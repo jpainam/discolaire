@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import type { Table as TanstackTable } from "@tanstack/react-table";
 import * as React from "react";
+import { flexRender } from "@tanstack/react-table";
+
 import { DataTablePagination } from "@repo/ui/data-table/data-table-pagination";
 import {
   Table,
@@ -12,7 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/table";
-import { flexRender } from "@tanstack/react-table";
 
 import { cn } from "..";
 import { EmptyState } from "../EmptyState";
@@ -69,7 +67,7 @@ export function DataTable<TData>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}

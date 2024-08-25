@@ -1,11 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 "use client";
 
 import type { Table } from "@tanstack/react-table";
 import { MixerHorizontalIcon } from "@radix-ui/react-icons";
+
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,

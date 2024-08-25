@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next";
+import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
+
 import { cn } from "@repo/ui";
 import { ThemeProvider, ThemeToggle } from "@repo/ui/theme";
 import { Toaster } from "@repo/ui/toast";
-import { GeistMono } from "geist/font/mono";
-import { GeistSans } from "geist/font/sans";
 
 import { TRPCReactProvider } from "~/trpc/react";
 
@@ -40,6 +41,7 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout(props: { children: React.ReactNode }) {
+  const v = useDebounce(0, 1000);
   return (
     <html lang="en" suppressHydrationWarning>
       <body

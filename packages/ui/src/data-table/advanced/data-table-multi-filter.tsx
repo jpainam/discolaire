@@ -1,4 +1,3 @@
-import type { DataTableFilterOption } from "@/types/data-table";
 import type { Table } from "@tanstack/react-table";
 import * as React from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -9,6 +8,7 @@ import {
   TextAlignCenterIcon,
   TrashIcon,
 } from "@radix-ui/react-icons";
+
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -28,6 +28,7 @@ import {
 } from "@repo/ui/select";
 import { Separator } from "@repo/ui/separator";
 
+import type { DataTableFilterOption } from "../types";
 import { DataTableFacetedFilter } from "../data-table-faceted-filter";
 
 const operators = [
@@ -137,7 +138,7 @@ export function MultiFilterRow<TData>({
     DataTableFilterOption<TData> | undefined
   >(options[0]);
 
-  const filterVarieties = selectedOption?.items.length
+  const filterVarieties = selectedOption?.options.length
     ? ["is", "is not"]
     : ["contains", "does not contain", "is", "is not"];
 
@@ -145,15 +146,15 @@ export function MultiFilterRow<TData>({
 
   // Update filter variety
   React.useEffect(() => {
-    if (selectedOption?.items.length) {
+    if (selectedOption?.options.length) {
       setFilterVariety("is");
     }
-  }, [selectedOption?.items.length]);
+  }, [selectedOption?.options.length]);
 
   // Create query string
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
-      const newSearchParams = new URLSearchParams(searchParams?.toString());
+      const newSearchParams = new URLSearchParams(searchParams.toString());
 
       for (const [key, value] of Object.entries(params)) {
         if (value === null) {
@@ -296,7 +297,7 @@ export function MultiFilterRow<TData>({
           </SelectGroup>
         </SelectContent>
       </Select>
-      {selectedOption?.items.length ? (
+      {selectedOption?.options.length ? (
         table.getColumn(selectedOption.value ? String(option.value) : "") && (
           <DataTableFacetedFilter
             key={selectedOption.id}
@@ -304,7 +305,7 @@ export function MultiFilterRow<TData>({
               selectedOption.value ? String(selectedOption.value) : "",
             )}
             title={selectedOption.label}
-            options={selectedOption.items}
+            options={selectedOption.options}
           />
         )
       ) : (
@@ -342,7 +343,7 @@ export function MultiFilterRow<TData>({
                   label: String(selectedOption?.label),
                   value: String(selectedOption?.value),
                   isMulti: true,
-                  items: selectedOption?.items ?? [],
+                  options: selectedOption?.options ?? [],
                 },
               ]);
             }}

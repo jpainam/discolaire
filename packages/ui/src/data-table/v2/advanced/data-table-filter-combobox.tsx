@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
 
 import * as React from "react";
@@ -7,6 +8,7 @@ import {
   PlusIcon,
   TextIcon,
 } from "@radix-ui/react-icons";
+
 import { Button } from "@repo/ui/button";
 import {
   Command,
@@ -111,8 +113,8 @@ export function DataTableFilterCombobox<TData>({
                     ...selectedOptions,
                     {
                       id: crypto.randomUUID(),
-                      label: selectedOption?.label ?? "",
-                      value: selectedOption?.value ?? "",
+                      label: selectedOption.label ?? "",
+                      value: selectedOption.value ?? "",
                       options: selectedOption?.options ?? [],
                       isMulti: true,
                     },

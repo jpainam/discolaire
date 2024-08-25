@@ -1,15 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
 
 import type { Table } from "@tanstack/react-table";
 import * as React from "react";
-import { cn } from "@/lib/utils";
 import { Cross2Icon } from "@radix-ui/react-icons";
+
 import { Button } from "@repo/ui/button";
 import { DataTableFacetedFilter } from "@repo/ui/data-table/v2/data-table-faceted-filter";
 import { DataTableViewOptions } from "@repo/ui/data-table/v2/data-table-view-options";
 import { Input } from "@repo/ui/input";
 
 import type { DataTableFilterField } from "./datatypes";
+import { cn } from "../..";
 
 interface DataTableToolbarProps<TData>
   extends React.HTMLAttributes<HTMLDivElement> {

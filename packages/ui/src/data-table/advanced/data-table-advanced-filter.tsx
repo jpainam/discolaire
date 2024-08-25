@@ -1,6 +1,5 @@
 "use client";
 
-import type { DataTableFilterOption } from "@/types/data-table";
 import * as React from "react";
 import {
   CaretSortIcon,
@@ -8,6 +7,7 @@ import {
   PlusIcon,
   TextIcon,
 } from "@radix-ui/react-icons";
+
 import { Button } from "@repo/ui/button";
 import {
   Command,
@@ -19,6 +19,8 @@ import {
   CommandSeparator,
 } from "@repo/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+
+import type { DataTableFilterOption } from "../types";
 
 interface DataTableAdvancedFilterProps<TData> {
   options: DataTableFilterOption<TData>[];
@@ -85,7 +87,7 @@ export function DataTableAdvancedFilter<TData>({
                     });
                   }}
                 >
-                  {option.items.length > 0 ? (
+                  {option.options.length > 0 ? (
                     <ChevronDownIcon
                       className="mr-2 size-4"
                       aria-hidden="true"
@@ -108,7 +110,7 @@ export function DataTableAdvancedFilter<TData>({
                       id: crypto.randomUUID(),
                       label: String(selectedOption?.label),
                       value: String(selectedOption?.value),
-                      items: selectedOption?.items ?? [],
+                      options: selectedOption?.options ?? [],
                       isMulti: true,
                     },
                   ]);

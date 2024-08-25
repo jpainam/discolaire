@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
+
 "use client";
 
 import type { Table } from "@tanstack/react-table";
 import * as React from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
+
 import { Button } from "@repo/ui/button";
 import { DataTableFacetedFilter } from "@repo/ui/data-table/data-table-faceted-filter";
 import { DataTableViewOptions } from "@repo/ui/data-table/data-table-view-options";

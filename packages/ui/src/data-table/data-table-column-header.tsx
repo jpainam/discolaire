@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import type { Column } from "@tanstack/react-table";
 import {
   ArrowDownIcon,
@@ -8,6 +5,7 @@ import {
   CaretSortIcon,
   EyeNoneIcon,
 } from "@radix-ui/react-icons";
+
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,

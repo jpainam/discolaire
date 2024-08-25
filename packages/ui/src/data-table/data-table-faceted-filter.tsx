@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import type { Column } from "@tanstack/react-table";
 import { CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons";
+
 import { Badge } from "@repo/ui/badge";
 import { Button } from "@repo/ui/button";
 import {
@@ -116,9 +114,9 @@ export function DataTableFacetedFilter<TData, TValue>({
                     )}
                     <span>{option.label}</span>
                     {option.withCount &&
-                      column?.getFacetedUniqueValues()?.get(option.value) && (
+                      column?.getFacetedUniqueValues().get(option.value) && (
                         <span className="ml-auto flex size-4 items-center justify-center font-mono text-xs">
-                          {column?.getFacetedUniqueValues().get(option.value)}
+                          {column.getFacetedUniqueValues().get(option.value)}
                         </span>
                       )}
                   </CommandItem>

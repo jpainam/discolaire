@@ -1,18 +1,20 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
 
-import type {
-  DataTableFilterableColumn,
-  DataTableFilterOption,
-  DataTableSearchableColumn,
-} from "@/types/data-table";
 import type { Table } from "@tanstack/react-table";
 import * as React from "react";
 import { PlusIcon, SwitchIcon } from "@radix-ui/react-icons";
+
 import { Button } from "@repo/ui/button";
 import { DataTableAdvancedFilter } from "@repo/ui/data-table/advanced/data-table-advanced-filter";
 import { DataTableViewOptions } from "@repo/ui/data-table/data-table-view-options";
 import { Input } from "@repo/ui/input";
 
+import type {
+  DataTableFilterableColumn,
+  DataTableFilterOption,
+  DataTableSearchableColumn,
+} from "../types";
 import { DataTableAdvancedFilterItem } from "./data-table-advanced-filter-item";
 import { DataTableMultiFilter } from "./data-table-multi-filter";
 
@@ -43,13 +45,13 @@ export function DataTableAdvancedToolbar<TData>({
       id: crypto.randomUUID(),
       label: String(column.id),
       value: column.id,
-      items: [],
+      options: [],
     }));
     const filterableOptions = filterableColumns.map((column) => ({
       id: crypto.randomUUID(),
       label: column.title,
       value: column.id,
-      items: column.options,
+      options: column.options,
     }));
 
     return [...searchableOptions, ...filterableOptions];

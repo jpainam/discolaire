@@ -1,13 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+/* eslint-disable @typescript-eslint/non-nullable-type-assertion-style */
 "use client";
 
 import type { Table } from "@tanstack/react-table";
 import * as React from "react";
 import { useSearchParams } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { CaretSortIcon, PlusIcon } from "@radix-ui/react-icons";
+
 import { Button } from "@repo/ui/button";
 
 import type { DataTableFilterField, DataTableFilterOption } from "../datatypes";
+import { cn } from "../../..";
 import { DataTableViewOptions } from "../data-table-view-options";
 import { DataTableFilterCombobox } from "./data-table-filter-combobox";
 import { DataTableFilterItem } from "./data-table-filter-item";

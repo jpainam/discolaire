@@ -1,6 +1,6 @@
 import type { Column } from "@tanstack/react-table";
-import { cn } from "@/lib/utils";
 import { CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons";
+
 import { Badge } from "@repo/ui/badge";
 import { Button } from "@repo/ui/button";
 import {
@@ -16,6 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { Separator } from "@repo/ui/separator";
 
 import type { Option } from "./datatypes";
+import { cn } from "../..";
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
@@ -36,7 +37,7 @@ export function DataTableFacetedFilter<TData, TValue>({
         <Button variant="outline" size="sm" className="h-8 border-dashed">
           <PlusCircledIcon className="mr-2 size-4" />
           {title}
-          {selectedValues?.size > 0 && (
+          {selectedValues.size > 0 && (
             <>
               <Separator orientation="vertical" className="mx-2 h-4" />
               <Badge
@@ -113,9 +114,9 @@ export function DataTableFacetedFilter<TData, TValue>({
                     )}
                     <span>{option.label}</span>
                     {option.withCount &&
-                      column?.getFacetedUniqueValues()?.get(option.value) && (
+                      column?.getFacetedUniqueValues().get(option.value) && (
                         <span className="ml-auto flex size-4 items-center justify-center font-mono text-xs">
-                          {column?.getFacetedUniqueValues().get(option.value)}
+                          {column.getFacetedUniqueValues().get(option.value)}
                         </span>
                       )}
                   </CommandItem>

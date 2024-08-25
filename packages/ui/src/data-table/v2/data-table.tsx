@@ -1,6 +1,7 @@
 import type { Table as TanstackTable } from "@tanstack/react-table";
 import * as React from "react";
-import { cn } from "@/lib/utils";
+import { flexRender } from "@tanstack/react-table";
+
 import { DataTablePagination } from "@repo/ui/data-table/v2/data-table-pagination";
 import {
   Table,
@@ -10,7 +11,8 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/table";
-import { flexRender } from "@tanstack/react-table";
+
+import { cn } from "../..";
 
 interface DataTableProps<TData> extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -64,7 +66,7 @@ export function DataTable<TData>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}

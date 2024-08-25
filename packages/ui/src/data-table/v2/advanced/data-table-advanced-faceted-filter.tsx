@@ -1,6 +1,6 @@
 import type { Column } from "@tanstack/react-table";
-import { cn } from "@/lib/utils";
 import { CheckIcon } from "@radix-ui/react-icons";
+
 import {
   Command,
   CommandEmpty,
@@ -12,6 +12,7 @@ import {
 } from "@repo/ui/command";
 
 import type { DataTableFilterOption, Option } from "../datatypes";
+import { cn } from "../../..";
 
 interface DataTableAdvancedFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
@@ -88,9 +89,9 @@ export function DataTableAdvancedFacetedFilter<TData, TValue>({
                 )}
                 <span>{option.label}</span>
                 {option.withCount &&
-                  column?.getFacetedUniqueValues()?.get(option.value) && (
+                  column?.getFacetedUniqueValues().get(option.value) && (
                     <span className="ml-auto flex size-4 items-center justify-center font-mono text-xs">
-                      {column?.getFacetedUniqueValues().get(option.value)}
+                      {column.getFacetedUniqueValues().get(option.value)}
                     </span>
                   )}
               </CommandItem>
