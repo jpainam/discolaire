@@ -1,0 +1,30 @@
+import { Suspense } from "react";
+import { getServerTranslations } from "@/app/i18n/server";
+import { EmptyState } from "@/components/EmptyState";
+import { ReportCardSummary } from "@/components/students/report-cards/ReportCardSummary";
+import { ReportCardTable } from "@/components/students/report-cards/ReportCardTable";
+import { reportCardService } from "@/server/services/report-card-service";
+import { Separator } from "@repo/ui/separator";
+
+export default async function Page({
+  searchParams: { term },
+  params: { id },
+}: {
+  params: { id: string };
+  searchParams: { term: number };
+}) {
+  const { t } = await getServerTranslations();
+  if (!term) {
+    return <EmptyState className="my-8" />;
+  }
+  const reportCard = await reportCardService.getStudent(id, Number(term));
+  return (
+    <div className="flex w-full flex-col gap-2">
+      <ReportCardTable reportCard={reportCard} />
+      <Separator />
+      <Suspense key={`grade-summary-${term}`}>
+        <ReportCardSummary reportCard={reportCard} />
+      </Suspense>
+    </div>
+  );
+}

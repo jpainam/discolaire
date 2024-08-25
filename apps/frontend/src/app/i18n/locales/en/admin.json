@@ -1,0 +1,17 @@
+{
+    "sms_management": {
+        "final_exam_marks_sms": "Final Exam Marks SMS",
+        "to_parents": "To Parents",
+        "to_students": "To Students",
+        "to_staffs": "To Staffs",
+        "templates": "SMS Template",
+        "history": "History",
+        "check_balance": "Check SMS Balance",
+        "templates_description": "Create and manage SMS templates for sending messages to parents and students"
+    },
+    "classrooms": "Classrooms",
+    "students": "Students",
+    "transactions": "Transactions",
+    "calendar": "Calendar",
+    "school_noticeboard": "School Noticeboard"
+}

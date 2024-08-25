@@ -1,0 +1,43 @@
+"use client";
+
+import CalendarIcon from "@/components/icons/calendar";
+import YoutubeIcon from "@/components/icons/youtube";
+import { useLocale } from "@/hooks/use-locale";
+import {
+  DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+} from "@repo/ui/dropdown-menu";
+import { HelpCircleIcon, LibraryBig } from "lucide-react";
+
+export function DropdownHelp() {
+  const { t } = useLocale();
+  return (
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger>
+        <HelpCircleIcon className="mr-2 h-4 w-4" />
+        <span>{t("help")}</span>
+      </DropdownMenuSubTrigger>
+      <DropdownMenuPortal>
+        <DropdownMenuSubContent>
+          <DropdownMenuItem>
+            <LibraryBig className="mr-2 h-4 w-4" />
+            <span>{t("how_to_get_started")}</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <YoutubeIcon className="mr-2 h-4 w-4" />
+            <span>{t("watch_a_video")}</span>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <CalendarIcon className="mr-2 h-4 w-4" />
+            <span>{t("join_a_webinar")}</span>
+          </DropdownMenuItem>
+        </DropdownMenuSubContent>
+      </DropdownMenuPortal>
+    </DropdownMenuSub>
+  );
+}

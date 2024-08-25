@@ -1,0 +1,116 @@
+"use client";
+
+import Link from "next/link";
+import { selectedStudentIdsAtom } from "@/atoms/transactions";
+import { AvatarState } from "@/components/AvatarState";
+import { routes } from "@/configs/routes";
+import { useLocale } from "@/hooks/use-locale";
+import { CURRENCY } from "@/lib/constants";
+import { AppRouter } from "@/server/api/root";
+import { getFullName } from "@/utils/full-name";
+import { Checkbox } from "@repo/ui/checkbox";
+import FlatBadge from "@repo/ui/FlatBadge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@repo/ui/table";
+import { inferProcedureOutput } from "@trpc/server";
+import { useAtom } from "jotai";
+
+type StudentAccountWithBalance = NonNullable<
+  inferProcedureOutput<AppRouter["classroom"]["studentsBalance"]>
+>;
+
+export function ListViewFinance({
+  students,
+  amountDue,
+}: {
+  students: StudentAccountWithBalance;
+  amountDue: number;
+}) {
+  const { t } = useLocale();
+  const [selectedStudents, setSelectedStudents] = useAtom(
+    selectedStudentIdsAtom,
+  );
+  return (
+    <div className="m-2 rounded-lg border">
+      <Table>
+        <TableHeader>
+          <TableRow className="bg-muted/50">
+            <TableHead>
+              <Checkbox
+                onCheckedChange={(checked) => {
+                  setSelectedStudents((stds) =>
+                    checked ? students.map((stud) => stud.student.id) : [],
+                  );
+                }}
+              />
+            </TableHead>
+            <TableHead></TableHead>
+            <TableHead>{t("registrationNumber")}</TableHead>
+            <TableHead>{t("fullName")}</TableHead>
+            <TableHead>{t("balance")}</TableHead>
+            <TableHead></TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {students.map((stud) => {
+            const remaining = stud.balance - amountDue;
+            return (
+              <TableRow key={stud.id}>
+                <TableCell className="py-0">
+                  <Checkbox
+                    onCheckedChange={(checked) => {
+                      setSelectedStudents((students) =>
+                        checked
+                          ? [...students, stud.student.id]
+                          : students.filter((id) => id !== stud.student.id),
+                      );
+                    }}
+                    checked={selectedStudents.includes(stud.student.id)}
+                  />
+                </TableCell>
+                <TableCell className="py-0">
+                  <AvatarState
+                    pos={getFullName(stud.student).length}
+                    avatar={stud.student?.avatar}
+                  />
+                </TableCell>
+                <TableCell className="py-0">
+                  {stud.student?.registrationNumber}
+                </TableCell>
+                <TableCell className="py-0">
+                  {stud.student && (
+                    <Link
+                      className="hover:text-blue-600 hover:underline"
+                      href={routes.students.details(stud.student.id)}
+                    >
+                      {getFullName(stud.student)}
+                    </Link>
+                  )}
+                </TableCell>
+                <TableCell className="py-0">
+                  <FlatBadge variant={remaining < 0 ? "red" : "green"}>
+                    {remaining} {CURRENCY}
+                  </FlatBadge>
+                </TableCell>
+                <TableCell className="py-0">{}</TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={3}>Total</TableCell>
+            <TableCell className="text-right">$2,500.00</TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table>
+    </div>
+  );
+}

@@ -1,0 +1,21 @@
+{
+  "french": "Francés",
+  "english": "Inglés",
+  "spanish": "Español",
+  "day_one": "{{count}} day",
+  "event_declined_subject": "Declined: {{title}} at {{date}}",
+  "identity_provider": "Identity provider",
+  "delete_webhook": "Delete Webhook",
+  "choose_a_file": "Choose a file...",
+  "unregister_these_students": "Unregister these students",
+  "search": "Search",
+  "make_payment": "Make Payment",
+  "cancel": "Cancel",
+  "view": "View",
+  "toggle_columns": "Toggle Columns",
+  "blog": {
+    "text": "Check out the corresponding <1>blog post</1> describing this example.",
+    "link": "https://locize.com/blog/next-app-dir-i18n/"
+  },
+  "step_1_description": ""
+}

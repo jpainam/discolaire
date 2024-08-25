@@ -1,0 +1,18 @@
+{
+    "sms_management": {
+        "final_exam_marks_sms": "SMS des notes de l'examen final",
+        "to_parents": "Aux parents",
+        "to_contacts": "Aux contacts",
+        "to_students": "Aux étudiants",
+        "to_staffs": "Aux personnels",
+        "templates": "Modèle de SMS",
+        "history": "Historique des SMS",
+        "check_balance": "Vérifier le solde des SMS",
+        "templates_description": "Créez des modèles de SMS pour envoyer des messages à des groupes de personnes"
+    },
+    "classrooms": "Classes",
+    "students": "Éleves",
+    "transactions": "Transactions",
+    "calendar": "Calendrier",
+    "school_noticeboard": "Tableau d'affichage"
+}

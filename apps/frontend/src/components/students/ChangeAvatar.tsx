@@ -1,0 +1,78 @@
+"use client";
+
+import * as React from "react";
+import { toast } from "sonner";
+
+import { FileUploader } from "@/components/uploads/file-uploader";
+import { useLocale } from "@/hooks/use-locale";
+import { useModal } from "@/hooks/use-modal";
+import useUpload from "@/hooks/use-upload";
+import { getErrorMessage } from "@/lib/handle-error";
+import { api } from "@/trpc/react";
+
+export function ChangeAvatar({ studentId }: { studentId: string }) {
+  const { t } = useLocale();
+  const { closeModal } = useModal();
+  const { onUpload, isPending, error, data: uploadedFiles } = useUpload();
+  const updateStudentAvatarMutation = api.student.updateAvatar.useMutation();
+
+  React.useEffect(() => {
+    if (!uploadedFiles || uploadedFiles.length === 0) {
+      return;
+    }
+    const avatarId = uploadedFiles[0].data?.id;
+    if (avatarId) {
+      updateStudentAvatarMutation.mutate({
+        id: studentId,
+        avatar: avatarId,
+      });
+    }
+  }, [studentId, uploadedFiles, updateStudentAvatarMutation]);
+  if (error) {
+    console.error(error);
+  }
+  // const fetchSignedUrl = await fetch(
+  //   process.env.NEXT_PUBLIC_BASE_URL + "/api/upload?key=" + fields["key"]
+  // );
+  // if (!fetchSignedUrl.ok) {
+  //   const e = await fetchSignedUrl.json();
+  //   updateFileState(index, { error: e });
+  //   throw new Error(await fetchSignedUrl.json());
+  // }
+  return (
+    <div>
+      <FileUploader
+        maxFileCount={1}
+        disabled={isPending}
+        maxSize={1 * 1024 * 1024}
+        onValueChange={(files) => {
+          if (files.length === 0) {
+            return;
+          }
+          toast.promise(onUpload(files[0], { dest: "avatars" }), {
+            loading: t("uploading"),
+            success: () => {
+              closeModal();
+              return t("uploaded_successfully");
+            },
+            error: (err) => {
+              return getErrorMessage(err);
+            },
+          });
+        }}
+        //progresses={progresses}
+      />
+      {uploadedFiles &&
+        uploadedFiles.map((d, index) => (
+          <div key={index}>
+            <p>File: {d.file.name}</p>
+            {d.isPending && <p>Uploading...</p>}
+            {!d.isPending && (
+              <p>Upload complete! File ID: {JSON.stringify(d.data)}</p>
+            )}
+            {d.error && <p>Error: {JSON.stringify(d.error)}</p>}
+          </div>
+        ))}
+    </div>
+  );
+}
