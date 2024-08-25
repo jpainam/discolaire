@@ -1,0 +1,901 @@
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["views"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model RecipientGroup {
+    id         String      @id @default(cuid())
+    name       String
+    recipients Recipient[]
+}
+
+model Recipient {
+    groupId String
+    group   RecipientGroup @relation(fields: [groupId], references: [id])
+    userId  String
+    user    User           @relation(fields: [userId], references: [id])
+
+    @@id([groupId, userId])
+}
+
+model Announcement {
+    id          Int      @id @default(autoincrement())
+    title       String
+    description String
+    link        String?
+    from        DateTime
+    to          DateTime
+    level       String
+    recipients  Json
+    createdAt   DateTime @default(now()) @db.Timestamp(6)
+    createdById String
+    createdBy   User     @relation(fields: [createdById], references: [id])
+    updatedAt   DateTime @updatedAt
+    updatedBy   String?
+}
+
+model Policy {
+    id          Int          @id @default(autoincrement())
+    name        String
+    effect      PolicyEffect @default(Deny)
+    actions     Json
+    resources   Json
+    description String?
+    isActive    Boolean?     @default(true)
+    createdAt   DateTime     @default(now()) @db.Timestamp(6)
+    updatedAt   DateTime     @updatedAt
+    createdBy   String?
+    updatedBy   String?
+    condition   Json?
+    roles       RolePolicy[]
+    UserPolicy  UserPolicy[]
+}
+
+model Role {
+    id          Int          @id @default(autoincrement())
+    name        String
+    description String?
+    isActive    Boolean?     @default(true)
+    createdAt   DateTime     @default(now()) @db.Timestamp(6)
+    updatedAt   DateTime     @updatedAt
+    createdBy   String?
+    updatedBy   String?
+    policies    RolePolicy[]
+    UserRole    UserRole[]
+}
+
+model RolePolicy {
+    roleId   Int
+    policyId Int
+    policy   Policy @relation(fields: [policyId], references: [id])
+    role     Role   @relation(fields: [roleId], references: [id])
+
+    @@id([roleId, policyId])
+}
+
+model UserPolicy {
+    userId   String
+    policyId Int
+    policy   Policy @relation(fields: [policyId], references: [id])
+    user     User   @relation(fields: [userId], references: [id])
+
+    @@id([userId, policyId])
+}
+
+model Appreciation {
+    id         Int                   @id @default(autoincrement())
+    content    String
+    isActive   Boolean?              @default(true)
+    createdAt  DateTime              @default(now()) @db.Timestamp(6)
+    updatedAt  DateTime              @updatedAt
+    category   AppreciationCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+    categoryId Int?
+}
+
+model ReportCard {
+    studentId   String
+    classroomId String
+    termId      Int
+    remark      String?
+    createdBy   User     @relation(fields: [createdById], references: [id])
+    createdById String
+    remarkAt    DateTime @default(now()) @db.Timestamp(6)
+
+    classroom Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    student   Student   @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    term      Term      @relation(fields: [termId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+    @@id([studentId, classroomId, termId])
+}
+
+model Attendance {
+    id          Int            @id @default(autoincrement())
+    date        DateTime       @default(now()) @db.Timestamp(6)
+    type        AttendanceType
+    asbence     Int            @default(0)
+    late        Int            @default(0)
+    excluded    Boolean        @default(false)
+    justified   Json?
+    termId      Int?
+    observation String?
+    createdAt   DateTime       @default(now()) @db.Timestamp(6)
+    updatedAt   DateTime       @updatedAt
+    createdBy   String?
+    updatedBy   String?
+
+    studentId    String
+    schoolYearId String
+    term         Term?      @relation(fields: [termId], references: [id], onDelete: SetNull)
+    schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    student      Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model Report {
+    id        Int      @id @default(autoincrement())
+    code      String
+    category  String   @default("student")
+    name      String
+    isActive  Boolean  @default(true)
+    type      String   @default("pdf")
+    link      String
+    createdAt DateTime @default(now()) @db.Timestamp(6)
+}
+
+model Classroom {
+    id                String         @id @default(uuid())
+    name              String?
+    shortName         String?
+    reportName        String?
+    maxSize           Int            @default(45)
+    levelId           Int            @default(1)
+    sectionId         Int?           @default(1)
+    cycleId           Int?           @default(1)
+    schoolYearId      String
+    seniorAdvisorId   String?
+    headTeacherId     String?
+    classroomLeaderId String?
+    createdAt         DateTime       @default(now()) @db.Timestamp(6)
+    updatedAt         DateTime       @updatedAt
+    createdBy         String?
+    updatedBy         String?
+    deletedAt         DateTime?      @db.Timestamp(6)
+    deletedBy         String?
+    cycle             Cycle?         @relation(fields: [cycleId], references: [id])
+    level             ClassroomLevel @relation(fields: [levelId], references: [id])
+    seniorAdvisor     Staff?         @relation("seniorAdvisor", fields: [seniorAdvisorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+    headTeacher       Staff?         @relation("headTeacher", fields: [headTeacherId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+    classroomLeader   Student?       @relation("classroomLeader", fields: [classroomLeaderId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+    schoolYear        SchoolYear     @relation(fields: [schoolYearId], references: [id])
+    section           Section?       @relation(fields: [sectionId], references: [id])
+    enrollments       Enrollment[]
+    fees              Fee[]
+    Subject           Subject[]
+    assignments       Assignment[]
+    studentId         String?
+    reportCards       ReportCard[]
+}
+
+model ClassroomLevel {
+    id         Int         @id @default(autoincrement())
+    name       String
+    group      Int
+    classrooms Classroom[]
+}
+
+model CalendarType {
+    id              Int             @id @default(autoincrement())
+    name            String          @unique
+    events          CalendarEvent[]
+    backgroundColor String
+}
+
+model CalendarEvent {
+    id             String        @id @default(cuid())
+    calendarTypeId Int?
+    calendarType   CalendarType? @relation(fields: [calendarTypeId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+    title          String
+    description    String?
+    start          DateTime
+    end            DateTime
+    repeat         String?
+    alert          String?
+    data           Json?
+}
+
+model GradeSheet {
+    id          Int       @id @default(autoincrement())
+    name        String
+    startDate   DateTime? @default(now()) @db.Timestamp(6)
+    endDate     DateTime? @default(now()) @db.Timestamp(6)
+    isActive    Boolean?  @default(true)
+    createdAt   DateTime  @default(now()) @db.Timestamp(6)
+    updatedAt   DateTime  @updatedAt
+    createdBy   String?
+    observation String?
+    weight      Float     @default(1)
+    scale       Float     @default(20)
+    subjectId   Int
+    termId      Int
+    grades      Grade[]
+    subject     Subject   @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+    term        Term      @relation(fields: [termId], references: [id], onDelete: Cascade)
+}
+
+model Grade {
+    id           Int        @id @default(autoincrement())
+    grade        Float
+    observation  String?
+    updatedAt    DateTime   @updatedAt
+    updatedBy    String?
+    isAbsent     Boolean?   @default(false)
+    gradeSheetId Int
+    studentId    String
+    gradeSheet   GradeSheet @relation(fields: [gradeSheetId], references: [id], onDelete: Cascade)
+    student      Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model AssignmentCategory {
+    id          Int          @id @default(autoincrement())
+    name        String
+    isActive    Boolean?     @default(true)
+    createdAt   DateTime?    @default(now()) @db.Timestamp(6)
+    updatedAt   DateTime     @updatedAt
+    createdBy   String?
+    updatedBy   String?
+    assignments Assignment[]
+}
+
+model AppreciationCategory {
+    id            Int            @id @default(autoincrement())
+    name          String
+    isActive      Boolean?       @default(true)
+    createdAt     DateTime?      @default(now()) @db.Timestamp(6)
+    updatedAt     DateTime       @updatedAt
+    createdBy     String?
+    appreciations Appreciation[]
+}
+
+model Assignment {
+    id          String    @id @default(uuid())
+    title       String
+    description String?
+    isActive    Boolean?  @default(true)
+    categoryId  Int?
+    subjectId   Int
+    post        Boolean?  @default(false)
+    dueDate     DateTime? @default(now()) @db.Timestamp(6)
+    createdAt   DateTime? @default(now()) @db.Timestamp(6)
+    updatedAt   DateTime  @updatedAt
+    createdById String?
+    createdBy   User?     @relation(fields: [createdById], references: [id])
+    classroomId String
+    from        DateTime? @default(now()) @db.Timestamp(6)
+    to          DateTime? @default(now()) @db.Timestamp(6)
+    visibles    String[]
+    links       String[]
+    attachments String[]
+    sections    String[]
+    subject     Subject   @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+    notify      Boolean?  @default(true)
+
+    classroom Classroom           @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+    category  AssignmentCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+}
+
+model Event {
+    id          String   @id @default(uuid())
+    start       DateTime @default(now()) @db.Timestamp(6)
+    end         DateTime @default(now()) @db.Timestamp(6)
+    allDay      Boolean  @default(false)
+    title       String?
+    description String?
+    location    String?
+}
+
+model Term {
+    id           Int          @id @default(autoincrement())
+    name         String
+    schoolYearId String
+    order        Int
+    startDate    DateTime?    @default(now()) @db.Timestamp(6)
+    endDate      DateTime?    @default(now()) @db.Timestamp(6)
+    isActive     Boolean?     @default(true)
+    observation  String?
+    gradeSheets  GradeSheet[]
+    schoolYear   SchoolYear   @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    attendances  Attendance[]
+    reportCards  ReportCard[]
+}
+
+model Enrollment {
+    id           Int        @id @default(autoincrement())
+    schoolYearId String
+    createdAt    DateTime   @default(now()) @db.Timestamp(6)
+    updatedAt    DateTime   @updatedAt
+    createdBy    String?
+    classroomId  String
+    observation  String?
+    studentId    String
+    classroom    Classroom  @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+    schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    student      Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+    @@unique([schoolYearId, classroomId, studentId])
+}
+
+model Relationship {
+    id             Int              @id @default(autoincrement())
+    name           String
+    StudentContact StudentContact[]
+}
+
+model ContactRelationship {
+    id   Int    @id @default(autoincrement())
+    name String
+}
+
+model Degree {
+    id    Int     @id @default(autoincrement())
+    name  String
+    Staff Staff[]
+}
+
+model Staff {
+    id                        String      @id @default(uuid())
+    prefix                    String?
+    firstName                 String?
+    lastName                  String?
+    avatar                    String?
+    isActive                  Boolean     @default(true)
+    jobTitle                  String?
+    employmentType            String?
+    degreeId                  Int?
+    dateOfHire                DateTime?   @db.Date
+    dateOfBirth               DateTime?   @db.Date
+    sendAgendaFrequency       String?
+    dateOfRelease             DateTime?   @db.Date
+    isTeacher                 Boolean?    @default(true)
+    gender                    Gender      @default(male)
+    email                     String?
+    phoneNumber1              String?
+    phoneNumber2              String?
+    address                   String?
+    observation               String?
+    dateOfCriminalRecordCheck DateTime?   @db.Date
+    deletedAt                 String?
+    deletedBy                 String?
+    createdAt                 DateTime?   @default(now()) @db.Timestamp(6)
+    updatedAt                 DateTime    @updatedAt
+    userId                    String?
+    countryId                 String?
+    dateOfLastAdvancement     DateTime?   @db.Date
+    country                   Country?    @relation(fields: [countryId], references: [id])
+    user                      User?       @relation(fields: [userId], references: [id])
+    subjects                  Subject[]
+    degree                    Degree?     @relation(fields: [degreeId], references: [id])
+    classrooms                Classroom[] @relation("seniorAdvisor")
+    classrooms2               Classroom[] @relation("headTeacher")
+}
+
+model Student {
+    id                        String           @id @default(uuid())
+    avatar                    String?
+    registrationNumber        String?
+    isActive                  Boolean          @default(true)
+    email                     String?
+    firstName                 String?
+    lastName                  String?
+    dateOfBirth               DateTime?        @db.Date
+    placeOfBirth              String?
+    residence                 String?
+    gender                    String?
+    churchFamily              String?
+    pastorName                String?
+    denomination              String?
+    isChurchMember            Boolean          @default(false)
+    churchAttendanceFrequency String?
+    isBaptized                Boolean          @default(false)
+    dateOfBaptism             DateTime?        @db.Date
+    phoneNumber               String?
+    parentDivorced            Boolean          @default(false)
+    dateOfEntry               DateTime?        @db.Date
+    dateOfExit                DateTime?        @db.Date
+    dateOfWithdraw            DateTime?        @db.Date
+    observation               String?
+    countryId                 String?
+    userId                    String?
+    tags                      Json?
+    createdAt                 DateTime         @default(now()) @db.Timestamp(6)
+    updatedAt                 DateTime         @updatedAt
+    createdBy                 String?
+    formerSchoolId            String?
+    religion                  String?
+    enrollments               Enrollment[]
+    Grade                     Grade[]
+    country                   Country?         @relation(fields: [countryId], references: [id])
+    formerSchool              FormerSchool?    @relation(fields: [formerSchoolId], references: [id])
+    user                      User?            @relation(fields: [userId], references: [id])
+    accounts                  StudentAccount[]
+    studentContacts           StudentContact[]
+    siblings                  StudentSibling[] @relation("sibling")
+    siblings2                 StudentSibling[] @relation("student")
+    Attendance                Attendance[]
+    classrooms                Classroom[]      @relation("classroomLeader")
+    reportCards               ReportCard[]
+}
+
+model StudentSibling {
+    studentId String
+    siblingId String
+    sibling   Student @relation("sibling", fields: [siblingId], references: [id])
+    student   Student @relation("student", fields: [studentId], references: [id])
+
+    @@unique([studentId, siblingId])
+}
+
+model StudentAccount {
+    id           Int           @id @default(autoincrement())
+    code         String? //@unique
+    name         String?
+    studentId    String
+    createdBy    String?
+    createdAt    DateTime      @default(now()) @db.Timestamp(6)
+    updatedAt    DateTime      @updatedAt
+    updatedBy    String?
+    student      Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+    transactions Transaction[]
+}
+
+model Transaction {
+    id              Int            @id @default(autoincrement())
+    transactionRef  String?
+    amount          Float
+    description     String?
+    transactionType String?        @default("CREDIT")
+    createdAt       DateTime       @default(now()) @db.Timestamp(6)
+    updatedAt       DateTime       @updatedAt
+    createdBy       String?
+    receivedBy      String?
+    receivedAt      DateTime?      @db.Timestamp(6)
+    isPrinted       Boolean?       @default(false)
+    printedAt       DateTime?      @db.Timestamp(6)
+    printedBy       String?
+    updatedBy       String?
+    observation     String?
+    deletedAt       DateTime?      @db.Timestamp(6)
+    deletedBy       String?
+    status          String?        @default("PENDING")
+    schoolYearId    String
+    accountId       Int
+    account         StudentAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+    schoolYear      SchoolYear     @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    journal         Journal?       @relation(fields: [journalId], references: [id])
+    journalId       Int?
+}
+
+model Journal {
+    id           Int           @id @default(autoincrement())
+    name         String
+    description  String?
+    fees         Fee[]
+    transactions Transaction[]
+}
+
+model Fee {
+    id          Int       @id @default(autoincrement())
+    description String?
+    code        String?
+    amount      Float
+    dueDate     DateTime  @default(now()) @db.Timestamp(6)
+    createdAt   DateTime  @default(now()) @db.Timestamp(6)
+    updatedAt   DateTime  @updatedAt
+    createdBy   String?
+    updatedBy   String?
+    classroomId String
+    isActive    Boolean?  @default(true)
+    classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+    journal     Journal?  @relation(fields: [journalId], references: [id])
+    journalId   Int?
+}
+
+model StudentContact {
+    studentId          String
+    contactId          String
+    relationshipId     Int?
+    livesWith          Boolean?      @default(true)
+    schoolPickup       Boolean?      @default(true)
+    emergencyContact   Boolean?      @default(true)
+    observation        String?
+    accessAttendance   Boolean?      @default(true)
+    accessBilling      Boolean?      @default(true)
+    accessDiscipline   Boolean?      @default(true)
+    accessReportCard   Boolean?      @default(true)
+    accessScheduling   Boolean?      @default(true)
+    canAccessData      Boolean?      @default(true)
+    enablePortalAccess Boolean?      @default(true)
+    primaryContact     Boolean?      @default(true)
+    paysFee            Boolean?      @default(true)
+    contact            Contact       @relation(fields: [contactId], references: [id], onDelete: Cascade)
+    relationship       Relationship? @relation(fields: [relationshipId], references: [id])
+    student            Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+    @@unique([studentId, contactId])
+}
+
+model Contact {
+    id              String           @id @default(uuid())
+    prefix          String?
+    firstName       String?
+    avatar          String?
+    lastName        String?
+    title           String?
+    employer        String?
+    phoneNumber1    String?
+    phoneNumber2    String?
+    email           String?
+    isActive        Boolean          @default(true)
+    address         String?
+    gender          String?          @default("male")
+    observation     String?
+    createdAt       DateTime         @default(now()) @db.Timestamp(6)
+    updatedAt       DateTime         @updatedAt
+    userId          String?
+    countryId       String?
+    country         Country?         @relation(fields: [countryId], references: [id])
+    user            User?            @relation(fields: [userId], references: [id])
+    studentContacts StudentContact[]
+}
+
+model Country {
+    id       String    @id
+    name     String?
+    codeIso3 String?
+    contacts Contact[]
+    Staff    Staff[]
+    students Student[]
+}
+
+model School {
+    id        String   @id
+    name      String
+    createdAt DateTime @default(now()) @db.Timestamp(6)
+    updatedAt DateTime @updatedAt
+    isActive  Boolean  @default(true)
+    isDefault Boolean  @default(false)
+    color     String?
+}
+
+model FormerSchool {
+    id           String    @id @default(uuid())
+    name         String
+    phoneNumber1 String?
+    phoneNumber2 String?
+    headOfSchool String?
+    address      String?
+    type         String?
+    students     Student[]
+}
+
+model Subject {
+    id             Int           @id @default(autoincrement())
+    courseId       String?
+    teacherId      String?
+    classroomId    String?
+    subjectGroupId Int?
+    order          Int?
+    coefficient    Float?
+    program        String?       @db.Text
+    gradeSheets    GradeSheet[]
+    Program        Program[]
+    classroom      Classroom?    @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+    course         Course?       @relation(fields: [courseId], references: [id])
+    subjectGroup   SubjectGroup? @relation(fields: [subjectGroupId], references: [id])
+    teacher        Staff?        @relation(fields: [teacherId], references: [id])
+    assignments    Assignment[]
+
+    @@unique([courseId, teacherId, classroomId])
+}
+
+model SubjectGroup {
+    id       Int       @id @default(autoincrement())
+    name     String
+    subjects Subject[]
+}
+
+model Course {
+    id           String         @id @default(uuid())
+    name         String?
+    color        String?
+    createdAt    DateTime       @default(now()) @db.Timestamp(6)
+    updatedAt    DateTime       @updatedAt
+    shortName    String?
+    reportName   String?
+    isActive     Boolean?       @default(true)
+    ProgramTheme ProgramTheme[]
+    subjects     Subject[]
+}
+
+model SchoolYear {
+    id                  String            @id
+    observation         String?
+    createdAt           DateTime?         @default(now()) @db.Timestamp(6)
+    updatedAt           DateTime          @updatedAt
+    abbreviation        String?
+    createdBy           String?
+    updatedBy           String?
+    isDefault           Boolean?          @default(false)
+    deletedAt           DateTime?         @db.Timestamp(6)
+    deletedBy           String?
+    isActive            Boolean?          @default(true)
+    isDeleted           Boolean?          @default(false)
+    name                String?
+    startDate           DateTime?         @default(now()) @db.Timestamp(6)
+    endDate             DateTime?         @default(now()) @db.Timestamp(6)
+    enrollmentStartDate DateTime?         @default(now()) @db.Timestamp(6)
+    enrollmentEndDate   DateTime?         @default(now()) @db.Timestamp(6)
+    classrooms          Classroom[]
+    enrollments         Enrollment[]
+    Program             Program[]
+    ProgramCategory     ProgramCategory[]
+    ProgramTheme        ProgramTheme[]
+    Term                Term[]
+    Transaction         Transaction[]
+    Attendance          Attendance[]
+}
+
+model Cycle {
+    id         Int         @id @default(autoincrement())
+    name       String
+    classrooms Classroom[]
+}
+
+model Section {
+    id         Int         @id @default(autoincrement())
+    name       String
+    classrooms Classroom[]
+}
+
+model User {
+    id              String         @id @default(uuid())
+    email           String         @unique
+    name            String?
+    avatar          String?
+    isActive        Boolean        @default(true)
+    password        String
+    isEmailVerified Boolean        @default(false)
+    createdAt       DateTime       @default(now())
+    updatedAt       DateTime       @updatedAt
+    Contact         Contact[]
+    photos          Photo[]
+    reportQueues    ReportQueue[]
+    Staff           Staff[]
+    Student         Student[]
+    tokens          Token[]
+    roles           UserRole[]
+    assignments     Assignment[]
+    reportCards     ReportCard[]
+    announcements   Announcement[]
+    recipients      Recipient[]
+    policies        UserPolicy[]
+}
+
+model UserRole {
+    userId String
+    roleId Int
+    role   Role   @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+    @@id([userId, roleId])
+}
+
+model Token {
+    id          Int       @id @default(autoincrement())
+    token       String
+    type        TokenType
+    expires     DateTime
+    blacklisted Boolean
+    createdAt   DateTime  @default(now())
+    userId      String
+    user        User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model MenuItem {
+    id        Int           @id @default(autoincrement())
+    name      String
+    title     String
+    href      String?
+    order     Int           @default(0)
+    category  String?
+    isActive  Boolean?      @default(true)
+    menuItems SubMenuItem[]
+}
+
+model SubMenuItem {
+    id             Int              @id @default(autoincrement())
+    name           String
+    icon           String
+    href           String
+    menuItemId     Int?
+    order          Int              @default(0)
+    isActive       Boolean?         @default(true)
+    MenuItem       MenuItem?        @relation(fields: [menuItemId], references: [id])
+    subSubMenuItem SubSubMenuItem[]
+}
+
+model SubSubMenuItem {
+    id            Int          @id @default(autoincrement())
+    name          String
+    icon          String
+    href          String
+    order         Int          @default(0)
+    subMenuItemId Int?
+    subMenuItem   SubMenuItem? @relation(fields: [subMenuItemId], references: [id])
+}
+
+model ProgramTheme {
+    id           Int        @id @default(autoincrement())
+    name         String
+    isActive     Boolean?   @default(true)
+    createdAt    DateTime   @default(now()) @db.Timestamp(6)
+    updatedAt    DateTime   @updatedAt
+    createdBy    String?
+    updatedBy    String?
+    courseId     String
+    schoolYearId String
+    Program      Program[]
+    course       Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+    schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+}
+
+model ProgramCategory {
+    id           Int        @id @default(autoincrement())
+    name         String
+    isActive     Boolean?   @default(true)
+    createdAt    DateTime   @default(now()) @db.Timestamp(6)
+    updatedAt    DateTime   @updatedAt
+    createdBy    String?
+    updatedBy    String?
+    schoolYearId String
+    Program      Program[]
+    schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+}
+
+model ProgramDocument {
+    id          Int      @id @default(autoincrement())
+    title       String
+    documentUrl String
+    description String?
+    isActive    Boolean? @default(true)
+    createdAt   DateTime @default(now()) @db.Timestamp(6)
+    createdBy   String?
+    programId   Int
+    program     Program  @relation(fields: [programId], references: [id], onDelete: Cascade)
+}
+
+model Program {
+    id           Int               @id @default(autoincrement())
+    title        String
+    content      String?
+    startDate    DateTime          @default(now()) @db.Timestamp(6)
+    endDate      DateTime          @default(now()) @db.Timestamp(6)
+    status       String?           @default("NOT_STARTED")
+    isActive     Boolean?          @default(true)
+    createdAt    DateTime          @default(now()) @db.Timestamp(6)
+    updatedAt    DateTime          @updatedAt
+    createdBy    String?
+    updatedBy    String?
+    subjectId    Int
+    schoolYearId String
+    categoryId   Int?
+    themeId      Int?
+    category     ProgramCategory?  @relation(fields: [categoryId], references: [id])
+    schoolYear   SchoolYear        @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    subject      Subject           @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+    theme        ProgramTheme?     @relation(fields: [themeId], references: [id])
+    documents    ProgramDocument[]
+}
+
+model SMSTemplate {
+    id          Int      @id @default(autoincrement())
+    name        String
+    description String?
+    content     String
+    isActive    Boolean? @default(true)
+    createdAt   DateTime @default(now()) @db.Timestamp(6)
+    createdBy   String?
+}
+
+model SMSHistory {
+    id        Int                @id @default(autoincrement())
+    message   String
+    status    String
+    createdAt DateTime           @default(now()) @db.Timestamp(6)
+    createdBy String?
+    sentAt    DateTime?          @db.Timestamp(6)
+    histories SMSHistoryDetail[]
+}
+
+model SMSHistoryDetail {
+    id           Int       @id @default(autoincrement())
+    smsHistoryId Int
+    to           String
+    status       String
+    deliveredAt  DateTime? @db.Timestamp(6)
+
+    smsHistory SMSHistory @relation(fields: [smsHistoryId], references: [id], onDelete: Cascade)
+}
+
+model Photo {
+    id        Int      @id @default(autoincrement())
+    photoUrl  String
+    name      String?
+    createdAt DateTime @default(now()) @db.Timestamp(6)
+    createdBy String?
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ReportQueue {
+    id           Int       @id @default(autoincrement())
+    name         String?
+    code         String?
+    fromUrl      String?
+    filePath     String?
+    content      Json?
+    status       String?   @default("IN_PROGRESS")
+    expectedDate DateTime  @default(now()) @db.Timestamp(6)
+    createdAt    DateTime  @default(now()) @db.Timestamp(6)
+    startedAt    DateTime? @db.Timestamp(6)
+    completedAt  DateTime? @db.Timestamp(6)
+    userId       String
+    user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view gradeaverageview {
+    studentId      String
+    subjectId      Int
+    termId         Int
+    id             Int     @default(0)
+    courseId       String?
+    teacherId      String?
+    classroomId    String?
+    subjectGroupId Int?
+    order          Int?
+    coefficient    Float?
+    program        String? @db.Text
+    termOrder      Int
+    weightedGrade  Float?
+    averageGrade   Float?
+
+    @@ignore
+}
+
+enum PolicyEffect {
+    Allow
+    Deny
+}
+
+enum TokenType {
+    ACCESS
+    REFRESH
+    RESET_PASSWORD
+    VERIFY_EMAIL
+}
+
+enum AttendanceType {
+    DAILY
+    WEEKLY
+    MONTHLY
+    PERIODICALLY
+}
+
+enum Gender {
+    male
+    female
+}

@@ -3,14 +3,18 @@ import type {
   NextAuthConfig,
   Session as NextAuthSession,
 } from "next-auth";
+import type { Adapter } from "next-auth/adapters";
 import { skipCSRFCheck } from "@auth/core";
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import Discord from "next-auth/providers/discord";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+import { z } from "zod";
 
-import { db } from "@acme/db/client";
-import { Account, Session, User } from "@acme/db/schema";
+import { db } from "@acme/db";
 
 import { env } from "../env";
+import exclude from "./exclude";
+import { isPasswordMatch } from "./utils";
 
 declare module "next-auth" {
   interface Session {
@@ -19,13 +23,7 @@ declare module "next-auth" {
     } & DefaultSession["user"];
   }
 }
-
-const adapter = DrizzleAdapter(db, {
-  usersTable: User,
-  accountsTable: Account,
-  sessionsTable: Session,
-});
-
+const adapter: Adapter = PrismaAdapter(db);
 export const isSecureContext = env.NODE_ENV !== "development";
 
 export const authConfig = {
@@ -38,7 +36,39 @@ export const authConfig = {
       }
     : {}),
   secret: env.AUTH_SECRET,
-  providers: [Discord],
+  providers: [
+    CredentialsProvider({
+      id: "credentials",
+      name: "Credentials",
+      credentials: {},
+      async authorize(credentials) {
+        const parsed = z
+          .object({ username: z.string().email(), password: z.string().min(1) })
+          .safeParse(credentials);
+
+        if (parsed.success) {
+          const { username, password } = parsed.data;
+          const user = await db.user.findFirst({
+            where: {
+              email: username,
+            },
+          });
+
+          if (!user || !(await isPasswordMatch(password, user.password))) {
+            throw new Error("Incorrect email or password");
+          }
+          const returnedUser = exclude(user, ["password"]);
+          return returnedUser;
+        }
+        throw new Error("Invalid credentials");
+      },
+    }),
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true,
+    }),
+  ],
   callbacks: {
     session: (opts) => {
       if (!("user" in opts))

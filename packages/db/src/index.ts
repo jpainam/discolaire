@@ -1,2 +1,20 @@
-export * from "drizzle-orm/sql";
-export { alias } from "drizzle-orm/pg-core";
+import { PrismaClient } from "@prisma/client";
+
+//import { env } from "@/env";
+
+const createPrismaClient = () =>
+  new PrismaClient({
+    //log:
+    //  env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
+  });
+
+// eslint-disable-next-line no-undef
+const globalForPrisma = globalThis as unknown as {
+  prisma: ReturnType<typeof createPrismaClient> | undefined;
+};
+
+export const db = globalForPrisma.prisma ?? createPrismaClient();
+
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+
+export * from "@prisma/client";
