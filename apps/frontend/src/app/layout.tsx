@@ -9,7 +9,7 @@ import { Toaster } from "@repo/ui/toast";
 
 import { TRPCReactProvider } from "~/trpc/react";
 
-import "~/app/globals.css";
+import "~/styles/globals.css";
 
 import { auth } from "@repo/auth";
 import { detectLanguage } from "@repo/i18n/server";

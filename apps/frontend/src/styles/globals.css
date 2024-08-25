@@ -1,10 +1,6 @@
 @import "react-big-calendar/lib/css/react-big-calendar.css";
 @import "react-day-picker/dist/style.css";
 @import "react-phone-number-input/style.css";
-@import "@ag-grid-community/styles/ag-grid.css";
-/* @import "@ag-grid-community/styles/ag-theme-quartz.css"; */
-@import "ag-grid-community/styles/ag-theme-alpine.css";
-/* @import "ag-grid-community/styles/ag-theme-balham.css"; */
 
 @tailwind base;
 @tailwind components;
