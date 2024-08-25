@@ -2,15 +2,21 @@ import type { Metadata, Viewport } from "next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 
+import { I18nProvider } from "@repo/i18n/i18n-context";
 import { cn } from "@repo/ui";
-import { ThemeProvider, ThemeToggle } from "@repo/ui/theme";
+import { ThemeToggle } from "@repo/ui/theme";
 import { Toaster } from "@repo/ui/toast";
 
 import { TRPCReactProvider } from "~/trpc/react";
 
 import "~/app/globals.css";
 
+import { auth } from "@repo/auth";
+import { detectLanguage } from "@repo/i18n/server";
+
+import { ThemeProvider } from "~/components/theme-provider";
 import { env } from "~/env";
+import AuthProvider from "~/providers/auth-provider";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -40,24 +46,36 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout(props: { children: React.ReactNode }) {
+export default async function RootLayout(props: { children: React.ReactNode }) {
+  const session = await auth();
+
+  const lng = await detectLanguage();
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={cn(
-          "min-h-screen bg-background font-sans text-foreground antialiased",
-          GeistSans.variable,
-          GeistMono.variable,
-        )}
-      >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <TRPCReactProvider>{props.children}</TRPCReactProvider>
-          <div className="absolute bottom-4 right-4">
-            <ThemeToggle />
-          </div>
-          <Toaster />
-        </ThemeProvider>
-      </body>
-    </html>
+    <I18nProvider language={lng}>
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={cn(
+            "min-h-screen bg-background font-sans text-foreground antialiased",
+            GeistSans.variable,
+            GeistMono.variable,
+          )}
+        >
+          <ThemeProvider
+            disableTransitionOnChange
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+          >
+            <TRPCReactProvider>
+              <AuthProvider session={session}>{props.children}</AuthProvider>
+            </TRPCReactProvider>
+            <div className="absolute bottom-4 right-4">
+              <ThemeToggle />
+            </div>
+            <Toaster />
+          </ThemeProvider>
+        </body>
+      </html>
+    </I18nProvider>
   );
 }

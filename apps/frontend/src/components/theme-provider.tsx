@@ -2,9 +2,10 @@
 
 import "~/styles/themes.css";
 
-import { TooltipProvider } from "@repo/ui/tooltip";
+import type { ThemeProviderProps } from "next-themes/dist/types";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { type ThemeProviderProps } from "next-themes/dist/types";
+
+import { TooltipProvider } from "@repo/ui/tooltip";
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   //const [theme] = useTheme();

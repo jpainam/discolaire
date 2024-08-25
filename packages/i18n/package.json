@@ -8,7 +8,8 @@
       "types": "./dist/index.d.ts",
       "default": "./src/index.ts"
     },
-    "./server": "./server.ts"
+    "./server": "./server.ts",
+    "./i18n-context": "./i18n-context.tsx"
   },
   "license": "MIT",
   "scripts": {
