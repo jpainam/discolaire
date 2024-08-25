@@ -2,13 +2,14 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { inferProcedureOutput } from "@trpc/server";
+
+import { useLocale } from "@repo/i18n";
 import { useDataTable } from "@repo/ui/data-table";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
 import { DataTableFilterField } from "@repo/ui/data-table/types";
-import { inferProcedureOutput } from "@trpc/server";
 
-import { useLocale } from "~/hooks/use-locale";
 import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { DataTableSkeleton } from "../data-table/data-table-skeleton";

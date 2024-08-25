@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useFormContext, useWatch } from "react-hook-form";
+
+import { useLocale } from "@repo/i18n";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import { Input } from "@repo/ui/input";
 import {
@@ -12,12 +15,10 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/table";
-import { useFormContext, useWatch } from "react-hook-form";
 
 import { AvatarState } from "~/components/AvatarState";
 import { EmptyState } from "~/components/EmptyState";
 import { routes } from "~/configs/routes";
-import { useLocale } from "~/hooks/use-locale";
 import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";

@@ -1,5 +1,9 @@
 import { useTransition } from "react";
 import { Fee } from "@prisma/client";
+import { CopyPlus, Forward, MoreVertical, Reply } from "lucide-react";
+import { toast } from "sonner";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -9,12 +13,9 @@ import {
 } from "@repo/ui/dropdown-menu";
 import { Separator } from "@repo/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
-import { CopyPlus, Forward, MoreVertical, Reply } from "lucide-react";
-import { toast } from "sonner";
 
 import { Mail } from "~/app/(dashboard)/mail/data";
 import { DeletePopover } from "~/components/shared/buttons/delete-popover";
-import { useLocale } from "~/hooks/use-locale";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { FeesDetailsForm } from "./fees-details-form";

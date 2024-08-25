@@ -1,5 +1,8 @@
 "use client";
 
+import { PiArrowLineUpBold } from "react-icons/pi";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -9,11 +12,9 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
-import { PiArrowLineUpBold } from "react-icons/pi";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
-import { useLocale } from "~/hooks/use-locale";
 import { cn } from "~/lib/utils";
 import { exportToCSV } from "~/utils/export-to-csv";
 

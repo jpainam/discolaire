@@ -1,6 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   Form,
@@ -12,12 +16,9 @@ import {
 } from "@repo/ui/form";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
 import { Separator } from "@repo/ui/separator";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";
-import { useLocale } from "~/hooks/use-locale";
 import { useModal } from "~/hooks/use-modal";
 
 export function ChurchDetailsForm() {

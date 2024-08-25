@@ -1,6 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   Form,
@@ -11,10 +15,7 @@ import {
   FormMessage,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
-import { useLocale } from "~/hooks/use-locale";
 import { cn } from "~/lib/utils";
 
 const FormSchema = z.object({

@@ -1,6 +1,7 @@
 "use client";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+
 import { showErrorToast } from "~/lib/handle-error";
 import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";

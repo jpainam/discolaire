@@ -1,11 +1,12 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { Button } from "@repo/ui/button";
-import { Label } from "@repo/ui/label";
 import { Plus } from "lucide-react";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
+import { Label } from "@repo/ui/label";
+
 import { useModal } from "~/hooks/use-modal";
 import { CreateEditAppreciation } from "./CreateEditAppreciation";
 

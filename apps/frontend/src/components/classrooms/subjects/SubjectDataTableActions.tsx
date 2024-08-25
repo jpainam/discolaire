@@ -2,14 +2,15 @@
 
 import { useParams } from "next/navigation";
 import { DownloadIcon, PlusIcon } from "@radix-ui/react-icons";
-import { Button } from "@repo/ui/button";
 import { type Table } from "@tanstack/react-table";
 import { inferProcedureOutput } from "@trpc/server";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
+
 import { useAlert } from "~/hooks/use-alert";
-import { useLocale } from "~/hooks/use-locale";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { exportTableToCSV } from "~/lib/export";

@@ -4,9 +4,10 @@ import path from "path";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { useLocale } from "@repo/i18n";
+
 import { Icons } from "~/components/icons";
 import { siteConfig } from "~/configs/site";
-import { useLocale } from "~/hooks/use-locale";
 import { cn } from "~/lib/utils";
 
 type MenuItem = {

@@ -1,6 +1,9 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { ChevronDownIcon, PrinterIcon } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import {
@@ -12,11 +15,9 @@ import {
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Label } from "@repo/ui/label";
 import { Separator } from "@repo/ui/separator";
-import { ChevronDownIcon, PrinterIcon } from "lucide-react";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
-import { useLocale } from "~/hooks/use-locale";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";

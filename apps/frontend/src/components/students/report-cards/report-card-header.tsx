@@ -1,5 +1,8 @@
 "use client";
 
+import { MoreVertical } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -8,14 +11,12 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import { Label } from "@repo/ui/label";
-import { MoreVertical } from "lucide-react";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/hooks/use-locale";
 import { useRouter } from "~/hooks/use-router";
 
 export function ReportCardHeader() {

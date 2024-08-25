@@ -1,15 +1,16 @@
 "use client";
 
 import { useMemo } from "react";
+import { inferProcedureOutput } from "@trpc/server";
+import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
+
+import { useLocale } from "@repo/i18n";
 import { DataTable } from "@repo/ui/data-table/v2/data-table";
 import { DataTableToolbar } from "@repo/ui/data-table/v2/data-table-toolbar";
 import { DataTableFilterField } from "@repo/ui/data-table/v2/datatypes";
 import { useDataTable } from "@repo/ui/data-table/v2/use-data-table";
 import { EmptyState } from "@repo/ui/EmptyState";
-import { inferProcedureOutput } from "@trpc/server";
-import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
 
-import { useLocale } from "~/hooks/use-locale";
 import { showErrorToast } from "~/lib/handle-error";
 import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";

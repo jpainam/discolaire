@@ -1,6 +1,11 @@
 "use client";
 
 import React, { useEffect, useMemo } from "react";
+import { inferProcedureOutput } from "@trpc/server";
+import _ from "lodash";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+
+import { useLocale } from "@repo/i18n";
 import {
   Card,
   CardContent,
@@ -15,11 +20,7 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/chart";
 import { Skeleton } from "@repo/ui/skeleton";
-import { inferProcedureOutput } from "@trpc/server";
-import _ from "lodash";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-import { useLocale } from "~/hooks/use-locale";
 import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 

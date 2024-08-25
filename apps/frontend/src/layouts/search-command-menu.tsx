@@ -10,6 +10,10 @@ import {
   MoonIcon,
   SunIcon,
 } from "@radix-ui/react-icons";
+import { LinkIcon } from "lucide-react";
+import { useTheme } from "next-themes";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   CommandDialog,
@@ -21,11 +25,8 @@ import {
   CommandSeparator,
 } from "@repo/ui/command";
 import { ScrollArea } from "@repo/ui/scroll-area";
-import { LinkIcon } from "lucide-react";
-import { useTheme } from "next-themes";
 
 import { usePageConfig } from "~/configs/page_config";
-import { useLocale } from "~/hooks/use-locale";
 import { cn } from "~/lib/utils";
 
 export function SearchCommandMenu({ ...props }: DialogProps) {

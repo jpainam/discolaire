@@ -3,6 +3,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import { Loader } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableSkeleton } from "@repo/ui/data-table/v2/data-table-skeleton";
 import FlatBadge from "@repo/ui/FlatBadge";
@@ -14,13 +18,10 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/table";
-import { useQueryClient } from "@tanstack/react-query";
-import { Loader } from "lucide-react";
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/hooks/use-locale";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { ReportCardType } from "~/types/report-card";

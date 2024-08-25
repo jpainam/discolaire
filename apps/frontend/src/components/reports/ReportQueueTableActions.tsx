@@ -1,5 +1,8 @@
 "use client";
 
+import { Ban, CloudDownload, MoreHorizontal, RefreshCcw } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -10,9 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
-import { Ban, CloudDownload, MoreHorizontal, RefreshCcw } from "lucide-react";
 
-import { useLocale } from "~/hooks/use-locale";
 import { ReportQueue } from "~/types/report";
 
 export function ReportQueueTableActions({ report }: { report: ReportQueue }) {

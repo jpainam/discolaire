@@ -1,17 +1,18 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { MoreVertical, Plus } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
-import { MoreVertical, Plus } from "lucide-react";
 
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { routes } from "~/configs/routes";
-import { useLocale } from "~/hooks/use-locale";
 import { useRouter } from "~/hooks/use-router";
 import { FinanceBreadCrumb } from "./breadcrumb";
 

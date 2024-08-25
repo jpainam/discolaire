@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { EnvelopeOpenIcon } from "@radix-ui/react-icons";
+import { useAtomValue } from "jotai";
+import { sumBy } from "lodash";
+import { AtSign, Copy, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
+import { useFormContext } from "react-hook-form";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   Card,
@@ -12,13 +18,8 @@ import {
 import { Checkbox } from "@repo/ui/checkbox";
 import { FormControl, FormField, FormItem } from "@repo/ui/form";
 import { Separator } from "@repo/ui/separator";
-import { useAtomValue } from "jotai";
-import { sumBy } from "lodash";
-import { AtSign, Copy, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
-import { useFormContext } from "react-hook-form";
 
 import { makePaymentAtom } from "~/atoms/payment";
-import { useLocale } from "~/hooks/use-locale";
 import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";

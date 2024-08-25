@@ -1,6 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   Form,
@@ -18,10 +22,7 @@ import {
   SelectValue,
 } from "@repo/ui/select";
 import { Textarea } from "@repo/ui/textarea";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
-import { useLocale } from "~/hooks/use-locale";
 import { useModal } from "~/hooks/use-modal";
 
 const feedbackSchema = z.object({

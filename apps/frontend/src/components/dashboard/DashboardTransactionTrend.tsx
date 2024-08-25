@@ -2,6 +2,9 @@
 
 import * as React from "react";
 import { useSearchParams } from "next/navigation";
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+
+import { useLocale } from "@repo/i18n";
 import {
   Card,
   CardContent,
@@ -25,11 +28,9 @@ import {
   SelectValue,
 } from "@repo/ui/select";
 import { Skeleton } from "@repo/ui/skeleton";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import { EmptyState } from "~/components/EmptyState";
 import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/hooks/use-locale";
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";

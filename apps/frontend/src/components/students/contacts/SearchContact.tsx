@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import { Button } from "@repo/ui/button";
-import { Input } from "@repo/ui/input";
-import { Skeleton } from "@repo/ui/skeleton";
 import { ChevronLeft } from "lucide-react";
 import { toast } from "sonner";
 
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
+import { Input } from "@repo/ui/input";
+import { Skeleton } from "@repo/ui/skeleton";
+
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import { useDebounce } from "~/hooks/use-debounce";
-import { useLocale } from "~/hooks/use-locale";
 import { showErrorToast } from "~/lib/handle-error";
 import rangeMap from "~/lib/range-map";
 import { cn } from "~/lib/utils";

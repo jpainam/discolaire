@@ -2,7 +2,8 @@
 
 import { useQueryState } from "nuqs";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+
 import { DatePicker } from "../shared/date-picker";
 import { ToggleSelector } from "../shared/forms/toggle-selector";
 import { ProgramThemeSelector } from "../shared/selects/ProgramThemeSelector";

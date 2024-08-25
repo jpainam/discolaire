@@ -2,11 +2,12 @@
 
 import { useMemo } from "react";
 import { useParams } from "next/navigation";
+
+import { useLocale } from "@repo/i18n";
 import { useDataTable } from "@repo/ui/data-table";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
 
-import { useLocale } from "~/hooks/use-locale";
 import { api } from "~/trpc/react";
 import { fetchGradeColumns } from "./GradeDataTableColumns";
 

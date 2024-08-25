@@ -2,6 +2,10 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { Check } from "lucide-react";
+import { toast } from "sonner";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   Command,
@@ -12,12 +16,9 @@ import {
   CommandList,
 } from "@repo/ui/command";
 import { Skeleton } from "@repo/ui/skeleton";
-import { Check } from "lucide-react";
-import { toast } from "sonner";
 
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import { useDebounce } from "~/hooks/use-debounce";
-import { useLocale } from "~/hooks/use-locale";
 import { useModal } from "~/hooks/use-modal";
 import { getErrorMessage } from "~/lib/handle-error";
 import rangeMap from "~/lib/range-map";

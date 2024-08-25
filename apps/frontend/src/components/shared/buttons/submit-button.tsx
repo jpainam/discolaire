@@ -1,10 +1,10 @@
 "use client";
 
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { Button } from "@repo/ui/button";
 import { useFormContext } from "react-hook-form";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
 
 type SubmitButtonProps = {
   //loading?: boolean;

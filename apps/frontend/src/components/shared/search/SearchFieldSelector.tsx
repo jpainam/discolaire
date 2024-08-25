@@ -1,3 +1,6 @@
+import { useAtom } from "jotai";
+
+import { useLocale } from "@repo/i18n";
 import {
   Select,
   SelectContent,
@@ -5,10 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/select";
-import { useAtom } from "jotai";
 
 import { peopleCriteriaAtom } from "~/atoms/use-criteria";
-import { useLocale } from "~/hooks/use-locale";
 
 export function SearchFieldSelector() {
   const { t } = useLocale();

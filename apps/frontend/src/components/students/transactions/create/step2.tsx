@@ -1,4 +1,8 @@
 import { useParams } from "next/navigation";
+import { ArrowLeft, Printer } from "lucide-react";
+import { useForm } from "react-hook-form";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import {
@@ -10,10 +14,7 @@ import {
   FormLabel,
 } from "@repo/ui/form";
 import { useStepper } from "@repo/ui/Stepper";
-import { ArrowLeft, Printer } from "lucide-react";
-import { useForm } from "react-hook-form";
 
-import { useLocale } from "~/hooks/use-locale";
 import Step2Details from "./step2details";
 
 export default function Step2() {

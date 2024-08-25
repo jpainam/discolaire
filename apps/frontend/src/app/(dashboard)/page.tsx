@@ -6,7 +6,7 @@ import { DashboardTransactionTrend } from "~/components/dashboard/DashboardTrans
 import { EffectiveStat } from "~/components/dashboard/EffectiveStat";
 import { SearchBlock } from "~/components/dashboard/SearchBlock";
 
-export default async function DashboardPage() {
+export default function DashboardPage() {
   // const signedUrl = await fetch(
   //   "http://localhost:3000/api/upload?key=avatars/011ece07-f378-47de-bbe5-d1cb8618dd8e"
   // );

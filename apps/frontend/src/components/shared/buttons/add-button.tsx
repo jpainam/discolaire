@@ -1,9 +1,9 @@
 "use client";
 
-import { Button } from "@repo/ui/button";
 import { PlusIcon } from "lucide-react";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
 
 type AddButtonProps = {
   onClick?: () => void;

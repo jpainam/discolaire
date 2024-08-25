@@ -1,7 +1,8 @@
 import React from "react";
 import { BookText, DatabaseIcon, HomeIcon } from "lucide-react";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+
 import { routes } from "./routes";
 
 export interface NavItem {

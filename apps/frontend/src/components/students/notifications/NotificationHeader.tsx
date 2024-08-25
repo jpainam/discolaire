@@ -2,6 +2,11 @@
 
 import { useState } from "react";
 import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { MailOpen, MoreVertical } from "lucide-react";
+import { DateRange } from "react-day-picker";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -12,15 +17,11 @@ import {
 } from "@repo/ui/dropdown-menu";
 import { Input } from "@repo/ui/input";
 import { Label } from "@repo/ui/label";
-import { useQuery } from "@tanstack/react-query";
-import { MailOpen, MoreVertical } from "lucide-react";
-import { DateRange } from "react-day-picker";
 
 import { DateRangePicker } from "~/components/shared/DateRangePicker";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useDebounce } from "~/hooks/use-debounce";
-import { useLocale } from "~/hooks/use-locale";
 import { useRouter } from "~/hooks/use-router";
 import { sidebarIcons } from "../sidebar-icons";
 

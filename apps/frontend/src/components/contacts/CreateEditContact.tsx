@@ -1,6 +1,13 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { inferProcedureOutput } from "@trpc/server";
+import { Loader } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   Form,
@@ -11,15 +18,9 @@ import {
 } from "@repo/ui/form";
 import { Separator } from "@repo/ui/separator";
 import { Textarea } from "@repo/ui/textarea";
-import { inferProcedureOutput } from "@trpc/server";
-import { Loader } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
 
 import { InputField } from "~/components/shared/forms/input-field";
 import PrefixSelector from "~/components/shared/forms/PrefixSelector";
-import { useLocale } from "~/hooks/use-locale";
 import { useSheet } from "~/hooks/use-sheet";
 import { getErrorMessage } from "~/lib/handle-error";
 import { AppRouter } from "~/server/api/root";

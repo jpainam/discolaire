@@ -1,6 +1,9 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { Forward, MoreVertical, Plus, Reply } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -10,10 +13,8 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import { Separator } from "@repo/ui/separator";
-import { Forward, MoreVertical, Plus, Reply } from "lucide-react";
 
 import { routes } from "~/configs/routes";
-import { useLocale } from "~/hooks/use-locale";
 import { useRouter } from "~/hooks/use-router";
 import { MakePaymentBreadCrumb } from "./breadcrumb";
 

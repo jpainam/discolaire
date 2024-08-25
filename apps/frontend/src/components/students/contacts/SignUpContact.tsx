@@ -4,14 +4,15 @@ import { useCallback } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { render } from "@react-email/components";
+import { toast } from "sonner";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Skeleton } from "@repo/ui/skeleton";
-import { toast } from "sonner";
 
 import { EmptyState } from "~/components/EmptyState";
 import { SendInvite } from "~/email-templates/SendInvite";
 import { env } from "~/env";
-import { useLocale } from "~/hooks/use-locale";
 import { getErrorMessage, showErrorToast } from "~/lib/handle-error";
 import { sendEmail } from "~/server/services/messaging-service";
 import { api } from "~/trpc/react";

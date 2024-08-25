@@ -3,6 +3,9 @@
 import { useState } from "react";
 //import { toast } from "@repo/ui/use-toast";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { useFormContext } from "react-hook-form";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   Command,
@@ -21,9 +24,7 @@ import {
 } from "@repo/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { ScrollArea } from "@repo/ui/scroll-area";
-import { useFormContext } from "react-hook-form";
 
-import { useLocale } from "~/hooks/use-locale";
 import { cn } from "~/lib/utils";
 import { studentPrintOptions } from "./print-selector-old";
 

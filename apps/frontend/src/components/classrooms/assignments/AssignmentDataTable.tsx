@@ -1,13 +1,14 @@
 "use client";
 
 import { useMemo } from "react";
-import { useDataTable } from "@repo/ui/data-table";
-import { DataTable } from "@repo/ui/data-table/data-table";
-import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
 import { ColumnDef } from "@tanstack/react-table";
 import { inferProcedureOutput } from "@trpc/server";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+import { useDataTable } from "@repo/ui/data-table";
+import { DataTable } from "@repo/ui/data-table/data-table";
+import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
+
 import { AppRouter } from "~/server/api/root";
 import { AssignmentDataTableActions } from "./AssignmentDataTableActions";
 import { fetchAssignmentTableColumns } from "./AssignmentDataTableColumns";

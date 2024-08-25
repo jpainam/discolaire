@@ -1,5 +1,12 @@
 "use client";
 
+import { subDays } from "date-fns";
+import { addDays } from "date-fns/addDays";
+import { sumBy } from "lodash";
+import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import {
@@ -18,14 +25,8 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/table";
-import { subDays } from "date-fns";
-import { addDays } from "date-fns/addDays";
-import { sumBy } from "lodash";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
-import { toast } from "sonner";
 
 import { useAlert } from "~/hooks/use-alert";
-import { useLocale } from "~/hooks/use-locale";
 import { useModal } from "~/hooks/use-modal";
 import { CURRENCY } from "~/lib/constants";
 import { getErrorMessage } from "~/lib/handle-error";

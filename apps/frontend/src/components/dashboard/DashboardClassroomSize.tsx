@@ -1,6 +1,10 @@
 "use client";
 
 import React, { useEffect, useMemo } from "react";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+
+import type { ChartConfig } from "@repo/ui/chart";
+import { useLocale } from "@repo/i18n";
 import {
   Card,
   CardContent,
@@ -9,15 +13,12 @@ import {
   CardTitle,
 } from "@repo/ui/card";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/chart";
 import { Skeleton } from "@repo/ui/skeleton";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-import { useLocale } from "~/hooks/use-locale";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";

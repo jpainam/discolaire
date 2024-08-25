@@ -1,13 +1,14 @@
 "use client";
 
 import { Fragment, useState } from "react";
-import { Button } from "@repo/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
-import { Separator } from "@repo/ui/separator";
 import { motion } from "framer-motion";
 import { PlusCircle, Settings2Icon, WandSparkles } from "lucide-react";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+import { Separator } from "@repo/ui/separator";
+
 import { AppreciationCategory } from "~/types/appreciation";
 import { AppreciationList } from "./AppreciationList";
 import { CreateEditAppreciationCategory } from "./CreateEditAppreciationCategory";

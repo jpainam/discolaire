@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocale } from "@repo/i18n";
 import {
   Select,
   SelectContent,
@@ -9,7 +10,6 @@ import {
 } from "@repo/ui/select";
 import { Skeleton } from "@repo/ui/skeleton";
 
-import { useLocale } from "~/hooks/use-locale";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 

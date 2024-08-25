@@ -1,17 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@repo/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@repo/ui/form";
-import { Label } from "@repo/ui/label";
-import { Textarea } from "@repo/ui/textarea";
 import { inferProcedureOutput } from "@trpc/server";
 import {
   AlignStartHorizontal,
@@ -25,7 +14,19 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@repo/ui/form";
+import { Label } from "@repo/ui/label";
+import { Textarea } from "@repo/ui/textarea";
+
 import { useModal } from "~/hooks/use-modal";
 import { getErrorMessage } from "~/lib/handle-error";
 import { AppRouter } from "~/server/api/root";

@@ -1,6 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Upload } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import {
@@ -11,12 +16,8 @@ import {
   FormLabel,
 } from "@repo/ui/form";
 import { Separator } from "@repo/ui/separator";
-import { Upload } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { SelectField } from "~/components/shared/forms/SelectField";
-import { useLocale } from "~/hooks/use-locale";
 
 const importPhotoSchema = z.object({
   firstRow: z.boolean(),

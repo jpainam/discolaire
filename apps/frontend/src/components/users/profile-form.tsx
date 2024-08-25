@@ -2,6 +2,11 @@
 
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
+import { useFieldArray, useForm } from "react-hook-form";
+import { z } from "zod";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   Form,
@@ -21,11 +26,6 @@ import {
   SelectValue,
 } from "@repo/ui/select";
 import { Textarea } from "@repo/ui/textarea";
-import { useSession } from "next-auth/react";
-import { useFieldArray, useForm } from "react-hook-form";
-import { z } from "zod";
-
-import { useLocale } from "~/hooks/use-locale";
 
 //import { toast } from "~/registry/new-york/ui/use-toast";
 

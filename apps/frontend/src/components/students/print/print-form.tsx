@@ -2,14 +2,15 @@
 
 //import { toast } from "@repo/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@repo/ui/button";
-import { Form } from "@repo/ui/form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
+import { Form } from "@repo/ui/form";
+
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/hooks/use-locale";
 import { useRouter } from "~/hooks/use-router";
 import { useSchoolYear } from "~/hooks/use-schoolyear";
 import PrintSelector from "./print-selector";

@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocale } from "@repo/i18n";
 import {
   Select,
   SelectContent,
@@ -13,7 +14,6 @@ import FolderIcon from "~/components/icons/folder-solid";
 import ImageIcon from "~/components/icons/image-solid";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
-import { useLocale } from "~/hooks/use-locale";
 
 type Option = {
   value: string;

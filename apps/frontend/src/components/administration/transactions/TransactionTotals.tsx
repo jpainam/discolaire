@@ -3,13 +3,14 @@
 import Link from "next/link";
 import { parseAsIsoDateTime, useQueryState } from "nuqs";
 
+import { useLocale } from "@repo/i18n";
+
 import ContainersIcon from "~/components/icons/containers";
 import ExpenseIcon from "~/components/icons/expenses";
 import RevenueUpIcon from "~/components/icons/revenue-up";
 import SalesIcon from "~/components/icons/sales";
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import { routes } from "~/configs/routes";
-import { useLocale } from "~/hooks/use-locale";
 import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/react";
 

@@ -12,7 +12,8 @@ import {
   UserSearch,
 } from "lucide-react";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { useCreateQueryString } from "../../hooks/create-query-string";

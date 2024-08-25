@@ -2,6 +2,9 @@
 
 import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
+import { sortBy, sum } from "lodash";
+
+import { useLocale } from "@repo/i18n";
 //import { StudentReportCard } from "~/types/report-card";
 import FlatBadge, { FlatBadgeVariant } from "@repo/ui/FlatBadge";
 import {
@@ -12,10 +15,8 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/table";
-import { sortBy, sum } from "lodash";
 
 import { routes } from "~/configs/routes";
-import { useLocale } from "~/hooks/use-locale";
 import { cn } from "~/lib/utils";
 import { getAppreciations } from "~/utils/get-appreciation";
 

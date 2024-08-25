@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Check, ChevronsUpDown, Plus } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   Command,
@@ -13,9 +16,7 @@ import {
 } from "@repo/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { ScrollArea } from "@repo/ui/scroll-area";
-import { Check, ChevronsUpDown, Plus } from "lucide-react";
 
-import { useLocale } from "~/hooks/use-locale";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";

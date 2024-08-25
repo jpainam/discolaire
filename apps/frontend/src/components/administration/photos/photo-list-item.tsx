@@ -1,14 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@repo/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { Pencil, Trash2 } from "lucide-react";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+
 import FolderIcon from "~/components/icons/folder-solid";
 import Favorite from "~/components/shared/favorite";
-import { useLocale } from "~/hooks/use-locale";
 
 type PhotoCardProps = {
   title: string;

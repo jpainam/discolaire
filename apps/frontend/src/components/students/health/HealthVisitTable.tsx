@@ -1,5 +1,8 @@
 "use client";
 
+import { Eye, MailIcon, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -16,9 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/table";
-import { Eye, MailIcon, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
-import { useLocale } from "~/hooks/use-locale";
 import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
 import { cn } from "~/lib/utils";

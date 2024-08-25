@@ -3,14 +3,15 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Grade } from "@prisma/client";
-import { Button } from "@repo/ui/button";
-import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
-import { ScrollArea } from "@repo/ui/scroll-area";
 import _ from "lodash";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useQueryState } from "nuqs";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
+import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
+import { ScrollArea } from "@repo/ui/scroll-area";
+
 import { api } from "~/trpc/react";
 import { ByChronologicalOrder } from "./by-chronological-order";
 import { BySubject } from "./by-subject";

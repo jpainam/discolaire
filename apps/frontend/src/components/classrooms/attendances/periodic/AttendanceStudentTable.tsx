@@ -1,6 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useForm, useFormContext, useWatch } from "react-hook-form";
+
+import { useLocale } from "@repo/i18n";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Form } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
@@ -12,11 +15,9 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/table";
-import { useForm, useFormContext, useWatch } from "react-hook-form";
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
-import { useLocale } from "~/hooks/use-locale";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { PeriodicAttendanceHeader } from "./PeriodicAttendanceHeader";

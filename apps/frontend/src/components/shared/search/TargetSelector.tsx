@@ -1,5 +1,8 @@
 "use client";
 
+import { useAtom } from "jotai/react";
+
+import { useLocale } from "@repo/i18n";
 import {
   Select,
   SelectContent,
@@ -7,10 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/select";
-import { useAtom } from "jotai/react";
 
 import { peopleCriteriaAtom } from "~/atoms/use-criteria";
-import { useLocale } from "~/hooks/use-locale";
 
 export function TargetSelector() {
   const { t } = useLocale();

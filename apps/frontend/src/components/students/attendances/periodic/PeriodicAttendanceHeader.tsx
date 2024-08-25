@@ -1,6 +1,10 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import { MoreVertical, Plus } from "lucide-react";
+import { toast } from "sonner";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -11,12 +15,9 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import { Label } from "@repo/ui/label";
-import { MoreVertical, Plus } from "lucide-react";
-import { toast } from "sonner";
 
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/hooks/use-locale";
 import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
 import { CreateEditPeriodicAttendance } from "./CreateEditPeriodicAttendance";

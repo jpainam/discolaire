@@ -2,6 +2,9 @@
 
 import * as React from "react";
 import { useSearchParams } from "next/navigation";
+import { Check, ChevronsUpDown } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   Command,
@@ -13,9 +16,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { ScrollArea } from "@repo/ui/scroll-area";
 import { Skeleton } from "@repo/ui/skeleton";
-import { Check, ChevronsUpDown } from "lucide-react";
 
-import { useLocale } from "~/hooks/use-locale";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 

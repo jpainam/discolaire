@@ -1,5 +1,9 @@
 "use client";
 
+import { useAtomValue } from "jotai";
+import { ChevronDown, SendHorizonal, SendIcon } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -10,11 +14,8 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import FlatBadge from "@repo/ui/FlatBadge";
-import { useAtomValue } from "jotai";
-import { ChevronDown, SendHorizonal, SendIcon } from "lucide-react";
 
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
-import { useLocale } from "~/hooks/use-locale";
 import { useModal } from "~/hooks/use-modal";
 import SendNotificationDialog from "./SendNotificationDialog";
 

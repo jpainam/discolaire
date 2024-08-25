@@ -2,14 +2,6 @@
 
 import { useParams } from "next/navigation";
 import { DownloadIcon } from "@radix-ui/react-icons";
-import { Button } from "@repo/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
 import { type Table } from "@tanstack/react-table";
 import { inferProcedureOutput } from "@trpc/server";
 import {
@@ -20,7 +12,16 @@ import {
   X,
 } from "lucide-react";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/dropdown-menu";
+
 import { useModal } from "~/hooks/use-modal";
 import { exportTableToCSV } from "~/lib/export";
 import { AppRouter } from "~/server/api/root";

@@ -2,6 +2,11 @@
 
 import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Plus, Save } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Form } from "@repo/ui/form";
 import { Label } from "@repo/ui/label";
@@ -13,14 +18,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@repo/ui/sheet";
-import { Plus, Save } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
-import { useLocale } from "~/hooks/use-locale";
 
 const addStudentFormSchema = z.object({
   firstName: z.string().min(1, "First name is required"),

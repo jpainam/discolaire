@@ -1,14 +1,6 @@
 "use client";
 
 import { useParams, usePathname } from "next/navigation";
-import { Button } from "@repo/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
 import {
   BellRing,
   MessageCircleMore,
@@ -26,10 +18,19 @@ import {
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import * as RPNInput from "react-phone-number-input";
 
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/dropdown-menu";
+
 import { SimpleTooltip } from "~/components/simple-tooltip";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/hooks/use-locale";
 import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";

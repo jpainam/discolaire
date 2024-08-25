@@ -1,10 +1,11 @@
 "use client";
 
-import { Button } from "@repo/ui/button";
 import { Plus } from "lucide-react";
 
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
+
 import { routes } from "~/configs/routes";
-import { useLocale } from "~/hooks/use-locale";
 import { useRouter } from "~/hooks/use-router";
 
 export function MakePaymentButton({ studentId }: { studentId: string }) {

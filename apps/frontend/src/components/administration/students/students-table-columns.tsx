@@ -1,18 +1,19 @@
 import React from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
-import { Checkbox } from "@repo/ui/checkbox";
-import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
 import { ColumnDef, createColumnHelper, Row } from "@tanstack/react-table";
 import { TFunction } from "i18next";
 import * as RPNInput from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
 import { toast } from "sonner";
 
+import { useLocale } from "@repo/i18n";
+import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
+import { Checkbox } from "@repo/ui/checkbox";
+import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
+
 import { DeletePopover } from "~/components/shared/buttons/delete-popover";
 import { EditButton } from "~/components/shared/buttons/edit-button";
 import { ViewButton } from "~/components/shared/buttons/view-button";
 import { routes } from "~/configs/routes";
-import { useLocale } from "~/hooks/use-locale";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { DataTableFilterableColumn } from "~/types/data-table";

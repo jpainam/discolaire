@@ -1,11 +1,12 @@
 "use client";
 
-import type { StepItem } from "@repo/ui/Stepper";
-import { Button } from "@repo/ui/button";
-import { Step, Stepper, useStepper } from "@repo/ui/Stepper";
 import { CreditCard, MonitorCheck, X } from "lucide-react";
 
-import { useLocale } from "~/hooks/use-locale";
+import type { StepItem } from "@repo/ui/Stepper";
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
+import { Step, Stepper, useStepper } from "@repo/ui/Stepper";
+
 import Step1 from "./step1";
 import Step2 from "./step2";
 import { SuccessStep } from "./SuccessStep";

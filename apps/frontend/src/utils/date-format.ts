@@ -1,4 +1,4 @@
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
 
 export function useDateFormat() {
   const { i18n } = useLocale();

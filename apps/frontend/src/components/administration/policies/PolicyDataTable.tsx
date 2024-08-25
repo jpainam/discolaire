@@ -1,11 +1,12 @@
 "use client";
 
 import { useMemo } from "react";
+
+import { useLocale } from "@repo/i18n";
 import { useDataTable } from "@repo/ui/data-table";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 
-import { useLocale } from "~/hooks/use-locale";
 import { api } from "~/trpc/react";
 import { fetchPolicyColumns } from "./PolicyDataTableColumns";
 

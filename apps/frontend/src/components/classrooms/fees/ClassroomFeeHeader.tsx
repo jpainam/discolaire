@@ -1,5 +1,8 @@
 "use client";
 
+import { ChevronDownIcon, Plus, PrinterIcon } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -8,11 +11,9 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import { Label } from "@repo/ui/label";
-import { ChevronDownIcon, Plus, PrinterIcon } from "lucide-react";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
-import { useLocale } from "~/hooks/use-locale";
 import { useModal } from "~/hooks/use-modal";
 import { sidebarIcons } from "../sidebar-icons";
 import { CreateEditFee } from "./CreateEditFee";

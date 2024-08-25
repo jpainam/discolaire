@@ -1,6 +1,10 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import { MoreVertical, Plus } from "lucide-react";
+import { useQueryState } from "nuqs";
+
+import { useLocale } from "@repo/i18n";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,11 +19,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/select";
-import { MoreVertical, Plus } from "lucide-react";
-import { useQueryState } from "nuqs";
 
 import { routes } from "~/configs/routes";
-import { useLocale } from "~/hooks/use-locale";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { api } from "~/trpc/react";

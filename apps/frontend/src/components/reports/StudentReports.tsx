@@ -1,6 +1,7 @@
 "use client";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+
 import { StudentReportBlock } from "./StudentReportBlock";
 
 export function StudentLinkReports({ reports }: { reports: any[] }) {

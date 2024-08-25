@@ -1,10 +1,11 @@
 "use client";
 
-import { Input } from "@repo/ui/input";
 import { useAtom } from "jotai";
 
+import { useLocale } from "@repo/i18n";
+import { Input } from "@repo/ui/input";
+
 import { peopleCriteriaAtom } from "~/atoms/use-criteria";
-import { useLocale } from "~/hooks/use-locale";
 
 export function SearchInputField() {
   const [criteria, setCriteria] = useAtom(peopleCriteriaAtom);

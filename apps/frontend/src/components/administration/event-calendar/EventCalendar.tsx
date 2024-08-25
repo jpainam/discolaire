@@ -21,15 +21,17 @@ import {
   View as RbcView,
 } from "react-big-calendar";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+
 import { useModal } from "~/hooks/use-modal";
 import { useResolvedTheme } from "~/hooks/use-resolved-theme";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
 import { useSearchParams } from "next/navigation";
-import { Skeleton } from "@repo/ui/skeleton";
 import { inferProcedureOutput } from "@trpc/server";
+
+import { Skeleton } from "@repo/ui/skeleton";
 
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import rangeMap from "~/lib/range-map";

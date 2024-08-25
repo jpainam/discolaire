@@ -1,6 +1,13 @@
 "use client";
 
 import { Fee } from "@prisma/client";
+import { type ColumnDef } from "@tanstack/react-table";
+import { inferProcedureOutput } from "@trpc/server";
+import i18next, { TFunction } from "i18next";
+import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
@@ -12,15 +19,9 @@ import {
 } from "@repo/ui/dropdown-menu";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Separator } from "@repo/ui/separator";
-import { type ColumnDef } from "@tanstack/react-table";
-import { inferProcedureOutput } from "@trpc/server";
-import i18next, { TFunction } from "i18next";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
-import { toast } from "sonner";
 
 import { CreateEditFee } from "~/components/classrooms/fees/CreateEditFee";
 import { useAlert } from "~/hooks/use-alert";
-import { useLocale } from "~/hooks/use-locale";
 import { useModal } from "~/hooks/use-modal";
 import { CURRENCY } from "~/lib/constants";
 import { getErrorMessage } from "~/lib/handle-error";

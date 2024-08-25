@@ -4,7 +4,8 @@ import { useMemo } from "react";
 import { User } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
 import { getUserColumns } from "./users-table-columns";

@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Separator } from "@repo/ui/separator";
 import {
   ArrowLeftRight,
   Euro,
@@ -12,9 +11,11 @@ import {
   Trash2,
 } from "lucide-react";
 
+import { useLocale } from "@repo/i18n";
+import { Separator } from "@repo/ui/separator";
+
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/hooks/use-locale";
 import { cn } from "~/lib/utils";
 
 export function TransactionHeader() {

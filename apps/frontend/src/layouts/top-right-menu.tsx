@@ -1,11 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Button } from "@repo/ui/button";
 import { CircleHelp, Mail, Printer } from "lucide-react";
 
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
+
 import { SimpleTooltip } from "~/components/simple-tooltip";
-import { useLocale } from "~/hooks/use-locale";
 import { useModal } from "~/hooks/use-modal";
 import { ModeToggle } from "~/layouts/mode-toggle";
 import { UserNav } from "~/layouts/user-nav";

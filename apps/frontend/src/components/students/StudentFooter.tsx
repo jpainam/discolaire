@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useParams, usePathname, useRouter } from "next/navigation";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   Pagination,
@@ -9,9 +12,7 @@ import {
   PaginationItem,
 } from "@repo/ui/pagination";
 import { Skeleton } from "@repo/ui/skeleton";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import { useLocale } from "~/hooks/use-locale";
 import { api } from "~/trpc/react";
 import { Student } from "~/types/student";
 

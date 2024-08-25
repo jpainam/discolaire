@@ -2,6 +2,10 @@
 
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import { useLocale } from "@repo/i18n";
 import {
   Accordion,
   AccordionContent,
@@ -24,11 +28,8 @@ import { Label } from "@repo/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { Separator } from "@repo/ui/separator";
 import { Textarea } from "@repo/ui/textarea";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { FileUploader } from "~/components/uploads/file-uploader";
-import { useLocale } from "~/hooks/use-locale";
 import { useSheet } from "~/hooks/use-sheet";
 import { useUploadFile } from "~/hooks/use-upload-file";
 

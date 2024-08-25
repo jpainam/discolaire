@@ -2,6 +2,11 @@
 
 import { useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
+import { useAtomValue } from "jotai";
+import { ChevronDown, Printer, Search } from "lucide-react";
+import { PiGridFour, PiListBullets } from "react-icons/pi";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -18,16 +23,12 @@ import { Input } from "@repo/ui/input";
 import { Label } from "@repo/ui/label";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
 import { ToggleGroup } from "@repo/ui/ToggleGroup";
-import { useAtomValue } from "jotai";
-import { ChevronDown, Printer, Search } from "lucide-react";
-import { PiGridFour, PiListBullets } from "react-icons/pi";
 
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/hooks/use-locale";
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 import { sidebarIcons } from "../sidebar-icons";

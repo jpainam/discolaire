@@ -1,6 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { inferProcedureOutput } from "@trpc/server";
+import { useAtom } from "jotai";
+
+import { useLocale } from "@repo/i18n";
 import { Checkbox } from "@repo/ui/checkbox";
 import FlatBadge from "@repo/ui/FlatBadge";
 import {
@@ -12,13 +16,10 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/table";
-import { inferProcedureOutput } from "@trpc/server";
-import { useAtom } from "jotai";
 
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
-import { useLocale } from "~/hooks/use-locale";
 import { CURRENCY } from "~/lib/constants";
 import { AppRouter } from "~/server/api/root";
 import { getFullName } from "~/utils/full-name";

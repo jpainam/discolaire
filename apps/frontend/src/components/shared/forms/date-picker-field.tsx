@@ -1,6 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { format } from "date-fns";
+import { enUS, es, fr } from "date-fns/locale";
+import { CalendarIcon } from "lucide-react";
+import { useFormContext } from "react-hook-form";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Calendar } from "@repo/ui/calendar";
 import {
@@ -12,12 +18,7 @@ import {
   FormMessage,
 } from "@repo/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
-import { format } from "date-fns";
-import { enUS, es, fr } from "date-fns/locale";
-import { CalendarIcon } from "lucide-react";
-import { useFormContext } from "react-hook-form";
 
-import { useLocale } from "~/hooks/use-locale";
 import { cn } from "~/lib/utils";
 
 type DatePickerProps = {

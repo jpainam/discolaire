@@ -1,5 +1,8 @@
 "use client";
 
+import { Bar, BarChart, XAxis, YAxis } from "recharts";
+
+import { useLocale } from "@repo/i18n";
 import { Card, CardContent } from "@repo/ui/card";
 import {
   ChartConfig,
@@ -7,9 +10,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/chart";
-import { Bar, BarChart, XAxis, YAxis } from "recharts";
-
-import { useLocale } from "~/hooks/use-locale";
 
 const chartData = [
   { type: "credit", count: 275, fill: "var(--color-credit)" },

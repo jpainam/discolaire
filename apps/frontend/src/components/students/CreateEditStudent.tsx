@@ -2,6 +2,11 @@
 
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   Form,
@@ -15,16 +20,12 @@ import PhoneInput from "@repo/ui/PhoneInput";
 import { Separator } from "@repo/ui/separator";
 import { TagInput } from "@repo/ui/TagInput";
 import { Textarea } from "@repo/ui/textarea";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
 
 import { CountryPicker } from "~/components/shared/CountryPicker";
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";
 import { SelectField } from "~/components/shared/forms/SelectField";
 import { FormerSchoolSelector } from "~/components/shared/selects/FormerSchoolSelector";
-import { useLocale } from "~/hooks/use-locale";
 import { useSheet } from "~/hooks/use-sheet";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";

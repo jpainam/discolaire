@@ -1,5 +1,12 @@
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { ColumnDef } from "@tanstack/react-table";
+import { inferProcedureOutput } from "@trpc/server";
+import i18next, { TFunction } from "i18next";
+import { FlagOff, Pencil } from "lucide-react";
+import { toast } from "sonner";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
@@ -11,16 +18,10 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import FlatBadge from "@repo/ui/FlatBadge";
-import { ColumnDef } from "@tanstack/react-table";
-import { inferProcedureOutput } from "@trpc/server";
-import i18next, { TFunction } from "i18next";
-import { FlagOff, Pencil } from "lucide-react";
-import { toast } from "sonner";
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useAlert } from "~/hooks/use-alert";
-import { useLocale } from "~/hooks/use-locale";
 import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";

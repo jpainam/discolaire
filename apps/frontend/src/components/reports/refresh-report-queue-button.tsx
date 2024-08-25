@@ -1,9 +1,9 @@
 "use client";
 
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { Button } from "@repo/ui/button";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
 
 export function RefreshReportQueueButton() {
   const { t } = useLocale();

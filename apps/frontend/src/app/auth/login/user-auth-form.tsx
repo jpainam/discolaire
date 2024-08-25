@@ -3,6 +3,12 @@
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { signIn } from "next-auth/react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   Form,
@@ -13,13 +19,8 @@ import {
   FormMessage,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
-import { signIn } from "next-auth/react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
 
 import { Icons } from "~/components/icons";
-import { useLocale } from "~/hooks/use-locale";
 import { cn } from "~/lib/utils";
 import { validateAuth } from "~/server/validateAuth";
 

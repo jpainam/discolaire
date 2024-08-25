@@ -1,6 +1,9 @@
 import { useTransition } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { Forward, Mail, MoreVertical, Reply } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -10,11 +13,9 @@ import {
 } from "@repo/ui/dropdown-menu";
 import { Separator } from "@repo/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
-import { Forward, Mail, MoreVertical, Reply } from "lucide-react";
 
 import { DeletePopover } from "~/components/shared/buttons/delete-popover";
 import { ViewButton } from "~/components/shared/buttons/view-button";
-import { useLocale } from "~/hooks/use-locale";
 import { api } from "~/trpc/react";
 
 export default function StudentsDetails() {

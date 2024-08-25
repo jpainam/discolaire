@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { MenuItemsType } from "~/types/menu";

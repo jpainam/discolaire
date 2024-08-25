@@ -1,5 +1,8 @@
 "use client";
 
+import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
+
+import { useLocale } from "@repo/i18n";
 import { Card, CardContent } from "@repo/ui/card";
 import {
   ChartConfig,
@@ -7,9 +10,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/chart";
-import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 
-import { useLocale } from "~/hooks/use-locale";
 import { Student } from "~/types/student";
 
 export function RepeatingPie({ students }: { students: Student[] }) {

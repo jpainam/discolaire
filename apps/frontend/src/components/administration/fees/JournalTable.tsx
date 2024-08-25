@@ -1,6 +1,9 @@
 "use client";
 
 import { Journal } from "@prisma/client";
+import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -17,9 +20,6 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/table";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
-
-import { useLocale } from "~/hooks/use-locale";
 
 export function JournalTable({ journals }: { journals: Journal[] }) {
   const { t } = useLocale();

@@ -1,13 +1,5 @@
 "use client";
 
-import { Button } from "@repo/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import { Separator } from "@repo/ui/separator";
 import {
   Download,
   DownloadCloud,
@@ -17,8 +9,17 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@repo/ui/dropdown-menu";
+import { Separator } from "@repo/ui/separator";
+
 import { useAlert } from "~/hooks/use-alert";
-import { useLocale } from "~/hooks/use-locale";
 import { FileTypeSelector } from "./FileTypeSelector";
 import { LastModifiedSelector } from "./LastModifiedSelector";
 import { ViewSwitcher } from "./ViewSwitcher";

@@ -1,7 +1,8 @@
 "use client";
 
+import { useLocale } from "@repo/i18n";
+
 import { Shell } from "~/components/shell";
-import { useLocale } from "~/hooks/use-locale";
 
 export default function UploadPage() {
   const { t } = useLocale();

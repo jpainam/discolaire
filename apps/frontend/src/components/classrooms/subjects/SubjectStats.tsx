@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import FlatBadge, { FlatBadgeVariant } from "@repo/ui/FlatBadge";
-import { Separator } from "@repo/ui/separator";
 import { sum } from "lodash";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+import FlatBadge, { FlatBadgeVariant } from "@repo/ui/FlatBadge";
+import { Separator } from "@repo/ui/separator";
+
 import { api } from "~/trpc/react";
 
 export function SubjectStats() {

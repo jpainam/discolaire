@@ -1,5 +1,8 @@
 "use client";
 
+import { AtSign, MoreVertical, Printer } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -8,9 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import { Label } from "@repo/ui/label";
-import { AtSign, MoreVertical, Printer } from "lucide-react";
 
-import { useLocale } from "~/hooks/use-locale";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function LoginInfoHeader() {

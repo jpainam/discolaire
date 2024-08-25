@@ -1,4 +1,9 @@
 import Link from "next/link";
+import { ColumnDef, Row } from "@tanstack/react-table";
+import { TFunction } from "i18next";
+import { Eye, MoreVertical, Send, Trash2 } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/data-table/v2/data-table-column-header";
@@ -8,12 +13,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
-import { ColumnDef, Row } from "@tanstack/react-table";
-import { TFunction } from "i18next";
-import { Eye, MoreVertical, Send, Trash2 } from "lucide-react";
 
 import { routes } from "~/configs/routes";
-import { useLocale } from "~/hooks/use-locale";
 import { SMSHistory } from "~/types/sms";
 
 export function fetchSmsHistoryColumns({

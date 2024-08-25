@@ -1,6 +1,8 @@
 "use client";
 
 import { useParams, useSearchParams } from "next/navigation";
+
+import { useLocale } from "@repo/i18n";
 import {
   Table,
   TableBody,
@@ -10,7 +12,6 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
-import { useLocale } from "~/hooks/use-locale";
 import { api } from "~/trpc/react";
 
 export function ReportCardTable() {

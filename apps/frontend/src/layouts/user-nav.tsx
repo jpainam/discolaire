@@ -1,5 +1,9 @@
 "use client";
 
+import { Computer, LogOut, Settings, User } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
+
+import { useLocale } from "@repo/i18n";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Button } from "@repo/ui/button";
 import {
@@ -11,11 +15,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
-import { Computer, LogOut, Settings, User } from "lucide-react";
-import { signOut, useSession } from "next-auth/react";
 
 import { routes } from "~/configs/routes";
-import { useLocale } from "~/hooks/use-locale";
 import { useRouter } from "~/hooks/use-router";
 import { MobileActionButtions } from "~/layouts/mobile-nav";
 

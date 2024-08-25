@@ -1,6 +1,12 @@
 import { useParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Fee } from "@prisma/client";
+import { Save, X } from "lucide-react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import {
@@ -11,15 +17,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@repo/ui/form";
-import { Save, X } from "lucide-react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
 
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";
 import { JournalSelector } from "~/components/shared/selects/JounalSelector";
-import { useLocale } from "~/hooks/use-locale";
 import { useModal } from "~/hooks/use-modal";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";

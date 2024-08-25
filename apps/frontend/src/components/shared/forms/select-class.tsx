@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocale } from "@repo/i18n";
 import { Label } from "@repo/ui/label";
 import {
   Select,
@@ -9,7 +10,6 @@ import {
   SelectValue,
 } from "@repo/ui/select";
 
-import { useLocale } from "~/hooks/use-locale";
 import { cn } from "~/lib/utils";
 
 type SelectClass = {

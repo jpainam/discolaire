@@ -1,3 +1,6 @@
+import { AlarmClock, AlarmClockCheck, AlarmClockMinus } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import {
   Select,
   SelectContent,
@@ -6,9 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/select";
-import { AlarmClock, AlarmClockCheck, AlarmClockMinus } from "lucide-react";
 
-import { useLocale } from "~/hooks/use-locale";
 import { cn } from "~/lib/utils";
 
 export function TransactionStatusSelector({

@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { useLocale } from "@repo/i18n";
+
 import { routes } from "~/configs/routes";
-import { useLocale } from "~/hooks/use-locale";
 import { cn } from "~/lib/utils";
 
 export function ReportCardMenu() {

@@ -1,5 +1,8 @@
 "use client";
 
+import { Bar, BarChart, LabelList, XAxis, YAxis } from "recharts";
+
+import { useLocale } from "@repo/i18n";
 import { Card, CardContent } from "@repo/ui/card";
 import {
   ChartConfig,
@@ -8,10 +11,8 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/chart";
 import { Skeleton } from "@repo/ui/skeleton";
-import { Bar, BarChart, LabelList, XAxis, YAxis } from "recharts";
 
 import { EmptyState } from "~/components/EmptyState";
-import { useLocale } from "~/hooks/use-locale";
 import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 

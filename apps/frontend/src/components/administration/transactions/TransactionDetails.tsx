@@ -1,10 +1,6 @@
 "use client";
 
 import { notFound } from "next/navigation";
-import { Button } from "@repo/ui/button";
-import FlatBadge from "@repo/ui/FlatBadge";
-import { Label } from "@repo/ui/label";
-import { Separator } from "@repo/ui/separator";
 import {
   AlignStartHorizontal,
   Badge,
@@ -21,7 +17,12 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
+import FlatBadge from "@repo/ui/FlatBadge";
+import { Label } from "@repo/ui/label";
+import { Separator } from "@repo/ui/separator";
+
 import { useModal } from "~/hooks/use-modal";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";

@@ -1,9 +1,9 @@
 "use client";
 
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
 
-import { useLocale } from "~/hooks/use-locale";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function PhotoHeader() {

@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
+
+import { useLocale } from "@repo/i18n";
 import {
   BreadCrumb,
   BreadCrumbItem,
@@ -9,7 +11,6 @@ import {
 } from "@repo/ui/BreadCrumb";
 
 import { routes } from "~/configs/routes";
-import { useLocale } from "~/hooks/use-locale";
 
 export const FinanceBreadCrumb = () => {
   const { t } = useLocale();

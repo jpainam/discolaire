@@ -1,6 +1,9 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { MoreVertical, PlusIcon, UserPlus, UserSearch } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -9,11 +12,9 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import { Label } from "@repo/ui/label";
-import { MoreVertical, PlusIcon, UserPlus, UserSearch } from "lucide-react";
 
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { SimpleTooltip } from "~/components/simple-tooltip";
-import { useLocale } from "~/hooks/use-locale";
 import { useModal } from "~/hooks/use-modal";
 import { sidebarIcons } from "../sidebar-icons";
 import { LinkContact } from "./LinkContact";

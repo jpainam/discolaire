@@ -1,3 +1,6 @@
+import { useFormContext } from "react-hook-form";
+
+import { useLocale } from "@repo/i18n";
 import {
   FormControl,
   FormField,
@@ -13,9 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/select";
-import { useFormContext } from "react-hook-form";
 
-import { useLocale } from "~/hooks/use-locale";
 import { cn } from "~/lib/utils";
 
 export type InputDescriptionProps = {

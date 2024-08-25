@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Textarea } from "@repo/ui/textarea";
 import { XIcon } from "lucide-react";
 import { toast } from "sonner";
 
+import { useLocale } from "@repo/i18n";
+import { Textarea } from "@repo/ui/textarea";
+
 import { useAlert } from "~/hooks/use-alert";
-import { useLocale } from "~/hooks/use-locale";
 import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";

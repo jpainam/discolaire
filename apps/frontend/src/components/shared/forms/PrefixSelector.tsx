@@ -1,3 +1,4 @@
+import { useLocale } from "@repo/i18n";
 import {
   Select,
   SelectContent,
@@ -7,7 +8,6 @@ import {
   SelectValue,
 } from "@repo/ui/select";
 
-import { useLocale } from "~/hooks/use-locale";
 import { cn } from "~/lib/utils";
 
 export default function PrefixSelector({

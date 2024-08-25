@@ -1,6 +1,14 @@
 import React from "react";
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { ColumnDef } from "@tanstack/react-table";
+import { inferProcedureOutput } from "@trpc/server";
+import { TFunction } from "i18next";
+import { Pencil, ReceiptText, Trash2 } from "lucide-react";
+import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
+import { toast } from "sonner";
+
+import { useLocale } from "@repo/i18n";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
 import {
   DropdownMenu,
@@ -9,16 +17,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
-import { ColumnDef } from "@tanstack/react-table";
-import { inferProcedureOutput } from "@trpc/server";
-import { TFunction } from "i18next";
-import { Pencil, ReceiptText, Trash2 } from "lucide-react";
-import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
-import { toast } from "sonner";
 
 import { routes } from "~/configs/routes";
 import { useAlert } from "~/hooks/use-alert";
-import { useLocale } from "~/hooks/use-locale";
 import { useSheet } from "~/hooks/use-sheet";
 import { getErrorMessage } from "~/lib/handle-error";
 import { AppRouter } from "~/server/api/root";

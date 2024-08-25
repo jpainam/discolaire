@@ -1,8 +1,8 @@
 "use client";
 
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 
-import { useLocale } from "~/hooks/use-locale";
 import { useModal } from "~/hooks/use-modal";
 import { ChurchDetailsForm } from "./ChurchDetailsForm";
 

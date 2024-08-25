@@ -2,14 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Button } from "@repo/ui/button";
-import { Label } from "@repo/ui/label";
 import { inferProcedureOutput } from "@trpc/server";
 import { Forward, Reply } from "lucide-react";
 
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
+import { Label } from "@repo/ui/label";
+
 import { routes } from "~/configs/routes";
 import { useAlert } from "~/hooks/use-alert";
-import { useLocale } from "~/hooks/use-locale";
 import { useSheet } from "~/hooks/use-sheet";
 import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";

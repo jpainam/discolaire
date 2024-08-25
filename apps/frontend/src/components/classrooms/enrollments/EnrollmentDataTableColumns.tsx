@@ -1,4 +1,12 @@
 import { useParams } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import { ColumnDef } from "@tanstack/react-table";
+import { inferProcedureOutput } from "@trpc/server";
+import i18next, { TFunction } from "i18next";
+import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/data-table/v2/data-table-column-header";
@@ -10,18 +18,11 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import FlatBadge from "@repo/ui/FlatBadge";
-import { useQueryClient } from "@tanstack/react-query";
-import { ColumnDef } from "@tanstack/react-table";
-import { inferProcedureOutput } from "@trpc/server";
-import i18next, { TFunction } from "i18next";
-import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
-import { toast } from "sonner";
 
 import { AvatarState } from "~/components/AvatarState";
 import { StudentCard } from "~/components/students/StudentCard";
 import { routes } from "~/configs/routes";
 import { useAlert } from "~/hooks/use-alert";
-import { useLocale } from "~/hooks/use-locale";
 import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { AppRouter } from "~/server/api/root";

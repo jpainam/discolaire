@@ -2,6 +2,9 @@
 
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { Forward, MoreVertical, Printer, Reply, RotateCw } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -11,10 +14,8 @@ import {
 } from "@repo/ui/dropdown-menu";
 import { Separator } from "@repo/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
-import { Forward, MoreVertical, Printer, Reply, RotateCw } from "lucide-react";
 
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
-import { useLocale } from "~/hooks/use-locale";
 import { cn } from "~/lib/utils";
 import { LeftPanelButton, RightPanelButton } from "../resize-panel-buttons";
 import { AddStudenSheet } from "./add-student-sheet";

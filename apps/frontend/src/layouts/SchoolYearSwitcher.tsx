@@ -3,6 +3,9 @@
 //import { useConfig } from "~/hooks/use-config";
 //import { Style, styles } from "~/registry/styles";
 import { useState } from "react";
+import { ChevronDown } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -10,9 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
 
-import { useLocale } from "~/hooks/use-locale";
 import { api } from "~/trpc/react";
 
 type SchoolYearSwitcherProps = {

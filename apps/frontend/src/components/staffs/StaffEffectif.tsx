@@ -1,6 +1,7 @@
 "use client";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+
 import { api } from "~/trpc/react";
 
 const COLORS = ["#6741D9", "#E0C6FD", "#FFBC75", "#FF7272"];

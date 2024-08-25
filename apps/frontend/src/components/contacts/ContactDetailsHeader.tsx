@@ -1,14 +1,6 @@
 "use client";
 
 import { Contact } from "@prisma/client";
-import { Button } from "@repo/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
 import {
   ChevronDown,
   ImageUpIcon,
@@ -19,8 +11,17 @@ import {
   Trash2,
 } from "lucide-react";
 
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/dropdown-menu";
+
 import { AvatarState } from "~/components/AvatarState";
-import { useLocale } from "~/hooks/use-locale";
 import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
 import rangeMap from "~/lib/range-map";

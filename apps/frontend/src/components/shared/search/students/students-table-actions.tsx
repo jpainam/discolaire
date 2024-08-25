@@ -1,8 +1,9 @@
 import { Table } from "@tanstack/react-table";
 import { TFunction } from "i18next";
 
+import { useLocale } from "@repo/i18n";
+
 import { ExportButton } from "~/components/shared/buttons/export-button";
-import { useLocale } from "~/hooks/use-locale";
 import { Student } from "~/types/student";
 import { exportToCSV } from "~/utils/export-to-csv";
 

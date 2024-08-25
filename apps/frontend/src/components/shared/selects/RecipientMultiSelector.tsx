@@ -1,6 +1,10 @@
 "use client";
 
 import * as React from "react";
+import { Command as CommandPrimitive } from "cmdk";
+import { X } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Badge } from "@repo/ui/badge";
 import {
   Command,
@@ -9,10 +13,7 @@ import {
   CommandList,
 } from "@repo/ui/command";
 import { Skeleton } from "@repo/ui/skeleton";
-import { Command as CommandPrimitive } from "cmdk";
-import { X } from "lucide-react";
 
-import { useLocale } from "~/hooks/use-locale";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";

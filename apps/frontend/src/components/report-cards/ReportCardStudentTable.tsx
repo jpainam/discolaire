@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocale } from "@repo/i18n";
 import {
   Table,
   TableBody,
@@ -8,7 +9,6 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
-import { useLocale } from "~/hooks/use-locale";
 import { cn } from "~/lib/utils";
 import { ReportCardStudentSummary } from "./ReportCardStudentSummary";
 

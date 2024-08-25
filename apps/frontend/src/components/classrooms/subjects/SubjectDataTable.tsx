@@ -2,12 +2,13 @@
 
 import React from "react";
 import { useParams } from "next/navigation";
+
+import { useLocale } from "@repo/i18n";
 import { useDataTable } from "@repo/ui/data-table";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
 
-import { useLocale } from "~/hooks/use-locale";
 import { api } from "~/trpc/react";
 import { SubjectDataTableActions } from "./SubjectDataTableActions";
 import { fetchSubjectsColumns } from "./SubjectDataTableColumns";

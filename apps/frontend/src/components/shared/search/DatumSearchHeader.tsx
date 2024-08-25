@@ -2,14 +2,15 @@
 
 import { useCallback } from "react";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import { Button } from "@repo/ui/button";
 import { useAtomValue } from "jotai";
+
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
 
 import { peopleCriteriaAtom } from "~/atoms/use-criteria";
 import AlphabetSearchBlock from "~/components/shared/search/AlphabetSearchBlock";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/hooks/use-locale";
 import { useRouter } from "~/hooks/use-router";
 import { SearchFieldSelector } from "./SearchFieldSelector";
 import { SearchInputField } from "./SearchInputField";

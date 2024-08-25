@@ -7,7 +7,7 @@ import {
   ZodParsedType,
 } from "zod";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
 
 const jsonStringifyReplacer = (_: string, value: any): any => {
   if (typeof value === "bigint") {

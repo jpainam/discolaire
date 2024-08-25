@@ -3,7 +3,8 @@
 import { useMemo } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+
 import { Student } from "~/types/student";
 import { useDateFormat } from "~/utils/date-format";
 import { fetchStudentColumns } from "./students-table-columns";

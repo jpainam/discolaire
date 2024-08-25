@@ -1,5 +1,15 @@
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
+import { inferProcedureOutput } from "@trpc/server";
+import { TFunction } from "i18next";
+import { Eye, Pencil, Trash2 } from "lucide-react";
+import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
+import * as RPNInput from "react-phone-number-input";
+import flags from "react-phone-number-input/flags";
+import { toast } from "sonner";
+
+import { useLocale } from "@repo/i18n";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/data-table/v2/data-table-column-header";
 import {
@@ -10,19 +20,10 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import FlatBadge from "@repo/ui/FlatBadge";
-import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { inferProcedureOutput } from "@trpc/server";
-import { TFunction } from "i18next";
-import { Eye, Pencil, Trash2 } from "lucide-react";
-import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
-import * as RPNInput from "react-phone-number-input";
-import flags from "react-phone-number-input/flags";
-import { toast } from "sonner";
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useAlert } from "~/hooks/use-alert";
-import { useLocale } from "~/hooks/use-locale";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { getErrorMessage } from "~/lib/handle-error";

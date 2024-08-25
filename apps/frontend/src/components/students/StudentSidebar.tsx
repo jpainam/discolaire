@@ -3,11 +3,12 @@
 import { ElementType, Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
-import Menu from "@repo/ui/menu/dropdown/menu";
 import { PiCaretDownBold } from "react-icons/pi";
 
+import { useLocale } from "@repo/i18n";
+import Menu from "@repo/ui/menu/dropdown/menu";
+
 import { SortableList } from "~/components/dnd/dnd-sortable-list";
-import { useLocale } from "~/hooks/use-locale";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { MenuItemsType } from "~/types/menu";

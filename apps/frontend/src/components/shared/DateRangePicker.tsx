@@ -1,15 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { Button } from "@repo/ui/button";
-import { Calendar } from "@repo/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { addDays, format } from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
+import { Calendar } from "@repo/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+
 import { cn } from "~/lib/utils";
 
 type DatePickerProps = {

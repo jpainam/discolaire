@@ -6,6 +6,9 @@ import {
   CheckIcon,
   PlusCircledIcon,
 } from "@radix-ui/react-icons";
+import { useForm } from "react-hook-form";
+
+import { useLocale } from "@repo/i18n";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Button } from "@repo/ui/button";
 import {
@@ -36,9 +39,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/select";
-import { useForm } from "react-hook-form";
 
-import { useLocale } from "~/hooks/use-locale";
 import { useTheme } from "~/hooks/use-theme";
 import { cn } from "~/lib/utils";
 

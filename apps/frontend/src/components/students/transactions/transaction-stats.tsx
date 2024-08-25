@@ -10,7 +10,8 @@ import {
   PiMoneyBold,
 } from "react-icons/pi";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+
 import { CURRENCY } from "~/lib/constants";
 import { cn } from "~/lib/utils";
 import { AppRouter } from "~/server/api/root";

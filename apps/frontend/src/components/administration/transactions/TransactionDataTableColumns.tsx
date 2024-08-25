@@ -1,3 +1,10 @@
+import { useQueryClient } from "@tanstack/react-query";
+import { ColumnDef, createColumnHelper, Row } from "@tanstack/react-table";
+import { inferProcedureOutput } from "@trpc/server";
+import i18next, { TFunction } from "i18next";
+import { Eye, MoreHorizontal, TicketCheck, Trash2 } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
@@ -9,13 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import FlatBadge from "@repo/ui/FlatBadge";
-import { useQueryClient } from "@tanstack/react-query";
-import { ColumnDef, createColumnHelper, Row } from "@tanstack/react-table";
-import { inferProcedureOutput } from "@trpc/server";
-import i18next, { TFunction } from "i18next";
-import { Eye, MoreHorizontal, TicketCheck, Trash2 } from "lucide-react";
 
-import { useLocale } from "~/hooks/use-locale";
 import { useModal } from "~/hooks/use-modal";
 import { AppRouter } from "~/server/api/root";
 import { TransactionDeleteModal } from "./TransactionDeleteModal";

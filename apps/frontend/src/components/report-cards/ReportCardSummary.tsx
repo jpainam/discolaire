@@ -1,8 +1,8 @@
 "use client";
 
+import { useLocale } from "@repo/i18n";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
 
-import { useLocale } from "~/hooks/use-locale";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";

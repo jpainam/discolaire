@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { subDays } from "date-fns";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
-import { subDays } from "date-fns";
 
 import { DateRangePicker } from "~/components/shared/DateRangePicker";
 import { routes } from "~/configs/routes";
-import { useLocale } from "~/hooks/use-locale";
 import { useRouter } from "~/hooks/use-router";
 import { useCreateQueryString } from "../../../hooks/create-query-string";
 

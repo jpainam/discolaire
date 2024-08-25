@@ -1,7 +1,8 @@
 "use client";
 
+import { useLocale } from "@repo/i18n";
+
 import CircleProgressBar from "~/components/charts/circle-progressbar";
-import { useLocale } from "~/hooks/use-locale";
 import { Student } from "~/types/student";
 
 export function EnrollmentStats({ students }: { students: Student[] }) {

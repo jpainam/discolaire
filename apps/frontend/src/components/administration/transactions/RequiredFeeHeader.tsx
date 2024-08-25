@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { MoreVertical } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -10,14 +13,12 @@ import {
 } from "@repo/ui/dropdown-menu";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Label } from "@repo/ui/label";
-import { MoreVertical } from "lucide-react";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { RequiredFeeSelector } from "~/components/shared/selects/RequiredFeeSelector";
 import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/hooks/use-locale";
 import { useRouter } from "~/hooks/use-router";
 import { useMoneyFormat } from "~/utils/money-format";
 

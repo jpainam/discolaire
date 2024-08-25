@@ -1,6 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -18,13 +22,10 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/table";
-import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
-import { toast } from "sonner";
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useAlert } from "~/hooks/use-alert";
-import { useLocale } from "~/hooks/use-locale";
 import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";

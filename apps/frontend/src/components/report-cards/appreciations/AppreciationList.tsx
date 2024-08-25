@@ -2,11 +2,12 @@
 
 import { Fragment, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { ScrollArea } from "@repo/ui/scroll-area";
-import { Separator } from "@repo/ui/separator";
 import { ChevronLeft, Loader, PlusCircle, Settings2Icon } from "lucide-react";
 
-import { useLocale } from "~/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
+import { ScrollArea } from "@repo/ui/scroll-area";
+import { Separator } from "@repo/ui/separator";
+
 import { api } from "~/trpc/react";
 import { AppreciationCategory } from "~/types/appreciation";
 import { CreateEditAppreciation } from "./CreateEditAppreciation";
