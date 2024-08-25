@@ -1,23 +1,16 @@
-import { render } from "@react-email/components";
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
 import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 
-import { SendInvite } from "~/email-templates/SendInvite";
-import { env } from "~/env";
+//import { SendInvite } from "@repo/transactional/emails/SendInvite";
 import { getErrorMessage } from "~/lib/handle-error";
 import { sendEmail } from "~/server/services/messaging-service";
 import { encryptInvitationCode } from "~/utils/encrypt";
 
-export function InviteConfirmationDialog({
-  email,
-  className,
-}: {
-  className?: string;
-  email: string;
-}) {
+export function InviteConfirmationDialog({ email }: { email: string }) {
   const { t } = useLocale();
   const { closeModal } = useModal();
 
@@ -29,26 +22,22 @@ export function InviteConfirmationDialog({
     }
     const invitationCode = await encryptInvitationCode(email);
     const invitationLink =
-      env.NEXT_PUBLIC_BASE_URL +
-      "/invite/" +
-      invitationCode +
-      "?email=" +
-      email;
-    const emailHtml = render(
-      <SendInvite
-        username={"username"}
-        invitedByUsername="Admin"
-        invitedByEmail="support@discolaire.com"
-        schoolName="Portal Scoalire"
-        inviteLink={invitationLink}
-      />,
-    );
+      "https://localhost/" + "/invite/" + invitationCode + "?email=" + email;
+    // const emailHtml = render(
+    //   <SendInvite
+    //     username={"username"}
+    //     invitedByUsername="Admin"
+    //     invitedByEmail="support@discolaire.com"
+    //     schoolName="Portal Scoalire"
+    //     inviteLink={invitationLink}
+    //   />,
+    // );
 
     toast.promise(
       sendEmail({
         to: [email],
         subject: "Invitation to Discolaire",
-        body: emailHtml,
+        body: "<div>Contenu de l'email</div>",
       }),
       {
         loading: t("sending"),
@@ -79,7 +68,7 @@ export function InviteConfirmationDialog({
         </Button>
         <Button
           onClick={() => {
-            sendInvite();
+            void sendInvite();
           }}
           size={"sm"}
           variant={"default"}

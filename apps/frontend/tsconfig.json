@@ -10,10 +10,6 @@
     "plugins": [{ "name": "next" }],
     "module": "esnext"
   },
-  "include": [
-    ".",
-    ".next/types/**/*.ts",
-    "../../packages/ui/src/EmptyState.tsx"
-  ],
+  "include": [".", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
