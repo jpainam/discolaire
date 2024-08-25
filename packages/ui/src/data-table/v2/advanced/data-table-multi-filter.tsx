@@ -1,13 +1,14 @@
 import type { Table } from "@tanstack/react-table";
 import * as React from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useDebounce } from "@/hooks/use-debounce";
 import {
   CopyIcon,
   DotsHorizontalIcon,
   TextAlignCenterIcon,
   TrashIcon,
 } from "@radix-ui/react-icons";
+
+import { useDebounce } from "@repo/lib/hooks/use-debounce";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -156,7 +157,7 @@ export function MultiFilterRow<TData>({
   // Create query string
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
-      const newSearchParams = new URLSearchParams(searchParams?.toString());
+      const newSearchParams = new URLSearchParams(searchParams.toString());
 
       for (const [key, value] of Object.entries(params)) {
         if (value === null) {
@@ -347,7 +348,7 @@ export function MultiFilterRow<TData>({
                   id: crypto.randomUUID(),
                   label: selectedOption.label,
                   value: selectedOption.value,
-                  options: selectedOption.options ?? [],
+                  options: selectedOption.options,
                   isMulti: true,
                 },
               ]);

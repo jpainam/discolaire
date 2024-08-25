@@ -1,7 +1,6 @@
 import type { Table } from "@tanstack/react-table";
 import * as React from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useDebounce } from "@/hooks/use-debounce";
 import {
   CopyIcon,
   DotsHorizontalIcon,
@@ -9,6 +8,7 @@ import {
   TrashIcon,
 } from "@radix-ui/react-icons";
 
+import { useDebounce } from "@repo/lib/hooks/use-debounce";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,

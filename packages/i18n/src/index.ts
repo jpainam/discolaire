@@ -1,7 +1,5 @@
 import { useTranslation } from "react-i18next";
 
-export const name = "i18n";
-
 export const useLocale = (
   namespace: Parameters<typeof useTranslation>[0] = "common",
 ) => {

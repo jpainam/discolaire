@@ -1,8 +1,10 @@
 import { Suspense } from "react";
+
+// import { getServerTranslations } from "~/app/i18n/server";
+import { getServerTranslations } from "@repo/i18n";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import { Separator } from "@repo/ui/separator";
 
-import { getServerTranslations } from "~/app/i18n/server";
 import { StaffDataTable } from "~/components/staffs/StaffDataTable";
 import { StaffHeader } from "~/components/staffs/StaffHeader";
 

@@ -19,6 +19,7 @@
     "@repo/db": "workspace:*",
     "@repo/ui": "workspace:*",
     "@repo/lib": "workspace:*",
+    "@repo/i18n": "workspace:*",
     "@repo/validators": "workspace:*",
     "@t3-oss/env-nextjs": "^0.11.0",
     "@tanstack/react-query": "catalog:",

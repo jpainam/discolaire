@@ -63,7 +63,7 @@ export function DataTableAdvancedFilterItem<TData>({
   // Create query string
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
-      const newSearchParams = new URLSearchParams(searchParams?.toString());
+      const newSearchParams = new URLSearchParams(searchParams.toString());
 
       for (const [key, value] of Object.entries(params)) {
         if (value === null) {
@@ -177,7 +177,7 @@ export function DataTableAdvancedFilterItem<TData>({
             <TrashIcon className="size-4" aria-hidden="true" />
           </Button>
         </div>
-        {selectedOption.items.length > 0 ? (
+        {selectedOption.options.length > 0 ? (
           table.getColumn(
             selectedOption.value ? String(selectedOption.value) : "",
           ) && (
@@ -187,7 +187,7 @@ export function DataTableAdvancedFilterItem<TData>({
                 selectedOption.value ? String(selectedOption.value) : "",
               )}
               title={selectedOption.label}
-              options={selectedOption.items}
+              options={selectedOption.options}
             />
           )
         ) : (
