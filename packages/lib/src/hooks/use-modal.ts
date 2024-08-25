@@ -1,15 +1,15 @@
 "use client";
 
+import type React from "react";
 import { atom, useAtomValue, useSetAtom } from "jotai";
-import React from "react";
 
-type ModalTypes = {
+interface ModalTypes {
   view: React.ReactNode;
   title?: React.ReactNode;
   description?: React.ReactNode;
   isOpen: boolean;
   className?: string;
-};
+}
 
 const modalAtom = atom<ModalTypes>({
   isOpen: false,

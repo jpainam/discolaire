@@ -1,18 +1,21 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 "use client";
 
+import type React from "react";
 import { atom, useAtomValue, useSetAtom } from "jotai";
-import React from "react";
 
 export type SheetPlacements = "left" | "right" | "top" | "bottom";
 
-type SheetTypes = {
+interface SheetTypes {
   view: React.ReactNode;
   isOpen: boolean;
   title?: React.ReactNode;
   description?: React.ReactNode;
   placement?: SheetPlacements;
   className?: string;
-};
+}
 
 const sheetAtom = atom<SheetTypes>({
   isOpen: false,

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { useEffect, useState } from "react";
 
 export function useLocalStorage<T>(
@@ -5,7 +7,7 @@ export function useLocalStorage<T>(
   initialValue: T,
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
   const [value, setValue] = useState(() =>
-    JSON.parse(localStorage.getItem(key) || JSON.stringify(initialValue)),
+    JSON.parse(localStorage.getItem(key) ?? JSON.stringify(initialValue)),
   );
 
   useEffect(() => {

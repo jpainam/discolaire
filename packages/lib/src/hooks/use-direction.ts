@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
 // import { useEffect } from 'react';
@@ -26,7 +29,7 @@ const isomorphicDirectionAtom = atom(
 
 const isomorphicDirectionAtomWithPersistence = atom(
   (get) => get(isomorphicDirectionAtom),
-  (get, set, newStorage: any) => {
+  (get, set, newStorage: never) => {
     set(isomorphicDirectionAtom, newStorage);
     localStorage.setItem("iso-direction", newStorage);
   },

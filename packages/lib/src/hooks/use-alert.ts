@@ -1,15 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
+import type React from "react";
 import { atom, useAtomValue, useSetAtom } from "jotai";
-import React from "react";
 
-type AlertTypes = {
+interface AlertTypes {
   isOpen: boolean;
   title?: React.ReactNode;
   description?: React.ReactNode;
   onCancel?: () => void;
   onConfirm?: () => void;
-};
+}
 
 const alertAtom = atom<AlertTypes>({
   isOpen: false,

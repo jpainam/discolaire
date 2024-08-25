@@ -17,9 +17,20 @@ export interface DataTableFilterField<TData> {
 export interface DataTableFilterOption<TData> {
   id: string;
   label: string;
-  value: keyof TData;
+  value: keyof TData | string;
   options: Option[];
   filterValues?: string[];
   filterOperator?: string;
   isMulti?: boolean;
+}
+
+export interface DataTableSearchableColumn<TData> {
+  id: keyof TData;
+  placeholder?: string;
+}
+
+export interface DataTableFilterableColumn<TData> {
+  id: keyof TData;
+  title: string;
+  options: Option[];
 }

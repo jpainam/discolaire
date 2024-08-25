@@ -1,4 +1,5 @@
-import { RefObject, useEffect, useLayoutEffect, useRef } from "react";
+import type { RefObject } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 
 export const useIsomorphicEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
@@ -66,6 +67,7 @@ function useEventListener<
     // Define the listening target
     const targetElement: T | Window = element?.current ?? window;
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!(targetElement && targetElement.addEventListener)) return;
 
     // Create event listener that calls handler function stored in ref

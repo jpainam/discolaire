@@ -1,7 +1,6 @@
-import type { Option } from "@/types/data-table";
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
+import type { Column } from "@tanstack/react-table";
 import { CheckIcon } from "@radix-ui/react-icons";
+
 import {
   Command,
   CommandEmpty,
@@ -11,7 +10,9 @@ import {
   CommandList,
   CommandSeparator,
 } from "@repo/ui/command";
-import { type Column } from "@tanstack/react-table";
+
+import type { Option } from "../types";
+import { cn } from "../..";
 
 interface DataTableAdvancedFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
@@ -25,7 +26,7 @@ export function DataTableAdvancedFacetedFilter<TData, TValue>({
   options,
 }: DataTableAdvancedFacetedFilterProps<TData, TValue>) {
   const selectedValues = new Set(column?.getFilterValue() as string[]);
-  const { t } = useLocale();
+
   return (
     <Command className="p-1">
       <CommandInput
@@ -35,7 +36,7 @@ export function DataTableAdvancedFacetedFilter<TData, TValue>({
         className="flex h-8 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
       />
       <CommandList>
-        <CommandEmpty>{t("not_found")}</CommandEmpty>
+        <CommandEmpty>Not found</CommandEmpty>
         <CommandGroup className="px-0">
           {options.map((option) => {
             const isSelected = selectedValues.has(option.value);

@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import jsonLogic from "json-logic-js";
 import { useSession } from "next-auth/react";
 
-import { api } from "~/trpc/react";
 import { Permission } from "~/types/permission";
 
 const toRegexpString = (actionOrResource: string) =>
@@ -21,10 +22,12 @@ export function doPermissionsCheck(
   const allPermissions = permissions.filter(
     (permission) =>
       permission.schoolId === schoolId &&
-      permission.actions.some((act) =>
+      permission.actions.some((act: never) =>
         action ? action.match(toRegexpString(act)) : null,
       ) &&
-      permission.resources.some((res) => resource.match(toRegexpString(res))),
+      permission.resources.some((res: never) =>
+        resource.match(toRegexpString(res)),
+      ),
   );
   // If there is at least one deny permission, return false
   const hasDenyPermission = allPermissions.some(

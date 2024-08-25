@@ -14,6 +14,7 @@ const useUpload = () => {
   const updateFileState = (index: number, newState: Partial<UploadState>) => {
     setData((prevUploads) => {
       const updatedUploads = [...prevUploads];
+      // @ts-expect-error TODO: fix this
       updatedUploads[index] = { ...updatedUploads[index], ...newState };
       return updatedUploads;
     });
@@ -21,7 +22,7 @@ const useUpload = () => {
 
   const onUpload = async (
     inputs: File | File[],
-    metadata?: { dest?: string }
+    metadata?: { dest?: string },
   ) => {
     const files = Array.isArray(inputs) ? inputs : [inputs];
     const initialUploads = files.map((file) => ({
@@ -52,7 +53,7 @@ const useUpload = () => {
                 dest: metadata?.dest,
                 contentType: file.type,
               }),
-            }
+            },
           );
           if (response.ok) {
             const { url, fields } = await response.json();
@@ -85,7 +86,7 @@ const useUpload = () => {
         } finally {
           updateFileState(index, { isPending: false });
         }
-      })
+      }),
     );
 
     setIsPending(false);
