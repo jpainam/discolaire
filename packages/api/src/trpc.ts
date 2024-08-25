@@ -48,7 +48,7 @@ export const createTRPCContext = async (opts: {
   console.log(">>> tRPC Request from", source, "by", session?.user);
 
   return {
-    session,
+    session: { ...session, schoolYearId: "2022-2023" },
     db,
     token: authToken,
   };
@@ -133,7 +133,7 @@ export const publicProcedure = t.procedure.use(timingMiddleware);
 export const protectedProcedure = t.procedure
   .use(timingMiddleware)
   .use(({ ctx, next }) => {
-    if (!ctx.session?.user) {
+    if (!ctx.session.user) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
     return next({

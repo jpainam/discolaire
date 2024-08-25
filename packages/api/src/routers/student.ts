@@ -1,0 +1,314 @@
+import { z } from "zod";
+
+import type { Prisma, Student } from "@acme/db";
+
+import { studentService } from "../services/student-service";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
+
+const whereClause = (q: string): Prisma.StudentFindManyArgs => {
+  const qq = `%${q}%`;
+  return {
+    where: {
+      AND: [
+        {
+          OR: [
+            { firstName: { startsWith: qq, mode: "insensitive" } },
+            { lastName: { startsWith: qq, mode: "insensitive" } },
+            { residence: { startsWith: qq, mode: "insensitive" } },
+            { phoneNumber: { startsWith: qq, mode: "insensitive" } },
+            { email: { startsWith: qq, mode: "insensitive" } },
+            { registrationNumber: { startsWith: qq, mode: "insensitive" } },
+          ],
+        },
+      ],
+    },
+  };
+};
+const createUpdateSchema = z.object({
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
+  dateOfBirth: z.coerce.date(),
+  placeOfBirth: z.string().min(1),
+  gender: z.string().min(1),
+  email: z.string().email().optional().or(z.literal("")),
+  residence: z.string().optional(),
+  phoneNumber: z.string().optional(),
+  formerSchoolId: z.string().optional(),
+  countryId: z.string().optional(),
+  dateOfEntry: z.coerce.date().optional().or(z.literal("")),
+  dateOfExit: z.coerce.date().optional().or(z.literal("")),
+  tags: z.array(z.string()).optional(),
+  observation: z.string().optional(),
+});
+export const studentRouter = createTRPCRouter({
+  all: protectedProcedure
+    .input(
+      z.object({
+        page: z.coerce.number().optional().default(1),
+        per_page: z.coerce.number().optional().default(30),
+        sort: z.string().optional().default("lastName"),
+        q: z.string().optional(),
+        formerSchool: z.boolean().optional().default(true),
+        country: z.boolean().optional().default(true),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const offset = input.per_page * (input.page - 1);
+
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      const [column, order] = (input.sort?.split(".")?.filter(Boolean) ?? [
+        "lastName",
+        "desc",
+      ]) as [keyof Student | undefined, "asc" | "desc" | undefined];
+
+      const data = await ctx.db.student.findMany({
+        skip: offset,
+        take: input.per_page,
+        orderBy: {
+          [column ?? "lastName"]: order ?? "desc",
+        },
+        where: whereClause(input.q ?? "").where,
+        include: {
+          formerSchool: true,
+          country: true,
+        },
+      });
+
+      const students = await Promise.all(
+        data.map(async (student) => {
+          return {
+            ...student,
+            isRepeating: await studentService.isRepeating(
+              student.id,
+              ctx.session.schoolYearId,
+            ),
+            classroom: await studentService.classroom(
+              student.id,
+              ctx.session.schoolYearId,
+            ),
+          };
+        }),
+      );
+      return students;
+    }),
+  create: protectedProcedure
+    .input(createUpdateSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.student.create({
+        data: input,
+      });
+    }),
+  update: protectedProcedure
+    .input(createUpdateSchema.extend({ id: z.string() }))
+    .mutation(({ ctx, input }) => {
+      const { id, ...data } = input;
+      return ctx.db.student.update({
+        where: { id: id },
+        data: data,
+      });
+    }),
+  count: protectedProcedure
+    .input(
+      z
+        .object({
+          q: z.string().optional(),
+        })
+        .optional(),
+    )
+    .query(async ({ ctx, input }) => {
+      const students = await ctx.db.student.findMany({
+        where: whereClause(input?.q ?? "").where,
+      });
+      const female = students.filter((std) => std.gender == "female").length;
+      const male = students.length - female;
+      return { total: students.length, female, male };
+    }),
+  contacts: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
+    return ctx.db.studentContact.findMany({
+      where: {
+        studentId: input,
+      },
+      include: {
+        contact: true,
+        relationship: true,
+      },
+    });
+  }),
+  delete: protectedProcedure
+    .input(z.union([z.string(), z.array(z.string())]))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.student.deleteMany({
+        where: {
+          id: {
+            in: Array.isArray(input) ? input : [input],
+          },
+        },
+      });
+    }),
+  siblings: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      return ctx.db.student.findMany({
+        where: {
+          siblings: {
+            some: {
+              studentId: input,
+            },
+          },
+        },
+      });
+    }),
+
+  classroom: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
+    // return the current classroom
+    return studentService.classroom(input, ctx.session.schoolYearId);
+  }),
+
+  get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    const student = await ctx.db.student.findUnique({
+      where: {
+        id: input,
+      },
+      include: {
+        formerSchool: true,
+        country: true,
+        studentContacts: {
+          include: {
+            contact: true,
+            relationship: true,
+          },
+        },
+        enrollments: {
+          include: {
+            classroom: true,
+          },
+        },
+        user: true,
+      },
+    });
+    const classroom = await studentService.classroom(
+      input,
+      ctx.session.schoolYearId,
+    );
+    return {
+      ...student,
+      classroom: classroom,
+    };
+  }),
+  selector: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.student.findMany({
+      orderBy: {
+        lastName: "asc",
+      },
+    });
+  }),
+  documents: protectedProcedure.input(z.string()).query(() => {
+    return [];
+  }),
+  enrollments: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
+    return ctx.db.enrollment.findMany({
+      where: {
+        studentId: input,
+      },
+      include: {
+        student: true,
+        classroom: true,
+        schoolYear: true,
+      },
+      orderBy: {
+        schoolYearId: "desc",
+      },
+    });
+  }),
+  grades: protectedProcedure
+    .input(z.object({ id: z.string(), termId: z.coerce.number().optional() }))
+    .query(({ ctx, input }) => {
+      return studentService.getGrades({
+        studentId: input.id,
+        termId: input.termId,
+        schoolYearId: ctx.session.schoolYearId,
+      });
+    }),
+  unlinkedContacts: protectedProcedure
+    .input(
+      z.object({
+        limit: z.number().optional().default(10),
+        page: z.number().optional().default(1),
+        q: z.string().optional(),
+        studentId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const qq = `%${input.q}%`;
+      return ctx.db.contact.findMany({
+        take: input.limit,
+        orderBy: {
+          lastName: "asc",
+        },
+        where: {
+          AND: [
+            {
+              OR: [
+                { firstName: { startsWith: qq, mode: "insensitive" } },
+                { lastName: { startsWith: qq, mode: "insensitive" } },
+                { phoneNumber1: { startsWith: qq, mode: "insensitive" } },
+                { phoneNumber2: { startsWith: qq, mode: "insensitive" } },
+                { email: { startsWith: qq, mode: "insensitive" } },
+              ],
+            },
+            {
+              studentContacts: {
+                none: {
+                  studentId: input.studentId,
+                },
+              },
+            },
+          ],
+        },
+      });
+    }),
+  updateAvatar: protectedProcedure
+    .input(z.object({ id: z.string(), avatar: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.student.update({
+        data: {
+          avatar: input.avatar,
+        },
+        where: {
+          id: input.id,
+        },
+      });
+      const student = await ctx.db.student.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+      if (student?.userId) {
+        await ctx.db.user.update({
+          data: {
+            avatar: input.avatar,
+          },
+          where: {
+            id: student.userId,
+          },
+        });
+      }
+      return true;
+    }),
+  transactions: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
+    return ctx.db.transaction.findMany({
+      where: {
+        account: {
+          studentId: input,
+        },
+        schoolYearId: ctx.session.schoolYearId,
+      },
+      include: {
+        journal: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  }),
+});
