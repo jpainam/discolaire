@@ -16,7 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@repo/ui/form";
-import PhoneInput from "@repo/ui/PhoneInput";
+import PhoneInput from "@repo/ui/PhoneInput/index";
 import { Separator } from "@repo/ui/separator";
 import { TagInput } from "@repo/ui/TagInput";
 import { Textarea } from "@repo/ui/textarea";

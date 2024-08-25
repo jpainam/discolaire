@@ -17,10 +17,11 @@ import { Textarea } from "@repo/ui/textarea";
 
 import { DatePicker } from "~/components/shared/date-picker";
 import { getErrorMessage } from "~/lib/handle-error";
-import { sendEmail } from "~/server/services/messaging-service";
+
+//import { sendEmail } from "~/server/services/messaging-service";
 
 export default function SendNotificationDialog() {
-  const { openModal, closeModal } = useModal();
+  const { closeModal } = useModal();
   const { t } = useLocale();
   return (
     <>
@@ -95,13 +96,15 @@ export default function SendNotificationDialog() {
           type="button"
           onClick={() => {
             toast.promise(
-              sendEmail({
-                subject: "Hello",
-                body: "<p>Hello this is avery long content o tetes</p>",
-                schedule: "now",
-                to: ["jpainam@gmail.com"],
-                receipt: false,
-              }),
+              Promise.resolve(),
+              // TODO
+              // sendEmail({
+              //   subject: "Hello",
+              //   body: "<p>Hello this is avery long content o tetes</p>",
+              //   schedule: "now",
+              //   to: ["jpainam@gmail.com"],
+              //   receipt: false,
+              // }),
               {
                 loading: t("sending"),
                 error: (error) => {

@@ -7,22 +7,21 @@ import { Button } from "@repo/ui/button";
 
 //import { SendInvite } from "@repo/transactional/emails/SendInvite";
 import { getErrorMessage } from "~/lib/handle-error";
-import { sendEmail } from "~/server/services/messaging-service";
-import { encryptInvitationCode } from "~/utils/encrypt";
+
+//import { sendEmail } from "~/server/services/messaging-service";
 
 export function InviteConfirmationDialog({ email }: { email: string }) {
   const { t } = useLocale();
   const { closeModal } = useModal();
 
-  const { openModal } = useModal();
-  const sendInvite = async () => {
+  const sendInvite = () => {
     if (!email) {
       toast.error(t("email_not_found"));
       return;
     }
-    const invitationCode = await encryptInvitationCode(email);
-    const invitationLink =
-      "https://localhost/" + "/invite/" + invitationCode + "?email=" + email;
+    //const invitationCode = await encryptInvitationCode(email);
+    //const invitationLink =
+    // "https://localhost/" + "/invite/" + invitationCode + "?email=" + email;
     // const emailHtml = render(
     //   <SendInvite
     //     username={"username"}
@@ -34,11 +33,12 @@ export function InviteConfirmationDialog({ email }: { email: string }) {
     // );
 
     toast.promise(
-      sendEmail({
-        to: [email],
-        subject: "Invitation to Discolaire",
-        body: "<div>Contenu de l'email</div>",
-      }),
+      Promise.resolve(),
+      // sendEmail({
+      //   to: [email],
+      //   subject: "Invitation to Discolaire",
+      //   body: "<div>Contenu de l'email</div>",
+      //}),
       {
         loading: t("sending"),
         error: (error) => {
