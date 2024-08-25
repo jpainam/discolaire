@@ -25,7 +25,6 @@ declare module "next-auth" {
 }
 const adapter: Adapter = PrismaAdapter(db);
 export const isSecureContext = env.NODE_ENV !== "development";
-
 export const authConfig = {
   adapter,
   // In development, we need to skip checks to allow Expo to work
@@ -36,6 +35,10 @@ export const authConfig = {
       }
     : {}),
   secret: env.AUTH_SECRET,
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
   pages: {
     signIn: "/auth/login",
     signOut: "/auth/logout",
@@ -76,6 +79,13 @@ export const authConfig = {
     }),
   ],
   callbacks: {
+    jwt({ token, user }) {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (user) {
+        return { ...token, ...user };
+      }
+      return token;
+    },
     session: (opts) => {
       if (!("user" in opts))
         throw new Error("unreachable with session strategy");

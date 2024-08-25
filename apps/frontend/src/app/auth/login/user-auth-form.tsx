@@ -56,18 +56,26 @@ export async function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         }}
       >
         <div className="grid gap-2">
-          <Label>{t("email")}</Label>
+          <Label htmlFor="username">{t("email")}</Label>
           <Input
+            id="username"
             autoCorrect="off"
+            name="username"
             autoComplete="email"
             type="email"
             required
             autoCapitalize="none"
             placeholder={"m@example.com"}
           />
-          <Label>{t("password")}</Label>
-          <Input required current-password="true" type="password" />
-          <Button>{t("signin_with_email")}</Button>
+          <Label htmlFor="password">{t("password")}</Label>
+          <Input
+            required
+            current-password="true"
+            type="password"
+            name="password"
+            id="password"
+          />
+          <Button type="submit">{t("signin_with_email")}</Button>
         </div>
       </form>
       {/* </Form> */}
@@ -81,17 +89,20 @@ export async function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           </span>
         </div>
       </div>
-      <Button
-        variant="outline"
-        type="button"
-        formAction={async () => {
-          "use server";
-          await signIn("google", { callbackUrl: "/" });
-        }}
-      >
-        <Icons.google className="mr-2 h-4 w-4" />
-        Google
-      </Button>
+      <form className="w-full">
+        <Button
+          variant="outline"
+          className="w-full"
+          type="submit"
+          formAction={async () => {
+            "use server";
+            await signIn("google", { callbackUrl: "/" });
+          }}
+        >
+          <Icons.google className="mr-2 h-4 w-4" />
+          Google
+        </Button>
+      </form>
     </div>
   );
 }
