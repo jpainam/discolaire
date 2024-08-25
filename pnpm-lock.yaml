@@ -227,7 +227,7 @@ importers:
         specifier: "catalog:"
         version: 5.5.4
 
-  apps/nextjs:
+  apps/frontend:
     dependencies:
       "@repo/api":
         specifier: workspace:*
