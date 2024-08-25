@@ -1,5 +1,3 @@
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -8,6 +6,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/select";
+
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
 
 export default function PrefixSelector({
   className,

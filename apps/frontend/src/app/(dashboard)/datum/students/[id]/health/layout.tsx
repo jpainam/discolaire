@@ -1,5 +1,6 @@
-import { HealthHeader } from "@/components/students/health/HealthHeader";
 import { PropsWithChildren } from "react";
+
+import { HealthHeader } from "~/components/students/health/HealthHeader";
 
 export default async function Layout({ children }: PropsWithChildren) {
   return (

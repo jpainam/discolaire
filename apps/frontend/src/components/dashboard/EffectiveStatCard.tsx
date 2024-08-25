@@ -1,7 +1,7 @@
-import { cn } from "@/lib/utils";
-
-import { getServerTranslations } from "@/app/i18n/server";
 import { PiGenderFemale, PiGenderMale } from "react-icons/pi";
+
+import { getServerTranslations } from "~/app/i18n/server";
+import { cn } from "~/lib/utils";
 import { BorderBeam } from "../magicui/BorderBeam";
 import { EffectiveStatCounter } from "./EffectiveStatCounter";
 
@@ -46,15 +46,15 @@ export async function EffectiveStatCard({
       <div className="mb-2 flex items-start gap-5">
         <span
           className={cn(
-            "flex rounded-lg p-3 bg-muted text-muted-foreground ",
+            "flex rounded-lg bg-muted p-3 text-muted-foreground",
             iconFill,
           )}
         >
           {icon}
         </span>
         <div>
-          <p className="font-medium text-gray-500 pb-1">{title}</p>
-          <p className="text-lg font-bold text-gray-900 dark:text-gray-700 ">
+          <p className="pb-1 font-medium text-gray-500">{title}</p>
+          <p className="text-lg font-bold text-gray-900 dark:text-gray-700">
             <EffectiveStatCounter amount={total} duration={2} />
           </p>
         </div>
@@ -64,19 +64,19 @@ export async function EffectiveStatCard({
           <div className={cn("flex items-center gap-1")}>
             <span
               className={cn(
-                "flex rounded-full px-2.5 py-1.5 bg-secondary text-secondary-foreground",
+                "flex rounded-full bg-secondary px-2.5 py-1.5 text-secondary-foreground",
               )}
             >
-              <PiGenderMale className="h-auto w-4 " />
+              <PiGenderMale className="h-auto w-4" />
             </span>
             <span className="leading-none">
               {male.toLocaleString()} ({((male / total) * 100).toFixed(0)}%)
             </span>
           </div>
-          <div className={cn("flex items-center gap-1 ")}>
+          <div className={cn("flex items-center gap-1")}>
             <span
               className={cn(
-                "flex rounded-full  px-2.5 py-1.5 bg-secondary text-secondary-foreground ",
+                "flex rounded-full bg-secondary px-2.5 py-1.5 text-secondary-foreground",
               )}
             >
               <PiGenderFemale className="h-auto w-4" />
@@ -91,13 +91,13 @@ export async function EffectiveStatCard({
       {secondTotal && (
         <div className="flex items-center gap-1">
           {t("total_contact_from_registered_students")}
-          <span className="text-lg font-bold text-gray-900 dark:text-gray-700 ">
+          <span className="text-lg font-bold text-gray-900 dark:text-gray-700">
             <EffectiveStatCounter amount={secondTotal} duration={2} />
           </span>
         </div>
       )}
       {active != undefined && inactive != undefined && (
-        <div className="flex gap-4 items-center">
+        <div className="flex items-center gap-4">
           <span>
             {t("active")}:<span className="font-semibold">{active}</span>
           </span>

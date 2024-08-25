@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { useLocale } from "@/hooks/use-locale";
-import { api } from "@/trpc/react";
 import FlatBadge, { FlatBadgeVariant } from "@repo/ui/FlatBadge";
 import { Separator } from "@repo/ui/separator";
 import { sum } from "lodash";
+
+import { useLocale } from "~/hooks/use-locale";
+import { api } from "~/trpc/react";
 
 export function SubjectStats() {
   const params = useParams<{ id: string }>();

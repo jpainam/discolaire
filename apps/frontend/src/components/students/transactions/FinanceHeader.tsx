@@ -1,10 +1,6 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { DropdownHelp } from "@/components/shared/DropdownHelp";
-import { routes } from "@/configs/routes";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -13,6 +9,10 @@ import {
 } from "@repo/ui/dropdown-menu";
 import { MoreVertical, Plus } from "lucide-react";
 
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { routes } from "~/configs/routes";
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
 import { FinanceBreadCrumb } from "./breadcrumb";
 
 export default function FinanceHeader() {

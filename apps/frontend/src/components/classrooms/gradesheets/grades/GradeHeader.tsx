@@ -1,11 +1,6 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import PDFIcon from "@/components/icons/pdf-solid";
-import XMLIcon from "@/components/icons/xml-solid";
-import { useLocale } from "@/hooks/use-locale";
-import { AppRouter } from "@/server/api/root";
-import { api } from "@/trpc/react";
 import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
 import { Skeleton } from "@repo/ui/skeleton";
@@ -18,6 +13,12 @@ import {
   TableRow,
 } from "@repo/ui/table";
 import { inferProcedureOutput } from "@trpc/server";
+
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { useLocale } from "~/hooks/use-locale";
+import { AppRouter } from "~/server/api/root";
+import { api } from "~/trpc/react";
 
 type GradeSheetGetGradeProcedureOutput = NonNullable<
   inferProcedureOutput<AppRouter["gradeSheet"]["grades"]>

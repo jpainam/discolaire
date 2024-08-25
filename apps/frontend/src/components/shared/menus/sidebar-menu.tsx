@@ -3,11 +3,11 @@
 import { Fragment } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import SimpleBar from "@/components/simplebar";
-import { useCreateQueryString } from "@/hooks/create-query-string";
-import { cn } from "@/lib/utils";
 import { Badge } from "@repo/ui/badge";
 
+import SimpleBar from "~/components/simplebar";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { cn } from "~/lib/utils";
 import { SideMenuType } from "./menu-types";
 
 function LinkMenuItem(item: SideMenuType) {

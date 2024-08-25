@@ -1,7 +1,7 @@
 /*import {
   classes,
   feesDescription,
-} from "@/components/administration/fees/data";
+} from "~/components/administration/fees/data";
 import { faker } from "@faker-js/faker";
 
 export type Fee = {

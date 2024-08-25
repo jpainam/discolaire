@@ -1,5 +1,5 @@
-import { ReportCardTable } from "@/components/classrooms/report-cards/ReportCardTable";
-import { EmptyState } from "@/components/EmptyState";
+import { ReportCardTable } from "~/components/classrooms/report-cards/ReportCardTable";
+import { EmptyState } from "~/components/EmptyState";
 
 export default function Page({
   searchParams: { term },

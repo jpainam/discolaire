@@ -2,22 +2,23 @@
 
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import { DatePicker } from "@/components/shared/date-picker";
-import { CheckboxField } from "@/components/shared/forms/checkbox-field";
-import { InputField } from "@/components/shared/forms/input-field";
-import { SubjectSelector } from "@/components/shared/selects/SubjectSelector";
-import { TermSelector } from "@/components/shared/selects/TermSelector";
-import { routes } from "@/configs/routes";
-import { useCreateQueryString } from "@/hooks/create-query-string";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
-import { cn } from "@/lib/utils";
 import { Button } from "@repo/ui/button";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { FormControl, FormField, FormItem, FormLabel } from "@repo/ui/form";
 import { Label } from "@repo/ui/label";
 import { Slider } from "@repo/ui/slider";
 import { useFormContext } from "react-hook-form";
+
+import { DatePicker } from "~/components/shared/date-picker";
+import { CheckboxField } from "~/components/shared/forms/checkbox-field";
+import { InputField } from "~/components/shared/forms/input-field";
+import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
+import { cn } from "~/lib/utils";
 
 export function CreateGradeSheetHeader() {
   const { t } = useLocale();

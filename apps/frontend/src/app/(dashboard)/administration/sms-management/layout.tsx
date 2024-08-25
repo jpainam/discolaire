@@ -1,7 +1,8 @@
-import { getServerTranslations } from "@/app/i18n/server";
-import { TabLink } from "@/components/users/tab-link";
-import { routes } from "@/configs/routes";
 import { Contact, FileStack, NotepadTextDashed, Users } from "lucide-react";
+
+import { getServerTranslations } from "~/app/i18n/server";
+import { TabLink } from "~/components/users/tab-link";
+import { routes } from "~/configs/routes";
 
 type UserLink = {
   icon: React.ReactNode;
@@ -38,7 +39,7 @@ export default async function Layout({
   ];
   return (
     <div className="flex flex-col">
-      <div className="flex m-2 max-w-fit items-center rounded-full bg-gray-100">
+      <div className="m-2 flex max-w-fit items-center rounded-full bg-gray-100">
         {userLinks.map((link: UserLink, index) => {
           return (
             <TabLink

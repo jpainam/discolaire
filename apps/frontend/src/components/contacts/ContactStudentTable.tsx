@@ -1,13 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { AvatarState } from "@/components/AvatarState";
-import { routes } from "@/configs/routes";
-import { useAlert } from "@/hooks/use-alert";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
-import { getErrorMessage } from "@/lib/handle-error";
-import { api } from "@/trpc/react";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -28,6 +21,13 @@ import {
 import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import { AvatarState } from "~/components/AvatarState";
+import { routes } from "~/configs/routes";
+import { useAlert } from "~/hooks/use-alert";
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
+import { getErrorMessage } from "~/lib/handle-error";
+import { api } from "~/trpc/react";
 import { DataTableSkeleton } from "../data-table/data-table-skeleton";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";

@@ -1,8 +1,9 @@
 "use client";
 
-import { useLocale } from "@/hooks/use-locale";
 import { DirectionAwareTabs } from "@repo/ui/direction-aware-tabs";
 import { User, Users } from "lucide-react";
+
+import { useLocale } from "~/hooks/use-locale";
 
 export function AccessLogsTable({}) {
   const { t } = useLocale();

@@ -1,5 +1,5 @@
-import { ClassroomFeeHeader } from "@/components/classrooms/fees/ClassroomFeeHeader";
-import { ClassroomFeeTable } from "@/components/classrooms/fees/ClassroomFeeTable";
+import { ClassroomFeeHeader } from "~/components/classrooms/fees/ClassroomFeeHeader";
+import { ClassroomFeeTable } from "~/components/classrooms/fees/ClassroomFeeTable";
 
 export default async function Page({
   params: { id },

@@ -1,13 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getServerTranslations } from "@/app/i18n/server";
-import { AvatarState } from "@/components/AvatarState";
-import { StudentContactRelationship } from "@/components/students/contacts/StudentContactRelationship";
-import { StudentSiblingTable } from "@/components/students/contacts/StudentSiblingTable";
-import { routes } from "@/configs/routes";
-import { api } from "@/trpc/server";
-import { getFullName } from "@/utils/full-name";
 import { Button } from "@repo/ui/button";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import { Label } from "@repo/ui/label";
@@ -22,6 +15,14 @@ import {
   Phone,
   PhoneCall,
 } from "lucide-react";
+
+import { getServerTranslations } from "~/app/i18n/server";
+import { AvatarState } from "~/components/AvatarState";
+import { StudentContactRelationship } from "~/components/students/contacts/StudentContactRelationship";
+import { StudentSiblingTable } from "~/components/students/contacts/StudentSiblingTable";
+import { routes } from "~/configs/routes";
+import { api } from "~/trpc/server";
+import { getFullName } from "~/utils/full-name";
 
 export default async function Page({
   params: { id, contactId },

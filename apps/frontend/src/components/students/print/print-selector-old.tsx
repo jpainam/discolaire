@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { PopoverProps } from "@radix-ui/react-popover";
 import { Button } from "@repo/ui/button";
@@ -14,6 +13,8 @@ import {
   CommandItem,
 } from "@repo/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+
+import { cn } from "~/lib/utils";
 
 interface PrintSelectorProps extends PopoverProps {
   stutentPrints: StudentPrintOption[];

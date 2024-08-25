@@ -1,9 +1,10 @@
-import { TransactionHeader } from "@/components/administration/transactions/TransactionHeader";
 import { PropsWithChildren } from "react";
+
+import { TransactionHeader } from "~/components/administration/transactions/TransactionHeader";
 
 export default function Layout({ children }: PropsWithChildren) {
   return (
-    <div className="flex  flex-col h-full w-full">
+    <div className="flex h-full w-full flex-col">
       <TransactionHeader />
       {children}
     </div>

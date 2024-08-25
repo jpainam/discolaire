@@ -1,16 +1,6 @@
 "use client";
 
 import { useParams, usePathname } from "next/navigation";
-import { SimpleTooltip } from "@/components/simple-tooltip";
-import { routes } from "@/configs/routes";
-import { useCreateQueryString } from "@/hooks/create-query-string";
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
-import { useRouter } from "@/hooks/use-router";
-import { useSheet } from "@/hooks/use-sheet";
-import { cn } from "@/lib/utils";
-import { api } from "@/trpc/react";
-import { getFullName } from "@/utils/full-name";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -36,6 +26,16 @@ import {
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import * as RPNInput from "react-phone-number-input";
 
+import { SimpleTooltip } from "~/components/simple-tooltip";
+import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
+import { useRouter } from "~/hooks/use-router";
+import { useSheet } from "~/hooks/use-sheet";
+import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
+import { getFullName } from "~/utils/full-name";
 import { CountryComponent } from "../shared/CountryPicker";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";

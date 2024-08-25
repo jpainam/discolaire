@@ -2,9 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { useLocale } from "@/hooks/use-locale";
-import { api } from "@/trpc/react";
-import { Student } from "@/types/student";
 import { Button } from "@repo/ui/button";
 import {
   Pagination,
@@ -13,6 +10,10 @@ import {
 } from "@repo/ui/pagination";
 import { Skeleton } from "@repo/ui/skeleton";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+
+import { useLocale } from "~/hooks/use-locale";
+import { api } from "~/trpc/react";
+import { Student } from "~/types/student";
 
 export function StudentFooter() {
   const { t, i18n } = useLocale();

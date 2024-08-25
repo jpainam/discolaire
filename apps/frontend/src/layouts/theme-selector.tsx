@@ -1,8 +1,9 @@
 "use client";
 
-import { useTheme } from "@/hooks/use-theme";
-import { cn } from "@/lib/utils";
 import { Button } from "@repo/ui/button";
+
+import { useTheme } from "~/hooks/use-theme";
+import { cn } from "~/lib/utils";
 
 export function ThemeSelector() {
   const [theme, setTheme] = useTheme();

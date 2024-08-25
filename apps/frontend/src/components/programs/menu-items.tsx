@@ -1,10 +1,11 @@
-import { routes } from "@/configs/routes";
 import {
   PiBriefcaseDuotone,
   PiCurrencyCircleDollarDuotone,
   PiDeviceTabletDuotone,
   PiPackageDuotone,
 } from "react-icons/pi";
+
+import { routes } from "~/configs/routes";
 
 type MenuItem = {
   name: string;

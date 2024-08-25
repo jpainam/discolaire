@@ -1,7 +1,5 @@
 import { useTransition } from "react";
 import Link from "next/link";
-import { routes } from "@/configs/routes";
-import { AppRouter } from "@/server/api/root";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
@@ -21,6 +19,9 @@ import {
 import { ColumnDef } from "@tanstack/react-table";
 import { inferProcedureOutput } from "@trpc/server";
 import i18next, { TFunction } from "i18next";
+
+import { routes } from "~/configs/routes";
+import { AppRouter } from "~/server/api/root";
 
 type ClassroomGetAssignemntProcedureOutput = NonNullable<
   inferProcedureOutput<AppRouter["classroom"]["assignments"]>

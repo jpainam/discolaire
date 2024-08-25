@@ -1,14 +1,4 @@
 import Link from "next/link";
-import { AvatarState } from "@/components/AvatarState";
-import { routes } from "@/configs/routes";
-import { useAlert } from "@/hooks/use-alert";
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
-import { useRouter } from "@/hooks/use-router";
-import { getErrorMessage } from "@/lib/handle-error";
-import { AppRouter } from "@/server/api/root";
-import { api } from "@/trpc/react";
-import { getAppreciations } from "@/utils/get-appreciation";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
@@ -27,6 +17,16 @@ import i18next, { TFunction } from "i18next";
 import { FlagOff, Pencil } from "lucide-react";
 import { toast } from "sonner";
 
+import { AvatarState } from "~/components/AvatarState";
+import { routes } from "~/configs/routes";
+import { useAlert } from "~/hooks/use-alert";
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
+import { useRouter } from "~/hooks/use-router";
+import { getErrorMessage } from "~/lib/handle-error";
+import { AppRouter } from "~/server/api/root";
+import { api } from "~/trpc/react";
+import { getAppreciations } from "~/utils/get-appreciation";
 import { EditGradeStudent } from "./EditGradeStudent";
 
 type GradeSheetGetGradeProcedureOutput = NonNullable<

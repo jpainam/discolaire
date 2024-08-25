@@ -1,11 +1,12 @@
 "use client";
 
-import { routes } from "@/configs/routes";
-import { useCreateQueryString } from "@/hooks/create-query-string";
-import { cn } from "@/lib/utils";
+import { useCallback } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+
+import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { cn } from "~/lib/utils";
 
 export default function AlphabetSearchBlock() {
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -25,10 +26,10 @@ export default function AlphabetSearchBlock() {
 
   return (
     <>
-      <div className="flex border text-sm gap-2  border-primary border-10 p-2 rounded-lg flex-col">
+      <div className="border-10 flex flex-col gap-2 rounded-lg border border-primary p-2 text-sm">
         {/*<DocumentMagnifyingGlassIcon className="w-6 text-blue-dark" />*/}
 
-        <div className="flex flex-wrap gap-1 ">
+        <div className="flex flex-wrap gap-1">
           {alphabetArray.map((value) => {
             const isActive = value === letter;
             return (
@@ -36,7 +37,7 @@ export default function AlphabetSearchBlock() {
                 key={value}
                 href={createUrl("letter", value)}
                 className={cn(
-                  "px-1 ",
+                  "px-1",
                   isActive
                     ? "text-blue-750 border border-gray-50 font-bold underline"
                     : "text-blue-500",
@@ -54,7 +55,7 @@ export default function AlphabetSearchBlock() {
                 key={value}
                 href={createUrl("classroom", value)}
                 className={cn(
-                  "px-1.5 ",
+                  "px-1.5",
                   isActive
                     ? "text-blue-750 border border-gray-50 font-bold underline"
                     : "text-blue-500",
@@ -68,7 +69,7 @@ export default function AlphabetSearchBlock() {
         <div className="p-x-2 inline-flex flex-wrap gap-4">
           <Link
             className={cn(
-              "px-1.5 ",
+              "px-1.5",
               selection == "saved"
                 ? "text-blue-750 border border-gray-50 font-bold underline"
                 : "text-blue-500",
@@ -79,7 +80,7 @@ export default function AlphabetSearchBlock() {
           </Link>
           <Link
             className={cn(
-              "px-1.5 ",
+              "px-1.5",
               selection == "past"
                 ? "text-blue-750 border border-gray-50 font-bold underline"
                 : "text-blue-500",
@@ -90,7 +91,7 @@ export default function AlphabetSearchBlock() {
           </Link>
           <Link
             className={cn(
-              "px-1.5 ",
+              "px-1.5",
               selection == "advanced"
                 ? "text-blue-750 border border-gray-50 font-bold underline"
                 : "text-blue-500",
@@ -101,7 +102,7 @@ export default function AlphabetSearchBlock() {
           </Link>
           <Link
             className={cn(
-              "px-1.5 ",
+              "px-1.5",
               selection == "multiple"
                 ? "text-blue-750 border border-gray-50 font-bold underline"
                 : "text-blue-500",

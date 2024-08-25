@@ -1,7 +1,8 @@
 import React, { forwardRef, useRef, useState } from "react";
-import { useIsomorphicEffect } from "@/hooks/use-event-listener";
 import { assignRef } from "@repo/ui/menu/popover/use-merged-ref";
 import { createPortal } from "react-dom";
+
+import { useIsomorphicEffect } from "~/hooks/use-event-listener";
 
 function createPortalNode(props: React.ComponentPropsWithoutRef<"div">) {
   const node = document.createElement("div");

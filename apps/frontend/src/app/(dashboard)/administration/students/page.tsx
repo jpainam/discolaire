@@ -1,6 +1,7 @@
-import { StudentsTable } from "@/components/administration/students/students-table";
-import { StudentsToolbar } from "@/components/administration/students/students-toolbar";
 import { Separator } from "@repo/ui/separator";
+
+import { StudentsTable } from "~/components/administration/students/students-table";
+import { StudentsToolbar } from "~/components/administration/students/students-toolbar";
 
 export default function StudentsContent() {
   return (

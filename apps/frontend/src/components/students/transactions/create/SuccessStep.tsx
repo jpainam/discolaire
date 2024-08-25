@@ -1,13 +1,15 @@
 "use client";
-import { makePaymentAtom } from "@/atoms/payment";
-import { routes } from "@/configs/routes";
-import { useRouter } from "@/hooks/use-router";
-import { api } from "@/trpc/react";
+
+import { useEffect } from "react";
+import { useParams } from "next/navigation";
 import { useAtom } from "jotai";
 import { Loader } from "lucide-react";
-import { useParams } from "next/navigation";
-import { useEffect } from "react";
 import { toast } from "sonner";
+
+import { makePaymentAtom } from "~/atoms/payment";
+import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
+import { api } from "~/trpc/react";
 
 export function SuccessStep() {
   const params = useParams() as { id: string };
@@ -44,17 +46,17 @@ export function SuccessStep() {
             }));
 
             router.push(
-              routes.students.transactions.details(params.id, result?.id)
+              routes.students.transactions.details(params.id, result?.id),
             );
             return "Transaction created successfully";
           },
-        }
+        },
       );
     }
   }, [payment, params.id]); // eslint-disable-line react-hooks/exhaustive-deps
   return (
-    <div className="h-40 flex items-center justify-center my-2 border bg-secondary text-primary rounded-md">
-      <Loader className="text-xl animate-spin" />
+    <div className="my-2 flex h-40 items-center justify-center rounded-md border bg-secondary text-primary">
+      <Loader className="animate-spin text-xl" />
     </div>
   );
 }

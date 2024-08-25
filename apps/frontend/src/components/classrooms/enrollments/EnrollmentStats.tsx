@@ -1,7 +1,8 @@
 "use client";
-import CircleProgressBar from "@/components/charts/circle-progressbar";
-import { useLocale } from "@/hooks/use-locale";
-import { Student } from "@/types/student";
+
+import CircleProgressBar from "~/components/charts/circle-progressbar";
+import { useLocale } from "~/hooks/use-locale";
+import { Student } from "~/types/student";
 
 export function EnrollmentStats({ students }: { students: Student[] }) {
   const { t } = useLocale();
@@ -10,7 +11,7 @@ export function EnrollmentStats({ students }: { students: Student[] }) {
   const males = total - females;
   const repeating = students.filter((s) => s?.isRepeating).length;
   return (
-    <div className="grid w-full grid-cols-1 md:grid-cols-4 gap-2">
+    <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-4">
       <span>
         Effectif
         {total} and {females}
@@ -65,7 +66,7 @@ function EnrollmentSummaryCard({
   progressColor,
 }: EnrollmentSummaryCardProps) {
   return (
-    <div className="h-20 w-auto border gap-4 flex flex-row justify-between rounded-lg p-2">
+    <div className="flex h-20 w-auto flex-row justify-between gap-4 rounded-lg border p-2">
       <span>{title}</span>
       <CircleProgressBar
         percentage={percentage}

@@ -1,15 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { CountryPicker } from "@/components/shared/CountryPicker";
-import { DatePickerField } from "@/components/shared/forms/date-picker-field";
-import { InputField } from "@/components/shared/forms/input-field";
-import { SelectField } from "@/components/shared/forms/SelectField";
-import { FormerSchoolSelector } from "@/components/shared/selects/FormerSchoolSelector";
-import { useLocale } from "@/hooks/use-locale";
-import { useSheet } from "@/hooks/use-sheet";
-import { getErrorMessage } from "@/lib/handle-error";
-import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/button";
 import {
@@ -28,6 +19,15 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { CountryPicker } from "~/components/shared/CountryPicker";
+import { DatePickerField } from "~/components/shared/forms/date-picker-field";
+import { InputField } from "~/components/shared/forms/input-field";
+import { SelectField } from "~/components/shared/forms/SelectField";
+import { FormerSchoolSelector } from "~/components/shared/selects/FormerSchoolSelector";
+import { useLocale } from "~/hooks/use-locale";
+import { useSheet } from "~/hooks/use-sheet";
+import { getErrorMessage } from "~/lib/handle-error";
+import { api } from "~/trpc/react";
 import { Tag } from "../ui/TagInput/tag-input";
 
 interface ProfileCreateEditSheetProps {

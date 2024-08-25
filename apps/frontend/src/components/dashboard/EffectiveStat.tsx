@@ -1,8 +1,8 @@
-import { getServerTranslations } from "@/app/i18n/server";
-import { cn } from "@/lib/utils";
-
-import { api } from "@/trpc/server";
 import { IconType } from "react-icons/lib";
+
+import { getServerTranslations } from "~/app/i18n/server";
+import { cn } from "~/lib/utils";
+import { api } from "~/trpc/server";
 import { MaleVsFemaleCount } from "./MaleVsFemaleCount";
 
 type JobStatsType = {
@@ -25,7 +25,7 @@ export async function EffectiveStat({ className }: JobStatsType) {
 
   return (
     <div
-      className={cn("grid text-sm grid-cols-1 gap-4 md:grid-cols-4", className)}
+      className={cn("grid grid-cols-1 gap-4 text-sm md:grid-cols-4", className)}
     >
       <MaleVsFemaleCount
         title={t("totalNumberOfStudents")}

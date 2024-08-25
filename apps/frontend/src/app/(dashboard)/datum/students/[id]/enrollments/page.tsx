@@ -1,8 +1,9 @@
-import { getServerTranslations } from "@/app/i18n/server";
-import { EmptyState } from "@/components/EmptyState";
-import { StudentEnrollmentHeader } from "@/components/students/enrollments/StudentEnrollmentHeader";
-import { StudentEnrollmentTable } from "@/components/students/enrollments/StudentEnrollmentTable";
-import { api } from "@/trpc/server";
+import { getServerTranslations } from "~/app/i18n/server";
+import { EmptyState } from "~/components/EmptyState";
+import { StudentEnrollmentHeader } from "~/components/students/enrollments/StudentEnrollmentHeader";
+import { StudentEnrollmentTable } from "~/components/students/enrollments/StudentEnrollmentTable";
+import { api } from "~/trpc/server";
+
 export default async function Page({
   params: { id },
 }: {

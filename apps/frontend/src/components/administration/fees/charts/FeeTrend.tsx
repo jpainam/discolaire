@@ -1,9 +1,5 @@
 "use client";
 
-import { EmptyState } from "@/components/EmptyState";
-import { useLocale } from "@/hooks/use-locale";
-import { showErrorToast } from "@/lib/handle-error";
-import { api } from "@/trpc/react";
 import { Card, CardContent } from "@repo/ui/card";
 import {
   ChartConfig,
@@ -13,6 +9,11 @@ import {
 } from "@repo/ui/chart";
 import { Skeleton } from "@repo/ui/skeleton";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+
+import { EmptyState } from "~/components/EmptyState";
+import { useLocale } from "~/hooks/use-locale";
+import { showErrorToast } from "~/lib/handle-error";
+import { api } from "~/trpc/react";
 
 export function FeeTrend() {
   const feesTrendQuery = api.fee.trend.useQuery();

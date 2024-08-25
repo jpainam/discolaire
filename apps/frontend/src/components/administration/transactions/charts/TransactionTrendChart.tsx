@@ -2,11 +2,6 @@
 
 import * as React from "react";
 import { useSearchParams } from "next/navigation";
-import { EmptyState } from "@/components/EmptyState";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
-import { api } from "@/trpc/react";
-import { useMoneyFormat } from "@/utils/money-format";
 import { Card, CardContent } from "@repo/ui/card";
 import {
   ChartConfig,
@@ -18,6 +13,12 @@ import {
 } from "@repo/ui/chart";
 import { Skeleton } from "@repo/ui/skeleton";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+
+import { EmptyState } from "~/components/EmptyState";
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
+import { api } from "~/trpc/react";
+import { useMoneyFormat } from "~/utils/money-format";
 
 export function TransactionTrendChart() {
   const { t } = useLocale();

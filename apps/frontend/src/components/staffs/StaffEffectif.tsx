@@ -1,7 +1,7 @@
 "use client";
 
-import { useLocale } from "@/hooks/use-locale";
-import { api } from "@/trpc/react";
+import { useLocale } from "~/hooks/use-locale";
+import { api } from "~/trpc/react";
 
 const COLORS = ["#6741D9", "#E0C6FD", "#FFBC75", "#FF7272"];
 
@@ -13,7 +13,7 @@ export function StaffEffectif() {
   const males = total - females;
   const { t } = useLocale();
   return (
-    <div className="flex text-sm flex-row gap-4 items-center">
+    <div className="flex flex-row items-center gap-4 text-sm">
       <Detail color={COLORS[0]!} value={total} text={t("total")} />
       <Detail color={COLORS[2]!} value={males} text={t("male")} />
       <Detail color={COLORS[3]!} value={females} text={t("female")} />
@@ -32,7 +32,7 @@ function Detail({
 }) {
   return (
     <div className="flex justify-between gap-2">
-      <div className=" col-span-3 flex items-center justify-start gap-1.5">
+      <div className="col-span-3 flex items-center justify-start gap-1.5">
         <span
           style={{ background: color }}
           className="block h-2.5 w-2.5 rounded"

@@ -1,7 +1,6 @@
 "use client";
 
 //import { toast } from "@repo/ui/use-toast";
-import { api } from "@/trpc/react";
 import {
   FormControl,
   FormField,
@@ -17,6 +16,8 @@ import {
   SelectValue,
 } from "@repo/ui/select";
 import { useFormContext } from "react-hook-form";
+
+import { api } from "~/trpc/react";
 
 export default function SchoolYearSelector() {
   const form = useFormContext();

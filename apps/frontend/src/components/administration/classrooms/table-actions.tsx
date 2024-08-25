@@ -1,11 +1,11 @@
 // import { Table } from "@tanstack/react-table";
 
-// import { DeletePopover } from "@/components/shared/buttons/delete-popover";
-// import { ExportButton } from "@/components/shared/buttons/export-button";
-// import { getErrorMessage } from "@/lib/handle-error";
+// import { DeletePopover } from "~/components/shared/buttons/delete-popover";
+// import { ExportButton } from "~/components/shared/buttons/export-button";
+// import { getErrorMessage } from "~/lib/handle-error";
 
-// import { api } from "@/trpc/react";
-// import { Classroom } from "@/types/classroom";
+// import { api } from "~/trpc/react";
+// import { Classroom } from "~/types/classroom";
 // import { toast } from "sonner";
 
 // export function deleteSelectedRows({

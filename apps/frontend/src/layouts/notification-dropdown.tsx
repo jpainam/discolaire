@@ -2,8 +2,6 @@
 
 import { RefObject, useState } from "react";
 import Link from "next/link";
-import SimpleBar from "@/components/simplebar";
-import { notificationsData } from "@/data/notifications";
 import { Badge } from "@repo/ui/badge";
 import { Checkbox } from "@repo/ui/checkbox";
 import { Label } from "@repo/ui/label";
@@ -11,6 +9,9 @@ import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { PiCheck } from "react-icons/pi";
+
+import SimpleBar from "~/components/simplebar";
+import { notificationsData } from "~/data/notifications";
 
 dayjs.extend(relativeTime);
 

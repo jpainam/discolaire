@@ -1,14 +1,15 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { CreateGradeSheetHeader } from "@/components/classrooms/gradesheets/grades/CreateGradeSheetHeader";
-import { CreateGradeStudentTable } from "@/components/classrooms/gradesheets/grades/CreateGradeStudentTable";
-import { useLocale } from "@/hooks/use-locale";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@repo/ui/form";
 import { ScrollArea } from "@repo/ui/scroll-area";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { CreateGradeSheetHeader } from "~/components/classrooms/gradesheets/grades/CreateGradeSheetHeader";
+import { CreateGradeStudentTable } from "~/components/classrooms/gradesheets/grades/CreateGradeStudentTable";
+import { useLocale } from "~/hooks/use-locale";
 
 const createGradeSchema = z.object({
   notifyParents: z.boolean().default(true),

@@ -1,17 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { AvatarState } from "@/components/AvatarState";
-import { DropdownInvitation } from "@/components/shared/invitations/DropdownInvitation";
-import { RelationshipSelector } from "@/components/shared/selects/RelationshipSelector";
-import { routes } from "@/configs/routes";
-import { useAlert } from "@/hooks/use-alert";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
-import { getErrorMessage, showErrorToast } from "@/lib/handle-error";
-import { cn } from "@/lib/utils";
-import { api } from "@/trpc/react";
-import { getFullName } from "@/utils/full-name";
 import { Button } from "@repo/ui/button";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import {
@@ -33,6 +22,18 @@ import {
 } from "@repo/ui/table";
 import { Eye, FileHeart, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+
+import { AvatarState } from "~/components/AvatarState";
+import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
+import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
+import { routes } from "~/configs/routes";
+import { useAlert } from "~/hooks/use-alert";
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
+import { getErrorMessage, showErrorToast } from "~/lib/handle-error";
+import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
+import { getFullName } from "~/utils/full-name";
 
 export function StudentContactTable({
   studentId,

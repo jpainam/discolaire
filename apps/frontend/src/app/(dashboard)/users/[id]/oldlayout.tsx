@@ -1,7 +1,8 @@
-import { getServerTranslations } from "@/app/i18n/server";
-import { TabLink } from "@/components/users/tab-link";
-import { routes } from "@/configs/routes";
 import { BellRing, LockKeyhole, Settings, UserIcon } from "lucide-react";
+
+import { getServerTranslations } from "~/app/i18n/server";
+import { TabLink } from "~/components/users/tab-link";
+import { routes } from "~/configs/routes";
 
 type UserLink = {
   icon: React.ReactNode;
@@ -39,7 +40,7 @@ export default async function Layout({
     },
   ];
   return (
-    <div className="my-4 container flex flex-col space-y-6 p-4">
+    <div className="container my-4 flex flex-col space-y-6 p-4">
       <div className="flex max-w-fit items-center rounded-full bg-gray-100">
         {userLinks.map((link: UserLink, index) => {
           return (

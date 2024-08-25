@@ -3,10 +3,6 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { DatePickerField } from "@/components/shared/forms/date-picker-field";
-import { InputField } from "@/components/shared/forms/input-field";
-import { useLocale } from "@/hooks/use-locale";
-import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Avatar } from "@radix-ui/react-avatar";
 import { AvatarFallback, AvatarImage } from "@repo/ui/avatar";
@@ -18,6 +14,11 @@ import { Textarea } from "@repo/ui/textarea";
 import { ExternalLink, LucideSave, Mail, Trash } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { DatePickerField } from "~/components/shared/forms/date-picker-field";
+import { InputField } from "~/components/shared/forms/input-field";
+import { useLocale } from "~/hooks/use-locale";
+import { api } from "~/trpc/react";
 
 const userFormSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),

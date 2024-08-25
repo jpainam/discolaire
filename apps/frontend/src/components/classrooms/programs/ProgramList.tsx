@@ -1,11 +1,12 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { routes } from "@/configs/routes";
-import { useRouter } from "@/hooks/use-router";
-import { cn } from "@/lib/utils";
-import { api } from "@/trpc/react";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
+
+import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
+import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
 
 export async function ProgramList({ classroomId }: { classroomId: string }) {
   const params = useParams<{ id: string; subjectId: string }>();

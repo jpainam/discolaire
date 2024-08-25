@@ -1,9 +1,6 @@
 "use client";
 
 import { useMemo } from "react";
-import { useLocale } from "@/hooks/use-locale";
-import { AppRouter } from "@/server/api/root";
-import { api } from "@/trpc/react";
 import { useDataTable } from "@repo/ui/data-table";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
@@ -11,6 +8,9 @@ import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
 import { DataTableFilterField } from "@repo/ui/data-table/types";
 import { inferProcedureOutput } from "@trpc/server";
 
+import { useLocale } from "~/hooks/use-locale";
+import { AppRouter } from "~/server/api/root";
+import { api } from "~/trpc/react";
 import { EnrollmentDataTableActions } from "./EnrollmentDataTableActions";
 import { fetchEnrollmentColumns } from "./EnrollmentDataTableColumns";
 

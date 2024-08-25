@@ -1,15 +1,16 @@
 import { PropsWithChildren } from "react";
 import { notFound } from "next/navigation";
-import { getServerTranslations } from "@/app/i18n/server";
-import { StaffProfile } from "@/components/staffs/profile/StaffProfile";
-import { StaffTabMenu } from "@/components/staffs/profile/StaffTabMenu";
-import { StaffDetailHeader } from "@/components/staffs/StaffDetailHeader";
-import { routes } from "@/configs/routes";
-import { checkPermissions } from "@/server/permission";
-import { api } from "@/trpc/server";
-import { PermissionAction } from "@/types/permission";
 import { NoPermission } from "@repo/ui/NoPermission";
 import { CalendarDays, DollarSign, Folders, History } from "lucide-react";
+
+import { getServerTranslations } from "~/app/i18n/server";
+import { StaffProfile } from "~/components/staffs/profile/StaffProfile";
+import { StaffTabMenu } from "~/components/staffs/profile/StaffTabMenu";
+import { StaffDetailHeader } from "~/components/staffs/StaffDetailHeader";
+import { routes } from "~/configs/routes";
+import { checkPermissions } from "~/server/permission";
+import { api } from "~/trpc/server";
+import { PermissionAction } from "~/types/permission";
 
 type UserLink = {
   icon: React.ReactNode;

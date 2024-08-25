@@ -1,12 +1,6 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import PDFIcon from "@/components/icons/pdf-solid";
-import XMLIcon from "@/components/icons/xml-solid";
-import { useCreateQueryString } from "@/hooks/create-query-string";
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
-import { useRouter } from "@/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -26,6 +20,12 @@ import {
 } from "@repo/ui/select";
 import { ChevronDown, Plus, Printer, Share2 } from "lucide-react";
 
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
+import { useRouter } from "~/hooks/use-router";
 import EventForm from "./EventForm";
 
 export function EventCalendarHeader() {

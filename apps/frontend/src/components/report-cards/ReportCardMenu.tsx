@@ -1,10 +1,11 @@
 "use client";
-import { routes } from "@/configs/routes";
-import Link from "next/link";
 
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+
+import { routes } from "~/configs/routes";
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
 
 export function ReportCardMenu() {
   const { t } = useLocale();
@@ -17,7 +18,7 @@ export function ReportCardMenu() {
   ];
 
   return (
-    <div className="bg-muted text-sm flex flex-row gap-4 py-2 border-b px-4 text-muted-foreground">
+    <div className="flex flex-row gap-4 border-b bg-muted px-4 py-2 text-sm text-muted-foreground">
       {menuItems.map((item) => {
         const isActive = pathname === item.href;
         return (
@@ -25,7 +26,7 @@ export function ReportCardMenu() {
             key={item.href}
             className={cn(
               isActive
-                ? "bg-secondary border-b-2 border-blue-500 text-secondary-foreground"
+                ? "border-b-2 border-blue-500 bg-secondary text-secondary-foreground"
                 : "",
             )}
             href={item.href}

@@ -1,6 +1,7 @@
-import { CreateEditAssignment } from "@/components/classrooms/assignments/CreateEditAssignment";
-import { api } from "@/trpc/server";
 import { notFound } from "next/navigation";
+
+import { CreateEditAssignment } from "~/components/classrooms/assignments/CreateEditAssignment";
+import { api } from "~/trpc/server";
 
 type EditPageProps = {
   params: {

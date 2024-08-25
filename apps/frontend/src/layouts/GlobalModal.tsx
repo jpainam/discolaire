@@ -2,8 +2,6 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { useModal } from "@/hooks/use-modal";
-import { cn } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -11,6 +9,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@repo/ui/dialog";
+
+import { useModal } from "~/hooks/use-modal";
+import { cn } from "~/lib/utils";
 
 export default function GlobalModal() {
   const { isOpen, view, closeModal, title, description, className } =

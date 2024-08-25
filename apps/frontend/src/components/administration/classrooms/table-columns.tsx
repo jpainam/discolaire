@@ -1,15 +1,15 @@
 // import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
-// import { DeletePopover } from "@/components/shared/buttons/delete-popover";
-// import { EditButton } from "@/components/shared/buttons/edit-button";
-// import { ViewButton } from "@/components/shared/buttons/view-button";
+// import { DeletePopover } from "~/components/shared/buttons/delete-popover";
+// import { EditButton } from "~/components/shared/buttons/edit-button";
+// import { ViewButton } from "~/components/shared/buttons/view-button";
 // import { Checkbox } from "@repo/ui/checkbox";
-// import { getErrorMessage } from "@/lib/handle-error";
+// import { getErrorMessage } from "~/lib/handle-error";
 
-// import { api } from "@/trpc/react";
-// import { Classroom } from "@/types/classroom";
-// import { ClassroomLevel } from "@/types/classroom_level";
+// import { api } from "~/trpc/react";
+// import { Classroom } from "~/types/classroom";
+// import { ClassroomLevel } from "~/types/classroom_level";
 
-// import { AppRouter } from "@/server/api/root";
+// import { AppRouter } from "~/server/api/root";
 // import { ColumnDef, Row, createColumnHelper } from "@tanstack/react-table";
 // import { inferProcedureOutput } from "@trpc/server";
 // import { TFunction, t } from "i18next";

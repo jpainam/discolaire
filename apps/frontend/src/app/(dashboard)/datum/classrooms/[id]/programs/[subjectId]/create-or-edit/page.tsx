@@ -1,4 +1,4 @@
-import { CreateEditProgram } from "@/components/classrooms/programs/CreateEditProgram";
+import { CreateEditProgram } from "~/components/classrooms/programs/CreateEditProgram";
 
 export default function Page({
   params: { subjectId },

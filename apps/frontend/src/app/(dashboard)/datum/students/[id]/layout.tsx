@@ -1,12 +1,13 @@
 import React, { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { StudentFooter } from "@/components/students/StudentFooter";
-import { StudentHeader } from "@/components/students/StudentHeader";
-import { StudentSidebar } from "@/components/students/StudentSidebar";
-import { api } from "@/trpc/server";
 import { Card, CardContent, CardFooter, CardHeader } from "@repo/ui/card";
 import { Separator } from "@repo/ui/separator";
 import { Skeleton } from "@repo/ui/skeleton";
+
+import { StudentFooter } from "~/components/students/StudentFooter";
+import { StudentHeader } from "~/components/students/StudentHeader";
+import { StudentSidebar } from "~/components/students/StudentSidebar";
+import { api } from "~/trpc/server";
 
 export default async function Layout({
   children,

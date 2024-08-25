@@ -1,14 +1,14 @@
 "use client";
 
 import { useMemo } from "react";
-import { useLocale } from "@/hooks/use-locale";
-import { SMSHistory } from "@/types/sms";
-import { useDateFormat } from "@/utils/date-format";
 import { DataTable } from "@repo/ui/data-table/v2/data-table";
 import { DataTableToolbar } from "@repo/ui/data-table/v2/data-table-toolbar";
 import { DataTableFilterField } from "@repo/ui/data-table/v2/datatypes";
 import { useDataTable } from "@repo/ui/data-table/v2/use-data-table";
 
+import { useLocale } from "~/hooks/use-locale";
+import { SMSHistory } from "~/types/sms";
+import { useDateFormat } from "~/utils/date-format";
 import { SMSHistoryDataTableActions } from "./SMSHistoryActions";
 import { fetchSmsHistoryColumns } from "./SMSHistoryColumns";
 import { SMSHistoryFloatingBar } from "./SMSHistoryFloatingBar";

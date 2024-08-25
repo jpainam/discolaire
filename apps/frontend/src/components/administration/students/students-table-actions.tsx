@@ -1,8 +1,9 @@
-import { ExportButton } from "@/components/shared/buttons/export-button";
-import { getErrorMessage } from "@/lib/handle-error";
-import { Student } from "@/types/student";
 import { Table } from "@tanstack/react-table";
 import { toast } from "sonner";
+
+import { ExportButton } from "~/components/shared/buttons/export-button";
+import { getErrorMessage } from "~/lib/handle-error";
+import { Student } from "~/types/student";
 
 export function deleteSelectedRows({
   table,

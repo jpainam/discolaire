@@ -1,12 +1,14 @@
 "use client";
-import { AdminPanelContext } from "@/contexts/admin-panel-provider";
+
+import { useContext, useState } from "react";
 import {
   PanelLeftClose,
   PanelLeftOpen,
   PanelRightClose,
   PanelRightOpen,
 } from "lucide-react";
-import { useContext, useState } from "react";
+
+import { AdminPanelContext } from "~/contexts/admin-panel-provider";
 import { Button } from "../ui/button";
 
 export function LeftPanelButton({ panelSize }: { panelSize?: number }) {

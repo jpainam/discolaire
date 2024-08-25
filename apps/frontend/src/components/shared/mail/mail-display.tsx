@@ -1,4 +1,3 @@
-import { Mail } from "@/app/(dashboard)/mail/data";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Button } from "@repo/ui/button";
 import { Calendar } from "@repo/ui/calendar";
@@ -28,6 +27,8 @@ import {
   ReplyAll,
   Trash2,
 } from "lucide-react";
+
+import { Mail } from "~/app/(dashboard)/mail/data";
 
 interface MailDisplayProps {
   mail: Mail | null;

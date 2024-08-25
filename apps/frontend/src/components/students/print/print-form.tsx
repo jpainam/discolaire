@@ -1,17 +1,17 @@
 "use client";
 
 //import { toast } from "@repo/ui/use-toast";
-import { routes } from "@/configs/routes";
-import { useCreateQueryString } from "@/hooks/create-query-string";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
-import { useSchoolYear } from "@/hooks/use-schoolyear";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/button";
 import { Form } from "@repo/ui/form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
+import { useSchoolYear } from "~/hooks/use-schoolyear";
 import PrintSelector from "./print-selector";
 import PrintTypeRadio from "./print-type-radio";
 import SchoolYearSelector from "./school-year-selector";

@@ -1,8 +1,5 @@
 "use client";
 
-import { selectedStudentIdsAtom } from "@/atoms/transactions";
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -16,6 +13,9 @@ import FlatBadge from "@repo/ui/FlatBadge";
 import { useAtomValue } from "jotai";
 import { ChevronDown, SendHorizonal, SendIcon } from "lucide-react";
 
+import { selectedStudentIdsAtom } from "~/atoms/transactions";
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
 import SendNotificationDialog from "./SendNotificationDialog";
 
 export function FinanceBulkAction() {

@@ -1,12 +1,4 @@
 import Link from "next/link";
-import { routes } from "@/configs/routes";
-import { useAlert } from "@/hooks/use-alert";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
-import { getErrorMessage } from "@/lib/handle-error";
-import { cn } from "@/lib/utils";
-import { AppRouter } from "@/server/api/root";
-import { api } from "@/trpc/react";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
@@ -24,6 +16,15 @@ import { inferProcedureOutput } from "@trpc/server";
 import i18next, { TFunction } from "i18next";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+
+import { routes } from "~/configs/routes";
+import { useAlert } from "~/hooks/use-alert";
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
+import { getErrorMessage } from "~/lib/handle-error";
+import { cn } from "~/lib/utils";
+import { AppRouter } from "~/server/api/root";
+import { api } from "~/trpc/react";
 
 type ClassroomGradeSheetProcedureOutput = NonNullable<
   inferProcedureOutput<AppRouter["classroom"]["gradesheets"]>

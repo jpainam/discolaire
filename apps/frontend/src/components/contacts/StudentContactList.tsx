@@ -1,14 +1,5 @@
 "use client";
 
-import { useAlert } from "@/hooks/use-alert";
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
-import { useRouter } from "@/hooks/use-router";
-import { getErrorMessage } from "@/lib/handle-error";
-import { AppRouter } from "@/server/api/root";
-import { api } from "@/trpc/react";
-import { generateStringColor } from "@/utils/colors";
-import { getFullName } from "@/utils/full-name";
 import { Button } from "@repo/ui/button";
 import {
   Card,
@@ -29,6 +20,15 @@ import { inferProcedureOutput } from "@trpc/server";
 import { ExternalLink, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import { useAlert } from "~/hooks/use-alert";
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
+import { useRouter } from "~/hooks/use-router";
+import { getErrorMessage } from "~/lib/handle-error";
+import { AppRouter } from "~/server/api/root";
+import { api } from "~/trpc/react";
+import { generateStringColor } from "~/utils/colors";
+import { getFullName } from "~/utils/full-name";
 import { routes } from "../../configs/routes";
 import { AvatarState } from "../AvatarState";
 import { ScrollArea } from "../ui/scroll-area";

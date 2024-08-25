@@ -1,10 +1,6 @@
 import { useTransition } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { DeletePopover } from "@/components/shared/buttons/delete-popover";
-import { ViewButton } from "@/components/shared/buttons/view-button";
-import { useLocale } from "@/hooks/use-locale";
-import { api } from "@/trpc/react";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -15,6 +11,11 @@ import {
 import { Separator } from "@repo/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
 import { Forward, Mail, MoreVertical, Reply } from "lucide-react";
+
+import { DeletePopover } from "~/components/shared/buttons/delete-popover";
+import { ViewButton } from "~/components/shared/buttons/view-button";
+import { useLocale } from "~/hooks/use-locale";
+import { api } from "~/trpc/react";
 
 export default function StudentsDetails() {
   const params = useParams<{ id: string }>();

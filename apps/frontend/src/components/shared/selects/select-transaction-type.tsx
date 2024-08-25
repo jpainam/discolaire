@@ -1,5 +1,3 @@
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
 import { Label } from "@repo/ui/label";
 import {
   Select,
@@ -8,6 +6,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/select";
+
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
 
 type SelectTransactionTypeProps = {
   className?: string;

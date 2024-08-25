@@ -1,6 +1,6 @@
 {
   /*
-import { ActionItem } from "@/components/shared/data-table/data-table-selection-bar";
+import { ActionItem } from "~/components/shared/data-table/data-table-selection-bar";
 import { StopCircle, Users } from "lucide-react";
 import { toast } from "sonner";
 

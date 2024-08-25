@@ -1,10 +1,6 @@
 "use client";
 
 import { notFound } from "next/navigation";
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
-import { api } from "@/trpc/react";
-import { useDateFormat } from "@/utils/date-format";
 import { Button } from "@repo/ui/button";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Label } from "@repo/ui/label";
@@ -25,6 +21,10 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
+import { api } from "~/trpc/react";
+import { useDateFormat } from "~/utils/date-format";
 import { getFullName } from "../../../utils/full-name";
 import { useMoneyFormat } from "../../../utils/money-format";
 

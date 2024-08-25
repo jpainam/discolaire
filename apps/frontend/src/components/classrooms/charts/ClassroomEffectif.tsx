@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useLocale } from "@/hooks/use-locale";
-import { AppRouter } from "@/server/api/root";
 import {
   Card,
   CardContent,
@@ -22,6 +20,9 @@ import { inferProcedureOutput } from "@trpc/server";
 import { sortBy } from "lodash";
 import { Loader, TrendingDown, TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+
+import { useLocale } from "~/hooks/use-locale";
+import { AppRouter } from "~/server/api/root";
 
 type ClassroomAllProcedureOutput = NonNullable<
   inferProcedureOutput<AppRouter["classroom"]["all"]>

@@ -1,11 +1,5 @@
 "use client";
 
-import DocIcon from "@/components/icons/doc-solid";
-import FolderIcon from "@/components/icons/folder-solid";
-import ImageIcon from "@/components/icons/image-solid";
-import PDFIcon from "@/components/icons/pdf-solid";
-import XMLIcon from "@/components/icons/xml-solid";
-import { useLocale } from "@/hooks/use-locale";
 import {
   Select,
   SelectContent,
@@ -13,6 +7,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/select";
+
+import DocIcon from "~/components/icons/doc-solid";
+import FolderIcon from "~/components/icons/folder-solid";
+import ImageIcon from "~/components/icons/image-solid";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { useLocale } from "~/hooks/use-locale";
 
 type Option = {
   value: string;

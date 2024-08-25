@@ -1,7 +1,7 @@
 "use client";
 
 //import { filterableItems, getColumns } from "./column";
-//import { DataTable } from "@/components/shared/data-table";
+//import { DataTable } from "~/components/shared/data-table";
 
 export default function PageTable2() {
   {

@@ -1,10 +1,4 @@
 import Image from "next/image";
-import { getServerTranslations } from "@/app/i18n/server";
-import { randomAvatar } from "@/components/raw-images";
-import { CopyUserIdButton } from "@/components/users/copy-user-id-button";
-import { UserSidebarNav } from "@/components/users/user-side-nav";
-import { routes } from "@/configs/routes";
-import { getServerAuthSession } from "@/server/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Separator } from "@repo/ui/separator";
 import {
@@ -15,6 +9,13 @@ import {
   Settings,
   UserIcon,
 } from "lucide-react";
+
+import { getServerTranslations } from "~/app/i18n/server";
+import { randomAvatar } from "~/components/raw-images";
+import { CopyUserIdButton } from "~/components/users/copy-user-id-button";
+import { UserSidebarNav } from "~/components/users/user-side-nav";
+import { routes } from "~/configs/routes";
+import { getServerAuthSession } from "~/server/auth";
 
 type UserLink = {
   icon: React.ReactNode;

@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "~/lib/utils";
 
 export default function ConsultingIcon({ className }: { className?: string }) {
   return (

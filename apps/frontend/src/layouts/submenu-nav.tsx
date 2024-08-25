@@ -1,10 +1,11 @@
 "use client";
 
-import { routes } from "@/configs/routes";
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
+import { routes } from "~/configs/routes";
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
 
 const sub_menus = [
   // { label: "quick_search", href: routes.datum.index },
@@ -24,7 +25,7 @@ export function SubMenuNav() {
 
   const menus = sub_menus;
   return (
-    <div className="flex text-sm flex-row items-center gap-0">
+    <div className="flex flex-row items-center gap-0 text-sm">
       {menus?.map((item, index) => {
         const isActive = pathnameKey && item.href.includes(pathnameKey);
         return (
@@ -32,8 +33,8 @@ export function SubMenuNav() {
             key={item.href}
             href={item.href}
             className={cn(
-              "py-2 px-2 items-center bg-transparent hover:bg-secondary hover:border-b-2 border-blue-700 hover:text-foreground",
-              isActive ? "bg-secondary text-foreground border-b-2" : ""
+              "items-center border-blue-700 bg-transparent px-2 py-2 hover:border-b-2 hover:bg-secondary hover:text-foreground",
+              isActive ? "border-b-2 bg-secondary text-foreground" : "",
             )}
           >
             {t(item.label)}

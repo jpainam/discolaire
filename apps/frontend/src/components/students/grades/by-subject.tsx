@@ -2,11 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { routes } from "@/configs/routes";
-import { useCreateQueryString } from "@/hooks/create-query-string";
-import { useRouter } from "@/hooks/use-router";
-import { Grade } from "@/types/grade";
-import { useDateFormat } from "@/utils/date-format";
 import {
   Accordion,
   AccordionContent,
@@ -15,6 +10,12 @@ import {
 } from "@repo/ui/accordion";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Separator } from "@repo/ui/separator";
+
+import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useRouter } from "~/hooks/use-router";
+import { Grade } from "~/types/grade";
+import { useDateFormat } from "~/utils/date-format";
 
 interface BySubjectProps {
   grades: Grade[];

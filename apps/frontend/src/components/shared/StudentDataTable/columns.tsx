@@ -1,9 +1,5 @@
 import { ReactNode } from "react";
 import Link from "next/link";
-import { AvatarState } from "@/components/AvatarState";
-import { routes } from "@/configs/routes";
-import { Student } from "@/types/student";
-import { getFullName } from "@/utils/full-name";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/data-table/v2/data-table-column-header";
 import FlatBadge from "@repo/ui/FlatBadge";
@@ -12,6 +8,11 @@ import { TFunction } from "i18next";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import * as RPNInput from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
+
+import { AvatarState } from "~/components/AvatarState";
+import { routes } from "~/configs/routes";
+import { Student } from "~/types/student";
+import { getFullName } from "~/utils/full-name";
 
 const columnHelper = createColumnHelper<Student>();
 

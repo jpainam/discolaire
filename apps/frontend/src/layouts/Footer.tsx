@@ -1,11 +1,12 @@
-import { routes } from "@/configs/routes";
-import { Mail, Phone } from "lucide-react";
 import Link from "next/link";
+import { Mail, Phone } from "lucide-react";
+
+import { routes } from "~/configs/routes";
 
 export function Footer() {
   return (
     <footer className="border-t py-6 md:py-8">
-      <div className="container max-w-7xl flex flex-col items-center justify-between gap-4 md:flex-row">
+      <div className="container flex max-w-7xl flex-col items-center justify-between gap-4 md:flex-row">
         <div className="text-sm text-muted-foreground">
           &copy; 2024 School Management. All rights reserved.
         </div>
@@ -25,11 +26,11 @@ export function Footer() {
             Terms of Service
           </Link>
           <div className="flex items-center gap-2 text-sm">
-            <Phone className="w-4 h-4" />
+            <Phone className="h-4 w-4" />
             <span>+1 (555) 123-4567</span>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <Mail className="w-4 h-4" />
+            <Mail className="h-4 w-4" />
             <span>info@schoolmanagement.com</span>
           </div>
         </nav>

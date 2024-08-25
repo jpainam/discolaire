@@ -3,11 +3,6 @@
 import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
-import { routes } from "@/configs/routes";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
-import { showErrorToast } from "@/lib/handle-error";
-import { api } from "@/trpc/react";
 import {
   BreadCrumb,
   BreadCrumbItem,
@@ -23,6 +18,12 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import { MoreVertical, Pencil } from "lucide-react";
+
+import { routes } from "~/configs/routes";
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
+import { showErrorToast } from "~/lib/handle-error";
+import { api } from "~/trpc/react";
 
 export function ProgramHeader() {
   const { t } = useLocale();

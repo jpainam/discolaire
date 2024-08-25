@@ -1,7 +1,6 @@
-import { getServerTranslations } from "@/app/i18n/server";
-import { ContactDataTable } from "@/components/contacts/ContactDataTable";
-
-import { api } from "@/trpc/server";
+import { getServerTranslations } from "~/app/i18n/server";
+import { ContactDataTable } from "~/components/contacts/ContactDataTable";
+import { api } from "~/trpc/server";
 
 type ContactPageProps = {
   searchParams: {
@@ -22,7 +21,7 @@ export default async function Page({ searchParams }: ContactPageProps) {
   //const count = await api.contact.count();
 
   return (
-    <div className="w-full flex flex-row">
+    <div className="flex w-full flex-row">
       <ContactDataTable />
       {/* <div className="grid md:grid-cols-2 p-1 gap-2">
         <ContactEffectif />

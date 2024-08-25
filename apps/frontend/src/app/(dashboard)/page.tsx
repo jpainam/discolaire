@@ -1,9 +1,10 @@
-import { DashboardClassroomSize } from "@/components/dashboard/DashboardClassroomSize";
-import { DashboardTransactionTrend } from "@/components/dashboard/DashboardTransactionTrend";
-import { EffectiveStat } from "@/components/dashboard/EffectiveStat";
-import { SearchBlock } from "@/components/dashboard/SearchBlock";
-import Link from "next/link";
 import { Suspense } from "react";
+import Link from "next/link";
+
+import { DashboardClassroomSize } from "~/components/dashboard/DashboardClassroomSize";
+import { DashboardTransactionTrend } from "~/components/dashboard/DashboardTransactionTrend";
+import { EffectiveStat } from "~/components/dashboard/EffectiveStat";
+import { SearchBlock } from "~/components/dashboard/SearchBlock";
 
 export default async function DashboardPage() {
   // const signedUrl = await fetch(
@@ -17,8 +18,8 @@ export default async function DashboardPage() {
   // );
 
   return (
-    <div className="grid px-6 md:px-8 2xl:px-10 md:mt-4 gap-4 grid-cols-12">
-      <div className="col-span-full text-lg md:text-2xl font-bold">
+    <div className="grid grid-cols-12 gap-4 px-6 md:mt-4 md:px-8 2xl:px-10">
+      <div className="col-span-full text-lg font-bold md:text-2xl">
         Dashboard
         <Link target="_blank" href={"#"}>
           The link

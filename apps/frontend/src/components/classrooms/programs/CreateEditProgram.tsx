@@ -2,10 +2,6 @@
 
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
-import { showErrorToast } from "@/lib/handle-error";
-import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/button";
 import { Form, FormField } from "@repo/ui/form";
@@ -13,6 +9,11 @@ import { Skeleton } from "@repo/ui/skeleton";
 import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
+import { showErrorToast } from "~/lib/handle-error";
+import { api } from "~/trpc/react";
 
 const QuillEditor = dynamic(() => import("@repo/ui/quill-editor"), {
   ssr: false,

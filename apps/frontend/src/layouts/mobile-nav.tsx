@@ -3,10 +3,6 @@
 import * as React from "react";
 import Link, { LinkProps } from "next/link";
 import { useRouter } from "next/navigation";
-import { Icons } from "@/components/icons";
-import { siteConfig } from "@/configs/site";
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenuGroup,
@@ -17,6 +13,11 @@ import {
 import { ScrollArea } from "@repo/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@repo/ui/sheet";
 import { AlignLeftIcon } from "lucide-react";
+
+import { Icons } from "~/components/icons";
+import { siteConfig } from "~/configs/site";
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
 
 export function MobileNav() {
   const [open, setOpen] = React.useState(false);

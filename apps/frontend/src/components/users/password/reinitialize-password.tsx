@@ -1,8 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { routes } from "@/configs/routes";
-import { useLocale } from "@/hooks/use-locale";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/button";
 import {
@@ -17,6 +15,9 @@ import {
 import { Input } from "@repo/ui/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { routes } from "~/configs/routes";
+import { useLocale } from "~/hooks/use-locale";
 
 const passwordFormSchema = z.object({
   oldPassword: z.string().min(6, {}),

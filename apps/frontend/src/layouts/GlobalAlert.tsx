@@ -1,7 +1,5 @@
 "use client";
 
-import { useAlert } from "@/hooks/use-alert";
-import { useLocale } from "@/hooks/use-locale";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,6 +10,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@repo/ui/alert-dialog";
+
+import { useAlert } from "~/hooks/use-alert";
+import { useLocale } from "~/hooks/use-locale";
 
 export default function GlobalAlert() {
   const { isOpen, title, description, closeAlert, onConfirm, onCancel } =

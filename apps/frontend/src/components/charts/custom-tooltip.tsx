@@ -1,11 +1,12 @@
-import { cn } from "@/lib/utils";
-import { addSpacesToCamelCase } from "@/utils/add-spaces-to-camel-case";
-import { formatNumber } from "@/utils/format-number";
 import { TooltipProps } from "recharts";
 import {
   NameType,
   ValueType,
 } from "recharts/types/component/DefaultTooltipContent";
+
+import { cn } from "~/lib/utils";
+import { addSpacesToCamelCase } from "~/utils/add-spaces-to-camel-case";
+import { formatNumber } from "~/utils/format-number";
 
 function isValidHexColor(colorCode: string) {
   const hexColorRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
@@ -37,7 +38,7 @@ export function CustomTooltip({
         className,
       )}
     >
-      <div className="mb-0.5 block p-2 px-2.5 text-center font-lexend text-xs font-semibold capitalize bg-secondary text-secondary-foreground">
+      <div className="font-lexend mb-0.5 block bg-secondary p-2 px-2.5 text-center text-xs font-semibold capitalize text-secondary-foreground">
         {label}
       </div>
       <div className="px-3 py-1.5 text-xs">

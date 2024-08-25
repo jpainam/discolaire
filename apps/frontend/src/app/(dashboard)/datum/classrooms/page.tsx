@@ -1,9 +1,9 @@
-import { ClassroomDataTable } from "@/components/classrooms/ClassroomDataTable";
+import { ClassroomDataTable } from "~/components/classrooms/ClassroomDataTable";
 
 export default async function Page({}: {}) {
   //const classrooms = await api.classroom.all();
   return (
-    <div className="grid md:flex flex-row w-full">
+    <div className="grid w-full flex-row md:flex">
       <ClassroomDataTable />
       {/* <ClassroomEffectif stats={classrooms || []} /> */}
     </div>

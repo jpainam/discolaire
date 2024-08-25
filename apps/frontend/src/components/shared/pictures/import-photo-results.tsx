@@ -1,6 +1,7 @@
-import rangeMap from "@/lib/range-map";
-import { cn } from "@/lib/utils";
 import { ScrollArea } from "@repo/ui/scroll-area";
+
+import rangeMap from "~/lib/range-map";
+import { cn } from "~/lib/utils";
 
 export default function ImoprtPhotoResults() {
   return (

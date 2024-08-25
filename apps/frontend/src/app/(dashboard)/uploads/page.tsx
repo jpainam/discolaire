@@ -1,6 +1,7 @@
 "use client";
-import { Shell } from "@/components/shell";
-import { useLocale } from "@/hooks/use-locale";
+
+import { Shell } from "~/components/shell";
+import { useLocale } from "~/hooks/use-locale";
 
 export default function UploadPage() {
   const { t } = useLocale();

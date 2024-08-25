@@ -1,12 +1,12 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
 import { Plus } from "lucide-react";
 
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
 import { CreateEditAppreciation } from "./CreateEditAppreciation";
 
 export function GradeAppreciationHeader() {

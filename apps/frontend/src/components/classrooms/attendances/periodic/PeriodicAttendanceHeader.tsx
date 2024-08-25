@@ -1,11 +1,12 @@
 "use client";
 
-import { useLocale } from "@/hooks/use-locale";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { Label } from "@repo/ui/label";
 import { BookMarked, Check, X } from "lucide-react";
 import { useFormContext } from "react-hook-form";
+
+import { useLocale } from "~/hooks/use-locale";
 
 export function PeriodicAttendanceHeader() {
   const form = useFormContext();

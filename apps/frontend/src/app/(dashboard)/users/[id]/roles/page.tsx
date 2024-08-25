@@ -1,5 +1,6 @@
-import { DisplayForm } from "@/components/users/roles/roles-form";
 import { Separator } from "@repo/ui/separator";
+
+import { DisplayForm } from "~/components/users/roles/roles-form";
 
 export default function SettingsDisplayPage() {
   return (

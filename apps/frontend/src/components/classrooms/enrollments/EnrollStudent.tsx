@@ -2,14 +2,6 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { randomAvatar } from "@/components/raw-images";
-import { useDebounce } from "@/hooks/use-debounce";
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
-import { getErrorMessage } from "@/lib/handle-error";
-import rangeMap from "@/lib/range-map";
-import { api } from "@/trpc/react";
-import { getFullName } from "@/utils/full-name";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Button } from "@repo/ui/button";
 import {
@@ -24,6 +16,15 @@ import { ScrollArea } from "@repo/ui/scroll-area";
 import { Skeleton } from "@repo/ui/skeleton";
 import { Check } from "lucide-react";
 import { toast } from "sonner";
+
+import { randomAvatar } from "~/components/raw-images";
+import { useDebounce } from "~/hooks/use-debounce";
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
+import { getErrorMessage } from "~/lib/handle-error";
+import rangeMap from "~/lib/range-map";
+import { api } from "~/trpc/react";
+import { getFullName } from "~/utils/full-name";
 
 export function EnrollStudent({ classroomId }: { classroomId: string }) {
   const [selectedStudents, setSelectedStudents] = React.useState<any[]>([]);

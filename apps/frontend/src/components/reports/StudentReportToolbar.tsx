@@ -1,14 +1,14 @@
 "use client";
 
-import PDFIcon from "@/components/icons/pdf-solid";
-import XMLIcon from "@/components/icons/xml-solid";
-import { StudentSelector } from "@/components/shared/selects/StudentSelector";
-import { routes } from "@/configs/routes";
-import { useCreateQueryString } from "@/hooks/create-query-string";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
 import { ToggleGroup } from "@repo/ui/ToggleGroup";
 
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { StudentSelector } from "~/components/shared/selects/StudentSelector";
+import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
 import { Label } from "../ui/label";
 
 export function StudentReportToolbar() {

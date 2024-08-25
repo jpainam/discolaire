@@ -1,8 +1,9 @@
 "use client";
 
-import { useTheme } from "@/hooks/use-theme";
-import { cn } from "@/lib/utils";
-import "@/styles/themes.css";
+import { useTheme } from "~/hooks/use-theme";
+import { cn } from "~/lib/utils";
+
+import "~/styles/themes.css";
 
 export function ThemeWrapper({
   children,

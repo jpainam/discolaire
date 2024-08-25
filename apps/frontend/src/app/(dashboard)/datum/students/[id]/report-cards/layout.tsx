@@ -1,7 +1,7 @@
-import { getServerTranslations } from "@/app/i18n/server";
-import { EmptyState } from "@/components/EmptyState";
-import { ReportCardHeader } from "@/components/students/report-cards/ReportCardHeader";
-import { api } from "@/trpc/server";
+import { getServerTranslations } from "~/app/i18n/server";
+import { EmptyState } from "~/components/EmptyState";
+import { ReportCardHeader } from "~/components/students/report-cards/ReportCardHeader";
+import { api } from "~/trpc/server";
 
 export default async function Layout({
   params: { id },
@@ -22,7 +22,7 @@ export default async function Layout({
     );
   }
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex w-full flex-col">
       <ReportCardHeader />
       {children}
     </div>

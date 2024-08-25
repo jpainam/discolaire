@@ -1,6 +1,5 @@
 "use client";
 
-import rangeMap from "@/lib/range-map";
 import { Card, CardContent } from "@repo/ui/card";
 import {
   ChartConfig,
@@ -11,6 +10,8 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/chart";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+
+import rangeMap from "~/lib/range-map";
 
 const chartData = [
   { month: "January", desktop: 186, mobile: 80, remaining: 60 },

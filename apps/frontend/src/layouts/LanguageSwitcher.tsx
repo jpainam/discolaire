@@ -7,8 +7,6 @@
 //   SelectTrigger,
 // } from "@repo/ui/select";
 import { useRouter } from "next/navigation";
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -18,6 +16,9 @@ import {
 } from "@repo/ui/dropdown-menu";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import i18next, { changeLanguage } from "i18next";
+
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
 
 export const LanguageSwitcher = ({
   currentLanguage,

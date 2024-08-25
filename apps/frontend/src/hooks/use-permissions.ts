@@ -1,7 +1,8 @@
-import { api } from "@/trpc/react";
-import { Permission } from "@/types/permission";
 import jsonLogic from "json-logic-js";
 import { useSession } from "next-auth/react";
+
+import { api } from "~/trpc/react";
+import { Permission } from "~/types/permission";
 
 const toRegexpString = (actionOrResource: string) =>
   `^${actionOrResource.replace(".", "\\.").replace("%", ".*")}$`;
@@ -11,7 +12,7 @@ export function doPermissionsCheck(
   action: string,
   resource: string,
   data?: object,
-  schoolId?: string
+  schoolId?: string,
 ) {
   if (!permissions || !Array.isArray(permissions)) {
     return false;
@@ -21,13 +22,13 @@ export function doPermissionsCheck(
     (permission) =>
       permission.schoolId === schoolId &&
       permission.actions.some((act) =>
-        action ? action.match(toRegexpString(act)) : null
+        action ? action.match(toRegexpString(act)) : null,
       ) &&
-      permission.resources.some((res) => resource.match(toRegexpString(res)))
+      permission.resources.some((res) => resource.match(toRegexpString(res))),
   );
   // If there is at least one deny permission, return false
   const hasDenyPermission = allPermissions.some(
-    (permission) => permission.effect === "Deny"
+    (permission) => permission.effect === "Deny",
   );
   if (hasDenyPermission) {
     return false;
@@ -61,7 +62,7 @@ export function useGetPermissions(permissionsOverride?: Permission[]) {
 
 /**
  *
- * @param action @/types/permissions PermissionAction
+ * @param action ~/types/permissions PermissionAction
  * @param resource string *
  * @param data
  * @param permissions
@@ -75,7 +76,7 @@ export function useCheckPermissions(
   data?: object,
   // Pass the data variables if you want to avoid hooks in this
   // e.g If you want to use useCheckPermissions in a loop like organization settings
-  permissions?: Permission[]
+  permissions?: Permission[],
 ) {
   const isLoggedIn = useIsLoggedIn();
 
@@ -87,7 +88,7 @@ export function useCheckPermissions(
     allPermissions as Permission[],
     action,
     resource,
-    data
+    data,
   );
 }
 

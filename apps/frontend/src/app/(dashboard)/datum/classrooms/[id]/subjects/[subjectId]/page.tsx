@@ -1,9 +1,10 @@
 import { notFound } from "next/navigation";
-import { SubjectDetailsHeader } from "@/components/classrooms/subjects/SubjectDetailsHeader";
-import { api } from "@/trpc/server";
 import { Button } from "@repo/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { ActivityIcon, BookIcon, VideoIcon } from "lucide-react";
+
+import { SubjectDetailsHeader } from "~/components/classrooms/subjects/SubjectDetailsHeader";
+import { api } from "~/trpc/server";
 
 export default async function Page({
   params: { id, subjectId },

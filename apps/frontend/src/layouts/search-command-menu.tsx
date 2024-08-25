@@ -2,9 +2,6 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { usePageConfig } from "@/configs/page_config";
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
 import { DialogProps } from "@radix-ui/react-dialog";
 //import { DialogProps } from "@radix-ui/react-alert-dialog";
 import {
@@ -26,6 +23,10 @@ import {
 import { ScrollArea } from "@repo/ui/scroll-area";
 import { LinkIcon } from "lucide-react";
 import { useTheme } from "next-themes";
+
+import { usePageConfig } from "~/configs/page_config";
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
 
 export function SearchCommandMenu({ ...props }: DialogProps) {
   const router = useRouter();

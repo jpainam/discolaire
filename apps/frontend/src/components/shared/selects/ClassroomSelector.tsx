@@ -1,10 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useLocale } from "@/hooks/use-locale";
-import { showErrorToast } from "@/lib/handle-error";
-import { cn } from "@/lib/utils";
-import { api } from "@/trpc/react";
 import { Button } from "@repo/ui/button";
 import {
   Command,
@@ -18,6 +14,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { ScrollArea } from "@repo/ui/scroll-area";
 import { Skeleton } from "@repo/ui/skeleton";
 import { Check, ChevronsUpDown } from "lucide-react";
+
+import { useLocale } from "~/hooks/use-locale";
+import { showErrorToast } from "~/lib/handle-error";
+import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
 
 type Option = {
   label: string;

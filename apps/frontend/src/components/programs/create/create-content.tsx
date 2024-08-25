@@ -1,8 +1,9 @@
 "use client";
 
-import { ClassroomSelector } from "@/components/shared/selects/ClassroomSelector";
-import { useLocale } from "@/hooks/use-locale";
 import { Label } from "@repo/ui/label";
+
+import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
+import { useLocale } from "~/hooks/use-locale";
 
 export function CreateProgramContent() {
   const { t } = useLocale();

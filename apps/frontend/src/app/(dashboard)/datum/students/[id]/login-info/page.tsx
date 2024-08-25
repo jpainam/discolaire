@@ -1,14 +1,15 @@
 import { notFound } from "next/navigation";
-import { getServerTranslations } from "@/app/i18n/server";
-import { AssociatedUserNotFound } from "@/components/students/login-info/AssociatedUserNotFound";
-import { LoginInfoHeader } from "@/components/students/login-info/LoginInfoHeader";
-import { UserLoginCard } from "@/components/students/login-info/UserLoginCard";
-import { api } from "@/trpc/server";
-import { getFullName } from "@/utils/full-name";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Label } from "@repo/ui/label";
 import { Separator } from "@repo/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
+
+import { getServerTranslations } from "~/app/i18n/server";
+import { AssociatedUserNotFound } from "~/components/students/login-info/AssociatedUserNotFound";
+import { LoginInfoHeader } from "~/components/students/login-info/LoginInfoHeader";
+import { UserLoginCard } from "~/components/students/login-info/UserLoginCard";
+import { api } from "~/trpc/server";
+import { getFullName } from "~/utils/full-name";
 
 export default async function Page({
   params: { id },

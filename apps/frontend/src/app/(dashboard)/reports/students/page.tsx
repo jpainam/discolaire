@@ -1,8 +1,9 @@
-import { getServerTranslations } from "@/app/i18n/server";
-import { StudentReportFooter } from "@/components/reports/StudentReportFooter";
-import { StudentLinkReports } from "@/components/reports/StudentReports";
-import { StudentReportToolbar } from "@/components/reports/StudentReportToolbar";
 import { Card, CardContent, CardFooter, CardHeader } from "@repo/ui/card";
+
+import { getServerTranslations } from "~/app/i18n/server";
+import { StudentReportFooter } from "~/components/reports/StudentReportFooter";
+import { StudentLinkReports } from "~/components/reports/StudentReports";
+import { StudentReportToolbar } from "~/components/reports/StudentReportToolbar";
 
 export default async function Page() {
   const { t } = await getServerTranslations();

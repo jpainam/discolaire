@@ -1,11 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useLocale } from "@/hooks/use-locale";
-import { showErrorToast } from "@/lib/handle-error";
-import { cn } from "@/lib/utils";
-import { api } from "@/trpc/react";
-import { getFullName } from "@/utils/full-name";
 import { Button } from "@repo/ui/button";
 import {
   Command,
@@ -19,6 +14,12 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { ScrollArea } from "@repo/ui/scroll-area";
 import { Check, ChevronsUpDown, Plus } from "lucide-react";
+
+import { useLocale } from "~/hooks/use-locale";
+import { showErrorToast } from "~/lib/handle-error";
+import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
+import { getFullName } from "~/utils/full-name";
 
 interface StaffSelectorProps {
   className?: string;

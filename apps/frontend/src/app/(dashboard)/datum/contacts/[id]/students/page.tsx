@@ -1,4 +1,4 @@
-import StudentContactList from "@/components/contacts/StudentContactList";
+import StudentContactList from "~/components/contacts/StudentContactList";
 
 export default async function Page({
   params: { id },
@@ -6,7 +6,7 @@ export default async function Page({
   params: { id: string };
 }) {
   return (
-    <div className="w-full text-md grid md:grid-cols-2 items-start gap-2 border rounded-md border-t-8 p-2">
+    <div className="text-md grid w-full items-start gap-2 rounded-md border border-t-8 p-2 md:grid-cols-2">
       <StudentContactList contactId={id} />
     </div>
   );

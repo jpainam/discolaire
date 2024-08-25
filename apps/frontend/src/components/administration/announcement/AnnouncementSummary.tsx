@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useLocale } from "@/hooks/use-locale";
-import { api } from "@/trpc/react";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Label } from "@repo/ui/label";
+
+import { useLocale } from "~/hooks/use-locale";
+import { api } from "~/trpc/react";
 
 export function AnnouncementSummary() {
   const { t } = useLocale();

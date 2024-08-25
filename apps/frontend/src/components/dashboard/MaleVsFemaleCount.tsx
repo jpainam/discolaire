@@ -1,7 +1,5 @@
 "use client";
 
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -12,6 +10,9 @@ import {
 import { ChartContainer } from "@repo/ui/chart";
 import { Separator } from "@repo/ui/separator";
 import { Bar, BarChart, LabelList, XAxis, YAxis } from "recharts";
+
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
 
 export function MaleVsFemaleCount({
   maleCount,

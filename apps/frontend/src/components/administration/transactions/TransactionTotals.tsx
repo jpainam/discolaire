@@ -1,16 +1,17 @@
 "use client";
-import ContainersIcon from "@/components/icons/containers";
-import ExpenseIcon from "@/components/icons/expenses";
-import RevenueUpIcon from "@/components/icons/revenue-up";
-import SalesIcon from "@/components/icons/sales";
-import { SkeletonLineGroup } from "@/components/skeletons/data-table";
-import { routes } from "@/configs/routes";
-import { useLocale } from "@/hooks/use-locale";
-import { CURRENCY } from "@/lib/constants";
-import { api } from "@/trpc/react";
 
 import Link from "next/link";
 import { parseAsIsoDateTime, useQueryState } from "nuqs";
+
+import ContainersIcon from "~/components/icons/containers";
+import ExpenseIcon from "~/components/icons/expenses";
+import RevenueUpIcon from "~/components/icons/revenue-up";
+import SalesIcon from "~/components/icons/sales";
+import { SkeletonLineGroup } from "~/components/skeletons/data-table";
+import { routes } from "~/configs/routes";
+import { useLocale } from "~/hooks/use-locale";
+import { CURRENCY } from "~/lib/constants";
+import { api } from "~/trpc/react";
 
 export function TransactionTotals() {
   const { t } = useLocale();
@@ -37,7 +38,7 @@ export function TransactionTotals() {
   const stats = transactionsStats.data;
   const percentage = 4;
   return (
-    <div className="grid grid-cols-4 text-sm py-1 mt-2 w-full gap-4">
+    <div className="mt-2 grid w-full grid-cols-4 gap-4 py-1 text-sm">
       <TransactionStatCard
         title={t("totalCurrentFees")}
         icon={<RevenueUpIcon className="h-[45px] w-[45px]" />}
@@ -90,7 +91,7 @@ function TransactionStatCard({
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex flex-row gap-4 items-center">
+      <div className="flex flex-row items-center gap-4">
         {icon}
         <div className="flex flex-col">
           <div>{title}</div>

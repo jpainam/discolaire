@@ -1,10 +1,10 @@
 "use client";
 
-import { useLocale } from "@/hooks/use-locale";
-import { useSheet } from "@/hooks/use-sheet";
 import { Button } from "@repo/ui/button";
 import { Stethoscope } from "lucide-react";
 
+import { useLocale } from "~/hooks/use-locale";
+import { useSheet } from "~/hooks/use-sheet";
 import { CreateEditHealthVisit } from "./CreateEditHealthVisit";
 
 export function HealthVisitHeader() {

@@ -1,10 +1,10 @@
 "use client";
 
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
 
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
 import { CreateEditPolicy } from "./CreateEditPolicy";
 
 export function PolicyHeader() {

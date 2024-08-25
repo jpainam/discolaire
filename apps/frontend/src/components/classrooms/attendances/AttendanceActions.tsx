@@ -1,8 +1,9 @@
 "use client";
 
-import { useLocale } from "@/hooks/use-locale";
 import { Button } from "@repo/ui/button";
 import { BookMarked, Check, Home, X } from "lucide-react";
+
+import { useLocale } from "~/hooks/use-locale";
 
 export function AttendanceActions() {
   const { t } = useLocale();

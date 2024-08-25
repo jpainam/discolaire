@@ -1,7 +1,8 @@
 "use client";
 
-import { DateTimePicker } from "@/components/shared/date-time-picker";
 import { Input } from "@repo/ui/input";
+
+import { DateTimePicker } from "~/components/shared/date-time-picker";
 
 export default function AdminPage() {
   return (

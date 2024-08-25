@@ -1,5 +1,6 @@
-import { PeriodicAttendanceHeader } from "@/components/students/attendances/periodic/PeriodicAttendanceHeader";
 import { PropsWithChildren } from "react";
+
+import { PeriodicAttendanceHeader } from "~/components/students/attendances/periodic/PeriodicAttendanceHeader";
 
 export default function Layout({ children }: PropsWithChildren) {
   return (

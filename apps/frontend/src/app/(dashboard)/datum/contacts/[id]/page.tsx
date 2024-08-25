@@ -1,10 +1,11 @@
-import { getServerTranslations } from "@/app/i18n/server";
-import { ContactDetails } from "@/components/contacts/ContactDetails";
-import { ContactDetailsHeader } from "@/components/contacts/ContactDetailsHeader";
-import { ContactStudentTable } from "@/components/contacts/ContactStudentTable";
-import { api } from "@/trpc/server";
-import { generateStringColor } from "@/utils/colors";
 import { Card, CardContent, CardHeader } from "@repo/ui/card";
+
+import { getServerTranslations } from "~/app/i18n/server";
+import { ContactDetails } from "~/components/contacts/ContactDetails";
+import { ContactDetailsHeader } from "~/components/contacts/ContactDetailsHeader";
+import { ContactStudentTable } from "~/components/contacts/ContactStudentTable";
+import { api } from "~/trpc/server";
+import { generateStringColor } from "~/utils/colors";
 
 export default async function Page({
   params: { id },

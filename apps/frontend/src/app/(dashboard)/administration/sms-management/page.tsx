@@ -1,11 +1,12 @@
-import { getServerTranslations } from "@/app/i18n/server";
-import { SMSHistoryDataTable } from "@/components/administration/sms-management/SMSHistoryDataTable";
-import { SMSHistoryHeader } from "@/components/administration/sms-management/SMSHistoryHeader";
 import { Alert, AlertDescription, AlertTitle } from "@repo/ui/alert";
 import { Button } from "@repo/ui/button";
 import { Card, CardContent, CardHeader } from "@repo/ui/card";
 import { Siren, Terminal } from "lucide-react";
 import { z } from "zod";
+
+import { getServerTranslations } from "~/app/i18n/server";
+import { SMSHistoryDataTable } from "~/components/administration/sms-management/SMSHistoryDataTable";
+import { SMSHistoryHeader } from "~/components/administration/sms-management/SMSHistoryHeader";
 
 const smsHistorySchema = z.object({
   per_page: z.number().optional(),

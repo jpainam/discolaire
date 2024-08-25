@@ -2,8 +2,6 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { useSheet } from "@/hooks/use-sheet";
-import { cn } from "@/lib/utils";
 import { Separator } from "@repo/ui/separator";
 import {
   Sheet,
@@ -12,6 +10,9 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@repo/ui/sheet";
+
+import { useSheet } from "~/hooks/use-sheet";
+import { cn } from "~/lib/utils";
 
 export default function GlobalSheet() {
   const { isOpen, view, placement, title, description, className, closeSheet } =

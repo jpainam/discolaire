@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useLocale } from "@/hooks/use-locale";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/button";
 import {
@@ -26,7 +25,9 @@ import { useSession } from "next-auth/react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
-//import { toast } from "@/registry/new-york/ui/use-toast";
+import { useLocale } from "~/hooks/use-locale";
+
+//import { toast } from "~/registry/new-york/ui/use-toast";
 
 const profileFormSchema = z.object({
   username: z

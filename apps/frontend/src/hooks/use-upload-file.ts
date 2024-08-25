@@ -1,11 +1,11 @@
-import type { UploadedFile } from "@/types/uploaded-file";
+import type { UploadFilesOptions } from "uploadthing/types";
 import * as React from "react";
 import { toast } from "sonner";
-import type { UploadFilesOptions } from "uploadthing/types";
 
-import { type OurFileRouter } from "@/app/api/uploadthing/core";
-import { getErrorMessage } from "@/lib/handle-error";
-import { uploadFiles } from "@/lib/uploadthing";
+import type { UploadedFile } from "~/types/uploaded-file";
+import { type OurFileRouter } from "~/app/api/uploadthing/core";
+import { getErrorMessage } from "~/lib/handle-error";
+import { uploadFiles } from "~/lib/uploadthing";
 
 interface UseUploadFileProps
   extends Pick<
@@ -17,12 +17,12 @@ interface UseUploadFileProps
 
 export function useUploadFile(
   endpoint: keyof OurFileRouter,
-  { defaultUploadedFiles = [], ...props }: UseUploadFileProps = {}
+  { defaultUploadedFiles = [], ...props }: UseUploadFileProps = {},
 ) {
   const [uploadedFiles, setUploadedFiles] =
     React.useState<UploadedFile[]>(defaultUploadedFiles);
   const [progresses, setProgresses] = React.useState<Record<string, number>>(
-    {}
+    {},
   );
   const [isUploading, setIsUploading] = React.useState(false);
 

@@ -2,14 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import PDFIcon from "@/components/icons/pdf-solid";
-import XMLIcon from "@/components/icons/xml-solid";
-import { ToggleSelector } from "@/components/shared/forms/toggle-selector";
-import { TermSelector } from "@/components/shared/selects/TermSelector";
-import { useCreateQueryString } from "@/hooks/create-query-string";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
-import { api } from "@/trpc/react";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -22,6 +14,15 @@ import { Label } from "@repo/ui/label";
 import { Skeleton } from "@repo/ui/skeleton";
 import { MoreVertical } from "lucide-react";
 import { parseAsInteger, useQueryState } from "nuqs";
+
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { ToggleSelector } from "~/components/shared/forms/toggle-selector";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
+import { api } from "~/trpc/react";
 
 export function StudentGradeHeader({
   studentId,

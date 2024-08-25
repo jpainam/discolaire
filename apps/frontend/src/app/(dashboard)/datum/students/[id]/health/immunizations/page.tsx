@@ -1,8 +1,3 @@
-import {
-  immunizations,
-  vaccines,
-} from "@/components/students/health/data-immunization";
-import { ImmunizationHeader } from "@/components/students/health/ImmunizationHeader";
 import { Card, CardContent } from "@repo/ui/card";
 import {
   Table,
@@ -12,6 +7,12 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/table";
+
+import {
+  immunizations,
+  vaccines,
+} from "~/components/students/health/data-immunization";
+import { ImmunizationHeader } from "~/components/students/health/ImmunizationHeader";
 
 export default function Page() {
   return (

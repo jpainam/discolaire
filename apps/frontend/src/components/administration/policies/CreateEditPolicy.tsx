@@ -1,9 +1,5 @@
 "use client";
 
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
-import { getErrorMessage } from "@/lib/handle-error";
-import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/button";
 import {
@@ -19,6 +15,11 @@ import { JsonEditor } from "json-edit-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
+import { getErrorMessage } from "~/lib/handle-error";
+import { api } from "~/trpc/react";
 
 const createEditPolicySchema = z.object({
   name: z.string().min(1),

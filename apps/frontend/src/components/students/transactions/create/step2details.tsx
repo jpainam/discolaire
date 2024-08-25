@@ -1,11 +1,5 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import { makePaymentAtom } from "@/atoms/payment";
-import { useLocale } from "@/hooks/use-locale";
-import { CURRENCY } from "@/lib/constants";
-import { api } from "@/trpc/react";
-import { useDateFormat } from "@/utils/date-format";
-import { getFullName } from "@/utils/full-name";
 import { EnvelopeOpenIcon } from "@radix-ui/react-icons";
 import { Button } from "@repo/ui/button";
 import {
@@ -22,6 +16,13 @@ import { useAtomValue } from "jotai";
 import { sumBy } from "lodash";
 import { AtSign, Copy, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 import { useFormContext } from "react-hook-form";
+
+import { makePaymentAtom } from "~/atoms/payment";
+import { useLocale } from "~/hooks/use-locale";
+import { CURRENCY } from "~/lib/constants";
+import { api } from "~/trpc/react";
+import { useDateFormat } from "~/utils/date-format";
+import { getFullName } from "~/utils/full-name";
 
 export default function Step2Details() {
   const payment = useAtomValue(makePaymentAtom);

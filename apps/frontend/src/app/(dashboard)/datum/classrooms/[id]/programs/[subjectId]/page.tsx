@@ -1,5 +1,5 @@
-import { getServerTranslations } from "@/app/i18n/server";
-import { ProgramHeader } from "@/components/classrooms/programs/ProgramHeader";
+import { getServerTranslations } from "~/app/i18n/server";
+import { ProgramHeader } from "~/components/classrooms/programs/ProgramHeader";
 
 export default async function Page() {
   const { t } = await getServerTranslations();

@@ -1,6 +1,7 @@
 "use client";
-import { useResolvedTheme } from "@/hooks/use-resolved-theme";
-import { cn } from "@/lib/utils";
+
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useParams } from "next/navigation";
 import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
 import {
   ColDef,
@@ -10,9 +11,11 @@ import {
   SizeColumnsToFitProvidedWidthStrategy,
 } from "@ag-grid-community/core";
 import { AgGridReact } from "@ag-grid-community/react"; // React Grid Logic
-import { useParams } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
 import { PiFilePdf, PiMicrosoftExcelLogoFill } from "react-icons/pi";
+
+import { useResolvedTheme } from "~/hooks/use-resolved-theme";
+import { cn } from "~/lib/utils";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
@@ -117,7 +120,7 @@ export default function AgGrid<T>({
 
   return (
     <div style={containerStyle}>
-      <div className="flex flex-col h-full">
+      <div className="flex h-full flex-col">
         <div className="flex flex-row justify-between">
           {quickSearch && (
             <Input
@@ -129,7 +132,7 @@ export default function AgGrid<T>({
             />
           )}
           {Object.keys(exports).length > 0 && (
-            <div className="flex flex-row gap-0 border-b-2 p-0 h-9 mb-1">
+            <div className="mb-1 flex h-9 flex-row gap-0 border-b-2 p-0">
               {exports.excel && (
                 <Button
                   variant={"ghost"}
@@ -161,7 +164,7 @@ export default function AgGrid<T>({
           // style={gridStyle}
           className={cn(
             currentTheme,
-            "z-40 w-full h-[calc(100vh-15rem)]",
+            "z-40 h-[calc(100vh-15rem)] w-full",
             className,
           )}
         >

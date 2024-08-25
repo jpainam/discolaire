@@ -1,7 +1,8 @@
-import EnrollmentDataTable from "@/components/classrooms/enrollments/EnrollmentDataTable";
-import { checkPermissions } from "@/server/permission";
-import { PermissionAction } from "@/types/permission";
 import { NoPermission } from "@repo/ui/NoPermission";
+
+import EnrollmentDataTable from "~/components/classrooms/enrollments/EnrollmentDataTable";
+import { checkPermissions } from "~/server/permission";
+import { PermissionAction } from "~/types/permission";
 
 export default async function Page({
   params: { id },

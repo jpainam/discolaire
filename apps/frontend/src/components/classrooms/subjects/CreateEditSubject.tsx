@@ -1,13 +1,6 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { CourseSelector } from "@/components/shared/selects/CourseSelector";
-import { StaffSelector } from "@/components/shared/selects/StaffSelector";
-import { useLocale } from "@/hooks/use-locale";
-import { useSheet } from "@/hooks/use-sheet";
-import { getErrorMessage } from "@/lib/handle-error";
-import rangeMap from "@/lib/range-map";
-import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Subject } from "@prisma/client";
 import { Button } from "@repo/ui/button";
@@ -25,6 +18,13 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { CourseSelector } from "~/components/shared/selects/CourseSelector";
+import { StaffSelector } from "~/components/shared/selects/StaffSelector";
+import { useLocale } from "~/hooks/use-locale";
+import { useSheet } from "~/hooks/use-sheet";
+import { getErrorMessage } from "~/lib/handle-error";
+import rangeMap from "~/lib/range-map";
+import { api } from "~/trpc/react";
 import { SelectField } from "../../shared/forms/SelectField";
 
 const createEditSubjectSchema = z.object({

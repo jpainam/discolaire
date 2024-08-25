@@ -1,4 +1,4 @@
-import { routes } from "@/configs/routes";
+import { routes } from "~/configs/routes";
 import { PhotoListItem } from "./photo-list-item";
 
 export function PhotosList() {

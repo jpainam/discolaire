@@ -1,5 +1,3 @@
-import { getServerTranslations } from "@/app/i18n/server";
-import { api } from "@/trpc/server";
 import {
   Table,
   TableBody,
@@ -8,6 +6,9 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/table";
+
+import { getServerTranslations } from "~/app/i18n/server";
+import { api } from "~/trpc/server";
 
 export async function GradeSheetStats({
   gradeSheetId,

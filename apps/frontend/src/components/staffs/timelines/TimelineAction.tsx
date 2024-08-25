@@ -1,11 +1,12 @@
 "use client";
 
-import { useAlert } from "@/hooks/use-alert";
-import { useLocale } from "@/hooks/use-locale";
-import { getErrorMessage } from "@/lib/handle-error";
 import { Button } from "@repo/ui/button";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
+
+import { useAlert } from "~/hooks/use-alert";
+import { useLocale } from "~/hooks/use-locale";
+import { getErrorMessage } from "~/lib/handle-error";
 
 export function TimelineAction({ timelineId }: { timelineId: string }) {
   const { openAlert } = useAlert();

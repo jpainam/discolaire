@@ -1,10 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { routes } from "@/configs/routes";
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
-import { getFullName } from "@/utils/full-name";
 import {
   Table,
   TableBody,
@@ -14,6 +10,10 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
+import { routes } from "~/configs/routes";
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
+import { getFullName } from "~/utils/full-name";
 import FlatBadge, { FlatBadgeVariant } from "../ui/FlatBadge";
 import { ReportCardSummary } from "./ReportCardSummary";
 

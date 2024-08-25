@@ -1,12 +1,5 @@
 "use client";
 
-import { useAlert } from "@/hooks/use-alert";
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
-import { CURRENCY } from "@/lib/constants";
-import { getErrorMessage } from "@/lib/handle-error";
-import { api } from "@/trpc/react";
-import { useDateFormat } from "@/utils/date-format";
 import { Button } from "@repo/ui/button";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import {
@@ -31,6 +24,13 @@ import { sumBy } from "lodash";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import { useAlert } from "~/hooks/use-alert";
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
+import { CURRENCY } from "~/lib/constants";
+import { getErrorMessage } from "~/lib/handle-error";
+import { api } from "~/trpc/react";
+import { useDateFormat } from "~/utils/date-format";
 import { CreateEditFee } from "./CreateEditFee";
 
 export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {

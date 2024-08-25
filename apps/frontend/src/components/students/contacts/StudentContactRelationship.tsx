@@ -1,11 +1,5 @@
 "use client";
 
-import { CheckboxField } from "@/components/shared/forms/checkbox-field";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
-import { getErrorMessage } from "@/lib/handle-error";
-import { AppRouter } from "@/server/api/root";
-import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
@@ -16,6 +10,13 @@ import { Save, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+
+import { CheckboxField } from "~/components/shared/forms/checkbox-field";
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
+import { getErrorMessage } from "~/lib/handle-error";
+import { AppRouter } from "~/server/api/root";
+import { api } from "~/trpc/react";
 
 const editRelationshipSchema = z.object({
   primaryContact: z.boolean(),

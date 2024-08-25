@@ -1,5 +1,6 @@
-import { api } from "@/trpc/server";
 import { notFound } from "next/navigation";
+
+import { api } from "~/trpc/server";
 
 export default async function Page({
   params: { id, assignmentId },

@@ -1,14 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import PDFIcon from "@/components/icons/pdf-solid";
-import XMLIcon from "@/components/icons/xml-solid";
-import { ClassroomSelector } from "@/components/shared/selects/ClassroomSelector";
-import { RequiredFeeSelector } from "@/components/shared/selects/RequiredFeeSelector";
-import { useCreateQueryString } from "@/hooks/create-query-string";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
-import { useMoneyFormat } from "@/utils/money-format";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -19,6 +11,15 @@ import {
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Label } from "@repo/ui/label";
 import { MoreVertical } from "lucide-react";
+
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
+import { RequiredFeeSelector } from "~/components/shared/selects/RequiredFeeSelector";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
+import { useMoneyFormat } from "~/utils/money-format";
 
 export function RequiredFeeHeader() {
   const { t } = useLocale();

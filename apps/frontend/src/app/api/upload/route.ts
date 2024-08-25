@@ -1,10 +1,11 @@
-import { env } from "@/env";
+import { type NextRequest } from "next/server";
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { v4 as uuidv4 } from "uuid";
 
-import { type NextRequest } from "next/server";
+import { env } from "~/env";
+
 const client = new S3Client({
   region: env.AWS_S3_REGION,
   credentials: {
@@ -41,14 +42,14 @@ export async function POST(request: Request) {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { key: string } }
+  { params }: { params: { key: string } },
 ) {
   const searchParams = request.nextUrl.searchParams;
   const key = (searchParams.get("key") as string) || params.key;
   if (!key) {
     return Response.json(
       { error: "A query/params key is required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
   const bucket = env.AWS_S3_BUCKET_NAME;

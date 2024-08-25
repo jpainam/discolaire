@@ -1,8 +1,9 @@
 import React from "react";
-import { getServerTranslations } from "@/app/i18n/server";
-import { checkPermissions } from "@/server/permission";
-import { PermissionAction } from "@/types/permission";
 import { NoPermission } from "@repo/ui/NoPermission";
+
+import { getServerTranslations } from "~/app/i18n/server";
+import { checkPermissions } from "~/server/permission";
+import { PermissionAction } from "~/types/permission";
 
 export default async function Layout({
   children,

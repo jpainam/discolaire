@@ -1,9 +1,8 @@
-import { getServerTranslations } from "@/app/i18n/server";
-import { EmptyState } from "@/components/EmptyState";
-import { StudentGrade } from "@/components/students/grades/StudentGrade";
-import { StudentGradeHeader } from "@/components/students/grades/StudentGradeHeader";
-
-import { api } from "@/trpc/server";
+import { getServerTranslations } from "~/app/i18n/server";
+import { EmptyState } from "~/components/EmptyState";
+import { StudentGrade } from "~/components/students/grades/StudentGrade";
+import { StudentGradeHeader } from "~/components/students/grades/StudentGradeHeader";
+import { api } from "~/trpc/server";
 
 export default async function Layout({
   children,
@@ -25,9 +24,9 @@ export default async function Layout({
   }
 
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="flex h-full w-full flex-col">
       <StudentGradeHeader studentId={id} classroomId={classroom.id} />
-      <div className="grid p-0 pb-2 text-sm md:grid-cols-2 gap-0">
+      <div className="grid gap-0 p-0 pb-2 text-sm md:grid-cols-2">
         <StudentGrade classroomId={classroom.id} studentId={id} />
         {children}
       </div>

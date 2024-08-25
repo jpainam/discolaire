@@ -2,22 +2,23 @@
 
 import { useCallback } from "react";
 import { useSearchParams } from "next/navigation";
-import { selectedStudentIdsAtom } from "@/atoms/transactions";
-import { AvatarState } from "@/components/AvatarState";
-import { SimpleTooltip } from "@/components/simple-tooltip";
-import { routes } from "@/configs/routes";
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
-import { AppRouter } from "@/server/api/root";
-import { getFullName } from "@/utils/full-name";
-import { useMoneyFormat } from "@/utils/money-format";
-import { openInNewTab } from "@/utils/open-new-tab";
 import { Button } from "@repo/ui/button";
 import { Card, CardContent } from "@repo/ui/card";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { inferProcedureOutput } from "@trpc/server";
 import { useAtom } from "jotai";
 import { ArrowDownUp, AtSign, DollarSign, Phone, Users } from "lucide-react";
+
+import { selectedStudentIdsAtom } from "~/atoms/transactions";
+import { AvatarState } from "~/components/AvatarState";
+import { SimpleTooltip } from "~/components/simple-tooltip";
+import { routes } from "~/configs/routes";
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
+import { AppRouter } from "~/server/api/root";
+import { getFullName } from "~/utils/full-name";
+import { useMoneyFormat } from "~/utils/money-format";
+import { openInNewTab } from "~/utils/open-new-tab";
 
 type StudentAccountWithBalance = NonNullable<
   inferProcedureOutput<AppRouter["classroom"]["studentsBalance"]>

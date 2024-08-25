@@ -1,8 +1,5 @@
 "use client";
 
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
-import { api } from "@/trpc/react";
 import {
   Select,
   SelectContent,
@@ -11,6 +8,10 @@ import {
   SelectValue,
 } from "@repo/ui/select";
 import { Skeleton } from "@repo/ui/skeleton";
+
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
 
 type RequiredFeeSelectorProps = {
   onChange?: (value: string) => void;

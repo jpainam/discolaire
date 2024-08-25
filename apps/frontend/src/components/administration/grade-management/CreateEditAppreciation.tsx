@@ -1,9 +1,5 @@
 "use client";
 
-import { InputField } from "@/components/shared/forms/input-field";
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
-import { getErrorMessage } from "@/lib/handle-error";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/button";
 import {
@@ -19,6 +15,11 @@ import { Textarea } from "@repo/ui/textarea";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+
+import { InputField } from "~/components/shared/forms/input-field";
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
+import { getErrorMessage } from "~/lib/handle-error";
 
 const appreciationFormSchema = z.object({
   name: z.string().min(1),

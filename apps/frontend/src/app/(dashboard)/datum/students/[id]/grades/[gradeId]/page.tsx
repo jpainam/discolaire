@@ -1,5 +1,3 @@
-import { getServerTranslations } from "@/app/i18n/server";
-import { StudentGradeChart } from "@/components/students/grades/charts/StudentGradeChart";
 import { Button } from "@repo/ui/button";
 import { Separator } from "@repo/ui/separator";
 import {
@@ -14,6 +12,8 @@ import {
   Waves,
 } from "lucide-react";
 
+import { getServerTranslations } from "~/app/i18n/server";
+import { StudentGradeChart } from "~/components/students/grades/charts/StudentGradeChart";
 import { GradeSheetStats } from "./grade-sheet-stats";
 
 type GradeSheetPageProps = {

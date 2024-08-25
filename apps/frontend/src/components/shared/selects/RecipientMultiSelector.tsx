@@ -1,10 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useLocale } from "@/hooks/use-locale";
-import { showErrorToast } from "@/lib/handle-error";
-import { cn } from "@/lib/utils";
-import { api } from "@/trpc/react";
 import { Badge } from "@repo/ui/badge";
 import {
   Command,
@@ -15,6 +11,11 @@ import {
 import { Skeleton } from "@repo/ui/skeleton";
 import { Command as CommandPrimitive } from "cmdk";
 import { X } from "lucide-react";
+
+import { useLocale } from "~/hooks/use-locale";
+import { showErrorToast } from "~/lib/handle-error";
+import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
 
 export function RecipientMultiSelector({
   className,

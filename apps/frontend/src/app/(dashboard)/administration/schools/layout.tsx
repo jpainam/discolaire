@@ -1,8 +1,6 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { getServerTranslations } from "@/app/i18n/server";
-import { routes } from "@/configs/routes";
 import { Badge } from "@repo/ui/badge";
 import { Button } from "@repo/ui/button";
 import {
@@ -29,6 +27,9 @@ import {
   TableRow,
 } from "@repo/ui/table";
 import { MoreHorizontal } from "lucide-react";
+
+import { getServerTranslations } from "~/app/i18n/server";
+import { routes } from "~/configs/routes";
 
 export default async function Layout({
   children,

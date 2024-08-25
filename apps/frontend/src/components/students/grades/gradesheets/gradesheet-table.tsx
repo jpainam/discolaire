@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useLocale } from "@/hooks/use-locale";
-import { api } from "@/trpc/react";
 import { useDataTable } from "@repo/ui/data-table";
 
+import { useLocale } from "~/hooks/use-locale";
+import { api } from "~/trpc/react";
 import {
   fetchGradeSheetColumns,
   GradeSheetTableType,

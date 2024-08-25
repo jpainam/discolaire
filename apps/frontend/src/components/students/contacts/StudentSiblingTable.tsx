@@ -1,10 +1,4 @@
 import Link from "next/link";
-import { getServerTranslations } from "@/app/i18n/server";
-import { EmptyState } from "@/components/EmptyState";
-import { routes } from "@/configs/routes";
-import { AppRouter } from "@/server/api/root";
-import { api } from "@/trpc/server";
-import { getFullName } from "@/utils/full-name";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import {
   Table,
@@ -15,6 +9,13 @@ import {
   TableRow,
 } from "@repo/ui/table";
 import { inferProcedureOutput } from "@trpc/server";
+
+import { getServerTranslations } from "~/app/i18n/server";
+import { EmptyState } from "~/components/EmptyState";
+import { routes } from "~/configs/routes";
+import { AppRouter } from "~/server/api/root";
+import { api } from "~/trpc/server";
+import { getFullName } from "~/utils/full-name";
 
 type StudentContactGetProcedureOutput = NonNullable<
   inferProcedureOutput<AppRouter["studentContact"]["get"]>

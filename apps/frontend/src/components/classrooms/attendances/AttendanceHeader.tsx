@@ -2,14 +2,6 @@
 
 import { useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
-import PDFIcon from "@/components/icons/pdf-solid";
-import XMLIcon from "@/components/icons/xml-solid";
-import { DatePicker } from "@/components/shared/date-picker";
-import { TermSelector } from "@/components/shared/selects/TermSelector";
-import { routes } from "@/configs/routes";
-import { useCreateQueryString } from "@/hooks/create-query-string";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -34,6 +26,15 @@ import {
   LucideIcon,
   Printer,
 } from "lucide-react";
+
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { DatePicker } from "~/components/shared/date-picker";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
 
 export function AttendanceHeader() {
   const { t } = useLocale();

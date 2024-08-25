@@ -1,4 +1,3 @@
-import { SMSTemplate } from "@/types/sms";
 import { Button } from "@repo/ui/button";
 import {
   Table,
@@ -10,6 +9,8 @@ import {
 } from "@repo/ui/table";
 import { Textarea } from "@repo/ui/textarea";
 import { Trash2 } from "lucide-react";
+
+import { SMSTemplate } from "~/types/sms";
 
 export function SMSTemplateList({ templates }: { templates: SMSTemplate[] }) {
   return (

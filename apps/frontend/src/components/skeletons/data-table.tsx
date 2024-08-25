@@ -1,6 +1,7 @@
-import rangeMap from "@/lib/range-map";
-import { cn } from "@/lib/utils";
 import { Skeleton } from "@repo/ui/skeleton";
+
+import rangeMap from "~/lib/range-map";
+import { cn } from "~/lib/utils";
 
 type DatatableSkeletonProps = {
   rows: number;

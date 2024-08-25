@@ -1,6 +1,7 @@
-import { Footer } from "@/layouts/Footer";
-import { Header } from "@/layouts/Header";
 import { NoticeBanner } from "@repo/ui/Banner";
+
+import { Footer } from "~/layouts/Footer";
+import { Header } from "~/layouts/Header";
 
 export default function Layout({
   children,

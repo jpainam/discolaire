@@ -1,14 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { EmptyState } from "@/components/EmptyState";
-import { useAlert } from "@/hooks/use-alert";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
-import { getErrorMessage } from "@/lib/handle-error";
-import { AppRouter } from "@/server/api/root";
-import { api } from "@/trpc/react";
-import { useDateFormat } from "@/utils/date-format";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -30,6 +22,14 @@ import { inferProcedureOutput } from "@trpc/server";
 import { MoreVertical, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import { EmptyState } from "~/components/EmptyState";
+import { useAlert } from "~/hooks/use-alert";
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
+import { getErrorMessage } from "~/lib/handle-error";
+import { AppRouter } from "~/server/api/root";
+import { api } from "~/trpc/react";
+import { useDateFormat } from "~/utils/date-format";
 import { routes } from "../../../configs/routes";
 
 type StudentEnrollmentProcedureOutput = NonNullable<

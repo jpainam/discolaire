@@ -1,10 +1,8 @@
 "use client";
 
-//import { useConfig } from "@/hooks/use-config";
-//import { Style, styles } from "@/registry/styles";
+//import { useConfig } from "~/hooks/use-config";
+//import { Style, styles } from "~/registry/styles";
 import { useState } from "react";
-import { useLocale } from "@/hooks/use-locale";
-import { api } from "@/trpc/react";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -13,6 +11,9 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
+
+import { useLocale } from "~/hooks/use-locale";
+import { api } from "~/trpc/react";
 
 type SchoolYearSwitcherProps = {
   className?: string;

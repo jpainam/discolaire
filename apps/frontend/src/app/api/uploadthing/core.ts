@@ -1,7 +1,8 @@
-import { createUploadthing, type FileRouter } from "uploadthing/next";
+import type { FileRouter } from "uploadthing/next";
+import { createUploadthing } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
-import { ratelimit } from "@/lib/rate-limit";
+import { ratelimit } from "~/lib/rate-limit";
 
 const f = createUploadthing();
 

@@ -2,12 +2,6 @@
 
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import { DateRangePicker } from "@/components/shared/DateRangePicker";
-import { routes } from "@/configs/routes";
-import { useCreateQueryString } from "@/hooks/create-query-string";
-import { useDebounce } from "@/hooks/use-debounce";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -22,6 +16,12 @@ import { useQuery } from "@tanstack/react-query";
 import { MailOpen, MoreVertical } from "lucide-react";
 import { DateRange } from "react-day-picker";
 
+import { DateRangePicker } from "~/components/shared/DateRangePicker";
+import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useDebounce } from "~/hooks/use-debounce";
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function NotificationHeader() {

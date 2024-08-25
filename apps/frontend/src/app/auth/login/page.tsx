@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 
-import { ModeToggle } from "@/layouts/mode-toggle";
+import { ModeToggle } from "~/layouts/mode-toggle";
 import { getServerTranslations } from "../../i18n/server";
 import { UserAuthForm } from "./user-auth-form";
 
@@ -15,10 +15,10 @@ export default async function AuthenticationPage() {
   return (
     <>
       <div className="container relative h-[100vh] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-        <div className="flex gap-2 flex-row absolute right-4 top-4 md:right-8 md:top-8">
+        <div className="absolute right-4 top-4 flex flex-row gap-2 md:right-8 md:top-8">
           <ModeToggle />
         </div>
-        <div className="hidden md:block relative h-full flex-col bg-muted p-10 lg:flex dark:border-r bg-cover bg-no-repeat bg-[url('/images/bg-login.png')]">
+        <div className="relative hidden h-full flex-col bg-muted bg-[url('/images/bg-login.png')] bg-cover bg-no-repeat p-10 dark:border-r md:block lg:flex">
           {/* <div className="absolute inset-0 bg-zinc-900" /> */}
           <div className="relative z-20 flex items-center text-lg font-medium">
             <Link className="flex flex-row" href="/">
@@ -37,7 +37,7 @@ export default async function AuthenticationPage() {
               Portail Scolaire
             </Link>
           </div>
-          <div className="relative z-20 mt-auto bg-secondary/40 rounded-md">
+          <div className="relative z-20 mt-auto rounded-md bg-secondary/40">
             <blockquote className="space-y-2">
               <p className="text-lg tracking-tighter">{t("signin_quote")}</p>
               <footer className="text-sm">Ellen G. White</footer>

@@ -1,5 +1,6 @@
-import { AppearanceForm } from "@/components/users/settings/settings-form";
 import { Separator } from "@repo/ui/separator";
+
+import { AppearanceForm } from "~/components/users/settings/settings-form";
 
 export default function SettingsAppearancePage() {
   return (

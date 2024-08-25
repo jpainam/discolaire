@@ -1,8 +1,9 @@
-import { FeeBar } from "@/components/administration/fees/charts/FeeBar";
-import { FeeTrend } from "@/components/administration/fees/charts/FeeTrend";
-import { FeeDataTable } from "@/components/administration/fees/FeeDataTable";
-import { FeeHeader } from "@/components/administration/fees/FeeHeader";
 import { Separator } from "@repo/ui/separator";
+
+import { FeeBar } from "~/components/administration/fees/charts/FeeBar";
+import { FeeTrend } from "~/components/administration/fees/charts/FeeTrend";
+import { FeeDataTable } from "~/components/administration/fees/FeeDataTable";
+import { FeeHeader } from "~/components/administration/fees/FeeHeader";
 
 export default function Page({
   searchParams: { classroom, status },

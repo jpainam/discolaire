@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 //import { toast } from "@repo/ui/use-toast";
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { Button } from "@repo/ui/button";
 import {
@@ -25,6 +23,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { ScrollArea } from "@repo/ui/scroll-area";
 import { useFormContext } from "react-hook-form";
 
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
 import { studentPrintOptions } from "./print-selector-old";
 
 export default function PrintSelector({ className }: { className?: string }) {

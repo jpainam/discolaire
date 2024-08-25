@@ -1,7 +1,7 @@
 "use client";
 
 // import { useEffect } from 'react';
-// import { useLocalStorage } from '@/hooks/use-local-storage';
+// import { useLocalStorage } from '~/hooks/use-local-storage';
 
 // export function useDirection() {
 //   const [direction, setDirection] = useLocalStorage('iso-direction', 'ltr');
@@ -17,7 +17,6 @@
 //     setDirection,
 //   };
 // }
-
 import { atom, useAtom } from "jotai";
 
 // 1. set initial atom for isomorphic direction

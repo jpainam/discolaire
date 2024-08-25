@@ -1,10 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getServerTranslations } from "@/app/i18n/server";
-import House from "@/components/lucide/House";
-import { routes } from "@/configs/routes";
-import { api } from "@/trpc/server";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Separator } from "@repo/ui/separator";
@@ -24,6 +20,10 @@ import {
   SquareUserRound,
 } from "lucide-react";
 
+import { getServerTranslations } from "~/app/i18n/server";
+import House from "~/components/lucide/House";
+import { routes } from "~/configs/routes";
+import { api } from "~/trpc/server";
 import { StudentContactTable } from "../contacts/StudentContactTable";
 
 export async function StudentDetails({ id }: { id: string }) {

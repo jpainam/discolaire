@@ -1,5 +1,6 @@
-import { cn } from "@/lib/utils";
 import { ForwardedRef, forwardRef } from "react";
+
+import { cn } from "~/lib/utils";
 
 const widgetCardClasses = {
   base: "border border-muted p-2",

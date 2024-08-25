@@ -1,13 +1,13 @@
 "use client";
 
 import { useTransition } from "react";
-import { useLocale } from "@/hooks/use-locale";
-import { api } from "@/trpc/react";
 import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
 import { Skeleton } from "@repo/ui/skeleton";
 import { AtSign, Loader } from "lucide-react";
 
+import { useLocale } from "~/hooks/use-locale";
+import { api } from "~/trpc/react";
 import { AssociatedUserNotFound } from "./AssociatedUserNotFound";
 
 export function UserLoginCard({ userId }: { userId: string }) {

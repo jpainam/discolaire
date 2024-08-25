@@ -1,4 +1,4 @@
-import { StudentDataTable } from "@/components/students/StudentDataTable";
+import { StudentDataTable } from "~/components/students/StudentDataTable";
 
 export default async function Page() {
   return (

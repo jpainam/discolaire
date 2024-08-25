@@ -1,9 +1,10 @@
-import { getServerTranslations } from "@/app/i18n/server";
-import FinanceHeader from "@/components/students/transactions/FinanceHeader";
-import { TransactionStats } from "@/components/students/transactions/transaction-stats";
-import { TransactionDataTable } from "@/components/students/transactions/TransactionDataTable";
-import { api } from "@/trpc/server";
 import { Separator } from "@repo/ui/separator";
+
+import { getServerTranslations } from "~/app/i18n/server";
+import FinanceHeader from "~/components/students/transactions/FinanceHeader";
+import { TransactionStats } from "~/components/students/transactions/transaction-stats";
+import { TransactionDataTable } from "~/components/students/transactions/TransactionDataTable";
+import { api } from "~/trpc/server";
 
 export default async function Page({
   params: { id },

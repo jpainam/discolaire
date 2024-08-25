@@ -1,6 +1,6 @@
-import { studentPhotos } from "@/types/photo";
 import { ScrollArea } from "@repo/ui/scroll-area";
 
+import { studentPhotos } from "~/types/photo";
 import { PhotoCard } from "./photos-card";
 
 export function StudentPhotoContent() {

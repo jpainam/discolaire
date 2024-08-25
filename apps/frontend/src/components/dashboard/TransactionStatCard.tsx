@@ -3,11 +3,12 @@
  * @see https://v0.dev/t/AotrKkWo9MB
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
-import { getServerTranslations } from "@/app/i18n/server";
-import { CURRENCY } from "@/lib/constants";
-import { cn } from "@/lib/utils";
-import { CircleArrowRight } from "lucide-react";
 import Link from "next/link";
+import { CircleArrowRight } from "lucide-react";
+
+import { getServerTranslations } from "~/app/i18n/server";
+import { CURRENCY } from "~/lib/constants";
+import { cn } from "~/lib/utils";
 
 export async function TransactionStatCard({
   title,
@@ -22,11 +23,11 @@ export async function TransactionStatCard({
 }) {
   const { t } = await getServerTranslations();
   return (
-    <div className={cn("relative w-full rounded-lg p-0 border", className)}>
+    <div className={cn("relative w-full rounded-lg border p-0", className)}>
       <div className="absolute inset-0 flex items-center justify-end">
         {icon}
       </div>
-      <div className=" px-4 py-5 relative z-10 space-y-2 ">
+      <div className="relative z-10 space-y-2 px-4 py-5">
         <h3 className="text-2xl font-extrabold">
           {title.toLocaleString()} {CURRENCY}
         </h3>
@@ -34,9 +35,9 @@ export async function TransactionStatCard({
       </div>
       <Link
         href="#"
-        className="w-full  gap-2 flex flex-row text-sm justify-center items-center rounded-b-lg px-4 bg-gray-800/20"
+        className="flex w-full flex-row items-center justify-center gap-2 rounded-b-lg bg-gray-800/20 px-4 text-sm"
       >
-        {t("more_info")} <CircleArrowRight className="w-4 h-4" />
+        {t("more_info")} <CircleArrowRight className="h-4 w-4" />
       </Link>
     </div>
   );

@@ -1,11 +1,12 @@
-import { ClassroomDetails } from "@/components/classrooms/ClassroomDetails";
-import EnrollmentDataTable from "@/components/classrooms/enrollments/EnrollmentDataTable";
-import { EnrollmentHeader } from "@/components/classrooms/enrollments/EnrollmentHeader";
-import { checkPermissions } from "@/server/permission";
-import { api } from "@/trpc/server";
-import { Classroom } from "@/types/classroom";
-import { PermissionAction } from "@/types/permission";
 import { notFound } from "next/navigation";
+
+import { ClassroomDetails } from "~/components/classrooms/ClassroomDetails";
+import EnrollmentDataTable from "~/components/classrooms/enrollments/EnrollmentDataTable";
+import { EnrollmentHeader } from "~/components/classrooms/enrollments/EnrollmentHeader";
+import { checkPermissions } from "~/server/permission";
+import { api } from "~/trpc/server";
+import { Classroom } from "~/types/classroom";
+import { PermissionAction } from "~/types/permission";
 
 export default async function Page({
   params: { id },
@@ -15,14 +16,14 @@ export default async function Page({
   const classroom = (await api.classroom.get(id)) as Classroom;
   const canReadEnrollment = await checkPermissions(
     PermissionAction.READ,
-    "classroom:enrollment"
+    "classroom:enrollment",
   );
 
   if (!classroom) {
     notFound();
   }
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex w-full flex-col">
       <ClassroomDetails classroomId={id} />
       {/* <div>
           <GenderPie classroom={classroom} />

@@ -1,8 +1,9 @@
-import { getServerTranslations } from "@/app/i18n/server";
-import { ReportQueueTable } from "@/components/reports/ReportQueueTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
 
-//import { getReportForUser, getReportsQueue } from "@/server/report-queues";
+import { getServerTranslations } from "~/app/i18n/server";
+import { ReportQueueTable } from "~/components/reports/ReportQueueTable";
+
+//import { getReportForUser, getReportsQueue } from "~/server/report-queues";
 
 export default async function Page() {
   const { t } = await getServerTranslations();

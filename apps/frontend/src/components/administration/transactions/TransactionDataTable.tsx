@@ -2,15 +2,15 @@
 
 import { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
-import { useLocale } from "@/hooks/use-locale";
-import { api } from "@/trpc/react";
-import { Transaction } from "@/types/transaction";
-import { useMoneyFormat } from "@/utils/money-format";
 import { useDataTable } from "@repo/ui/data-table";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
 
+import { useLocale } from "~/hooks/use-locale";
+import { api } from "~/trpc/react";
+import { Transaction } from "~/types/transaction";
+import { useMoneyFormat } from "~/utils/money-format";
 import { TransactionDataTableActions } from "./TransactionDataTableActions";
 import { fetchTransactionColumns } from "./TransactionDataTableColumns";
 

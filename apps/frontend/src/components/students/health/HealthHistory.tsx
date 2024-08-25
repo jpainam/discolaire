@@ -1,9 +1,9 @@
-import { cn } from "@/lib/utils";
 import { Checkbox } from "@repo/ui/checkbox";
 import { Label } from "@repo/ui/label";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
 import { Textarea } from "@repo/ui/textarea";
 
+import { cn } from "~/lib/utils";
 import { historyData, SubHistoryType } from "./data";
 
 export default function HealthHistory({ history }: { history: string[] }) {

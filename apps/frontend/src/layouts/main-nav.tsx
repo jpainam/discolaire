@@ -1,13 +1,13 @@
 "use client";
 
-import { Icons } from "@/components/icons";
-import { siteConfig } from "@/configs/site";
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
-
+import path from "path";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import path from "path";
+
+import { Icons } from "~/components/icons";
+import { siteConfig } from "~/configs/site";
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
 
 type MenuItem = {
   label: string;
@@ -35,7 +35,7 @@ export function MainNav({ className }: { className?: string }) {
   const pathname = usePathname();
   const pathName = path.basename(pathname);
   return (
-    <div className={cn("hidden md:flex flex-1 ", className)}>
+    <div className={cn("hidden flex-1 md:flex", className)}>
       <Link href="/" className="mr-6 flex items-center space-x-2">
         <Icons.logo className="h-6 w-6" />
         <span className="hidden font-bold sm:inline-block">
@@ -51,7 +51,7 @@ export function MainNav({ className }: { className?: string }) {
               "transition-colors hover:text-primary-foreground/80 dark:text-secondary-foreground",
               item?.actives?.includes(pathName)
                 ? "text-primary-foreground"
-                : "text-primary-foreground/60"
+                : "text-primary-foreground/60",
             )}
           >
             {item.label}

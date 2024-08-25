@@ -1,13 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { useLocale } from "@/hooks/use-locale";
-import { api } from "@/trpc/react";
 import { useDataTable } from "@repo/ui/data-table";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
 import { DataTableFilterField } from "@repo/ui/data-table/types";
 
+import { useLocale } from "~/hooks/use-locale";
+import { api } from "~/trpc/react";
 import { NoticeboardDataTableActions } from "./NoticeboardDataTableActions";
 import { getColumns } from "./NoticeboardDataTableColumns";
 

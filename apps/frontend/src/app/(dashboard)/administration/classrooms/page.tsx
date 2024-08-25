@@ -1,4 +1,4 @@
-import AdminClassroomTable from "@/components/administration/classrooms/tab-content";
+import AdminClassroomTable from "~/components/administration/classrooms/tab-content";
 
 export default function AdminClassroomPage() {
   return (

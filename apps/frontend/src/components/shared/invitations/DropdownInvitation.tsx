@@ -1,11 +1,11 @@
-import { env } from "@/env";
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
-import { encryptInvitationCode } from "@/utils/encrypt";
 import { DropdownMenuItem } from "@repo/ui/dropdown-menu";
 import { CopyIcon, SendIcon } from "lucide-react";
 import { toast } from "sonner";
 
+import { env } from "~/env";
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
+import { encryptInvitationCode } from "~/utils/encrypt";
 import { CopyConfirmationDialog } from "./CopyConfirmationDialog";
 import { InviteConfirmationDialog } from "./InviteConfirmationDialog";
 

@@ -1,6 +1,4 @@
 import * as React from "react";
-import { AvatarState } from "@/components/AvatarState";
-import { cn } from "@/lib/utils";
 import {
   Command,
   CommandEmpty,
@@ -11,6 +9,9 @@ import {
 } from "@repo/ui/command";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Check } from "lucide-react";
+
+import { AvatarState } from "~/components/AvatarState";
+import { cn } from "~/lib/utils";
 
 type Option = {
   value: string;

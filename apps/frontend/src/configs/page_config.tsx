@@ -1,6 +1,7 @@
-import { useLocale } from "@/hooks/use-locale";
-import { BookText, DatabaseIcon, HomeIcon } from "lucide-react";
 import React from "react";
+import { BookText, DatabaseIcon, HomeIcon } from "lucide-react";
+
+import { useLocale } from "~/hooks/use-locale";
 import { routes } from "./routes";
 
 export interface NavItem {
@@ -35,12 +36,12 @@ export function usePageConfig() {
       {
         title: t("home"),
         href: "/",
-        icon: <HomeIcon className="w-5 h-6" />,
+        icon: <HomeIcon className="h-6 w-5" />,
       },
       {
         title: t("datum"),
         href: routes.datum.index,
-        icon: <DatabaseIcon className="w-5 h-" />,
+        icon: <DatabaseIcon className="h- w-5" />,
       },
       {
         title: t("programs"),
@@ -49,7 +50,7 @@ export function usePageConfig() {
       {
         title: t("report_cards"),
         href: routes.datum.index,
-        icon: <BookText className="w-5 h-6" />,
+        icon: <BookText className="h-6 w-5" />,
       },
       {
         title: t("reportings"),

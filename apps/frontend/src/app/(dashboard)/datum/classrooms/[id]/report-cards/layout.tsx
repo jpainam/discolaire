@@ -1,5 +1,6 @@
-import { ReportCardHeader } from "@/components/classrooms/report-cards/ReportCardHeader";
 import { PropsWithChildren } from "react";
+
+import { ReportCardHeader } from "~/components/classrooms/report-cards/ReportCardHeader";
 
 export default function Layout({ children }: PropsWithChildren) {
   return (

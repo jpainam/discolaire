@@ -1,6 +1,7 @@
-import { getServerTranslations } from "@/app/i18n/server";
-import { ReinitializePasswordForm } from "@/components/users/password/reinitialize-password";
 import { Separator } from "@repo/ui/separator";
+
+import { getServerTranslations } from "~/app/i18n/server";
+import { ReinitializePasswordForm } from "~/components/users/password/reinitialize-password";
 
 export default async function Page() {
   const { t } = await getServerTranslations();

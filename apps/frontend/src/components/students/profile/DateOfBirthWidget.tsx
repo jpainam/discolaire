@@ -1,10 +1,11 @@
 "use client";
 
-import Confetti, { type ConfettiRef } from "@/components/magicui/Confetti";
-
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
 import { useEffect, useRef } from "react";
+
+import type { ConfettiRef } from "~/components/magicui/Confetti";
+import Confetti from "~/components/magicui/Confetti";
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
 
 export function DateOfBirthWidget({
   date,

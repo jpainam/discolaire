@@ -1,15 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { SimpleTooltip } from "@/components/simple-tooltip";
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
-import { ModeToggle } from "@/layouts/mode-toggle";
-import { UserNav } from "@/layouts/user-nav";
-import { cn } from "@/lib/utils";
 import { Button } from "@repo/ui/button";
 import { CircleHelp, Mail, Printer } from "lucide-react";
 
+import { SimpleTooltip } from "~/components/simple-tooltip";
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
+import { ModeToggle } from "~/layouts/mode-toggle";
+import { UserNav } from "~/layouts/user-nav";
+import { cn } from "~/lib/utils";
 import { FeedBackDialog } from "./FeedbackDialog";
 import { SearchCommandMenu } from "./search-command-menu";
 

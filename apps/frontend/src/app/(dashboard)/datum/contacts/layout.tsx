@@ -1,5 +1,6 @@
-import { ContactHeader } from "@/components/contacts/ContactHeader";
 import { Separator } from "@repo/ui/separator";
+
+import { ContactHeader } from "~/components/contacts/ContactHeader";
 
 export default async function Layout({
   children,

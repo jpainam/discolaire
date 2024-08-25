@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useLocale } from "@/hooks/use-locale";
-import { api } from "@/trpc/react";
 import { Grade } from "@prisma/client";
 import { Button } from "@repo/ui/button";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
@@ -12,6 +10,8 @@ import _ from "lodash";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useQueryState } from "nuqs";
 
+import { useLocale } from "~/hooks/use-locale";
+import { api } from "~/trpc/react";
 import { ByChronologicalOrder } from "./by-chronological-order";
 import { BySubject } from "./by-subject";
 

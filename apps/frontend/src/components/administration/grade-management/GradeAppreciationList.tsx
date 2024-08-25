@@ -1,12 +1,12 @@
 "use client";
 
-import { routes } from "@/configs/routes";
-import { useRouter } from "@/hooks/use-router";
-import { showErrorToast } from "@/lib/handle-error";
-import { cn } from "@/lib/utils";
-import { api } from "@/trpc/react";
-
 import { useParams } from "next/navigation";
+
+import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
+import { showErrorToast } from "~/lib/handle-error";
+import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
 
 export function GradeAppreciationList() {
   const params = useParams() as { id: string; appreciationId: string };
@@ -30,11 +30,11 @@ export function GradeAppreciationList() {
               router.push(
                 routes.administration.grade_management.appreciations +
                   "/" +
-                  appr.id
+                  appr.id,
               );
             }}
             className={cn(
-              "border-b p-2 cursor-pointer hover:bg-muted/50"
+              "cursor-pointer border-b p-2 hover:bg-muted/50",
               // params.appreciationId == appr.id
               //   ? "bg-muted text-muted-foreground"
               //   : ""

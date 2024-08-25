@@ -1,12 +1,6 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { routes } from "@/configs/routes";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
-import { useSheet } from "@/hooks/use-sheet";
-import { api } from "@/trpc/react";
-import { getFullName } from "@/utils/full-name";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +8,12 @@ import {
 } from "@repo/ui/dropdown-menu";
 import { MoreVertical, PlusIcon } from "lucide-react";
 
+import { routes } from "~/configs/routes";
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
+import { useSheet } from "~/hooks/use-sheet";
+import { api } from "~/trpc/react";
+import { getFullName } from "~/utils/full-name";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { ContactSelector } from "../shared/selects/ContactSelector";
 import { Button } from "../ui/button";

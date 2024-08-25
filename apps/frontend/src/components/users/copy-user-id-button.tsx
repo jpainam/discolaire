@@ -1,7 +1,9 @@
 "use client";
-import { useLocale } from "@/hooks/use-locale";
+
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
+
+import { useLocale } from "~/hooks/use-locale";
 import { Button } from "../ui/button";
 
 export function CopyUserIdButton({ userId }: { userId: string }) {

@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 
-import { accounts, mails } from "@/app/(dashboard)/mail/data";
-import { Mail } from "@/components/shared/mail/mail";
+import { accounts, mails } from "~/app/(dashboard)/mail/data";
+import { Mail } from "~/components/shared/mail/mail";
 
 export default function MailPage() {
   const layout = cookies().get("react-resizable-panels:layout");
@@ -13,7 +13,7 @@ export default function MailPage() {
 
   return (
     <>
-      <div className="flex flex-col h-[calc(100vh-9rem)]">
+      <div className="flex h-[calc(100vh-9rem)] flex-col">
         <Mail
           accounts={accounts}
           mails={mails}

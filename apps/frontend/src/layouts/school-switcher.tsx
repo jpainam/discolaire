@@ -1,9 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useLocale } from "@/hooks/use-locale";
-import { useTheme } from "@/hooks/use-theme";
-import { cn } from "@/lib/utils";
 import {
   CaretSortIcon,
   CheckIcon,
@@ -40,6 +37,10 @@ import {
   SelectValue,
 } from "@repo/ui/select";
 import { useForm } from "react-hook-form";
+
+import { useLocale } from "~/hooks/use-locale";
+import { useTheme } from "~/hooks/use-theme";
+import { cn } from "~/lib/utils";
 
 type Team = {
   label: string;

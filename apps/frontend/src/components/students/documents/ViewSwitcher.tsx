@@ -1,6 +1,7 @@
-import { cn } from "@/lib/utils";
 import { ToggleGroup } from "@repo/ui/ToggleGroup";
 import { PiGridFour, PiListBullets } from "react-icons/pi";
+
+import { cn } from "~/lib/utils";
 
 export function ViewSwitcher() {
   const isGridLayout = true;

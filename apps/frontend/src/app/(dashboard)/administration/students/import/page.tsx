@@ -1,4 +1,5 @@
-import { getServerTranslations } from "@/app/i18n/server";
+import { getServerTranslations } from "~/app/i18n/server";
+
 export default async function Page() {
   const { t } = await getServerTranslations();
   return (

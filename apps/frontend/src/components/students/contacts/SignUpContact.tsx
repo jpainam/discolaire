@@ -3,19 +3,19 @@
 import { useCallback } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { EmptyState } from "@/components/EmptyState";
-import { SendInvite } from "@/email-templates/SendInvite";
-import { env } from "@/env";
-import { useLocale } from "@/hooks/use-locale";
-import { getErrorMessage, showErrorToast } from "@/lib/handle-error";
-import { sendEmail } from "@/server/services/messaging-service";
-import { api } from "@/trpc/react";
-import { encryptInvitationCode } from "@/utils/encrypt";
 import { render } from "@react-email/components";
 import { Button } from "@repo/ui/button";
 import { Skeleton } from "@repo/ui/skeleton";
 import { toast } from "sonner";
 
+import { EmptyState } from "~/components/EmptyState";
+import { SendInvite } from "~/email-templates/SendInvite";
+import { env } from "~/env";
+import { useLocale } from "~/hooks/use-locale";
+import { getErrorMessage, showErrorToast } from "~/lib/handle-error";
+import { sendEmail } from "~/server/services/messaging-service";
+import { api } from "~/trpc/react";
+import { encryptInvitationCode } from "~/utils/encrypt";
 import { SignUpContactIcon } from "./SignUpContactIcon";
 
 export function SignUpContact() {

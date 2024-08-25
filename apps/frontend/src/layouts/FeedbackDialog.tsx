@@ -1,7 +1,5 @@
 "use client";
 
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/button";
 import {
@@ -22,6 +20,9 @@ import {
 import { Textarea } from "@repo/ui/textarea";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
 
 const feedbackSchema = z.object({
   type: z.enum(["feedback", "request", "question"]),

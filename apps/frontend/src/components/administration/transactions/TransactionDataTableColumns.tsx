@@ -1,6 +1,3 @@
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
-import { AppRouter } from "@/server/api/root";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
@@ -18,6 +15,9 @@ import { inferProcedureOutput } from "@trpc/server";
 import i18next, { TFunction } from "i18next";
 import { Eye, MoreHorizontal, TicketCheck, Trash2 } from "lucide-react";
 
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
+import { AppRouter } from "~/server/api/root";
 import { TransactionDeleteModal } from "./TransactionDeleteModal";
 import { TransactionDetails } from "./TransactionDetails";
 

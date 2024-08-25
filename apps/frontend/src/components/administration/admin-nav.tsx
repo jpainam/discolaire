@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { buttonVariants } from "@repo/ui/button";
 import { LucideIcon } from "lucide-react";
+
+import { cn } from "~/lib/utils";
 
 interface NavProps {
   links: {

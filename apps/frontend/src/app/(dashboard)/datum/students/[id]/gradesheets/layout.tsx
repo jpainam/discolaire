@@ -1,6 +1,6 @@
-import { getServerTranslations } from "@/app/i18n/server";
-import { EmptyState } from "@/components/EmptyState";
-import { api } from "@/trpc/server";
+import { getServerTranslations } from "~/app/i18n/server";
+import { EmptyState } from "~/components/EmptyState";
+import { api } from "~/trpc/server";
 
 export default async function Layout({
   children,

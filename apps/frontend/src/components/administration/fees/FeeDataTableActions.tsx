@@ -1,17 +1,18 @@
 "use client";
 
-import { useAlert } from "@/hooks/use-alert";
-import { useLocale } from "@/hooks/use-locale";
-import { exportTableToCSV } from "@/lib/export";
-import { getErrorMessage } from "@/lib/handle-error";
-import { AppRouter } from "@/server/api/root";
-import { api } from "@/trpc/react";
 import { DownloadIcon } from "@radix-ui/react-icons";
 import { Button } from "@repo/ui/button";
 import { type Table } from "@tanstack/react-table";
 import { inferProcedureOutput } from "@trpc/server";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
+
+import { useAlert } from "~/hooks/use-alert";
+import { useLocale } from "~/hooks/use-locale";
+import { exportTableToCSV } from "~/lib/export";
+import { getErrorMessage } from "~/lib/handle-error";
+import { AppRouter } from "~/server/api/root";
+import { api } from "~/trpc/react";
 
 type FeeProcedureOutput = NonNullable<
   inferProcedureOutput<AppRouter["fee"]["all"]>

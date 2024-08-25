@@ -1,5 +1,6 @@
-import { routes } from "@/configs/routes";
 import Link from "next/link";
+
+import { routes } from "~/configs/routes";
 
 export function ClassroomPrintOptions() {
   const items = [
@@ -42,7 +43,7 @@ export function ClassroomPrintOptions() {
     "Liste des paramètres",
   ];
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
       {items.map((item, index) => {
         return (
           <div className="flex flex-row gap-2" key={index}>
@@ -50,7 +51,7 @@ export function ClassroomPrintOptions() {
             <Link
               href={routes.reports.index}
               target="_blank"
-              className="hover:underline hover:text-blue-500"
+              className="hover:text-blue-500 hover:underline"
             >
               {item}
             </Link>

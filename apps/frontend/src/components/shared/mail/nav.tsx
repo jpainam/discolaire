@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { buttonVariants } from "@repo/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
 import { LucideIcon } from "lucide-react";
+
+import { cn } from "~/lib/utils";
 
 interface NavProps {
   isCollapsed: boolean;

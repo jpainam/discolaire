@@ -1,8 +1,5 @@
 "use client";
 
-import CalendarIcon from "@/components/icons/calendar";
-import YoutubeIcon from "@/components/icons/youtube";
-import { useLocale } from "@/hooks/use-locale";
 import {
   DropdownMenuItem,
   DropdownMenuPortal,
@@ -12,6 +9,10 @@ import {
   DropdownMenuSubTrigger,
 } from "@repo/ui/dropdown-menu";
 import { HelpCircleIcon, LibraryBig } from "lucide-react";
+
+import CalendarIcon from "~/components/icons/calendar";
+import YoutubeIcon from "~/components/icons/youtube";
+import { useLocale } from "~/hooks/use-locale";
 
 export function DropdownHelp() {
   const { t } = useLocale();

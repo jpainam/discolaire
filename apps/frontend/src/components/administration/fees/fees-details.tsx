@@ -1,9 +1,4 @@
 import { useTransition } from "react";
-import { Mail } from "@/app/(dashboard)/mail/data";
-import { DeletePopover } from "@/components/shared/buttons/delete-popover";
-import { useLocale } from "@/hooks/use-locale";
-import { getErrorMessage } from "@/lib/handle-error";
-import { api } from "@/trpc/react";
 import { Fee } from "@prisma/client";
 import { Button } from "@repo/ui/button";
 import {
@@ -17,6 +12,11 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
 import { CopyPlus, Forward, MoreVertical, Reply } from "lucide-react";
 import { toast } from "sonner";
 
+import { Mail } from "~/app/(dashboard)/mail/data";
+import { DeletePopover } from "~/components/shared/buttons/delete-popover";
+import { useLocale } from "~/hooks/use-locale";
+import { getErrorMessage } from "~/lib/handle-error";
+import { api } from "~/trpc/react";
 import { FeesDetailsForm } from "./fees-details-form";
 
 interface MailDisplayProps {

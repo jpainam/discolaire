@@ -1,6 +1,6 @@
 import { atom, useAtom } from "jotai";
 
-import { Mail, mails } from "@/app/(dashboard)/mail/data";
+import { Mail, mails } from "~/app/(dashboard)/mail/data";
 
 type SubMenuConfig = {
   selected: Mail["id"] | null;

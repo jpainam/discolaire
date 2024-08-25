@@ -1,7 +1,5 @@
 "use client";
 
-import { useLocale } from "@/hooks/use-locale";
-import { Student } from "@/types/student";
 import { Card, CardContent } from "@repo/ui/card";
 import {
   ChartConfig,
@@ -10,6 +8,9 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/chart";
 import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
+
+import { useLocale } from "~/hooks/use-locale";
+import { Student } from "~/types/student";
 
 export function RepeatingPie({ students }: { students: Student[] }) {
   const { t } = useLocale();

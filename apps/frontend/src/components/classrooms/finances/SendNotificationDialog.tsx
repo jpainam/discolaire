@@ -1,8 +1,3 @@
-import { DatePicker } from "@/components/shared/date-picker";
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
-import { getErrorMessage } from "@/lib/handle-error";
-import { sendEmail } from "@/server/services/messaging-service";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { Input } from "@repo/ui/input";
@@ -16,6 +11,12 @@ import {
 } from "@repo/ui/select";
 import { Textarea } from "@repo/ui/textarea";
 import { toast } from "sonner";
+
+import { DatePicker } from "~/components/shared/date-picker";
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
+import { getErrorMessage } from "~/lib/handle-error";
+import { sendEmail } from "~/server/services/messaging-service";
 
 export default function SendNotificationDialog() {
   const { openModal, closeModal } = useModal();

@@ -1,5 +1,3 @@
-import { makePaymentAtom } from "@/atoms/payment";
-import { useLocale } from "@/hooks/use-locale";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/button";
 import { Form } from "@repo/ui/form";
@@ -9,6 +7,8 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { makePaymentAtom } from "~/atoms/payment";
+import { useLocale } from "~/hooks/use-locale";
 import {
   AmountInput,
   DescriptionInput,

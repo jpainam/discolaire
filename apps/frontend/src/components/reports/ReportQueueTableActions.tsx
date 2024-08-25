@@ -1,7 +1,5 @@
 "use client";
 
-import { useLocale } from "@/hooks/use-locale";
-import { ReportQueue } from "@/types/report";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -13,6 +11,9 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import { Ban, CloudDownload, MoreHorizontal, RefreshCcw } from "lucide-react";
+
+import { useLocale } from "~/hooks/use-locale";
+import { ReportQueue } from "~/types/report";
 
 export function ReportQueueTableActions({ report }: { report: ReportQueue }) {
   const { t } = useLocale("print");

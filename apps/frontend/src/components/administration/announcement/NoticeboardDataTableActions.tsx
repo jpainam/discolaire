@@ -1,17 +1,17 @@
 "use client";
 
-import { useAlert } from "@/hooks/use-alert";
-import { useLocale } from "@/hooks/use-locale";
-import { useSheet } from "@/hooks/use-sheet";
-import { getErrorMessage } from "@/lib/handle-error";
-import { AppRouter } from "@/server/api/root";
-import { api } from "@/trpc/react";
 import { Button } from "@repo/ui/button";
 import { type Table } from "@tanstack/react-table";
 import { inferProcedureOutput } from "@trpc/server";
 import { Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import { useAlert } from "~/hooks/use-alert";
+import { useLocale } from "~/hooks/use-locale";
+import { useSheet } from "~/hooks/use-sheet";
+import { getErrorMessage } from "~/lib/handle-error";
+import { AppRouter } from "~/server/api/root";
+import { api } from "~/trpc/react";
 import { CreateEditAnnouncement } from "./CreateEditAnnouncement";
 
 type AnnouncementAllProcedureOutput = NonNullable<

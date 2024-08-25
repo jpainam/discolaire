@@ -1,6 +1,6 @@
-import { GradeSheetDataTable } from "@/components/classrooms/gradesheets/GradeSheetDataTable";
-import { GradeSheetHeader } from "@/components/classrooms/gradesheets/GradeSheetHeader";
-import { api } from "@/trpc/server";
+import { GradeSheetDataTable } from "~/components/classrooms/gradesheets/GradeSheetDataTable";
+import { GradeSheetHeader } from "~/components/classrooms/gradesheets/GradeSheetHeader";
+import { api } from "~/trpc/server";
 
 export default async function Page({
   params: { id },
@@ -18,7 +18,7 @@ export default async function Page({
   }
 
   return (
-    <div className="w-full flex flex-col gap-2">
+    <div className="flex w-full flex-col gap-2">
       <GradeSheetHeader />
       <GradeSheetDataTable gradesheets={gradesheets} />
     </div>

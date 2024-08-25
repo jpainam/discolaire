@@ -1,7 +1,5 @@
 "use client";
 
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -10,6 +8,8 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
 import { ReportCardStudentSummary } from "./ReportCardStudentSummary";
 
 export function ReportCardStudentTable() {

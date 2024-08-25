@@ -1,7 +1,4 @@
 import * as React from "react";
-import { Kbd } from "@/components/kbd";
-import { exportTableToCSV } from "@/lib/export";
-import { Student } from "@/types/student";
 import {
   ArrowUpIcon,
   CheckCircledIcon,
@@ -21,6 +18,10 @@ import {
 import { Separator } from "@repo/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
 import { type Table } from "@tanstack/react-table";
+
+import { Kbd } from "~/components/kbd";
+import { exportTableToCSV } from "~/lib/export";
+import { Student } from "~/types/student";
 
 interface ClassroomTableFloatingBarProps {
   table: Table<Student>;

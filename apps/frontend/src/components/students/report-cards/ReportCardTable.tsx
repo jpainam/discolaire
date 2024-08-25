@@ -2,11 +2,7 @@
 
 import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
-import { routes } from "@/configs/routes";
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
-//import { StudentReportCard } from "@/types/report-card";
-import { getAppreciations } from "@/utils/get-appreciation";
+//import { StudentReportCard } from "~/types/report-card";
 import FlatBadge, { FlatBadgeVariant } from "@repo/ui/FlatBadge";
 import {
   Table,
@@ -17,6 +13,11 @@ import {
   TableRow,
 } from "@repo/ui/table";
 import { sortBy, sum } from "lodash";
+
+import { routes } from "~/configs/routes";
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
+import { getAppreciations } from "~/utils/get-appreciation";
 
 export function ReportCardTable({ reportCard }: { reportCard: any[] }) {
   const { t } = useLocale();

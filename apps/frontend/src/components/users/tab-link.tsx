@@ -1,8 +1,10 @@
 "use client";
-import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
+
+import { cn } from "~/lib/utils";
 
 export function TabLink({
   title,
@@ -21,10 +23,10 @@ export function TabLink({
     <Link href={href} className="relative z-10">
       <div
         className={cn(
-          "rounded-full flex flex-row items-center gap-2 px-4 py-1.5 text-sm text-muted-foreground transition-all",
+          "flex flex-row items-center gap-2 rounded-full px-4 py-1.5 text-sm text-muted-foreground transition-all",
           isActive
-            ? "text-primary-foreground bg-primary"
-            : "hover:text-secondary-foreground"
+            ? "bg-primary text-primary-foreground"
+            : "hover:text-secondary-foreground",
         )}
       >
         {icon} {title}

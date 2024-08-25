@@ -1,13 +1,6 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import PDFIcon from "@/components/icons/pdf-solid";
-import XMLIcon from "@/components/icons/xml-solid";
-import { ClassroomSelector } from "@/components/shared/selects/ClassroomSelector";
-import { JournalSelector } from "@/components/shared/selects/JounalSelector";
-import { useCreateQueryString } from "@/hooks/create-query-string";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -17,6 +10,14 @@ import {
 } from "@repo/ui/dropdown-menu";
 import { Label } from "@repo/ui/label";
 import { MoreVertical, Plus } from "lucide-react";
+
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
+import { JournalSelector } from "~/components/shared/selects/JounalSelector";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
 
 export function FeeHeader() {
   const { t } = useLocale();

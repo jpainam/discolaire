@@ -1,8 +1,3 @@
-import { DatePickerField } from "@/components/shared/forms/date-picker-field";
-import { InputField } from "@/components/shared/forms/input-field";
-import { ClassroomSelector } from "@/components/shared/selects/ClassroomSelector";
-import { JournalSelector } from "@/components/shared/selects/JounalSelector";
-import { useLocale } from "@/hooks/use-locale";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Fee } from "@prisma/client";
 import { Button } from "@repo/ui/button";
@@ -20,6 +15,12 @@ import { Textarea } from "@repo/ui/textarea";
 import { Save } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { DatePickerField } from "~/components/shared/forms/date-picker-field";
+import { InputField } from "~/components/shared/forms/input-field";
+import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
+import { JournalSelector } from "~/components/shared/selects/JounalSelector";
+import { useLocale } from "~/hooks/use-locale";
 
 const editFeeFormSchema = z.object({
   code: z.string().min(1, "Code is required"),

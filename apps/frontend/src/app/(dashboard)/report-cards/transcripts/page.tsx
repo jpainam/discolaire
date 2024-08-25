@@ -1,6 +1,6 @@
-import { TranscriptClassroomGrid } from "@/components/grades/transcripts/transcript-classroom-grid";
-import { TranscriptGrid } from "@/components/grades/transcripts/transcript-grid";
-import { ClassroomSelector } from "@/components/shared/selects/ClassroomSelector";
+import { TranscriptClassroomGrid } from "~/components/grades/transcripts/transcript-classroom-grid";
+import { TranscriptGrid } from "~/components/grades/transcripts/transcript-grid";
+import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 
 type TranscriptPageProps = {
   searchParams: {

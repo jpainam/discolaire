@@ -1,7 +1,7 @@
 // 'use client' PLease AVOID MAKING Pages as CLIENT
-import { AssignmentDataTable } from "@/components/classrooms/assignments/AssignmentDataTable";
-import { AssignmentHeader } from "@/components/classrooms/assignments/AssignmentHeader";
-import { api } from "@/trpc/server";
+import { AssignmentDataTable } from "~/components/classrooms/assignments/AssignmentDataTable";
+import { AssignmentHeader } from "~/components/classrooms/assignments/AssignmentHeader";
+import { api } from "~/trpc/server";
 
 type AssignmentPageProps = {
   searchParams: {
@@ -29,28 +29,28 @@ export default async function Page({
       <AssignmentHeader />
       <AssignmentDataTable assignments={assignemts} />
       <div className="overflow-x-auto">
-        <table className="min-w-full dark:bg-gray-800 bg-white border border-gray-200">
+        <table className="min-w-full border border-gray-200 bg-white dark:bg-gray-800">
           <thead>
             <tr>
-              <th className="py-2 px-4 border-b">Title</th>
-              <th className="py-2 px-4 border-b">Due Date</th>
-              <th className="py-2 px-4 border-b">Visible to Parents</th>
+              <th className="border-b px-4 py-2">Title</th>
+              <th className="border-b px-4 py-2">Due Date</th>
+              <th className="border-b px-4 py-2">Visible to Parents</th>
             </tr>
           </thead>
           <tbody>
             {assignemts.map((assignment) => (
               <tr key={assignment.id}>
                 <td
-                  className="py-2 px-4 border-b text-blue-500 cursor-pointer"
+                  className="cursor-pointer border-b px-4 py-2 text-blue-500"
                   //onClick={() => handleTitleClick(assignment.id)}
                 >
                   {assignment.title}
                 </td>
-                <td className="py-2 px-4 border-b">
+                <td className="border-b px-4 py-2">
                   {assignment.dueDate &&
                     new Date(assignment.dueDate).toLocaleDateString()}
                 </td>
-                <td className="py-2 px-4 border-b">
+                <td className="border-b px-4 py-2">
                   {assignment.visibles ? "Yes" : "No"}
                 </td>
               </tr>

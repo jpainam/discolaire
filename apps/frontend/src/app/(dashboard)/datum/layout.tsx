@@ -1,5 +1,6 @@
-import { SubMenuNav } from "@/layouts/submenu-nav";
 import React from "react";
+
+import { SubMenuNav } from "~/layouts/submenu-nav";
 
 export default function SearchLayout({
   children,

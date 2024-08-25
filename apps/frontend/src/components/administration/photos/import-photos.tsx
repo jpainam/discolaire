@@ -1,7 +1,5 @@
 "use client";
 
-import { SelectField } from "@/components/shared/forms/SelectField";
-import { useLocale } from "@/hooks/use-locale";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
@@ -16,6 +14,9 @@ import { Separator } from "@repo/ui/separator";
 import { Upload } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { SelectField } from "~/components/shared/forms/SelectField";
+import { useLocale } from "~/hooks/use-locale";
 
 const importPhotoSchema = z.object({
   firstRow: z.boolean(),

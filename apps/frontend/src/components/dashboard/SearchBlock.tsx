@@ -1,7 +1,5 @@
 "use client";
 
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/button";
 import {
@@ -15,6 +13,9 @@ import {
 import { Input } from "@repo/ui/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
 
 const FormSchema = z.object({
   q: z.string().min(2),

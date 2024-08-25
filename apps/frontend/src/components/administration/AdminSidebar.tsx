@@ -1,4 +1,5 @@
 "use client";
+
 import {
   CalendarDays,
   DollarSign,
@@ -7,13 +8,13 @@ import {
   Mails,
   RefreshCcw,
   Settings,
-  UserSearch,
   Users,
+  UserSearch,
 } from "lucide-react";
 
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
-import { api } from "@/trpc/react";
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
 import { useCreateQueryString } from "../../hooks/create-query-string";
 import { Separator } from "../ui/separator";
 import { AdminNav } from "./admin-nav";

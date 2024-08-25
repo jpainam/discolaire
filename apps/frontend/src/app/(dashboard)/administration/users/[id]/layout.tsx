@@ -1,4 +1,4 @@
-import UserNavigation from "@/components/administration/users/user-navigation";
+import UserNavigation from "~/components/administration/users/user-navigation";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

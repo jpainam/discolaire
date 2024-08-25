@@ -1,10 +1,6 @@
 "use client";
 
 import React, { useEffect, useMemo } from "react";
-import { useLocale } from "@/hooks/use-locale";
-import { showErrorToast } from "@/lib/handle-error";
-import { cn } from "@/lib/utils";
-import { api } from "@/trpc/react";
 import {
   Card,
   CardContent,
@@ -20,6 +16,11 @@ import {
 } from "@repo/ui/chart";
 import { Skeleton } from "@repo/ui/skeleton";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+
+import { useLocale } from "~/hooks/use-locale";
+import { showErrorToast } from "~/lib/handle-error";
+import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
 
 export function DashboardClassroomSize({ className }: { className?: string }) {
   const { t } = useLocale();

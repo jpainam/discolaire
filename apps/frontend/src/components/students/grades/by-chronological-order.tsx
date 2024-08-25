@@ -1,12 +1,14 @@
 "use client";
-import { routes } from "@/configs/routes";
-import { useCreateQueryString } from "@/hooks/create-query-string";
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
 
-import { Grade } from "@/types/grade";
-import { useDateFormat } from "@/utils/date-format";
 import { useParams, useRouter } from "next/navigation";
+
+import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
+import { Grade } from "~/types/grade";
+import { useDateFormat } from "~/utils/date-format";
+
 interface ByChronologicalOrderProps {
   grades: Grade[];
   minMaxMoy: {
@@ -66,22 +68,22 @@ export function ByChronologicalOrder({
                 coef: grade.gradeSheet?.subject?.coefficient?.toString() ?? "-",
               };
               router.push(
-                `${routes.students.grades(params.id)}/${grade?.id}/?${createQueryString({ ...query })}`
+                `${routes.students.grades(params.id)}/${grade?.id}/?${createQueryString({ ...query })}`,
               );
             }}
             key={grade.id}
             className={cn(
-              "flex cursor-pointer flex-row gap-4 items-center border-b border-accent py-2 px-4",
-              grade.id === Number(params?.gradeId) ? "bg-accent" : "bg-none"
+              "flex cursor-pointer flex-row items-center gap-4 border-b border-accent px-4 py-2",
+              grade.id === Number(params?.gradeId) ? "bg-accent" : "bg-none",
             )}
           >
-            <div className="flex w-auto  justify-center flex-col">
-              <div className="bg-secondary px-1 text-xs mb-1 flex flex-col items-center rounded-md">
+            <div className="flex w-auto flex-col justify-center">
+              <div className="mb-1 flex flex-col items-center rounded-md bg-secondary px-1 text-xs">
                 <div>{d}</div>
                 <div>{m}</div>
               </div>
               <div
-                className="w-full h-1 rounded-sm"
+                className="h-1 w-full rounded-sm"
                 style={{
                   backgroundColor:
                     grade.gradeSheet?.subject?.course?.color ?? "lightgray",
@@ -89,10 +91,10 @@ export function ByChronologicalOrder({
               ></div>
             </div>
             <div className="flex flex-col gap-0">
-              <div className="uppercase text-sm py-0 font-bold">
+              <div className="py-0 text-sm font-bold uppercase">
                 {grade.gradeSheet?.subject?.course?.name}
               </div>
-              <div className="text-sm py-0  text-muted-foreground">
+              <div className="py-0 text-sm text-muted-foreground">
                 {grade.gradeSheet?.name}
               </div>
               <div className="py-0 text-xs text-muted-foreground">
@@ -102,9 +104,9 @@ export function ByChronologicalOrder({
                   ?.avg?.toFixed(2)}
               </div>
             </div>
-            <div className="ml-auto text-sm flex flex-col">
-              <span className=" font-bold">{grade.grade}</span>
-              <span className="text-muted-foreground text-xs">
+            <div className="ml-auto flex flex-col text-sm">
+              <span className="font-bold">{grade.grade}</span>
+              <span className="text-xs text-muted-foreground">
                 {grade.gradeSheet?.term?.name}
               </span>
             </div>

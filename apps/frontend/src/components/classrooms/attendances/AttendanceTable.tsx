@@ -2,11 +2,6 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { AvatarState } from "@/components/AvatarState";
-import { useLocale } from "@/hooks/use-locale";
-import { showErrorToast } from "@/lib/handle-error";
-import { api } from "@/trpc/react";
-import { getFullName } from "@/utils/full-name";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import { Form } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
@@ -20,6 +15,11 @@ import {
 } from "@repo/ui/table";
 import { useForm } from "react-hook-form";
 
+import { AvatarState } from "~/components/AvatarState";
+import { useLocale } from "~/hooks/use-locale";
+import { showErrorToast } from "~/lib/handle-error";
+import { api } from "~/trpc/react";
+import { getFullName } from "~/utils/full-name";
 import { routes } from "../../../configs/routes";
 
 export function AttendanceTable() {

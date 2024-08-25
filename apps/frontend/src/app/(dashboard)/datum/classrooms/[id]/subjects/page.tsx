@@ -1,5 +1,5 @@
-import { SubjectDataTable } from "@/components/classrooms/subjects/SubjectDataTable";
-import { SubjectHeader } from "@/components/classrooms/subjects/SubjectHeader";
+import { SubjectDataTable } from "~/components/classrooms/subjects/SubjectDataTable";
+import { SubjectHeader } from "~/components/classrooms/subjects/SubjectHeader";
 
 export default async function Page({
   params: { id },
@@ -7,7 +7,7 @@ export default async function Page({
   params: { id: string };
 }) {
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex w-full flex-col">
       <SubjectHeader />
       {/* <SubjectStats subjects={subjects} /> */}
       <SubjectDataTable />

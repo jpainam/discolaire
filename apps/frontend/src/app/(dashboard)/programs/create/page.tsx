@@ -1,4 +1,4 @@
-import { CreateProgramContent } from "@/components/programs/create/create-content";
+import { CreateProgramContent } from "~/components/programs/create/create-content";
 
 export default function Page() {
   return (

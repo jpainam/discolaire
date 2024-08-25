@@ -1,6 +1,6 @@
-import { getServerTranslations } from "@/app/i18n/server";
-import MakePaymentStepper from "@/components/students/transactions/create";
-import MakePaymentToolbar from "@/components/students/transactions/create/MakePaymentToolbar";
+import { getServerTranslations } from "~/app/i18n/server";
+import MakePaymentStepper from "~/components/students/transactions/create";
+import MakePaymentToolbar from "~/components/students/transactions/create/MakePaymentToolbar";
 
 export default async function Page() {
   const { t } = await getServerTranslations();

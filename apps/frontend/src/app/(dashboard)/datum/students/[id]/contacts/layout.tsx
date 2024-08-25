@@ -1,10 +1,11 @@
-import { SignUpContact } from "@/components/students/contacts/SignUpContact";
-import { StudentContactHeader } from "@/components/students/contacts/StudentContactHeader";
-import { StudentContactTable } from "@/components/students/contacts/StudentContactTable";
-import { checkPermissions } from "@/server/permission";
-import { PermissionAction } from "@/types/permission";
 import { NoPermission } from "@repo/ui/NoPermission";
 import { Separator } from "@repo/ui/separator";
+
+import { SignUpContact } from "~/components/students/contacts/SignUpContact";
+import { StudentContactHeader } from "~/components/students/contacts/StudentContactHeader";
+import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";
+import { checkPermissions } from "~/server/permission";
+import { PermissionAction } from "~/types/permission";
 
 export default async function Layout({
   children,

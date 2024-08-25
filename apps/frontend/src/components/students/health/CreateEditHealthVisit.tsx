@@ -1,10 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { FileUploader } from "@/components/uploads/file-uploader";
-import { useLocale } from "@/hooks/use-locale";
-import { useSheet } from "@/hooks/use-sheet";
-import { useUploadFile } from "@/hooks/use-upload-file";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Accordion,
@@ -30,6 +26,11 @@ import { Separator } from "@repo/ui/separator";
 import { Textarea } from "@repo/ui/textarea";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { FileUploader } from "~/components/uploads/file-uploader";
+import { useLocale } from "~/hooks/use-locale";
+import { useSheet } from "~/hooks/use-sheet";
+import { useUploadFile } from "~/hooks/use-upload-file";
 
 const createEditVisitSchema = z.object({
   date: z.coerce.date(),

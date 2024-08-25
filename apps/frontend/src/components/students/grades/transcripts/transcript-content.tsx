@@ -2,16 +2,16 @@
 
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import { ExportButton } from "@/components/shared/buttons/export-button";
-import { TermSelector } from "@/components/shared/selects/TermSelector";
-import { useLocale } from "@/hooks/use-locale";
-import { api } from "@/trpc/react";
-import { getFullName } from "@/utils/full-name";
 import { Accordion } from "@repo/ui/accordion";
 import { Checkbox } from "@repo/ui/checkbox";
 import { Label } from "@repo/ui/label";
 import { Skeleton } from "@repo/ui/skeleton";
 
+import { ExportButton } from "~/components/shared/buttons/export-button";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { useLocale } from "~/hooks/use-locale";
+import { api } from "~/trpc/react";
+import { getFullName } from "~/utils/full-name";
 import { TranscriptItem } from "./transcript-item";
 
 export function TranscriptContent() {

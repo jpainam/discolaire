@@ -1,5 +1,4 @@
 import React from "react";
-import { cn } from "@/lib/utils";
 import { Checkbox } from "@repo/ui/checkbox";
 import {
   FormControl,
@@ -10,6 +9,8 @@ import {
   FormMessage,
 } from "@repo/ui/form";
 import { useFormContext } from "react-hook-form";
+
+import { cn } from "~/lib/utils";
 
 type InputFieldProps = {
   label?: React.ReactNode;

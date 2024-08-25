@@ -1,6 +1,6 @@
-import { getServerTranslations } from "@/app/i18n/server";
-import { NotificationHeader } from "@/components/students/notifications/NotificationHeader";
-import NotificationList from "@/components/students/notifications/NotificationList";
+import { getServerTranslations } from "~/app/i18n/server";
+import { NotificationHeader } from "~/components/students/notifications/NotificationHeader";
+import NotificationList from "~/components/students/notifications/NotificationList";
 
 export default async function Page({
   params: { id },

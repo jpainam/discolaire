@@ -1,6 +1,3 @@
-import { getServerTranslations } from "@/app/i18n/server";
-import { CURRENCY } from "@/lib/constants";
-import { api } from "@/trpc/server";
 import { sumBy } from "lodash";
 import {
   BookUser,
@@ -16,6 +13,10 @@ import {
   TableProperties,
 } from "lucide-react";
 
+import { getServerTranslations } from "~/app/i18n/server";
+import { CURRENCY } from "~/lib/constants";
+import { api } from "~/trpc/server";
+
 export async function ClassroomDetails({
   classroomId,
 }: {
@@ -25,11 +26,11 @@ export async function ClassroomDetails({
   const fees = await api.classroom.fees(classroomId);
   const classroom = await api.classroom.get(classroomId);
   return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-2 divide-x w-full">
+    <div className="grid w-full gap-2 divide-x md:grid-cols-2 lg:grid-cols-3">
       <ul className="grid gap-3 p-2 text-sm">
         <li className="flex items-center justify-between">
-          <div className="text-muted-foreground flex flex-row gap-1 items-center">
-            <TableProperties className="w-4 h-4" />
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <TableProperties className="h-4 w-4" />
             {t("name")}
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
@@ -37,8 +38,8 @@ export async function ClassroomDetails({
           </span>
         </li>
         <li className="flex items-center justify-between">
-          <div className="text-muted-foreground flex flex-row gap-1 items-center">
-            <File className="w-4 h-4" />
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <File className="h-4 w-4" />
             {t("shortName")}
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
@@ -46,8 +47,8 @@ export async function ClassroomDetails({
           </span>
         </li>
         <li className="flex items-center justify-between">
-          <div className="text-muted-foreground flex flex-row gap-1 items-center">
-            <SquareLibrary className="w-4 h-4" />
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <SquareLibrary className="h-4 w-4" />
             {t("section")}
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
@@ -55,8 +56,8 @@ export async function ClassroomDetails({
           </span>
         </li>
         <li className="flex items-center justify-between">
-          <div className="text-muted-foreground flex flex-row gap-1 items-center">
-            <CircleDollarSign className="w-4 h-4" />
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <CircleDollarSign className="h-4 w-4" />
             {t("fees")}
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
@@ -66,8 +67,8 @@ export async function ClassroomDetails({
       </ul>
       <ul className="grid gap-3 p-2 text-sm">
         <li className="flex items-center justify-between">
-          <div className="text-muted-foreground flex flex-row gap-1 items-center">
-            <Newspaper className="w-4 h-4" />
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <Newspaper className="h-4 w-4" />
             <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
               {t("reportName")}
             </span>
@@ -77,8 +78,8 @@ export async function ClassroomDetails({
           </span>
         </li>
         <li className="flex items-center justify-between">
-          <div className="text-muted-foreground flex flex-row gap-1 items-center">
-            <CircleGauge className="w-4 h-4" />
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <CircleGauge className="h-4 w-4" />
             {t("level")}
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
@@ -86,8 +87,8 @@ export async function ClassroomDetails({
           </span>
         </li>
         <li className="flex items-center justify-between">
-          <div className="text-muted-foreground flex flex-row gap-1 items-center">
-            <Recycle className="w-4 h-4" />
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <Recycle className="h-4 w-4" />
             {t("cycle")}
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
@@ -101,8 +102,8 @@ export async function ClassroomDetails({
       </ul>
       <ul className="grid gap-3 p-2 text-sm">
         <li className="flex items-center justify-between">
-          <div className="text-muted-foreground flex flex-row gap-1 items-center">
-            <SquareUser className="w-4 h-4" />
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <SquareUser className="h-4 w-4" />
             <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
               {t("senior_advisor")}
             </span>
@@ -112,8 +113,8 @@ export async function ClassroomDetails({
           </span>
         </li>
         <li className="flex items-center justify-between">
-          <div className="text-muted-foreground flex flex-row gap-1 items-center">
-            <BookUser className="w-4 h-4" />
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <BookUser className="h-4 w-4" />
             {t("classroom_leader")}
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
@@ -121,8 +122,8 @@ export async function ClassroomDetails({
           </span>
         </li>
         <li className="flex items-center justify-between">
-          <div className="text-muted-foreground flex flex-row gap-1 items-center">
-            <Hash className="w-4 h-4" />
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <Hash className="h-4 w-4" />
             {t("max_size")}
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
@@ -130,8 +131,8 @@ export async function ClassroomDetails({
           </span>
         </li>
         <li className="flex items-center justify-between">
-          <div className="text-muted-foreground flex flex-row gap-1 items-center">
-            <CircleUser className="w-4 h-4" />
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <CircleUser className="h-4 w-4" />
             {t("head_teacher")}
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">

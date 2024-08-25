@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { cn } from "@/lib/utils";
 import { Button } from "@repo/ui/button";
+
+import { cn } from "~/lib/utils";
 
 type ViewButtonProps = {
   asLink?: boolean;

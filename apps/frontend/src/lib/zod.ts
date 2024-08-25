@@ -1,4 +1,3 @@
-import { useLocale } from "@/hooks/use-locale";
 import { i18n } from "i18next";
 import {
   defaultErrorMap,
@@ -7,6 +6,8 @@ import {
   ZodIssueCode,
   ZodParsedType,
 } from "zod";
+
+import { useLocale } from "~/hooks/use-locale";
 
 const jsonStringifyReplacer = (_: string, value: any): any => {
   if (typeof value === "bigint") {
@@ -33,7 +34,7 @@ const isRecord = (value: unknown): value is Record<string, unknown> => {
 
 const getKeyAndValues = (
   param: unknown,
-  defaultKey: string
+  defaultKey: string,
 ): {
   values: Record<string, unknown>;
   key: string;
@@ -98,7 +99,7 @@ export const makeZodI18nMap: MakeZodI18nMap = (option) => (issue, ctx) => {
             {
               ns: handlePath.ns,
               defaultValue: issue.path.join("."),
-            }
+            },
           ),
         }
       : {};
@@ -243,7 +244,7 @@ export const makeZodI18nMap: MakeZodI18nMap = (option) => (issue, ctx) => {
           ns,
           defaultValue: message,
           ...path,
-        }
+        },
       );
       break;
     case ZodIssueCode.too_big:
@@ -265,13 +266,13 @@ export const makeZodI18nMap: MakeZodI18nMap = (option) => (issue, ctx) => {
           ns,
           defaultValue: message,
           ...path,
-        }
+        },
       );
       break;
     case ZodIssueCode.custom:
       const { key, values } = getKeyAndValues(
         issue.params?.i18n,
-        "errors.custom"
+        "errors.custom",
       );
 
       message = t(key, {

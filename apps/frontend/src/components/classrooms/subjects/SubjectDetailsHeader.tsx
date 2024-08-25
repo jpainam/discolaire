@@ -3,8 +3,6 @@
 import { Fragment } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { routes } from "@/configs/routes";
-import { useLocale } from "@/hooks/use-locale";
 import {
   BreadCrumb,
   BreadCrumbItem,
@@ -19,6 +17,8 @@ import {
 } from "@repo/ui/dropdown-menu";
 import { MoreVertical } from "lucide-react";
 
+import { routes } from "~/configs/routes";
+import { useLocale } from "~/hooks/use-locale";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function SubjectDetailsHeader() {

@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { routes } from "@/configs/routes";
-import { useLocale } from "@/hooks/use-locale";
 import {
   BreadCrumb,
   BreadCrumbItem,
   BreadCrumbSeparator,
 } from "@repo/ui/BreadCrumb";
+
+import { routes } from "~/configs/routes";
+import { useLocale } from "~/hooks/use-locale";
 
 export const MakePaymentBreadCrumb = () => {
   const { t } = useLocale();

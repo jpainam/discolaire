@@ -1,6 +1,6 @@
 "use client";
 
-import { useLocale } from "@/hooks/use-locale";
+import { useLocale } from "~/hooks/use-locale";
 import { GradeSheetTable } from "./gradesheet-table";
 
 export function GradeSheetContent({ studentId }: { studentId: string }) {

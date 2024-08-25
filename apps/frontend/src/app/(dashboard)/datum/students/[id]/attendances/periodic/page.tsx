@@ -1,4 +1,4 @@
-import { PeriodicAttendanceTable } from "@/components/students/attendances/periodic/PeriodicAttendanceTable";
+import { PeriodicAttendanceTable } from "~/components/students/attendances/periodic/PeriodicAttendanceTable";
 
 export default function Page({
   params: { id },

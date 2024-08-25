@@ -1,10 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { Icons } from "@/components/icons";
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
-import { validateAuth } from "@/server/validateAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { Button } from "@repo/ui/button";
@@ -21,6 +17,11 @@ import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+
+import { Icons } from "~/components/icons";
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
+import { validateAuth } from "~/server/validateAuth";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 

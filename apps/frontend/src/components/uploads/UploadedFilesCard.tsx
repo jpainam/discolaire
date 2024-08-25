@@ -1,4 +1,3 @@
-import type { UploadedFile } from "@/types/uploaded-file";
 import Image from "next/image";
 import {
   Card,
@@ -9,6 +8,7 @@ import {
 } from "@repo/ui/card";
 import { ScrollArea, ScrollBar } from "@repo/ui/scroll-area";
 
+import type { UploadedFile } from "~/types/uploaded-file";
 import { EmptyCard } from "./EmptyCard";
 
 interface UploadedFilesCardProps {

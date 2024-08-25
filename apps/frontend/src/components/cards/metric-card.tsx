@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn } from "~/lib/utils";
 
 const metricCardClasses = {
   base: "border border-muted bg-gray-0 p-5 dark:bg-gray-50 lg:p-6",
@@ -69,7 +69,7 @@ export default function MetricCard({
             </div>
             <div
               className={cn(
-                "font-lexend text-lg font-semibold text-gray-900 ",
+                "font-lexend text-lg font-semibold text-gray-900",
                 metricClassName,
               )}
             >

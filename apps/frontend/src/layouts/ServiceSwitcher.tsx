@@ -1,8 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { env } from "@/env";
-import { useLocale } from "@/hooks/use-locale";
 import { Button } from "@repo/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import {
@@ -14,6 +12,9 @@ import {
   LucideIcon,
   MailIcon,
 } from "lucide-react";
+
+import { env } from "~/env";
+import { useLocale } from "~/hooks/use-locale";
 
 interface ServiceItem {
   title: string;

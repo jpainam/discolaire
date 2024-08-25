@@ -1,11 +1,11 @@
 "use client";
 
-import PDFIcon from "@/components/icons/pdf-solid";
-import XMLIcon from "@/components/icons/xml-solid";
-import { useLocale } from "@/hooks/use-locale";
 import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
 
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { useLocale } from "~/hooks/use-locale";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function AccessLogsHeader() {

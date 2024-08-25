@@ -1,7 +1,5 @@
 "use client";
 
-import { useLocale } from "@/hooks/use-locale";
-import { Classroom } from "@/types/classroom";
 import { Card, CardContent } from "@repo/ui/card";
 import {
   ChartConfig,
@@ -10,6 +8,9 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/chart";
 import { LabelList, Pie, PieChart } from "recharts";
+
+import { useLocale } from "~/hooks/use-locale";
+import { Classroom } from "~/types/classroom";
 
 export function GenderPie({ classroom }: { classroom: Classroom }) {
   const { t } = useLocale();

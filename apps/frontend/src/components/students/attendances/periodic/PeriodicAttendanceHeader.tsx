@@ -1,11 +1,6 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { TermSelector } from "@/components/shared/selects/TermSelector";
-import { useCreateQueryString } from "@/hooks/create-query-string";
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
-import { useRouter } from "@/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -19,6 +14,11 @@ import { Label } from "@repo/ui/label";
 import { MoreVertical, Plus } from "lucide-react";
 import { toast } from "sonner";
 
+import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
+import { useRouter } from "~/hooks/use-router";
 import { CreateEditPeriodicAttendance } from "./CreateEditPeriodicAttendance";
 
 export function PeriodicAttendanceHeader() {

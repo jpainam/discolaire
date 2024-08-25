@@ -1,7 +1,5 @@
 "use client";
 
-import { useAlert } from "@/hooks/use-alert";
-import { useLocale } from "@/hooks/use-locale";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -19,6 +17,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
+import { useAlert } from "~/hooks/use-alert";
+import { useLocale } from "~/hooks/use-locale";
 import { FileTypeSelector } from "./FileTypeSelector";
 import { LastModifiedSelector } from "./LastModifiedSelector";
 import { ViewSwitcher } from "./ViewSwitcher";

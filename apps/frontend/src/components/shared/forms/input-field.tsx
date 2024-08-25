@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import {
   FormControl,
   FormDescription,
@@ -11,6 +10,8 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { useFormContext } from "react-hook-form";
+
+import { cn } from "~/lib/utils";
 
 type InputFieldProps = {
   label?: string;

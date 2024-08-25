@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { useAlert } from "@/hooks/use-alert";
-import { useLocale } from "@/hooks/use-locale";
-import { getErrorMessage } from "@/lib/handle-error";
-import { api } from "@/trpc/react";
-import { AppreciationCategory } from "@/types/appreciation";
 import { Input } from "@repo/ui/input";
 import { XIcon } from "lucide-react";
 import { toast } from "sonner";
+
+import { useAlert } from "~/hooks/use-alert";
+import { useLocale } from "~/hooks/use-locale";
+import { getErrorMessage } from "~/lib/handle-error";
+import { api } from "~/trpc/react";
+import { AppreciationCategory } from "~/types/appreciation";
 
 export function CreateEditAppreciationCategory({
   category,

@@ -1,22 +1,23 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { routes } from "@/configs/routes";
-import { useCreateQueryString } from "@/hooks/create-query-string";
-import { useAlert } from "@/hooks/use-alert";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
-import { useSheet } from "@/hooks/use-sheet";
-import { exportTableToCSV } from "@/lib/export";
-import { getErrorMessage } from "@/lib/handle-error";
-import { AppRouter } from "@/server/api/root";
-import { api } from "@/trpc/react";
 import { DownloadIcon, PlusIcon } from "@radix-ui/react-icons";
 import { Button } from "@repo/ui/button";
 import { type Table } from "@tanstack/react-table";
 import { inferProcedureOutput } from "@trpc/server";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
+
+import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useAlert } from "~/hooks/use-alert";
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
+import { useSheet } from "~/hooks/use-sheet";
+import { exportTableToCSV } from "~/lib/export";
+import { getErrorMessage } from "~/lib/handle-error";
+import { AppRouter } from "~/server/api/root";
+import { api } from "~/trpc/react";
 
 type ClassroomGradeSheetProcedureOutput = NonNullable<
   inferProcedureOutput<AppRouter["classroom"]["gradesheets"]>

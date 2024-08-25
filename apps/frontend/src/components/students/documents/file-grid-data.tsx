@@ -1,8 +1,8 @@
-import DocIcon from "@/components/icons/doc-solid";
-import FolderIcon from "@/components/icons/folder-solid";
-import ImageIcon from "@/components/icons/image-solid";
-import PDFIcon from "@/components/icons/pdf-solid";
-import XMLIcon from "@/components/icons/xml-solid";
+import DocIcon from "~/components/icons/doc-solid";
+import FolderIcon from "~/components/icons/folder-solid";
+import ImageIcon from "~/components/icons/image-solid";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
 
 export const fileGridData = [
   {

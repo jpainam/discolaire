@@ -1,9 +1,11 @@
 "use client";
-import { useLocale } from "@/hooks/use-locale";
-import { Student } from "@/types/student";
-import { useDateFormat } from "@/utils/date-format";
-import { ColumnDef } from "@tanstack/react-table";
+
 import { useMemo } from "react";
+import { ColumnDef } from "@tanstack/react-table";
+
+import { useLocale } from "~/hooks/use-locale";
+import { Student } from "~/types/student";
+import { useDateFormat } from "~/utils/date-format";
 import { fetchStudentColumns } from "./students-table-columns";
 
 export function StudentsTable() {
@@ -22,7 +24,7 @@ export function StudentsTable() {
         dateFormatter: fullDateFormatter,
         schoolYearId: schoolYearId ?? "",
       }),
-    [] // eslint-disable-line react-hooks/exhaustive-deps
+    [], // eslint-disable-line react-hooks/exhaustive-deps
   );
   // const filterableColumns = fetchFilterableColumns({ t: t });
   // const { table } = useDataTable({

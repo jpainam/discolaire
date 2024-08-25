@@ -1,10 +1,6 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { routes } from "@/configs/routes";
-import { useCreateQueryString } from "@/hooks/create-query-string";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,6 +11,10 @@ import {
 import { Label } from "@repo/ui/label";
 import { ChevronDown, MailIcon, Printer } from "lucide-react";
 
+import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
 import { ClassroomSelector } from "../shared/selects/ClassroomSelector";

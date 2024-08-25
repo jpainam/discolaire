@@ -1,10 +1,11 @@
 import React from "react";
-import { Callout } from "@/components/callout";
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
 import { Button } from "@repo/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { PiTrashFill } from "react-icons/pi";
+
+import { Callout } from "~/components/callout";
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
 
 type DeletePopoverProps = {
   title: string;

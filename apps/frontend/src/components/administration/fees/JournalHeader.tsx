@@ -1,9 +1,5 @@
 "use client";
 
-import PDFIcon from "@/components/icons/pdf-solid";
-import XMLIcon from "@/components/icons/xml-solid";
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -14,6 +10,10 @@ import {
 import { Label } from "@repo/ui/label";
 import { ChevronDown, Plus, Printer } from "lucide-react";
 
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
 import { CreateEditJournal } from "./CreateEditJournal";
 
 export function JournalHeader() {

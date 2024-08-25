@@ -1,11 +1,11 @@
-import BrushSolidIcon from "@/components/icons/brush-solid";
-import BulbSolidIcon from "@/components/icons/bulb-solid";
-import CloudTaskIcon from "@/components/icons/cloud-task";
-import CubeSolidIcon from "@/components/icons/cube-solid";
-import FileStackIcon from "@/components/icons/file-stack";
-import ParcelMapIcon from "@/components/icons/parcel-map";
-import ShoppingBagSolidIcon from "@/components/icons/shopping-bag-solid";
-import TruckSolidIcon from "@/components/icons/truck-solid";
+import BrushSolidIcon from "~/components/icons/brush-solid";
+import BulbSolidIcon from "~/components/icons/bulb-solid";
+import CloudTaskIcon from "~/components/icons/cloud-task";
+import CubeSolidIcon from "~/components/icons/cube-solid";
+import FileStackIcon from "~/components/icons/file-stack";
+import ParcelMapIcon from "~/components/icons/parcel-map";
+import ShoppingBagSolidIcon from "~/components/icons/shopping-bag-solid";
+import TruckSolidIcon from "~/components/icons/truck-solid";
 
 export const notificationsData = [
   {

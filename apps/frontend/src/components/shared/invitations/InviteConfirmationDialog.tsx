@@ -1,13 +1,14 @@
-import { SendInvite } from "@/email-templates/SendInvite";
-import { env } from "@/env";
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
-import { getErrorMessage } from "@/lib/handle-error";
-import { sendEmail } from "@/server/services/messaging-service";
-import { encryptInvitationCode } from "@/utils/encrypt";
 import { render } from "@react-email/components";
 import { Button } from "@repo/ui/button";
 import { toast } from "sonner";
+
+import { SendInvite } from "~/email-templates/SendInvite";
+import { env } from "~/env";
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
+import { getErrorMessage } from "~/lib/handle-error";
+import { sendEmail } from "~/server/services/messaging-service";
+import { encryptInvitationCode } from "~/utils/encrypt";
 
 export function InviteConfirmationDialog({
   email,

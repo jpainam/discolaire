@@ -1,13 +1,13 @@
 "use client";
 
-import { studentReportsAtom } from "@/atoms/report-atom";
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
-import { Report } from "@/types/report";
 import { Checkbox } from "@repo/ui/checkbox";
 import { Label } from "@repo/ui/label";
 import { useAtom } from "jotai";
 
+import { studentReportsAtom } from "~/atoms/report-atom";
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
+import { Report } from "~/types/report";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
 

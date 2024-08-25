@@ -1,7 +1,7 @@
-import { ClassroomHeader } from "@/components/classrooms/ClassroomHeader";
-import { ClassroomSidebar } from "@/components/classrooms/ClassroomSidebar";
-
 import React from "react";
+
+import { ClassroomHeader } from "~/components/classrooms/ClassroomHeader";
+import { ClassroomSidebar } from "~/components/classrooms/ClassroomSidebar";
 
 export default async function Layout({
   children,

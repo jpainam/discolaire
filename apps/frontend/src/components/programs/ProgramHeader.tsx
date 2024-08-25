@@ -1,7 +1,8 @@
 "use client";
 
-import { useLocale } from "@/hooks/use-locale";
 import { useQueryState } from "nuqs";
+
+import { useLocale } from "~/hooks/use-locale";
 import { DatePicker } from "../shared/date-picker";
 import { ToggleSelector } from "../shared/forms/toggle-selector";
 import { ProgramThemeSelector } from "../shared/selects/ProgramThemeSelector";
@@ -18,8 +19,8 @@ export function ProgramHeader() {
   ];
 
   return (
-    <div className="bg-muted text-sm  gap-4 flex items-center flex-row px-4 py-1">
-      <div className="flex ">{t("content_and_educational_ressources")}</div>
+    <div className="flex flex-row items-center gap-4 bg-muted px-4 py-1 text-sm">
+      <div className="flex">{t("content_and_educational_ressources")}</div>
       <ToggleSelector
         items={toggleItems}
         defaultValue={"1"}

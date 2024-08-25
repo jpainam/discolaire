@@ -1,8 +1,8 @@
-import { GridViewFinanceCard } from "@/components/classrooms/finances/GridViewFinanceCard";
-import { ListViewFinance } from "@/components/classrooms/finances/ListViewFinance";
-
-import { api } from "@/trpc/server";
 import { sumBy } from "lodash";
+
+import { GridViewFinanceCard } from "~/components/classrooms/finances/GridViewFinanceCard";
+import { ListViewFinance } from "~/components/classrooms/finances/ListViewFinance";
+import { api } from "~/trpc/server";
 
 export default async function Page({
   params: { id },
@@ -25,19 +25,19 @@ export default async function Page({
             ?.toLowerCase()
             .includes(query.toLowerCase()) ||
           balance.student?.email?.toLowerCase().includes(query.toLowerCase()) ||
-          (!isNaN(Number(query)) && balance.balance >= Number(query))
+          (!isNaN(Number(query)) && balance.balance >= Number(query)),
       );
 
   const amountDue = sumBy(
     fees.filter((fee) => (fee.dueDate ? fee.dueDate <= new Date() : false)),
-    "amount"
+    "amount",
   );
   return (
     <>
       {view === "list" ? (
         <ListViewFinance amountDue={amountDue} students={students} />
       ) : (
-        <div className="text-sm grid md:grid-cols-2 xl:md:grid-cols-3 gap-4 p-2">
+        <div className="grid gap-4 p-2 text-sm md:grid-cols-2 xl:md:grid-cols-3">
           {students.map((balance) => {
             return (
               balance.student && (

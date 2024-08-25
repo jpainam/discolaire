@@ -1,10 +1,11 @@
 "use client";
+
 import { useSearchParams } from "next/navigation";
 
 //import { getColumns } from "../../../app/(dashboard)/task/columns";
 //import { DataTable } from "../data-table";
-import { EmptyState } from "@/components/EmptyState";
-import { useLocale } from "@/hooks/use-locale";
+import { EmptyState } from "~/components/EmptyState";
+import { useLocale } from "~/hooks/use-locale";
 import { StudentResults } from "./students/student-results";
 
 export default function SearchResults() {

@@ -1,5 +1,3 @@
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
 import {
   FormControl,
   FormField,
@@ -16,6 +14,9 @@ import {
   SelectValue,
 } from "@repo/ui/select";
 import { useFormContext } from "react-hook-form";
+
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
 
 export type InputDescriptionProps = {
   className?: string;

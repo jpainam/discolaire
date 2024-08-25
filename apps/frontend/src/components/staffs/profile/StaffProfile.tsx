@@ -1,11 +1,12 @@
 import { notFound } from "next/navigation";
-import { getServerTranslations } from "@/app/i18n/server";
-import { AvatarState } from "@/components/AvatarState";
-import { api } from "@/trpc/server";
-import { getFullName } from "@/utils/full-name";
 import { Button } from "@repo/ui/button";
 import { Card, CardContent, CardHeader } from "@repo/ui/card";
 import { Separator } from "@repo/ui/separator";
+
+import { getServerTranslations } from "~/app/i18n/server";
+import { AvatarState } from "~/components/AvatarState";
+import { api } from "~/trpc/server";
+import { getFullName } from "~/utils/full-name";
 
 export async function StaffProfile({ staffId }: { staffId: string }) {
   const staff = await api.staff.get({ id: staffId });

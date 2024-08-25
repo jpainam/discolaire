@@ -1,13 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { Mail as MailType } from "@/app/(dashboard)/mail/data";
-import { useMail } from "@/app/(dashboard)/mail/use-mail";
-import { AccountSwitcher } from "@/components/shared/mail/account-switcher";
-import { MailDisplay } from "@/components/shared/mail/mail-display";
-import { MailList } from "@/components/shared/mail/mail-list";
-import { Nav } from "@/components/shared/mail/nav";
-import { cn } from "@/lib/utils";
 import { Input } from "@repo/ui/input";
 import {
   ResizableHandle,
@@ -30,6 +23,14 @@ import {
   Trash2,
   Users2,
 } from "lucide-react";
+
+import { Mail as MailType } from "~/app/(dashboard)/mail/data";
+import { useMail } from "~/app/(dashboard)/mail/use-mail";
+import { AccountSwitcher } from "~/components/shared/mail/account-switcher";
+import { MailDisplay } from "~/components/shared/mail/mail-display";
+import { MailList } from "~/components/shared/mail/mail-list";
+import { Nav } from "~/components/shared/mail/nav";
+import { cn } from "~/lib/utils";
 
 interface MailProps {
   accounts: {

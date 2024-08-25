@@ -1,9 +1,10 @@
 "use client";
 
 import React from "react";
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
 import { Button } from "@repo/ui/button";
+
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
 
 type DeleteButtonProps = {
   onClick?: () => void;

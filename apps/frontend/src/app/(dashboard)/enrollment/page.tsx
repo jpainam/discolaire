@@ -1,11 +1,12 @@
-//import { RegisteredStudentContent } from "@/components/shared/enrollment/registered-student-content";
-//import { UnregisteredStudentContent } from "@/components/shared/enrollment/unregistered-student-content";
-import { Shell } from "@/components/shell";
+//import { RegisteredStudentContent } from "~/components/shared/enrollment/registered-student-content";
+//import { UnregisteredStudentContent } from "~/components/shared/enrollment/unregistered-student-content";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@repo/ui/resizable";
+
+import { Shell } from "~/components/shell";
 
 export default function EnrollmentPage({
   searchParams,

@@ -1,12 +1,4 @@
 import Link from "next/link";
-import { routes } from "@/configs/routes";
-import { useCreateQueryString } from "@/hooks/create-query-string";
-import { useLocale } from "@/hooks/use-locale";
-import { useRouter } from "@/hooks/use-router";
-import { CURRENCY } from "@/lib/constants";
-import { getErrorMessage } from "@/lib/handle-error";
-import { AppRouter } from "@/server/api/root";
-import { api } from "@/trpc/react";
 import {
   CheckCircledIcon,
   CrossCircledIcon,
@@ -34,6 +26,15 @@ import { inferProcedureOutput } from "@trpc/server";
 import i18next, { TFunction } from "i18next";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
+
+import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useLocale } from "~/hooks/use-locale";
+import { useRouter } from "~/hooks/use-router";
+import { CURRENCY } from "~/lib/constants";
+import { getErrorMessage } from "~/lib/handle-error";
+import { AppRouter } from "~/server/api/root";
+import { api } from "~/trpc/react";
 
 type StudentTransactionProcedureOutput = NonNullable<
   inferProcedureOutput<AppRouter["student"]["transactions"]>

@@ -1,11 +1,12 @@
 "use client";
 
-import { InputField } from "@/components/shared/forms/input-field";
-import { useLocale } from "@/hooks/use-locale";
-import { useModal } from "@/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import { Form } from "@repo/ui/form";
 import { useForm } from "react-hook-form";
+
+import { InputField } from "~/components/shared/forms/input-field";
+import { useLocale } from "~/hooks/use-locale";
+import { useModal } from "~/hooks/use-modal";
 
 export function CreateEditPeriodicAttendance() {
   const form = useForm();

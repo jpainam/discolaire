@@ -1,4 +1,4 @@
-import { Portal, PortalProps } from "@/components/Portal/Portal";
+import { Portal, PortalProps } from "~/components/Portal/Portal";
 
 export interface OptionalPortalProps extends PortalProps {
   /** Determines whether children should be rendered inside `<Portal />` */

@@ -1,5 +1,6 @@
-import { SkeletonLineGroup } from "@/components/skeletons/data-table";
 import { Skeleton } from "@repo/ui/skeleton";
+
+import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 
 export default function MailSkeleton() {
   return (

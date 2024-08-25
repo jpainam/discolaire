@@ -1,7 +1,5 @@
 "use client";
 
-import { useLocale } from "@/hooks/use-locale";
-import { cn } from "@/lib/utils";
 import { Alert, AlertDescription } from "@repo/ui/alert";
 import { Button } from "@repo/ui/button";
 import {
@@ -13,6 +11,9 @@ import {
 } from "@repo/ui/card";
 import { Separator } from "@repo/ui/separator";
 import { TriangleAlert } from "lucide-react";
+
+import { useLocale } from "~/hooks/use-locale";
+import { cn } from "~/lib/utils";
 
 export function AssociatedUserNotFound({ className }: { className?: string }) {
   const { t } = useLocale();

@@ -1,9 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useLocale } from "@/hooks/use-locale";
-import { ReportQueue } from "@/types/report";
-import { useDateFormat } from "@/utils/date-format";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { Separator } from "@repo/ui/separator";
 import {
@@ -16,6 +13,9 @@ import {
 } from "@repo/ui/table";
 import { Ban, Check, CircleX } from "lucide-react";
 
+import { useLocale } from "~/hooks/use-locale";
+import { ReportQueue } from "~/types/report";
+import { useDateFormat } from "~/utils/date-format";
 import FlatBadge from "../ui/FlatBadge";
 import { ReportQueueTableActions } from "./ReportQueueTableActions";
 
