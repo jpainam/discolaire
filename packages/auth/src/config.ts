@@ -39,6 +39,7 @@ export const authConfig = {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
+
   pages: {
     signIn: "/auth/login",
     signOut: "/auth/logout",
@@ -79,6 +80,13 @@ export const authConfig = {
     }),
   ],
   callbacks: {
+    redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
+    },
     jwt({ token, user }) {
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (user) {
@@ -86,17 +94,16 @@ export const authConfig = {
       }
       return token;
     },
-    session: (opts) => {
-      if (!("user" in opts))
-        throw new Error("unreachable with session strategy");
-
-      return {
-        ...opts.session,
-        user: {
-          ...opts.session.user,
-          id: opts.user.id,
-        },
-      };
+    session: ({ session, token }) => {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (token) {
+        // @ts-expect-error TODO  fix this
+        session.user = {
+          ...session.user,
+          ...token,
+        };
+      }
+      return session;
     },
   },
 } satisfies NextAuthConfig;
