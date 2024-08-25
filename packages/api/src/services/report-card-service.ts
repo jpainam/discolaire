@@ -1,7 +1,7 @@
 import { Grade } from "@prisma/client";
 import _ from "lodash";
 
-import { db } from "@acme/db";
+import { db } from "@repo/db";
 
 import { classroomService } from "./classroom-service";
 import { calculateFinalGrade, getRank } from "./utils-service";

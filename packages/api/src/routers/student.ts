@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { Prisma, Student } from "@acme/db";
+import type { Prisma, Student } from "@repo/db";
 
 import { studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";

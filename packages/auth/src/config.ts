@@ -10,7 +10,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { z } from "zod";
 
-import { db } from "@acme/db";
+import { db } from "@repo/db";
 
 import { env } from "../env";
 import exclude from "./exclude";

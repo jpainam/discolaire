@@ -1,9 +1,7 @@
 "use client";
 
-// import { CreatePostSchema } from "@acme/db/schema";
-import { z } from "zod";
-
-import { Button } from "@acme/ui/button";
+// import { CreatePostSchema } from "@repo/db/schema";
+import { Button } from "@repo/ui/button";
 import {
   Form,
   FormControl,
@@ -11,8 +9,9 @@ import {
   FormItem,
   FormMessage,
   useForm,
-} from "@acme/ui/form";
-import { Input } from "@acme/ui/input";
+} from "@repo/ui/form";
+import { Input } from "@repo/ui/input";
+import { z } from "zod";
 
 const CreatePostSchema = z.object({
   title: z.string().min(1),

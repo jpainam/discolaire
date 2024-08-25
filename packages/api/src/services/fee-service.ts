@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 
-import { db } from "@acme/db";
+import { db } from "@repo/db";
 
 export const feeService = {
   getMontlyFees: async (schoolYearId: string) => {

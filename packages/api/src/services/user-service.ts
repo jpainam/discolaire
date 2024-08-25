@@ -1,4 +1,4 @@
-import { db } from "@acme/db";
+import { db } from "@repo/db";
 
 export const userService = {
   getPermissions: async (userId: string) => {

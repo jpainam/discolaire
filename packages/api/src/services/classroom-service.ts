@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import _ from "lodash";
 
-import { db } from "@acme/db";
+import { db } from "@repo/db";
 
 export const classroomService = {
   getCount: async (classroomId: string) => {
