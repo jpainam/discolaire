@@ -5,11 +5,11 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/src/index.d.ts",
+      "types": "./dist/index.d.ts",
       "default": "./src/index.ts"
     },
     "./hooks/*": {
-      "types": "./dist/src/*.d.ts",
+      "types": "./dist/hooks/*.d.ts",
       "default": "./src/hooks/*.ts"
     }
   },
