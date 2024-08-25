@@ -8,7 +8,6 @@ import {
   TrashIcon,
 } from "@radix-ui/react-icons";
 
-import { DataTableFacetedFilter } from "@repo/data-table-faceted-filter";
 import { useDebounce } from "@repo/lib/hooks/use-debounce";
 import { Button } from "@repo/ui/button";
 import {
@@ -32,6 +31,7 @@ import { Separator } from "@repo/ui/separator";
 import type { DataTableConfig } from "../config";
 import type { DataTableFilterOption } from "../datatypes";
 import { dataTableConfig } from "../config";
+import { DataTableFacetedFilter } from "../data-table-faceted-filter";
 
 interface DataTableMultiFilterProps<TData> {
   table: Table<TData>;
