@@ -1,117 +1,76 @@
-"use client";
-
 import * as React from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ReloadIcon } from "@radix-ui/react-icons";
-import { signIn } from "next-auth/react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
 
-import { useLocale } from "@repo/i18n";
+import { signIn } from "@repo/auth";
+import { getServerTranslations } from "@repo/i18n/server";
 import { Button } from "@repo/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
+import { Label } from "@repo/ui/label";
 
 import { Icons } from "~/components/icons";
 import { cn } from "~/lib/utils";
-import { validateAuth } from "~/server/validateAuth";
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
 
-const authFormSchema = z.object({
-  email: z.string().email().min(1),
-  password: z.string().min(1),
-});
+// const authFormSchema = z.object({
+//   email: z.string().email().min(1),
+//   password: z.string().min(1),
+// });
 
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+export async function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+  // const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  const form = useForm<z.infer<typeof authFormSchema>>({
-    resolver: zodResolver(authFormSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
-  async function onSubmit(data: z.infer<typeof authFormSchema>) {
-    setIsLoading(true);
-    const res = await signIn("credentials", {
-      username: data.email,
-      password: data.password,
-      redirect: false,
-    });
+  // const form = useForm<z.infer<typeof authFormSchema>>({
+  //   resolver: zodResolver(authFormSchema),
+  //   defaultValues: {
+  //     email: "",
+  //     password: "",
+  //   },
+  // });
+  // function onSubmit(data: z.infer<typeof authFormSchema>) {
+  //   setIsLoading(true);
+  //   console.log(data);
 
-    if (res?.error) {
-      res?.error && toast.error(res.error);
-    } else {
-      validateAuth(); // TODO FIX THIS
-    }
-    setIsLoading(false);
-  }
-  const { t } = useLocale("auth");
+  //   const res = await signIn("credentials", {
+  //     username: data.email,
+  //     password: data.password,
+  //     redirect: false,
+  //   });
+
+  //   if (res?.error) {
+  //     alert("Error: " + res.error);
+  //     //res?.error && toast.error(res.error);
+  //   } else {
+  //     alert("Success");
+  //     //validateAuth(); // TODO FIX THIS
+  //   }
+  //   setIsLoading(false);
+  // }
+  const { t } = await getServerTranslations("auth");
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid gap-2">
-            <FormField
-              control={form.control}
-              name={"email"}
-              render={({ field }) => (
-                <FormItem className={className}>
-                  <FormLabel>{t("email")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isLoading}
-                      autoCorrect="off"
-                      autoComplete="email"
-                      type="email"
-                      required
-                      autoCapitalize="none"
-                      placeholder={"m@example.com"}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name={"password"}
-              render={({ field }) => (
-                <FormItem className={className}>
-                  <FormLabel>{t("password")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      required
-                      current-password="true"
-                      disabled={isLoading}
-                      type="password"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button disabled={isLoading}>
-              {isLoading && (
-                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              {t("signin_with_email")}
-            </Button>
-          </div>
-        </form>
-      </Form>
+      {/* <Form {...form}> */}
+      <form
+        action={async (formData) => {
+          "use server";
+          await signIn("credentials", formData);
+        }}
+      >
+        <div className="grid gap-2">
+          <Label>{t("email")}</Label>
+          <Input
+            autoCorrect="off"
+            autoComplete="email"
+            type="email"
+            required
+            autoCapitalize="none"
+            placeholder={"m@example.com"}
+          />
+          <Label>{t("password")}</Label>
+          <Input required current-password="true" type="password" />
+          <Button>{t("signin_with_email")}</Button>
+        </div>
+      </form>
+      {/* </Form> */}
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
@@ -125,10 +84,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       <Button
         variant="outline"
         type="button"
-        onClick={() => {
-          signIn("google", { callbackUrl: "/" });
+        formAction={async () => {
+          "use server";
+          await signIn("google", { callbackUrl: "/" });
         }}
-        disabled={isLoading}
       >
         <Icons.google className="mr-2 h-4 w-4" />
         Google

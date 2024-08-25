@@ -36,6 +36,12 @@ export const authConfig = {
       }
     : {}),
   secret: env.AUTH_SECRET,
+  pages: {
+    signIn: "/auth/login",
+    signOut: "/auth/logout",
+    error: "/auth/error",
+    verifyRequest: "/auth/verify-request",
+  },
   providers: [
     CredentialsProvider({
       id: "credentials",

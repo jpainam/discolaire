@@ -1,8 +1,8 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { ModeToggle } from "~/layouts/mode-toggle";
-import { getServerTranslations } from "../../i18n/server";
+import { getServerTranslations } from "@repo/i18n/server";
 import { UserAuthForm } from "./user-auth-form";
 
 export const metadata: Metadata = {
