@@ -2,11 +2,11 @@ import { render } from "@react-email/components";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
+import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 
 import { SendInvite } from "~/email-templates/SendInvite";
 import { env } from "~/env";
-import { useModal } from "~/hooks/use-modal";
 import { getErrorMessage } from "~/lib/handle-error";
 import { sendEmail } from "~/server/services/messaging-service";
 import { encryptInvitationCode } from "~/utils/encrypt";

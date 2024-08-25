@@ -10,9 +10,9 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/chart";
+import { EmptyState } from "@repo/ui/EmptyState";
 import { Skeleton } from "@repo/ui/skeleton";
 
-import { EmptyState } from "~/components/EmptyState";
 import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 

@@ -10,6 +10,7 @@ import flags from "react-phone-number-input/flags";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
+import { useRouter } from "@repo/lib/hooks/use-router";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/data-table/v2/data-table-column-header";
 import {
@@ -24,7 +25,6 @@ import FlatBadge from "@repo/ui/FlatBadge";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useAlert } from "~/hooks/use-alert";
-import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { getErrorMessage } from "~/lib/handle-error";
 import { AppRouter } from "~/server/api/root";

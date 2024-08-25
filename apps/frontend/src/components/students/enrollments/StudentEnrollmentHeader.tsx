@@ -4,10 +4,10 @@ import { useParams } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
+import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
 
-import { useModal } from "~/hooks/use-modal";
 import { EnrollStudentModal } from "./EnrollStudentModal";
 
 export function StudentEnrollmentHeader({

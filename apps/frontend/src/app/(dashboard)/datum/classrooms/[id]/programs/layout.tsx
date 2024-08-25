@@ -1,5 +1,6 @@
+import { EmptyState } from "@repo/ui/EmptyState";
+
 import { ProgramList } from "~/components/classrooms/programs/ProgramList";
-import { EmptyState } from "~/components/EmptyState";
 import { api } from "~/trpc/server";
 
 export default async function Layout({

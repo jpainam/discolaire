@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { MoreVertical, PlusIcon } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
+import { useRouter } from "@repo/lib/hooks/use-router";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +12,6 @@ import {
 } from "@repo/ui/dropdown-menu";
 
 import { routes } from "~/configs/routes";
-import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";

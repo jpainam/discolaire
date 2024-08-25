@@ -2,6 +2,8 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+
+import { useModal } from "@repo/lib/hooks/use-modal";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +12,6 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog";
 
-import { useModal } from "~/hooks/use-modal";
 import { cn } from "~/lib/utils";
 
 export default function GlobalModal() {

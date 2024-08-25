@@ -3,9 +3,9 @@
 import { useParams, useRouter } from "next/navigation";
 
 import { useLocale } from "@repo/i18n";
+import { useCreateQueryString } from "@repo/lib/hooks/create-query-string";
 
 import { routes } from "~/configs/routes";
-import { useCreateQueryString } from "~/hooks/create-query-string";
 import { cn } from "~/lib/utils";
 import { Grade } from "~/types/grade";
 import { useDateFormat } from "~/utils/date-format";

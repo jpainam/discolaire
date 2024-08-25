@@ -5,6 +5,7 @@ import i18next, { TFunction } from "i18next";
 import { Eye, MoreHorizontal, TicketCheck, Trash2 } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
+import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
@@ -17,7 +18,6 @@ import {
 } from "@repo/ui/dropdown-menu";
 import FlatBadge from "@repo/ui/FlatBadge";
 
-import { useModal } from "~/hooks/use-modal";
 import { AppRouter } from "~/server/api/root";
 import { TransactionDeleteModal } from "./TransactionDeleteModal";
 import { TransactionDetails } from "./TransactionDetails";

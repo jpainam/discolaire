@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { useLocale } from "@repo/i18n";
+import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import {
   Form,
@@ -18,7 +19,6 @@ import {
 import { Input } from "@repo/ui/input";
 import { Textarea } from "@repo/ui/textarea";
 
-import { useModal } from "~/hooks/use-modal";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 

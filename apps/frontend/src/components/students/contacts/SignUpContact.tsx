@@ -8,9 +8,9 @@ import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import { EmptyState } from "@repo/ui/EmptyState";
 import { Skeleton } from "@repo/ui/skeleton";
 
-import { EmptyState } from "~/components/EmptyState";
 import { SendInvite } from "~/email-templates/SendInvite";
 import { env } from "~/env";
 import { getErrorMessage, showErrorToast } from "~/lib/handle-error";

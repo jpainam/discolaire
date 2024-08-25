@@ -22,8 +22,8 @@ import {
 } from "react-big-calendar";
 
 import { useLocale } from "@repo/i18n";
+import { useModal } from "@repo/lib/hooks/use-modal";
 
-import { useModal } from "~/hooks/use-modal";
 import { useResolvedTheme } from "~/hooks/use-resolved-theme";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";

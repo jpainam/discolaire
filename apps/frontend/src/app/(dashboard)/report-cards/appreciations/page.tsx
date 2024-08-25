@@ -1,6 +1,6 @@
+import { EmptyState } from "@repo/ui/EmptyState";
 import { Separator } from "@repo/ui/separator";
 
-import { EmptyState } from "~/components/EmptyState";
 import { AppreciationHeader } from "~/components/report-cards/appreciations/AppreciationHeader";
 import { AppreciationTable } from "~/components/report-cards/appreciations/AppreciationTable";
 import { reportCardService } from "~/server/services/report-card-service";

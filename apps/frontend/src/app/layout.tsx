@@ -41,7 +41,6 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout(props: { children: React.ReactNode }) {
-  const v = useDebounce(0, 1000);
   return (
     <html lang="en" suppressHydrationWarning>
       <body

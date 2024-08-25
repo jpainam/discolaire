@@ -1,5 +1,6 @@
+import { EmptyState } from "@repo/ui/EmptyState";
+
 import { getServerTranslations } from "~/app/i18n/server";
-import { EmptyState } from "~/components/EmptyState";
 import { StudentGrade } from "~/components/students/grades/StudentGrade";
 import { StudentGradeHeader } from "~/components/students/grades/StudentGradeHeader";
 import { api } from "~/trpc/server";

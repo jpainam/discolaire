@@ -2,8 +2,9 @@
 
 import { useParams } from "next/navigation";
 
+import { useRouter } from "@repo/lib/hooks/use-router";
+
 import { routes } from "~/configs/routes";
-import { useRouter } from "~/hooks/use-router";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";

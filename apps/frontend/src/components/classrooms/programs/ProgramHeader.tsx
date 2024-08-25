@@ -6,6 +6,7 @@ import { useParams, usePathname } from "next/navigation";
 import { MoreVertical, Pencil } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
+import { useRouter } from "@repo/lib/hooks/use-router";
 import {
   BreadCrumb,
   BreadCrumbItem,
@@ -22,7 +23,6 @@ import {
 } from "@repo/ui/dropdown-menu";
 
 import { routes } from "~/configs/routes";
-import { useRouter } from "~/hooks/use-router";
 import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 

@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { useLocale } from "@repo/i18n";
+import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import {
   Form,
@@ -22,8 +23,6 @@ import {
   SelectValue,
 } from "@repo/ui/select";
 import { Textarea } from "@repo/ui/textarea";
-
-import { useModal } from "~/hooks/use-modal";
 
 const feedbackSchema = z.object({
   type: z.enum(["feedback", "request", "question"]),

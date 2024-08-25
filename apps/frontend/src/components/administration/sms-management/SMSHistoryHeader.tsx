@@ -4,12 +4,12 @@ import { useState } from "react";
 import { subDays } from "date-fns";
 
 import { useLocale } from "@repo/i18n";
+import { useRouter } from "@repo/lib/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
 
 import { DateRangePicker } from "~/components/shared/DateRangePicker";
 import { routes } from "~/configs/routes";
-import { useRouter } from "~/hooks/use-router";
 import { useCreateQueryString } from "../../../hooks/create-query-string";
 
 export function SMSHistoryHeader() {

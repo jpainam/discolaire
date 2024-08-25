@@ -5,13 +5,13 @@ import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { useAtomValue } from "jotai";
 
 import { useLocale } from "@repo/i18n";
+import { useCreateQueryString } from "@repo/lib/hooks/create-query-string";
+import { useRouter } from "@repo/lib/hooks/use-router";
 import { Button } from "@repo/ui/button";
 
 import { peopleCriteriaAtom } from "~/atoms/use-criteria";
 import AlphabetSearchBlock from "~/components/shared/search/AlphabetSearchBlock";
 import { routes } from "~/configs/routes";
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useRouter } from "~/hooks/use-router";
 import { SearchFieldSelector } from "./SearchFieldSelector";
 import { SearchInputField } from "./SearchInputField";
 import { TargetSelector } from "./TargetSelector";

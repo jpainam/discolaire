@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { useLocale } from "@repo/i18n";
+import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import {
   Form,
@@ -19,7 +20,6 @@ import { Separator } from "@repo/ui/separator";
 
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";
-import { useModal } from "~/hooks/use-modal";
 
 export function ChurchDetailsForm() {
   const { t } = useLocale();

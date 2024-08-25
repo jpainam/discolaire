@@ -6,6 +6,7 @@ import { useFormContext, useWatch } from "react-hook-form";
 
 import { useLocale } from "@repo/i18n";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
+import { EmptyState } from "@repo/ui/EmptyState";
 import { Input } from "@repo/ui/input";
 import {
   Table,
@@ -17,7 +18,6 @@ import {
 } from "@repo/ui/table";
 
 import { AvatarState } from "~/components/AvatarState";
-import { EmptyState } from "~/components/EmptyState";
 import { routes } from "~/configs/routes";
 import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";

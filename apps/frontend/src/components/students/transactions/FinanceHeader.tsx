@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { MoreVertical, Plus } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
+import { useRouter } from "@repo/lib/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -13,7 +14,6 @@ import {
 
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { routes } from "~/configs/routes";
-import { useRouter } from "~/hooks/use-router";
 import { FinanceBreadCrumb } from "./breadcrumb";
 
 export default function FinanceHeader() {

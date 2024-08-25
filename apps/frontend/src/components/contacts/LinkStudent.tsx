@@ -6,6 +6,7 @@ import { Check } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
+import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import {
   Command,
@@ -19,7 +20,6 @@ import { Skeleton } from "@repo/ui/skeleton";
 
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import { useDebounce } from "~/hooks/use-debounce";
-import { useModal } from "~/hooks/use-modal";
 import { getErrorMessage } from "~/lib/handle-error";
 import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";

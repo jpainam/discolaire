@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { ChevronDownIcon, PrinterIcon } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
+import { useRouter } from "@repo/lib/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import {
@@ -18,7 +19,6 @@ import { Separator } from "@repo/ui/separator";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
-import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { getAge } from "~/utils/student-utils";

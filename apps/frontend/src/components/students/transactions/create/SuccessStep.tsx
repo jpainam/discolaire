@@ -6,9 +6,10 @@ import { useAtom } from "jotai";
 import { Loader } from "lucide-react";
 import { toast } from "sonner";
 
+import { useRouter } from "@repo/lib/hooks/use-router";
+
 import { makePaymentAtom } from "~/atoms/payment";
 import { routes } from "~/configs/routes";
-import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
 export function SuccessStep() {

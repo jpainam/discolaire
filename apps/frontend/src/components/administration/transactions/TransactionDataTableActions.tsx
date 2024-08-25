@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
+import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -22,7 +23,6 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 
-import { useModal } from "~/hooks/use-modal";
 import { exportTableToCSV } from "~/lib/export";
 import { AppRouter } from "~/server/api/root";
 

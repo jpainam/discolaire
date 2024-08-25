@@ -5,6 +5,7 @@ import * as RPNInput from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
 
 import { useLocale } from "@repo/i18n";
+import { useCreateQueryString } from "@repo/lib/hooks/create-query-string";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
@@ -13,7 +14,6 @@ import { DeletePopover } from "~/components/shared/buttons/delete-popover";
 import { EditButton } from "~/components/shared/buttons/edit-button";
 import { ViewButton } from "~/components/shared/buttons/view-button";
 import { routes } from "~/configs/routes";
-import { useCreateQueryString } from "~/hooks/create-query-string";
 import { DataTableFilterableColumn } from "~/types/data-table";
 import { Student } from "~/types/student";
 

@@ -3,10 +3,10 @@
 import { useAtom } from "jotai";
 
 import { useLocale } from "@repo/i18n";
+import { useRouter } from "@repo/lib/hooks/use-router";
 import { Button } from "@repo/ui/button";
 
 import { studentReportsAtom } from "~/atoms/report-atom";
-import { useRouter } from "~/hooks/use-router";
 
 export function StudentReportFooter() {
   const [reportsStudent, setReportsStudent] = useAtom(studentReportsAtom);

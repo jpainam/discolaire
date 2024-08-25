@@ -4,8 +4,9 @@ import { useCallback } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
+import { useCreateQueryString } from "@repo/lib/hooks/create-query-string";
+
 import { routes } from "~/configs/routes";
-import { useCreateQueryString } from "~/hooks/create-query-string";
 import { cn } from "~/lib/utils";
 
 export default function AlphabetSearchBlock() {

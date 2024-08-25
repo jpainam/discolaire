@@ -18,12 +18,12 @@ import {
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
+import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Label } from "@repo/ui/label";
 import { Separator } from "@repo/ui/separator";
 
-import { useModal } from "~/hooks/use-modal";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
 import { getFullName } from "../../../utils/full-name";

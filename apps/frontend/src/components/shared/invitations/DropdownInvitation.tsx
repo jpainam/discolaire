@@ -2,10 +2,10 @@ import { CopyIcon, SendIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
+import { useModal } from "@repo/lib/hooks/use-modal";
 import { DropdownMenuItem } from "@repo/ui/dropdown-menu";
 
 import { env } from "~/env";
-import { useModal } from "~/hooks/use-modal";
 import { encryptInvitationCode } from "~/utils/encrypt";
 import { CopyConfirmationDialog } from "./CopyConfirmationDialog";
 import { InviteConfirmationDialog } from "./InviteConfirmationDialog";

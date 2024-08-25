@@ -13,9 +13,9 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/chart";
+import { EmptyState } from "@repo/ui/EmptyState";
 import { Skeleton } from "@repo/ui/skeleton";
 
-import { EmptyState } from "~/components/EmptyState";
 import { api } from "~/trpc/react";
 
 export function RequiredFeeTransactionTrend() {

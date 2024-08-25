@@ -3,11 +3,11 @@
 import { useForm } from "react-hook-form";
 
 import { useLocale } from "@repo/i18n";
+import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import { Form } from "@repo/ui/form";
 
 import { InputField } from "~/components/shared/forms/input-field";
-import { useModal } from "~/hooks/use-modal";
 
 export function CreateEditPeriodicAttendance() {
   const form = useForm();

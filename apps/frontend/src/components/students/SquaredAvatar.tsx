@@ -1,8 +1,8 @@
 import { PencilIcon } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
+import { useModal } from "@repo/lib/hooks/use-modal";
 
-import { useModal } from "~/hooks/use-modal";
 import { getFullName } from "~/utils/full-name";
 import { AvatarState } from "../AvatarState";
 import { SimpleTooltip } from "../simple-tooltip";

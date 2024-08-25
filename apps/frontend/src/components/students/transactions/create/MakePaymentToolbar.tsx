@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { Forward, MoreVertical, Plus, Reply } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
+import { useRouter } from "@repo/lib/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -15,7 +16,6 @@ import {
 import { Separator } from "@repo/ui/separator";
 
 import { routes } from "~/configs/routes";
-import { useRouter } from "~/hooks/use-router";
 import { MakePaymentBreadCrumb } from "./breadcrumb";
 
 export default function MakePaymentToolbar() {

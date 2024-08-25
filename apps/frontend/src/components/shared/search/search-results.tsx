@@ -5,8 +5,8 @@ import { useSearchParams } from "next/navigation";
 //import { getColumns } from "../../../app/(dashboard)/task/columns";
 //import { DataTable } from "../data-table";
 import { useLocale } from "@repo/i18n";
+import { EmptyState } from "@repo/ui/EmptyState";
 
-import { EmptyState } from "~/components/EmptyState";
 import { StudentResults } from "./students/student-results";
 
 export default function SearchResults() {

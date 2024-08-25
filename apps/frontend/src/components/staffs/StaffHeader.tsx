@@ -5,6 +5,7 @@ import { MoreVertical, Plus } from "lucide-react";
 import { useQueryState } from "nuqs";
 
 import { useLocale } from "@repo/i18n";
+import { useRouter } from "@repo/lib/hooks/use-router";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,7 +22,6 @@ import {
 } from "@repo/ui/select";
 
 import { routes } from "~/configs/routes";
-import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { api } from "~/trpc/react";
 import { useCreateQueryString } from "../../hooks/create-query-string";

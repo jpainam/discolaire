@@ -1,5 +1,6 @@
+import { EmptyState } from "@repo/ui/EmptyState";
+
 import { getServerTranslations } from "~/app/i18n/server";
-import { EmptyState } from "~/components/EmptyState";
 
 export default async function Page({
   params: { id },

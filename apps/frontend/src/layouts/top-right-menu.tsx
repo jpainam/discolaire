@@ -4,10 +4,10 @@ import { useRouter } from "next/navigation";
 import { CircleHelp, Mail, Printer } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
+import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 
 import { SimpleTooltip } from "~/components/simple-tooltip";
-import { useModal } from "~/hooks/use-modal";
 import { ModeToggle } from "~/layouts/mode-toggle";
 import { UserNav } from "~/layouts/user-nav";
 import { cn } from "~/lib/utils";

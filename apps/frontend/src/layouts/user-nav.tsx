@@ -4,6 +4,7 @@ import { Computer, LogOut, Settings, User } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 
 import { useLocale } from "@repo/i18n";
+import { useRouter } from "@repo/lib/hooks/use-router";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Button } from "@repo/ui/button";
 import {
@@ -17,7 +18,6 @@ import {
 } from "@repo/ui/dropdown-menu";
 
 import { routes } from "~/configs/routes";
-import { useRouter } from "~/hooks/use-router";
 import { MobileActionButtions } from "~/layouts/mobile-nav";
 
 export function UserNav({ className }: { className?: string }) {

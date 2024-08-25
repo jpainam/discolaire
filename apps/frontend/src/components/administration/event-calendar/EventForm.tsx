@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { useLocale } from "@repo/i18n";
+import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import {
   Form,
@@ -32,7 +33,6 @@ import { DateTimePicker } from "~/components/shared/date-time-picker";
 import { InputField } from "~/components/shared/forms/input-field";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
-import { useModal } from "~/hooks/use-modal";
 import { getErrorMessage } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { AppRouter } from "~/server/api/root";

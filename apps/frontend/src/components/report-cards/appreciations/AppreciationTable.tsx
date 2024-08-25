@@ -7,6 +7,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
+import { useCreateQueryString } from "@repo/lib/hooks/create-query-string";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableSkeleton } from "@repo/ui/data-table/v2/data-table-skeleton";
 import FlatBadge from "@repo/ui/FlatBadge";
@@ -21,7 +22,6 @@ import {
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
-import { useCreateQueryString } from "~/hooks/create-query-string";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { ReportCardType } from "~/types/report-card";

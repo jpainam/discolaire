@@ -7,6 +7,7 @@ import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
+import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import {
@@ -27,7 +28,6 @@ import {
 } from "@repo/ui/table";
 
 import { useAlert } from "~/hooks/use-alert";
-import { useModal } from "~/hooks/use-modal";
 import { CURRENCY } from "~/lib/constants";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";

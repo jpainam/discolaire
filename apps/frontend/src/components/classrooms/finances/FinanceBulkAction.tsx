@@ -4,6 +4,7 @@ import { useAtomValue } from "jotai";
 import { ChevronDown, SendHorizonal, SendIcon } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
+import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -16,7 +17,6 @@ import {
 import FlatBadge from "@repo/ui/FlatBadge";
 
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
-import { useModal } from "~/hooks/use-modal";
 import SendNotificationDialog from "./SendNotificationDialog";
 
 export function FinanceBulkAction() {

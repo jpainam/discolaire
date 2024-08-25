@@ -6,12 +6,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { useLocale } from "@repo/i18n";
+import { useCreateQueryString } from "@repo/lib/hooks/create-query-string";
+import { useRouter } from "@repo/lib/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import { Form } from "@repo/ui/form";
 
 import { routes } from "~/configs/routes";
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useRouter } from "~/hooks/use-router";
 import { useSchoolYear } from "~/hooks/use-schoolyear";
 import PrintSelector from "./print-selector";
 import PrintTypeRadio from "./print-type-radio";

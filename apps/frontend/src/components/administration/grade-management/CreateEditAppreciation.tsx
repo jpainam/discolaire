@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { useLocale } from "@repo/i18n";
+import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import {
   Form,
@@ -19,7 +20,6 @@ import { Separator } from "@repo/ui/separator";
 import { Textarea } from "@repo/ui/textarea";
 
 import { InputField } from "~/components/shared/forms/input-field";
-import { useModal } from "~/hooks/use-modal";
 import { getErrorMessage } from "~/lib/handle-error";
 
 const appreciationFormSchema = z.object({

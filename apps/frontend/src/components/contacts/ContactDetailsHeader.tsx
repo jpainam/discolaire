@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
+import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -22,7 +23,6 @@ import {
 } from "@repo/ui/dropdown-menu";
 
 import { AvatarState } from "~/components/AvatarState";
-import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
 import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";

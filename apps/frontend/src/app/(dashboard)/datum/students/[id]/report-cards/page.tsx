@@ -1,8 +1,9 @@
 import { Suspense } from "react";
+
+import { EmptyState } from "@repo/ui/EmptyState";
 import { Separator } from "@repo/ui/separator";
 
 import { getServerTranslations } from "~/app/i18n/server";
-import { EmptyState } from "~/components/EmptyState";
 import { ReportCardSummary } from "~/components/students/report-cards/ReportCardSummary";
 import { ReportCardTable } from "~/components/students/report-cards/ReportCardTable";
 import { reportCardService } from "~/server/services/report-card-service";
