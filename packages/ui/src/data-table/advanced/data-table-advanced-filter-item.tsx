@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import type { Table } from "@tanstack/react-table";
 import * as React from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { TrashIcon } from "@radix-ui/react-icons";
 
-import { useDebounce } from "@repo/lib";
+import { useLocale } from "@repo/i18n";
+import { useDebounce } from "@repo/lib/hooks/use-debounce";
 import { Button } from "@repo/ui/button";
 import { Input } from "@repo/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
@@ -41,7 +43,7 @@ export function DataTableAdvancedFilterItem<TData>({
   const [open, setOpen] = React.useState(true);
 
   const selectedValues =
-    selectedOption.items.length > 0
+    selectedOption.options.length > 0
       ? Array.from(
           new Set(
             table
@@ -52,7 +54,7 @@ export function DataTableAdvancedFilterItem<TData>({
       : [];
 
   const filterVarieties =
-    selectedOption.items.length > 0
+    selectedOption.options.length > 0
       ? ["is", "is not"]
       : ["contains", "does not contain", "is", "is not"];
 

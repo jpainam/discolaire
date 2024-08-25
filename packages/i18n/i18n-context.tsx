@@ -1,10 +1,8 @@
-"use client";
-
+import React, { useMemo } from "react";
 import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import resourcesToBackend from "i18next-resources-to-backend";
-import { useMemo } from "react";
-import { I18nextProvider as Provider, initReactI18next } from "react-i18next";
+import { initReactI18next, I18nextProvider as Provider } from "react-i18next";
 
 import { getOptions } from "./settings";
 

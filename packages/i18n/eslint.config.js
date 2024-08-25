@@ -1,0 +1,14 @@
+import baseConfig from "@repo/eslint-config/base";
+
+/** @type {import('typescript-eslint').Config} */
+export default [
+  {
+    ignores: [],
+  },
+  ...baseConfig,
+  {
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
+];
