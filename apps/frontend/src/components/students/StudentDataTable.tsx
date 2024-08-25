@@ -1,27 +1,24 @@
 "use client";
 
 import { useMemo } from "react";
-import { inferProcedureOutput } from "@trpc/server";
 import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
 
+import type { RouterOutputs } from "@repo/api";
+import type { DataTableFilterField } from "@repo/ui/data-table/v2/datatypes";
 import { useLocale } from "@repo/i18n";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import { DataTable } from "@repo/ui/data-table/v2/data-table";
 import { DataTableToolbar } from "@repo/ui/data-table/v2/data-table-toolbar";
-import { DataTableFilterField } from "@repo/ui/data-table/v2/datatypes";
 import { useDataTable } from "@repo/ui/data-table/v2/use-data-table";
 import { EmptyState } from "@repo/ui/EmptyState";
 
 import { showErrorToast } from "~/lib/handle-error";
-import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
 import { StudentDataTableActions } from "./StudentDataTableActions";
 import { fetchStudentColumns } from "./StudentDataTableColumns";
 
-type StudentGetAllProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["student"]["all"]>
->[number];
+type StudentGetAllProcedureOutput = RouterOutputs["student"]["all"][number];
 
 export function StudentDataTable() {
   const { t } = useLocale();
@@ -31,15 +28,16 @@ export function StudentDataTable() {
   const [per_page] = useQueryState("per_page", parseAsInteger);
   const [sort] = useQueryState("sort", parseAsString);
   const [lastName] = useQueryState("lastName", parseAsString);
+  api.staff.all.useQuery();
   const studentsCountQuery = api.student.count.useQuery({
-    q: lastName || undefined,
+    q: lastName ?? undefined,
   });
 
   const studentsQuery = api.student.all.useQuery({
-    page: page || undefined,
-    per_page: per_page || undefined,
-    sort: sort || undefined,
-    q: lastName || undefined,
+    page: page ?? undefined,
+    per_page: per_page ?? undefined,
+    sort: sort ?? undefined,
+    q: lastName ?? undefined,
   });
 
   const filterFields: DataTableFilterField<StudentGetAllProcedureOutput>[] = [

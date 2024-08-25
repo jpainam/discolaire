@@ -1,14 +1,14 @@
+import type { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
+import type * as RPNInput from "react-phone-number-input";
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { inferProcedureOutput } from "@trpc/server";
-import { TFunction } from "i18next";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
-import * as RPNInput from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
 import { useAlert } from "@repo/lib/hooks/use-alert";
 import { useRouter } from "@repo/lib/hooks/use-router";
@@ -28,33 +28,25 @@ import FlatBadge from "@repo/ui/FlatBadge";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { getErrorMessage } from "~/lib/handle-error";
-import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import CreateEditStudent from "./CreateEditStudent";
 
-type StudentGetAllProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["student"]["all"]>
->[number];
+type StudentAllProcedureOutput = RouterOutputs["student"]["all"][number];
 
-const columnHelper = createColumnHelper<StudentGetAllProcedureOutput>();
+export type StudentTableAction = ColumnDef<StudentAllProcedureOutput, unknown>;
 
-export type StudentTableAction = ColumnDef<
-  StudentGetAllProcedureOutput,
-  unknown
->;
-
-type UseStudentColumnsProps = {
+interface UseStudentColumnsProps {
   t: TFunction<string, unknown>;
   dateFormatter: Intl.DateTimeFormat;
-};
+}
 
 export function fetchStudentColumns({
   t,
   dateFormatter,
 }: UseStudentColumnsProps): {
-  columns: ColumnDef<StudentGetAllProcedureOutput, unknown>[];
+  columns: ColumnDef<StudentAllProcedureOutput, unknown>[];
 } {
   const allcolumns = [
     {
@@ -125,6 +117,7 @@ export function fetchStudentColumns({
       ),
       cell: ({ row }) => {
         const student = row.original;
+
         return (
           <Link
             className="hover:text-blue-600 hover:underline"
@@ -143,6 +136,7 @@ export function fetchStudentColumns({
       ),
       cell: ({ row }) => {
         const student = row.original;
+        const gender = student.gender;
         return (
           <FlatBadge
             variant={student.gender == "female" ? "pink" : "blue"}
@@ -153,7 +147,8 @@ export function fetchStudentColumns({
             ) : (
               <PiGenderFemaleThin className="h-4 w-4" />
             )}
-            {t(row.getValue("gender") as string)}
+
+            {t(`${gender}`)}
           </FlatBadge>
         );
       },
@@ -173,10 +168,10 @@ export function fetchStudentColumns({
       },
       cell: ({ row }) => {
         const student = row.original;
-        const r = student?.isRepeating ? t("yes") : t("no");
+        const r = student.isRepeating ? t("yes") : t("no");
         return (
           <div className="flex items-center justify-center">
-            {student?.isRepeating ? (
+            {student.isRepeating ? (
               <FlatBadge variant="red">{r}</FlatBadge>
             ) : (
               <FlatBadge variant="green">{r}</FlatBadge>
@@ -198,9 +193,9 @@ export function fetchStudentColumns({
         return (
           <Link
             className="hover:text-blue-600 hover:underline"
-            href={routes.classrooms.details(classroom?.id)}
+            href={routes.classrooms.details(classroom.id)}
           >
-            {classroom?.shortName}
+            {classroom.shortName}
           </Link>
         );
       },
@@ -314,7 +309,7 @@ export function fetchStudentColumns({
       id: "actions",
       cell: ({ row }) => <ActionCells student={row.original} />,
     },
-  ] as ColumnDef<StudentGetAllProcedureOutput, unknown>[];
+  ] as ColumnDef<StudentAllProcedureOutput, unknown>[];
 
   //   const filteredColumns = columns //@ts-ignore
   //     .map((col) => allcolumns.find((c) => c.accessorKey === col))
@@ -327,7 +322,7 @@ export function fetchStudentColumns({
   };
 }
 
-function ActionCells({ student }: { student: StudentGetAllProcedureOutput }) {
+function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
   const { t } = useLocale();
   const router = useRouter();
   const { openSheet } = useSheet();
@@ -381,7 +376,7 @@ function ActionCells({ student }: { student: StudentGetAllProcedureOutput }) {
               openAlert({
                 title: t("delete"),
                 description: t("delete_confirmation"),
-                onConfirm: async () => {
+                onConfirm: () => {
                   toast.promise(deleteStudentMutation.mutateAsync(student.id), {
                     loading: t("deleting"),
                     success: () => {

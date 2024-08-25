@@ -16,7 +16,6 @@ import { detectLanguage } from "@repo/i18n/server";
 import { ThemeProvider } from "~/components/theme-provider";
 import { env } from "~/env";
 import AuthProvider from "~/providers/auth-provider";
-import { api } from "~/trpc/server";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -48,8 +47,6 @@ export const viewport: Viewport = {
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const session = await auth();
-  await api.student.all({});
-  await api.staff.all();
 
   const lng = await detectLanguage();
   return (

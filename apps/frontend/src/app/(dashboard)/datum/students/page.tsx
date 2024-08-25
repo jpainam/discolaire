@@ -1,6 +1,6 @@
 import { StudentDataTable } from "~/components/students/StudentDataTable";
 
-export default async function Page() {
+export default function Page() {
   return (
     <>
       {/* <StudentStat /> */}
