@@ -7,9 +7,9 @@ import { Plus } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
+import { useSheet } from "@repo/lib/hooks/use-sheet";
 import { Button } from "@repo/ui/button";
 
-import { useSheet } from "~/hooks/use-sheet";
 import { exportTableToCSV } from "~/lib/export";
 import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";

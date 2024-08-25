@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { useLocale } from "@repo/i18n";
+import { useSheet } from "@repo/lib/hooks/use-sheet";
 import {
   Accordion,
   AccordionContent,
@@ -30,7 +31,6 @@ import { Separator } from "@repo/ui/separator";
 import { Textarea } from "@repo/ui/textarea";
 
 import { FileUploader } from "~/components/uploads/file-uploader";
-import { useSheet } from "~/hooks/use-sheet";
 import { useUploadFile } from "~/hooks/use-upload-file";
 
 const createEditVisitSchema = z.object({

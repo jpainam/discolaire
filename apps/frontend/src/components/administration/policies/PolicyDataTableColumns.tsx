@@ -7,6 +7,7 @@ import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
+import { useAlert } from "@repo/lib/hooks/use-alert";
 import { useRouter } from "@repo/lib/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
@@ -20,7 +21,6 @@ import {
 } from "@repo/ui/dropdown-menu";
 import FlatBadge from "@repo/ui/FlatBadge";
 
-import { useAlert } from "~/hooks/use-alert";
 import { getErrorMessage } from "~/lib/handle-error";
 import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";

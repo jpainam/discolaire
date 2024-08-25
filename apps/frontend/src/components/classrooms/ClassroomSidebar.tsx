@@ -5,11 +5,11 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
 import { useLocale } from "@repo/i18n";
+import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { MenuItemsType } from "~/types/menu";
-import { DataTableSkeleton } from "../data-table/data-table-skeleton";
 import { Badge } from "../ui/badge";
 import { sidebarIcons } from "./sidebar-icons";
 

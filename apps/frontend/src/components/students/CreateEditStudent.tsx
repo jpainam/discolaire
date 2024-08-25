@@ -6,7 +6,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import type { RouterOutputs } from "@repo/api";
+import type { Tag } from "@repo/ui/TagInput/tag-input";
 import { useLocale } from "@repo/i18n";
+import { useSheet } from "@repo/lib/hooks/use-sheet";
 import { Button } from "@repo/ui/button";
 import {
   Form,
@@ -18,7 +21,7 @@ import {
 } from "@repo/ui/form";
 import PhoneInput from "@repo/ui/PhoneInput/index";
 import { Separator } from "@repo/ui/separator";
-import { TagInput } from "@repo/ui/TagInput";
+import { TagInput } from "@repo/ui/TagInput/index";
 import { Textarea } from "@repo/ui/textarea";
 
 import { CountryPicker } from "~/components/shared/CountryPicker";
@@ -26,13 +29,11 @@ import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";
 import { SelectField } from "~/components/shared/forms/SelectField";
 import { FormerSchoolSelector } from "~/components/shared/selects/FormerSchoolSelector";
-import { useSheet } from "~/hooks/use-sheet";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
-import { Tag } from "../ui/TagInput/tag-input";
 
 interface ProfileCreateEditSheetProps {
-  student?: any;
+  student?: RouterOutputs["student"]["get"];
 }
 
 const createEditStudentSchema = z.object({

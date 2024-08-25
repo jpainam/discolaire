@@ -5,8 +5,10 @@ import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
+import { useAlert } from "@repo/lib/hooks/use-alert";
 import { useRouter } from "@repo/lib/hooks/use-router";
 import { Button } from "@repo/ui/button";
+import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,10 +28,8 @@ import {
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
-import { useAlert } from "~/hooks/use-alert";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
-import { DataTableSkeleton } from "../data-table/data-table-skeleton";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 

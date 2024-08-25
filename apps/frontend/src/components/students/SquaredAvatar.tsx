@@ -2,11 +2,11 @@ import { PencilIcon } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
 import { useModal } from "@repo/lib/hooks/use-modal";
+import { Button } from "@repo/ui/button";
 
 import { getFullName } from "~/utils/full-name";
 import { AvatarState } from "../AvatarState";
 import { SimpleTooltip } from "../simple-tooltip";
-import { Button } from "../ui/button";
 import { ChangeAvatar } from "./ChangeAvatar";
 
 export function SquaredAvatar({ student }: { student?: any }) {

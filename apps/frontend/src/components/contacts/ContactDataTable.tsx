@@ -6,13 +6,13 @@ import { inferProcedureOutput } from "@trpc/server";
 
 import type { DataTableFilterField } from "@repo/ui/data-table/v2/datatypes";
 import { useLocale } from "@repo/i18n";
+import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import { DataTable } from "@repo/ui/data-table/v2/data-table";
 import { DataTableToolbar } from "@repo/ui/data-table/v2/data-table-toolbar";
 import { useDataTable } from "@repo/ui/data-table/v2/use-data-table";
 
 import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
-import { DataTableSkeleton } from "../data-table/data-table-skeleton";
 import { ContactDataTableActions } from "./ContactDataTableActions";
 import { getColumns } from "./ContactDataTableColumns";
 

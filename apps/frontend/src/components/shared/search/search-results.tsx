@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 
 //import { getColumns } from "../../../app/(dashboard)/task/columns";
-//import { DataTable } from "../data-table";
+//import { DataTable } from "@repo/data-table";
 import { useLocale } from "@repo/i18n";
 import { EmptyState } from "@repo/ui/EmptyState";
 

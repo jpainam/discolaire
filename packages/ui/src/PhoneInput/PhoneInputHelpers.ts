@@ -1,10 +1,7 @@
+import type { CountryCode } from "libphonenumber-js";
 import i18nIsoCountries from "i18n-iso-countries";
 import i18next from "i18next";
-import {
-  type CountryCode,
-  getCountries,
-  getCountryCallingCode,
-} from "libphonenumber-js";
+import { getCountries, getCountryCallingCode } from "libphonenumber-js";
 
 /**
  * Source: https://grafikart.fr/tutoriels/drapeau-emoji-fonction-2152
@@ -66,6 +63,7 @@ export function replaceNumbersWithZeros(phoneNumber: string): string {
 
   // Concatenate the country code and the replaced number
   const replacedPhoneNumber =
+    // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
     (countryCode as string) + " " + replacedRestOfNumber;
 
   return replacedPhoneNumber;

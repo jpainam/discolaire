@@ -13,6 +13,7 @@ import {
 
 import { useLocale } from "@repo/i18n";
 import { useModal } from "@repo/lib/hooks/use-modal";
+import { useSheet } from "@repo/lib/hooks/use-sheet";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -23,7 +24,6 @@ import {
 } from "@repo/ui/dropdown-menu";
 
 import { AvatarState } from "~/components/AvatarState";
-import { useSheet } from "~/hooks/use-sheet";
 import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";
 import { DropdownHelp } from "../shared/DropdownHelp";

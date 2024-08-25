@@ -6,6 +6,7 @@ import { ChevronDown, MailIcon, Printer } from "lucide-react";
 import { useLocale } from "@repo/i18n";
 import { useCreateQueryString } from "@repo/lib/hooks/create-query-string";
 import { useRouter } from "@repo/lib/hooks/use-router";
+import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,7 +22,6 @@ import XMLIcon from "../icons/xml-solid";
 import { ClassroomSelector } from "../shared/selects/ClassroomSelector";
 import { ClassroomStudentSelector } from "../shared/selects/ClassroomStudentSelector";
 import { TermSelector } from "../shared/selects/TermSelector";
-import { Button } from "../ui/button";
 
 export function ReportCardHeader() {
   const { t } = useLocale();

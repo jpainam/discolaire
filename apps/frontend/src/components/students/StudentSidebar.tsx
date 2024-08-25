@@ -1,24 +1,25 @@
 "use client";
 
-import { ElementType, Fragment, useEffect, useState } from "react";
+import type { ElementType } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { PiCaretDownBold } from "react-icons/pi";
 
+import { DataTableSkeleton } from "@repo/data-table/v2/data-table-skeleton";
 import { useLocale } from "@repo/i18n";
+import { Badge } from "@repo/ui/badge";
 import Menu from "@repo/ui/menu/dropdown/menu";
 
 import { SortableList } from "~/components/dnd/dnd-sortable-list";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { MenuItemsType } from "~/types/menu";
-import { DataTableSkeleton } from "../data-table/v2/data-table-skeleton";
-import { Badge } from "../ui/badge";
 import { sidebarIcons } from "./sidebar-icons";
 
 export function StudentSidebar({ className }: { className?: string }) {
   const pathname = usePathname();
-  const params = useParams() as { id: string };
+  const params = useParams();
   const menusQuery = api.menu.byCategory.useQuery({ category: "student" });
 
   const [items, setItems] = useState<MenuItemsType[]>([]);

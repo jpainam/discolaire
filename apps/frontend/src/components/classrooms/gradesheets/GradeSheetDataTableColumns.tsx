@@ -7,6 +7,7 @@ import { Eye, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
+import { useAlert } from "@repo/lib/hooks/use-alert";
 import { useRouter } from "@repo/lib/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
@@ -21,7 +22,6 @@ import {
 import FlatBadge from "@repo/ui/FlatBadge";
 
 import { routes } from "~/configs/routes";
-import { useAlert } from "~/hooks/use-alert";
 import { getErrorMessage } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { AppRouter } from "~/server/api/root";

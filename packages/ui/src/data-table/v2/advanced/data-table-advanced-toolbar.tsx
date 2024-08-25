@@ -7,11 +7,11 @@ import * as React from "react";
 import { useSearchParams } from "next/navigation";
 import { CaretSortIcon, PlusIcon } from "@radix-ui/react-icons";
 
+import { DataTableViewOptions } from "@repo/data-table-view-options";
 import { Button } from "@repo/ui/button";
 
 import type { DataTableFilterField, DataTableFilterOption } from "../datatypes";
 import { cn } from "../../..";
-import { DataTableViewOptions } from "../data-table-view-options";
 import { DataTableFilterCombobox } from "./data-table-filter-combobox";
 import { DataTableFilterItem } from "./data-table-filter-item";
 import { DataTableMultiFilter } from "./data-table-multi-filter";

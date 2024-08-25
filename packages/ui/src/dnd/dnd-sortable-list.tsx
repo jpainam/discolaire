@@ -1,5 +1,6 @@
-/* eslint-disable no-duplicate-imports */
 import type { Active, UniqueIdentifier } from "@dnd-kit/core";
+import type { ReactNode } from "react";
+import { useId, useMemo, useState } from "react";
 import {
   DndContext,
   KeyboardSensor,
@@ -8,12 +9,10 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import {
-  SortableContext,
   arrayMove,
+  SortableContext,
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
-import type { ReactNode } from "react";
-import { useId, useMemo, useState } from "react";
 
 import { DragHandle, SortableItem } from "./dnd-sortable-item";
 import { SortableOverlay } from "./dnd-sortable-overly";

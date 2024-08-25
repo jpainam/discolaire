@@ -8,8 +8,9 @@ import {
   PanelRightOpen,
 } from "lucide-react";
 
+import { Button } from "@repo/ui/button";
+
 import { AdminPanelContext } from "~/contexts/admin-panel-provider";
-import { Button } from "../ui/button";
 
 export function LeftPanelButton({ panelSize }: { panelSize?: number }) {
   const [size, setSize] = useState(20);

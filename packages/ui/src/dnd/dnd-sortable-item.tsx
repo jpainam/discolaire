@@ -1,4 +1,3 @@
-/* eslint-disable no-duplicate-imports */
 import type {
   DraggableSyntheticListeners,
   UniqueIdentifier,
@@ -9,7 +8,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { PiDotsSixVerticalBold } from "react-icons/pi";
 
-import { cn } from "~/lib/utils";
+import { cn } from "../utils";
 
 interface Props {
   id: UniqueIdentifier;

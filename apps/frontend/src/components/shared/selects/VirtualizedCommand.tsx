@@ -1,4 +1,7 @@
 import * as React from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { Check } from "lucide-react";
+
 import {
   Command,
   CommandEmpty,
@@ -7,8 +10,6 @@ import {
   CommandItem,
   CommandList,
 } from "@repo/ui/command";
-import { useVirtualizer } from "@tanstack/react-virtual";
-import { Check } from "lucide-react";
 
 import { AvatarState } from "~/components/AvatarState";
 import { cn } from "~/lib/utils";

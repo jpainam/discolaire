@@ -8,6 +8,7 @@ import {
   TrashIcon,
 } from "@radix-ui/react-icons";
 
+import { DataTableFacetedFilter } from "@repo/data-table-faceted-filter";
 import { useDebounce } from "@repo/lib/hooks/use-debounce";
 import { Button } from "@repo/ui/button";
 import {
@@ -29,7 +30,6 @@ import {
 import { Separator } from "@repo/ui/separator";
 
 import type { DataTableFilterOption } from "../types";
-import { DataTableFacetedFilter } from "../data-table-faceted-filter";
 
 const operators = [
   {

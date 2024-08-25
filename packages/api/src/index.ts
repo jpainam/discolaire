@@ -28,6 +28,9 @@ type RouterInputs = inferRouterInputs<AppRouter>;
  *      ^? Post[]
  **/
 type RouterOutputs = inferRouterOutputs<AppRouter>;
+// export type ReactQueryOptions = inferReactQueryProcedureOptions<AppRouter>;
+// export type RouterInputs = inferRouterInputs<AppRouter>;
+// export type RouterOutputs = inferRouterOutputs<AppRouter>;
 
-export { createTRPCContext, appRouter, createCaller };
+export { appRouter, createCaller, createTRPCContext };
 export type { AppRouter, RouterInputs, RouterOutputs };

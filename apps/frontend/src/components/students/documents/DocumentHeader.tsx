@@ -10,6 +10,7 @@ import {
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
+import { useAlert } from "@repo/lib/hooks/use-alert";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -19,7 +20,6 @@ import {
 } from "@repo/ui/dropdown-menu";
 import { Separator } from "@repo/ui/separator";
 
-import { useAlert } from "~/hooks/use-alert";
 import { FileTypeSelector } from "./FileTypeSelector";
 import { LastModifiedSelector } from "./LastModifiedSelector";
 import { ViewSwitcher } from "./ViewSwitcher";

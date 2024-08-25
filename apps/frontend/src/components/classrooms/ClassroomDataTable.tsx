@@ -3,15 +3,15 @@
 import * as React from "react";
 import { inferProcedureOutput } from "@trpc/server";
 
+import { DataTableFilterField } from "@repo/data-table/types";
 import { useLocale } from "@repo/i18n";
 import { useDataTable } from "@repo/ui/data-table";
 import { DataTable } from "@repo/ui/data-table/data-table";
+import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
 
 import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
-import { DataTableSkeleton } from "../data-table/data-table-skeleton";
-import { DataTableFilterField } from "../data-table/types";
 import { ClassroomDataTableActions } from "./ClassroomDataTableActions";
 import { getColumns } from "./ClassroomDataTableColumns";
 

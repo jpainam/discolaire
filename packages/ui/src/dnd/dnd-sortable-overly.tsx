@@ -1,7 +1,6 @@
-/* eslint-disable no-duplicate-imports */
 import type { DropAnimation } from "@dnd-kit/core";
-import { DragOverlay, defaultDropAnimationSideEffects } from "@dnd-kit/core";
 import type { PropsWithChildren } from "react";
+import { defaultDropAnimationSideEffects, DragOverlay } from "@dnd-kit/core";
 
 const dropAnimationConfig: DropAnimation = {
   sideEffects: defaultDropAnimationSideEffects({

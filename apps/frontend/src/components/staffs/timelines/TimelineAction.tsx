@@ -4,9 +4,9 @@ import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
+import { useAlert } from "@repo/lib/hooks/use-alert";
 import { Button } from "@repo/ui/button";
 
-import { useAlert } from "~/hooks/use-alert";
 import { getErrorMessage } from "~/lib/handle-error";
 
 export function TimelineAction({ timelineId }: { timelineId: string }) {

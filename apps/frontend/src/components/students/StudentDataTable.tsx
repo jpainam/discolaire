@@ -5,6 +5,7 @@ import { inferProcedureOutput } from "@trpc/server";
 import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
 
 import { useLocale } from "@repo/i18n";
+import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import { DataTable } from "@repo/ui/data-table/v2/data-table";
 import { DataTableToolbar } from "@repo/ui/data-table/v2/data-table-toolbar";
 import { DataTableFilterField } from "@repo/ui/data-table/v2/datatypes";
@@ -15,7 +16,6 @@ import { showErrorToast } from "~/lib/handle-error";
 import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
-import { DataTableSkeleton } from "../data-table/data-table-skeleton";
 import { StudentDataTableActions } from "./StudentDataTableActions";
 import { fetchStudentColumns } from "./StudentDataTableColumns";
 

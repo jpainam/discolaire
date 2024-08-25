@@ -10,7 +10,10 @@ import flags from "react-phone-number-input/flags";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
+import { useAlert } from "@repo/lib/hooks/use-alert";
 import { useRouter } from "@repo/lib/hooks/use-router";
+import { useSheet } from "@repo/lib/hooks/use-sheet";
+import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/data-table/v2/data-table-column-header";
 import {
@@ -24,14 +27,11 @@ import FlatBadge from "@repo/ui/FlatBadge";
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
-import { useAlert } from "~/hooks/use-alert";
-import { useSheet } from "~/hooks/use-sheet";
 import { getErrorMessage } from "~/lib/handle-error";
 import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
-import { Button } from "../ui/button";
 import CreateEditStudent from "./CreateEditStudent";
 
 type StudentGetAllProcedureOutput = NonNullable<

@@ -4,7 +4,6 @@ import { GeistSans } from "geist/font/sans";
 
 import { I18nProvider } from "@repo/i18n/i18n-context";
 import { cn } from "@repo/ui";
-import { ThemeToggle } from "@repo/ui/theme";
 import { Toaster } from "@repo/ui/toast";
 
 import { TRPCReactProvider } from "~/trpc/react";
@@ -17,6 +16,7 @@ import { detectLanguage } from "@repo/i18n/server";
 import { ThemeProvider } from "~/components/theme-provider";
 import { env } from "~/env";
 import AuthProvider from "~/providers/auth-provider";
+import { api } from "~/trpc/server";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -48,6 +48,8 @@ export const viewport: Viewport = {
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const session = await auth();
+  await api.student.all({});
+  await api.staff.all();
 
   const lng = await detectLanguage();
   return (
@@ -69,9 +71,6 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
             <TRPCReactProvider>
               <AuthProvider session={session}>{props.children}</AuthProvider>
             </TRPCReactProvider>
-            <div className="absolute bottom-4 right-4">
-              <ThemeToggle />
-            </div>
             <Toaster />
           </ThemeProvider>
         </body>

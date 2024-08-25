@@ -3,9 +3,9 @@
 import { Stethoscope } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
+import { useSheet } from "@repo/lib/hooks/use-sheet";
 import { Button } from "@repo/ui/button";
 
-import { useSheet } from "~/hooks/use-sheet";
 import { CreateEditHealthVisit } from "./CreateEditHealthVisit";
 
 export function HealthVisitHeader() {

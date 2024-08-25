@@ -1,13 +1,14 @@
 import { ReactNode } from "react";
 import Link from "next/link";
-import { Checkbox } from "@repo/ui/checkbox";
-import { DataTableColumnHeader } from "@repo/ui/data-table/v2/data-table-column-header";
-import FlatBadge from "@repo/ui/FlatBadge";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { TFunction } from "i18next";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import * as RPNInput from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
+
+import { Checkbox } from "@repo/ui/checkbox";
+import { DataTableColumnHeader } from "@repo/ui/data-table/v2/data-table-column-header";
+import FlatBadge from "@repo/ui/FlatBadge";
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";

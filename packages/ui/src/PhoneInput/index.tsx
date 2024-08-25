@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
 
 import { env } from "process";
@@ -24,24 +25,24 @@ import {
   replaceNumbersWithZeros,
 } from "./PhoneInputHelpers";
 
-type CountryOption = {
+export interface CountryOption {
   value: Country;
   label: string;
   indicatif: CountryCallingCode;
-};
+}
 
 i18nIsoCountries.registerLocale(
   i18next.language == "fr" ? frCountries : enCountries,
 );
 
-type PhoneInputFieldProps = {
+interface PhoneInputFieldProps {
   disabled?: boolean;
   flagClassName?: string;
   inputClassName?: string;
   className?: string;
   onChange?: (value: string) => void; // ISO 3166-1 alpha-2 code (e.g. "US", "CM", "FR")
   defaultCountry?: string; // ISO 3166-1 alpha-2 code (e.g. "US", "CM", "FR")
-};
+}
 
 export default function PhoneInputField({
   disabled,
@@ -59,7 +60,7 @@ export default function PhoneInputField({
   );
 
   const [country, setCountry] = useState<CountryOption>(
-    defaultCountryOption ||
+    defaultCountryOption ??
       ({
         value: "CM",
         label: "Cameroon",
@@ -70,6 +71,7 @@ export default function PhoneInputField({
   const [phoneNumber, setPhoneNumber] = useState<E164Number>();
 
   const placeholder = replaceNumbersWithZeros(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     getExampleNumber(country.value, examples)!.formatInternational(),
   );
 
@@ -86,12 +88,13 @@ export default function PhoneInputField({
       <div className={cn("flex gap-0", className)}>
         <ComboboxCountryInput
           disabled={disabled}
-          value={country}
+          value={country.value}
           className={flagClassName}
           onValueChange={onCountryChange}
           options={options}
           placeholder="Find your country..."
           renderOption={({ option }) => {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             const Flag = country && flags[option.value];
             return (
               <div className="flex w-full items-center justify-between px-2 text-sm">

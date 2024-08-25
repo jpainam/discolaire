@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { useLocale } from "@repo/i18n";
+import { useSheet } from "@repo/lib/hooks/use-sheet";
 import { Button } from "@repo/ui/button";
 import {
   Form,
@@ -22,7 +23,6 @@ import { Skeleton } from "@repo/ui/skeleton";
 
 import { CourseSelector } from "~/components/shared/selects/CourseSelector";
 import { StaffSelector } from "~/components/shared/selects/StaffSelector";
-import { useSheet } from "~/hooks/use-sheet";
 import { getErrorMessage } from "~/lib/handle-error";
 import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";

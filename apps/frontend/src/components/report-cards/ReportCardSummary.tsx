@@ -1,9 +1,9 @@
 "use client";
 
 import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
 
-import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 

@@ -1,14 +1,15 @@
 import Image from "next/image";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 
 import { cn } from "~/lib/utils";
 import { avatars, randomAvatar } from "./raw-images";
 
-type AvatarStateProps = {
+interface AvatarStateProps {
   avatar?: string | null;
   className?: string;
   pos?: number;
-};
+}
 
 export function AvatarState({ avatar, className, pos }: AvatarStateProps) {
   let generatedAvatar;
@@ -20,7 +21,7 @@ export function AvatarState({ avatar, className, pos }: AvatarStateProps) {
   return (
     <>
       <Avatar className={cn("my-1 h-9 w-9", className)}>
-        <AvatarImage src={avatar || undefined} alt={"AV"} />
+        <AvatarImage src={avatar ?? undefined} alt={"AV"} />
         <AvatarFallback>
           {generatedAvatar && (
             <Image className={cn(className)} src={generatedAvatar} alt="AV" />

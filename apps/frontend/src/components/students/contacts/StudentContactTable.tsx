@@ -5,6 +5,7 @@ import { Eye, FileHeart, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
+import { useAlert } from "@repo/lib/hooks/use-alert";
 import { useRouter } from "@repo/lib/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
@@ -30,7 +31,6 @@ import { AvatarState } from "~/components/AvatarState";
 import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import { routes } from "~/configs/routes";
-import { useAlert } from "~/hooks/use-alert";
 import { getErrorMessage, showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";

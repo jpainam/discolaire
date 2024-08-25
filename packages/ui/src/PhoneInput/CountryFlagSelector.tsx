@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+import type { Country } from "react-phone-number-input/input";
 import * as React from "react";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 import { CheckIcon } from "lucide-react";
 
+import type { CountryOption } from ".";
 import { cn } from "..";
 import { Button } from "../button";
 import {
@@ -15,27 +18,27 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "../popover";
 import { isoToEmoji } from "./PhoneInputHelpers";
 
-export type Option = Record<"value" | "label", string> & Record<string, string>;
+//export type Option = Record<"value" | "label", string> & Record<string, string>;
 
-type ComboboxCountryInputProps<T extends Option> = {
-  value: T;
-  onValueChange: (value: T) => void;
-  options: T[];
+interface ComboboxCountryInputProps {
+  value: Country;
+  onValueChange: (value: CountryOption) => void;
+  options: CountryOption[];
   renderOption: ({
     option,
     isSelected,
   }: {
-    option: T;
+    option: CountryOption;
     isSelected: boolean;
   }) => React.ReactNode;
-  renderValue: (option: T) => string;
+  renderValue: (option: CountryOption) => string;
   emptyMessage: string;
   placeholder?: string;
   className?: string;
   disabled?: boolean;
-};
+}
 
-export function ComboboxCountryInput<T extends Option>({
+export function ComboboxCountryInput({
   value,
   onValueChange,
   options,
@@ -45,7 +48,7 @@ export function ComboboxCountryInput<T extends Option>({
   placeholder,
   className,
   emptyMessage,
-}: ComboboxCountryInputProps<T>) {
+}: ComboboxCountryInputProps) {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -62,7 +65,7 @@ export function ComboboxCountryInput<T extends Option>({
           )}
           // className="inline-flex items-center justify-between self-start rounded-md border border-stone-200 bg-white px-4 py-2 text-lg font-medium ring-offset-white transition-colors hover:bg-stone-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 "
         >
-          {value.value ? isoToEmoji(value.value) : ""}
+          {value ? isoToEmoji(value) : ""}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -73,7 +76,7 @@ export function ComboboxCountryInput<T extends Option>({
             <CommandEmpty>{emptyMessage}</CommandEmpty>
             <CommandGroup className="mt-2 h-full max-h-48 overflow-auto p-0 [&_div[cmdk-group-items]]:flex [&_div[cmdk-group-items]]:flex-col [&_div[cmdk-group-items]]:gap-1">
               {options.map((option) => {
-                const isSelected = value.value === option.value;
+                const isSelected = value === option.value;
 
                 return (
                   <CommandItem

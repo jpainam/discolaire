@@ -6,6 +6,7 @@ import { ExternalLink, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
+import { useAlert } from "@repo/lib/hooks/use-alert";
 import { useModal } from "@repo/lib/hooks/use-modal";
 import { useRouter } from "@repo/lib/hooks/use-router";
 import { Button } from "@repo/ui/button";
@@ -24,7 +25,6 @@ import {
 } from "@repo/ui/pagination";
 import { Separator } from "@repo/ui/separator";
 
-import { useAlert } from "~/hooks/use-alert";
 import { getErrorMessage } from "~/lib/handle-error";
 import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";

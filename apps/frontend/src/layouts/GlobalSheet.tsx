@@ -2,6 +2,8 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+
+import { useSheet } from "@repo/lib/hooks/use-sheet";
 import { Separator } from "@repo/ui/separator";
 import {
   Sheet,
@@ -11,7 +13,6 @@ import {
   SheetTitle,
 } from "@repo/ui/sheet";
 
-import { useSheet } from "~/hooks/use-sheet";
 import { cn } from "~/lib/utils";
 
 export default function GlobalSheet() {

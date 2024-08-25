@@ -4,6 +4,7 @@ import { Eye, MailIcon, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
 import { useModal } from "@repo/lib/hooks/use-modal";
+import { useSheet } from "@repo/lib/hooks/use-sheet";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -21,7 +22,6 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
-import { useSheet } from "~/hooks/use-sheet";
 import { cn } from "~/lib/utils";
 import { CreateEditHealthVisit } from "./CreateEditHealthVisit";
 import { HealthVisitDetails } from "./HealthVisitDetails";

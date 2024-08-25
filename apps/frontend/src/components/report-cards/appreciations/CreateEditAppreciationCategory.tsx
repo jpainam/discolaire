@@ -3,9 +3,9 @@ import { XIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
+import { useAlert } from "@repo/lib/hooks/use-alert";
 import { Input } from "@repo/ui/input";
 
-import { useAlert } from "~/hooks/use-alert";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { AppreciationCategory } from "~/types/appreciation";
