@@ -1,6 +1,7 @@
 import { SquareArrowLeft, Upload, Users } from "lucide-react";
 
-import { getServerTranslations } from "~/app/i18n/server";
+import { getServerTranslations } from "@repo/i18n/server";
+
 import { TabLink } from "~/components/users/tab-link";
 import { routes } from "~/configs/routes";
 

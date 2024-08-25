@@ -1,6 +1,6 @@
+import { getServerTranslations } from "@repo/i18n/server";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
 
-import { getServerTranslations } from "~/app/i18n/server";
 import { ReportQueueTable } from "~/components/reports/ReportQueueTable";
 
 //import { getReportForUser, getReportsQueue } from "~/server/report-queues";

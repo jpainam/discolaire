@@ -1,9 +1,10 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
+
+import { getServerTranslations } from "@repo/i18n/server";
 import { Avatar, AvatarImage } from "@repo/ui/avatar";
 import { Separator } from "@repo/ui/separator";
 
-import { getServerTranslations } from "~/app/i18n/server";
 import { Avatar01, Logo } from "~/components/raw-images";
 import { IdCardBarCode } from "~/components/students/idcard/id-barcode";
 import { IdCardHeader } from "~/components/students/idcard/IdCardHeader";

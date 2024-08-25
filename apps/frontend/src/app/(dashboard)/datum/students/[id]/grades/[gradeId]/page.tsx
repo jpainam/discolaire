@@ -1,5 +1,3 @@
-import { Button } from "@repo/ui/button";
-import { Separator } from "@repo/ui/separator";
 import {
   ArrowDownLeft,
   ArrowUpLeft,
@@ -12,7 +10,10 @@ import {
   Waves,
 } from "lucide-react";
 
-import { getServerTranslations } from "~/app/i18n/server";
+import { getServerTranslations } from "@repo/i18n/server";
+import { Button } from "@repo/ui/button";
+import { Separator } from "@repo/ui/separator";
+
 import { StudentGradeChart } from "~/components/students/grades/charts/StudentGradeChart";
 import { GradeSheetStats } from "./grade-sheet-stats";
 

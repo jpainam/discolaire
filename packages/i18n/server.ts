@@ -51,8 +51,8 @@ export async function detectLanguage() {
 }
 
 export const getServerTranslations: (
-  ns: any,
-  options: { keyPrefix?: string },
+  ns?: any,
+  options?: { keyPrefix?: string },
 ) => Promise<{
   t: (key: string) => string;
   i18n: i18n;

@@ -1,3 +1,6 @@
+import { MoreVertical, Truck } from "lucide-react";
+
+import { getServerTranslations } from "@repo/i18n/server";
 import { Button } from "@repo/ui/button";
 import {
   Card,
@@ -14,9 +17,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
-import { MoreVertical, Truck } from "lucide-react";
-
-import { getServerTranslations } from "~/app/i18n/server";
 
 export default async function Page() {
   // const templates = await getSMSTemplates();

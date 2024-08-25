@@ -1,6 +1,6 @@
+import { getServerTranslations } from "@repo/i18n/server";
 import { Separator } from "@repo/ui/separator";
 
-import { getServerTranslations } from "~/app/i18n/server";
 import FinanceHeader from "~/components/students/transactions/FinanceHeader";
 import { TransactionStats } from "~/components/students/transactions/transaction-stats";
 import { TransactionDataTable } from "~/components/students/transactions/TransactionDataTable";

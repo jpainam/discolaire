@@ -1,5 +1,3 @@
-import { NoticeBanner } from "@repo/ui/Banner";
-
 import { Footer } from "~/layouts/Footer";
 import { Header } from "~/layouts/Header";
 
@@ -8,7 +6,7 @@ export default function Layout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
-      <NoticeBanner />
+      {/* <NoticeBanner /> */}
       <Header />
 
       <main className="min-h-[80vh] flex-1">{children}</main>

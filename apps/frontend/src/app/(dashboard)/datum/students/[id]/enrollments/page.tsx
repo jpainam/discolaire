@@ -1,6 +1,6 @@
+import { getServerTranslations } from "@repo/i18n/server";
 import { EmptyState } from "@repo/ui/EmptyState";
 
-import { getServerTranslations } from "~/app/i18n/server";
 import { StudentEnrollmentHeader } from "~/components/students/enrollments/StudentEnrollmentHeader";
 import { StudentEnrollmentTable } from "~/components/students/enrollments/StudentEnrollmentTable";
 import { api } from "~/trpc/server";

@@ -1,9 +1,10 @@
 import { PropsWithChildren } from "react";
 import { notFound } from "next/navigation";
-import { NoPermission } from "@repo/ui/NoPermission";
 import { CalendarDays, DollarSign, Folders, History } from "lucide-react";
 
-import { getServerTranslations } from "~/app/i18n/server";
+import { getServerTranslations } from "@repo/i18n/server";
+import { NoPermission } from "@repo/ui/NoPermission";
+
 import { StaffProfile } from "~/components/staffs/profile/StaffProfile";
 import { StaffTabMenu } from "~/components/staffs/profile/StaffTabMenu";
 import { StaffDetailHeader } from "~/components/staffs/StaffDetailHeader";

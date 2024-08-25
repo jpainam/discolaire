@@ -1,7 +1,8 @@
 import { Suspense } from "react";
+
+import { getServerTranslations } from "@repo/i18n/server";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 
-import { getServerTranslations } from "~/app/i18n/server";
 import { StudentDetails } from "~/components/students/profile/StudentDetails";
 
 type SearchParams = {

@@ -1,4 +1,5 @@
-import { getServerTranslations } from "~/app/i18n/server";
+import { getServerTranslations } from "@repo/i18n/server";
+
 import { NotificationHeader } from "~/components/students/notifications/NotificationHeader";
 import NotificationList from "~/components/students/notifications/NotificationList";
 

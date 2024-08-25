@@ -1,4 +1,5 @@
-import { getServerTranslations } from "~/app/i18n/server";
+import { getServerTranslations } from "@repo/i18n/server";
+
 import { api } from "~/trpc/server";
 //import { MobileNav } from "~/components/mobile-nav";
 import { LanguageSwitcher } from "./LanguageSwitcher";

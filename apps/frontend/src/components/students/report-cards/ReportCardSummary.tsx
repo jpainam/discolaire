@@ -1,9 +1,10 @@
-import { Table, TableBody, TableCell, TableRow } from "@repo/ui/table";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
 //import { StudentReportCard } from "~/types/report-card";
 import { Check, HelpCircle } from "lucide-react";
 
-import { getServerTranslations } from "~/app/i18n/server";
+import { getServerTranslations } from "@repo/i18n/server";
+import { Table, TableBody, TableCell, TableRow } from "@repo/ui/table";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
+
 import { cn } from "~/lib/utils";
 
 export async function ReportCardSummary({ reportCard }: { reportCard: any[] }) {

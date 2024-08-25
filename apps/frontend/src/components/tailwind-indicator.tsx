@@ -1,6 +1,6 @@
 import { env } from "process";
 
-import { getServerTranslations } from "~/app/i18n/server";
+import { getServerTranslations } from "@repo/i18n/server";
 
 export async function TailwindIndicator() {
   const { t } = await getServerTranslations();

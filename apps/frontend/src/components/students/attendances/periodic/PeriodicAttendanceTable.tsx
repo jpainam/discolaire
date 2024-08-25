@@ -1,3 +1,4 @@
+import { getServerTranslations } from "@repo/i18n/server";
 import {
   Table,
   TableBody,
@@ -7,7 +8,6 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
-import { getServerTranslations } from "~/app/i18n/server";
 import { PeriodicAttendanceTableActions } from "./PeriodicAttendanceTableActions";
 
 export async function PeriodicAttendanceTable({

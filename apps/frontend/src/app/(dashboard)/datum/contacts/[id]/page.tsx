@@ -1,6 +1,6 @@
+import { getServerTranslations } from "@repo/i18n/server";
 import { Card, CardContent, CardHeader } from "@repo/ui/card";
 
-import { getServerTranslations } from "~/app/i18n/server";
 import { ContactDetails } from "~/components/contacts/ContactDetails";
 import { ContactDetailsHeader } from "~/components/contacts/ContactDetailsHeader";
 import { ContactStudentTable } from "~/components/contacts/ContactStudentTable";

@@ -1,4 +1,5 @@
-import { getServerTranslations } from "~/app/i18n/server";
+import { getServerTranslations } from "@repo/i18n/server";
+
 import MakePaymentStepper from "~/components/students/transactions/create";
 import MakePaymentToolbar from "~/components/students/transactions/create/MakePaymentToolbar";
 

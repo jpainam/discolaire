@@ -1,11 +1,12 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { Button } from "@repo/ui/button";
-import { Separator } from "@repo/ui/separator";
 import { Calendar } from "lucide-react";
 
+import { getServerTranslations } from "@repo/i18n/server";
+import { Button } from "@repo/ui/button";
+import { Separator } from "@repo/ui/separator";
+
 import logo from "~/../public/images/logo.png";
-import { getServerTranslations } from "~/app/i18n/server";
 import { api } from "~/trpc/server";
 
 export default async function Page({

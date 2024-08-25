@@ -5,7 +5,8 @@ import {
   PiMoney,
 } from "react-icons/pi";
 
-import { getServerTranslations } from "~/app/i18n/server";
+import { getServerTranslations } from "@repo/i18n/server";
+
 import { cn } from "~/lib/utils";
 import { TransactionStatCard } from "./TransactionStatCard";
 

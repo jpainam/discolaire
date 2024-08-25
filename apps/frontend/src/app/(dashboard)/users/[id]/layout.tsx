@@ -1,6 +1,4 @@
 import Image from "next/image";
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
-import { Separator } from "@repo/ui/separator";
 import {
   BellRing,
   Computer,
@@ -10,7 +8,10 @@ import {
   UserIcon,
 } from "lucide-react";
 
-import { getServerTranslations } from "~/app/i18n/server";
+import { getServerTranslations } from "@repo/i18n/server";
+import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
+import { Separator } from "@repo/ui/separator";
+
 import { randomAvatar } from "~/components/raw-images";
 import { CopyUserIdButton } from "~/components/users/copy-user-id-button";
 import { UserSidebarNav } from "~/components/users/user-side-nav";

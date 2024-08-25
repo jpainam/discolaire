@@ -1,6 +1,6 @@
 import React from "react";
 
-import { getServerTranslations } from "~/app/i18n/server";
+import { getServerTranslations } from "@repo/i18n/server";
 
 export default async function Layout({
   children,

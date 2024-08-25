@@ -1,4 +1,5 @@
-import { getServerTranslations } from "~/app/i18n/server";
+import { getServerTranslations } from "@repo/i18n/server";
+
 import { ContactDataTable } from "~/components/contacts/ContactDataTable";
 import { api } from "~/trpc/server";
 

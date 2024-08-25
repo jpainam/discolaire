@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
-import { getServerTranslations } from "~/app/i18n/server";
+import { getServerTranslations } from "@repo/i18n/server";
+
 import { TimelineAction } from "~/components/staffs/timelines/TimelineAction";
 import { api } from "~/trpc/server";
 

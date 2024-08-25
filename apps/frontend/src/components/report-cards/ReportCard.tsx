@@ -1,6 +1,6 @@
+import { getServerTranslations } from "@repo/i18n/server";
 import { EmptyState } from "@repo/ui/EmptyState";
 
-import { getServerTranslations } from "~/app/i18n/server";
 import { reportCardService } from "~/server/services/report-card-service";
 import { ReportCardStudentTable } from "./ReportCardStudentTable";
 import { ReportCardTable } from "./ReportCardTable";
