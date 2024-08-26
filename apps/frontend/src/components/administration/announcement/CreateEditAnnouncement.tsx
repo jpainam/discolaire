@@ -27,8 +27,8 @@ import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { InputField } from "../../shared/forms/input-field";
 import { SelectField } from "../../shared/forms/SelectField";
-import { Separator } from "../../ui/separator";
 import { Button } from "../@repo/ui/button";
+import { Separator } from "../@repo/ui/separator";
 
 type AnnouncementGetProcedureOutput = NonNullable<
   inferProcedureOutput<AppRouter["announcement"]["get"]>

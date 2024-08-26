@@ -5,6 +5,7 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 import { Ban, Check, CircleX } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
+import FlatBadge from "@repo/ui/FlatBadge";
 import { Separator } from "@repo/ui/separator";
 import {
   Table,
@@ -17,7 +18,6 @@ import {
 
 import { ReportQueue } from "~/types/report";
 import { useDateFormat } from "~/utils/date-format";
-import FlatBadge from "../ui/FlatBadge";
 import { ReportQueueTableActions } from "./ReportQueueTableActions";
 
 export function ReportQueueTable({ reports }: { reports: ReportQueue[] }) {

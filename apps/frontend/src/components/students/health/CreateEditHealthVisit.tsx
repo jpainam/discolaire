@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { useUploadFile } from "@repo/hooks/use-upload-file";
 import { useLocale } from "@repo/i18n";
 import { useSheet } from "@repo/lib/hooks/use-sheet";
 import {
@@ -31,7 +32,6 @@ import { Separator } from "@repo/ui/separator";
 import { Textarea } from "@repo/ui/textarea";
 
 import { FileUploader } from "~/components/uploads/file-uploader";
-import { useUploadFile } from "~/hooks/use-upload-file";
 
 const createEditVisitSchema = z.object({
   date: z.coerce.date(),

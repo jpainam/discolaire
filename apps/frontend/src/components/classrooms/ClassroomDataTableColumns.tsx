@@ -29,12 +29,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
+import FlatBadge from "@repo/ui/FlatBadge";
 
 import { routes } from "~/configs/routes";
 import { getErrorMessage } from "~/lib/handle-error";
 import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
-import FlatBadge from "../ui/FlatBadge";
 import { CreateEditClassroom } from "./CreateEditClassroom";
 
 type ClassroomProcedureOutput = NonNullable<

@@ -1,12 +1,12 @@
 "use client";
 
 import { useLocale } from "@repo/i18n";
+import { Separator } from "@repo/ui/separator";
+import { Skeleton } from "@repo/ui/skeleton";
 
 import { showErrorToast } from "~/lib/handle-error";
 import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";
-import { Separator } from "../ui/separator";
-import { Skeleton } from "../ui/skeleton";
 
 export function ContactDetails({ contactId }: { contactId: string }) {
   const contactQuery = api.contact.get.useQuery(contactId);

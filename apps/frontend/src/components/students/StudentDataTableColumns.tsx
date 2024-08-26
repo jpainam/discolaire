@@ -286,7 +286,7 @@ export function fetchStudentColumns({
       ),
       cell: ({ row }) => {
         const countryId = row.original.country?.id as RPNInput.Country;
-        const Flag = countryId && flags[countryId];
+        const Flag = flags[countryId];
         return (
           <div className="flex flex-row items-center gap-1">
             <span className="flex h-4 w-6 overflow-hidden rounded-sm bg-foreground/20">

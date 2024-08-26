@@ -16,6 +16,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
+import { Separator } from "@repo/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
 
 import { routes } from "~/configs/routes";
@@ -24,7 +25,6 @@ import { api } from "~/trpc/react";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
 import { ClassroomSelector } from "../shared/selects/ClassroomSelector";
-import { Separator } from "../ui/separator";
 import { CreateEditClassroom } from "./CreateEditClassroom";
 
 export function ClassroomHeader() {

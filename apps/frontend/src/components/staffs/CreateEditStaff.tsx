@@ -18,6 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@repo/ui/form";
+import { Separator } from "@repo/ui/separator";
 import { Textarea } from "@repo/ui/textarea";
 
 import { getErrorMessage } from "~/lib/handle-error";
@@ -28,7 +29,6 @@ import { InputField } from "../shared/forms/input-field";
 import { SelectField } from "../shared/forms/SelectField";
 import { StaffLevelSelector } from "../shared/selects/StaffLevelSelector";
 import { Form } from "../ui/form";
-import { Separator } from "../ui/separator";
 
 type StaffProcedureOutput = NonNullable<
   inferProcedureOutput<AppRouter["staff"]["all"]>

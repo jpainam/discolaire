@@ -13,11 +13,11 @@ import {
 } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
+import { Separator } from "@repo/ui/separator";
 
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { useCreateQueryString } from "../../hooks/create-query-string";
-import { Separator } from "../ui/separator";
 import { AdminNav } from "./admin-nav";
 
 type AdminSidebarProps = {

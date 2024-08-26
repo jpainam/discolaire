@@ -24,6 +24,7 @@ import {
   PaginationItem,
 } from "@repo/ui/pagination";
 import { Separator } from "@repo/ui/separator";
+import { Skeleton } from "@repo/ui/skeleton";
 
 import { getErrorMessage } from "~/lib/handle-error";
 import { AppRouter } from "~/server/api/root";
@@ -33,7 +34,6 @@ import { getFullName } from "~/utils/full-name";
 import { routes } from "../../configs/routes";
 import { AvatarState } from "../AvatarState";
 import { ScrollArea } from "../ui/scroll-area";
-import { Skeleton } from "../ui/skeleton";
 import { LinkStudent } from "./LinkStudent";
 
 type StudentContactOutput = NonNullable<

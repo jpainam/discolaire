@@ -1,14 +1,6 @@
 "use client";
 
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import {
   LogOut,
   LucideIcon,
   User,
@@ -17,8 +9,17 @@ import {
   UserX,
 } from "lucide-react";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/dropdown-menu";
+import { Separator } from "@repo/ui/separator";
+
 import { cn } from "~/lib/utils";
-import { Separator } from "../ui/separator";
 
 export function StudentStat() {
   return (

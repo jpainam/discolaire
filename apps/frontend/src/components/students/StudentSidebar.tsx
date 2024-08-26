@@ -1,25 +1,24 @@
 "use client";
 
-import type { ElementType } from "react";
-import { Fragment, useEffect, useState } from "react";
+import { ElementType, Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { PiCaretDownBold } from "react-icons/pi";
 
-import { DataTableSkeleton } from "@repo/data-table/v2/data-table-skeleton";
 import { useLocale } from "@repo/i18n";
 import { Badge } from "@repo/ui/badge";
-import Menu from "@repo/ui/menu/dropdown/menu";
+import { DataTableSkeleton } from "@repo/ui/data-table/v2/data-table-skeleton";
+import { SortableList } from "@repo/ui/dnd/dnd-sortable-list";
 
-import { SortableList } from "~/components/dnd/dnd-sortable-list";
+import type { MenuItemsType } from "~/types/menu";
+import Menu from "~/components/menu/dropdown/menu";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
-import { MenuItemsType } from "~/types/menu";
 import { sidebarIcons } from "./sidebar-icons";
 
 export function StudentSidebar({ className }: { className?: string }) {
   const pathname = usePathname();
-  const params = useParams();
+  const params = useParams<{ id: string }>();
   const menusQuery = api.menu.byCategory.useQuery({ category: "student" });
 
   const [items, setItems] = useState<MenuItemsType[]>([]);
@@ -51,9 +50,9 @@ export function StudentSidebar({ className }: { className?: string }) {
         <SortableList items={items} onChange={setItems}>
           {items.map((item, index) => {
             //const Icon = item.icon;
-            const Icon = sidebarIcons?.[item.name];
-            const isActive = pathname === (item?.href as string);
-            const pathnameExistInDropdowns: boolean = item?.menuItems?.some(
+            const Icon = sidebarIcons[item.name];
+            const isActive = pathname === item.href;
+            const pathnameExistInDropdowns: boolean = item.menuItems.some(
               (dropdownItem) =>
                 dropdownItem.href === pathname ||
                 dropdownItem.subMenuItems?.some(
@@ -82,7 +81,7 @@ export function StudentSidebar({ className }: { className?: string }) {
                         )}
                       >
                         <Link
-                          href={item?.href || "#"}
+                          href={item.href ?? "#"}
                           className="flex w-full items-center gap-1 text-sm"
                         >
                           <SortableList.DragHandle
@@ -95,7 +94,7 @@ export function StudentSidebar({ className }: { className?: string }) {
                           {t(item.title)}
                         </Link>
 
-                        {item?.menuItems?.length > 0 && (
+                        {item.menuItems.length > 0 && (
                           <div className="flex items-center transition-all group-hover:gap-1">
                             <PiCaretDownBold
                               strokeWidth={3}
@@ -108,32 +107,31 @@ export function StudentSidebar({ className }: { className?: string }) {
                         )}
                       </div>
                     </Menu.Trigger>
-                    {item?.menuItems?.length > 0 && (
+                    {item.menuItems.length > 0 && (
                       <Menu.List className="w-[280px] border-gray-300 !bg-white !px-2 !py-3 dark:bg-gray-100">
-                        {item?.menuItems?.map((dropdownItem, index) => {
-                          const isChildActive =
-                            pathname === (dropdownItem?.href as string);
+                        {item.menuItems.map((dropdownItem, index) => {
+                          const isChildActive = pathname === dropdownItem.href;
+                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
                           const pathnameExistInChildDropdowns: any =
-                            dropdownItem?.subMenuItems?.filter(
+                            dropdownItem.subMenuItems?.filter(
                               (dropdownItem) => dropdownItem.href === pathname,
                             );
                           const isChildDropdownActive = Boolean(
                             pathnameExistInChildDropdowns?.length,
                           );
                           //const DropdownIcon = dropdownItem?.icon;
-                          const DropdownIcon =
-                            sidebarIcons?.[dropdownItem?.name];
+                          const DropdownIcon = sidebarIcons[dropdownItem.name];
 
                           return (
                             <Menu.Item
-                              key={"dropdown" + dropdownItem?.name + index}
+                              key={"dropdown" + dropdownItem.name + index}
                               className={cn(
                                 "!data-[hover=true]:bg-gray-200 px-0 py-0 transition-all data-[hover=true]:dark:bg-gray-200",
                                 isChildDropdownActive &&
                                   "!bg-gray-200 dark:bg-gray-200",
                               )}
                             >
-                              {dropdownItem?.subMenuItems?.length ? (
+                              {dropdownItem.subMenuItems?.length ? (
                                 <ul className="w-full">
                                   <Menu
                                     trigger="hover"
@@ -178,23 +176,22 @@ export function StudentSidebar({ className }: { className?: string }) {
                                       </li>
                                     </Menu.Trigger>
                                     <Menu.List className="border-gray-300 bg-gray-100">
-                                      {dropdownItem?.subMenuItems?.map(
+                                      {dropdownItem.subMenuItems.map(
                                         (subMenuItem, index) => {
                                           const isChildActive =
-                                            pathname ===
-                                            (subMenuItem?.href as string);
+                                            pathname === subMenuItem.href;
 
                                           return (
                                             <Menu.Item
                                               key={
                                                 "sub-menu" +
-                                                subMenuItem?.name +
+                                                subMenuItem.name +
                                                 index
                                               }
                                               className="px-0 py-0"
                                             >
                                               <Link
-                                                href={subMenuItem?.href}
+                                                href={subMenuItem.href}
                                                 className={cn(
                                                   "relative flex w-full items-center justify-between rounded-md px-4 py-2 font-medium text-gray-900",
                                                   isChildActive
@@ -204,12 +201,12 @@ export function StudentSidebar({ className }: { className?: string }) {
                                               >
                                                 <span className="flex items-center truncate text-sm">
                                                   <span className="truncate">
-                                                    {t(subMenuItem?.name)}
+                                                    {t(subMenuItem.name)}
                                                   </span>
                                                 </span>
-                                                {subMenuItem?.badge?.length ? (
+                                                {subMenuItem.badge?.length ? (
                                                   <Badge>
-                                                    {subMenuItem?.badge}
+                                                    {subMenuItem.badge}
                                                   </Badge>
                                                 ) : null}
                                               </Link>
@@ -222,7 +219,11 @@ export function StudentSidebar({ className }: { className?: string }) {
                                 </ul>
                               ) : (
                                 <MenuLink
-                                  item={dropdownItem}
+                                  item={{
+                                    name: dropdownItem.name,
+                                    href: dropdownItem.href ?? "#",
+                                    badge: dropdownItem.badge,
+                                  }}
                                   isChildActive={isChildActive}
                                   isDropdownOpen={isDropdownOpen}
                                 />
@@ -243,21 +244,25 @@ export function StudentSidebar({ className }: { className?: string }) {
   );
 }
 
-type MenuItemsProps = {
+interface MenuItemsProps {
   as?: ElementType;
-  item: any;
+  item: {
+    name: string;
+    href: string;
+    badge?: string;
+  };
   isChildActive?: boolean;
   isDropdownOpen?: boolean;
   className?: string;
-};
+}
 
 function MenuLink({ item, isChildActive }: MenuItemsProps) {
   //const Icon = item?.icon;
-  const Icon = sidebarIcons?.[item?.name];
+  const Icon = sidebarIcons[item.name];
   const { t } = useLocale();
   return (
     <Link
-      href={item?.href}
+      href={item.href}
       className={cn(
         "relative flex w-full items-center justify-between rounded-md px-4 py-2 font-medium text-gray-900",
         isChildActive
@@ -267,24 +272,23 @@ function MenuLink({ item, isChildActive }: MenuItemsProps) {
     >
       <div className="flex items-center truncate">
         {Icon && <Icon className="h-4 w-4 stroke-1" />}
-        <span className="truncate text-sm">{t(item?.name)}</span>
+        <span className="truncate text-sm">{t(item.name)}</span>
       </div>
-      {item?.badge?.length ? <Badge>{item?.badge} </Badge> : null}
+      {item.badge?.length ? <Badge>{item.badge} </Badge> : null}
     </Link>
   );
 }
 
 function getMenu(data: MenuItemsType[], id: string) {
-  if (!data) return [];
   // replace :id by the actual id in all href
-  return data?.map((menu) => {
+  return data.map((menu) => {
     return {
       ...menu,
       href: menu.href?.replace(":id", id),
       menuItems: menu.menuItems.map((item) => {
         return {
           ...item,
-          href: item?.href?.replace(":id", id),
+          href: item.href?.replace(":id", id),
           subMenuItems: item.subMenuItems?.map((subItem) => {
             return {
               ...subItem,

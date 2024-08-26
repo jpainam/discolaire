@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/select";
+import { Separator } from "@repo/ui/separator";
 
 import { routes } from "~/configs/routes";
 import { api } from "~/trpc/react";
@@ -30,7 +31,6 @@ import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
 import { StaffLevelSelector } from "../shared/selects/StaffLevelSelector";
 import { Label } from "../ui/label";
-import { Separator } from "../ui/separator";
 import { CreateEditStaff } from "./CreateEditStaff";
 import { StaffEffectif } from "./StaffEffectif";
 

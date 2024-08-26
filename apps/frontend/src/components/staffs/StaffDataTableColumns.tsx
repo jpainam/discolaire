@@ -20,6 +20,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
+import FlatBadge from "@repo/ui/FlatBadge";
 
 import { routes } from "~/configs/routes";
 import { getErrorMessage } from "~/lib/handle-error";
@@ -29,7 +30,6 @@ import { getFullName } from "~/utils/full-name";
 import { AvatarState } from "../AvatarState";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { Checkbox } from "../ui/checkbox";
-import FlatBadge from "../ui/FlatBadge";
 import { CreateEditStaff } from "./CreateEditStaff";
 
 type StaffProcedureOutput = NonNullable<

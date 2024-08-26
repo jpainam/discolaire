@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import { useLocale } from "@repo/i18n";
+import FlatBadge, { FlatBadgeVariant } from "@repo/ui/FlatBadge";
 import {
   Table,
   TableBody,
@@ -15,7 +16,6 @@ import {
 import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";
 import { getFullName } from "~/utils/full-name";
-import FlatBadge, { FlatBadgeVariant } from "../ui/FlatBadge";
 import { ReportCardSummary } from "./ReportCardSummary";
 
 interface ReportCardTableProps {

@@ -17,6 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@repo/ui/form";
+import { Separator } from "@repo/ui/separator";
 
 import { getErrorMessage } from "~/lib/handle-error";
 import { AppRouter } from "~/server/api/root";
@@ -24,7 +25,6 @@ import { api } from "~/trpc/react";
 import { InputField } from "../shared/forms/input-field";
 import { SelectField } from "../shared/forms/SelectField";
 import { StaffSelector } from "../shared/selects/StaffSelector";
-import { Separator } from "../ui/separator";
 
 type ClassroomAllProcedureOutput = NonNullable<
   inferProcedureOutput<AppRouter["classroom"]["all"]>

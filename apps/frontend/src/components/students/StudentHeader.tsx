@@ -31,6 +31,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
+import FlatBadge from "@repo/ui/FlatBadge";
+import { Separator } from "@repo/ui/separator";
+import { Skeleton } from "@repo/ui/skeleton";
 
 import { SimpleTooltip } from "~/components/simple-tooltip";
 import { routes } from "~/configs/routes";
@@ -41,9 +44,6 @@ import { CountryComponent } from "../shared/CountryPicker";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { StudentSelector } from "../shared/selects/StudentSelector";
-import FlatBadge from "../ui/FlatBadge";
-import { Separator } from "../ui/separator";
-import { Skeleton } from "../ui/skeleton";
 import CreateEditStudent from "./CreateEditStudent";
 import { SquaredAvatar } from "./SquaredAvatar";
 

@@ -8,14 +8,11 @@
       "types": "./dist/index.d.ts",
       "default": "./src/index.ts"
     },
-    "./PhoneInput/*": {
-      "default": "./src/PhoneInput/*.tsx"
-    },
     "./*": {
       "types": "./dist/src/*.d.ts",
       "default": [
-        "./src/*.ts",
-        "./src/*.tsx"
+        "./src/**/*.ts",
+        "./src/**/*.tsx"
       ]
     }
   },

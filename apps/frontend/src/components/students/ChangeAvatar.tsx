@@ -5,9 +5,9 @@ import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
 import { useModal } from "@repo/lib/hooks/use-modal";
+import useUpload from "@repo/lib/hooks/use-upload";
 
 import { FileUploader } from "~/components/uploads/file-uploader";
-import useUpload from "~/hooks/use-upload";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
@@ -63,17 +63,16 @@ export function ChangeAvatar({ studentId }: { studentId: string }) {
         }}
         //progresses={progresses}
       />
-      {uploadedFiles &&
-        uploadedFiles.map((d, index) => (
-          <div key={index}>
-            <p>File: {d.file.name}</p>
-            {d.isPending && <p>Uploading...</p>}
-            {!d.isPending && (
-              <p>Upload complete! File ID: {JSON.stringify(d.data)}</p>
-            )}
-            {d.error && <p>Error: {JSON.stringify(d.error)}</p>}
-          </div>
-        ))}
+      {uploadedFiles.map((d, index) => (
+        <div key={index}>
+          <p>File: {d.file.name}</p>
+          {d.isPending && <p>Uploading...</p>}
+          {!d.isPending && (
+            <p>Upload complete! File ID: {JSON.stringify(d.data)}</p>
+          )}
+          {d.error && <p>Error: {JSON.stringify(d.error)}</p>}
+        </div>
+      ))}
     </div>
   );
 }
