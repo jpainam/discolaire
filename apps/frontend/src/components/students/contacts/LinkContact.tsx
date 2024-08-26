@@ -6,6 +6,7 @@ import { Check } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
+import { useDebounce } from "@repo/lib/hooks/use-debounce";
 import { useModal } from "@repo/lib/hooks/use-modal";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Button } from "@repo/ui/button";
@@ -22,7 +23,6 @@ import { Skeleton } from "@repo/ui/skeleton";
 
 import { randomAvatar } from "~/components/raw-images";
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
-import { useDebounce } from "~/hooks/use-debounce";
 import { getErrorMessage } from "~/lib/handle-error";
 import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";

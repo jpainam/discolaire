@@ -1,20 +1,20 @@
 "use client";
 
-import { useCallback } from "react";
+import { render } from "@react-email/components";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { render } from "@react-email/components";
+import { useCallback } from "react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
+import { SendInvite } from "@repo/transactional/emails/SendInvite";
 import { Button } from "@repo/ui/button";
 import { EmptyState } from "@repo/ui/EmptyState";
 import { Skeleton } from "@repo/ui/skeleton";
 
-import { SendInvite } from "~/email-templates/SendInvite";
 import { env } from "~/env";
 import { getErrorMessage, showErrorToast } from "~/lib/handle-error";
-import { sendEmail } from "~/server/services/messaging-service";
+//import { sendEmail } from "~/server/services/messaging-service";
 import { api } from "~/trpc/react";
 import { encryptInvitationCode } from "~/utils/encrypt";
 import { SignUpContactIcon } from "./SignUpContactIcon";
@@ -123,7 +123,7 @@ export function SignUpContact() {
                       email: std.contact.email,
                       username:
                         std.contact.lastName ||
-                        std.contact.firstName ||
+                        std.contact.firstName ??
                         "@username",
                     });
                     await new Promise((resolve) => setTimeout(resolve, 2000));

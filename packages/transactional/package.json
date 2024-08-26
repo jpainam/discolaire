@@ -14,8 +14,8 @@
     "./*": {
       "types": "./dist/*.d.ts",
       "default": [
-        "./src/*.ts",
-        "./src/*.tsx"
+        "./*.ts",
+        "./*.tsx"
       ]
     }
   },

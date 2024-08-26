@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { type ClientUploadedFileData } from "uploadthing/types";
+
 import {
   Card,
   CardContent,
@@ -8,8 +10,9 @@ import {
 } from "@repo/ui/card";
 import { ScrollArea, ScrollBar } from "@repo/ui/scroll-area";
 
-import type { UploadedFile } from "~/types/uploaded-file";
 import { EmptyCard } from "./EmptyCard";
+
+export interface UploadedFile<T = unknown> extends ClientUploadedFileData<T> {}
 
 interface UploadedFilesCardProps {
   uploadedFiles: UploadedFile[];
