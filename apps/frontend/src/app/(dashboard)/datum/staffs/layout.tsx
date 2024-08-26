@@ -1,5 +1,6 @@
 import { PropsWithChildren } from "react";
-import { NoPermission } from "@repo/ui/NoPermission";
+
+import { NoPermission } from "@repo/ui/no-permission";
 
 import { checkPermissions } from "~/server/permission";
 import { PermissionAction } from "~/types/permission";

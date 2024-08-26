@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 "use client";
 
 import type { DropzoneProps, FileRejection } from "react-dropzone";
@@ -8,7 +10,7 @@ import { Trash2, UploadCloud } from "lucide-react";
 import Dropzone from "react-dropzone";
 import { toast } from "sonner";
 
-import { useControllableState } from "@repo/lib/hooks/use-controllable-state";
+import { useControllableState } from "@repo/hooks/use-controllable-state";
 import { Button } from "@repo/ui/button";
 import { Progress } from "@repo/ui/progress";
 import { ScrollArea } from "@repo/ui/scroll-area";

@@ -1,7 +1,7 @@
 import React from "react";
 
 import { getServerTranslations } from "@repo/i18n/server";
-import { NoPermission } from "@repo/ui/NoPermission";
+import { NoPermission } from "@repo/ui/no-permission";
 
 import { checkPermissions } from "~/server/permission";
 import { PermissionAction } from "~/types/permission";

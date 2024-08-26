@@ -1,11 +1,12 @@
-import { TriangleAlert } from "lucide-react";
+import { Mail, TriangleAlert } from "lucide-react";
+import { toast } from "sonner";
 
 import { getServerTranslations } from "@repo/i18n/server";
 
-import { Alert, AlertDescription } from "../alert";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../card";
-import { cn } from "../utils";
-import { PermissionAction } from "./PermissionAction";
+import { Alert, AlertDescription } from "./alert";
+import { Button } from "./button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./card";
+import { cn } from "./utils";
 
 interface NoPermissionProps {
   resourceText: string;
@@ -13,7 +14,7 @@ interface NoPermissionProps {
   className?: string;
 }
 
-const NoPermission = async ({
+export const NoPermission = async ({
   resourceText,
   isFullPage = false,
   className,
@@ -37,7 +38,16 @@ const NoPermission = async ({
       </CardContent>
       <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-2 py-1">
         <div className="ml-auto mr-0 w-auto">
-          <PermissionAction />
+          <Button
+            onClick={() => {
+              toast.info(t("not_yet_implemented"));
+            }}
+            size="sm"
+            variant="outline"
+          >
+            <Mail className="mr-2 h-4 w-4" />
+            {t("contactAdministrator")}
+          </Button>
         </div>
       </CardFooter>
     </Card>
@@ -58,5 +68,3 @@ const NoPermission = async ({
     return <NoPermissionMessage className={className} />;
   }
 };
-
-export default NoPermission;

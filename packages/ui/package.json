@@ -61,6 +61,7 @@
     "@radix-ui/react-tooltip": "^1.1.2",
     "@repo/i18n": "workspace:*",
     "@repo/lib": "workspace:*",
+    "@repo/hooks": "workspace:*",
     "@tanstack/query-core": "^5.28.4",
     "@tanstack/react-query": "^5.51.23",
     "@tanstack/react-table": "^8.12.0",

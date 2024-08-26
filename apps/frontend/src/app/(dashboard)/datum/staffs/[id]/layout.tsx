@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { CalendarDays, DollarSign, Folders, History } from "lucide-react";
 
 import { getServerTranslations } from "@repo/i18n/server";
-import { NoPermission } from "@repo/ui/NoPermission";
+import { NoPermission } from "@repo/ui/no-permission";
 
 import { StaffProfile } from "~/components/staffs/profile/StaffProfile";
 import { StaffTabMenu } from "~/components/staffs/profile/StaffTabMenu";

@@ -242,6 +242,9 @@ importers:
       '@repo/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@repo/hooks':
+        specifier: workspace:*
+        version: link:../../packages/hooks
       '@repo/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n
@@ -747,6 +750,9 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.1.2
         version: 1.1.2(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@repo/hooks':
+        specifier: workspace:*
+        version: link:../hooks
       '@repo/i18n':
         specifier: workspace:*
         version: link:../i18n

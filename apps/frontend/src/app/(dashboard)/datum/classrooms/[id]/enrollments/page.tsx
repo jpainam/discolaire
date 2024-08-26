@@ -1,4 +1,4 @@
-import { NoPermission } from "@repo/ui/NoPermission";
+import { NoPermission } from "@repo/ui/no-permission";
 
 import EnrollmentDataTable from "~/components/classrooms/enrollments/EnrollmentDataTable";
 import { checkPermissions } from "~/server/permission";
