@@ -85,11 +85,11 @@ export function StudentContactTable({
             const contact = c.contact;
             const relationship = c.relationship;
             return (
-              <TableRow key={contact?.id}>
+              <TableRow key={`${contact.id}-${index}`}>
                 <TableCell className="flex items-center justify-start gap-1 py-0">
-                  <AvatarState pos={index} avatar={contact?.avatar} />
+                  <AvatarState pos={index} avatar={contact.avatar} />
                   <Link
-                    href={`${routes.students.contacts(c.studentId)}/${contact?.id}`}
+                    href={`${routes.students.contacts(c.studentId)}/${contact.id}`}
                     className={cn(
                       "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline",
                     )}
@@ -99,10 +99,10 @@ export function StudentContactTable({
                 </TableCell>
                 <TableCell className="py-0">{relationship?.name}</TableCell>
                 <TableCell className="py-0 text-right">
-                  {contact?.email ? contact?.email : "N/A"}
+                  {contact.email ? contact.email : "N/A"}
                 </TableCell>
                 <TableCell className="py-0 text-right">
-                  {contact?.phoneNumber1}{" "}
+                  {contact.phoneNumber1}{" "}
                 </TableCell>
                 <TableCell className="py-0">
                   {contact.userId ? (
@@ -122,7 +122,7 @@ export function StudentContactTable({
                       <PopoverContent align="end">
                         <RelationshipSelector
                           defaultValue={
-                            c.relationshipId?.toString() || undefined
+                            c.relationshipId?.toString() ?? undefined
                           }
                           onChange={(v) => {
                             toast.promise(
@@ -135,9 +135,9 @@ export function StudentContactTable({
                                   },
                                 },
                                 {
-                                  onSuccess: async () => {
-                                    await utils.contact.students.invalidate();
-                                    await utils.student.contacts.invalidate(
+                                  onSuccess: () => {
+                                    void utils.contact.students.invalidate();
+                                    void utils.student.contacts.invalidate(
                                       studentId,
                                     );
                                     toast.success(t("added_successfully"));
@@ -171,13 +171,13 @@ export function StudentContactTable({
                         <DropdownMenuItem
                           onSelect={() => {
                             router.push(
-                              `${routes.students.contacts(c.studentId)}/${c?.contactId}`,
+                              `${routes.students.contacts(c.studentId)}/${c.contactId}`,
                             );
                           }}
                         >
                           <Eye className="mr-2 h-4 w-4" /> {t("details")}
                         </DropdownMenuItem>
-                        <DropdownInvitation email={c.contact?.email} />
+                        <DropdownInvitation email={c.contact.email} />
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                           className="text-destructive"

@@ -1,8 +1,7 @@
 import Image from "next/image";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
-
 import { cn } from "~/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { avatars, randomAvatar } from "./raw-images";
 
 interface AvatarStateProps {

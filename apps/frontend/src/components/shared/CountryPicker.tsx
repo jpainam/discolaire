@@ -1,6 +1,13 @@
 "use client";
 
+import type * as RPNInput from "react-phone-number-input";
 import React, { useMemo } from "react";
+import { t } from "i18next";
+import { CheckIcon, ChevronsUpDown } from "lucide-react";
+import { getCountries } from "react-phone-number-input";
+import flags from "react-phone-number-input/flags";
+import countryNames from "react-phone-number-input/locale/en.json";
+
 import { Button } from "@repo/ui/button";
 import {
   Command,
@@ -13,16 +20,10 @@ import {
 import { FormControl } from "@repo/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { ScrollArea } from "@repo/ui/scroll-area";
-import { t } from "i18next";
-import { CheckIcon, ChevronsUpDown } from "lucide-react";
-import * as RPNInput from "react-phone-number-input";
-import { getCountries } from "react-phone-number-input";
-import flags from "react-phone-number-input/flags";
-import countryNames from "react-phone-number-input/locale/en.json";
 
 import { cn } from "~/lib/utils";
 
-type CountryPickerFieldProps = {
+interface CountryPickerFieldProps {
   emptyPlaceholder?: React.ReactNode;
   searchPlaceholder?: string;
   className?: string;
@@ -30,7 +31,7 @@ type CountryPickerFieldProps = {
   disabled?: boolean;
   onChange?: (value: string) => void;
   defaultValue?: string;
-};
+}
 export function CountryPicker({
   emptyPlaceholder,
   searchPlaceholder,
@@ -84,6 +85,7 @@ export function CountryPicker({
                     key={country}
                     onSelect={() => {
                       setValue(country);
+                      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
                       onChange && onChange(country);
                       setOpen(false);
                     }}

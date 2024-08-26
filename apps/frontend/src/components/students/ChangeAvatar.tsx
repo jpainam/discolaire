@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
 
 import * as React from "react";
@@ -6,8 +7,8 @@ import { toast } from "sonner";
 import { useLocale } from "@repo/i18n";
 import { useModal } from "@repo/lib/hooks/use-modal";
 import useUpload from "@repo/lib/hooks/use-upload";
+import { FileUploader } from "@repo/ui/uploads/file-uploader";
 
-import { FileUploader } from "~/components/uploads/file-uploader";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
@@ -18,9 +19,10 @@ export function ChangeAvatar({ studentId }: { studentId: string }) {
   const updateStudentAvatarMutation = api.student.updateAvatar.useMutation();
 
   React.useEffect(() => {
-    if (!uploadedFiles || uploadedFiles.length === 0) {
+    if (uploadedFiles.length == 0) {
       return;
     }
+    // @ts-expect-error - TODO  fix this
     const avatarId = uploadedFiles[0].data?.id;
     if (avatarId) {
       updateStudentAvatarMutation.mutate({

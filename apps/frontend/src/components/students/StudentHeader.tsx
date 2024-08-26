@@ -1,5 +1,6 @@
 "use client";
 
+import type * as RPNInput from "react-phone-number-input";
 import { useParams, usePathname } from "next/navigation";
 import {
   BellRing,
@@ -16,11 +17,9 @@ import {
   Users,
 } from "lucide-react";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
-import * as RPNInput from "react-phone-number-input";
 
 import { useLocale } from "@repo/i18n";
 import { useCreateQueryString } from "@repo/lib/hooks/create-query-string";
-import { useModal } from "@repo/lib/hooks/use-modal";
 import { useRouter } from "@repo/lib/hooks/use-router";
 import { useSheet } from "@repo/lib/hooks/use-sheet";
 import { Button } from "@repo/ui/button";
@@ -60,31 +59,29 @@ export function StudentHeader({ className }: StudentHeaderProps) {
 
   const { createQueryString } = useCreateQueryString();
   const pathname = usePathname();
-  const { openModal } = useModal();
 
   const navigateToStudent = (id: string | null) => {
     if (id) {
-      if (!pathname.includes(params.id as string)) {
+      if (!pathname.includes(params.id)) {
         router.push(`${pathname}/${id}/?${createQueryString({})}`);
         return;
       }
-      const newPath = pathname.replace(params.id as string, id);
+      const newPath = pathname.replace(params.id, id);
       router.push(`${newPath}/?${createQueryString({})}`);
-    } else {
     }
   };
 
   const student = studentQuery.data;
-  const studentTags = JSON.stringify(student?.tags || []);
+  const studentTags = JSON.stringify(student?.tags ?? []);
 
   return (
     <header className={cn(className)}>
       <div className="flex w-full gap-1">
-        <SquaredAvatar student={student || undefined} />
+        <SquaredAvatar student={student ?? undefined} />
         <div className="flex w-full flex-col gap-1">
           <StudentSelector
             className="w-full md:w-[500px]"
-            defaultValue={params.id as string}
+            defaultValue={params.id}
             onChange={(val) => {
               if (val) {
                 navigateToStudent(val);
@@ -141,9 +138,7 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                   aria-label="Notification"
                   variant="ghost"
                   onClick={() => {
-                    router.push(
-                      `${routes.students.notifications(params.id as string)}`,
-                    );
+                    router.push(`${routes.students.notifications(params.id)}`);
                   }}
                 >
                   <MessageCircleMore className="h-4 w-4" />
@@ -155,8 +150,8 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                   size={"icon"}
                   aria-label="Contacts"
                   variant="ghost"
-                  onClick={(e) => {
-                    router.push(routes.students.contacts(params.id as string));
+                  onClick={() => {
+                    router.push(routes.students.contacts(params.id));
                   }}
                 >
                   <Users className="h-4 w-4" />
@@ -169,7 +164,7 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                   aria-label="print"
                   variant="ghost"
                   onClick={() => {
-                    router.push(routes.students.print(params.id as string));
+                    router.push(routes.students.print(params.id));
                   }}
                 >
                   <Printer className="h-4 w-4" />
@@ -181,10 +176,8 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                   <Button
                     size={"icon"}
                     variant="ghost"
-                    onClick={(e) => {
-                      router.push(
-                        routes.students.contacts(params.id as string),
-                      );
+                    onClick={() => {
+                      router.push(routes.students.contacts(params.id));
                     }}
                   >
                     <MoreVertical className="h-4 w-4" />
@@ -213,7 +206,7 @@ export function StudentHeader({ className }: StudentHeaderProps) {
               {student?.registrationNumber && (
                 <div className="flex flex-row items-center gap-2 rounded dark:bg-secondary">
                   <NotebookTabs className="h-4 w-4 text-foreground" />
-                  <span> {student?.registrationNumber}</span>
+                  <span> {student.registrationNumber}</span>
                 </div>
               )}
               {student?.classroom && (
@@ -221,7 +214,7 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                   <SquareEqual className="h-4 w-4 text-foreground" />
                   <span className="line-clamp-1">
                     {" "}
-                    {student?.classroom?.shortName}
+                    {student.classroom.shortName}
                   </span>
                 </div>
               )}
@@ -229,7 +222,7 @@ export function StudentHeader({ className }: StudentHeaderProps) {
               {student?.phoneNumber && (
                 <div className="flex flex-row items-center gap-2 rounded dark:bg-secondary">
                   <Phone className="h-4 w-4 text-foreground" />
-                  <span> {student?.phoneNumber}</span>
+                  <span> {student.phoneNumber}</span>
                 </div>
               )}
               {/* {student?.email && (
@@ -248,7 +241,7 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                 ) : (
                   <PiGenderFemaleThin className="h-4 w-4" />
                 )}
-                {t(student?.gender || "male")}
+                {t(student?.gender ?? "male")}
               </FlatBadge>
 
               {student?.tags && (
@@ -260,7 +253,7 @@ export function StudentHeader({ className }: StudentHeaderProps) {
               {student?.countryId && (
                 <CountryComponent
                   className="text-sm"
-                  country={student?.countryId as RPNInput.Country}
+                  country={student.countryId as RPNInput.Country}
                 />
               )}
               {/* {student?.dateOfBirth &&

@@ -1,5 +1,6 @@
 import { PencilIcon } from "lucide-react";
 
+import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
 import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
@@ -9,7 +10,8 @@ import { AvatarState } from "../AvatarState";
 import { SimpleTooltip } from "../simple-tooltip";
 import { ChangeAvatar } from "./ChangeAvatar";
 
-export function SquaredAvatar({ student }: { student?: any }) {
+type Student = RouterOutputs["student"]["get"];
+export function SquaredAvatar({ student }: { student?: Student }) {
   const { t } = useLocale();
   const { openModal } = useModal();
 
@@ -30,7 +32,7 @@ export function SquaredAvatar({ student }: { student?: any }) {
                 className: "w-[500px]",
                 description:
                   "Drag and drop your files here or click to browse.",
-                view: <ChangeAvatar studentId={student?.id} />,
+                view: <ChangeAvatar studentId={student.id} />,
               });
             }}
             size={"icon"}
