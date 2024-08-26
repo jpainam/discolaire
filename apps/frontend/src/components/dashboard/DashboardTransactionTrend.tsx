@@ -4,9 +4,9 @@ import * as React from "react";
 import { useSearchParams } from "next/navigation";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
+import { useCreateQueryString } from "@repo/hooks/create-query-string";
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
-import { useCreateQueryString } from "@repo/lib/hooks/create-query-string";
-import { useRouter } from "@repo/lib/hooks/use-router";
 import {
   Card,
   CardContent,

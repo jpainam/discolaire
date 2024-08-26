@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useCallback, useId, useState } from "react";
 
-import { useDirection } from "@repo/lib/hooks/use-direction";
+import { useDirection } from "@repo/hooks/use-direction";
 
 import type {
   FloatingPlacement,

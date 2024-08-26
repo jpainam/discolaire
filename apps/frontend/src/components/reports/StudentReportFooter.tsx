@@ -2,8 +2,8 @@
 
 import { useAtom } from "jotai";
 
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
-import { useRouter } from "@repo/lib/hooks/use-router";
 import { Button } from "@repo/ui/button";
 
 import { studentReportsAtom } from "~/atoms/report-atom";

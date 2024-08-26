@@ -3,9 +3,9 @@
 import { useSearchParams } from "next/navigation";
 import { ChevronDown, Printer } from "lucide-react";
 
+import { useCreateQueryString } from "@repo/hooks/create-query-string";
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
-import { useCreateQueryString } from "@repo/lib/hooks/create-query-string";
-import { useRouter } from "@repo/lib/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,

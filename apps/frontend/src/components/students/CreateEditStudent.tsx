@@ -8,8 +8,8 @@ import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import type { Tag } from "@repo/ui/TagInput/tag-input";
+import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
-import { useSheet } from "@repo/lib/hooks/use-sheet";
 import { Button } from "@repo/ui/button";
 import {
   Form,

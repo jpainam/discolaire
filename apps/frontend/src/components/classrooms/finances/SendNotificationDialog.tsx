@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 
+import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { Input } from "@repo/ui/input";

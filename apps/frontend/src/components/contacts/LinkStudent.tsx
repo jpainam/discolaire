@@ -5,8 +5,8 @@ import Image from "next/image";
 import { Check } from "lucide-react";
 import { toast } from "sonner";
 
+import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import {
   Command,

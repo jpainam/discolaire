@@ -7,9 +7,9 @@ import { inferProcedureOutput } from "@trpc/server";
 import { Plus, Trash2, UploadIcon } from "lucide-react";
 import { toast } from "sonner";
 
+import { useAlert } from "@repo/hooks/use-alert";
+import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { useAlert } from "@repo/lib/hooks/use-alert";
-import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 
 import { exportTableToCSV } from "~/lib/export";

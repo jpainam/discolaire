@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 
-import { useRouter } from "@repo/lib/hooks/use-router";
+import { useRouter } from "@repo/hooks/use-router";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 
 import { routes } from "~/configs/routes";

@@ -8,8 +8,8 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
-import { useSheet } from "@repo/lib/hooks/use-sheet";
 import {
   Form,
   FormControl,

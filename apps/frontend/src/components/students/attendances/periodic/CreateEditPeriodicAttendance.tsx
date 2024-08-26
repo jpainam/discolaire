@@ -2,8 +2,8 @@
 
 import { useForm } from "react-hook-form";
 
+import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import { Form } from "@repo/ui/form";
 

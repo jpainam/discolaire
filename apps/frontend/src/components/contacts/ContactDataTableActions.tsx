@@ -6,8 +6,8 @@ import { inferProcedureOutput } from "@trpc/server";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 
+import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
-import { useSheet } from "@repo/lib/hooks/use-sheet";
 import { Button } from "@repo/ui/button";
 
 import { exportTableToCSV } from "~/lib/export";

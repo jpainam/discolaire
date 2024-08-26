@@ -7,8 +7,8 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
-import { useRouter } from "@repo/lib/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { Form } from "@repo/ui/form";

@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 
-import { useRouter } from "@repo/lib/hooks/use-router";
+import { useRouter } from "@repo/hooks/use-router";
 
 import { routes } from "~/configs/routes";
 import { showErrorToast } from "~/lib/handle-error";

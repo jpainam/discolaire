@@ -5,8 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { MoreVertical } from "lucide-react";
 import { type DateRange } from "react-day-picker";
 
+import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
-import { useCreateQueryString } from "@repo/lib/hooks/create-query-string";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,

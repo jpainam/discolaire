@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
-import { useSheet } from "@repo/lib/hooks/use-sheet";
+import { useSheet } from "@repo/hooks/use-sheet";
 import { Separator } from "@repo/ui/separator";
 import {
   Sheet,

@@ -6,7 +6,7 @@ import { useAtom } from "jotai";
 import { Loader } from "lucide-react";
 import { toast } from "sonner";
 
-import { useRouter } from "@repo/lib/hooks/use-router";
+import { useRouter } from "@repo/hooks/use-router";
 
 import { makePaymentAtom } from "~/atoms/payment";
 import { routes } from "~/configs/routes";

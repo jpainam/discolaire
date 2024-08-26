@@ -4,9 +4,9 @@ import { useSearchParams } from "next/navigation";
 import { MoreVertical, Plus } from "lucide-react";
 import { useQueryState } from "nuqs";
 
+import { useRouter } from "@repo/hooks/use-router";
+import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
-import { useRouter } from "@repo/lib/hooks/use-router";
-import { useSheet } from "@repo/lib/hooks/use-sheet";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,

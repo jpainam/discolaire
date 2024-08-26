@@ -4,8 +4,8 @@ import * as React from "react";
 import { useSearchParams } from "next/navigation";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
-import { useRouter } from "@repo/lib/hooks/use-router";
 import { Card, CardContent } from "@repo/ui/card";
 import {
   ChartConfig,

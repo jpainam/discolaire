@@ -2,8 +2,8 @@ import { useState } from "react";
 import { XIcon } from "lucide-react";
 import { toast } from "sonner";
 
+import { useAlert } from "@repo/hooks/use-alert";
 import { useLocale } from "@repo/i18n";
-import { useAlert } from "@repo/lib/hooks/use-alert";
 import { Input } from "@repo/ui/input";
 
 import { getErrorMessage } from "~/lib/handle-error";

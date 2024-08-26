@@ -1,1 +1,1 @@
-export { default as NoPermission } from "./NoPermission";
+export * from "./NoPermission";

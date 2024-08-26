@@ -3,8 +3,8 @@
 import { useParams } from "next/navigation";
 import { ChevronDownIcon, PrinterIcon } from "lucide-react";
 
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
-import { useRouter } from "@repo/lib/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import {

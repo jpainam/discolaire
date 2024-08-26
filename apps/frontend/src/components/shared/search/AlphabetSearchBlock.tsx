@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-import { useCreateQueryString } from "@repo/lib/hooks/create-query-string";
+import { useCreateQueryString } from "@repo/hooks/create-query-string";
 
 import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";

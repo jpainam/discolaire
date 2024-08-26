@@ -2,8 +2,8 @@
 
 import { Plus } from "lucide-react";
 
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
-import { useRouter } from "@repo/lib/hooks/use-router";
 import { Button } from "@repo/ui/button";
 
 import { routes } from "~/configs/routes";

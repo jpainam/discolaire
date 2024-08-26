@@ -21,8 +21,8 @@ import {
   View as RbcView,
 } from "react-big-calendar";
 
+import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { useModal } from "@repo/lib/hooks/use-modal";
 
 import { useResolvedTheme } from "~/hooks/use-resolved-theme";
 

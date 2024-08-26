@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
-import { useModal } from "@repo/lib/hooks/use-modal";
+import { useModal } from "@repo/hooks/use-modal";
 import {
   Dialog,
   DialogContent,

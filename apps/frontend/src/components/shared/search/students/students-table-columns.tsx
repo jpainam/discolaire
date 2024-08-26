@@ -4,8 +4,8 @@ import { TFunction } from "i18next";
 import * as RPNInput from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
 
+import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
-import { useCreateQueryString } from "@repo/lib/hooks/create-query-string";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";

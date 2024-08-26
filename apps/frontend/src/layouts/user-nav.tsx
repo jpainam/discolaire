@@ -3,8 +3,8 @@
 import { Computer, LogOut, Settings, User } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
-import { useRouter } from "@repo/lib/hooks/use-router";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Button } from "@repo/ui/button";
 import {

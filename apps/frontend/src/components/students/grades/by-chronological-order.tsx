@@ -2,8 +2,8 @@
 
 import { useParams, useRouter } from "next/navigation";
 
+import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
-import { useCreateQueryString } from "@repo/lib/hooks/create-query-string";
 
 import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";

@@ -9,8 +9,8 @@ import { Pencil, Trash2, Users } from "lucide-react";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import { toast } from "sonner";
 
-import { useAlert } from "@repo/lib/hooks/use-alert";
-import { useSheet } from "@repo/lib/hooks/use-sheet";
+import { useAlert } from "@repo/hooks/use-alert";
+import { useSheet } from "@repo/hooks/use-sheet";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";

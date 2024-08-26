@@ -30,7 +30,7 @@ const NoPermission = async ({
       <CardContent className="bg-destructive/5 p-4 text-sm">
         <Alert variant="destructive">
           <AlertDescription className="text-destructive">
-            {t("youNeedAdditionalPermissionTo", { resource: resourceText })}
+            {t("youNeedAdditionalPermissionTo")}
           </AlertDescription>
         </Alert>
         <div className="m-2">{t("contactAdministratorForAccess")}</div>

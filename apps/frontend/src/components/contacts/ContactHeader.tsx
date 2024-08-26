@@ -3,9 +3,9 @@
 import { useParams } from "next/navigation";
 import { MoreVertical, PlusIcon } from "lucide-react";
 
+import { useRouter } from "@repo/hooks/use-router";
+import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
-import { useRouter } from "@repo/lib/hooks/use-router";
-import { useSheet } from "@repo/lib/hooks/use-sheet";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,

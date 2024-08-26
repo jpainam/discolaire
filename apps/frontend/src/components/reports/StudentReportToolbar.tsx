@@ -1,8 +1,8 @@
 "use client";
 
+import { useCreateQueryString } from "@repo/hooks/create-query-string";
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
-import { useCreateQueryString } from "@repo/lib/hooks/create-query-string";
-import { useRouter } from "@repo/lib/hooks/use-router";
 import { ToggleGroup } from "@repo/ui/ToggleGroup";
 
 import PDFIcon from "~/components/icons/pdf-solid";

@@ -2,9 +2,9 @@ import { useState } from "react";
 import { XIcon } from "lucide-react";
 import { toast } from "sonner";
 
+import { useAlert } from "@repo/hooks/use-alert";
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
-import { useAlert } from "@repo/lib/hooks/use-alert";
-import { useRouter } from "@repo/lib/hooks/use-router";
 import { Textarea } from "@repo/ui/textarea";
 
 import { getErrorMessage } from "~/lib/handle-error";

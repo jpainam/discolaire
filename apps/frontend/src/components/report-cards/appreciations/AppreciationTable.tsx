@@ -6,8 +6,8 @@ import { useSearchParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 
+import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
-import { useCreateQueryString } from "@repo/lib/hooks/create-query-string";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableSkeleton } from "@repo/ui/data-table/v2/data-table-skeleton";
 import FlatBadge from "@repo/ui/FlatBadge";

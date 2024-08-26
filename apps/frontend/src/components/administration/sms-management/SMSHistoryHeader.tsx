@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { subDays } from "date-fns";
 
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
-import { useRouter } from "@repo/lib/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
 

@@ -4,9 +4,9 @@
 import * as React from "react";
 import { toast } from "sonner";
 
+import { useModal } from "@repo/hooks/use-modal";
+import useUpload from "@repo/hooks/use-upload";
 import { useLocale } from "@repo/i18n";
-import { useModal } from "@repo/lib/hooks/use-modal";
-import useUpload from "@repo/lib/hooks/use-upload";
 import { FileUploader } from "@repo/ui/uploads/file-uploader";
 
 import { getErrorMessage } from "~/lib/handle-error";

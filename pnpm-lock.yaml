@@ -508,6 +508,27 @@ importers:
         specifier: 'catalog:'
         version: 5.5.4
 
+  packages/hooks:
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../tooling/eslint
+      '@repo/prettier-config':
+        specifier: workspace:*
+        version: link:../../tooling/prettier
+      '@repo/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/typescript
+      eslint:
+        specifier: 'catalog:'
+        version: 9.9.0(jiti@1.21.6)
+      prettier:
+        specifier: 'catalog:'
+        version: 3.3.3
+      typescript:
+        specifier: 'catalog:'
+        version: 5.5.4
+
   packages/i18n:
     dependencies:
       accept-language:

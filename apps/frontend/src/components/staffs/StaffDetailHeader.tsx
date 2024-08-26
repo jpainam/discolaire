@@ -5,9 +5,9 @@ import { useParams, useRouter } from "next/navigation";
 import { inferProcedureOutput } from "@trpc/server";
 import { Forward, Reply } from "lucide-react";
 
+import { useAlert } from "@repo/hooks/use-alert";
+import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
-import { useAlert } from "@repo/lib/hooks/use-alert";
-import { useSheet } from "@repo/lib/hooks/use-sheet";
 import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
 

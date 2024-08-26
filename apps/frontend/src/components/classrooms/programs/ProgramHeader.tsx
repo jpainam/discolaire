@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { MoreVertical, Pencil } from "lucide-react";
 
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
-import { useRouter } from "@repo/lib/hooks/use-router";
 import {
   BreadCrumb,
   BreadCrumbItem,

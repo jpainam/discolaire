@@ -3,8 +3,8 @@
 import { useAtomValue } from "jotai";
 import { ChevronDown, SendHorizonal, SendIcon } from "lucide-react";
 
+import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,

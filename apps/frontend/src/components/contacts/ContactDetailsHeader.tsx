@@ -11,9 +11,9 @@ import {
   Trash2,
 } from "lucide-react";
 
+import { useModal } from "@repo/hooks/use-modal";
+import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
-import { useModal } from "@repo/lib/hooks/use-modal";
-import { useSheet } from "@repo/lib/hooks/use-sheet";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,

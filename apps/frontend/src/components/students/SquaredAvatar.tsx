@@ -1,8 +1,8 @@
 import { PencilIcon } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
+import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { useModal } from "@repo/lib/hooks/use-modal";
 import { Button } from "@repo/ui/button";
 
 import { getFullName } from "~/utils/full-name";

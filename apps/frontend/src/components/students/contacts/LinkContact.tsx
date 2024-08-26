@@ -5,9 +5,9 @@ import Image from "next/image";
 import { Check } from "lucide-react";
 import { toast } from "sonner";
 
+import { useDebounce } from "@repo/hooks/use-debounce";
+import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { useDebounce } from "@repo/lib/hooks/use-debounce";
-import { useModal } from "@repo/lib/hooks/use-modal";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Button } from "@repo/ui/button";
 import {

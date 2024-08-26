@@ -4,9 +4,9 @@ import { useCallback } from "react";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { useAtomValue } from "jotai";
 
+import { useCreateQueryString } from "@repo/hooks/create-query-string";
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
-import { useCreateQueryString } from "@repo/lib/hooks/create-query-string";
-import { useRouter } from "@repo/lib/hooks/use-router";
 import { Button } from "@repo/ui/button";
 
 import { peopleCriteriaAtom } from "~/atoms/use-criteria";

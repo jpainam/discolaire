@@ -6,9 +6,9 @@ import { inferProcedureOutput } from "@trpc/server";
 import { MoreVertical, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import { useAlert } from "@repo/hooks/use-alert";
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
-import { useAlert } from "@repo/lib/hooks/use-alert";
-import { useRouter } from "@repo/lib/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
