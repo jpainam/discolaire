@@ -17,6 +17,7 @@ import { healthRouter } from "./routers/health";
 import { journalRouter } from "./routers/journal";
 import { menuRouter } from "./routers/menu";
 import { policyRouter } from "./routers/policy";
+import { postRouter } from "./routers/post";
 import { programRouter } from "./routers/program";
 import { recipientRouter } from "./routers/recipient";
 import { reportCardRouter } from "./routers/reportCard";
@@ -66,6 +67,7 @@ export const appRouter = createTRPCRouter({
   program: programRouter,
   menu: menuRouter,
   policy: policyRouter,
+  post: postRouter,
   transaction: transactionRouter,
 });
 

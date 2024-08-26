@@ -682,6 +682,7 @@ model User {
     announcements   Announcement[]
     recipients      Recipient[]
     policies        UserPolicy[]
+    posts           Post[]
 }
 
 model UserRole {
@@ -854,6 +855,16 @@ model ReportQueue {
     completedAt  DateTime? @db.Timestamp(6)
     userId       String
     user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Post {
+    id        String   @id @default(uuid())
+    title     String
+    content   String
+    createdAt DateTime @default(now()) @db.Timestamp(6)
+    updatedAt DateTime @updatedAt
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 /// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.

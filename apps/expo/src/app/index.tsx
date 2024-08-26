@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useState } from "react";
 import { Button, Pressable, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -24,7 +27,7 @@ function PostCard(props: {
         >
           <Pressable className="">
             <Text className="text-xl font-semibold text-primary">
-              {props.post.title}
+              {props.post?.title}
             </Text>
             <Text className="mt-2 text-foreground">{props.post.content}</Text>
           </Pressable>

@@ -1,13 +1,13 @@
 import { Suspense } from "react";
 import Link from "next/link";
 
+import { ContactCard } from "~/components/contacts/ContactCard";
 import { DashboardClassroomSize } from "~/components/dashboard/DashboardClassroomSize";
 import { DashboardTransactionTrend } from "~/components/dashboard/DashboardTransactionTrend";
 import { EffectiveStat } from "~/components/dashboard/EffectiveStat";
 import { SearchBlock } from "~/components/dashboard/SearchBlock";
-import { api } from "~/trpc/server";
 
-export default async function DashboardPage() {
+export default function DashboardPage() {
   // const signedUrl = await fetch(
   //   "http://localhost:3000/api/upload?key=avatars/011ece07-f378-47de-bbe5-d1cb8618dd8e"
   // );
@@ -17,7 +17,7 @@ export default async function DashboardPage() {
   //   "2b030158-4304-4dba-a6be-b99c5c6c26b9",
   //   43
   // );
-  const staff = await api.staff.all();
+  //const staff = await api.staff.all();
 
   return (
     <div className="grid grid-cols-12 gap-4 px-6 md:mt-4 md:px-8 2xl:px-10">
@@ -31,6 +31,7 @@ export default async function DashboardPage() {
       <Suspense>
         <EffectiveStat className="col-span-full" />
       </Suspense>
+      <ContactCard className="col-span-4" />
 
       {/* <Suspense>
         <TransactionStat className="col-span-full" />
