@@ -1,4 +1,5 @@
 import { StaticImageData } from "next/image";
+
 import Avatar01 from "../../public/avatars/avatar-01.webp";
 import Avatar02 from "../../public/avatars/avatar-02.webp";
 import Avatar03 from "../../public/avatars/avatar-03.webp";
@@ -14,7 +15,6 @@ import Avatar12 from "../../public/avatars/avatar-12.webp";
 import Avatar13 from "../../public/avatars/avatar-13.webp";
 import Avatar14 from "../../public/avatars/avatar-14.webp";
 import Avatar15 from "../../public/avatars/avatar-15.webp";
-
 import Logo from "../../public/images/logo.webp";
 
 export { Avatar01, Avatar02, Avatar03, Avatar04, Avatar05, Avatar06, Logo };
@@ -37,9 +37,11 @@ export const avatars: StaticImageData[] = [
   Avatar15,
 ];
 export function randomAvatar(pos?: number): StaticImageData {
+  let av: StaticImageData | undefined;
   if (pos != undefined) {
-    return avatars[pos % avatars.length];
+    av = avatars[pos % avatars.length];
+  } else {
+    av = avatars[Math.floor(Math.random() * avatars.length)];
   }
-  const av = avatars[Math.floor(Math.random() * avatars.length)];
-  return av || Avatar01;
+  return av ?? Avatar01;
 }
