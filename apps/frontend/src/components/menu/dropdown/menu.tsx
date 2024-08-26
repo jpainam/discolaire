@@ -1,15 +1,18 @@
-import { MenuContextProvider } from "@/components/ui/menu/dropdown/menu-context";
-import { MenuItem } from "@/components/ui/menu/dropdown/menu-item";
-import { MenuList } from "@/components/ui/menu/dropdown/menu-list";
-import { MenuTrigger } from "@/components/ui/menu/dropdown/menu-trigger";
-import { useDelayedHover } from "@/components/ui/menu/dropdown/use-delay-hover";
-import { useHovered } from "@/components/ui/menu/dropdown/use-hover";
-import { useUncontrolled } from "@/components/ui/menu/dropdown/use-uncontrolled";
-import Popover from "@/components/ui/menu/popover/popover";
-import { FloatingPosition } from "@/components/ui/menu/popover/types";
-import { useUpdate } from "@/components/ui/menu/popover/use-update";
-import { cn } from "@/lib/utils";
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
+
+import { cn } from "@repo/lib";
+
+import type { FloatingPosition } from "~/components/menu/popover/types";
+import { MenuContextProvider } from "~/components/menu/dropdown/menu-context";
+import { MenuItem } from "~/components/menu/dropdown/menu-item";
+import { MenuList } from "~/components/menu/dropdown/menu-list";
+import { MenuTrigger } from "~/components/menu/dropdown/menu-trigger";
+import { useDelayedHover } from "~/components/menu/dropdown/use-delay-hover";
+import { useHovered } from "~/components/menu/dropdown/use-hover";
+import { useUncontrolled } from "~/components/menu/dropdown/use-uncontrolled";
+import Popover from "~/components/menu/popover/popover";
+import { useUpdate } from "~/components/menu/popover/use-update";
 
 interface MenuProps {
   className?: string;
@@ -72,15 +75,18 @@ export default function Menu({
   function close() {
     setIsOpened(false);
     setOpenedViaClick(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     isOpened && onClose?.();
   }
 
   const open = () => {
     setIsOpened(true);
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     !isOpened && onOpen?.();
   };
 
   const toggleDropdown = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     isOpened ? close() : open();
   };
 
@@ -101,14 +107,15 @@ export default function Menu({
   }
 
   function getItemIndex(node: HTMLButtonElement) {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!node) {
       return null;
     }
 
     return Array.from(
       findElement(node, "[data-menu-dropdown]")?.querySelectorAll(
-        "[data-menu-item]"
-      ) || []
+        "[data-menu-item]",
+      ) ?? [],
     ).findIndex((element) => element === node);
   }
 

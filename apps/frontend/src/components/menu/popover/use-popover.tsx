@@ -1,20 +1,23 @@
-import { useUncontrolled } from "@/components/ui/menu/dropdown/use-uncontrolled";
-import {
-  FloatingAxesOffsets,
-  FloatingPosition,
-} from "@/components/ui/menu/popover/types";
-import { useFloatingAutoUpdate } from "@/components/ui/menu/popover/use-floating-auto-update";
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
+import type { Middleware, UseFloatingReturn } from "@floating-ui/react";
 import {
   flip,
   inline,
   limitShift,
-  Middleware,
   offset,
   shift,
   size,
   useFloating,
-  UseFloatingReturn,
 } from "@floating-ui/react";
+
+import type {
+  FloatingAxesOffsets,
+  FloatingPosition,
+} from "~/components/menu/popover/types";
+import { useUncontrolled } from "~/components/menu/dropdown/use-uncontrolled";
+import { useFloatingAutoUpdate } from "~/components/menu/popover/use-floating-auto-update";
 
 export type PopoverWidth = "target" | React.CSSProperties["width"];
 
@@ -117,7 +120,7 @@ export function usePopover(options: UsePopoverOptions) {
   useFloatingAutoUpdate({
     opened: options.opened,
     position: options.position,
-    positionDependencies: options.positionDependencies || [],
+    positionDependencies: options.positionDependencies ?? [],
     floating,
   });
 

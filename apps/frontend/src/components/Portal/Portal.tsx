@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import React, { forwardRef, useRef, useState } from "react";
-import { assignRef } from "@repo/ui/menu/popover/use-merged-ref";
 import { createPortal } from "react-dom";
 
+import { assignRef } from "~/components/menu/popover/use-merged-ref";
 import { useIsomorphicEffect } from "~/hooks/use-event-listener";
 
 function createPortalNode(props: React.ComponentPropsWithoutRef<"div">) {

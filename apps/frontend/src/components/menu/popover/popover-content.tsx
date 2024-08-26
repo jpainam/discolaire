@@ -1,10 +1,14 @@
-import { OptionalPortal } from "@/components/Portal";
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 
-import { usePopoverContext } from "@/components/ui/menu/popover/popover-context";
-import { useFocusReturn } from "@/components/ui/menu/popover/use-focus-return";
-import { useMergedRef } from "@/components/ui/menu/popover/use-merged-ref";
-import { cn } from "@/lib/utils";
+import { cn } from "@repo/lib";
+
+import { usePopoverContext } from "~/components/menu/popover/popover-context";
+import { useFocusReturn } from "~/components/menu/popover/use-focus-return";
+import { useMergedRef } from "~/components/menu/popover/use-merged-ref";
+import { OptionalPortal } from "~/components/Portal";
 
 interface Options {
   active: boolean | undefined;
@@ -19,7 +23,7 @@ export function closeOnEscape(
   options: Options = { active: true },
 ) {
   if (typeof callback !== "function" || !options.active) {
-    return options.onKeyDown || noop;
+    return options.onKeyDown ?? noop;
   }
 
   return (event: React.KeyboardEvent<any>) => {
@@ -132,7 +136,7 @@ export const PopoverContent = React.forwardRef<
               className,
               popoverStyle.base,
               popoverStyle.shadow[shadow],
-              // @ts-ignore
+              // @ts-expect-error TODO fix this
               popoverStyle.size[size],
               popoverStyle.rounded[rounded],
             )}

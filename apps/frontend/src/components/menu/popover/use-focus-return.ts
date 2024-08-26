@@ -1,5 +1,6 @@
-import { useUpdate } from "@/components/ui/menu/popover/use-update";
 import { useRef } from "react";
+
+import { useUpdate } from "~/components/menu/popover/use-update";
 
 interface UseFocusReturn {
   opened: boolean;
@@ -18,7 +19,7 @@ export function useFocusReturn({
       "focus" in lastActiveElement.current &&
       typeof lastActiveElement.current.focus === "function"
     ) {
-      lastActiveElement.current?.focus({ preventScroll: true });
+      lastActiveElement.current.focus({ preventScroll: true });
     }
   };
 

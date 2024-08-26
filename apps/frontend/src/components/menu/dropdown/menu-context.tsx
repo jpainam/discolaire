@@ -1,4 +1,4 @@
-import { createContextHook } from "@/components/ui/menu/popover/create-custom-context";
+import { createContextHook } from "~/components/menu/popover/create-custom-context";
 
 interface MenuContext {
   toggleDropdown: () => void;

@@ -1,9 +1,15 @@
-import { useMenuContext } from "@/components/ui/menu/dropdown/menu-context";
-import { useMergedRef } from "@/components/ui/menu/popover/use-merged-ref";
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { forwardRef, useRef } from "react";
 
-import { keydownHandler } from "@/components/ui/menu/dropdown/keyboard-handler";
-import { cn } from "@/lib/utils";
+import { cn } from "@repo/lib";
+
+import { keydownHandler } from "~/components/menu/dropdown/keyboard-handler";
+import { useMenuContext } from "~/components/menu/dropdown/menu-context";
+import { useMergedRef } from "~/components/menu/popover/use-merged-ref";
 
 export interface MenuItemProps {
   as?: React.ElementType;
@@ -71,7 +77,7 @@ export const MenuItem = forwardRef<
         role="menuitem"
         disabled={disabled}
         data-menu-item
-        data-disabled={disabled || undefined}
+        data-disabled={disabled ?? undefined}
         data-hover={ctx.hovered === itemIndex ? true : undefined}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}

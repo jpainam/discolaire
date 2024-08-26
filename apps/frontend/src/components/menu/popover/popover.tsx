@@ -1,18 +1,22 @@
-import { PopoverContent } from "@/components/ui/menu/popover/popover-content";
-import { PopoverContextProvider } from "@/components/ui/menu/popover/popover-context";
-import { PopoverTrigger } from "@/components/ui/menu/popover/popover-trigger";
-import {
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useCallback, useId, useState } from "react";
+
+import { useDirection } from "@repo/lib/hooks/use-direction";
+
+import type {
   FloatingPlacement,
   FloatingPosition,
   FloatingSide,
-} from "@/components/ui/menu/popover/types";
-import { useClickOutside } from "@/components/ui/menu/popover/use-click-outside";
-import {
-  PopoverWidth,
-  usePopover,
-} from "@/components/ui/menu/popover/use-popover";
-import { useDirection } from "@/hooks/use-direction";
-import React, { useCallback, useId, useState } from "react";
+} from "~/components/menu/popover/types";
+import type { PopoverWidth } from "~/components/menu/popover/use-popover";
+import { PopoverContent } from "~/components/menu/popover/popover-content";
+import { PopoverContextProvider } from "~/components/menu/popover/popover-context";
+import { PopoverTrigger } from "~/components/menu/popover/popover-trigger";
+import { useClickOutside } from "~/components/menu/popover/use-click-outside";
+import { usePopover } from "~/components/menu/popover/use-popover";
 
 export interface PortalProps extends React.ComponentPropsWithoutRef<"div"> {
   children: React.ReactNode;
@@ -107,7 +111,7 @@ export default function Popover({
    */
   function getFloatingPosition(
     dir: "rtl" | "ltr",
-    position: FloatingPosition
+    position: FloatingPosition,
   ): FloatingPosition {
     if (
       dir === "rtl" &&
@@ -129,12 +133,8 @@ export default function Popover({
   const popover = usePopover({
     middlewares,
     width,
-    position: getFloatingPosition(
-      // @ts-ignore
-      direction,
-      position!
-    ),
-    offset: offset!,
+    position: getFloatingPosition(direction, position),
+    offset: offset,
     onPositionChange,
     positionDependencies,
     opened,
@@ -147,7 +147,7 @@ export default function Popover({
   useClickOutside(
     () => closeOnClickOutside && popover.onClose(),
     clickOutsideEvents,
-    [referenceNode, floatingNode]
+    [referenceNode, floatingNode],
   );
 
   /**
@@ -159,7 +159,7 @@ export default function Popover({
       setReferenceNode(node);
       popover.floating.refs.setReference(node);
     },
-    [popover.floating.refs]
+    [popover.floating.refs],
   );
 
   /**
@@ -171,7 +171,7 @@ export default function Popover({
       setFloatingNode(node);
       popover.floating.refs.setFloating(node);
     },
-    [popover.floating.refs]
+    [popover.floating.refs],
   );
 
   return (
@@ -196,7 +196,7 @@ export default function Popover({
         getDropdownId: () => `popover${uid}-dropdown`,
         withRoles,
         targetProps: props,
-        as: as!,
+        as: as,
         classNames,
         keepMounted,
       }}

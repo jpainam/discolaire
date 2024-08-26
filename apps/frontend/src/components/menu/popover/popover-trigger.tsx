@@ -1,7 +1,10 @@
-import { usePopoverContext } from "@/components/ui/menu/popover/popover-context";
-import { useMergedRef } from "@/components/ui/menu/popover/use-merged-ref";
-import { cn } from "@/lib/utils";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { cloneElement } from "react";
+
+import { cn } from "@repo/lib";
+
+import { usePopoverContext } from "~/components/menu/popover/popover-context";
+import { useMergedRef } from "~/components/menu/popover/use-merged-ref";
 
 export interface PopoverTargetProps {
   children: React.ReactNode;
@@ -57,7 +60,7 @@ export const PopoverTrigger = React.forwardRef<
       forwardedProps.className,
       children.props.className,
     ),
-    [refProp!]: targetRef,
+    [refProp]: targetRef,
     ...(!ctx.controlled ? { onClick: ctx.onToggle } : null),
   });
 });

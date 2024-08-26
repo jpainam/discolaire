@@ -14,13 +14,14 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.26.23",
     "@repo/api": "workspace:*",
     "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/i18n": "workspace:*",
     "@repo/lib": "workspace:*",
-    "@repo/ui": "workspace:*",
     "@repo/transactional": "workspace:*",
+    "@repo/ui": "workspace:*",
     "@repo/validators": "workspace:*",
     "@t3-oss/env-nextjs": "^0.11.0",
     "@tanstack/react-query": "catalog:",

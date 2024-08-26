@@ -1,10 +1,13 @@
-import { useMenuContext } from "@/components/ui/menu/dropdown/menu-context";
-import Popover from "@/components/ui/menu/popover/popover";
-import { useMergedRef } from "@/components/ui/menu/popover/use-merged-ref";
-import { cn } from "@/lib/utils";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { forwardRef, useRef } from "react";
 
-export type MenuListProps = {
+import { cn } from "@repo/lib";
+
+import { useMenuContext } from "~/components/menu/dropdown/menu-context";
+import Popover from "~/components/menu/popover/popover";
+import { useMergedRef } from "~/components/menu/popover/use-merged-ref";
+
+export interface MenuListProps {
   as?: React.ElementType;
   children?: React.ReactNode;
   className?: string;
@@ -13,7 +16,7 @@ export type MenuListProps = {
   shadow?: "sm" | "md" | "lg" | "xl" | "none";
   size?: "sm" | "md" | "lg" | "xl";
   rounded?: "sm" | "md" | "lg" | "pill" | "none";
-};
+}
 
 export const MenuList = forwardRef<
   HTMLElement,
@@ -31,7 +34,7 @@ export const MenuList = forwardRef<
       onMouseLeave,
       ...props
     },
-    ref
+    ref,
   ) => {
     const Component = as;
     const { trigger, openDropdown, closeDropdown } = useMenuContext();
@@ -42,7 +45,7 @@ export const MenuList = forwardRef<
         event.preventDefault();
         wrapperRef.current
           ?.querySelectorAll<HTMLButtonElement>(
-            "[data-menu-item]:not(:disabled)"
+            "[data-menu-item]:not(:disabled)",
           )[0]
           ?.focus();
       }
@@ -73,7 +76,7 @@ export const MenuList = forwardRef<
         tabIndex={-1}
         data-menu-dropdown
         className={cn("w-48", className)}
-        // @ts-ignore
+        // @ts-expect-error TODO fix this
         onKeyDown={handleKeyDown}
         shadow={shadow}
         size={size}
@@ -82,7 +85,7 @@ export const MenuList = forwardRef<
         {children}
       </Popover.Content>
     );
-  }
+  },
 );
 
 MenuList.displayName = "MenuList";

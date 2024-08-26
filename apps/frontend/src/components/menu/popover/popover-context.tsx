@@ -1,7 +1,8 @@
-import { PortalProps } from "@/components/Portal";
-import { createContextHook } from "@/components/ui/menu/popover/create-custom-context";
-import { FloatingPosition } from "@/components/ui/menu/popover/types";
-import { PopoverWidth } from "@/components/ui/menu/popover/use-popover";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { FloatingPosition } from "~/components/menu/popover/types";
+import type { PopoverWidth } from "~/components/menu/popover/use-popover";
+import type { PortalProps } from "~/components/Portal";
+import { createContextHook } from "~/components/menu/popover/create-custom-context";
 
 interface PopoverContextProps {
   x: number;

@@ -1,7 +1,9 @@
-import { useMenuContext } from "@/components/ui/menu/dropdown/menu-context";
-import Popover from "@/components/ui/menu/popover/popover";
-import { isElement } from "@/components/ui/menu/popover/popover-trigger";
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { cloneElement, forwardRef } from "react";
+
+import { useMenuContext } from "~/components/menu/dropdown/menu-context";
+import Popover from "~/components/menu/popover/popover";
+import { isElement } from "~/components/menu/popover/popover-trigger";
 
 export interface MenuTargetProps {
   as?: string;

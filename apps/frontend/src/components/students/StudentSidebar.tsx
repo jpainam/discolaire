@@ -1,6 +1,7 @@
 "use client";
 
-import { ElementType, Fragment, useEffect, useState } from "react";
+import type { ElementType } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { PiCaretDownBold } from "react-icons/pi";
