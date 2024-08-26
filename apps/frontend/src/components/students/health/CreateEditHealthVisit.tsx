@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { useUploadFile } from "@repo/hooks/use-upload-file";
+//import { useUploadFile } from "@repo/hooks/use-upload-file";
 import { useLocale } from "@repo/i18n";
 import { useSheet } from "@repo/lib/hooks/use-sheet";
 import {
@@ -44,6 +43,7 @@ const createEditVisitSchema = z.object({
   files: z.array(z.instanceof(File)),
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function CreateEditHealthVisit({ healthVisit }: { healthVisit?: any }) {
   const { t } = useLocale();
   const form = useForm<z.infer<typeof createEditVisitSchema>>({
@@ -58,12 +58,14 @@ export function CreateEditHealthVisit({ healthVisit }: { healthVisit?: any }) {
     },
     resolver: zodResolver(createEditVisitSchema),
   });
-  const [loading, setLoading] = useState(false);
-  const { onUpload, progresses, uploadedFiles, isUploading } = useUploadFile(
-    "imageUploader",
-    { defaultUploadedFiles: [] },
-  );
+  // const [loading, setLoading] = useState(false);
+  // const { onUpload, progresses, uploadedFiles, isUploading } = useUploadFile(
+  //   "imageUploader",
+  //   { defaultUploadedFiles: [] },
+  // );
   const { closeSheet } = useSheet();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     console.log(data);
   };
@@ -207,10 +209,10 @@ export function CreateEditHealthVisit({ healthVisit }: { healthVisit?: any }) {
                             onValueChange={field.onChange}
                             maxFileCount={4}
                             maxSize={4 * 1024 * 1024}
-                            progresses={progresses}
+                            //progresses={progresses}
                             // pass the onUpload function here for direct upload
                             // onUpload={uploadFiles}
-                            disabled={isUploading}
+                            //disabled={isUploading}
                           />
                         </FormControl>
                         <FormMessage />

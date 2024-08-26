@@ -2,7 +2,7 @@ import type { Table as TanstackTable } from "@tanstack/react-table";
 import * as React from "react";
 import { flexRender } from "@tanstack/react-table";
 
-import { DataTablePagination } from "@repo/ui/data-table/v2/data-table-pagination";
+import { cn } from "../..";
 import {
   Table,
   TableBody,
@@ -10,9 +10,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
-
-import { cn } from "../..";
+} from "../../table";
+import { DataTablePagination } from "./data-table-pagination";
 
 interface DataTableProps<TData> extends React.HTMLAttributes<HTMLDivElement> {
   /**
