@@ -7,6 +7,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./src/index.ts"
+    },
+    "./permission": {
+      "types": "./dist/permission.d.ts",
+      "default": "./src/permission.ts"
     }
   },
   "license": "MIT",
@@ -21,6 +25,7 @@
   "dependencies": {
     "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
+    "@repo/lib": "workspace:*",
     "@repo/validators": "workspace:*",
     "@t3-oss/env-nextjs": "^0.11.0",
     "@trpc/server": "catalog:",

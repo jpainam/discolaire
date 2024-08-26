@@ -5,12 +5,13 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
 import { useLocale } from "@repo/i18n";
+import { Badge } from "@repo/ui/badge";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 
+import type { MenuItemsType } from "~/types/menu";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
-import { MenuItemsType } from "~/types/menu";
-import { Badge } from "../ui/badge";
+import { showErrorToast } from "../../lib/handle-error";
 import { sidebarIcons } from "./sidebar-icons";
 
 export function ClassroomSidebar({ className }: { className?: string }) {
@@ -39,7 +40,8 @@ export function ClassroomSidebar({ className }: { className?: string }) {
     );
   }
   if (menusQuery.isError) {
-    throw menusQuery.error;
+    showErrorToast(menusQuery.error);
+    return;
   }
 
   return (
@@ -50,17 +52,13 @@ export function ClassroomSidebar({ className }: { className?: string }) {
       )}
     >
       {items.map((item, index) => {
-        const isActive = pathname === (item?.href as string);
-        const pathnameExistInDropdowns: any = item?.menuItems?.filter(
-          (dropdownItem) => dropdownItem.href === pathname,
-        );
-        const isDropdownOpen = Boolean(pathnameExistInDropdowns?.length);
-        const Icon = sidebarIcons?.[item.name];
+        const isActive = pathname === item.href;
+        const Icon = sidebarIcons[item.name];
 
         return (
           <Link
             key={item.name + "-" + index}
-            href={params.id ? item?.href || "" : "#"}
+            href={params.id ? (item.href ?? "") : "#"}
             className={cn(
               "my-1 flex items-center justify-between rounded-md p-2 font-medium capitalize",
               isActive
@@ -72,7 +70,7 @@ export function ClassroomSidebar({ className }: { className?: string }) {
               {Icon && <Icon className="me-2 h-5 w-5 stroke-1" />}
               <span className="truncate">{t(item.name)}</span>
             </div>
-            {item?.badge?.length ? <Badge> {t(item?.badge)}</Badge> : null}
+            {item.badge?.length ? <Badge> {t(`${item.badge}`)}</Badge> : null}
           </Link>
         );
       })}
@@ -81,16 +79,15 @@ export function ClassroomSidebar({ className }: { className?: string }) {
 }
 
 function getMenu(data: MenuItemsType[], id: string) {
-  if (!data) return [];
   // replace :id by the actual id in all href
-  return data?.map((menu) => {
+  return data.map((menu) => {
     return {
       ...menu,
       href: menu.href?.replace(":id", id),
       menuItems: menu.menuItems.map((item) => {
         return {
           ...item,
-          href: item?.href?.replace(":id", id),
+          href: item.href?.replace(":id", id),
           subMenuItems: item.subMenuItems?.map((subItem) => {
             return {
               ...subItem,

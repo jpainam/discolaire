@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Check } from "lucide-react";
 import { toast } from "sonner";
 
+import { useDebounce } from "@repo/hooks/use-debounce";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
@@ -21,14 +22,13 @@ import { ScrollArea } from "@repo/ui/scroll-area";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { randomAvatar } from "~/components/raw-images";
-import { useDebounce } from "~/hooks/use-debounce";
 import { getErrorMessage } from "~/lib/handle-error";
 import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 
 export function EnrollStudent({ classroomId }: { classroomId: string }) {
-  const [selectedStudents, setSelectedStudents] = React.useState<any[]>([]);
+  const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
   const { closeModal } = useModal();
   const [value, setValue] = useState("");
   const debounceValue = useDebounce(value, 500);
@@ -74,18 +74,18 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
                   key={`${stud.id}-list`}
                   className="flex items-center px-2 py-1"
                   onSelect={() => {
-                    if (selectedStudents.includes(stud)) {
-                      return setSelectedStudents(
-                        selectedStudents.filter(
-                          (selectedStudent) => selectedStudent.id !== stud.id,
+                    if (selectedIds.includes(stud.id)) {
+                      return setSelectedIds(
+                        selectedIds.filter(
+                          (selectedId) => selectedId !== stud.id,
                         ),
                       );
                     }
 
-                    return setSelectedStudents(
-                      [...unenrollStudentsQuery.data].filter((u) =>
-                        [...selectedStudents, stud].includes(u),
-                      ),
+                    return setSelectedIds(
+                      unenrollStudentsQuery.data
+                        .filter((u) => [...selectedIds, stud.id].includes(u.id))
+                        .map((u) => u.id),
                     );
                   }}
                 >
@@ -106,7 +106,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
                       {stud.email}
                     </span>
                   </div>
-                  {selectedStudents.includes(stud) ? (
+                  {selectedIds.includes(stud.id) ? (
                     <Check className="ml-auto flex h-5 w-5 text-primary" />
                   ) : null}
                 </CommandItem>
@@ -116,22 +116,27 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
         </CommandList>
       </Command>
       <div className="flex items-center border-t p-4 sm:justify-between">
-        {selectedStudents.length > 0 ? (
+        {selectedIds.length > 0 ? (
           <div className="flex -space-x-2">
-            {selectedStudents.map((stud) => (
-              <Avatar
-                key={`${stud.id}-selected`}
-                className="inline-block border-2 border-background"
-              >
-                <AvatarImage src={stud.avatar ?? undefined} alt="Image" />
-                <AvatarFallback>
-                  <Image
-                    src={randomAvatar(getFullName(stud).length)}
-                    alt="AV"
-                  />
-                </AvatarFallback>
-              </Avatar>
-            ))}
+            {selectedIds.map((studId) => {
+              const stud = unenrollStudentsQuery.data?.find(
+                (u) => u.id === studId,
+              );
+              return (
+                <Avatar
+                  key={`${studId}-selected`}
+                  className="inline-block border-2 border-background"
+                >
+                  <AvatarImage src={stud?.avatar ?? undefined} alt="Image" />
+                  <AvatarFallback>
+                    <Image
+                      src={randomAvatar(getFullName(stud).length)}
+                      alt="AV"
+                    />
+                  </AvatarFallback>
+                </Avatar>
+              );
+            })}
           </div>
         ) : (
           <span className="text-sm text-muted-foreground">
@@ -140,11 +145,11 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
         )}
         <Button
           variant={"default"}
-          disabled={selectedStudents.length === 0}
+          disabled={selectedIds.length === 0}
           onClick={() => {
             toast.promise(
               createEnrollmentMutation.mutateAsync({
-                studentId: selectedStudents.map((stud) => stud.id),
+                studentId: selectedIds,
                 classroomId: classroomId,
                 observation: "",
               }),

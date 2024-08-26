@@ -1,37 +1,36 @@
 "use client";
 
-import Link from "next/link";
 import { useParams } from "next/navigation";
 
 import { useLocale } from "@repo/i18n";
 import {
-  BreadCrumb,
-  BreadCrumbItem,
-  BreadCrumbSeparator,
-} from "@repo/ui/BreadCrumb";
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "@repo/ui/breadcrumb";
 
 import { routes } from "~/configs/routes";
 
 export const FinanceBreadCrumb = () => {
   const { t } = useLocale();
-  const params = useParams() as { id: string };
+  const params = useParams<{ id: string }>();
   return (
-    <BreadCrumb
-      orientation="horizontal"
-      variant={"ghost"}
-      className="gap-1 rounded-lg bg-background px-2"
-    >
-      <BreadCrumbItem className="h-7 px-2" index={0}>
-        <Link href={routes.students.details(params.id)}>{t("students")}</Link>
-      </BreadCrumbItem>
-      <BreadCrumbSeparator className="" />
-      <BreadCrumbItem className="h-7 px-2" index={1}>
-        {t("account")}
-      </BreadCrumbItem>
-      <BreadCrumbSeparator />
-      <BreadCrumbItem className="h-7 px-2" index={2}>
-        {t("finances")}
-      </BreadCrumbItem>
-    </BreadCrumb>
+    <Breadcrumb>
+      {" "}
+      <BreadcrumbList>
+        <BreadcrumbLink
+          href={routes.students.details(params.id)}
+          className="h-7 px-2"
+        >
+          {t("students")}
+        </BreadcrumbLink>
+        <BreadcrumbSeparator className="" />
+        <BreadcrumbItem className="h-7 px-2">{t("account")}</BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem className="h-7 px-2">{t("finances")}</BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
   );
 };

@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import {
   AtSign,
   BookHeart,
@@ -29,32 +28,25 @@ import { StudentContactTable } from "../contacts/StudentContactTable";
 
 export async function StudentDetails({ id }: { id: string }) {
   const { t, i18n } = await getServerTranslations();
-
-  // TODO: Refactor this to use Promise.allSettled
   const siblings = await api.student.siblings(id);
-  const studentContacts = await api.student.contacts(id);
   const student = await api.student.get(id);
-
-  if (!student) {
-    notFound();
-  }
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
     day: "numeric",
     month: "long",
     year: "numeric",
   });
   return (
-    <div className="grid text-sm">
+    <div className="grid px-2 text-sm 2xl:px-4">
       <div className="grid grid-cols-2 gap-y-3 xl:grid-cols-4">
         <span className="flex flex-row items-center gap-1 text-xs text-muted-foreground 2xl:text-sm">
           <SquareUserRound className="h-4 w-4 stroke-1" /> {t("lastName")}
         </span>
-        <span>{student?.lastName || "N/A"}</span>
+        <span>{student.lastName ?? "N/A"}</span>
         <span className="flex flex-row items-center gap-1 text-muted-foreground md:text-xs 2xl:text-sm">
           <SquareUserRound className="h-4 w-4 stroke-1" />
           {t("firstName")}
         </span>
-        <span>{student?.firstName || "N/A"} </span>
+        <span>{student.firstName ?? "N/A"} </span>
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <Church className="h-4 w-4 stroke-1" />
           {t("religion")}
@@ -72,7 +64,7 @@ export async function StudentDetails({ id }: { id: string }) {
           <CakeSlice className="h-4 w-4 stroke-1" />
           {t("placeOfBirth")}
         </span>
-        <span>{student.placeOfBirth || "N/A"}</span>
+        <span>{student.placeOfBirth ?? "N/A"}</span>
       </div>
       <Separator className="my-2 w-full" />
       <div className="grid grid-cols-2 gap-y-3 xl:grid-cols-4">
@@ -80,7 +72,7 @@ export async function StudentDetails({ id }: { id: string }) {
           <House className="h-4 w-4 stroke-1" />
           {t("residence")}
         </span>
-        <span>{student.residence || "N/A"}</span>
+        <span>{student.residence ?? "N/A"}</span>
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <CalendarPlus className="h-4 w-4 stroke-1" />
           {t("dateOfEntry")}
@@ -104,17 +96,17 @@ export async function StudentDetails({ id }: { id: string }) {
           <Phone className="h-4 w-4 stroke-1" />
           {t("phoneNumber")}
         </span>
-        <span>{student.phoneNumber || "N/A"}</span>
+        <span>{student.phoneNumber ?? "N/A"}</span>
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <AtSign className="h-4 w-4 stroke-1" />
           {t("email")}
         </span>
-        <span>{student.email || "N/A"}</span>
+        <span>{student.email ?? "N/A"}</span>
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <CircleUser className="h-4 w-4 stroke-1" />
           {t("userId")}
         </span>
-        <span>{student.userId || "N/A"}</span>
+        <span>{student.userId ?? "N/A"}</span>
       </div>
       <Separator className="my-2 w-full" />
       <div className="flex flex-row items-center justify-between">
@@ -123,7 +115,7 @@ export async function StudentDetails({ id }: { id: string }) {
           {t("formerSchool")}
         </span>
         <span className="line-clamp-1">
-          {student.formerSchool?.name || "N/A"}
+          {student.formerSchool?.name ?? "N/A"}
         </span>
       </div>
 
@@ -162,26 +154,25 @@ export async function StudentDetails({ id }: { id: string }) {
           </li>
         </ul>
         <ul className="grid w-[350px] gap-3">
-          {siblings &&
-            siblings.map((sibling, index) => {
-              return (
-                <li
-                  key={`${index}`}
-                  className="flex items-center justify-between"
+          {siblings.map((sibling, index) => {
+            return (
+              <li
+                key={`${index}`}
+                className="flex items-center justify-between"
+              >
+                <span className="text-muted-foreground">{`${t("sibling")} ${index + 1}`}</span>
+                <Link
+                  className="flex flex-row items-center gap-1 hover:text-blue-500 hover:underline"
+                  href={routes.students.details(sibling.id)}
                 >
-                  <span className="text-muted-foreground">{`${t("sibling")} ${index + 1}`}</span>
-                  <Link
-                    className="flex flex-row items-center gap-1 hover:text-blue-500 hover:underline"
-                    href={routes.students.details(sibling.id)}
-                  >
-                    <span className="truncate capitalize">
-                      {sibling.lastName?.toLowerCase()}{" "}
-                    </span>
-                    <ExternalLink className="h-4 w-4 bg-muted" />
-                  </Link>
-                </li>
-              );
-            })}
+                  <span className="truncate capitalize">
+                    {sibling.lastName?.toLowerCase()}{" "}
+                  </span>
+                  <ExternalLink className="h-4 w-4 bg-muted" />
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </div>
       <Separator className="my-2 w-full" />
@@ -196,7 +187,7 @@ export async function StudentDetails({ id }: { id: string }) {
       <Separator className="my-2 w-full" />
       <div className="flex w-full flex-col items-start">
         <span className="font-semibold">{t("observation")}</span>
-        <span>{student.observation || "N/A"}</span>
+        <span>{student.observation ?? "N/A"}</span>
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ import {
   TrashIcon,
 } from "@radix-ui/react-icons";
 
-import { useDebounce } from "@repo/lib/hooks/use-debounce";
+import { useDebounce } from "@repo/hooks/use-debounce";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,

@@ -4,7 +4,7 @@
 // import { XMarkIcon } from "@heroicons/react/20/solid";
 // import { useAtom } from "jotai";
 
-// import { closedBannerAtom } from "@repo/lib/hooks/use-banners";
+// import { closedBannerAtom } from "@repo/hooks/use-banners";
 
 // import { Button } from "../button";
 

@@ -8,9 +8,9 @@
       "types": "./dist/index.d.ts",
       "default": "./src/index.ts"
     },
-    "./hooks/*": {
-      "types": "./dist/hooks/*.d.ts",
-      "default": "./src/hooks/*.ts"
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "default": "./src/*.ts"
     }
   },
   "license": "MIT",

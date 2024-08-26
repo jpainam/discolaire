@@ -10,31 +10,38 @@ import { TRPCReactProvider } from "~/trpc/react";
 
 import "~/styles/globals.css";
 
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 import { auth } from "@repo/auth";
 import { detectLanguage } from "@repo/i18n/server";
 
+import { ProgressBar } from "~/components/next-progress";
+import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { ThemeProvider } from "~/components/theme-provider";
 import { env } from "~/env";
+import GlobalAlert from "~/layouts/GlobalAlert";
+import GlobalModal from "~/layouts/GlobalModal";
+import GlobalSheet from "~/layouts/GlobalSheet";
 import AuthProvider from "~/providers/auth-provider";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
     env.VERCEL_ENV === "production"
-      ? "https://turbo.t3.gg"
+      ? "https://school.discolaire.com"
       : "http://localhost:3000",
   ),
-  title: "Create T3 Turbo",
-  description: "Simple monorepo with shared backend for web & mobile apps",
+  title: "Gestion Scolaire",
+  description: "Gestion scolaire pour les écoles",
   openGraph: {
-    title: "Create T3 Turbo",
-    description: "Simple monorepo with shared backend for web & mobile apps",
-    url: "https://create-t3-turbo.vercel.app",
-    siteName: "Create T3 Turbo",
+    title: "Gestion Scolaire",
+    description: "Gestion scolaire pour les écoles",
+    url: "https://discolaire.com",
+    siteName: "Digitalisation Scolaire",
   },
   twitter: {
     card: "summary_large_image",
-    site: "@jullerino",
-    creator: "@jullerino",
+    site: "@discolaire",
+    creator: "@discolaire",
   },
 };
 
@@ -65,10 +72,19 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
             defaultTheme="system"
             enableSystem
           >
+            <ProgressBar />
             <TRPCReactProvider>
-              <AuthProvider session={session}>{props.children}</AuthProvider>
+              <AuthProvider session={session}>
+                {props.children}
+                <GlobalSheet />
+                <GlobalAlert />
+                <GlobalModal />
+                <ReactQueryDevtools initialIsOpen={false} />
+              </AuthProvider>
             </TRPCReactProvider>
             <Toaster />
+            <TailwindIndicator />
+            <Toaster richColors />
           </ThemeProvider>
         </body>
       </html>

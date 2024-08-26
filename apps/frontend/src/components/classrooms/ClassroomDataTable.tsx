@@ -1,23 +1,20 @@
 "use client";
 
 import * as React from "react";
-import { inferProcedureOutput } from "@trpc/server";
 
-import { DataTableFilterField } from "@repo/data-table/types";
+import type { RouterOutputs } from "@repo/api";
+import type { DataTableFilterField } from "@repo/data-table/types";
 import { useLocale } from "@repo/i18n";
-import { useDataTable } from "@repo/ui/data-table";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
+import { useDataTable } from "@repo/ui/data-table/index";
 
-import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { ClassroomDataTableActions } from "./ClassroomDataTableActions";
 import { getColumns } from "./ClassroomDataTableColumns";
 
-type ClassroomProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["classroom"]["all"]>
->[number];
+type ClassroomProcedureOutput = RouterOutputs["classroom"]["all"][number];
 
 export function ClassroomDataTable() {
   const { t } = useLocale();

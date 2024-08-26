@@ -20,7 +20,7 @@ import {
 } from "@tanstack/react-table";
 import { z } from "zod";
 
-import { useDebounce } from "@repo/lib/hooks/use-debounce";
+import { useDebounce } from "@repo/hooks/use-debounce";
 
 import type { DataTableFilterField } from "./datatypes";
 
