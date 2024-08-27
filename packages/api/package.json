@@ -23,6 +23,9 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.637.0",
+    "@aws-sdk/s3-presigned-post": "^3.637.0",
+    "@aws-sdk/s3-request-presigner": "^3.637.0",
     "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/lib": "workspace:*",
@@ -30,12 +33,14 @@
     "@t3-oss/env-nextjs": "^0.11.0",
     "@trpc/server": "catalog:",
     "superjson": "2.2.1",
+    "uuid": "^10.0.0",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
+    "@types/uuid": "^10.0.0",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"

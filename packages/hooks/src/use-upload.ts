@@ -1,10 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { useState } from "react";
+
+import { env } from "../env";
 
 interface UploadState {
   file: File;
   isPending: boolean;
-  error: any;
+  error: unknown;
   data: { id: string; url: string } | null;
 }
 const useUpload = () => {
@@ -23,7 +24,7 @@ const useUpload = () => {
 
   const onUpload = async (
     inputs: File | File[],
-    metadata?: { dest?: string },
+    metadata?: { destination: string },
   ) => {
     const files = Array.isArray(inputs) ? inputs : [inputs];
     const initialUploads = files.map((file) => ({
@@ -43,8 +44,7 @@ const useUpload = () => {
         updateFileState(index, { isPending: true });
         try {
           const response = await fetch(
-            // TODO: replace with actual upload endpoint
-            "http://localhost/api/upload",
+            env.NEXT_PUBLIC_BASE_URL + "/api/upload",
             {
               method: "POST",
               headers: {
@@ -52,17 +52,25 @@ const useUpload = () => {
               },
               body: JSON.stringify({
                 filename: file.name,
-                dest: metadata?.dest,
+                destination: metadata?.destination,
                 contentType: file.type,
               }),
             },
           );
           if (response.ok) {
-            // @ts-expect-error TODO: fix this
-            const { url, fields } = await response.json();
+            const {
+              url,
+              fields,
+            }: {
+              url: string;
+              fields: Record<string, string>;
+            } = (await response.json()) as {
+              url: string;
+              fields: Record<string, string>;
+            };
             const formData = new FormData();
             Object.entries(fields).forEach(([key, value]) => {
-              formData.append(key, value as any);
+              formData.append(key, value);
             });
             formData.append("file", file);
 
@@ -72,8 +80,7 @@ const useUpload = () => {
             });
             if (uploadResponse.ok) {
               const uploadedData = {
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                id: fields.key,
+                id: fields.key ?? "",
                 url,
               };
               updateFileState(index, { isPending: false, data: uploadedData });

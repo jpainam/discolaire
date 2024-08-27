@@ -29,8 +29,7 @@ import { Label } from "@repo/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { Separator } from "@repo/ui/separator";
 import { Textarea } from "@repo/ui/textarea";
-
-import { FileUploader } from "~/components/uploads/file-uploader";
+import { FileUploader } from "@repo/ui/uploads/file-uploader";
 
 const createEditVisitSchema = z.object({
   date: z.coerce.date(),

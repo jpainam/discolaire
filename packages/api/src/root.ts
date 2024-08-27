@@ -31,12 +31,14 @@ import { subjectRouter } from "./routers/subject";
 import { subjectGroupRouter } from "./routers/subjectGroup";
 import { termRouter } from "./routers/term";
 import { transactionRouter } from "./routers/transaction";
+import { uploadRouter } from "./routers/upload";
 import { userRouter } from "./routers/user";
 import { createTRPCRouter } from "./trpc";
 
 export const appRouter = createTRPCRouter({
   auth: authRouter,
   staff: staffRouter,
+  upload: uploadRouter,
   classroom: classroomRouter,
   contact: contactRouter,
   subject: subjectRouter,

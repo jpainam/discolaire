@@ -17,6 +17,10 @@ export const env = createEnv({
    */
   server: {
     //DATABASE_URL: z.string().url(),
+    AWS_S3_ACCESS_KEY_ID: z.string().min(10),
+    AWS_S3_REGION: z.string().min(2),
+    AWS_S3_BUCKET_NAME: z.string().min(2),
+    AWS_S3_SECRET_ACCESS_KEY: z.string().min(1),
   },
 
   /**
@@ -34,6 +38,11 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+    // AWS S3
+    AWS_S3_ACCESS_KEY_ID: process.env.AWS_S3_ACCESS_KEY_ID,
+    AWS_S3_REGION: process.env.AWS_S3_REGION,
+    AWS_S3_BUCKET_NAME: process.env.AWS_S3_BUCKET_NAME,
+    AWS_S3_SECRET_ACCESS_KEY: process.env.AWS_S3_SECRET_ACCESS_KEY,
   },
   skipValidation:
     !!process.env.CI || process.env.npm_lifecycle_event === "lint",

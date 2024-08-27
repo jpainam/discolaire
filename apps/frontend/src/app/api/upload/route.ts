@@ -1,4 +1,4 @@
-import type {NextRequest} from "next/server";
+import type { NextRequest } from "next/server";
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
@@ -15,14 +15,17 @@ const client = new S3Client({
 });
 
 export async function POST(request: Request) {
-  const { filename, dest, contentType } = await request.json();
-  if (typeof dest !== "string" || dest.length === 0) {
-    return Response.json({ error: "Invalid dest " + dest }, { status: 400 });
+  const { destination, contentType } = await request.json();
+  if (typeof destination !== "string" || destination.length === 0) {
+    return Response.json(
+      { error: "Invalid dest " + destination },
+      { status: 400 },
+    );
   }
   try {
     const { url, fields } = await createPresignedPost(client, {
       Bucket: env.AWS_S3_BUCKET_NAME,
-      Key: `${dest}/${uuidv4()}`,
+      Key: `${destination}/${uuidv4()}`,
       Conditions: [
         ["content-length-range", 0, 10485760], // up to 10 MB
         ["starts-with", "$Content-Type", contentType],
@@ -35,8 +38,8 @@ export async function POST(request: Request) {
     });
 
     return Response.json({ url, fields });
-  } catch (error: any) {
-    return Response.json({ error: error.message });
+  } catch (error: unknown) {
+    return Response.json({ error: (error as Error).message });
   }
 }
 
@@ -45,7 +48,7 @@ export async function GET(
   { params }: { params: { key: string } },
 ) {
   const searchParams = request.nextUrl.searchParams;
-  const key = (searchParams.get("key")!) || params.key;
+  const key = searchParams.get("key") ?? params.key;
   if (!key) {
     return Response.json(
       { error: "A query/params key is required" },

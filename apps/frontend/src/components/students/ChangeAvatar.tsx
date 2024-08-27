@@ -15,6 +15,9 @@ import { api } from "~/trpc/react";
 export function ChangeAvatar({ studentId }: { studentId: string }) {
   const { t } = useLocale();
   const { closeModal } = useModal();
+  const presignedUrl = api.upload.createPresignedPost.useQuery({
+    destination: "avatars",
+  });
   const { onUpload, isPending, error, data: uploadedFiles } = useUpload();
   const updateStudentAvatarMutation = api.student.updateAvatar.useMutation();
 
@@ -31,17 +34,11 @@ export function ChangeAvatar({ studentId }: { studentId: string }) {
       });
     }
   }, [studentId, uploadedFiles, updateStudentAvatarMutation]);
+
   if (error) {
     console.error(error);
   }
-  // const fetchSignedUrl = await fetch(
-  //   process.env.NEXT_PUBLIC_BASE_URL + "/api/upload?key=" + fields["key"]
-  // );
-  // if (!fetchSignedUrl.ok) {
-  //   const e = await fetchSignedUrl.json();
-  //   updateFileState(index, { error: e });
-  //   throw new Error(await fetchSignedUrl.json());
-  // }
+
   return (
     <div>
       <FileUploader
@@ -52,16 +49,30 @@ export function ChangeAvatar({ studentId }: { studentId: string }) {
           if (files.length === 0) {
             return;
           }
-          toast.promise(onUpload(files[0], { dest: "avatars" }), {
-            loading: t("uploading"),
-            success: () => {
-              closeModal();
-              return t("uploaded_successfully");
+          const file = files[0];
+          if (!file) {
+            toast.error("No file selected");
+            return;
+          }
+          if (!presignedUrl.data) {
+            toast.error("No presigned URL");
+            return;
+          }
+          toast.promise(
+            onUpload(file, {
+              destination: "avatars",
+            }),
+            {
+              loading: t("uploading"),
+              success: () => {
+                closeModal();
+                return t("uploaded_successfully");
+              },
+              error: (err) => {
+                return getErrorMessage(err);
+              },
             },
-            error: (err) => {
-              return getErrorMessage(err);
-            },
-          });
+          );
         }}
         //progresses={progresses}
       />

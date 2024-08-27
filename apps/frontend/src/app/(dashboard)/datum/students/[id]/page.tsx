@@ -1,21 +1,12 @@
 import { Suspense } from "react";
 
-import { getServerTranslations } from "@repo/i18n/server";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 
 import { StudentDetails } from "~/components/students/profile/StudentDetails";
 
-type SearchParams = Record<string, string | string[] | undefined>;
+//type SearchParams = Record<string, string | string[] | undefined>;
 
-export default async function Page({
-  params: { id },
-  searchParams,
-}: {
-  params: { id: string };
-  searchParams: SearchParams;
-}) {
-  const { t } = await getServerTranslations();
-
+export default function Page({ params: { id } }: { params: { id: string } }) {
   return (
     <div className="flex w-full flex-col p-1">
       <Suspense
