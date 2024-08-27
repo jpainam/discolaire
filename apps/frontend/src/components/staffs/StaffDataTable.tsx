@@ -2,26 +2,23 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { inferProcedureOutput } from "@trpc/server";
 
+import type { RouterOutputs } from "@repo/api";
+import type { DataTableFilterField } from "@repo/ui/data-table/types";
 import { useLocale } from "@repo/i18n";
-import { useDataTable } from "@repo/ui/data-table";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
-import { DataTableFilterField } from "@repo/ui/data-table/types";
+import { useDataTable } from "@repo/ui/data-table/index";
 
-import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { StaffDataTableActions } from "./StaffDataTableActions";
 import { fetchStaffColumns } from "./StaffDataTableColumns";
 
-type StaffDataTableProps = {
+interface StaffDataTableProps {
   visibles?: string[];
-};
-type StaffProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["staff"]["all"]>
->[number];
+}
+type StaffProcedureOutput = NonNullable<RouterOutputs["staff"]["all"]>[number];
 
 export function StaffDataTable({ visibles }: StaffDataTableProps) {
   const searchParams = useSearchParams();
@@ -57,8 +54,8 @@ export function StaffDataTable({ visibles }: StaffDataTableProps) {
   );
 
   useEffect(() => {
-    const gender = searchParams.get("gender") || "";
-    const jobTitle = searchParams.get("jobTitle") || "";
+    const gender = searchParams.get("gender") ?? "";
+    const jobTitle = searchParams.get("jobTitle") ?? "";
     const level = searchParams.get("level");
     const v = staffsQuery.data?.filter((staff) => {
       const g = gender != "*" && gender ? staff.gender == gender : true;
@@ -69,7 +66,7 @@ export function StaffDataTable({ visibles }: StaffDataTableProps) {
       const l = level ? staff.degreeId == Number(level) : true;
       return g && f && l;
     });
-    setItems(v || []);
+    setItems(v ?? []);
   }, [searchParams, staffsQuery.data]);
 
   const filterFields: DataTableFilterField<StaffProcedureOutput>[] = [
@@ -84,7 +81,7 @@ export function StaffDataTable({ visibles }: StaffDataTableProps) {
   ];
 
   const { table } = useDataTable({
-    data: staffsQuery.data || [],
+    data: staffsQuery.data ?? [],
     pageCount: Math.ceil(items.length / 30),
     columns: columns,
     // optional props

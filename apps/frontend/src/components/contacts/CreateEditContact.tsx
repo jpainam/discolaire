@@ -1,12 +1,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { inferProcedureOutput } from "@trpc/server";
 import { Loader } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import type { RouterOutputs } from "@repo/api";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -17,15 +17,14 @@ import {
   FormItem,
   FormLabel,
 } from "@repo/ui/form";
+import { Input } from "@repo/ui/input";
 import { Separator } from "@repo/ui/separator";
 import { Textarea } from "@repo/ui/textarea";
 
 import { InputField } from "~/components/shared/forms/input-field";
 import PrefixSelector from "~/components/shared/forms/PrefixSelector";
 import { getErrorMessage } from "~/lib/handle-error";
-import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
-import { Input } from "../ui/input";
 
 const createEditContactSchema = z.object({
   prefix: z.string().optional(),
@@ -43,32 +42,30 @@ const createEditContactSchema = z.object({
 type CreateEditContactValues = z.infer<typeof createEditContactSchema>;
 
 type ContactAllProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["contact"]["all"]>
+  RouterOutputs["contact"]["all"]
 >[number];
 
-type ContactGetProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["contact"]["get"]>
->;
+//type ContactGetProcedureOutput = NonNullable<RouterOutputs["contact"]["get"]>;
 
-type CreateEditContactProps = {
-  contact?: ContactAllProcedureOutput | ContactGetProcedureOutput;
-};
+interface CreateEditContactProps {
+  contact?: ContactAllProcedureOutput;
+}
 
 export default function CreateEditContact({ contact }: CreateEditContactProps) {
   const { closeSheet } = useSheet();
   const form = useForm<CreateEditContactValues>({
     resolver: zodResolver(createEditContactSchema),
     defaultValues: {
-      prefix: contact?.prefix || "",
-      lastName: contact?.lastName || "",
-      firstName: contact?.firstName || "",
-      title: contact?.title || "",
-      employer: contact?.employer || "",
-      phoneNumber1: contact?.phoneNumber1 || "",
-      phoneNumber2: contact?.phoneNumber2 || "",
-      email: contact?.email || "",
-      address: contact?.address || "",
-      observation: contact?.observation || "",
+      prefix: contact?.prefix ?? "",
+      lastName: contact?.lastName ?? "",
+      firstName: contact?.firstName ?? "",
+      title: contact?.title ?? "",
+      employer: contact?.employer ?? "",
+      phoneNumber1: contact?.phoneNumber1 ?? "",
+      phoneNumber2: contact?.phoneNumber2 ?? "",
+      email: contact?.email ?? "",
+      address: contact?.address ?? "",
+      observation: contact?.observation ?? "",
     },
   });
   const { t } = useLocale();
@@ -91,7 +88,7 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
             return getErrorMessage(error);
           },
           success: () => {
-            utils.contact.get.invalidate(contact.id);
+            void utils.contact.get.invalidate(contact.id);
             closeSheet();
             return t("updated_successfully");
           },
@@ -104,7 +101,7 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
           return getErrorMessage(error);
         },
         success: () => {
-          utils.contact.all.invalidate();
+          void utils.contact.all.invalidate();
           closeSheet();
           return t("created_successfully");
         },

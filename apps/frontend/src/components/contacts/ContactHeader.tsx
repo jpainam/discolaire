@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 "use client";
 
 import { useParams } from "next/navigation";
@@ -12,6 +13,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
+import { Label } from "@repo/ui/label";
 import { Separator } from "@repo/ui/separator";
 
 import { routes } from "~/configs/routes";
@@ -19,7 +21,6 @@ import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { ContactSelector } from "../shared/selects/ContactSelector";
-import { Label } from "../ui/label";
 import CreateEditContact from "./CreateEditContact";
 
 export function ContactHeader() {

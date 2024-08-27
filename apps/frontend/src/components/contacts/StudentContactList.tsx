@@ -1,10 +1,9 @@
 "use client";
 
-import { useQueryClient } from "@tanstack/react-query";
-import { inferProcedureOutput } from "@trpc/server";
 import { ExternalLink, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { useAlert } from "@repo/hooks/use-alert";
 import { useModal } from "@repo/hooks/use-modal";
 import { useRouter } from "@repo/hooks/use-router";
@@ -23,21 +22,20 @@ import {
   PaginationContent,
   PaginationItem,
 } from "@repo/ui/pagination";
+import { ScrollArea } from "@repo/ui/scroll-area";
 import { Separator } from "@repo/ui/separator";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { getErrorMessage } from "~/lib/handle-error";
-import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { generateStringColor } from "~/utils/colors";
 import { getFullName } from "~/utils/full-name";
 import { routes } from "../../configs/routes";
 import { AvatarState } from "../AvatarState";
-import { ScrollArea } from "../ui/scroll-area";
 import { LinkStudent } from "./LinkStudent";
 
 type StudentContactOutput = NonNullable<
-  inferProcedureOutput<AppRouter["contact"]["students"]>
+  RouterOutputs["contact"]["students"]
 >[number];
 
 export default function StudentContactList({
@@ -52,7 +50,7 @@ export default function StudentContactList({
   const { t, i18n } = useLocale();
   const router = useRouter();
   const { openAlert } = useAlert();
-  const queryClient = useQueryClient();
+
   const deleteStudentContactMutation = api.studentContact.delete.useMutation();
   const utils = api.useUtils();
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
@@ -83,14 +81,14 @@ export default function StudentContactList({
         </Button>
       )}
 
-      {contactStudentsQuery?.data?.length === 0 && (
+      {contactStudentsQuery.data?.length === 0 && (
         <EmptyState
           title={t("no_data")}
-          description={`${contactQuery?.data?.prefix} ${getFullName(contactQuery?.data)}`}
+          description={`${contactQuery.data?.prefix} ${getFullName(contactQuery.data)}`}
         />
       )}
       <ScrollArea className="h-[calc(100vh-15rem)]">
-        {contactStudentsQuery?.data?.map(
+        {contactStudentsQuery.data?.map(
           (studentcontact: StudentContactOutput, index) => {
             const student = studentcontact.student;
             const contact = contactQuery.data;
@@ -100,14 +98,14 @@ export default function StudentContactList({
                 key={index}
                 className="mt-1 border border-t-8"
                 style={{
-                  borderTopColor: color ?? "lightgray",
+                  borderTopColor: color,
                 }}
               >
                 <CardHeader className="flex w-full flex-row items-start gap-12 border-b bg-muted/50 p-2">
                   <div className="grid gap-0.5">
                     <CardTitle className="group flex items-center">
                       <AvatarState
-                        avatar={student?.avatar}
+                        avatar={student.avatar}
                         className="h-[60px] w-[60px]"
                         pos={getFullName(student).length}
                       />
@@ -117,10 +115,9 @@ export default function StudentContactList({
                     <Button
                       size="sm"
                       onClick={() => {
-                        student &&
-                          router.push(
-                            routes.students.details(studentcontact.studentId),
-                          );
+                        router.push(
+                          routes.students.details(studentcontact.studentId),
+                        );
                       }}
                       variant="outline"
                       className="h-8 justify-start gap-1"
@@ -132,9 +129,9 @@ export default function StudentContactList({
                     </Button>
                     <div className="pl-1 text-xs text-muted-foreground">
                       {t("bornOn")}:{" "}
-                      {student?.dateOfBirth &&
-                        dateFormatter.format(new Date(student?.dateOfBirth))}
-                      {!student?.dateOfBirth && "N/A"}
+                      {student.dateOfBirth &&
+                        dateFormatter.format(new Date(student.dateOfBirth))}
+                      {!student.dateOfBirth && "N/A"}
                     </div>
                   </div>
                 </CardHeader>
@@ -144,13 +141,13 @@ export default function StudentContactList({
                       <span className="text-muted-foreground">
                         {t("lastName")}
                       </span>
-                      <span className="truncate">{student?.lastName}</span>
+                      <span className="truncate">{student.lastName}</span>
                     </li>
                     <li className="flex items-center justify-between">
                       <span className="text-muted-foreground">
                         {t("firstName")}
                       </span>
-                      <span className="truncate">{student?.firstName}</span>
+                      <span className="truncate">{student.firstName}</span>
                     </li>
                   </ul>
                   <Separator className="my-2" />
@@ -159,7 +156,7 @@ export default function StudentContactList({
                       <dt className="text-muted-foreground">
                         {t("classroom")}
                       </dt>
-                      <dd>{student?.classroom?.shortName || ""}</dd>
+                      <dd>{student.classroom?.shortName ?? ""}</dd>
                     </div>
                     <div className="flex items-center justify-between">
                       <dt className="text-muted-foreground">
@@ -179,7 +176,7 @@ export default function StudentContactList({
                               title: t("delete"),
                               description: t("delete_confirmation"),
                               onConfirm: () => {
-                                if (!student || !contact) {
+                                if (!contact) {
                                   toast.error(
                                     t("student id or contact id is missing"),
                                   );

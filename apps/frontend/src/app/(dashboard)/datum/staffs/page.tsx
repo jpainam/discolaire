@@ -1,20 +1,12 @@
 import { Suspense } from "react";
 
-// import { getServerTranslations } from "@repo/i18n/server";
-import { getServerTranslations } from "@repo/i18n";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import { Separator } from "@repo/ui/separator";
 
 import { StaffDataTable } from "~/components/staffs/StaffDataTable";
 import { StaffHeader } from "~/components/staffs/StaffHeader";
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: { gender?: string; jobTitle?: string; level?: string };
-}) {
-  const { t } = await getServerTranslations();
-
+export default function Page() {
   return (
     <div className="flex flex-col px-2">
       <Suspense key={"staff-header-suspense"}>

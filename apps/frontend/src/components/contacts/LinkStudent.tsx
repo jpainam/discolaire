@@ -5,8 +5,10 @@ import Image from "next/image";
 import { Check } from "lucide-react";
 import { toast } from "sonner";
 
+import { useDebounce } from "@repo/hooks/use-debounce";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
+import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Button } from "@repo/ui/button";
 import {
   Command,
@@ -16,22 +18,21 @@ import {
   CommandItem,
   CommandList,
 } from "@repo/ui/command";
+import { ScrollArea } from "@repo/ui/scroll-area";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
-import { useDebounce } from "~/hooks/use-debounce";
 import { getErrorMessage } from "~/lib/handle-error";
 import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { randomAvatar } from "../raw-images";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { ScrollArea } from "../ui/scroll-area";
 
 export function LinkStudent({ contactId }: { contactId: string }) {
   const { t } = useLocale();
   const [value, setValue] = useState("");
   const debounceValue = useDebounce(value, 500);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectedStudents, setSelectedStudents] = React.useState<any[]>([]);
   const [relationship, setRelationship] = useState<string | null>(null);
 
@@ -160,7 +161,7 @@ export function LinkStudent({ contactId }: { contactId: string }) {
             }
             toast.promise(
               createStudentContactMutation.mutateAsync({
-                studentId: selectedStudents.map((stud) => stud.id),
+                studentId: selectedStudents.map((stud) => stud.id as string),
                 contactId: contactId,
                 data: {
                   relationshipId: Number(relationship),

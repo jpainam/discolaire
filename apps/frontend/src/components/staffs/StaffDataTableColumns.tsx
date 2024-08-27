@@ -1,17 +1,18 @@
+import type { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import React from "react";
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { ColumnDef } from "@tanstack/react-table";
-import { inferProcedureOutput } from "@trpc/server";
-import { TFunction } from "i18next";
 import { Pencil, ReceiptText, Trash2 } from "lucide-react";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { useAlert } from "@repo/hooks/use-alert";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
 import {
   DropdownMenu,
@@ -24,18 +25,13 @@ import FlatBadge from "@repo/ui/FlatBadge";
 
 import { routes } from "~/configs/routes";
 import { getErrorMessage } from "~/lib/handle-error";
-import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { AvatarState } from "../AvatarState";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
-import { Checkbox } from "../ui/checkbox";
 import { CreateEditStaff } from "./CreateEditStaff";
 
-type StaffProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["staff"]["all"]>
->[number];
-
+type StaffProcedureOutput = NonNullable<RouterOutputs["staff"]["all"]>[number];
 export function fetchStaffColumns({
   t,
   columns,
@@ -150,6 +146,7 @@ export function fetchStaffColumns({
       ),
       cell: ({ row }) => {
         const staff = row.original;
+        const gender = staff.gender;
         return (
           <FlatBadge
             variant={staff.gender == "female" ? "pink" : "blue"}
@@ -160,7 +157,8 @@ export function fetchStaffColumns({
             ) : (
               <PiGenderFemaleThin className="h-4 w-4" />
             )}
-            {t(row.getValue("gender") as string)}
+
+            {t(gender)}
           </FlatBadge>
         );
       },
@@ -226,11 +224,11 @@ export function fetchStaffColumns({
     },
   ] as ColumnDef<StaffProcedureOutput, unknown>[];
 
-  const filteredColumns = columns //@ts-ignore
+  const filteredColumns = columns // @ts-expect-error TODO: fix type
     .map((col) => allcolumns.find((c) => c.accessorKey === col))
     .filter(Boolean) as ColumnDef<StaffProcedureOutput, unknown>[];
 
-  // @ts-ignore
+  // @ts-expect-error TODO: fix type
   filteredColumns.push(allcolumns[allcolumns.length - 1]);
   return {
     columns: filteredColumns,

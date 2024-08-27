@@ -16,20 +16,18 @@ import { useLocale } from "@repo/i18n";
 import { Separator } from "@repo/ui/separator";
 
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
-import { useCreateQueryString } from "../../hooks/create-query-string";
 import { AdminNav } from "./admin-nav";
 
-type AdminSidebarProps = {
+interface AdminSidebarProps {
   className?: string;
-};
+}
 export function AdminSidebar({ className }: AdminSidebarProps) {
   const { t } = useLocale("admin");
   //const { data: users } = useAtomValue(usersAtom);
-  const users: any[] = [];
+  //const users: any[] = [];
 
-  const classroomsQuery = api.classroom.all.useQuery();
-  const { createQueryString } = useCreateQueryString();
+  //const classroomsQuery = api.classroom.all.useQuery();
+  //const { createQueryString } = useCreateQueryString();
   return (
     <div className={cn("h-[calc(100vh-10rem)]", className)}>
       <AdminNav

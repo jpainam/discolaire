@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { MoreVertical, Plus } from "lucide-react";
 import { useQueryState } from "nuqs";
 
+import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
@@ -14,6 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
+import { Label } from "@repo/ui/label";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
 import {
   Select,
@@ -26,28 +28,25 @@ import { Separator } from "@repo/ui/separator";
 
 import { routes } from "~/configs/routes";
 import { api } from "~/trpc/react";
-import { useCreateQueryString } from "../../hooks/create-query-string";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
 import { StaffLevelSelector } from "../shared/selects/StaffLevelSelector";
-import { Label } from "../ui/label";
 import { CreateEditStaff } from "./CreateEditStaff";
 import { StaffEffectif } from "./StaffEffectif";
 
 export function StaffHeader() {
-  const { t } = useLocale();
   const { t: t2 } = useLocale("print");
   const jobTitlesQuery = api.staff.jobTitles.useQuery();
-  const levels = api.staff.levels.useQuery();
+  //const levels = api.staff.levels.useQuery();
 
-  const jobTitles = jobTitlesQuery.data || [];
-  const router = useRouter();
+  const jobTitles = jobTitlesQuery.data ?? [];
+
   const [level, setLevel] = useQueryState("level", { shallow: false });
 
   const { openSheet } = useSheet();
   return (
     <div className="flex flex-row items-center gap-4 py-2">
-      {jobTitles && <FilterJobTitle jobTitles={jobTitles as string[]} />}
+      {<FilterJobTitle jobTitles={jobTitles as string[]} />}
       <GenderFilter />
 
       <StaffLevelSelector
@@ -145,7 +144,7 @@ function FilterJobTitle({ jobTitles }: { jobTitles: string[] }) {
     <div className="flex flex-row items-center gap-2">
       {/* <Label>{t("jobTitle")}</Label> */}
       <Select
-        defaultValue={jobTitle || "*"}
+        defaultValue={jobTitle ?? "*"}
         onValueChange={(v) => {
           router.push(
             `${routes.staffs.index}/?${createQueryString({ jobTitle: v })}`,
@@ -179,7 +178,7 @@ function GenderFilter() {
   return (
     <RadioGroup
       onValueChange={(v) => setGender(v == "*" ? null : v)}
-      defaultValue={gender || "*"}
+      defaultValue={gender ?? "*"}
       className="flex flex-row"
     >
       <div className="flex items-center space-x-2">

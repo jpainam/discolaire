@@ -1,16 +1,17 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { inferProcedureOutput } from "@trpc/server";
 import { subMonths } from "date-fns";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import type { RouterOutputs } from "@repo/api";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
+  Form,
   FormControl,
   FormDescription,
   FormField,
@@ -22,17 +23,13 @@ import { Separator } from "@repo/ui/separator";
 import { Textarea } from "@repo/ui/textarea";
 
 import { getErrorMessage } from "~/lib/handle-error";
-import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { DatePickerField } from "../shared/forms/date-picker-field";
 import { InputField } from "../shared/forms/input-field";
 import { SelectField } from "../shared/forms/SelectField";
 import { StaffLevelSelector } from "../shared/selects/StaffLevelSelector";
-import { Form } from "../ui/form";
 
-type StaffProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["staff"]["all"]>
->[number];
+type StaffProcedureOutput = NonNullable<RouterOutputs["staff"]["all"][number]>;
 
 const staffCreateEditSchema = z.object({
   prefix: z.string().min(1),
@@ -57,9 +54,9 @@ const staffCreateEditSchema = z.object({
   isTeacher: z.string().default("yes"),
   dateOfBirth: z.coerce.date().optional(),
 });
-type CreateEditStaffProps = {
+interface CreateEditStaffProps {
   staff?: StaffProcedureOutput;
-};
+}
 
 export function CreateEditStaff({ staff }: CreateEditStaffProps) {
   const { closeSheet } = useSheet();
@@ -71,27 +68,27 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
   const form = useForm<z.infer<typeof staffCreateEditSchema>>({
     resolver: zodResolver(staffCreateEditSchema),
     defaultValues: {
-      prefix: staff?.prefix || "",
-      firstName: staff?.firstName || "",
-      lastName: staff?.lastName || "",
-      gender: staff?.gender || "male",
-      isActive: staff?.isActive || true,
-      jobTitle: staff?.jobTitle || "",
-      countryId: staff?.countryId || "",
-      observation: staff?.observation || "",
-      degreeId: staff ? String(staff?.degreeId) : "",
-      employmentType: staff?.employmentType || "",
-      address: staff?.address || "",
-      email: staff?.email || "",
-      phoneNumber1: staff?.phoneNumber1 || "",
-      phoneNumber2: staff?.phoneNumber2 || "",
-      dateOfHire: staff?.dateOfHire || new Date(),
-      dateOfRelease: staff?.dateOfRelease || new Date(),
-      dateOfCriminalRecordCheck: staff?.dateOfCriminalRecordCheck || new Date(),
-      sendAgendaFrequency: staff?.sendAgendaFrequency || "",
-      dateOfLastAdvancement: staff?.dateOfLastAdvancement || new Date(),
+      prefix: staff?.prefix ?? "",
+      firstName: staff?.firstName ?? "",
+      lastName: staff?.lastName ?? "",
+      gender: staff?.gender ?? "male",
+      isActive: staff?.isActive ?? true,
+      jobTitle: staff?.jobTitle ?? "",
+      countryId: staff?.countryId ?? "",
+      observation: staff?.observation ?? "",
+      degreeId: staff ? String(staff.degreeId) : "",
+      employmentType: staff?.employmentType ?? "",
+      address: staff?.address ?? "",
+      email: staff?.email ?? "",
+      phoneNumber1: staff?.phoneNumber1 ?? "",
+      phoneNumber2: staff?.phoneNumber2 ?? "",
+      dateOfHire: staff?.dateOfHire ?? new Date(),
+      dateOfRelease: staff?.dateOfRelease ?? new Date(),
+      dateOfCriminalRecordCheck: staff?.dateOfCriminalRecordCheck ?? new Date(),
+      sendAgendaFrequency: staff?.sendAgendaFrequency ?? "",
+      dateOfLastAdvancement: staff?.dateOfLastAdvancement ?? new Date(),
       isTeacher: staff?.isActive ? "yes" : "no",
-      dateOfBirth: staff?.dateOfBirth || subMonths(new Date(), 100),
+      dateOfBirth: staff?.dateOfBirth ?? subMonths(new Date(), 100),
     },
   });
   const { t } = useLocale();
@@ -224,7 +221,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
                     onChange={(val) => {
                       field.onChange(val);
                     }}
-                    defaultValue={staff?.degreeId?.toString() || undefined}
+                    defaultValue={staff?.degreeId?.toString() ?? undefined}
                     onSelectCreateLevel={() => console.log("create level")}
                   />
                 </FormControl>
