@@ -8,7 +8,7 @@ interface UploadState {
   error: unknown;
   data: { id: string; url: string } | null;
 }
-const useUpload = () => {
+export const useUpload = () => {
   const [isPending, setIsPending] = useState(false);
   const [data, setData] = useState<UploadState[]>([]);
   const [error, setError] = useState(null);
@@ -105,5 +105,3 @@ const useUpload = () => {
 
   return { onUpload, isPending, data, error, isError: !!error };
 };
-
-export default useUpload;

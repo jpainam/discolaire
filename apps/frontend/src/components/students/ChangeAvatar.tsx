@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
 
 import * as React from "react";
 import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
-import useUpload from "@repo/hooks/use-upload";
+import { useUpload } from "@repo/hooks/use-upload";
 import { useLocale } from "@repo/i18n";
 import { FileUploader } from "@repo/ui/uploads/file-uploader";
 
@@ -15,9 +14,7 @@ import { api } from "~/trpc/react";
 export function ChangeAvatar({ studentId }: { studentId: string }) {
   const { t } = useLocale();
   const { closeModal } = useModal();
-  const presignedUrl = api.upload.createPresignedPost.useQuery({
-    destination: "avatars",
-  });
+
   const { onUpload, isPending, error, data: uploadedFiles } = useUpload();
   const updateStudentAvatarMutation = api.student.updateAvatar.useMutation();
 
@@ -54,10 +51,7 @@ export function ChangeAvatar({ studentId }: { studentId: string }) {
             toast.error("No file selected");
             return;
           }
-          if (!presignedUrl.data) {
-            toast.error("No presigned URL");
-            return;
-          }
+
           toast.promise(
             onUpload(file, {
               destination: "avatars",
@@ -83,7 +77,7 @@ export function ChangeAvatar({ studentId }: { studentId: string }) {
           {!d.isPending && (
             <p>Upload complete! File ID: {JSON.stringify(d.data)}</p>
           )}
-          {d.error && <p>Error: {JSON.stringify(d.error)}</p>}
+          {<p>Error: {JSON.stringify(d.error)}</p>}
         </div>
       ))}
     </div>

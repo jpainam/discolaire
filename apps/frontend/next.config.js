@@ -20,7 +20,12 @@ const config = {
   transpilePackages: [
     "@repo/api",
     "@repo/auth",
+    "@repo/editor",
     "@repo/db",
+    "@repo/hooks",
+    "@repo/i18n",
+    "@repo/lib",
+    "@repo/transactional",
     "@repo/ui",
     "@repo/validators",
   ],
@@ -28,6 +33,24 @@ const config = {
   /** We already do linting and typechecking as separate tasks in CI */
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
+
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "github.com", port: "" },
+      {
+        protocol: "https",
+        hostname: "source.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "utfs.io",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
+  },
 };
 
 export default config;
