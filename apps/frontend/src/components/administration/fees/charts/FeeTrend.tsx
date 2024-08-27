@@ -2,10 +2,10 @@
 
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
+import type { ChartConfig } from "@repo/ui/chart";
 import { useLocale } from "@repo/i18n";
 import { Card, CardContent } from "@repo/ui/card";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
@@ -34,14 +34,14 @@ export function FeeTrend() {
   }
   if (feesTrendQuery.isError) {
     showErrorToast(feesTrendQuery.error);
-    throw feesTrendQuery.error;
+    return;
   }
-  if (!feesTrendQuery.data) {
+  if (!feesTrendQuery.data.length) {
     return <EmptyState />;
   }
-  const data = feesTrendQuery.data || [];
+  const data = feesTrendQuery.data;
   return (
-    <Card className="border-none p-2 shadow-none">
+    <Card className="flex-1 border-none p-2 shadow-none">
       <CardContent className="p-2">
         <ChartContainer
           config={chartConfig}

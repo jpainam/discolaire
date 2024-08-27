@@ -9,12 +9,11 @@ import { cn } from "~/lib/utils";
 export function TabLink({
   title,
   href,
-  active,
   icon,
 }: {
   title: string;
   href: string;
-  active?: boolean;
+  //active?: boolean;
   icon?: React.ReactNode;
 }) {
   const pathname = usePathname();

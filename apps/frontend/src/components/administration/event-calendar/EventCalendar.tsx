@@ -1,5 +1,6 @@
 "use client";
 
+import type { EventProps, View as RbcView } from "react-big-calendar";
 import { useCallback, useMemo, useState } from "react";
 import {
   addMonths,
@@ -14,17 +15,11 @@ import {
 //import { enUS, fr } from "date-fns/locale";
 
 import { enUS, es, fr } from "date-fns/locale";
-import {
-  Calendar,
-  dateFnsLocalizer,
-  EventProps,
-  View as RbcView,
-} from "react-big-calendar";
+import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 
 import { useModal } from "@repo/hooks/use-modal";
+import { useResolvedTheme } from "@repo/hooks/use-resolved-theme";
 import { useLocale } from "@repo/i18n";
-
-import { useResolvedTheme } from "~/hooks/use-resolved-theme";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
 

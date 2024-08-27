@@ -2,23 +2,20 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { inferProcedureOutput } from "@trpc/server";
 
+import { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
-import { useDataTable } from "@repo/ui/data-table";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
+import { useDataTable } from "@repo/ui/data-table/index";
 
 import { showErrorToast } from "~/lib/handle-error";
-import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { FeeDataTableActions } from "./FeeDataTableActions";
 import { fetchFeesColumns } from "./FeeDataTableColumns";
 
-type FeeProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["fee"]["all"]>
->;
+type FeeProcedureOutput = NonNullable<RouterOutputs["fee"]["all"]>;
 
 export function FeeDataTable() {
   const searchParams = useSearchParams();
@@ -51,9 +48,9 @@ export function FeeDataTable() {
   );
 
   const { table } = useDataTable({
-    data: filteredFees || [],
+    data: filteredFees,
     columns,
-    pageCount: Math.ceil((filteredFees || []).length / 10),
+    pageCount: Math.ceil(filteredFees.length / 10),
     defaultPageSize: 10,
   });
 
