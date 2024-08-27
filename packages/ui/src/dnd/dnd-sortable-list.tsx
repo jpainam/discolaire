@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import type { Active, UniqueIdentifier } from "@dnd-kit/core";
 import type { ReactNode } from "react";
 import { useId, useMemo, useState } from "react";

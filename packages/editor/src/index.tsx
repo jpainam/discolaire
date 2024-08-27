@@ -111,36 +111,36 @@ import { createTrailingBlockPlugin } from "@udecode/plate-trailing-block";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
-import { BlockquoteElement } from "~/components/plate-ui/blockquote-element";
-import { CodeBlockElement } from "~/components/plate-ui/code-block-element";
-import { CodeLeaf } from "~/components/plate-ui/code-leaf";
-import { CodeLineElement } from "~/components/plate-ui/code-line-element";
-import { CodeSyntaxLeaf } from "~/components/plate-ui/code-syntax-leaf";
-import { ColumnElement } from "~/components/plate-ui/column-element";
-import { ColumnGroupElement } from "~/components/plate-ui/column-group-element";
-import { Editor } from "~/components/plate-ui/editor";
-import { FixedToolbar } from "~/components/plate-ui/fixed-toolbar";
-import { FixedToolbarButtons } from "~/components/plate-ui/fixed-toolbar-buttons";
-import { FloatingToolbar } from "~/components/plate-ui/floating-toolbar";
-import { FloatingToolbarButtons } from "~/components/plate-ui/floating-toolbar-buttons";
-import { HeadingElement } from "~/components/plate-ui/heading-element";
-import { HighlightLeaf } from "~/components/plate-ui/highlight-leaf";
-import { HrElement } from "~/components/plate-ui/hr-element";
-import { ImageElement } from "~/components/plate-ui/image-element";
-//import { InlineDateElement } from "~/components/plate-ui/inline-date-element";
-import { LinkElement } from "~/components/plate-ui/link-element";
-import { LinkFloatingToolbar } from "~/components/plate-ui/link-floating-toolbar";
-import { ListElement } from "~/components/plate-ui/list-element";
-import { MediaEmbedElement } from "~/components/plate-ui/media-embed-element";
-import { ParagraphElement } from "~/components/plate-ui/paragraph-element";
-import { withPlaceholders } from "~/components/plate-ui/placeholder";
+import { BlockquoteElement } from "./components/plate-ui/blockquote-element";
+import { CodeBlockElement } from "./components/plate-ui/code-block-element";
+import { CodeLeaf } from "./components/plate-ui/code-leaf";
+import { CodeLineElement } from "./components/plate-ui/code-line-element";
+import { CodeSyntaxLeaf } from "./components/plate-ui/code-syntax-leaf";
+import { ColumnElement } from "./components/plate-ui/column-element";
+import { ColumnGroupElement } from "./components/plate-ui/column-group-element";
+import { Editor } from "./components/plate-ui/editor";
+import { FixedToolbar } from "./components/plate-ui/fixed-toolbar";
+import { FixedToolbarButtons } from "./components/plate-ui/fixed-toolbar-buttons";
+import { FloatingToolbar } from "./components/plate-ui/floating-toolbar";
+import { FloatingToolbarButtons } from "./components/plate-ui/floating-toolbar-buttons";
+import { HeadingElement } from "./components/plate-ui/heading-element";
+import { HighlightLeaf } from "./components/plate-ui/highlight-leaf";
+import { HrElement } from "./components/plate-ui/hr-element";
+import { ImageElement } from "./components/plate-ui/image-element";
+//import { InlineDateElement } from "./components/plate-ui/inline-date-element";
+import { LinkElement } from "./components/plate-ui/link-element";
+import { LinkFloatingToolbar } from "./components/plate-ui/link-floating-toolbar";
+import { ListElement } from "./components/plate-ui/list-element";
+import { MediaEmbedElement } from "./components/plate-ui/media-embed-element";
+import { ParagraphElement } from "./components/plate-ui/paragraph-element";
+import { withPlaceholders } from "./components/plate-ui/placeholder";
 import {
   TableCellElement,
   TableCellHeaderElement,
-} from "~/components/plate-ui/table-cell-element";
-import { TableElement } from "~/components/plate-ui/table-element";
-import { TableRowElement } from "~/components/plate-ui/table-row-element";
-import { withDraggables } from "~/components/plate-ui/with-draggables";
+} from "./components/plate-ui/table-cell-element";
+import { TableElement } from "./components/plate-ui/table-element";
+import { TableRowElement } from "./components/plate-ui/table-row-element";
+import { withDraggables } from "./components/plate-ui/with-draggables";
 
 const plugins = createPlugins(
   [

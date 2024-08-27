@@ -1,5 +1,7 @@
 import bcrypt from "bcryptjs";
 
+import { env } from "../env";
+
 export const isPasswordMatch = async (
   password: string,
   userPassword: string,
@@ -12,7 +14,7 @@ export const encryptPassword = async (password: string) => {
   return encryptedPassword;
 };
 
-const INVITATION_LINK_SECRET = `${process.env.INVITATION_LINK_SECRET}`;
+const INVITATION_LINK_SECRET = env.INVITATION_LINK_SECRET;
 export const encryptInvitationCode = async (email: string) => {
   const encryptedCode = await bcrypt.hash(email + INVITATION_LINK_SECRET, 8);
   return encryptedCode;

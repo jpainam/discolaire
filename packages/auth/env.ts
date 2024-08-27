@@ -13,11 +13,13 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
     DATABASE_URL: z.string(),
+    INVITATION_LINK_SECRET: z.string(),
   },
   client: {},
   runtimeEnv: {
     ...process.env,
     DATABASE_URL: process.env.DATABASE_URL,
+    INVITATION_LINK_SECRET: process.env.INVITATION_LINK_SECRET,
     AUTH_DISCORD_ID: process.env.AUTH_DISCORD_ID,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     AUTH_SECRET: process.env.AUTH_SECRET,

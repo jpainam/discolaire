@@ -19,6 +19,7 @@
     "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/hooks": "workspace:*",
+    "@repo/editor": "workspace:*",
     "@repo/i18n": "workspace:*",
     "@repo/lib": "workspace:*",
     "@repo/transactional": "workspace:*",

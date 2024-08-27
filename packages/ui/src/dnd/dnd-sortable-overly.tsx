@@ -12,7 +12,7 @@ const dropAnimationConfig: DropAnimation = {
   }),
 };
 
-interface Props {}
+type Props = object;
 
 export function SortableOverlay({ children }: PropsWithChildren<Props>) {
   return (

@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.tsx"
   },
   "license": "MIT",
   "scripts": {
@@ -78,6 +78,7 @@
     "@udecode/plate-toggle": "^36.3.6",
     "@udecode/plate-trailing-block": "^36.0.0",
     "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
     "cmdk": "1.0.0",
     "lucide-react": "^0.435.0",
     "prismjs": "^1.29.0",
