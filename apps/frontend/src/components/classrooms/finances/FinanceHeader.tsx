@@ -1,13 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useAtomValue } from "jotai";
-import { ChevronDown, Printer, Search } from "lucide-react";
+import { ChevronDown, Printer } from "lucide-react";
+import { useQueryState } from "nuqs";
 import { PiGridFour, PiListBullets } from "react-icons/pi";
 
-import { useCreateQueryString } from "@repo/hooks/create-query-string";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -24,13 +22,11 @@ import {
 import { Input } from "@repo/ui/input";
 import { Label } from "@repo/ui/label";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
-import { ToggleGroup } from "@repo/ui/ToggleGroup";
+import { ToggleGroup, ToggleGroupItem } from "@repo/ui/toggle-group";
 
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
-import { routes } from "~/configs/routes";
-import { cn } from "~/lib/utils";
 import { sidebarIcons } from "../sidebar-icons";
 import { FinanceBulkAction } from "./FinanceBulkAction";
 
@@ -38,12 +34,12 @@ export function FinanceHeader() {
   const { t } = useLocale();
   const { t: t2 } = useLocale("print");
   const searchParams = useSearchParams();
-  const { createQueryString } = useCreateQueryString();
-  const [search, setSearch] = useState(searchParams.get("query") ?? "");
-  const params = useParams() as { id: string };
-  const router = useRouter();
+  //const { createQueryString } = useCreateQueryString();
+  const [_, setType] = useQueryState("type");
+  const [search, setSearch] = useQueryState("query");
+
   const selectedStudents = useAtomValue(selectedStudentIdsAtom);
-  const Icon = sidebarIcons["financial_situation"];
+  const Icon = sidebarIcons.financial_situation;
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary px-2 py-1 text-secondary-foreground">
       {Icon && <Icon className="h-6 w-6" />}
@@ -51,32 +47,13 @@ export function FinanceHeader() {
       <Input
         onChange={(v) => setSearch(v.target.value)}
         className="w-64"
-        defaultValue={search}
+        defaultValue={search ?? ""}
         placeholder={t("search")}
       />
-      <Button
-        size="sm"
-        variant="default"
-        onClick={() => {
-          search
-            ? router.push(
-                `${routes.classrooms.finances(params.id)}/?query=${search}`,
-              )
-            : router.push(`${routes.classrooms.finances(params.id)}`);
-        }}
-        className="gap-1"
-      >
-        <Search className="h-4 w-4" />
-        {t("search")}
-      </Button>
 
       <RadioGroup
         onValueChange={(val) => {
-          router.push(
-            routes.classrooms.finances(params.id) +
-              "?" +
-              createQueryString({ type: val }),
-          );
+          void setType(val == "all" ? null : val);
         }}
         className="flex flex-row"
         defaultValue={searchParams.get("type") ?? "all"}
@@ -164,45 +141,30 @@ export function FinanceHeader() {
 }
 
 function CreditOrDebit() {
-  const isGridLayout = true;
-  const { createQueryString } = useCreateQueryString();
-  const router = useRouter();
-  const params = useParams() as { id: string };
+  const [view, setView] = useQueryState("view");
+
   const options = [
     {
       value: "list",
-      label: (
-        <PiListBullets
-          className={cn(
-            "h-5 w-5 transition-colors",
-            !isGridLayout && "text-primary-foreground",
-          )}
-        />
-      ),
+      label: <PiListBullets className="h-6 w-6" />,
     },
     {
       value: "grid",
-      label: (
-        <PiGridFour
-          className={cn(
-            "h-5 w-5 transition-colors",
-            isGridLayout && "text-primary-foreground",
-          )}
-        />
-      ),
+      label: <PiGridFour className="h-6 w-6" />,
     },
   ];
   return (
     <ToggleGroup
+      size={"sm"}
+      defaultValue={view ?? "list"}
       onValueChange={(val) => {
-        router.push(
-          routes.classrooms.finances(params.id) +
-            "?" +
-            createQueryString({ view: val }),
-        );
+        void setView(val);
       }}
-      defaultValue={isGridLayout ? "grid" : "list"}
-      options={options}
-    ></ToggleGroup>
+      type="single"
+    >
+      {options.map((option) => (
+        <ToggleGroupItem value={option.value}>{option.label}</ToggleGroupItem>
+      ))}
+    </ToggleGroup>
   );
 }

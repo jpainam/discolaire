@@ -2,10 +2,10 @@
 
 import { useCallback } from "react";
 import { useSearchParams } from "next/navigation";
-import { inferProcedureOutput } from "@trpc/server";
 import { useAtom } from "jotai";
 import { ArrowDownUp, AtSign, DollarSign, Phone, Users } from "lucide-react";
 
+import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Card, CardContent } from "@repo/ui/card";
@@ -16,13 +16,12 @@ import { AvatarState } from "~/components/AvatarState";
 import { SimpleTooltip } from "~/components/simple-tooltip";
 import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";
-import { AppRouter } from "~/server/api/root";
 import { getFullName } from "~/utils/full-name";
 import { useMoneyFormat } from "~/utils/money-format";
 import { openInNewTab } from "~/utils/open-new-tab";
 
 type StudentAccountWithBalance = NonNullable<
-  inferProcedureOutput<AppRouter["classroom"]["studentsBalance"]>
+  RouterOutputs["classroom"]["studentsBalance"]
 >[number];
 
 export function GridViewFinanceCard({
@@ -100,12 +99,12 @@ export function GridViewFinanceCard({
                 <DollarSign className="h-3 w-3" />
               </Button>
             </SimpleTooltip>
-            <SimpleTooltip content={student.phoneNumber || "@phone"}>
+            <SimpleTooltip content={student.phoneNumber ?? "@phone"}>
               <Button variant={"outline"} size={"icon"} className="h-6 w-6">
                 <Phone className="h-3 w-3" />
               </Button>
             </SimpleTooltip>
-            <SimpleTooltip content={student.email || "@email"}>
+            <SimpleTooltip content={student.email ?? "@email"}>
               <Button variant={"outline"} size={"icon"} className="h-6 w-6">
                 <AtSign className="h-3 w-3" />
               </Button>

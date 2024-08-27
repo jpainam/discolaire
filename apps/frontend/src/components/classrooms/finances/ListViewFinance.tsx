@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { inferProcedureOutput } from "@trpc/server";
 import { useAtom } from "jotai";
 
+import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
 import { Checkbox } from "@repo/ui/checkbox";
 import FlatBadge from "@repo/ui/FlatBadge";
@@ -21,11 +21,10 @@ import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { CURRENCY } from "~/lib/constants";
-import { AppRouter } from "~/server/api/root";
 import { getFullName } from "~/utils/full-name";
 
 type StudentAccountWithBalance = NonNullable<
-  inferProcedureOutput<AppRouter["classroom"]["studentsBalance"]>
+  RouterOutputs["classroom"]["studentsBalance"]
 >;
 
 export function ListViewFinance({
@@ -47,7 +46,7 @@ export function ListViewFinance({
             <TableHead>
               <Checkbox
                 onCheckedChange={(checked) => {
-                  setSelectedStudents((stds) =>
+                  setSelectedStudents((_stds) =>
                     checked ? students.map((stud) => stud.student.id) : [],
                   );
                 }}
@@ -80,21 +79,19 @@ export function ListViewFinance({
                 <TableCell className="py-0">
                   <AvatarState
                     pos={getFullName(stud.student).length}
-                    avatar={stud.student?.avatar}
+                    avatar={stud.student.avatar}
                   />
                 </TableCell>
                 <TableCell className="py-0">
-                  {stud.student?.registrationNumber}
+                  {stud.student.registrationNumber}
                 </TableCell>
                 <TableCell className="py-0">
-                  {stud.student && (
-                    <Link
-                      className="hover:text-blue-600 hover:underline"
-                      href={routes.students.details(stud.student.id)}
-                    >
-                      {getFullName(stud.student)}
-                    </Link>
-                  )}
+                  <Link
+                    className="hover:text-blue-600 hover:underline"
+                    href={routes.students.details(stud.student.id)}
+                  >
+                    {getFullName(stud.student)}
+                  </Link>
                 </TableCell>
                 <TableCell className="py-0">
                   <FlatBadge variant={remaining < 0 ? "red" : "green"}>
