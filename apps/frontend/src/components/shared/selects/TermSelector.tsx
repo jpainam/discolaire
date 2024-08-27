@@ -13,13 +13,13 @@ import { Skeleton } from "@repo/ui/skeleton";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
-type TermSelectorProps = {
+interface TermSelectorProps {
   onChange?: (value: string) => void;
   placeholder?: string;
   className?: string;
   defaultValue?: string | null;
   showAllOption?: boolean;
-};
+}
 export function TermSelector({
   onChange,
   placeholder,
@@ -33,9 +33,9 @@ export function TermSelector({
 
   return (
     <Select
-      defaultValue={defaultValue || undefined}
+      defaultValue={defaultValue ?? undefined}
       onValueChange={(value) => {
-        onChange && onChange(value == "all" ? "" : value);
+        onChange?.(value == "all" ? "" : value);
       }}
     >
       {!termsQuery.isPending ? (

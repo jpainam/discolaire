@@ -19,13 +19,13 @@ import { Skeleton } from "@repo/ui/skeleton";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
-type SelectProgramThemeProps = {
+interface SelectProgramThemeProps {
   placeholder?: string;
   className?: string;
   contentClassName?: string;
   onChange?: (value: string) => void;
   disabled?: boolean;
-};
+}
 export function ProgramThemeSelector({
   placeholder,
   className,
@@ -58,14 +58,14 @@ export function ProgramThemeSelector({
         >
           {value
             ? programThemesQuery.data?.find((d) => d.id === Number(value))?.name
-            : placeholder || t("select_an_option")}
+            : (placeholder ?? t("select_an_option"))}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className={cn("w-[400px] p-0", contentClassName)}>
         <Command>
           <CommandInput
-            placeholder={placeholder || t("search_for_an_option")}
+            placeholder={placeholder ?? t("search_for_an_option")}
           />
           <CommandEmpty>{t("not_found")}</CommandEmpty>
           <CommandGroup>
@@ -74,7 +74,7 @@ export function ProgramThemeSelector({
                 <CommandItem
                   key={d.id}
                   //value={`${d.id}`}
-                  onSelect={(currentValue) => {
+                  onSelect={(_currentValue) => {
                     setValue(d.id === Number(value) ? "" : `${d.id}`);
                     onChange?.(d.id === Number(value) ? "" : `${d.id}`);
                     setOpen(false);
@@ -91,10 +91,10 @@ export function ProgramThemeSelector({
                       <div
                         className="flex h-4 w-4 rounded-full"
                         style={{
-                          backgroundColor: d?.course?.color ?? "lightgray",
+                          backgroundColor: d.course.color ?? "lightgray",
                         }}
                       ></div>
-                      <div className="font-semibold"> {d.course?.name}</div>
+                      <div className="font-semibold"> {d.course.name}</div>
                     </div>
                     <div className="pl-8 font-normal">{d.name}</div>
                   </div>

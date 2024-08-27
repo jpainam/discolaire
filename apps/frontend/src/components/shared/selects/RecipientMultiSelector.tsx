@@ -76,7 +76,7 @@ export function RecipientMultiSelector({
   }
   if (recipientsQuery.isError) {
     showErrorToast(recipientsQuery.error);
-    throw recipientsQuery.error;
+    return;
   }
 
   return (
@@ -89,7 +89,7 @@ export function RecipientMultiSelector({
           {selected.map((a_selection) => {
             return (
               <Badge key={a_selection} variant="secondary">
-                {recipientsQuery.data?.find((r) => r.id === a_selection)?.name}
+                {recipientsQuery.data.find((r) => r.id === a_selection)?.name}
                 <button
                   className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
                   onKeyDown={(e) => {
@@ -136,15 +136,15 @@ export function RecipientMultiSelector({
                         e.preventDefault();
                         e.stopPropagation();
                       }}
-                      onSelect={(value) => {
+                      onSelect={(_value) => {
                         setInputValue("");
                         setSelected((prev) => [...prev, a_selection]);
-                        onChange && onChange([...selected, a_selection]);
+                        onChange?.([...selected, a_selection]);
                       }}
                       className={"cursor-pointer"}
                     >
                       {
-                        recipientsQuery.data?.find((r) => r.id == a_selection)
+                        recipientsQuery.data.find((r) => r.id == a_selection)
                           ?.name
                       }
                     </CommandItem>

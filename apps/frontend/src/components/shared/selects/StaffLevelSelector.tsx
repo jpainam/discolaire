@@ -16,6 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { ScrollArea } from "@repo/ui/scroll-area";
 import { Skeleton } from "@repo/ui/skeleton";
 
+import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
@@ -35,14 +36,14 @@ export const StaffLevelSelector = ({
   onSelectCreateLevel,
 }: StaffLevelSelectorProps) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState<string>(defaultValue || "");
+  const [value, setValue] = useState<string>(defaultValue ?? "");
   const { t } = useLocale();
 
   const staffLevelsQuery = api.staff.levels.useQuery();
-  const staffLevels = staffLevelsQuery.data || [];
+  const staffLevels = staffLevelsQuery.data ?? [];
 
   if (staffLevelsQuery.isError) {
-    throw staffLevelsQuery.error;
+    showErrorToast(staffLevelsQuery.error);
   }
   if (staffLevelsQuery.isPending) {
     return <Skeleton className={cn("h-8 w-[250px]", className)} />;
@@ -59,7 +60,7 @@ export const StaffLevelSelector = ({
             className={cn(`w-[250px] justify-between`, className)}
           >
             {value
-              ? staffLevels?.find((level) => level.id == Number(value))?.name
+              ? staffLevels.find((level) => level.id == Number(value))?.name
               : t("select_an_option")}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
@@ -76,17 +77,17 @@ export const StaffLevelSelector = ({
               <CommandEmpty>{t("no_data")}</CommandEmpty>
               <CommandGroup>
                 <ScrollArea
-                  className={(staffLevels || []).length > 7 ? "h-[210px]" : ""}
+                  className={staffLevels.length > 7 ? "h-[210px]" : ""}
                 >
-                  {staffLevels?.map((level) => (
+                  {staffLevels.map((level) => (
                     <CommandItem
                       key={level.id}
                       className="flex w-full cursor-pointer items-center justify-between space-x-2"
                       onSelect={() => {
                         const v =
                           level.id == Number(value) ? undefined : level.id;
-                        onChange(v?.toString() || "");
-                        setValue(v?.toString() || "");
+                        onChange(v?.toString() ?? "");
+                        setValue(v?.toString() ?? "");
                         setOpen(false);
                       }}
                     >

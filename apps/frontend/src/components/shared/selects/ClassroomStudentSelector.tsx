@@ -24,11 +24,11 @@ import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 
 // https://github.com/oaarnikoivu/shadcn-virtualized-combobox
-type Option = {
+interface Option {
   value: string;
   label: string;
   avatar?: string;
-};
+}
 
 interface VirtualizedCommandProps {
   height: string;
@@ -62,7 +62,7 @@ const VirtualizedCommand = ({
   const handleSearch = (search: string) => {
     setFilteredOptions(
       options.filter((option) =>
-        option.label.toLowerCase().includes(search.toLowerCase() ?? []),
+        option.label.toLowerCase().includes(search.toLowerCase()),
       ),
     );
   };
@@ -93,7 +93,7 @@ const VirtualizedCommand = ({
               position: "relative",
             }}
           >
-            {virtualOptions.map((virtualOption, index) => {
+            {virtualOptions.map((virtualOption, _index) => {
               //const avatar = randomAvatar();
               const current = filteredOptions[virtualOption.index];
               return (
@@ -173,14 +173,14 @@ export function ClassroomStudentSelector({
   useEffect(() => {
     if (classroomStudentsQuery.data) {
       if (defaultValue) {
-        const dValue = classroomStudentsQuery.data?.find(
+        const dValue = classroomStudentsQuery.data.find(
           (item) => item.id === defaultValue,
         );
-        dValue &&
+        if (dValue)
           setSelectedOption({ label: getFullName(dValue), value: dValue.id });
       }
       setOptions(
-        classroomStudentsQuery.data?.map((student) => ({
+        classroomStudentsQuery.data.map((student) => ({
           label: getFullName(student),
           value: student.id,
           avatar: student.avatar ?? undefined,
@@ -202,8 +202,8 @@ export function ClassroomStudentSelector({
           className={cn("w-full justify-between", className)}
         >
           {options.find((option) => option.value === selectedOption.value)
-            ?.label ||
-            placeholder ||
+            ?.label ??
+            placeholder ??
             t("select_an_option")}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 justify-end opacity-50" />
         </Button>
@@ -221,10 +221,9 @@ export function ClassroomStudentSelector({
           }
           selectedOption={selectedOption.value}
           onSelectOption={(currentValue) => {
-            onChange &&
-              onChange(
-                currentValue === selectedOption.value ? null : currentValue,
-              );
+            onChange?.(
+              currentValue === selectedOption.value ? null : currentValue,
+            );
             setSelectedOption({
               value: currentValue === selectedOption.value ? "" : currentValue,
               label: "",

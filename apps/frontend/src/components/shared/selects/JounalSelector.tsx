@@ -13,13 +13,13 @@ import { Skeleton } from "@repo/ui/skeleton";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
-type JournalSelectorProps = {
+interface JournalSelectorProps {
   onChange?: (value: string) => void;
   placeholder?: string;
   className?: string;
   defaultValue?: string | null;
   showAllOption?: boolean;
-};
+}
 export function JournalSelector({
   onChange,
   placeholder,
@@ -33,9 +33,9 @@ export function JournalSelector({
 
   return (
     <Select
-      defaultValue={defaultValue || undefined}
+      defaultValue={defaultValue ?? undefined}
       onValueChange={(value) => {
-        onChange && onChange(value == "All" ? "" : value);
+        onChange?.(value == "All" ? "" : value);
       }}
     >
       {!journalsQuery.isPending ? (
@@ -56,7 +56,7 @@ export function JournalSelector({
             {t("all")}
           </SelectItem>
         )}
-        {journalsQuery?.data?.map((journal) => {
+        {journalsQuery.data?.map((journal) => {
           return (
             <SelectItem key={journal.id} value={journal.id.toString()}>
               {journal.name}

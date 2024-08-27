@@ -11,11 +11,11 @@ import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import VirtualizedCommand from "./VirtualizedCommand";
 
-type Option = {
+interface Option {
   value: string;
   label: string;
   avatar?: string;
-};
+}
 
 interface FormerSchoolSelectorProps {
   searchPlaceholder?: string;
@@ -48,13 +48,13 @@ export function FormerSchoolSelector({
   useEffect(() => {
     if (formerSchoolsQuery.data) {
       if (defaultValue) {
-        const dValue = formerSchoolsQuery.data?.find(
+        const dValue = formerSchoolsQuery.data.find(
           (item) => item.id === defaultValue,
         );
-        dValue && setSelectedOption({ label: dValue.name, value: dValue.id });
+        if (dValue) setSelectedOption({ label: dValue.name, value: dValue.id });
       }
       setOptions(
-        formerSchoolsQuery.data?.map((item) => ({
+        formerSchoolsQuery.data.map((item) => ({
           label: item.name,
           value: item.id,
           avatar: undefined,
@@ -111,10 +111,9 @@ export function FormerSchoolSelector({
           placeholder={searchPlaceholder ? searchPlaceholder : t("search")}
           selectedOption={selectedOption.value}
           onSelectOption={(currentValue) => {
-            onChange &&
-              onChange(
-                currentValue === selectedOption.value ? null : currentValue,
-              );
+            onChange?.(
+              currentValue === selectedOption.value ? null : currentValue,
+            );
             setSelectedOption({
               value: currentValue === selectedOption.value ? "" : currentValue,
               label: "",

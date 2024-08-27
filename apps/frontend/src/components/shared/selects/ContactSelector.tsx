@@ -12,11 +12,11 @@ import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import VirtualizedCommand from "./VirtualizedCommand";
 
-type Option = {
+interface Option {
   value: string;
   label: string;
   avatar?: string;
-};
+}
 
 interface ContactSelectorProps {
   searchPlaceholder?: string;
@@ -52,7 +52,7 @@ export function ContactSelector({
     if (contacts) {
       if (defaultValue) {
         const dValue = contacts.find((item) => item.id === defaultValue);
-        dValue &&
+        if (dValue)
           setSelectedOption({ label: getFullName(dValue), value: dValue.id });
       }
       setOptions(
@@ -98,10 +98,9 @@ export function ContactSelector({
           placeholder={searchPlaceholder ? searchPlaceholder : t("search")}
           selectedOption={selectedOption.value}
           onSelectOption={(currentValue) => {
-            onChange &&
-              onChange(
-                currentValue === selectedOption.value ? null : currentValue,
-              );
+            onChange?.(
+              currentValue === selectedOption.value ? null : currentValue,
+            );
             setSelectedOption({
               value: currentValue === selectedOption.value ? "" : currentValue,
               label: "",

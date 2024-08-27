@@ -21,18 +21,18 @@ import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
-type Option = {
+interface Option {
   label: string;
   value: string;
-};
+}
 
-type ClassroomSelectorProps = {
+interface ClassroomSelectorProps {
   searchPlaceholder?: string;
   placeholder?: string;
   className?: string;
   defaultValue?: string;
   onChange?: (value: string | null | undefined) => void;
-};
+}
 
 export function ClassroomSelector({
   searchPlaceholder,
@@ -54,7 +54,7 @@ export function ClassroomSelector({
   React.useEffect(() => {
     setItems(
       classroomsQuery.data?.map((it) => ({
-        label: it.name || "",
+        label: it.name ?? "",
         value: it.id,
       })) ?? [],
     );
@@ -62,11 +62,11 @@ export function ClassroomSelector({
 
   const handleSearch = (search: string) => {
     if (!classroomsQuery.data) return;
-    const filteredItems = classroomsQuery.data?.filter((it) =>
+    const filteredItems = classroomsQuery.data.filter((it) =>
       it.name?.toLowerCase().includes(search.toLowerCase()),
     );
     setItems(
-      filteredItems.map((it) => ({ label: it.name || "", value: it.id })),
+      filteredItems.map((it) => ({ label: it.name ?? "", value: it.id })),
     );
   };
   if (classroomsQuery.isPending) {
@@ -76,7 +76,7 @@ export function ClassroomSelector({
     showErrorToast(classroomsQuery.error);
     return null;
   }
-  if (!classroomsQuery.data) return null;
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -86,8 +86,8 @@ export function ClassroomSelector({
           aria-expanded={open}
           className={cn("w-full justify-between", className)}
         >
-          {items.find((it) => it.value === value)?.label ||
-            placeholder ||
+          {items.find((it) => it.value === value)?.label ??
+            placeholder ??
             t("select_an_option")}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -110,8 +110,7 @@ export function ClassroomSelector({
                     className="overflow-hidden"
                     value={item.value}
                     onSelect={(currentValue) => {
-                      onChange &&
-                        onChange(currentValue == value ? null : currentValue);
+                      onChange?.(currentValue == value ? null : currentValue);
                       setValue(currentValue === value ? "" : currentValue);
                       setOpen(false);
                     }}

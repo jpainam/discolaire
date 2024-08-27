@@ -21,19 +21,19 @@ import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
-type Option = {
+interface Option {
   label: string;
   value: string;
-};
+}
 
-type ClassroomSelectorProps = {
+interface ClassroomSelectorProps {
   searchPlaceholder?: string;
   placeholder?: string;
   classroomId: string;
   className?: string;
   defaultValue?: string;
   onChange?: (value: string | null | undefined) => void;
-};
+}
 
 export function SubjectSelector({
   searchPlaceholder,
@@ -59,7 +59,7 @@ export function SubjectSelector({
   React.useEffect(() => {
     setItems(
       subjects?.map((it) => ({
-        label: it.course?.name || "",
+        label: it.course?.name ?? "",
         value: it.id.toString(),
       })) ?? [],
     );
@@ -68,11 +68,11 @@ export function SubjectSelector({
   const handleSearch = (search: string) => {
     if (!subjects) return;
     const filteredItems = subjects.filter((it) =>
-      it?.course?.name?.toLowerCase().includes(search.toLowerCase()),
+      it.course?.name?.toLowerCase().includes(search.toLowerCase()),
     );
     setItems(
       filteredItems.map((it) => ({
-        label: it.course?.name || "",
+        label: it.course?.name ?? "",
         value: it.id.toString(),
       })),
     );
@@ -120,8 +120,7 @@ export function SubjectSelector({
                     className="overflow-hidden"
                     value={item.value}
                     onSelect={(currentValue) => {
-                      onChange &&
-                        onChange(currentValue == value ? null : currentValue);
+                      onChange?.(currentValue == value ? null : currentValue);
                       setValue(currentValue === value ? "" : currentValue);
                       setOpen(false);
                     }}

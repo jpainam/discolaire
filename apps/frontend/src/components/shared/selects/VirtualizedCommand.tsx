@@ -14,11 +14,11 @@ import {
 import { AvatarState } from "~/components/AvatarState";
 import { cn } from "~/lib/utils";
 
-type Option = {
+interface Option {
   value: string;
   label: string;
   avatar?: string;
-};
+}
 
 interface VirtualizedCommandProps {
   height: string;
@@ -59,7 +59,7 @@ const VirtualizedCommand = ({
   const handleSearch = (search: string) => {
     setFilteredOptions(
       options.filter((option) =>
-        option.label.toLowerCase().includes(search.toLowerCase() ?? []),
+        option.label.toLowerCase().includes(search.toLowerCase()),
       ),
     );
   };
@@ -108,13 +108,12 @@ const VirtualizedCommand = ({
                   value={filteredOptions[virtualOption.index]?.value}
                   onSelect={onSelectOption}
                 >
-                  {renderOption &&
-                    renderOption({
-                      option: filteredOptions[virtualOption.index],
-                      isSelected:
-                        selectedOption ===
-                        filteredOptions[virtualOption.index]?.value,
-                    })}
+                  {renderOption?.({
+                    option: filteredOptions[virtualOption.index],
+                    isSelected:
+                      selectedOption ===
+                      filteredOptions[virtualOption.index]?.value,
+                  })}
                   {!renderOption && (
                     <>
                       <div className="flex flex-row items-center gap-2">

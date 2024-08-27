@@ -10,7 +10,7 @@ import {
 
 import { cn } from "~/lib/utils";
 
-type SelectTransactionTypeProps = {
+interface SelectTransactionTypeProps {
   className?: string;
   labelClassName?: string;
   triggerClassName?: string;
@@ -18,7 +18,7 @@ type SelectTransactionTypeProps = {
   placeholder?: string;
   defaultValue?: string;
   onChange: (value: string) => void;
-};
+}
 
 const items: { label: string; value: string }[] = [
   { label: "credit", value: "CREDIT" },
