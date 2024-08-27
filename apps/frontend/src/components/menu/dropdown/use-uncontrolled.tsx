@@ -19,7 +19,7 @@ export function useUncontrolled<T>({
 
   const handleUncontrolledChange = (val: T) => {
     setUncontrolledValue(val);
-    onChange?.(val);
+    onChange(val);
   };
 
   if (value !== undefined) {

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { inferProcedureOutput } from "@trpc/server";
+import type { inferProcedureOutput } from "@trpc/server";
 import { Loader, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -34,7 +34,7 @@ import { CheckboxField } from "~/components/shared/forms/checkbox-field";
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";
 import { showErrorToast } from "~/lib/handle-error";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
 const QuillEditor = dynamic(() => import("@repo/ui/quill-editor"), {
@@ -249,8 +249,8 @@ export function CreateEditAssignment({
                   onChange={(val) => {
                     if (val) {
                       const dateRange = val as { from: Date; to: Date };
-                      form.setValue("from", dateRange?.from);
-                      form.setValue("to", dateRange?.to);
+                      form.setValue("from", dateRange.from);
+                      form.setValue("to", dateRange.to);
                     }
                   }}
                 />

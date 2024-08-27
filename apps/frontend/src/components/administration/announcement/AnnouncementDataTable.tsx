@@ -6,7 +6,7 @@ import { useLocale } from "@repo/i18n";
 import { useDataTable } from "@repo/ui/data-table";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
-import { DataTableFilterField } from "@repo/ui/data-table/types";
+import type { DataTableFilterField } from "@repo/ui/data-table/types";
 
 import { api } from "~/trpc/react";
 import { NoticeboardDataTableActions } from "./NoticeboardDataTableActions";

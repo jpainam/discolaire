@@ -36,7 +36,7 @@ const EditableAppreciation = ({
 
   useEffect(() => {
     if (isEditing) {
-      inputRef?.current?.focus();
+      inputRef.current?.focus();
     }
   }, [isEditing]);
 

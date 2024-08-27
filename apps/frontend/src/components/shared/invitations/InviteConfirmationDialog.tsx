@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
+ 
 import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";

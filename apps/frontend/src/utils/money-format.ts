@@ -2,7 +2,7 @@ import i18next from "i18next";
 
 export function asThousands(amount: number): string {
   const entier = `${amount}`;
-  let n = entier;
+  const n = entier;
   let tmp = "";
   let c = 0;
   if (n.length > 3) {

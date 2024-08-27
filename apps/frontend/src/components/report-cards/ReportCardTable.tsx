@@ -3,7 +3,8 @@
 import Link from "next/link";
 
 import { useLocale } from "@repo/i18n";
-import FlatBadge, { FlatBadgeVariant } from "@repo/ui/FlatBadge";
+import type { FlatBadgeVariant } from "@repo/ui/FlatBadge";
+import FlatBadge from "@repo/ui/FlatBadge";
 import {
   Table,
   TableBody,
@@ -64,23 +65,23 @@ export function ReportCardTable({ reportCard }: ReportCardTableProps) {
             <TableRow key={index}>
               <TableCell className={cn(rowClassName, "text-left")}>
                 <div className="flex flex-col gap-0">
-                  <span>{card?.subject?.name}</span>
+                  <span>{card.subject.name}</span>
                   <Link
                     className="ml-4 hover:text-blue-500 hover:underline"
-                    href={routes.staffs.details(card?.subject?.teacherId || "")}
+                    href={routes.staffs.details(card.subject.teacherId || "")}
                   >
-                    {getFullName(card?.subject?.teacher)}
+                    {getFullName(card.subject.teacher)}
                   </Link>
                 </div>
               </TableCell>
               <TableCell className={cn(rowClassName)}>
-                <Cell n={card?.avg} />
+                <Cell n={card.avg} />
               </TableCell>
               <TableCell className={cn(rowClassName)}>
-                <Cell n={card?.max} />
+                <Cell n={card.max} />
               </TableCell>
               <TableCell className={cn(rowClassName)}>
-                <Cell n={card?.min} />
+                <Cell n={card.min} />
               </TableCell>
               <TableCell className={cn(rowClassName)}>
                 Consulter cahier de texte

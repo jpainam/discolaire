@@ -25,7 +25,7 @@ export function AssignmentHeader() {
   const router = useRouter();
   const { t } = useLocale();
   const { createQueryString } = useCreateQueryString();
-  const Icon = sidebarIcons["assignments"];
+  const Icon = sidebarIcons.assignments;
   return (
     <div className="flex w-full flex-col">
       <div className="flex flex-row items-center gap-2 border-b bg-secondary px-2 py-1 text-secondary-foreground">

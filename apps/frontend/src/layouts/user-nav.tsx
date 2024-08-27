@@ -51,7 +51,7 @@ export function UserNav({ className }: { className?: string }) {
         <DropdownMenuGroup>
           <DropdownMenuItem
             onClick={() => {
-              user?.id && router.push(routes.users.details(user?.id));
+              user?.id && router.push(routes.users.details(user.id));
             }}
           >
             <User className="mr-2 h-4 w-4" />
@@ -59,7 +59,7 @@ export function UserNav({ className }: { className?: string }) {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              user?.id && router.push(routes.users.settings(user?.id));
+              user?.id && router.push(routes.users.settings(user.id));
             }}
           >
             <Settings className="mr-2 h-4 w-4" />
@@ -67,7 +67,7 @@ export function UserNav({ className }: { className?: string }) {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              user?.id && router.push(routes.users.logs(user?.id));
+              user?.id && router.push(routes.users.logs(user.id));
             }}
           >
             <Computer className="mr-2 h-4 w-4" />

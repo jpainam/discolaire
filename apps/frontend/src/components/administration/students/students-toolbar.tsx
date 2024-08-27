@@ -28,7 +28,7 @@ export function StudentsToolbar() {
 
   useEffect(() => {
     //setClassroomId(null);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);  
 
   return (
     <div className="flex items-center p-2">

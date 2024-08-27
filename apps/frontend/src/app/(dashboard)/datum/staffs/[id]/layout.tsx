@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 import { notFound } from "next/navigation";
 import { CalendarDays, DollarSign, Folders, History } from "lucide-react";
 
@@ -13,11 +13,11 @@ import { checkPermissions } from "~/server/permission";
 import { api } from "~/trpc/server";
 import { PermissionAction } from "~/types/permission";
 
-type UserLink = {
+interface UserLink {
   icon: React.ReactNode;
   name: string;
   href: string;
-};
+}
 
 export default async function Layout({
   children,

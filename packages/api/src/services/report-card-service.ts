@@ -1,4 +1,4 @@
-import { Grade } from "@prisma/client";
+import type { Grade } from "@prisma/client";
 import _ from "lodash";
 
 import { db } from "@repo/db";
@@ -202,9 +202,9 @@ export const reportCardService = {
           min: allgrades.length
             ? Math.min(...allgrades.map((g) => g.grade ?? 0))
             : 0,
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+           
           avg: allgrades.length
-            ? // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+            ?  
               _.mean(allgrades.map((g) => g.grade ?? 0))
             : 0,
         },

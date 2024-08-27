@@ -4,7 +4,8 @@ import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
 import { Textarea } from "@repo/ui/textarea";
 
 import { cn } from "~/lib/utils";
-import { historyData, SubHistoryType } from "./data";
+import type { SubHistoryType } from "./data";
+import { historyData } from "./data";
 
 export default function HealthHistory({ history }: { history: string[] }) {
   return (

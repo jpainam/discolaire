@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { inferProcedureOutput } from "@trpc/server";
+import type { inferProcedureOutput } from "@trpc/server";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -23,7 +23,7 @@ import { Textarea } from "@repo/ui/textarea";
 import { DatePicker } from "~/components/shared/date-picker";
 import { RecipientMultiSelector } from "~/components/shared/selects/RecipientMultiSelector";
 import { getErrorMessage } from "~/lib/handle-error";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { InputField } from "../../shared/forms/input-field";
 import { SelectField } from "../../shared/forms/SelectField";
@@ -34,9 +34,9 @@ type AnnouncementGetProcedureOutput = NonNullable<
   inferProcedureOutput<AppRouter["announcement"]["get"]>
 >;
 
-type CreateEditNoticeBoardProps = {
+interface CreateEditNoticeBoardProps {
   noticeBoard?: AnnouncementGetProcedureOutput;
-};
+}
 
 const noticeBoardSchema = z.object({
   id: z.number().optional(),

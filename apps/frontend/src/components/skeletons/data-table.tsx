@@ -3,9 +3,9 @@ import { Skeleton } from "@repo/ui/skeleton";
 import rangeMap from "~/lib/range-map";
 import { cn } from "~/lib/utils";
 
-type DatatableSkeletonProps = {
+interface DatatableSkeletonProps {
   rows: number;
-};
+}
 export default function DatatableSkeleton({ rows }: DatatableSkeletonProps) {
   return (
     <>

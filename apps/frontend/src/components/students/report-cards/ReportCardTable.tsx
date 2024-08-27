@@ -6,7 +6,8 @@ import { sortBy, sum } from "lodash";
 
 import { useLocale } from "@repo/i18n";
 //import { StudentReportCard } from "~/types/report-card";
-import FlatBadge, { FlatBadgeVariant } from "@repo/ui/FlatBadge";
+import type { FlatBadgeVariant } from "@repo/ui/FlatBadge";
+import FlatBadge from "@repo/ui/FlatBadge";
 import {
   Table,
   TableBody,
@@ -37,7 +38,7 @@ export function ReportCardTable({ reportCard }: { reportCard: any[] }) {
       if (!ggs[groupId]) {
         ggs[groupId] = [];
       }
-      card && ggs[groupId]?.push(card);
+      card && ggs[groupId].push(card);
     });
     setGroups(ggs);
     setTotalCoeff(coeff);

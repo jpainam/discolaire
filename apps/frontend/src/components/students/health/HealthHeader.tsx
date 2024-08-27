@@ -12,7 +12,7 @@ import { cn } from "~/lib/utils";
 
 export function HealthHeader() {
   const { t } = useLocale();
-  const params = useParams() as { id: string };
+  const params = useParams();
   const pathname = usePathname();
   const { createQueryString } = useCreateQueryString();
   const healthLinks: { label: string; href: string }[] = [

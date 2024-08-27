@@ -17,11 +17,11 @@ import {
 } from "@repo/ui/select";
 import { Separator } from "@repo/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
-import { type Table } from "@tanstack/react-table";
+import type {Table} from "@tanstack/react-table";
 
 import { Kbd } from "~/components/kbd";
 import { exportTableToCSV } from "~/lib/export";
-import { SMSHistory } from "~/types/sms";
+import type { SMSHistory } from "~/types/sms";
 
 interface ClassroomTableFloatingBarProps {
   table: Table<SMSHistory>;

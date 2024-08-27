@@ -94,7 +94,7 @@ export default function PhoneInputField({
           options={options}
           placeholder="Find your country..."
           renderOption={({ option }) => {
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+             
             const Flag = country && flags[option.value];
             return (
               <div className="flex w-full items-center justify-between px-2 text-sm">

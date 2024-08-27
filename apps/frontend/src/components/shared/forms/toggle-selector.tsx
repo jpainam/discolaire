@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Label } from "@repo/ui/label";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
 
-type ToggleSelectorProps = {
+interface ToggleSelectorProps {
   items: { label: React.ReactNode | string; value: string }[];
   onChange: (value: string) => void;
   defaultValue?: string;
-};
+}
 export function ToggleSelector({
   items,
   defaultValue,

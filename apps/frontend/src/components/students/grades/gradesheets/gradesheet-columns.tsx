@@ -1,6 +1,7 @@
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
-import { ColumnDef, createColumnHelper, Table } from "@tanstack/react-table";
-import { TFunction } from "i18next";
+import type { ColumnDef, Table } from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import { z } from "zod";
 
 import { ExportButton } from "~/components/shared/buttons/export-button";

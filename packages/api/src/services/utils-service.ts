@@ -17,14 +17,14 @@ export function calculateFinalGrade(
   weights: number[],
 ): number {
   const presentGrades = grades.filter(
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+     
     (grade) => !grade.isAbsent && grade.grade !== null,
   );
   const presentWeights = weights.filter(
     (_, i) => !grades[i]?.isAbsent && grades[i]?.grade !== null,
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+   
   const weightSum = _.sum(presentWeights);
   const normalizedWeights = presentWeights.map((weight) => weight / weightSum);
 

@@ -42,7 +42,7 @@ export function ClassroomHeader() {
 
   useEffect(() => {
     if (!params.id || !classroomsQuery.data) return;
-    const currentClassroomIdx = classroomsQuery.data?.findIndex(
+    const currentClassroomIdx = classroomsQuery.data.findIndex(
       (s) => s.id === params.id,
     );
     if (!classroomsQuery.data) return;
@@ -56,11 +56,11 @@ export function ClassroomHeader() {
 
   const handleClassroomChange = (value: string) => {
     if (params.id) {
-      if (!pathname.includes(params.id as string)) {
+      if (!pathname.includes(params.id)) {
         router.push(`${pathname}/${params.id}/?${createQueryString({})}`);
         return;
       }
-      const newPath = pathname.replace(params.id as string, value);
+      const newPath = pathname.replace(params.id, value);
       router.push(`${newPath}/?${createQueryString({})}`);
     } else {
       router.push(routes.classrooms.details(value));
@@ -71,7 +71,7 @@ export function ClassroomHeader() {
     <div className="grid w-full flex-row items-center gap-2 border-b px-2 py-1 md:flex">
       <ClassroomSelector
         className="w-full md:w-[300px]"
-        defaultValue={params.id as string}
+        defaultValue={params.id}
         onChange={(value) => {
           value && handleClassroomChange(value);
         }}
@@ -89,11 +89,11 @@ export function ClassroomHeader() {
                       className: "w-[700px]",
                       title: (
                         <div className="p-2">
-                          {t("edit")} {classroomQuery.data?.name}
+                          {t("edit")} {classroomQuery.data.name}
                         </div>
                       ),
                       view: (
-                        <CreateEditClassroom classroom={classroomQuery?.data} />
+                        <CreateEditClassroom classroom={classroomQuery.data} />
                       ),
                     });
                   }}

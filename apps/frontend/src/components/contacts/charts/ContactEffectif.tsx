@@ -8,8 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/card";
+import type {
+  ChartConfig} from "@repo/ui/chart";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,

@@ -43,14 +43,14 @@ import {
 import { useTheme } from "~/hooks/use-theme";
 import { cn } from "~/lib/utils";
 
-type Team = {
+interface Team {
   label: string;
   value: string;
-};
-type SchoolGroup = {
+}
+interface SchoolGroup {
   label: string;
   schools: Team[];
-};
+}
 const groups: SchoolGroup[] = [
   {
     label: "Cameroun",
@@ -135,7 +135,7 @@ export function SchoolSwitcher({ className }: TeamSwitcherProps) {
                       key={`${team.value}-index`}
                       onSelect={() => {
                         setSelectedTeam(team);
-                        handleThemeSelection(team?.value || "orange");
+                        handleThemeSelection(team.value || "orange");
                         setOpen(false);
                       }}
                       className="text-sm"

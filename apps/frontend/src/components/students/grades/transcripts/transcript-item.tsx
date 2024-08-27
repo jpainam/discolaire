@@ -16,11 +16,11 @@ import {
 } from "@repo/ui/table";
 
 import { useDateFormat } from "~/utils/date-format";
-import { Assignment } from "./transcript-content";
+import type { Assignment } from "./transcript-content";
 
-type TranscriptItemProps = {
+interface TranscriptItemProps {
   assignment: Assignment;
-};
+}
 export function TranscriptItem({ assignment }: TranscriptItemProps) {
   const { fullDateFormatter } = useDateFormat();
   return (

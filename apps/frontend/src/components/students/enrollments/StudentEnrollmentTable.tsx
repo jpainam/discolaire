@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useQueryClient } from "@tanstack/react-query";
-import { inferProcedureOutput } from "@trpc/server";
+import type { inferProcedureOutput } from "@trpc/server";
 import { MoreVertical, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -28,7 +28,7 @@ import {
 } from "@repo/ui/table";
 
 import { getErrorMessage } from "~/lib/handle-error";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
 import { routes } from "../../../configs/routes";

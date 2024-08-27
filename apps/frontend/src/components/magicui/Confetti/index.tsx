@@ -3,22 +3,24 @@ import type {
   CreateTypes as ConfettiInstance,
   Options as ConfettiOptions,
 } from "canvas-confetti";
+import type {
+  ReactNode} from "react";
 import React, {
   createContext,
   forwardRef,
-  ReactNode,
   useCallback,
   useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
 } from "react";
-import { Button, ButtonProps } from "@repo/ui/button";
+import type { ButtonProps } from "@repo/ui/button";
+import { Button } from "@repo/ui/button";
 import confetti from "canvas-confetti";
 
-type Api = {
+interface Api {
   fire: (options?: ConfettiOptions) => void;
-};
+}
 
 type Props = React.ComponentPropsWithRef<"canvas"> & {
   options?: ConfettiOptions;

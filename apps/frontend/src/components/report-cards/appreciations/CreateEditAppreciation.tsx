@@ -9,7 +9,7 @@ import { Textarea } from "@repo/ui/textarea";
 
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
-import { Appreciation, AppreciationCategory } from "~/types/appreciation";
+import type { Appreciation, AppreciationCategory } from "~/types/appreciation";
 
 export function CreateEditAppreciation({
   category,

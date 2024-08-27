@@ -8,7 +8,7 @@ import { Input } from "@repo/ui/input";
 
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
-import { AppreciationCategory } from "~/types/appreciation";
+import type { AppreciationCategory } from "~/types/appreciation";
 
 export function CreateEditAppreciationCategory({
   category,

@@ -10,7 +10,7 @@ import { sidebarIcons } from "../sidebar-icons";
 
 export function AccessLogsHeader() {
   const { t } = useLocale();
-  const Icon = sidebarIcons["access_logs"];
+  const Icon = sidebarIcons.access_logs;
   return (
     <div className="flex flex-row items-center bg-secondary px-2 py-1 text-secondary-foreground">
       {Icon && <Icon className="mr-2 h-5 w-5" />}

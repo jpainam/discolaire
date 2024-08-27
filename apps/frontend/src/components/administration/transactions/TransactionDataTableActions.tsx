@@ -2,8 +2,8 @@
 
 import { useParams } from "next/navigation";
 import { DownloadIcon } from "@radix-ui/react-icons";
-import { type Table } from "@tanstack/react-table";
-import { inferProcedureOutput } from "@trpc/server";
+import type {Table} from "@tanstack/react-table";
+import type { inferProcedureOutput } from "@trpc/server";
 import {
   ChevronsUpDown,
   LayoutTemplate,
@@ -24,7 +24,7 @@ import {
 } from "@repo/ui/dropdown-menu";
 
 import { exportTableToCSV } from "~/lib/export";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 
 type TransactionAllProcedureOutput = NonNullable<
   inferProcedureOutput<AppRouter["transaction"]["all"]>
@@ -37,7 +37,7 @@ export function TransactionDataTableActions({
 }) {
   const { t } = useLocale();
   const { openModal } = useModal();
-  const params = useParams() as { id: string };
+  const params = useParams();
   const selectedIds = table
     .getFilteredSelectedRowModel()
     .rows.map((row) => row.original.id);

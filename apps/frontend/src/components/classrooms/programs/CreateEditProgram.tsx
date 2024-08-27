@@ -94,7 +94,7 @@ export function CreateEditProgram({
             <QuillEditor
               className="h-full"
               onChange={onChange}
-              defaultValue={subjectQuery?.data?.program ?? ""}
+              defaultValue={subjectQuery.data?.program ?? ""}
             />
           )}
         />

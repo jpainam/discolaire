@@ -59,8 +59,8 @@ export default async function Page({
               </span>
               <span className="font-mono text-sm uppercase">
                 {t("dateOfBirth")}{" "}
-                {student?.dateOfBirth &&
-                  Intl.DateTimeFormat().format(new Date(student?.dateOfBirth))}
+                {student.dateOfBirth &&
+                  Intl.DateTimeFormat().format(new Date(student.dateOfBirth))}
               </span>
             </div>
             <div className="col-span-2 mt-[10px]">

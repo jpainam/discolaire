@@ -21,7 +21,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 
 import { cn } from "~/lib/utils";
 
-type DatePickerProps = {
+interface DatePickerProps {
   description?: string;
   name: string;
   label: string;
@@ -30,7 +30,7 @@ type DatePickerProps = {
   labelClassName?: string;
   inputClassName?: string;
   disabled?: boolean;
-};
+}
 export function DatePickerField({
   description,
   name,

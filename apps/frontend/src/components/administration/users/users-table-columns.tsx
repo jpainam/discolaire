@@ -1,10 +1,11 @@
-import { User } from "@prisma/client";
+import type { User } from "@prisma/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
 import { Switch } from "@repo/ui/switch";
-import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { TFunction } from "i18next";
+import type { ColumnDef} from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 
 const columnHelper = createColumnHelper<User>();
 

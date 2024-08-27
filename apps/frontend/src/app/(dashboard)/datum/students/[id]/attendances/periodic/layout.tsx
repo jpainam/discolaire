@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
 import { PeriodicAttendanceHeader } from "~/components/students/attendances/periodic/PeriodicAttendanceHeader";
 

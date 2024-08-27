@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { inferProcedureOutput } from "@trpc/server";
+import type { inferProcedureOutput } from "@trpc/server";
 import { sortBy } from "lodash";
 import { Loader, TrendingDown, TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
@@ -14,8 +14,9 @@ import {
   CardFooter,
   CardHeader,
 } from "@repo/ui/card";
+import type {
+  ChartConfig} from "@repo/ui/chart";
 import {
-  ChartConfig,
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
@@ -23,7 +24,7 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/chart";
 
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 
 type ClassroomAllProcedureOutput = NonNullable<
   inferProcedureOutput<AppRouter["classroom"]["all"]>
@@ -60,7 +61,7 @@ export function ClassroomEffectif({
       { level: string; levelId: number; female: number; male: number }
     > = {};
 
-    stats?.forEach((stat) => {
+    stats.forEach((stat) => {
       if (stat?.level) {
         levels[stat.level.name] = {
           level: stat.level.name,

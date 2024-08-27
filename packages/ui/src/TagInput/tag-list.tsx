@@ -3,8 +3,9 @@ import SortableList, { SortableItem } from "react-easy-sort";
 
 import type { Tag as TagType } from "./tag-input";
 import { cn } from "..";
-import { Tag, TagProps } from "./tag";
-import { TagInputStyleClassesProps } from "./tag-input";
+import type { TagProps } from "./tag";
+import { Tag } from "./tag";
+import type { TagInputStyleClassesProps } from "./tag-input";
 
 export type TagListProps = {
   tags: TagType[];
@@ -61,14 +62,14 @@ export const TagList: React.FC<TagListProps> = ({
               "flex flex-wrap gap-2": direction === "row",
               "flex flex-col gap-2": direction === "column",
             },
-            classStyleProps?.tagListClasses?.container,
+            classStyleProps.tagListClasses?.container,
           )}
         >
           {draggable ? (
             <SortableList
               onSortEnd={onSortEnd}
               // className="flex flex-wrap gap-2 list"
-              className={`list flex flex-wrap gap-2 ${classStyleProps?.tagListClasses?.sortableList}`}
+              className={`list flex flex-wrap gap-2 ${classStyleProps.tagListClasses?.sortableList}`}
               dropTarget={<DropTarget />}
             >
               {tags.map((tagObj, index) => (
@@ -92,7 +93,7 @@ export const TagList: React.FC<TagListProps> = ({
                         isActiveTag={index === activeTagIndex}
                         direction={direction}
                         draggable={draggable}
-                        tagClasses={classStyleProps?.tagClasses}
+                        tagClasses={classStyleProps.tagClasses}
                         {...tagListProps}
                         disabled={disabled}
                       />
@@ -112,7 +113,7 @@ export const TagList: React.FC<TagListProps> = ({
                   isActiveTag={index === activeTagIndex}
                   direction={direction}
                   draggable={draggable}
-                  tagClasses={classStyleProps?.tagClasses}
+                  tagClasses={classStyleProps.tagClasses}
                   {...tagListProps}
                   disabled={disabled}
                 />
@@ -149,7 +150,7 @@ export const TagList: React.FC<TagListProps> = ({
                         isActiveTag={index === activeTagIndex}
                         direction={direction}
                         draggable={draggable}
-                        tagClasses={classStyleProps?.tagClasses}
+                        tagClasses={classStyleProps.tagClasses}
                         {...tagListProps}
                         disabled={disabled}
                       />
@@ -169,7 +170,7 @@ export const TagList: React.FC<TagListProps> = ({
                   isActiveTag={index === activeTagIndex}
                   direction={direction}
                   draggable={draggable}
-                  tagClasses={classStyleProps?.tagClasses}
+                  tagClasses={classStyleProps.tagClasses}
                   {...tagListProps}
                   disabled={disabled}
                 />

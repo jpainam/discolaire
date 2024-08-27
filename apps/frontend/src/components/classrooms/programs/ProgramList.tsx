@@ -47,7 +47,7 @@ export async function ProgramList({ classroomId }: { classroomId: string }) {
               <div
                 className="h-6 w-1 rounded-lg"
                 style={{
-                  backgroundColor: subj?.course?.color ?? "lightgray",
+                  backgroundColor: subj.course?.color ?? "lightgray",
                 }}
               ></div>
               <div className="truncate text-sm">{subj.course?.name}</div>

@@ -69,38 +69,38 @@ export function ContactStudentTable({ id }: { id: string }) {
         </TableHeader>
         <TableBody>
           {studentContacts.map((stc, index) => {
-            const student = stc?.student;
+            const student = stc.student;
             return (
               <TableRow key={`${stc.contactId}-${index}`}>
                 <TableCell className="py-0">
-                  <AvatarState pos={index} avatar={student?.avatar} />
+                  <AvatarState pos={index} avatar={student.avatar} />
                 </TableCell>
                 <TableCell className="py-0">
                   <Link
                     href={
-                      routes.students.contacts(student?.id || "") +
+                      routes.students.contacts(student.id || "") +
                       "/" +
                       stc.contactId
                     }
                   >
-                    {student?.lastName}
+                    {student.lastName}
                   </Link>
                 </TableCell>
                 <TableCell className="py-0">
                   <Link
                     href={
-                      routes.students.contacts(student?.id || "") +
+                      routes.students.contacts(student.id || "") +
                       "/" +
                       stc.contactId
                     }
                   >
-                    {student?.firstName}
+                    {student.firstName}
                   </Link>
                 </TableCell>
                 <TableCell className="py-0">
-                  {student?.classroom?.shortName}
+                  {student.classroom?.shortName}
                 </TableCell>
-                <TableCell className="py-0">{student?.email}</TableCell>
+                <TableCell className="py-0">{student.email}</TableCell>
                 <TableCell className="py-0 text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -111,7 +111,7 @@ export function ContactStudentTable({ id }: { id: string }) {
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem
                         onSelect={() => {
-                          if (!student?.id) return;
+                          if (!student.id) return;
                           router.push(
                             `${routes.students.contacts(student.id)}/${id}`,
                           );

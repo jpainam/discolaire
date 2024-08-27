@@ -1,4 +1,4 @@
-import { StaticImageData } from "next/image";
+import type { StaticImageData } from "next/image";
 
 import Avatar01 from "../../public/avatars/avatar-01.webp";
 import Avatar02 from "../../public/avatars/avatar-02.webp";

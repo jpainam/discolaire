@@ -11,12 +11,12 @@ import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import FolderIcon from "~/components/icons/folder-solid";
 import Favorite from "~/components/shared/favorite";
 
-type PhotoCardProps = {
+interface PhotoCardProps {
   title: string;
   size: string;
   totalFiles: number;
   href?: string;
-};
+}
 
 export function PhotoListItem({
   title,

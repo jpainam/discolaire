@@ -7,12 +7,12 @@ import { Button } from "@repo/ui/button";
 
 import { cn } from "~/lib/utils";
 
-type DeleteButtonProps = {
+interface DeleteButtonProps {
   onClick?: () => void;
   label?: string | React.ReactNode;
   className?: string;
   disabled?: boolean;
-};
+}
 const DeleteButton = React.forwardRef<HTMLButtonElement, DeleteButtonProps>(
   ({ onClick, className, label, disabled = false, ...props }, ref) => {
     const { t } = useLocale();

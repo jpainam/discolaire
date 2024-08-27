@@ -2,11 +2,11 @@ import { TranscriptClassroomGrid } from "~/components/grades/transcripts/transcr
 import { TranscriptGrid } from "~/components/grades/transcripts/transcript-grid";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 
-type TranscriptPageProps = {
+interface TranscriptPageProps {
   searchParams: {
     studentId: string;
   };
-};
+}
 export default function Page({
   searchParams: { studentId },
 }: TranscriptPageProps) {

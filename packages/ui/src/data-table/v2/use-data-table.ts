@@ -141,7 +141,7 @@ export function useDataTable<TData, TValue>({
   // Create query string
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
-      const newSearchParams = new URLSearchParams(searchParams?.toString());
+      const newSearchParams = new URLSearchParams(searchParams.toString());
 
       for (const [key, value] of Object.entries(params)) {
         if (value === null) {

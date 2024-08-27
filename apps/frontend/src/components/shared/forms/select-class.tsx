@@ -12,13 +12,13 @@ import {
 
 import { cn } from "~/lib/utils";
 
-type SelectClass = {
+interface SelectClass {
   className?: string;
   name: string;
   label?: string;
   onChange?: (value: string) => void;
   defaultValue?: string | number;
-};
+}
 export function SelectClass({
   className,
   name,

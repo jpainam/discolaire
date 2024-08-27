@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { MoreVertical } from "lucide-react";
-import { type DateRange } from "react-day-picker";
+import type {DateRange} from "react-day-picker";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
@@ -74,13 +74,13 @@ export function TransactionSummary() {
         }
         onChange={(val) => {
           if (val) {
-            const dateRange = val as DateRange;
+            const dateRange = val;
 
             router.push(
               "?" +
                 createQueryString({
-                  from: dateRange?.from?.toISOString(),
-                  to: dateRange?.to?.toISOString(),
+                  from: dateRange.from?.toISOString(),
+                  to: dateRange.to?.toISOString(),
                 }),
             );
           }

@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef } from "react";
-import { ImperativePanelHandle } from "react-resizable-panels";
+import type { ImperativePanelHandle } from "react-resizable-panels";
 
 export const AdminPanelContext = React.createContext<{
   leftPanelRef: React.RefObject<ImperativePanelHandle>;

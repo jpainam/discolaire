@@ -1,8 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { inferProcedureOutput } from "@trpc/server";
-import { SubmitHandler, useForm } from "react-hook-form";
+import type { inferProcedureOutput } from "@trpc/server";
+import type { SubmitHandler} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -35,7 +36,7 @@ import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { getErrorMessage } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
 const isSchoolYear = (data: any) => data.calendarType === "School Year";
@@ -147,13 +148,13 @@ export default function EventForm({
     };
     const newEvent = {
       data: eventData,
-      start: data?.startDate,
+      start: data.startDate,
       description: data.description || "",
       title: data.title,
       alert: data.alert,
       repeat: data.repeat,
       calendarTypeId: data.calendarType ? Number(data.calendarType) : null,
-      end: data?.endDate,
+      end: data.endDate,
     };
 
     if (event) {
@@ -361,7 +362,7 @@ export default function EventForm({
                   placeholder="Event Start Date"
                   className="mt-1"
                   onChange={(date) => {
-                    setValue("startDate", date as Date);
+                    setValue("startDate", date);
                     clearErrors("startDate");
                   }}
                   defaultValue={watchedStartDate}
@@ -383,7 +384,7 @@ export default function EventForm({
                   placeholder="Event End Date"
                   className="mt-1"
                   onChange={(date) => {
-                    setValue("endDate", date as Date);
+                    setValue("endDate", date);
                     clearErrors("endDate");
                   }}
                   defaultValue={watchedEndDate}

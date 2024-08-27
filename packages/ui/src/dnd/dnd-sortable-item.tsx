@@ -68,9 +68,9 @@ export function SortableItem({
   );
 }
 
-type DragHandleProps = {
+interface DragHandleProps {
   className?: string;
-};
+}
 
 export function DragHandle({ className }: PropsWithChildren<DragHandleProps>) {
   const { attributes, listeners, ref } = useContext(SortableItemContext);

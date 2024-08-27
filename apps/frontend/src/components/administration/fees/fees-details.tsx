@@ -1,5 +1,5 @@
 import { useTransition } from "react";
-import { Fee } from "@prisma/client";
+import type { Fee } from "@prisma/client";
 import { CopyPlus, Forward, MoreVertical, Reply } from "lucide-react";
 import { toast } from "sonner";
 
@@ -14,7 +14,7 @@ import {
 import { Separator } from "@repo/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
 
-import { Mail } from "~/app/(dashboard)/mail/data";
+import type { Mail } from "~/app/(dashboard)/mail/data";
 import { DeletePopover } from "~/components/shared/buttons/delete-popover";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";

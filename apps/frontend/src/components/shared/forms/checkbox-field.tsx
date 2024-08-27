@@ -12,7 +12,7 @@ import { useFormContext } from "react-hook-form";
 
 import { cn } from "~/lib/utils";
 
-type InputFieldProps = {
+interface InputFieldProps {
   label?: React.ReactNode;
   className?: string;
   name: string;
@@ -23,7 +23,7 @@ type InputFieldProps = {
   disabled?: boolean;
   checkboxClassName?: string;
   type?: string;
-};
+}
 export function CheckboxField({
   descriptionClassName,
   disabled,

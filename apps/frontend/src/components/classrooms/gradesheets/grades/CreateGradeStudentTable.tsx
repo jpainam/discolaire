@@ -50,7 +50,7 @@ export function CreateGradeStudentTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {classroomStudentsQuery.data?.map((st, index) => {
+          {classroomStudentsQuery.data.map((st, index) => {
             return (
               <TableRow
                 key={st.id}
@@ -112,7 +112,7 @@ function GradeTableRow({
         />
       </TableCell>
       <TableCell className="py-0">
-        {watchValue?.grade && getAppreciations(Number(watchValue.grade))}
+        {watchValue.grade && getAppreciations(Number(watchValue.grade))}
       </TableCell>
     </>
   );

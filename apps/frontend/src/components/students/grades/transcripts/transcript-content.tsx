@@ -63,7 +63,7 @@ export function TranscriptContent() {
   );
 }
 
-export type Assignment = {
+export interface Assignment {
   id: number;
   course: string;
   gpa: number;
@@ -81,7 +81,7 @@ export type Assignment = {
     file: string;
     observation: string;
   }[];
-};
+}
 const assignmentList: Assignment[] = [
   {
     course: "Math",

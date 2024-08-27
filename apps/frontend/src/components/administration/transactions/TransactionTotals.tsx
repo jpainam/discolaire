@@ -43,21 +43,21 @@ export function TransactionTotals() {
       <TransactionStatCard
         title={t("totalCurrentFees")}
         icon={<RevenueUpIcon className="h-[45px] w-[45px]" />}
-        totalFee={stats?.totalFee}
+        totalFee={stats.totalFee}
         subtitle={t("sinceLastMonth")}
         percentage={percentage}
       />
       <TransactionStatCard
         title={t("totalCompletedAmount")}
         icon={<SalesIcon className="h-[45px] w-[45px]" />}
-        totalFee={stats?.totalCompleted}
+        totalFee={stats.totalCompleted}
         percentage={percentage}
         subtitle={t("sinceLastMonth")}
       />
       <TransactionStatCard
         title={t("totalUnvalidatedAmount")}
         icon={<ExpenseIcon className="h-[45px] w-[45px]" />}
-        totalFee={stats?.totalInProgress}
+        totalFee={stats.totalInProgress}
         percentage={percentage}
         subtitle={t("sinceLastMonth")}
       />
@@ -65,7 +65,7 @@ export function TransactionTotals() {
         <TransactionStatCard
           title={t("totalTransactionDeleted")}
           icon={<ContainersIcon className="h-[45px] w-[45px]" />}
-          totalFee={stats?.totalDeleted}
+          totalFee={stats.totalDeleted}
           percentage={percentage}
           subtitle={t("sinceLastMonth")}
         />
@@ -74,13 +74,13 @@ export function TransactionTotals() {
   );
 }
 
-type TransactionStatCardProps = {
+interface TransactionStatCardProps {
   totalFee?: number | null;
   percentage: number;
   icon: React.ReactNode;
   subtitle?: string;
   title?: string;
-};
+}
 function TransactionStatCard({
   totalFee,
   percentage,

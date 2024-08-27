@@ -5,9 +5,10 @@ import {
   DotsHorizontalIcon,
   StopwatchIcon,
 } from "@radix-ui/react-icons";
-import { ColumnDef } from "@tanstack/react-table";
-import { inferProcedureOutput } from "@trpc/server";
-import i18next, { TFunction } from "i18next";
+import type { ColumnDef } from "@tanstack/react-table";
+import type { inferProcedureOutput } from "@trpc/server";
+import type { TFunction } from "i18next";
+import i18next from "i18next";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -29,12 +30,13 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
-import FlatBadge, { FlatBadgeVariant } from "@repo/ui/FlatBadge";
+import type { FlatBadgeVariant } from "@repo/ui/FlatBadge";
+import FlatBadge from "@repo/ui/FlatBadge";
 
 import { routes } from "~/configs/routes";
 import { CURRENCY } from "~/lib/constants";
 import { getErrorMessage } from "~/lib/handle-error";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
 type StudentTransactionProcedureOutput = NonNullable<

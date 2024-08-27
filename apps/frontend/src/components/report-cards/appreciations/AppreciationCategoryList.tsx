@@ -9,7 +9,7 @@ import { Button } from "@repo/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { Separator } from "@repo/ui/separator";
 
-import { AppreciationCategory } from "~/types/appreciation";
+import type { AppreciationCategory } from "~/types/appreciation";
 import { AppreciationList } from "./AppreciationList";
 import { CreateEditAppreciationCategory } from "./CreateEditAppreciationCategory";
 
@@ -39,7 +39,7 @@ export function AppreciationCategoryList({
       <PopoverContent align="end" className="w-[350px] p-0 text-sm">
         {!selectedCategory ? (
           <div className="p-1">
-            {categories?.map((category) => {
+            {categories.map((category) => {
               return (
                 <Fragment key={`category-${category.id}`}>
                   {category.id == openIdItem ? (

@@ -10,7 +10,7 @@ import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
 export function GradeAppreciationList() {
-  const params = useParams() as { id: string; appreciationId: string };
+  const params = useParams();
   const appreciationCategoriesQuery = api.appreciation.categories.useQuery();
 
   const router = useRouter();
@@ -24,7 +24,7 @@ export function GradeAppreciationList() {
   }
   return (
     <div className="flex flex-col">
-      {appreciationCategoriesQuery.data?.map((appr, index) => {
+      {appreciationCategoriesQuery.data.map((appr, index) => {
         return (
           <div
             onClick={() => {

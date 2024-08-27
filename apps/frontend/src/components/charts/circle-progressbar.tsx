@@ -75,7 +75,7 @@ export default function CircleProgressBar({
   // Safari browser transform css issue with foreignObject
   const [isSafari, setSafari] = useState(false);
   useEffect(() => {
-    let isBrowserSafari = /^((?!chrome|android).)*safari/i.test(
+    const isBrowserSafari = /^((?!chrome|android).)*safari/i.test(
       navigator.userAgent,
     );
     setSafari(() => isBrowserSafari);

@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { inferProcedureOutput } from "@trpc/server";
+import type { inferProcedureOutput } from "@trpc/server";
 import {
   AlignStartHorizontal,
   Clock,
@@ -29,7 +29,7 @@ import { Label } from "@repo/ui/label";
 import { Textarea } from "@repo/ui/textarea";
 
 import { getErrorMessage } from "~/lib/handle-error";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
 type TransactionAllProcedureOutput = NonNullable<

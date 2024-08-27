@@ -23,7 +23,7 @@ export async function checkPermissions(
 
   const allPermissions = permissionsOverride ?? permissionsResult;
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
+   
   return doPermissionsCheck(
     allPermissions as Permission[],
     action,

@@ -24,14 +24,14 @@ import { useLocale } from "@repo/i18n";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
 import { useSearchParams } from "next/navigation";
-import { inferProcedureOutput } from "@trpc/server";
+import type { inferProcedureOutput } from "@trpc/server";
 
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import rangeMap from "~/lib/range-map";
 import { cn } from "~/lib/utils";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import EventForm from "./EventForm";
 
@@ -165,7 +165,7 @@ export function EventCalendar() {
     //const bgColor = calendarTypeColors[event.calendarType] || "lightgrey";
     const bgColor = event.calendarType?.backgroundColor || "lightgrey";
 
-    let newStyle = {
+    const newStyle = {
       backgroundColor: bgColor,
       color: "black",
       borderRadius: "5px",
@@ -193,7 +193,7 @@ export function EventCalendar() {
       getMonth(date) === getMonth(nextMonth) &&
       getYear(date) === getYear(nextMonth);
 
-    let style = {};
+    const style = {};
     let className = "";
 
     if (isWeekend) {

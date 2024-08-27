@@ -10,7 +10,7 @@ export function useCreateQueryString() {
 
   const createQueryString = useCallback(
     (params: Record<string, string | number | null | undefined>) => {
-      const newSearchParams = new URLSearchParams(searchParams?.toString());
+      const newSearchParams = new URLSearchParams(searchParams.toString());
 
       for (const [key, value] of Object.entries(params)) {
         if (value === null || value === undefined || value === "") {

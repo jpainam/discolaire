@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { type ColumnDef } from "@tanstack/react-table";
-import { inferProcedureOutput } from "@trpc/server";
-import { TFunction } from "i18next";
+import type {ColumnDef} from "@tanstack/react-table";
+import type { inferProcedureOutput } from "@trpc/server";
+import type { TFunction } from "i18next";
 import {
   Eye,
   MoveRight,
@@ -33,7 +33,7 @@ import FlatBadge from "@repo/ui/FlatBadge";
 
 import { routes } from "~/configs/routes";
 import { getErrorMessage } from "~/lib/handle-error";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { CreateEditClassroom } from "./CreateEditClassroom";
 

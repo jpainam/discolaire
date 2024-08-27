@@ -1,10 +1,11 @@
 import { atom, useAtom } from "jotai";
 
-import { Mail, mails } from "~/app/(dashboard)/mail/data";
+import type { Mail} from "~/app/(dashboard)/mail/data";
+import { mails } from "~/app/(dashboard)/mail/data";
 
-type SubMenuConfig = {
+interface SubMenuConfig {
   selected: Mail["id"] | null;
-};
+}
 
 const configAtom = atom<SubMenuConfig>({
   selected: mails[0]?.id ?? null,

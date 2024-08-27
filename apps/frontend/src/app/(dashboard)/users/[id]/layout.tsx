@@ -18,11 +18,11 @@ import { UserSidebarNav } from "~/components/users/user-side-nav";
 import { routes } from "~/configs/routes";
 import { getServerAuthSession } from "~/server/auth";
 
-type UserLink = {
+interface UserLink {
   icon: React.ReactNode;
   title: string;
   href: string;
-};
+}
 const randomImage = randomAvatar();
 export default async function Layout({
   children,

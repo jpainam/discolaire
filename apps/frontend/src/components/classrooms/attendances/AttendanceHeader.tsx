@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
+import type {
+  LucideIcon} from "lucide-react";
 import {
   AlarmClock,
   CalendarClock,
   CalendarDays,
   ChevronDown,
   Laptop2,
-  LucideIcon,
   Printer,
 } from "lucide-react";
 
@@ -42,7 +43,7 @@ export function AttendanceHeader() {
   const [query, setQuery] = useState<Record<string, any>>({});
   const searchParams = useSearchParams();
   const type = searchParams.get("type") || "hourly";
-  const params = useParams() as { id: string };
+  const params = useParams();
 
   const items: { label: string; value: string; icon?: LucideIcon }[] = [
     { label: t("hourly_attendance"), value: "hourly", icon: AlarmClock },

@@ -25,14 +25,14 @@ export function ReportCardHeader() {
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const Icon = sidebarIcons["report_cards"];
+  const Icon = sidebarIcons.report_cards;
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary px-2 py-1 text-secondary-foreground">
       {Icon && <Icon className="h-6 w-6" />}
       <Label>{t("term")}</Label>
       <TermSelector
         className="w-[300px]"
-        defaultValue={searchParams.get("term") as string}
+        defaultValue={searchParams.get("term")}
         onChange={(val) => {
           router.push(`?` + createQueryString({ term: val }));
         }}

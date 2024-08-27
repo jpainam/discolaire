@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { MailOpen, MoreVertical } from "lucide-react";
-import { DateRange } from "react-day-picker";
+import type { DateRange } from "react-day-picker";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
@@ -26,8 +26,8 @@ import { useDebounce } from "~/hooks/use-debounce";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function NotificationHeader() {
-  const Icon = sidebarIcons["notifications"];
-  const params = useParams() as { id: string };
+  const Icon = sidebarIcons.notifications;
+  const params = useParams();
   const [value, setValue] = useState("");
   const debounceValue = useDebounce(value, 500);
   const { data: students, isPending } = useQuery({

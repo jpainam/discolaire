@@ -4,8 +4,9 @@ import type { Tag as TagType } from "./tag-input";
 import { cn } from "..";
 import { Button } from "../button";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover";
-import { TagInputStyleClassesProps } from "./tag-input";
-import { TagList, TagListProps } from "./tag-list";
+import type { TagInputStyleClassesProps } from "./tag-input";
+import type { TagListProps } from "./tag-list";
+import { TagList } from "./tag-list";
 
 type TagPopoverProps = {
   children: React.ReactNode;
@@ -47,7 +48,7 @@ export const TagPopover: React.FC<TagPopoverProps> = ({
         setPopoverWidth(triggerContainerRef.current.offsetWidth);
         setSideOffset(
           triggerContainerRef.current.offsetWidth -
-            triggerRef?.current?.offsetWidth,
+            triggerRef.current.offsetWidth,
         );
       }
     };
@@ -65,7 +66,7 @@ export const TagPopover: React.FC<TagPopoverProps> = ({
         isPopoverOpen &&
         triggerContainerRef.current &&
         !triggerContainerRef.current.contains(event.target) &&
-        !popoverContentRef?.current?.contains(event.target)
+        !popoverContentRef.current?.contains(event.target)
       ) {
         setIsPopoverOpen(false);
       }
@@ -139,7 +140,7 @@ export const TagPopover: React.FC<TagPopoverProps> = ({
             role="combobox"
             className={cn(
               `hover:bg-transparent data-[state=open]:rotate-180`,
-              classStyleProps?.popoverClasses?.popoverTrigger,
+              classStyleProps.popoverClasses?.popoverTrigger,
             )}
             onClick={() => setIsPopoverOpen(!isPopoverOpen)}
           >
@@ -164,7 +165,7 @@ export const TagPopover: React.FC<TagPopoverProps> = ({
         ref={popoverContentRef}
         className={cn(
           `w-full space-y-3`,
-          classStyleProps?.popoverClasses?.popoverContent,
+          classStyleProps.popoverClasses?.popoverContent,
         )}
         style={{
           marginLeft: `-${sideOffset}px`,
@@ -183,8 +184,8 @@ export const TagPopover: React.FC<TagPopoverProps> = ({
           activeTagIndex={activeTagIndex}
           setActiveTagIndex={setActiveTagIndex}
           classStyleProps={{
-            tagListClasses: classStyleProps?.tagListClasses,
-            tagClasses: classStyleProps?.tagClasses,
+            tagListClasses: classStyleProps.tagListClasses,
+            tagClasses: classStyleProps.tagClasses,
           }}
           {...tagProps}
           disabled={disabled}

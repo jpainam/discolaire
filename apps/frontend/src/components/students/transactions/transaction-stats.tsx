@@ -1,8 +1,8 @@
 "use client";
 
-import { inferProcedureOutput } from "@trpc/server";
+import type { inferProcedureOutput } from "@trpc/server";
 import { sumBy } from "lodash";
-import { IconType } from "react-icons";
+import type { IconType } from "react-icons";
 import {
   PiBank,
   PiCurrencyCircleDollar,
@@ -14,16 +14,16 @@ import { useLocale } from "@repo/i18n";
 
 import { CURRENCY } from "~/lib/constants";
 import { cn } from "~/lib/utils";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
-export type TransactionType = {
+export interface TransactionType {
   icon: IconType;
   title: string;
   amount: string;
   iconWrapperFill?: string;
   className?: string;
-};
+}
 
 type StudentTransactionProcedureOutput = NonNullable<
   inferProcedureOutput<AppRouter["student"]["transactions"]>
@@ -82,13 +82,13 @@ export function TransactionStats({
   );
 }
 
-export type TransactionCardProps = {
+export interface TransactionCardProps {
   className?: string;
   icon: IconType;
   amount: string;
   title: string;
   iconWrapperFill?: string;
-};
+}
 
 function TransactionStatCard({
   className,

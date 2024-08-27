@@ -1,4 +1,4 @@
-import { type NextRequest } from "next/server";
+import type {NextRequest} from "next/server";
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
@@ -45,7 +45,7 @@ export async function GET(
   { params }: { params: { key: string } },
 ) {
   const searchParams = request.nextUrl.searchParams;
-  const key = (searchParams.get("key") as string) || params.key;
+  const key = (searchParams.get("key")!) || params.key;
   if (!key) {
     return Response.json(
       { error: "A query/params key is required" },

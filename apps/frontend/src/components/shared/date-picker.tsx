@@ -12,7 +12,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 
 import { cn } from "~/lib/utils";
 
-type DatePickerProps = {
+interface DatePickerProps {
   placeholder?: string;
   className?: string;
   fromYear?: number;
@@ -20,7 +20,7 @@ type DatePickerProps = {
   toYear?: number;
   onChange?: (date: Date) => void;
   defaultValue?: Date;
-};
+}
 export function DatePicker({
   placeholder,
   className,

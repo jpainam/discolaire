@@ -18,7 +18,7 @@ import { sidebarIcons } from "../sidebar-icons";
 
 export function IdCardHeader() {
   const { t } = useLocale();
-  const Icon = sidebarIcons["id_card"];
+  const Icon = sidebarIcons.id_card;
   return (
     <div className="flex flex-row items-center gap-1 bg-secondary px-2 py-1 text-secondary-foreground">
       {Icon && <Icon className="h-6 w-6" />}

@@ -3,14 +3,14 @@ import { getServerTranslations } from "@repo/i18n/server";
 import { ContactDataTable } from "~/components/contacts/ContactDataTable";
 import { api } from "~/trpc/server";
 
-type ContactPageProps = {
+interface ContactPageProps {
   searchParams: {
     per_page: number;
     page: number;
     sort: string;
     firstName: string;
   };
-};
+}
 export default async function Page({ searchParams }: ContactPageProps) {
   const { t } = await getServerTranslations();
   const contacts = await api.contact.all({

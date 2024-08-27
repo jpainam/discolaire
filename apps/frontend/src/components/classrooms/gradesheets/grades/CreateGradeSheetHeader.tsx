@@ -23,7 +23,7 @@ import { cn } from "~/lib/utils";
 
 export function CreateGradeSheetHeader() {
   const { t } = useLocale();
-  const params = useParams() as { id: string };
+  const params = useParams();
   const router = useRouter();
   const [weight, setWeight] = useState<number>(100);
   const { createQueryString } = useCreateQueryString();

@@ -5,13 +5,13 @@ import { reportCardService } from "~/server/services/report-card-service";
 import { ReportCardStudentTable } from "./ReportCardStudentTable";
 import { ReportCardTable } from "./ReportCardTable";
 
-type ReportCardProps = {
+interface ReportCardProps {
   searchParams: {
     classroom?: string;
     student?: string;
     term?: string;
   };
-};
+}
 export async function ReportCard({ searchParams }: ReportCardProps) {
   const { t } = await getServerTranslations();
   if (!searchParams.classroom) {

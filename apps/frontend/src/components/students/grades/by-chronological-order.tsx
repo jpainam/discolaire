@@ -7,7 +7,7 @@ import { useLocale } from "@repo/i18n";
 
 import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";
-import { Grade } from "~/types/grade";
+import type { Grade } from "~/types/grade";
 import { useDateFormat } from "~/utils/date-format";
 
 interface ByChronologicalOrderProps {
@@ -29,7 +29,7 @@ export function ByChronologicalOrder({
   minMaxMoy,
 }: ByChronologicalOrderProps) {
   const router = useRouter();
-  const params = useParams() as { id: string; gradeId: string };
+  const params = useParams();
   const { createQueryString } = useCreateQueryString();
   const { monthFormatter, dayFormatter } = useDateFormat();
 
@@ -37,10 +37,10 @@ export function ByChronologicalOrder({
   return (
     <div>
       {grades.map((grade) => {
-        const m = grade?.createdAt
-          ? monthFormatter.format(grade?.createdAt)
+        const m = grade.createdAt
+          ? monthFormatter.format(grade.createdAt)
           : "";
-        const d = grade?.createdAt ? dayFormatter.format(grade?.createdAt) : "";
+        const d = grade.createdAt ? dayFormatter.format(grade.createdAt) : "";
         return (
           <div
             onClick={() => {
@@ -58,24 +58,24 @@ export function ByChronologicalOrder({
                 grade: grade.grade,
                 termName: grade.gradeSheet?.term?.name,
                 moy: minMaxMoy
-                  ?.find((g) => g.gradeSheetId === grade.gradeSheetId)
+                  .find((g) => g.gradeSheetId === grade.gradeSheetId)
                   ?.avg?.toFixed(2),
                 max: minMaxMoy
-                  ?.find((g) => g.gradeSheetId === grade.gradeSheetId)
+                  .find((g) => g.gradeSheetId === grade.gradeSheetId)
                   ?.max?.toFixed(2),
                 min: minMaxMoy
-                  ?.find((g) => g.gradeSheetId === grade.gradeSheetId)
+                  .find((g) => g.gradeSheetId === grade.gradeSheetId)
                   ?.min?.toFixed(2),
                 coef: grade.gradeSheet?.subject?.coefficient?.toString() ?? "-",
               };
               router.push(
-                `${routes.students.grades(params.id)}/${grade?.id}/?${createQueryString({ ...query })}`,
+                `${routes.students.grades(params.id)}/${grade.id}/?${createQueryString({ ...query })}`,
               );
             }}
             key={grade.id}
             className={cn(
               "flex cursor-pointer flex-row items-center gap-4 border-b border-accent px-4 py-2",
-              grade.id === Number(params?.gradeId) ? "bg-accent" : "bg-none",
+              grade.id === Number(params.gradeId) ? "bg-accent" : "bg-none",
             )}
           >
             <div className="flex w-auto flex-col justify-center">
@@ -101,7 +101,7 @@ export function ByChronologicalOrder({
               <div className="py-0 text-xs text-muted-foreground">
                 {t("average_of_classroom")}{" "}
                 {minMaxMoy
-                  ?.find((g) => g.gradeSheetId === grade.gradeSheetId)
+                  .find((g) => g.gradeSheetId === grade.gradeSheetId)
                   ?.avg?.toFixed(2)}
               </div>
             </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Journal } from "@prisma/client";
+import type { Journal } from "@prisma/client";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";

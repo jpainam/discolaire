@@ -4,14 +4,15 @@ import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 
 import { useLocale } from "@repo/i18n";
 import { Card, CardContent } from "@repo/ui/card";
+import type {
+  ChartConfig} from "@repo/ui/chart";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/chart";
 
-import { Student } from "~/types/student";
+import type { Student } from "~/types/student";
 
 export function RepeatingPie({ students }: { students: Student[] }) {
   const { t } = useLocale();

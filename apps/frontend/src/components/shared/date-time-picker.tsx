@@ -1,6 +1,7 @@
 "use client";
 
-import { ChangeEventHandler, useState } from "react";
+import type { ChangeEventHandler} from "react";
+import { useState } from "react";
 import { format, setHours, setMinutes } from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
@@ -13,7 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 
 import { cn } from "~/lib/utils";
 
-type DateTimePickerProps = {
+interface DateTimePickerProps {
   placeholder?: string;
   className?: string;
   fromYear?: number;
@@ -21,7 +22,7 @@ type DateTimePickerProps = {
   toYear?: number;
   onChange?: (date: Date) => void;
   defaultValue?: Date;
-};
+}
 export function DateTimePicker({
   placeholder,
   className,

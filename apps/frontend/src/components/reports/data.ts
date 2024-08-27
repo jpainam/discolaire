@@ -1,11 +1,11 @@
-export type ReportQueue = {
+export interface ReportQueue {
   id: string;
   created_at: string;
   job_name: string;
   started_at: string;
   ended_at: string;
   status: "Running" | "Completed" | "Failed" | "Scheduled" | "Cancelled";
-};
+}
 
 export const reportQueue: ReportQueue[] = [
   {

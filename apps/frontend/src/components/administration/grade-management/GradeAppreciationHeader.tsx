@@ -11,7 +11,7 @@ import { Label } from "@repo/ui/label";
 import { CreateEditAppreciation } from "./CreateEditAppreciation";
 
 export function GradeAppreciationHeader() {
-  const params = useParams() as { id: string; appreciationId: string };
+  const params = useParams();
   const { t } = useLocale();
   const { openModal } = useModal();
   return (

@@ -16,11 +16,11 @@ import { Star } from "lucide-react";
 
 import { SortableList } from "../dnd/dnd-sortable-list";
 
-type ItemType = {
+interface ItemType {
   id: string;
   label: string;
   value: string;
-};
+}
 
 const favorites: ItemType[] = [
   { id: "item1", label: "Item 1", value: "Value 1" },

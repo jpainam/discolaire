@@ -10,12 +10,12 @@ import { Icons } from "~/components/icons";
 import { siteConfig } from "~/configs/site";
 import { cn } from "~/lib/utils";
 
-type MenuItem = {
+interface MenuItem {
   label: string;
   href: string;
   sub_menus?: MenuItem[];
   actives?: string[];
-};
+}
 
 export function MainNav({ className }: { className?: string }) {
   const { t } = useLocale();
@@ -50,7 +50,7 @@ export function MainNav({ className }: { className?: string }) {
             href={item.href}
             className={cn(
               "transition-colors hover:text-primary-foreground/80 dark:text-secondary-foreground",
-              item?.actives?.includes(pathName)
+              item.actives?.includes(pathName)
                 ? "text-primary-foreground"
                 : "text-primary-foreground/60",
             )}

@@ -1,10 +1,10 @@
-import { Table } from "@tanstack/react-table";
-import { TFunction } from "i18next";
+import type { Table } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 
 import { useLocale } from "@repo/i18n";
 
 import { ExportButton } from "~/components/shared/buttons/export-button";
-import { Student } from "~/types/student";
+import type { Student } from "~/types/student";
 import { exportToCSV } from "~/utils/export-to-csv";
 
 export function deleteSelectedRows({

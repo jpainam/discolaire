@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+ 
+ 
 import { SafeAreaView, Text, View } from "react-native";
 import { Stack, useGlobalSearchParams } from "expo-router";
 

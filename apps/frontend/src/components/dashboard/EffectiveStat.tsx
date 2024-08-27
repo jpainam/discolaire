@@ -1,4 +1,4 @@
-import { IconType } from "react-icons/lib";
+import type { IconType } from "react-icons/lib";
 
 import { getServerTranslations } from "@repo/i18n/server";
 
@@ -6,18 +6,18 @@ import { cn } from "~/lib/utils";
 import { api } from "~/trpc/server";
 import { MaleVsFemaleCount } from "./MaleVsFemaleCount";
 
-type JobStatsType = {
+interface JobStatsType {
   className?: string;
-};
+}
 
-export type StatType = {
+export interface StatType {
   icon: IconType;
   title: string;
   amount: number;
   increased: boolean;
   percentage: string;
   iconWrapperFill?: string;
-};
+}
 
 export async function EffectiveStat({ className }: JobStatsType) {
   const { t } = await getServerTranslations();
@@ -36,21 +36,21 @@ export async function EffectiveStat({ className }: JobStatsType) {
       />
       <MaleVsFemaleCount
         title={t("registeredStudents")}
-        maleCount={enrollmentsCount?.male || 0}
-        femaleCount={enrollmentsCount?.female || 0}
-        totalCount={enrollmentsCount?.total || 0}
+        maleCount={enrollmentsCount.male || 0}
+        femaleCount={enrollmentsCount.female || 0}
+        totalCount={enrollmentsCount.total || 0}
       />
       <MaleVsFemaleCount
         title={t("registeredStudents")}
-        maleCount={enrollmentsCount?.male || 0}
-        femaleCount={enrollmentsCount?.female || 0}
-        totalCount={enrollmentsCount?.total || 0}
+        maleCount={enrollmentsCount.male || 0}
+        femaleCount={enrollmentsCount.female || 0}
+        totalCount={enrollmentsCount.total || 0}
       />
       <MaleVsFemaleCount
         title={t("registeredStudents")}
-        maleCount={enrollmentsCount?.male || 0}
-        femaleCount={enrollmentsCount?.female || 0}
-        totalCount={enrollmentsCount?.total || 0}
+        maleCount={enrollmentsCount.male || 0}
+        femaleCount={enrollmentsCount.female || 0}
+        totalCount={enrollmentsCount.total || 0}
       />
 
       {/* {contactsCount && (

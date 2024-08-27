@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { inferProcedureOutput } from "@trpc/server";
+import type { inferProcedureOutput } from "@trpc/server";
 
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -18,7 +18,7 @@ import {
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
 type GradeSheetGetGradeProcedureOutput = NonNullable<
@@ -36,7 +36,7 @@ export function GradeHeader({
   grades: GradeSheetGetGradeProcedureOutput[];
   gradesheet: GradeSheetGetProcedureOutput;
 }) {
-  const params = useParams() as { id: string };
+  const params = useParams();
 
   const classroomQuery = api.classroom.get.useQuery(params.id);
   const { t, i18n } = useLocale();
@@ -71,7 +71,7 @@ export function GradeHeader({
           {classroomQuery.isPending ? (
             <Skeleton className="h-8 w-full" />
           ) : (
-            classroomQuery.data?.name
+            classroomQuery.data.name
           )}
         </span>
         <span> Note sur : 20.00</span>
@@ -85,7 +85,7 @@ export function GradeHeader({
         </span>
         <span> {gradesheet?.subject?.course?.name} </span>
         <span>{gradesheet?.name}</span>
-        <span>Effectif : {classroomQuery.data?.size} </span>
+        <span>Effectif : {classroomQuery.data.size} </span>
         <span>
           {t("min_grade")} : {minGrade}
         </span>

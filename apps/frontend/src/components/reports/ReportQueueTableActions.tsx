@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 
-import { ReportQueue } from "~/types/report";
+import type { ReportQueue } from "~/types/report";
 
 export function ReportQueueTableActions({ report }: { report: ReportQueue }) {
   const { t } = useLocale("print");

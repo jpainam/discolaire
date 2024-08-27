@@ -19,9 +19,9 @@ import {
 
 import { cn } from "~/lib/utils";
 
-export type InputDescriptionProps = {
+export interface InputDescriptionProps {
   className?: string;
-};
+}
 export function DescriptionInput({ className }: InputDescriptionProps) {
   const form = useFormContext();
   const { t } = useLocale();

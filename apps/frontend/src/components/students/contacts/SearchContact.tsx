@@ -54,7 +54,7 @@ export function SearchContact({ onBack }: { onBack: () => void }) {
           </div>
         ) : (
           <ul>
-            {searchContactsQuery?.data?.map((contact) => {
+            {searchContactsQuery.data?.map((contact) => {
               return (
                 <li
                   key={contact.id}

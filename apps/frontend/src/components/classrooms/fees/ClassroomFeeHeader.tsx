@@ -21,7 +21,7 @@ import { CreateEditFee } from "./CreateEditFee";
 export function ClassroomFeeHeader() {
   const { t } = useLocale();
   const { openModal } = useModal();
-  const Icon = sidebarIcons["fees"];
+  const Icon = sidebarIcons.fees;
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary px-2 py-1 text-secondary-foreground">
       {Icon && <Icon className="h-6 w-6" />}

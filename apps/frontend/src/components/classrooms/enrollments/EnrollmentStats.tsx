@@ -3,14 +3,14 @@
 import { useLocale } from "@repo/i18n";
 
 import CircleProgressBar from "~/components/charts/circle-progressbar";
-import { Student } from "~/types/student";
+import type { Student } from "~/types/student";
 
 export function EnrollmentStats({ students }: { students: Student[] }) {
   const { t } = useLocale();
   const total = students.length;
   const females = students.filter((s) => s.gender == "female").length;
   const males = total - females;
-  const repeating = students.filter((s) => s?.isRepeating).length;
+  const repeating = students.filter((s) => s.isRepeating).length;
   return (
     <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-4">
       <span>
@@ -52,13 +52,13 @@ export function EnrollmentStats({ students }: { students: Student[] }) {
   );
 }
 
-type EnrollmentSummaryCardProps = {
+interface EnrollmentSummaryCardProps {
   title?: string;
   percentage: number;
   stroke: string;
   progressColor: string;
   size: number;
-};
+}
 function EnrollmentSummaryCard({
   title,
   percentage,

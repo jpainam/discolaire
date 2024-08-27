@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { buttonVariants } from "@repo/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
-import { LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 import { cn } from "~/lib/utils";
 

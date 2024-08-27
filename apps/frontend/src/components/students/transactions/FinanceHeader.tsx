@@ -17,7 +17,7 @@ import { routes } from "~/configs/routes";
 import { FinanceBreadCrumb } from "./breadcrumb";
 
 export default function FinanceHeader() {
-  const params = useParams() as { id: string };
+  const params = useParams();
   const router = useRouter();
   const { t } = useLocale();
   return (

@@ -23,7 +23,7 @@ export function ReportCardHeader() {
   const { t } = useLocale();
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
-  const Icon = sidebarIcons["report_cards"];
+  const Icon = sidebarIcons.report_cards;
   return (
     <div className="grid flex-row items-center gap-4 border-b bg-muted/40 px-2 py-1 md:flex">
       {Icon && <Icon className="hidden h-6 w-6 md:block" />}

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-import { PopoverProps } from "@radix-ui/react-popover";
+import type { PopoverProps } from "@radix-ui/react-popover";
 import { Button } from "@repo/ui/button";
 import {
   Command,
@@ -80,11 +80,11 @@ export function StudentPrintSelector({
   );
 }
 
-type StudentPrintOption = {
+interface StudentPrintOption {
   label: string;
   value: string;
   id: number;
-};
+}
 export const studentPrintOptions: StudentPrintOption[] = [
   { id: 1, label: "Fiche d'information de l'eleve", value: "print" },
   { id: 2, label: "Fiche de demande d'inscription", value: "print-export" },

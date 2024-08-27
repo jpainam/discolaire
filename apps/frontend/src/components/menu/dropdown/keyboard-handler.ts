@@ -13,7 +13,7 @@ function findPreviousIndex(
   elements: HTMLButtonElement[],
   loop: boolean,
 ): number {
-  const disabledMap = elements.reduce<{ [key: number]: boolean }>(
+  const disabledMap = elements.reduce<Record<number, boolean>>(
     (acc, el, i) => {
       acc[i] = el.disabled;
       return acc;
@@ -40,7 +40,7 @@ function findNextIndex(
   loop: boolean,
 ): number {
   // Create lookup map
-  const disabledMap = elements.reduce<{ [key: number]: boolean }>(
+  const disabledMap = elements.reduce<Record<number, boolean>>(
     (acc, el, i) => {
       acc[i] = el.disabled;
       return acc;

@@ -16,13 +16,13 @@ export function LeftPanelButton({ panelSize }: { panelSize?: number }) {
   const [size, setSize] = useState(20);
   const panelRef = useContext(AdminPanelContext);
   const setPanelSize = (size: number) => {
-    panelRef?.leftPanelRef?.current?.resize(size);
+    panelRef?.leftPanelRef.current?.resize(size);
   };
   return (
     <Button
       onClick={() => {
         if (panelRef?.leftPanelRef.current?.isCollapsed()) {
-          panelRef.leftPanelRef.current?.expand();
+          panelRef.leftPanelRef.current.expand();
         } else {
           panelRef?.leftPanelRef.current?.collapse();
         }
@@ -46,7 +46,7 @@ export function RightPanelButton() {
       onClick={() => {
         console.log("panelRef", panelRef?.rightPanelRef.current?.isCollapsed());
         if (panelRef?.rightPanelRef.current?.isCollapsed()) {
-          panelRef.rightPanelRef.current?.expand();
+          panelRef.rightPanelRef.current.expand();
         } else {
           console.log("Collapsing right panel");
           panelRef?.rightPanelRef.current?.collapse();

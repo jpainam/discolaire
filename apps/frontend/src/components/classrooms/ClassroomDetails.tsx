@@ -35,7 +35,7 @@ export async function ClassroomDetails({
             {t("name")}
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-            {classroom?.name}
+            {classroom.name}
           </span>
         </li>
         <li className="flex items-center justify-between">
@@ -44,7 +44,7 @@ export async function ClassroomDetails({
             {t("shortName")}
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-            {classroom?.shortName}
+            {classroom.shortName}
           </span>
         </li>
         <li className="flex items-center justify-between">
@@ -53,7 +53,7 @@ export async function ClassroomDetails({
             {t("section")}
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-            {classroom?.section?.name}
+            {classroom.section?.name}
           </span>
         </li>
         <li className="flex items-center justify-between">
@@ -75,7 +75,7 @@ export async function ClassroomDetails({
             </span>
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-            {classroom?.reportName}
+            {classroom.reportName}
           </span>
         </li>
         <li className="flex items-center justify-between">
@@ -84,7 +84,7 @@ export async function ClassroomDetails({
             {t("level")}
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-            {classroom?.level?.name}
+            {classroom.level?.name}
           </span>
         </li>
         <li className="flex items-center justify-between">
@@ -93,7 +93,7 @@ export async function ClassroomDetails({
             {t("cycle")}
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-            {classroom?.cycle?.name}
+            {classroom.cycle?.name}
           </span>
         </li>
         <li className="flex items-center justify-between">
@@ -110,7 +110,7 @@ export async function ClassroomDetails({
             </span>
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-            {classroom?.seniorAdvisor?.lastName}
+            {classroom.seniorAdvisor?.lastName}
           </span>
         </li>
         <li className="flex items-center justify-between">
@@ -119,7 +119,7 @@ export async function ClassroomDetails({
             {t("classroom_leader")}
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-            {classroom?.classroomLeader?.lastName}
+            {classroom.classroomLeader?.lastName}
           </span>
         </li>
         <li className="flex items-center justify-between">
@@ -128,7 +128,7 @@ export async function ClassroomDetails({
             {t("max_size")}
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-            {classroom?.maxSize}
+            {classroom.maxSize}
           </span>
         </li>
         <li className="flex items-center justify-between">

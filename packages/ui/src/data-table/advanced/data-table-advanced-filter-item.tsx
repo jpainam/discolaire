@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+ 
 import type { Table } from "@tanstack/react-table";
 import * as React from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";

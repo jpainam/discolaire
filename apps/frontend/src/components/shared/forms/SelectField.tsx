@@ -21,7 +21,7 @@ import {
 
 import { cn } from "~/lib/utils";
 
-type SelectFieldProps = {
+interface SelectFieldProps {
   className?: string;
   name: string;
   label?: string;
@@ -31,7 +31,7 @@ type SelectFieldProps = {
   description?: string;
   disabled?: boolean;
   inputClassName?: string;
-};
+}
 export function SelectField({
   name,
   label,

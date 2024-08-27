@@ -1,8 +1,9 @@
 "use client";
 
+import type {
+  LucideIcon} from "lucide-react";
 import {
   LogOut,
-  LucideIcon,
   User,
   UserMinus,
   Users,

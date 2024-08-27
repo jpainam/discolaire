@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { inferProcedureOutput } from "@trpc/server";
+import type { inferProcedureOutput } from "@trpc/server";
 import { Save, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -16,7 +16,7 @@ import { Separator } from "@repo/ui/separator";
 
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
 import { getErrorMessage } from "~/lib/handle-error";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
 const editRelationshipSchema = z.object({

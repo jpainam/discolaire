@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { inferProcedureOutput } from "@trpc/server";
+import type { inferProcedureOutput } from "@trpc/server";
 import { Forward, Reply } from "lucide-react";
 
 import { useAlert } from "@repo/hooks/use-alert";
@@ -12,7 +12,7 @@ import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
 
 import { routes } from "~/configs/routes";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { StaffSelector } from "../shared/selects/StaffSelector";
 
@@ -58,7 +58,7 @@ export function StaffDetailHeader() {
           onChange={(staffId) => {
             router.push(routes.staffs.details(staffId));
           }}
-          defaultValue={params.id as string}
+          defaultValue={params.id}
         />
         <div className="ml-auto flex flex-row items-center gap-2">
           {/* <Button

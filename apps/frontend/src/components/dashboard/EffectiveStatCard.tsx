@@ -6,7 +6,7 @@ import { cn } from "~/lib/utils";
 import { BorderBeam } from "../magicui/BorderBeam";
 import { EffectiveStatCounter } from "./EffectiveStatCounter";
 
-type StatCardProps = {
+interface StatCardProps {
   className?: string;
   icon: React.ReactNode;
   title: string;
@@ -18,7 +18,7 @@ type StatCardProps = {
   index?: number;
   active?: number;
   inactive?: number;
-};
+}
 
 export async function EffectiveStatCard({
   className,

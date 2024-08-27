@@ -1,6 +1,6 @@
 import AsyncSelect from "react-select/async";
 
-type AsyncSelectFieldProps = {
+interface AsyncSelectFieldProps {
   className?: string;
   name: string;
   label?: string;
@@ -13,7 +13,7 @@ type AsyncSelectFieldProps = {
   description?: string;
   descriptionClassName?: string;
   disabled?: boolean;
-};
+}
 
 export function AsyncSelectField({}: AsyncSelectFieldProps) {
   return <AsyncSelect cacheOptions defaultOptions />;

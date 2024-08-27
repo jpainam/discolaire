@@ -1,9 +1,10 @@
 "use client";
 
-import { Fee } from "@prisma/client";
-import { type ColumnDef } from "@tanstack/react-table";
-import { inferProcedureOutput } from "@trpc/server";
-import i18next, { TFunction } from "i18next";
+import type { Fee } from "@prisma/client";
+import type {ColumnDef} from "@tanstack/react-table";
+import type { inferProcedureOutput } from "@trpc/server";
+import type { TFunction } from "i18next";
+import i18next from "i18next";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -25,9 +26,9 @@ import { Separator } from "@repo/ui/separator";
 import { CreateEditFee } from "~/components/classrooms/fees/CreateEditFee";
 import { CURRENCY } from "~/lib/constants";
 import { getErrorMessage } from "~/lib/handle-error";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
-import { Classroom } from "~/types/classroom";
+import type { Classroom } from "~/types/classroom";
 
 type FeeProcedureOutput = NonNullable<
   inferProcedureOutput<AppRouter["fee"]["all"]>
@@ -147,7 +148,7 @@ export function fetchFeesColumns({
       cell: ({ row }) => {
         const fee = row.original;
         const c = fee.classroom as Classroom;
-        return <div>{c?.shortName}</div>;
+        return <div>{c.shortName}</div>;
       },
     },
     {

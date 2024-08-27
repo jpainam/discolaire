@@ -16,10 +16,10 @@ import {
 
 import { api } from "~/trpc/react";
 
-type SchoolYearSwitcherProps = {
+interface SchoolYearSwitcherProps {
   className?: string;
   currentSchoolYear?: string;
-};
+}
 export function SchoolYearSwitcher({
   className,
   currentSchoolYear,
@@ -32,7 +32,7 @@ export function SchoolYearSwitcher({
   const classroomsQuery = api.classroom.all.useQuery();
   const setSchoolYearCookieMutation = api.schoolYear.setAsCookie.useMutation();
 
-  const recentYear = schoolYearsQuery.data && schoolYearsQuery.data[0]?.id;
+  const recentYear = schoolYearsQuery.data?.[0]?.id;
   const defaultValue = currentSchoolYear ?? recentYear;
 
   if (!currentSchoolYear) {

@@ -93,7 +93,7 @@ export function LastModifiedSelector() {
                       }}
                     >
                       {item.name}
-                      {item?.icon}
+                      {item.icon}
                     </Button>
                   </li>
                 ),

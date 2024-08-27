@@ -25,7 +25,7 @@ import { getAge } from "~/utils/student-utils";
 
 export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
   const { t } = useLocale();
-  const params = useParams() as { id: string };
+  const params = useParams();
   const router = useRouter();
   const classroomStudentsQuery = api.classroom.students.useQuery(classroomId);
   if (classroomStudentsQuery.isPending) {

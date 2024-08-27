@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useSearchParams } from "next/navigation";
-import { inferProcedureOutput } from "@trpc/server";
+import type { inferProcedureOutput } from "@trpc/server";
 
 import type { DataTableFilterField } from "@repo/ui/data-table/v2/datatypes";
 import { useLocale } from "@repo/i18n";
@@ -11,7 +11,7 @@ import { DataTable } from "@repo/ui/data-table/v2/data-table";
 import { DataTableToolbar } from "@repo/ui/data-table/v2/data-table-toolbar";
 import { useDataTable } from "@repo/ui/data-table/v2/use-data-table";
 
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { ContactDataTableActions } from "./ContactDataTableActions";
 import { getColumns } from "./ContactDataTableColumns";

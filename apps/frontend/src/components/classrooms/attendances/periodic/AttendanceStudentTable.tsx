@@ -106,14 +106,14 @@ function AttendanceTableRow({
     <>
       <TableCell>
         <div className="flex flex-row gap-1">
-          {!watchValue?.absence && (
+          {!watchValue.absence && (
             <FlatBadge variant={"green"}>Present</FlatBadge>
           )}
-          {watchValue?.absence && watchValue?.absence != "0" && (
+          {watchValue.absence && watchValue.absence != "0" && (
             <FlatBadge variant={"red"}>Absent</FlatBadge>
           )}
-          {watchValue?.late && <FlatBadge variant={"yellow"}>Late</FlatBadge>}
-          {watchValue?.consigned && (
+          {watchValue.late && <FlatBadge variant={"yellow"}>Late</FlatBadge>}
+          {watchValue.consigned && (
             <FlatBadge variant={"indigo"}>Consigned</FlatBadge>
           )}
         </div>

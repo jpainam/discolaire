@@ -2,7 +2,7 @@
 import { useParams } from "next/navigation";
 
 export function StudentRightbar() {
-  const params = useParams() as { id: string };
+  const params = useParams();
   if (!params.id) {
     return null;
   }

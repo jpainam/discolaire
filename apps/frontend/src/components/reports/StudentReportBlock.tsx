@@ -8,7 +8,7 @@ import { Label } from "@repo/ui/label";
 
 import { studentReportsAtom } from "~/atoms/report-atom";
 import { cn } from "~/lib/utils";
-import { Report } from "~/types/report";
+import type { Report } from "~/types/report";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
 

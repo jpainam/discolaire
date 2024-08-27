@@ -14,8 +14,8 @@ export default function Sidebar({ className }: { className?: string }) {
       <SimpleBar className="h-[calc(100%-80px)]">
         <div className="3xl:mt-6 mt-4 pb-3">
           {menuItems.map((item, index) => {
-            const isActive = pathname === (item?.href as string);
-            const pathnameExistInDropdowns: any = item?.dropdownItems?.filter(
+            const isActive = pathname === (item.href!);
+            const pathnameExistInDropdowns: any = item.dropdownItems?.filter(
               (dropdownItem) => dropdownItem.href === pathname,
             );
             const isDropdownOpen = Boolean(pathnameExistInDropdowns?.length);
@@ -23,7 +23,7 @@ export default function Sidebar({ className }: { className?: string }) {
             return (
               <Link
                 key={item.name + "-" + index}
-                href={item?.href || "#"}
+                href={item.href || "#"}
                 className={cn(
                   "group relative mx-3 my-0.5 flex items-center justify-between rounded-md px-3 py-2 font-medium capitalize lg:my-1 2xl:mx-5 2xl:my-2",
                   isActive
@@ -32,7 +32,7 @@ export default function Sidebar({ className }: { className?: string }) {
                 )}
               >
                 <div className="flex items-center truncate">
-                  {item?.icon && (
+                  {item.icon && (
                     <span
                       className={cn(
                         "me-2 inline-flex h-5 w-5 items-center justify-center rounded-md [&>svg]:h-[20px] [&>svg]:w-[20px]",
@@ -41,7 +41,7 @@ export default function Sidebar({ className }: { className?: string }) {
                           : "text-gray-800 dark:text-gray-500 dark:group-hover:text-gray-700",
                       )}
                     >
-                      {item?.icon}
+                      {item.icon}
                     </span>
                   )}
                   <span className="truncate">{item.name}</span>

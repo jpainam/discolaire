@@ -118,10 +118,10 @@ export default function AlphabetSearchBlock() {
   );
 }
 
-type ClasseOption = {
+interface ClasseOption {
   label: string;
   value: string;
-};
+}
 const classeOptions: ClasseOption[] = [
   { label: "Toutes", value: "all" },
   { label: "6ème", value: "6" },

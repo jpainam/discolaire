@@ -28,7 +28,7 @@ import { api } from "~/trpc/react";
 
 export function ProgramHeader() {
   const { t } = useLocale();
-  const params = useParams() as { id: string; subjectId: string };
+  const params = useParams();
   const subjectQuery = api.subject.get.useQuery({
     id: Number(params.subjectId),
   });
@@ -52,7 +52,7 @@ export function ProgramHeader() {
           label: `${t("create")}/${t("edit")}`,
           href:
             routes.classrooms.programs(params.id) +
-            `/${subject?.id}/create-or-edit`,
+            `/${subject.id}/create-or-edit`,
         });
       }
       setBreadcrumbs(breads);

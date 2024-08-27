@@ -10,7 +10,7 @@ import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
 
 import { api } from "~/trpc/react";
-import { Transaction } from "~/types/transaction";
+import type { Transaction } from "~/types/transaction";
 import { useMoneyFormat } from "~/utils/money-format";
 import { TransactionDataTableActions } from "./TransactionDataTableActions";
 import { fetchTransactionColumns } from "./TransactionDataTableColumns";

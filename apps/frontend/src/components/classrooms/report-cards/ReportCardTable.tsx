@@ -17,7 +17,7 @@ import { api } from "~/trpc/react";
 export function ReportCardTable() {
   const searchParams = useSearchParams();
   const { t } = useLocale();
-  const params = useParams() as { id: string };
+  const params = useParams();
   const rowClassName = "border-b border-muted-200";
   const { data: students } = api.classroom.students.useQuery(params.id);
   return (

@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { useQueryClient } from "@tanstack/react-query";
-import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { inferProcedureOutput } from "@trpc/server";
-import { TFunction } from "i18next";
+import type { ColumnDef} from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
+import type { inferProcedureOutput } from "@trpc/server";
+import type { TFunction } from "i18next";
 import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -15,7 +16,7 @@ import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-hea
 
 import { routes } from "~/configs/routes";
 import { getErrorMessage } from "~/lib/handle-error";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { CreateEditSubject } from "./CreateEditSubject";

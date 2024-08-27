@@ -24,7 +24,7 @@ import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
-import { ReportCardType } from "~/types/report-card";
+import type { ReportCardType } from "~/types/report-card";
 import { getFullName } from "../../../utils/full-name";
 import { AppreciationCategoryList } from "./AppreciationCategoryList";
 import { EditableAppreciation } from "./EditableAppreciation";
@@ -167,8 +167,7 @@ export function AppreciationTable({ reports }: { reports: any[] }) {
                       });
                     }}
                     initialText={
-                      (remarksMap[report.student.id] &&
-                        remarksMap[report.student.id]?.remark) ||
+                      (remarksMap[report.student.id]?.remark) ||
                       t("double_clicked_to_edit_or_add_remarks")
                     }
                   />

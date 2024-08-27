@@ -1,8 +1,6 @@
 import { redirect } from "next/navigation";
 
-type SearchParams = {
-  [key: string]: string | string[];
-};
+type SearchParams = Record<string, string | string[]>;
 
 export default function Page({ searchParams }: { searchParams: SearchParams }) {
   redirect("/datum/students");

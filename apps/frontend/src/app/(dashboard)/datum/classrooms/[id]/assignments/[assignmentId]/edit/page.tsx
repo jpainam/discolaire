@@ -3,12 +3,12 @@ import { notFound } from "next/navigation";
 import { CreateEditAssignment } from "~/components/classrooms/assignments/CreateEditAssignment";
 import { api } from "~/trpc/server";
 
-type EditPageProps = {
+interface EditPageProps {
   params: {
     id: string;
     assignmentId: string;
   };
-};
+}
 export default async function Page({ params }: EditPageProps) {
   const assignment = await api.assignment.get(params.assignmentId);
   if (!assignment) {

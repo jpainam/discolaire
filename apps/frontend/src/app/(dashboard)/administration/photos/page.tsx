@@ -3,9 +3,9 @@ import { PhotosList } from "~/components/administration/photos/photos-list";
 
 type PictureCategory = "student" | "staff";
 
-type PictureMangementProps = {
+interface PictureMangementProps {
   searchParams: { id?: string; cat?: PictureCategory };
-};
+}
 export default function PictureMangement({
   searchParams: { id, cat },
 }: PictureMangementProps) {

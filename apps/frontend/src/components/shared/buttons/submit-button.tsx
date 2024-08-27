@@ -6,10 +6,10 @@ import { useFormContext } from "react-hook-form";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 
-type SubmitButtonProps = {
+interface SubmitButtonProps {
   //loading?: boolean;
   label?: string;
-};
+}
 export function SubmitButton({ label }: SubmitButtonProps) {
   const { t } = useLocale();
   const {

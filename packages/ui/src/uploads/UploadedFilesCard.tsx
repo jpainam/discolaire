@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { type ClientUploadedFileData } from "uploadthing/types";
+import type {ClientUploadedFileData} from "uploadthing/types";
 
 import {
   Card,

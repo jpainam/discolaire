@@ -15,12 +15,12 @@ import ImageIcon from "~/components/icons/image-solid";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 
-type Option = {
+interface Option {
   value: string;
   name: string;
   icon: React.ReactNode;
   id: number;
-};
+}
 const fileTypeOptions = [
   {
     value: "folder",
@@ -80,7 +80,7 @@ export function FileTypeSelector({
           }) => (
             <SelectItem key={item.id} value={item.value}>
               <div className="flex flex-row items-center gap-1">
-                <span className="w-[30px]">{item?.icon}</span>
+                <span className="w-[30px]">{item.icon}</span>
                 <span>{item.name}</span>
               </div>
             </SelectItem>

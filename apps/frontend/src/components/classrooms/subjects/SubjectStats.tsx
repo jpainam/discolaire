@@ -5,7 +5,8 @@ import { useParams } from "next/navigation";
 import { sum } from "lodash";
 
 import { useLocale } from "@repo/i18n";
-import FlatBadge, { FlatBadgeVariant } from "@repo/ui/FlatBadge";
+import type { FlatBadgeVariant } from "@repo/ui/FlatBadge";
+import FlatBadge from "@repo/ui/FlatBadge";
 import { Separator } from "@repo/ui/separator";
 
 import { api } from "~/trpc/react";
@@ -19,13 +20,13 @@ export function SubjectStats() {
   const [totalCoefficient, setTotalCoefficient] = useState<number>(0);
 
   useEffect(() => {
-    const v = subjectsQuery?.data?.map((s) => s.teacherId) || [];
-    setCountTeacher(v?.length);
+    const v = subjectsQuery.data?.map((s) => s.teacherId) || [];
+    setCountTeacher(v.length);
     const groups: Record<string, number> = {};
-    const coeff = sum(subjectsQuery?.data?.map((s) => s.coefficient));
-    subjectsQuery?.data?.forEach((s) => {
+    const coeff = sum(subjectsQuery.data?.map((s) => s.coefficient));
+    subjectsQuery.data?.forEach((s) => {
       if (s.subjectGroup) {
-        const name = s.subjectGroup?.name;
+        const name = s.subjectGroup.name;
         if (name && groups[name]) {
           groups[name]++;
         } else {
@@ -48,7 +49,7 @@ export function SubjectStats() {
   return (
     <div className="flex flex-row items-center gap-2">
       <FlatBadge variant={"indigo"}>
-        {subjectsQuery?.data?.length} {t("subjects")}
+        {subjectsQuery.data?.length} {t("subjects")}
       </FlatBadge>
       <FlatBadge variant={"green"}>
         {countTeacher} {t("teachers")}

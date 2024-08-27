@@ -1,5 +1,5 @@
-import { TooltipProps } from "recharts";
-import {
+import type { TooltipProps } from "recharts";
+import type {
   NameType,
   ValueType,
 } from "recharts/types/component/DefaultTooltipContent";

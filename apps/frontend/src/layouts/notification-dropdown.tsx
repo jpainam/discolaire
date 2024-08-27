@@ -1,6 +1,7 @@
 "use client";
 
-import { RefObject, useState } from "react";
+import type { RefObject} from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Badge } from "@repo/ui/badge";
 import { Checkbox } from "@repo/ui/checkbox";

@@ -1,7 +1,9 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { ColumnDef, createColumnHelper, Row } from "@tanstack/react-table";
-import { inferProcedureOutput } from "@trpc/server";
-import i18next, { TFunction } from "i18next";
+import type { ColumnDef, Row } from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
+import type { inferProcedureOutput } from "@trpc/server";
+import type { TFunction } from "i18next";
+import i18next from "i18next";
 import { Eye, MoreHorizontal, TicketCheck, Trash2 } from "lucide-react";
 
 import { useModal } from "@repo/hooks/use-modal";
@@ -18,7 +20,7 @@ import {
 } from "@repo/ui/dropdown-menu";
 import FlatBadge from "@repo/ui/FlatBadge";
 
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { TransactionDeleteModal } from "./TransactionDeleteModal";
 import { TransactionDetails } from "./TransactionDetails";
 

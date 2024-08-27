@@ -3,13 +3,13 @@ import { Button } from "@repo/ui/button";
 
 import { cn } from "~/lib/utils";
 
-type EditButtonProps = {
+interface EditButtonProps {
   asLink?: boolean;
   href?: string;
   disabled?: boolean;
   onClick?: () => void;
   className?: string;
-};
+}
 export function EditButton({
   asLink,
   href,

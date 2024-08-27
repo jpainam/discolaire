@@ -35,7 +35,7 @@ export default async function Page({
             <h1 className="text-2xl font-bold">{t("receipt")}</h1>
             <div className="flex items-center gap-2">
               <ReceiptIcon className="h-5 w-5" />
-              <span>{transaction?.transactionRef}</span>
+              <span>{transaction.transactionRef}</span>
             </div>
           </div>
           <Separator />

@@ -4,7 +4,7 @@ import * as React from "react";
 import { addDays, format } from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
 import { Calendar as CalendarIcon } from "lucide-react";
-import { DateRange } from "react-day-picker";
+import type { DateRange } from "react-day-picker";
 
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -13,7 +13,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 
 import { cn } from "~/lib/utils";
 
-type DatePickerProps = {
+interface DatePickerProps {
   onChange?: (date: DateRange | undefined) => void;
   from?: Date;
   to?: Date;
@@ -22,7 +22,7 @@ type DatePickerProps = {
   numberOfMonths?: number;
   fromYear?: number;
   toYear?: number;
-};
+}
 export function DateRangePicker({
   className,
   onChange,

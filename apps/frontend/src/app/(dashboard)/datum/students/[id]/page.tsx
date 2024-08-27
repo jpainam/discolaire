@@ -5,9 +5,7 @@ import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 
 import { StudentDetails } from "~/components/students/profile/StudentDetails";
 
-type SearchParams = {
-  [key: string]: string | string[] | undefined;
-};
+type SearchParams = Record<string, string | string[] | undefined>;
 
 export default async function Page({
   params: { id },

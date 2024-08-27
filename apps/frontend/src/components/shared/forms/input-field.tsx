@@ -13,7 +13,7 @@ import { useFormContext } from "react-hook-form";
 
 import { cn } from "~/lib/utils";
 
-type InputFieldProps = {
+interface InputFieldProps {
   label?: string;
   className?: string;
   name: string;
@@ -24,7 +24,7 @@ type InputFieldProps = {
   disabled?: boolean;
   inputClassName?: string;
   type?: string;
-};
+}
 export function InputField({
   descriptionClassName,
   disabled,

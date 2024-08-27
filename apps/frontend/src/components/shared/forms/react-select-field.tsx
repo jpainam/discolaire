@@ -2,7 +2,7 @@ import { FormField, FormItem, FormLabel, FormMessage } from "@repo/ui/form";
 import { useFormContext } from "react-hook-form";
 import Select from "react-select";
 
-type ReactSelectFieldProps = {
+interface ReactSelectFieldProps {
   className?: string;
   name: string;
   label?: string;
@@ -15,7 +15,7 @@ type ReactSelectFieldProps = {
   description?: string;
   descriptionClassName?: string;
   disabled?: boolean;
-};
+}
 export function ReactSelectField({
   items,
   label,

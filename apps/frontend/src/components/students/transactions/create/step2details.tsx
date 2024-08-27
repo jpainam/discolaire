@@ -88,7 +88,7 @@ export default function Step2Details() {
         <div className="ml-auto flex flex-row items-center gap-2 rounded-md border bg-black px-2 py-1 text-white">
           <span className="text-lg font-bold">{t("amount")}:</span>
           <span className="text-lg font-bold text-green-600">
-            {payment.amount?.toLocaleString(i18n.language)} {CURRENCY}
+            {payment.amount.toLocaleString(i18n.language)} {CURRENCY}
           </span>
         </div>
       </CardHeader>
@@ -99,7 +99,7 @@ export default function Step2Details() {
           <ul className="grid gap-2">
             <li className="flex items-center justify-between">
               <span className="text-muted-foreground">{t("receivedFrom")}</span>
-              <span>{getFullName(studentQuery?.data)}</span>
+              <span>{getFullName(studentQuery.data)}</span>
             </li>
             <li className="flex items-center justify-between">
               <span className="text-muted-foreground">{t("for")}</span>
@@ -150,7 +150,7 @@ export default function Step2Details() {
                 {studentContactsQuery.data?.map((item, index) => (
                   <NotificationFragment
                     key={`${item.contactId}-notification-${index}`}
-                    name={item?.contact?.lastName || ""}
+                    name={item.contact.lastName || ""}
                     itemId={item.contactId}
                   />
                 ))}

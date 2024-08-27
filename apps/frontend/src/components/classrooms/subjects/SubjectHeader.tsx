@@ -18,7 +18,7 @@ import { sidebarIcons } from "../sidebar-icons";
 import { SubjectStats } from "./SubjectStats";
 
 export function SubjectHeader() {
-  const Icon = sidebarIcons["subjects"];
+  const Icon = sidebarIcons.subjects;
   const { t } = useLocale();
 
   return (

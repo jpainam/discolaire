@@ -9,7 +9,7 @@ import { Badge } from "@repo/ui/badge";
 
 import SimpleBar from "~/components/simplebar";
 import { cn } from "~/lib/utils";
-import { SideMenuType } from "./menu-types";
+import type { SideMenuType } from "./menu-types";
 
 function LinkMenuItem(item: SideMenuType) {
   const { createQueryString } = useCreateQueryString();
@@ -31,16 +31,16 @@ function LinkMenuItem(item: SideMenuType) {
         <span>{Icon && <Icon className="h-5 w-5" />}</span>
         <span className="truncate">{item.title}</span>
       </div>
-      {item?.badge?.length ? <Badge>{item?.badge} </Badge> : null}
+      {item.badge?.length ? <Badge>{item.badge} </Badge> : null}
     </Link>
   );
 }
 
-type SidebarMenuProps = {
+interface SidebarMenuProps {
   className?: string;
   simpleBarClassName?: string;
   items: SideMenuType[];
-};
+}
 export default function SidebarMenu({
   className,
   items,

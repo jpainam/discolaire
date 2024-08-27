@@ -3,14 +3,14 @@ import { AssignmentDataTable } from "~/components/classrooms/assignments/Assignm
 import { AssignmentHeader } from "~/components/classrooms/assignments/AssignmentHeader";
 import { api } from "~/trpc/server";
 
-type AssignmentPageProps = {
+interface AssignmentPageProps {
   searchParams: {
     per_page: number;
   };
   params: {
     id: string;
   };
-};
+}
 export default async function Page({
   params,
   searchParams,

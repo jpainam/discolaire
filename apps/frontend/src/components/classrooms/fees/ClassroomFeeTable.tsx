@@ -100,7 +100,7 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
                     <FlatBadge variant={"red"}>{t("inactive")}</FlatBadge>
                   )}
                 </TableCell>
-                <TableCell className="">{fee?.journal?.name}</TableCell>
+                <TableCell className="">{fee.journal?.name}</TableCell>
                 <TableCell className="">
                   <div className="flex flex-row items-center justify-end gap-0">
                     <DropdownMenu>

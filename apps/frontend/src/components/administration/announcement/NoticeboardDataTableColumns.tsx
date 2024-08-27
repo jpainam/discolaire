@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { type ColumnDef } from "@tanstack/react-table";
-import { inferProcedureOutput } from "@trpc/server";
-import { TFunction } from "i18next";
+import type {ColumnDef} from "@tanstack/react-table";
+import type { inferProcedureOutput } from "@trpc/server";
+import type { TFunction } from "i18next";
 import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -21,10 +21,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
-import FlatBadge, { FlatBadgeProps } from "@repo/ui/FlatBadge";
+import type { FlatBadgeProps } from "@repo/ui/FlatBadge";
+import FlatBadge from "@repo/ui/FlatBadge";
 
 import { getErrorMessage } from "~/lib/handle-error";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { CreateEditAnnouncement } from "./CreateEditAnnouncement";
 
@@ -135,13 +136,13 @@ export function getColumns({
 
         if (publishFrom <= now && now <= publishTo) {
           status = t("active_notice");
-          variant = statusVariants["active_notice"];
+          variant = statusVariants.active_notice;
         } else if (publishFrom > now) {
           status = t("future_notice");
-          variant = statusVariants["future_notice"];
+          variant = statusVariants.future_notice;
         } else {
           status = t("expired_notice");
-          variant = statusVariants["expired_notice"];
+          variant = statusVariants.expired_notice;
         }
 
         return <FlatBadge variant={variant}>{status}</FlatBadge>;

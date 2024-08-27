@@ -18,7 +18,7 @@ export async function DatumDataTable({
 }: {
   searchParams: SearchParams;
 }) {
-  const target = searchParams["target"] || "";
+  const target = searchParams.target || "";
 
   if (target === "students") {
     const search = tableSearchParamsSchema.parse(searchParams);

@@ -2,14 +2,14 @@
 
 import { useMemo } from "react";
 import { useParams } from "next/navigation";
-import { inferProcedureOutput } from "@trpc/server";
+import type { inferProcedureOutput } from "@trpc/server";
 
 import { useLocale } from "@repo/i18n";
 import { useDataTable } from "@repo/ui/data-table";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
 
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { GradeSheetDataTableActions } from "./GradeSheetDataTableActions";
 import { fetchGradeSheetColumns } from "./GradeSheetDataTableColumns";
 
@@ -23,7 +23,7 @@ export function GradeSheetDataTable({
   gradesheets: ClassroomGradeSheetProcedureOutput[];
 }) {
   const { t } = useLocale();
-  const params = useParams() as { id: string };
+  const params = useParams();
   const columns = useMemo(() => {
     return fetchGradeSheetColumns({
       t: t,

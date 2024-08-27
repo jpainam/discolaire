@@ -1,8 +1,9 @@
-import { i18n } from "i18next";
+import type { i18n } from "i18next";
+import type {
+  ZodErrorMap} from "zod";
 import {
   defaultErrorMap,
   z,
-  ZodErrorMap,
   ZodIssueCode,
   ZodParsedType,
 } from "zod";
@@ -54,17 +55,17 @@ const getKeyAndValues = (
 
 export type MakeZodI18nMap = (option?: ZodI18nMapOption) => ZodErrorMap;
 
-export type ZodI18nMapOption = {
+export interface ZodI18nMapOption {
   t?: i18n["t"];
   ns?: string | readonly string[];
   handlePath?: HandlePathOption | false;
-};
+}
 
-export type HandlePathOption = {
+export interface HandlePathOption {
   context?: string;
   ns?: string | readonly string[];
   keyPrefix?: string;
-};
+}
 
 const defaultNs = "zod";
 

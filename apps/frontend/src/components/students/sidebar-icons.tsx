@@ -14,9 +14,10 @@ import {
   NotebookPen,
   NotepadTextDashed,
   User,
-  Users,
-  type LucideIcon,
+  Users
+  
 } from "lucide-react";
+import type {LucideIcon} from "lucide-react";
 
 export const sidebarIcons: Record<string, LucideIcon> = {
   profile: User,

@@ -1,9 +1,10 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import Link from "next/link";
-import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { TFunction } from "i18next";
+import type { ColumnDef} from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
-import * as RPNInput from "react-phone-number-input";
+import type * as RPNInput from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
 
 import { Checkbox } from "@repo/ui/checkbox";
@@ -12,21 +13,21 @@ import FlatBadge from "@repo/ui/FlatBadge";
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
-import { Student } from "~/types/student";
+import type { Student } from "~/types/student";
 import { getFullName } from "~/utils/full-name";
 
 const columnHelper = createColumnHelper<Student>();
 
 export type StudentTableAction = ColumnDef<Student, unknown>;
 
-type UseStudentColumnsProps = {
+interface UseStudentColumnsProps {
   actionCell?: (student: Student) => ReactNode;
   columns: string[];
   t: TFunction<string, unknown>;
   dateFormatter: Intl.DateTimeFormat;
   schoolYearId?: string;
   action?: StudentTableAction;
-};
+}
 export function fetchStudentColumns({
   columns,
   schoolYearId,
@@ -148,7 +149,7 @@ export function fetchStudentColumns({
             ) : (
               <PiGenderFemaleThin className="h-4 w-4" />
             )}
-            {t(row.getValue("gender") as string)}
+            {t(row.getValue("gender"))}
           </FlatBadge>
         );
       },
@@ -168,10 +169,10 @@ export function fetchStudentColumns({
       },
       cell: ({ row }) => {
         const student = row.original;
-        const r = student?.isRepeating ? t("yes") : t("no");
+        const r = student.isRepeating ? t("yes") : t("no");
         return (
           <div className="flex items-center justify-center">
-            {student?.isRepeating ? (
+            {student.isRepeating ? (
               <FlatBadge variant="red">{r}</FlatBadge>
             ) : (
               <FlatBadge variant="green">{r}</FlatBadge>
@@ -203,7 +204,7 @@ export function fetchStudentColumns({
         <DataTableColumnHeader column={column} title={t("formerSchool")} />
       ),
       cell: ({ row }) => {
-        const formerSchool = row.original?.formerSchool;
+        const formerSchool = row.original.formerSchool;
         return <div>{formerSchool?.name}</div>;
       },
     },

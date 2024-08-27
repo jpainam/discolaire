@@ -13,7 +13,7 @@ import { routes } from "~/configs/routes";
 import { api } from "~/trpc/react";
 
 export function SuccessStep() {
-  const params = useParams() as { id: string };
+  const params = useParams();
   const [payment, setPayment] = useAtom(makePaymentAtom);
   const router = useRouter();
   const createTransactionMutation = api.transaction.create.useMutation();
@@ -47,7 +47,7 @@ export function SuccessStep() {
             }));
 
             router.push(
-              routes.students.transactions.details(params.id, result?.id),
+              routes.students.transactions.details(params.id, result.id),
             );
             return "Transaction created successfully";
           },

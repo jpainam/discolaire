@@ -4,8 +4,9 @@ import { Bar, BarChart, LabelList, XAxis, YAxis } from "recharts";
 
 import { useLocale } from "@repo/i18n";
 import { Card, CardContent } from "@repo/ui/card";
+import type {
+  ChartConfig} from "@repo/ui/chart";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,

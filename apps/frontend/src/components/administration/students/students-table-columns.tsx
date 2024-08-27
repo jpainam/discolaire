@@ -1,7 +1,8 @@
 import React from "react";
-import { ColumnDef, createColumnHelper, Row } from "@tanstack/react-table";
-import { TFunction } from "i18next";
-import * as RPNInput from "react-phone-number-input";
+import type { ColumnDef, Row } from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
+import type * as RPNInput from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
 import { toast } from "sonner";
 
@@ -16,8 +17,8 @@ import { ViewButton } from "~/components/shared/buttons/view-button";
 import { routes } from "~/configs/routes";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
-import { DataTableFilterableColumn } from "~/types/data-table";
-import { Student } from "~/types/student";
+import type { DataTableFilterableColumn } from "~/types/data-table";
+import type { Student } from "~/types/student";
 
 const columnHelper = createColumnHelper<Student>();
 
@@ -95,7 +96,7 @@ export function fetchStudentColumns({
         <DataTableColumnHeader column={column} title={t("gender")} />
       ),
       cell: ({ row }) => {
-        return <div>{t(row.getValue("gender") as string)}</div>;
+        return <div>{t(row.getValue("gender"))}</div>;
       },
       enableSorting: true,
       filterFn: (row, id, value) => {
@@ -142,7 +143,7 @@ export function fetchStudentColumns({
         <DataTableColumnHeader column={column} title={t("formerSchool")} />
       ),
       cell: ({ row }) => {
-        const formerSchool = row.original?.formerSchool;
+        const formerSchool = row.original.formerSchool;
         return <div>{formerSchool?.name}</div>;
       },
     }),

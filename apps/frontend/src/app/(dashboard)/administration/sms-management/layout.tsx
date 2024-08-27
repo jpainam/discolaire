@@ -5,11 +5,11 @@ import { getServerTranslations } from "@repo/i18n/server";
 import { TabLink } from "~/components/users/tab-link";
 import { routes } from "~/configs/routes";
 
-type UserLink = {
+interface UserLink {
   icon: React.ReactNode;
   name: string;
   href: string;
-};
+}
 export default async function Layout({
   children,
 }: {

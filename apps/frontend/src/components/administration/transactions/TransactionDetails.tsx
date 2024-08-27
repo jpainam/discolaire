@@ -59,13 +59,13 @@ export function TransactionDetails({
       <div className="flex flex-row items-center gap-1">
         <Badge className="stroke-1" />
         <Label>{t("account")}:</Label>
-        {transactionQuery.data?.account?.name}
+        {transactionQuery.data.account.name}
       </div>
       <div className="flex flex-row items-center gap-1">
         <User className="stroke-1" />
         <Label>{t("student")}:</Label>
         <span className="overflow-hidden truncate">
-          {getFullName(transactionQuery.data.account?.student)}
+          {getFullName(transactionQuery.data.account.student)}
         </span>
       </div>
       <div className="flex flex-row items-center gap-1">
@@ -93,7 +93,7 @@ export function TransactionDetails({
           }
         >
           {transactionQuery.data.status &&
-            t(transactionQuery.data.status?.toLowerCase())}
+            t(transactionQuery.data.status.toLowerCase())}
         </FlatBadge>
       </div>
       <div className="flex flex-row items-center gap-1">

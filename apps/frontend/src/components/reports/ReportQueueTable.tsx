@@ -16,7 +16,7 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
-import { ReportQueue } from "~/types/report";
+import type { ReportQueue } from "~/types/report";
 import { useDateFormat } from "~/utils/date-format";
 import { ReportQueueTableActions } from "./ReportQueueTableActions";
 
@@ -43,31 +43,31 @@ export function ReportQueueTable({ reports }: { reports: ReportQueue[] }) {
             return (
               <TableRow key={rep.id}>
                 <TableCell className="font-medium">
-                  {rep?.createdAt &&
-                    fullDateTimeFormatter.format(new Date(rep?.createdAt))}
+                  {rep.createdAt &&
+                    fullDateTimeFormatter.format(new Date(rep.createdAt))}
                 </TableCell>
                 <TableCell>
                   {" "}
                   <Link
-                    href={rep?.signedUrl ?? "#"}
+                    href={rep.signedUrl ?? "#"}
                     target="_blank"
                     className="text-blue-500 underline"
                   >
-                    {rep?.code}: {rep?.name}
+                    {rep.code}: {rep.name}
                   </Link>{" "}
                 </TableCell>
                 <TableCell>
-                  {rep?.expectedDate &&
+                  {rep.expectedDate &&
                     fullDateTimeFormatter.format(new Date(rep.expectedDate))}
                 </TableCell>
                 <TableCell>
-                  {rep?.startedAt
-                    ? fullDateTimeFormatter.format(new Date(rep?.startedAt))
+                  {rep.startedAt
+                    ? fullDateTimeFormatter.format(new Date(rep.startedAt))
                     : "-"}
                 </TableCell>
                 <TableCell>
-                  {rep?.completedAt
-                    ? fullDateTimeFormatter.format(new Date(rep?.completedAt))
+                  {rep.completedAt
+                    ? fullDateTimeFormatter.format(new Date(rep.completedAt))
                     : "-"}
                 </TableCell>
                 <TableCell>
@@ -89,7 +89,7 @@ export function ReportQueueTable({ reports }: { reports: ReportQueue[] }) {
                     {rep.status == "COMPLETED" && <Check className="h-4 w-4" />}
                     {rep.status == "CANCELLED" && <Ban className="h-4 w-4" />}
                     {rep.status == "FAILED" && <CircleX className="h-4 w-4" />}
-                    <span className="ml-2">{t(rep?.status as string)}</span>
+                    <span className="ml-2">{t(rep.status as string)}</span>
                   </FlatBadge>
                 </TableCell>
                 <TableCell className="flex flex-row justify-end">

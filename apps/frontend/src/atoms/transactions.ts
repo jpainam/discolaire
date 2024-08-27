@@ -1,11 +1,11 @@
 import { addDays, subDays } from "date-fns";
 import { atom } from "jotai";
 
-type TransactionToolbarSearchParams = {
+interface TransactionToolbarSearchParams {
   from: Date;
   to: Date;
   status: string;
-};
+}
 
 export const transactionSearchAtom = atom<TransactionToolbarSearchParams>({
   from: subDays(new Date(), 15),

@@ -1,16 +1,16 @@
-export type HistoryType = {
+export interface HistoryType {
   id: string;
   title: string;
   description: string;
   sub_types?: SubHistoryType[];
   observation: string;
-};
+}
 
-export type SubHistoryType = {
+export interface SubHistoryType {
   id: string;
   title: string;
   type: "radio" | "checkbox";
-};
+}
 const desc = "Veuillez expliquer et documenter tout médicament...";
 const ADD_ADHD: HistoryType = {
   id: "ADD_ADHD",

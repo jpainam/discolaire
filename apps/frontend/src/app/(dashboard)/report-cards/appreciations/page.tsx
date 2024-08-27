@@ -5,13 +5,13 @@ import { AppreciationHeader } from "~/components/report-cards/appreciations/Appr
 import { AppreciationTable } from "~/components/report-cards/appreciations/AppreciationTable";
 import { reportCardService } from "~/server/services/report-card-service";
 
-type AppreciationProps = {
+interface AppreciationProps {
   searchParams: {
     type: "subjects" | "students";
     classroom: string;
     term: number;
   };
-};
+}
 export default async function Page({ searchParams }: AppreciationProps) {
   const reports =
     searchParams.classroom &&

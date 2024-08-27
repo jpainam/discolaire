@@ -24,7 +24,7 @@ import {
   Users2,
 } from "lucide-react";
 
-import { Mail as MailType } from "~/app/(dashboard)/mail/data";
+import type { Mail as MailType } from "~/app/(dashboard)/mail/data";
 import { useMail } from "~/app/(dashboard)/mail/use-mail";
 import { AccountSwitcher } from "~/components/shared/mail/account-switcher";
 import { MailDisplay } from "~/components/shared/mail/mail-display";

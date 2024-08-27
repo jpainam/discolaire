@@ -34,15 +34,15 @@ export function ContactDetails({ contactId }: { contactId: string }) {
       <ul className="grid gap-3">
         <li className="grid items-center justify-between md:flex">
           <span className="text-muted-foreground">{t("lastName")}</span>
-          <span>{contact?.lastName}</span>
+          <span>{contact.lastName}</span>
         </li>
         <li className="grid items-center justify-between md:flex">
           <span className="text-muted-foreground">{t("firstName")}</span>
-          <span>{contact?.firstName}</span>
+          <span>{contact.firstName}</span>
         </li>
         <li className="grid items-center justify-between md:flex">
           <span className="text-muted-foreground">{t("title")}</span>
-          <span>{contact?.title}</span>
+          <span>{contact.title}</span>
         </li>
       </ul>
 
@@ -51,19 +51,19 @@ export function ContactDetails({ contactId }: { contactId: string }) {
         <dl className="grid gap-3">
           <div className="grid items-center justify-between md:flex">
             <dt className="text-muted-foreground">{t("email")}</dt>
-            <dd>{contact?.email || "N/A"}</dd>
+            <dd>{contact.email || "N/A"}</dd>
           </div>
           <div className="grid items-center justify-between md:flex">
             <dt className="text-muted-foreground">{t("phoneNumber")} 1</dt>
-            <dd>{contact?.phoneNumber1 || "N/A"}</dd>
+            <dd>{contact.phoneNumber1 || "N/A"}</dd>
           </div>
           <div className="grid items-center justify-between md:flex">
             <dt className="text-muted-foreground">{t("phoneNumber")} 2</dt>
-            <dd>{contact?.phoneNumber2 || "N/A"}</dd>
+            <dd>{contact.phoneNumber2 || "N/A"}</dd>
           </div>
           <div className="grid items-center justify-between md:flex">
             <dt className="text-muted-foreground">{t("address")} </dt>
-            <dd>{contact?.address}</dd>
+            <dd>{contact.address}</dd>
           </div>
         </dl>
       </div>

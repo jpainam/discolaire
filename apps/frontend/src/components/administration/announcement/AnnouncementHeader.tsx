@@ -20,10 +20,10 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { DateRangePicker } from "../../shared/DateRangePicker";
 import { AnnouncementSummary } from "./AnnouncementSummary";
 
-type DateRange = {
+interface DateRange {
   from: Date;
   to: Date;
-};
+}
 
 function isValidDateRange(range: any): range is DateRange {
   return range && range.from instanceof Date && range.to instanceof Date;

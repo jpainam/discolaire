@@ -1,8 +1,9 @@
 import { useParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import { ColumnDef } from "@tanstack/react-table";
-import { inferProcedureOutput } from "@trpc/server";
-import i18next, { TFunction } from "i18next";
+import type { ColumnDef } from "@tanstack/react-table";
+import type { inferProcedureOutput } from "@trpc/server";
+import type { TFunction } from "i18next";
+import i18next from "i18next";
 import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -22,7 +23,7 @@ import {
 import FlatBadge from "@repo/ui/FlatBadge";
 
 import { getErrorMessage } from "~/lib/handle-error";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
 type PolicyAllProcedureOutput = NonNullable<
@@ -140,7 +141,7 @@ export function fetchPolicyColumns({
 
 function ActionCell({ student }: { student: PolicyAllProcedureOutput }) {
   const queryClient = useQueryClient();
-  const params = useParams() as { id: string };
+  const params = useParams();
   const { t } = useLocale();
   const router = useRouter();
   const unenrollStudentsMutation =

@@ -28,7 +28,7 @@ import {
   Trash2,
 } from "lucide-react";
 
-import { Mail } from "~/app/(dashboard)/mail/data";
+import type { Mail } from "~/app/(dashboard)/mail/data";
 
 interface MailDisplayProps {
   mail: Mail | null;

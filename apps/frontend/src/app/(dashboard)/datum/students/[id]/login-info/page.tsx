@@ -103,8 +103,8 @@ export default async function Page({
               ))}
           </TabsList>
           <TabsContent value={`student-${student.id}`}>
-            {student?.userId ? (
-              <UserLoginCard userId={student?.userId} />
+            {student.userId ? (
+              <UserLoginCard userId={student.userId} />
             ) : (
               <AssociatedUserNotFound />
             )}
@@ -115,8 +115,8 @@ export default async function Page({
                 key={`content-${std.contactId}`}
                 value={`contact-${std.contactId}`}
               >
-                {std.contact?.userId ? (
-                  <UserLoginCard userId={std.contact?.userId} />
+                {std.contact.userId ? (
+                  <UserLoginCard userId={std.contact.userId} />
                 ) : (
                   <AssociatedUserNotFound />
                 )}

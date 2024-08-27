@@ -4,8 +4,9 @@ import { Bar, BarChart, XAxis, YAxis } from "recharts";
 
 import { useLocale } from "@repo/i18n";
 import { Card, CardContent } from "@repo/ui/card";
+import type {
+  ChartConfig} from "@repo/ui/chart";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
@@ -50,7 +51,7 @@ export function CreditDebitPie() {
               tickMargin={10}
               axisLine={false}
               tickFormatter={(value) =>
-                chartConfig[value as keyof typeof chartConfig]?.label
+                chartConfig[value as keyof typeof chartConfig].label
               }
             />
             <XAxis dataKey="count" type="number" hide />

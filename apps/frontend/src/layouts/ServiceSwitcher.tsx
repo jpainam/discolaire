@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import type {
+  LucideIcon} from "lucide-react";
 import {
   BookOpenCheckIcon,
   BookUserIcon,
   ChevronDown,
   ChevronRight,
   LayoutList,
-  LucideIcon,
   MailIcon,
 } from "lucide-react";
 

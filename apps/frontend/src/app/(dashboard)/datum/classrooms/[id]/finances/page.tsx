@@ -18,13 +18,13 @@ export default async function Page({
     ? balances
     : balances.filter(
         (balance) =>
-          balance.student?.firstName
+          balance.student.firstName
             ?.toLowerCase()
             .includes(query.toLowerCase()) ||
-          balance.student?.lastName
+          balance.student.lastName
             ?.toLowerCase()
             .includes(query.toLowerCase()) ||
-          balance.student?.email?.toLowerCase().includes(query.toLowerCase()) ||
+          balance.student.email?.toLowerCase().includes(query.toLowerCase()) ||
           (!isNaN(Number(query)) && balance.balance >= Number(query)),
       );
 

@@ -1,16 +1,16 @@
 "use client";
 
 import { useMemo } from "react";
-import { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 
 import { useLocale } from "@repo/i18n";
 import { DataTable } from "@repo/ui/data-table/v2/data-table";
 import { DataTableToolbar } from "@repo/ui/data-table/v2/data-table-toolbar";
-import { DataTableFilterField } from "@repo/ui/data-table/v2/datatypes";
+import type { DataTableFilterField } from "@repo/ui/data-table/v2/datatypes";
 import { useDataTable } from "@repo/ui/data-table/v2/use-data-table";
 
 import { useSchoolYear } from "~/hooks/use-schoolyear";
-import { Student } from "~/types/student";
+import type { Student } from "~/types/student";
 import { useDateFormat } from "~/utils/date-format";
 import { StudentDataTableActions } from "./actions";
 import { fetchStudentColumns } from "./columns";

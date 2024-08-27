@@ -1,6 +1,6 @@
 "use client";
 
-import { Contact } from "@prisma/client";
+import type { Contact } from "@prisma/client";
 import {
   ChevronDown,
   ImageUpIcon,
@@ -64,7 +64,7 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
                 ),
                 className: "w-[600px]",
                 view: (
-                  <CreateEditContact contact={contactQuery.data as Contact} />
+                  <CreateEditContact contact={contactQuery.data!} />
                 ),
               });
             }}

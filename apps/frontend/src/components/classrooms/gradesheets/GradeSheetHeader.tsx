@@ -21,7 +21,7 @@ import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 
 export function GradeSheetHeader() {
-  const params = useParams() as { id: string };
+  const params = useParams();
   const searchParams = useSearchParams();
   const { t } = useLocale();
   const router = useRouter();

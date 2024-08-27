@@ -18,11 +18,11 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { cn } from "~/lib/utils";
 import { exportToCSV } from "~/utils/export-to-csv";
 
-type ExportButtonProps = {
+interface ExportButtonProps {
   onPdfClick?: () => void;
   onExcelClick?: () => void;
   className?: string;
-};
+}
 export function ExportButton({
   onPdfClick,
   onExcelClick,
@@ -55,12 +55,12 @@ export function ExportButton({
   );
 }
 
-type ExportButtonProps2 = {
+interface ExportButtonProps2 {
   data: unknown[];
   header: string;
   fileName: string;
   className?: string;
-};
+}
 
 export default function ExportButton2({
   data,

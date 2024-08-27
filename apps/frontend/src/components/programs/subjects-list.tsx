@@ -1,8 +1,8 @@
 "use client";
 
-type SubjectListProps = {
+interface SubjectListProps {
   className?: string;
-};
+}
 export function SubjectsList({ className }: SubjectListProps) {
   return <div></div>;
   // const classroomId = useAtomValue(classroomIdAtom);

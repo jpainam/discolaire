@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { type ColumnDef } from "@tanstack/react-table";
-import { inferProcedureOutput } from "@trpc/server";
-import { TFunction } from "i18next";
+import type {ColumnDef} from "@tanstack/react-table";
+import type { inferProcedureOutput } from "@trpc/server";
+import type { TFunction } from "i18next";
 import { Pencil, Trash2, Users } from "lucide-react";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import { toast } from "sonner";
@@ -25,7 +25,7 @@ import FlatBadge from "@repo/ui/FlatBadge";
 
 import { routes } from "~/configs/routes";
 import { getErrorMessage } from "~/lib/handle-error";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { AvatarState } from "../AvatarState";
@@ -142,7 +142,7 @@ export function getColumns({
             ) : (
               <PiGenderFemaleThin className="h-4 w-4" />
             )}
-            {t(row.getValue("gender") as string)}
+            {t(row.getValue("gender"))}
           </FlatBadge>
         );
       },

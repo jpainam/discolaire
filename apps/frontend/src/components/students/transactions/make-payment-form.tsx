@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
+import type { SubmitHandler} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
@@ -12,16 +13,17 @@ import { Form } from "@repo/ui/form";
 
 import FormFooter from "~/components/form-footer";
 import { routes } from "~/configs/routes";
+import type {
+  MakePaymentFormInput} from "./make-payment.schema";
 import {
-  MakePaymentFormInput,
   makePaymentFormSchema,
 } from "./make-payment.schema";
 
 const _defaultValues = {};
 
-type MakePaymentFormProps = {
+interface MakePaymentFormProps {
   className?: string;
-};
+}
 export function MakePaymentForm({ className }: MakePaymentFormProps) {
   const { t } = useLocale();
   const [isLoading, setLoading] = useState(false);

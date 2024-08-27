@@ -1,12 +1,12 @@
-export type Vaccine = {
+export interface Vaccine {
   name: string;
   description: string;
-};
-export type Immunization = {
+}
+export interface Immunization {
   name: string;
   description: string;
   vaccines: Record<string, string>;
-};
+}
 
 export const vaccines: Vaccine[] = [
   {

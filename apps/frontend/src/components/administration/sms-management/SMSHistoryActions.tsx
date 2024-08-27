@@ -1,7 +1,7 @@
 "use client";
 
 import { DownloadIcon, PlusIcon } from "@radix-ui/react-icons";
-import { type Table } from "@tanstack/react-table";
+import type {Table} from "@tanstack/react-table";
 import { Trash2 } from "lucide-react";
 
 import { useAlert } from "@repo/hooks/use-alert";
@@ -10,7 +10,7 @@ import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 
 import { exportTableToCSV } from "~/lib/export";
-import { SMSHistory } from "~/types/sms";
+import type { SMSHistory } from "~/types/sms";
 
 interface TasksTableToolbarActionsProps {
   table: Table<SMSHistory>;

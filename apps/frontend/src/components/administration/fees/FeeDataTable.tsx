@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
-import { RouterOutputs } from "@repo/api";
+import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";

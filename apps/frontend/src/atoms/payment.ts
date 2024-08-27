@@ -1,6 +1,6 @@
 import { atom } from "jotai";
 
-type MakePayment = {
+interface MakePayment {
   paymentMethod: string;
   transactionRef: string;
   description: string;
@@ -12,7 +12,7 @@ type MakePayment = {
     emails: string[];
     sms: string[];
   };
-};
+}
 
 export const makePaymentAtom = atom<MakePayment>({
   paymentMethod: "",

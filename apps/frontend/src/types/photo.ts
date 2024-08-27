@@ -1,8 +1,8 @@
-export type Photo = {
+export interface Photo {
   name: string;
   artist: string;
   cover: string;
-};
+}
 
 export const studentPhotos: Photo[] = [
   {

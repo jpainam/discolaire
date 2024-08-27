@@ -4,7 +4,7 @@ import { cva } from "class-variance-authority";
 import type { Tag as TagType } from "./tag-input";
 import { cn } from "..";
 import { Button } from "../button";
-import { TagInputProps, TagInputStyleClassesProps } from "./tag-input";
+import type { TagInputProps, TagInputStyleClassesProps } from "./tag-input";
 
 export const tagVariants = cva(
   "inline-flex items-center rounded-md border pl-2 text-sm transition-all",

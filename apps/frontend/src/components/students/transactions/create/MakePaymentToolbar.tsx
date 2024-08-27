@@ -19,7 +19,7 @@ import { routes } from "~/configs/routes";
 import { MakePaymentBreadCrumb } from "./breadcrumb";
 
 export default function MakePaymentToolbar() {
-  const params = useParams() as { id: string };
+  const params = useParams();
   const router = useRouter();
   const { t } = useLocale();
   return (

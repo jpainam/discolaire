@@ -14,7 +14,7 @@ import { routes } from "~/configs/routes";
 
 export const MakePaymentBreadCrumb = () => {
   const { t } = useLocale();
-  const params = useParams() as { id: string };
+  const params = useParams();
   return (
     <BreadCrumb
       orientation="horizontal"

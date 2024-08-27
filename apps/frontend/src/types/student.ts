@@ -61,10 +61,10 @@ export enum StudentTabIndex {
   FINANCES = "finances",
 }
 
-export type RegisteredStudent = {
+export interface RegisteredStudent {
   id: string;
   first_name: string;
   last_name: string;
   sex: string;
   dob: string;
-};
+}

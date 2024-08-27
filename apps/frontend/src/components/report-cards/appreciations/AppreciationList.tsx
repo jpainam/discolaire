@@ -9,7 +9,7 @@ import { ScrollArea } from "@repo/ui/scroll-area";
 import { Separator } from "@repo/ui/separator";
 
 import { api } from "~/trpc/react";
-import { AppreciationCategory } from "~/types/appreciation";
+import type { AppreciationCategory } from "~/types/appreciation";
 import { CreateEditAppreciation } from "./CreateEditAppreciation";
 
 export function AppreciationList({
@@ -57,7 +57,7 @@ export function AppreciationList({
       <Separator />
       <ScrollArea className="my-2 h-[400px] w-full px-2">
         <div className="flex flex-col gap-1">
-          {appreciationCategoriesQuery.data?.map((appreciation) => {
+          {appreciationCategoriesQuery.data.map((appreciation) => {
             return (
               <Fragment key={appreciation.id}>
                 {appreciation.id == openIdItem ? (

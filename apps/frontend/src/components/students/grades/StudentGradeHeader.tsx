@@ -72,10 +72,10 @@ export function StudentGradeHeader({
     if (!studentGradesQuery.data) return;
     if (term) {
       studentGradesQuery.data.forEach((grade) => {
-        if (grade.gradeSheet?.termId == Number(term)) {
+        if (grade.gradeSheet.termId == Number(term)) {
           gradeSum +=
-            grade.grade * (grade.gradeSheet?.subject?.coefficient || 0);
-          coeffSum += grade.gradeSheet?.subject?.coefficient || 0;
+            grade.grade * (grade.gradeSheet.subject.coefficient || 0);
+          coeffSum += grade.gradeSheet.subject.coefficient || 0;
         }
       });
       setStudentAvg(gradeSum / (coeffSum || 1e9));
@@ -117,13 +117,13 @@ export function StudentGradeHeader({
       />
       {studentAvg && (
         <FlatBadge variant={"yellow"}>
-          {t("student_general_avg")} : {studentAvg?.toFixed(2)}
+          {t("student_general_avg")} : {studentAvg.toFixed(2)}
         </FlatBadge>
       )}
 
       {classroomAvg ? (
         <FlatBadge variant={"pink"}>
-          {t("classroom_general_avg")} : {classroomAvg?.toFixed(2)}
+          {t("classroom_general_avg")} : {classroomAvg.toFixed(2)}
         </FlatBadge>
       ) : (
         <></>

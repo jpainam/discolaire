@@ -4,26 +4,27 @@ import { LabelList, Pie, PieChart } from "recharts";
 
 import { useLocale } from "@repo/i18n";
 import { Card, CardContent } from "@repo/ui/card";
+import type {
+  ChartConfig} from "@repo/ui/chart";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/chart";
 
-import { Classroom } from "~/types/classroom";
+import type { Classroom } from "~/types/classroom";
 
 export function GenderPie({ classroom }: { classroom: Classroom }) {
   const { t } = useLocale();
   const chartData = [
     {
       gender: "male",
-      count: classroom?.maleCount || 10,
+      count: classroom.maleCount || 10,
       fill: "var(--color-male)",
     },
     {
       gender: "female",
-      count: classroom?.maleCount || 20,
+      count: classroom.maleCount || 20,
       fill: "var(--color-female)",
     },
   ];
@@ -61,7 +62,7 @@ export function GenderPie({ classroom }: { classroom: Classroom }) {
                 stroke="none"
                 fontSize={12}
                 formatter={(value: keyof typeof chartConfig) =>
-                  chartConfig[value]?.label
+                  chartConfig[value].label
                 }
               />
             </Pie>

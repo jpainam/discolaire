@@ -3,13 +3,13 @@ import { Button } from "@repo/ui/button";
 
 import { cn } from "~/lib/utils";
 
-type ViewButtonProps = {
+interface ViewButtonProps {
   asLink?: boolean;
   href?: string;
   className?: string;
   target?: string;
   onClick?: () => void;
-};
+}
 export function ViewButton({
   asLink,
   href,

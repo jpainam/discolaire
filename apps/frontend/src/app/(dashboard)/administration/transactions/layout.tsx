@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
 import { TransactionHeader } from "~/components/administration/transactions/TransactionHeader";
 

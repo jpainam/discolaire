@@ -7,13 +7,13 @@ import {
 
 import { routes } from "~/configs/routes";
 
-type MenuItem = {
+interface MenuItem {
   name: string;
   href?: string;
   icon?: JSX.Element;
   badge?: string;
   dropdownItems?: MenuItem[];
-};
+}
 export const menuItems: MenuItem[] = [
   {
     name: "Program",

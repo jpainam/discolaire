@@ -1,4 +1,5 @@
-import { ForwardedRef, forwardRef } from "react";
+import type { ForwardedRef} from "react";
+import { forwardRef } from "react";
 
 import { cn } from "~/lib/utils";
 
@@ -12,7 +13,7 @@ const widgetCardClasses = {
   },
 };
 
-type WidgetCardTypes = {
+interface WidgetCardTypes {
   title?: React.ReactNode;
   description?: React.ReactNode;
   action?: React.ReactNode;
@@ -22,7 +23,7 @@ type WidgetCardTypes = {
   actionClassName?: string;
   descriptionClassName?: string;
   className?: string;
-};
+}
 
 function WidgetCard(
   {

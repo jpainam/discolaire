@@ -11,9 +11,9 @@ import {
   CommandList,
 } from "../command";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover";
-import { TagInputStyleClassesProps } from "./tag-input";
+import type { TagInputStyleClassesProps } from "./tag-input";
 
-type AutocompleteProps = {
+interface AutocompleteProps {
   tags: TagType[];
   setTags: React.Dispatch<React.SetStateAction<TagType[]>>;
   autocompleteOptions: TagType[];
@@ -23,7 +23,7 @@ type AutocompleteProps = {
   children: React.ReactNode;
   inlineTags?: boolean;
   classStyleProps: TagInputStyleClassesProps["autoComplete"];
-};
+}
 
 export const Autocomplete: React.FC<AutocompleteProps> = ({
   tags,
@@ -50,8 +50,8 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({
   useEffect(() => {
     if (!triggerContainerRef.current || !triggerRef.current) return;
     setPopoverContentTop(
-      triggerContainerRef.current?.getBoundingClientRect().bottom -
-        triggerRef.current?.getBoundingClientRect().bottom,
+      triggerContainerRef.current.getBoundingClientRect().bottom -
+        triggerRef.current.getBoundingClientRect().bottom,
     );
   }, [tags]);
 
@@ -62,7 +62,7 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({
         isPopoverOpen &&
         triggerContainerRef.current &&
         !triggerContainerRef.current.contains(event.target) &&
-        !popoverContentRef?.current?.contains(event.target)
+        !popoverContentRef.current?.contains(event.target)
       ) {
         setIsPopoverOpen(false);
       }

@@ -8,14 +8,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { Callout } from "~/components/callout";
 import { cn } from "~/lib/utils";
 
-type DeletePopoverProps = {
+interface DeletePopoverProps {
   title: string;
   description: string;
   onDelete: () => void;
   disabled?: boolean;
   className?: string;
   type?: "default" | "warning" | "danger";
-};
+}
 
 const DeletePopover = React.forwardRef(
   (

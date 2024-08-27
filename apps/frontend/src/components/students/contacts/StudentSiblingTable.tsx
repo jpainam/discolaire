@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { inferProcedureOutput } from "@trpc/server";
+import type { inferProcedureOutput } from "@trpc/server";
 
 import { getServerTranslations } from "@repo/i18n/server";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
@@ -14,7 +14,7 @@ import {
 } from "@repo/ui/table";
 
 import { routes } from "~/configs/routes";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/server";
 import { getFullName } from "~/utils/full-name";
 
@@ -65,11 +65,11 @@ export async function StudentSiblingTable({
                         className="justify-center hover:text-blue-600 hover:underline"
                         href={`${routes.students.contacts(linkedStd.studentId)}/${contact?.id}`}
                       >
-                        {student?.lastName}
+                        {student.lastName}
                       </Link>
                     </TableCell>
                     <TableCell>{linkedStd.relationship?.name}</TableCell>
-                    <TableCell>{student?.classroom?.shortName}</TableCell>
+                    <TableCell>{student.classroom?.shortName}</TableCell>
                   </TableRow>
                 );
               })}

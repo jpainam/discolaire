@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
 import { HealthHeader } from "~/components/students/health/HealthHeader";
 

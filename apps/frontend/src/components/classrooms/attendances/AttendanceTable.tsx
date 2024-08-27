@@ -69,7 +69,7 @@ export function AttendanceTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {studentsQuery.data?.map((student, index) => {
+            {studentsQuery.data.map((student, index) => {
               return (
                 <TableRow key={student.id}>
                   <TableCell className="py-0 font-medium">

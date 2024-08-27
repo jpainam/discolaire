@@ -6,9 +6,10 @@ import { useLocale } from "@repo/i18n";
 import { useDataTable } from "@repo/ui/data-table";
 
 import { api } from "~/trpc/react";
+import type {
+  GradeSheetTableType} from "./gradesheet-columns";
 import {
-  fetchGradeSheetColumns,
-  GradeSheetTableType,
+  fetchGradeSheetColumns
 } from "./gradesheet-columns";
 
 export function GradeSheetTable({ studentId }: { studentId: string }) {
@@ -24,11 +25,11 @@ export function GradeSheetTable({ studentId }: { studentId: string }) {
     > = {};
     if (!studentGradesQuery.data) return;
     studentGradesQuery.data.forEach((grade) => {
-      if (grade?.gradeSheet?.subjectId) {
-        if (!vv[grade?.gradeSheet?.subjectId]) {
-          vv[grade.gradeSheet?.subjectId] = {
+      if (grade.gradeSheet.subjectId) {
+        if (!vv[grade.gradeSheet.subjectId]) {
+          vv[grade.gradeSheet.subjectId] = {
             id: grade.gradeSheet.subjectId,
-            subject: grade.gradeSheet?.subject?.course?.name ?? "",
+            subject: grade.gradeSheet.subject.course?.name ?? "",
             observation: grade.observation ?? "",
             grades: [],
           };
@@ -51,7 +52,7 @@ export function GradeSheetTable({ studentId }: { studentId: string }) {
       });
     }
     setData(groupedGrades);
-  }, [studentGradesQuery.data]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [studentGradesQuery.data]);  
   const { table } = useDataTable({
     data: data,
     columns: columns,

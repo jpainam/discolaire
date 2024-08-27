@@ -16,7 +16,7 @@ import { sidebarIcons } from "../sidebar-icons";
 
 export function LoginInfoHeader() {
   const { t } = useLocale();
-  const Icon = sidebarIcons["login_info"];
+  const Icon = sidebarIcons.login_info;
   return (
     <div className="flex flex-row items-center bg-secondary px-2 py-1 text-secondary-foreground">
       {Icon && <Icon className="mr-2 h-6 w-6" />}

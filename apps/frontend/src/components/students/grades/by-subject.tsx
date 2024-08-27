@@ -15,7 +15,7 @@ import FlatBadge from "@repo/ui/FlatBadge";
 import { Separator } from "@repo/ui/separator";
 
 import { routes } from "~/configs/routes";
-import { Grade } from "~/types/grade";
+import type { Grade } from "~/types/grade";
 import { useDateFormat } from "~/utils/date-format";
 
 interface BySubjectProps {
@@ -37,13 +37,13 @@ export function BySubject({ grades, minMaxMoy }: BySubjectProps) {
   const [subjectSums, setSubjectSums] = useState<Record<string, number>>({});
   useEffect(() => {
     const t = Array.from(
-      new Set(grades.map((grade) => grade?.gradeSheet?.subject)),
+      new Set(grades.map((grade) => grade.gradeSheet?.subject)),
     );
     setSubjects(t);
     // Compute the average of each subject
     const computeSums: Record<string, number> = {};
     grades.forEach((grade) => {
-      const subjectId = grade?.gradeSheet?.subject?.id;
+      const subjectId = grade.gradeSheet?.subject?.id;
       if (subjectId) {
         if (!computeSums[subjectId]) {
           computeSums[subjectId] = 0;
@@ -65,7 +65,7 @@ export function BySubject({ grades, minMaxMoy }: BySubjectProps) {
         const filteredGrades =
           grades &&
           grades.filter(
-            (grade) => grade?.gradeSheet?.subject?.id === subject?.id,
+            (grade) => grade.gradeSheet?.subject?.id === subject?.id,
           );
         const subjectAvg =
           (subjectSums[subject?.id] ?? 0) / (filteredGrades.length ?? 1);
@@ -91,7 +91,7 @@ export function BySubject({ grades, minMaxMoy }: BySubjectProps) {
                       : "green"
                 }
               >
-                {Number(subjectAvg)?.toFixed(2)}
+                {Number(subjectAvg).toFixed(2)}
               </FlatBadge>
             </AccordionTrigger>
             <AccordionContent className="px-4">
@@ -131,9 +131,9 @@ function BySubjectItem({
   }[];
 }) {
   const { monthFormatter, dayFormatter } = useDateFormat();
-  const m = monthFormatter.format(grade?.createdAt ?? new Date());
-  const d = dayFormatter.format(grade?.createdAt ?? new Date());
-  const params = useParams() as { id: string; gradeId: string };
+  const m = monthFormatter.format(grade.createdAt ?? new Date());
+  const d = dayFormatter.format(grade.createdAt ?? new Date());
+  const params = useParams();
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
   return (
@@ -160,7 +160,7 @@ function BySubjectItem({
           coef: grade.gradeSheet?.subject?.coefficient?.toString() ?? "-",
         };
         router.push(
-          `${routes.students.grades(params.id)}/${grade?.id}/?${createQueryString({ ...query })}`,
+          `${routes.students.grades(params.id)}/${grade.id}/?${createQueryString({ ...query })}`,
         );
       }}
     >
@@ -169,12 +169,12 @@ function BySubjectItem({
         <div>{m}</div>
       </div>
       <div className="flex flex-col">
-        <div className="text-sm font-semibold">{grade?.gradeSheet?.name}</div>
+        <div className="text-sm font-semibold">{grade.gradeSheet?.name}</div>
         <div className="tracking-tighter text-muted-foreground">
-          {grade?.gradeSheet?.term?.name}
+          {grade.gradeSheet?.term?.name}
         </div>
       </div>
-      <div className="ml-auto font-bold">{grade?.grade}</div>
+      <div className="ml-auto font-bold">{grade.grade}</div>
     </div>
   );
 }

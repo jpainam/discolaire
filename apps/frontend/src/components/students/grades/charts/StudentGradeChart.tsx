@@ -1,15 +1,16 @@
 "use client";
 
 import { Card, CardContent } from "@repo/ui/card";
+import type {
+  ChartConfig} from "@repo/ui/chart";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/chart";
 import { Area, AreaChart, CartesianGrid } from "recharts";
 
-import { Grade } from "~/types/grade";
+import type { Grade } from "~/types/grade";
 
 const chartData = [
   { month: "January", desktop: 186, mobile: 80 },

@@ -1,8 +1,8 @@
 "use client";
 
 import { useMemo } from "react";
-import { User } from "@prisma/client";
-import { ColumnDef } from "@tanstack/react-table";
+import type { User } from "@prisma/client";
+import type { ColumnDef } from "@tanstack/react-table";
 
 import { useLocale } from "@repo/i18n";
 

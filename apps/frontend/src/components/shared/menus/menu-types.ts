@@ -1,8 +1,8 @@
-import { IconType } from "react-icons";
+import type { IconType } from "react-icons";
 
-export type SideMenuType = {
+export interface SideMenuType {
   title?: string;
   href?: string;
   icon?: IconType;
   badge?: string;
-};
+}

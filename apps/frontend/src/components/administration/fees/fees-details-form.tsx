@@ -1,7 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Fee } from "@prisma/client";
+import type { Fee } from "@prisma/client";
 import { Save } from "lucide-react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import type { SubmitHandler} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { useLocale } from "@repo/i18n";
@@ -55,7 +56,7 @@ export function FeesDetailsForm({ fee }: { fee?: Fee }) {
     data: EditFeeFormValues,
   ) => {
     console.log(data);
-    fee && fee.id && true;
+    fee?.id && true;
     // toast.promise(
     //   updateFee(fee.id, {
     //     code: data.code,

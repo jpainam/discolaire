@@ -23,8 +23,8 @@ import { routes } from "~/configs/routes";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function SubjectDetailsHeader() {
-  const Icon = sidebarIcons["programs"];
-  const params = useParams() as { id: string; subjectId: string };
+  const Icon = sidebarIcons.programs;
+  const params = useParams();
   const { t } = useLocale();
   const breadcrumbs = [
     { label: t("classroom"), href: routes.classrooms.details(params.id) },

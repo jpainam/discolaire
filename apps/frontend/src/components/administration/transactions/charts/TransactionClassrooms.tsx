@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo } from "react";
-import { inferProcedureOutput } from "@trpc/server";
+import type { inferProcedureOutput } from "@trpc/server";
 import _ from "lodash";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
@@ -13,15 +13,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/card";
+import type {
+  ChartConfig} from "@repo/ui/chart";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/chart";
 import { Skeleton } from "@repo/ui/skeleton";
 
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
 type TransactionQuotaProcedureOutput = NonNullable<

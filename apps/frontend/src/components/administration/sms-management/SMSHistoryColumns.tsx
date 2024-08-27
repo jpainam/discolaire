@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { ColumnDef, Row } from "@tanstack/react-table";
-import { TFunction } from "i18next";
+import type { ColumnDef, Row } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import { Eye, MoreVertical, Send, Trash2 } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
@@ -15,7 +15,7 @@ import {
 } from "@repo/ui/dropdown-menu";
 
 import { routes } from "~/configs/routes";
-import { SMSHistory } from "~/types/sms";
+import type { SMSHistory } from "~/types/sms";
 
 export function fetchSmsHistoryColumns({
   t,

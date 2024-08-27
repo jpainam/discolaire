@@ -12,7 +12,7 @@ const metricCardClasses = {
   },
 };
 
-type MetricCardTypes = {
+interface MetricCardTypes {
   title: string;
   metric: React.ReactNode;
   icon?: React.ReactNode;
@@ -25,7 +25,7 @@ type MetricCardTypes = {
   metricClassName?: string;
   chartClassName?: string;
   className?: string;
-};
+}
 
 export default function MetricCard({
   title,

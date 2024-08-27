@@ -14,11 +14,11 @@ import {
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { api } from "~/trpc/react";
-import { Student } from "~/types/student";
+import type { Student } from "~/types/student";
 
 export function StudentFooter() {
   const { t, i18n } = useLocale();
-  const params = useParams() as { id: string };
+  const params = useParams();
   const studentQuery = api.student.get.useQuery(params.id);
   //const studentsQuery = api.student.all.useQuery();
 
@@ -50,10 +50,10 @@ export function StudentFooter() {
   return (
     <>
       <div className="text-xs text-muted-foreground">
-        {studentQuery.data?.updatedAt && t("lastUpdatedAt")}{" "}
-        {studentQuery.data?.updatedAt && (
-          <time dateTime={new Date(studentQuery.data?.updatedAt).toISOString()}>
-            {dateFormatter.format(new Date(studentQuery.data?.updatedAt))}
+        {studentQuery.data.updatedAt && t("lastUpdatedAt")}{" "}
+        {studentQuery.data.updatedAt && (
+          <time dateTime={new Date(studentQuery.data.updatedAt).toISOString()}>
+            {dateFormatter.format(new Date(studentQuery.data.updatedAt))}
           </time>
         )}
       </div>
