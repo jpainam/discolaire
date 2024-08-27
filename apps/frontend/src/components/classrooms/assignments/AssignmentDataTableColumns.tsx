@@ -1,6 +1,11 @@
+import type { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import { useTransition } from "react";
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import i18next from "i18next";
+
+import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
@@ -16,16 +21,12 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
-import { ColumnDef } from "@tanstack/react-table";
-import { inferProcedureOutput } from "@trpc/server";
-import i18next, { TFunction } from "i18next";
 
 import { routes } from "~/configs/routes";
-import { AppRouter } from "~/server/api/root";
 
 type ClassroomGetAssignemntProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["classroom"]["assignments"]>
->[number];
+  RouterOutputs["classroom"]["assignments"][number]
+>;
 
 export function fetchAssignmentTableColumns({
   t,
@@ -75,7 +76,7 @@ export function fetchAssignmentTableColumns({
       ),
       cell: ({ row }) => {
         const subject = row.original.subject;
-        return <div>{subject?.course?.shortName}</div>;
+        return <div>{subject.course?.shortName}</div>;
       },
     },
     {
@@ -156,7 +157,6 @@ function ActionsCell({
   assignment: ClassroomGetAssignemntProcedureOutput;
 }) {
   const [isUpdatePending, startUpdateTransition] = useTransition();
-  const [isDeletePending, startDeleteTransition] = useTransition();
 
   return (
     <DropdownMenu>
@@ -175,7 +175,7 @@ function ActionsCell({
           <DropdownMenuSubContent>
             <DropdownMenuRadioGroup
               value={assignment.title}
-              onValueChange={(value) => {
+              onValueChange={(_value) => {
                 startUpdateTransition(() => {
                   //   toast.promise(
                   //     new Promise((resolve) => setTimeout(resolve, 5000)),
@@ -224,7 +224,6 @@ function ActionsCell({
             //   );
             // });
           }}
-          disabled={isDeletePending}
         >
           Delete
         </DropdownMenuItem>

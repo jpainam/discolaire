@@ -1,11 +1,8 @@
-import { notFound } from "next/navigation";
+import { checkPermissions } from "@repo/api/permission";
 
 import { ClassroomDetails } from "~/components/classrooms/ClassroomDetails";
 import EnrollmentDataTable from "~/components/classrooms/enrollments/EnrollmentDataTable";
 import { EnrollmentHeader } from "~/components/classrooms/enrollments/EnrollmentHeader";
-import { checkPermissions } from "~/server/permission";
-import { api } from "~/trpc/server";
-import { Classroom } from "~/types/classroom";
 import { PermissionAction } from "~/types/permission";
 
 export default async function Page({
@@ -13,15 +10,12 @@ export default async function Page({
 }: {
   params: { id: string };
 }) {
-  const classroom = (await api.classroom.get(id)) as Classroom;
+  // const classroom = await api.classroom.get(id);
   const canReadEnrollment = await checkPermissions(
     PermissionAction.READ,
     "classroom:enrollment",
   );
 
-  if (!classroom) {
-    notFound();
-  }
   return (
     <div className="flex w-full flex-col">
       <ClassroomDetails classroomId={id} />

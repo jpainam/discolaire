@@ -1,23 +1,22 @@
 "use client";
 
 import { useMemo } from "react";
-import { inferProcedureOutput } from "@trpc/server";
 
+import type { RouterOutputs } from "@repo/api";
+import type { DataTableFilterField } from "@repo/ui/data-table/types";
 import { useLocale } from "@repo/i18n";
-import { useDataTable } from "@repo/ui/data-table";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
-import { DataTableFilterField } from "@repo/ui/data-table/types";
+import { useDataTable } from "@repo/ui/data-table/index";
 
-import { AppRouter } from "~/server/api/root";
+import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { EnrollmentDataTableActions } from "./EnrollmentDataTableActions";
 import { fetchEnrollmentColumns } from "./EnrollmentDataTableColumns";
 
-type ClassroomStudentProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["classroom"]["students"]>
->[number];
+type ClassroomStudentProcedureOutput =
+  RouterOutputs["classroom"]["students"][number];
 
 export default function EnrollmentDataTable({
   classroomId,
@@ -51,14 +50,14 @@ export default function EnrollmentDataTable({
   const columns = useMemo(() => {
     const columns = fetchEnrollmentColumns({
       t: t,
-      canUnEnrollStudent: true,
+      //canUnEnrollStudent: true,
     });
     return columns;
   }, [t]); // eslint-disable-line react-hooks/exhaustive-deps
-  const pageCount = classroomStudentsQuery.data?.length || 0 / 50;
+  const pageCount = classroomStudentsQuery.data?.length ?? 0 / 50;
 
   const { table } = useDataTable({
-    data: classroomStudentsQuery.data || [],
+    data: classroomStudentsQuery.data ?? [],
     columns: columns,
     filterFields: filterFields,
     pageCount: pageCount,
@@ -68,7 +67,8 @@ export default function EnrollmentDataTable({
     return <DataTableSkeleton rowCount={15} columnCount={7} />;
   }
   if (classroomStudentsQuery.error) {
-    throw classroomStudentsQuery.error;
+    showErrorToast(classroomStudentsQuery.error);
+    return;
   }
   return (
     <div className="p-1">

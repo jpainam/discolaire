@@ -1,21 +1,20 @@
 "use client";
 
+import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
-import { ColumnDef } from "@tanstack/react-table";
-import { inferProcedureOutput } from "@trpc/server";
 
+import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
-import { useDataTable } from "@repo/ui/data-table";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
+import { useDataTable } from "@repo/ui/data-table/index";
 
-import { AppRouter } from "~/server/api/root";
 import { AssignmentDataTableActions } from "./AssignmentDataTableActions";
 import { fetchAssignmentTableColumns } from "./AssignmentDataTableColumns";
 
 type ClassroomGetAssignemntProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["classroom"]["assignments"]>
->[number];
+  RouterOutputs["classroom"]["assignments"][number]
+>;
 
 export function AssignmentDataTable({
   assignments,

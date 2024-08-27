@@ -1,8 +1,7 @@
 "use client";
 
-import * as React from "react";
-import { useSearchParams } from "next/navigation";
 import { Check, ChevronsUpDown } from "lucide-react";
+import * as React from "react";
 
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -20,14 +19,14 @@ import { Skeleton } from "@repo/ui/skeleton";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
-type SelectCoursesProps = {
+interface SelectCoursesProps {
   placeholder?: string;
   className?: string;
   defaultValue?: string;
   contentClassName?: string;
   onChange?: (value: string) => void;
   disabled?: boolean;
-};
+}
 export function CourseSelector({
   placeholder,
   className,
@@ -38,7 +37,6 @@ export function CourseSelector({
 }: SelectCoursesProps) {
   const coursesQuery = api.course.all.useQuery();
 
-  const searchParams = useSearchParams();
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState(defaultValue);
   const data = coursesQuery.data;
@@ -63,7 +61,7 @@ export function CourseSelector({
         >
           {value
             ? data?.find((d) => d.id === value)?.name
-            : placeholder || t("select_an_option")}
+            : (placeholder ?? t("select_an_option"))}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -73,7 +71,7 @@ export function CourseSelector({
       >
         <Command>
           <CommandInput
-            placeholder={placeholder || t("search_for_an_option")}
+            placeholder={placeholder ?? t("search_for_an_option")}
           />
           <CommandEmpty>{t("not_found")}</CommandEmpty>
           <CommandGroup>
@@ -82,7 +80,7 @@ export function CourseSelector({
                 <CommandItem
                   key={d.id}
                   //value={`${d.id}`}
-                  onSelect={(currentValue) => {
+                  onSelect={(_currentValue) => {
                     setValue(d.id === value ? "" : `${d.id}`);
                     onChange?.(d.id === value ? "" : `${d.id}`);
                     setOpen(false);
@@ -98,10 +96,10 @@ export function CourseSelector({
                     <div
                       className="flex h-4 w-4 rounded-full"
                       style={{
-                        backgroundColor: d?.color ?? "lightgray",
+                        backgroundColor: d.color ?? "lightgray",
                       }}
                     ></div>
-                    <div> {d?.name}</div>
+                    <div> {d.name}</div>
                   </div>
                 </CommandItem>
               ))}

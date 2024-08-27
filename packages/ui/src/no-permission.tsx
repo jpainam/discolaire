@@ -1,7 +1,9 @@
+"use client";
+
 import { Mail, TriangleAlert } from "lucide-react";
 import { toast } from "sonner";
 
-import { getServerTranslations } from "@repo/i18n/server";
+import { useLocale } from "@repo/i18n";
 
 import { Alert, AlertDescription } from "./alert";
 import { Button } from "./button";
@@ -14,12 +16,12 @@ interface NoPermissionProps {
   className?: string;
 }
 
-export const NoPermission = async ({
+export const NoPermission = ({
   resourceText,
   isFullPage = false,
   className,
 }: NoPermissionProps) => {
-  const { t } = await getServerTranslations();
+  const { t } = useLocale();
   const NoPermissionMessage = ({ className }: { className?: string }) => (
     <Card className={cn("max-w-[450px] justify-center", className)}>
       <CardHeader className="flex flex-row items-start border-b bg-muted/50 p-2">

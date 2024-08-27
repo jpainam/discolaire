@@ -73,8 +73,8 @@ export const StaffSelector = ({
           <div className="flex w-full gap-1">
             <p className="text-foreground">
               {value
-                ? getFullName(staffs?.find((staff) => staff.id === value))
-                : placeholder || t("select_an_option")}
+                ? getFullName(staffs.find((staff) => staff.id === value))
+                : (placeholder ?? t("select_an_option"))}
             </p>
           </div>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -88,22 +88,20 @@ export const StaffSelector = ({
       >
         <Command>
           <CommandInput
-            placeholder={searchPlaceholder || t("search_for_an_option")}
+            placeholder={searchPlaceholder ?? t("search_for_an_option")}
           />
           <CommandList>
             <CommandEmpty>{t("not_found")}</CommandEmpty>
             <CommandGroup>
-              <ScrollArea
-                className={(staffs || []).length > 7 ? "h-[350px]" : ""}
-              >
-                {staffs?.map((staff) => (
+              <ScrollArea className={staffs.length > 7 ? "h-[350px]" : ""}>
+                {staffs.map((staff) => (
                   <CommandItem
                     key={staff.id}
                     className="flex w-full cursor-pointer items-center justify-between space-x-2"
                     onSelect={() => {
                       setValue(staff.id);
                       setOpen(false);
-                      onChange && onChange(staff.id);
+                      onChange?.(staff.id);
                     }}
                   >
                     <span>{getFullName(staff)}</span>

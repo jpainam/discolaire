@@ -1,11 +1,11 @@
+import type { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import { useParams } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
-import { ColumnDef } from "@tanstack/react-table";
-import { inferProcedureOutput } from "@trpc/server";
-import i18next, { TFunction } from "i18next";
+import i18next from "i18next";
 import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { useAlert } from "@repo/hooks/use-alert";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
@@ -25,20 +25,16 @@ import { AvatarState } from "~/components/AvatarState";
 import { StudentCard } from "~/components/students/StudentCard";
 import { routes } from "~/configs/routes";
 import { getErrorMessage } from "~/lib/handle-error";
-import { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 
-type ClassroomStudentProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["classroom"]["students"]>
->[number];
+type ClassroomStudentProcedureOutput =
+  RouterOutputs["classroom"]["students"][number];
 
 export function fetchEnrollmentColumns({
   t,
-  canUnEnrollStudent,
 }: {
   t: TFunction<string, unknown>;
-  canUnEnrollStudent: boolean;
 }): ColumnDef<ClassroomStudentProcedureOutput>[] {
   const dateFormater = Intl.DateTimeFormat(i18next.language, {
     year: "numeric",
@@ -161,7 +157,7 @@ export function fetchEnrollmentColumns({
             className="w-[70px] items-center justify-center"
             variant={student.gender == "female" ? "pink" : "green"}
           >
-            {t(student.gender || "male")}
+            {t(student.gender ?? "male")}
           </FlatBadge>
         );
       },
@@ -186,8 +182,7 @@ export function fetchEnrollmentColumns({
 }
 
 function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
-  const queryClient = useQueryClient();
-  const params = useParams() as { id: string };
+  const params = useParams<{ id: string }>();
   const { t } = useLocale();
   const router = useRouter();
   const unenrollStudentsMutation =

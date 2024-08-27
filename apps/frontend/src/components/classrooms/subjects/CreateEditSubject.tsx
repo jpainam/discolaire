@@ -2,11 +2,11 @@
 
 import { useParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Subject } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import type { RouterOutputs } from "@repo/api";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -36,17 +36,18 @@ const createEditSubjectSchema = z.object({
   order: z.string().min(1).optional(),
 });
 type CreateEditSubjectValue = z.infer<typeof createEditSubjectSchema>;
+type Subject = NonNullable<RouterOutputs["subject"]["get"]>;
 
 export function CreateEditSubject({ subject }: { subject?: Subject }) {
   const { t } = useLocale();
   const { closeSheet } = useSheet();
   const form = useForm<CreateEditSubjectValue>({
     defaultValues: {
-      courseId: subject?.courseId?.toString() || "",
-      teacherId: subject?.teacherId?.toString() || "",
-      subjectGroupId: subject?.subjectGroupId?.toString() || "",
-      coefficient: subject?.coefficient?.toString() || "",
-      order: subject?.order?.toString() || "",
+      courseId: subject?.courseId?.toString() ?? "",
+      teacherId: subject?.teacherId?.toString() ?? "",
+      subjectGroupId: subject?.subjectGroupId?.toString() ?? "",
+      coefficient: subject?.coefficient?.toString() ?? "",
+      order: subject?.order?.toString() ?? "",
     },
     resolver: zodResolver(createEditSubjectSchema),
   });
@@ -55,13 +56,13 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
   const subjectCreateMutation = api.subject.create.useMutation();
   const subjectUpdateMutation = api.subject.update.useMutation();
 
-  const params = useParams() as { id: string };
+  const params = useParams<{ id: string }>();
 
   const onSubmit = (data: CreateEditSubjectValue) => {
     const formValues = {
       courseId: data.courseId,
       teacherId: data.teacherId,
-      classroomId: params.id as string,
+      classroomId: params.id,
       subjectGroupId: Number(data.subjectGroupId),
       order: Number(data.order),
       coefficient: Number(data.coefficient),
@@ -114,7 +115,7 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
                 <FormLabel>{t("course")}</FormLabel>
                 <FormControl>
                   <CourseSelector
-                    defaultValue={subject?.courseId || undefined}
+                    defaultValue={subject?.courseId ?? undefined}
                     onChange={field.onChange}
                     className="w-full"
                   />
@@ -131,7 +132,7 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
                 <FormLabel>{t("teacher")}</FormLabel>
                 <FormControl>
                   <StaffSelector
-                    defaultValue={subject?.teacherId || undefined}
+                    defaultValue={subject?.teacherId ?? undefined}
                     onChange={field.onChange}
                   />
                 </FormControl>
@@ -154,10 +155,10 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
               name="subjectGroupId"
               placeholder={t("select_an_option")}
               items={
-                subjectGroupsQuery?.data?.map((group) => ({
+                subjectGroupsQuery.data?.map((group) => ({
                   label: group.name,
                   value: group.id.toString(),
-                })) || []
+                })) ?? []
               }
               description={t("subject_group_description")}
             />
