@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import type { Tag as TagType } from "./tag-input";
+import type { TagInputStyleClassesProps, Tag as TagType } from "./tag-input";
+import type { TagListProps } from "./tag-list";
 import { cn } from "..";
 import { Button } from "../button";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover";
-import type { TagInputStyleClassesProps } from "./tag-input";
-import type { TagListProps } from "./tag-list";
 import { TagList } from "./tag-list";
 
 type TagPopoverProps = {

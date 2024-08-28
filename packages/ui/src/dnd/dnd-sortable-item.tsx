@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/unbound-method */
 import type {
   DraggableSyntheticListeners,
   UniqueIdentifier,
@@ -16,6 +18,7 @@ interface Props {
 }
 
 interface Context {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   attributes: Record<string, any>;
   listeners: DraggableSyntheticListeners;
   ref(node: HTMLElement | null): void;

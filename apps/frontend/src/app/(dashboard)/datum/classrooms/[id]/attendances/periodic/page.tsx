@@ -9,6 +9,8 @@ export default async function Page({
   params: { id: string };
 }) {
   const students = await api.classroom.students(params.id);
+  console.log(students);
+  console.log(searchParams);
   return (
     <div className="flex flex-col gap-2 px-2 py-1">
       <AttendanceStudentTable classroomId={params.id} />

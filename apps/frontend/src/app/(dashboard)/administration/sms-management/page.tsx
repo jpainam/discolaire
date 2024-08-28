@@ -1,5 +1,4 @@
 import { Siren, Terminal } from "lucide-react";
-import { z } from "zod";
 
 import { getServerTranslations } from "@repo/i18n/server";
 import { Alert, AlertDescription, AlertTitle } from "@repo/ui/alert";
@@ -9,20 +8,16 @@ import { Card, CardContent, CardHeader } from "@repo/ui/card";
 import { SMSHistoryDataTable } from "~/components/administration/sms-management/SMSHistoryDataTable";
 import { SMSHistoryHeader } from "~/components/administration/sms-management/SMSHistoryHeader";
 
-const smsHistorySchema = z.object({
-  per_page: z.number().optional(),
-  page: z.number().optional(),
-  name: z.string().optional(),
-});
-type SMSHistoryType = z.infer<typeof smsHistorySchema>;
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: SMSHistoryType;
-}) {
+// const smsHistorySchema = z.object({
+//   per_page: z.number().optional(),
+//   page: z.number().optional(),
+//   name: z.string().optional(),
+// });
+//type SMSHistoryType = z.infer<typeof smsHistorySchema>;
+export default async function Page() {
   //const smsHistory = await getSMSHistory();
   const { t } = await getServerTranslations("admin");
-  const d = new Date();
+  //const d = new Date();
   const f = [];
   for (let i = 0; i < 10; i++) {
     f.push({
@@ -33,7 +28,7 @@ export default async function Page({
       createdAt: new Date(),
     });
   }
-  const balance = 40;
+  //const balance = 40;
   return (
     <Card>
       <CardHeader className="flex flex-col items-start border-b bg-muted/50 px-2 py-1">
@@ -48,7 +43,7 @@ export default async function Page({
         </div>
         <Alert
           className="p-2"
-          variant={balance < 3000 ? "destructive" : "default"}
+          //variant={balance < 3000 ? "destructive" : "default"}
         >
           <Terminal className="h-4 w-4" />
           <AlertTitle>{t("sms_balance")}</AlertTitle>

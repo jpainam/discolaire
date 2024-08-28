@@ -188,7 +188,7 @@ export function useDataTable<TData, TValue>({
   // Table states
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>(visibleColumns ?? {});
+    React.useState<VisibilityState>(visibleColumns);
   const [columnFilters, setColumnFilters] =
     React.useState<ColumnFiltersState>(initialColumnFilters);
 
@@ -311,7 +311,7 @@ export function useDataTable<TData, TValue>({
   const table = useReactTable({
     data,
     columns,
-    pageCount: pageCount ?? -1,
+    pageCount: pageCount,
     state: {
       pagination,
       sorting,

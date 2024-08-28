@@ -1,12 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-unsafe-enum-comparison */
+import type { VariantProps } from "class-variance-authority";
 import React from "react";
-import type {VariantProps} from "class-variance-authority";
 
+import type { tagVariants } from "./tag";
 import { Button } from "../button";
 import { CommandInput } from "../command";
 import { Input } from "../input";
 import { cn, uuid } from "../utils";
 import { Autocomplete } from "./autocomplete";
-import type { tagVariants } from "./tag";
 import { TagList } from "./tag-list";
 import { TagPopover } from "./tag-popover";
 
@@ -246,7 +249,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
               const newTags = [...tags];
               newTags.splice(activeTagIndex, 1);
               setTags(newTags);
-              setActiveTagIndex((prev) => (prev! === 0 ? null : prev! - 1));
+              setActiveTagIndex((prev) => (prev === 0 ? null : prev! - 1));
             }
             break;
           case "ArrowRight":
@@ -265,7 +268,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
               setActiveTagIndex(tags.length - 1);
             } else {
               setActiveTagIndex((prev) =>
-                prev! === 0 ? tags.length - 1 : prev! - 1,
+                prev === 0 ? tags.length - 1 : prev! - 1,
               );
             }
             break;
@@ -283,7 +286,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
 
     const removeTag = (idToRemove: string) => {
       setTags(tags.filter((tag) => tag.id !== idToRemove));
-      onTagRemove?.(tags.find((tag) => tag.id === idToRemove)?.text || "");
+      onTagRemove?.(tags.find((tag) => tag.id === idToRemove)?.text ?? "");
       setTagCount((prevTagCount) => prevTagCount - 1);
     };
 
@@ -419,7 +422,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
                       enableAutocomplete ? "autocomplete-options" : undefined
                     }
                     disabled={
-                      disabled ||
+                      disabled ??
                       (maxTags !== undefined && tags.length >= maxTags)
                     }
                   />
@@ -457,7 +460,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
                     ref={inputRef}
                     value={inputValue}
                     disabled={
-                      disabled ||
+                      disabled ??
                       (maxTags !== undefined && tags.length >= maxTags)
                     }
                     onChangeCapture={handleInputChange}
@@ -511,7 +514,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
                       ref={inputRef}
                       value={inputValue}
                       disabled={
-                        disabled ||
+                        disabled ??
                         (maxTags !== undefined && tags.length >= maxTags)
                       }
                       onChangeCapture={handleInputChange}
@@ -562,7 +565,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
                     ref={inputRef}
                     value={inputValue}
                     disabled={
-                      disabled ||
+                      disabled ??
                       (maxTags !== undefined && tags.length >= maxTags)
                     }
                     onChangeCapture={handleInputChange}
@@ -605,7 +608,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
                   autoComplete={enableAutocomplete ? "on" : "off"}
                   list={enableAutocomplete ? "autocomplete-options" : undefined}
                   disabled={
-                    disabled ||
+                    disabled ??
                     (maxTags !== undefined && tags.length >= maxTags)
                   }
                 />
@@ -654,7 +657,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
                   autoComplete={enableAutocomplete ? "on" : "off"}
                   list={enableAutocomplete ? "autocomplete-options" : undefined}
                   disabled={
-                    disabled ||
+                    disabled ??
                     (maxTags !== undefined && tags.length >= maxTags)
                   }
                   className={cn(

@@ -1,16 +1,17 @@
 "use client";
 
-import { ReactNode, useMemo, useState } from "react";
+import type { ReactNode } from "react";
+import { useMemo, useState } from "react";
 import { AnimatePresence, motion, MotionConfig } from "framer-motion";
 import useMeasure from "react-use-measure";
 
 import { cn } from ".";
 
-type Tab = {
+interface Tab {
   id: number;
   label: ReactNode;
   content: ReactNode;
-};
+}
 
 interface OgImageSectionProps {
   tabs: Tab[];
@@ -32,7 +33,7 @@ function DirectionAwareTabs({
 
   const content = useMemo(() => {
     const activeTabContent = tabs.find((tab) => tab.id === activeTab)?.content;
-    return activeTabContent || null;
+    return activeTabContent ?? null;
   }, [activeTab, tabs]);
 
   const handleTabClick = (newTabId: number) => {
@@ -40,7 +41,7 @@ function DirectionAwareTabs({
       const newDirection = newTabId > activeTab ? 1 : -1;
       setDirection(newDirection);
       setActiveTab(newTabId);
-      onChange ? onChange() : null;
+      onChange?.();
     }
   };
 
