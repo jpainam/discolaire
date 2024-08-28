@@ -13,17 +13,17 @@ import {
 } from "@repo/ui/pagination";
 import { Skeleton } from "@repo/ui/skeleton";
 
-import { api } from "~/trpc/react";
 import type { Student } from "~/types/student";
+import { api } from "~/trpc/react";
 
 export function StudentFooter() {
   const { t, i18n } = useLocale();
-  const params = useParams();
+  const params = useParams<{ id: string }>();
   const studentQuery = api.student.get.useQuery(params.id);
   //const studentsQuery = api.student.all.useQuery();
 
-  const [prevStudent, setPrevStudent] = useState<Student | null>(null);
-  const [nextStudent, setNextStudent] = useState<Student | null>(null);
+  const [prevStudent, _setPrevStudent] = useState<Student | null>(null);
+  const [nextStudent, _setNextStudent] = useState<Student | null>(null);
   const pathname = usePathname();
   const router = useRouter();
   useEffect(() => {
@@ -46,14 +46,14 @@ export function StudentFooter() {
   if (studentQuery.isPending) {
     return <Skeleton className="h-full w-full" />;
   }
-  if (!params.id) return null;
+  const student = studentQuery.data;
   return (
     <>
       <div className="text-xs text-muted-foreground">
-        {studentQuery.data.updatedAt && t("lastUpdatedAt")}{" "}
-        {studentQuery.data.updatedAt && (
-          <time dateTime={new Date(studentQuery.data.updatedAt).toISOString()}>
-            {dateFormatter.format(new Date(studentQuery.data.updatedAt))}
+        {student?.updatedAt && t("lastUpdatedAt")}{" "}
+        {student?.updatedAt && (
+          <time dateTime={new Date(student.updatedAt).toISOString()}>
+            {dateFormatter.format(new Date(student.updatedAt))}
           </time>
         )}
       </div>
@@ -64,8 +64,8 @@ export function StudentFooter() {
               disabled={!prevStudent}
               size="icon"
               onClick={() => {
-                prevStudent &&
-                  router.push(pathname.replace(params.id, prevStudent.id));
+                if (!prevStudent) return;
+                router.push(pathname.replace(params.id, prevStudent.id));
               }}
               variant="outline"
               className="h-6 w-8"
@@ -78,8 +78,8 @@ export function StudentFooter() {
             <Button
               disabled={!nextStudent}
               onClick={() => {
-                nextStudent &&
-                  router.push(pathname.replace(params.id, nextStudent.id));
+                if (!nextStudent) return;
+                router.push(pathname.replace(params.id, nextStudent.id));
               }}
               size="icon"
               variant="outline"

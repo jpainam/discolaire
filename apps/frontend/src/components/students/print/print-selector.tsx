@@ -5,7 +5,6 @@ import { useState } from "react";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { useFormContext } from "react-hook-form";
 
-import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   Command,
@@ -30,7 +29,7 @@ import { studentPrintOptions } from "./print-selector-old";
 
 export default function PrintSelector({ className }: { className?: string }) {
   const form = useFormContext();
-  const { t } = useLocale();
+
   const [open, setOpen] = useState(false);
   return (
     <>

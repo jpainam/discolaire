@@ -12,17 +12,16 @@ import { Button } from "@repo/ui/button";
 import { Form } from "@repo/ui/form";
 
 import { routes } from "~/configs/routes";
-import { useSchoolYear } from "~/hooks/use-schoolyear";
 import PrintSelector from "./print-selector";
 import PrintTypeRadio from "./print-type-radio";
 import SchoolYearSelector from "./school-year-selector";
 
-type PrintStart =
-  | "Maintenant"
-  | "En soirée"
-  | "Demain matin"
-  | "En fin de semaine"
-  | "Personnalisé";
+// type PrintStart =
+//   | "Maintenant"
+//   | "En soirée"
+//   | "Demain matin"
+//   | "En fin de semaine"
+//   | "Personnalisé";
 const printFormSchema = z.object({
   type: z.enum(["pdf", "excel"], {
     required_error: "Veuillez choisir un type d'impression",
@@ -46,14 +45,14 @@ const printFormSchema = z.object({
 type PrintFormValues = z.infer<typeof printFormSchema>;
 
 export default function PrintForm() {
-  const schoolYearId = useSchoolYear();
+  //const schoolYearId = useSchoolYear();
   const { t } = useLocale();
 
   const defaultValues: Partial<PrintFormValues> = {
     type: "pdf",
     date: new Date(),
     start: "Maintenant",
-    school_year: schoolYearId ?? "",
+    school_year: "2022-2023",
   };
 
   const form = useForm<PrintFormValues>({

@@ -7,7 +7,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
 
 import { cn } from "~/lib/utils";
 
-export async function ReportCardSummary({ reportCard }: { reportCard: any[] }) {
+export async function ReportCardSummary() {
   const { t } = await getServerTranslations();
   const rowClassName = "border text-center text-sm";
   return (

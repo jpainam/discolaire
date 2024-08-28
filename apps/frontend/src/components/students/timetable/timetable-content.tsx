@@ -1,4 +1,4 @@
-export default async function TimeTableContent() {
+export default function TimeTableContent() {
   /*await new Promise((resolve) => {
     setTimeout(resolve, 3000);
   });*/

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Check } from "lucide-react";
 import { toast } from "sonner";
 
+import { RouterOutputs } from "@repo/api";
 import { useDebounce } from "@repo/hooks/use-debounce";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
@@ -28,11 +29,15 @@ import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 
+type Contact = NonNullable<
+  RouterOutputs["student"]["unlinkedContacts"]
+>[number];
+
 export function LinkContact({ studentId }: { studentId: string }) {
   const { t } = useLocale();
   const [value, setValue] = useState("");
   const debounceValue = useDebounce(value, 500);
-  const [selectedContacts, setSelectedContacts] = React.useState<any[]>([]);
+  const [selectedContacts, setSelectedContacts] = React.useState<Contact[]>([]);
   const [relationship, setRelationship] = useState<string | null>(null);
 
   const studentUnLinkedContact = api.student.unlinkedContacts.useQuery({

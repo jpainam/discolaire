@@ -1,4 +1,4 @@
-export default async function AcademicContent() {
+export default function AcademicContent() {
   /*await new Promise((resolve) => {
     setTimeout(resolve, 3000);
   });*/

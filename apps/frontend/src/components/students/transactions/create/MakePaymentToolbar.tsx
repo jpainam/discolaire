@@ -4,7 +4,6 @@ import { useParams } from "next/navigation";
 import { Forward, MoreVertical, Plus, Reply } from "lucide-react";
 
 import { useRouter } from "@repo/hooks/use-router";
-import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -19,9 +18,9 @@ import { routes } from "~/configs/routes";
 import { MakePaymentBreadCrumb } from "./breadcrumb";
 
 export default function MakePaymentToolbar() {
-  const params = useParams();
+  const params = useParams<{ id: string }>();
   const router = useRouter();
-  const { t } = useLocale();
+
   return (
     <div className="flex flex-row items-center gap-4 border-b bg-muted/50 px-4 py-1">
       <MakePaymentBreadCrumb />

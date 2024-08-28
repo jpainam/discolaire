@@ -1,9 +1,6 @@
-import { env } from "process";
+import { env } from "~/env";
 
-import { getServerTranslations } from "@repo/i18n/server";
-
-export async function TailwindIndicator() {
-  const { t } = await getServerTranslations();
+export function TailwindIndicator() {
   if (env.NODE_ENV === "production") return null;
 
   return (

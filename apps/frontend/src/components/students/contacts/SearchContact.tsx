@@ -3,13 +3,13 @@ import { useParams } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { toast } from "sonner";
 
+import { useDebounce } from "@repo/hooks/use-debounce";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Input } from "@repo/ui/input";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
-import { useDebounce } from "~/hooks/use-debounce";
 import { showErrorToast } from "~/lib/handle-error";
 import rangeMap from "~/lib/range-map";
 import { cn } from "~/lib/utils";
@@ -72,9 +72,9 @@ export function SearchContact({ onBack }: { onBack: () => void }) {
                         },
                       },
                       {
-                        onSuccess: async () => {
-                          await utils.contact.students.invalidate();
-                          await utils.student.contacts.invalidate();
+                        onSuccess: () => {
+                          void utils.contact.students.invalidate();
+                          void utils.student.contacts.invalidate();
                           toast.success(t("added_successfully"));
                         },
                         onError: (error) => {

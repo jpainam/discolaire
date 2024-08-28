@@ -21,7 +21,6 @@ interface SchoolYearSwitcherProps {
   currentSchoolYear?: string;
 }
 export function SchoolYearSwitcher({
-  className,
   currentSchoolYear,
 }: SchoolYearSwitcherProps) {
   const schoolYearsQuery = api.schoolYear.all.useQuery();
@@ -29,14 +28,14 @@ export function SchoolYearSwitcher({
   const [value, setValue] = useState(currentSchoolYear);
   const { t } = useLocale();
 
-  const classroomsQuery = api.classroom.all.useQuery();
+  //const classroomsQuery = api.classroom.all.useQuery();
   const setSchoolYearCookieMutation = api.schoolYear.setAsCookie.useMutation();
 
   const recentYear = schoolYearsQuery.data?.[0]?.id;
-  const defaultValue = currentSchoolYear ?? recentYear;
+  //const defaultValue = currentSchoolYear ?? recentYear;
 
-  if (!currentSchoolYear) {
-    recentYear && setSchoolYearCookieMutation.mutate(recentYear);
+  if (!currentSchoolYear && recentYear) {
+    setSchoolYearCookieMutation.mutate(recentYear);
   }
 
   const handleOnChange = (val: string) => {

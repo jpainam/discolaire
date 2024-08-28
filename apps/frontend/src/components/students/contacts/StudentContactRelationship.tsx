@@ -1,13 +1,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { inferProcedureOutput } from "@trpc/server";
 import { Save, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { useRouter } from "@repo/hooks/use-router";
+import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
@@ -16,7 +15,6 @@ import { Separator } from "@repo/ui/separator";
 
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
 import { getErrorMessage } from "~/lib/handle-error";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
 const editRelationshipSchema = z.object({
@@ -35,7 +33,7 @@ const editRelationshipSchema = z.object({
 });
 
 type StudentContactGetProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["studentContact"]["get"]>
+  RouterOutputs["studentContact"]["get"]
 >;
 
 export function StudentContactRelationship({
@@ -46,18 +44,18 @@ export function StudentContactRelationship({
   const form = useForm<z.infer<typeof editRelationshipSchema>>({
     resolver: zodResolver(editRelationshipSchema),
     defaultValues: {
-      primaryContact: studentContact.primaryContact || false,
-      emergencyContact: studentContact.emergencyContact || false,
-      enablePortalAccess: studentContact.enablePortalAccess || false,
-      canAccessData: studentContact.canAccessData || false,
-      accessDiscipline: studentContact.accessDiscipline || false,
-      accessReportCard: studentContact.accessReportCard || false,
-      accessAttendance: studentContact.accessAttendance || false,
-      accessBilling: studentContact.accessBilling || false,
-      accessScheduling: studentContact.accessScheduling || false,
-      schoolPickup: studentContact.accessAttendance || false,
-      livesWith: studentContact.livesWith || false,
-      paysFee: studentContact.paysFee || false,
+      primaryContact: studentContact.primaryContact ?? false,
+      emergencyContact: studentContact.emergencyContact ?? false,
+      enablePortalAccess: studentContact.enablePortalAccess ?? false,
+      canAccessData: studentContact.canAccessData ?? false,
+      accessDiscipline: studentContact.accessDiscipline ?? false,
+      accessReportCard: studentContact.accessReportCard ?? false,
+      accessAttendance: studentContact.accessAttendance ?? false,
+      accessBilling: studentContact.accessBilling ?? false,
+      accessScheduling: studentContact.accessScheduling ?? false,
+      schoolPickup: studentContact.accessAttendance ?? false,
+      livesWith: studentContact.livesWith ?? false,
+      paysFee: studentContact.paysFee ?? false,
     },
   });
 
@@ -65,12 +63,12 @@ export function StudentContactRelationship({
   const utils = api.useUtils();
 
   function onSubmit(data: z.infer<typeof editRelationshipSchema>) {
-    if (studentContact?.studentId && studentContact?.contactId) {
+    if (studentContact.studentId && studentContact.contactId) {
       toast.promise(
         updateStudentContactMutation.mutateAsync({
           data: data,
-          studentId: studentContact?.studentId,
-          contactId: studentContact?.contactId,
+          studentId: studentContact.studentId,
+          contactId: studentContact.contactId,
         }),
         {
           success: async () => {
@@ -87,7 +85,6 @@ export function StudentContactRelationship({
   }
 
   const { t } = useLocale();
-  const router = useRouter();
 
   return (
     <Form {...form}>
@@ -157,7 +154,7 @@ export function StudentContactRelationship({
               <Separator />
               <div className="mb-2 font-semibold">
                 {t("allowWhichDataToContact", {
-                  name: studentContact.student?.lastName,
+                  name: studentContact.student.lastName,
                 })}
               </div>
               <div className="grid gap-2 md:grid-cols-3">

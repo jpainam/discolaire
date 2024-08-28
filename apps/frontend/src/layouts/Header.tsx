@@ -10,7 +10,7 @@ import { ServiceSwitcher } from "./ServiceSwitcher";
 import { TopRightMenu } from "./top-right-menu";
 
 export async function Header() {
-  const { t, i18n } = await getServerTranslations();
+  const { i18n } = await getServerTranslations();
   const lng = i18n.resolvedLanguage;
 
   const schoolYear = await api.schoolYear.fromCookie();
