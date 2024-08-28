@@ -8,7 +8,7 @@ import { routes } from "~/configs/routes";
 
 export default function LogoutPage() {
   useEffect(() => {
-    signOut({ redirect: true, callbackUrl: routes.auth.login });
+    void signOut({ redirect: true, callbackUrl: routes.auth.login });
   }, []);
   return (
     <div className="flex h-[100vh] flex-col items-center justify-center">

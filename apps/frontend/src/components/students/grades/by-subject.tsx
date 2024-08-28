@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -14,8 +16,8 @@ import {
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Separator } from "@repo/ui/separator";
 
-import { routes } from "~/configs/routes";
 import type { Grade } from "~/types/grade";
+import { routes } from "~/configs/routes";
 import { useDateFormat } from "~/utils/date-format";
 
 interface BySubjectProps {
@@ -62,12 +64,11 @@ export function BySubject({ grades, minMaxMoy }: BySubjectProps) {
         if (!subject) return null;
         if (uniqueSubjectTitles.includes(subject?.id)) return null;
         uniqueSubjectTitles.push(subject?.id);
-        const filteredGrades =
-          grades &&
-          grades.filter(
-            (grade) => grade.gradeSheet?.subject?.id === subject?.id,
-          );
+        const filteredGrades = grades.filter(
+          (grade) => grade.gradeSheet?.subject?.id === subject?.id,
+        );
         const subjectAvg =
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           (subjectSums[subject?.id] ?? 0) / (filteredGrades.length ?? 1);
         return (
           <AccordionItem
@@ -95,16 +96,15 @@ export function BySubject({ grades, minMaxMoy }: BySubjectProps) {
               </FlatBadge>
             </AccordionTrigger>
             <AccordionContent className="px-4">
-              {filteredGrades &&
-                filteredGrades.map((grade, index) => (
-                  <div
-                    className="mb-1 flex flex-col"
-                    key={`${grade.id}-${index}-bysubject`}
-                  >
-                    <BySubjectItem minMaxMoy={minMaxMoy} grade={grade} />
-                    {index < filteredGrades.length - 1 && <Separator />}
-                  </div>
-                ))}
+              {filteredGrades.map((grade, index) => (
+                <div
+                  className="mb-1 flex flex-col"
+                  key={`${grade.id}-${index}-bysubject`}
+                >
+                  <BySubjectItem minMaxMoy={minMaxMoy} grade={grade} />
+                  {index < filteredGrades.length - 1 && <Separator />}
+                </div>
+              ))}
             </AccordionContent>
           </AccordionItem>
         );
@@ -133,7 +133,7 @@ function BySubjectItem({
   const { monthFormatter, dayFormatter } = useDateFormat();
   const m = monthFormatter.format(grade.createdAt ?? new Date());
   const d = dayFormatter.format(grade.createdAt ?? new Date());
-  const params = useParams();
+  const params = useParams<{ id: string }>();
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
   return (

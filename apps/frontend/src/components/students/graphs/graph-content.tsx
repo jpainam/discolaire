@@ -1,4 +1,4 @@
-export default async function GraphContent() {
+export default function GraphContent() {
   /*await new Promise((resolve) => {
     setTimeout(resolve, 3000);
   });*/

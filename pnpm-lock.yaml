@@ -287,6 +287,9 @@ importers:
       geist:
         specifier: ^1.3.1
         version: 1.3.1(next@14.2.5(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+      json-edit-react:
+        specifier: 1.15.10-rc1
+        version: 1.15.10-rc1(react@18.3.1)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -8535,6 +8538,11 @@ packages:
   json-buffer@3.0.1:
     resolution: {integrity: sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==}
 
+  json-edit-react@1.15.10-rc1:
+    resolution: {integrity: sha512-uRY4vUJdOyBmO8n371L9PJ/gQjmA5sTvD1xswIaAGItBEpVIyse4Cn203lgog9NLI3WSolaSV0m7e9nrAPsakA==}
+    peerDependencies:
+      react: '>=16.0.0'
+
   json-logic-js@2.0.5:
     resolution: {integrity: sha512-rTT2+lqcuUmj4DgWfmzupZqQDA64AdmYqizzMPWj3DxGdfFNsxPpcNVSaTj4l8W2tG/+hg7/mQhxjU3aPacO6g==}
 
@@ -9408,6 +9416,12 @@ packages:
   object-keys@1.1.1:
     resolution: {integrity: sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==}
     engines: {node: '>= 0.4'}
+
+  object-property-assigner@1.3.1:
+    resolution: {integrity: sha512-3R6x1l1sQA4jQBOqxkxH3DHw0PMh7K5UY4x1Yc5QYbbkzZpAJ8l9w+Trq/64ZRe2thiOsa8JpB4M7D61hnkjRA==}
+
+  object-property-extractor@1.0.12:
+    resolution: {integrity: sha512-X6rMK1O6O3EU4O06BtATezWKr+5idX6Yo0PndVqr8NlED3Eoa2YE+VKQgQL4EK0+vh+YA83Sjj9Nsi/PuXXeDQ==}
 
   object.assign@4.1.5:
     resolution: {integrity: sha512-byy+U7gp+FVwmyzKPYhW2h5l3crpmGsxl7X2s8y43IgxvG4g3QZ6CffDtsNQy1WsmZpQbO+ybo0AlW7TY6DcBQ==}
@@ -20475,6 +20489,12 @@ snapshots:
 
   json-buffer@3.0.1: {}
 
+  json-edit-react@1.15.10-rc1(react@18.3.1):
+    dependencies:
+      object-property-assigner: 1.3.1
+      object-property-extractor: 1.0.12
+      react: 18.3.1
+
   json-logic-js@2.0.5: {}
 
   json-parse-better-errors@1.0.2: {}
@@ -21523,6 +21543,10 @@ snapshots:
       define-properties: 1.2.1
 
   object-keys@1.1.1: {}
+
+  object-property-assigner@1.3.1: {}
+
+  object-property-extractor@1.0.12: {}
 
   object.assign@4.1.5:
     dependencies:

@@ -1,13 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
 
 import Link from "next/link";
-import { useQueryClient } from "@tanstack/react-query";
-import type { inferProcedureOutput } from "@trpc/server";
 import { MoreVertical, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { useAlert } from "@repo/hooks/use-alert";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -28,13 +27,12 @@ import {
 } from "@repo/ui/table";
 
 import { getErrorMessage } from "~/lib/handle-error";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
 import { routes } from "../../../configs/routes";
 
 type StudentEnrollmentProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["student"]["enrollments"]>
+  RouterOutputs["student"]["enrollments"]
 >[number];
 
 export function StudentEnrollmentTable({
@@ -47,8 +45,7 @@ export function StudentEnrollmentTable({
   const { fullDateFormatter } = useDateFormat();
   const deleteEnrollmentMutation = api.enrollment.delete.useMutation();
   const utils = api.useUtils();
-  const queryClient = useQueryClient();
-  const router = useRouter();
+
   if (enrollments.length === 0) {
     return <EmptyState className="my-2" />;
   }
@@ -96,7 +93,7 @@ export function StudentEnrollmentTable({
                 <TableCell>{enrollmentStartDate}</TableCell>
                 <TableCell>{enrolmmentEndDate}</TableCell>
                 <TableCell className="items-center justify-center">
-                  {c.observation || "N/A"}
+                  {c.observation ?? "N/A"}
                 </TableCell>
                 <TableCell>
                   <FlatBadge variant="green">{t("enrolled")}</FlatBadge>

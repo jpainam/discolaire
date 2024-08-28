@@ -1,4 +1,4 @@
-import { env } from "process";
+import { env } from "~/env";
 
 export const siteConfig = {
   name: "Portal Scolaire",

@@ -39,12 +39,12 @@ export function CreateEditPolicy() {
   });
   const createPolicyMutation = api.policy.create.useMutation();
   const utils = api.useUtils();
-  const onSubmit = async (data: z.infer<typeof createEditPolicySchema>) => {
+  const onSubmit = (data: z.infer<typeof createEditPolicySchema>) => {
     // TODO parse the content
     const values = {
       name: data.name,
       content: data.content,
-      description: data.description || "",
+      description: data.description ?? "",
       effect: "Allow" as const,
       actions: ["*"],
       resources: ["*"],

@@ -1,22 +1,21 @@
 "use client";
 
-import type {Table} from "@tanstack/react-table";
-import type { inferProcedureOutput } from "@trpc/server";
+import type { Table } from "@tanstack/react-table";
 import { Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { useAlert } from "@repo/hooks/use-alert";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 
 import { getErrorMessage } from "~/lib/handle-error";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { CreateEditAnnouncement } from "./CreateEditAnnouncement";
 
 type AnnouncementAllProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["announcement"]["all"]>
+  RouterOutputs["announcement"]["all"]
 >[number];
 
 interface TasksTableToolbarActionsProps {
@@ -29,8 +28,10 @@ export function NoticeboardDataTableActions({
   const { openSheet } = useSheet();
   const { openAlert, closeAlert } = useAlert();
   const { t } = useLocale();
-  const deleteAnnouncementMutation = api.announcement.delete.useMutation();
   const utils = api.useUtils();
+  const deleteAnnouncementMutation = api.announcement.delete.useMutation({
+    onSettled: () => utils.announcement.invalidate(),
+  });
 
   return (
     <div className="flex items-center gap-2">

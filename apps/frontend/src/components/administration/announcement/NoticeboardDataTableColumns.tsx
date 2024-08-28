@@ -1,13 +1,14 @@
 "use client";
 
+import type { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import type {ColumnDef} from "@tanstack/react-table";
-import type { inferProcedureOutput } from "@trpc/server";
-import type { TFunction } from "i18next";
 import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
+import type { FlatBadgeProps } from "@repo/ui/FlatBadge";
 import { useAlert } from "@repo/hooks/use-alert";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
@@ -21,11 +22,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
-import type { FlatBadgeProps } from "@repo/ui/FlatBadge";
 import FlatBadge from "@repo/ui/FlatBadge";
 
 import { getErrorMessage } from "~/lib/handle-error";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { CreateEditAnnouncement } from "./CreateEditAnnouncement";
 
@@ -36,7 +35,7 @@ const statusVariants: Record<string, FlatBadgeProps["variant"]> = {
 };
 
 type AnnouncementAllProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["announcement"]["all"]>
+  RouterOutputs["announcement"]["all"]
 >[number];
 
 export function getColumns({
@@ -76,7 +75,7 @@ export function getColumns({
       ),
       cell: ({ row }) => {
         const noticeboard = row.original;
-        return <div className="">{noticeboard?.title}</div>;
+        return <div className="">{noticeboard.title}</div>;
       },
     },
     {
@@ -88,7 +87,7 @@ export function getColumns({
         const noticeboard = row.original;
         return (
           <div className="hover:text-blue-600 hover:underline">
-            {noticeboard?.description}
+            {noticeboard.description}
           </div>
         );
       },
@@ -100,8 +99,7 @@ export function getColumns({
       ),
       cell: ({ row }) => {
         const noticeboard = row.original;
-        //return <div className="">{noticeboard?.recipients.join(", ")}</div>;
-        return <div>Recipient</div>;
+        return <div className="">{JSON.stringify(noticeboard.recipients)}</div>;
       },
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));
@@ -114,7 +112,7 @@ export function getColumns({
       ),
       cell: ({ row }) => {
         const noticeboard = row.original;
-        return <div className="">{noticeboard?.level}</div>;
+        return <div className="">{noticeboard.level}</div>;
       },
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));
@@ -157,7 +155,7 @@ export function getColumns({
         const noticeboard = row.original;
         return (
           <Link className="hover:text-blue-600 hover:underline" href={"#"}>
-            {noticeboard?.link}
+            {noticeboard.link}
           </Link>
         );
       },
@@ -171,7 +169,7 @@ export function getColumns({
         const noticeboard = row.original;
         return (
           <div className="hover:text-blue-600 hover:underline">
-            {new Date(noticeboard?.from).toLocaleDateString()}
+            {new Date(noticeboard.from).toLocaleDateString()}
           </div>
         );
       },
@@ -185,7 +183,7 @@ export function getColumns({
         const noticeboard = row.original;
         return (
           <div className="hover:text-blue-600 hover:underline">
-            {new Date(noticeboard?.to).toLocaleDateString()}
+            {new Date(noticeboard.to).toLocaleDateString()}
           </div>
         );
       },

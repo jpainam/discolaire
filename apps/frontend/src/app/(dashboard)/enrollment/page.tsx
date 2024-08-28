@@ -8,11 +8,7 @@ import {
 
 import { Shell } from "~/components/shell";
 
-export default function EnrollmentPage({
-  searchParams,
-}: {
-  searchParams: { id: string };
-}) {
+export default function EnrollmentPage() {
   return (
     <Shell>
       <ResizablePanelGroup

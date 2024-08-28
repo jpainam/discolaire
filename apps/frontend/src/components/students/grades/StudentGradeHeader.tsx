@@ -56,8 +56,8 @@ export function StudentGradeHeader({
     if (term) {
       classroomMinMaxMoyGrades.data?.forEach((grade) => {
         if (grade.termId == Number(term)) {
-          gradeSum += (grade.avg || 0) * (grade.coefficient || 0);
-          coeffSum += grade.coefficient || 0;
+          gradeSum += (grade.avg ?? 0) * (grade.coefficient ?? 0);
+          coeffSum += grade.coefficient ?? 0;
         }
       });
       setClassroomAvg(gradeSum / (coeffSum || 1e9));
@@ -73,9 +73,8 @@ export function StudentGradeHeader({
     if (term) {
       studentGradesQuery.data.forEach((grade) => {
         if (grade.gradeSheet.termId == Number(term)) {
-          gradeSum +=
-            grade.grade * (grade.gradeSheet.subject.coefficient || 0);
-          coeffSum += grade.gradeSheet.subject.coefficient || 0;
+          gradeSum += grade.grade * (grade.gradeSheet.subject.coefficient ?? 0);
+          coeffSum += grade.gradeSheet.subject.coefficient ?? 0;
         }
       });
       setStudentAvg(gradeSum / (coeffSum || 1e9));
@@ -99,7 +98,7 @@ export function StudentGradeHeader({
         className="w-[300px]"
         showAllOption={true}
         onChange={(val) => {
-          setTerm(Number(val));
+          void setTerm(Number(val));
         }}
         defaultValue={term ? `${term}` : undefined}
       />

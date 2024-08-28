@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 // import {
@@ -34,7 +35,7 @@ export const LanguageSwitcher = ({
 
   //const lang = languages.find((lang) => lang != currentLanguage)
   const onChangeLanguage = (value: any) => {
-    i18next.changeLanguage(value);
+    void i18next.changeLanguage(value);
     router.refresh();
   };
   return (
@@ -74,7 +75,7 @@ export const LanguageSwitcher = ({
         </DropdownMenuItem>
         <DropdownMenuItem
           onSelect={() => {
-            changeLanguage("es");
+            void changeLanguage("es");
           }}
         >
           <span className="mr-2">{getUnicodeFlagIcon("ES")}</span>

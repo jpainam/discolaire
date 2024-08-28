@@ -39,7 +39,7 @@ export function CreateEditAppreciation() {
   });
   const { t } = useLocale();
 
-  const onSubmit = async (data: AppreciationFormValues) => {
+  const onSubmit = (_data: AppreciationFormValues) => {
     toast.promise(Promise.resolve(), {
       success: () => {
         closeModal();

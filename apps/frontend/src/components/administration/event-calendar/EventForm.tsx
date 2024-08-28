@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import type { SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { inferProcedureOutput } from "@trpc/server";
-import type { SubmitHandler} from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -36,12 +37,11 @@ import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { getErrorMessage } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
-const isSchoolYear = (data: any) => data.calendarType === "School Year";
+//const isSchoolYear = (data: any) => data.calendarType === "School Year";
 const isTeaching = (data: any) => data.calendarType === "Teaching";
-const isHoliday = (data: any) => data.calendarType === "Holidays";
+//const isHoliday = (data: any) => data.calendarType === "Holidays";
 
 const eventFormSchema = z
   .object({
@@ -90,7 +90,7 @@ const eventFormSchema = z
 type EventFormInput = z.infer<typeof eventFormSchema>;
 
 type CalendarEventProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["calendarEvent"]["all"]>
+  RouterOutputs["calendarEvent"]["all"]
 >[number];
 
 interface CreateEventProps {
@@ -112,7 +112,7 @@ export default function EventForm({
   const form = useForm<EventFormInput>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: {
-      calendarType: event?.calendarTypeId ? `${event?.calendarTypeId}` : "",
+      calendarType: event?.calendarTypeId ? `${event.calendarTypeId}` : "",
       title: event?.title ?? "",
       classroom: "",
       subject: "",
@@ -122,14 +122,7 @@ export default function EventForm({
     },
   });
 
-  const {
-    register,
-    setValue,
-    handleSubmit,
-    watch,
-    clearErrors,
-    formState: { errors },
-  } = form;
+  const { register, setValue, handleSubmit, watch, clearErrors } = form;
 
   const watchedCalendarType = watch("calendarType");
   const watchedStartDate = watch("startDate");
@@ -149,7 +142,7 @@ export default function EventForm({
     const newEvent = {
       data: eventData,
       start: data.startDate,
-      description: data.description || "",
+      description: data.description ?? "",
       title: data.title,
       alert: data.alert,
       repeat: data.repeat,
@@ -166,7 +159,7 @@ export default function EventForm({
             return getErrorMessage(error);
           },
           success: () => {
-            utils.calendarEvent.all.invalidate();
+            void utils.calendarEvent.all.invalidate();
             return t("updated_successfully");
           },
         },
@@ -178,7 +171,7 @@ export default function EventForm({
           return getErrorMessage(error);
         },
         success: () => {
-          utils.calendarEvent.all.invalidate();
+          void utils.calendarEvent.all.invalidate();
           return t("added_successfully");
         },
       });
@@ -195,7 +188,7 @@ export default function EventForm({
           return getErrorMessage(error);
         },
         success: () => {
-          utils.calendarEvent.all.invalidate();
+          void utils.calendarEvent.all.invalidate();
           return t("deleted_successfully");
         },
       });
@@ -260,7 +253,7 @@ export default function EventForm({
                         field.onChange(value);
                         setValue("subject", "");
                       }}
-                      defaultValue={watchedClassroomId || undefined}
+                      defaultValue={watchedClassroomId ?? undefined}
                     />
                   </FormControl>
                   <FormMessage />
@@ -277,9 +270,9 @@ export default function EventForm({
                   <FormControl>
                     <SubjectSelector
                       onChange={field.onChange}
-                      classroomId={watchedClassroomId || ""}
+                      classroomId={watchedClassroomId ?? ""}
                       className="h-10"
-                      defaultValue={watchedSubject || undefined}
+                      defaultValue={watchedSubject ?? undefined}
                     />
                   </FormControl>
                   <FormMessage />
@@ -362,7 +355,8 @@ export default function EventForm({
                   placeholder="Event Start Date"
                   className="mt-1"
                   onChange={(date) => {
-                    setValue("startDate", date);
+                    //setValue("startDate", date);
+                    field.onChange(date);
                     clearErrors("startDate");
                   }}
                   defaultValue={watchedStartDate}
@@ -384,7 +378,8 @@ export default function EventForm({
                   placeholder="Event End Date"
                   className="mt-1"
                   onChange={(date) => {
-                    setValue("endDate", date);
+                    field.onChange(date);
+                    //setValue("endDate", date);
                     clearErrors("endDate");
                   }}
                   defaultValue={watchedEndDate}
