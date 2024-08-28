@@ -1,4 +1,6 @@
 import React from "react";
+import { useFormContext } from "react-hook-form";
+
 import { Checkbox } from "@repo/ui/checkbox";
 import {
   FormControl,
@@ -8,7 +10,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@repo/ui/form";
-import { useFormContext } from "react-hook-form";
 
 import { cn } from "~/lib/utils";
 
@@ -31,10 +32,10 @@ export function CheckboxField({
   labelClassName,
   className,
   name,
-  placeholder,
+  //placeholder,
   description,
   checkboxClassName,
-  type = "text",
+  //type = "text",
 }: InputFieldProps) {
   const form = useFormContext();
 

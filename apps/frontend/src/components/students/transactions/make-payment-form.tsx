@@ -1,9 +1,9 @@
 "use client";
 
+import type { SubmitHandler } from "react-hook-form";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { SubmitHandler} from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -11,13 +11,11 @@ import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
 import { Form } from "@repo/ui/form";
 
+import type { MakePaymentFormInput } from "./make-payment.schema";
 import FormFooter from "~/components/form-footer";
 import { routes } from "~/configs/routes";
-import type {
-  MakePaymentFormInput} from "./make-payment.schema";
-import {
-  makePaymentFormSchema,
-} from "./make-payment.schema";
+import { cn } from "~/lib/utils";
+import { makePaymentFormSchema } from "./make-payment.schema";
 
 const _defaultValues = {};
 
@@ -46,7 +44,7 @@ export function MakePaymentForm({ className }: MakePaymentFormProps) {
 
   const router = useRouter();
   return (
-    <div className="@container">
+    <div className={cn(className)}>
       <Form {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <FormFooter

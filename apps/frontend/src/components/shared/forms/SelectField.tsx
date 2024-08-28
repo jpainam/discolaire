@@ -2,7 +2,6 @@
 
 import { useFormContext } from "react-hook-form";
 
-import { useLocale } from "@repo/i18n";
 import {
   FormControl,
   FormDescription,
@@ -44,7 +43,7 @@ export function SelectField({
   items,
 }: SelectFieldProps) {
   const form = useFormContext();
-  const { t } = useLocale();
+
   return (
     <FormField
       control={form.control}

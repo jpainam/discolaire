@@ -31,12 +31,12 @@ export default function PrefixSelector({
   return (
     <Select
       onValueChange={(val) => {
-        onChange && onChange(val);
+        onChange?.(val);
       }}
-      defaultValue={defaultValue || "M"}
+      defaultValue={defaultValue ?? "M"}
     >
       <SelectTrigger className={cn("w-[180px]", className)}>
-        <SelectValue placeholder={placeholder || t("selectAPrefix")} />
+        <SelectValue placeholder={placeholder ?? t("selectAPrefix")} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>

@@ -10,10 +10,11 @@ import { useRouter } from "@repo/hooks/use-router";
 
 import { makePaymentAtom } from "~/atoms/payment";
 import { routes } from "~/configs/routes";
+import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
 export function SuccessStep() {
-  const params = useParams();
+  const params = useParams<{ id: string }>();
   const [payment, setPayment] = useAtom(makePaymentAtom);
   const router = useRouter();
   const createTransactionMutation = api.transaction.create.useMutation();
@@ -35,7 +36,7 @@ export function SuccessStep() {
         {
           loading: "Creating transaction...",
           error: (error) => {
-            return error.message;
+            return getErrorMessage(error);
           },
           success: (result) => {
             setPayment((prev) => ({

@@ -2,6 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
 import { Button, buttonVariants } from "@repo/ui/button";
 import {
   Form,
@@ -13,8 +16,6 @@ import {
   FormMessage,
 } from "@repo/ui/form";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { cn } from "~/lib/utils";
 
@@ -44,6 +45,7 @@ export function AppearanceForm() {
   });
 
   function onSubmit(data: AppearanceFormValues) {
+    console.log(data);
     // toast({
     //   title: "You submitted the following values:",
     //   description: (

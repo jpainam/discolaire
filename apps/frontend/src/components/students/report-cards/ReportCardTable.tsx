@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 import { sortBy, sum } from "lodash";
 
-import { useLocale } from "@repo/i18n";
-//import { StudentReportCard } from "~/types/report-card";
 import type { FlatBadgeVariant } from "@repo/ui/FlatBadge";
+//import { StudentReportCard } from "~/types/report-card";
+import { useLocale } from "@repo/i18n";
 import FlatBadge from "@repo/ui/FlatBadge";
 import {
   Table,
@@ -38,7 +40,7 @@ export function ReportCardTable({ reportCard }: { reportCard: any[] }) {
       if (!ggs[groupId]) {
         ggs[groupId] = [];
       }
-      card && ggs[groupId].push(card);
+      ggs[groupId].push(card);
     });
     setGroups(ggs);
     setTotalCoeff(coeff);
@@ -209,6 +211,8 @@ function ReportCardGroup({
 
 function Cell({ n }: { n?: number | null }) {
   let v: FlatBadgeVariant = "green";
+
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (n == undefined || n == null) {
     return <></>;
   }

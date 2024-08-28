@@ -42,7 +42,7 @@ export function DatePickerField({
   disabled = false,
 }: DatePickerProps) {
   const form = useFormContext();
-  const { i18n, t } = useLocale();
+  const { i18n } = useLocale();
   const [open, setOpen] = useState(false);
   const currentLocale = i18n.language.includes("en")
     ? enUS
@@ -83,7 +83,7 @@ export function DatePickerField({
                 disabled={disabled}
                 selected={field.value}
                 onSelect={(date) => {
-                  date && field.onChange(date);
+                  field.onChange(date);
                   setOpen(false);
                 }}
                 /*disabled={(date) =>

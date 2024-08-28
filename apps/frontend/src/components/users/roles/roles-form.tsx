@@ -1,6 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import {
@@ -12,8 +15,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@repo/ui/form";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 //import { toast } from "@repo/ui/use-toast";
 
@@ -64,6 +65,7 @@ export function DisplayForm() {
   });
 
   function onSubmit(data: DisplayFormValues) {
+    console.log(data);
     // toast({
     //   title: "You submitted the following values:",
     //   description: (
