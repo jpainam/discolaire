@@ -33,6 +33,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function StudentGradeChart({ grades }: { grades: Grade[] }) {
+  console.log(grades)
   return (
     <Card className="border-none shadow-none">
       <CardContent className="p-0">

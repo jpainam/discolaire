@@ -6,6 +6,7 @@ import type {
   FieldPath,
   FieldValues,
   UseFormProps,
+  useFormState,
 } from "react-hook-form";
 import type { ZodType, ZodTypeDef } from "zod";
 import * as React from "react";
@@ -191,15 +192,16 @@ const FormMessage = React.forwardRef<
 FormMessage.displayName = "FormMessage";
 
 export {
-  useForm,
-  useFormField,
   Form,
-  FormItem,
-  FormLabel,
   FormControl,
   FormDescription,
-  FormMessage,
   FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useForm,
+  useFormField,
+  useFormState,
 };
 
 export { useFieldArray } from "react-hook-form";

@@ -3,11 +3,12 @@ import { Label } from "@repo/ui/label";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
 import { Textarea } from "@repo/ui/textarea";
 
-import { cn } from "~/lib/utils";
 import type { SubHistoryType } from "./data";
+import { cn } from "~/lib/utils";
 import { historyData } from "./data";
 
 export default function HealthHistory({ history }: { history: string[] }) {
+  console.log(history);
   return (
     <div className="flex flex-col gap-2">
       <div className="flex md:grid md:grid-cols-12">
@@ -49,9 +50,7 @@ export default function HealthHistory({ history }: { history: string[] }) {
               </RadioGroup>
               <div className="flex w-full flex-col items-start px-2">
                 <div>-- {history.title}</div>
-                <div className="italic">
-                  {history.description ?? history.description}
-                </div>
+                <div className="italic">{history.description}</div>
                 {history.sub_types && (
                   <DisplaySubHistory sub_types={history.sub_types} />
                 )}

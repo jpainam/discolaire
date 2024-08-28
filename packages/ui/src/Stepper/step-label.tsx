@@ -1,5 +1,6 @@
-import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
+
+import { cn } from "../utils";
 import { useStepper } from "./use-stepper";
 
 interface StepLabelProps {
@@ -49,7 +50,7 @@ const StepLabel = ({
       aria-current={isCurrentStep ? "step" : undefined}
       className={cn(
         "stepper__step-label-container",
-        "flex-col flex",
+        "flex flex-col",
         variant !== "line" ? "ms-2" : orientation === "horizontal" && "my-2",
         variant === "circle-alt" && "text-center",
         variant === "circle-alt" && orientation === "horizontal" && "ms-0",

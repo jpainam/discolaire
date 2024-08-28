@@ -46,8 +46,8 @@ export function UserLoginCard({ userId }: { userId: string }) {
         size={"sm"}
         className="w-fit text-destructive"
         onClick={() => {
-          startTransition(() => {
-            sendResetPassword();
+          startTransition(async () => {
+            await sendResetPassword();
           });
         }}
       >

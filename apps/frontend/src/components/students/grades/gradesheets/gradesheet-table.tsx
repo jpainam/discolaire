@@ -3,14 +3,11 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { useLocale } from "@repo/i18n";
-import { useDataTable } from "@repo/ui/data-table";
+import { useDataTable } from "@repo/ui/data-table/index";
 
+import type { GradeSheetTableType } from "./gradesheet-columns";
 import { api } from "~/trpc/react";
-import type {
-  GradeSheetTableType} from "./gradesheet-columns";
-import {
-  fetchGradeSheetColumns
-} from "./gradesheet-columns";
+import { fetchGradeSheetColumns } from "./gradesheet-columns";
 
 export function GradeSheetTable({ studentId }: { studentId: string }) {
   const { t } = useLocale();
@@ -52,7 +49,9 @@ export function GradeSheetTable({ studentId }: { studentId: string }) {
       });
     }
     setData(groupedGrades);
-  }, [studentGradesQuery.data]);  
+  }, [studentGradesQuery.data]);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { table } = useDataTable({
     data: data,
     columns: columns,

@@ -67,20 +67,21 @@ export default function CreateEditStudent({
 
   const form = useForm<z.infer<typeof createEditStudentSchema>>({
     defaultValues: {
-      firstName: student?.firstName || "",
-      lastName: student?.lastName || "",
-      dateOfBirth: student?.dateOfBirth || new Date(),
-      placeOfBirth: student?.placeOfBirth || "",
-      gender: student?.gender || "",
-      residence: student?.residence || "",
-      phoneNumber: student?.phoneNumber || "",
-      email: student?.email || "",
-      countryId: student?.countryId || "",
-      dateOfExit: student?.dateOfExit || "",
-      dateOfEntry: student?.dateOfEntry || "",
-      formerSchoolId: student?.formerSchoolId || "",
-      observation: student?.observation || "",
-      tags: student?.tags || [],
+      firstName: student?.firstName ?? "",
+      lastName: student?.lastName ?? "",
+      dateOfBirth: student?.dateOfBirth ?? new Date(),
+      placeOfBirth: student?.placeOfBirth ?? "",
+      gender: student?.gender ?? "",
+      residence: student?.residence ?? "",
+      phoneNumber: student?.phoneNumber ?? "",
+      email: student?.email ?? "",
+      countryId: student?.countryId ?? "",
+      dateOfExit: student?.dateOfExit ?? "",
+      dateOfEntry: student?.dateOfEntry ?? "",
+      formerSchoolId: student?.formerSchoolId ?? "",
+      observation: student?.observation ?? "",
+      // @ts-expect-error TODO  fix this
+      tags: student?.tags ?? [],
     },
     resolver: zodResolver(createEditStudentSchema),
   });
@@ -89,7 +90,7 @@ export default function CreateEditStudent({
   const updateStudentMutation = api.student.update.useMutation();
   const utils = api.useUtils();
   const onSubmit = (data: z.infer<typeof createEditStudentSchema>) => {
-    if (student) {
+    if (student?.id) {
       toast.promise(
         updateStudentMutation.mutateAsync({ id: student.id, ...data }),
         {

@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
-import { HorizontalStep } from "./horizontal-step";
+
 import type { StepProps } from "./types";
+import { HorizontalStep } from "./horizontal-step";
 import { useStepper } from "./use-stepper";
 import { VerticalStep } from "./vertical-step";
 
@@ -34,7 +36,7 @@ const Step = React.forwardRef<HTMLLIElement, StepProps>(
 
     const { isVertical, isError, isLoading, clickable } = useStepper();
 
-    const hasVisited = isCurrentStep || isCompletedStep;
+    const hasVisited = isCurrentStep ?? isCompletedStep;
 
     const sharedProps = {
       isLastStep,

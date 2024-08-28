@@ -13,6 +13,7 @@ import { Form } from "@repo/ui/form";
 
 import { routes } from "~/configs/routes";
 import PrintSelector from "./print-selector";
+import PrintStartEndDateSelector from "./print-start-end-date-selector";
 import PrintTypeRadio from "./print-type-radio";
 import SchoolYearSelector from "./school-year-selector";
 
@@ -81,8 +82,8 @@ export default function PrintForm() {
           <PrintTypeRadio />
           <PrintSelector />
           <SchoolYearSelector />
-          {/*<PrintStartSelector form={form} />
-          <PrintStartEndDateSelector form={form} />*/}
+          {/*<PrintStartSelector form={form} />*/}
+          <PrintStartEndDateSelector />
           <div className="col-span-1 col-start-2 flex gap-5">
             <Button type="reset" variant={"outline"} className="h-8 w-auto">
               {t("cancel")}

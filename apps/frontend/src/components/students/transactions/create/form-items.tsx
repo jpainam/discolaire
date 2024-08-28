@@ -26,20 +26,7 @@ export function DescriptionInput({ className }: InputDescriptionProps) {
   const form = useFormContext();
   const { t } = useLocale();
   return (
-    <FormField
-      control={form.control}
-      name="description"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>{t("Description")}</FormLabel>
-          <FormControl>
-            <Input placeholder={t("Description")} {...field} />
-          </FormControl>
-
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+    
   );
 }
 

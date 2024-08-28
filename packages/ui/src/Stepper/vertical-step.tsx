@@ -1,11 +1,13 @@
-import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
-import { cn } from "@/lib/utils";
-import { cva } from "class-variance-authority";
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import * as React from "react";
+import { cva } from "class-variance-authority";
+
+import type { StepSharedProps } from "./types";
+import { Collapsible, CollapsibleContent } from "../collapsible";
+import { cn } from "../utils";
 import { StepButtonContainer } from "./step-button-container";
 import { StepIcon } from "./step-icon";
 import { StepLabel } from "./step-label";
-import type { StepSharedProps } from "./types";
 import { useStepper } from "./use-stepper";
 
 type VerticalStepProps = StepSharedProps & {
@@ -14,7 +16,7 @@ type VerticalStepProps = StepSharedProps & {
 
 const verticalStepVariants = cva(
   [
-    "flex flex-col relative transition-all duration-200",
+    "relative flex flex-col transition-all duration-200",
     "data-[completed=true]:[&:not(:last-child)]:after:bg-primary",
     "data-[invalid=true]:[&:not(:last-child)]:after:bg-destructive",
   ],
@@ -22,15 +24,15 @@ const verticalStepVariants = cva(
     variants: {
       variant: {
         circle: cn(
-          "[&:not(:last-child)]:pb-[var(--step-gap)] [&:not(:last-child)]:gap-[var(--step-gap)]",
-          "[&:not(:last-child)]:after:content-[''] [&:not(:last-child)]:after:w-[2px] [&:not(:last-child)]:after:bg-border",
+          "[&:not(:last-child)]:gap-[var(--step-gap)] [&:not(:last-child)]:pb-[var(--step-gap)]",
+          "[&:not(:last-child)]:after:w-[2px] [&:not(:last-child)]:after:bg-border [&:not(:last-child)]:after:content-['']",
           "[&:not(:last-child)]:after:inset-x-[calc(var(--step-icon-size)/2)]",
           "[&:not(:last-child)]:after:absolute",
           "[&:not(:last-child)]:after:top-[calc(var(--step-icon-size)+var(--step-gap))]",
           "[&:not(:last-child)]:after:bottom-[var(--step-gap)]",
           "[&:not(:last-child)]:after:transition-all [&:not(:last-child)]:after:duration-200",
         ),
-        line: "flex-1 border-t-0 mb-4",
+        line: "mb-4 flex-1 border-t-0",
       },
     },
   },
@@ -72,22 +74,23 @@ const VerticalStep = React.forwardRef<HTMLDivElement, VerticalStepProps>(
     } = useStepper();
 
     const opacity = hasVisited ? 1 : 0.8;
-    const localIsLoading = isLoading || state === "loading";
-    const localIsError = isError || state === "error";
+    const localIsLoading = isLoading ?? state === "loading";
+    const localIsError = isError ?? state === "error";
 
     const isLastStep = index === steps.length - 1;
 
     const active =
-      variant === "line" ? isCompletedStep || isCurrentStep : isCompletedStep;
-    const checkIcon = checkIconProp || checkIconContext;
-    const errorIcon = errorIconProp || errorIconContext;
+      variant === "line" ? (isCompletedStep ?? isCurrentStep) : isCompletedStep;
+    const checkIcon = checkIconProp ?? checkIconContext;
+    const errorIcon = errorIconProp ?? errorIconContext;
 
     const renderChildren = () => {
       if (!expandVerticalSteps) {
         return (
           <Collapsible open={isCurrentStep}>
             <CollapsibleContent
-              ref={(node) => {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              ref={(node: any) => {
                 if (
                   // If the step is the first step and the previous step
                   // was the last step or if the step is not the first step
@@ -105,7 +108,7 @@ const VerticalStep = React.forwardRef<HTMLDivElement, VerticalStepProps>(
                   });
                 }
               }}
-              className="overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up"
+              className="data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up overflow-hidden"
             >
               {children}
             </CollapsibleContent>
@@ -126,14 +129,14 @@ const VerticalStep = React.forwardRef<HTMLDivElement, VerticalStepProps>(
           isLastStepCurrentStep && "gap-[var(--step-gap)]",
           styles?.["vertical-step"],
         )}
-        data-optional={steps[index || 0]?.optional}
+        data-optional={steps[index ?? 0]?.optional}
         data-completed={isCompletedStep}
         data-active={active}
-        data-clickable={clickable || !!onClickStep}
+        data-clickable={clickable ?? !!onClickStep}
         data-invalid={localIsError}
         onClick={() =>
-          onClickStep?.(index || 0, setStep) ||
-          onClickStepGeneral?.(index || 0, setStep)
+          onClickStep?.(index ?? 0, setStep) ??
+          onClickStepGeneral?.(index ?? 0, setStep)
         }
       >
         <div
@@ -143,7 +146,7 @@ const VerticalStep = React.forwardRef<HTMLDivElement, VerticalStepProps>(
             "stepper__vertical-step-container",
             "flex items-center",
             variant === "line" &&
-              "border-s-[3px] data-[active=true]:border-primary py-2 ps-3",
+              "border-s-[3px] py-2 ps-3 data-[active=true]:border-primary",
             styles?.["vertical-step-container"],
           )}
         >

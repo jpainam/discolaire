@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { LucideIcon } from "lucide-react";
 
 type IconType = LucideIcon | React.ComponentType<any> | undefined;
 
-type StepItem = {
+interface StepItem {
   id?: string;
   label?: string;
   description?: string;
   icon?: IconType;
   optional?: boolean;
-};
+}
 
 interface StepOptions {
   orientation?: "vertical" | "horizontal";

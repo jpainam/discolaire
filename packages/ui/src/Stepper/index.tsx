@@ -1,10 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 "use client";
 
-import { cn } from "@/lib/utils";
 import * as React from "react";
+
+import type { StepItem, StepperProps, StepProps } from "./types";
+import { cn } from "../utils";
 import { StepperProvider } from "./context";
 import { Step } from "./step";
-import type { StepItem, StepProps, StepperProps } from "./types";
 import { useMediaQuery } from "./use-media-query";
 import { useStepper } from "./use-stepper";
 
@@ -56,7 +59,7 @@ const Stepper = React.forwardRef<HTMLDivElement, StepperProps>(
     const stepCount = items.length;
 
     const isMobile = useMediaQuery(
-      `(max-width: ${mobileBreakpoint || "768px"})`,
+      `(max-width: ${mobileBreakpoint ?? "768px"})`,
     );
 
     const clickable = !!onClickStep;
@@ -79,7 +82,7 @@ const Stepper = React.forwardRef<HTMLDivElement, StepperProps>(
           clickable,
           stepCount,
           isVertical,
-          variant: variant || "circle",
+          variant: variant ?? "circle",
           expandVerticalSteps,
           steps,
           scrollTracking,
@@ -100,9 +103,9 @@ const Stepper = React.forwardRef<HTMLDivElement, StepperProps>(
           style={
             {
               "--step-icon-size":
-                variables?.["--step-icon-size"] ||
-                `${VARIABLE_SIZES[size || "md"]}`,
-              "--step-gap": variables?.["--step-gap"] || "8px",
+                variables?.["--step-icon-size"] ??
+                `${VARIABLE_SIZES[size ?? "md"]}`,
+              "--step-gap": variables?.["--step-gap"] ?? "8px",
             } as React.CSSProperties
           }
           {...rest}
@@ -134,8 +137,7 @@ const VerticalContent = ({ children }: { children: React.ReactNode }) => {
     <>
       {React.Children.map(children, (child, i) => {
         const isCompletedStep =
-          (React.isValidElement(child) &&
-            (child.props as any).isCompletedStep) ??
+          (React.isValidElement(child) && child.props.isCompletedStep) ??
           i < activeStep;
         const isLastStep = i === stepCount - 1;
         const isCurrentStep = i === activeStep;
@@ -181,4 +183,4 @@ const HorizontalContent = ({ children }: { children: React.ReactNode }) => {
 
 Stepper.displayName = "Stepper";
 export { Step, Stepper, useStepper };
-export type { StepItem, StepProps, StepperProps };
+export type { StepItem, StepperProps, StepProps };

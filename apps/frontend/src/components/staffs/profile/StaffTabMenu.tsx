@@ -9,12 +9,12 @@ import { cn } from "~/lib/utils";
 export function StaffTabMenu({
   title,
   href,
-  active,
+  //active,
   icon,
 }: {
   title: string;
   href: string;
-  active?: boolean;
+  //active?: boolean;
   icon?: React.ReactNode;
 }) {
   const pathname = usePathname();

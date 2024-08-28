@@ -1,8 +1,9 @@
-import { cn } from "@/lib/utils";
+import * as React from "react";
 import { cva } from "class-variance-authority";
 import { CheckIcon, Loader2, X } from "lucide-react";
-import * as React from "react";
+
 import type { IconType } from "./types";
+import { cn } from "../utils";
 import { useStepper } from "./use-stepper";
 
 interface StepIconProps {
@@ -108,9 +109,9 @@ const StepIcon = React.forwardRef<HTMLDivElement, StepIconProps>(
         <span
           ref={ref}
           key="label"
-          className={cn("font-medium text-center text-md")}
+          className={cn("text-md text-center font-medium")}
         >
-          {(index || 0) + 1}
+          {(index ?? 0) + 1}
         </span>
       );
     }, [

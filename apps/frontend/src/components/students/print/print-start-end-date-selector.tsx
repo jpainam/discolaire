@@ -1,15 +1,23 @@
 "use client";
 
-import { Button } from "@repo/ui/button";
-import { Calendar } from "@repo/ui/calendar";
-import { FormControl, FormField, FormItem, FormLabel } from "@repo/ui/form";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
+import { Button } from "@repo/ui/button";
+import { Calendar } from "@repo/ui/calendar";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  useFormState,
+} from "@repo/ui/form";
+import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+
 import { cn } from "~/lib/utils";
 
-export default function PrintStartEndDateSelector({ form }: { form: any }) {
+export default function PrintStartEndDateSelector() {
+  const form = useFormState();
   return (
     <>
       <FormLabel>

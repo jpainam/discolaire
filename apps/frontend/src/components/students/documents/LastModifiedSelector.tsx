@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button } from "@repo/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { PiCaretDownBold, PiCaretRightBold } from "react-icons/pi";
 
+import { useMedia } from "@repo/hooks/use-media";
+import { Button } from "@repo/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+
 import { DatePicker } from "~/components/shared/date-picker";
-import { useMedia } from "~/hooks/use-media";
 import { cn } from "~/lib/utils";
 
 const modifiedOptions = [
@@ -53,12 +55,12 @@ export function LastModifiedSelector() {
 
   useEffect(() => {
     if (startDate && endDate) {
-      setSelected(`${startDate} to ${endDate}`);
+      setSelected(`${startDate.toDateString()} to ${endDate.toDateString()}`);
     }
   }, [startDate, endDate]);
 
   return (
-    <Popover>
+    <Popover open={open}>
       <PopoverTrigger asChild>
         <Button
           size="sm"

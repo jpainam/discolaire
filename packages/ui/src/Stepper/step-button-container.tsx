@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import type { StepSharedProps } from "./types";
+import { Button } from "../button";
+import { cn } from "../utils";
 import { useStepper } from "./use-stepper";
 
 type StepButtonContainerProps = StepSharedProps & {
@@ -22,9 +22,9 @@ const StepButtonContainer = ({
     styles,
   } = useStepper();
 
-  const currentStepClickable = clickable || !!onClickStep;
+  const currentStepClickable = clickable ?? !!onClickStep;
 
-  const isLoading = isLoadingProp || isLoadingContext;
+  const isLoading = isLoadingProp ?? isLoadingContext;
 
   if (variant === "line") {
     return null;
@@ -36,21 +36,21 @@ const StepButtonContainer = ({
       tabIndex={currentStepClickable ? 0 : -1}
       className={cn(
         "stepper__step-button-container",
-        "rounded-full p-0 pointer-events-none",
-        "w-[var(--step-icon-size)] h-[var(--step-icon-size)]",
-        "border-2 flex rounded-full justify-center items-center",
+        "pointer-events-none rounded-full p-0",
+        "h-[var(--step-icon-size)] w-[var(--step-icon-size)]",
+        "flex items-center justify-center rounded-full border-2",
         "data-[clickable=true]:pointer-events-auto",
-        "data-[active=true]:bg-primary data-[active=true]:border-primary data-[active=true]:text-primary-foreground",
+        "data-[active=true]:border-primary data-[active=true]:bg-primary data-[active=true]:text-primary-foreground",
         "data-[current=true]:border-primary data-[current=true]:bg-secondary",
-        "data-[invalid=true]:bg-destructive data-[invalid=true]:border-destructive data-[invalid=true]:text-destructive-foreground",
+        "data-[invalid=true]:border-destructive data-[invalid=true]:bg-destructive data-[invalid=true]:text-destructive-foreground",
         styles?.["step-button-container"],
       )}
       aria-current={isCurrentStep ? "step" : undefined}
       data-current={isCurrentStep}
-      data-invalid={isError && (isCurrentStep || isCompletedStep)}
+      data-invalid={isError && (isCurrentStep ?? isCompletedStep)}
       data-active={isCompletedStep}
       data-clickable={currentStepClickable}
-      data-loading={isLoading && (isCurrentStep || isCompletedStep)}
+      data-loading={isLoading && (isCurrentStep ?? isCompletedStep)}
     >
       {children}
     </Button>

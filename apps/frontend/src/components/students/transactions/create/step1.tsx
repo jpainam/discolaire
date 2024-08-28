@@ -6,13 +6,20 @@ import { z } from "zod";
 
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
-import { Form } from "@repo/ui/form";
-import { useStepper } from "@repo/ui/Stepper";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@repo/ui/form";
+import { Input } from "@repo/ui/input";
+import { useStepper } from "@repo/ui/Stepper/use-stepper";
 
 import { makePaymentAtom } from "~/atoms/payment";
 import {
   AmountInput,
-  DescriptionInput,
   SelectPaymentMethod,
   SelectTransactionType,
 } from "./form-items";
@@ -53,7 +60,20 @@ export default function Step1() {
         <div className="grid grid-cols-1 gap-2 md:grid-cols-2 md:gap-4">
           <SelectPaymentMethod className={""} />
           <SelectTransactionType />
-          <DescriptionInput />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("Description")}</FormLabel>
+                <FormControl>
+                  <Input placeholder={t("Description")} {...field} />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <AmountInput />
         </div>
         <div className="flex w-full justify-end gap-2">

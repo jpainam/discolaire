@@ -15,7 +15,7 @@ export function DateOfBirthWidget({
   date?: Date | null;
   className?: string;
 }) {
-  const { t, i18n } = useLocale();
+  const { i18n } = useLocale();
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
     day: "numeric",
     month: "long",
@@ -28,7 +28,7 @@ export function DateOfBirthWidget({
   if (!date) return null;
   return (
     <div className={cn(className)}>
-      {date && dateFormatter.format(new Date(date))}
+      {dateFormatter.format(new Date(date))}
       <Confetti
         ref={confettiRef}
         className="absolute left-0 top-0 z-0 h-full w-full"
