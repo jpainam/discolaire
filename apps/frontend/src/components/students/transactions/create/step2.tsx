@@ -1,6 +1,8 @@
 import { useParams } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Printer } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -13,14 +15,24 @@ import {
   FormItem,
   FormLabel,
 } from "@repo/ui/form";
-import { useStepper } from "@repo/ui/Stepper";
+import { useStepper } from "@repo/ui/Stepper/use-stepper";
 
 import Step2Details from "./step2details";
+
+const step2Schema = z.object({
+  paymentReceived: z.boolean(),
+  paymentCorrectness: z.boolean(),
+  notifications: z.object({
+    emails: z.array(z.string()),
+    sms: z.array(z.string()),
+  }),
+});
 
 export default function Step2() {
   const { nextStep, isDisabledStep, prevStep } = useStepper();
   const params = useParams();
   const form = useForm({
+    resolver: zodResolver(step2Schema),
     defaultValues: {
       paymentReceived: false,
       paymentCorrectness: false,
@@ -30,7 +42,7 @@ export default function Step2() {
       },
     },
   });
-  function onSubmit(data: any) {
+  function onSubmit(data: z.infer<typeof step2Schema>) {
     console.log(data);
     nextStep();
   }

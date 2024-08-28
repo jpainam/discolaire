@@ -2,48 +2,43 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import type { inferProcedureOutput } from "@trpc/server";
 import { Forward, Reply } from "lucide-react";
 
-import { useAlert } from "@repo/hooks/use-alert";
-import { useSheet } from "@repo/hooks/use-sheet";
+import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
 
 import { routes } from "~/configs/routes";
-import type { AppRouter } from "~/server/api/root";
+import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { StaffSelector } from "../shared/selects/StaffSelector";
 
-type StaffProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["staff"]["all"]>
->[number];
+type StaffProcedureOutput = NonNullable<RouterOutputs["staff"]["all"]>[number];
 
 export function StaffDetailHeader() {
   const params = useParams<{ id: string }>();
   const { t } = useLocale();
-  const { openSheet } = useSheet();
-  const { openAlert, closeAlert } = useAlert();
+
   const [nextStaff, setNextStaff] = useState<StaffProcedureOutput | null>(null);
   const [prevStaff, setPrevStaff] = useState<StaffProcedureOutput | null>(null);
   const staffQuery = api.staff.get.useQuery({ id: params.id });
   const staffsQuery = api.staff.all.useQuery();
 
   const router = useRouter();
-  const { t: t2 } = useLocale("print");
+
   useEffect(() => {
     if (!params.id || !staffsQuery.data) return;
     const staffs = staffsQuery.data;
     const currentStaffIdx = staffsQuery.data.findIndex(
       (s) => s.id === params.id,
     );
-    setPrevStaff(staffs[currentStaffIdx - 1] || null);
-    setNextStaff(staffs[currentStaffIdx + 1] || null);
+    setPrevStaff(staffs[currentStaffIdx - 1] ?? null);
+    setNextStaff(staffs[currentStaffIdx + 1] ?? null);
   }, [params.id, staffsQuery.data]);
 
   if (staffQuery.isError) {
-    throw staffQuery.error;
+    showErrorToast(staffQuery.error);
   }
   // if (isPending) {
   //   return <Skeleton className="h-12 w-full" />;
@@ -116,7 +111,8 @@ export function StaffDetailHeader() {
           <Button
             disabled={!prevStaff}
             onClick={() => {
-              prevStaff && router.push(routes.staffs.details(prevStaff.id));
+              if (!prevStaff?.id) return;
+              router.push(routes.staffs.details(prevStaff.id));
             }}
             size="icon"
             variant="outline"
@@ -126,7 +122,8 @@ export function StaffDetailHeader() {
           <Button
             disabled={!nextStaff}
             onClick={() => {
-              nextStaff && router.push(routes.staffs.details(nextStaff.id));
+              if (!nextStaff?.id) return;
+              router.push(routes.staffs.details(nextStaff.id));
             }}
             size="icon"
             variant="outline"

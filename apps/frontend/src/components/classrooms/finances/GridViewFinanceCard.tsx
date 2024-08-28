@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAtom } from "jotai";
 import { ArrowDownUp, AtSign, DollarSign, Phone, Users } from "lucide-react";
@@ -18,7 +19,6 @@ import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";
 import { getFullName } from "~/utils/full-name";
 import { useMoneyFormat } from "~/utils/money-format";
-import { openInNewTab } from "~/utils/open-new-tab";
 
 type StudentAccountWithBalance = NonNullable<
   RouterOutputs["classroom"]["studentsBalance"]
@@ -88,16 +88,11 @@ export function GridViewFinanceCard({
           </div>
           <div className="flex flex-row gap-1">
             <SimpleTooltip content={t("financial_situation")}>
-              <Button
-                onClick={() => {
-                  openInNewTab(routes.students.transactions.index(student.id));
-                }}
-                variant={"outline"}
-                className="h-6 w-6"
-                size={"icon"}
-              >
-                <DollarSign className="h-3 w-3" />
-              </Button>
+              <Link href={routes.students.transactions.index(student.id)}>
+                <Button variant={"outline"} className="h-6 w-6" size={"icon"}>
+                  <DollarSign className="h-3 w-3" />
+                </Button>
+              </Link>
             </SimpleTooltip>
             <SimpleTooltip content={student.phoneNumber ?? "@phone"}>
               <Button variant={"outline"} size={"icon"} className="h-6 w-6">
@@ -115,7 +110,7 @@ export function GridViewFinanceCard({
                 size={"icon"}
                 className="h-6 w-6"
                 onClick={() => {
-                  openInNewTab(routes.students.contacts(student.id));
+                  console.log(routes.students.contacts(student.id));
                 }}
               >
                 <Users className="h-3 w-3" />

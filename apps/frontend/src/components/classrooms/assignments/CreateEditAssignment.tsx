@@ -3,11 +3,11 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { inferProcedureOutput } from "@trpc/server";
 import { Loader, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
 import { Badge } from "@repo/ui/badge";
 import { Button } from "@repo/ui/button";
@@ -34,7 +34,6 @@ import { CheckboxField } from "~/components/shared/forms/checkbox-field";
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";
 import { showErrorToast } from "~/lib/handle-error";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
 const QuillEditor = dynamic(() => import("@repo/ui/quill-editor"), {
@@ -43,7 +42,7 @@ const QuillEditor = dynamic(() => import("@repo/ui/quill-editor"), {
 });
 
 type AssignemntGetProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["assignment"]["get"]>
+  RouterOutputs["assignment"]["get"]
 >;
 
 const assignmentSchema = z.object({

@@ -2,19 +2,18 @@
 
 import { useMemo } from "react";
 import { useParams } from "next/navigation";
-import type { inferProcedureOutput } from "@trpc/server";
 
+import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
-import { useDataTable } from "@repo/ui/data-table";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
+import { useDataTable } from "@repo/ui/data-table/index";
 
-import type { AppRouter } from "~/server/api/root";
 import { GradeSheetDataTableActions } from "./GradeSheetDataTableActions";
 import { fetchGradeSheetColumns } from "./GradeSheetDataTableColumns";
 
 type ClassroomGradeSheetProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["classroom"]["gradesheets"]>
+  RouterOutputs["classroom"]["gradesheets"]
 >[number];
 
 export function GradeSheetDataTable({
@@ -23,7 +22,7 @@ export function GradeSheetDataTable({
   gradesheets: ClassroomGradeSheetProcedureOutput[];
 }) {
   const { t } = useLocale();
-  const params = useParams();
+  const params = useParams<{ id: string }>();
   const columns = useMemo(() => {
     return fetchGradeSheetColumns({
       t: t,

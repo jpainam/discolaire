@@ -22,13 +22,6 @@ import { cn } from "~/lib/utils";
 export interface InputDescriptionProps {
   className?: string;
 }
-export function DescriptionInput({ className }: InputDescriptionProps) {
-  const form = useFormContext();
-  const { t } = useLocale();
-  return (
-    
-  );
-}
 
 export function RefTransactionInput() {
   const form = useFormContext();

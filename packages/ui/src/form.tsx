@@ -6,7 +6,6 @@ import type {
   FieldPath,
   FieldValues,
   UseFormProps,
-  useFormState,
 } from "react-hook-form";
 import type { ZodType, ZodTypeDef } from "zod";
 import * as React from "react";
@@ -201,7 +200,6 @@ export {
   FormMessage,
   useForm,
   useFormField,
-  useFormState,
 };
 
-export { useFieldArray } from "react-hook-form";
+export { useFieldArray, useFormState } from "react-hook-form";

@@ -3,9 +3,9 @@
 import { useMemo } from "react";
 
 import { useLocale } from "@repo/i18n";
-import { useDataTable } from "@repo/ui/data-table";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
+import { useDataTable } from "@repo/ui/data-table/index";
 
 import { api } from "~/trpc/react";
 import { fetchPolicyColumns } from "./PolicyDataTableColumns";
@@ -17,9 +17,9 @@ export function PolicyDataTable() {
     return fetchPolicyColumns({ t: t });
   }, [t]);
   const { table } = useDataTable({
-    data: policiesQuery.data || [],
+    data: policiesQuery.data ?? [],
     columns: columns,
-    pageCount: policiesQuery.data?.length || 0 / 50,
+    pageCount: policiesQuery.data?.length ?? 0 / 50,
   });
 
   if (policiesQuery.isPending) {

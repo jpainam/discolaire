@@ -6,7 +6,7 @@ import { sumBy } from "lodash";
 import { AtSign, Copy, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 
-import { RouterOutputs } from "@repo/api";
+import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
