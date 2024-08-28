@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { notFound } from "next/navigation";
 
 import { getServerTranslations } from "@repo/i18n/server";
 import { Avatar, AvatarImage } from "@repo/ui/avatar";
@@ -18,9 +17,7 @@ export default async function Page({
 }) {
   const { t } = await getServerTranslations();
   const student = await api.student.get(id);
-  if (!student) {
-    notFound();
-  }
+
   return (
     <div className="flex flex-col">
       <IdCardHeader />
@@ -30,7 +27,7 @@ export default async function Page({
           <div className="relative">
             {student.avatar && (
               <Avatar className="absolute left-5 top-10 h-[150px] w-[150px] rounded-lg shadow-lg">
-                <AvatarImage src={student.avatar ?? ""} alt="Avatar" />
+                <AvatarImage src={student.avatar} alt="Avatar" />
               </Avatar>
             )}
             {!student.avatar && (
@@ -78,7 +75,7 @@ export default async function Page({
                   width={2}
                   height={40}
                   backgroundColor="#E4EEF8"
-                  id={"1234567890"}
+                  id={"123456789012"}
                 />
                 <Image src={Logo} height={40} width={120} alt="Logo" />
               </div>

@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import type { Prisma, Student } from "@repo/db";
@@ -186,6 +187,12 @@ export const studentRouter = createTRPCRouter({
         user: true,
       },
     });
+    if (!student) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Student not found",
+      });
+    }
     const classroom = await studentService.classroom(
       input,
       ctx.session.schoolYearId,

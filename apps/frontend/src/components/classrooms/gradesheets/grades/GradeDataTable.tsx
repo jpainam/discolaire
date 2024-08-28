@@ -4,9 +4,9 @@ import { useMemo } from "react";
 import { useParams } from "next/navigation";
 
 import { useLocale } from "@repo/i18n";
-import { useDataTable } from "@repo/ui/data-table";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
+import { useDataTable } from "@repo/ui/data-table/index";
 
 import { api } from "~/trpc/react";
 import { fetchGradeColumns } from "./GradeDataTableColumns";
@@ -21,7 +21,7 @@ export function GradeDataTable({ gradeSheetId }: { gradeSheetId: number }) {
 
   const { table } = useDataTable({
     columns: columns,
-    data: gradesQuery.data || [],
+    data: gradesQuery.data ?? [],
     pageCount: 1,
   });
   return (

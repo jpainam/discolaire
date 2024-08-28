@@ -2,7 +2,7 @@
 
 import { DirectionAwareTabs } from "@repo/ui/direction-aware-tabs";
 
-const ReportCardStudentSummary = ({}) => {
+const ReportCardStudentSummary = () => {
   const tabs = [
     {
       id: 0,

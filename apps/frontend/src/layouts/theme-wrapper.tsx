@@ -1,6 +1,7 @@
 "use client";
 
-import { useTheme } from "~/hooks/use-theme";
+import { useTheme } from "@repo/hooks/use-theme";
+
 import { cn } from "~/lib/utils";
 
 import "~/styles/themes.css";

@@ -7,6 +7,7 @@ import {
   Trash,
   Trash2,
 } from "lucide-react";
+import { PiGridFour, PiListBullets } from "react-icons/pi";
 import { toast } from "sonner";
 
 import { useAlert } from "@repo/hooks/use-alert";
@@ -19,10 +20,10 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import { Separator } from "@repo/ui/separator";
+import { ToggleGroup, ToggleGroupItem } from "@repo/ui/toggle-group";
 
 import { FileTypeSelector } from "./FileTypeSelector";
 import { LastModifiedSelector } from "./LastModifiedSelector";
-import { ViewSwitcher } from "./ViewSwitcher";
 
 export function DocumentHeader() {
   const { t } = useLocale();
@@ -33,7 +34,14 @@ export function DocumentHeader() {
       <FileTypeSelector />
       <LastModifiedSelector />
       <div className="ml-auto flex flex-row items-center gap-2">
-        <ViewSwitcher />
+        <ToggleGroup type="single" defaultValue={"view"}>
+          <ToggleGroupItem value="view">
+            <PiListBullets className="h-6 w-6" />
+          </ToggleGroupItem>
+          <ToggleGroupItem value="grid">
+            <PiGridFour className="h-6 w-6" />
+          </ToggleGroupItem>
+        </ToggleGroup>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant={"outline"} size={"icon"}>

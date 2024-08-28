@@ -1,6 +1,6 @@
 "use client";
 
-//import { useConfig } from "~/hooks/use-config";
+//import { useConfig } from "@repo/hooks/use-config";
 //import { Style, styles } from "~/registry/styles";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";

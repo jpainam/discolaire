@@ -1,5 +1,7 @@
 "use client";
+
 import Barcode from "react-barcode";
+
 export function IdCardBarCode({
   id,
   width,
@@ -15,11 +17,11 @@ export function IdCardBarCode({
 }) {
   return (
     <Barcode
-      value={"123456789012"}
+      value={id}
       width={width}
-      height={height || 40}
+      height={height ?? 40}
       background={backgroundColor}
-      fontSize={fontSize || 12}
+      fontSize={fontSize ?? 12}
       format="UPC"
       displayValue={true}
     />

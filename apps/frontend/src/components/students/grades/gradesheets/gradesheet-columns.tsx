@@ -1,8 +1,10 @@
-import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { ColumnDef, Table } from "@tanstack/react-table";
-import { createColumnHelper } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
+import { createColumnHelper } from "@tanstack/react-table";
 import { z } from "zod";
+
+import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
 
 import { ExportButton } from "~/components/shared/buttons/export-button";
 import { exportToCSV } from "~/utils/export-to-csv";

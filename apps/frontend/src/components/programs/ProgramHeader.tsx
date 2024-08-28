@@ -1,18 +1,21 @@
 "use client";
 
-import { useQueryState } from "nuqs";
+import { parseAsString, useQueryState } from "nuqs";
 
 import { useLocale } from "@repo/i18n";
+import { Label } from "@repo/ui/label";
 
 import { DatePicker } from "../shared/date-picker";
 import { ToggleSelector } from "../shared/forms/toggle-selector";
 import { ProgramThemeSelector } from "../shared/selects/ProgramThemeSelector";
-import { Label } from "../ui/label";
 
 export function ProgramHeader() {
   const { t } = useLocale();
 
-  const [theme, setTheme] = useQueryState("theme");
+  const [theme, setTheme] = useQueryState(
+    "theme",
+    parseAsString.withDefault("1"),
+  );
   const [toggle, setToggle] = useQueryState("toggle");
   const toggleItems = [
     { value: "1", label: t("chronological_view") },
@@ -24,14 +27,15 @@ export function ProgramHeader() {
       <div className="flex">{t("content_and_educational_ressources")}</div>
       <ToggleSelector
         items={toggleItems}
-        defaultValue={"1"}
+        defaultValue={theme}
         onChange={setToggle}
       />
       <Label>{t("since")}</Label>
       <DatePicker className="size-sm w-[200px]" />
       <ProgramThemeSelector
         onChange={(val) => {
-          setTheme(val);
+          console.log(toggle);
+          void setTheme(val);
         }}
       />
     </div>

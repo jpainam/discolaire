@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useParams } from "next/navigation";
 
 import { useLocale } from "@repo/i18n";
@@ -16,7 +15,6 @@ import { getFullName } from "~/utils/full-name";
 import { TranscriptItem } from "./transcript-item";
 
 export function TranscriptContent() {
-  const [showAll, setShowAll] = useState(false);
   const params = useParams<{ id: string }>();
   const studentQuery = api.student.get.useQuery(params.id);
 

@@ -32,7 +32,7 @@ export async function PeriodicAttendanceTable({
       </TableHeader>
       <TableBody>
         <TableRow>
-          <TableCell className="font-medium">INV001</TableCell>
+          <TableCell className="font-medium">{term}</TableCell>
           <TableCell>Paid</TableCell>
           <TableCell>Credit Card</TableCell>
           <TableCell>INV001</TableCell>

@@ -1,10 +1,9 @@
 "use client";
 
+import type { DateRange } from "react-day-picker";
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
 import { MailOpen, MoreVertical } from "lucide-react";
-import type { DateRange } from "react-day-picker";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
@@ -22,24 +21,18 @@ import { Label } from "@repo/ui/label";
 
 import { DateRangePicker } from "~/components/shared/DateRangePicker";
 import { routes } from "~/configs/routes";
-import { useDebounce } from "~/hooks/use-debounce";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function NotificationHeader() {
   const Icon = sidebarIcons.notifications;
-  const params = useParams();
+  const params = useParams<{ id: string }>();
   const [value, setValue] = useState("");
-  const debounceValue = useDebounce(value, 500);
-  const { data: students, isPending } = useQuery({
-    queryKey: ["search-students", debounceValue],
-    queryFn: async () => {
-      return null;
-    },
-  });
+  //const debounceValue = useDebounce(value, 500);
 
   const { createQueryString } = useCreateQueryString();
   const { t } = useLocale();
   const router = useRouter();
+  console.log(value);
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary px-2 py-1 text-secondary-foreground">
       {Icon && <Icon className="h-5 w-5" />}

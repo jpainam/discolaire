@@ -1,8 +1,8 @@
 "use client";
 
+import type { Grade } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import type { Grade } from "@prisma/client";
 import _ from "lodash";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useQueryState } from "nuqs";
@@ -12,6 +12,7 @@ import { Button } from "@repo/ui/button";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import { ScrollArea } from "@repo/ui/scroll-area";
 
+import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { ByChronologicalOrder } from "./by-chronological-order";
 import { BySubject } from "./by-subject";
@@ -59,7 +60,7 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
   }, [orderBy, studentGradesQuery.data, term]);
 
   if (classroomMoyMinMaxGrades.isError) {
-    throw classroomMoyMinMaxGrades.error;
+    showErrorToast(classroomMoyMinMaxGrades.error);
   }
   return (
     <div className="flex flex-col">
@@ -67,7 +68,7 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
         <Button
           variant={"ghost"}
           onClick={() => {
-            setOrderBy("subject");
+            void setOrderBy("subject");
           }}
         >
           {t("subject")}{" "}
@@ -80,7 +81,7 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
         <Button
           variant={"ghost"}
           onClick={() => {
-            setOrderBy("grade");
+            void setOrderBy("grade");
           }}
         >
           {t("grade")}
@@ -103,11 +104,13 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
           {view === "by_chronological_order" && (
             <ByChronologicalOrder
               grades={items}
+              // @ts-expect-error TODO fix this
               minMaxMoy={classroomMoyMinMaxGrades.data}
             />
           )}
           {view === "by_subject" && (
             <BySubject
+              // @ts-expect-error TODO fix this
               minMaxMoy={classroomMoyMinMaxGrades.data}
               grades={items}
             />

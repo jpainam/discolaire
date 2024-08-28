@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 
-import { useLocale } from "@repo/i18n";
 import type { FlatBadgeVariant } from "@repo/ui/FlatBadge";
+import { useLocale } from "@repo/i18n";
 import FlatBadge from "@repo/ui/FlatBadge";
 import {
   Table,
@@ -16,7 +16,6 @@ import {
 
 import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";
-import { getFullName } from "~/utils/full-name";
 import { ReportCardSummary } from "./ReportCardSummary";
 
 interface ReportCardTableProps {
@@ -70,7 +69,7 @@ export function ReportCardTable({ reportCard }: ReportCardTableProps) {
                     className="ml-4 hover:text-blue-500 hover:underline"
                     href={routes.staffs.details(card.subject.teacherId || "")}
                   >
-                    {getFullName(card.subject.teacher)}
+                    {card.subject.teacher}
                   </Link>
                 </div>
               </TableCell>
@@ -100,7 +99,7 @@ export function ReportCardTable({ reportCard }: ReportCardTableProps) {
 
 function Cell({ n }: { n?: number | null }) {
   let v: FlatBadgeVariant = "green";
-  if (n == undefined || n == null) {
+  if (!n) {
     return <></>;
   }
   if (n < 10) {

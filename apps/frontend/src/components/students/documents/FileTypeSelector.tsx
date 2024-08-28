@@ -14,6 +14,7 @@ import FolderIcon from "~/components/icons/folder-solid";
 import ImageIcon from "~/components/icons/image-solid";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
+import { cn } from "~/lib/utils";
 
 interface Option {
   value: string;
@@ -21,7 +22,7 @@ interface Option {
   icon: React.ReactNode;
   id: number;
 }
-const fileTypeOptions = [
+const fileTypeOptions: Option[] = [
   {
     value: "folder",
     name: "Folder",
@@ -66,7 +67,7 @@ export function FileTypeSelector({
   const { t } = useLocale();
   return (
     <Select defaultValue={defaultValue} onValueChange={onChange}>
-      <SelectTrigger className="w-[280px]">
+      <SelectTrigger className={cn("w-[280px]", className)}>
         <SelectValue placeholder={t("select_an_option")} />
       </SelectTrigger>
       <SelectContent>

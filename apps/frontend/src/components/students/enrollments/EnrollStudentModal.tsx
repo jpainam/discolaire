@@ -1,6 +1,5 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -37,7 +36,7 @@ export function EnrollStudentModal({ studentId }: { studentId: string }) {
     resolver: zodResolver(enrollFormSchema),
   });
   const { t } = useLocale();
-  const params = useParams();
+  //const params = useParams<{ id: string }>();
   const createEnrollmentMutation = api.enrollment.create.useMutation();
   const utils = api.useUtils();
 
@@ -46,7 +45,7 @@ export function EnrollStudentModal({ studentId }: { studentId: string }) {
       createEnrollmentMutation.mutateAsync({
         studentId: studentId,
         classroomId: data.classroomId,
-        observation: data.observation || "",
+        observation: data.observation ?? "",
       }),
       {
         error: (error) => {

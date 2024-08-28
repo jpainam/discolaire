@@ -2,12 +2,11 @@
 
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import { Label } from "@repo/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
+import { Textarea } from "@repo/ui/textarea";
 
-import { Label } from "../ui/label";
-import { Textarea } from "../ui/textarea";
-
-const ReportCardSummary = ({}) => {
+const ReportCardSummary = () => {
   const { t } = useLocale();
 
   return (

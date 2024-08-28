@@ -3,13 +3,13 @@
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
+import { Label } from "@repo/ui/label";
 import { ToggleGroup } from "@repo/ui/ToggleGroup";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { StudentSelector } from "~/components/shared/selects/StudentSelector";
 import { routes } from "~/configs/routes";
-import { Label } from "../ui/label";
 
 export function StudentReportToolbar() {
   const { t } = useLocale();
