@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Check } from "lucide-react";
 import { toast } from "sonner";
 
-import { RouterOutputs } from "@repo/api";
+import type { RouterOutputs } from "@repo/api";
 import { useDebounce } from "@repo/hooks/use-debounce";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";

@@ -2,10 +2,10 @@
 
 import { CreditCard, MonitorCheck, X } from "lucide-react";
 
-import type { StepItem } from "@repo/ui/Stepper";
+import type { StepItem } from "@repo/ui/Stepper/types";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
-import { Step, Stepper, useStepper } from "@repo/ui/Stepper";
+import { Step, Stepper, useStepper } from "@repo/ui/Stepper/index";
 
 import Step1 from "./step1";
 import Step2 from "./step2";
@@ -39,13 +39,13 @@ export default function MakePaymentStepper() {
 const Footer = () => {
   const { t } = useLocale();
   const {
-    nextStep,
-    prevStep,
+    //nextStep,
+    //prevStep,
     resetSteps,
-    isDisabledStep,
+    //isDisabledStep,
     hasCompletedAllSteps,
-    isLastStep,
-    isOptionalStep,
+    //isLastStep,
+    //isOptionalStep,
   } = useStepper();
   return (
     <>

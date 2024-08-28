@@ -6,6 +6,7 @@ import { sumBy } from "lodash";
 import { AtSign, Copy, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 
+import { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -25,19 +26,21 @@ import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
 import { getFullName } from "~/utils/full-name";
 
+type Fee = RouterOutputs["classroom"]["fees"][number];
+
 export default function Step2Details() {
   const payment = useAtomValue(makePaymentAtom);
   const params = useParams<{ id: string }>();
   const form = useFormContext();
   const studentQuery = api.student.get.useQuery(params.id);
-  const [transactionDate, setTransactionDate] = useState<Date>(new Date());
-  const [remaining, setRemaining] = useState(0);
-  const [paySoFar, setPaySoFar] = useState(0);
+  const [transactionDate, _setTransactionDate] = useState<Date>(new Date());
+  const [remaining, _setRemaining] = useState(0);
+  const [paySoFar, _setPaySoFar] = useState(0);
 
   const studentContactsQuery = api.student.contacts.useQuery(params.id);
 
   //const feesQuery = api.classroom.fees.useQuery({ id: student?.classroom?.id });
-  const fees: any[] = [];
+  const fees: Fee[] = [];
 
   const { t, i18n } = useLocale();
   const { fullDateTimeFormatter } = useDateFormat();
@@ -82,7 +85,7 @@ export default function Step2Details() {
             </Button>
           </CardTitle>
           <CardDescription>
-            {transactionDate && fullDateTimeFormatter.format(transactionDate)}
+            {fullDateTimeFormatter.format(transactionDate)}
           </CardDescription>
         </div>
         <div className="ml-auto flex flex-row items-center gap-2 rounded-md border bg-black px-2 py-1 text-white">
@@ -144,13 +147,13 @@ export default function Step2Details() {
               <FormItem className="grid gap-2 text-muted-foreground md:grid-cols-4">
                 <NotificationFragment
                   key={`${studentQuery.data?.id}-notification-0`}
-                  name={studentQuery.data?.lastName || ""}
-                  itemId={studentQuery.data?.id!}
+                  name={studentQuery.data?.lastName ?? ""}
+                  itemId={studentQuery.data?.id ?? ""}
                 />
                 {studentContactsQuery.data?.map((item, index) => (
                   <NotificationFragment
                     key={`${item.contactId}-notification-${index}`}
-                    name={item.contact.lastName || ""}
+                    name={item.contact.lastName ?? ""}
                     itemId={item.contactId}
                   />
                 ))}
@@ -192,7 +195,7 @@ function NotificationFragment({
                       return checked
                         ? field.onChange({
                             ...field.value,
-                            emails: [...field.value?.emails, itemId],
+                            emails: [...field.value.emails, itemId],
                           })
                         : field.onChange({
                             ...field.value,
@@ -212,7 +215,7 @@ function NotificationFragment({
                       return checked
                         ? field.onChange({
                             ...field.value,
-                            sms: [...field.value?.sms, itemId],
+                            sms: [...field.value.sms, itemId],
                           })
                         : field.onChange({
                             ...field.value,

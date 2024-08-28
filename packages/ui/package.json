@@ -8,6 +8,13 @@
       "types": "./dist/index.d.ts",
       "default": "./src/index.ts"
     },
+    "./Stepper/*": {
+      "types": "./dist/Stepper/index.d.ts",
+      "default": [
+        "./src/Stepper/*.ts",
+        "./src/Stepper/*.tsx"
+      ]
+    },
     "./*": {
       "types": "./dist/*.d.ts",
       "default": [
