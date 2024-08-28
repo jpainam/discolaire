@@ -1,15 +1,16 @@
 "use client";
 
-import type { RefObject} from "react";
+import type { RefObject } from "react";
 import { useState } from "react";
 import Link from "next/link";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { PiCheck } from "react-icons/pi";
+
 import { Badge } from "@repo/ui/badge";
 import { Checkbox } from "@repo/ui/checkbox";
 import { Label } from "@repo/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import { PiCheck } from "react-icons/pi";
 
 import SimpleBar from "~/components/simplebar";
 import { notificationsData } from "~/data/notifications";
@@ -75,6 +76,7 @@ function NotificationsList({
 export default function NotificationDropdown({
   children,
 }: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children: JSX.Element & { ref?: RefObject<any> };
 }) {
   const [open, setOpen] = useState(false);

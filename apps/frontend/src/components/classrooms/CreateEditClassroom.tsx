@@ -2,11 +2,11 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import type { inferProcedureOutput } from "@trpc/server";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import type { RouterOutputs } from "@repo/api";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -20,18 +20,17 @@ import {
 import { Separator } from "@repo/ui/separator";
 
 import { getErrorMessage } from "~/lib/handle-error";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { InputField } from "../shared/forms/input-field";
 import { SelectField } from "../shared/forms/SelectField";
 import { StaffSelector } from "../shared/selects/StaffSelector";
 
 type ClassroomAllProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["classroom"]["all"]>
+  RouterOutputs["classroom"]["all"]
 >[number];
 
 type ClassroomGetProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["classroom"]["get"]>
+  RouterOutputs["classroom"]["get"]
 >;
 
 export function CreateEditClassroom({
@@ -85,8 +84,12 @@ export function CreateEditClassroom({
 
   const { closeSheet } = useSheet();
 
-  const updateClassroomMutation = api.classroom.update.useMutation();
-  const createClassroomMutation = api.classroom.create.useMutation();
+  const updateClassroomMutation = api.classroom.update.useMutation({
+    onSettled: () => utils.classroom.invalidate(),
+  });
+  const createClassroomMutation = api.classroom.create.useMutation({
+    onSettled: () => utils.classroom.invalidate(),
+  });
   const utils = api.useUtils();
 
   function onSubmit(data: UpdateClassroomValues) {
@@ -105,7 +108,6 @@ export function CreateEditClassroom({
             return getErrorMessage(error);
           },
           success: () => {
-            utils.classroom.invalidate();
             return t("updated_successfully");
           },
         },
@@ -117,7 +119,6 @@ export function CreateEditClassroom({
           return getErrorMessage(error);
         },
         success: () => {
-          utils.classroom.invalidate();
           return t("created_successfully");
         },
       });

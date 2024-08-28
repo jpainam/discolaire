@@ -1,12 +1,12 @@
+import type { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import type { ColumnDef } from "@tanstack/react-table";
-import type { inferProcedureOutput } from "@trpc/server";
-import type { TFunction } from "i18next";
 import i18next from "i18next";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { useAlert } from "@repo/hooks/use-alert";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
@@ -25,11 +25,10 @@ import FlatBadge from "@repo/ui/FlatBadge";
 import { routes } from "~/configs/routes";
 import { getErrorMessage } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
 type ClassroomGradeSheetProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["classroom"]["gradesheets"]>
+  RouterOutputs["classroom"]["gradesheets"]
 >[number];
 
 export function fetchGradeSheetColumns({
@@ -44,11 +43,11 @@ export function fetchGradeSheetColumns({
     day: "numeric",
     year: "numeric",
   });
-  const endDateFormatter = Intl.DateTimeFormat(i18next.language, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  // const endDateFormatter = Intl.DateTimeFormat(i18next.language, {
+  //   year: "numeric",
+  //   month: "short",
+  //   day: "numeric",
+  // });
   return [
     {
       id: "select",
@@ -82,7 +81,7 @@ export function fetchGradeSheetColumns({
       ),
       cell: ({ row }) => {
         const startDate = row.original.startDate;
-        const endDate = row.original.endDate;
+        //const endDate = row.original.endDate;
         return (
           <div>
             {startDate && startDateFormatter.format(new Date(startDate))}
@@ -102,7 +101,7 @@ export function fetchGradeSheetColumns({
         return (
           <Link
             className="hover:text-blue-600 hover:underline"
-            href={routes.classrooms.gradesheets.details(classroomId, grade?.id)}
+            href={routes.classrooms.gradesheets.details(classroomId, grade.id)}
           >
             {grade.name}
           </Link>
@@ -117,7 +116,7 @@ export function fetchGradeSheetColumns({
       ),
       cell: ({ row }) => {
         const subject = row.original.subject;
-        return <div>{subject?.course?.reportName}</div>;
+        return <div>{subject.course?.reportName}</div>;
       },
     },
     {
@@ -126,11 +125,11 @@ export function fetchGradeSheetColumns({
         <DataTableColumnHeader column={column} title={t("teacher")} />
       ),
       cell: ({ row }) => {
-        const teacher = row.original.subject?.teacher;
+        const teacher = row.original.subject.teacher;
         return (
           <Link
             className="hover:text-blue-500 hover:underline"
-            href={teacher?.id ? routes.staffs.details(teacher?.id) : "#"}
+            href={teacher?.id ? routes.staffs.details(teacher.id) : "#"}
           >
             {teacher?.lastName}
           </Link>
@@ -144,7 +143,7 @@ export function fetchGradeSheetColumns({
       ),
       cell: ({ row }) => {
         const subject = row.original.subject;
-        return <div>{subject?.coefficient}</div>;
+        return <div>{subject.coefficient}</div>;
       },
     },
     {
@@ -185,7 +184,7 @@ export function fetchGradeSheetColumns({
         const avg = row.original.avg || 0;
         return (
           <FlatBadge variant={avg < 10 ? "red" : "green"}>
-            {avg?.toFixed(2)}
+            {avg.toFixed(2)}
           </FlatBadge>
         );
       },
@@ -199,7 +198,7 @@ export function fetchGradeSheetColumns({
         const min = row.original.min || 0;
         return (
           <FlatBadge variant={min < 10 ? "purple" : "yellow"}>
-            {min?.toFixed(2)}
+            {min.toFixed(2)}
           </FlatBadge>
         );
       },
@@ -213,7 +212,7 @@ export function fetchGradeSheetColumns({
         const max = row.original.max || 0;
         return (
           <FlatBadge variant={max < 10 ? "pink" : "blue"}>
-            {max?.toFixed(2)}
+            {max.toFixed(2)}
           </FlatBadge>
         );
       },
@@ -235,7 +234,7 @@ export function fetchGradeSheetColumns({
       ),
       cell: ({ row }) => {
         const term = row.original.term;
-        return <div>{term?.name}</div>;
+        return <div>{term.name}</div>;
       },
     },
     {
@@ -312,8 +311,8 @@ function ActionCells({
                     {
                       loading: t("deleting"),
                       success: () => {
-                        utils.gradeSheet.invalidate();
-                        utils.grade.invalidate();
+                        void utils.gradeSheet.invalidate();
+                        void utils.grade.invalidate();
                         closeAlert();
                         return t("deleted_successfully");
                       },

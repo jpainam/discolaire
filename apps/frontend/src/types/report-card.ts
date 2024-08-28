@@ -13,7 +13,6 @@ export type ReportCardType = z.infer<typeof reportCardSchema>;
 
 export const reportCardListSchema = z.array(reportCardSchema);
 
-const subjectSchema = z.record(z.string(), z.any());
 export const studentReportCard = z.object({
   avg: z.number().nullish(),
   rank: z.number(),

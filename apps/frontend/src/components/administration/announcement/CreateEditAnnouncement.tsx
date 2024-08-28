@@ -3,13 +3,14 @@
 import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import type { inferProcedureOutput } from "@trpc/server";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { RouterOutputs } from "@repo/api";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
 import {
   Form,
   FormControl,
@@ -18,20 +19,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@repo/ui/form";
+import { Separator } from "@repo/ui/separator";
 import { Textarea } from "@repo/ui/textarea";
 
 import { DatePicker } from "~/components/shared/date-picker";
 import { RecipientMultiSelector } from "~/components/shared/selects/RecipientMultiSelector";
 import { getErrorMessage } from "~/lib/handle-error";
-import type { AppRouter } from "~/server/api/root";
-import { api } from "~/trpc/react";
 import { InputField } from "../../shared/forms/input-field";
 import { SelectField } from "../../shared/forms/SelectField";
-import { Button } from "../@repo/ui/button";
-import { Separator } from "../@repo/ui/separator";
 
 type AnnouncementGetProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["announcement"]["get"]>
+  RouterOutputs["announcement"]["get"]
 >;
 
 interface CreateEditNoticeBoardProps {
@@ -73,19 +71,22 @@ export function CreateEditAnnouncement({
   const { watch } = form;
 
   useEffect(() => {
-    const subscription = watch((value, { name, type }) => console.log(value));
+    const subscription = watch((value, { name, type }) =>
+      console.log(value, name, type),
+    );
     return () => subscription.unsubscribe();
   }, [watch]);
 
   const { closeSheet } = useSheet();
-  const updateAnnouncementMutation = api.announcement.update.useMutation();
-  const createAnnouncementMutation = api.announcement.create.useMutation();
+  //const updateAnnouncementMutation = api.announcement.update.useMutation();
+  //const createAnnouncementMutation = api.announcement.create.useMutation();
 
-  async function onSubmit(data: UpdateNoticeBoardValues) {
+  function onSubmit(data: UpdateNoticeBoardValues) {
     console.log("Submitting data:", data);
     const values = {
       ...data,
     };
+    console.log(values);
 
     if (noticeBoard) {
       toast.promise(
@@ -216,6 +217,7 @@ export function CreateEditAnnouncement({
                     <RecipientMultiSelector
                       onChange={(values) => {
                         form.setValue("recipients", values);
+                        field.onChange(values);
                       }}
                       defaultValues={[]}
                     />

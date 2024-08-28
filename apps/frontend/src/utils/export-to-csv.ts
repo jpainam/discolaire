@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export function exportToCSV(data: any[], header: string, fileName: string) {
   const csvContent =
     "data:text/csv;charset=utf-8," +

@@ -1,9 +1,10 @@
 "use client";
 
+import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+
 import { buttonVariants } from "@repo/ui/button";
-import type { LucideIcon } from "lucide-react";
 
 import { cn } from "~/lib/utils";
 
@@ -19,7 +20,7 @@ interface NavProps {
 
 export function AdminNav({ links }: NavProps) {
   const searchParams = useSearchParams();
-  const tab = searchParams.get("tab") || "classrooms";
+  const tab = searchParams.get("tab") ?? "classrooms";
   const activeLink = links.find((link) => link.href?.includes(tab));
   return (
     <div
@@ -30,7 +31,7 @@ export function AdminNav({ links }: NavProps) {
         {links.map((link, index) => (
           <Link
             key={index}
-            href={link.href || "#"}
+            href={link.href ?? "#"}
             className={cn(
               buttonVariants({
                 variant: link.href === activeLink?.href ? "default" : "ghost",

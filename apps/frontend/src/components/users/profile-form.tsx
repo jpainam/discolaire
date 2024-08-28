@@ -1,12 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
-import { useFieldArray, useForm } from "react-hook-form";
+//import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   Form,
@@ -16,6 +14,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  useForm,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import {
@@ -65,16 +64,16 @@ const defaultValues: Partial<ProfileFormValues> = {
 };
 
 export function ProfileForm() {
-  const form = useForm<ProfileFormValues>({
-    resolver: zodResolver(profileFormSchema),
+  const form = useForm({
+    schema: profileFormSchema,
     defaultValues,
     mode: "onChange",
   });
 
-  const { fields, append } = useFieldArray({
-    name: "urls",
-    control: form.control,
-  });
+  // const { fields, append } = useFieldArray({
+  //   name: "urls",
+  //   control: form.control,
+  // });
 
   function onSubmit(data: ProfileFormValues) {
     console.log(data);
@@ -87,9 +86,10 @@ export function ProfileForm() {
     //   ),
     // });
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data } = useSession();
-  const user = data?.user;
-  const { t } = useLocale();
+  //const user = data?.user;
+  //const { t } = useLocale();
 
   return (
     <Form {...form}>

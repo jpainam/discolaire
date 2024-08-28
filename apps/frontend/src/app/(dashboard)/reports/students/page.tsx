@@ -1,12 +1,11 @@
-import { getServerTranslations } from "@repo/i18n/server";
 import { Card, CardContent, CardFooter, CardHeader } from "@repo/ui/card";
 
 import { StudentReportFooter } from "~/components/reports/StudentReportFooter";
 import { StudentLinkReports } from "~/components/reports/StudentReports";
 import { StudentReportToolbar } from "~/components/reports/StudentReportToolbar";
 
-export default async function Page() {
-  const { t } = await getServerTranslations();
+export default function Page() {
+  //const { t } = await getServerTranslations();
   //const reports = await getReportsByCategory("student");
   // if (!reports) {
   //   notFound();

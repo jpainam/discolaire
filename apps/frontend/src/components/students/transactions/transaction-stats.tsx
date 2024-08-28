@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import type { inferProcedureOutput } from "@trpc/server";
-import { sumBy } from "lodash";
 import type { IconType } from "react-icons";
+import { sumBy } from "lodash";
 import {
   PiBank,
   PiCurrencyCircleDollar,
@@ -10,11 +10,11 @@ import {
   PiMoneyBold,
 } from "react-icons/pi";
 
+import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
 
 import { CURRENCY } from "~/lib/constants";
 import { cn } from "~/lib/utils";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
 export interface TransactionType {
@@ -26,7 +26,7 @@ export interface TransactionType {
 }
 
 type StudentTransactionProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["student"]["transactions"]>
+  RouterOutputs["student"]["transactions"]
 >[number];
 
 export function TransactionStats({
@@ -38,7 +38,7 @@ export function TransactionStats({
 }) {
   const { t, i18n } = useLocale();
   const feesQuery = api.classroom.fees.useQuery(classroomId);
-  const fees = feesQuery.data || [];
+  const fees = feesQuery.data ?? [];
   const statData: TransactionType[] = [
     {
       title: t("total_fees"),

@@ -1,8 +1,7 @@
 "use client";
 
+import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
-import type {
-  LucideIcon} from "lucide-react";
 import {
   BookOpenCheckIcon,
   BookUserIcon,
@@ -75,7 +74,7 @@ const ServiceSwitcherItem = ({ item }: { item: ServiceItem }) => {
   return (
     <Link
       target="_blank"
-      href={item.href || ""}
+      href={item.href ?? ""}
       className="flex flex-row items-center gap-2 rounded-lg pr-2 hover:bg-muted/50"
     >
       <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-secondary">

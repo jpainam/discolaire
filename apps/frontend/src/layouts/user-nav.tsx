@@ -24,26 +24,25 @@ export function UserNav({ className }: { className?: string }) {
   const { t } = useLocale();
   const router = useRouter();
   const { data } = useSession();
+  console.log(data);
   const user = data?.user;
+  if (!user) return null;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className={className}>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage
-              src={(user?.avatar || user?.image) ?? undefined}
-              alt={"AV"}
-            />
-            <AvatarFallback className="uppercase">{`${user?.name?.charAt(0)}${user?.name?.charAt(1)}`}</AvatarFallback>
+            <AvatarImage src={user.avatar} alt={"AV"} />
+            <AvatarFallback className="uppercase">{`${user.name?.charAt(0)}${user.name?.charAt(1)}`}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[250px] rounded-xl" align="end">
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user?.name}</p>
+            <p className="text-sm font-medium leading-none">{user.name}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              {data?.user.email}
+              {user.email}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -51,7 +50,7 @@ export function UserNav({ className }: { className?: string }) {
         <DropdownMenuGroup>
           <DropdownMenuItem
             onClick={() => {
-              user?.id && router.push(routes.users.details(user.id));
+              router.push(routes.users.details(user.id));
             }}
           >
             <User className="mr-2 h-4 w-4" />
@@ -59,7 +58,7 @@ export function UserNav({ className }: { className?: string }) {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              user?.id && router.push(routes.users.settings(user.id));
+              router.push(routes.users.settings(user.id));
             }}
           >
             <Settings className="mr-2 h-4 w-4" />
@@ -67,7 +66,7 @@ export function UserNav({ className }: { className?: string }) {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              user?.id && router.push(routes.users.logs(user.id));
+              router.push(routes.users.logs(user.id));
             }}
           >
             <Computer className="mr-2 h-4 w-4" />
@@ -78,8 +77,8 @@ export function UserNav({ className }: { className?: string }) {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="text-destructive"
-          onClick={async () => {
-            signOut({ callbackUrl: "/", redirect: true });
+          onClick={() => {
+            void signOut({ callbackUrl: "/", redirect: true });
           }}
         >
           <LogOut className="mr-2 h-4 w-4" />

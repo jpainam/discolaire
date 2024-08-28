@@ -1,8 +1,8 @@
 "use client";
 
+import type { DialogProps } from "@radix-ui/react-dialog";
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import type { DialogProps } from "@radix-ui/react-dialog";
 //import { DialogProps } from "@radix-ui/react-alert-dialog";
 import {
   CircleIcon,
@@ -93,7 +93,7 @@ export function SearchCommandMenu({ ...props }: DialogProps) {
                     key={navItem.href}
                     value={navItem.title}
                     onSelect={() => {
-                      runCommand(() => router.push(navItem.href!));
+                      runCommand(() => router.push(navItem.href ?? ""));
                     }}
                   >
                     <span>
@@ -114,7 +114,7 @@ export function SearchCommandMenu({ ...props }: DialogProps) {
                     key={navItem.href}
                     value={navItem.title}
                     onSelect={() => {
-                      runCommand(() => router.push(navItem.href!));
+                      runCommand(() => router.push(navItem.href ?? ""));
                     }}
                   >
                     <div className="mr-2 flex h-4 w-4 items-center justify-center">

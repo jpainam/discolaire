@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useEffect, useMemo } from "react";
-import type { inferProcedureOutput } from "@trpc/server";
 import _ from "lodash";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
+import type { RouterOutputs } from "@repo/api";
+import type { ChartConfig } from "@repo/ui/chart";
 import { useLocale } from "@repo/i18n";
 import {
   Card,
@@ -13,8 +14,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/card";
-import type {
-  ChartConfig} from "@repo/ui/chart";
 import {
   ChartContainer,
   ChartTooltip,
@@ -22,11 +21,11 @@ import {
 } from "@repo/ui/chart";
 import { Skeleton } from "@repo/ui/skeleton";
 
-import type { AppRouter } from "~/server/api/root";
+import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
 type TransactionQuotaProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["transaction"]["quotas"]>
+  RouterOutputs["transaction"]["quotas"]
 >[number];
 
 export function TransactionClassrooms() {
@@ -76,7 +75,7 @@ export function TransactionClassrooms() {
     );
   }
   if (transactionsQuotaQuery.isError) {
-    throw transactionsQuotaQuery.error;
+    showErrorToast(transactionsQuotaQuery.error);
   }
   if (!transactionsQuotaQuery.data) return null;
 
@@ -105,6 +104,7 @@ export function TransactionClassrooms() {
                     tickLine={false}
                     tickMargin={10}
                     axisLine={false}
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
                     tickFormatter={(value) => value.slice(0, 3)}
                   />
                   <ChartTooltip

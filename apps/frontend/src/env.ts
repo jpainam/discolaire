@@ -30,6 +30,8 @@ export const env = createEnv({
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
     NEXT_PUBLIC_BASE_URL: z.string().url(),
+    NEXT_PUBLIC_PROSPECT_SERVICE_URL: z.string().url(),
+    NEXT_PUBLIC_LIBRARY_SERVICE_URL: z.string().url(),
   },
   /**
    * Destructure all variables from `process.env` to make sure they aren't tree-shaken away.
@@ -37,6 +39,10 @@ export const env = createEnv({
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+    NEXT_PUBLIC_LIBRARY_SERVICE_URL:
+      process.env.NEXT_PUBLIC_LIBRARY_SERVICE_URL,
+    NEXT_PUBLIC_PROSPECT_SERVICE_URL:
+      process.env.NEXT_PUBLIC_PROSPECT_SERVICE_URL,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
     // AWS S3
     AWS_S3_ACCESS_KEY_ID: process.env.AWS_S3_ACCESS_KEY_ID,

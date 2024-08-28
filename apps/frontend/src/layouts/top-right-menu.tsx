@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { CircleHelp, Mail, Printer } from "lucide-react";
 
 import { useModal } from "@repo/hooks/use-modal";
@@ -28,7 +27,6 @@ export function TopRightMenu({ className }: { className?: string }) {
 }
 
 export function TopRightButtons() {
-  const router = useRouter();
   const { openModal } = useModal();
   const { t } = useLocale("description");
   return (

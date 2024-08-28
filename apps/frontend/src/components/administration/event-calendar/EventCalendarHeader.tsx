@@ -47,7 +47,7 @@ export function EventCalendarHeader() {
     <div className="flex flex-row items-center gap-2 px-2">
       <Label>Calendar type</Label>
       <Select
-        defaultValue={searchParams.get("category") || "All"}
+        defaultValue={searchParams.get("category") ?? "All"}
         onValueChange={handleFilterChange}
       >
         <SelectTrigger className="h-10 max-w-[200px]">

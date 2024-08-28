@@ -27,7 +27,7 @@ export function SubMenuNav() {
   const menus = sub_menus;
   return (
     <div className="flex flex-row items-center gap-0 text-sm">
-      {menus.map((item, index) => {
+      {menus.map((item, _index) => {
         const isActive = pathnameKey && item.href.includes(pathnameKey);
         return (
           <Link

@@ -49,7 +49,11 @@ export function ClassroomFeeHeader() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onSelect={() => {}}>
+            <DropdownMenuItem
+              onSelect={() => {
+                console.log("PDF");
+              }}
+            >
               <PDFIcon className="mr-2 h-4 w-4" />
               {t("fees")}
             </DropdownMenuItem>

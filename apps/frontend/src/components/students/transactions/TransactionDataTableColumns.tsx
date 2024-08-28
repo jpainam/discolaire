@@ -1,3 +1,5 @@
+import type { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import Link from "next/link";
 import {
   CheckCircledIcon,
@@ -5,15 +7,12 @@ import {
   DotsHorizontalIcon,
   StopwatchIcon,
 } from "@radix-ui/react-icons";
-import type { ColumnDef } from "@tanstack/react-table";
-import type { inferProcedureOutput } from "@trpc/server";
-import type { TFunction } from "i18next";
 import i18next from "i18next";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { useCreateQueryString } from "@repo/hooks/create-query-string";
-import { useRouter } from "@repo/hooks/use-router";
+import type { RouterOutputs } from "@repo/api";
+import type { FlatBadgeVariant } from "@repo/ui/FlatBadge";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
@@ -30,17 +29,15 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
-import type { FlatBadgeVariant } from "@repo/ui/FlatBadge";
 import FlatBadge from "@repo/ui/FlatBadge";
 
 import { routes } from "~/configs/routes";
 import { CURRENCY } from "~/lib/constants";
 import { getErrorMessage } from "~/lib/handle-error";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
 type StudentTransactionProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["student"]["transactions"]>
+  RouterOutputs["student"]["transactions"]
 >[number];
 
 export function fetchTransactionColumns({
@@ -135,7 +132,7 @@ export function fetchTransactionColumns({
         const transaction = row.original;
         return (
           <div>
-            {transaction.amount?.toLocaleString(i18next.language, {
+            {transaction.amount.toLocaleString(i18next.language, {
               style: "currency",
               currency: CURRENCY,
               maximumFractionDigits: 0,
@@ -210,8 +207,8 @@ function ActionsCell({
 }: {
   transaction: StudentTransactionProcedureOutput;
 }) {
-  const { createQueryString } = useCreateQueryString();
-  const router = useRouter();
+  //const { createQueryString } = useCreateQueryString();
+  //const router = useRouter();
   const { t } = useLocale();
   const deleteTransactionsMutation = api.transaction.delete.useMutation();
   return (
@@ -232,6 +229,7 @@ function ActionsCell({
             <DropdownMenuRadioGroup
               value={transaction.status ?? ""}
               onValueChange={(value) => {
+                console.log(value);
                 toast.promise(
                   deleteTransactionsMutation.mutateAsync({
                     ids: [transaction.id],
@@ -262,7 +260,9 @@ function ActionsCell({
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="bg-destructive text-destructive-foreground"
-          onSelect={() => {}}
+          onSelect={() => {
+            console.log("clicked");
+          }}
         >
           <Trash2 className="mr-2 size-4" aria-hidden="true" />
           {t("delete")}

@@ -1,6 +1,12 @@
 "use client";
 
-import type { EventProps, View as RbcView } from "react-big-calendar";
+import type {
+  Culture,
+  DateLocalizer,
+  EventProps,
+  Formats,
+  View as RbcView,
+} from "react-big-calendar";
 import { useCallback, useMemo, useState } from "react";
 import {
   addMonths,
@@ -24,22 +30,21 @@ import { useLocale } from "@repo/i18n";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
 import { useSearchParams } from "next/navigation";
-import type { inferProcedureOutput } from "@trpc/server";
 
+import type { RouterOutputs } from "@repo/api";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import rangeMap from "~/lib/range-map";
 import { cn } from "~/lib/utils";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import EventForm from "./EventForm";
 
-const calendarTypeColors = {
-  "School Year": "#4fc793",
-  Teaching: "#F1595C",
-  Holidays: "#4669FA",
-};
+// const calendarTypeColors = {
+//   "School Year": "#4fc793",
+//   Teaching: "#F1595C",
+//   Holidays: "#4669FA",
+// };
 
 // export interface CalendarEvent {
 //   id: string;
@@ -55,17 +60,17 @@ const calendarTypeColors = {
 // }
 
 type CalendarEventProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["calendarEvent"]["all"]>
+  RouterOutputs["calendarEvent"]["all"]
 >[number];
 
 export function EventCalendar() {
   const searchParams = useSearchParams();
   const calendarEventsQuery = api.calendarEvent.all.useQuery({
     start: searchParams.get("start")
-      ? new Date(searchParams.get("start") || "")
+      ? new Date(searchParams.get("start") ?? "")
       : undefined,
     end: searchParams.get("end")
-      ? new Date(searchParams.get("end") || "")
+      ? new Date(searchParams.get("end") ?? "")
       : undefined,
   });
 
@@ -146,13 +151,19 @@ export function EventCalendar() {
       scrollToTime: new Date(2023, 10, 27, 6),
       formats: {
         dateFormat: "d",
-        weekdayFormat: (date: Date, culture: any, localizer: any) =>
-          localizer.format(date, "EEE", culture),
-        dayFormat: (date: Date, culture: any, localizer: any) =>
-          localizer.format(date, "EEE M/d", culture),
-        timeGutterFormat: (date: Date, culture: any, localizer: any) =>
-          localizer.format(date, "HH:mm", culture),
-      },
+        weekdayFormat: (
+          date: Date,
+          culture?: Culture,
+          localizer?: DateLocalizer,
+        ) => localizer?.format(date, "EEE", culture),
+        dayFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) =>
+          localizer?.format(date, "EEE M/d", culture),
+        timeGutterFormat: (
+          date: Date,
+          culture?: Culture,
+          localizer?: DateLocalizer,
+        ) => localizer?.format(date, "HH:mm", culture),
+      } as Formats,
     }),
     [],
   );
@@ -163,7 +174,7 @@ export function EventCalendar() {
 
   const eventPropGetter = (event: CalendarEventProcedureOutput) => {
     //const bgColor = calendarTypeColors[event.calendarType] || "lightgrey";
-    const bgColor = event.calendarType?.backgroundColor || "lightgrey";
+    const bgColor = event.calendarType?.backgroundColor ?? "lightgrey";
 
     const newStyle = {
       backgroundColor: bgColor,
@@ -233,7 +244,7 @@ export function EventCalendar() {
     <div className="h-[calc(100vh-15rem)] px-2">
       <Calendar
         localizer={localizer}
-        events={calendarEventsQuery.data || []}
+        events={calendarEventsQuery.data ?? []}
         views={views}
         view={view}
         messages={messages}

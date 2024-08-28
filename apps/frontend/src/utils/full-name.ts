@@ -1,4 +1,11 @@
-export function getFullName(person: any): string {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+type Person = {
+  firstName?: string | null;
+  lastName?: string | null;
+  middleName?: string | null;
+} & Record<string, any>;
+
+export function getFullName(person?: Person): string {
   if (!person) {
     return "";
   }
@@ -21,7 +28,7 @@ export function getFullName(person: any): string {
  * @param part  > 0 1..n (n = length of name parts)
  * @returns
  */
-export function getNameParts(person: any, part: number) {
+export function getNameParts(person: Person, part: number) {
   const v = getFullName(person);
   const tabs = v.split(" ").filter((s) => s.length > 0);
   if (tabs.length > part) {

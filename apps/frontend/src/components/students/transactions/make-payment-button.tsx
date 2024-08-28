@@ -3,14 +3,13 @@
 import { Plus } from "lucide-react";
 
 import { useRouter } from "@repo/hooks/use-router";
-import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 
 import { routes } from "~/configs/routes";
 
 export function MakePaymentButton({ studentId }: { studentId: string }) {
   const router = useRouter();
-  const { t } = useLocale();
+  //const { t } = useLocale();
   return (
     <Button
       onClick={() => {

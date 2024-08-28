@@ -1,6 +1,6 @@
-import Link from "next/link";
 import type { ColumnDef, Row } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
+import Link from "next/link";
 import { Eye, MoreVertical, Send, Trash2 } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
@@ -14,8 +14,8 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 
-import { routes } from "~/configs/routes";
 import type { SMSHistory } from "~/types/sms";
+import { routes } from "~/configs/routes";
 
 export function fetchSmsHistoryColumns({
   t,
@@ -106,6 +106,7 @@ export function fetchSmsHistoryColumns({
 
 function ActionsCell({ row }: { row: Row<SMSHistory> }) {
   const { t } = useLocale();
+  console.log(row);
   return (
     <>
       <DropdownMenu>

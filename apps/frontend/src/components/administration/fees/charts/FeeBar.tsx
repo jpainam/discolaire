@@ -2,16 +2,14 @@
 
 import { Bar, BarChart, LabelList, XAxis, YAxis } from "recharts";
 
+import type { ChartConfig } from "@repo/ui/chart";
 import { useLocale } from "@repo/i18n";
 import { Card, CardContent } from "@repo/ui/card";
-import type {
-  ChartConfig} from "@repo/ui/chart";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/chart";
-import { EmptyState } from "@repo/ui/EmptyState";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { showErrorToast } from "~/lib/handle-error";
@@ -35,12 +33,10 @@ export function FeeBar() {
   }
   if (feesMonthlyQuery.isError) {
     showErrorToast(feesMonthlyQuery.error);
-    throw feesMonthlyQuery.error;
+    return;
   }
-  if (!feesMonthlyQuery.data) {
-    return <EmptyState className="p-2" />;
-  }
-  const data = feesMonthlyQuery.data || [];
+
+  const data = feesMonthlyQuery.data;
   return (
     <Card className="flex w-[350px] flex-col border-none shadow-none">
       <CardContent className="flex-1 p-0">
@@ -60,6 +56,7 @@ export function FeeBar() {
               tickLine={false}
               tickMargin={10}
               axisLine={false}
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-return
               tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip

@@ -1,7 +1,7 @@
 "use client";
 
-import * as React from "react";
 import type { LinkProps } from "next/link";
+import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AlignLeftIcon } from "lucide-react";
@@ -95,6 +95,7 @@ function MobileLink({
     <Link
       href={href}
       onClick={() => {
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
         router.push(href.toString());
         onOpenChange?.(false);
       }}

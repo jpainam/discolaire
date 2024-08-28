@@ -20,6 +20,7 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string;
+      avatar: string;
     } & DefaultSession["user"];
   }
 }
@@ -117,6 +118,7 @@ export const validateToken = async (
     ? {
         user: {
           ...session.user,
+          avatar: "",
         },
         expires: session.session.expires.toISOString(),
       }

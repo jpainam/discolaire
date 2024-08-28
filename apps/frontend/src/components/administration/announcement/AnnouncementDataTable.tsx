@@ -2,11 +2,11 @@
 
 import * as React from "react";
 
+import type { DataTableFilterField } from "@repo/ui/data-table/types";
 import { useLocale } from "@repo/i18n";
-import { useDataTable } from "@repo/ui/data-table";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
-import type { DataTableFilterField } from "@repo/ui/data-table/types";
+import { useDataTable } from "@repo/ui/data-table/index";
 
 import { api } from "~/trpc/react";
 import { NoticeboardDataTableActions } from "./NoticeboardDataTableActions";
@@ -27,6 +27,7 @@ export function AnnouncementDataTable() {
     return uniqueLevels;
   }, [announcementsQuery.data]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const filterFields: DataTableFilterField<any>[] = [
     {
       label: t("Recipients"),
@@ -47,7 +48,7 @@ export function AnnouncementDataTable() {
   ];
 
   const { table } = useDataTable({
-    data: announcementsQuery.data || [],
+    data: announcementsQuery.data ?? [],
     columns: columns,
     pageCount: 1,
     filterFields: filterFields,

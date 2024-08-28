@@ -34,14 +34,14 @@ export default function GlobalAlert() {
         <AlertDialogFooter>
           <AlertDialogCancel
             onClick={() => {
-              onCancel && onCancel();
+              onCancel?.();
             }}
           >
             {t("cancel")}
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={() => {
-              onConfirm && onConfirm();
+              onConfirm?.();
             }}
             className="bg-destructive text-destructive-foreground hover:bg-destructive/80"
           >
