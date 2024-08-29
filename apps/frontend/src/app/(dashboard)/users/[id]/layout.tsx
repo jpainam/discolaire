@@ -8,6 +8,7 @@ import {
   UserIcon,
 } from "lucide-react";
 
+import { auth } from "@repo/auth";
 import { getServerTranslations } from "@repo/i18n/server";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Separator } from "@repo/ui/separator";
@@ -16,7 +17,6 @@ import { randomAvatar } from "~/components/raw-images";
 import { CopyUserIdButton } from "~/components/users/copy-user-id-button";
 import { UserSidebarNav } from "~/components/users/user-side-nav";
 import { routes } from "~/configs/routes";
-import { getServerAuthSession } from "~/server/auth";
 
 interface UserLink {
   icon: React.ReactNode;
@@ -64,7 +64,7 @@ export default async function Layout({
       icon: <Computer className="h-4 w-4" />,
     },
   ];
-  const session = await getServerAuthSession();
+  const session = await auth();
   console.log(session);
   console.log(session);
   const user = session?.user;

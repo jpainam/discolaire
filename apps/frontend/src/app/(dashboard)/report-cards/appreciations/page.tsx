@@ -1,34 +1,31 @@
-import { EmptyState } from "@repo/ui/EmptyState";
 import { Separator } from "@repo/ui/separator";
 
 import { AppreciationHeader } from "~/components/report-cards/appreciations/AppreciationHeader";
-import { AppreciationTable } from "~/components/report-cards/appreciations/AppreciationTable";
-import { reportCardService } from "~/server/services/report-card-service";
 
-interface AppreciationProps {
-  searchParams: {
-    type: "subjects" | "students";
-    classroom: string;
-    term: number;
-  };
-}
-export default async function Page({ searchParams }: AppreciationProps) {
-  const reports =
-    searchParams.classroom &&
-    searchParams.term &&
-    (await reportCardService.getStudentSummary(
-      searchParams.classroom,
-      searchParams.term,
-    ));
+// interface AppreciationProps {
+//   searchParams: {
+//     type: "subjects" | "students";
+//     classroom: string;
+//     term: number;
+//   };
+// }
+export default function Page() {
+  // const reports =
+  //   searchParams.classroom &&
+  //   searchParams.term &&
+  //   (await reportCardService.getStudentSummary(
+  //     searchParams.classroom,
+  //     searchParams.term,
+  //   ));
   return (
     <div className="flex flex-col">
       <AppreciationHeader />
       <Separator />
-      {reports ? (
+      {/* {reports ? (
         <AppreciationTable reports={reports} />
       ) : (
         <EmptyState className="p-4" />
-      )}
+      )} */}
     </div>
   );
 }

@@ -1,6 +1,6 @@
-import type { inferProcedureOutput } from "@trpc/server";
 import Link from "next/link";
 
+import type { RouterOutputs } from "@repo/api";
 import { getServerTranslations } from "@repo/i18n/server";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { EmptyState } from "@repo/ui/EmptyState";
@@ -13,20 +13,20 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
-import type { AppRouter } from "~/server/api/root";
 import { routes } from "~/configs/routes";
 import { api } from "~/trpc/server";
 import { getFullName } from "~/utils/full-name";
 
-type StudentContactGetProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["studentContact"]["get"]>
->;
+type StudentContactGetProcedureOutput = RouterOutputs["studentContact"]["get"];
 
 export async function StudentSiblingTable({
   studentContact,
 }: {
   studentContact: StudentContactGetProcedureOutput;
 }) {
+  if (!studentContact) {
+    return <EmptyState description="No student contact found" />;
+  }
   const linkedStudents = await api.contact.students(studentContact.contactId);
   const contact = studentContact.contact;
   const { t } = await getServerTranslations();
@@ -34,9 +34,13 @@ export async function StudentSiblingTable({
     <Card>
       <CardHeader className="flex flex-row items-center justify-center space-y-0 border-b bg-muted/50 px-2 py-1">
         <CardTitle className="text-md group flex items-center py-0">
-          {t("studentsLinkedTo", {
-            name: `${contact?.prefix} ${getFullName(contact)}`,
-          })}
+          {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            t("studentsLinkedTo", {
+              name: `${contact.prefix} ${getFullName(contact)}`,
+            })
+          }
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
@@ -63,7 +67,7 @@ export async function StudentSiblingTable({
                     <TableCell>
                       <Link
                         className="justify-center hover:text-blue-600 hover:underline"
-                        href={`${routes.students.contacts(linkedStd.studentId)}/${contact?.id}`}
+                        href={`${routes.students.contacts(linkedStd.studentId)}/${contact.id}`}
                       >
                         {student.lastName}
                       </Link>

@@ -1,4 +1,4 @@
-import { isInvitationLinkMatch } from "~/utils/encrypt";
+import { isInvitationLinkMatch } from "@repo/lib/encrypt";
 
 export default async function Page({
   params: { code },

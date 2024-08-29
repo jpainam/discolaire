@@ -2,15 +2,8 @@
 
 import type { DialogProps } from "@radix-ui/react-dialog";
 import * as React from "react";
-import { useRouter } from "next/navigation";
 //import { DialogProps } from "@radix-ui/react-alert-dialog";
-import {
-  CircleIcon,
-  LaptopIcon,
-  MoonIcon,
-  SunIcon,
-} from "@radix-ui/react-icons";
-import { LinkIcon } from "lucide-react";
+import { LaptopIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 
 import { useLocale } from "@repo/i18n";
@@ -26,14 +19,12 @@ import {
 } from "@repo/ui/command";
 import { ScrollArea } from "@repo/ui/scroll-area";
 
-import { usePageConfig } from "~/configs/page_config";
 import { cn } from "~/lib/utils";
 
 export function SearchCommandMenu({ ...props }: DialogProps) {
-  const router = useRouter();
+  //const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const { setTheme } = useTheme();
-  const { searchPages } = usePageConfig();
 
   const { t } = useLocale();
 
@@ -85,7 +76,7 @@ export function SearchCommandMenu({ ...props }: DialogProps) {
           <CommandEmpty>{t("not_found")}</CommandEmpty>
           <ScrollArea className="h-[400px] w-full">
             <CommandGroup heading={t("main_menu")}>
-              {searchPages.mainNav
+              {/* {searchPages.mainNav
                 .filter((navitem) => !navitem.external)
                 .map((navItem) => (
                   <CommandItem
@@ -105,9 +96,9 @@ export function SearchCommandMenu({ ...props }: DialogProps) {
                     </span>
                     {navItem.title}
                   </CommandItem>
-                ))}
+                ))} */}
             </CommandGroup>
-            {searchPages.sidebarNav.map((group) => (
+            {/* {searchPages.sidebarNav.map((group) => (
               <CommandGroup key={group.title} heading={group.title}>
                 {group.items.map((navItem) => (
                   <CommandItem
@@ -124,7 +115,7 @@ export function SearchCommandMenu({ ...props }: DialogProps) {
                   </CommandItem>
                 ))}
               </CommandGroup>
-            ))}
+            ))} */}
             <CommandSeparator />
             <CommandGroup heading="Theme">
               <CommandItem onSelect={() => runCommand(() => setTheme("light"))}>

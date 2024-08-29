@@ -1,7 +1,6 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import type { inferProcedureOutput } from "@trpc/server";
 import type { TFunction } from "i18next";
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
@@ -15,6 +14,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { useAlert } from "@repo/hooks/use-alert";
 import { useRouter } from "@repo/hooks/use-router";
 import { useSheet } from "@repo/hooks/use-sheet";
@@ -31,15 +31,12 @@ import {
 } from "@repo/ui/dropdown-menu";
 import FlatBadge from "@repo/ui/FlatBadge";
 
-import type { AppRouter } from "~/server/api/root";
 import { routes } from "~/configs/routes";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { CreateEditClassroom } from "./CreateEditClassroom";
 
-type ClassroomProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["classroom"]["all"]>
->[number];
+type ClassroomProcedureOutput = RouterOutputs["classroom"]["all"][number];
 
 export function getColumns({
   t,
@@ -152,8 +149,8 @@ export function getColumns({
       ),
       cell: ({ row }) => {
         const classroom = row.original;
-        const maleCount = classroom?.maleCount || 0;
-        const femaleCount = classroom?.femaleCount || 0;
+        const maleCount = classroom.maleCount || 0;
+        const femaleCount = classroom.femaleCount || 0;
         return (
           <div className="flex flex-row items-center gap-1">
             <span>{maleCount}</span>
@@ -175,8 +172,8 @@ export function getColumns({
       ),
       cell: ({ row }) => {
         const classroom = row.original;
-        const maleCount = classroom?.maleCount || 0;
-        const femaleCount = classroom?.femaleCount || 0;
+        const maleCount = classroom.maleCount || 0;
+        const femaleCount = classroom.femaleCount || 0;
         return (
           <div className="flex flex-row items-center gap-1">
             <span>{femaleCount}</span>
@@ -201,7 +198,7 @@ export function getColumns({
         return teacher ? (
           <Link
             className="hover:text-blue-600 hover:underline"
-            href={routes.staffs.details(teacher?.id)}
+            href={routes.staffs.details(teacher.id)}
           >
             {teacher.lastName}
           </Link>
@@ -236,7 +233,7 @@ export function getColumns({
       ),
       cell: ({ row }) => {
         const level = row.original.level;
-        return <div>{level?.name}</div>;
+        return <div>{level.name}</div>;
       },
       filterFn: (row, id, value) => {
         return (

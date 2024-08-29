@@ -1,76 +1,43 @@
-import {
-  IconArrowWaveRightUp,
-  IconBoxAlignRightFilled,
-  IconBoxAlignTopLeft,
-  IconClipboardCopy,
-  IconFileBroken,
-  IconSignature,
-  IconTableColumn,
-} from "@tabler/icons-react";
+import { getServerTranslations } from "@repo/i18n/server";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
 
-import { BentoGrid, BentoGridItem } from "@repo/ui/bento-grid";
+import { ReportQueueTable } from "~/components/reports/ReportQueueTable";
 
-export default function Page() {
+//import { getReportForUser, getReportsQueue } from "~/server/report-queues";
+
+export default async function Page() {
+  const { t } = await getServerTranslations();
+  // const [reports, reportsForUser] = await Promise.all([
+  //   getReportsQueue(),
+  //   getReportForUser(),
+  // ]);
+
   return (
-    <BentoGrid className="max-w-4xl">
-      {items.map((item, i) => (
-        <BentoGridItem
-          key={i}
-          title={item.title}
-          description={item.description}
-          header={item.header}
-          icon={item.icon}
-          className={i === 3 || i === 6 ? "md:col-span-2" : ""}
-        />
-      ))}
-    </BentoGrid>
+    <div className="px-0 md:px-0">
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-row justify-between">
+          <h2 className="text-xl font-bold tracking-tight">
+            {t("queueTitleDescription")}
+          </h2>
+          {/* <RefreshReportQueueButton /> */}
+        </div>
+        <Tabs defaultValue="myqueue" className="space-y-4">
+          <TabsList>
+            <TabsTrigger value="myqueue">{t("myQueue")}</TabsTrigger>
+            <TabsTrigger value="allqueues">{t("allQueues")}</TabsTrigger>
+          </TabsList>
+          <TabsContent value="myqueue">
+            <div className="rounded-md border">
+              <ReportQueueTable reports={[]} />
+            </div>
+          </TabsContent>
+          <TabsContent value="allqueues">
+            <div className="rounded-md border">
+              <ReportQueueTable reports={[]} />
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
   );
 }
-const Skeleton = () => (
-  <div className="flex h-full min-h-[6rem] w-full flex-1 rounded-xl bg-gradient-to-br from-neutral-200 to-neutral-100 dark:from-neutral-900 dark:to-neutral-800"></div>
-);
-const items = [
-  {
-    title: "The Dawn of Innovation",
-    description: "Explore the birth of groundbreaking ideas and inventions.",
-    header: <Skeleton />,
-    icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
-  },
-  {
-    title: "The Digital Revolution",
-    description: "Dive into the transformative power of technology.",
-    header: <Skeleton />,
-    icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />,
-  },
-  {
-    title: "The Art of Design",
-    description: "Discover the beauty of thoughtful and functional design.",
-    header: <Skeleton />,
-    icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
-  },
-  {
-    title: "The Power of Communication",
-    description:
-      "Understand the impact of effective communication in our lives.",
-    header: <Skeleton />,
-    icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
-  },
-  {
-    title: "The Pursuit of Knowledge",
-    description: "Join the quest for understanding and enlightenment.",
-    header: <Skeleton />,
-    icon: <IconArrowWaveRightUp className="h-4 w-4 text-neutral-500" />,
-  },
-  {
-    title: "The Joy of Creation",
-    description: "Experience the thrill of bringing ideas to life.",
-    header: <Skeleton />,
-    icon: <IconBoxAlignTopLeft className="h-4 w-4 text-neutral-500" />,
-  },
-  {
-    title: "The Spirit of Adventure",
-    description: "Embark on exciting journeys and thrilling discoveries.",
-    header: <Skeleton />,
-    icon: <IconBoxAlignRightFilled className="h-4 w-4 text-neutral-500" />,
-  },
-];

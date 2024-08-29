@@ -1,8 +1,8 @@
 import { checkPermissions } from "@repo/api/permission";
+import { PermissionAction } from "@repo/lib/permission";
 import { NoPermission } from "@repo/ui/no-permission";
 
 import EnrollmentDataTable from "~/components/classrooms/enrollments/EnrollmentDataTable";
-import { PermissionAction } from "~/types/permission";
 
 export default async function Page({
   params: { id },

@@ -67,8 +67,3 @@ export function composeEventHandlers<E>(
     }
   };
 }
-
-export function uuid() {
-  // @ts-expect-error TODO: Fix this
-  return crypto.getRandomValues(new Uint32Array(1))[0].toString();
-}

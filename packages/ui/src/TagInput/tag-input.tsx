@@ -3,12 +3,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-enum-comparison */
 import type { VariantProps } from "class-variance-authority";
 import React from "react";
+import { v4 as uuidv4 } from "uuid";
 
 import type { tagVariants } from "./tag";
 import { Button } from "../button";
 import { CommandInput } from "../command";
 import { Input } from "../input";
-import { cn, uuid } from "../utils";
+import { cn } from "../utils";
 import { Autocomplete } from "./autocomplete";
 import { TagList } from "./tag-list";
 import { TagPopover } from "./tag-popover";
@@ -214,7 +215,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
           return;
         }
 
-        const newTagId = uuid();
+        const newTagId = uuidv4();
 
         if (
           newTagText &&
