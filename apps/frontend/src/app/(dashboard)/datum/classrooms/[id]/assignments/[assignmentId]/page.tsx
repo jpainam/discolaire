@@ -3,9 +3,9 @@ import { notFound } from "next/navigation";
 import { api } from "~/trpc/server";
 
 export default async function Page({
-  params: { id, assignmentId },
+  params: { assignmentId },
 }: {
-  params: { id: string; assignmentId: string };
+  params: { assignmentId: string };
 }) {
   const assignment = await api.assignment.get(assignmentId);
   if (!assignment) {

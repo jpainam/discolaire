@@ -2,16 +2,16 @@ import type { PropsWithChildren } from "react";
 import { notFound } from "next/navigation";
 import { CalendarDays, DollarSign, Folders, History } from "lucide-react";
 
+import { checkPermissions } from "@repo/api/permission";
 import { getServerTranslations } from "@repo/i18n/server";
+import { PermissionAction } from "@repo/lib/permission";
 import { NoPermission } from "@repo/ui/no-permission";
 
 import { StaffProfile } from "~/components/staffs/profile/StaffProfile";
 import { StaffTabMenu } from "~/components/staffs/profile/StaffTabMenu";
 import { StaffDetailHeader } from "~/components/staffs/StaffDetailHeader";
 import { routes } from "~/configs/routes";
-import { checkPermissions } from "~/server/permission";
 import { api } from "~/trpc/server";
-import { PermissionAction } from "~/types/permission";
 
 interface UserLink {
   icon: React.ReactNode;
@@ -70,7 +70,7 @@ export default async function Layout({
       </div>
       <div className="w-full md:grid-cols-2 xl:grid-cols-3">
         <div className="flex max-w-fit items-center rounded-full bg-muted text-muted-foreground">
-          {userLinks.map((link: UserLink, index) => {
+          {userLinks.map((link: UserLink, _index) => {
             return (
               <StaffTabMenu
                 key={link.href}

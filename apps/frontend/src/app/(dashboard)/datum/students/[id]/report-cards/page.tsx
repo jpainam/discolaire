@@ -1,32 +1,26 @@
-import { Suspense } from "react";
-
-import { getServerTranslations } from "@repo/i18n/server";
 import { EmptyState } from "@repo/ui/EmptyState";
 import { Separator } from "@repo/ui/separator";
 
-import { ReportCardSummary } from "~/components/students/report-cards/ReportCardSummary";
-import { ReportCardTable } from "~/components/students/report-cards/ReportCardTable";
-import { reportCardService } from "~/server/services/report-card-service";
-
-export default async function Page({
+export default function Page({
   searchParams: { term },
   params: { id },
 }: {
   params: { id: string };
   searchParams: { term: number };
 }) {
-  const { t } = await getServerTranslations();
+  //const { t } = await getServerTranslations();
   if (!term) {
     return <EmptyState className="my-8" />;
   }
-  const reportCard = await reportCardService.getStudent(id, Number(term));
+  //const reportCard = await reportCardService.getStudent(id, Number(term));
+  console.log(id);
   return (
     <div className="flex w-full flex-col gap-2">
-      <ReportCardTable reportCard={reportCard} />
+      {/* <ReportCardTable reportCard={reportCard} /> */}
       <Separator />
-      <Suspense key={`grade-summary-${term}`}>
+      {/* <Suspense key={`grade-summary-${term}`}>
         <ReportCardSummary reportCard={reportCard} />
-      </Suspense>
+      </Suspense> */}
     </div>
   );
 }

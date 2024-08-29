@@ -12,9 +12,7 @@ interface UserLink {
 }
 export default async function Layout({
   children,
-  params,
 }: {
-  params: { id: string };
   children: React.ReactNode;
 }) {
   const { t } = await getServerTranslations();
@@ -38,7 +36,7 @@ export default async function Layout({
   return (
     <div className="container my-4 flex flex-col space-y-6 p-4">
       <div className="flex max-w-fit items-center rounded-full bg-gray-100">
-        {userLinks.map((link: UserLink, index) => {
+        {userLinks.map((link: UserLink, _index) => {
           return (
             <TabLink
               key={link.href}

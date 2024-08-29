@@ -1,5 +1,3 @@
-import { notFound } from "next/navigation";
-
 import { getServerTranslations } from "@repo/i18n/server";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Label } from "@repo/ui/label";
@@ -21,9 +19,7 @@ export default async function Page({
   const { t } = await getServerTranslations();
   const student = await api.student.get(id);
   const studentcontacts = await api.student.contacts(id);
-  if (!student) {
-    notFound();
-  }
+
   return (
     <div className="flex flex-col text-sm">
       <LoginInfoHeader />
@@ -39,7 +35,7 @@ export default async function Page({
           <Label className="w-[150px] font-semibold">
             {t("registration_number")}:
           </Label>
-          <span>{student.registrationNumber || "N/A"}</span>
+          <span>{student.registrationNumber ?? "N/A"}</span>
         </div>
         <div className="flex flex-wrap">
           {t2("loginInfoDescription1")} {t2("loginInfoDescription2")}
@@ -92,15 +88,14 @@ export default async function Page({
             <TabsTrigger value={`student-${student.id}`}>
               {getFullName(student)}
             </TabsTrigger>
-            {studentcontacts &&
-              studentcontacts.map((std, index) => (
-                <TabsTrigger
-                  key={std.contactId}
-                  value={`contact-${std.contactId}`}
-                >
-                  {getFullName(std.contact)}
-                </TabsTrigger>
-              ))}
+            {studentcontacts.map((std, _index) => (
+              <TabsTrigger
+                key={std.contactId}
+                value={`contact-${std.contactId}`}
+              >
+                {getFullName(std.contact)}
+              </TabsTrigger>
+            ))}
           </TabsList>
           <TabsContent value={`student-${student.id}`}>
             {student.userId ? (
@@ -109,19 +104,18 @@ export default async function Page({
               <AssociatedUserNotFound />
             )}
           </TabsContent>
-          {studentcontacts &&
-            studentcontacts.map((std, index) => (
-              <TabsContent
-                key={`content-${std.contactId}`}
-                value={`contact-${std.contactId}`}
-              >
-                {std.contact.userId ? (
-                  <UserLoginCard userId={std.contact.userId} />
-                ) : (
-                  <AssociatedUserNotFound />
-                )}
-              </TabsContent>
-            ))}
+          {studentcontacts.map((std, _index) => (
+            <TabsContent
+              key={`content-${std.contactId}`}
+              value={`contact-${std.contactId}`}
+            >
+              {std.contact.userId ? (
+                <UserLoginCard userId={std.contact.userId} />
+              ) : (
+                <AssociatedUserNotFound />
+              )}
+            </TabsContent>
+          ))}
         </Tabs>
         <div className="flex flex-row items-center gap-2">
           <span className="font-bold">Note:</span>

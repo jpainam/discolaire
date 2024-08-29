@@ -1,4 +1,3 @@
-import { getServerTranslations } from "@repo/i18n/server";
 import { Separator } from "@repo/ui/separator";
 
 import FinanceHeader from "~/components/students/transactions/FinanceHeader";
@@ -11,7 +10,6 @@ export default async function Page({
 }: {
   params: { id: string };
 }) {
-  const { t } = await getServerTranslations();
   const classroom = await api.student.classroom(id);
   const transactions = await api.student.transactions(id);
 

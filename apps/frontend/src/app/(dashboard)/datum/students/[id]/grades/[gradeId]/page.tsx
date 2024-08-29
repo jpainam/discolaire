@@ -35,7 +35,7 @@ interface GradeSheetPageProps {
 }
 export default async function Page(props: GradeSheetPageProps) {
   const searchParams = props.searchParams;
-  const params = props.params;
+
   const { t, i18n } = await getServerTranslations();
   const dateFormat = new Intl.DateTimeFormat(i18n.language, {
     year: "numeric",
