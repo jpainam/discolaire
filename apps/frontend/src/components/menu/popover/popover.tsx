@@ -3,8 +3,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useCallback, useId, useState } from "react";
 
-import { useDirection } from "@repo/hooks/use-direction";
-
 import type {
   FloatingPlacement,
   FloatingPosition,
@@ -99,7 +97,7 @@ export default function Popover({
 }: PopoverProps) {
   const [referenceNode, setReferenceNode] = useState<HTMLElement | null>(null);
   const [floatingNode, setFloatingNode] = useState<HTMLElement | null>(null);
-  const { direction } = useDirection();
+  //const { direction } = useDirection();
   const uid = useId();
 
   /**
@@ -128,11 +126,11 @@ export default function Popover({
 
     return position;
   }
-  type DIRECTION = "ltr" | "rtl";
+
   const popover = usePopover({
     middlewares,
     width,
-    position: getFloatingPosition(direction as DIRECTION, position),
+    position: getFloatingPosition("ltr", position),
     offset: offset,
     onPositionChange,
     positionDependencies,
