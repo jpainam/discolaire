@@ -1,3 +1,5 @@
+"use client";
+
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
 import type * as RPNInput from "react-phone-number-input";
@@ -34,8 +36,6 @@ import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import CreateEditStudent from "./CreateEditStudent";
 
 type StudentAllProcedureOutput = RouterOutputs["student"]["all"][number];
-
-export type StudentTableAction = ColumnDef<StudentAllProcedureOutput, unknown>;
 
 interface UseStudentColumnsProps {
   t: TFunction<string, unknown>;
