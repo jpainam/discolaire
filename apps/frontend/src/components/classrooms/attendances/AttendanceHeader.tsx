@@ -94,7 +94,7 @@ export function AttendanceHeader() {
               router.push(
                 routes.classrooms.attendances.hourly(params.id) +
                   "?" +
-                  createQueryString({ date: d?.toISOString() }),
+                  createQueryString({ date: d.toISOString() }),
               );
             }}
             className="w-[200px]"

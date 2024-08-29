@@ -3,7 +3,7 @@ import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { SendInvite } from "@repo/transactional/SendInvite";
+import { SendInvite } from "@repo/transactional/emails/SendInvite";
 import { Button } from "@repo/ui/button";
 
 import { env } from "~/env";

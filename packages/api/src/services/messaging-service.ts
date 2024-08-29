@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-"use server";
-
 import { env } from "../../env";
 
 const messagingBaseUrl = env.MESSAGING_SERVICE_URL;

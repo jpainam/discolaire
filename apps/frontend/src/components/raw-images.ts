@@ -1,47 +1,28 @@
-import type { StaticImageData } from "next/image";
-
-import Avatar01 from "../../public/avatars/avatar-01.webp";
-import Avatar02 from "../../public/avatars/avatar-02.webp";
-import Avatar03 from "../../public/avatars/avatar-03.webp";
-import Avatar04 from "../../public/avatars/avatar-04.webp";
-import Avatar05 from "../../public/avatars/avatar-05.webp";
-import Avatar06 from "../../public/avatars/avatar-06.webp";
-import Avatar07 from "../../public/avatars/avatar-07.webp";
-import Avatar08 from "../../public/avatars/avatar-08.webp";
-import Avatar09 from "../../public/avatars/avatar-09.webp";
-import Avatar10 from "../../public/avatars/avatar-10.webp";
-import Avatar11 from "../../public/avatars/avatar-11.webp";
-import Avatar12 from "../../public/avatars/avatar-12.webp";
-import Avatar13 from "../../public/avatars/avatar-13.webp";
-import Avatar14 from "../../public/avatars/avatar-14.webp";
-import Avatar15 from "../../public/avatars/avatar-15.webp";
-import Logo from "../../public/images/logo.webp";
-
-export { Avatar01, Avatar02, Avatar03, Avatar04, Avatar05, Avatar06, Logo };
-
-export const avatars: StaticImageData[] = [
-  Avatar01,
-  Avatar02,
-  Avatar03,
-  Avatar04,
-  Avatar05,
-  Avatar06,
-  Avatar07,
-  Avatar08,
-  Avatar09,
-  Avatar10,
-  Avatar11,
-  Avatar12,
-  Avatar13,
-  Avatar14,
-  Avatar15,
+export const avatars = [
+  "/avatars/avatar-01.webp",
+  "/avatars/avatar-02.webp",
+  "/avatars/avatar-03.webp",
+  "/avatars/avatar-04.webp",
+  "/avatars/avatar-05.webp",
+  "/avatars/avatar-06.webp",
+  "/avatars/avatar-07.webp",
+  "/avatars/avatar-08.webp",
+  "/avatars/avatar-09.webp",
+  "/avatars/avatar-10.webp",
+  "/avatars/avatar-11.webp",
+  "/avatars/avatar-12.webp",
+  "/avatars/avatar-13.webp",
+  "/avatars/avatar-14.webp",
+  "/avatars/avatar-15.webp",
 ];
-export function randomAvatar(pos?: number): StaticImageData {
-  let av: StaticImageData | undefined;
+
+export function randomAvatar(pos?: number): string {
   if (pos != undefined) {
-    av = avatars[pos % avatars.length];
+    return avatars[pos % avatars.length] ?? "/avatars/avatar-01.webp";
   } else {
-    av = avatars[Math.floor(Math.random() * avatars.length)];
+    return (
+      avatars[Math.floor(Math.random() * avatars.length)] ??
+      "/avatars/avatar-01.webp"
+    );
   }
-  return av ?? Avatar01;
 }

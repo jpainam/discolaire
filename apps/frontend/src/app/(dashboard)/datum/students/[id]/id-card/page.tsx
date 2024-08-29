@@ -4,7 +4,7 @@ import { getServerTranslations } from "@repo/i18n/server";
 import { Avatar, AvatarImage } from "@repo/ui/avatar";
 import { Separator } from "@repo/ui/separator";
 
-import { Avatar01, Logo } from "~/components/raw-images";
+import { randomAvatar } from "~/components/raw-images";
 import { IdCardBarCode } from "~/components/students/idcard/id-barcode";
 import { IdCardHeader } from "~/components/students/idcard/IdCardHeader";
 import { api } from "~/trpc/server";
@@ -32,7 +32,7 @@ export default async function Page({
             )}
             {!student.avatar && (
               <Image
-                src={Avatar01}
+                src={randomAvatar()}
                 className="absolute left-5 top-10 rounded-lg shadow-lg"
                 height={150}
                 width={150}
@@ -77,7 +77,12 @@ export default async function Page({
                   backgroundColor="#E4EEF8"
                   id={"123456789012"}
                 />
-                <Image src={Logo} height={40} width={120} alt="Logo" />
+                <Image
+                  src={"/images/logo.webp"}
+                  height={40}
+                  width={120}
+                  alt="Logo"
+                />
               </div>
             </div>
           </div>
@@ -86,6 +91,3 @@ export default async function Page({
     </div>
   );
 }
-
-//  className="rounded-xl border-2 bg-[url('/public/images/id-card.webp')]"
-// h-screen

@@ -7,7 +7,7 @@ import { render } from "@react-email/components";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
-import { SendInvite } from "@repo/transactional/SendInvite";
+import { SendInvite } from "@repo/transactional/emails/SendInvite";
 import { Button } from "@repo/ui/button";
 import { EmptyState } from "@repo/ui/EmptyState";
 import { Skeleton } from "@repo/ui/skeleton";

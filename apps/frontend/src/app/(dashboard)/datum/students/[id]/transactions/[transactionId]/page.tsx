@@ -6,7 +6,6 @@ import { getServerTranslations } from "@repo/i18n/server";
 import { Button } from "@repo/ui/button";
 import { Separator } from "@repo/ui/separator";
 
-import logo from "~/../public/images/logo.png";
 import { api } from "~/trpc/server";
 
 export default async function Page({
@@ -25,7 +24,7 @@ export default async function Page({
       <div className="absolute inset-0 bg-gray-600 backdrop-blur-sm" />
       <div className="relative z-10 flex h-full flex-col justify-between px-4 py-8 sm:px-6 md:px-8">
         <header className="flex items-center justify-between">
-          <Image src={logo} width={75} height={75} alt="LOGO" />
+          <Image src={"/images/logo.png"} width={75} height={75} alt="LOGO" />
           <div className="flex items-center gap-2 text-white">
             <Calendar className="h-5 w-5" />
             <span>May 16, 2024</span>

@@ -17,6 +17,8 @@ import {
 } from "@react-email/components";
 import { ArrowRight } from "lucide-react";
 
+import { env } from "../env";
+
 interface SendInviteUserEmailProps {
   username?: string;
   userImage?: string;
@@ -29,7 +31,7 @@ interface SendInviteUserEmailProps {
   inviteFromLocation?: string;
 }
 
-const baseUrl = `https://${process.env.NEXT_PUBLIC_BASE_URL}`;
+const baseUrl = env.NEXT_PUBLIC_BASE_URL;
 
 export const SendInvite = ({
   username,
