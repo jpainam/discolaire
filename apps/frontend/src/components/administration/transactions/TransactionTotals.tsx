@@ -12,6 +12,7 @@ import SalesIcon from "~/components/icons/sales";
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import { routes } from "~/configs/routes";
 import { CURRENCY } from "~/lib/constants";
+import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
 export function TransactionTotals() {
@@ -20,8 +21,8 @@ export function TransactionTotals() {
   const [from, _] = useQueryState("from", parseAsIsoDateTime);
   const [to, __] = useQueryState("to", parseAsIsoDateTime);
   const transactionsStats = api.transaction.stats.useQuery({
-    from: from || undefined,
-    to: to || undefined,
+    from: from ?? undefined,
+    to: to ?? undefined,
   });
 
   if (transactionsStats.isPending) {
@@ -34,7 +35,8 @@ export function TransactionTotals() {
     );
   }
   if (transactionsStats.isError) {
-    throw transactionsStats.error;
+    showErrorToast(transactionsStats.error);
+    return;
   }
   const stats = transactionsStats.data;
   const percentage = 4;
@@ -88,8 +90,9 @@ function TransactionStatCard({
   subtitle,
   title,
 }: TransactionStatCardProps) {
-  const { t, i18n } = useLocale();
-
+  const { i18n } = useLocale();
+  console.log("totalFee", percentage);
+  console.log(subtitle);
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-row items-center gap-4">
@@ -102,7 +105,7 @@ function TransactionStatCard({
               currency: CURRENCY,
               maximumFractionDigits: 0,
               minimumFractionDigits: 0,
-            }) || 0}
+            }) ?? 0}
           </p>
         </div>
       </div>

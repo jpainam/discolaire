@@ -1,17 +1,11 @@
 "use client";
 
-import { Fragment, useEffect, useState } from "react";
-import Link from "next/link";
+import { useEffect } from "react";
 import { useParams, usePathname } from "next/navigation";
 import { MoreVertical, Pencil } from "lucide-react";
 
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
-import {
-  BreadCrumb,
-  BreadCrumbItem,
-  BreadCrumbSeparator,
-} from "@repo/ui/BreadCrumb";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -28,22 +22,22 @@ import { api } from "~/trpc/react";
 
 export function ProgramHeader() {
   const { t } = useLocale();
-  const params = useParams();
+  const params = useParams<{ id: string; subjectId: string }>();
   const subjectQuery = api.subject.get.useQuery({
     id: Number(params.subjectId),
   });
   const subject = subjectQuery.data;
   const pathname = usePathname();
 
-  const [breadcrumbs, setBreadcrumbs] = useState<
-    { label: string; href: string }[]
-  >([{ label: t("programs"), href: routes.classrooms.programs(params.id) }]);
+  // const [breadcrumbs, setBreadcrumbs] = useState<
+  //   { label: string; href: string }[]
+  // >([{ label: t("programs"), href: routes.classrooms.programs(params.id) }]);
   useEffect(() => {
     if (subject) {
       const breads = [
         { label: t("programs"), href: routes.classrooms.programs(params.id) },
         {
-          label: subject.course?.name || "",
+          label: subject.course?.name ?? "",
           href: routes.classrooms.programs(params.id) + `/${subject.id}`,
         },
       ];
@@ -55,7 +49,7 @@ export function ProgramHeader() {
             `/${subject.id}/create-or-edit`,
         });
       }
-      setBreadcrumbs(breads);
+      // setBreadcrumbs(breads);
     }
   }, [params.id, pathname, subject, t]);
 
@@ -63,12 +57,12 @@ export function ProgramHeader() {
 
   if (subjectQuery.isError) {
     showErrorToast(subjectQuery.error);
-    throw subjectQuery.error;
+    return;
   }
 
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary px-2 py-1 text-secondary-foreground">
-      <BreadCrumb
+      {/* <BreadCrumb
         orientation="horizontal"
         variant={"ghost"}
         className="gap-1 rounded-lg bg-background px-2"
@@ -83,7 +77,7 @@ export function ProgramHeader() {
             </Fragment>
           );
         })}
-      </BreadCrumb>
+      </BreadCrumb> */}
 
       <div className="ml-auto flex flex-row gap-1">
         <Button

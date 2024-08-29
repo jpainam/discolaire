@@ -1,23 +1,20 @@
 "use client";
 
+import type { Table } from "@tanstack/react-table";
 import { DownloadIcon } from "@radix-ui/react-icons";
-import type {Table} from "@tanstack/react-table";
-import type { inferProcedureOutput } from "@trpc/server";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { useAlert } from "@repo/hooks/use-alert";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 
 import { exportTableToCSV } from "~/lib/export";
 import { getErrorMessage } from "~/lib/handle-error";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
-type FeeProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["fee"]["all"]>
->[number];
+type FeeProcedureOutput = NonNullable<RouterOutputs["fee"]["all"]>[number];
 
 export function FeeDataTableActions({
   table,
@@ -48,7 +45,7 @@ export function FeeDataTableActions({
                     loading: t("deleting"),
                     success: () => {
                       table.toggleAllRowsSelected(false);
-                      utils.fee.all.invalidate();
+                      void utils.fee.all.invalidate();
                       return t("deleted_successfully");
                     },
                     error: (error) => {

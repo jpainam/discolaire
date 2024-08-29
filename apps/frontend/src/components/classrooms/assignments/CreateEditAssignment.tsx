@@ -95,6 +95,7 @@ export function CreateEditAssignment({
   };
 
   const { t } = useLocale();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     console.log(data);
   };
@@ -188,7 +189,7 @@ export function CreateEditAssignment({
                       if (link) {
                         if (isValidURL(link)) {
                           form.setValue("links", [
-                            ...(form.getValues("links")),
+                            ...form.getValues("links"),
                             link,
                           ]);
                           setLink("");
@@ -207,7 +208,7 @@ export function CreateEditAssignment({
                 </div>
                 <FormMessage />
                 <div className="flex flex-wrap gap-4 pt-2">
-                  {(form.getValues("links")).map((link, index) => (
+                  {form.getValues("links").map((link, index) => (
                     <div key={index}>
                       <Badge variant="secondary" className="px-4 py-2">
                         {link}
@@ -257,38 +258,22 @@ export function CreateEditAssignment({
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="post"
-            render={({ field }) => (
-              <FormItem className="col-span-full mt-4">
-                <CheckboxField
-                  label={
-                    <div className="flex flex-row items-center gap-1">
-                      {t("Post to Calendar")}
-                    </div>
-                  }
-                  name="postToCalendar"
-                />
-              </FormItem>
-            )}
+          <CheckboxField
+            label={
+              <div className="flex flex-row items-center gap-1">
+                {t("Post to Calendar")}
+              </div>
+            }
+            name="postToCalendar"
           />
 
-          <FormField
-            control={form.control}
+          <CheckboxField
+            label={
+              <div className="flex flex-row items-center gap-1">
+                {t("Send Notifications")}
+              </div>
+            }
             name="sendNotifications"
-            render={({ field }) => (
-              <FormItem className="col-span-full">
-                <CheckboxField
-                  label={
-                    <div className="flex flex-row items-center gap-1">
-                      {t("Send Notifications")}
-                    </div>
-                  }
-                  name="sendNotifications"
-                />
-              </FormItem>
-            )}
           />
 
           {/* <FormField

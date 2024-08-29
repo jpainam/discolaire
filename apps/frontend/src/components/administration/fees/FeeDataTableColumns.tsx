@@ -1,13 +1,13 @@
 "use client";
 
 import type { Fee } from "@prisma/client";
-import type {ColumnDef} from "@tanstack/react-table";
-import type { inferProcedureOutput } from "@trpc/server";
+import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
 import i18next from "i18next";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { useAlert } from "@repo/hooks/use-alert";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
@@ -23,16 +23,13 @@ import {
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Separator } from "@repo/ui/separator";
 
+import type { Classroom } from "~/types/classroom";
 import { CreateEditFee } from "~/components/classrooms/fees/CreateEditFee";
 import { CURRENCY } from "~/lib/constants";
 import { getErrorMessage } from "~/lib/handle-error";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
-import type { Classroom } from "~/types/classroom";
 
-type FeeProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["fee"]["all"]>
->[number];
+type FeeProcedureOutput = NonNullable<RouterOutputs["fee"]["all"]>[number];
 
 export function fetchFeesColumns({
   t,
@@ -116,9 +113,8 @@ export function fetchFeesColumns({
       ),
       cell: ({ row }) => {
         const fee = row.original;
-        const hasPassed = fee.dueDate
-          ? new Date(fee.dueDate) < new Date()
-          : false;
+        const hasPassed = new Date(fee.dueDate) < new Date();
+
         return (
           <FlatBadge variant={hasPassed ? "green" : "red"}>
             {hasPassed ? t("yes") : t("no")}
@@ -136,7 +132,7 @@ export function fetchFeesColumns({
       ),
       cell: ({ row }) => {
         const fee = row.original;
-        const d = fee.dueDate ? dateFormat.format(fee.dueDate) : "";
+        const d = dateFormat.format(fee.dueDate);
         return <div>{d}</div>;
       },
     },
@@ -158,7 +154,7 @@ export function fetchFeesColumns({
       ),
       cell: ({ row }) => {
         const fee = row.original;
-        return <div>{fee.journal?.name || "N/A"}</div>;
+        return <div>{fee.journal?.name ?? "N/A"}</div>;
       },
     },
     {
@@ -208,7 +204,7 @@ function ActionCell({ fee }: { fee: Fee }) {
                       return getErrorMessage(error);
                     },
                     success: () => {
-                      utils.fee.all.invalidate();
+                      void utils.fee.all.invalidate();
                       return t("delete_successfully");
                     },
                   });

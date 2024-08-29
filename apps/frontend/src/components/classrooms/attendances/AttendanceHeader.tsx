@@ -1,9 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import type { LucideIcon } from "lucide-react";
 import { useParams, useSearchParams } from "next/navigation";
-import type {
-  LucideIcon} from "lucide-react";
 import {
   AlarmClock,
   CalendarClock,
@@ -40,10 +38,10 @@ import { routes } from "~/configs/routes";
 
 export function AttendanceHeader() {
   const { t } = useLocale();
-  const [query, setQuery] = useState<Record<string, any>>({});
+  //const [query, setQuery] = useState<Record<string, any>>({});
   const searchParams = useSearchParams();
-  const type = searchParams.get("type") || "hourly";
-  const params = useParams();
+  const type = searchParams.get("type") ?? "hourly";
+  const params = useParams<{ id: string }>();
 
   const items: { label: string; value: string; icon?: LucideIcon }[] = [
     { label: t("hourly_attendance"), value: "hourly", icon: AlarmClock },
@@ -61,7 +59,7 @@ export function AttendanceHeader() {
         {t("attendance_type")}
       </Label>
       <Select
-        defaultValue={searchParams.get("type") || undefined}
+        defaultValue={searchParams.get("type") ?? undefined}
         onValueChange={(val) => {
           router.push(
             routes.classrooms.attendances.index(params.id) +
@@ -96,7 +94,7 @@ export function AttendanceHeader() {
               router.push(
                 routes.classrooms.attendances.hourly(params.id) +
                   "?" +
-                  createQueryString({ date: d.toISOString() }),
+                  createQueryString({ date: d?.toISOString() }),
               );
             }}
             className="w-[200px]"

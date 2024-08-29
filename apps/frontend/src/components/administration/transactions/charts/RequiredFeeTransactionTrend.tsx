@@ -3,10 +3,9 @@
 import * as React from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
+import type { ChartConfig } from "@repo/ui/chart";
 import { useLocale } from "@repo/i18n";
 import { Card, CardContent } from "@repo/ui/card";
-import type {
-  ChartConfig} from "@repo/ui/chart";
 import {
   ChartContainer,
   ChartLegend,
@@ -17,6 +16,7 @@ import {
 import { EmptyState } from "@repo/ui/EmptyState";
 import { Skeleton } from "@repo/ui/skeleton";
 
+import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
 export function RequiredFeeTransactionTrend() {
@@ -44,9 +44,10 @@ export function RequiredFeeTransactionTrend() {
     );
   }
   if (transactionsTrendQuery.isError) {
-    throw transactionsTrendQuery.error;
+    showErrorToast(transactionsTrendQuery.error);
+    return;
   }
-  if (!transactionsTrendQuery.data) {
+  if (transactionsTrendQuery.data.length === 0) {
     return <EmptyState />;
   }
   const transactions = transactionsTrendQuery.data;
@@ -92,7 +93,7 @@ export function RequiredFeeTransactionTrend() {
               content={
                 <ChartTooltipContent
                   className="w-[200px]"
-                  labelFormatter={(value, payload) => {
+                  labelFormatter={(value, _payload) => {
                     return new Date(value).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",

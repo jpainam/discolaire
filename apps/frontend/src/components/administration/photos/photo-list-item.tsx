@@ -30,7 +30,7 @@ export function PhotoListItem({
       <div className="flex items-start justify-between">
         <Link
           className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gray-100"
-          href={href || "#"}
+          href={href ?? "#"}
         >
           <FolderIcon className="h-7 w-7" />
         </Link>
@@ -56,7 +56,7 @@ export function PhotoListItem({
           </Popover>
         </div>
       </div>
-      <Link href={href || "#"}>
+      <Link href={href ?? "#"}>
         <h4 className="mb-1 truncate text-sm font-medium text-gray-800">
           {title}
         </h4>

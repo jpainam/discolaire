@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 "use client";
 
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+
+import type { ChartConfig } from "@repo/ui/chart";
 import { Card, CardContent } from "@repo/ui/card";
-import type {
-  ChartConfig} from "@repo/ui/chart";
 import {
   ChartContainer,
   ChartLegend,
@@ -10,7 +12,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/chart";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import rangeMap from "~/lib/range-map";
 

@@ -31,6 +31,7 @@ export function AttendanceStudentTable({
   const form = useForm();
   const classroomStudentsQuery = api.classroom.students.useQuery(classroomId);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     console.log(data);
   };
@@ -89,6 +90,7 @@ export function AttendanceStudentTable({
 
 function AttendanceTableRow({
   index,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   studentId,
 }: {
   index: number;

@@ -2,13 +2,12 @@
 
 import * as React from "react";
 import { useSearchParams } from "next/navigation";
+import _ from "lodash";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
-import { useRouter } from "@repo/hooks/use-router";
+import type { ChartConfig } from "@repo/ui/chart";
 import { useLocale } from "@repo/i18n";
 import { Card, CardContent } from "@repo/ui/card";
-import type {
-  ChartConfig} from "@repo/ui/chart";
 import {
   ChartContainer,
   ChartLegend,
@@ -19,8 +18,8 @@ import {
 import { EmptyState } from "@repo/ui/EmptyState";
 import { Skeleton } from "@repo/ui/skeleton";
 
+import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
-import { useMoneyFormat } from "~/utils/money-format";
 
 export function TransactionTrendChart() {
   const { t } = useLocale();
@@ -37,26 +36,25 @@ export function TransactionTrendChart() {
   }, [t]);
 
   const searchParams = useSearchParams();
-  const status = searchParams.get("status");
-  const from = searchParams.get("from");
-  const to = searchParams.get("to");
-  const { moneyFormatter } = useMoneyFormat();
+  // const status = searchParams.get("status");
+  // const from = searchParams.get("from");
+  // const to = searchParams.get("to");
+
   const transactionsTrendQuery = api.transaction.trends.useQuery();
 
   const [filteredData, setFilteredData] = React.useState<
-    { date: string; amount: number }[]
+    { date: string; amount?: number }[]
   >([]);
 
   const [totalAmount, setTotalAmount] = React.useState(0);
 
   const timeRange = searchParams.get("timeRange");
-  const timeRanges = [
-    { label: t("schoolYear"), value: "All" },
-    { label: t("last_3_months"), value: "90" },
-    { label: t("last_30_days"), value: "30" },
-    { label: t("last_7_days"), value: "7" },
-  ];
-  const router = useRouter();
+  // const timeRanges = [
+  //   { label: t("schoolYear"), value: "All" },
+  //   { label: t("last_3_months"), value: "90" },
+  //   { label: t("last_30_days"), value: "30" },
+  //   { label: t("last_7_days"), value: "7" },
+  // ];
 
   React.useEffect(() => {
     if (!transactionsTrendQuery.data) return;
@@ -68,7 +66,8 @@ export function TransactionTrendChart() {
       now.setDate(now.getDate() - Number(timeRange));
       return date >= now;
     });
-    setTotalAmount(f.reduce((acc, item) => acc + item.amount, 0));
+
+    setTotalAmount(_.sumBy(f, "amount"));
     setFilteredData(f);
   }, [timeRange, transactionsTrendQuery.data]);
 
@@ -81,11 +80,14 @@ export function TransactionTrendChart() {
     );
   }
   if (transactionsTrendQuery.isError) {
-    throw transactionsTrendQuery.error;
+    showErrorToast(transactionsTrendQuery.error);
+    return;
   }
-  if (!transactionsTrendQuery.data || !filteredData) {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  if (transactionsTrendQuery.data.length == 0 || !filteredData) {
     return <EmptyState />;
   }
+  console.log(totalAmount);
   return (
     <Card className="border-none p-0 shadow-none">
       {/* <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
@@ -190,7 +192,7 @@ export function TransactionTrendChart() {
               content={
                 <ChartTooltipContent
                   className="w-[200px]"
-                  labelFormatter={(value, payload) => {
+                  labelFormatter={(value, _payload) => {
                     return new Date(value).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",

@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import { MoreVertical } from "lucide-react";
-import type {DateRange} from "react-day-picker";
+import { useQueryState } from "nuqs";
 
-import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -25,18 +23,16 @@ import { api } from "~/trpc/react";
 import { useMoneyFormat } from "../../../utils/money-format";
 
 export function TransactionSummary() {
-  const searchParams = useSearchParams();
-  const status = searchParams.get("status");
-  const from = searchParams.get("from");
-  const to = searchParams.get("to");
+  const [status, setStatus] = useQueryState("status");
+  const [from, setFrom] = useQueryState("from");
+  const [to, setTo] = useQueryState("to");
   const { t } = useLocale();
   const [totals, setTotals] = useState(0);
   const [validated, setValidated] = useState(0);
   const [cancelled, setCancelled] = useState(0);
-  const router = useRouter();
-  const { createQueryString } = useCreateQueryString();
+
   const transactionsQuery = api.transaction.all.useQuery({
-    status: status || undefined,
+    status: status ?? undefined,
     from: from ? new Date(from) : undefined,
     to: to ? new Date(to) : undefined,
   });
@@ -64,37 +60,20 @@ export function TransactionSummary() {
     <div className="flex flex-row items-center gap-2 p-2">
       <Label> {t("date")}</Label>
       <DateRangePicker
-        from={
-          searchParams.get("from")
-            ? new Date(searchParams.get("from")!)
-            : undefined
-        }
-        to={
-          searchParams.get("to") ? new Date(searchParams.get("to")!) : undefined
-        }
+        from={from ? new Date(from) : undefined}
+        to={to ? new Date(to) : undefined}
         onChange={(val) => {
           if (val) {
             const dateRange = val;
-
-            router.push(
-              "?" +
-                createQueryString({
-                  from: dateRange.from?.toISOString(),
-                  to: dateRange.to?.toISOString(),
-                }),
-            );
+            void setFrom(dateRange.from?.toISOString() ?? null);
+            void setTo(dateRange.to?.toISOString() ?? null);
           }
         }}
       />
       <Label>{t("status")}</Label>
       <TransactionStatusSelector
         onChange={(val) => {
-          router.push(
-            "?" +
-              createQueryString({
-                status: val,
-              }),
-          );
+          void setStatus(val);
         }}
       />
 

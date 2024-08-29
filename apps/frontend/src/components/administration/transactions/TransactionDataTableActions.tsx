@@ -1,9 +1,7 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import type { Table } from "@tanstack/react-table";
 import { DownloadIcon } from "@radix-ui/react-icons";
-import type {Table} from "@tanstack/react-table";
-import type { inferProcedureOutput } from "@trpc/server";
 import {
   ChevronsUpDown,
   LayoutTemplate,
@@ -12,7 +10,7 @@ import {
   X,
 } from "lucide-react";
 
-import { useModal } from "@repo/hooks/use-modal";
+import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -24,10 +22,9 @@ import {
 } from "@repo/ui/dropdown-menu";
 
 import { exportTableToCSV } from "~/lib/export";
-import type { AppRouter } from "~/server/api/root";
 
 type TransactionAllProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["transaction"]["all"]>
+  RouterOutputs["transaction"]["all"]
 >[number];
 
 export function TransactionDataTableActions({
@@ -36,11 +33,11 @@ export function TransactionDataTableActions({
   table: Table<TransactionAllProcedureOutput>;
 }) {
   const { t } = useLocale();
-  const { openModal } = useModal();
-  const params = useParams();
-  const selectedIds = table
-    .getFilteredSelectedRowModel()
-    .rows.map((row) => row.original.id);
+  // const { openModal } = useModal();
+  // const params = useParams();
+  // const selectedIds = table
+  //   .getFilteredSelectedRowModel()
+  //   .rows.map((row) => row.original.id);
   return (
     <div className="flex items-center gap-2">
       {table.getFilteredSelectedRowModel().rows.length > 0 ? (

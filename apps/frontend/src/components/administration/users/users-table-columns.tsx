@@ -1,11 +1,12 @@
 import type { User } from "@prisma/client";
+import type { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
+import { createColumnHelper } from "@tanstack/react-table";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
 import { Switch } from "@repo/ui/switch";
-import type { ColumnDef} from "@tanstack/react-table";
-import { createColumnHelper } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
 
 const columnHelper = createColumnHelper<User>();
 
@@ -47,7 +48,7 @@ export function getUserColumns({
       ),
       cell: ({ row }) => (
         <Avatar className="flex h-[20px] w-[20px] items-center justify-center rounded">
-          <AvatarImage src="/avatars/01.png" alt="Avatar" />
+          <AvatarImage src={row.original.avatar ?? ""} alt="Avatar" />
           <AvatarFallback>JL</AvatarFallback>
         </Avatar>
       ),

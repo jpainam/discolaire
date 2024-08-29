@@ -42,10 +42,10 @@ export function ClassroomHeader() {
 
   useEffect(() => {
     if (!params.id || !classroomsQuery.data) return;
-    const currentClassroomIdx = classroomsQuery.data.findIndex(
-      (s) => s.id === params.id,
-    );
-    if (!classroomsQuery.data) return;
+    // const currentClassroomIdx = classroomsQuery.data.findIndex(
+    //   (s) => s.id === params.id,
+    // );
+    // if (!classroomsQuery.data) return;
     // setPrevClassrom(
     //   classroomsQuery.data
     //     ? classroomsQuery.data[currentClassroomIdx - 1]
@@ -73,7 +73,7 @@ export function ClassroomHeader() {
         className="w-full md:w-[300px]"
         defaultValue={params.id}
         onChange={(value) => {
-          value && handleClassroomChange(value);
+          if (value) handleClassroomChange(value);
         }}
       />
       <div className="flex items-center gap-2 md:ml-auto">

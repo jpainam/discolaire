@@ -1,24 +1,14 @@
 "use client";
 
-import { useMemo } from "react";
-import type { User } from "@prisma/client";
-import type { ColumnDef } from "@tanstack/react-table";
-
-import { useLocale } from "@repo/i18n";
-
-import { api } from "~/trpc/react";
-import { useDateFormat } from "~/utils/date-format";
-import { getUserColumns } from "./users-table-columns";
-
 export function UserDataTable() {
-  const usersQuery = api.user.all.useQuery();
-  const { t } = useLocale();
+  //const usersQuery = api.user.all.useQuery();
+  // const { t } = useLocale();
 
-  const { fullDateFormatter } = useDateFormat();
-  const columns = useMemo<ColumnDef<User, unknown>[]>(
-    () => getUserColumns({ t: t, fullDateFormatter: fullDateFormatter }),
-    [], // eslint-disable-line react-hooks/exhaustive-deps
-  );
+  // const { fullDateFormatter } = useDateFormat();
+  // const columns = useMemo<ColumnDef<User, unknown>[]>(
+  //   () => getUserColumns({ t: t, fullDateFormatter: fullDateFormatter }),
+  //   [], // eslint-disable-line react-hooks/exhaustive-deps
+  // );
 
   // const { table } = useDataTable({
   //   data: users || [],

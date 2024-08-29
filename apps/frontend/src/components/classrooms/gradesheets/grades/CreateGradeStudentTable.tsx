@@ -36,7 +36,7 @@ export function CreateGradeStudentTable() {
     showErrorToast(classroomStudentsQuery.error);
     return null;
   }
-  if (!classroomStudentsQuery.data) {
+  if (classroomStudentsQuery.data.length === 0) {
     return <EmptyState title={t("no_data")} />;
   }
   return (

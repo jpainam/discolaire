@@ -10,14 +10,14 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  useFormState,
+  useFormContext,
 } from "@repo/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 
 import { cn } from "~/lib/utils";
 
 export default function PrintStartEndDateSelector() {
-  const form = useFormState();
+  const form = useFormContext();
   return (
     <>
       <FormLabel>

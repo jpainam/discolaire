@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { sum } from "lodash";
 
-import { useLocale } from "@repo/i18n";
 import type { FlatBadgeVariant } from "@repo/ui/FlatBadge";
+import { useLocale } from "@repo/i18n";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Separator } from "@repo/ui/separator";
 
@@ -20,7 +20,7 @@ export function SubjectStats() {
   const [totalCoefficient, setTotalCoefficient] = useState<number>(0);
 
   useEffect(() => {
-    const v = subjectsQuery.data?.map((s) => s.teacherId) || [];
+    const v = subjectsQuery.data?.map((s) => s.teacherId) ?? [];
     setCountTeacher(v.length);
     const groups: Record<string, number> = {};
     const coeff = sum(subjectsQuery.data?.map((s) => s.coefficient));
@@ -54,25 +54,20 @@ export function SubjectStats() {
       <FlatBadge variant={"green"}>
         {countTeacher} {t("teachers")}
       </FlatBadge>
-      {countGroups &&
-        Object.keys(countGroups).map((key, index) => {
-          return (
-            <FlatBadge
-              key={key}
-              variant={badgeVariants[index % badgeVariants.length]}
-            >
-              {countGroups[key]} {key}
-            </FlatBadge>
-          );
-        })}
+      {Object.keys(countGroups).map((key, index) => {
+        return (
+          <FlatBadge
+            key={key}
+            variant={badgeVariants[index % badgeVariants.length]}
+          >
+            {countGroups[key]} {key}
+          </FlatBadge>
+        );
+      })}
       <Separator orientation="vertical" />
       <FlatBadge variant={"pink"}>
         {totalCoefficient} {t("coefficient")}
       </FlatBadge>
     </div>
   );
-}
-
-function CoefficientDistribution() {
-  return <div></div>;
 }

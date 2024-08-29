@@ -1,11 +1,10 @@
-import { useQueryClient } from "@tanstack/react-query";
 import type { ColumnDef, Row } from "@tanstack/react-table";
-import { createColumnHelper } from "@tanstack/react-table";
-import type { inferProcedureOutput } from "@trpc/server";
 import type { TFunction } from "i18next";
+import { createColumnHelper } from "@tanstack/react-table";
 import i18next from "i18next";
 import { Eye, MoreHorizontal, TicketCheck, Trash2 } from "lucide-react";
 
+import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -20,12 +19,11 @@ import {
 } from "@repo/ui/dropdown-menu";
 import FlatBadge from "@repo/ui/FlatBadge";
 
-import type { AppRouter } from "~/server/api/root";
 import { TransactionDeleteModal } from "./TransactionDeleteModal";
 import { TransactionDetails } from "./TransactionDetails";
 
 type TransactionAllProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["transaction"]["all"]>
+  RouterOutputs["transaction"]["all"]
 >[number];
 
 const columnHelper = createColumnHelper<TransactionAllProcedureOutput>();
@@ -72,9 +70,7 @@ export const fetchTransactionColumns = ({
         <DataTableColumnHeader column={column} title={t("createdAt")} />
       ),
       cell: ({ row }) => {
-        const d =
-          row.original.createdAt &&
-          dateFormatter.format(new Date(row.original.createdAt));
+        const d = dateFormatter.format(new Date(row.original.createdAt));
         return <div>{d}</div>;
       },
     }),
@@ -82,7 +78,7 @@ export const fetchTransactionColumns = ({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("account")} />
       ),
-      cell: ({ row }) => <div>{row.original.account?.name}</div>,
+      cell: ({ row }) => <div>{row.original.account.name}</div>,
     }),
     columnHelper.accessor("transactionRef", {
       header: ({ column }) => (
@@ -114,7 +110,7 @@ export const fetchTransactionColumns = ({
         <DataTableColumnHeader column={column} title={t("status")} />
       ),
       cell: ({ row }) => {
-        const status = row.original.status as string;
+        const status = row.original.status;
         return (
           <FlatBadge
             className="flex w-20 justify-center"
@@ -126,7 +122,7 @@ export const fetchTransactionColumns = ({
                   : "yellow"
             }
           >
-            {t(status.toLowerCase())}
+            {t(status?.toLowerCase() ?? "")}
           </FlatBadge>
         );
       },
@@ -146,7 +142,6 @@ function ActionCell({
   transaction: TransactionAllProcedureOutput;
 }) {
   const { t } = useLocale();
-  const queryClient = useQueryClient();
 
   const { openModal } = useModal();
   return (

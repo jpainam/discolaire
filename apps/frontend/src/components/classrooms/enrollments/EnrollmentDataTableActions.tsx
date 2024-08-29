@@ -1,12 +1,12 @@
 "use client";
 
+import type { Table } from "@tanstack/react-table";
 import { useParams } from "next/navigation";
 import { DownloadIcon } from "@radix-ui/react-icons";
-import type {Table} from "@tanstack/react-table";
-import type { inferProcedureOutput } from "@trpc/server";
 import { Plus, Trash2, UploadIcon } from "lucide-react";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { useAlert } from "@repo/hooks/use-alert";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
@@ -14,12 +14,11 @@ import { Button } from "@repo/ui/button";
 
 import { exportTableToCSV } from "~/lib/export";
 import { getErrorMessage } from "~/lib/handle-error";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { EnrollStudent } from "./EnrollStudent";
 
 type ClassroomStudentProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["classroom"]["students"]>
+  RouterOutputs["classroom"]["students"]
 >[number];
 
 interface EnrollmentToolbarActionsProps {
@@ -66,9 +65,7 @@ export function EnrollmentDataTableActions({
                     },
                     success: async () => {
                       table.toggleAllRowsSelected(false);
-                      await utils.classroom.students.invalidate(
-                        params.id,
-                      );
+                      await utils.classroom.students.invalidate(params.id);
                       closeAlert();
 
                       return t("unenrolled_successfully");

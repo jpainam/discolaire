@@ -2,10 +2,9 @@
 
 import { LabelList, Pie, PieChart } from "recharts";
 
+import type { ChartConfig } from "@repo/ui/chart";
 import { useLocale } from "@repo/i18n";
 import { Card, CardContent } from "@repo/ui/card";
-import type {
-  ChartConfig} from "@repo/ui/chart";
 import {
   ChartContainer,
   ChartTooltip,
@@ -19,12 +18,12 @@ export function GenderPie({ classroom }: { classroom: Classroom }) {
   const chartData = [
     {
       gender: "male",
-      count: classroom.maleCount || 10,
+      count: classroom.maleCount ?? 10,
       fill: "var(--color-male)",
     },
     {
       gender: "female",
-      count: classroom.maleCount || 20,
+      count: classroom.maleCount ?? 20,
       fill: "var(--color-female)",
     },
   ];

@@ -1,12 +1,12 @@
 "use client";
 
+import type { SubmitHandler } from "react-hook-form";
 import { useEffect } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Avatar } from "@radix-ui/react-avatar";
 import { ExternalLink, LucideSave, Mail, Trash } from "lucide-react";
-import type { SubmitHandler} from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -61,9 +61,8 @@ export function UserDetails() {
     form.reset(val);
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const router = useRouter();
   const { t } = useLocale();
-  const onSubmit: SubmitHandler<UserFormValues> = (data: UserFormValues) => {
+  const onSubmit: SubmitHandler<UserFormValues> = (_data: UserFormValues) => {
     /*setLoading(true);
      setTimeout(() => {
        setLoading(false);

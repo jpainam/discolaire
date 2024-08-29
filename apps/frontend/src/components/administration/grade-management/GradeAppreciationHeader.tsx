@@ -1,6 +1,5 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { Plus } from "lucide-react";
 
 import { useModal } from "@repo/hooks/use-modal";
@@ -11,7 +10,6 @@ import { Label } from "@repo/ui/label";
 import { CreateEditAppreciation } from "./CreateEditAppreciation";
 
 export function GradeAppreciationHeader() {
-  const params = useParams();
   const { t } = useLocale();
   const { openModal } = useModal();
   return (

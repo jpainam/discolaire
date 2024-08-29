@@ -3,7 +3,7 @@
 import * as React from "react";
 
 import type { RouterOutputs } from "@repo/api";
-import type { DataTableFilterField } from "@repo/data-table/types";
+import type { DataTableFilterField } from "@repo/ui/data-table/types";
 import { useLocale } from "@repo/i18n";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
@@ -56,7 +56,7 @@ export function ClassroomDataTable() {
   ];
 
   const { table } = useDataTable({
-    data: classroomsQuery.data || [],
+    data: classroomsQuery.data ?? [],
     columns: columns,
     pageCount: 1,
     // optional props

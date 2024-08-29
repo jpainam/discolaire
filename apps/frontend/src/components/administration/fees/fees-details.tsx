@@ -1,4 +1,3 @@
-import { useTransition } from "react";
 import type { Fee } from "@prisma/client";
 import { CopyPlus, Forward, MoreVertical, Reply } from "lucide-react";
 import { toast } from "sonner";
@@ -14,28 +13,27 @@ import {
 import { Separator } from "@repo/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
 
-import type { Mail } from "~/app/(dashboard)/mail/data";
-import { DeletePopover } from "~/components/shared/buttons/delete-popover";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { FeesDetailsForm } from "./fees-details-form";
 
-interface MailDisplayProps {
-  mail: Mail | null;
-}
+// interface MailDisplayProps {
+//   mail: Mail | null;
+// }
 
 export default function FeesDetails({ fee }: { fee?: Fee }) {
-  const today = new Date();
+  //const today = new Date();
 
   const { t } = useLocale();
-  const [isDeletePending, startDeleteTransition] = useTransition();
+
   const feeMutation = api.fee.delete.useMutation();
   const utils = api.useUtils();
-  const onDeleteFee = async (id: number) => {
+  const onDeleteFee = (id: number) => {
     toast.promise(feeMutation.mutateAsync({ id }), {
       loading: t("deleting"),
-      success: async (data) => {
-        utils.fee.all.invalidate();
+      success: (data) => {
+        console.log(data);
+        void utils.fee.all.invalidate();
         return t("deleted_successfully");
       },
       error: (err) => getErrorMessage(err),
@@ -57,15 +55,11 @@ export default function FeesDetails({ fee }: { fee?: Fee }) {
           <Separator orientation="vertical" className="mx-1 h-6" />
           <Tooltip>
             <TooltipTrigger asChild>
-              <DeletePopover
-                title={t("delete")}
-                className="border-none"
-                disabled={!fee || isDeletePending}
-                description={t("delete_confirmation")}
-                onDelete={() => {
-                  fee && startDeleteTransition(() => onDeleteFee(fee.id));
+              <Button
+                onClick={() => {
+                  if (fee) onDeleteFee(fee.id);
                 }}
-              />
+              ></Button>
             </TooltipTrigger>
             <TooltipContent>{t("delete")}</TooltipContent>
           </Tooltip>

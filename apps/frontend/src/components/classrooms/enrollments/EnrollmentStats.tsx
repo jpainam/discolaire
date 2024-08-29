@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useLocale } from "@repo/i18n";
 
-import CircleProgressBar from "~/components/charts/circle-progressbar";
 import type { Student } from "~/types/student";
 
 export function EnrollmentStats({ students }: { students: Student[] }) {
@@ -69,7 +69,7 @@ function EnrollmentSummaryCard({
   return (
     <div className="flex h-20 w-auto flex-row justify-between gap-4 rounded-lg border p-2">
       <span>{title}</span>
-      <CircleProgressBar
+      {/* <CircleProgressBar
         percentage={percentage}
         size={size}
         stroke={stroke}
@@ -82,7 +82,7 @@ function EnrollmentSummaryCard({
           </span>
         }
         strokeClassName="dark:stroke-gray-300"
-      />
+      /> */}
     </div>
   );
 }

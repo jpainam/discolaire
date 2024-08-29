@@ -1,7 +1,5 @@
 "use client";
 
-import { useParams } from "next/navigation";
-
 import { useRouter } from "@repo/hooks/use-router";
 
 import { routes } from "~/configs/routes";
@@ -10,7 +8,6 @@ import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
 export function GradeAppreciationList() {
-  const params = useParams();
   const appreciationCategoriesQuery = api.appreciation.categories.useQuery();
 
   const router = useRouter();

@@ -1,14 +1,11 @@
-import { useParams } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
 import type { ColumnDef } from "@tanstack/react-table";
-import type { inferProcedureOutput } from "@trpc/server";
 import type { TFunction } from "i18next";
-import i18next from "i18next";
+import { useParams } from "next/navigation";
 import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { useAlert } from "@repo/hooks/use-alert";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
@@ -23,11 +20,10 @@ import {
 import FlatBadge from "@repo/ui/FlatBadge";
 
 import { getErrorMessage } from "~/lib/handle-error";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
 type PolicyAllProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["policy"]["all"]>
+  RouterOutputs["policy"]["all"]
 >[number];
 
 export function fetchPolicyColumns({
@@ -35,11 +31,11 @@ export function fetchPolicyColumns({
 }: {
   t: TFunction<string, unknown>;
 }): ColumnDef<PolicyAllProcedureOutput>[] {
-  const dateFormater = Intl.DateTimeFormat(i18next.language, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  // const dateFormater = Intl.DateTimeFormat(i18next.language, {
+  //   year: "numeric",
+  //   month: "short",
+  //   day: "numeric",
+  // });
   return [
     {
       id: "select",
@@ -125,7 +121,7 @@ export function fetchPolicyColumns({
         <DataTableColumnHeader column={column} title={t("condition")} />
       ),
       cell: ({ row }) => {
-        return <div></div>;
+        return <div>{JSON.stringify(row.original.condition)}</div>;
       },
     },
 
@@ -140,12 +136,11 @@ export function fetchPolicyColumns({
 }
 
 function ActionCell({ student }: { student: PolicyAllProcedureOutput }) {
-  const queryClient = useQueryClient();
-  const params = useParams();
+  const params = useParams<{ id: string }>();
   const { t } = useLocale();
-  const router = useRouter();
-  const unenrollStudentsMutation =
-    api.enrollment.deleteByStudentIdClassroomId.useMutation();
+
+  //const unenrollStudentsMutation =
+  //   api.enrollment.deleteByStudentIdClassroomId.useMutation();
   const utils = api.useUtils();
   const { openAlert, closeAlert } = useAlert();
   return (
@@ -159,7 +154,9 @@ function ActionCell({ student }: { student: PolicyAllProcedureOutput }) {
         <DropdownMenuContent align="end">
           <DropdownMenuItem
             className="flex items-center gap-2"
-            onSelect={() => {}}
+            onSelect={() => {
+              console.log("Viewing student", student);
+            }}
           >
             <Eye className="h-4 w-4" /> {t("details")}
           </DropdownMenuItem>
