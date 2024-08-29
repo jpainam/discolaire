@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -40,7 +39,6 @@ export function CreateEditProgram({
     defaultValues: { content: defaultContent },
     resolver: zodResolver(programFormSchema),
   });
-  const queryClient = useQueryClient();
 
   // const mutation = useMutation({
   //   mutationFn: ,
@@ -61,7 +59,8 @@ export function CreateEditProgram({
     const returnUrl = pathname.split("/").slice(0, -1).join("/");
     router.push(returnUrl);
   };
-  const submitProgram = async (data: ProgramFormValues) => {
+  const submitProgram = (data: ProgramFormValues) => {
+    console.log(data);
     //subjectId && mutation.mutate({ content: data.content, id: subjectId });
   };
 
@@ -84,7 +83,7 @@ export function CreateEditProgram({
         <FormField
           control={form.control}
           name="content"
-          render={({ field: { onChange, value } }) => (
+          render={({ field: { onChange } }) => (
             // <QuillEditor
             //   value={value}
             //   onChange={onChange}

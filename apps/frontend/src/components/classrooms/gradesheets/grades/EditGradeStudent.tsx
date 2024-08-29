@@ -42,7 +42,7 @@ export function EditGradeStudent({
   });
   const updateGradeMutation = api.grade.update.useMutation();
   const utils = api.useUtils();
-  const onSubmit = async (data: EditGradeStudentValue) => {
+  const onSubmit = (data: EditGradeStudentValue) => {
     toast.promise(
       updateGradeMutation.mutateAsync({
         grade: data.grade,
@@ -52,8 +52,8 @@ export function EditGradeStudent({
       {
         loading: t("updating"),
         success: () => {
-          utils.grade.invalidate();
-          utils.gradeSheet.invalidate();
+          void utils.grade.invalidate();
+          void utils.gradeSheet.invalidate();
           closeModal();
           return t("updated");
         },

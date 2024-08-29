@@ -1,9 +1,7 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { ChevronDownIcon, PrinterIcon } from "lucide-react";
 
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
@@ -20,22 +18,20 @@ import { Separator } from "@repo/ui/separator";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
 import { getAge } from "~/utils/student-utils";
 
 export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
   const { t } = useLocale();
-  const params = useParams();
-  const router = useRouter();
+
   const classroomStudentsQuery = api.classroom.students.useQuery(classroomId);
   if (classroomStudentsQuery.isPending) {
     return <DataTableSkeleton rowCount={1} columnCount={8} />;
   }
-  const students = classroomStudentsQuery.data || [];
+  const students = classroomStudentsQuery.data ?? [];
   const male = students.filter((student) => student.gender == "male").length;
   const total = students.length || 1e9;
   const female = students.length - male;
-  getFullName;
+
   const repeating = students.filter((student) => student.isRepeating).length;
   const oldest =
     students.length > 0

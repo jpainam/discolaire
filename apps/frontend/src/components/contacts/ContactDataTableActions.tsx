@@ -1,23 +1,22 @@
 "use client";
 
+import type { Table } from "@tanstack/react-table";
 import { DownloadIcon } from "@radix-ui/react-icons";
-import type {Table} from "@tanstack/react-table";
-import type { inferProcedureOutput } from "@trpc/server";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 
 import { exportTableToCSV } from "~/lib/export";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import TrashIcon from "../icons/trash";
 import CreateEditContact from "./CreateEditContact";
 
 type ContactAllProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["contact"]["all"]>
+  RouterOutputs["contact"]["all"]
 >[number];
 
 interface TasksTableToolbarActionsProps {
@@ -29,8 +28,11 @@ export function ContactDataTableActions({
 }: TasksTableToolbarActionsProps) {
   const { t } = useLocale();
   const { openSheet } = useSheet();
-  const deleteContactsMutation = api.contact.delete.useMutation();
   const utils = api.useUtils();
+  const deleteContactsMutation = api.contact.delete.useMutation({
+    onSettled: () => utils.contact.all.invalidate(),
+  });
+
   return (
     <>
       <div className="flex items-center gap-2">
@@ -43,7 +45,6 @@ export function ContactDataTableActions({
               toast.promise(deleteContactsMutation.mutateAsync(selectedIds), {
                 loading: t("deleting"),
                 success: () => {
-                  utils.contact.all.invalidate();
                   return t("deleted_successfully");
                 },
               });

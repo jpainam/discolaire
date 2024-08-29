@@ -2,10 +2,9 @@
 
 import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 
+import type { ChartConfig } from "@repo/ui/chart";
 import { useLocale } from "@repo/i18n";
 import { Card, CardContent } from "@repo/ui/card";
-import type {
-  ChartConfig} from "@repo/ui/chart";
 import {
   ChartContainer,
   ChartTooltip,
@@ -62,14 +61,14 @@ export function RepeatingPie({ students }: { students: Student[] }) {
                       <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle">
                         <tspan
                           x={viewBox.cx}
-                          y={(viewBox.cy || 0) - 16}
+                          y={(viewBox.cy ?? 0) - 16}
                           className="fill-foreground text-2xl font-bold"
                         >
                           {repeating.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 4}
+                          y={(viewBox.cy ?? 0) + 4}
                           className="fill-muted-foreground"
                         >
                           {t("repeating")}

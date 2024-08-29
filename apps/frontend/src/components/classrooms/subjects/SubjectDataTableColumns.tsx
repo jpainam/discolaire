@@ -1,12 +1,11 @@
-import Link from "next/link";
-import { useQueryClient } from "@tanstack/react-query";
-import type { ColumnDef} from "@tanstack/react-table";
-import { createColumnHelper } from "@tanstack/react-table";
-import type { inferProcedureOutput } from "@trpc/server";
+import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
+import Link from "next/link";
+import { createColumnHelper } from "@tanstack/react-table";
 import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { useAlert } from "@repo/hooks/use-alert";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
@@ -16,14 +15,11 @@ import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-hea
 
 import { routes } from "~/configs/routes";
 import { getErrorMessage } from "~/lib/handle-error";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { CreateEditSubject } from "./CreateEditSubject";
 
-type SubjectGetQueryOutput = NonNullable<
-  inferProcedureOutput<AppRouter["subject"]["get"]>
->;
+type SubjectGetQueryOutput = NonNullable<RouterOutputs["subject"]["get"]>;
 
 const columnHelper = createColumnHelper<SubjectGetQueryOutput>();
 
@@ -137,11 +133,12 @@ export const fetchSubjectsColumns = ({
 
 function ActionsCell({ subject }: { subject: SubjectGetQueryOutput }) {
   const { t } = useLocale();
-  const queryClient = useQueryClient();
   const { openAlert, closeAlert } = useAlert();
   const { openSheet } = useSheet();
-  const deleteSubjectQuery = api.subject.delete.useMutation();
   const utils = api.useUtils();
+  const deleteSubjectQuery = api.subject.delete.useMutation({
+    onSettled: () => utils.classroom.subjects.invalidate(),
+  });
 
   return (
     <div className="flex items-center justify-end">
@@ -150,7 +147,7 @@ function ActionsCell({ subject }: { subject: SubjectGetQueryOutput }) {
           openSheet({
             title: (
               <div className="px-2">
-                {t("edit")} : {subject?.course?.name}
+                {t("edit")} : {subject.course?.name}
               </div>
             ),
             view: <CreateEditSubject subject={subject} />,
@@ -175,7 +172,6 @@ function ActionsCell({ subject }: { subject: SubjectGetQueryOutput }) {
                   return getErrorMessage(error);
                 },
                 success: () => {
-                  utils.classroom.subjects.invalidate();
                   closeAlert();
                   return t("deleted_successfully");
                 },

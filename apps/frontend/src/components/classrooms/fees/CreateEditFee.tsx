@@ -1,8 +1,8 @@
+import type { Fee } from "@prisma/client";
+import type { SubmitHandler } from "react-hook-form";
 import { useParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Fee } from "@prisma/client";
 import { Save, X } from "lucide-react";
-import type { SubmitHandler} from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -48,8 +48,8 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
       isActive: fee?.isActive ?? true,
     },
   });
-  const params = useParams();
-  const classroomId = params.id as string;
+  const params = useParams<{ id: string }>();
+  const classroomId = params.id;
 
   const { closeModal } = useModal();
   const updateFeeMutation = api.fee.update.useMutation();
@@ -64,7 +64,7 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
       amount: data.amount,
       dueDate: data.dueDate,
       isActive: data.isActive,
-      classroomId: classroomId ?? "",
+      classroomId: classroomId,
       journalId: data.journalId,
     };
     if (fee) {
@@ -72,10 +72,7 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
         loading: t("loading"),
         success: () => {
           closeModal();
-          if (fee) {
-            return t("updated_successfully");
-          }
-          return t("added_successfully");
+          return t("updated_successfully");
         },
         error: (error) => {
           return getErrorMessage(error);
@@ -83,12 +80,9 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
       });
     } else {
       toast.promise(createFeeMutation.mutateAsync(values), {
-        loading: t("loading"),
+        loading: t("adding"),
         success: () => {
           closeModal();
-          if (fee) {
-            return t("updated_successfully");
-          }
           return t("added_successfully");
         },
         error: (error) => {

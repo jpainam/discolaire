@@ -1,14 +1,14 @@
 "use client";
 
+import type { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import type {ColumnDef} from "@tanstack/react-table";
-import type { inferProcedureOutput } from "@trpc/server";
-import type { TFunction } from "i18next";
 import { Pencil, Trash2, Users } from "lucide-react";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { useAlert } from "@repo/hooks/use-alert";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { Button } from "@repo/ui/button";
@@ -25,7 +25,6 @@ import FlatBadge from "@repo/ui/FlatBadge";
 
 import { routes } from "~/configs/routes";
 import { getErrorMessage } from "~/lib/handle-error";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { AvatarState } from "../AvatarState";
@@ -34,7 +33,7 @@ import CreateEditContact from "./CreateEditContact";
 import StudentContactList from "./StudentContactList";
 
 type ContactAllProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["contact"]["all"]>
+  RouterOutputs["contact"]["all"]
 >[number];
 
 export function getColumns({
@@ -132,6 +131,7 @@ export function getColumns({
       ),
       cell: ({ row }) => {
         const contact = row.original;
+        const gender = contact.gender;
         return (
           <FlatBadge
             variant={contact.gender == "female" ? "pink" : "blue"}
@@ -142,7 +142,7 @@ export function getColumns({
             ) : (
               <PiGenderFemaleThin className="h-4 w-4" />
             )}
-            {t(row.getValue("gender"))}
+            {t(`${gender}`)}
           </FlatBadge>
         );
       },
@@ -172,7 +172,9 @@ export function getColumns({
         const { openAlert, closeAlert } = useAlert();
         const contact = row.original;
         const utils = api.useUtils();
-        const deleteContactMutation = api.contact.delete.useMutation();
+        const deleteContactMutation = api.contact.delete.useMutation({
+          onSettled: () => utils.contact.all.invalidate(),
+        });
 
         return (
           <DropdownMenu>
@@ -224,7 +226,6 @@ export function getColumns({
                           loading: t("deleting"),
                           success: () => {
                             closeAlert();
-                            utils.contact.all.invalidate();
                             return t("deleted_successfully");
                           },
                           error: (error) => {

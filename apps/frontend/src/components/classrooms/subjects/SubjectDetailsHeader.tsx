@@ -1,16 +1,15 @@
 "use client";
 
-import { Fragment } from "react";
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import { MoreVertical } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
 import {
-  BreadCrumb,
-  BreadCrumbItem,
-  BreadCrumbSeparator,
-} from "@repo/ui/BreadCrumb";
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+} from "@repo/ui/breadcrumb";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -24,7 +23,7 @@ import { sidebarIcons } from "../sidebar-icons";
 
 export function SubjectDetailsHeader() {
   const Icon = sidebarIcons.programs;
-  const params = useParams();
+  const params = useParams<{ id: string; subjectId: string }>();
   const { t } = useLocale();
   const breadcrumbs = [
     { label: t("classroom"), href: routes.classrooms.details(params.id) },
@@ -38,22 +37,20 @@ export function SubjectDetailsHeader() {
   return (
     <div className="flex flex-row items-center bg-secondary px-2 py-1 text-secondary-foreground">
       {Icon && <Icon className="mr-2 h-6 w-6" />}
-      <BreadCrumb
-        orientation="horizontal"
-        variant={"ghost"}
-        className="gap-1 rounded-lg bg-background px-2"
-      >
-        {breadcrumbs.map((breadcrumb, index) => {
-          return (
-            <Fragment key={index}>
-              <BreadCrumbItem className="h-7 px-2" index={index}>
-                <Link href={breadcrumb.href}>{breadcrumb.label}</Link>
-              </BreadCrumbItem>
-              {index != breadcrumbs.length - 1 && <BreadCrumbSeparator />}
-            </Fragment>
-          );
-        })}
-      </BreadCrumb>
+      <Breadcrumb>
+        <BreadcrumbList>
+          {breadcrumbs.map((breadcrumb, index) => {
+            return (
+              <BreadcrumbItem key={index}>
+                <BreadcrumbLink href={breadcrumb.href}>
+                  {breadcrumb.label}
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            );
+          })}
+        </BreadcrumbList>
+      </Breadcrumb>
+
       <div className="ml-auto">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

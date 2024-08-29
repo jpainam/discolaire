@@ -1,27 +1,25 @@
 "use client";
 
+import type { Table } from "@tanstack/react-table";
 import { useParams } from "next/navigation";
 import { DownloadIcon, PlusIcon } from "@radix-ui/react-icons";
-import type {Table} from "@tanstack/react-table";
-import type { inferProcedureOutput } from "@trpc/server";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useAlert } from "@repo/hooks/use-alert";
 import { useRouter } from "@repo/hooks/use-router";
-import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 
 import { routes } from "~/configs/routes";
 import { exportTableToCSV } from "~/lib/export";
 import { getErrorMessage } from "~/lib/handle-error";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
 type ClassroomGradeSheetProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["classroom"]["gradesheets"]>
+  RouterOutputs["classroom"]["gradesheets"]
 >[number];
 
 interface GradeSheetToolbarActionsProps {
@@ -31,10 +29,9 @@ interface GradeSheetToolbarActionsProps {
 export function GradeSheetDataTableActions({
   table,
 }: GradeSheetToolbarActionsProps) {
-  const { openSheet } = useSheet();
   const { t } = useLocale();
   const router = useRouter();
-  const params = useParams();
+  const params = useParams<{ id: string }>();
   const { openAlert, closeAlert } = useAlert();
   const { createQueryString } = useCreateQueryString();
   const deleteGradeSheetMutation = api.gradeSheet.delete.useMutation();

@@ -53,7 +53,7 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
       />
     );
   }
-  const fees = feesQuery.data || [];
+  const fees = feesQuery.data;
   return (
     <div className="m-2 rounded-lg border">
       <Table>
@@ -69,7 +69,7 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {fees.map((fee) => {
+          {fees?.map((fee) => {
             return (
               <TableRow key={fee.id} className={rowClassName}>
                 <TableCell className="">{fee.description}</TableCell>
@@ -82,12 +82,12 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
                   {CURRENCY}
                 </TableCell>
                 <TableCell className="">
-                  {fee.dueDate && fullDateFormatter.format(fee.dueDate)}
+                  {fullDateFormatter.format(fee.dueDate)}
                 </TableCell>
                 <TableCell className="">
-                  {fee.dueDate && fee.dueDate < subDays(new Date(), 1) ? (
+                  {fee.dueDate < subDays(new Date(), 1) ? (
                     <FlatBadge variant={"green"}>{t("applied")}</FlatBadge>
-                  ) : fee.dueDate && fee.dueDate > addDays(new Date(), 7) ? (
+                  ) : fee.dueDate > addDays(new Date(), 7) ? (
                     <FlatBadge variant={"purple"}>{t("upcoming")}</FlatBadge>
                   ) : (
                     <FlatBadge variant={"yellow"}>{t("current")}</FlatBadge>

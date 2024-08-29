@@ -1,15 +1,13 @@
+import type { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import type { ColumnDef } from "@tanstack/react-table";
-import type { inferProcedureOutput } from "@trpc/server";
-import type { TFunction } from "i18next";
-import i18next from "i18next";
 import { FlagOff, Pencil } from "lucide-react";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { useAlert } from "@repo/hooks/use-alert";
 import { useModal } from "@repo/hooks/use-modal";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
@@ -26,13 +24,12 @@ import FlatBadge from "@repo/ui/FlatBadge";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { getErrorMessage } from "~/lib/handle-error";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { getAppreciations } from "~/utils/get-appreciation";
 import { EditGradeStudent } from "./EditGradeStudent";
 
 type GradeSheetGetGradeProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["gradeSheet"]["grades"]>
+  RouterOutputs["gradeSheet"]["grades"]
 >[number];
 
 export function fetchGradeColumns({
@@ -42,11 +39,11 @@ export function fetchGradeColumns({
   t: TFunction<string, unknown>;
   classroomId: string;
 }): ColumnDef<GradeSheetGetGradeProcedureOutput, unknown>[] {
-  const dateFormatter = Intl.DateTimeFormat(i18next.language, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  // const dateFormatter = Intl.DateTimeFormat(i18next.language, {
+  //   month: "short",
+  //   day: "numeric",
+  //   year: "numeric",
+  // });
 
   return [
     {
@@ -80,8 +77,8 @@ export function fetchGradeColumns({
         const student = row.original.student;
         return (
           <AvatarState
-            avatar={student?.avatar}
-            pos={student?.firstName?.length}
+            avatar={student.avatar}
+            pos={student.firstName?.length}
           />
         );
       },
@@ -93,13 +90,13 @@ export function fetchGradeColumns({
       ),
       cell: ({ row }) => {
         const student = row.original.student;
-        if (!student) return <></>;
+        if (!student.id) return <></>;
         return (
           <Link
             className="hover:text-blue-600 hover:underline"
-            href={routes.students.details(student?.id)}
+            href={routes.students.details(student.id)}
           >
-            {student?.firstName} {student?.lastName}
+            {student.firstName} {student.lastName}
           </Link>
         );
       },
@@ -150,6 +147,7 @@ export function fetchGradeColumns({
 
 function ActionCells({
   grade,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   classroomId,
 }: {
   classroomId: string;
@@ -158,7 +156,7 @@ function ActionCells({
   const { openAlert, closeAlert } = useAlert();
   const { t } = useLocale();
   const { openModal } = useModal();
-  const router = useRouter();
+
   const markGradeAbsent = api.grade.update.useMutation();
   return (
     <div className="flex justify-end">
@@ -176,13 +174,13 @@ function ActionCells({
           <DropdownMenuItem
             onSelect={() => {
               const st = grade.student;
-              if (!st?.id) {
-                throw new Error("studentId is required");
+              if (!st.id) {
+                return;
               }
               openModal({
                 title: <div>{t("edit")}</div>,
                 description: t("edit_grade_description", {
-                  name: `${st?.lastName} ${st?.firstName}`,
+                  name: `${st.lastName} ${st.firstName}`,
                 }),
                 view: (
                   <EditGradeStudent

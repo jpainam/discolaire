@@ -78,7 +78,7 @@ export function ContactStudentTable({ id }: { id: string }) {
                 <TableCell className="py-0">
                   <Link
                     href={
-                      routes.students.contacts(student.id || "") +
+                      routes.students.contacts(student.id ?? "") +
                       "/" +
                       stc.contactId
                     }
@@ -89,7 +89,7 @@ export function ContactStudentTable({ id }: { id: string }) {
                 <TableCell className="py-0">
                   <Link
                     href={
-                      routes.students.contacts(student.id || "") +
+                      routes.students.contacts(student.id ?? "") +
                       "/" +
                       stc.contactId
                     }

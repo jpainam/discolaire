@@ -1,6 +1,5 @@
 "use client";
 
-import type { Contact } from "@prisma/client";
 import {
   ChevronDown,
   ImageUpIcon,
@@ -47,6 +46,7 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
       </div>
     );
   }
+  const contact = contactQuery.data;
   return (
     <div className="flex flex-row items-start gap-2">
       <AvatarState pos={0} className="h-auto w-[100px]" />
@@ -58,14 +58,13 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
                 title: (
                   <p className="px-4 py-2">
                     {t("edit")} -{" "}
-                    {contactQuery.data?.lastName ||
+                    {contactQuery.data?.lastName ??
                       contactQuery.data?.firstName}
                   </p>
                 ),
                 className: "w-[600px]",
-                view: (
-                  <CreateEditContact contact={contactQuery.data!} />
-                ),
+                // @ts-expect-error TODO fix this
+                view: <CreateEditContact contact={contact} />,
               });
             }}
             variant={"outline"}

@@ -1,8 +1,8 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import type { inferProcedureOutput } from "@trpc/server";
 
+import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
@@ -18,15 +18,14 @@ import {
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
 type GradeSheetGetGradeProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["gradeSheet"]["grades"]>
+  RouterOutputs["gradeSheet"]["grades"]
 >[number];
 
 type GradeSheetGetProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["gradeSheet"]["get"]>
+  RouterOutputs["gradeSheet"]["get"]
 >;
 
 export function GradeHeader({
@@ -36,7 +35,7 @@ export function GradeHeader({
   grades: GradeSheetGetGradeProcedureOutput[];
   gradesheet: GradeSheetGetProcedureOutput;
 }) {
-  const params = useParams();
+  const params = useParams<{ id: string }>();
 
   const classroomQuery = api.classroom.get.useQuery(params.id);
   const { t, i18n } = useLocale();
@@ -46,12 +45,12 @@ export function GradeHeader({
 
   const males10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student?.gender == "male",
+      (grade) => grade.grade >= 10 && grade.student.gender == "male",
     ).length / (grades.length || 1e9);
 
   const females10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student?.gender == "female",
+      (grade) => grade.grade >= 10 && grade.student.gender == "female",
     ).length / (grades.length || 1e9);
 
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
@@ -71,11 +70,11 @@ export function GradeHeader({
           {classroomQuery.isPending ? (
             <Skeleton className="h-8 w-full" />
           ) : (
-            classroomQuery.data.name
+            classroomQuery.data?.name
           )}
         </span>
         <span> Note sur : 20.00</span>
-        <span> {gradesheet?.subject?.teacher?.lastName}</span>
+        <span> {gradesheet.subject.teacher?.lastName}</span>
         <span>
           {gradesheet.startDate && dateFormatter.format(gradesheet.startDate)}
         </span>
@@ -83,21 +82,21 @@ export function GradeHeader({
           {" "}
           {t("max_grade")} : {maxGrade}
         </span>
-        <span> {gradesheet?.subject?.course?.name} </span>
-        <span>{gradesheet?.name}</span>
-        <span>Effectif : {classroomQuery.data.size} </span>
+        <span> {gradesheet.subject.course?.name} </span>
+        <span>{gradesheet.name}</span>
+        <span>Effectif : {classroomQuery.data?.size} </span>
         <span>
           {t("min_grade")} : {minGrade}
         </span>
         <span>
-          {t("coefficient")} : {gradesheet?.subject?.coefficient}{" "}
+          {t("coefficient")} : {gradesheet.subject.coefficient}{" "}
         </span>
         <span>
           {t("avg_grade")} : {average.toFixed(2)}
         </span>
         <span>
           {" "}
-          {t("term")} : {gradesheet?.term?.name}
+          {t("term")} : {gradesheet.term.name}
         </span>
       </div>
       <div className="mx-2 mb-2">

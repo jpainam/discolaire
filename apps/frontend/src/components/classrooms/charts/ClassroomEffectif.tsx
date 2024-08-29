@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { inferProcedureOutput } from "@trpc/server";
 import { sortBy } from "lodash";
 import { Loader, TrendingDown, TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
+import type { RouterOutputs } from "@repo/api";
+import type { ChartConfig } from "@repo/ui/chart";
 import { useLocale } from "@repo/i18n";
 import {
   Card,
@@ -14,8 +15,6 @@ import {
   CardFooter,
   CardHeader,
 } from "@repo/ui/card";
-import type {
-  ChartConfig} from "@repo/ui/chart";
 import {
   ChartContainer,
   ChartLegend,
@@ -24,10 +23,8 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/chart";
 
-import type { AppRouter } from "~/server/api/root";
-
 type ClassroomAllProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["classroom"]["all"]>
+  RouterOutputs["classroom"]["all"]
 >[number];
 
 export function ClassroomEffectif({
@@ -62,15 +59,12 @@ export function ClassroomEffectif({
     > = {};
 
     stats.forEach((stat) => {
-      if (stat?.level) {
-        levels[stat.level.name] = {
-          level: stat.level.name,
-          levelId: stat.levelId || 0,
-          female:
-            (levels[stat.level.name]?.female || 0) + stat.femaleCount || 0,
-          male: (levels[stat.level.name]?.male || 0) + stat.maleCount || 0,
-        };
-      }
+      levels[stat.level.name] = {
+        level: stat.level.name,
+        levelId: stat.levelId || 0,
+        female: (levels[stat.level.name]?.female ?? 0) + stat.femaleCount || 0,
+        male: (levels[stat.level.name]?.male ?? 0) + stat.maleCount || 0,
+      };
     });
     const values = Object.values(levels);
     setChartData(sortBy(values, "levelId"));
@@ -97,6 +91,7 @@ export function ClassroomEffectif({
               tickLine={false}
               tickMargin={10}
               axisLine={false}
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-return
               tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip

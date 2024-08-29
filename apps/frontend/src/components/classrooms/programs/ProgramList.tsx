@@ -9,7 +9,8 @@ import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
-export async function ProgramList({ classroomId }: { classroomId: string }) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function ProgramList({ classroomId }: { classroomId: string }) {
   const params = useParams<{ id: string; subjectId: string }>();
   const router = useRouter();
   const subjectsQuery = api.classroom.subjects.useQuery({ id: params.id });

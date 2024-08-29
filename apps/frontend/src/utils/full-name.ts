@@ -5,7 +5,7 @@ type Person = {
   middleName?: string | null;
 } & Record<string, any>;
 
-export function getFullName(person?: Person): string {
+export function getFullName(person?: any): string {
   if (!person) {
     return "";
   }

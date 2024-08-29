@@ -1,6 +1,10 @@
 "use client";
 
 import * as React from "react";
+import { TrendingUp } from "lucide-react";
+import { Label, Pie, PieChart } from "recharts";
+
+import type { ChartConfig } from "@repo/ui/chart";
 import {
   Card,
   CardContent,
@@ -9,15 +13,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/card";
-import type {
-  ChartConfig} from "@repo/ui/chart";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/chart";
-import { TrendingUp } from "lucide-react";
-import { Label, Pie, PieChart } from "recharts";
 
 const chartData = [
   { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
@@ -100,7 +100,7 @@ export function ContactGenderEffectif() {
                         </tspan>
                         <tspan
                           x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
+                          y={(viewBox.cy ?? 0) + 24}
                           className="fill-muted-foreground"
                         >
                           Visitors
