@@ -1,16 +1,15 @@
 "use client";
 
+import type { Table } from "@tanstack/react-table";
 import { DownloadIcon, PlusIcon } from "@radix-ui/react-icons";
-import type {Table} from "@tanstack/react-table";
 import { Trash2 } from "lucide-react";
 
 import { useAlert } from "@repo/hooks/use-alert";
-import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 
-import { exportTableToCSV } from "~/lib/export";
 import type { SMSHistory } from "~/types/sms";
+import { exportTableToCSV } from "~/lib/export";
 
 interface TasksTableToolbarActionsProps {
   table: Table<SMSHistory>;
@@ -19,7 +18,6 @@ interface TasksTableToolbarActionsProps {
 export function SMSHistoryDataTableActions({
   table,
 }: TasksTableToolbarActionsProps) {
-  const { openSheet } = useSheet();
   const { t } = useLocale();
   const { openAlert, closeAlert } = useAlert();
   return (
@@ -30,7 +28,9 @@ export function SMSHistoryDataTableActions({
             openAlert({
               title: t("delete"),
               description: t("delete_confirmation"),
-              onConfirm: () => {},
+              onConfirm: () => {
+                console.log("delete");
+              },
               onCancel: () => {
                 closeAlert();
               },

@@ -15,6 +15,7 @@ export function TimelineAction({ timelineId }: { timelineId: string }) {
   return (
     <Button
       onClick={() => {
+        console.log(timelineId);
         openAlert({
           title: "Delete Timeline",
           description: "Are you sure you want to delete this timeline?",

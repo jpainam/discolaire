@@ -1,10 +1,11 @@
 "use client";
 
+import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+
 import { buttonVariants } from "@repo/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
-import type { LucideIcon } from "lucide-react";
 
 import { cn } from "~/lib/utils";
 
@@ -21,7 +22,7 @@ interface NavProps {
 
 export function Nav({ links, isCollapsed }: NavProps) {
   const searchParams = useSearchParams();
-  const tab = searchParams.get("tab") || "classrooms";
+  const tab = searchParams.get("tab") ?? "classrooms";
   const activeLink = links.find((link) => link.href?.includes(tab));
   return (
     <div
@@ -34,7 +35,7 @@ export function Nav({ links, isCollapsed }: NavProps) {
             <Tooltip key={index} delayDuration={0}>
               <TooltipTrigger asChild>
                 <Link
-                  href={link.href || "#"}
+                  href={link.href ?? "#"}
                   className={cn(
                     buttonVariants({
                       variant:
@@ -62,7 +63,7 @@ export function Nav({ links, isCollapsed }: NavProps) {
           ) : (
             <Link
               key={index}
-              href={link.href || "#"}
+              href={link.href ?? "#"}
               className={cn(
                 buttonVariants({
                   variant: link.href === activeLink?.href ? "default" : "ghost",

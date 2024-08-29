@@ -1,19 +1,19 @@
-import type { ReactNode } from "react";
-import Link from "next/link";
-import type { ColumnDef} from "@tanstack/react-table";
-import { createColumnHelper } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
-import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
+import type { ReactNode } from "react";
 import type * as RPNInput from "react-phone-number-input";
+import Link from "next/link";
+import { createColumnHelper } from "@tanstack/react-table";
+import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import flags from "react-phone-number-input/flags";
 
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/data-table/v2/data-table-column-header";
 import FlatBadge from "@repo/ui/FlatBadge";
 
+import type { Student } from "~/types/student";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
-import type { Student } from "~/types/student";
 import { getFullName } from "~/utils/full-name";
 
 const columnHelper = createColumnHelper<Student>();
@@ -30,7 +30,7 @@ interface UseStudentColumnsProps {
 }
 export function fetchStudentColumns({
   columns,
-  schoolYearId,
+
   action,
   t,
   dateFormatter,
@@ -142,6 +142,7 @@ export function fetchStudentColumns({
       ),
       cell: ({ row }) => {
         const student = row.original;
+        const gender = student.gender;
         return (
           <FlatBadge variant={student.gender == "female" ? "pink" : "blue"}>
             {student.gender == "male" ? (
@@ -149,7 +150,7 @@ export function fetchStudentColumns({
             ) : (
               <PiGenderFemaleThin className="h-4 w-4" />
             )}
-            {t(row.getValue("gender"))}
+            {t(`${gender}`)}
           </FlatBadge>
         );
       },
@@ -188,7 +189,8 @@ export function fetchStudentColumns({
         <DataTableColumnHeader column={column} title={t("classroom")} />
       ),
       cell: ({ row }) => {
-        return <div>xxx</div>;
+        const student = row.original;
+        return <div>{student.classroom?.shortName}</div>;
         // const enr = row.original?.enrollments?.find(
         //   (e) => e.schoolYearId == schoolYearId
         // );
@@ -282,7 +284,7 @@ export function fetchStudentColumns({
       ),
       cell: ({ row }) => {
         const countryId = row.original.country?.id as RPNInput.Country;
-        const Flag = countryId && flags[countryId];
+        const Flag = flags[countryId];
         return (
           <div className="flex flex-row items-center gap-1">
             <span className="flex h-4 w-6 overflow-hidden rounded-sm bg-foreground/20">
@@ -303,11 +305,12 @@ export function fetchStudentColumns({
     },
   ] as ColumnDef<Student, unknown>[];
 
-  const filteredColumns = columns //@ts-ignore
+  const filteredColumns = columns
+    // @ts-expect-error TODO: fix this
     .map((col) => allcolumns.find((c) => c.accessorKey === col))
     .filter(Boolean) as ColumnDef<Student, unknown>[];
 
-  action && filteredColumns.push(action);
+  if (action) filteredColumns.push(action);
 
   return {
     columns: filteredColumns,

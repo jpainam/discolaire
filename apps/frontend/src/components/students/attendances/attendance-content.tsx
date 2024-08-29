@@ -1,4 +1,4 @@
-export default async function AttendanceContent() {
+export default function AttendanceContent() {
   /*await new Promise((resolve) => {
     setTimeout(resolve, 3000);
   });*/
