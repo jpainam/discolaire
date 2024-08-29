@@ -18,7 +18,7 @@ interface DatePickerProps {
   fromYear?: number;
   disabled?: boolean;
   toYear?: number;
-  onChange?: (date?: Date) => void;
+  onChange?: (date: Date) => void;
   defaultValue?: Date;
 }
 export function DatePicker({
@@ -68,7 +68,7 @@ export function DatePicker({
           disabled={disabled}
           selected={value}
           onSelect={(date) => {
-            onChange?.(date ?? undefined);
+            if (date) onChange?.(date);
             setOpen(false);
             setValue(date);
           }}

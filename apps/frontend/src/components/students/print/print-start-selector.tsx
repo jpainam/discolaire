@@ -10,7 +10,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  useFormState,
+  useFormContext,
 } from "@repo/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import {
@@ -24,7 +24,7 @@ import {
 import { cn } from "~/lib/utils";
 
 export default function PrintStartSelector() {
-  const form = useFormState();
+  const form = useFormContext();
   return (
     <>
       <FormLabel>Quand lancé l&apos;impression ?</FormLabel>

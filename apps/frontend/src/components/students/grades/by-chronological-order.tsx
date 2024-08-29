@@ -29,7 +29,7 @@ export function ByChronologicalOrder({
   minMaxMoy,
 }: ByChronologicalOrderProps) {
   const router = useRouter();
-  const params = useParams();
+  const params = useParams<{ id: string; gradeId: string }>();
   const { createQueryString } = useCreateQueryString();
   const { monthFormatter, dayFormatter } = useDateFormat();
 

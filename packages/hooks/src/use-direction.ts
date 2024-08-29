@@ -25,7 +25,6 @@ import { atom, useAtom } from "jotai";
 
 // 1. set initial atom for isomorphic direction
 const isomorphicDirectionAtom = atom(
-  // @ts-expect-error TODO fix this
   typeof window !== "undefined" ? localStorage.getItem("iso-direction") : "ltr",
 );
 
@@ -33,7 +32,6 @@ const isomorphicDirectionAtomWithPersistence = atom(
   (get) => get(isomorphicDirectionAtom),
   (get, set, newStorage: any) => {
     set(isomorphicDirectionAtom, newStorage);
-    // @ts-expect-error TODO fix this
     localStorage.setItem("iso-direction", newStorage);
   },
 );

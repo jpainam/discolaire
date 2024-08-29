@@ -23,7 +23,10 @@ export function DropdownInvitation({ email }: { email?: string | null }) {
             toast.error(t("email_not_found"));
             return;
           }
-          const invitationCode = await api.invitation.create({ email });
+          const invitationCode = await api.invitation.create({
+            email,
+            name: "",
+          });
           const invitationLink =
             env.NEXT_PUBLIC_BASE_URL +
             "/invite/" +
@@ -51,7 +54,7 @@ export function DropdownInvitation({ email }: { email?: string | null }) {
             className: "w-[350px] p-2",
             description: t("would_you_like_to_invite_this_person"),
             title: t("send_invite"),
-            view: <InviteConfirmationDialog email={email} />,
+            view: <InviteConfirmationDialog name="" email={email} />,
           });
         }}
       >

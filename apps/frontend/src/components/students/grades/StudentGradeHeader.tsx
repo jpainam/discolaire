@@ -1,12 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import { MoreVertical } from "lucide-react";
 import { parseAsInteger, useQueryState } from "nuqs";
 
-import { useCreateQueryString } from "@repo/hooks/create-query-string";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -21,7 +18,6 @@ import { Skeleton } from "@repo/ui/skeleton";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
-import { ToggleSelector } from "~/components/shared/forms/toggle-selector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { api } from "~/trpc/react";
 
@@ -33,7 +29,7 @@ export function StudentGradeHeader({
   classroomId: string;
 }) {
   const { t } = useLocale();
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   const [term, setTerm] = useQueryState("term", parseAsInteger);
   const studentGradesQuery = api.student.grades.useQuery({
     id: studentId,
@@ -41,7 +37,7 @@ export function StudentGradeHeader({
   });
   const { t: t2 } = useLocale("print");
 
-  const router = useRouter();
+  // const router = useRouter();
 
   const [studentAvg, setStudentAvg] = useState<number | null>(null);
   const [classroomAvg, setClassroomAvg] = useState<number | null>(null);
@@ -83,11 +79,11 @@ export function StudentGradeHeader({
     }
   }, [studentGradesQuery.data, term]);
 
-  const { createQueryString } = useCreateQueryString();
-  const toggleItems = [
-    { value: "by_chronological_order", label: t("by_chronological_order") },
-    { value: "by_subject", label: t("bySubject") },
-  ];
+  // const { createQueryString } = useCreateQueryString();
+  // const toggleItems = [
+  //   { value: "by_chronological_order", label: t("by_chronological_order") },
+  //   { value: "by_subject", label: t("bySubject") },
+  // ];
   if (classroomMinMaxMoyGrades.isPending) {
     return <Skeleton className="h-8 w-full" />;
   }
@@ -102,7 +98,7 @@ export function StudentGradeHeader({
         }}
         defaultValue={term ? `${term}` : undefined}
       />
-      <ToggleSelector
+      {/* <ToggleSelector
         items={toggleItems}
         defaultValue={searchParams.get("view") ?? "by_chronological_order"}
         onChange={(v) => {
@@ -113,7 +109,7 @@ export function StudentGradeHeader({
               }),
           );
         }}
-      />
+      /> */}
       {studentAvg && (
         <FlatBadge variant={"yellow"}>
           {t("student_general_avg")} : {studentAvg.toFixed(2)}

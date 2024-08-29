@@ -4,10 +4,7 @@ import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Label } from "@repo/ui/label";
-import { ToggleGroup } from "@repo/ui/ToggleGroup";
 
-import PDFIcon from "~/components/icons/pdf-solid";
-import XMLIcon from "~/components/icons/xml-solid";
 import { StudentSelector } from "~/components/shared/selects/StudentSelector";
 import { routes } from "~/configs/routes";
 
@@ -15,18 +12,18 @@ export function StudentReportToolbar() {
   const { t } = useLocale();
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
-  const options = [
-    {
-      value: "pdf",
-      label: "Pdf",
-      iconLeft: <PDFIcon className="h-6 w-6" />,
-    },
-    {
-      value: "excel",
-      label: "Excel",
-      iconLeft: <XMLIcon className="h-6 w-6" />,
-    },
-  ];
+  // const options = [
+  //   {
+  //     value: "pdf",
+  //     label: "Pdf",
+  //     iconLeft: <PDFIcon className="h-6 w-6" />,
+  //   },
+  //   {
+  //     value: "excel",
+  //     label: "Excel",
+  //     iconLeft: <XMLIcon className="h-6 w-6" />,
+  //   },
+  // ];
   return (
     <>
       <Label>{t("students")}</Label>
@@ -42,7 +39,7 @@ export function StudentReportToolbar() {
           }
         }}
       />
-      <ToggleGroup
+      {/* <ToggleGroup
         onValueChange={(val) => {
           if (val) {
             router.push(
@@ -55,7 +52,7 @@ export function StudentReportToolbar() {
           }
         }}
         options={options}
-      />
+      /> */}
     </>
   );
 }

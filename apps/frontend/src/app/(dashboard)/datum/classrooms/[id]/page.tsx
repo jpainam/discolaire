@@ -1,9 +1,9 @@
 import { checkPermissions } from "@repo/api/permission";
+import { PermissionAction } from "@repo/lib/permission";
 
 import { ClassroomDetails } from "~/components/classrooms/ClassroomDetails";
 import EnrollmentDataTable from "~/components/classrooms/enrollments/EnrollmentDataTable";
 import { EnrollmentHeader } from "~/components/classrooms/enrollments/EnrollmentHeader";
-import { PermissionAction } from "~/types/permission";
 
 export default async function Page({
   params: { id },

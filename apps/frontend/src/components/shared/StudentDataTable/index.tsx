@@ -4,7 +4,6 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
 
 import type { DataTableFilterField } from "@repo/ui/data-table/v2/datatypes";
-import { useSchoolYear } from "@repo/hooks/use-schoolyear";
 import { useLocale } from "@repo/i18n";
 import { DataTable } from "@repo/ui/data-table/v2/data-table";
 import { DataTableToolbar } from "@repo/ui/data-table/v2/data-table-toolbar";
@@ -54,7 +53,8 @@ export default function StudentDataTable2({
     },
   ];
 
-  const schoolYearId = useSchoolYear();
+  //const schoolYearId = useSchoolYear();
+  const schoolYearId = "2022-2023";
   const defaultVisibles = [
     "select",
     "id",
@@ -71,7 +71,7 @@ export default function StudentDataTable2({
         t: t,
         columns: visibles ? visibles : defaultVisibles,
         dateFormatter: fullDateFormatter,
-        schoolYearId: schoolYearId ?? "",
+        schoolYearId: schoolYearId,
         action: action,
       });
       return columns;

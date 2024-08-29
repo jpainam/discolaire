@@ -17,7 +17,7 @@ export function StudentEnrollmentHeader({
 }) {
   const { t } = useLocale();
   const { openModal } = useModal();
-  const params = useParams();
+  const params = useParams<{ id: string }>();
 
   return (
     <div className="flex flex-row items-center border-b bg-secondary px-2 py-1">

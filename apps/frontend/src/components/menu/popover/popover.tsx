@@ -128,11 +128,11 @@ export default function Popover({
 
     return position;
   }
-
+  type DIRECTION = "ltr" | "rtl";
   const popover = usePopover({
     middlewares,
     width,
-    position: getFloatingPosition(direction, position),
+    position: getFloatingPosition(direction as DIRECTION, position),
     offset: offset,
     onPositionChange,
     positionDependencies,

@@ -20,7 +20,7 @@ import { sidebarIcons } from "../sidebar-icons";
 import { LinkContact } from "./LinkContact";
 
 export function StudentContactHeader() {
-  const params = useParams();
+  const params = useParams<{ id: string }>();
   const { t } = useLocale();
 
   const Icon = sidebarIcons.contacts;
