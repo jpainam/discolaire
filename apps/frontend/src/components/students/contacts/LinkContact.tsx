@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Check } from "lucide-react";
+import { Check, Loader } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -165,7 +165,10 @@ export function LinkContact({ studentId }: { studentId: string }) {
         )}
         <Button
           variant={"default"}
-          disabled={selectedContacts.length === 0}
+          disabled={
+            selectedContacts.length === 0 ||
+            createStudentContactMutation.isPending
+          }
           onClick={() => {
             if (!relationship) {
               toast.error(t("please_select_relationship"));
@@ -193,6 +196,9 @@ export function LinkContact({ studentId }: { studentId: string }) {
             );
           }}
         >
+          {createStudentContactMutation.isPending && (
+            <Loader className="mr-2 h-4 w-4 animate-spin" />
+          )}
           {t("link")}
         </Button>
       </div>

@@ -89,7 +89,7 @@ export function SignUpContact() {
     return;
   }
   return (
-    <div className="flex flex-row gap-4 px-4 pt-2 text-sm">
+    <div className="flex flex-row gap-4 p-2 px-4 text-sm">
       <div className="flex w-full flex-col rounded-xl border border-[#f3ba63] bg-[#fff9ed] p-4 text-accent-foreground dark:border-[#693f05] dark:bg-[#271700]">
         <div className="flex flex-row">
           <div className="flex flex-1 flex-col gap-2">

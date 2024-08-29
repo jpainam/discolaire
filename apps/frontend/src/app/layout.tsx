@@ -4,7 +4,7 @@ import { GeistSans } from "geist/font/sans";
 
 import { I18nProvider } from "@repo/i18n/i18n-context";
 import { cn } from "@repo/ui";
-import { Toaster } from "@repo/ui/toast";
+import { Toaster } from "@repo/ui/sonner";
 
 import { TRPCReactProvider } from "~/trpc/react";
 
@@ -82,7 +82,6 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
                 <ReactQueryDevtools initialIsOpen={false} />
               </AuthProvider>
             </TRPCReactProvider>
-            <Toaster />
             <TailwindIndicator />
             <Toaster richColors />
           </ThemeProvider>

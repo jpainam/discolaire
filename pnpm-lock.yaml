@@ -874,8 +874,8 @@ importers:
         specifier: ^2.12.7
         version: 2.12.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sonner:
-        specifier: ^1.5.0
-        version: 1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 1.4.0
+        version: 1.4.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       tailwind-merge:
         specifier: ^2.5.2
         version: 2.5.2
@@ -961,7 +961,7 @@ importers:
         version: 7.35.0(eslint@9.9.0(jiti@1.21.6))
       eslint-plugin-react-hooks:
         specifier: rc
-        version: 5.1.0-rc-7771d3a7-20240827(eslint@9.9.0(jiti@1.21.6))
+        version: 5.1.0-rc-a19a8ab4-20240829(eslint@9.9.0(jiti@1.21.6))
       eslint-plugin-turbo:
         specifier: ^2.0.13
         version: 2.0.13(eslint@9.9.0(jiti@1.21.6))
@@ -6488,8 +6488,8 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
 
-  eslint-plugin-react-hooks@5.1.0-rc-7771d3a7-20240827:
-    resolution: {integrity: sha512-SY8Fq2Qz7Bb7xJnv2siIUFzOEf/BahfvIbxHxpY4ud1OGiCpm0d+6mSxGn0CegCCbj82SvIHCrM5LHgAgADW2g==}
+  eslint-plugin-react-hooks@5.1.0-rc-a19a8ab4-20240829:
+    resolution: {integrity: sha512-lWHTnMQqgAvQ4S5VVyXSxdNnfqbSiH4VAb7hbN1scbQaB9DmXkE2r1EOi2RigeA3x994TOcrFb73l1UZD4PvXQ==}
     engines: {node: '>=10'}
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0
@@ -9747,8 +9747,8 @@ packages:
     resolution: {integrity: sha512-l5x7VUUWbjVFbafGLxPWkYsHIhEvmF85tbIeFZWc8ZPtoMyybuEhL7Jye/ooC4/d48FgOjSJXgsF/AJPYCW8Zw==}
     engines: {node: '>= 10.0.0', npm: '>= 3.0.0'}
 
-  sonner@1.5.0:
-    resolution: {integrity: sha512-FBjhG/gnnbN6FY0jaNnqZOMmB73R+5IiyYAw8yBj7L54ER7HB3fOSE5OFiQiE2iXWxeXKvg6fIP4LtVppHEdJA==}
+  sonner@1.4.0:
+    resolution: {integrity: sha512-nvkTsIuOmi9e5Wz5If8ldasJjZNVfwiXYijBi2dbijvTQnQppvMcXTFNxL/NUFWlI2yJ1JX7TREDsg+gYm9WyA==}
     peerDependencies:
       react: ^18.0.0
       react-dom: ^18.0.0
@@ -17265,7 +17265,7 @@ snapshots:
       safe-regex-test: 1.0.3
       string.prototype.includes: 2.0.0
 
-  eslint-plugin-react-hooks@5.1.0-rc-7771d3a7-20240827(eslint@9.9.0(jiti@1.21.6)):
+  eslint-plugin-react-hooks@5.1.0-rc-a19a8ab4-20240829(eslint@9.9.0(jiti@1.21.6)):
     dependencies:
       eslint: 9.9.0(jiti@1.21.6)
 
@@ -21070,7 +21070,7 @@ snapshots:
       ip-address: 9.0.5
       smart-buffer: 4.2.0
 
-  sonner@1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  sonner@1.4.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
