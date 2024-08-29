@@ -1,38 +1,46 @@
 "use client";
 
-import { render } from "@react-email/components";
+import { useCallback } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useCallback } from "react";
+import { render } from "@react-email/components";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
-import { SendInvite } from "@repo/transactional/emails/SendInvite";
+import { SendInvite } from "@repo/transactional/SendInvite";
 import { Button } from "@repo/ui/button";
 import { EmptyState } from "@repo/ui/EmptyState";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { env } from "~/env";
 import { getErrorMessage, showErrorToast } from "~/lib/handle-error";
-//import { sendEmail } from "~/server/services/messaging-service";
 import { api } from "~/trpc/react";
-import { encryptInvitationCode } from "~/utils/encrypt";
 import { SignUpContactIcon } from "./SignUpContactIcon";
 
 export function SignUpContact() {
   const params = useParams<{ id: string }>();
   const { t } = useLocale();
   const studentContactsQuery = api.student.contacts.useQuery(params.id);
+  const sendEmailMutation = api.messaging.sendEmail.useMutation();
+  const createInvitationMutation = api.invitation.create.useMutation();
+
   const sendInvite = useCallback(
-    async ({ email, username }: { email: string; username: string }) => {
-      const invitationCode = await encryptInvitationCode(email);
+    async ({
+      email,
+      username,
+      invitationCode,
+    }: {
+      email: string;
+      invitationCode: string;
+      username: string;
+    }) => {
       const invitationLink =
         env.NEXT_PUBLIC_BASE_URL +
         "/invite/" +
         invitationCode +
         "?email=" +
         email;
-      const emailHtml = render(
+      const emailHtml = await render(
         <SendInvite
           username={username}
           invitedByUsername="Admin"
@@ -42,7 +50,7 @@ export function SignUpContact() {
         />,
       );
       toast.promise(
-        sendEmail({
+        sendEmailMutation.mutateAsync({
           subject: "Invitation to join Discolaire",
           to: email,
           body: emailHtml,
@@ -58,7 +66,7 @@ export function SignUpContact() {
         },
       );
     },
-    [t],
+    [sendEmailMutation, t],
   );
   if (studentContactsQuery.isPending) {
     return (
@@ -71,7 +79,7 @@ export function SignUpContact() {
     showErrorToast(studentContactsQuery.error);
     return;
   }
-  if (!studentContactsQuery.data) {
+  if (studentContactsQuery.data.length === 0) {
     return <EmptyState className="my-4" />;
   }
   const haveNotSignedUp = studentContactsQuery.data.map(
@@ -108,26 +116,41 @@ export function SignUpContact() {
 
               <Button
                 onClick={() => {
-                  studentContactsQuery.data.forEach(async (std) => {
-                    if (!std.contact.email) {
-                      toast.error(
-                        t("email_not_found") +
-                          " " +
-                          std.contact.firstName +
-                          " " +
-                          std.contact.lastName,
+                  void Promise.all(
+                    studentContactsQuery.data.map(async (std) => {
+                      if (!std.contact.email) {
+                        toast.error(
+                          t("email_not_found") +
+                            " " +
+                            std.contact.firstName +
+                            " " +
+                            std.contact.lastName,
+                        );
+                        return;
+                      }
+                      createInvitationMutation.mutate(
+                        {
+                          email: std.contact.email,
+                          name:
+                            std.contact.lastName ??
+                            std.contact.firstName ??
+                            "@username",
+                        },
+                        {
+                          onSuccess: (invitation) => {
+                            void sendInvite({
+                              email: invitation.email,
+                              invitationCode: invitation.token,
+                              username: invitation.name,
+                            });
+                          },
+                        },
                       );
-                      return;
-                    }
-                    await sendInvite({
-                      email: std.contact.email,
-                      username:
-                        std.contact.lastName ||
-                        std.contact.firstName ??
-                        "@username",
-                    });
-                    await new Promise((resolve) => setTimeout(resolve, 2000));
-                  });
+
+                      await new Promise((resolve) => setTimeout(resolve, 2000));
+                      return true;
+                    }),
+                  );
                 }}
                 variant={"default"}
                 className="w-fit"

@@ -9,7 +9,7 @@
   "exports": {
     "./emails/*": {
       "types": "./dist/emails/*.d.ts",
-      "default": "./emails/*"
+      "default": "./emails/*.tsx"
     },
     "./*": {
       "types": "./dist/*.d.ts",

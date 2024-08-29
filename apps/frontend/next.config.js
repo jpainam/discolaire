@@ -20,7 +20,6 @@ const config = {
   transpilePackages: [
     "@repo/api",
     "@repo/auth",
-    "@repo/editor",
     "@repo/db",
     "@repo/hooks",
     "@repo/i18n",

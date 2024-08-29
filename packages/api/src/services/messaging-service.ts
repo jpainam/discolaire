@@ -10,41 +10,43 @@ const headersList = {
   "Content-Type": "application/json",
 };
 
-export async function sendEmail({
-  subject,
-  body,
-  to,
-  schedule,
-  receipt,
-  cc,
-  bcc,
-}: {
-  subject: string;
-  body: string;
-  to: string | string[];
-  cc?: string | string[];
-  bcc?: string | string[];
-  schedule?: string;
-  receipt?: boolean;
-}) {
-  try {
-    const bodyContent = JSON.stringify({
-      html: body,
-      subject: subject,
-      from: "DisScolaire <no-reply@discolaire.com>",
-      to: to,
-    });
+export const messagingService = {
+  sendEmail: async ({
+    subject,
+    body,
+    to,
+    schedule,
+    receipt,
+    cc,
+    bcc,
+  }: {
+    subject: string;
+    body: string;
+    to: string | string[];
+    cc?: string | string[];
+    bcc?: string | string[];
+    schedule?: string;
+    receipt?: boolean;
+  }) => {
+    try {
+      const bodyContent = JSON.stringify({
+        html: body,
+        subject: subject,
+        from: "DisScolaire <no-reply@discolaire.com>",
+        to: to,
+      });
 
-    const response = await fetch(`${messagingBaseUrl}/api/v1/emails`, {
-      method: "POST",
-      body: bodyContent,
-      headers: headersList,
-    });
+      const response = await fetch(`${messagingBaseUrl}/api/v1/emails`, {
+        method: "POST",
+        body: bodyContent,
+        headers: headersList,
+      });
 
-    const data = await response.text();
-    return data;
-  } catch (e) {
-    console.error(e);
-    throw e;
-  }
-}
+      const data = await response.text();
+      return data;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  },
+};

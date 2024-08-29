@@ -65,11 +65,11 @@ export function StudentDataTable() {
   }, [t, fullDateFormatter]);
 
   const pageCount = Math.ceil(
-    (studentsCountQuery.data?.total || 0) / (studentsQuery.data?.length || 1),
+    (studentsCountQuery.data?.total ?? 0) / (studentsQuery.data?.length ?? 1),
   );
 
   const { table } = useDataTable({
-    data: studentsQuery.data || [],
+    data: studentsQuery.data ?? [],
     columns: columns,
     pageCount: pageCount,
     // optional props
@@ -85,7 +85,7 @@ export function StudentDataTable() {
     showErrorToast(studentsQuery.error);
     return;
   }
-  if (!studentsQuery.data) {
+  if (studentsQuery.data.length === 0) {
     return <EmptyState title={t("no_data")} className="my-8" />;
   }
 

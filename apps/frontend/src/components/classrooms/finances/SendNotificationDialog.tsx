@@ -17,12 +17,12 @@ import { Textarea } from "@repo/ui/textarea";
 
 import { DatePicker } from "~/components/shared/date-picker";
 import { getErrorMessage } from "~/lib/handle-error";
-
-//import { sendEmail } from "~/server/services/messaging-service";
+import { api } from "~/trpc/react";
 
 export default function SendNotificationDialog() {
   const { closeModal } = useModal();
   const { t } = useLocale();
+  const sendEmailMutation = api.messaging.sendEmail.useMutation();
   return (
     <>
       <div className="grid gap-1">
@@ -96,15 +96,13 @@ export default function SendNotificationDialog() {
           type="button"
           onClick={() => {
             toast.promise(
-              Promise.resolve(),
-              // TODO
-              // sendEmail({
-              //   subject: "Hello",
-              //   body: "<p>Hello this is avery long content o tetes</p>",
-              //   schedule: "now",
-              //   to: ["jpainam@gmail.com"],
-              //   receipt: false,
-              // }),
+              sendEmailMutation.mutateAsync({
+                subject: "Hello",
+                body: "<p>Hello this is avery long content o tetes</p>",
+                schedule: "now",
+                to: ["jpainam@gmail.com"],
+                receipt: false,
+              }),
               {
                 loading: t("sending"),
                 error: (error) => {

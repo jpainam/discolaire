@@ -1,13 +1,9 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/JBkUhDr7VY6
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
-import { Button } from "@repo/ui/button";
-import { Input } from "@repo/ui/input";
 import { t } from "i18next";
 import { CopyIcon } from "lucide-react";
 import { toast } from "sonner";
+
+import { Button } from "@repo/ui/button";
+import { Input } from "@repo/ui/input";
 
 export function CopyConfirmationDialog({
   invitationLink,
@@ -22,7 +18,7 @@ export function CopyConfirmationDialog({
           variant="ghost"
           size="icon"
           onClick={() => {
-            navigator.clipboard.writeText(invitationLink);
+            void navigator.clipboard.writeText(invitationLink);
             toast.success(t("copied"));
           }}
         >

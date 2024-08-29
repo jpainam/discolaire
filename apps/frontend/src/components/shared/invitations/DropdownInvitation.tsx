@@ -6,7 +6,7 @@ import { useLocale } from "@repo/i18n";
 import { DropdownMenuItem } from "@repo/ui/dropdown-menu";
 
 import { env } from "~/env";
-import { encryptInvitationCode } from "~/utils/encrypt";
+import { api } from "~/trpc/server";
 import { CopyConfirmationDialog } from "./CopyConfirmationDialog";
 import { InviteConfirmationDialog } from "./InviteConfirmationDialog";
 
@@ -23,11 +23,11 @@ export function DropdownInvitation({ email }: { email?: string | null }) {
             toast.error(t("email_not_found"));
             return;
           }
-          const invitationCode = await encryptInvitationCode(email);
+          const invitationCode = await api.invitation.create({ email });
           const invitationLink =
             env.NEXT_PUBLIC_BASE_URL +
             "/invite/" +
-            invitationCode +
+            invitationCode.token +
             "?email=" +
             email;
           openModal({
@@ -48,7 +48,7 @@ export function DropdownInvitation({ email }: { email?: string | null }) {
             return;
           }
           openModal({
-            className: "w-[400px] p-2",
+            className: "w-[350px] p-2",
             description: t("would_you_like_to_invite_this_person"),
             title: t("send_invite"),
             view: <InviteConfirmationDialog email={email} />,

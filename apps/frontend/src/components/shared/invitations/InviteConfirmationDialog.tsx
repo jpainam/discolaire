@@ -1,56 +1,64 @@
- 
+import { render } from "@react-email/components";
 import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
+import { SendInvite } from "@repo/transactional/SendInvite";
 import { Button } from "@repo/ui/button";
 
-//import { SendInvite } from "@repo/transactional/emails/SendInvite";
+import { env } from "~/env";
 import { getErrorMessage } from "~/lib/handle-error";
+import { api } from "~/trpc/react";
 
-//import { sendEmail } from "~/server/services/messaging-service";
-
-export function InviteConfirmationDialog({ email }: { email: string }) {
+export function InviteConfirmationDialog({
+  email,
+  name,
+}: {
+  email: string;
+  name: string;
+}) {
   const { t } = useLocale();
   const { closeModal } = useModal();
+  const sendEmailMutation = api.messaging.sendEmail.useMutation();
 
-  const sendInvite = () => {
-    if (!email) {
-      toast.error(t("email_not_found"));
-      return;
-    }
-    //const invitationCode = await encryptInvitationCode(email);
-    //const invitationLink =
-    // "https://localhost/" + "/invite/" + invitationCode + "?email=" + email;
-    // const emailHtml = render(
-    //   <SendInvite
-    //     username={"username"}
-    //     invitedByUsername="Admin"
-    //     invitedByEmail="support@discolaire.com"
-    //     schoolName="Portal Scoalire"
-    //     inviteLink={invitationLink}
-    //   />,
-    // );
+  const sendInvitation = api.invitation.create.useMutation({
+    onSuccess: async (invitation) => {
+      const invitationLink =
+        env.NEXT_PUBLIC_BASE_URL +
+        "/invite/" +
+        invitation.token +
+        "?email=" +
+        email;
+      const emailHtml = await render(
+        <SendInvite
+          username={invitation.name}
+          invitedByUsername="Admin"
+          invitedByEmail="support@discolaire.com"
+          schoolName="Portal Scoalire"
+          inviteLink={invitationLink}
+        />,
+      );
 
-    toast.promise(
-      Promise.resolve(),
-      // sendEmail({
-      //   to: [email],
-      //   subject: "Invitation to Discolaire",
-      //   body: "<div>Contenu de l'email</div>",
-      //}),
-      {
-        loading: t("sending"),
-        error: (error) => {
-          return getErrorMessage(error);
+      toast.promise(
+        sendEmailMutation.mutateAsync({
+          to: [email],
+          subject: "Invitation to Discolaire",
+          body: emailHtml,
+        }),
+        {
+          loading: t("sending"),
+          error: (error) => {
+            return getErrorMessage(error);
+          },
+          success: () => {
+            closeModal();
+            return t("sent_successfully");
+          },
         },
-        success: () => {
-          closeModal();
-          return t("sent_successfully");
-        },
-      },
-    );
-  };
+      );
+    },
+  });
+
   return (
     <div className="flex flex-col gap-1 text-sm">
       <div className="flex justify-center">
@@ -68,7 +76,14 @@ export function InviteConfirmationDialog({ email }: { email: string }) {
         </Button>
         <Button
           onClick={() => {
-            void sendInvite();
+            if (!email) {
+              toast.error(t("email_not_found"));
+              return;
+            }
+            sendInvitation.mutate({
+              email: email,
+              name: name,
+            });
           }}
           size={"sm"}
           variant={"default"}

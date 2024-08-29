@@ -14,8 +14,10 @@ import { feeRouter } from "./routers/fee";
 import { gradeRouter } from "./routers/grade";
 import { gradeSheetRouter } from "./routers/gradeSheet";
 import { healthRouter } from "./routers/health";
+import { invitationRouter } from "./routers/invitation";
 import { journalRouter } from "./routers/journal";
 import { menuRouter } from "./routers/menu";
+import { messagingRouter } from "./routers/messaging";
 import { policyRouter } from "./routers/policy";
 import { postRouter } from "./routers/post";
 import { programRouter } from "./routers/program";
@@ -70,7 +72,9 @@ export const appRouter = createTRPCRouter({
   menu: menuRouter,
   policy: policyRouter,
   post: postRouter,
+  messaging: messagingRouter,
   transaction: transactionRouter,
+  invitation: invitationRouter,
 });
 
 // export type definition of API
