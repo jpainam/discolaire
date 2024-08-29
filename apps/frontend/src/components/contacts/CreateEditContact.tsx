@@ -113,58 +113,59 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
     <Form {...form}>
       <form className="h-full" onSubmit={form.handleSubmit(onSubmit)}>
         <div className="h-[80vh] overflow-y-auto">
-          <div className="grid items-center gap-2 px-4 py-2 md:grid-cols-[30%_70%]">
-            <FormLabel>{t("civility")}</FormLabel>
-            <div className="grid grid-cols-[25%_75%] gap-1">
-              <FormField
-                control={form.control}
-                name="prefix"
-                render={({ field }) => (
-                  <FormItem className="f flex">
-                    <PrefixSelector
-                      className="w-full"
-                      onChange={field.onChange}
-                      defaultValue={field.value}
-                    />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem className="f flex">
-                    <Input
-                      className="w-full"
-                      onChange={field.onChange}
-                      defaultValue={field.value}
-                    />
-                  </FormItem>
-                )}
-              />
+          {/* <div className="grid items-center gap-2 px-4 py-2 md:grid-cols-[30%_70%]"> */}
+          <div className="grid gap-2 px-4 py-2 md:grid-cols-2">
+            <div className="col-span-2">
+              <div className="grid grid-cols-[25%_75%] gap-1">
+                <FormField
+                  control={form.control}
+                  name="prefix"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("civility")}</FormLabel>
+                      <FormControl>
+                        <PrefixSelector
+                          className="w-full"
+                          onChange={field.onChange}
+                          defaultValue={field.value}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("lastName")}</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="w-full"
+                          onChange={field.onChange}
+                          defaultValue={field.value}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
-            {/* <FormLabel>{t("lastName")}</FormLabel> */}
-            {/* <InputField name="lastName" /> */}
-            <FormLabel>{t("firstName")}</FormLabel>
-            <InputField name="firstName" />
+            <InputField name="firstName" label={t("firstName")} />
+            <InputField name="email" label={t("email")} />
           </div>
-          <div className="grid items-center gap-2 border-y bg-muted/50 px-4 py-2 md:grid-cols-[30%_70%]">
-            <FormLabel>{t("title")}</FormLabel>
-            <InputField name="title" />
-            <FormLabel>{t("employer")}</FormLabel>
-            <InputField name="employer" />
+          <div className="grid items-center gap-2 border-y bg-muted/50 px-4 pb-2 md:grid-cols-2">
+            <InputField name="title" label={t("title")} />
+            <InputField name="employer" label={t("employer")} />
           </div>
-          <div className="grid items-center gap-2 px-4 py-2 md:grid-cols-[30%_70%]">
-            <FormLabel>{t("phoneNumber")} 1 </FormLabel>
-            <InputField name="phoneNumber1" />
-            <FormLabel>{t("phoneNumber")} 2 </FormLabel>
-            <InputField name="phoneNumber2" />
-            <FormLabel>{t("email")} </FormLabel>
-            <InputField name="email" />
-            <FormLabel>{t("address")} </FormLabel>
-            <InputField name="address" />
+          <div className="grid items-center gap-2 px-4 py-2 md:grid-cols-2">
+            <InputField name="phoneNumber1" label={t("phoneNumber") + "1"} />
+            <InputField name="phoneNumber2" label={t("phoneNumber") + "2"} />
           </div>
-          <div className="grid items-center gap-2 border-y bg-muted/50 px-4 py-2 md:grid-cols-[30%_70%]">
+          <div className="col-span-2 px-4 pb-2">
+            <InputField name="address" label={t("address")} />
+          </div>
+          <div className="md:grid-cols- grid items-center gap-2 border-y bg-muted/50 px-4 py-2">
             <FormField
               control={form.control}
               name="observation"

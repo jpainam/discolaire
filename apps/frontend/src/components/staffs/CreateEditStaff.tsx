@@ -1,8 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { subMonths } from "date-fns";
-import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -18,6 +16,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  useForm,
 } from "@repo/ui/form";
 import { Separator } from "@repo/ui/separator";
 import { Textarea } from "@repo/ui/textarea";
@@ -61,12 +60,12 @@ interface CreateEditStaffProps {
 export function CreateEditStaff({ staff }: CreateEditStaffProps) {
   const { closeSheet } = useSheet();
   const classNames = {
-    inputClassName: "h-8",
+    // inputClassName: "h-8",
     labelClassName: "w-[150px] truncate",
     className: "flex flex-row items-center px-2",
   };
-  const form = useForm<z.infer<typeof staffCreateEditSchema>>({
-    resolver: zodResolver(staffCreateEditSchema),
+  const form = useForm({
+    schema: staffCreateEditSchema,
     defaultValues: {
       prefix: staff?.prefix ?? "",
       firstName: staff?.firstName ?? "",

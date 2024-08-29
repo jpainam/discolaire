@@ -17,18 +17,15 @@ import { Label } from "@repo/ui/label";
 import { Separator } from "@repo/ui/separator";
 
 import { routes } from "~/configs/routes";
-import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { ContactSelector } from "../shared/selects/ContactSelector";
 import CreateEditContact from "./CreateEditContact";
 
 export function ContactHeader() {
-  const params = useParams<{ id: string }>();
   const router = useRouter();
   const { t } = useLocale();
+  const params = useParams<{ id: string }>();
   const { openSheet } = useSheet();
-  const contactQuery = api.contact.get.useQuery(params.id);
 
   return (
     <div className="grid flex-row items-center gap-4 px-4 py-1 md:flex">
@@ -47,14 +44,13 @@ export function ContactHeader() {
         <Button
           size="icon"
           onClick={() => {
-            if (!contactQuery.data) return;
             openSheet({
               className: "w-[600px]",
-              title: <p className="px-4 py-2">{t("edit")}</p>,
-              description: (
-                <p className="px-4">{getFullName(contactQuery.data)}</p>
-              ),
-              view: <CreateEditContact contact={contactQuery.data} />,
+              title: <p className="px-4 py-2">{t("create")}</p>,
+              // description: (
+              //   <p className="px-4">{getFullName(contactQuery.data)}</p>
+              // ),
+              view: <CreateEditContact />,
             });
           }}
           variant="outline"
