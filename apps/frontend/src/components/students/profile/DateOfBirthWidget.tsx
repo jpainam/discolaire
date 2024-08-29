@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 import { useLocale } from "@repo/i18n";
 
-import type { ConfettiRef } from "~/components/magicui/Confetti";
-import Confetti from "~/components/magicui/Confetti";
+// import type { ConfettiRef } from "~/components/magicui/Confetti";
+// import Confetti from "~/components/magicui/Confetti";
 import { cn } from "~/lib/utils";
 
 export function DateOfBirthWidget({
@@ -21,21 +21,21 @@ export function DateOfBirthWidget({
     month: "long",
     year: "numeric",
   });
-  const confettiRef = useRef<ConfettiRef>(null);
+  //const confettiRef = useRef<ConfettiRef>(null);
   useEffect(() => {
-    confettiRef.current?.fire({});
+    //confettiRef.current?.fire({});
   }, []);
   if (!date) return null;
   return (
     <div className={cn(className)}>
       {dateFormatter.format(new Date(date))}
-      <Confetti
+      {/* <Confetti
         ref={confettiRef}
         className="absolute left-0 top-0 z-0 h-full w-full"
         onMouseEnter={() => {
           confettiRef.current?.fire({});
         }}
-      />
+      /> */}
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
   Body,
   Button,
@@ -14,7 +15,8 @@ import {
   Tailwind,
   Text,
 } from "@react-email/components";
-import * as React from "react";
+
+import { env } from "../env";
 
 interface NetlifyWelcomeEmailProps {
   steps?: {
@@ -23,7 +25,7 @@ interface NetlifyWelcomeEmailProps {
   }[];
   links?: string[];
 }
-const baseUrl = `https://${process.env.NEXT_PUBLIC_BASE_URL}`;
+const baseUrl = env.NEXT_PUBLIC_BASE_URL;
 
 const PropDefaults: NetlifyWelcomeEmailProps = {
   steps: [
@@ -96,7 +98,7 @@ export const NetlifyWelcomeEmail = ({
           },
         }}
       >
-        <Body className="bg-offwhite text-base font-sans">
+        <Body className="bg-offwhite font-sans text-base">
           <Img
             src={`${baseUrl}/static/netlify-logo.png`}
             width="184"
@@ -104,8 +106,8 @@ export const NetlifyWelcomeEmail = ({
             alt="Netlify"
             className="mx-auto my-20"
           />
-          <Container className="bg-white p-45">
-            <Heading className="text-center my-0 leading-8">
+          <Container className="p-45 bg-white">
+            <Heading className="my-0 text-center leading-8">
               Welcome to Netlify
             </Heading>
 
@@ -124,7 +126,7 @@ export const NetlifyWelcomeEmail = ({
             <ul>{steps?.map(({ Description }) => Description)}</ul>
 
             <Section className="text-center">
-              <Button className="bg-brand text-white rounded-lg py-3 px-[18px]">
+              <Button className="bg-brand rounded-lg px-[18px] py-3 text-white">
                 Go to your dashboard
               </Button>
             </Section>
@@ -133,7 +135,7 @@ export const NetlifyWelcomeEmail = ({
               <Row>
                 {links?.map((link) => (
                   <Column key={link}>
-                    <Link className="text-black underline font-bold">
+                    <Link className="font-bold text-black underline">
                       {link}
                     </Link>{" "}
                     <span className="text-green-500">→</span>
@@ -146,7 +148,7 @@ export const NetlifyWelcomeEmail = ({
           <Container className="mt-20">
             <Section>
               <Row>
-                <Column className="text-right px-20">
+                <Column className="px-20 text-right">
                   <Link>Unsubscribe</Link>
                 </Column>
                 <Column className="text-left">
@@ -154,7 +156,7 @@ export const NetlifyWelcomeEmail = ({
                 </Column>
               </Row>
             </Section>
-            <Text className="text-center text-gray-400 mb-45">
+            <Text className="mb-45 text-center text-gray-400">
               Netlify, 44 Montgomery Street, Suite 300 San Francisco, CA
             </Text>
           </Container>
