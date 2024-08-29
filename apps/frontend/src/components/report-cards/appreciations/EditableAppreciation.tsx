@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from "react";
+
 import { Textarea } from "@repo/ui/textarea";
 
 const EditableAppreciation = ({
   initialText,
-  className,
+
   onSubmit,
 }: {
   initialText: string;

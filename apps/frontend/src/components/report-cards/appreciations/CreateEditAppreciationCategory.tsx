@@ -6,9 +6,9 @@ import { useAlert } from "@repo/hooks/use-alert";
 import { useLocale } from "@repo/i18n";
 import { Input } from "@repo/ui/input";
 
+import type { AppreciationCategory } from "~/types/appreciation";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
-import type { AppreciationCategory } from "~/types/appreciation";
 
 export function CreateEditAppreciationCategory({
   category,
@@ -92,12 +92,12 @@ export function CreateEditAppreciationCategory({
                 toast.promise(
                   updateAppreciationCategory.mutateAsync({
                     id: category.id,
-                    name: value || "N/A",
+                    name: value ?? "N/A",
                   }),
                   {
                     loading: t("updating"),
-                    success: async () => {
-                      utils.appreciation.categories.invalidate();
+                    success: () => {
+                      void utils.appreciation.categories.invalidate();
                       onCompleted?.();
                       return t("updated");
                     },
@@ -109,7 +109,7 @@ export function CreateEditAppreciationCategory({
               } else {
                 toast.promise(
                   createAppreciationCategory.mutateAsync({
-                    name: value || "N/A",
+                    name: value ?? "N/A",
                   }),
                   {
                     loading: t("adding"),

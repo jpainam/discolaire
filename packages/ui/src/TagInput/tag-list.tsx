@@ -1,11 +1,10 @@
 import React from "react";
 import SortableList, { SortableItem } from "react-easy-sort";
 
-import type { Tag as TagType } from "./tag-input";
-import { cn } from "..";
 import type { TagProps } from "./tag";
+import type { TagInputStyleClassesProps, Tag as TagType } from "./tag-input";
+import { cn } from "..";
 import { Tag } from "./tag";
-import type { TagInputStyleClassesProps } from "./tag-input";
 
 export type TagListProps = {
   tags: TagType[];

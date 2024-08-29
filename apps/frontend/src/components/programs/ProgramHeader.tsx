@@ -4,9 +4,9 @@ import { parseAsString, useQueryState } from "nuqs";
 
 import { useLocale } from "@repo/i18n";
 import { Label } from "@repo/ui/label";
+import { ToggleGroup, ToggleGroupItem } from "@repo/ui/toggle-group";
 
 import { DatePicker } from "../shared/date-picker";
-import { ToggleSelector } from "../shared/forms/toggle-selector";
 import { ProgramThemeSelector } from "../shared/selects/ProgramThemeSelector";
 
 export function ProgramHeader() {
@@ -16,25 +16,29 @@ export function ProgramHeader() {
     "theme",
     parseAsString.withDefault("1"),
   );
-  const [toggle, setToggle] = useQueryState("toggle");
-  const toggleItems = [
-    { value: "1", label: t("chronological_view") },
-    { value: "2", label: t("weekly_view") },
-  ];
+  const [toggle, setToggle] = useQueryState("toggle", {
+    defaultValue: "1",
+  });
 
   return (
     <div className="flex flex-row items-center gap-4 bg-muted px-4 py-1 text-sm">
       <div className="flex">{t("content_and_educational_ressources")}</div>
-      <ToggleSelector
-        items={toggleItems}
-        defaultValue={theme}
-        onChange={setToggle}
-      />
+      <ToggleGroup
+        defaultValue={toggle}
+        onValueChange={(val) => {
+          void setToggle(val);
+        }}
+        type="single"
+      >
+        <ToggleGroupItem value="1">{t("chronological_view")}</ToggleGroupItem>
+        <ToggleGroupItem value="2">{t("weekly_view")}</ToggleGroupItem>
+      </ToggleGroup>
+
       <Label>{t("since")}</Label>
       <DatePicker className="size-sm w-[200px]" />
       <ProgramThemeSelector
         onChange={(val) => {
-          console.log(toggle);
+          console.log(theme);
           void setTheme(val);
         }}
       />

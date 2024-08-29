@@ -2,7 +2,6 @@
 
 import { useAtom } from "jotai";
 
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 
@@ -11,7 +10,7 @@ import { studentReportsAtom } from "~/atoms/report-atom";
 export function StudentReportFooter() {
   const [reportsStudent, setReportsStudent] = useAtom(studentReportsAtom);
   const { t } = useLocale();
-  const router = useRouter();
+
   return (
     <>
       <Button

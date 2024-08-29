@@ -3,13 +3,12 @@ import { XIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { useAlert } from "@repo/hooks/use-alert";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Textarea } from "@repo/ui/textarea";
 
+import type { Appreciation, AppreciationCategory } from "~/types/appreciation";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
-import type { Appreciation, AppreciationCategory } from "~/types/appreciation";
 
 export function CreateEditAppreciation({
   category,
@@ -27,7 +26,7 @@ export function CreateEditAppreciation({
   const deleteAppreciationMutation = api.appreciation.delete.useMutation();
   const createAppreciationMutation = api.appreciation.create.useMutation();
   const updateAppreciationMutation = api.appreciation.update.useMutation();
-  const router = useRouter();
+
   return (
     <div className="mb-4 flex w-full flex-col px-1">
       <div className="ml-auto pb-1">

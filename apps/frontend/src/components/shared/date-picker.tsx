@@ -18,7 +18,7 @@ interface DatePickerProps {
   fromYear?: number;
   disabled?: boolean;
   toYear?: number;
-  onChange?: (date: Date) => void;
+  onChange?: (date?: Date) => void;
   defaultValue?: Date;
 }
 export function DatePicker({
@@ -33,7 +33,7 @@ export function DatePicker({
   const { i18n, t } = useLocale();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<Date | undefined>(
-    defaultValue || undefined,
+    defaultValue ?? undefined,
   );
   const currentLocale = i18n.language.includes("en")
     ? enUS
@@ -68,7 +68,7 @@ export function DatePicker({
           disabled={disabled}
           selected={value}
           onSelect={(date) => {
-            date && onChange && onChange(date);
+            onChange?.(date ?? undefined);
             setOpen(false);
             setValue(date);
           }}

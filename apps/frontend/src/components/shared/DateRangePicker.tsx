@@ -1,10 +1,10 @@
 "use client";
 
+import type { DateRange } from "react-day-picker";
 import * as React from "react";
 import { addDays, format } from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
 import { Calendar as CalendarIcon } from "lucide-react";
-import type { DateRange } from "react-day-picker";
 
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -35,8 +35,8 @@ export function DateRangePicker({
 }: DatePickerProps) {
   const currentDate = new Date();
   const [date, setDate] = React.useState<DateRange | undefined>({
-    from: from || currentDate,
-    to: to || addDays(from || currentDate, 15),
+    from: from ?? currentDate,
+    to: to ?? addDays(from ?? currentDate, 15),
   });
 
   const [open, setOpen] = React.useState(false);
@@ -73,7 +73,7 @@ export function DateRangePicker({
               format(date.from, "LLL dd, y")
             )
           ) : (
-            <span>{placeholder || t("pick_a_date")}</span>
+            <span>{placeholder ?? t("pick_a_date")}</span>
           )}
         </Button>
       </PopoverTrigger>
@@ -89,7 +89,7 @@ export function DateRangePicker({
           selected={date}
           onSelect={(date) => {
             setDate(date);
-            onChange && onChange(date);
+            onChange?.(date);
           }}
           numberOfMonths={numberOfMonths}
         />

@@ -1,10 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
-import { Loader } from "lucide-react";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
@@ -20,11 +19,12 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
+import type { ReportCardType } from "~/types/report-card";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
-import type { ReportCardType } from "~/types/report-card";
+import { showErrorToast } from "../../../lib/handle-error";
 import { getFullName } from "../../../utils/full-name";
 import { AppreciationCategoryList } from "./AppreciationCategoryList";
 import { EditableAppreciation } from "./EditableAppreciation";
@@ -36,14 +36,13 @@ export function AppreciationTable({ reports }: { reports: any[] }) {
 
   const searchParams = useSearchParams();
   const classroomId = searchParams.get("classroom");
-  const queryClient = useQueryClient();
 
   const [remarksMap, setRemarkMaps] = useState<Record<string, ReportCardType>>(
     {},
   );
   const termId = Number(searchParams.get("term"));
   const remarksQuery = api.reportCard.getRemarks.useQuery({
-    classroomId: classroomId || "",
+    classroomId: classroomId ?? "",
     termId: termId || 0,
   });
 
@@ -73,7 +72,7 @@ export function AppreciationTable({ reports }: { reports: any[] }) {
     );
   }
   if (appreciationCategoriesQuery.isError || remarksQuery.isError) {
-    throw appreciationCategoriesQuery.error || remarksQuery.error;
+    showErrorToast(appreciationCategoriesQuery.error ?? remarksQuery.error);
   }
 
   return (
@@ -167,20 +166,16 @@ export function AppreciationTable({ reports }: { reports: any[] }) {
                       });
                     }}
                     initialText={
-                      (remarksMap[report.student.id]?.remark) ||
+                      remarksMap[report.student.id]?.remark ??
                       t("double_clicked_to_edit_or_add_remarks")
                     }
                   />
                   <div className="ml-auto opacity-0 group-hover/report:opacity-100">
-                    {appreciationCategoriesQuery.isPending ? (
-                      <Loader className="size-4 animate-spin" />
-                    ) : (
-                      appreciationCategoriesQuery.data && (
-                        <AppreciationCategoryList
-                          studentId={report.student.id}
-                          categories={appreciationCategoriesQuery.data}
-                        />
-                      )
+                    {appreciationCategoriesQuery.data && (
+                      <AppreciationCategoryList
+                        studentId={report.student.id}
+                        categories={appreciationCategoriesQuery.data}
+                      />
                     )}
                   </div>
                 </div>

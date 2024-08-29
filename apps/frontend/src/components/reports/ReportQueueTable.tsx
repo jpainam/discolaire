@@ -22,7 +22,7 @@ import { ReportQueueTableActions } from "./ReportQueueTableActions";
 
 export function ReportQueueTable({ reports }: { reports: ReportQueue[] }) {
   const { t } = useLocale();
-  const { fullDateTimeFormatter, fullDateFormatter } = useDateFormat();
+  const { fullDateTimeFormatter } = useDateFormat();
 
   return (
     <div className="flex flex-col gap-4">

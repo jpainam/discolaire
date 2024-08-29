@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Fragment, useState } from "react";
@@ -8,8 +9,9 @@ import { useLocale } from "@repo/i18n";
 import { ScrollArea } from "@repo/ui/scroll-area";
 import { Separator } from "@repo/ui/separator";
 
-import { api } from "~/trpc/react";
 import type { AppreciationCategory } from "~/types/appreciation";
+import { showErrorToast } from "~/lib/handle-error";
+import { api } from "~/trpc/react";
 import { CreateEditAppreciation } from "./CreateEditAppreciation";
 
 export function AppreciationList({
@@ -28,7 +30,7 @@ export function AppreciationList({
   const classroomId = searchParams.get("classroom");
   const termId = Number(searchParams.get("term"));
   const upsertStudentRemarkMutation = api.reportCard.upsertRemark.useMutation();
-  const utils = api.useUtils();
+
   const appreciationCategoriesQuery = api.appreciation.categories.useQuery();
 
   if (appreciationCategoriesQuery.isPending) {
@@ -39,7 +41,7 @@ export function AppreciationList({
     );
   }
   if (appreciationCategoriesQuery.isError) {
-    throw appreciationCategoriesQuery.error;
+    showErrorToast(appreciationCategoriesQuery.error);
   }
   return (
     <div className="flex flex-col items-start gap-0">
@@ -57,7 +59,7 @@ export function AppreciationList({
       <Separator />
       <ScrollArea className="my-2 h-[400px] w-full px-2">
         <div className="flex flex-col gap-1">
-          {appreciationCategoriesQuery.data.map((appreciation) => {
+          {appreciationCategoriesQuery.data?.map((appreciation) => {
             return (
               <Fragment key={appreciation.id}>
                 {appreciation.id == openIdItem ? (

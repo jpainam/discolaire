@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { ChevronDown, PrinterIcon } from "lucide-react";
+import { useQueryState } from "nuqs";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
@@ -16,13 +17,14 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import { Label } from "@repo/ui/label";
-import { ToggleGroup } from "@repo/ui/ToggleGroup";
+import { ToggleGroup, ToggleGroupItem } from "@repo/ui/toggle-group";
 
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { ClassroomStudentSelector } from "~/components/shared/selects/ClassroomStudentSelector";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { routes } from "~/configs/routes";
+import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { AppreciationCategoryList } from "./AppreciationCategoryList";
 
@@ -32,9 +34,16 @@ export function AppreciationHeader() {
   const { createQueryString } = useCreateQueryString();
   const searchParams = useSearchParams();
   const appreciationCategories = api.appreciation.categories.useQuery();
+  const [classroomId, setClassroomId] = useQueryState("classroom");
+  const [subjectId, setSubjectId] = useQueryState("subject");
+  const [termId, setTermId] = useQueryState("term");
+  const [toggleType, setToggleType] = useQueryState("type", {
+    defaultValue: "generales",
+  });
 
   if (appreciationCategories.isError) {
-    throw appreciationCategories.error;
+    showErrorToast(appreciationCategories.error);
+    return;
   }
 
   const options = [
@@ -53,20 +62,23 @@ export function AppreciationHeader() {
   return (
     <div className="grid grid-cols-1 flex-row items-center gap-2 px-2 py-1 md:flex md:gap-4">
       <ToggleGroup
-        defaultValue={searchParams.get("type") || "generales"}
-        options={options}
         onValueChange={(val) => {
-          router.push(
-            routes.report_cards.appreciations +
-              "/?" +
-              createQueryString({ type: val }),
-          );
+          void setToggleType(val);
         }}
-      />
+        defaultValue={toggleType}
+        type="single"
+      >
+        {options.map((option) => (
+          <ToggleGroupItem value={option.value}>
+            {option.iconLeft} {option.label}
+          </ToggleGroupItem>
+        ))}
+      </ToggleGroup>
+
       <Label className="hidden md:flex">{t("classrooms")}</Label>
       <ClassroomSelector
         className="md:w-[300px]"
-        defaultValue={searchParams.get("classroom") || undefined}
+        defaultValue={classroomId ?? undefined}
         onChange={(val) => {
           router.push(
             routes.report_cards.appreciations +
@@ -78,50 +90,39 @@ export function AppreciationHeader() {
       <Label className="hidden md:flex">{t("terms")}</Label>
       <TermSelector
         className="md:w-[250px]"
-        defaultValue={searchParams.get("term") || undefined}
+        defaultValue={termId}
         onChange={(val) => {
-          router.push(
-            routes.report_cards.appreciations +
-              "/?" +
-              createQueryString({ term: val }),
-          );
+          void setTermId(val);
         }}
       />
-      {searchParams.get("classroom") &&
-        searchParams.get("type") === "students" && (
-          <>
-            <Label>{t("students")}</Label>
-            <ClassroomStudentSelector
-              defaultValue={searchParams.get("student") || undefined}
-              className="w-[300px]"
-              onChange={(val) => {
-                router.push(
-                  routes.report_cards.appreciations +
-                    "/?" +
-                    createQueryString({ student: val }),
-                );
-              }}
-              classroomId={searchParams.get("classroom")!}
-            />
-          </>
-        )}
+      {classroomId && searchParams.get("type") === "students" && (
+        <>
+          <Label>{t("students")}</Label>
+          <ClassroomStudentSelector
+            defaultValue={searchParams.get("student") ?? undefined}
+            className="w-[300px]"
+            onChange={(val) => {
+              void setClassroomId(val ?? null);
+            }}
+            classroomId={classroomId}
+          />
+        </>
+      )}
 
       {searchParams.get("classroom") &&
         searchParams.get("type") === "subjects" && (
           <>
             <Label>{t("courses")}</Label>
-            <SubjectSelector
-              defaultValue={searchParams.get("subject") || undefined}
-              className="h-8 w-[300px]"
-              classroomId={searchParams.get("classroom")!}
-              onChange={(val) => {
-                router.push(
-                  routes.report_cards.appreciations +
-                    "/?" +
-                    createQueryString({ subject: val }),
-                );
-              }}
-            />
+            {classroomId && (
+              <SubjectSelector
+                defaultValue={subjectId ?? undefined}
+                className="h-8 w-[300px]"
+                classroomId={classroomId}
+                onChange={(val) => {
+                  void setSubjectId(val ?? null);
+                }}
+              />
+            )}
           </>
         )}
 
