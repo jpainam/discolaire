@@ -1,6 +1,6 @@
 import { ClassroomDataTable } from "~/components/classrooms/ClassroomDataTable";
 
-export default async function Page({}: {}) {
+export default function Page() {
   //const classrooms = await api.classroom.all();
   return (
     <div className="grid w-full flex-row md:flex">

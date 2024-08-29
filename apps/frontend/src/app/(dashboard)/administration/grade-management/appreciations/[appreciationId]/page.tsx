@@ -3,5 +3,9 @@ export default function Page({
 }: {
   params: { id: string; appreciationId: string };
 }) {
-  return <div></div>;
+  return (
+    <div>
+      {id} - {appreciationId}
+    </div>
+  );
 }

@@ -20,16 +20,16 @@ export default async function Page({
         (balance) =>
           balance.student.firstName
             ?.toLowerCase()
-            .includes(query.toLowerCase()) ||
+            .includes(query.toLowerCase()) ??
           balance.student.lastName
             ?.toLowerCase()
-            .includes(query.toLowerCase()) ||
-          balance.student.email?.toLowerCase().includes(query.toLowerCase()) ||
+            .includes(query.toLowerCase()) ??
+          balance.student.email?.toLowerCase().includes(query.toLowerCase()) ??
           (!isNaN(Number(query)) && balance.balance >= Number(query)),
       );
 
   const amountDue = sumBy(
-    fees.filter((fee) => (fee.dueDate ? fee.dueDate <= new Date() : false)),
+    fees.filter((fee) => fee.dueDate <= new Date()),
     "amount",
   );
   return (
@@ -40,13 +40,11 @@ export default async function Page({
         <div className="grid gap-4 p-2 text-sm md:grid-cols-2 xl:md:grid-cols-3">
           {students.map((balance) => {
             return (
-              balance.student && (
-                <GridViewFinanceCard
-                  amountDue={amountDue}
-                  studentBalance={balance}
-                  key={balance.id}
-                />
-              )
+              <GridViewFinanceCard
+                amountDue={amountDue}
+                studentBalance={balance}
+                key={balance.id}
+              />
             );
           })}
         </div>

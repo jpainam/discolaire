@@ -69,7 +69,7 @@ export default async function Page({
                 </span>
                 <ExternalLink className="h-4 w-4" />
               </Link>
-              <span>{studentContact.relationship?.name || "N/A"}</span>
+              <span>{studentContact.relationship?.name ?? "N/A"}</span>
             </div>
           </div>
           <div className="rounded-md border">

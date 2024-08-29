@@ -24,10 +24,11 @@ import FlatBadge from "@repo/ui/FlatBadge";
 import { Label } from "@repo/ui/label";
 import { Separator } from "@repo/ui/separator";
 
+import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
-import { getFullName } from "../../../utils/full-name";
-import { useMoneyFormat } from "../../../utils/money-format";
+import { getFullName } from "~/utils/full-name";
+import { useMoneyFormat } from "~/utils/money-format";
 
 export function TransactionDetails({
   transactionId,
@@ -51,7 +52,8 @@ export function TransactionDetails({
     notFound();
   }
   if (transactionQuery.isError) {
-    throw transactionQuery.error;
+    showErrorToast(transactionQuery.error);
+    return;
   }
   const transaction = transactionQuery.data;
   return (
@@ -109,14 +111,13 @@ export function TransactionDetails({
       <div className="flex flex-row items-center gap-1">
         <CalendarDays className="stroke-1" />
         <Label>{t("createdAt")}:</Label>
-        {transaction.createdAt &&
-          fullDateFormatter.format(transaction.createdAt)}
+        {fullDateFormatter.format(transaction.createdAt)}
       </div>
       <div className="col-span-full flex flex-row items-center gap-1">
         <Library className="stroke-1" />
         <Label>{t("observation")}</Label>
       </div>
-      <div className="col-span-full">{transaction.observation || "N/A"}</div>
+      <div className="col-span-full">{transaction.observation ?? "N/A"}</div>
       <Separator className="col-span-full" />
       <div className="col-span-full ml-auto flex flex-row gap-4">
         <Button

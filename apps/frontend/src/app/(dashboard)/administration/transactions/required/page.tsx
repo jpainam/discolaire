@@ -5,7 +5,7 @@ import { RequiredFeeTransactionTrend } from "~/components/administration/transac
 import { RequiredFeeDataTable } from "~/components/administration/transactions/RequiredFeeDataTable";
 import { RequiredFeeHeader } from "~/components/administration/transactions/RequiredFeeHeader";
 
-export default async function Page() {
+export default function Page() {
   return (
     <div className="flex flex-col">
       <RequiredFeeHeader />

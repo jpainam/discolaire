@@ -1,7 +1,7 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import type { Fee } from "@prisma/client";
+import type { SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Save } from "lucide-react";
-import type { SubmitHandler} from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -56,6 +56,7 @@ export function FeesDetailsForm({ fee }: { fee?: Fee }) {
     data: EditFeeFormValues,
   ) => {
     console.log(data);
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     fee?.id && true;
     // toast.promise(
     //   updateFee(fee.id, {

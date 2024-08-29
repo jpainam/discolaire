@@ -4,17 +4,11 @@ import { AssignmentHeader } from "~/components/classrooms/assignments/Assignment
 import { api } from "~/trpc/server";
 
 interface AssignmentPageProps {
-  searchParams: {
-    per_page: number;
-  };
   params: {
     id: string;
   };
 }
-export default async function Page({
-  params,
-  searchParams,
-}: AssignmentPageProps) {
+export default async function Page({ params }: AssignmentPageProps) {
   const assignemts = await api.classroom.assignments(params.id);
   // const handleTitleClick = (id: string) => {
   //   router.push(
@@ -51,7 +45,7 @@ export default async function Page({
                     new Date(assignment.dueDate).toLocaleDateString()}
                 </td>
                 <td className="border-b px-4 py-2">
-                  {assignment.visibles ? "Yes" : "No"}
+                  {/* {assignment.visibles ? "Yes" : "No"} */}
                 </td>
               </tr>
             ))}

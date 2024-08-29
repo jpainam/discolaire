@@ -41,7 +41,7 @@ export default async function Layout({
   return (
     <div className="flex flex-col">
       <div className="m-2 flex max-w-fit items-center rounded-full bg-gray-100">
-        {userLinks.map((link: UserLink, index) => {
+        {userLinks.map((link: UserLink, _index) => {
           return (
             <TabLink
               key={link.href}

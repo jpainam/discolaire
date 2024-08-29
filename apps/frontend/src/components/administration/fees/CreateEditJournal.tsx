@@ -1,7 +1,7 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import type { Journal } from "@prisma/client";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -23,8 +23,8 @@ export function CreateEditJournal({ journal }: { journal?: Journal }) {
   const { closeModal } = useModal();
   const form = useForm<z.infer<typeof journalSchema>>({
     defaultValues: {
-      name: journal?.name || "",
-      description: journal?.description || "",
+      name: journal?.name ?? "",
+      description: journal?.description ?? "",
     },
     resolver: zodResolver(journalSchema),
   });
@@ -32,7 +32,7 @@ export function CreateEditJournal({ journal }: { journal?: Journal }) {
   const addJournalMutation = api.journal.create.useMutation();
   const updateJournalMutation = api.journal.update.useMutation();
 
-  const onSubmit = async (data: z.infer<typeof journalSchema>) => {
+  const onSubmit = (data: z.infer<typeof journalSchema>) => {
     if (!journal) {
       toast.promise(addJournalMutation.mutateAsync(data), {
         loading: t("adding"),

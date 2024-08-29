@@ -15,7 +15,7 @@ export default async function Page({
     notFound();
   }
   const timelines = await api.staff.timelines(id);
-  const { t, i18n } = await getServerTranslations();
+  const { i18n } = await getServerTranslations();
   const dateFormat = Intl.DateTimeFormat(i18n.language, {
     year: "numeric",
     month: "short",

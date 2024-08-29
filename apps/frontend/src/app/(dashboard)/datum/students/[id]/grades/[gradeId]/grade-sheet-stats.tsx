@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
+import { cn } from "~/lib/utils";
 import { api } from "~/trpc/server";
 
 export async function GradeSheetStats({
@@ -19,11 +20,9 @@ export async function GradeSheetStats({
 }) {
   const { t } = await getServerTranslations("print");
   const successRate = await api.gradeSheet.successRate(gradeSheetId);
-  if (!successRate) {
-    return null;
-  }
+
   return (
-    <div className="p-1">
+    <div className={cn("p-1", className)}>
       <Table className="items-center border-none">
         <TableHeader>
           <TableRow className="border">

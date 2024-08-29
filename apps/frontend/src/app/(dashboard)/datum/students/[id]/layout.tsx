@@ -1,13 +1,15 @@
 import React, { Suspense } from "react";
-import { notFound } from "next/navigation";
+
+import { checkPermissions } from "@repo/api/permission";
+import { PermissionAction } from "@repo/lib/permission";
 import { Card, CardContent, CardFooter, CardHeader } from "@repo/ui/card";
+import { NoPermission } from "@repo/ui/no-permission";
 import { Separator } from "@repo/ui/separator";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { StudentFooter } from "~/components/students/StudentFooter";
 import { StudentHeader } from "~/components/students/StudentHeader";
 import { StudentSidebar } from "~/components/students/StudentSidebar";
-import { api } from "~/trpc/server";
 
 export default async function Layout({
   children,
@@ -16,20 +18,18 @@ export default async function Layout({
   children: React.ReactNode;
   params: { id: string };
 }) {
-  // const canReadStudent = await checkPermissions(
-  //   PermissionAction.READ,
-  //   "student",
-  //   {
-  //     id: id,
-  //   }
-  // );
-  // if (!canReadStudent) {
-  //   return <NoPermission isFullPage={true} className="mt-8" resourceText="" />;
-  // }
-  const student = await api.student.get(id);
-  if (!student) {
-    notFound();
+  const canReadStudent = await checkPermissions(
+    PermissionAction.READ,
+    "student",
+    {
+      id: id,
+    },
+  );
+  if (!canReadStudent) {
+    return <NoPermission isFullPage={true} className="mt-8" resourceText="" />;
   }
+  //const student = await api.student.get(id);
+
   return (
     <div className="grid w-full flex-row md:flex">
       <StudentSidebar />

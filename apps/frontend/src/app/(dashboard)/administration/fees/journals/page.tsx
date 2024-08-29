@@ -1,4 +1,3 @@
-import { EmptyState } from "@repo/ui/EmptyState";
 import { Separator } from "@repo/ui/separator";
 
 import { JournalHeader } from "~/components/administration/fees/JournalHeader";
@@ -11,7 +10,7 @@ export default async function Page() {
     <div className="flex flex-col">
       <JournalHeader />
       <Separator />
-      {journals ? <JournalTable journals={journals} /> : <EmptyState />}
+      <JournalTable journals={journals} />
     </div>
   );
 }

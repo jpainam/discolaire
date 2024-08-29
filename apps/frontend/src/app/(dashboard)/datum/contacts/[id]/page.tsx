@@ -1,21 +1,14 @@
-import { getServerTranslations } from "@repo/i18n/server";
 import { Card, CardContent, CardHeader } from "@repo/ui/card";
 
 import { ContactDetails } from "~/components/contacts/ContactDetails";
 import { ContactDetailsHeader } from "~/components/contacts/ContactDetailsHeader";
 import { ContactStudentTable } from "~/components/contacts/ContactStudentTable";
-import { api } from "~/trpc/server";
-import { generateStringColor } from "~/utils/colors";
 
-export default async function Page({
-  params: { id },
-}: {
-  params: { id: string };
-}) {
-  const contact = await api.contact.get(id);
+export default function Page({ params: { id } }: { params: { id: string } }) {
+  // const contact = await api.contact.get(id);
 
-  const { t } = await getServerTranslations();
-  const color = generateStringColor();
+  // const { t } = await getServerTranslations();
+  // const color = generateStringColor();
   return (
     <div className="grid gap-4 p-2 xl:grid-cols-2">
       <Card>

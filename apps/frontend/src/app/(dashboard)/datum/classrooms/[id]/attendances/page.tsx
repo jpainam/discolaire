@@ -5,5 +5,9 @@ export default function Page({
   params: { id: string };
   searchParams: { type?: string; date?: Date };
 }) {
-  return <div className="flex flex-col  flex-1 mb-2">Content</div>;
+  return (
+    <div className="mb-2 flex flex-1 flex-col">
+      {id} - {type} - {JSON.stringify(date)}
+    </div>
+  );
 }

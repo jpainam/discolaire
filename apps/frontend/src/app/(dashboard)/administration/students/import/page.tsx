@@ -1,7 +1,5 @@
-import { getServerTranslations } from "@repo/i18n/server";
-
-export default async function Page() {
-  const { t } = await getServerTranslations();
+export default function Page() {
+  // const { t } = await getServerTranslations();
   return (
     <div>
       <ul>

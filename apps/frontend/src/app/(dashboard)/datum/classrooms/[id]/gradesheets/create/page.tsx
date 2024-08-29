@@ -32,16 +32,17 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
     defaultValues: {
       notifyParents: true,
       notifyStudents: true,
-      termId: searchParams.get("term") || "0",
-      subjectId: searchParams.get("subject") || "0",
+      termId: searchParams.get("term") ?? "0",
+      subjectId: searchParams.get("subject") ?? "0",
       weight: 100,
       name: t("harmonized_grade"),
       date: new Date(),
       scale: 20,
     },
   });
-  const onSubmit = async (data: CreateGradeValues) => {
+  const onSubmit = (data: CreateGradeValues) => {
     console.log(data);
+    console.log(id);
   };
   return (
     <Form {...form}>

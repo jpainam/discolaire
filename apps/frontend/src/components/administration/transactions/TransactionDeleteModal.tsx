@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { inferProcedureOutput } from "@trpc/server";
 import {
   AlignStartHorizontal,
   Clock,
@@ -14,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -29,12 +29,10 @@ import { Label } from "@repo/ui/label";
 import { Textarea } from "@repo/ui/textarea";
 
 import { getErrorMessage } from "~/lib/handle-error";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 
-type TransactionAllProcedureOutput = NonNullable<
-  inferProcedureOutput<AppRouter["transaction"]["all"]>
->[number];
+type TransactionAllProcedureOutput =
+  RouterOutputs["transaction"]["all"][number];
 
 const deleteTransactionSchema = z.object({
   observation: z.string().min(1),
@@ -54,7 +52,7 @@ export function TransactionDeleteModal({
   const { closeModal } = useModal();
   const utils = api.useUtils();
   const deleteTransactionMutation = api.transaction.delete.useMutation();
-  const onSubmit = async (data: { observation: string }) => {
+  const onSubmit = (data: { observation: string }) => {
     toast.promise(
       deleteTransactionMutation.mutateAsync({
         ids: transaction.id,
@@ -83,7 +81,7 @@ export function TransactionDeleteModal({
           <div className="flex flex-row items-center gap-1">
             <User className="h-4 w-4 stroke-1" />
             <Label>{t("student")}:</Label>
-            {transaction.account?.name}
+            {transaction.account.name}
           </div>
           <div className="flex flex-row items-center gap-1">
             <DollarSign className="h-4 w-4 stroke-1" />
@@ -100,7 +98,7 @@ export function TransactionDeleteModal({
           <div className="flex flex-row items-center gap-1">
             <Clock className="h-4 w-4 stroke-1" />
             <Label>{t("status")}:</Label>
-            {transaction.status && t(transaction.status?.toLowerCase())}
+            {transaction.status && t(transaction.status.toLowerCase())}
           </div>
           <div className="flex flex-row items-center gap-1">
             <FileSliders className="h-4 w-4 stroke-1" />

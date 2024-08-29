@@ -5,13 +5,13 @@ import { GradeHeader } from "~/components/classrooms/gradesheets/grades/GradeHea
 import { api } from "~/trpc/server";
 
 export default async function Page({
-  params: { id, gradesheetId },
+  params: { gradesheetId },
 }: {
-  params: { id: string; gradesheetId: number };
+  params: { gradesheetId: number };
 }) {
   const grades = await api.gradeSheet.grades(Number(gradesheetId));
   const gradesheet = await api.gradeSheet.get(Number(gradesheetId));
-  if (!grades || !gradesheet) {
+  if (grades.length == 0 || !gradesheet) {
     notFound();
   }
 

@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
+import { ActivityIcon, BookIcon, VideoIcon } from "lucide-react";
+
 import { Button } from "@repo/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { ActivityIcon, BookIcon, VideoIcon } from "lucide-react";
 
 import { SubjectDetailsHeader } from "~/components/classrooms/subjects/SubjectDetailsHeader";
 import { api } from "~/trpc/server";
@@ -24,6 +25,7 @@ export default async function Page({
             {subject.course?.name}
           </h1>
           <p className="mt-4 text-muted-foreground">
+            {id}
             In this course, you will learn the fundamentals of web development,
             including HTML, CSS, and JavaScript. We'll cover topics such as
             responsive design, web accessibility, and modern front-end
