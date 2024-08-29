@@ -93,6 +93,8 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
                     <AvatarImage src={stud.avatar ?? undefined} alt="Image" />
                     <AvatarFallback>
                       <Image
+                        width={50}
+                        height={50}
                         src={randomAvatar(getFullName(stud).length)}
                         alt="AV"
                       />
@@ -130,6 +132,8 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
                   <AvatarImage src={stud?.avatar ?? undefined} alt="Image" />
                   <AvatarFallback>
                     <Image
+                      width={50}
+                      height={50}
                       src={randomAvatar(getFullName(stud).length)}
                       alt="AV"
                     />

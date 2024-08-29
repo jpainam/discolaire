@@ -8,6 +8,7 @@ import { useLocale } from "@repo/i18n";
 import { DropdownMenuItem } from "@repo/ui/dropdown-menu";
 
 import { env } from "~/env";
+import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { CopyConfirmationDialog } from "./CopyConfirmationDialog";
 import { InviteConfirmationDialog } from "./InviteConfirmationDialog";
@@ -26,10 +27,10 @@ export function DropdownInvitation({ email }: { email?: string | null }) {
             toast.error(t("email_not_found"));
             return;
           }
-          createInvitationMutation.mutate(
-            { email, name: "" },
+          toast.promise(
+            createInvitationMutation.mutateAsync({ email, name: "" }),
             {
-              onSuccess: (invitation) => {
+              success: (invitation) => {
                 const invitationLink =
                   env.NEXT_PUBLIC_BASE_URL +
                   "/invite/" +
@@ -44,6 +45,10 @@ export function DropdownInvitation({ email }: { email?: string | null }) {
                     <CopyConfirmationDialog invitationLink={invitationLink} />
                   ),
                 });
+                return t("invitation_created");
+              },
+              error: (error) => {
+                return getErrorMessage(error);
               },
             },
           );

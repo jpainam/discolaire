@@ -106,6 +106,8 @@ export function LinkStudent({ contactId }: { contactId: string }) {
                     <AvatarImage src={stud.avatar ?? undefined} alt="Image" />
                     <AvatarFallback>
                       <Image
+                        height={50}
+                        width={50}
                         src={randomAvatar(getFullName(stud).length)}
                         alt="AV"
                       />
@@ -139,6 +141,8 @@ export function LinkStudent({ contactId }: { contactId: string }) {
                 <AvatarImage src={stud.avatar ?? undefined} alt="Image" />
                 <AvatarFallback>
                   <Image
+                    width={50}
+                    height={50}
                     src={randomAvatar(getFullName(stud).length)}
                     alt="AV"
                   />

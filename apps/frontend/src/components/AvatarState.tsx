@@ -25,8 +25,8 @@ export function AvatarState({ avatar, className, pos }: AvatarStateProps) {
           {generatedAvatar && (
             <Image
               className={cn(className)}
-              height={100}
-              width={100}
+              height={50}
+              width={50}
               src={generatedAvatar}
               alt="AV"
             />

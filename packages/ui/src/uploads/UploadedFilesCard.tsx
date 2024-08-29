@@ -34,6 +34,8 @@ export function UploadedFilesCard({ uploadedFiles }: UploadedFilesCardProps) {
               {uploadedFiles.map((file) => (
                 <div key={file.key} className="relative aspect-video w-64">
                   <Image
+                    width={640}
+                    height={360}
                     src={file.url}
                     alt={file.name}
                     fill

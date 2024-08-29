@@ -19,10 +19,14 @@ export const invitationRouter = createTRPCRouter({
         where: { email: input.email },
         orderBy: { createdAt: "desc" },
       });
-      return ctx.db.invitation.upsert({
-        where: { id: lastInvitation?.id },
-        create: data,
-        update: { ...data, lastSentAt: new Date() },
+      if (lastInvitation) {
+        return ctx.db.invitation.update({
+          where: { id: lastInvitation.id },
+          data: { ...data, lastSentAt: new Date() },
+        });
+      }
+      return ctx.db.invitation.create({
+        data: data,
       });
     }),
 });
