@@ -1,4 +1,4 @@
-export default async function MailContent() {
+export default function MailContent() {
   /*await new Promise((resolve) => {
     setTimeout(resolve, 3000);
   });*/

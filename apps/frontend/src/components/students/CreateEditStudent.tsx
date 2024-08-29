@@ -33,7 +33,9 @@ import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
 interface ProfileCreateEditSheetProps {
-  student?: RouterOutputs["student"]["get"];
+  student?:
+    | RouterOutputs["student"]["get"]
+    | RouterOutputs["student"]["all"][number];
 }
 
 const createEditStudentSchema = z.object({

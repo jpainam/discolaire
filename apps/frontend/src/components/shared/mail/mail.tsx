@@ -1,15 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { Input } from "@repo/ui/input";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@repo/ui/resizable";
-import { Separator } from "@repo/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
-import { TooltipProvider } from "@repo/ui/tooltip";
 import {
   AlertCircle,
   Archive,
@@ -23,6 +14,16 @@ import {
   Trash2,
   Users2,
 } from "lucide-react";
+
+import { Input } from "@repo/ui/input";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@repo/ui/resizable";
+import { Separator } from "@repo/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
+import { TooltipProvider } from "@repo/ui/tooltip";
 
 import type { Mail as MailType } from "~/app/(dashboard)/mail/data";
 import { useMail } from "~/app/(dashboard)/mail/use-mail";
@@ -215,7 +216,7 @@ export function Mail({
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={defaultLayout[2]}>
           <MailDisplay
-            mail={mails.find((item) => item.id === mail.selected) || null}
+            mail={mails.find((item) => item.id === mail.selected) ?? null}
           />
         </ResizablePanel>
       </ResizablePanelGroup>

@@ -15,7 +15,7 @@ export function ChangeAvatar({ studentId }: { studentId: string }) {
   const { t } = useLocale();
   const { closeModal } = useModal();
 
-  const { onUpload, isPending, error, data: uploadedFiles } = useUpload();
+  const { onUpload, isPending, data: uploadedFiles } = useUpload();
   const updateStudentAvatarMutation = api.student.updateAvatar.useMutation();
 
   React.useEffect(() => {
@@ -31,10 +31,6 @@ export function ChangeAvatar({ studentId }: { studentId: string }) {
       });
     }
   }, [studentId, uploadedFiles, updateStudentAvatarMutation]);
-
-  if (error) {
-    console.error(error);
-  }
 
   return (
     <div>

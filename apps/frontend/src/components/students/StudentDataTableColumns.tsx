@@ -380,7 +380,7 @@ function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
                   toast.promise(deleteStudentMutation.mutateAsync(student.id), {
                     loading: t("deleting"),
                     success: () => {
-                      utils.student.all.invalidate();
+                      void utils.student.all.invalidate();
                       closeAlert();
                       return t("deleted_successfully");
                     },

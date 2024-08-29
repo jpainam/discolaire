@@ -5,7 +5,7 @@ import { User, Users } from "lucide-react";
 import { useLocale } from "@repo/i18n";
 import { DirectionAwareTabs } from "@repo/ui/direction-aware-tabs";
 
-export function AccessLogsTable({}) {
+export function AccessLogsTable() {
   const { t } = useLocale();
   const tabs = [
     {

@@ -1,7 +1,8 @@
 "use client";
 
-import { Button } from "@repo/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
+
+import { Button } from "@repo/ui/button";
 
 export function PeriodicAttendanceTableActions({
   studentId,
@@ -10,7 +11,13 @@ export function PeriodicAttendanceTableActions({
 }) {
   return (
     <div className="flex flex-row justify-end gap-2">
-      <Button variant={"ghost"} size={"icon"}>
+      <Button
+        onClick={() => {
+          console.log(studentId);
+        }}
+        variant={"ghost"}
+        size={"icon"}
+      >
         <Pencil size={16} />
       </Button>
       <Button variant={"ghost"} size={"icon"}>
