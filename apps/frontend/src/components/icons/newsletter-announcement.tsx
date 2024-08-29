@@ -1,5 +1,4 @@
 export default function NewsletterAnnouncement({
-  strokeWidth,
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (

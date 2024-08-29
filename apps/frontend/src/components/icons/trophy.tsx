@@ -1,5 +1,4 @@
 export default function TrophyIcon({
-  strokeWidth,
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (

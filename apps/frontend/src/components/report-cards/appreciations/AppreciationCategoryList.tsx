@@ -17,6 +17,7 @@ export function AppreciationCategoryList({
   categories,
   studentId,
 }: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   categories: any[];
   studentId: string;
 }) {

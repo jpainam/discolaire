@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import type {
   GlobalOptions as ConfettiGlobalOptions,
   CreateTypes as ConfettiInstance,
   Options as ConfettiOptions,
 } from "canvas-confetti";
-import type {
-  ReactNode} from "react";
+import type { ReactNode } from "react";
 import React, {
   createContext,
   forwardRef,
@@ -14,9 +15,10 @@ import React, {
   useMemo,
   useRef,
 } from "react";
+import confetti from "canvas-confetti";
+
 import type { ButtonProps } from "@repo/ui/button";
 import { Button } from "@repo/ui/button";
-import confetti from "canvas-confetti";
 
 interface Api {
   fire: (options?: ConfettiOptions) => void;
@@ -41,6 +43,7 @@ const Confetti = forwardRef<ConfettiRef, Props>((props, ref) => {
     children,
     ...rest
   } = props;
+  // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
   const instanceRef = useRef<ConfettiInstance | null>(null); // confetti instance
 
   const canvasRef = useCallback(
@@ -95,7 +98,9 @@ const Confetti = forwardRef<ConfettiRef, Props>((props, ref) => {
 });
 
 interface ConfettiButtonProps extends ButtonProps {
+  // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
   options?: ConfettiOptions &
+    // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
     ConfettiGlobalOptions & { canvas?: HTMLCanvasElement };
   children?: React.ReactNode;
 }

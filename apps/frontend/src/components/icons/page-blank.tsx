@@ -1,5 +1,4 @@
 export default function PageBlankIcon({
-  strokeWidth,
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (

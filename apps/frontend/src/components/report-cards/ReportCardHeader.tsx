@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { ChevronDown, MailIcon, Printer } from "lucide-react";
+import { useQueryState } from "nuqs";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
@@ -28,24 +29,23 @@ export function ReportCardHeader() {
   const router = useRouter();
   const { createQueryString } = useCreateQueryString();
   const searchParams = useSearchParams();
+  const [classroomId, setClassroomId] = useQueryState("classroom", {
+    defaultValue: "",
+  });
 
   return (
     <div className="grid grid-cols-1 flex-row items-center gap-4 bg-muted/40 px-4 py-1 md:flex">
       <Label className="hidden md:flex">{t("classrooms")}</Label>
       <ClassroomSelector
-        defaultValue={searchParams.get("classroom") || undefined}
+        defaultValue={classroomId}
         onChange={(val) => {
-          router.push(
-            routes.report_cards.index +
-              "/?" +
-              createQueryString({ classroom: val, student: undefined }),
-          );
+          void setClassroomId(val ?? null);
         }}
         className="w-[300px]"
       />
       <Label className="hidden md:flex">{t("terms")}</Label>
       <TermSelector
-        defaultValue={searchParams.get("term") || undefined}
+        defaultValue={searchParams.get("term") ?? undefined}
         className="w-[300px]"
         onChange={(val) => {
           router.push(
@@ -53,7 +53,7 @@ export function ReportCardHeader() {
           );
         }}
       />
-      {searchParams.get("classroom") && (
+      {classroomId && (
         <>
           <Label className="hidden md:flex">{t("students")}</Label>
           <ClassroomStudentSelector
@@ -64,9 +64,9 @@ export function ReportCardHeader() {
                   createQueryString({ student: val }),
               );
             }}
-            defaultValue={searchParams.get("student") || undefined}
+            defaultValue={searchParams.get("student") ?? undefined}
             className="w-[300px]"
-            classroomId={searchParams.get("classroom")!}
+            classroomId={classroomId}
           />
         </>
       )}

@@ -1,5 +1,4 @@
 export default function UserAvatarIcon({
-  strokeWidth,
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (

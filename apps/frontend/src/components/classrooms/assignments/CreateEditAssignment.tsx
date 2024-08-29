@@ -83,7 +83,7 @@ export function CreateEditAssignment({
   const [link, setLink] = useState("");
 
   const handleRemoveLink = (index: number) => {
-    const currentLinks = form.getValues("links") as string[];
+    const currentLinks = form.getValues("links");
     const newLinks = currentLinks.filter((_, i) => i !== index);
     form.setValue("links", newLinks);
   };
@@ -188,7 +188,7 @@ export function CreateEditAssignment({
                       if (link) {
                         if (isValidURL(link)) {
                           form.setValue("links", [
-                            ...(form.getValues("links") as string[]),
+                            ...(form.getValues("links")),
                             link,
                           ]);
                           setLink("");
@@ -207,7 +207,7 @@ export function CreateEditAssignment({
                 </div>
                 <FormMessage />
                 <div className="flex flex-wrap gap-4 pt-2">
-                  {(form.getValues("links") as string[]).map((link, index) => (
+                  {(form.getValues("links")).map((link, index) => (
                     <div key={index}>
                       <Badge variant="secondary" className="px-4 py-2">
                         {link}

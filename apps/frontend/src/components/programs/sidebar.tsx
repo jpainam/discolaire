@@ -2,10 +2,56 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  PiBriefcaseDuotone,
+  PiCurrencyCircleDollarDuotone,
+  PiDeviceTabletDuotone,
+  PiPackageDuotone,
+} from "react-icons/pi";
 
+import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";
 import SimpleBar from "../simplebar";
-import { menuItems } from "./menu-items";
+
+interface MenuItem {
+  name: string;
+  href: string;
+  icon?: JSX.Element;
+  badge?: string;
+  dropdownItems?: MenuItem[];
+}
+const menuItems: MenuItem[] = [
+  {
+    name: "Program",
+    href: "#",
+  },
+  {
+    name: "Contenu",
+    href: "/programs",
+  },
+  {
+    name: "Create",
+    href: routes.programs.create,
+    icon: <PiDeviceTabletDuotone />,
+  },
+  {
+    name: "Summary",
+    href: routes.programs.summary,
+    icon: <PiBriefcaseDuotone />,
+    badge: "New",
+  },
+  {
+    name: "Homework",
+    href: routes.programs.homeworks,
+    icon: <PiCurrencyCircleDollarDuotone />,
+    badge: "New",
+  },
+  {
+    name: "Monitoring",
+    href: routes.programs.monitoring,
+    icon: <PiPackageDuotone />,
+  },
+];
 
 export default function Sidebar({ className }: { className?: string }) {
   const pathname = usePathname();
@@ -14,11 +60,7 @@ export default function Sidebar({ className }: { className?: string }) {
       <SimpleBar className="h-[calc(100%-80px)]">
         <div className="3xl:mt-6 mt-4 pb-3">
           {menuItems.map((item, index) => {
-            const isActive = pathname === (item.href!);
-            const pathnameExistInDropdowns: any = item.dropdownItems?.filter(
-              (dropdownItem) => dropdownItem.href === pathname,
-            );
-            const isDropdownOpen = Boolean(pathnameExistInDropdowns?.length);
+            const isActive = pathname === item.href;
 
             return (
               <Link

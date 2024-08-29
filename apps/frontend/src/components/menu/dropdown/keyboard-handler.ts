@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 export function findElement(startElement: HTMLElement, selector: string) {
   let currentElement: HTMLElement | null = startElement;
 
@@ -13,13 +14,10 @@ function findPreviousIndex(
   elements: HTMLButtonElement[],
   loop: boolean,
 ): number {
-  const disabledMap = elements.reduce<Record<number, boolean>>(
-    (acc, el, i) => {
-      acc[i] = el.disabled;
-      return acc;
-    },
-    {},
-  );
+  const disabledMap = elements.reduce<Record<number, boolean>>((acc, el, i) => {
+    acc[i] = el.disabled;
+    return acc;
+  }, {});
 
   for (let i = current - 1; i >= 0; i--) {
     if (!disabledMap[i]) return i;
@@ -40,13 +38,10 @@ function findNextIndex(
   loop: boolean,
 ): number {
   // Create lookup map
-  const disabledMap = elements.reduce<Record<number, boolean>>(
-    (acc, el, i) => {
-      acc[i] = el.disabled;
-      return acc;
-    },
-    {},
-  );
+  const disabledMap = elements.reduce<Record<number, boolean>>((acc, el, i) => {
+    acc[i] = el.disabled;
+    return acc;
+  }, {});
 
   // Find next enabled index after current
   for (let i = current + 1; i < elements.length; i++) {
@@ -99,7 +94,7 @@ export function keydownHandler({
       findElement(
         event.currentTarget,
         parentSelector,
-      )?.querySelectorAll<HTMLButtonElement>(siblingSelector) || [],
+      )?.querySelectorAll<HTMLButtonElement>(siblingSelector) ?? [],
     ).filter((node) =>
       haveSameParent(event.currentTarget, node, parentSelector),
     );

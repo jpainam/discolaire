@@ -1,7 +1,4 @@
-export default function DriveIcon({
-  strokeWidth,
-  ...props
-}: React.SVGProps<SVGSVGElement>) {
+export default function DriveIcon({ ...props }: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       fill="none"

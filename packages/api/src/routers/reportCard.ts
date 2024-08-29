@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { reportCardService } from "../services/report-card-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const reportCardRouter = createTRPCRouter({
@@ -25,8 +26,11 @@ export const reportCardRouter = createTRPCRouter({
         termId: z.coerce.number(),
       }),
     )
-    .query(() => {
-      return [];
+    .query(({ input }) => {
+      return reportCardService.getClassroomSummary(
+        input.classroomId,
+        input.termId,
+      );
     }),
   deleteRemark: protectedProcedure
     .input(

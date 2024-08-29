@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 "use client";
 
 import React, { useEffect, useMemo } from "react";
@@ -51,13 +52,13 @@ export function DashboardClassroomSize({ className }: { className?: string }) {
   useEffect(() => {
     const data = classroomsQuery.data?.map((classroom) => {
       return {
-        name: classroom.shortName || classroom.name || "",
+        name: classroom.shortName ?? classroom.name ?? "",
         maxSize: classroom.maxSize || 0,
         size: classroom.size,
         difference: (classroom.maxSize || 0) - classroom.size,
       };
     });
-    setFilteredData(data || []);
+    setFilteredData(data ?? []);
   }, [classroomsQuery.data]);
 
   if (classroomsQuery.isPending) {
@@ -76,7 +77,7 @@ export function DashboardClassroomSize({ className }: { className?: string }) {
   }
   if (classroomsQuery.isError) {
     showErrorToast(classroomsQuery.error);
-    throw classroomsQuery.error;
+    return;
   }
 
   return (

@@ -1,5 +1,4 @@
 export default function UserInfoIcon({
-  strokeWidth,
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (

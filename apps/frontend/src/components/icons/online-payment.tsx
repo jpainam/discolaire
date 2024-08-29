@@ -1,5 +1,4 @@
 export default function OnlinePaymentIcon({
-  strokeWidth,
   ...props
 }: React.SVGProps<SVGSVGElement>) {
   return (

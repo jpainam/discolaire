@@ -1,7 +1,4 @@
-export default function PDFIcon({
-  strokeWidth,
-  ...props
-}: React.SVGProps<SVGSVGElement>) {
+export default function PDFIcon({ ...props }: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

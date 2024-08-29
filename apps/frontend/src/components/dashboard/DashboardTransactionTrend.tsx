@@ -2,8 +2,10 @@
 
 import * as React from "react";
 import { useSearchParams } from "next/navigation";
+import _ from "lodash";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
+import type { ChartConfig } from "@repo/ui/chart";
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
@@ -14,8 +16,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/card";
-import type {
-  ChartConfig} from "@repo/ui/chart";
 import {
   ChartContainer,
   ChartLegend,
@@ -33,6 +33,7 @@ import {
 } from "@repo/ui/select";
 import { Skeleton } from "@repo/ui/skeleton";
 
+import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { useMoneyFormat } from "~/utils/money-format";
@@ -56,9 +57,9 @@ export function DashboardTransactionTrend({
   }, [t]);
 
   const searchParams = useSearchParams();
-  const status = searchParams.get("status");
-  const from = searchParams.get("from");
-  const to = searchParams.get("to");
+  // const status = searchParams.get("status");
+  // const from = searchParams.get("from");
+  // const to = searchParams.get("to");
   const { moneyFormatter } = useMoneyFormat();
   const transactionsTrendQuery = api.transaction.trends.useQuery();
 
@@ -88,7 +89,9 @@ export function DashboardTransactionTrend({
       now.setDate(now.getDate() - Number(timeRange));
       return date >= now;
     });
-    setTotalAmount(f.reduce((acc, item) => acc + item.amount, 0));
+
+    setTotalAmount(_.sumBy(f, "amount"));
+    // @ts-expect-error TODO fix this
     setFilteredData(f);
   }, [timeRange, transactionsTrendQuery.data]);
 
@@ -101,8 +104,9 @@ export function DashboardTransactionTrend({
     );
   }
   if (transactionsTrendQuery.isError) {
-    throw transactionsTrendQuery.error;
+    showErrorToast(transactionsTrendQuery.error);
   }
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!transactionsTrendQuery.data || !filteredData) {
     return <EmptyState />;
   }
@@ -114,7 +118,7 @@ export function DashboardTransactionTrend({
           <CardDescription>
             {t("showing_total_transactions_for", {
               timeRange:
-                timeRanges.find((item) => item.value == timeRange)?.label ||
+                timeRanges.find((item) => item.value == timeRange)?.label ??
                 t("schoolYear"),
             })}
           </CardDescription>
@@ -138,7 +142,7 @@ export function DashboardTransactionTrend({
           </div>
           <div className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6">
             <Select
-              defaultValue={timeRange || undefined}
+              defaultValue={timeRange ?? undefined}
               onValueChange={(val) => {
                 router.push(
                   "?" +
@@ -210,7 +214,7 @@ export function DashboardTransactionTrend({
               content={
                 <ChartTooltipContent
                   className="w-[200px]"
-                  labelFormatter={(value, payload) => {
+                  labelFormatter={(value, _payload) => {
                     return new Date(value).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
