@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import type {ColumnDef} from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 import type { inferProcedureOutput } from "@trpc/server";
 import type { TFunction } from "i18next";
+import Link from "next/link";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import {
   Eye,
   MoveRight,
@@ -31,9 +31,9 @@ import {
 } from "@repo/ui/dropdown-menu";
 import FlatBadge from "@repo/ui/FlatBadge";
 
+import type { AppRouter } from "~/server/api/root";
 import { routes } from "~/configs/routes";
 import { getErrorMessage } from "~/lib/handle-error";
-import type { AppRouter } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { CreateEditClassroom } from "./CreateEditClassroom";
 

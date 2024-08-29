@@ -1,7 +1,7 @@
 import Image from "next/image";
 
-import { cn } from "~/lib/utils";
 import type { Photo } from "~/types/photo";
+import { cn } from "~/lib/utils";
 
 interface AlbumArtworkProps extends React.HTMLAttributes<HTMLDivElement> {
   photo: Photo;

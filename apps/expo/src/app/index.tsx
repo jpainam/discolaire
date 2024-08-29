@@ -1,6 +1,3 @@
- 
- 
- 
 import { useState } from "react";
 import { Button, Pressable, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";

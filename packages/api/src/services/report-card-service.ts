@@ -202,10 +202,9 @@ export const reportCardService = {
           min: allgrades.length
             ? Math.min(...allgrades.map((g) => g.grade ?? 0))
             : 0,
-           
+
           avg: allgrades.length
-            ?  
-              _.mean(allgrades.map((g) => g.grade ?? 0))
+            ? _.mean(allgrades.map((g) => g.grade ?? 0))
             : 0,
         },
       };

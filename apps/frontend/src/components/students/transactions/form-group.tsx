@@ -5,7 +5,7 @@ interface FormGroupProps {
 export function FormGroup({ children, title }: FormGroupProps) {
   return (
     <div className="flex flex-col gap-2">
-      <div className="p-2 dark:bg-muted dark:text-muted-foreground text-sm rounded-md bg-primary text-primary-foreground">
+      <div className="rounded-md bg-primary p-2 text-sm text-primary-foreground dark:bg-muted dark:text-muted-foreground">
         {title}
       </div>
       {children}

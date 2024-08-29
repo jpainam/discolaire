@@ -1,12 +1,13 @@
 "use client";
 
+import type { Table } from "@tanstack/react-table";
 import { DownloadIcon } from "@radix-ui/react-icons";
-import { Button } from "@repo/ui/button";
-import type {Table} from "@tanstack/react-table";
 import { Plus } from "lucide-react";
 
-import { exportTableToCSV } from "~/lib/export";
+import { Button } from "@repo/ui/button";
+
 import type { Student } from "~/types/student";
+import { exportTableToCSV } from "~/lib/export";
 
 interface TasksTableToolbarActionsProps {
   table: Table<Student>;

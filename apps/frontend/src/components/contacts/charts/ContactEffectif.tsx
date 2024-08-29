@@ -1,5 +1,9 @@
 "use client";
 
+import { TrendingUp } from "lucide-react";
+import { LabelList, RadialBar, RadialBarChart } from "recharts";
+
+import type { ChartConfig } from "@repo/ui/chart";
 import {
   Card,
   CardContent,
@@ -8,15 +12,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/card";
-import type {
-  ChartConfig} from "@repo/ui/chart";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/chart";
-import { TrendingUp } from "lucide-react";
-import { LabelList, RadialBar, RadialBarChart } from "recharts";
 
 const chartData = [
   { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },

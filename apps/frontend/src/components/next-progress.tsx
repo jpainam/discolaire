@@ -1,4 +1,5 @@
 "use client";
+
 import { AppProgressBar } from "next-nprogress-bar";
 import NextTopLoader from "nextjs-toploader";
 

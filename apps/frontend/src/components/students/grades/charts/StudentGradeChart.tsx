@@ -1,14 +1,14 @@
 "use client";
 
+import { Area, AreaChart, CartesianGrid } from "recharts";
+
+import type { ChartConfig } from "@repo/ui/chart";
 import { Card, CardContent } from "@repo/ui/card";
-import type {
-  ChartConfig} from "@repo/ui/chart";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/chart";
-import { Area, AreaChart, CartesianGrid } from "recharts";
 
 import type { Grade } from "~/types/grade";
 
@@ -33,7 +33,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function StudentGradeChart({ grades }: { grades: Grade[] }) {
-  console.log(grades)
+  console.log(grades);
   return (
     <Card className="border-none shadow-none">
       <CardContent className="p-0">

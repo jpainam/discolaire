@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Button } from "@repo/ui/button";
 import { PiArrowLeftBold } from "react-icons/pi";
+
+import { Button } from "@repo/ui/button";
 
 export default function PageNotFound() {
   return (

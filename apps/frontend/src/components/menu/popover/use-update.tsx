@@ -1,4 +1,4 @@
-import type { DependencyList, EffectCallback} from "react";
+import type { DependencyList, EffectCallback } from "react";
 import { useEffect, useRef } from "react";
 
 export function useUpdate(fn: EffectCallback, dependencies?: DependencyList) {

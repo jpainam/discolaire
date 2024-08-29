@@ -1,5 +1,5 @@
-import Link from "next/link";
 import type { inferProcedureOutput } from "@trpc/server";
+import Link from "next/link";
 
 import { getServerTranslations } from "@repo/i18n/server";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
@@ -13,8 +13,8 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
-import { routes } from "~/configs/routes";
 import type { AppRouter } from "~/server/api/root";
+import { routes } from "~/configs/routes";
 import { api } from "~/trpc/server";
 import { getFullName } from "~/utils/full-name";
 

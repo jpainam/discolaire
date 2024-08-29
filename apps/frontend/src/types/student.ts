@@ -1,8 +1,8 @@
-import { countrySchema } from "./country";
+import { z } from "zod";
 
+import { countrySchema } from "./country";
 import { schoolSchema } from "./school";
 
-import { z } from "zod";
 //import { studentContactsSchema } from "./student-contact";
 
 export const studentSchema = z.object({

@@ -1,7 +1,7 @@
+import type { ImperativePanelHandle } from "react-resizable-panels";
+import { useRef, useState } from "react";
 import { atom, useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
-import { useRef, useState } from "react";
-import type { ImperativePanelHandle } from "react-resizable-panels";
 
 export const leftPanelSizeAtom = atomWithStorage<number>("leftPanelSize", 15);
 export const centerPanelSizeAtom = atomWithStorage<number>(

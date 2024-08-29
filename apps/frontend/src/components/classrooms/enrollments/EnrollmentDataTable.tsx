@@ -53,7 +53,7 @@ export default function EnrollmentDataTable({
       //canUnEnrollStudent: true,
     });
     return columns;
-  }, [t]);  
+  }, [t]);
   const pageCount = classroomStudentsQuery.data?.length ?? 0 / 50;
 
   const { table } = useDataTable({

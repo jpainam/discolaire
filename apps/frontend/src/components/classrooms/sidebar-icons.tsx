@@ -1,3 +1,4 @@
+import type { LucideIcon } from "lucide-react";
 import {
   BookOpenText,
   BookText,
@@ -10,10 +11,8 @@ import {
   Proportions,
   Receipt,
   TableProperties,
-  Users
-  
+  Users,
 } from "lucide-react";
-import type {LucideIcon} from "lucide-react";
 
 export const sidebarIcons: Record<string, LucideIcon> = {
   documents: FolderOpen,

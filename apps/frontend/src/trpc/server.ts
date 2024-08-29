@@ -1,9 +1,10 @@
-import type { AppRouter } from "@repo/api";
 import { cache } from "react";
 import { headers } from "next/headers";
+import { createHydrationHelpers } from "@trpc/react-query/rsc";
+
+import type { AppRouter } from "@repo/api";
 import { createCaller, createTRPCContext } from "@repo/api";
 import { auth } from "@repo/auth";
-import { createHydrationHelpers } from "@trpc/react-query/rsc";
 
 import { createQueryClient } from "./query-client";
 

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+
 import { Button } from "@repo/ui/button";
 
 import AddFavorite from "../../../../public/images/add-favorite.jpg";

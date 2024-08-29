@@ -1,8 +1,8 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
 
 export function TabListItem({
   icon,
@@ -17,17 +17,17 @@ export function TabListItem({
   const isActive = href === pathname;
   return (
     <Link
-      className="flex hover:bg-secondary hover:rounded-md items-start justify-center flex-col"
+      className="flex flex-col items-start justify-center hover:rounded-md hover:bg-secondary"
       href={href}
     >
-      <div className="flex px-4 items-center flex-row gap-2">
+      <div className="flex flex-row items-center gap-2 px-4">
         <div>{icon}</div>
         <div className="flex flex-col">
           <div>{name}</div>
           {isActive && (
             <div
               className={
-                "border-b-4 bg-primary border-primary rounded-t-md w-full h-1"
+                "h-1 w-full rounded-t-md border-b-4 border-primary bg-primary"
               }
             ></div>
           )}

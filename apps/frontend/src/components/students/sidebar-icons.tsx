@@ -1,3 +1,4 @@
+import type { LucideIcon } from "lucide-react";
 import {
   Ambulance,
   ArrowRightLeft,
@@ -14,10 +15,8 @@ import {
   NotebookPen,
   NotepadTextDashed,
   User,
-  Users
-  
+  Users,
 } from "lucide-react";
-import type {LucideIcon} from "lucide-react";
 
 export const sidebarIcons: Record<string, LucideIcon> = {
   profile: User,

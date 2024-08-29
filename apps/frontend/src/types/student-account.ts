@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import { studentSchema } from "./student";
 
 export const studentAccountSchema = z.object({

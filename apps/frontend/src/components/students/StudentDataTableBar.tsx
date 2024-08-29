@@ -1,3 +1,4 @@
+import type { Table } from "@tanstack/react-table";
 import * as React from "react";
 import {
   ArrowUpIcon,
@@ -8,6 +9,7 @@ import {
   TrashIcon,
 } from "@radix-ui/react-icons";
 import { SelectTrigger } from "@radix-ui/react-select";
+
 import { Button } from "@repo/ui/button";
 import {
   Select,
@@ -17,11 +19,10 @@ import {
 } from "@repo/ui/select";
 import { Separator } from "@repo/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
-import type {Table} from "@tanstack/react-table";
 
+import type { Student } from "~/types/student";
 import { Kbd } from "~/components/kbd";
 import { exportTableToCSV } from "~/lib/export";
-import type { Student } from "~/types/student";
 
 interface ClassroomTableFloatingBarProps {
   table: Table<Student>;

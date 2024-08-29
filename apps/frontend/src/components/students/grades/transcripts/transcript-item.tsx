@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+
 import {
   AccordionContent,
   AccordionItem,
@@ -15,8 +16,8 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
-import { useDateFormat } from "~/utils/date-format";
 import type { Assignment } from "./transcript-content";
+import { useDateFormat } from "~/utils/date-format";
 
 interface TranscriptItemProps {
   assignment: Assignment;

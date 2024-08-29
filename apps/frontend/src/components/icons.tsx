@@ -1,5 +1,6 @@
-import type { LucideProps} from "lucide-react";
+import type { LucideProps } from "lucide-react";
 import { Moon, SunMedium } from "lucide-react";
+
 type IconProps = React.HTMLAttributes<SVGElement>;
 
 // https://vercel.com/blog/how-we-optimized-package-imports-in-next-js

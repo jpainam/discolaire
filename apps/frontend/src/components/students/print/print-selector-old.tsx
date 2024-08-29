@@ -1,9 +1,10 @@
 "use client";
 
+import type { PopoverProps } from "@radix-ui/react-popover";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-import type { PopoverProps } from "@radix-ui/react-popover";
+
 import { Button } from "@repo/ui/button";
 import {
   Command,

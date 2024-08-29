@@ -1,6 +1,6 @@
 import { atom, useAtom } from "jotai";
 
-import type { Mail} from "~/app/(dashboard)/mail/data";
+import type { Mail } from "~/app/(dashboard)/mail/data";
 import { mails } from "~/app/(dashboard)/mail/data";
 
 interface Config {

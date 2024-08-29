@@ -5,9 +5,9 @@ import { useParams, useRouter } from "next/navigation";
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
 
+import type { Grade } from "~/types/grade";
 import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";
-import type { Grade } from "~/types/grade";
 import { useDateFormat } from "~/utils/date-format";
 
 interface ByChronologicalOrderProps {
@@ -37,9 +37,7 @@ export function ByChronologicalOrder({
   return (
     <div>
       {grades.map((grade) => {
-        const m = grade.createdAt
-          ? monthFormatter.format(grade.createdAt)
-          : "";
+        const m = grade.createdAt ? monthFormatter.format(grade.createdAt) : "";
         const d = grade.createdAt ? dayFormatter.format(grade.createdAt) : "";
         return (
           <div

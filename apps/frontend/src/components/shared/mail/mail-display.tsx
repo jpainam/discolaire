@@ -1,3 +1,18 @@
+import { addDays } from "date-fns/addDays";
+import { addHours } from "date-fns/addHours";
+import { format } from "date-fns/format";
+import { nextSaturday } from "date-fns/nextSaturday";
+import {
+  Archive,
+  ArchiveX,
+  Clock,
+  Forward,
+  MoreVertical,
+  Reply,
+  ReplyAll,
+  Trash2,
+} from "lucide-react";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Button } from "@repo/ui/button";
 import { Calendar } from "@repo/ui/calendar";
@@ -13,20 +28,6 @@ import { Separator } from "@repo/ui/separator";
 import { Switch } from "@repo/ui/switch";
 import { Textarea } from "@repo/ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
-import { addDays } from "date-fns/addDays";
-import { addHours } from "date-fns/addHours";
-import { format } from "date-fns/format";
-import { nextSaturday } from "date-fns/nextSaturday";
-import {
-  Archive,
-  ArchiveX,
-  Clock,
-  Forward,
-  MoreVertical,
-  Reply,
-  ReplyAll,
-  Trash2,
-} from "lucide-react";
 
 import type { Mail } from "~/app/(dashboard)/mail/data";
 

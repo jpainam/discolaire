@@ -1,4 +1,3 @@
- 
 export default function RealEstateIcon({
   ...props
 }: React.SVGProps<SVGSVGElement>) {

@@ -2,10 +2,10 @@
 
 import { useMemo } from "react";
 
+import type { DataTableFilterField } from "@repo/ui/data-table/v2/datatypes";
 import { useLocale } from "@repo/i18n";
 import { DataTable } from "@repo/ui/data-table/v2/data-table";
 import { DataTableToolbar } from "@repo/ui/data-table/v2/data-table-toolbar";
-import type { DataTableFilterField } from "@repo/ui/data-table/v2/datatypes";
 import { useDataTable } from "@repo/ui/data-table/v2/use-data-table";
 
 import type { SMSHistory } from "~/types/sms";
@@ -23,16 +23,13 @@ export function SMSHistoryDataTable({
 }) {
   const { t } = useLocale("admin");
   const { fullDateFormatter } = useDateFormat();
-  const columns = useMemo(
-    () => {
-      const columns = fetchSmsHistoryColumns({
-        t: t,
-        dateFormatter: fullDateFormatter,
-      });
-      return columns;
-    },
-    [t, fullDateFormatter],  
-  );
+  const columns = useMemo(() => {
+    const columns = fetchSmsHistoryColumns({
+      t: t,
+      dateFormatter: fullDateFormatter,
+    });
+    return columns;
+  }, [t, fullDateFormatter]);
   const pageCount = Math.ceil(count / smsHistory.length);
 
   const filterFields: DataTableFilterField<SMSHistory>[] = [

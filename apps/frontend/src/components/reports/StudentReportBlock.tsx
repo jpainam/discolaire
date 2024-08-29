@@ -6,9 +6,9 @@ import { useLocale } from "@repo/i18n";
 import { Checkbox } from "@repo/ui/checkbox";
 import { Label } from "@repo/ui/label";
 
+import type { Report } from "~/types/report";
 import { studentReportsAtom } from "~/atoms/report-atom";
 import { cn } from "~/lib/utils";
-import type { Report } from "~/types/report";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
 

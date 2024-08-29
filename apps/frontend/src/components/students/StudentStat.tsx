@@ -1,14 +1,7 @@
 "use client";
 
-import type {
-  LucideIcon} from "lucide-react";
-import {
-  LogOut,
-  User,
-  UserMinus,
-  Users,
-  UserX,
-} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { LogOut, User, UserMinus, Users, UserX } from "lucide-react";
 
 import {
   DropdownMenu,

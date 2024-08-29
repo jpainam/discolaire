@@ -1,3 +1,5 @@
+import { Trash2 } from "lucide-react";
+
 import { Button } from "@repo/ui/button";
 import {
   Table,
@@ -8,7 +10,6 @@ import {
   TableRow,
 } from "@repo/ui/table";
 import { Textarea } from "@repo/ui/textarea";
-import { Trash2 } from "lucide-react";
 
 import type { SMSTemplate } from "~/types/sms";
 

@@ -1,6 +1,8 @@
 "use client";
 
 import { Fragment, useState } from "react";
+import { Star } from "lucide-react";
+
 import { Button } from "@repo/ui/button";
 import {
   Sheet,
@@ -12,7 +14,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@repo/ui/sheet";
-import { Star } from "lucide-react";
 
 import { SortableList } from "../dnd/dnd-sortable-list";
 

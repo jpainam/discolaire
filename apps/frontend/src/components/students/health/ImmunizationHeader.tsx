@@ -1,11 +1,5 @@
-import type {
-  LucideIcon} from "lucide-react";
-import {
-  CalendarClock,
-  CalendarX2,
-  CircleCheck,
-  Clock
-} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { CalendarClock, CalendarX2, CircleCheck, Clock } from "lucide-react";
 
 import { cn } from "~/lib/utils";
 

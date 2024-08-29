@@ -1,7 +1,7 @@
 "use client";
 
-import { Check, ChevronsUpDown } from "lucide-react";
 import * as React from "react";
+import { Check, ChevronsUpDown } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";

@@ -1,4 +1,3 @@
-import { BentoGrid, BentoGridItem } from "@repo/ui/bento-grid";
 import {
   IconArrowWaveRightUp,
   IconBoxAlignRightFilled,
@@ -8,6 +7,8 @@ import {
   IconSignature,
   IconTableColumn,
 } from "@tabler/icons-react";
+
+import { BentoGrid, BentoGridItem } from "@repo/ui/bento-grid";
 
 export default function Page() {
   return (
