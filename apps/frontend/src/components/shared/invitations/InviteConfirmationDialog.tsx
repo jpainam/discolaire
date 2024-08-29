@@ -1,3 +1,5 @@
+"use client";
+
 import { render } from "@react-email/components";
 import { toast } from "sonner";
 

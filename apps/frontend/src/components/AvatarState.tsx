@@ -23,7 +23,13 @@ export function AvatarState({ avatar, className, pos }: AvatarStateProps) {
         <AvatarImage src={avatar ?? undefined} alt={"AV"} />
         <AvatarFallback>
           {generatedAvatar && (
-            <Image className={cn(className)} src={generatedAvatar} alt="AV" />
+            <Image
+              className={cn(className)}
+              height={100}
+              width={100}
+              src={generatedAvatar}
+              alt="AV"
+            />
           )}
         </AvatarFallback>
       </Avatar>

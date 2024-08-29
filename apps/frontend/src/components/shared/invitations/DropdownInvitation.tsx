@@ -1,3 +1,5 @@
+"use client";
+
 import { CopyIcon, SendIcon } from "lucide-react";
 import { toast } from "sonner";
 
@@ -6,7 +8,7 @@ import { useLocale } from "@repo/i18n";
 import { DropdownMenuItem } from "@repo/ui/dropdown-menu";
 
 import { env } from "~/env";
-import { api } from "~/trpc/server";
+import { api } from "~/trpc/react";
 import { CopyConfirmationDialog } from "./CopyConfirmationDialog";
 import { InviteConfirmationDialog } from "./InviteConfirmationDialog";
 
@@ -14,31 +16,37 @@ export function DropdownInvitation({ email }: { email?: string | null }) {
   const { t } = useLocale();
 
   const { openModal } = useModal();
+  const createInvitationMutation = api.invitation.create.useMutation();
 
   return (
     <>
       <DropdownMenuItem
-        onSelect={async () => {
+        onSelect={() => {
           if (!email) {
             toast.error(t("email_not_found"));
             return;
           }
-          const invitationCode = await api.invitation.create({
-            email,
-            name: "",
-          });
-          const invitationLink =
-            env.NEXT_PUBLIC_BASE_URL +
-            "/invite/" +
-            invitationCode.token +
-            "?email=" +
-            email;
-          openModal({
-            title: t("copy_invite"),
-            className: "w-[500px]",
-            description: t("copy_invitation_link_description"),
-            view: <CopyConfirmationDialog invitationLink={invitationLink} />,
-          });
+          createInvitationMutation.mutate(
+            { email, name: "" },
+            {
+              onSuccess: (invitation) => {
+                const invitationLink =
+                  env.NEXT_PUBLIC_BASE_URL +
+                  "/invite/" +
+                  invitation.token +
+                  "?email=" +
+                  email;
+                openModal({
+                  title: t("copy_invite"),
+                  className: "w-[500px]",
+                  description: t("copy_invitation_link_description"),
+                  view: (
+                    <CopyConfirmationDialog invitationLink={invitationLink} />
+                  ),
+                });
+              },
+            },
+          );
         }}
       >
         <CopyIcon className="mr-2 h-4 w-4" />

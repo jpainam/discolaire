@@ -1,3 +1,5 @@
+"use client";
+
 import { t } from "i18next";
 import { CopyIcon } from "lucide-react";
 import { toast } from "sonner";
