@@ -19,7 +19,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@repo/ui/form";
-import PhoneInput from "@repo/ui/PhoneInput/index";
+import { PhoneInput } from "@repo/ui/phone-input";
 import { Separator } from "@repo/ui/separator";
 import { TagInput } from "@repo/ui/TagInput/index";
 import { Textarea } from "@repo/ui/textarea";
@@ -29,6 +29,7 @@ import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";
 import { SelectField } from "~/components/shared/forms/SelectField";
 import { FormerSchoolSelector } from "~/components/shared/selects/FormerSchoolSelector";
+import { env } from "~/env";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
@@ -48,7 +49,7 @@ const createEditStudentSchema = z.object({
   residence: z.string().optional(),
   phoneNumber: z.string().optional(),
   formerSchoolId: z.string().optional(),
-  countryId: z.string().optional(),
+  countryId: z.string(),
   dateOfEntry: z.coerce.date().optional().or(z.literal("")),
   dateOfExit: z.coerce.date().optional().or(z.literal("")),
   tags: z.array(z.string()).optional(),
@@ -77,7 +78,7 @@ export default function CreateEditStudent({
       residence: student?.residence ?? "",
       phoneNumber: student?.phoneNumber ?? "",
       email: student?.email ?? "",
-      countryId: student?.countryId ?? "",
+      countryId: student?.countryId ?? env.NEXT_PUBLIC_DEFAULT_COUNTRY_CODE,
       dateOfExit: student?.dateOfExit ?? "",
       dateOfEntry: student?.dateOfEntry ?? "",
       formerSchoolId: student?.formerSchoolId ?? "",
@@ -88,33 +89,41 @@ export default function CreateEditStudent({
     resolver: zodResolver(createEditStudentSchema),
   });
 
-  const createStudentMutation = api.student.create.useMutation();
-  const updateStudentMutation = api.student.update.useMutation();
+  const createStudentMutation = api.student.create.useMutation({
+    onSettled: () => utils.student.all.invalidate(),
+  });
+  const updateStudentMutation = api.student.update.useMutation({
+    onSettled: () => utils.student.get.invalidate(student?.id),
+  });
   const utils = api.useUtils();
   const onSubmit = (data: z.infer<typeof createEditStudentSchema>) => {
+    const values = {
+      ...data,
+      dateOfEntry: data.dateOfEntry ? data.dateOfEntry : undefined,
+      formerSchoolId: data.formerSchoolId ? data.formerSchoolId : undefined,
+      dateOfExit: data.dateOfExit ? data.dateOfExit : undefined,
+    };
     if (student?.id) {
       toast.promise(
-        updateStudentMutation.mutateAsync({ id: student.id, ...data }),
+        updateStudentMutation.mutateAsync({ id: student.id, ...values }),
         {
           loading: t("updating"),
           error: (error) => {
             return getErrorMessage(error);
           },
-          success: async () => {
-            await utils.student.get.invalidate(student.id);
+          success: () => {
             closeSheet();
             return t("updated_successfully");
           },
         },
       );
     } else {
-      toast.promise(createStudentMutation.mutateAsync(data), {
+      toast.promise(createStudentMutation.mutateAsync(values), {
         loading: t("creating"),
         error: (error) => {
           return getErrorMessage(error);
         },
-        success: async () => {
-          await utils.student.all.invalidate();
+        success: () => {
           closeSheet();
           return t("created_successfully");
         },
@@ -167,15 +176,12 @@ export default function CreateEditStudent({
               control={form.control}
               name="phoneNumber"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="phoneNumber">
+                <FormItem className="flex flex-col items-start">
+                  <FormLabel className="text-left">
                     {t("phoneNumber")}
                   </FormLabel>
-                  <FormControl>
-                    <PhoneInput
-                      onChange={field.onChange}
-                      defaultCountry={form.getValues("countryId")}
-                    />
+                  <FormControl className="w-full">
+                    <PhoneInput placeholder="Enter a phone number" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

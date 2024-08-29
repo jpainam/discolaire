@@ -36,8 +36,8 @@ const createUpdateSchema = z.object({
   phoneNumber: z.string().optional(),
   formerSchoolId: z.string().optional(),
   countryId: z.string().optional(),
-  dateOfEntry: z.coerce.date().optional().or(z.literal("")),
-  dateOfExit: z.coerce.date().optional().or(z.literal("")),
+  dateOfEntry: z.coerce.date().optional(),
+  dateOfExit: z.coerce.date().optional(),
   tags: z.array(z.string()).optional(),
   observation: z.string().optional(),
 });
@@ -95,6 +95,7 @@ export const studentRouter = createTRPCRouter({
   create: protectedProcedure
     .input(createUpdateSchema)
     .mutation(({ ctx, input }) => {
+      console.log("input", input);
       return ctx.db.student.create({
         data: input,
       });

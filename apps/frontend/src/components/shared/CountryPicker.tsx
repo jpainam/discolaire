@@ -21,6 +21,7 @@ import { FormControl } from "@repo/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { ScrollArea } from "@repo/ui/scroll-area";
 
+import { env } from "~/env";
 import { cn } from "~/lib/utils";
 
 interface CountryPickerFieldProps {
@@ -42,7 +43,9 @@ export function CountryPicker({
   defaultValue,
 }: CountryPickerFieldProps) {
   const countries = useMemo(() => getCountries(), []);
-  const [value, setValue] = React.useState(defaultValue);
+  const [value, setValue] = React.useState(
+    defaultValue ?? env.NEXT_PUBLIC_DEFAULT_COUNTRY_CODE,
+  );
   const [open, setOpen] = React.useState(false);
 
   return (

@@ -11,6 +11,7 @@
   "balance": "Balance",
   "card": "Credit/Debit Card",
   "selected": "Selected",
+  "creating": "Creating...",
   "receipt": "Receipt",
   "notify_parents": "Notify Parents",
   "notify_students": "Notify Students",
