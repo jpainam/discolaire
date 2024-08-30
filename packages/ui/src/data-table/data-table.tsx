@@ -75,10 +75,7 @@ export function DataTable<TData>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
-                      className={cn(
-                        variant == "compact" && "py-0",
-                        "text-xs 2xl:text-xs",
-                      )}
+                      className={cn(variant == "compact" && "py-0")}
                       key={cell.id}
                     >
                       {flexRender(

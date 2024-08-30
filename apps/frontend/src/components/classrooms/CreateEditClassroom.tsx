@@ -162,7 +162,7 @@ export function CreateEditClassroom({
                 value: l.id.toString(),
               }))}
             />
-            <Separator className="col-span-full my-2" />
+            <Separator className="my-0z col-span-full" />
             <FormField
               control={form.control}
               name={"seniorAdvisorId"}

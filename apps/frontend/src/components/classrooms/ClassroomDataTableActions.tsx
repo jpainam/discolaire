@@ -34,12 +34,6 @@ export function ClassroomDataTableActions({
   return (
     <div className="flex items-center gap-2">
       {table.getFilteredSelectedRowModel().rows.length > 0 ? (
-        // <DeleteClassroomsDialog
-        //   classrooms={table
-        //     .getFilteredSelectedRowModel()
-        //     .rows.map((row) => row.original)}
-        //   onSuccess={() => table.toggleAllRowsSelected(false)}
-        // />
         <Button
           variant={"destructive"}
           onClick={() => {
@@ -84,7 +78,6 @@ export function ClassroomDataTableActions({
       <Button
         size={"sm"}
         className="h-8"
-        variant={"outline"}
         onClick={() => {
           openSheet({
             className: "w-[700px]",
