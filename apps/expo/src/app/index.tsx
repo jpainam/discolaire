@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Button, Pressable, Text, TextInput, View } from "react-native";
+import { Button, Pressable, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, Stack } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 
 import type { RouterOutputs } from "~/utils/api";
+import { Text, View } from "~/components/Themed";
 import { api } from "~/utils/api";
 import { useSignIn, useSignOut, useUser } from "~/utils/auth";
 
@@ -13,8 +14,8 @@ function PostCard(props: {
   onDelete: () => void;
 }) {
   return (
-    <View className="flex flex-row rounded-lg bg-muted p-4">
-      <View className="flex-grow">
+    <View>
+      <View>
         <Link
           asChild
           href={{
@@ -22,16 +23,14 @@ function PostCard(props: {
             params: { id: props.post.id },
           }}
         >
-          <Pressable className="">
-            <Text className="text-xl font-semibold text-primary">
-              {props.post.title}
-            </Text>
-            <Text className="mt-2 text-foreground">{props.post.content}</Text>
+          <Pressable>
+            <Text>{props.post.title}</Text>
+            <Text>{props.post.content}</Text>
           </Pressable>
         </Link>
       </View>
       <Pressable onPress={props.onDelete}>
-        <Text className="font-bold uppercase text-primary">Delete</Text>
+        <Text>Delete</Text>
       </Pressable>
     </View>
   );
@@ -52,31 +51,20 @@ function CreatePost() {
   });
 
   return (
-    <View className="mt-4 flex gap-2">
-      <TextInput
-        className="items-center rounded-md border border-input bg-background px-3 text-lg leading-[1.25] text-foreground"
-        value={title}
-        onChangeText={setTitle}
-        placeholder="Title"
-      />
+    <View>
+      <TextInput value={title} onChangeText={setTitle} placeholder="Title" />
       {error?.data?.zodError?.fieldErrors.title && (
-        <Text className="mb-2 text-destructive">
-          {error.data.zodError.fieldErrors.title}
-        </Text>
+        <Text>{error.data.zodError.fieldErrors.title}</Text>
       )}
       <TextInput
-        className="items-center rounded-md border border-input bg-background px-3 text-lg leading-[1.25] text-foreground"
         value={content}
         onChangeText={setContent}
         placeholder="Content"
       />
       {error?.data?.zodError?.fieldErrors.content && (
-        <Text className="mb-2 text-destructive">
-          {error.data.zodError.fieldErrors.content}
-        </Text>
+        <Text>{error.data.zodError.fieldErrors.content}</Text>
       )}
       <Pressable
-        className="flex items-center rounded bg-primary p-2"
         onPress={() => {
           mutate({
             title,
@@ -84,12 +72,10 @@ function CreatePost() {
           });
         }}
       >
-        <Text className="text-foreground">Create</Text>
+        <Text>Create</Text>
       </Pressable>
       {error?.data?.code === "UNAUTHORIZED" && (
-        <Text className="mt-2 text-destructive">
-          You need to be logged in to create a post
-        </Text>
+        <Text>You need to be logged in to create a post</Text>
       )}
     </View>
   );
