@@ -50,6 +50,8 @@ export const createTRPCContext = async (opts: {
   const source = opts.headers.get("x-trpc-source") ?? "unknown";
   //console.log(">>> tRPC Request from", source, "by", session?.user);
   console.log(">>> tRPC Request from", source);
+
+  // ADDED TO GET SCHOOL YEAR FROM COOKIE
   const schoolYearFromCookie = cookies().get("schoolYear")?.value;
   const schoolYearId = schoolYearFromCookie
     ? schoolYearFromCookie
@@ -61,6 +63,7 @@ export const createTRPCContext = async (opts: {
       message: "No school year not found",
     });
   }
+  // END OF ADDITION
 
   return {
     schoolYearId,

@@ -1,5 +1,7 @@
 "use client";
 
+import { useTransition } from "react";
+
 import { useLocale } from "@repo/i18n";
 //import { useConfig } from "@repo/hooks/use-config";
 //import { Style, styles } from "~/registry/styles";
@@ -11,6 +13,7 @@ import {
   SelectValue,
 } from "@repo/ui/select";
 
+import { createSchoolYearCookie } from "~/actions/schoolYear";
 import { api } from "~/trpc/react";
 
 interface SchoolYearSwitcherProps {
@@ -19,21 +22,29 @@ interface SchoolYearSwitcherProps {
 }
 export function SchoolYearSwitcher({ defaultValue }: SchoolYearSwitcherProps) {
   const schoolYearsQuery = api.schoolYear.all.useQuery();
+  const [isUpdatePending, startUpdateTransition] = useTransition();
+
   const { t } = useLocale();
-  const schoolYearCookieMutation = api.schoolYear.setAsCookie.useMutation();
+  if (isUpdatePending) {
+    //toast.loading(t("updating"));
+  }
   return (
     <Select
       defaultValue={defaultValue}
       onValueChange={(val) => {
-        schoolYearCookieMutation.mutate(val);
+        startUpdateTransition(() => {
+          return createSchoolYearCookie(val);
+        });
       }}
     >
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder={t("schoolYear")} />
+      <SelectTrigger className="h-8 w-[180px] border-none">
+        {t("year")} - <SelectValue placeholder={t("schoolYear")} />
       </SelectTrigger>
       <SelectContent>
         {schoolYearsQuery.data?.map((item) => (
-          <SelectItem value={item.id}>{item.id}</SelectItem>
+          <SelectItem key={item.id} value={item.id}>
+            {item.id}
+          </SelectItem>
         ))}
       </SelectContent>
     </Select>

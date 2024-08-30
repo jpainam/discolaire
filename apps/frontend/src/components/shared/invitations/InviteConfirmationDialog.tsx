@@ -106,7 +106,7 @@ function ConfirmationPhone() {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0)">
+      <g clipPath="url(#clip0)">
         <path
           d="M4.94622 93.854C4.94622 93.854 4.80406 93.4356 4.5741 92.6572"
           stroke="#69F0AE"

@@ -1,7 +1,7 @@
 import { getServerTranslations } from "@repo/i18n/server";
 
-import { api } from "~/trpc/server";
 //import { MobileNav } from "~/components/mobile-nav";
+import { getSchoolYearFromCookie } from "~/actions/schoolYear";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { MainNav } from "./main-nav";
 import { MobileNav } from "./mobile-nav";
@@ -13,7 +13,7 @@ export async function Header() {
   const { i18n } = await getServerTranslations();
   const lng = i18n.resolvedLanguage;
 
-  const schoolYear = await api.schoolYear.fromCookie();
+  const schoolYear = await getSchoolYearFromCookie();
 
   return (
     <header className="w-ful sticky top-0 z-40 flex flex-col items-center border-primary bg-background dark:border-muted-foreground/10 dark:bg-background">

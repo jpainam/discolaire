@@ -7,7 +7,7 @@ export function SignUpContactIcon() {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0)">
+      <g clipPath="url(#clip0)">
         <path d="M152 104.74H0.0375977V116H152V104.74Z" fill="#FAE0B5"></path>
         <path
           d="M151.789 104.749H0V104.373H151.857L151.789 104.749Z"
