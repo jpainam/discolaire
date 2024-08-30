@@ -1,71 +1,41 @@
 "use client";
 
+import { useLocale } from "@repo/i18n";
 //import { useConfig } from "@repo/hooks/use-config";
 //import { Style, styles } from "~/registry/styles";
-import { useState } from "react";
-import { ChevronDown } from "lucide-react";
-
-import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/select";
 
 import { api } from "~/trpc/react";
 
 interface SchoolYearSwitcherProps {
   className?: string;
-  currentSchoolYear?: string;
+  defaultValue?: string;
 }
-export function SchoolYearSwitcher({
-  currentSchoolYear,
-}: SchoolYearSwitcherProps) {
+export function SchoolYearSwitcher({ defaultValue }: SchoolYearSwitcherProps) {
   const schoolYearsQuery = api.schoolYear.all.useQuery();
-
-  const [value, setValue] = useState(currentSchoolYear);
   const { t } = useLocale();
-
-  //const classroomsQuery = api.classroom.all.useQuery();
-  const setSchoolYearCookieMutation = api.schoolYear.setAsCookie.useMutation();
-
-  const recentYear = schoolYearsQuery.data?.[0]?.id;
-  //const defaultValue = currentSchoolYear ?? recentYear;
-
-  if (!currentSchoolYear && recentYear) {
-    setSchoolYearCookieMutation.mutate(recentYear);
-  }
-
-  const handleOnChange = (val: string) => {
-    setValue(val);
-    setSchoolYearCookieMutation.mutate(val);
-  };
-
+  const schoolYearCookieMutation = api.schoolYear.setAsCookie.useMutation();
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant={"ghost"}
-          size={"sm"}
-          className="flex items-center gap-2 hover:bg-transparent hover:text-primary-foreground hover:dark:text-primary"
-        >
-          <span className="text-muted-foreground">{t("year")}</span>
-          <span>{value}</span>
-          <ChevronDown className="h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-14">
+    <Select
+      defaultValue={defaultValue}
+      onValueChange={(val) => {
+        schoolYearCookieMutation.mutate(val);
+      }}
+    >
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder={t("schoolYear")} />
+      </SelectTrigger>
+      <SelectContent>
         {schoolYearsQuery.data?.map((item) => (
-          <DropdownMenuItem
-            key={item.id}
-            onSelect={() => handleOnChange(item.id)}
-          >
-            <span className="text-xs">{item.id}</span>
-          </DropdownMenuItem>
+          <SelectItem value={item.id}>{item.id}</SelectItem>
         ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </SelectContent>
+    </Select>
   );
 }

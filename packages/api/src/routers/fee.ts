@@ -44,7 +44,7 @@ export const feeRouter = createTRPCRouter({
     return ctx.db.fee.findMany({
       where: {
         classroom: {
-          schoolYearId: ctx.session.schoolYearId,
+          schoolYearId: ctx.schoolYearId,
         },
       },
       include: {
@@ -109,9 +109,9 @@ export const feeRouter = createTRPCRouter({
       });
     }),
   monthly: protectedProcedure.query(async ({ ctx }) => {
-    return feeService.getMontlyFees(ctx.session.schoolYearId);
+    return feeService.getMontlyFees(ctx.schoolYearId);
   }),
   trend: protectedProcedure.query(async ({ ctx }) => {
-    return feeService.getAmountTrend(ctx.session.schoolYearId);
+    return feeService.getAmountTrend(ctx.schoolYearId);
   }),
 });

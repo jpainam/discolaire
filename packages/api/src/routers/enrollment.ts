@@ -19,7 +19,7 @@ export const enrollmentRouter = createTRPCRouter({
               studentId: studId,
               classroomId: input.classroomId,
               observation: input.observation,
-              schoolYearId: ctx.session.schoolYearId,
+              schoolYearId: ctx.schoolYearId,
             };
           })
         : [
@@ -27,7 +27,7 @@ export const enrollmentRouter = createTRPCRouter({
               studentId: input.studentId,
               classroomId: input.classroomId,
               observation: input.observation,
-              schoolYearId: ctx.session.schoolYearId,
+              schoolYearId: ctx.schoolYearId,
             },
           ];
       return ctx.db.enrollment.createMany({
@@ -65,7 +65,7 @@ export const enrollmentRouter = createTRPCRouter({
             {
               enrollments: {
                 none: {
-                  schoolYearId: ctx.session.schoolYearId,
+                  schoolYearId: ctx.schoolYearId,
                 },
               },
             },
@@ -104,6 +104,6 @@ export const enrollmentRouter = createTRPCRouter({
       });
     }),
   count: protectedProcedure.query(async ({ ctx }) => {
-    return enrollmentService.getCount(ctx.session.schoolYearId);
+    return enrollmentService.getCount(ctx.schoolYearId);
   }),
 });

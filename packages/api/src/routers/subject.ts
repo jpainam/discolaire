@@ -10,7 +10,7 @@ export const subjectRouter = createTRPCRouter({
       },
       where: {
         classroom: {
-          schoolYearId: ctx.session.schoolYearId,
+          schoolYearId: ctx.schoolYearId,
         },
       },
       orderBy: {

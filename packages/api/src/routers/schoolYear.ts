@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { z } from "zod";
 
+import { schoolYearService } from "../services/school-year-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const schoolYearRouter = createTRPCRouter({
@@ -18,20 +19,8 @@ export const schoolYearRouter = createTRPCRouter({
       },
     });
   }),
-  getDefault: protectedProcedure.query(async ({ ctx }) => {
-    const schoolyear = await ctx.db.schoolYear.findFirst({
-      where: {
-        isDefault: true,
-      },
-    });
-    if (!schoolyear) {
-      return ctx.db.schoolYear.findFirst({
-        orderBy: {
-          startDate: "desc",
-        },
-      });
-    }
-    return schoolyear;
+  getDefault: protectedProcedure.query(() => {
+    return schoolYearService.getDefault();
   }),
   fromCookie: protectedProcedure.query(() => {
     const schoolYear = cookies().get("schoolYear");
@@ -39,10 +28,12 @@ export const schoolYearRouter = createTRPCRouter({
     return schoolYearValue;
   }),
   setAsCookie: protectedProcedure.input(z.string()).mutation(({ input }) => {
-    cookies().set({
+    console.log("<<<<<Setting school year as cookie", input);
+    return cookies().set({
       name: "schoolYear",
       value: input,
-      //httpOnly: true,
+      // Set httpOnly to false when creating the cookie. So the cookie is visible in the client
+      httpOnly: false,
       path: "/",
     });
   }),

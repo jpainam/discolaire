@@ -29,7 +29,7 @@ export async function Header() {
       </div>
       <div className="hidden w-full items-center bg-primary px-2 py-2 text-primary-foreground dark:border-t dark:bg-background dark:text-secondary-foreground md:flex">
         <MainNav />
-        <SchoolYearSwitcher currentSchoolYear={schoolYear} />
+        <SchoolYearSwitcher defaultValue={schoolYear} />
         <ServiceSwitcher />
         <LanguageSwitcher currentLanguage={lng} />
       </div>

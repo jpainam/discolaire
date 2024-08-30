@@ -6,6 +6,7 @@
  * tl;dr - this is where all the tRPC server stuff is created and plugged in.
  * The pieces you will need to use are documented accordingly near the end
  */
+import { cookies } from "next/headers";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
@@ -13,6 +14,8 @@ import { ZodError } from "zod";
 import type { Session } from "@repo/auth";
 import { auth, validateToken } from "@repo/auth";
 import { db } from "@repo/db";
+
+import { schoolYearService } from "./services/school-year-service";
 
 /**
  * Isomorphic Session getter for API requests
@@ -47,9 +50,21 @@ export const createTRPCContext = async (opts: {
   const source = opts.headers.get("x-trpc-source") ?? "unknown";
   //console.log(">>> tRPC Request from", source, "by", session?.user);
   console.log(">>> tRPC Request from", source);
+  const schoolYearFromCookie = cookies().get("schoolYear")?.value;
+  const schoolYearId = schoolYearFromCookie
+    ? schoolYearFromCookie
+    : (await schoolYearService.getDefault())?.id;
+
+  if (!schoolYearId) {
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "No school year not found",
+    });
+  }
 
   return {
-    session: { ...session, schoolYearId: "2022-2023" },
+    schoolYearId,
+    session,
     db,
     token: authToken,
   };
@@ -134,7 +149,7 @@ export const publicProcedure = t.procedure.use(timingMiddleware);
 export const protectedProcedure = t.procedure
   .use(timingMiddleware)
   .use(({ ctx, next }) => {
-    if (!ctx.session.user) {
+    if (!ctx.session?.user) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
     return next({

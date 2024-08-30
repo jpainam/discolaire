@@ -18,7 +18,7 @@ export const classroomRouter = createTRPCRouter({
         levelId: "asc",
       },
       where: {
-        schoolYearId: ctx.session.schoolYearId,
+        schoolYearId: ctx.schoolYearId,
       },
       include: {
         level: true,
@@ -121,10 +121,10 @@ export const classroomRouter = createTRPCRouter({
           levelId: input.levelId,
           shortName: input.shortName,
           reportName: input.reportName,
-          schoolYearId: ctx.session.schoolYearId,
+          schoolYearId: ctx.schoolYearId,
           cycleId: input.cycleId,
           sectionId: input.sectionId,
-          //createdBy: { connect: { id: ctx.session.user.id } },
+          //createdById: { connect: { id: ctx.session.user.id } },
         },
       });
     }),
@@ -172,7 +172,7 @@ export const classroomRouter = createTRPCRouter({
         include: {
           transactions: {
             where: {
-              schoolYearId: ctx.session.schoolYearId,
+              schoolYearId: ctx.schoolYearId,
               status: "COMPLETED",
             },
           },

@@ -9,7 +9,7 @@ export const programRouter = createTRPCRouter({
         startDate: "desc",
       },
       where: {
-        schoolYearId: ctx.session.schoolYearId,
+        schoolYearId: ctx.schoolYearId,
       },
       include: {
         category: true,
@@ -21,7 +21,7 @@ export const programRouter = createTRPCRouter({
   themes: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.programTheme.findMany({
       where: {
-        schoolYearId: ctx.session.schoolYearId,
+        schoolYearId: ctx.schoolYearId,
       },
       include: {
         course: true,

@@ -30,7 +30,7 @@ export const transactionRouter = createTRPCRouter({
         },
         where: {
           AND: [
-            { schoolYearId: ctx.session.schoolYearId },
+            { schoolYearId: ctx.schoolYearId },
             {
               createdAt: {
                 gte: input.from,
@@ -79,7 +79,7 @@ export const transactionRouter = createTRPCRouter({
   quotas: protectedProcedure.query(async ({ ctx }) => {
     const classrooms = await ctx.db.classroom.findMany({
       where: {
-        schoolYearId: ctx.session.schoolYearId,
+        schoolYearId: ctx.schoolYearId,
       },
       include: {
         section: true,
@@ -104,7 +104,7 @@ export const transactionRouter = createTRPCRouter({
       },
       where: {
         classroom: {
-          schoolYearId: ctx.session.schoolYearId,
+          schoolYearId: ctx.schoolYearId,
         },
       },
     });
@@ -119,7 +119,7 @@ export const transactionRouter = createTRPCRouter({
 
     const transactions = await ctx.db.transaction.findMany({
       where: {
-        schoolYearId: ctx.session.schoolYearId,
+        schoolYearId: ctx.schoolYearId,
         account: {
           studentId: {
             in: enrollmentIds,
@@ -190,7 +190,7 @@ export const transactionRouter = createTRPCRouter({
           amount: input.amount,
           transactionRef: transactionRef,
           transactionType: input.transactionType,
-          schoolYearId: ctx.session.schoolYearId,
+          schoolYearId: ctx.schoolYearId,
           description: input.description,
         },
       });
@@ -200,7 +200,7 @@ export const transactionRouter = createTRPCRouter({
   trends: protectedProcedure.query(async ({ ctx }) => {
     const result = await ctx.db.transaction.groupBy({
       where: {
-        schoolYearId: ctx.session.schoolYearId,
+        schoolYearId: ctx.schoolYearId,
       },
       by: ["createdAt"],
       _sum: {
@@ -236,7 +236,7 @@ export const transactionRouter = createTRPCRouter({
         },
         where: {
           classroom: {
-            schoolYearId: ctx.session.schoolYearId,
+            schoolYearId: ctx.schoolYearId,
           },
         },
       });
@@ -245,7 +245,7 @@ export const transactionRouter = createTRPCRouter({
           amount: true,
         },
         where: {
-          schoolYearId: ctx.session.schoolYearId,
+          schoolYearId: ctx.schoolYearId,
           status: "VALIDATED",
         },
       });

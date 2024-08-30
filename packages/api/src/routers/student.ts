@@ -81,11 +81,11 @@ export const studentRouter = createTRPCRouter({
             ...student,
             isRepeating: await studentService.isRepeating(
               student.id,
-              ctx.session.schoolYearId,
+              ctx.schoolYearId,
             ),
             classroom: await studentService.classroom(
               student.id,
-              ctx.session.schoolYearId,
+              ctx.schoolYearId,
             ),
           };
         }),
@@ -163,7 +163,7 @@ export const studentRouter = createTRPCRouter({
 
   classroom: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
     // return the current classroom
-    return studentService.classroom(input, ctx.session.schoolYearId);
+    return studentService.classroom(input, ctx.schoolYearId);
   }),
 
   get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
@@ -194,10 +194,7 @@ export const studentRouter = createTRPCRouter({
         message: "Student not found",
       });
     }
-    const classroom = await studentService.classroom(
-      input,
-      ctx.session.schoolYearId,
-    );
+    const classroom = await studentService.classroom(input, ctx.schoolYearId);
     return {
       ...student,
       classroom: classroom,
@@ -234,7 +231,7 @@ export const studentRouter = createTRPCRouter({
       return studentService.getGrades({
         studentId: input.id,
         termId: input.termId,
-        schoolYearId: ctx.session.schoolYearId,
+        schoolYearId: ctx.schoolYearId,
       });
     }),
   unlinkedContacts: protectedProcedure
@@ -309,7 +306,7 @@ export const studentRouter = createTRPCRouter({
         account: {
           studentId: input,
         },
-        schoolYearId: ctx.session.schoolYearId,
+        schoolYearId: ctx.schoolYearId,
       },
       include: {
         journal: true,

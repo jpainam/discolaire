@@ -9,7 +9,7 @@ export const termRouter = createTRPCRouter({
         startDate: "asc",
       },
       where: {
-        schoolYearId: ctx.session.schoolYearId,
+        schoolYearId: ctx.schoolYearId,
       },
     });
   }),
