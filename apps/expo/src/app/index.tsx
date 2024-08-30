@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Pressable, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Link, Stack } from "expo-router";
+import { Link, router, Stack } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 
 import type { RouterOutputs } from "~/utils/api";
@@ -119,7 +119,12 @@ export default function Index() {
         </Text>
 
         <MobileAuth />
-
+        <Button
+          title="Welcome"
+          onPress={() => {
+            router.push("/welcome");
+          }}
+        ></Button>
         <View className="py-2">
           <Text className="font-semibold italic text-primary">
             Press on a post

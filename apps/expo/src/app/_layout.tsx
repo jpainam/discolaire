@@ -60,6 +60,7 @@ export default function RootLayout() {
           <Stack.Screen name="modal" options={{ presentation: "modal" }} />
           <Stack.Screen name="calendar" options={{ headerShown: false }} />
           <Stack.Screen name="auth" options={{ headerShown: false }} />
+          <Stack.Screen name="welcome" options={{ headerShown: false }} />
         </Stack>
       </Provider>
     </ThemeProvider>
