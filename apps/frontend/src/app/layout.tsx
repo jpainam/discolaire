@@ -19,7 +19,6 @@ import { ProgressBar } from "~/components/next-progress";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { ThemeProvider } from "~/components/theme-provider";
 import { env } from "~/env";
-import GlobalAlert from "~/layouts/GlobalAlert";
 import GlobalModal from "~/layouts/GlobalModal";
 import GlobalSheet from "~/layouts/GlobalSheet";
 import AuthProvider from "~/providers/auth-provider";
@@ -78,7 +77,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
               <AuthProvider session={session}>
                 <ConfirmDialogProvider>{props.children}</ConfirmDialogProvider>
                 <GlobalSheet />
-                <GlobalAlert />
+
                 <GlobalModal />
                 <ReactQueryDevtools initialIsOpen={false} />
               </AuthProvider>

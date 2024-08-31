@@ -360,7 +360,7 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
             className="bg-destructive text-destructive-foreground"
             onSelect={async () => {
               const isConfirmed = await confirm({
-                title: t("delete", { name: classroom.name }),
+                title: t("are_you_sure"),
                 description: t("delete_confirmation"),
               });
               if (isConfirmed) {
