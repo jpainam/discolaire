@@ -1,8 +1,10 @@
+import type { ColorValue, TextInputProps, ViewStyle } from "react-native";
 import React from "react";
-import { ColorValue, TextInput, TextInputProps, ViewStyle } from "react-native";
+import { TextInput } from "react-native";
 
-import Colors from "@/constants/Colors";
-import { ThemeProps, useThemeColor, View } from "../Themed";
+import type { ThemeProps } from "../Themed";
+import Colors from "~/constants/Colors";
+import { useThemeColor, View } from "../Themed";
 import { useColorScheme } from "../useColorScheme";
 
 type Props = ThemeProps &
@@ -17,7 +19,7 @@ type Props = ThemeProps &
   };
 
 const StyledTextInput: React.FC<Props> = React.forwardRef(
-  (props: Props, ref: any) => {
+  (props: Props, ref: unknown) => {
     const {
       style,
       lightColor,
@@ -25,8 +27,8 @@ const StyledTextInput: React.FC<Props> = React.forwardRef(
       containerStyle,
       leftContent,
       rightContent,
-      borderWidth = containerStyle?.borderWidth || 1,
-      borderRadius = containerStyle?.borderRadius || 8,
+      borderWidth = containerStyle?.borderWidth ?? 1,
+      borderRadius = containerStyle?.borderRadius ?? 8,
       ...otherProps
     } = props;
 
@@ -41,8 +43,8 @@ const StyledTextInput: React.FC<Props> = React.forwardRef(
           borderColor: borderColor,
           borderWidth: borderWidth,
           borderRadius: borderRadius,
-          flexDirection: containerStyle?.flexDirection || "row",
-          paddingHorizontal: containerStyle?.paddingHorizontal || 20,
+          flexDirection: containerStyle?.flexDirection ?? "row",
+          paddingHorizontal: containerStyle?.paddingHorizontal ?? 20,
           alignItems: "center",
           justifyContent: "space-between",
         }}
@@ -50,6 +52,7 @@ const StyledTextInput: React.FC<Props> = React.forwardRef(
         {leftContent}
         <TextInput
           {...otherProps}
+          //@ts-expect-error TODO   fix this
           ref={ref}
           style={[
             {
@@ -66,6 +69,6 @@ const StyledTextInput: React.FC<Props> = React.forwardRef(
         {rightContent}
       </View>
     );
-  }
+  },
 );
 export default StyledTextInput;

@@ -38,34 +38,29 @@ export function StudentDataTableActions({ table }: StudentToolbarActionsProps) {
         <Button
           variant={"destructive"}
           className="h-8"
-          onClick={() => {
+          onClick={async () => {
             const selectedStudentIds = table
               .getFilteredSelectedRowModel()
               .rows.map((row) => row.original.id);
-            openAlert({
-              title: t("delete"),
+            const isConfirmed = await confirm({
+              title: t("are_you_sure"),
               description: t("delete_confirmation"),
-              onConfirm: () => {
-                toast.promise(
-                  deleteStudentMutation.mutateAsync(selectedStudentIds),
-                  {
-                    loading: t("deleting"),
-                    success: () => {
-                      table.toggleAllRowsSelected(false);
-                      closeAlert();
-                      return t("deleted_successfully");
-                    },
-                    error: (error) => {
-                      return getErrorMessage(error);
-                    },
-                  },
-                );
-              },
-              onCancel: () => {
-                closeAlert();
-                table.toggleAllRowsSelected(false);
-              },
             });
+            if (isConfirmed) {
+              toast.promise(
+                deleteStudentMutation.mutateAsync(selectedStudentIds),
+                {
+                  loading: t("deleting"),
+                  success: () => {
+                    table.toggleAllRowsSelected(false);
+                    return t("deleted_successfully");
+                  },
+                  error: (error) => {
+                    return getErrorMessage(error);
+                  },
+                },
+              );
+            }
           }}
         >
           <Trash2 className="mr-2 h-4 w-4" />
