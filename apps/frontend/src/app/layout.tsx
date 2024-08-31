@@ -23,6 +23,7 @@ import GlobalAlert from "~/layouts/GlobalAlert";
 import GlobalModal from "~/layouts/GlobalModal";
 import GlobalSheet from "~/layouts/GlobalSheet";
 import AuthProvider from "~/providers/auth-provider";
+import ConfirmDialogProvider from "~/providers/confirm-dialog-provider";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -75,7 +76,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
             <ProgressBar />
             <TRPCReactProvider>
               <AuthProvider session={session}>
-                {props.children}
+                <ConfirmDialogProvider>{props.children}</ConfirmDialogProvider>
                 <GlobalSheet />
                 <GlobalAlert />
                 <GlobalModal />
