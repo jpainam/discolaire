@@ -6,11 +6,11 @@ import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useAlert } from "@repo/hooks/use-alert";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
 
 import { routes } from "~/configs/routes";
@@ -133,7 +133,7 @@ export const fetchSubjectsColumns = ({
 
 function ActionsCell({ subject }: { subject: SubjectGetQueryOutput }) {
   const { t } = useLocale();
-  const { openAlert, closeAlert } = useAlert();
+  const confirm = useConfirm();
   const { openSheet } = useSheet();
   const utils = api.useUtils();
   const deleteSubjectQuery = api.subject.delete.useMutation({
@@ -161,23 +161,22 @@ function ActionsCell({ subject }: { subject: SubjectGetQueryOutput }) {
       <Button
         disabled={deleteSubjectQuery.isPending}
         variant={"ghost"}
-        onClick={() => {
-          openAlert({
+        onClick={async () => {
+          const isConfirmed = await confirm({
             title: t("delete"),
-            description: t("delete_confirmation"),
-            onConfirm: () => {
-              toast.promise(deleteSubjectQuery.mutateAsync(subject.id), {
-                loading: t("deleting"),
-                error: (error) => {
-                  return getErrorMessage(error);
-                },
-                success: () => {
-                  closeAlert();
-                  return t("deleted_successfully");
-                },
-              });
-            },
+            confirmText: t("delete_confirmation"),
           });
+          if (isConfirmed) {
+            toast.promise(deleteSubjectQuery.mutateAsync(subject.id), {
+              loading: t("deleting"),
+              error: (error) => {
+                return getErrorMessage(error);
+              },
+              success: () => {
+                return t("deleted_successfully");
+              },
+            });
+          }
         }}
         size={"icon"}
       >

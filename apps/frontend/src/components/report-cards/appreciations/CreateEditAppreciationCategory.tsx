@@ -2,8 +2,8 @@ import { useState } from "react";
 import { XIcon } from "lucide-react";
 import { toast } from "sonner";
 
-import { useAlert } from "@repo/hooks/use-alert";
 import { useLocale } from "@repo/i18n";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import { Input } from "@repo/ui/input";
 
 import type { AppreciationCategory } from "~/types/appreciation";
@@ -18,7 +18,7 @@ export function CreateEditAppreciationCategory({
   onCompleted?: () => void;
 }) {
   const [value, setValue] = useState(category?.name);
-  const { openAlert, closeAlert } = useAlert();
+  const confirm = useConfirm();
   const deleteAppreciationCategory =
     api.appreciation.deleteCategory.useMutation();
   const updateAppreciationCategory =
@@ -48,35 +48,31 @@ export function CreateEditAppreciationCategory({
           <div className="h-1.5 w-1.5 rounded-full bg-destructive" />
           <span
             className="cursor-pointer text-xs hover:text-destructive hover:underline"
-            onClick={() => {
-              if (category) {
-                openAlert({
-                  title: t("delete"),
-                  description: t("delete_confirmation"),
-                  onConfirm: () => {
-                    toast.promise(
-                      deleteAppreciationCategory.mutateAsync(category.id),
-                      {
-                        loading: t("deleting"),
-                        success: async () => {
-                          await utils.appreciation.categories.invalidate();
-                          closeAlert();
-                          onCompleted?.();
-                          return t("deleted");
-                        },
-                        error: (error) => {
-                          closeAlert();
-                          return getErrorMessage(error);
-                        },
-                      },
-                    );
+            onClick={async () => {
+              if (!category) {
+                return;
+              }
+              const isConfirmed = await confirm({
+                title: t("delete"),
+                confirmText: t("delete"),
+                cancelText: t("cancel"),
+                description: t("delete_confirmation"),
+              });
+              if (isConfirmed) {
+                toast.promise(
+                  deleteAppreciationCategory.mutateAsync(category.id),
+                  {
+                    loading: t("deleting"),
+                    success: async () => {
+                      await utils.appreciation.categories.invalidate();
+                      onCompleted?.();
+                      return t("deleted");
+                    },
+                    error: (error) => {
+                      return getErrorMessage(error);
+                    },
                   },
-                  onCancel: () => {
-                    closeAlert();
-                  },
-                });
-              } else {
-                onCompleted?.();
+                );
               }
             }}
           >

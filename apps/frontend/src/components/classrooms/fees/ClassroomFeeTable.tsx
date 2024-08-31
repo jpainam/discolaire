@@ -6,10 +6,10 @@ import { sumBy } from "lodash";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { useAlert } from "@repo/hooks/use-alert";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import {
   DropdownMenu,
@@ -39,9 +39,11 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
   const { t, i18n } = useLocale();
   const rowClassName = "border";
   const { fullDateFormatter } = useDateFormat();
-  const feeMutation = api.fee.delete.useMutation();
+  const deleteFeeMutation = api.fee.delete.useMutation({
+    onSettled: () => api.useUtils().fee.invalidate(),
+  });
   const { openModal } = useModal();
-  const { openAlert, closeAlert } = useAlert();
+  const confirm = useConfirm();
   if (feesQuery.isPending) {
     return (
       <DataTableSkeleton
@@ -125,29 +127,25 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                           className="text-destructive"
-                          onSelect={() => {
-                            openAlert({
+                          onSelect={async () => {
+                            const isConfirmed = await confirm({
                               title: t("delete"),
                               description: t("delete_confirmation"),
-                              onConfirm: () => {
-                                toast.promise(
-                                  feeMutation.mutateAsync({ id: fee.id }),
-                                  {
-                                    loading: t("deleting"),
-                                    success: () => {
-                                      closeAlert();
-                                      return t("deleted_successfully");
-                                    },
-                                    error: (error) => {
-                                      return getErrorMessage(error);
-                                    },
-                                  },
-                                );
-                              },
-                              onCancel: () => {
-                                closeAlert();
-                              },
                             });
+                            if (isConfirmed) {
+                              toast.promise(
+                                deleteFeeMutation.mutateAsync({ id: fee.id }),
+                                {
+                                  loading: t("deleting"),
+                                  success: () => {
+                                    return t("deleted_successfully");
+                                  },
+                                  error: (error) => {
+                                    return getErrorMessage(error);
+                                  },
+                                },
+                              );
+                            }
                           }}
                         >
                           <Trash2 className="mr-2 h-3 w-3" />

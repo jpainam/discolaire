@@ -6,9 +6,9 @@ import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useAlert } from "@repo/hooks/use-alert";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 
 import { exportTableToCSV } from "~/lib/export";
 import { getErrorMessage } from "~/lib/handle-error";
@@ -22,39 +22,38 @@ export function FeeDataTableActions({
   table: Table<FeeProcedureOutput>;
 }) {
   const { t } = useLocale();
-  const { openAlert } = useAlert();
-  const feesMutation = api.fee.deleteMany.useMutation();
-  const utils = api.useUtils();
+  const confirm = useConfirm();
+  const feesMutation = api.fee.deleteMany.useMutation({
+    onSettled: () => api.useUtils().fee.invalidate(),
+  });
   return (
     <div className="flex items-center gap-2">
       {table.getFilteredSelectedRowModel().rows.length > 0 ? (
         <Button
           size={"sm"}
-          onClick={() => {
-            openAlert({
+          onClick={async () => {
+            const isConfirmed = await confirm({
               title: t("delete"),
+              confirmText: t("delete"),
+              cancelText: t("cancel"),
               description: t("delete_confirmation"),
-              onConfirm: () => {
-                const selectedRowIds = table
-                  .getFilteredSelectedRowModel()
-                  .rows.map((row) => row.original.id);
-
-                toast.promise(
-                  feesMutation.mutateAsync({ ids: selectedRowIds }),
-                  {
-                    loading: t("deleting"),
-                    success: () => {
-                      table.toggleAllRowsSelected(false);
-                      void utils.fee.all.invalidate();
-                      return t("deleted_successfully");
-                    },
-                    error: (error) => {
-                      return getErrorMessage(error);
-                    },
-                  },
-                );
-              },
             });
+            if (isConfirmed) {
+              const selectedRowIds = table
+                .getFilteredSelectedRowModel()
+                .rows.map((row) => row.original.id);
+
+              toast.promise(feesMutation.mutateAsync({ ids: selectedRowIds }), {
+                loading: t("deleting"),
+                success: () => {
+                  table.toggleAllRowsSelected(false);
+                  return t("deleted_successfully");
+                },
+                error: (error) => {
+                  return getErrorMessage(error);
+                },
+              });
+            }
           }}
           variant={"destructive"}
         >

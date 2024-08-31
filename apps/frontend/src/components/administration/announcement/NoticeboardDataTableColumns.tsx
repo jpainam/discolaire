@@ -9,11 +9,11 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import type { FlatBadgeProps } from "@repo/ui/FlatBadge";
-import { useAlert } from "@repo/hooks/use-alert";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
 import {
   DropdownMenu,
@@ -203,7 +203,7 @@ function ActionCells({
   noticeboard: AnnouncementAllProcedureOutput;
 }) {
   const { openSheet } = useSheet();
-  const { openAlert, closeAlert } = useAlert();
+  const confirm = useConfirm();
   const { t } = useLocale();
 
   const utils = api.useUtils();
@@ -241,28 +241,24 @@ function ActionCells({
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="bg-destructive text-destructive-foreground"
-            onSelect={() => {
-              openAlert({
-                title: t("delete", { name: noticeboard.title }),
+            onSelect={async () => {
+              const isConfirmed = await confirm({
+                title: t("are_you_sure?"),
                 description: t("delete_confirmation"),
-                onCancel: () => {
-                  closeAlert();
-                },
-                onConfirm: () => {
-                  toast.promise(
-                    deleteAnnouncementMutation.mutateAsync(noticeboard.id),
-                    {
-                      loading: t("deleting"),
-                      success: async () => {
-                        closeAlert();
-                        await utils.announcement.all.invalidate();
-                        return t("deleted_successfully");
-                      },
-                      error: (error) => getErrorMessage(error),
-                    },
-                  );
-                },
               });
+              if (isConfirmed) {
+                toast.promise(
+                  deleteAnnouncementMutation.mutateAsync(noticeboard.id),
+                  {
+                    loading: t("deleting"),
+                    success: async () => {
+                      await utils.announcement.all.invalidate();
+                      return t("deleted_successfully");
+                    },
+                    error: (error) => getErrorMessage(error),
+                  },
+                );
+              }
             }}
           >
             <Trash2 className="mr-2 size-4" />

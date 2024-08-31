@@ -2,8 +2,8 @@ import { useState } from "react";
 import { XIcon } from "lucide-react";
 import { toast } from "sonner";
 
-import { useAlert } from "@repo/hooks/use-alert";
 import { useLocale } from "@repo/i18n";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import { Textarea } from "@repo/ui/textarea";
 
 import type { Appreciation, AppreciationCategory } from "~/types/appreciation";
@@ -20,10 +20,12 @@ export function CreateEditAppreciation({
   onCompleted?: () => void;
 }) {
   const [value, setValue] = useState(category?.name);
-  const { openAlert, closeAlert } = useAlert();
+  const confirm = useConfirm();
   const { t } = useLocale();
   const utils = api.useUtils();
-  const deleteAppreciationMutation = api.appreciation.delete.useMutation();
+  const deleteAppreciationMutation = api.appreciation.delete.useMutation({
+    onSettled: () => api.useUtils().appreciation.invalidate(),
+  });
   const createAppreciationMutation = api.appreciation.create.useMutation();
   const updateAppreciationMutation = api.appreciation.update.useMutation();
 
@@ -46,35 +48,30 @@ export function CreateEditAppreciation({
           <div className="h-1.5 w-1.5 rounded-full bg-destructive" />
           <span
             className="cursor-pointer text-xs hover:text-destructive hover:underline"
-            onClick={() => {
-              if (category && appreciation) {
-                openAlert({
-                  title: t("delete"),
-                  description: t("delete_confirmation"),
-                  onConfirm: () => {
-                    toast.promise(
-                      deleteAppreciationMutation.mutateAsync(appreciation.id),
-                      {
-                        loading: t("deleting"),
-                        success: async () => {
-                          await utils.appreciation.invalidate();
-                          closeAlert();
-                          onCompleted?.();
-                          return t("deleted");
-                        },
-                        error: (error) => {
-                          closeAlert();
-                          return getErrorMessage(error);
-                        },
-                      },
-                    );
+            onClick={async () => {
+              if (!category || !appreciation) {
+                return;
+              }
+              const isConfirmed = await confirm({
+                title: t("delete"),
+                confirmText: t("delete"),
+                cancelText: t("cancel"),
+                description: t("delete_confirmation"),
+              });
+              if (isConfirmed) {
+                toast.promise(
+                  deleteAppreciationMutation.mutateAsync(appreciation.id),
+                  {
+                    loading: t("deleting"),
+                    success: () => {
+                      onCompleted?.();
+                      return t("deleted");
+                    },
+                    error: (error) => {
+                      return getErrorMessage(error);
+                    },
                   },
-                  onCancel: () => {
-                    closeAlert();
-                  },
-                });
-              } else {
-                onCompleted?.();
+                );
               }
             }}
           >

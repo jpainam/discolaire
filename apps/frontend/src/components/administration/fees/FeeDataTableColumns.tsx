@@ -8,11 +8,11 @@ import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useAlert } from "@repo/hooks/use-alert";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
 import {
   DropdownMenu,
@@ -167,7 +167,7 @@ export function fetchFeesColumns({
 function ActionCell({ fee }: { fee: Fee }) {
   const { t } = useLocale();
   const { openModal } = useModal();
-  const { openAlert } = useAlert();
+  const confirm = useConfirm();
   const feeMutation = api.fee.delete.useMutation();
   const utils = api.useUtils();
   return (
@@ -193,23 +193,25 @@ function ActionCell({ fee }: { fee: Fee }) {
           <Separator />
           <DropdownMenuItem
             disabled={feeMutation.isPending}
-            onSelect={() => {
-              openAlert({
+            onSelect={async () => {
+              const isConfirmed = await confirm({
                 title: t("delete"),
+                confirmText: t("delete"),
+                cancelText: t("cancel"),
                 description: t("delete_confirmation"),
-                onConfirm: () => {
-                  toast.promise(feeMutation.mutateAsync({ id: fee.id }), {
-                    loading: t("deleting"),
-                    error: (error) => {
-                      return getErrorMessage(error);
-                    },
-                    success: () => {
-                      void utils.fee.all.invalidate();
-                      return t("delete_successfully");
-                    },
-                  });
-                },
               });
+              if (isConfirmed) {
+                toast.promise(feeMutation.mutateAsync({ id: fee.id }), {
+                  loading: t("deleting"),
+                  error: (error) => {
+                    return getErrorMessage(error);
+                  },
+                  success: () => {
+                    void utils.fee.all.invalidate();
+                    return t("delete_successfully");
+                  },
+                });
+              }
             }}
             className="bg-destructive text-destructive-foreground"
           >

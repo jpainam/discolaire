@@ -4,7 +4,6 @@ import { ExternalLink, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useAlert } from "@repo/hooks/use-alert";
 import { useModal } from "@repo/hooks/use-modal";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
@@ -16,6 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/card";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import { EmptyState } from "@repo/ui/EmptyState";
 import {
   Pagination,
@@ -49,7 +49,7 @@ export default function StudentContactList({
   const { openModal } = useModal();
   const { t, i18n } = useLocale();
   const router = useRouter();
-  const { openAlert } = useAlert();
+  const confirm = useConfirm();
 
   const deleteStudentContactMutation = api.studentContact.delete.useMutation();
   const utils = api.useUtils();
@@ -171,37 +171,35 @@ export default function StudentContactList({
                     <PaginationContent>
                       <PaginationItem>
                         <Button
-                          onClick={() => {
-                            openAlert({
+                          onClick={async () => {
+                            if (!contact?.id) {
+                              return;
+                            }
+                            const isConfirmed = await confirm({
                               title: t("delete"),
-                              description: t("delete_confirmation"),
-                              onConfirm: () => {
-                                if (!contact) {
-                                  toast.error(
-                                    t("student id or contact id is missing"),
-                                  );
-                                  return;
-                                }
-                                toast.promise(
-                                  deleteStudentContactMutation.mutateAsync({
-                                    studentId: studentcontact.studentId,
-                                    contactId: contact.id,
-                                  }),
-                                  {
-                                    loading: t("deleting"),
-                                    success: async () => {
-                                      await utils.student.contacts.invalidate();
-                                      await utils.contact.students.invalidate();
-
-                                      return t("deleted_successfully");
-                                    },
-                                    error: (error) => {
-                                      return getErrorMessage(error);
-                                    },
-                                  },
-                                );
-                              },
+                              confirmText: t("delete_confirmation"),
                             });
+
+                            if (isConfirmed) {
+                              toast.promise(
+                                deleteStudentContactMutation.mutateAsync({
+                                  studentId: studentcontact.studentId,
+                                  contactId: contact.id,
+                                }),
+                                {
+                                  loading: t("deleting"),
+                                  success: async () => {
+                                    await utils.student.contacts.invalidate();
+                                    await utils.contact.students.invalidate();
+
+                                    return t("deleted_successfully");
+                                  },
+                                  error: (error) => {
+                                    return getErrorMessage(error);
+                                  },
+                                },
+                              );
+                            }
                           }}
                           size="icon"
                           className="w-8"

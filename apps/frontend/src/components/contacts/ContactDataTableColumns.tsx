@@ -9,10 +9,10 @@ import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useAlert } from "@repo/hooks/use-alert";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
 import {
   DropdownMenu,
@@ -169,7 +169,7 @@ export function getColumns({
       id: "actions",
       cell: function Cell({ row }) {
         const { openSheet } = useSheet();
-        const { openAlert, closeAlert } = useAlert();
+        const confirm = useConfirm();
         const contact = row.original;
         const utils = api.useUtils();
         const deleteContactMutation = api.contact.delete.useMutation({
@@ -215,26 +215,25 @@ export function getColumns({
               <DropdownMenuItem
                 disabled={deleteContactMutation.isPending}
                 className="text-destructive"
-                onSelect={() => {
-                  openAlert({
+                onSelect={async () => {
+                  const isConfirmed = await confirm({
                     title: t("delete"),
                     description: t("delete_confirmation"),
-                    onConfirm: () => {
-                      toast.promise(
-                        deleteContactMutation.mutateAsync(contact.id),
-                        {
-                          loading: t("deleting"),
-                          success: () => {
-                            closeAlert();
-                            return t("deleted_successfully");
-                          },
-                          error: (error) => {
-                            return getErrorMessage(error);
-                          },
-                        },
-                      );
-                    },
                   });
+                  if (isConfirmed) {
+                    toast.promise(
+                      deleteContactMutation.mutateAsync(contact.id),
+                      {
+                        loading: t("deleting"),
+                        success: () => {
+                          return t("deleted_successfully");
+                        },
+                        error: (error) => {
+                          return getErrorMessage(error);
+                        },
+                      },
+                    );
+                  }
                 }}
               >
                 <Trash2 className="mr-2 h-4 w-4" />

@@ -4,10 +4,10 @@ import Link from "next/link";
 import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { useAlert } from "@repo/hooks/use-alert";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import {
   DropdownMenu,
@@ -36,7 +36,7 @@ import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 export function ContactStudentTable({ id }: { id: string }) {
   const studentContactsQuery = api.contact.students.useQuery(id);
   const utils = api.useUtils();
-  const { openAlert } = useAlert();
+  const confirm = useConfirm();
   const router = useRouter();
   const { t } = useLocale();
   const deleteStudentContactMutation = api.studentContact.delete.useMutation();
@@ -127,30 +127,31 @@ export function ContactStudentTable({ id }: { id: string }) {
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
                         className="text-destructive"
-                        onSelect={() => {
-                          openAlert({
+                        onSelect={async () => {
+                          if (!student.id) return;
+
+                          const isConfirmed = await confirm({
                             title: t("delete"),
                             description: t("delete_confirmation"),
-                            onConfirm: () => {
-                              if (!student.id) return;
-                              toast.promise(
-                                deleteStudentContactMutation.mutateAsync({
-                                  contactId: stc.contactId,
-                                  studentId: student.id,
-                                }),
-                                {
-                                  success: async () => {
-                                    await utils.contact.students.invalidate();
-                                    await utils.student.contacts.invalidate();
-                                    return t("delete_successfully");
-                                  },
-                                  error: (error) => {
-                                    return getErrorMessage(error);
-                                  },
-                                },
-                              );
-                            },
                           });
+                          if (isConfirmed) {
+                            toast.promise(
+                              deleteStudentContactMutation.mutateAsync({
+                                contactId: stc.contactId,
+                                studentId: student.id,
+                              }),
+                              {
+                                success: async () => {
+                                  await utils.contact.students.invalidate();
+                                  await utils.student.contacts.invalidate();
+                                  return t("delete_successfully");
+                                },
+                                error: (error) => {
+                                  return getErrorMessage(error);
+                                },
+                              },
+                            );
+                          }
                         }}
                       >
                         <Trash2 className="mr-2 h-4 w-4" />

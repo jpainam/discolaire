@@ -5,10 +5,10 @@ import { Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useAlert } from "@repo/hooks/use-alert";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
@@ -26,7 +26,7 @@ export function NoticeboardDataTableActions({
   table,
 }: TasksTableToolbarActionsProps) {
   const { openSheet } = useSheet();
-  const { openAlert, closeAlert } = useAlert();
+  const confirm = useConfirm();
   const { t } = useLocale();
   const utils = api.useUtils();
   const deleteAnnouncementMutation = api.announcement.delete.useMutation({
@@ -38,37 +38,34 @@ export function NoticeboardDataTableActions({
       {table.getFilteredSelectedRowModel().rows.length > 0 ? (
         <Button
           variant={"destructive"}
-          onClick={() => {
+          onClick={async () => {
             const selectedNotices = table
               .getFilteredSelectedRowModel()
               .rows.map((row) => row.original);
-            openAlert({
+            const isConfirmed = await confirm({
               title: t("delete"),
+              confirmText: t("delete"),
+              cancelText: t("cancel"),
               description: `${t("delete_confirmation")} ${selectedNotices.map((cl) => cl.title).join(", ")}?`,
-              onConfirm: () => {
-                toast.promise(
-                  deleteAnnouncementMutation.mutateAsync(
-                    selectedNotices.map((cl) => cl.id),
-                  ),
-                  {
-                    loading: t("deleting"),
-                    success: () => {
-                      table.toggleAllRowsSelected(false);
-                      closeAlert();
-                      return t("deleted_successfully");
-                    },
-                    error: (error) => {
-                      console.error(error);
-                      return getErrorMessage(error);
-                    },
-                  },
-                );
-              },
-              onCancel: () => {
-                closeAlert();
-                table.toggleAllRowsSelected(false);
-              },
             });
+            if (isConfirmed) {
+              toast.promise(
+                deleteAnnouncementMutation.mutateAsync(
+                  selectedNotices.map((cl) => cl.id),
+                ),
+                {
+                  loading: t("deleting"),
+                  success: () => {
+                    table.toggleAllRowsSelected(false);
+                    return t("deleted_successfully");
+                  },
+                  error: (error) => {
+                    console.error(error);
+                    return getErrorMessage(error);
+                  },
+                },
+              );
+            }
           }}
         >
           <Trash2 className="mr-2 h-4 w-4" />

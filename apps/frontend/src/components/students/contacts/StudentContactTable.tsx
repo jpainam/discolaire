@@ -4,10 +4,10 @@ import Link from "next/link";
 import { Eye, FileHeart, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { useAlert } from "@repo/hooks/use-alert";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import {
   DropdownMenu,
@@ -45,7 +45,7 @@ export function StudentContactTable({
 }) {
   const studentContactsQuery = api.student.contacts.useQuery(studentId);
   const { t } = useLocale();
-  const { openAlert, closeAlert } = useAlert();
+  const confirm = useConfirm();
   const router = useRouter();
 
   const updateStudentContactMutation = api.studentContact.update.useMutation();
@@ -181,35 +181,36 @@ export function StudentContactTable({
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                           className="text-destructive"
-                          onSelect={() => {
-                            openAlert({
+                          onSelect={async () => {
+                            const isConfirmed = await confirm({
                               title: t("delete"),
-                              description: t("delete_confirmation"),
-                              onConfirm: () => {
-                                toast.promise(
-                                  deleteStudentContactMutation.mutateAsync({
-                                    studentId: c.studentId,
-                                    contactId: c.contactId,
-                                  }),
-                                  {
-                                    loading: t("deleting"),
-                                    success: async () => {
-                                      await utils.student.contacts.invalidate(
-                                        studentId,
-                                      );
-                                      await utils.contact.students.invalidate(
-                                        c.contactId,
-                                      );
-                                      return t("deleted_successfully");
-                                    },
-                                    error: (error) => {
-                                      return getErrorMessage(error);
-                                    },
-                                  },
-                                );
-                                closeAlert();
-                              },
+                              description: t("delete_confirmation", {
+                                name: getFullName(contact),
+                              }),
                             });
+                            if (isConfirmed) {
+                              toast.promise(
+                                deleteStudentContactMutation.mutateAsync({
+                                  studentId: c.studentId,
+                                  contactId: c.contactId,
+                                }),
+                                {
+                                  loading: t("deleting"),
+                                  success: async () => {
+                                    await utils.student.contacts.invalidate(
+                                      studentId,
+                                    );
+                                    await utils.contact.students.invalidate(
+                                      c.contactId,
+                                    );
+                                    return t("deleted_successfully");
+                                  },
+                                  error: (error) => {
+                                    return getErrorMessage(error);
+                                  },
+                                },
+                              );
+                            }
                           }}
                         >
                           <Trash2 className="mr-2 h-4 w-4" />

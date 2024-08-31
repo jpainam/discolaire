@@ -4,7 +4,6 @@ import type { Table } from "@tanstack/react-table";
 import { DownloadIcon, PlusIcon } from "@radix-ui/react-icons";
 import { Trash2 } from "lucide-react";
 
-import { useAlert } from "@repo/hooks/use-alert";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 
@@ -19,22 +18,22 @@ export function SMSHistoryDataTableActions({
   table,
 }: TasksTableToolbarActionsProps) {
   const { t } = useLocale();
-  const { openAlert, closeAlert } = useAlert();
+  //const confirm = useConfirm();
   return (
     <div className="flex items-center gap-2">
       {table.getFilteredSelectedRowModel().rows.length > 0 ? (
         <Button
           onClick={() => {
-            openAlert({
-              title: t("delete"),
-              description: t("delete_confirmation"),
-              onConfirm: () => {
-                console.log("delete");
-              },
-              onCancel: () => {
-                closeAlert();
-              },
-            });
+            // openAlert({
+            //   title: t("delete"),
+            //   description: t("delete_confirmation"),
+            //   onConfirm: () => {
+            //     console.log("delete");
+            //   },
+            //   onCancel: () => {
+            //     closeAlert();
+            //   },
+            // });
           }}
           variant="destructive"
           className="h-8"
