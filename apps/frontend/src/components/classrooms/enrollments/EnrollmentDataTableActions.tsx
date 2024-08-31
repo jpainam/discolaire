@@ -7,10 +7,10 @@ import { Plus, Trash2, UploadIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useAlert } from "@repo/hooks/use-alert";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 
 import { exportTableToCSV } from "~/lib/export";
 import { getErrorMessage } from "~/lib/handle-error";
@@ -31,49 +31,47 @@ export function EnrollmentDataTableActions({
   const { t } = useLocale();
   const { openModal } = useModal();
   const params = useParams<{ id: string }>();
-  const { openAlert, closeAlert } = useAlert();
+  const confirm = useConfirm();
   const utils = api.useUtils();
   // const canEnrollStudent = useCheckPermissions(
   //   PermissionAction.CREATE,
   //   "classroom:enrollment"
   // );
   const unenrollStudentsMutation =
-    api.enrollment.deleteByStudentIdClassroomId.useMutation();
+    api.enrollment.deleteByStudentIdClassroomId.useMutation({
+      onSettled: () => utils.classroom.students.invalidate(params.id),
+    });
   return (
     <div className="flex items-center gap-2">
       {table.getFilteredSelectedRowModel().rows.length > 0 ? (
         <Button
           disabled={false}
-          onClick={() => {
+          onClick={async () => {
             const selectedIds = table
               .getFilteredSelectedRowModel()
               .rows.map((row) => row.original.id);
-            openAlert({
+            const isConfirmed = await confirm({
               title: t("unenroll"),
               description: t("delete_confirmation"),
-
-              onConfirm: () => {
-                toast.promise(
-                  unenrollStudentsMutation.mutateAsync({
-                    studentId: selectedIds,
-                    classroomId: params.id,
-                  }),
-                  {
-                    loading: t("unenrolling"),
-                    error: (error) => {
-                      return getErrorMessage(error);
-                    },
-                    success: async () => {
-                      table.toggleAllRowsSelected(false);
-                      await utils.classroom.students.invalidate(params.id);
-                      closeAlert();
-
-                      return t("unenrolled_successfully");
-                    },
-                  },
-                );
-              },
             });
+            if (isConfirmed) {
+              toast.promise(
+                unenrollStudentsMutation.mutateAsync({
+                  studentId: selectedIds,
+                  classroomId: params.id,
+                }),
+                {
+                  loading: t("unenrolling"),
+                  error: (error) => {
+                    return getErrorMessage(error);
+                  },
+                  success: () => {
+                    table.toggleAllRowsSelected(false);
+                    return t("unenrolled_successfully");
+                  },
+                },
+              );
+            }
           }}
           size={"sm"}
           variant={"destructive"}

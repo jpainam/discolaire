@@ -1,36 +1,32 @@
 "use client";
 
 import { Trash2 } from "lucide-react";
-import { toast } from "sonner";
 
-import { useAlert } from "@repo/hooks/use-alert";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 
-import { getErrorMessage } from "~/lib/handle-error";
-
 export function TimelineAction({ timelineId }: { timelineId: string }) {
-  const { openAlert } = useAlert();
-  const { t } = useLocale();
+  //const confirm = useConfirm();
+  //const { t } = useLocale();
   return (
     <Button
       onClick={() => {
         console.log(timelineId);
-        openAlert({
-          title: "Delete Timeline",
-          description: "Are you sure you want to delete this timeline?",
-          onConfirm: () => {
-            toast.promise(Promise.resolve(), {
-              loading: t("deleting"),
-              success: () => {
-                return t("deleted_successfully");
-              },
-              error: (error) => {
-                return getErrorMessage(error);
-              },
-            });
-          },
-        });
+        // openAlert({
+        //   title: "Delete Timeline",
+        //   description: "Are you sure you want to delete this timeline?",
+        //   onConfirm: () => {
+        //     toast.promise(Promise.resolve(), {
+        //       loading: t("deleting"),
+        //       success: () => {
+        //         return t("deleted_successfully");
+        //       },
+        //       error: (error) => {
+        //         return getErrorMessage(error);
+        //       },
+        //     });
+        //   },
+        // });
       }}
       variant={"ghost"}
       size={"icon"}

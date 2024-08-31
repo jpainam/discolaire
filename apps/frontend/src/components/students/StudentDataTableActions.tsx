@@ -6,10 +6,10 @@ import { Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useAlert } from "@repo/hooks/use-alert";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 
 import { exportTableToCSV } from "~/lib/export";
 import { getErrorMessage } from "~/lib/handle-error";
@@ -26,7 +26,7 @@ interface StudentToolbarActionsProps {
 
 export function StudentDataTableActions({ table }: StudentToolbarActionsProps) {
   const { openSheet } = useSheet();
-  const { openAlert, closeAlert } = useAlert();
+  const confirm = useConfirm();
   const { t } = useLocale();
   const utils = api.useUtils();
   const deleteStudentMutation = api.student.delete.useMutation({

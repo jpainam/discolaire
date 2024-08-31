@@ -6,10 +6,10 @@ import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useAlert } from "@repo/hooks/use-alert";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 
 import { exportTableToCSV } from "~/lib/export";
 import { getErrorMessage } from "~/lib/handle-error";
@@ -25,39 +25,33 @@ interface SubjectToolbarActionsProps {
 export function SubjectDataTableActions({ table }: SubjectToolbarActionsProps) {
   const { openSheet } = useSheet();
   const { t } = useLocale();
-  const { openAlert, closeAlert } = useAlert();
+  const confirm = useConfirm();
   const deleteSubjectMutation = api.subject.delete.useMutation();
   return (
     <div className="flex items-center gap-2">
       {table.getFilteredSelectedRowModel().rows.length > 0 ? (
         <Button
-          onClick={() => {
-            openAlert({
-              title: t("delete"),
+          onClick={async () => {
+            const isConfirmed = await confirm({
+              title: t("are_you_sure"),
               description: t("delete_confirmation"),
-              onConfirm: () => {
-                const selectedIds = table
-                  .getFilteredSelectedRowModel()
-                  .rows.map((row) => row.original.id);
-                if (selectedIds.length === 0) {
-                  return;
-                }
-                toast.promise(deleteSubjectMutation.mutateAsync(selectedIds), {
-                  loading: t("deleting"),
-                  success: () => {
-                    table.toggleAllRowsSelected(false);
-                    closeAlert();
-                    return t("deleted_successfully");
-                  },
-                  error: (err) => {
-                    return getErrorMessage(err);
-                  },
-                });
-              },
-              onCancel: () => {
-                closeAlert();
-              },
             });
+            if (isConfirmed) {
+              const selectedIds = table
+                .getFilteredSelectedRowModel()
+                .rows.map((row) => row.original.id);
+
+              toast.promise(deleteSubjectMutation.mutateAsync(selectedIds), {
+                loading: t("deleting"),
+                success: () => {
+                  table.toggleAllRowsSelected(false);
+                  return t("deleted_successfully");
+                },
+                error: (err) => {
+                  return getErrorMessage(err);
+                },
+              });
+            }
           }}
           variant="destructive"
           className="h-8"

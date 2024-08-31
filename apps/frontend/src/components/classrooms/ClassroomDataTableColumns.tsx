@@ -15,12 +15,12 @@ import {
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useAlert } from "@repo/hooks/use-alert";
 import { useRouter } from "@repo/hooks/use-router";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
 import {
   DropdownMenu,
@@ -311,11 +311,13 @@ export function getColumns({
 
 function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
   const { openSheet } = useSheet();
-  const { openAlert, closeAlert } = useAlert();
+  const confirm = useConfirm();
   const { t } = useLocale();
   const router = useRouter();
-  const classroomMutation = api.classroom.delete.useMutation();
-  const utils = api.useUtils();
+  const classroomMutation = api.classroom.delete.useMutation({
+    onSettled: () => api.useUtils().classroom.invalidate(),
+  });
+
   return (
     <div className="flex justify-end">
       <DropdownMenu>
@@ -356,27 +358,22 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="bg-destructive text-destructive-foreground"
-            onSelect={() => {
-              openAlert({
+            onSelect={async () => {
+              const isConfirmed = await confirm({
                 title: t("delete", { name: classroom.name }),
                 description: t("delete_confirmation"),
-                onCancel: () => {
-                  closeAlert();
-                },
-                onConfirm: () => {
-                  toast.promise(classroomMutation.mutateAsync(classroom.id), {
-                    loading: t("deleting"),
-                    success: async () => {
-                      closeAlert();
-                      await utils.classroom.all.invalidate();
-                      return t("deleted_successfully");
-                    },
-                    error: (error) => {
-                      return getErrorMessage(error);
-                    },
-                  });
-                },
               });
+              if (isConfirmed) {
+                toast.promise(classroomMutation.mutateAsync(classroom.id), {
+                  loading: t("deleting"),
+                  success: () => {
+                    return t("deleted_successfully");
+                  },
+                  error: (error) => {
+                    return getErrorMessage(error);
+                  },
+                });
+              }
             }}
           >
             <Trash2 className="mr-2 size-4" />

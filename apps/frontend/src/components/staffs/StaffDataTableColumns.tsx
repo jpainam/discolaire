@@ -1,6 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
-import React from "react";
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Pencil, ReceiptText, Trash2 } from "lucide-react";
@@ -8,11 +7,11 @@ import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useAlert } from "@repo/hooks/use-alert";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
 import {
   DropdownMenu,
@@ -236,12 +235,13 @@ export function fetchStaffColumns({
 }
 
 function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
-  const [isDeletePending, startDeleteTransition] = React.useTransition();
   const { t } = useLocale();
   const { openSheet } = useSheet();
-  const { closeAlert, openAlert } = useAlert();
+  const confirm = useConfirm();
 
-  const deleteStaffMutation = api.staff.delete.useMutation();
+  const deleteStaffMutation = api.staff.delete.useMutation({
+    onSettled: () => api.useUtils().staff.invalidate(),
+  });
   return (
     <>
       <DropdownMenu>
@@ -273,32 +273,27 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            disabled={isDeletePending}
+            disabled={deleteStaffMutation.isPending}
             className="text-destructive"
-            onClick={() => {
-              startDeleteTransition(() => {
-                openAlert({
-                  title: t("delete"),
-                  description: t("delete_confirmation", {
-                    name: getFullName(staff),
-                  }),
-                  onConfirm: () => {
-                    toast.promise(deleteStaffMutation.mutateAsync(staff.id), {
-                      loading: t("deleting"),
-                      success: () => {
-                        return t("deleted_successfully");
-                      },
-                      error: (err) => {
-                        console.error(err);
-                        return getErrorMessage(err);
-                      },
-                    });
+            onClick={async () => {
+              const isConfirmed = await confirm({
+                title: t("are_you_sure"),
+                description: t("delete_confirmation", {
+                  name: getFullName(staff),
+                }),
+              });
+              if (isConfirmed) {
+                toast.promise(deleteStaffMutation.mutateAsync(staff.id), {
+                  loading: t("deleting"),
+                  success: () => {
+                    return t("deleted_successfully");
                   },
-                  onCancel: () => {
-                    closeAlert();
+                  error: (err) => {
+                    console.error(err);
+                    return getErrorMessage(err);
                   },
                 });
-              });
+              }
             }}
           >
             <Trash2 className="mr-2 size-4" /> {t("delete")}

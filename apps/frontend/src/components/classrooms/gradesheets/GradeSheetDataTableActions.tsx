@@ -8,10 +8,10 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
-import { useAlert } from "@repo/hooks/use-alert";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 
 import { routes } from "~/configs/routes";
 import { exportTableToCSV } from "~/lib/export";
@@ -32,41 +32,36 @@ export function GradeSheetDataTableActions({
   const { t } = useLocale();
   const router = useRouter();
   const params = useParams<{ id: string }>();
-  const { openAlert, closeAlert } = useAlert();
+  const confirm = useConfirm();
   const { createQueryString } = useCreateQueryString();
-  const deleteGradeSheetMutation = api.gradeSheet.delete.useMutation();
+  const deleteGradeSheetMutation = api.gradeSheet.delete.useMutation({
+    onSettled: () => api.useUtils().invalidate(),
+  });
   return (
     <div className="flex items-center gap-2">
       {table.getFilteredSelectedRowModel().rows.length > 0 ? (
         <Button
-          onClick={() => {
-            openAlert({
-              title: t("delete"),
+          onClick={async () => {
+            const isConfirmed = await confirm({
+              title: t("are_you_sure"),
               description: t("delete_confirmation"),
-              onConfirm: () => {
-                const selectedIds = table
-                  .getFilteredSelectedRowModel()
-                  .rows.map((row) => row.original.id);
-
-                toast.promise(
-                  deleteGradeSheetMutation.mutateAsync(selectedIds),
-                  {
-                    loading: t("deleting"),
-                    success: () => {
-                      table.toggleAllRowsSelected(false);
-                      return t("deleted_successfully");
-                    },
-                    error: (err) => {
-                      console.error(err);
-                      return getErrorMessage(err);
-                    },
-                  },
-                );
-              },
-              onCancel: () => {
-                closeAlert();
-              },
             });
+            if (isConfirmed) {
+              const selectedIds = table
+                .getFilteredSelectedRowModel()
+                .rows.map((row) => row.original.id);
+
+              toast.promise(deleteGradeSheetMutation.mutateAsync(selectedIds), {
+                loading: t("deleting"),
+                success: () => {
+                  table.toggleAllRowsSelected(false);
+                  return t("deleted_successfully");
+                },
+                error: (err) => {
+                  return getErrorMessage(err);
+                },
+              });
+            }
           }}
           variant="destructive"
           className="h-8"

@@ -8,9 +8,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { PiGridFour, PiListBullets } from "react-icons/pi";
-import { toast } from "sonner";
 
-import { useAlert } from "@repo/hooks/use-alert";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -27,7 +25,7 @@ import { LastModifiedSelector } from "./LastModifiedSelector";
 
 export function DocumentHeader() {
   const { t } = useLocale();
-  const { openAlert } = useAlert();
+  //const confirm = useConfirm();
   return (
     <div className="flex w-full flex-row items-center gap-2 border-b bg-secondary px-2 py-1 text-secondary-foreground">
       <span>{t("all_files")}</span>
@@ -60,13 +58,13 @@ export function DocumentHeader() {
             <Separator />
             <DropdownMenuItem
               onSelect={() => {
-                openAlert({
-                  title: t("delete"),
-                  description: t("delete_confirmation"),
-                  onConfirm: () => {
-                    toast.warning("not_yet_implemented");
-                  },
-                });
+                // openAlert({
+                //   title: t("delete"),
+                //   description: t("delete_confirmation"),
+                //   onConfirm: () => {
+                //     toast.warning("not_yet_implemented");
+                //   },
+                // });
               }}
               className="my-2 bg-destructive text-destructive-foreground"
             >
@@ -76,13 +74,13 @@ export function DocumentHeader() {
 
             <DropdownMenuItem
               onSelect={() => {
-                openAlert({
-                  title: t("delete"),
-                  description: t("delete_confirmation"),
-                  onConfirm: () => {
-                    toast.warning("not_yet_implemented");
-                  },
-                });
+                // openAlert({
+                //   title: t("delete"),
+                //   description: t("delete_confirmation"),
+                //   onConfirm: () => {
+                //     toast.warning("not_yet_implemented");
+                //   },
+                // });
               }}
               className="bg-destructive text-destructive-foreground"
             >

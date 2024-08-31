@@ -11,12 +11,12 @@ import flags from "react-phone-number-input/flags";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useAlert } from "@repo/hooks/use-alert";
 import { useRouter } from "@repo/hooks/use-router";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import { DataTableColumnHeader } from "@repo/ui/data-table/v2/data-table-column-header";
 import {
   DropdownMenu,
@@ -326,9 +326,11 @@ function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
   const { t } = useLocale();
   const router = useRouter();
   const { openSheet } = useSheet();
-  const { openAlert, closeAlert } = useAlert();
-  const deleteStudentMutation = api.student.delete.useMutation();
-  const utils = api.useUtils();
+  const confirm = useConfirm();
+  const deleteStudentMutation = api.student.delete.useMutation({
+    onSettled: () => api.useUtils().student.all.invalidate(),
+  });
+
   return (
     <div className="flex justify-end">
       <DropdownMenu>
@@ -372,24 +374,24 @@ function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="cursor-pointer text-destructive"
-            onSelect={() => {
-              openAlert({
-                title: t("delete"),
-                description: t("delete_confirmation"),
-                onConfirm: () => {
-                  toast.promise(deleteStudentMutation.mutateAsync(student.id), {
-                    loading: t("deleting"),
-                    success: () => {
-                      void utils.student.all.invalidate();
-                      closeAlert();
-                      return t("deleted_successfully");
-                    },
-                    error: (error) => {
-                      return getErrorMessage(error);
-                    },
-                  });
-                },
+            onSelect={async () => {
+              const isConfirmed = await confirm({
+                title: t("are_you_sure"),
+                description: t("delete_confirmation", {
+                  name: getFullName(student),
+                }),
               });
+              if (isConfirmed) {
+                toast.promise(deleteStudentMutation.mutateAsync(student.id), {
+                  loading: t("deleting"),
+                  success: () => {
+                    return t("deleted_successfully");
+                  },
+                  error: (error) => {
+                    return getErrorMessage(error);
+                  },
+                });
+              }
             }}
           >
             <Trash2 className="mr-2 h-4 w-4" />

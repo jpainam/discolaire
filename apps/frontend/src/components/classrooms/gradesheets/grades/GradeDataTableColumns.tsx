@@ -6,11 +6,11 @@ import { FlagOff, Pencil } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useAlert } from "@repo/hooks/use-alert";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
 import {
   DropdownMenu,
@@ -153,7 +153,7 @@ function ActionCells({
   classroomId: string;
   grade: GradeSheetGetGradeProcedureOutput;
 }) {
-  const { openAlert, closeAlert } = useAlert();
+  const confirm = useConfirm();
   const { t } = useLocale();
   const { openModal } = useModal();
 
@@ -198,33 +198,29 @@ function ActionCells({
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="bg-destructive text-destructive-foreground"
-            onSelect={() => {
-              openAlert({
-                title: t("mark_absent"),
-                description: t("mark_absent_confirmation"),
-                onCancel: () => {
-                  closeAlert();
-                },
-                onConfirm: () => {
-                  toast.promise(
-                    markGradeAbsent.mutateAsync({
-                      id: grade.id,
-                      grade: 0,
-                      isAbsent: true,
-                    }),
-                    {
-                      loading: t("mark_absent") + "...",
-                      success: () => {
-                        closeAlert();
-                        return t("marked_absent_successfully");
-                      },
-                      error: (error) => {
-                        return getErrorMessage(error);
-                      },
-                    },
-                  );
-                },
+            onSelect={async () => {
+              const isConfirmed = await confirm({
+                title: t("are_you_sure"),
+                description: t("delete_confirmation"),
               });
+              if (isConfirmed) {
+                toast.promise(
+                  markGradeAbsent.mutateAsync({
+                    id: grade.id,
+                    grade: 0,
+                    isAbsent: true,
+                  }),
+                  {
+                    loading: t("mark_absent") + "...",
+                    success: () => {
+                      return t("marked_absent_successfully");
+                    },
+                    error: (error) => {
+                      return getErrorMessage(error);
+                    },
+                  },
+                );
+              }
             }}
           >
             <FlagOff className="mr-2 size-4" />

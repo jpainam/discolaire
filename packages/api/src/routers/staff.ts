@@ -54,13 +54,17 @@ export const staffRouter = {
         },
       });
     }),
-  delete: protectedProcedure.input(z.string()).mutation(({ ctx, input }) => {
-    return ctx.db.staff.delete({
-      where: {
-        id: input,
-      },
-    });
-  }),
+  delete: protectedProcedure
+    .input(z.union([z.string(), z.array(z.string())]))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.staff.deleteMany({
+        where: {
+          id: {
+            in: Array.isArray(input) ? input : [input],
+          },
+        },
+      });
+    }),
   teachers: protectedProcedure.query(({ ctx }) => {
     return ctx.db.staff.findMany({
       where: {

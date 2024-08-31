@@ -6,9 +6,9 @@ import { MoreVertical, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useAlert } from "@repo/hooks/use-alert";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,10 +41,11 @@ export function StudentEnrollmentTable({
   enrollments: StudentEnrollmentProcedureOutput[];
 }) {
   const { t } = useLocale();
-  const { openAlert, closeAlert } = useAlert();
+  const confirm = useConfirm();
   const { fullDateFormatter } = useDateFormat();
-  const deleteEnrollmentMutation = api.enrollment.delete.useMutation();
-  const utils = api.useUtils();
+  const deleteEnrollmentMutation = api.enrollment.delete.useMutation({
+    onSettled: () => api.useUtils().student.invalidate(),
+  });
 
   if (enrollments.length === 0) {
     return <EmptyState className="my-2" />;
@@ -113,28 +114,25 @@ export function StudentEnrollmentTable({
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem
                         className="cursor-pointer bg-destructive text-destructive-foreground"
-                        onSelect={() => {
-                          openAlert({
-                            title: t("delete"),
+                        onSelect={async () => {
+                          const isConfirmed = await confirm({
+                            title: t("are_you_sure"),
                             description: t("delete_confirmation"),
-                            onConfirm: () => {
-                              toast.promise(
-                                deleteEnrollmentMutation.mutateAsync(c.id),
-                                {
-                                  loading: t("unenrolling"),
-                                  error: (error) => {
-                                    closeAlert();
-                                    return getErrorMessage(error);
-                                  },
-                                  success: async () => {
-                                    await utils.student.invalidate();
-                                    closeAlert();
-                                    return t("unenrolled");
-                                  },
-                                },
-                              );
-                            },
                           });
+                          if (isConfirmed) {
+                            toast.promise(
+                              deleteEnrollmentMutation.mutateAsync(c.id),
+                              {
+                                loading: t("unenrolling"),
+                                error: (error) => {
+                                  return getErrorMessage(error);
+                                },
+                                success: () => {
+                                  return t("unenrolled");
+                                },
+                              },
+                            );
+                          }
                         }}
                       >
                         <Trash2 className="mr-2 h-4 w-4" />

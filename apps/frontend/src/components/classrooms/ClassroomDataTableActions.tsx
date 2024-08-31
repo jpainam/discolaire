@@ -6,10 +6,10 @@ import { Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useAlert } from "@repo/hooks/use-alert";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 
 import { exportTableToCSV } from "~/lib/export";
 import { getErrorMessage } from "~/lib/handle-error";
@@ -28,47 +28,38 @@ export function ClassroomDataTableActions({
   table,
 }: TasksTableToolbarActionsProps) {
   const { openSheet } = useSheet();
-  const { openAlert, closeAlert } = useAlert();
+  const confirm = useConfirm();
   const { t } = useLocale();
-  const classroomMutation = api.classroom.delete.useMutation();
+  const classroomMutation = api.classroom.delete.useMutation({
+    onSettled: () => api.useUtils().classroom.invalidate(),
+  });
   return (
     <div className="flex items-center gap-2">
       {table.getFilteredSelectedRowModel().rows.length > 0 ? (
         <Button
           variant={"destructive"}
-          onClick={() => {
-            const selectedClassrooms = table
+          onClick={async () => {
+            const selectedIds = table
               .getFilteredSelectedRowModel()
-              .rows.map((row) => row.original);
-            openAlert({
-              title: t("delete"),
-              description: `${t("delete_confirmation")} ${selectedClassrooms.map((cl) => cl.shortName).join(", ")}?`,
-              onConfirm: () => {
-                toast.promise(
-                  Promise.all(
-                    selectedClassrooms.map((cl) =>
-                      classroomMutation.mutateAsync(cl.id),
-                    ),
-                  ),
-                  {
-                    loading: t("deleting"),
-                    success: () => {
-                      table.toggleAllRowsSelected(false);
-                      closeAlert();
-                      return t("deleted_successfully");
-                    },
-                    error: (error) => {
-                      console.error(error);
-                      return getErrorMessage(error);
-                    },
-                  },
-                );
-              },
-              onCancel: () => {
-                closeAlert();
-                table.toggleAllRowsSelected(false);
-              },
+              .rows.map((row) => row.original.id);
+
+            const isConfirmed = await confirm({
+              title: t("are_you_sure"),
+              description: t("delete_confirmation"),
             });
+            if (isConfirmed) {
+              toast.promise(classroomMutation.mutateAsync(selectedIds), {
+                loading: t("deleting"),
+                success: () => {
+                  table.toggleAllRowsSelected(false);
+                  return t("deleted_successfully");
+                },
+                error: (error) => {
+                  console.error(error);
+                  return getErrorMessage(error);
+                },
+              });
+            }
           }}
         >
           <Trash2 className="mr-2 h-4 w-4" />

@@ -7,11 +7,11 @@ import { Eye, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useAlert } from "@repo/hooks/use-alert";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
 import {
   DropdownMenu,
@@ -253,7 +253,7 @@ function ActionCells({
   classroomId: string;
   gradesheet: ClassroomGradeSheetProcedureOutput;
 }) {
-  const { openAlert, closeAlert } = useAlert();
+  const confirm = useConfirm();
   const { t } = useLocale();
   const deleteGradeSheetMutation = api.gradeSheet.delete.useMutation();
   const utils = api.useUtils();
@@ -298,31 +298,27 @@ function ActionCells({
           <DropdownMenuItem
             disabled={deleteGradeSheetMutation.isPending}
             className="bg-destructive text-destructive-foreground"
-            onSelect={() => {
-              openAlert({
+            onSelect={async () => {
+              const isConfirmed = await confirm({
                 title: t("delete"),
                 description: t("delete_confirmation"),
-                onCancel: () => {
-                  closeAlert();
-                },
-                onConfirm: () => {
-                  toast.promise(
-                    deleteGradeSheetMutation.mutateAsync(gradesheet.id),
-                    {
-                      loading: t("deleting"),
-                      success: () => {
-                        void utils.gradeSheet.invalidate();
-                        void utils.grade.invalidate();
-                        closeAlert();
-                        return t("deleted_successfully");
-                      },
-                      error: (error) => {
-                        return getErrorMessage(error);
-                      },
-                    },
-                  );
-                },
               });
+              if (isConfirmed) {
+                toast.promise(
+                  deleteGradeSheetMutation.mutateAsync(gradesheet.id),
+                  {
+                    loading: t("deleting"),
+                    success: () => {
+                      void utils.gradeSheet.invalidate();
+                      void utils.grade.invalidate();
+                      return t("deleted_successfully");
+                    },
+                    error: (error) => {
+                      return getErrorMessage(error);
+                    },
+                  },
+                );
+              }
             }}
           >
             <Trash2 className="mr-2 size-4" />
