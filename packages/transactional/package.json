@@ -1,11 +1,9 @@
 {
   "name": "@repo/transactional",
-  "private": true,
   "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
   "type": "module",
-  "workspaces": [
-    ".react-email"
-  ],
   "exports": {
     "./emails/*": {
       "types": "./dist/emails/*.d.ts",
@@ -19,7 +17,9 @@
       ]
     }
   },
-  "license": "MIT",
+  "workspaces": [
+    ".react-email"
+  ],
   "scripts": {
     "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
@@ -29,6 +29,11 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
+  "prettier": "@repo/prettier-config",
+  "dependencies": {
+    "@react-email/components": "^0.0.23",
+    "react-email": "^3.0.1"
+  },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
@@ -36,10 +41,5 @@
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"
-  },
-  "prettier": "@repo/prettier-config",
-  "dependencies": {
-    "@react-email/components": "^0.0.23",
-    "react-email": "^3.0.1"
   }
 }

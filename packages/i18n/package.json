@@ -1,7 +1,8 @@
 {
   "name": "@repo/i18n",
-  "private": true,
   "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
   "type": "module",
   "exports": {
     ".": {
@@ -11,7 +12,6 @@
     "./server": "./server.ts",
     "./i18n-context": "./i18n-context.tsx"
   },
-  "license": "MIT",
   "scripts": {
     "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
@@ -20,6 +20,14 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
+  "prettier": "@repo/prettier-config",
+  "dependencies": {
+    "accept-language": "^3.0.20",
+    "i18next": "^23.14.0",
+    "i18next-browser-languagedetector": "^8.0.0",
+    "i18next-resources-to-backend": "^1.2.1",
+    "react-i18next": "^15.0.1"
+  },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
@@ -27,13 +35,5 @@
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"
-  },
-  "prettier": "@repo/prettier-config",
-  "dependencies": {
-    "i18next": "^23.14.0",
-    "i18next-browser-languagedetector": "^8.0.0",
-    "i18next-resources-to-backend": "^1.2.1",
-    "react-i18next": "^15.0.1",
-    "accept-language": "^3.0.20"
   }
 }

@@ -1,7 +1,8 @@
 {
   "name": "@repo/lib",
-  "private": true,
   "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
   "type": "module",
   "exports": {
     ".": {
@@ -13,7 +14,6 @@
       "default": "./src/*.ts"
     }
   },
-  "license": "MIT",
   "scripts": {
     "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
@@ -21,15 +21,6 @@
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
-  },
-  "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/prettier-config": "workspace:*",
-    "@repo/tsconfig": "workspace:*",
-    "@types/json-logic-js": "^2.0.7",
-    "eslint": "catalog:",
-    "prettier": "catalog:",
-    "typescript": "catalog:"
   },
   "prettier": "@repo/prettier-config",
   "dependencies": {
@@ -43,5 +34,14 @@
     "react-use": "^17.5.1",
     "tailwind-merge": "^2.5.2",
     "uploadthing": "^6.13.2"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/prettier-config": "workspace:*",
+    "@repo/tsconfig": "workspace:*",
+    "@types/json-logic-js": "^2.0.7",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
   }
 }

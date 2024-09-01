@@ -1,14 +1,6 @@
 {
   "name": "create-t3-turbo",
   "private": true,
-  "engines": {
-    "node": ">=20.16.0"
-  },
-  "prisma": {
-    "schema": "packages/db/prisma/schema.prisma",
-    "seed": "tsx packages/db/src/seed.ts"
-  },
-  "packageManager": "pnpm@9.7.1",
   "scripts": {
     "build": "turbo run build",
     "clean": "git clean -xdf node_modules",
@@ -19,13 +11,14 @@
     "dev:next": "turbo watch dev -F @repo/frontend...",
     "format": "turbo run format --continue -- --cache --cache-location .cache/.prettiercache",
     "format:fix": "turbo run format --continue -- --write --cache --cache-location .cache/.prettiercache",
+    "postinstall": "pnpm lint:ws",
     "lint": "turbo run lint --continue -- --cache --cache-location .cache/.eslintcache",
     "lint:fix": "turbo run lint --continue -- --fix --cache --cache-location .cache/.eslintcache",
     "lint:ws": "pnpm dlx sherif@latest",
-    "postinstall": "pnpm lint:ws",
     "typecheck": "turbo run typecheck",
     "ui-add": "turbo run ui-add"
   },
+  "prettier": "@repo/prettier-config",
   "devDependencies": {
     "@repo/prettier-config": "workspace:*",
     "@turbo/gen": "2.0.15-canary.0",
@@ -33,5 +26,12 @@
     "turbo": "2.0.15-canary.0",
     "typescript": "catalog:"
   },
-  "prettier": "@repo/prettier-config"
+  "packageManager": "pnpm@9.7.1",
+  "engines": {
+    "node": ">=20.16.0"
+  },
+  "prisma": {
+    "schema": "packages/db/prisma/schema.prisma",
+    "seed": "tsx packages/db/src/seed.ts"
+  }
 }
