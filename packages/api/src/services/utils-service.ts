@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-import type { Grade } from "@prisma/client";
 import _ from "lodash";
 
 export function getRank(array: number[], target: number): number {
@@ -13,7 +12,10 @@ export function getRank(array: number[], target: number): number {
 }
 
 export function calculateFinalGrade(
-  grades: Grade[],
+  grades: {
+    isAbsent: boolean;
+    grade: number;
+  }[],
   weights: number[],
 ): number {
   const presentGrades = grades.filter(

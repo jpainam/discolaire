@@ -166,13 +166,23 @@ export const reportCardService = {
         const isAbsent = studentMapGrades[studentId]?.every(
           (grade) => grade.isAbsent,
         );
+        const _grades = studentMapGrades[studentId]
+          ? studentMapGrades[studentId]
+          : [];
         return {
           studentId,
           isAbsent: isAbsent,
           grade: isAbsent
             ? null
-            : studentMapGrades[studentId] &&
-              calculateFinalGrade(studentMapGrades[studentId], weights),
+            : calculateFinalGrade(
+                _grades.map((g) => {
+                  return {
+                    isAbsent: g.isAbsent ?? false,
+                    grade: g.grade,
+                  };
+                }),
+                weights,
+              ),
         };
       });
       const currentStudentGrade = studentGrades.find(
