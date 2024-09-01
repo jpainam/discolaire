@@ -2,10 +2,10 @@ import type { ColorValue, TextInputProps, ViewStyle } from "react-native";
 import React from "react";
 import { TextInput } from "react-native";
 
-import type { ThemeProps } from "../Themed";
+import type { ThemeProps } from "./Themed";
 import Colors from "~/constants/Colors";
-import { useThemeColor, View } from "../Themed";
-import { useColorScheme } from "../useColorScheme";
+import { useThemeColor, View } from "./Themed";
+import { useColorScheme } from "./useColorScheme";
 
 type Props = ThemeProps &
   TextInputProps & {
@@ -18,7 +18,7 @@ type Props = ThemeProps &
     borderRadius?: number;
   };
 
-const StyledTextInput: React.FC<Props> = React.forwardRef(
+const Input: React.FC<Props> = React.forwardRef(
   (props: Props, ref: unknown) => {
     const {
       style,
@@ -71,4 +71,4 @@ const StyledTextInput: React.FC<Props> = React.forwardRef(
     );
   },
 );
-export default StyledTextInput;
+export default Input;

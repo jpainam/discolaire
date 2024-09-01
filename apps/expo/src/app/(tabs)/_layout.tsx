@@ -3,6 +3,7 @@ import { Pressable } from "react-native";
 import { Link, Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
+import { View } from "~/components/Themed";
 import { useClientOnlyValue } from "~/components/useClientOnlyValue";
 import { useColorScheme } from "~/components/useColorScheme";
 import Colors from "~/constants/Colors";
@@ -37,20 +38,41 @@ export default function TabLayout() {
           title: "Home",
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerRight: () => (
-            <Link href="/" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <Ionicons
-                    name="calendar"
-                    // <FontAwesome
-                    // name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? "light"].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 2,
+              }}
+            >
+              <Link href="/calendar" asChild>
+                <Pressable>
+                  {({ pressed }) => (
+                    <Ionicons
+                      name="calendar"
+                      // <FontAwesome
+                      // name="info-circle"
+                      size={25}
+                      color={Colors[colorScheme ?? "light"].text}
+                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                    />
+                  )}
+                </Pressable>
+              </Link>
+              <Link href="/SearchStudent" asChild>
+                <Pressable>
+                  {({ pressed }) => (
+                    <Ionicons
+                      name="people"
+                      // <FontAwesome
+                      // name="info-circle"
+                      size={25}
+                      color={Colors[colorScheme ?? "light"].text}
+                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                    />
+                  )}
+                </Pressable>
+              </Link>
+            </View>
           ),
         }}
       />
@@ -70,13 +92,13 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name="apps" color={color} />,
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="students"
         options={{
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="people" color={color} />,
         }}
-      />
+      /> */}
 
       <Tabs.Screen
         name="settings"

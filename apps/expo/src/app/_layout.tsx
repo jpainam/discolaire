@@ -57,10 +57,14 @@ export default function RootLayout() {
       <Provider>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+          <Stack.Screen
+            name="SearchStudent"
+            options={{ presentation: "modal" }}
+          />
           <Stack.Screen name="calendar" options={{ headerShown: false }} />
           <Stack.Screen name="auth" options={{ headerShown: false }} />
           <Stack.Screen name="welcome" options={{ headerShown: false }} />
+          <Stack.Screen name="(modals)" options={{ headerShown: false }} />
         </Stack>
       </Provider>
     </ThemeProvider>

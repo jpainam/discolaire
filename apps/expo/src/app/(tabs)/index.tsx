@@ -30,8 +30,8 @@ export default function TabOneScreen() {
           void signOut();
         }}
       />
-      <Link href={"/students"}>
-        <Text>Liste of student</Text>
+      <Link href={"/classes"}>
+        <Text>Liste of des classes</Text>
       </Link>
       <EditScreenInfo path="app/(tabs)/index.tsx" />
     </View>

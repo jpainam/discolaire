@@ -1,6 +1,20 @@
-import { View } from "~/components/Themed";
+import { ActivityIndicator } from "react-native";
 
-const Page = () => {
-  return <View></View>;
-};
-export default Page;
+import { Text, View } from "~/components/Themed";
+
+export default function ChatIndex() {
+  return (
+    <View style={{ flex: 1 }}>
+      <Text>Chat index</Text>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <ActivityIndicator />
+      </View>
+    </View>
+  );
+}
