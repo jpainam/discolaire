@@ -5,10 +5,11 @@
   "scripts": {
     "build": "nitro build",
     "clean": "git clean -xdf .cache .nitro .output .turbo .vercel node_modules",
-    "lint": "eslint",
     "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint",
     "typecheck": "tsc --noEmit"
   },
+  "prettier": "@repo/prettier-config",
   "dependencies": {
     "@auth/core": "0.34.2"
   },
@@ -23,6 +24,5 @@
     "nitropack": "^2.9.7",
     "prettier": "catalog:",
     "typescript": "catalog:"
-  },
-  "prettier": "@repo/prettier-config"
+  }
 }

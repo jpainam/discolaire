@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "with-env": "dotenv -e ../../.env --"
   },
+  "prettier": "@repo/prettier-config",
   "dependencies": {
     "@floating-ui/react": "^0.26.23",
     "@hookform/resolvers": "^3.9.0",
@@ -73,6 +74,5 @@
     "prettier": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
-  },
-  "prettier": "@repo/prettier-config"
+  }
 }
