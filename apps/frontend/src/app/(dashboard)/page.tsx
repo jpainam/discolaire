@@ -18,6 +18,8 @@ export default function DashboardPage() {
   //   43
   // );
   //const staff = await api.staff.all();
+  //const session = await auth();
+  //console.log(session);
 
   return (
     <div className="grid grid-cols-12 gap-4 px-6 md:mt-4 md:px-8 2xl:px-10">

@@ -1,5 +1,6 @@
 import { ActivityIndicator, Alert, Pressable } from "react-native";
 import { Link, router } from "expo-router";
+import { FlashList } from "@shopify/flash-list";
 
 import { Text, View } from "~/components/Themed";
 import { api } from "~/utils/api";
@@ -43,20 +44,25 @@ const Page = () => {
       Alert.alert("Error", JSON.stringify(classroomsQuery.error.message));
     }
   }
+  const data = classroomsQuery.data;
   return (
     <View>
       {classroomsQuery.isPending && <ActivityIndicator />}
       <Text>{JSON.stringify(classroomsQuery.data)}</Text>
-      {/* {classroomsQuery.data && (
+      {classroomsQuery.data && (
         <FlashList
-          data={classroomsQuery.data}
+          data={data}
           estimatedItemSize={20}
           ItemSeparatorComponent={() => <View className="h-2" />}
-          renderItem={(_p, index) => (
-            <ListItem name={"Name"} id={`${index}-index`} levelName={"name"} />
+          renderItem={({ item }) => (
+            <ListItem
+              name={item.name ?? ""}
+              id={`${item.id}-index`}
+              levelName={item.level.name}
+            />
           )}
         />
-      )} */}
+      )}
     </View>
   );
 };

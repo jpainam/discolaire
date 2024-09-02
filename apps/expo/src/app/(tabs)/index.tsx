@@ -4,6 +4,7 @@ import { Link } from "expo-router";
 import EditScreenInfo from "~/components/EditScreenInfo";
 import { Text, View } from "~/components/Themed";
 import { useSignOut } from "~/utils/auth";
+import { onSubmit } from "../auth/submit-login";
 
 export default function TabOneScreen() {
   //const user = useUser();
@@ -21,7 +22,7 @@ export default function TabOneScreen() {
       <Button
         title="Try login"
         onPress={() => {
-          //onSubmit();
+          void onSubmit();
         }}
       />
       <Button
