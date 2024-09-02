@@ -23,35 +23,51 @@ const createLevelSchema = z.object({
   name: z.string().min(1),
   order: z.coerce.number().int().min(0),
 });
-export function CreateEditLevel() {
+export function CreateEditLevel({
+  name,
+  order,
+  id,
+}: {
+  name?: string;
+  id?: number;
+  order?: number;
+}) {
   const form = useForm({
     schema: createLevelSchema,
     defaultValues: {
-      name: "",
-      order: 0,
+      name: name ?? "",
+      order: order ?? 0,
     },
   });
   const { t } = useLocale();
   const { closeModal } = useModal();
   const utils = api.useUtils();
   const createClassroomLevel = api.classroomLevel.create.useMutation({
-    onSettled: () => utils.classroomLevel.all.invalidate(),
+    onSettled: () => utils.classroomLevel.invalidate(),
   });
+  const updateClassroomLevel = api.classroomLevel.update.useMutation({
+    onSettled: () => utils.classroomLevel.invalidate(),
+  });
+
   const onSubmit = (data: z.infer<typeof createLevelSchema>) => {
     const values = {
       name: data.name,
       group: data.order,
     };
-    toast.promise(createClassroomLevel.mutateAsync(values), {
-      success: () => {
-        closeModal();
-        return t("created_successfully");
-      },
-      loading: t("creating"),
-      error: (error) => {
-        return getErrorMessage(error);
-      },
-    });
+    if (id) {
+      updateClassroomLevel.mutate({ id: id, ...values });
+    } else {
+      toast.promise(createClassroomLevel.mutateAsync(values), {
+        success: () => {
+          closeModal();
+          return t("created_successfully");
+        },
+        loading: t("creating"),
+        error: (error) => {
+          return getErrorMessage(error);
+        },
+      });
+    }
   };
   return (
     <Form {...form}>

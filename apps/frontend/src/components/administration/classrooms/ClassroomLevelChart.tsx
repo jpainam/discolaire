@@ -43,7 +43,7 @@ export function ClassroomLevelChart() {
   }
   const chartData = classroomLevelCountQuery.data;
   return (
-    <Card className="rounded-md shadow-none">
+    <Card className="my-2 rounded-md shadow-none">
       <CardHeader>
         <CardTitle>Nombre de classe par niveau</CardTitle>
         <CardDescription></CardDescription>

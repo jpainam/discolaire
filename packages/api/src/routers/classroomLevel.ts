@@ -61,11 +61,14 @@ export const classroomLevelRouter = createTRPCRouter({
     });
   }),
   delete: protectedProcedure
-    .input(z.coerce.number())
+    .input(z.union([z.coerce.number(), z.array(z.coerce.number())]))
     .mutation(async ({ ctx, input }) => {
+      const ids = Array.isArray(input) ? input : [input];
       const classrooms = await ctx.db.classroom.findMany({
         where: {
-          levelId: input,
+          levelId: {
+            in: ids,
+          },
         },
       });
       if (classrooms.length > 0) {
@@ -74,9 +77,11 @@ export const classroomLevelRouter = createTRPCRouter({
           message: "Cannot delete level with classrooms",
         });
       }
-      return ctx.db.classroomLevel.delete({
+      return ctx.db.classroomLevel.deleteMany({
         where: {
-          id: input,
+          id: {
+            in: ids,
+          },
         },
       });
     }),

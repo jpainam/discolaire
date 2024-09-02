@@ -7,7 +7,7 @@ import { ClassroomLevelTable } from "~/components/administration/classrooms/Clas
 
 export default function Page() {
   return (
-    <div className="grid grid-cols-1 items-start gap-2 p-4 md:grid-cols-3">
+    <div className="grid grid-cols-1 items-start gap-2 p-4 xl:grid-cols-3">
       <div className="col-span-full">
         <ClassroomLevelHeader />
       </div>

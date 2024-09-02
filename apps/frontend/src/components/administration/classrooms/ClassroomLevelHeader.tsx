@@ -1,6 +1,8 @@
 "use client";
 
-import { MoreVertical } from "lucide-react";
+import { useAtomValue } from "jotai";
+import { MoreVertical, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
@@ -16,11 +18,26 @@ import { Label } from "@repo/ui/label";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { api } from "~/trpc/react";
+import { selectedClassroomLevelAtom } from "./_atom";
 import { CreateEditLevel } from "./CreateEditLevel";
 
 export function ClassroomLevelHeader() {
   const { t } = useLocale();
   const { openModal } = useModal();
+  const selectedLevels = useAtomValue(selectedClassroomLevelAtom);
+  const toastId = 0;
+  const utils = api.useUtils();
+  const deleteClassroomLevelMutation = api.classroomLevel.delete.useMutation({
+    onSettled: () => utils.classroomLevel.invalidate(),
+    onError: (error) => {
+      toast.error(error.message, { id: toastId });
+    },
+  });
+  if (deleteClassroomLevelMutation.isPending) {
+    toast.loading(t("deleting"), { id: toastId });
+  }
+
   return (
     <div className="flex flex-row items-center gap-2">
       <Label>{t("Niveau des classes")}</Label>
@@ -38,6 +55,12 @@ export function ClassroomLevelHeader() {
         >
           {t("add")}
         </Button>
+        {selectedLevels.length > 0 && (
+          <Button variant={"destructive"}>
+            <Trash2 className="mr-2 h-4 w-4" />
+            <span className="mr-2">{t("delete")}</span>({selectedLevels.length})
+          </Button>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant={"outline"} size={"icon"}>
