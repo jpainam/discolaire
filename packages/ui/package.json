@@ -72,7 +72,7 @@
     "@repo/lib": "workspace:*",
     "@tanstack/query-core": "^5.28.4",
     "@tanstack/react-query": "^5.51.23",
-    "@tanstack/react-table": "^8.12.0",
+    "@tanstack/react-table": "^8.20.5",
     "@tanstack/react-virtual": "^3.8.1",
     "class-variance-authority": "^0.7.0",
     "cmdk": "1.0.0",
