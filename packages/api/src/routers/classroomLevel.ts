@@ -7,7 +7,7 @@ export const classroomLevelRouter = createTRPCRouter({
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.classroomLevel.findMany({
       orderBy: {
-        group: "asc",
+        order: "asc",
       },
     });
   }),
@@ -48,7 +48,7 @@ export const classroomLevelRouter = createTRPCRouter({
     });
     const levels = await ctx.db.classroomLevel.findMany({
       orderBy: {
-        group: "asc",
+        order: "asc",
       },
     });
     return levels.map((l) => {
@@ -90,7 +90,7 @@ export const classroomLevelRouter = createTRPCRouter({
       z.object({
         id: z.number(),
         name: z.string().min(1),
-        group: z.coerce.number().int().min(0),
+        order: z.coerce.number().int().min(0),
       }),
     )
     .mutation(({ ctx, input }) => {
@@ -100,7 +100,7 @@ export const classroomLevelRouter = createTRPCRouter({
         },
         data: {
           name: input.name,
-          group: input.group,
+          order: input.order,
         },
       });
     }),
@@ -108,7 +108,7 @@ export const classroomLevelRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string().min(1),
-        group: z.coerce.number().int().min(0),
+        order: z.coerce.number().int().min(0),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -116,7 +116,7 @@ export const classroomLevelRouter = createTRPCRouter({
       return ctx.db.classroomLevel.create({
         data: {
           name: input.name,
-          group: input.group == 0 ? count + 1 : input.group,
+          order: input.order == 0 ? count + 1 : input.order,
         },
       });
     }),

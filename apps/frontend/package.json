@@ -74,5 +74,6 @@
     "prettier": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
-  }
+  },
+  "packageManager": "pnpm@9.7.1"
 }

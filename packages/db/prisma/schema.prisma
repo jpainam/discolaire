@@ -202,7 +202,7 @@ model Classroom {
 model ClassroomLevel {
     id         Int         @id @default(autoincrement())
     name       String
-    group      Int
+    order      Int         @default(1)
     classrooms Classroom[]
 }
 

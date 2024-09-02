@@ -16,7 +16,6 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 
-import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
 const createLevelSchema = z.object({
@@ -44,29 +43,36 @@ export function CreateEditLevel({
   const utils = api.useUtils();
   const createClassroomLevel = api.classroomLevel.create.useMutation({
     onSettled: () => utils.classroomLevel.invalidate(),
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+    onSuccess: () => {
+      toast.success(t("created_successfully"), { id: 0 });
+      closeModal();
+    },
   });
   const updateClassroomLevel = api.classroomLevel.update.useMutation({
     onSettled: () => utils.classroomLevel.invalidate(),
+    onSuccess: () => {
+      toast.success(t("updated_successfully"), { id: 0 });
+      closeModal();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
   });
 
   const onSubmit = (data: z.infer<typeof createLevelSchema>) => {
     const values = {
       name: data.name,
-      group: data.order,
+      order: data.order,
     };
     if (id) {
+      toast.loading(t("updating"), { id: 0 });
       updateClassroomLevel.mutate({ id: id, ...values });
     } else {
-      toast.promise(createClassroomLevel.mutateAsync(values), {
-        success: () => {
-          closeModal();
-          return t("created_successfully");
-        },
-        loading: t("creating"),
-        error: (error) => {
-          return getErrorMessage(error);
-        },
-      });
+      createClassroomLevel.mutate(values);
+      toast.loading(t("creating"), { id: 0 });
     }
   };
   return (
@@ -110,8 +116,14 @@ export function CreateEditLevel({
           >
             {t("cancel")}
           </Button>
-          <Button size={"sm"} type="submit">
-            {t("submit")}
+          <Button
+            isLoading={
+              updateClassroomLevel.isPending || createClassroomLevel.isPending
+            }
+            size={"sm"}
+            type="submit"
+          >
+            {id ? t("edit") : t("submit")}
           </Button>
         </div>
       </form>
