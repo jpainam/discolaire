@@ -269,3 +269,7 @@ A [blog post](https://jumr.dev/blog/t3-turbo) where I wrote how to migrate a T3 
 ## Turborepo
 
 https://github.com/vercel/turborepo/issues/9016
+
+# Bugs
+
+- `Invalid create() Unique constraint failed on the fields: (id)` https://github.com/prisma/prisma/discussions/5256
