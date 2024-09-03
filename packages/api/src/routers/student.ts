@@ -13,6 +13,7 @@ const whereClause = (q: string): Prisma.StudentFindManyArgs => {
       AND: [
         {
           OR: [
+            { id: { startsWith: qq, mode: "insensitive" } },
             { firstName: { startsWith: qq, mode: "insensitive" } },
             { lastName: { startsWith: qq, mode: "insensitive" } },
             { residence: { startsWith: qq, mode: "insensitive" } },

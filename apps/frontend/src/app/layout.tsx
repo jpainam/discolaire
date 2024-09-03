@@ -10,7 +10,7 @@ import { TRPCReactProvider } from "~/trpc/react";
 
 import "~/styles/globals.css";
 
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+//import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { auth } from "@repo/auth";
 import { detectLanguage } from "@repo/i18n/server";
@@ -79,7 +79,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
                 <GlobalSheet />
 
                 <GlobalModal />
-                <ReactQueryDevtools initialIsOpen={false} />
+                {/* <ReactQueryDevtools initialIsOpen={false} /> */}
               </AuthProvider>
             </TRPCReactProvider>
             <TailwindIndicator />
