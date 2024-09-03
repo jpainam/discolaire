@@ -116,7 +116,7 @@ export function StudentEnrollmentTable({
                         className="cursor-pointer bg-destructive text-destructive-foreground"
                         onSelect={async () => {
                           const isConfirmed = await confirm({
-                            title: t("are_you_sure"),
+                            title: t("delete"),
                             description: t("delete_confirmation"),
                           });
                           if (isConfirmed) {

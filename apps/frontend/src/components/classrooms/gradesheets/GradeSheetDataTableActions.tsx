@@ -43,7 +43,7 @@ export function GradeSheetDataTableActions({
         <Button
           onClick={async () => {
             const isConfirmed = await confirm({
-              title: t("are_you_sure"),
+              title: t("delete"),
               description: t("delete_confirmation"),
             });
             if (isConfirmed) {

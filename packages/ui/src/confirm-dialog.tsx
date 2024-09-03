@@ -110,11 +110,20 @@ const ConfirmDialogContent: React.FC<{
           ) : (
             <>
               {cancelButton !== null && (
-                <AlertDialogCancel onClick={onCancel} {...cancelButton}>
+                <AlertDialogCancel
+                  onClick={onCancel}
+                  variant={"outline"}
+                  {...cancelButton}
+                >
                   {cancelText}
                 </AlertDialogCancel>
               )}
-              <AlertDialogAction onClick={onConfirm} {...confirmButton}>
+              <AlertDialogAction
+                onClick={onConfirm}
+                variant={"default"}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/80"
+                {...confirmButton}
+              >
                 {confirmText}
               </AlertDialogAction>
             </>

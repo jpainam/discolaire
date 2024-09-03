@@ -108,6 +108,9 @@ export function DropdownInvitation({ email }: { email?: string | null }) {
             icon: <Mail className="h-4 w-4" />,
             description: t("would_you_like_to_invite_this_person"),
             confirmText: t("yes"),
+            confirmButton: {
+              className: "",
+            },
             cancelText: t("no"),
             alertDialogTitle: {
               className: "flex items-center gap-2",

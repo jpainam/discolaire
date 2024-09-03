@@ -13,8 +13,6 @@
   "number_of_avg": "Nombre de Moy >= 10",
   "success_rate": "Taux de réussite",
   "classroom_information": "Informations de la classe",
-  "exporting_classroom_information": "Impression des informations de la classe",
-  "classroom_information_exported_successfully": "Informations de la classe imprimées avec succès",
   "boys": "Garçons",
   "girls": "Filles",
   "staff_list": "Liste du personnel",

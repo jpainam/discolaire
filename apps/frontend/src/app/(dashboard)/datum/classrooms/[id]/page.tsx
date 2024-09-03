@@ -27,14 +27,13 @@ export default async function Page({
         </div> */}
 
       <EnrollmentHeader classroomId={id} />
-      {JSON.stringify(canReadEnrollment)}
       {/* <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-2 p-2 ">
         <GenderPie classroom={classroom} />
         <RepeatingPie students={students} />
         <GenderPie classroom={classroom} />
         <GenderPie classroom={classroom} />
       </div> */}
-      <EnrollmentDataTable classroomId={id} />
+      {canReadEnrollment && <EnrollmentDataTable classroomId={id} />}
     </div>
   );
 }

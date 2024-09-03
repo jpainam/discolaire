@@ -2,7 +2,14 @@
 
 import { useEffect } from "react";
 import { useParams, usePathname } from "next/navigation";
-import { Forward, MoreVertical, Pencil, Reply } from "lucide-react";
+import {
+  Forward,
+  MoreVertical,
+  Pencil,
+  Printer,
+  Reply,
+  Trash2,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
@@ -10,35 +17,49 @@ import { useRouter } from "@repo/hooks/use-router";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import { Separator } from "@repo/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
 
 import { routes } from "~/configs/routes";
-import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
+import { DropdownHelp } from "../shared/DropdownHelp";
 import { ClassroomSelector } from "../shared/selects/ClassroomSelector";
 import { CreateEditClassroom } from "./CreateEditClassroom";
 
 export function ClassroomHeader() {
   const { t } = useLocale();
-  const { t: t2 } = useLocale("print");
   const { createQueryString } = useCreateQueryString();
   //const [nextClassroom, setNextClassroom] = useState<Classroom | null>(null);
   //const [prevClassroom, setPrevClassrom] = useState<Classroom | null>(null);
   const params = useParams<{ id: string }>();
   const pathname = usePathname();
   const router = useRouter();
+  const deleteClassroomMutation = api.classroom.delete.useMutation({
+    onSuccess: () => {
+      toast.success(t("deleted_successfully"), { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
 
   const classroomsQuery = api.classroom.all.useQuery();
   const classroomQuery = api.classroom.get.useQuery(params.id);
+  const confirm = useConfirm();
 
   useEffect(() => {
     if (!params.id || !classroomsQuery.data) return;
@@ -157,41 +178,40 @@ export function ClassroomHeader() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
+            <DropdownHelp />
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <Printer className="mr-2 h-4 w-4" />
+                <span>{t("export")}</span>
+              </DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent>
+                  <DropdownMenuItem>
+                    <PDFIcon className="mr-2 h-4 w-4" />
+                    <span>{t("pdf_export")}</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <XMLIcon className="mr-2 h-4 w-4" />
+                    <span>{t("excel_export")}</span>
+                  </DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
+            <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={() => {
-                toast.promise(Promise.resolve(), {
-                  loading: t2("exporting_classroom_information"),
-                  success: () => {
-                    router.push(routes.reports.index);
-                    return t2("classroom_information_exported_successfully");
-                  },
-                  error: (e) => {
-                    console.error(e);
-                    return getErrorMessage(e);
-                  },
+              className="text-destructive"
+              onSelect={async () => {
+                const isConfirmed = await confirm({
+                  title: t("delete"),
+                  description: t("delete_confirmation"),
                 });
+                if (isConfirmed) {
+                  toast.loading(t("deleting"), { id: 0 });
+                  deleteClassroomMutation.mutate(params.id);
+                }
               }}
             >
-              <PDFIcon className="mr-2 h-4 w-4" />
-              {t2("classroom_information")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              // TODO implement exporting staff information
-              onClick={() => {
-                toast.promise(Promise.resolve(), {
-                  loading: t2("exporting_classroom_information"),
-                  success: () => {
-                    router.push(routes.reports.index);
-                    return t2("classroom_information_exported_successfully");
-                  },
-                  error: (e) => {
-                    console.error(e);
-                    return getErrorMessage(e);
-                  },
-                });
-              }}
-            >
-              <XMLIcon className="mr-2 size-4" /> {t2("classroom_information")}
+              <Trash2 className="mr-2 h-4 w-4" /> {t("delete")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

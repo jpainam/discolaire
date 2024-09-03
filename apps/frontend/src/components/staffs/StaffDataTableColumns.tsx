@@ -277,7 +277,7 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
             className="text-destructive"
             onClick={async () => {
               const isConfirmed = await confirm({
-                title: t("are_you_sure"),
+                title: t("delete"),
                 description: t("delete_confirmation", {
                   name: getFullName(staff),
                 }),
