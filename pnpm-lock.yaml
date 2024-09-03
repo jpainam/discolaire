@@ -333,8 +333,8 @@ importers:
         specifier: ^1.3.1
         version: 1.3.1(next@14.2.5(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       json-edit-react:
-        specifier: 1.15.10-rc1
-        version: 1.15.10-rc1(react@18.3.1)
+        specifier: 1.15.10
+        version: 1.15.10(react@18.3.1)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -7335,8 +7335,8 @@ packages:
   json-buffer@3.0.1:
     resolution: {integrity: sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==}
 
-  json-edit-react@1.15.10-rc1:
-    resolution: {integrity: sha512-uRY4vUJdOyBmO8n371L9PJ/gQjmA5sTvD1xswIaAGItBEpVIyse4Cn203lgog9NLI3WSolaSV0m7e9nrAPsakA==}
+  json-edit-react@1.15.10:
+    resolution: {integrity: sha512-97vtCfcxM6RiRPYVF4aXDhl1BavY2eJiCaoUghw4YchGkKOVIsbn5p1x7Ht15SMl/srZ7U6nl8KZzPyYPoXoRQ==}
     peerDependencies:
       react: '>=16.0.0'
 
@@ -18149,7 +18149,7 @@ snapshots:
 
   json-buffer@3.0.1: {}
 
-  json-edit-react@1.15.10-rc1(react@18.3.1):
+  json-edit-react@1.15.10(react@18.3.1):
     dependencies:
       object-property-assigner: 1.3.1
       object-property-extractor: 1.0.12
