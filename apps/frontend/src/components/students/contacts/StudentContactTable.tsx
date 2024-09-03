@@ -64,7 +64,7 @@ export function StudentContactTable({
     );
   }
   return (
-    <div className={cn("mx-4 my-2 rounded-lg border", className)}>
+    <div className={cn("m-2 rounded-lg border", className)}>
       <Table>
         <TableHeader>
           <TableRow className="bg-muted/50 font-semibold">

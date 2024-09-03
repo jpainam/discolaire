@@ -8,7 +8,7 @@ import { StudentDetails } from "~/components/students/profile/StudentDetails";
 
 export default function Page({ params: { id } }: { params: { id: string } }) {
   return (
-    <div className="flex w-full flex-col p-1">
+    <div className="flex w-full flex-col">
       <Suspense
         key={id}
         fallback={

@@ -42,7 +42,7 @@ import { getFullName } from "~/utils/full-name";
 import { CountryComponent } from "../shared/CountryPicker";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
-import { StudentSelector } from "../shared/selects/StudentSelector";
+import { StudentSelector } from "../shared/selects/StudentSelector2";
 import CreateEditStudent from "./CreateEditStudent";
 import { SquaredAvatar } from "./SquaredAvatar";
 
@@ -60,15 +60,13 @@ export function StudentHeader({ className }: StudentHeaderProps) {
   const { createQueryString } = useCreateQueryString();
   const pathname = usePathname();
 
-  const navigateToStudent = (id: string | null) => {
-    if (id) {
-      if (!pathname.includes(params.id)) {
-        router.push(`${pathname}/${id}/?${createQueryString({})}`);
-        return;
-      }
-      const newPath = pathname.replace(params.id, id);
-      router.push(`${newPath}/?${createQueryString({})}`);
+  const navigateToStudent = (id: string) => {
+    if (!pathname.includes(params.id)) {
+      router.push(`${pathname}/${id}/?${createQueryString({})}`);
+      return;
     }
+    const newPath = pathname.replace(params.id, id);
+    router.push(`${newPath}/?${createQueryString({})}`);
   };
 
   const student = studentQuery.data;
@@ -85,10 +83,6 @@ export function StudentHeader({ className }: StudentHeaderProps) {
             onChange={(val) => {
               if (val) {
                 navigateToStudent(val);
-              } else {
-                router.push(
-                  `${routes.students.index}/?${createQueryString({})}`,
-                );
               }
             }}
           />

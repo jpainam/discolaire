@@ -4,22 +4,21 @@ import type { DialogProps } from "@radix-ui/react-dialog";
 import * as React from "react";
 import { ChevronDownIcon } from "lucide-react";
 
-//import { DialogProps } from "@radix-ui/react-alert-dialog";
-
 import { useDebounce } from "@repo/hooks/use-debounce";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   CommandDialog,
   CommandEmpty,
-  CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
 } from "@repo/ui/command";
-import { ScrollArea } from "@repo/ui/scroll-area";
+import { EmptyState } from "@repo/ui/EmptyState";
+import { Skeleton } from "@repo/ui/skeleton";
 
+//import { DialogProps } from "@radix-ui/react-alert-dialog";
+import rangeMap from "~/lib/range-map";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
@@ -38,7 +37,7 @@ export function StudentSelector({ ...props }: StudentSelectorProps) {
 
   const debounceValue = useDebounce(searchText, 500);
   const studentsQuery = api.student.all.useQuery({
-    q: debounceValue.length == 0 ? props.defaultValue : "",
+    q: debounceValue,
   });
 
   const { t } = useLocale();
@@ -71,19 +70,25 @@ export function StudentSelector({ ...props }: StudentSelectorProps) {
           placeholder={t("search_for_an_option")}
         />
         <CommandList>
-          <CommandEmpty>{t("not_found")}</CommandEmpty>
-          <ScrollArea className="h-[400px] w-full">
-            <CommandGroup heading={t("main_menu")}></CommandGroup>
-            <CommandSeparator />
-            {studentsQuery.data?.map((student) => (
-              <CommandItem
-                key={student.id}
-                onSelect={() => runCommand(student.id, getFullName(student))}
-              >
-                {getFullName(student)}
-              </CommandItem>
-            ))}
-          </ScrollArea>
+          <CommandEmpty>
+            <EmptyState />
+          </CommandEmpty>
+          {studentsQuery.isPending && (
+            <CommandItem className="flex flex-col items-center justify-center gap-2">
+              {rangeMap(10, (index) => (
+                <Skeleton className="h-8 w-full" key={index} />
+              ))}
+            </CommandItem>
+          )}
+          {studentsQuery.data?.map((student) => (
+            <CommandItem
+              className="flex items-center px-2 py-1"
+              key={student.id}
+              onSelect={() => runCommand(student.id, getFullName(student))}
+            >
+              {getFullName(student)}
+            </CommandItem>
+          ))}
         </CommandList>
       </CommandDialog>
     </>

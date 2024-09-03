@@ -36,8 +36,8 @@ export async function StudentDetails({ id }: { id: string }) {
     year: "numeric",
   });
   return (
-    <div className="grid px-2 text-sm 2xl:px-4">
-      <div className="grid grid-cols-2 gap-y-3 xl:grid-cols-4">
+    <div className="grid py-2 text-sm">
+      <div className="grid grid-cols-2 gap-y-3 px-2 xl:grid-cols-4">
         <span className="flex flex-row items-center gap-1 text-xs text-muted-foreground 2xl:text-sm">
           <SquareUserRound className="h-4 w-4 stroke-1" /> {t("lastName")}
         </span>
@@ -67,7 +67,7 @@ export async function StudentDetails({ id }: { id: string }) {
         <span>{student.placeOfBirth ?? "N/A"}</span>
       </div>
       <Separator className="my-2 w-full" />
-      <div className="grid grid-cols-2 gap-y-3 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-y-3 px-2 xl:grid-cols-4">
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <House className="h-4 w-4 stroke-1" />
           {t("residence")}
@@ -109,7 +109,7 @@ export async function StudentDetails({ id }: { id: string }) {
         <span>{student.userId ?? "N/A"}</span>
       </div>
       <Separator className="my-2 w-full" />
-      <div className="flex flex-row items-center justify-between">
+      <div className="flex flex-row items-center justify-between px-2">
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <School className="h-4 w-4 stroke-1" />
           {t("formerSchool")}
@@ -120,7 +120,7 @@ export async function StudentDetails({ id }: { id: string }) {
       </div>
 
       <Separator className="my-2 w-full" />
-      <div className="grid w-full justify-between md:flex">
+      <div className="grid w-full justify-between px-2 md:flex">
         <ul className="grid w-[350px] gap-3">
           <li className="flex items-center justify-between">
             <span className="flex flex-row items-center gap-1 text-muted-foreground">
