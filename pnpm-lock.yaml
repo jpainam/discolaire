@@ -859,8 +859,8 @@ importers:
         specifier: ^8.20.5
         version: 8.20.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tanstack/react-virtual':
-        specifier: ^3.10.6
-        version: 3.10.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^3.10.7
+        version: 3.10.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -991,7 +991,7 @@ importers:
         version: 7.35.2(eslint@9.9.0(jiti@1.21.6))
       eslint-plugin-react-hooks:
         specifier: rc
-        version: 5.1.0-rc-4f604941-20240830(eslint@9.9.0(jiti@1.21.6))
+        version: 5.1.0-rc-d1afcb43-20240903(eslint@9.9.0(jiti@1.21.6))
       eslint-plugin-turbo:
         specifier: ^2.1.1
         version: 2.1.1(eslint@9.9.0(jiti@1.21.6))
@@ -4516,8 +4516,8 @@ packages:
       react: '>=16.8'
       react-dom: '>=16.8'
 
-  '@tanstack/react-virtual@3.10.6':
-    resolution: {integrity: sha512-xaSy6uUxB92O8mngHZ6CvbhGuqxQ5lIZWCBy+FjhrbHmOwc6BnOnKkYm2FsB1/BpKw/+FVctlMbEtI+F6I1aJg==}
+  '@tanstack/react-virtual@3.10.7':
+    resolution: {integrity: sha512-yeP+M0G8D+15ZFPivpuQ5hoM4Fa/PzERBx8P8EGcfEsXX3JOb9G9UUrqc47ZXAxvK+YqzM9T5qlJUYUFOwCZJw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -4526,8 +4526,8 @@ packages:
     resolution: {integrity: sha512-P9dF7XbibHph2PFRz8gfBKEXEY/HJPOhym8CHmjF8y3q5mWpKx9xtZapXQUWCgkqvsK0R46Azuz+VaxD4Xl+Tg==}
     engines: {node: '>=12'}
 
-  '@tanstack/virtual-core@3.10.6':
-    resolution: {integrity: sha512-1giLc4dzgEKLMx5pgKjL6HlG5fjZMgCjzlKAlpr7yoUtetVPELgER1NtephAI910nMwfPTHNyWKSFmJdHkz2Cw==}
+  '@tanstack/virtual-core@3.10.7':
+    resolution: {integrity: sha512-ND5dfsU0n9F4gROzwNNDJmg6y8n9pI8YWxtgbfJ5UcNn7Hx+MxEXtXcQ189tS7sh8pmCObgz2qSiyRKTZxT4dg==}
 
   '@tootallnate/quickjs-emscripten@0.23.0':
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
@@ -6177,8 +6177,8 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9
 
-  eslint-plugin-react-hooks@5.1.0-rc-4f604941-20240830:
-    resolution: {integrity: sha512-7IHBSzlQL498kfaPzQWV1t8dR/v3QTbXtG2x2bVjl5YOLpmf+I045NU78HMX7wAOaepWjsOwF591Q/O+nr3CJQ==}
+  eslint-plugin-react-hooks@5.1.0-rc-d1afcb43-20240903:
+    resolution: {integrity: sha512-/nFI+l7fwC5yg0VIPL9YmtlAPSbzOeeMW7cIcx5JEcsdE8SBN7uXKnsfik1yDQeGbQIgaQzN4nj5fNxfoVh7dQ==}
     engines: {node: '>=10'}
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0
@@ -14956,15 +14956,15 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@tanstack/react-virtual@3.10.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@tanstack/react-virtual@3.10.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@tanstack/virtual-core': 3.10.6
+      '@tanstack/virtual-core': 3.10.7
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
   '@tanstack/table-core@8.20.5': {}
 
-  '@tanstack/virtual-core@3.10.6': {}
+  '@tanstack/virtual-core@3.10.7': {}
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
@@ -16854,7 +16854,7 @@ snapshots:
       safe-regex-test: 1.0.3
       string.prototype.includes: 2.0.0
 
-  eslint-plugin-react-hooks@5.1.0-rc-4f604941-20240830(eslint@9.9.0(jiti@1.21.6)):
+  eslint-plugin-react-hooks@5.1.0-rc-d1afcb43-20240903(eslint@9.9.0(jiti@1.21.6)):
     dependencies:
       eslint: 9.9.0(jiti@1.21.6)
 
