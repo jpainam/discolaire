@@ -4,7 +4,7 @@
     "config:base"
   ],
   "schedule": [
-    "1 1 * * 1"
+    "every weekend"
   ],
   "packageRules": [
     {
