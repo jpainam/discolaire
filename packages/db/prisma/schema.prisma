@@ -14,6 +14,14 @@ model RecipientGroup {
     recipients Recipient[]
 }
 
+model Feedback {
+    id          Int      @id @default(autoincrement())
+    content     String
+    createdAt   DateTime @default(now()) @db.Timestamp(6)
+    createdById String
+    createdBy   User     @relation(fields: [createdById], references: [id])
+}
+
 model Recipient {
     groupId String
     group   RecipientGroup @relation(fields: [groupId], references: [id])
@@ -650,11 +658,11 @@ model SchoolYear {
     isDefault           Boolean?          @default(false)
     deletedAt           DateTime?         @db.Timestamp(6)
     deletedBy           String?
-    isActive            Boolean?          @default(true)
+    isActive            Boolean           @default(true)
     isDeleted           Boolean?          @default(false)
-    name                String?
-    startDate           DateTime?         @default(now()) @db.Timestamp(6)
-    endDate             DateTime?         @default(now()) @db.Timestamp(6)
+    name                String
+    startDate           DateTime          @default(now()) @db.Timestamp(6)
+    endDate             DateTime          @default(now()) @db.Timestamp(6)
     enrollmentStartDate DateTime?         @default(now()) @db.Timestamp(6)
     enrollmentEndDate   DateTime?         @default(now()) @db.Timestamp(6)
     classrooms          Classroom[]
@@ -703,6 +711,7 @@ model User {
     policies        UserPolicy[]
     posts           Post[]
     invitations     Invitation[]
+    Feedback        Feedback[]
 }
 
 model UserRole {

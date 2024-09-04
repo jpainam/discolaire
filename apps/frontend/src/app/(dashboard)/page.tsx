@@ -1,5 +1,8 @@
 import { Suspense } from "react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+
+import { auth } from "@repo/auth";
 
 import { ContactCard } from "~/components/contacts/ContactCard";
 import { DashboardClassroomSize } from "~/components/dashboard/DashboardClassroomSize";
@@ -7,7 +10,7 @@ import { DashboardTransactionTrend } from "~/components/dashboard/DashboardTrans
 import { EffectiveStat } from "~/components/dashboard/EffectiveStat";
 import { SearchBlock } from "~/components/dashboard/SearchBlock";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
   // const signedUrl = await fetch(
   //   "http://localhost:3000/api/upload?key=avatars/011ece07-f378-47de-bbe5-d1cb8618dd8e"
   // );
@@ -20,6 +23,10 @@ export default function DashboardPage() {
   //const staff = await api.staff.all();
   //const session = await auth();
   //console.log(session);
+  const session = await auth();
+  if (!session) {
+    redirect("/auth/login");
+  }
 
   return (
     <div className="grid grid-cols-12 gap-4 px-6 md:mt-4 md:px-8 2xl:px-10">

@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { getServerTranslations } from "@repo/i18n/server";
 
 import { ModeToggle } from "~/layouts/mode-toggle";
+import { api } from "~/trpc/server";
 import { UserAuthForm } from "./user-auth-form";
 
 export const metadata: Metadata = {
@@ -13,6 +15,11 @@ export const metadata: Metadata = {
 
 export default async function AuthenticationPage() {
   const { t } = await getServerTranslations("auth");
+  const schoolYears = await api.schoolYear.getDefault();
+  if (!schoolYears) {
+    redirect("/setup");
+  }
+
   return (
     <>
       <div className="container relative h-[100vh] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">

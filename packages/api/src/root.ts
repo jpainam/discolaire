@@ -11,6 +11,7 @@ import { contactRouter } from "./routers/contact";
 import { courseRouter } from "./routers/course";
 import { enrollmentRouter } from "./routers/enrollment";
 import { feeRouter } from "./routers/fee";
+import { feedbackRouter } from "./routers/feedback";
 import { gradeRouter } from "./routers/grade";
 import { gradeSheetRouter } from "./routers/gradeSheet";
 import { healthRouter } from "./routers/health";
@@ -60,6 +61,7 @@ export const appRouter = createTRPCRouter({
   studentAccount: studentAccountRouter,
   school: schoolRouter,
   grade: gradeRouter,
+  feedback: feedbackRouter,
   gradeSheet: gradeSheetRouter,
   health: healthRouter,
   enrollment: enrollmentRouter,
