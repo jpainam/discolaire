@@ -43,7 +43,7 @@
     "nativewind": "~4.1.6",
     "react": "catalog:react18",
     "react-dom": "catalog:react18",
-    "react-native": "~0.74.5",
+    "react-native": "~0.75.2",
     "react-native-calendars": "^1.1306.0",
     "react-native-css-interop": "~0.0.34",
     "react-native-gesture-handler": "~2.19.0",
