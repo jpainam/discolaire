@@ -21,7 +21,7 @@
     "eslint-plugin-react": "^7.35.2",
     "eslint-plugin-react-hooks": "rc",
     "eslint-plugin-turbo": "^2.1.1",
-    "typescript-eslint": "^8.3.0"
+    "typescript-eslint": "^8.4.0"
   },
   "devDependencies": {
     "@repo/prettier-config": "workspace:*",
