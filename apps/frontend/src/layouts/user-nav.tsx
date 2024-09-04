@@ -24,7 +24,6 @@ export function UserNav({ className }: { className?: string }) {
   const { t } = useLocale();
   const router = useRouter();
   const { data } = useSession();
-  console.log(data);
   const user = data?.user;
   if (!user) return null;
   return (

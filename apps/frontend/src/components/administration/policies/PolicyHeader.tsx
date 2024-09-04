@@ -18,7 +18,7 @@ export function PolicyHeader() {
           onClick={() => {
             openModal({
               className: "w-[500px]",
-              title: t("create_policy"),
+              title: t("create") + " - " + t("policy"),
               view: <CreateEditPolicy />,
             });
           }}

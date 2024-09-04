@@ -34,8 +34,9 @@ export function GradeSheetDataTableActions({
   const params = useParams<{ id: string }>();
   const confirm = useConfirm();
   const { createQueryString } = useCreateQueryString();
+  const utils = api.useUtils();
   const deleteGradeSheetMutation = api.gradeSheet.delete.useMutation({
-    onSettled: () => api.useUtils().invalidate(),
+    onSettled: () => utils.invalidate(),
   });
   return (
     <div className="flex items-center gap-2">

@@ -273,3 +273,9 @@ https://github.com/vercel/turborepo/issues/9016
 # Bugs
 
 - `Invalid create() Unique constraint failed on the fields: (id)` https://github.com/prisma/prisma/discussions/5256
+
+```bash
+ssh root@37.27.188.136
+docker exec -it qgs0so4 bash
+SELECT setval(pg_get_serial_sequence('"Policy"', 'id'), coalesce(max(id) + 1, 1), false ) FROM "Policy";
+```

@@ -7,3 +7,7 @@ export type Student =
 export type Classroom =
   | RouterOutputs["classroom"]["get"]
   | RouterOutputs["classroom"]["all"][number];
+
+export type Policy =
+  | RouterOutputs["policy"]["get"]
+  | RouterOutputs["policy"]["all"][number];

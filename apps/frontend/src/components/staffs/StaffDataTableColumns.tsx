@@ -238,9 +238,9 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
   const { t } = useLocale();
   const { openSheet } = useSheet();
   const confirm = useConfirm();
-
+  const utils = api.useUtils();
   const deleteStaffMutation = api.staff.delete.useMutation({
-    onSettled: () => api.useUtils().staff.invalidate(),
+    onSettled: () => utils.staff.invalidate(),
   });
   return (
     <>

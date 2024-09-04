@@ -185,9 +185,10 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
   const params = useParams<{ id: string }>();
   const { t } = useLocale();
   const router = useRouter();
+  const utils = api.useUtils();
   const unenrollStudentsMutation =
     api.enrollment.deleteByStudentIdClassroomId.useMutation({
-      onSettled: () => api.useUtils().classroom.students.invalidate(params.id),
+      onSettled: () => utils.classroom.students.invalidate(params.id),
     });
 
   const confirm = useConfirm();

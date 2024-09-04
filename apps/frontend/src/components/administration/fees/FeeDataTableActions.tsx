@@ -23,8 +23,9 @@ export function FeeDataTableActions({
 }) {
   const { t } = useLocale();
   const confirm = useConfirm();
+  const utils = api.useUtils();
   const feesMutation = api.fee.deleteMany.useMutation({
-    onSettled: () => api.useUtils().fee.invalidate(),
+    onSettled: () => utils.fee.invalidate(),
   });
   return (
     <div className="flex items-center gap-2">

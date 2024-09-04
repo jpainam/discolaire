@@ -11,7 +11,7 @@ import { TopRightMenu } from "./top-right-menu";
 
 export async function Header() {
   const { i18n } = await getServerTranslations();
-  const lng = i18n.resolvedLanguage;
+  const lng = i18n.resolvedLanguage ?? "FR";
 
   const schoolYear = await getSchoolYearFromCookie();
 

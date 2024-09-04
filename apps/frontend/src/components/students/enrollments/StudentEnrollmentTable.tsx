@@ -43,8 +43,9 @@ export function StudentEnrollmentTable({
   const { t } = useLocale();
   const confirm = useConfirm();
   const { fullDateFormatter } = useDateFormat();
+  const utils = api.useUtils();
   const deleteEnrollmentMutation = api.enrollment.delete.useMutation({
-    onSettled: () => api.useUtils().student.invalidate(),
+    onSettled: () => utils.student.invalidate(),
   });
 
   if (enrollments.length === 0) {

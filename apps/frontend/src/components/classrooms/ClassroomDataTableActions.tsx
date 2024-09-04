@@ -30,8 +30,9 @@ export function ClassroomDataTableActions({
   const { openSheet } = useSheet();
   const confirm = useConfirm();
   const { t } = useLocale();
+  const utils = api.useUtils();
   const classroomMutation = api.classroom.delete.useMutation({
-    onSettled: () => api.useUtils().classroom.invalidate(),
+    onSettled: () => utils.classroom.invalidate(),
   });
   return (
     <div className="flex items-center gap-2">

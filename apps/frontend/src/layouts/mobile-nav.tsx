@@ -64,7 +64,7 @@ export function MobileNav() {
                   <MobileLink
                     key={item.href}
                     href={item.href}
-                    onOpenChange={setOpen}
+                    ///onOpenChange={setOpen}
                   >
                     {item.label}
                   </MobileLink>

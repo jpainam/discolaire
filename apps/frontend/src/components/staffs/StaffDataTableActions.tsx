@@ -28,8 +28,9 @@ export function StaffDataTableActions({
   const { openSheet } = useSheet();
   const { t } = useLocale();
   const confirm = useConfirm();
+  const utils = api.useUtils();
   const deleteStaffMutation = api.staff.delete.useMutation({
-    onSettled: () => api.useUtils().staff.invalidate(),
+    onSettled: () => utils.staff.invalidate(),
   });
   return (
     <div className="flex items-center gap-2">

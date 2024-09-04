@@ -39,8 +39,9 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
   const { t, i18n } = useLocale();
   const rowClassName = "border";
   const { fullDateFormatter } = useDateFormat();
+  const utils = api.useUtils();
   const deleteFeeMutation = api.fee.delete.useMutation({
-    onSettled: () => api.useUtils().fee.invalidate(),
+    onSettled: () => utils.fee.invalidate(),
   });
   const { openModal } = useModal();
   const confirm = useConfirm();

@@ -1,15 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-// } from "@repo/ui/select";
+import type * as RPNInput from "react-phone-number-input";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import i18next, { changeLanguage } from "i18next";
+import i18next from "i18next";
+import flags from "react-phone-number-input/flags";
 
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -26,18 +21,20 @@ export const LanguageSwitcher = ({
   currentLanguage,
   className,
 }: {
-  currentLanguage: any;
+  currentLanguage: string;
   className?: string;
 }) => {
   const router = useRouter();
 
   const { t } = useLocale();
+  const [value, setValue] = useState<string>(currentLanguage);
 
-  //const lang = languages.find((lang) => lang != currentLanguage)
-  const onChangeLanguage = (value: any) => {
+  const onChangeLanguage = (value: string) => {
     void i18next.changeLanguage(value);
+    setValue(value == "en" ? "US" : value == "fr" ? "FR" : "ES");
     router.refresh();
   };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -46,13 +43,9 @@ export const LanguageSwitcher = ({
           size={"icon"}
           className={cn("rounded-lg hover:bg-transparent", className)}
         >
-          <span className="text-2xl">
-            {currentLanguage == "fr"
-              ? getUnicodeFlagIcon("FR")
-              : currentLanguage == "es"
-                ? getUnicodeFlagIcon("es")
-                : getUnicodeFlagIcon("US")}
-          </span>
+          <RenderSwitchItem
+            countryId={value.toUpperCase() as RPNInput.Country}
+          />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -62,26 +55,41 @@ export const LanguageSwitcher = ({
             onChangeLanguage("fr");
           }}
         >
-          <span className="mr-2">{getUnicodeFlagIcon("FR")}</span>
-          <span className="text-xs">{t("french")}</span>
+          <RenderSwitchItem countryId="FR" text={t("french")} />
         </DropdownMenuItem>
         <DropdownMenuItem
           onSelect={() => {
             onChangeLanguage("en");
           }}
         >
-          <span className="mr-2"> {getUnicodeFlagIcon("US")}</span>
-          <span className="text-xs">{t("english")}</span>
+          <RenderSwitchItem countryId="US" text={t("english")} />
         </DropdownMenuItem>
         <DropdownMenuItem
           onSelect={() => {
-            void changeLanguage("es");
+            onChangeLanguage("es");
           }}
         >
-          <span className="mr-2">{getUnicodeFlagIcon("ES")}</span>
-          <span className="text-xs">{t("spanish")}</span>
+          <RenderSwitchItem countryId="ES" text={t("spanish")} />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 };
+
+function RenderSwitchItem({
+  countryId,
+  text,
+}: {
+  countryId: RPNInput.Country;
+  text?: string;
+}) {
+  const Flag = flags[countryId];
+  return (
+    <div className="flex flex-row items-center gap-3">
+      <span className="flex h-4 w-6 overflow-hidden rounded-sm bg-foreground/20">
+        {Flag && <Flag title={text ?? "FR"} />}
+      </span>
+      {text && <span className="flex text-sm">{text}</span>}
+    </div>
+  );
+}

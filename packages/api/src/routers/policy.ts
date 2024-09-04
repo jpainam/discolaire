@@ -18,9 +18,17 @@ export const policyRouter = createTRPCRouter({
       },
     });
   }),
+  get: protectedProcedure.input(z.number()).query(({ ctx, input }) => {
+    return ctx.db.policy.findUnique({
+      where: {
+        id: input,
+      },
+    });
+  }),
   create: protectedProcedure
     .input(createUpdateSchema)
     .mutation(({ ctx, input }) => {
+      console.log(input);
       return ctx.db.policy.create({
         data: input,
       });

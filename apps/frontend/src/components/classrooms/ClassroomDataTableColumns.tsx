@@ -314,8 +314,9 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
   const confirm = useConfirm();
   const { t } = useLocale();
   const router = useRouter();
+  const utils = api.useUtils();
   const classroomMutation = api.classroom.delete.useMutation({
-    onSettled: () => api.useUtils().classroom.invalidate(),
+    onSettled: () => utils.classroom.invalidate(),
   });
 
   return (

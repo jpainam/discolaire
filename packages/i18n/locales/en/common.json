@@ -487,6 +487,8 @@
   "delete_confirmation": "Are you sure? This action cannot be undone.",
   "reload": "Reload",
   "attendance": "Attendance",
+  "policy": "Policy",
+  "invalid_policy": "Invalid policy",
   "next_student": "Next student",
   "add_from_existing": "Add from existing",
   "consignes": "Consignes",

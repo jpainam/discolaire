@@ -327,8 +327,9 @@ function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
   const router = useRouter();
   const { openSheet } = useSheet();
   const confirm = useConfirm();
+  const utils = api.useUtils();
   const deleteStudentMutation = api.student.delete.useMutation({
-    onSettled: () => api.useUtils().student.all.invalidate(),
+    onSettled: () => utils.student.all.invalidate(),
   });
 
   return (

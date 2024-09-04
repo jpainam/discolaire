@@ -23,8 +23,9 @@ export function CreateEditAppreciation({
   const confirm = useConfirm();
   const { t } = useLocale();
   const utils = api.useUtils();
+
   const deleteAppreciationMutation = api.appreciation.delete.useMutation({
-    onSettled: () => api.useUtils().appreciation.invalidate(),
+    onSettled: () => utils.appreciation.invalidate(),
   });
   const createAppreciationMutation = api.appreciation.create.useMutation();
   const updateAppreciationMutation = api.appreciation.update.useMutation();
