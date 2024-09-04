@@ -1,11 +1,11 @@
-import { PolicyDataTable } from "~/components/administration/policies/PolicyDataTable";
 import { PolicyHeader } from "~/components/administration/policies/PolicyHeader";
+import { PolicyTable } from "~/components/administration/policies/PolicyTable";
 
 export default function Page() {
   return (
     <div className="flex flex-col">
       <PolicyHeader />
-      <PolicyDataTable />
+      <PolicyTable />
     </div>
   );
 }

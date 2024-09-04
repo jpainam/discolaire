@@ -62,8 +62,8 @@ model Policy {
     id          Int          @id @default(autoincrement())
     name        String
     effect      PolicyEffect @default(Deny)
-    actions     Json
-    resources   Json
+    actions     String[]
+    resources   String[]
     description String?
     isActive    Boolean?     @default(true)
     createdAt   DateTime     @default(now()) @db.Timestamp(6)
