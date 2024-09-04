@@ -142,7 +142,7 @@ export function SchoolYearTable() {
                                 name={schoolYear.name}
                                 startDate={schoolYear.startDate}
                                 endDate={schoolYear.endDate}
-                                isActive={schoolYear.isActive ?? true}
+                                isActive={schoolYear.isActive}
                               />
                             ),
                           });
