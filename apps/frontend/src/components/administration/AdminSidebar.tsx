@@ -7,6 +7,7 @@ import {
   Image as LucideImage,
   Mails,
   RefreshCcw,
+  School,
   Settings,
   Users,
   UserSearch,
@@ -98,6 +99,12 @@ export function AdminSidebar({ className }: AdminSidebarProps) {
             label: "",
             icon: Mails,
             href: `/administration/sms-management`,
+          },
+          {
+            title: t("school_years"),
+            label: "",
+            icon: School,
+            href: `/administration/school-years`,
           },
           {
             title: t("school_noticeboard"),
