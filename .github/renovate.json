@@ -3,6 +3,9 @@
   "extends": [
     "config:base"
   ],
+  "schedule": [
+    "1 1 * * 1"
+  ],
   "packageRules": [
     {
       "matchPackagePatterns": [
