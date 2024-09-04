@@ -24,7 +24,7 @@ export async function checkPermissions(
   const allPermissions = permissionsOverride ?? permissionsResult;
 
   return doPermissionsCheck(
-    allPermissions as Permission[],
+    allPermissions,
     action,
     resource,
     data,
