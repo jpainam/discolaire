@@ -1,14 +1,13 @@
-import type { User } from "@prisma/client";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
-import { createColumnHelper } from "@tanstack/react-table";
 
+import type { RouterOutputs } from "@repo/api";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Checkbox } from "@repo/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
 import { Switch } from "@repo/ui/switch";
 
-const columnHelper = createColumnHelper<User>();
+type User = RouterOutputs["user"]["all"][number];
 
 export function getUserColumns({
   t,
@@ -18,7 +17,8 @@ export function getUserColumns({
   fullDateFormatter: Intl.DateTimeFormat;
 }): ColumnDef<User, unknown>[] {
   return [
-    columnHelper.accessor<"id", string>("id", {
+    {
+      accessorKey: "selected",
       header: ({ table }) => (
         <Checkbox
           checked={table.getIsAllPageRowsSelected()}
@@ -41,8 +41,9 @@ export function getUserColumns({
       ),
       enableSorting: false,
       enableHiding: false,
-    }),
-    columnHelper.accessor<"avatar", string>("avatar", {
+    },
+    {
+      accessorKey: "avatar",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Avatar" />
       ),
@@ -52,26 +53,29 @@ export function getUserColumns({
           <AvatarFallback>JL</AvatarFallback>
         </Avatar>
       ),
-    }),
-    columnHelper.accessor<"email", string>("email", {
+    },
+    {
+      accessorKey: "email",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="E-mail" />
       ),
       cell: ({ row }) => <div className="flex">{row.getValue("email")}</div>,
-    }),
-    columnHelper.accessor<"isEmailVerified", boolean>("isEmailVerified", {
+    },
+    {
+      accessorKey: "isEmailVerified",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("is_email_verified")} />
       ),
       cell: ({ row }) => <Switch checked={row.getValue("isEmailVerified")} />,
-    }),
-    columnHelper.accessor<"createdAt", Date>("createdAt", {
+    },
+    {
+      accessorKey: "createdAt",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("createdAt")} />
       ),
       cell: ({ row }) => {
         return fullDateFormatter.format(new Date(row.getValue("createdAt")));
       },
-    }),
-  ] as ColumnDef<User, unknown>[];
+    },
+  ];
 }

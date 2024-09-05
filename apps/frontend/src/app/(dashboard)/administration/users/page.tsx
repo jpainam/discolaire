@@ -4,7 +4,7 @@ import { useLocale } from "@repo/i18n";
 import { Separator } from "@repo/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
 
-import { UserDataTable } from "~/components/administration/users/users-table";
+import { UserDataTable } from "~/components/administration/users/UserDataTable";
 
 export default function AdminUsersPage() {
   const { t } = useLocale();
