@@ -15,7 +15,7 @@ export function getUserColumns({
 }: {
   t: TFunction<string, unknown>;
   fullDateFormatter: Intl.DateTimeFormat;
-}): ColumnDef<User, unknown>[] {
+}) {
   return [
     {
       accessorKey: "selected",
@@ -77,5 +77,5 @@ export function getUserColumns({
         return fullDateFormatter.format(new Date(row.getValue("createdAt")));
       },
     },
-  ];
+  ] as ColumnDef<User, unknown>[];
 }

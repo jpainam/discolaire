@@ -30,5 +30,5 @@ export function UserDataTable() {
   if (usersQuery.isPending) {
     return <DataTableSkeleton rowCount={10} columnCount={8} />;
   }
-  return <DataTable columns={columns} table={table}></DataTable>;
+  return <DataTable variant="compact" table={table}></DataTable>;
 }
