@@ -14,7 +14,7 @@ import { AssociatedUserNotFound } from "./AssociatedUserNotFound";
 export function UserLoginCard({ userId }: { userId: string }) {
   const { t } = useLocale();
 
-  const userQuery = api.user.get.useQuery({ id: userId });
+  const userQuery = api.user.get.useQuery(userId);
   const [isPending, startTransition] = useTransition();
 
   const sendResetPassword = async () => {

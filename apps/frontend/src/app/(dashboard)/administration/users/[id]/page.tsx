@@ -1,3 +1,10 @@
-export default function Page({ params: { id } }: { params: { id: string } }) {
-  return <div>The user page details {id}</div>;
+import { api } from "~/trpc/server";
+
+export default async function Page({
+  params: { id },
+}: {
+  params: { id: string };
+}) {
+  const user = await api.user.get(id);
+  return <div>{JSON.stringify(user)}</div>;
 }

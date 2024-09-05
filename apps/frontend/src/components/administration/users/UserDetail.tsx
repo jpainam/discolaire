@@ -36,7 +36,7 @@ type UserFormValues = z.infer<typeof userFormSchema>;
 export function UserDetails() {
   const searchParms = useSearchParams();
 
-  const useQuery = api.user.get.useQuery({ id: searchParms.get("id") ?? "" });
+  const useQuery = api.user.get.useQuery(searchParms.get("id") ?? "");
   const user = useQuery.data;
   const defaultValues = {
     name: user?.name ?? "",
