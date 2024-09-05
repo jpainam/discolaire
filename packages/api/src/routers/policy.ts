@@ -28,9 +28,8 @@ export const policyRouter = createTRPCRouter({
   create: protectedProcedure
     .input(createUpdateSchema)
     .mutation(({ ctx, input }) => {
-      console.log(input);
       return ctx.db.policy.create({
-        data: input,
+        data: { ...input, createdBy: ctx.session.user.id },
       });
     }),
   update: protectedProcedure
@@ -45,7 +44,10 @@ export const policyRouter = createTRPCRouter({
         where: {
           id: id,
         },
-        data: data,
+        data: {
+          ...data,
+          updatedBy: ctx.session.user.id,
+        },
       });
     }),
   delete: protectedProcedure

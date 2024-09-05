@@ -24,6 +24,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
+import FlatBadge from "@repo/ui/FlatBadge";
 import {
   Table,
   TableBody,
@@ -124,7 +125,13 @@ export function PolicyTable() {
                 </TableCell>
                 <TableCell className="py-0">{policy.name}</TableCell>
                 <TableCell className="py-0">{policy.description}</TableCell>
-                <TableCell className="py-0">{policy.effect}</TableCell>
+                <TableCell className="py-0">
+                  <FlatBadge
+                    variant={policy.effect == "Allow" ? "green" : "purple"}
+                  >
+                    {policy.effect}
+                  </FlatBadge>
+                </TableCell>
                 <TableCell className="py-0">
                   {policy.actions.join(", ")}
                 </TableCell>
@@ -160,6 +167,7 @@ export function PolicyTable() {
                           onSelect={() => {
                             openModal({
                               title: t("edit") + " - " + t("policy"),
+                              className: "w-[600px]",
                               view: <CreateEditPolicy policy={policy} />,
                             });
                           }}
@@ -172,9 +180,16 @@ export function PolicyTable() {
                           onSelect={async () => {
                             const isConfirmed = await confirm({
                               title: t("delete"),
-                              confirmText: t("delete_confirmation"),
+                              icon: (
+                                <Trash2 className="size-4 text-destructive" />
+                              ),
+                              alertDialogTitle: {
+                                className: "flex items-center gap-2",
+                              },
+                              description: t("delete_confirmation"),
                             });
                             if (isConfirmed) {
+                              toast.loading(t("deleting"), { id: 0 });
                               deletePolicyMutation.mutate(policy.id);
                             }
                           }}

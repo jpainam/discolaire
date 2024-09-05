@@ -38,7 +38,8 @@ export function CreateEditPolicy({ policy }: { policy?: Policy }) {
   const form = useForm<z.infer<typeof createEditPolicySchema>>({
     resolver: zodResolver(createEditPolicySchema),
     defaultValues: {
-      name: "",
+      name: policy?.name ?? "",
+      description: policy?.description ?? "",
       content: JSON.stringify({
         effect: policy?.effect ?? "Allow",
         resources: policy?.resources ?? ["*"],
@@ -48,6 +49,16 @@ export function CreateEditPolicy({ policy }: { policy?: Policy }) {
     },
   });
   const utils = api.useUtils();
+  const updatePolicyMutation = api.policy.update.useMutation({
+    onSettled: () => utils.policy.invalidate(),
+    onSuccess: () => {
+      closeModal();
+      toast.success(t("updated_successfully"), { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
   const createPolicyMutation = api.policy.create.useMutation({
     onSettled: () => utils.policy.invalidate(),
     onSuccess: () => {
@@ -76,8 +87,13 @@ export function CreateEditPolicy({ policy }: { policy?: Policy }) {
       resources: parsedContent.resources,
       condition: parsedContent.condition,
     };
-    toast.loading(t("creating"), { id: 0 });
-    createPolicyMutation.mutate(values);
+    if (policy) {
+      toast.loading(t("updating"), { id: 0 });
+      updatePolicyMutation.mutate({ id: policy.id, ...values });
+    } else {
+      toast.loading(t("creating"), { id: 0 });
+      createPolicyMutation.mutate(values);
+    }
   };
 
   return (
