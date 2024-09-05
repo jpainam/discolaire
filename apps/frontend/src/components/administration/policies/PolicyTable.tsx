@@ -116,17 +116,22 @@ export function PolicyTable() {
           {policies.map((policy) => (
             <>
               <TableRow key={policy.id} className="group">
-                <TableCell>
+                <TableCell className="py-0">
                   <Checkbox
                     checked={selectedPolicies.includes(policy.id)}
                     onCheckedChange={() => toggleSelection(policy.id)}
                   />
                 </TableCell>
-                <TableCell className="font-medium">{policy.name}</TableCell>
-                <TableCell>{policy.description}</TableCell>
-                <TableCell>{policy.actions.join(", ")}</TableCell>
-                <TableCell>{policy.resources.join(", ")}</TableCell>
-                <TableCell>
+                <TableCell className="py-0">{policy.name}</TableCell>
+                <TableCell className="py-0">{policy.description}</TableCell>
+                <TableCell className="py-0">{policy.effect}</TableCell>
+                <TableCell className="py-0">
+                  {policy.actions.join(", ")}
+                </TableCell>
+                <TableCell className="py-0">
+                  {policy.resources.join(", ")}
+                </TableCell>
+                <TableCell className="py-0">
                   <Button
                     variant="ghost"
                     size="sm"
@@ -141,7 +146,7 @@ export function PolicyTable() {
                     <span className="sr-only">Toggle condition details</span>
                   </Button>
                 </TableCell>
-                <TableCell>
+                <TableCell className="py-0">
                   <div className="flex justify-end">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -183,7 +188,7 @@ export function PolicyTable() {
               </TableRow>
               {isExpanded(policy.id) && (
                 <TableRow>
-                  <TableCell colSpan={7} className="bg-muted/50 p-4">
+                  <TableCell colSpan={8} className="bg-muted/50 p-4">
                     <pre className="whitespace-pre-wrap text-sm">
                       {JSON.stringify(policy.condition, null, 2)}
                     </pre>

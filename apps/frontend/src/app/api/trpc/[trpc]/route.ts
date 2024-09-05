@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 
 import { appRouter, createTRPCContext } from "@repo/api";
@@ -34,6 +35,9 @@ const handler = auth(async (req) => {
       }),
     onError({ error, path }) {
       console.error(`>>> tRPC Error on '${path}'`, error);
+      if (error.code == "UNAUTHORIZED") {
+        redirect("/auth/login");
+      }
     },
   });
 
