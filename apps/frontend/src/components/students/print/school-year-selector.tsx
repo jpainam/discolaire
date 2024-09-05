@@ -39,8 +39,8 @@ export default function SchoolYearSelector() {
               </FormControl>
               <SelectContent>
                 {schoolYearsQuery.data?.map((year) => (
-                  <SelectItem key={year.id} value={year.name ?? ""}>
-                    {year.name ?? ""}
+                  <SelectItem key={year.id} value={year.name}>
+                    {year.name}
                   </SelectItem>
                 ))}
               </SelectContent>
