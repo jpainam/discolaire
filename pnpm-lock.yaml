@@ -119,8 +119,8 @@ importers:
         specifier: ^14.0.2
         version: 14.0.2
       '@react-native-async-storage/async-storage':
-        specifier: 1.24.0
-        version: 1.24.0(react-native@0.75.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))
+        specifier: 2.0.0
+        version: 2.0.0(react-native@0.75.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))
       '@react-native-community/netinfo':
         specifier: ^11.3.2
         version: 11.3.2(react-native@0.75.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))
@@ -388,8 +388,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@prisma/nextjs-monorepo-workaround-plugin':
-        specifier: ^5.18.0
-        version: 5.18.0
+        specifier: ^5.19.1
+        version: 5.19.1
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../tooling/eslint
@@ -559,10 +559,10 @@ importers:
     dependencies:
       '@auth/prisma-adapter':
         specifier: ^2.4.2
-        version: 2.4.2(@prisma/client@5.18.0(prisma@5.18.0))
+        version: 2.4.2(@prisma/client@5.19.1(prisma@5.19.1))
       '@prisma/client':
-        specifier: ^5.18.0
-        version: 5.18.0(prisma@5.18.0)
+        specifier: ^5.19.1
+        version: 5.19.1(prisma@5.19.1)
       '@vercel/postgres':
         specifier: ^0.9.0
         version: 0.9.0
@@ -574,8 +574,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@prisma/nextjs-monorepo-workaround-plugin':
-        specifier: ^5.18.0
-        version: 5.18.0
+        specifier: ^5.19.1
+        version: 5.19.1
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../tooling/eslint
@@ -595,8 +595,8 @@ importers:
         specifier: 'catalog:'
         version: 3.3.3
       prisma:
-        specifier: ^5.18.0
-        version: 5.18.0
+        specifier: ^5.19.1
+        version: 5.19.1
       typescript:
         specifier: 'catalog:'
         version: 5.5.4
@@ -853,11 +853,11 @@ importers:
         specifier: workspace:*
         version: link:../lib
       '@tanstack/query-core':
-        specifier: ^5.53.3
-        version: 5.53.3
+        specifier: ^5.54.1
+        version: 5.54.1
       '@tanstack/react-query':
-        specifier: ^5.53.3
-        version: 5.53.3(react@18.3.1)
+        specifier: ^5.54.1
+        version: 5.54.1(react@18.3.1)
       '@tanstack/react-table':
         specifier: ^8.20.5
         version: 8.20.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -929,8 +929,8 @@ importers:
         specifier: ^5.53.0
         version: 5.53.0(eslint@9.9.0(jiti@1.21.6))(typescript@5.5.4)
       '@tanstack/react-query-devtools':
-        specifier: ^5.54.0
-        version: 5.54.0(@tanstack/react-query@5.53.3(react@18.3.1))(react@18.3.1)
+        specifier: ^5.54.1
+        version: 5.54.1(@tanstack/react-query@5.54.1(react@18.3.1))(react@18.3.1)
       '@types/react':
         specifier: catalog:react18
         version: 18.3.3
@@ -2879,8 +2879,8 @@ packages:
   '@popperjs/core@2.11.8':
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
 
-  '@prisma/client@5.18.0':
-    resolution: {integrity: sha512-BWivkLh+af1kqC89zCJYkHsRcyWsM8/JHpsDMM76DjP3ZdEquJhXa4IeX+HkWPnwJ5FanxEJFZZDTWiDs/Kvyw==}
+  '@prisma/client@5.19.1':
+    resolution: {integrity: sha512-x30GFguInsgt+4z5I4WbkZP2CGpotJMUXy+Gl/aaUjHn2o1DnLYNTA+q9XdYmAQZM8fIIkvUiA2NpgosM3fneg==}
     engines: {node: '>=16.13'}
     peerDependencies:
       prisma: '*'
@@ -2888,23 +2888,23 @@ packages:
       prisma:
         optional: true
 
-  '@prisma/debug@5.18.0':
-    resolution: {integrity: sha512-f+ZvpTLidSo3LMJxQPVgAxdAjzv5OpzAo/eF8qZqbwvgi2F5cTOI9XCpdRzJYA0iGfajjwjOKKrVq64vkxEfUw==}
+  '@prisma/debug@5.19.1':
+    resolution: {integrity: sha512-lAG6A6QnG2AskAukIEucYJZxxcSqKsMK74ZFVfCTOM/7UiyJQi48v6TQ47d6qKG3LbMslqOvnTX25dj/qvclGg==}
 
-  '@prisma/engines-version@5.18.0-25.4c784e32044a8a016d99474bd02a3b6123742169':
-    resolution: {integrity: sha512-a/+LpJj8vYU3nmtkg+N3X51ddbt35yYrRe8wqHTJtYQt7l1f8kjIBcCs6sHJvodW/EK5XGvboOiwm47fmNrbgg==}
+  '@prisma/engines-version@5.19.1-2.69d742ee20b815d88e17e54db4a2a7a3b30324e3':
+    resolution: {integrity: sha512-xR6rt+z5LnNqTP5BBc+8+ySgf4WNMimOKXRn6xfNRDSpHvbOEmd7+qAOmzCrddEc4Cp8nFC0txU14dstjH7FXA==}
 
-  '@prisma/engines@5.18.0':
-    resolution: {integrity: sha512-ofmpGLeJ2q2P0wa/XaEgTnX/IsLnvSp/gZts0zjgLNdBhfuj2lowOOPmDcfKljLQUXMvAek3lw5T01kHmCG8rg==}
+  '@prisma/engines@5.19.1':
+    resolution: {integrity: sha512-kR/PoxZDrfUmbbXqqb8SlBBgCjvGaJYMCOe189PEYzq9rKqitQ2fvT/VJ8PDSe8tTNxhc2KzsCfCAL+Iwm/7Cg==}
 
-  '@prisma/fetch-engine@5.18.0':
-    resolution: {integrity: sha512-I/3u0x2n31rGaAuBRx2YK4eB7R/1zCuayo2DGwSpGyrJWsZesrV7QVw7ND0/Suxeo/vLkJ5OwuBqHoCxvTHpOg==}
+  '@prisma/fetch-engine@5.19.1':
+    resolution: {integrity: sha512-pCq74rtlOVJfn4pLmdJj+eI4P7w2dugOnnTXpRilP/6n5b2aZiA4ulJlE0ddCbTPkfHmOL9BfaRgA8o+1rfdHw==}
 
-  '@prisma/get-platform@5.18.0':
-    resolution: {integrity: sha512-Tk+m7+uhqcKDgnMnFN0lRiH7Ewea0OEsZZs9pqXa7i3+7svS3FSCqDBCaM9x5fmhhkufiG0BtunJVDka+46DlA==}
+  '@prisma/get-platform@5.19.1':
+    resolution: {integrity: sha512-sCeoJ+7yt0UjnR+AXZL7vXlg5eNxaFOwC23h0KvW1YIXUoa7+W2ZcAUhoEQBmJTW4GrFqCuZ8YSP0mkDa4k3Zg==}
 
-  '@prisma/nextjs-monorepo-workaround-plugin@5.18.0':
-    resolution: {integrity: sha512-BRTytLDKe0JR/+uOrGJTeGJA+EhdgBbDM5Su+AML7t0Pz5Zi+5bjE5nHxcFLIVm/bJjDXd06P8UVkTdK6PW0VQ==}
+  '@prisma/nextjs-monorepo-workaround-plugin@5.19.1':
+    resolution: {integrity: sha512-1iYnW2IVhnQYsXwNjY+8dche/huVmkOL8FNKYjzHBsppuyqGcZ7fn6po4xfQgyfpnzsb/eEYYtlh5fycAy6fcw==}
 
   '@radix-ui/number@1.1.0':
     resolution: {integrity: sha512-V3gRzhVNU1ldS5XhAPTom1fOIo4ccrjjJgmE+LI2h/WaFpHmx0MQApT+KZHnx8abG6Avtfcz4WoEciMnpFT3HQ==}
@@ -3802,10 +3802,10 @@ packages:
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
 
-  '@react-native-async-storage/async-storage@1.24.0':
-    resolution: {integrity: sha512-W4/vbwUOYOjco0x3toB8QCr7EjIP6nE9G7o8PMguvvjYT5Awg09lyV4enACRx4s++PPulBiBSjL0KTFx2u0Z/g==}
+  '@react-native-async-storage/async-storage@2.0.0':
+    resolution: {integrity: sha512-af6H9JjfL6G/PktBfUivvexoiFKQTJGQCtSWxMdivLzNIY94mu9DdiY0JqCSg/LyPCLGKhHPUlRQhNvpu3/KVA==}
     peerDependencies:
-      react-native: ^0.0.0-0 || >=0.60 <1.0
+      react-native: ^0.0.0-0 || >=0.65 <1.0
 
   '@react-native-community/cli-clean@14.0.0':
     resolution: {integrity: sha512-kvHthZTNur/wLLx8WL5Oh+r04zzzFAX16r8xuaLhu9qGTE6Th1JevbsIuiQb5IJqD8G/uZDKgIZ2a0/lONcbJg==}
@@ -4490,16 +4490,16 @@ packages:
   '@tanstack/query-core@5.51.21':
     resolution: {integrity: sha512-POQxm42IUp6n89kKWF4IZi18v3fxQWFRolvBA6phNVmA8psdfB1MvDnGacCJdS+EOX12w/CyHM62z//rHmYmvw==}
 
-  '@tanstack/query-core@5.53.3':
-    resolution: {integrity: sha512-ZfjAgd7NpqDx0e4aYBt7EmS2enbulPrJwowTy+mayRE93WUUH+sIYHun1TdRjpGwDPMNNZ5D6goh7n3CwoO+HA==}
+  '@tanstack/query-core@5.54.1':
+    resolution: {integrity: sha512-hKS+WRpT5zBFip21pB6Jx1C0hranWQrbv5EJ7qPoiV5MYI3C8rTCqWC9DdBseiPT1JgQWh8Y55YthuYZNiw3Xw==}
 
   '@tanstack/query-devtools@5.54.0':
     resolution: {integrity: sha512-B8Sa6mh7/4m2fyk2/YnUXeOZ1/us7G/C/i1It8YcCbieXc8vf1AdSYjR+mZIoJeKOKLqA741hZqfj8d4F1NCVg==}
 
-  '@tanstack/react-query-devtools@5.54.0':
-    resolution: {integrity: sha512-0GoijDWrCxB8CnWbu8U2xeg7XYeT0yhI6dPbAz7KHr2nyXELsdBZGHrr6PlfLR5jAHJ2OBpK2vu6blwkAjkuOA==}
+  '@tanstack/react-query-devtools@5.54.1':
+    resolution: {integrity: sha512-6kJoLujP1f+8dSoOjK15uJl79XhTAdyPIKIcMJ33s5zIva6d7AUuTWoj7opcfkUvU/Jy0xXivHPsrhFHhi0SxA==}
     peerDependencies:
-      '@tanstack/react-query': ^5.53.3
+      '@tanstack/react-query': ^5.54.1
       react: ^18 || ^19
 
   '@tanstack/react-query@5.51.23':
@@ -4507,8 +4507,8 @@ packages:
     peerDependencies:
       react: ^18.0.0
 
-  '@tanstack/react-query@5.53.3':
-    resolution: {integrity: sha512-286mN/91CeM7vC6CZFLKYDHSw+WyMX6ekIvzoTbpM4xyPb99VSyCKPLyPgaOatKqYm6ooMBquSq9NGRdKgsJfg==}
+  '@tanstack/react-query@5.54.1':
+    resolution: {integrity: sha512-SuMi4JBYv49UtmiRyqjxY7XAnE1qwLht9nlkC8sioxFXz5Uzj30lepiKf2mYXuXfC7fHYjTrAPkNx+427pRHXA==}
     peerDependencies:
       react: ^18 || ^19
 
@@ -8634,8 +8634,8 @@ packages:
   pretty-format@3.8.0:
     resolution: {integrity: sha512-WuxUnVtlWL1OfZFQFuqvnvs6MiAGk9UNsBostyBOB0Is9wb5uRESevA6rnl/rkksXaGX3GzZhPup5d6Vp1nFew==}
 
-  prisma@5.18.0:
-    resolution: {integrity: sha512-+TrSIxZsh64OPOmaSgVPH7ALL9dfU0jceYaMJXsNrTkFHO7/3RANi5K2ZiPB1De9+KDxCWn7jvRq8y8pvk+o9g==}
+  prisma@5.19.1:
+    resolution: {integrity: sha512-c5K9MiDaa+VAAyh1OiYk76PXOme9s3E992D7kvvIOhCrNsBQfy2mP2QAQtX0WNj140IgG++12kwZpYB9iIydNQ==}
     engines: {node: '>=16.13'}
     hasBin: true
 
@@ -10454,10 +10454,10 @@ snapshots:
       preact: 10.11.3
       preact-render-to-string: 5.2.3(preact@10.11.3)
 
-  '@auth/prisma-adapter@2.4.2(@prisma/client@5.18.0(prisma@5.18.0))':
+  '@auth/prisma-adapter@2.4.2(@prisma/client@5.19.1(prisma@5.19.1))':
     dependencies:
       '@auth/core': 0.34.2
-      '@prisma/client': 5.18.0(prisma@5.18.0)
+      '@prisma/client': 5.19.1(prisma@5.19.1)
     transitivePeerDependencies:
       - '@simplewebauthn/browser'
       - '@simplewebauthn/server'
@@ -12900,32 +12900,32 @@ snapshots:
 
   '@popperjs/core@2.11.8': {}
 
-  '@prisma/client@5.18.0(prisma@5.18.0)':
+  '@prisma/client@5.19.1(prisma@5.19.1)':
     optionalDependencies:
-      prisma: 5.18.0
+      prisma: 5.19.1
 
-  '@prisma/debug@5.18.0': {}
+  '@prisma/debug@5.19.1': {}
 
-  '@prisma/engines-version@5.18.0-25.4c784e32044a8a016d99474bd02a3b6123742169': {}
+  '@prisma/engines-version@5.19.1-2.69d742ee20b815d88e17e54db4a2a7a3b30324e3': {}
 
-  '@prisma/engines@5.18.0':
+  '@prisma/engines@5.19.1':
     dependencies:
-      '@prisma/debug': 5.18.0
-      '@prisma/engines-version': 5.18.0-25.4c784e32044a8a016d99474bd02a3b6123742169
-      '@prisma/fetch-engine': 5.18.0
-      '@prisma/get-platform': 5.18.0
+      '@prisma/debug': 5.19.1
+      '@prisma/engines-version': 5.19.1-2.69d742ee20b815d88e17e54db4a2a7a3b30324e3
+      '@prisma/fetch-engine': 5.19.1
+      '@prisma/get-platform': 5.19.1
 
-  '@prisma/fetch-engine@5.18.0':
+  '@prisma/fetch-engine@5.19.1':
     dependencies:
-      '@prisma/debug': 5.18.0
-      '@prisma/engines-version': 5.18.0-25.4c784e32044a8a016d99474bd02a3b6123742169
-      '@prisma/get-platform': 5.18.0
+      '@prisma/debug': 5.19.1
+      '@prisma/engines-version': 5.19.1-2.69d742ee20b815d88e17e54db4a2a7a3b30324e3
+      '@prisma/get-platform': 5.19.1
 
-  '@prisma/get-platform@5.18.0':
+  '@prisma/get-platform@5.19.1':
     dependencies:
-      '@prisma/debug': 5.18.0
+      '@prisma/debug': 5.19.1
 
-  '@prisma/nextjs-monorepo-workaround-plugin@5.18.0': {}
+  '@prisma/nextjs-monorepo-workaround-plugin@5.19.1': {}
 
   '@radix-ui/number@1.1.0': {}
 
@@ -13845,7 +13845,7 @@ snapshots:
     dependencies:
       react: 18.3.1
 
-  '@react-native-async-storage/async-storage@1.24.0(react-native@0.75.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))':
+  '@react-native-async-storage/async-storage@2.0.0(react-native@0.75.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))':
     dependencies:
       merge-options: 3.0.4
       react-native: 0.75.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4)
@@ -14938,14 +14938,14 @@ snapshots:
 
   '@tanstack/query-core@5.51.21': {}
 
-  '@tanstack/query-core@5.53.3': {}
+  '@tanstack/query-core@5.54.1': {}
 
   '@tanstack/query-devtools@5.54.0': {}
 
-  '@tanstack/react-query-devtools@5.54.0(@tanstack/react-query@5.53.3(react@18.3.1))(react@18.3.1)':
+  '@tanstack/react-query-devtools@5.54.1(@tanstack/react-query@5.54.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@tanstack/query-devtools': 5.54.0
-      '@tanstack/react-query': 5.53.3(react@18.3.1)
+      '@tanstack/react-query': 5.54.1(react@18.3.1)
       react: 18.3.1
 
   '@tanstack/react-query@5.51.23(react@18.3.1)':
@@ -14953,9 +14953,9 @@ snapshots:
       '@tanstack/query-core': 5.51.21
       react: 18.3.1
 
-  '@tanstack/react-query@5.53.3(react@18.3.1)':
+  '@tanstack/react-query@5.54.1(react@18.3.1)':
     dependencies:
-      '@tanstack/query-core': 5.53.3
+      '@tanstack/query-core': 5.54.1
       react: 18.3.1
 
   '@tanstack/react-table@8.20.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
@@ -19642,9 +19642,11 @@ snapshots:
 
   pretty-format@3.8.0: {}
 
-  prisma@5.18.0:
+  prisma@5.19.1:
     dependencies:
-      '@prisma/engines': 5.18.0
+      '@prisma/engines': 5.19.1
+    optionalDependencies:
+      fsevents: 2.3.3
 
   prismjs@1.29.0: {}
 
