@@ -34,7 +34,7 @@ export const permissionRouter = createTRPCRouter({
     });
   }),
   getRole: protectedProcedure
-    .input(z.number())
+    .input(z.string())
     .query(async ({ ctx, input }) => {
       return ctx.db.role.findUnique({
         include: {
