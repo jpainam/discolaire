@@ -4,6 +4,7 @@
   "spanish": "Spanish",
   "home": "Home",
   "amount": "Amount",
+  "policies": "Policies",
   "add_permissions": "Add Permissions",
   "permission_options": "Permission Options",
   "add_user_to_group_description": "Add user to an existing group, or create a new group. We recommend using groups to manage user permissions by job function.",

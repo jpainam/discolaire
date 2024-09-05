@@ -14,7 +14,7 @@ export function PermissionTable() {
   });
 
   return (
-    <ScrollArea className="min-h-[calc(100vh-20rem)]">
+    <ScrollArea className="m-2 min-h-[calc(100vh-20rem)] rounded-md border">
       {type === "add_user_to_group" && <UserGroupTable />}
       {type === "copy_permissions" && <CopyPermissionTable />}
       {type === "attach_policy" && <AttachPolicyTable />}

@@ -1,6 +1,6 @@
 "use client";
 
-import { MoreHorizontal } from "lucide-react";
+import { LinkIcon, MoreHorizontal } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -123,6 +123,12 @@ export function UserAddPermissionHeader() {
             <SelectItem value="system">{t("system")}</SelectItem>
           </SelectContent>
         </Select>
+        <div className="ml-auto">
+          <Button>
+            <LinkIcon className="mr-2 h-4 w-4" />
+            {t("attach")}
+          </Button>
+        </div>
       </div>
     </div>
   );

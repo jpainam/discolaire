@@ -93,7 +93,7 @@ model Role {
     createdBy   String?
     updatedBy   String?
     policies    RolePolicy[]
-    UserRole    UserRole[]
+    roles       UserRole[]
 }
 
 model RolePolicy {
