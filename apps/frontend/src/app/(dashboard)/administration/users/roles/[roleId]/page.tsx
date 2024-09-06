@@ -5,6 +5,7 @@ import { Label } from "@repo/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
 
 import { api } from "~/trpc/server";
+import { PolicyDataTable } from "./PolicyDataTable";
 
 export default async function Page({
   params: { roleId },
@@ -22,7 +23,7 @@ export default async function Page({
     notFound();
   }
   return (
-    <div className="flex flex-col p-2">
+    <div className="flex flex-col gap-4 p-2">
       <div className="grid divide-y bg-secondary text-secondary-foreground md:grid-cols-3">
         <div className="flex flex-col gap-2">
           <Label>{t("user_group_name")}</Label>
@@ -33,7 +34,7 @@ export default async function Page({
           <span>{dateFormatter.format(role.createdAt)}</span>
         </div>
       </div>
-      <Tabs defaultValue="account" className="w-[400px]">
+      <Tabs defaultValue="permissions">
         <TabsList>
           <TabsTrigger value="users">{t("users")}</TabsTrigger>
           <TabsTrigger value="permissions">{t("permissions")}</TabsTrigger>
@@ -42,7 +43,7 @@ export default async function Page({
           Make changes to your account here.
         </TabsContent>
         <TabsContent value="permissions">
-          Change your password here.
+          <PolicyDataTable roleId={roleId} />
         </TabsContent>
       </Tabs>
     </div>

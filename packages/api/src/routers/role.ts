@@ -18,20 +18,23 @@ export const roleRouter = createTRPCRouter({
       },
     });
   }),
-  attachPolicy: protectedProcedure
+  attachPolicies: protectedProcedure
     .input(
       z.object({
         roleId: z.string(),
-        policyId: z.string(),
+        policyIds: z.array(z.string()),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.rolePolicy.create({
-        data: {
+      const data = input.policyIds.map((policyId) => {
+        return {
           roleId: input.roleId,
-          policyId: input.policyId,
+          policyId: policyId,
           createdById: ctx.session.user.id,
-        },
+        };
+      });
+      return ctx.db.rolePolicy.createMany({
+        data: data,
       });
     }),
   removeRole: protectedProcedure
@@ -48,6 +51,18 @@ export const roleRouter = createTRPCRouter({
             roleId: input.roleId,
             userId: input.userId,
           },
+        },
+      });
+    }),
+  policies: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      return ctx.db.rolePolicy.findMany({
+        include: {
+          policy: true,
+        },
+        where: {
+          roleId: input,
         },
       });
     }),

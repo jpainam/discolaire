@@ -25,6 +25,16 @@ export const policyRouter = createTRPCRouter({
       },
     });
   }),
+  roles: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
+    return ctx.db.rolePolicy.findMany({
+      include: {
+        role: true,
+      },
+      where: {
+        policyId: input,
+      },
+    });
+  }),
   attachToUser: protectedProcedure
     .input(
       z.object({

@@ -15,7 +15,7 @@ export default function UserNavigation() {
       value: `${routes.administration.users.details(id)}`,
     },
     {
-      label: "Profile",
+      label: "Permissions",
       value: `${routes.administration.users.profile(id)}`,
     },
     {

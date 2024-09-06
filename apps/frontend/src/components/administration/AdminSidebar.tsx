@@ -101,7 +101,7 @@ export function AdminSidebar({ className }: AdminSidebarProps) {
             href: `/administration/sms-management`,
           },
           {
-            title: t("school_years"),
+            title: t("schoolYear"),
             label: "",
             icon: School,
             href: `/administration/school-years`,
@@ -110,7 +110,7 @@ export function AdminSidebar({ className }: AdminSidebarProps) {
             title: t("school_noticeboard"),
             label: "",
             icon: Users,
-            href: `/administration/notice-board`,
+            href: `/administration/announcement`,
           },
           {
             title: t("calendar"),
