@@ -49,12 +49,6 @@ export function AdminSidebar({ className }: AdminSidebarProps) {
             href: `/administration/students`,
           },
           {
-            title: t("right_and_policies"),
-            label: "",
-            icon: Users,
-            href: `/administration/right-and-policies`,
-          },
-          {
             title: t("classrooms"),
             label: "0",
             icon: Inbox,

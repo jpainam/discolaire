@@ -105,7 +105,7 @@ export function UserRoleTable() {
                 </TableCell>
                 <TableCell>
                   <Link
-                    href={`/administrations/users/roles/${role.id}`}
+                    href={`/administration/users/roles/${role.id}`}
                     className="flex flex-row items-center gap-1 hover:text-blue-600 hover:underline"
                   >
                     <span>{role.name}</span>
