@@ -40,7 +40,7 @@ import { CreateEditPolicy } from "./CreateEditPolicy";
 
 export function PolicyTable() {
   const [selectedPolicies, setSelectedPolicies] = useAtom(selectedPoliciesAtom);
-  const [expandedPolicies, setExpandedPolicies] = useState<number[]>([]);
+  const [expandedPolicies, setExpandedPolicies] = useState<string[]>([]);
   const policiesQuery = api.policy.all.useQuery();
   const { t } = useLocale();
   const utils = api.useUtils();
@@ -56,7 +56,7 @@ export function PolicyTable() {
   });
   const confirm = useConfirm();
 
-  const toggleSelection = (id: number) => {
+  const toggleSelection = (id: string) => {
     setSelectedPolicies((prev) =>
       prev.includes(id)
         ? prev.filter((policyId) => policyId !== id)
@@ -64,7 +64,7 @@ export function PolicyTable() {
     );
   };
 
-  const toggleExpansion = (id: number) => {
+  const toggleExpansion = (id: string) => {
     setExpandedPolicies((prev) =>
       prev.includes(id)
         ? prev.filter((policyId) => policyId !== id)
@@ -72,7 +72,7 @@ export function PolicyTable() {
     );
   };
 
-  const isExpanded = (id: number) => expandedPolicies.includes(id);
+  const isExpanded = (id: string) => expandedPolicies.includes(id);
   if (policiesQuery.error) {
     toast.error(policiesQuery.error.message);
     return;

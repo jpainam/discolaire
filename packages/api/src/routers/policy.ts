@@ -18,7 +18,7 @@ export const policyRouter = createTRPCRouter({
       },
     });
   }),
-  get: protectedProcedure.input(z.number()).query(({ ctx, input }) => {
+  get: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.policy.findUnique({
       where: {
         id: input,
@@ -35,7 +35,7 @@ export const policyRouter = createTRPCRouter({
   update: protectedProcedure
     .input(
       createUpdateSchema.extend({
-        id: z.number(),
+        id: z.string(),
       }),
     )
     .mutation(({ ctx, input }) => {
@@ -51,7 +51,7 @@ export const policyRouter = createTRPCRouter({
       });
     }),
   delete: protectedProcedure
-    .input(z.union([z.array(z.number()), z.number()]))
+    .input(z.union([z.array(z.string()), z.string()]))
     .mutation(async ({ ctx, input }) => {
       return ctx.db.policy.deleteMany({
         where: {
