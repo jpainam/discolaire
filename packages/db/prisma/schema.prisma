@@ -67,7 +67,7 @@ model Announcement {
 }
 
 model Policy {
-    id          Int          @id @default(autoincrement())
+    id          String       @id @default(cuid())
     name        String
     effect      PolicyEffect @default(Deny)
     actions     String[]
@@ -80,7 +80,7 @@ model Policy {
     updatedBy   String?
     condition   Json?
     roles       RolePolicy[]
-    UserPolicy  UserPolicy[]
+    users       UserPolicy[]
 }
 
 model Role {
@@ -98,7 +98,7 @@ model Role {
 
 model RolePolicy {
     roleId   String
-    policyId Int
+    policyId String
     policy   Policy @relation(fields: [policyId], references: [id])
     role     Role   @relation(fields: [roleId], references: [id])
 
@@ -107,7 +107,7 @@ model RolePolicy {
 
 model UserPolicy {
     userId   String
-    policyId Int
+    policyId String
     policy   Policy @relation(fields: [policyId], references: [id])
     user     User   @relation(fields: [userId], references: [id])
 

@@ -1,6 +1,9 @@
 "use client";
 
+import { useAtom } from "jotai";
+
 import { useLocale } from "@repo/i18n";
+import { Checkbox } from "@repo/ui/checkbox";
 import { Skeleton } from "@repo/ui/skeleton";
 import {
   Table,
@@ -11,12 +14,14 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
+import { attachRoleAtom } from "~/atoms/permission-atom";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
 
-export function UserGroupTable() {
+export function UserRoleTable() {
   const { t } = useLocale();
   const usersRoleQuery = api.permission.roles.useQuery();
+  const [attachRoleValue, setAttachRoleValue] = useAtom(attachRoleAtom);
   const { fullDateFormatter } = useDateFormat();
   if (usersRoleQuery.isPending) {
     return (
@@ -31,6 +36,7 @@ export function UserGroupTable() {
     <Table>
       <TableHeader>
         <TableRow className="bg-muted/50">
+          <TableHead className="w-10"></TableHead>
           <TableHead>
             {t("roles")} - {t("name")}
           </TableHead>
@@ -43,6 +49,19 @@ export function UserGroupTable() {
         {usersRoleQuery.data?.map((role) => {
           return (
             <TableRow key={role.id}>
+              <TableCell>
+                <Checkbox
+                  checked={attachRoleValue.includes(role.id)}
+                  onCheckedChange={(checked) => {
+                    setAttachRoleValue((prev) => {
+                      if (checked) {
+                        return [...prev, role.id];
+                      }
+                      return prev.filter((id) => id !== role.id);
+                    });
+                  }}
+                />
+              </TableCell>
               <TableCell>{role.name}</TableCell>
               <TableCell>{role.users}</TableCell>
               <TableCell>Attach policy</TableCell>
