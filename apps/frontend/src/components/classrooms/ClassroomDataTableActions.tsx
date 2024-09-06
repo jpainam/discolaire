@@ -8,9 +8,11 @@ import { toast } from "sonner";
 import type { RouterOutputs } from "@repo/api";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";
 
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { exportTableToCSV } from "~/lib/export";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
@@ -31,6 +33,10 @@ export function ClassroomDataTableActions({
   const confirm = useConfirm();
   const { t } = useLocale();
   const utils = api.useUtils();
+  const canCreateClassroom = useCheckPermissions(
+    PermissionAction.CREATE,
+    "classroom:create",
+  );
   const classroomMutation = api.classroom.delete.useMutation({
     onSettled: () => utils.classroom.invalidate(),
   });
@@ -67,20 +73,23 @@ export function ClassroomDataTableActions({
           {t("delete")} ({table.getFilteredSelectedRowModel().rows.length})
         </Button>
       ) : null}
-      <Button
-        size={"sm"}
-        className="h-8"
-        onClick={() => {
-          openSheet({
-            className: "w-[700px]",
-            title: <div className="p-2">{t("create")}</div>,
-            view: <CreateEditClassroom />,
-          });
-        }}
-      >
-        <Plus className="mr-2 size-4" aria-hidden="true" />
-        {t("new")}
-      </Button>
+      {canCreateClassroom && (
+        <Button
+          size={"sm"}
+          className="h-8"
+          disabled={!canCreateClassroom}
+          onClick={() => {
+            openSheet({
+              className: "w-[700px]",
+              title: <div className="p-2">{t("create")}</div>,
+              view: <CreateEditClassroom />,
+            });
+          }}
+        >
+          <Plus className="mr-2 size-4" aria-hidden="true" />
+          {t("new")}
+        </Button>
+      )}
 
       <Button
         variant="outline"

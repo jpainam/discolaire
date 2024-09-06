@@ -40,8 +40,10 @@ type ClassroomProcedureOutput = RouterOutputs["classroom"]["all"][number];
 
 export function getColumns({
   t,
+  // canCreate
 }: {
   t: TFunction<string, unknown>;
+  //canCreate: boolean;
 }): ColumnDef<ClassroomProcedureOutput, unknown>[] {
   return [
     {

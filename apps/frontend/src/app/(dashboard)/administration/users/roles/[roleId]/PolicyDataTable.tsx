@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
+import FlatBadge from "@repo/ui/FlatBadge";
 import { Skeleton } from "@repo/ui/skeleton";
 import {
   Table,
@@ -69,17 +70,17 @@ export function PolicyDataTable({ roleId }: { roleId: string }) {
           {t("attach")}
         </Button>
       </div>
-      <div className="w-full rounded-md border">
-        <Table className="w-full">
+      <div className="rounded-md border">
+        <Table>
           <TableHeader className="bg-muted/50">
             <TableRow>
               <TableHead className="w-10"></TableHead>
               <TableHead>
                 {t("policy")} - {t("name")}
               </TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Method</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
+              <TableHead>{t("description")}</TableHead>
+              <TableHead>{t("effect")}</TableHead>
+              <TableHead>{t("resources")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -100,6 +101,15 @@ export function PolicyDataTable({ roleId }: { roleId: string }) {
                   </TableCell>
                   <TableCell> {policy.name}</TableCell>
                   <TableCell> {policy.description}</TableCell>
+                  <TableCell>
+                    {" "}
+                    <FlatBadge
+                      variant={policy.effect == "Allow" ? "green" : "gray"}
+                    >
+                      {policy.effect}
+                    </FlatBadge>
+                  </TableCell>
+                  <TableCell>{policy.resources.join(",")}</TableCell>
                 </TableRow>
               );
             })}

@@ -33,8 +33,14 @@ export const roleRouter = createTRPCRouter({
           createdById: ctx.session.user.id,
         };
       });
+      await ctx.db.rolePolicy.deleteMany({
+        where: {
+          roleId: input.roleId,
+        },
+      });
       return ctx.db.rolePolicy.createMany({
         data: data,
+        skipDuplicates: true,
       });
     }),
   removeRole: protectedProcedure
