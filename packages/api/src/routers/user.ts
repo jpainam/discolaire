@@ -28,6 +28,22 @@ export const userRouter = createTRPCRouter({
         },
       });
     }),
+  roles: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.userRole.findMany({
+        include: {
+          role: true,
+        },
+        where: {
+          userId: input.userId,
+        },
+      });
+    }),
   get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
     return ctx.db.user.findUnique({
       where: {

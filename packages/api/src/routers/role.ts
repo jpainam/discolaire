@@ -34,6 +34,23 @@ export const roleRouter = createTRPCRouter({
         },
       });
     }),
+  removeRole: protectedProcedure
+    .input(
+      z.object({
+        roleId: z.string(),
+        userId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.userRole.delete({
+        where: {
+          userId_roleId: {
+            roleId: input.roleId,
+            userId: input.userId,
+          },
+        },
+      });
+    }),
   attach: protectedProcedure
     .input(
       z.object({
