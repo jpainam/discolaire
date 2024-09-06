@@ -17,7 +17,7 @@ import { EditDeleteAction } from "./EditDeleteAction";
 
 export default async function Page() {
   const { t, i18n } = await getServerTranslations();
-  const roles = await api.permission.roles();
+  const roles = await api.role.all();
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
     day: "numeric",
     month: "short",
@@ -55,7 +55,11 @@ export default async function Page() {
                   <TableCell>{role.policies}</TableCell>
                   <TableCell>{dateFormatter.format(role.createdAt)}</TableCell>
                   <TableCell className="text-right">
-                    <EditDeleteAction />
+                    <EditDeleteAction
+                      id={role.id}
+                      name={role.name}
+                      description={role.description ?? undefined}
+                    />
                   </TableCell>
                 </TableRow>
               );

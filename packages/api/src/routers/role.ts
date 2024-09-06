@@ -1,0 +1,119 @@
+import { z } from "zod";
+
+import { createTRPCRouter, protectedProcedure } from "../trpc";
+
+const createUpdateRoleSchema = z.object({
+  name: z.string(),
+  description: z.string().optional(),
+});
+export const roleRouter = createTRPCRouter({
+  get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    return ctx.db.role.findUnique({
+      include: {
+        policies: true,
+        roles: true,
+      },
+      where: {
+        id: input,
+      },
+    });
+  }),
+  attachPolicy: protectedProcedure
+    .input(
+      z.object({
+        roleId: z.string(),
+        policyId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.rolePolicy.create({
+        data: {
+          roleId: input.roleId,
+          policyId: input.policyId,
+          createdById: ctx.session.user.id,
+        },
+      });
+    }),
+  attach: protectedProcedure
+    .input(
+      z.object({
+        roleId: z.string(),
+        userId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.userRole.create({
+        data: {
+          roleId: input.roleId,
+          userId: input.userId,
+          createdById: ctx.session.user.id,
+        },
+      });
+    }),
+  delete: protectedProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.role.delete({
+        where: {
+          id: input,
+        },
+      });
+    }),
+  update: protectedProcedure
+    .input(
+      createUpdateRoleSchema.extend({
+        id: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.role.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          ...input,
+          updatedBy: ctx.session.user.id,
+        },
+      });
+    }),
+  create: protectedProcedure
+    .input(createUpdateRoleSchema)
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.role.create({
+        data: {
+          ...input,
+          createdBy: ctx.session.user.id,
+        },
+      });
+    }),
+  all: protectedProcedure.query(async ({ ctx }) => {
+    const roles = await ctx.db.role.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    const countUsers = await ctx.db.userRole.groupBy({
+      by: ["roleId"],
+      _count: {
+        _all: true,
+      },
+    });
+    const countPolicy = await ctx.db.rolePolicy.groupBy({
+      by: ["roleId"],
+      _count: {
+        _all: true,
+      },
+    });
+    return roles.map((role) => {
+      return {
+        ...role,
+        policies:
+          countPolicy.find((count) => count.roleId === role.id)?._count._all ??
+          0,
+        users:
+          countUsers.find((count) => count.roleId === role.id)?._count._all ??
+          0,
+      };
+    });
+  }),
+});

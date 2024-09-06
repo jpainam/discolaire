@@ -12,7 +12,7 @@ export default async function Page({
   params: { roleId: string };
 }) {
   const { t, i18n } = await getServerTranslations();
-  const role = await api.permission.getRole(roleId);
+  const role = await api.role.get(roleId);
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
     day: "numeric",
     month: "short",

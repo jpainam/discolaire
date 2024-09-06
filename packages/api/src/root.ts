@@ -25,6 +25,7 @@ import { postRouter } from "./routers/post";
 import { programRouter } from "./routers/program";
 import { recipientRouter } from "./routers/recipient";
 import { reportCardRouter } from "./routers/reportCard";
+import { roleRouter } from "./routers/role";
 import { schoolRouter } from "./routers/school";
 import { schoolYearRouter } from "./routers/schoolYear";
 import { staffRouter } from "./routers/staff";
@@ -66,6 +67,7 @@ export const appRouter = createTRPCRouter({
   feedback: feedbackRouter,
   gradeSheet: gradeSheetRouter,
   health: healthRouter,
+  role: roleRouter,
   enrollment: enrollmentRouter,
   appreciation: appreciationRouter,
   reportCard: reportCardRouter,

@@ -25,6 +25,22 @@ export const policyRouter = createTRPCRouter({
       },
     });
   }),
+  attachToUser: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        policyId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.userPolicy.create({
+        data: {
+          userId: input.userId,
+          policyId: input.policyId,
+          createdById: ctx.session.user.id,
+        },
+      });
+    }),
   create: protectedProcedure
     .input(createUpdateSchema)
     .mutation(({ ctx, input }) => {

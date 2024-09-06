@@ -11,13 +11,13 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./card";
 import { cn } from "./utils";
 
 interface NoPermissionProps {
-  resourceText: string;
+  resourceText?: string;
   isFullPage?: boolean;
   className?: string;
 }
 
 export const NoPermission = ({
-  resourceText,
+  resourceText = "",
   isFullPage = false,
   className,
 }: NoPermissionProps) => {

@@ -20,7 +20,7 @@ import { useDateFormat } from "~/utils/date-format";
 
 export function UserRoleTable() {
   const { t } = useLocale();
-  const usersRoleQuery = api.permission.roles.useQuery();
+  const usersRoleQuery = api.role.all.useQuery();
   const [attachRoleValue, setAttachRoleValue] = useAtom(attachRoleAtom);
   const { fullDateFormatter } = useDateFormat();
   if (usersRoleQuery.isPending) {
