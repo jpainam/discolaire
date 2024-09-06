@@ -81,10 +81,13 @@ export function PolicyDataTable({ roleId }: { roleId: string }) {
               <TableHead>{t("description")}</TableHead>
               <TableHead>{t("effect")}</TableHead>
               <TableHead>{t("resources")}</TableHead>
+              <TableHead>{t("actions")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {policiesQuery.data?.map((policy) => {
+              const hasWriteAction = (policy: { actions: string[] }) =>
+                policy.actions.some((action) => /^write:.*/.test(action));
               return (
                 <TableRow key={policy.id}>
                   <TableCell>
@@ -110,6 +113,13 @@ export function PolicyDataTable({ roleId }: { roleId: string }) {
                     </FlatBadge>
                   </TableCell>
                   <TableCell>{policy.resources.join(",")}</TableCell>
+                  <TableCell>
+                    <FlatBadge
+                      variant={hasWriteAction(policy) ? "pink" : "green"}
+                    >
+                      {policy.actions.join(",")}
+                    </FlatBadge>
+                  </TableCell>
                 </TableRow>
               );
             })}

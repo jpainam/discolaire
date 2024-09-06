@@ -8,6 +8,7 @@ import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -27,6 +28,7 @@ import {
 import { Separator } from "@repo/ui/separator";
 
 import { routes } from "~/configs/routes";
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { api } from "~/trpc/react";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
@@ -38,6 +40,10 @@ export function StaffHeader() {
   const { t: t2 } = useLocale("print");
   const jobTitlesQuery = api.staff.jobTitles.useQuery();
   //const levels = api.staff.levels.useQuery();
+  const canCreateStaff = useCheckPermissions(
+    PermissionAction.CREATE,
+    "staff:profile",
+  );
 
   const jobTitles = jobTitlesQuery.data ?? [];
 
@@ -58,19 +64,21 @@ export function StaffHeader() {
       <StaffEffectif />
 
       <div className="ml-auto flex flex-row gap-2">
-        <Button
-          onClick={() => {
-            openSheet({
-              className: "w-[750px]",
-              view: <CreateEditStaff />,
-            });
-          }}
-          size="icon"
-          variant="outline"
-          className="h-8 w-8"
-        >
-          <Plus className="h-4 w-4" />
-        </Button>
+        {canCreateStaff && (
+          <Button
+            onClick={() => {
+              openSheet({
+                className: "w-[750px]",
+                view: <CreateEditStaff />,
+              });
+            }}
+            size="icon"
+            variant="outline"
+            className="h-8 w-8"
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="icon" variant="outline" className="h-8 w-8">

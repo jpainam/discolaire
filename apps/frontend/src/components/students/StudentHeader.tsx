@@ -22,6 +22,7 @@ import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -36,6 +37,7 @@ import { Skeleton } from "@repo/ui/skeleton";
 
 import { SimpleTooltip } from "~/components/simple-tooltip";
 import { routes } from "~/configs/routes";
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
@@ -56,6 +58,20 @@ export function StudentHeader({ className }: StudentHeaderProps) {
   const { openSheet } = useSheet();
   const params = useParams<{ id: string }>();
   const studentQuery = api.student.get.useQuery(params.id);
+  const canUpdateStudent = useCheckPermissions(
+    PermissionAction.UPDATE,
+    "student:profile",
+    {
+      id: params.id,
+    },
+  );
+  const canDeleteStudent = useCheckPermissions(
+    PermissionAction.DELETE,
+    "student:profile",
+    {
+      id: params.id,
+    },
+  );
 
   const { createQueryString } = useCreateQueryString();
   const pathname = usePathname();
@@ -76,6 +92,7 @@ export function StudentHeader({ className }: StudentHeaderProps) {
     <header className={cn(className)}>
       <div className="flex w-full gap-1">
         <SquaredAvatar student={student ?? undefined} />
+        <div>{canDeleteStudent}</div>
         <div className="flex w-full flex-col gap-1">
           <StudentSelector
             className="w-full md:w-[500px]"
@@ -99,26 +116,32 @@ export function StudentHeader({ className }: StudentHeaderProps) {
               ) : (
                 <FlatBadge variant={"red"}>Deactiver</FlatBadge>
               )}
-              <Separator orientation="vertical" className="h-4" />
-              <Button
-                size={"icon"}
-                onClick={() => {
-                  if (!student) return;
-                  openSheet({
-                    className: "w-[700px]",
-                    title: (
-                      <div className="px-2">
-                        {t("edit")} {getFullName(student)}
-                      </div>
-                    ),
-                    view: <CreateEditStudent student={student} />,
-                  });
-                }}
-                aria-label={t("edit")}
-                variant="ghost"
-              >
-                <Pencil className="h-4 w-4" />
-              </Button>
+
+              {canUpdateStudent && (
+                <>
+                  <Separator orientation="vertical" className="h-4" />
+                  <Button
+                    disabled={!canUpdateStudent}
+                    size={"icon"}
+                    onClick={() => {
+                      if (!student) return;
+                      openSheet({
+                        className: "w-[700px]",
+                        title: (
+                          <div className="px-2">
+                            {t("edit")} {getFullName(student)}
+                          </div>
+                        ),
+                        view: <CreateEditStudent student={student} />,
+                      });
+                    }}
+                    aria-label={t("edit")}
+                    variant="ghost"
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                </>
+              )}
               <Separator orientation="vertical" className="h-4" />
               <SimpleTooltip content="Notification reçus">
                 <Button size={"icon"} aria-label="Notification" variant="ghost">
@@ -186,11 +209,18 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                     <ShieldBan className="mr-2 h-4 w-4" />
                     {t("disable")}
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="text-destructive">
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    {t("delete")}
-                  </DropdownMenuItem>
+                  {canDeleteStudent && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        disabled={!canDeleteStudent}
+                        className="text-destructive"
+                      >
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        {t("delete")}
+                      </DropdownMenuItem>
+                    </>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

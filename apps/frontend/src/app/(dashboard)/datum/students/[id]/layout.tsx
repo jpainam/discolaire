@@ -20,7 +20,7 @@ export default async function Layout({
 }) {
   const canReadStudent = await checkPermissions(
     PermissionAction.READ,
-    "student",
+    "student:profile",
     {
       id: id,
     },

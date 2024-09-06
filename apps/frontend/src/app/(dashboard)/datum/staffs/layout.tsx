@@ -5,9 +5,12 @@ import { PermissionAction } from "@repo/lib/permission";
 import { NoPermission } from "@repo/ui/no-permission";
 
 export default async function Layout({ children }: PropsWithChildren) {
-  const canReadStaff = await checkPermissions(PermissionAction.STAFF_READ, "*");
+  const canReadStaff = await checkPermissions(
+    PermissionAction.READ,
+    "staff:list",
+  );
   if (!canReadStaff) {
-    return <NoPermission isFullPage resourceText="" />;
+    return <NoPermission className="my-8" isFullPage resourceText="" />;
   }
   return <>{children}</>;
 }

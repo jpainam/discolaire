@@ -24,14 +24,14 @@ export default async function Layout({
   params: { id },
 }: PropsWithChildren<{ params: { id: string } }>) {
   const canReadStaff = await checkPermissions(
-    PermissionAction.STAFF_READ,
-    "*",
+    PermissionAction.READ,
+    "staff:profile",
     {
       id: id,
     },
   );
   if (!canReadStaff) {
-    return <NoPermission isFullPage resourceText="" />;
+    return <NoPermission className="my-8" isFullPage resourceText="" />;
   }
   const staff = await api.staff.get({ id });
   if (!staff) {
