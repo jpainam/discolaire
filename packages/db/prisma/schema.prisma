@@ -109,9 +109,9 @@ model RolePolicy {
 model UserPolicy {
     userId      String
     policyId    String
-    createdById String
-    policy      Policy @relation(fields: [policyId], references: [id])
-    user        User   @relation(fields: [userId], references: [id])
+    createdById String?
+    policy      Policy  @relation(fields: [policyId], references: [id])
+    user        User    @relation(fields: [userId], references: [id])
 
     @@id([userId, policyId])
 }
@@ -719,9 +719,9 @@ model User {
 model UserRole {
     userId      String
     roleId      String
-    role        Role   @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    user        User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    createdById String
+    role        Role    @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    user        User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    createdById String?
 
     @@id([userId, roleId])
 }

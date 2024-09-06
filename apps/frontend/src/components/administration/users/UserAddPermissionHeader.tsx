@@ -1,8 +1,7 @@
 "use client";
 
-import { LinkIcon, MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import { useQueryState } from "nuqs";
-import { useDebouncedCallback } from "use-debounce";
 
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -19,16 +18,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
-import { Input } from "@repo/ui/input";
 import { Label } from "@repo/ui/label";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@repo/ui/select";
 
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { cn } from "~/lib/utils";
@@ -38,11 +29,6 @@ export function UserAddPermissionHeader() {
   const [type, setType] = useQueryState("type", {
     defaultValue: "add_user_to_group",
   });
-  const [filter, setFilter] = useQueryState("filter");
-  const [_, setSearchText] = useQueryState("q");
-  const debounced = useDebouncedCallback((value) => {
-    void setSearchText(value);
-  }, 1000);
 
   const items: { id: string; title: string; description: string }[] = [
     {
@@ -106,30 +92,6 @@ export function UserAddPermissionHeader() {
           </RadioGroup>
         </CardContent>
       </Card>
-      <div className="flex flex-row items-center gap-4">
-        <Input
-          className="max-w-96"
-          onChange={(e) => debounced(e.target.value)}
-        />
-        <Select
-          defaultValue={filter ?? undefined}
-          onValueChange={(val) => setFilter(val)}
-        >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder={t("all_types")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="user">{t("users")}</SelectItem>
-            <SelectItem value="system">{t("system")}</SelectItem>
-          </SelectContent>
-        </Select>
-        <div className="ml-auto">
-          <Button>
-            <LinkIcon className="mr-2 h-4 w-4" />
-            {t("attach")}
-          </Button>
-        </div>
-      </div>
     </div>
   );
 }
