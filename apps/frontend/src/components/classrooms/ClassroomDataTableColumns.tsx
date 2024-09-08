@@ -40,10 +40,10 @@ type ClassroomProcedureOutput = RouterOutputs["classroom"]["all"][number];
 
 export function getColumns({
   t,
-  // canCreate
+  canDeleteClassroom,
 }: {
   t: TFunction<string, unknown>;
-  //canCreate: boolean;
+  canDeleteClassroom: boolean;
 }): ColumnDef<ClassroomProcedureOutput, unknown>[] {
   return [
     {
@@ -305,13 +305,24 @@ export function getColumns({
     {
       id: "actions",
       cell: function Cell({ row }) {
-        return <ActionCells classroom={row.original} />;
+        return (
+          <ActionCells
+            canDeleteClassroom={canDeleteClassroom}
+            classroom={row.original}
+          />
+        );
       },
     },
   ];
 }
 
-function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
+function ActionCells({
+  classroom,
+  canDeleteClassroom,
+}: {
+  classroom: ClassroomProcedureOutput;
+  canDeleteClassroom: boolean;
+}) {
   const { openSheet } = useSheet();
   const confirm = useConfirm();
   const { t } = useLocale();
@@ -358,30 +369,35 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
             <Pencil className="mr-2 size-4" />
             {t("edit")}
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            className="bg-destructive text-destructive-foreground"
-            onSelect={async () => {
-              const isConfirmed = await confirm({
-                title: t("delete"),
-                description: t("delete_confirmation"),
-              });
-              if (isConfirmed) {
-                toast.promise(classroomMutation.mutateAsync(classroom.id), {
-                  loading: t("deleting"),
-                  success: () => {
-                    return t("deleted_successfully");
-                  },
-                  error: (error) => {
-                    return getErrorMessage(error);
-                  },
-                });
-              }
-            }}
-          >
-            <Trash2 className="mr-2 size-4" />
-            {t("delete")}
-          </DropdownMenuItem>
+          {canDeleteClassroom && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                disabled={!canDeleteClassroom}
+                className="bg-destructive text-destructive-foreground"
+                onSelect={async () => {
+                  const isConfirmed = await confirm({
+                    title: t("delete"),
+                    description: t("delete_confirmation"),
+                  });
+                  if (isConfirmed) {
+                    toast.promise(classroomMutation.mutateAsync(classroom.id), {
+                      loading: t("deleting"),
+                      success: () => {
+                        return t("deleted_successfully");
+                      },
+                      error: (error) => {
+                        return getErrorMessage(error);
+                      },
+                    });
+                  }
+                }}
+              >
+                <Trash2 className="mr-2 size-4" />
+                {t("delete")}
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

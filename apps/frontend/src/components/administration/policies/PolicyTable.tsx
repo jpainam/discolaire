@@ -114,104 +114,112 @@ export function PolicyTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {policies.map((policy) => (
-            <>
-              <TableRow key={policy.id} className="group">
-                <TableCell className="py-0">
-                  <Checkbox
-                    checked={selectedPolicies.includes(policy.id)}
-                    onCheckedChange={() => toggleSelection(policy.id)}
-                  />
-                </TableCell>
-                <TableCell className="py-0">{policy.name}</TableCell>
-                <TableCell className="py-0">{policy.description}</TableCell>
-                <TableCell className="py-0">
-                  <FlatBadge
-                    variant={policy.effect == "Allow" ? "green" : "purple"}
-                  >
-                    {policy.effect}
-                  </FlatBadge>
-                </TableCell>
-                <TableCell className="py-0">
-                  {policy.actions.join(", ")}
-                </TableCell>
-                <TableCell className="py-0">
-                  {policy.resources.join(", ")}
-                </TableCell>
-                <TableCell className="py-0">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-8 w-8 p-0"
-                    onClick={() => toggleExpansion(policy.id)}
-                  >
-                    {isExpanded(policy.id) ? (
-                      <ChevronDownIcon className="h-4 w-4" />
-                    ) : (
-                      <ChevronRightIcon className="h-4 w-4" />
-                    )}
-                    <span className="sr-only">Toggle condition details</span>
-                  </Button>
-                </TableCell>
-                <TableCell className="py-0">
-                  <div className="flex justify-end">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant={"ghost"} size={"icon"}>
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem
-                          className="flex items-center gap-2"
-                          onSelect={() => {
-                            openModal({
-                              title: t("edit") + " - " + t("policy"),
-                              className: "w-[600px]",
-                              view: <CreateEditPolicy policy={policy} />,
-                            });
-                          }}
-                        >
-                          <Pencil className="mr-2 h-4 w-4" /> {t("edit")}
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          className="flex items-center gap-2 bg-destructive text-destructive-foreground"
-                          onSelect={async () => {
-                            const isConfirmed = await confirm({
-                              title: t("delete"),
-                              icon: (
-                                <Trash2 className="size-4 text-destructive" />
-                              ),
-                              alertDialogTitle: {
-                                className: "flex items-center gap-2",
-                              },
-                              description: t("delete_confirmation"),
-                            });
-                            if (isConfirmed) {
-                              toast.loading(t("deleting"), { id: 0 });
-                              deletePolicyMutation.mutate(policy.id);
-                            }
-                          }}
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" /> {t("delete")}
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                </TableCell>
-              </TableRow>
-              {isExpanded(policy.id) && (
-                <TableRow>
-                  <TableCell colSpan={8} className="bg-muted/50 p-4">
-                    <pre className="whitespace-pre-wrap text-sm">
-                      {JSON.stringify(policy.condition, null, 2)}
-                    </pre>
+          {policies.map((policy) => {
+            const hasWriteAction = (policy: { actions: string[] }) =>
+              policy.actions.some((action) => /^write:.*/.test(action));
+            return (
+              <>
+                <TableRow key={policy.id} className="group">
+                  <TableCell className="py-0">
+                    <Checkbox
+                      checked={selectedPolicies.includes(policy.id)}
+                      onCheckedChange={() => toggleSelection(policy.id)}
+                    />
+                  </TableCell>
+                  <TableCell className="py-0">{policy.name}</TableCell>
+                  <TableCell className="py-0">{policy.description}</TableCell>
+                  <TableCell className="py-0">
+                    <FlatBadge
+                      variant={policy.effect == "Allow" ? "green" : "purple"}
+                    >
+                      {policy.effect}
+                    </FlatBadge>
+                  </TableCell>
+                  <TableCell className="py-0">
+                    <FlatBadge
+                      variant={hasWriteAction(policy) ? "pink" : "gray"}
+                    >
+                      {policy.actions.join(",")}
+                    </FlatBadge>
+                  </TableCell>
+                  <TableCell className="py-0">
+                    {policy.resources.join(", ")}
+                  </TableCell>
+                  <TableCell className="py-0">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 w-8 p-0"
+                      onClick={() => toggleExpansion(policy.id)}
+                    >
+                      {isExpanded(policy.id) ? (
+                        <ChevronDownIcon className="h-4 w-4" />
+                      ) : (
+                        <ChevronRightIcon className="h-4 w-4" />
+                      )}
+                      <span className="sr-only">Toggle condition details</span>
+                    </Button>
+                  </TableCell>
+                  <TableCell className="py-0">
+                    <div className="flex justify-end">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant={"ghost"} size={"icon"}>
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            className="flex items-center gap-2"
+                            onSelect={() => {
+                              openModal({
+                                title: t("edit") + " - " + t("policy"),
+                                className: "w-[600px]",
+                                view: <CreateEditPolicy policy={policy} />,
+                              });
+                            }}
+                          >
+                            <Pencil className="mr-2 h-4 w-4" /> {t("edit")}
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            className="flex items-center gap-2 bg-destructive text-destructive-foreground"
+                            onSelect={async () => {
+                              const isConfirmed = await confirm({
+                                title: t("delete"),
+                                icon: (
+                                  <Trash2 className="size-4 text-destructive" />
+                                ),
+                                alertDialogTitle: {
+                                  className: "flex items-center gap-2",
+                                },
+                                description: t("delete_confirmation"),
+                              });
+                              if (isConfirmed) {
+                                toast.loading(t("deleting"), { id: 0 });
+                                deletePolicyMutation.mutate(policy.id);
+                              }
+                            }}
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" /> {t("delete")}
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                   </TableCell>
                 </TableRow>
-              )}
-            </>
-          ))}
+                {isExpanded(policy.id) && (
+                  <TableRow>
+                    <TableCell colSpan={8} className="bg-muted/50 p-4">
+                      <pre className="whitespace-pre-wrap text-sm">
+                        {JSON.stringify(policy.condition, null, 2)}
+                      </pre>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </>
+            );
+          })}
         </TableBody>
       </Table>
     </div>

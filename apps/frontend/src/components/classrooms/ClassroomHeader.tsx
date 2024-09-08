@@ -16,6 +16,7 @@ import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";
 import {
@@ -33,6 +34,7 @@ import { Separator } from "@repo/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
 
 import { routes } from "~/configs/routes";
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { api } from "~/trpc/react";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
@@ -48,6 +50,20 @@ export function ClassroomHeader() {
   const params = useParams<{ id: string }>();
   const pathname = usePathname();
   const router = useRouter();
+  const canDeleteClassroom = useCheckPermissions(
+    PermissionAction.DELETE,
+    "classroom:profile",
+    {
+      id: params.id,
+    },
+  );
+  const canUpdateClassroom = useCheckPermissions(
+    PermissionAction.UPDATE,
+    "classroom:profile",
+    {
+      id: params.id,
+    },
+  );
   const deleteClassroomMutation = api.classroom.delete.useMutation({
     onSuccess: () => {
       toast.success(t("deleted_successfully"), { id: 0 });
@@ -98,7 +114,7 @@ export function ClassroomHeader() {
         }}
       />
       <div className="flex items-center gap-2 md:ml-auto">
-        {classroomQuery.data && (
+        {classroomQuery.data && canUpdateClassroom && (
           <>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -197,22 +213,26 @@ export function ClassroomHeader() {
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>
             </DropdownMenuSub>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className="text-destructive"
-              onSelect={async () => {
-                const isConfirmed = await confirm({
-                  title: t("delete"),
-                  description: t("delete_confirmation"),
-                });
-                if (isConfirmed) {
-                  toast.loading(t("deleting"), { id: 0 });
-                  deleteClassroomMutation.mutate(params.id);
-                }
-              }}
-            >
-              <Trash2 className="mr-2 h-4 w-4" /> {t("delete")}
-            </DropdownMenuItem>
+            {canDeleteClassroom && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="text-destructive"
+                  onSelect={async () => {
+                    const isConfirmed = await confirm({
+                      title: t("delete"),
+                      description: t("delete_confirmation"),
+                    });
+                    if (isConfirmed) {
+                      toast.loading(t("deleting"), { id: 0 });
+                      deleteClassroomMutation.mutate(params.id);
+                    }
+                  }}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" /> {t("delete")}
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

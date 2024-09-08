@@ -8,12 +8,14 @@ import { toast } from "sonner";
 import type { RouterOutputs } from "@repo/api";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { useConfirm } from "@repo/ui/confirm-dialog";
 import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
 
 import { routes } from "~/configs/routes";
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
@@ -136,52 +138,64 @@ function ActionsCell({ subject }: { subject: SubjectGetQueryOutput }) {
   const confirm = useConfirm();
   const { openSheet } = useSheet();
   const utils = api.useUtils();
+  const canDeleteClassroomSubject = useCheckPermissions(
+    PermissionAction.DELETE,
+    "classroom:subject",
+  );
+  const canEditClassroomSubject = useCheckPermissions(
+    PermissionAction.UPDATE,
+    "classroom:subject",
+  );
   const deleteSubjectQuery = api.subject.delete.useMutation({
     onSettled: () => utils.classroom.subjects.invalidate(),
   });
 
   return (
     <div className="flex items-center justify-end">
-      <Button
-        onClick={() => {
-          openSheet({
-            title: (
-              <div className="px-2">
-                {t("edit")} : {subject.course?.name}
-              </div>
-            ),
-            view: <CreateEditSubject subject={subject} />,
-          });
-        }}
-        variant={"ghost"}
-        size={"icon"}
-      >
-        <Pencil className="h-4 w-4" />
-      </Button>
-      <Button
-        disabled={deleteSubjectQuery.isPending}
-        variant={"ghost"}
-        onClick={async () => {
-          const isConfirmed = await confirm({
-            title: t("delete"),
-            confirmText: t("delete_confirmation"),
-          });
-          if (isConfirmed) {
-            toast.promise(deleteSubjectQuery.mutateAsync(subject.id), {
-              loading: t("deleting"),
-              error: (error) => {
-                return getErrorMessage(error);
-              },
-              success: () => {
-                return t("deleted_successfully");
-              },
+      {canEditClassroomSubject && (
+        <Button
+          onClick={() => {
+            openSheet({
+              title: (
+                <div className="px-2">
+                  {t("edit")} : {subject.course?.name}
+                </div>
+              ),
+              view: <CreateEditSubject subject={subject} />,
             });
-          }
-        }}
-        size={"icon"}
-      >
-        <Trash2 className="h-4 w-4 text-destructive" />
-      </Button>
+          }}
+          variant={"ghost"}
+          size={"icon"}
+        >
+          <Pencil className="h-4 w-4" />
+        </Button>
+      )}
+      {canDeleteClassroomSubject && (
+        <Button
+          disabled={deleteSubjectQuery.isPending}
+          variant={"ghost"}
+          onClick={async () => {
+            const isConfirmed = await confirm({
+              title: t("delete"),
+              confirmText: t("delete_confirmation"),
+            });
+            if (isConfirmed) {
+              toast.promise(deleteSubjectQuery.mutateAsync(subject.id), {
+                loading: t("deleting"),
+                error: (error) => {
+                  return getErrorMessage(error);
+                },
+                success: () => {
+                  return t("deleted_successfully");
+                },
+              });
+            }
+          }}
+          size={"icon"}
+        >
+          <Trash2 className="h-4 w-4 text-destructive" />
+        </Button>
+      )}
     </div>
   );
 }

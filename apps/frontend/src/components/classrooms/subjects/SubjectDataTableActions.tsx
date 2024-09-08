@@ -8,9 +8,11 @@ import { toast } from "sonner";
 import type { RouterOutputs } from "@repo/api";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";
 
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { exportTableToCSV } from "~/lib/export";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
@@ -26,10 +28,19 @@ export function SubjectDataTableActions({ table }: SubjectToolbarActionsProps) {
   const { openSheet } = useSheet();
   const { t } = useLocale();
   const confirm = useConfirm();
+  const canAddClassroomSubject = useCheckPermissions(
+    PermissionAction.CREATE,
+    "classroom:subject",
+  );
+  const canDeleteClassroomSubject = useCheckPermissions(
+    PermissionAction.DELETE,
+    "classroom:subject",
+  );
   const deleteSubjectMutation = api.subject.delete.useMutation();
   return (
     <div className="flex items-center gap-2">
-      {table.getFilteredSelectedRowModel().rows.length > 0 ? (
+      {canDeleteClassroomSubject &&
+      table.getFilteredSelectedRowModel().rows.length > 0 ? (
         <Button
           onClick={async () => {
             const isConfirmed = await confirm({
@@ -62,18 +73,20 @@ export function SubjectDataTableActions({ table }: SubjectToolbarActionsProps) {
         </Button>
       ) : null}
 
-      <Button
-        onClick={() => {
-          openSheet({
-            title: <div className="px-2">{t("create")}</div>,
-            view: <CreateEditSubject />,
-          });
-        }}
-        size={"sm"}
-      >
-        <PlusIcon className="mr-2 h-4 w-4" />
-        {t("new")}
-      </Button>
+      {canAddClassroomSubject && (
+        <Button
+          onClick={() => {
+            openSheet({
+              title: <div className="px-2">{t("create")}</div>,
+              view: <CreateEditSubject />,
+            });
+          }}
+          size={"sm"}
+        >
+          <PlusIcon className="mr-2 h-4 w-4" />
+          {t("new")}
+        </Button>
+      )}
       <Button
         variant="outline"
         size="sm"

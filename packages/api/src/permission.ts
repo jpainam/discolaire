@@ -22,6 +22,7 @@ export async function checkPermissions(
   const permissionsResult = await userService.getPermissions(user.id);
 
   const allPermissions = permissionsOverride ?? permissionsResult;
+  console.log("allPermissions", allPermissions);
 
   return doPermissionsCheck(allPermissions, action, resource, data, "IPW");
 }

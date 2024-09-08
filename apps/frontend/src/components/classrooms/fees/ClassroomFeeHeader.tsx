@@ -1,9 +1,11 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import { ChevronDownIcon, Plus, PrinterIcon } from "lucide-react";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -15,31 +17,42 @@ import { Label } from "@repo/ui/label";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { sidebarIcons } from "../sidebar-icons";
 import { CreateEditFee } from "./CreateEditFee";
 
 export function ClassroomFeeHeader() {
   const { t } = useLocale();
+  const params = useParams<{ id: string }>();
   const { openModal } = useModal();
+  const canCreateClassroomFee = useCheckPermissions(
+    PermissionAction.CREATE,
+    "classroom:fee",
+    {
+      id: params.id,
+    },
+  );
   const Icon = sidebarIcons.fees;
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary px-2 py-1 text-secondary-foreground">
       {Icon && <Icon className="h-6 w-6" />}
       <Label>{t("fees")}</Label>
       <div className="ml-auto flex flex-row gap-2">
-        <Button
-          onClick={() => {
-            openModal({
-              title: <div>{t("add")}</div>,
-              className: "w-[500px]",
-              view: <CreateEditFee />,
-            });
-          }}
-          variant={"outline"}
-          size={"icon"}
-        >
-          <Plus className="h-4 w-4" />
-        </Button>
+        {canCreateClassroomFee && (
+          <Button
+            onClick={() => {
+              openModal({
+                title: <div>{t("add")}</div>,
+                className: "w-[500px]",
+                view: <CreateEditFee />,
+              });
+            }}
+            variant={"outline"}
+            size={"icon"}
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant={"outline"} className="flex h-8 flex-row">

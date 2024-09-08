@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import type { RouterOutputs } from "@repo/api";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { useConfirm } from "@repo/ui/confirm-dialog";
@@ -24,6 +25,7 @@ import FlatBadge from "@repo/ui/FlatBadge";
 import { AvatarState } from "~/components/AvatarState";
 import { StudentCard } from "~/components/students/StudentCard";
 import { routes } from "~/configs/routes";
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
@@ -185,6 +187,10 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
   const params = useParams<{ id: string }>();
   const { t } = useLocale();
   const router = useRouter();
+  const canDeleteEnrollment = useCheckPermissions(
+    PermissionAction.DELETE,
+    "classroom:enrollment",
+  );
   const utils = api.useUtils();
   const unenrollStudentsMutation =
     api.enrollment.deleteByStudentIdClassroomId.useMutation({
@@ -209,35 +215,40 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
           >
             <Eye className="h-4 w-4" /> {t("details")}
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            className="flex items-center gap-2 bg-destructive text-destructive-foreground"
-            onSelect={async () => {
-              const isConfirmed = await confirm({
-                title: t("unenroll") + " " + student.lastName,
-                description: t("delete_confirmation"),
-              });
-              if (isConfirmed) {
-                toast.promise(
-                  unenrollStudentsMutation.mutateAsync({
-                    classroomId: params.id,
-                    studentId: student.id,
-                  }),
-                  {
-                    loading: t("unenrolling"),
-                    error: (error) => {
-                      return getErrorMessage(error);
-                    },
-                    success: () => {
-                      return t("unenrolled_sucessfully");
-                    },
-                  },
-                );
-              }
-            }}
-          >
-            <Trash2 className="mr-2 h-4 w-4" /> {t("unenroll")}
-          </DropdownMenuItem>
+          {canDeleteEnrollment && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                disabled={!canDeleteEnrollment}
+                className="flex items-center gap-2 bg-destructive text-destructive-foreground"
+                onSelect={async () => {
+                  const isConfirmed = await confirm({
+                    title: t("unenroll") + " " + student.lastName,
+                    description: t("delete_confirmation"),
+                  });
+                  if (isConfirmed) {
+                    toast.promise(
+                      unenrollStudentsMutation.mutateAsync({
+                        classroomId: params.id,
+                        studentId: student.id,
+                      }),
+                      {
+                        loading: t("unenrolling"),
+                        error: (error) => {
+                          return getErrorMessage(error);
+                        },
+                        success: () => {
+                          return t("unenrolled_sucessfully");
+                        },
+                      },
+                    );
+                  }
+                }}
+              >
+                <Trash2 className="mr-2 h-4 w-4" /> {t("unenroll")}
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

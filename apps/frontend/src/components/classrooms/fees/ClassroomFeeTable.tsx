@@ -8,6 +8,7 @@ import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
@@ -28,6 +29,7 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { CURRENCY } from "~/lib/constants";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
@@ -39,6 +41,20 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
   const { t, i18n } = useLocale();
   const rowClassName = "border";
   const { fullDateFormatter } = useDateFormat();
+  const canDeleteClassroomFee = useCheckPermissions(
+    PermissionAction.DELETE,
+    "classroom:fee",
+    {
+      id: classroomId,
+    },
+  );
+  const canUpdateClassroomFee = useCheckPermissions(
+    PermissionAction.UPDATE,
+    "classroom:fee",
+    {
+      id: classroomId,
+    },
+  );
   const utils = api.useUtils();
   const deleteFeeMutation = api.fee.delete.useMutation({
     onSettled: () => utils.fee.invalidate(),
@@ -105,56 +121,68 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
                 </TableCell>
                 <TableCell className="">{fee.journal?.name}</TableCell>
                 <TableCell className="">
-                  <div className="flex flex-row items-center justify-end gap-0">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant={"ghost"} size={"icon"}>
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem
-                          onSelect={() => {
-                            openModal({
-                              title: <div>{t("edit")}</div>,
-                              className: "w-[500px]",
-                              view: <CreateEditFee fee={fee} />,
-                            });
-                          }}
-                        >
-                          <Pencil className="mr-2 h-3 w-3" />
-                          {t("edit")}
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          className="text-destructive"
-                          onSelect={async () => {
-                            const isConfirmed = await confirm({
-                              title: t("delete"),
-                              description: t("delete_confirmation"),
-                            });
-                            if (isConfirmed) {
-                              toast.promise(
-                                deleteFeeMutation.mutateAsync({ id: fee.id }),
-                                {
-                                  loading: t("deleting"),
-                                  success: () => {
-                                    return t("deleted_successfully");
-                                  },
-                                  error: (error) => {
-                                    return getErrorMessage(error);
-                                  },
-                                },
-                              );
-                            }
-                          }}
-                        >
-                          <Trash2 className="mr-2 h-3 w-3" />
-                          <span>{t("delete")}</span>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
+                  {canUpdateClassroomFee || canDeleteClassroomFee ? (
+                    <div className="flex flex-row items-center justify-end gap-0">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant={"ghost"} size={"icon"}>
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          {canUpdateClassroomFee && (
+                            <DropdownMenuItem
+                              onSelect={() => {
+                                openModal({
+                                  title: <div>{t("edit")}</div>,
+                                  className: "w-[500px]",
+                                  view: <CreateEditFee fee={fee} />,
+                                });
+                              }}
+                            >
+                              <Pencil className="mr-2 h-3 w-3" />
+                              {t("edit")}
+                            </DropdownMenuItem>
+                          )}
+                          {canDeleteClassroomFee && (
+                            <>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                className="text-destructive"
+                                onSelect={async () => {
+                                  const isConfirmed = await confirm({
+                                    title: t("delete"),
+                                    description: t("delete_confirmation"),
+                                  });
+                                  if (isConfirmed) {
+                                    toast.promise(
+                                      deleteFeeMutation.mutateAsync({
+                                        id: fee.id,
+                                      }),
+                                      {
+                                        loading: t("deleting"),
+                                        success: () => {
+                                          return t("deleted_successfully");
+                                        },
+                                        error: (error) => {
+                                          return getErrorMessage(error);
+                                        },
+                                      },
+                                    );
+                                  }
+                                }}
+                              >
+                                <Trash2 className="mr-2 h-3 w-3" />
+                                <span>{t("delete")}</span>
+                              </DropdownMenuItem>
+                            </>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
                 </TableCell>
               </TableRow>
             );

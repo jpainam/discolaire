@@ -5,11 +5,13 @@ import * as React from "react";
 import type { RouterOutputs } from "@repo/api";
 import type { DataTableFilterField } from "@repo/ui/data-table/types";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { DataTable } from "@repo/ui/data-table/data-table";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
 import { useDataTable } from "@repo/ui/data-table/index";
 
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { api } from "~/trpc/react";
 import { ClassroomDataTableActions } from "./ClassroomDataTableActions";
 import { getColumns } from "./ClassroomDataTableColumns";
@@ -23,7 +25,15 @@ export function ClassroomDataTable() {
   const classroomCyclesQuery = api.classroomCycle.all.useQuery();
   const classroomSectionsQuery = api.classroomSection.all.useQuery();
 
-  const columns = React.useMemo(() => getColumns({ t: t }), [t]);
+  const canDeleteClassroom = useCheckPermissions(
+    PermissionAction.DELETE,
+    "classroom:profile",
+  );
+
+  const columns = React.useMemo(
+    () => getColumns({ t: t, canDeleteClassroom }),
+    [t, canDeleteClassroom],
+  );
 
   const filterFields: DataTableFilterField<ClassroomProcedureOutput>[] = [
     {
