@@ -711,36 +711,13 @@ model Token {
 }
 
 model MenuItem {
-    id        Int           @id @default(autoincrement())
-    name      String
-    title     String
-    href      String?
-    order     Int           @default(0)
-    category  String?
-    isActive  Boolean?      @default(true)
-    menuItems SubMenuItem[]
-}
-
-model SubMenuItem {
-    id             Int              @id @default(autoincrement())
-    name           String
-    icon           String
-    href           String
-    menuItemId     Int?
-    order          Int              @default(0)
-    isActive       Boolean?         @default(true)
-    MenuItem       MenuItem?        @relation(fields: [menuItemId], references: [id])
-    subSubMenuItem SubSubMenuItem[]
-}
-
-model SubSubMenuItem {
-    id            Int          @id @default(autoincrement())
-    name          String
-    icon          String
-    href          String
-    order         Int          @default(0)
-    subMenuItemId Int?
-    subMenuItem   SubMenuItem? @relation(fields: [subMenuItemId], references: [id])
+    id       Int      @id @default(autoincrement())
+    name     String
+    title    String
+    href     String?
+    order    Int      @default(0)
+    category String?
+    isActive Boolean? @default(true)
 }
 
 model ProgramTheme {

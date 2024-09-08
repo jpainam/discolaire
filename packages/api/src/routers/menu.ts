@@ -15,19 +15,7 @@ export const menuRouter = createTRPCRouter({
           category: input.category,
           isActive: true,
         },
-        include: {
-          menuItems: {
-            where: {
-              isActive: true,
-            },
-            include: {
-              subSubMenuItem: true,
-            },
-            orderBy: {
-              order: "asc",
-            },
-          },
-        },
+
         orderBy: {
           order: "asc",
         },
