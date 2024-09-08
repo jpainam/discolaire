@@ -181,7 +181,7 @@ model Classroom {
     shortName         String?
     reportName        String?
     maxSize           Int            @default(45)
-    levelId           Int            @default(1)
+    levelId           String
     sectionId         Int?           @default(1)
     cycleId           Int?           @default(1)
     schoolYearId      String
@@ -210,7 +210,7 @@ model Classroom {
 }
 
 model ClassroomLevel {
-    id         Int         @id @default(autoincrement())
+    id         String      @id @default(cuid())
     name       String
     order      Int         @default(1)
     classrooms Classroom[]
