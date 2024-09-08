@@ -20,7 +20,7 @@ export function ClassroomLevelTable() {
     selectedClassroomLevelAtom,
   );
   const { t } = useLocale();
-  const [items, setItems] = useState<{ id: number; name: string }[]>([]);
+  const [items, setItems] = useState<{ id: string; name: string }[]>([]);
   useEffect(() => {
     if (classroomLevelsQuery.data) {
       setItems(classroomLevelsQuery.data);

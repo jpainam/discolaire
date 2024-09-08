@@ -23,7 +23,6 @@ import {
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Separator } from "@repo/ui/separator";
 
-import type { Classroom } from "~/types/classroom";
 import { CreateEditFee } from "~/components/classrooms/fees/CreateEditFee";
 import { CURRENCY } from "~/lib/constants";
 import { getErrorMessage } from "~/lib/handle-error";
@@ -143,8 +142,8 @@ export function fetchFeesColumns({
       ),
       cell: ({ row }) => {
         const fee = row.original;
-        const c = fee.classroom as Classroom;
-        return <div>{c.shortName}</div>;
+        const c = fee.classroom;
+        return <div>{c.name}</div>;
       },
     },
     {

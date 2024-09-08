@@ -28,7 +28,7 @@ export function CreateEditLevel({
   id,
 }: {
   name?: string;
-  id?: number;
+  id?: string;
   order?: number;
 }) {
   const form = useForm({

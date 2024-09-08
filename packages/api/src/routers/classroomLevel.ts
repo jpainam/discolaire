@@ -38,7 +38,7 @@ export const classroomLevelRouter = createTRPCRouter({
         schoolYearId: ctx.schoolYearId,
       },
     });
-    const effectifMap: Record<number, number> = {};
+    const effectifMap: Record<string, number> = {};
     classrooms.forEach((c) => {
       const eff = effectifMap[c.levelId] ?? 0;
       effectifMap[c.levelId] =
@@ -61,7 +61,7 @@ export const classroomLevelRouter = createTRPCRouter({
     });
   }),
   delete: protectedProcedure
-    .input(z.union([z.coerce.number(), z.array(z.coerce.number())]))
+    .input(z.union([z.coerce.string(), z.array(z.coerce.string())]))
     .mutation(async ({ ctx, input }) => {
       const ids = Array.isArray(input) ? input : [input];
       const classrooms = await ctx.db.classroom.findMany({
@@ -88,7 +88,7 @@ export const classroomLevelRouter = createTRPCRouter({
   update: protectedProcedure
     .input(
       z.object({
-        id: z.number(),
+        id: z.string(),
         name: z.string().min(1),
         order: z.coerce.number().int().min(0),
       }),

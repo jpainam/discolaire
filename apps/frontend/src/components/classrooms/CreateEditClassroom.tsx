@@ -96,7 +96,7 @@ export function CreateEditClassroom({
     const values = {
       ...data,
       cycleId: parseInt(data.cycleId),
-      levelId: parseInt(data.levelId),
+      levelId: data.levelId,
       sectionId: parseInt(data.sectionId),
     };
     if (classroom?.id) {

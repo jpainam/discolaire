@@ -1,3 +1,3 @@
 import { atom } from "jotai";
 
-export const selectedClassroomLevelAtom = atom<number[]>([]);
+export const selectedClassroomLevelAtom = atom<string[]>([]);

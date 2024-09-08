@@ -55,13 +55,13 @@ export function ClassroomEffectif({
     setLoading(true);
     const levels: Record<
       string,
-      { level: string; levelId: number; female: number; male: number }
+      { level: string; levelId: string; female: number; male: number }
     > = {};
 
     stats.forEach((stat) => {
       levels[stat.level.name] = {
         level: stat.level.name,
-        levelId: stat.levelId || 0,
+        levelId: stat.levelId,
         female: (levels[stat.level.name]?.female ?? 0) + stat.femaleCount || 0,
         male: (levels[stat.level.name]?.male ?? 0) + stat.maleCount || 0,
       };
