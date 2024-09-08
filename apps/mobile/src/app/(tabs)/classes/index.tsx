@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, Pressable } from "react-native";
+import { ActivityIndicator, Pressable } from "react-native";
 import { Link } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 
@@ -36,15 +36,7 @@ function ListItem({
 
 const Page = () => {
   const classroomsQuery = api.classroom.all.useQuery();
-  if (classroomsQuery.isError) {
-    const errorMessage = classroomsQuery.error.message;
-    if (errorMessage == "UNAUTHORIZED") {
-      console.log("UNAUTHORIZED");
-      Alert.alert("Error", "UNAUTHORIZED");
-    } else {
-      Alert.alert("Error", JSON.stringify(classroomsQuery.error.message));
-    }
-  }
+
   const data = classroomsQuery.data;
   return (
     <View>

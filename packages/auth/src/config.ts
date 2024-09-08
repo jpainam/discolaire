@@ -135,7 +135,6 @@ export const validateToken = async (
     },
   } as { user: AdapterUser; session: AdapterSession };
 
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   // return session
   //   ? {
   //       user: {

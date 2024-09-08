@@ -1,14 +1,22 @@
-import { Platform, StyleSheet } from "react-native";
-import { Stack } from "expo-router";
+import { useState } from "react";
+import { ActivityIndicator, Platform, Pressable } from "react-native";
+import { Link, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { FlashList } from "@shopify/flash-list";
+import { useDebounce } from "use-debounce";
 
-import EditScreenInfo from "~/components/EditScreenInfo";
 import { Text, useThemeColor, View } from "~/components/Themed";
+import { api } from "~/utils/api";
 
 export default function ModalScreen() {
   const backgroundColor = useThemeColor({}, "background");
+  const [searchText, setSearchText] = useState<string>("");
+  const [debounceValue] = useDebounce(searchText, 1000);
+  const studentsQuery = api.student.all.useQuery({
+    q: debounceValue,
+  });
   return (
-    <View style={styles.container}>
+    <View style={{ flex: 1 }}>
       <Stack.Screen
         options={{
           headerTitle: "Search",
@@ -22,8 +30,7 @@ export default function ModalScreen() {
           headerSearchBarOptions: {
             placeholder: "Search students",
             onChangeText: (text) => {
-              // search for the typed student;
-              console.log(text.nativeEvent.text);
+              setSearchText(text.nativeEvent.text);
             },
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             onSearchButtonPress: (ev: any) => {
@@ -34,33 +41,44 @@ export default function ModalScreen() {
           },
         }}
       />
-      <Text style={styles.title}>Modal</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
+      {studentsQuery.isPending && <ActivityIndicator />}
+      <FlashList
+        data={studentsQuery.data}
+        renderItem={({ item }) => {
+          return (
+            <StudentListItem
+              id={item.id}
+              name={item.lastName + ", " + item.firstName}
+              //avatar={item.avatar}
+            />
+          );
+        }}
       />
-      <EditScreenInfo path="app/modal.tsx" />
-
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-});
+interface StudentListItemProps {
+  id: string;
+  name: string;
+  //avatar: string;
+}
+function StudentListItem({ id, name }: StudentListItemProps) {
+  return (
+    <View>
+      <Link
+        asChild
+        href={{
+          pathname: "/student/[id]",
+          params: { id: id },
+        }}
+      >
+        <Pressable>
+          <Text>{name}</Text>
+        </Pressable>
+      </Link>
+    </View>
+  );
+}
