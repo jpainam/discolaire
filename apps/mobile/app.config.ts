@@ -2,9 +2,9 @@ import type { ConfigContext, ExpoConfig } from "expo/config";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: "expo",
-  slug: "expo",
-  scheme: "expo",
+  name: "mobile",
+  slug: "discolaire-mobile",
+  scheme: "discolaire.app",
   version: "0.1.0",
   orientation: "portrait",
   icon: "./assets/icon.png",
@@ -19,21 +19,21 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   assetBundlePatterns: ["**/*"],
   ios: {
-    bundleIdentifier: "your.bundle.identifier",
+    bundleIdentifier: "com.discolaire.app",
     supportsTablet: true,
   },
   android: {
-    package: "your.bundle.identifier",
+    package: "com.discolaire.app",
     adaptiveIcon: {
       foregroundImage: "./assets/icon.png",
       backgroundColor: "#1F104A",
     },
   },
-  // extra: {
-  //   eas: {
-  //     projectId: "your-eas-project-id",
-  //   },
-  // },
+  extra: {
+    eas: {
+      projectId: "072ac1fa-2a2f-4b0c-b6b1-3ecde2d3305e",
+    },
+  },
   experiments: {
     tsconfigPaths: true,
     typedRoutes: true,

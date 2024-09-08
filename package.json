@@ -1,5 +1,5 @@
 {
-  "name": "create-t3-turbo",
+  "name": "discolaire",
   "private": true,
   "scripts": {
     "build": "turbo run build",

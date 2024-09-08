@@ -112,7 +112,7 @@ pnpm db:push
 
 1. Install Android Studio tools [as shown on expo docs](https://docs.expo.dev/workflow/android-studio-emulator).
 
-2. Change the `dev` script at `apps/expo/package.json` to open the Android emulator.
+2. Change the `dev` script at `apps/mobile/package.json` to open the Android emulator.
 
    ```diff
    +  "dev": "expo start --android",
