@@ -19,13 +19,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@repo/ui/form";
+import { Input } from "@repo/ui/input";
 import { Separator } from "@repo/ui/separator";
 import { Textarea } from "@repo/ui/textarea";
 
 import { DatePicker } from "~/components/shared/date-picker";
 import { RecipientMultiSelector } from "~/components/shared/selects/RecipientMultiSelector";
 import { getErrorMessage } from "~/lib/handle-error";
-import { InputField } from "../../shared/forms/input-field";
 import { SelectField } from "../../shared/forms/SelectField";
 
 type AnnouncementGetProcedureOutput = NonNullable<
@@ -133,9 +133,9 @@ export function CreateEditAnnouncement({
               control={form.control}
               name="title"
               render={({ field }) => (
-                <FormItem className="col-span-full">
+                <FormItem className="col-span-full gap-y-1 space-y-0">
                   <FormLabel>{t("title")}</FormLabel>
-                  <InputField {...field} />
+                  <Input {...field} />
                 </FormItem>
               )}
             />
@@ -156,9 +156,9 @@ export function CreateEditAnnouncement({
               control={form.control}
               name="link"
               render={({ field }) => (
-                <FormItem className="col-span-full">
+                <FormItem className="col-span-full gap-y-1 space-y-0">
                   <FormLabel>URL</FormLabel>
-                  <InputField {...field} />
+                  <Input {...field} />
                 </FormItem>
               )}
             />
