@@ -1,17 +1,13 @@
 "use client";
 
-import type { ElementType } from "react";
 import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
-import { PiCaretDownBold } from "react-icons/pi";
 
 import { useLocale } from "@repo/i18n";
-import { Badge } from "@repo/ui/badge";
 import { DataTableSkeleton } from "@repo/ui/data-table/v2/data-table-skeleton";
 import { SortableList } from "@repo/ui/dnd/dnd-sortable-list";
 
-import type { MenuItemsType } from "~/types/menu";
 import Menu from "~/components/menu/dropdown/menu";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
@@ -22,11 +18,23 @@ export function StudentSidebar({ className }: { className?: string }) {
   const params = useParams<{ id: string }>();
   const menusQuery = api.menu.byCategory.useQuery({ category: "student" });
 
-  const [items, setItems] = useState<MenuItemsType[]>([]);
+  const [items, setItems] = useState<
+    { id: number; name: string; href?: string; title: string }[]
+  >([]);
 
   useEffect(() => {
     if (!menusQuery.data) return;
-    const m = getMenu(menusQuery.data, params.id);
+    const m = getMenu(
+      menusQuery.data.map((item) => {
+        return {
+          name: item.name,
+          title: item.title,
+          id: item.id,
+          href: item.href ?? undefined,
+        };
+      }),
+      params.id,
+    );
     setItems(m);
   }, [menusQuery.data, params.id]);
 
@@ -53,14 +61,6 @@ export function StudentSidebar({ className }: { className?: string }) {
             //const Icon = item.icon;
             const Icon = sidebarIcons[item.name];
             const isActive = pathname === item.href;
-            const pathnameExistInDropdowns: boolean = item.menuItems.some(
-              (dropdownItem) =>
-                dropdownItem.href === pathname ||
-                dropdownItem.subMenuItems?.some(
-                  (subMenuItem) => subMenuItem.href === pathname,
-                ),
-            );
-            const isDropdownOpen = Boolean(pathnameExistInDropdowns);
             return (
               <Fragment key={"sortable-menu" + item.name + "-" + index}>
                 <SortableList.Item id={item.id}>
@@ -75,9 +75,7 @@ export function StudentSidebar({ className }: { className?: string }) {
                       <div
                         className={cn(
                           "relative m-1 flex grow cursor-pointer items-center justify-between overflow-hidden rounded-md px-2 py-2 transition-all hover:ps-7",
-                          isDropdownOpen
-                            ? "bg-secondary"
-                            : "transition-all duration-200 hover:bg-primary hover:text-primary-foreground",
+                          "transition-all duration-200 hover:bg-primary hover:text-primary-foreground",
                           isActive ? "bg-primary text-primary-foreground" : "",
                         )}
                       >
@@ -88,152 +86,13 @@ export function StudentSidebar({ className }: { className?: string }) {
                           <SortableList.DragHandle
                             className={cn(
                               "inset-t-0 absolute h-5 w-5 -translate-x-7 bg-primary text-primary-foreground transition-all group-hover:-translate-x-6 [&>svg]:h-[20px] [&>svg]:w-[20px]",
-                              isDropdownOpen ? "text-gray-0" : "",
                             )}
                           />
                           {Icon && <Icon className="h-4 w-4" />}
                           {t(item.title)}
                         </Link>
-
-                        {item.menuItems.length > 0 && (
-                          <div className="flex items-center transition-all group-hover:gap-1">
-                            <PiCaretDownBold
-                              strokeWidth={3}
-                              className={cn(
-                                "h-4 w-4 -rotate-90 transition-transform duration-200 rtl:rotate-90",
-                                isDropdownOpen ? "text-gray-0" : "",
-                              )}
-                            />
-                          </div>
-                        )}
                       </div>
                     </Menu.Trigger>
-                    {item.menuItems.length > 0 && (
-                      <Menu.List className="w-[280px] border-gray-300 !bg-white !px-2 !py-3 dark:bg-gray-100">
-                        {item.menuItems.map((dropdownItem, index) => {
-                          const isChildActive = pathname === dropdownItem.href;
-                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                          const pathnameExistInChildDropdowns: any =
-                            dropdownItem.subMenuItems?.filter(
-                              (dropdownItem) => dropdownItem.href === pathname,
-                            );
-                          const isChildDropdownActive = Boolean(
-                            pathnameExistInChildDropdowns?.length,
-                          );
-                          //const DropdownIcon = dropdownItem?.icon;
-                          const DropdownIcon = sidebarIcons[dropdownItem.name];
-
-                          return (
-                            <Menu.Item
-                              key={"dropdown" + dropdownItem.name + index}
-                              className={cn(
-                                "!data-[hover=true]:bg-gray-200 px-0 py-0 transition-all data-[hover=true]:dark:bg-gray-200",
-                                isChildDropdownActive &&
-                                  "!bg-gray-200 dark:bg-gray-200",
-                              )}
-                            >
-                              {dropdownItem.subMenuItems?.length ? (
-                                <ul className="w-full">
-                                  <Menu
-                                    trigger="hover"
-                                    placement="right-start"
-                                    offset={0}
-                                    closeDelay={0}
-                                  >
-                                    <Menu.Trigger>
-                                      <li
-                                        className={cn(
-                                          "relative flex cursor-pointer items-center justify-between rounded-md px-4 py-2",
-                                          isChildDropdownActive
-                                            ? "before:top-2/5 rounded-md bg-gray-100 text-primary before:absolute before:start-0 before:block before:h-4/5 before:w-1 before:rounded-ee-md before:rounded-se-md before:bg-primary dark:bg-gray-200 2xl:before:start-0"
-                                            : "text-gray-700 transition-all duration-200 hover:bg-gray-100 dark:text-gray-700/90 hover:dark:bg-gray-200 dark:hover:text-gray-700",
-                                        )}
-                                      >
-                                        <span className="flex items-center text-sm">
-                                          {DropdownIcon && (
-                                            <span
-                                              className={cn(
-                                                "me-2 inline-flex h-5 w-5 items-center justify-center rounded-md [&>svg]:h-[20px] [&>svg]:w-[20px]",
-                                                isChildDropdownActive
-                                                  ? "text-primary"
-                                                  : "text-gray-400 dark:text-gray-500 dark:group-hover:text-gray-700",
-                                              )}
-                                            >
-                                              <DropdownIcon className="h-4 w-4 stroke-1" />
-                                            </span>
-                                          )}
-                                          {t(dropdownItem.name)}
-                                        </span>
-
-                                        <PiCaretDownBold
-                                          strokeWidth={3}
-                                          className={cn(
-                                            "h-4 w-4 -rotate-90 transition-transform duration-200 rtl:rotate-90",
-                                            isChildDropdownActive
-                                              ? "text-primary"
-                                              : "text-gray-900",
-                                          )}
-                                        />
-                                      </li>
-                                    </Menu.Trigger>
-                                    <Menu.List className="border-gray-300 bg-gray-100">
-                                      {dropdownItem.subMenuItems.map(
-                                        (subMenuItem, index) => {
-                                          const isChildActive =
-                                            pathname === subMenuItem.href;
-
-                                          return (
-                                            <Menu.Item
-                                              key={
-                                                "sub-menu" +
-                                                subMenuItem.name +
-                                                index
-                                              }
-                                              className="px-0 py-0"
-                                            >
-                                              <Link
-                                                href={subMenuItem.href}
-                                                className={cn(
-                                                  "relative flex w-full items-center justify-between rounded-md px-4 py-2 font-medium text-gray-900",
-                                                  isChildActive
-                                                    ? "text-primary"
-                                                    : "bg-gray-200 text-gray-900 transition-colors duration-200 hover:text-gray-900",
-                                                )}
-                                              >
-                                                <span className="flex items-center truncate text-sm">
-                                                  <span className="truncate">
-                                                    {t(subMenuItem.name)}
-                                                  </span>
-                                                </span>
-                                                {subMenuItem.badge?.length ? (
-                                                  <Badge>
-                                                    {subMenuItem.badge}
-                                                  </Badge>
-                                                ) : null}
-                                              </Link>
-                                            </Menu.Item>
-                                          );
-                                        },
-                                      )}
-                                    </Menu.List>
-                                  </Menu>
-                                </ul>
-                              ) : (
-                                <MenuLink
-                                  item={{
-                                    name: dropdownItem.name,
-                                    href: dropdownItem.href ?? "#",
-                                    badge: dropdownItem.badge,
-                                  }}
-                                  isChildActive={isChildActive}
-                                  isDropdownOpen={isDropdownOpen}
-                                />
-                              )}
-                            </Menu.Item>
-                          );
-                        })}
-                      </Menu.List>
-                    )}
                   </Menu>
                 </SortableList.Item>
               </Fragment>
@@ -245,59 +104,15 @@ export function StudentSidebar({ className }: { className?: string }) {
   );
 }
 
-interface MenuItemsProps {
-  as?: ElementType;
-  item: {
-    name: string;
-    href: string;
-    badge?: string;
-  };
-  isChildActive?: boolean;
-  isDropdownOpen?: boolean;
-  className?: string;
-}
-
-function MenuLink({ item, isChildActive }: MenuItemsProps) {
-  //const Icon = item?.icon;
-  const Icon = sidebarIcons[item.name];
-  const { t } = useLocale();
-  return (
-    <Link
-      href={item.href}
-      className={cn(
-        "relative flex w-full items-center justify-between rounded-md px-4 py-2 font-medium text-gray-900",
-        isChildActive
-          ? "before:top-2/5 bg-gray-100 text-primary before:absolute before:-start-2.5 before:block before:h-4/5 before:w-1 before:rounded-ee-md before:rounded-se-md before:bg-primary dark:bg-gray-200 2xl:before:-start-2.5"
-          : "text-gray-700/90 text-gray-900 transition-colors duration-200 hover:bg-gray-200",
-      )}
-    >
-      <div className="flex items-center truncate">
-        {Icon && <Icon className="h-4 w-4 stroke-1" />}
-        <span className="truncate text-sm">{t(item.name)}</span>
-      </div>
-      {item.badge?.length ? <Badge>{item.badge} </Badge> : null}
-    </Link>
-  );
-}
-
-function getMenu(data: MenuItemsType[], id: string) {
+function getMenu(
+  data: { id: number; title: string; name: string; href?: string }[],
+  id: string,
+) {
   // replace :id by the actual id in all href
   return data.map((menu) => {
     return {
       ...menu,
       href: menu.href?.replace(":id", id),
-      menuItems: menu.menuItems.map((item) => {
-        return {
-          ...item,
-          href: item.href?.replace(":id", id),
-          subMenuItems: item.subMenuItems?.map((subItem) => {
-            return {
-              ...subItem,
-              href: subItem.href.replace(":id", id),
-            };
-          }),
-        };
-      }),
     };
   });
 }

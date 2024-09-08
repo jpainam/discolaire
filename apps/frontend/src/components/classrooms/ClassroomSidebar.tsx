@@ -5,10 +5,8 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
 import { useLocale } from "@repo/i18n";
-import { Badge } from "@repo/ui/badge";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 
-import type { MenuItemsType } from "~/types/menu";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { showErrorToast } from "../../lib/handle-error";
@@ -19,11 +17,19 @@ export function ClassroomSidebar({ className }: { className?: string }) {
   const params = useParams();
   const menusQuery = api.menu.byCategory.useQuery({ category: "classroom" });
 
-  const [items, setItems] = useState<MenuItemsType[]>([]);
+  const [items, setItems] = useState<{ name: string; href?: string }[]>([]);
 
   useEffect(() => {
     if (!menusQuery.data) return;
-    const m = getMenu(menusQuery.data, params.id as string);
+    const m = getMenu(
+      menusQuery.data.map((item) => {
+        return {
+          name: item.name,
+          href: item.href ?? undefined,
+        };
+      }),
+      params.id as string,
+    );
     setItems(m);
   }, [menusQuery.data, params.id]);
 
@@ -70,7 +76,6 @@ export function ClassroomSidebar({ className }: { className?: string }) {
               {Icon && <Icon className="me-2 h-5 w-5 stroke-1" />}
               <span className="truncate">{t(item.name)}</span>
             </div>
-            {item.badge?.length ? <Badge> {t(`${item.badge}`)}</Badge> : null}
           </Link>
         );
       })}
@@ -78,24 +83,12 @@ export function ClassroomSidebar({ className }: { className?: string }) {
   );
 }
 
-function getMenu(data: MenuItemsType[], id: string) {
+function getMenu(data: { name: string; href?: string }[], id: string) {
   // replace :id by the actual id in all href
   return data.map((menu) => {
     return {
       ...menu,
       href: menu.href?.replace(":id", id),
-      menuItems: menu.menuItems.map((item) => {
-        return {
-          ...item,
-          href: item.href?.replace(":id", id),
-          subMenuItems: item.subMenuItems?.map((subItem) => {
-            return {
-              ...subItem,
-              href: subItem.href.replace(":id", id),
-            };
-          }),
-        };
-      }),
     };
   });
 }
