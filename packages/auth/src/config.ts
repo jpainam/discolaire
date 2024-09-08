@@ -3,10 +3,11 @@ import type {
   NextAuthConfig,
   Session as NextAuthSession,
 } from "next-auth";
-import type { Adapter, AdapterSession, AdapterUser } from "next-auth/adapters";
+import type { Adapter } from "next-auth/adapters";
 import { skipCSRFCheck } from "@auth/core";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { addDays, subDays } from "date-fns";
+import { addDays } from "date-fns";
+import jwt from "jsonwebtoken";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { z } from "zod";
@@ -112,48 +113,42 @@ export const authConfig = {
 
 export const validateToken = async (
   token: string,
-  //): Promise<NextAuthSession | null> => {
-): Promise<NextAuthSession> => {
+): Promise<NextAuthSession | null> => {
   const sessionToken = token.slice("Bearer ".length);
-  // TODO - This session is null for expo for now. Fix it.
   //const session = await adapter.getSessionAndUser?.(sessionToken);
-  await Promise.resolve(setTimeout(() => null, 1000));
-  // Solution, hard code session for now.
-  const session = {
-    user: {
-      name: "Jean P. Ainam",
-      email: "jpainam@gmail.com",
-      id: "9d060304-e6e2-42e8-850b-639049222b77",
-      avatar: null,
-      isActive: true,
-      emailVerified: subDays(new Date(), 30),
-    },
-    session: {
-      expires: addDays(new Date(), 30),
-      sessionToken: sessionToken,
-      userId: "9d060304-e6e2-42e8-850b-639049222b77",
-    },
-  } as { user: AdapterUser; session: AdapterSession };
-
-  // return session
-  //   ? {
-  //       user: {
-  //         ...session.user,
-  //         avatar: "",
-  //       },
-  //       expires: session.session.expires.toISOString(),
-  //     }
-  //   : null;
-  return {
-    user: {
-      ...session.user,
-      avatar: "",
-    },
-    expires: session.session.expires.toISOString(),
+  const payload = jwt.verify(sessionToken, env.AUTH_SECRET ?? "") as {
+    sub?: string | undefined;
   };
+  const userId = payload.sub;
+  const user = await db.user.findUnique({
+    where: {
+      id: userId,
+      isActive: true,
+    },
+  });
+  return user
+    ? {
+        user: {
+          email: user.email,
+          id: user.id,
+          name: user.name,
+          avatar: user.avatar ?? "",
+        },
+        expires: addDays(new Date(), 30).toISOString(),
+      }
+    : null;
 };
 
 export const invalidateSessionToken = async (token: string) => {
   const sessionToken = token.slice("Bearer ".length);
   await adapter.deleteSession?.(sessionToken);
+};
+
+export const generateToken = (user: { id: string }) => {
+  const payload = {
+    sub: user.id,
+    iat: new Date().getTime(),
+    exp: addDays(new Date(), 30).getTime(),
+  };
+  return jwt.sign(payload, env.AUTH_SECRET ?? "");
 };

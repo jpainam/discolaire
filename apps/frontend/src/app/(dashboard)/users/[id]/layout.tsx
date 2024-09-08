@@ -65,8 +65,6 @@ export default async function Layout({
     },
   ];
   const session = await auth();
-  console.log(session);
-  console.log(session);
   const user = session?.user;
   return (
     <div>

@@ -45,25 +45,9 @@ export const createTRPCContext = async (opts: {
   const session = await isomorphicGetSession(opts.headers);
 
   const source = opts.headers.get("x-trpc-source") ?? "unknown";
-  //console.log(">>> tRPC Request from", source, "by", session?.user);
-  console.log(">>> tRPC Request from", source);
-
-  // ADDED TO GET SCHOOL YEAR FROM COOKIE
-  // const schoolYearFromCookie = cookies().get("schoolYear")?.value;
-  // const schoolYearId = schoolYearFromCookie
-  //   ? schoolYearFromCookie
-  //   : (await schoolYearService.getDefault())?.id;
-
-  // if (!schoolYearId) {
-  //   throw new TRPCError({
-  //     code: "INTERNAL_SERVER_ERROR",
-  //     message: "No school year not found",
-  //   });
-  // }
-  // END OF ADDITION
+  console.log(">>> tRPC Request from", source, "by", session?.user);
 
   return {
-    schoolYearId: "2022-2023",
     session,
     db,
     token: authToken,
@@ -156,6 +140,7 @@ export const protectedProcedure = t.procedure
       ctx: {
         // infers the `session` as non-nullable
         session: { ...ctx.session, user: ctx.session.user },
+        schoolYearId: "2022-2023", // TODO: get this from the session or header
       },
     });
   });

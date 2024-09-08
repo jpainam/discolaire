@@ -9,6 +9,7 @@ const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
 export { auth, handlers, signIn, signOut };
 
 export {
+  generateToken,
   invalidateSessionToken,
   isSecureContext,
   validateToken,

@@ -19,16 +19,17 @@ export default function ModalScreen() {
     <View style={{ flex: 1 }}>
       <Stack.Screen
         options={{
-          headerTitle: "Search",
+          headerTitle: "Elèves",
           headerBlurEffect: "regular",
+          headerShadowVisible: false,
           headerTransparent: true,
-          headerLargeTitle: true,
-          headerLargeTitleShadowVisible: false,
+          //headerLargeTitle: true,
+          //headerLargeTitleShadowVisible: false,
           headerStyle: {
             backgroundColor: backgroundColor,
           },
           headerSearchBarOptions: {
-            placeholder: "Search students",
+            placeholder: "Rechercher...",
             onChangeText: (text) => {
               setSearchText(text.nativeEvent.text);
             },
@@ -42,6 +43,10 @@ export default function ModalScreen() {
         }}
       />
       {studentsQuery.isPending && <ActivityIndicator />}
+      <View>
+        <Text>Contenu</Text>
+        <Text>{JSON.stringify(studentsQuery.data)}</Text>
+      </View>
       <FlashList
         data={studentsQuery.data}
         estimatedItemSize={20}
