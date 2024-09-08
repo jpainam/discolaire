@@ -11,7 +11,7 @@ interface BackendUser {
   iat: number;
   id: string;
   isActive: boolean;
-  isEmailVerified: boolean;
+  emailVerified?: Date;
   jti: string;
   name: string;
   sub: string;

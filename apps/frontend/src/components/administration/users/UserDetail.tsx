@@ -28,7 +28,7 @@ const userFormSchema = z.object({
   avatar: z.string().url().nullish(),
   password: z.string().min(8, { message: "Password is required" }),
   createdAt: z.coerce.date().nullish(),
-  isEmailVerified: z.boolean(),
+  emailVerified: z.coerce.date().optional(),
 });
 
 type UserFormValues = z.infer<typeof userFormSchema>;

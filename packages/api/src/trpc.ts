@@ -6,7 +6,6 @@
  * tl;dr - this is where all the tRPC server stuff is created and plugged in.
  * The pieces you will need to use are documented accordingly near the end
  */
-import { cookies } from "next/headers";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
@@ -14,8 +13,6 @@ import { ZodError } from "zod";
 import type { Session } from "@repo/auth";
 import { auth, validateToken } from "@repo/auth";
 import { db } from "@repo/db";
-
-import { schoolYearService } from "./services/school-year-service";
 
 /**
  * Isomorphic Session getter for API requests
@@ -52,21 +49,21 @@ export const createTRPCContext = async (opts: {
   console.log(">>> tRPC Request from", source);
 
   // ADDED TO GET SCHOOL YEAR FROM COOKIE
-  const schoolYearFromCookie = cookies().get("schoolYear")?.value;
-  const schoolYearId = schoolYearFromCookie
-    ? schoolYearFromCookie
-    : (await schoolYearService.getDefault())?.id;
+  // const schoolYearFromCookie = cookies().get("schoolYear")?.value;
+  // const schoolYearId = schoolYearFromCookie
+  //   ? schoolYearFromCookie
+  //   : (await schoolYearService.getDefault())?.id;
 
-  if (!schoolYearId) {
-    throw new TRPCError({
-      code: "INTERNAL_SERVER_ERROR",
-      message: "No school year not found",
-    });
-  }
+  // if (!schoolYearId) {
+  //   throw new TRPCError({
+  //     code: "INTERNAL_SERVER_ERROR",
+  //     message: "No school year not found",
+  //   });
+  // }
   // END OF ADDITION
 
   return {
-    schoolYearId,
+    schoolYearId: "2022-2023",
     session,
     db,
     token: authToken,

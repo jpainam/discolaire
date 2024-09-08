@@ -21,8 +21,7 @@ export default async function DashboardPage() {
   //   43
   // );
   //const staff = await api.staff.all();
-  //const session = await auth();
-  //console.log(session);
+
   const session = await auth();
   if (!session) {
     redirect("/auth/login");

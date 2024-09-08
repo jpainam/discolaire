@@ -1,19 +1,22 @@
-import { Button, StyleSheet } from "react-native";
+import { ActivityIndicator, Button, StyleSheet } from "react-native";
 import { Link } from "expo-router";
 
 import EditScreenInfo from "~/components/EditScreenInfo";
 import { Text, View } from "~/components/Themed";
+import { api } from "~/utils/api";
 import { useSignOut } from "~/utils/auth";
 import { onSubmit } from "../auth/submit-login";
 
 export default function TabOneScreen() {
   //const user = useUser();
   //const signIn = useSignIn();
-
+  const schoolYearsQuery = api.schoolYear.all.useQuery();
   const signOut = useSignOut();
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>
+      {schoolYearsQuery.isPending && <ActivityIndicator />}
+      <Text>{JSON.stringify(schoolYearsQuery.data)}</Text>
       <View
         style={styles.separator}
         lightColor="#eee"

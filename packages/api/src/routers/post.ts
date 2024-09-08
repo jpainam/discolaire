@@ -11,6 +11,15 @@ export const postRouter = {
   all: publicProcedure.query(({ ctx }) => {
     return ctx.db.post.findMany();
   }),
+  hello: publicProcedure.query(() => {
+    return [
+      {
+        id: "1",
+        title: "hello",
+        content: "world",
+      },
+    ];
+  }),
 
   byId: publicProcedure
     .input(z.object({ id: z.string() }))

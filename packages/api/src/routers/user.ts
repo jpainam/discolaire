@@ -58,7 +58,7 @@ export const userRouter = createTRPCRouter({
         name: z.string().min(1),
         avatar: z.string().optional(),
         password: z.string().min(6),
-        isEmailVerified: z.boolean().default(false),
+        emailVerified: z.coerce.date().optional(),
         isActive: z.boolean().default(true),
       }),
     )
@@ -69,7 +69,7 @@ export const userRouter = createTRPCRouter({
           name: input.name,
           avatar: input.avatar,
           password: await encryptPassword(input.password),
-          isEmailVerified: input.isEmailVerified,
+          emailVerified: input.emailVerified,
 
           isActive: input.isActive,
         },

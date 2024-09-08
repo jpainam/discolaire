@@ -62,11 +62,11 @@ export function getUserColumns({
       cell: ({ row }) => <div className="flex">{row.getValue("email")}</div>,
     },
     {
-      accessorKey: "isEmailVerified",
+      accessorKey: "emailVerified",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("is_email_verified")} />
       ),
-      cell: ({ row }) => <Switch checked={row.getValue("isEmailVerified")} />,
+      cell: () => <Switch checked={false} />,
     },
     {
       accessorKey: "createdAt",

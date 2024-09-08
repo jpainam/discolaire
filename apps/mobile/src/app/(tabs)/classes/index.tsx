@@ -1,5 +1,5 @@
 import { ActivityIndicator, Alert, Pressable } from "react-native";
-import { Link, router } from "expo-router";
+import { Link } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 
 import { Text, View } from "~/components/Themed";
@@ -39,7 +39,8 @@ const Page = () => {
   if (classroomsQuery.isError) {
     const errorMessage = classroomsQuery.error.message;
     if (errorMessage == "UNAUTHORIZED") {
-      router.replace("/auth");
+      console.log("UNAUTHORIZED");
+      Alert.alert("Error", "UNAUTHORIZED");
     } else {
       Alert.alert("Error", JSON.stringify(classroomsQuery.error.message));
     }
