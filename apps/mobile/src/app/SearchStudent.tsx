@@ -44,6 +44,7 @@ export default function ModalScreen() {
       {studentsQuery.isPending && <ActivityIndicator />}
       <FlashList
         data={studentsQuery.data}
+        estimatedItemSize={20}
         renderItem={({ item }) => {
           return (
             <StudentListItem
