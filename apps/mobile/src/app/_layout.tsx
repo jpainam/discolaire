@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import "@bacons/text-decoder/install";
 
 import { useEffect } from "react";
@@ -31,8 +33,10 @@ void SplashScreen.preventAutoHideAsync();
 // It wraps your pages with the providers they need
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-require-imports
     SpaceMono: require("../../assets/fonts/SpaceMono-Regular.ttf"),
+    PoppinsBold: require("../../assets/fonts/Poppins-Bold.ttf"),
+    PoppinsRegular: require("../../assets/fonts/Poppins-Regular.ttf"),
+    PoppinsSemiBold: require("../../assets/fonts/Poppins-SemiBold.ttf"),
     ...FontAwesome.font,
   });
 
@@ -57,10 +61,7 @@ export default function RootLayout() {
       <Provider>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="SearchStudent"
-            options={{ presentation: "modal" }}
-          />
+          <Stack.Screen name="student" options={{ headerShown: false }} />
           <Stack.Screen name="calendar" options={{ headerShown: false }} />
           <Stack.Screen name="auth" options={{ headerShown: false }} />
           <Stack.Screen name="welcome" options={{ headerShown: false }} />

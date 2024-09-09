@@ -3,12 +3,14 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { TRPCProvider } from "~/utils/api";
+import { AuthProvider } from "./auth-provider";
 
 export function Provider({ children }: { children: React.ReactNode }) {
   return (
     <TRPCProvider>
-      <Providers>{children}</Providers>
-      {/* {children} */}
+      <AuthProvider>
+        <Providers>{children}</Providers>
+      </AuthProvider>
     </TRPCProvider>
   );
 }

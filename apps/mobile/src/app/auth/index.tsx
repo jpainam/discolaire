@@ -1,36 +1,168 @@
-import { useEffect } from "react";
-import { Button } from "react-native";
+import { useEffect, useState } from "react";
+import { Alert, SafeAreaView, TextInput, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 
-import ScreenWrapper from "~/components/ScreenWrapper";
-import { View } from "~/components/Themed";
-import { useUser } from "~/utils/auth";
+import { Text, useThemeColor, View } from "~/components/Themed";
+import FontSize from "~/constants/FontSize";
+import Spacing from "~/constants/Spacing";
+import { useAuth } from "~/providers/auth-provider";
+import { api } from "~/utils/api";
 import { setToken } from "~/utils/session-store";
-import { onSubmit } from "./submit-login";
 
-const token =
-  "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoiVk5aMElVRERfVXRYR0tIX0xkN0ozaklCazRpRm5ad2F5SnRrNy02UnB2anBSbi1IYjZCVVNCemdVN3pjTVhXeHp4VnhMRG0tM0pnOVd2QS11a3VfblEifQ..Q-En09VdiqUz5B-GPQBeOQ.Visx2cXqrWFBIhc-r5vYir8B46uzq9CgOrOU45OmSiL61iAK9BMeckeE1k5KCA8hONC4LBEtCB92JeILeYAVk4qc7N-XxPUTC5RG6pNHfIPhN5c322A_MO7VAERMhYvEffKw1H1u5h8qPcl-JPnC9ICN-XbM8Gi7KlVLHSHp7omlyJk8hezWHtrGB1fxEvrD0gXpPu9YcjeUDSX76EHYst8M-0YBx4sIA1BLb5E_pcJsk1zN2hmoZD2txUhWPi5E_PhvE_BoZv-cE0azH8tEctCvG3RKwiVnBSWlpvSPMl7SquxcYzqktjr1R_wOHNoYHPGrcmUqm6VEQPrsUB2g0UQyLR7stXAg3jhIX-9ge80OCuXGebKMXNbQ2vlzL1gM8tM8cO0eY_M5pVR22Kds22cYNiyEofPoX4naoYqevu_RZ9nlNWhebFh-cXzxNkmcZXPo0c4m9Py1tpyh-LKAyf_w8WNfw_5GXBSwJ9W6fyY.TKte59BsVX3UrjoSTQmGRb343JnQ3-Q7tamlvwH3Dik";
 export default function Page() {
+  const { session } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const backgroundColor = useThemeColor({}, "background");
+  const primaryColor = useThemeColor({}, "primary");
+  const borderColor = useThemeColor({}, "borderColor");
+  const utils = api.useUtils();
+  const signInMutation = api.auth.signInWithPassword.useMutation({
+    onSuccess: async (sessionToken) => {
+      setToken(sessionToken);
+      await utils.invalidate();
+      router.replace("/");
+    },
+    onError: (error) => {
+      console.error(error);
+      Alert.alert("Error", error.message);
+    },
+  });
+
   useEffect(() => {
-    setToken(token);
-  }, []);
-  const user = useUser();
-  useEffect(() => {
-    if (user) {
-      console.log(user);
+    if (session) {
       router.replace("/");
     }
-  }, [user]);
+  }, [session]);
+
+  const onSignIn = () => {
+    console.log("running onSingin");
+    if (!email || !password) {
+      Alert.alert("Error", "Please fill in all fields");
+    } else {
+      signInMutation.mutate({ email, password });
+    }
+  };
+
   return (
-    <ScreenWrapper>
-      <View>
-        <Button
-          title="login"
-          onPress={() => {
-            void onSubmit();
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: backgroundColor,
+      }}
+    >
+      <View
+        style={{
+          padding: Spacing * 2,
+        }}
+      >
+        <View
+          style={{
+            padding: Spacing * 2,
+            alignItems: "center",
           }}
-        />
+        >
+          <Text
+            style={{
+              fontSize: FontSize.xLarge,
+              color: primaryColor,
+              fontFamily: "PoppinsBold",
+              marginVertical: Spacing * 3,
+            }}
+          >
+            Connectez-vous ici
+          </Text>
+          <Text
+            style={{
+              fontFamily: "PoppinsSemibold",
+              fontSize: FontSize.large,
+              maxWidth: "60%",
+              textAlign: "center",
+            }}
+          >
+            Welcome back you've been missed!
+          </Text>
+        </View>
+        <View
+          style={{
+            marginVertical: Spacing * 3,
+          }}
+        >
+          <TextInput
+            style={{
+              fontFamily: "PoppinsRegular",
+              fontSize: FontSize.small,
+              borderColor: borderColor,
+              borderWidth: 1,
+              padding: Spacing,
+              //backgroundColor: Colors.light.lightPrimary,
+              borderRadius: Spacing,
+
+              marginVertical: Spacing,
+            }}
+            autoCapitalize="none"
+            placeholder="Email"
+            keyboardType="email-address"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <TextInput
+            style={{
+              fontFamily: "PoppinsRegular",
+              fontSize: FontSize.small,
+              borderColor: borderColor,
+              borderWidth: 1,
+              padding: Spacing,
+              //backgroundColor: Colors.light.lightPrimary,
+              borderRadius: Spacing,
+              marginVertical: Spacing,
+            }}
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+        </View>
+        <View>
+          <Text
+            style={{
+              fontFamily: "PoppinsSemibold",
+              fontSize: FontSize.small,
+              //color: Colors.light.primary,
+              alignSelf: "flex-end",
+            }}
+          >
+            Mot de passe oublié ?
+          </Text>
+        </View>
+        <TouchableOpacity
+          style={{
+            padding: Spacing * 2,
+            //backgroundColor: Colors.light.primary,
+            marginVertical: Spacing * 3,
+            borderRadius: Spacing,
+            ///shadowColor: Colors.light.primary,
+            shadowOffset: {
+              width: 0,
+              height: Spacing,
+            },
+            shadowOpacity: 0.3,
+            shadowRadius: Spacing,
+          }}
+          onPress={onSignIn}
+        >
+          <Text
+            style={{
+              fontFamily: "PoppinsBold",
+              //color: Colors.light.onPrimary,
+              textAlign: "center",
+              fontSize: FontSize.large,
+            }}
+          >
+            Connexion
+          </Text>
+        </TouchableOpacity>
       </View>
-    </ScreenWrapper>
+    </SafeAreaView>
   );
 }

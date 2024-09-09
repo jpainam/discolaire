@@ -3,15 +3,18 @@ import { Link } from "expo-router";
 
 import EditScreenInfo from "~/components/EditScreenInfo";
 import { Text, View } from "~/components/Themed";
+import { useAuth } from "~/providers/auth-provider";
 import { api } from "~/utils/api";
 import { useSignOut } from "~/utils/auth";
-import { onSubmit } from "../auth/submit-login";
 
 export default function TabOneScreen() {
   //const user = useUser();
   //const signIn = useSignIn();
   const schoolYearsQuery = api.schoolYear.all.useQuery();
   const signOut = useSignOut();
+  const { user, session } = useAuth();
+  console.log(user);
+  console.log(session);
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>
@@ -25,7 +28,7 @@ export default function TabOneScreen() {
       <Button
         title="Try login"
         onPress={() => {
-          void onSubmit();
+          console.log("login");
         }}
       />
       <Button
