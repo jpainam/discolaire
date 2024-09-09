@@ -58,7 +58,7 @@ export default function TabLayout() {
                   )}
                 </Pressable>
               </Link>
-              <Link href="/SearchStudent" asChild>
+              <Link href="/student" asChild>
                 <Pressable>
                   {({ pressed }) => (
                     <Ionicons
