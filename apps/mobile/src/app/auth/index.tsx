@@ -37,12 +37,15 @@ export default function Page() {
   }, [session]);
 
   const onSignIn = () => {
-    console.log("running onSingin");
-    if (!email || !password) {
-      Alert.alert("Error", "Please fill in all fields");
-    } else {
-      signInMutation.mutate({ email, password });
-    }
+    signInMutation.mutate({
+      email: "jpainam@gmail.com",
+      password: "admin1234",
+    });
+    // if (!email || !password) {
+    //   Alert.alert("Error", "Please fill in all fields");
+    // } else {
+    //   signInMutation.mutate({ email, password });
+    // }
   };
 
   return (
