@@ -33,7 +33,9 @@ export const authRouter = {
           message: "Incorrect email or password",
         });
       }
+      console.log("user", user);
       const token = generateToken({ id: user.id });
+      console.log("token", token);
       return token;
     }),
   signOut: protectedProcedure.mutation(async (opts) => {

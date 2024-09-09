@@ -116,27 +116,32 @@ export const validateToken = async (
 ): Promise<NextAuthSession | null> => {
   const sessionToken = token.slice("Bearer ".length);
   //const session = await adapter.getSessionAndUser?.(sessionToken);
-  const payload = jwt.verify(sessionToken, env.AUTH_SECRET ?? "") as {
-    sub?: string | undefined;
-  };
-  const userId = payload.sub;
-  const user = await db.user.findUnique({
-    where: {
-      id: userId,
-      isActive: true,
-    },
-  });
-  return user
-    ? {
-        user: {
-          email: user.email,
-          id: user.id,
-          name: user.name,
-          avatar: user.avatar ?? "",
-        },
-        expires: addDays(new Date(), 30).toISOString(),
-      }
-    : null;
+  try {
+    const payload = jwt.verify(sessionToken, env.AUTH_SECRET ?? "") as {
+      sub?: string | undefined;
+    };
+    const userId = payload.sub;
+    const user = await db.user.findUnique({
+      where: {
+        id: userId,
+        isActive: true,
+      },
+    });
+    return user
+      ? {
+          user: {
+            email: user.email,
+            id: user.id,
+            name: user.name,
+            avatar: user.avatar ?? "",
+          },
+          expires: addDays(new Date(), 30).toISOString(),
+        }
+      : null;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (_error) {
+    return null;
+  }
 };
 
 export const invalidateSessionToken = async (token: string) => {
