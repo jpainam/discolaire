@@ -116,10 +116,12 @@ export function useDataTable<TData, TValue>({
 interface DataTableProps<TData, TValue> {
   table: TanstackTable<TData>;
   className?: string;
+  actionBar?: React.ReactNode | null;
 }
 export function DataTable<TData, TValue>({
   table,
   className,
+  actionBar,
 }: DataTableProps<TData, TValue>) {
   return (
     <div className={cn("w-full space-y-2.5 overflow-auto", className)}>
@@ -174,7 +176,10 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      <div className="flex flex-col gap-2.5">
+        <DataTablePagination table={table} />
+        {table.getFilteredSelectedRowModel().rows.length > 0 && actionBar}
+      </div>
     </div>
   );
 }

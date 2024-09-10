@@ -9,6 +9,7 @@ import { DataTable, useDataTable } from "@repo/ui/datatable/index";
 
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
+import { UserDataTableAction } from "./UserDataTableAction";
 import { getUserColumns } from "./UserDataTableColumn";
 
 export function UserDataTable() {
@@ -34,5 +35,10 @@ export function UserDataTable() {
   if (usersQuery.isPending) {
     return <DataTableSkeleton rowCount={10} columnCount={8} />;
   }
-  return <DataTable table={table} />;
+  return (
+    <DataTable
+      actionBar={<UserDataTableAction table={table} />}
+      table={table}
+    />
+  );
 }
