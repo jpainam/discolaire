@@ -12,7 +12,7 @@ export default {
     primary: blue,
     onPrimary: white,
     lightPrimary: "#f1f4ff",
-    background: "#fff",
+    background: "#f8f8f8",
     tint: tintColorLight,
     borderColor: "#ccc",
     tabIconDefault: "#ccc",

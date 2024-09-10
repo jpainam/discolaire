@@ -61,7 +61,6 @@ export default function RootLayout() {
       <Provider>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="student" options={{ headerShown: false }} />
           <Stack.Screen name="calendar" options={{ headerShown: false }} />
           <Stack.Screen name="auth" options={{ headerShown: false }} />
           <Stack.Screen name="welcome" options={{ headerShown: false }} />

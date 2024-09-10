@@ -42,7 +42,14 @@ export function StudentListItem({
             flexDirection: "column",
           }}
         >
-          <Text>{name}</Text>
+          <Text
+            style={{
+              fontSize: 14,
+              overflow: "hidden",
+            }}
+          >
+            {name}
+          </Text>
           {dateOfBirth && (
             <Text
               style={{

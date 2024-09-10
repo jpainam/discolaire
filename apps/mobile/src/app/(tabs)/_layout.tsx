@@ -58,20 +58,6 @@ export default function TabLayout() {
                   )}
                 </Pressable>
               </Link>
-              <Link href="/student" asChild>
-                <Pressable>
-                  {({ pressed }) => (
-                    <Ionicons
-                      name="people"
-                      // <FontAwesome
-                      // name="info-circle"
-                      size={25}
-                      color={Colors[colorScheme ?? "light"].text}
-                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                    />
-                  )}
-                </Pressable>
-              </Link>
             </View>
           ),
         }}
@@ -92,13 +78,13 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name="apps" color={color} />,
         }}
       />
-      {/* <Tabs.Screen
-        name="students"
+      <Tabs.Screen
+        name="student"
         options={{
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="people" color={color} />,
         }}
-      /> */}
+      />
 
       <Tabs.Screen
         name="settings"
