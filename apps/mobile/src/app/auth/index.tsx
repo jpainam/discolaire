@@ -19,7 +19,6 @@ export default function Page() {
   const utils = api.useUtils();
   const signInMutation = api.auth.signInWithPassword.useMutation({
     onSuccess: async (sessionToken) => {
-      console.log("running onSuccess", sessionToken);
       setToken(sessionToken);
       await utils.invalidate();
       router.replace("/");

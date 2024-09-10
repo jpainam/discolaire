@@ -2,10 +2,12 @@ import { useState } from "react";
 import { ActivityIndicator, Platform, Pressable } from "react-native";
 import { Link, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { Ionicons } from "@expo/vector-icons";
 import { FlashList } from "@shopify/flash-list";
 import { useDebounce } from "use-debounce";
 
 import { Text, useThemeColor, View } from "~/components/Themed";
+import Spacing from "~/constants/Spacing";
 import { api } from "~/utils/api";
 
 export default function ModalScreen() {
@@ -23,8 +25,8 @@ export default function ModalScreen() {
           headerBlurEffect: "regular",
           headerShadowVisible: false,
           headerTransparent: true,
-          headerLargeTitle: true,
-          headerLargeTitleShadowVisible: false,
+          //headerLargeTitle: true,
+          //headerLargeTitleShadowVisible: false,
           headerStyle: {
             backgroundColor: backgroundColor,
           },
@@ -78,8 +80,15 @@ function StudentListItem({ id, name }: StudentListItemProps) {
           params: { id: id },
         }}
       >
-        <Pressable>
+        <Pressable
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            padding: Spacing,
+          }}
+        >
           <Text>{name}</Text>
+          <Ionicons name="chevron-forward" size={24} color="black" />
         </Pressable>
       </Link>
     </View>

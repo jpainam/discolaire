@@ -13,11 +13,11 @@ export default function TabOneScreen() {
   const schoolYearsQuery = api.schoolYear.all.useQuery();
   const signOut = useSignOut();
   const { user, session } = useAuth();
-  console.log(user);
-  console.log(session);
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>
+      <Text>{JSON.stringify(user)}</Text>
+      <Text>{JSON.stringify(session)}</Text>
       {schoolYearsQuery.isPending && <ActivityIndicator />}
       <Text>{JSON.stringify(schoolYearsQuery.data)}</Text>
       <View

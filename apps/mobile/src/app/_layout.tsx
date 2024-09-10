@@ -65,7 +65,10 @@ export default function RootLayout() {
           <Stack.Screen name="calendar" options={{ headerShown: false }} />
           <Stack.Screen name="auth" options={{ headerShown: false }} />
           <Stack.Screen name="welcome" options={{ headerShown: false }} />
-          {/* <Stack.Screen name="(modals)" options={{ headerShown: false }} /> */}
+          {/* <Stack.Screen
+            name="(modals)"
+            options={{ headerShown: false, presentation: "modal" }}
+          /> */}
         </Stack>
       </Provider>
     </ThemeProvider>
