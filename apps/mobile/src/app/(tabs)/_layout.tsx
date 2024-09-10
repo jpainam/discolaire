@@ -1,6 +1,6 @@
 import React from "react";
 import { Pressable } from "react-native";
-import { Link, Tabs } from "expo-router";
+import { Link, Tabs, useSegments } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 import { View } from "~/components/Themed";
@@ -18,7 +18,7 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  //const segments = useSegments();
+  const segments = useSegments();
 
   //const shouldShowTabBar = !segments.includes("[id]");
 
@@ -62,7 +62,7 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="chats"
         options={{
           headerShown: false,
@@ -70,12 +70,30 @@ export default function TabLayout() {
             <TabBarIcon name="chatbubbles" color={color} />
           ),
         }}
+      /> */}
+      <Tabs.Screen
+        name="chats"
+        options={{
+          title: "Chats",
+          tabBarIcon: ({ size, color }) => (
+            <Ionicons name="chatbubbles" size={size} color={color} />
+          ),
+          headerShown: false,
+          tabBarStyle: {
+            backgroundColor: Colors.light.background,
+            display: segments[2] === "[id]" ? "none" : "flex",
+          },
+        }}
       />
       <Tabs.Screen
         name="classes"
         options={{
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="apps" color={color} />,
+          tabBarStyle: {
+            backgroundColor: Colors.light.background,
+            display: segments[2] === "[id]" ? "none" : "flex",
+          },
         }}
       />
       <Tabs.Screen
@@ -83,6 +101,10 @@ export default function TabLayout() {
         options={{
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="people" color={color} />,
+          tabBarStyle: {
+            backgroundColor: Colors.light.background,
+            display: segments[2] === "[id]" ? "none" : "flex",
+          },
         }}
       />
 

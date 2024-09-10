@@ -3,10 +3,11 @@
 import "@bacons/text-decoder/install";
 
 import { useEffect } from "react";
+import { TouchableOpacity } from "react-native";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Link, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import {
   DarkTheme,
   DefaultTheme,
@@ -14,6 +15,7 @@ import {
 } from "@react-navigation/native";
 
 import { useColorScheme } from "~/components/useColorScheme";
+import Colors from "~/constants/Colors";
 import { Provider } from "~/providers";
 
 export {
@@ -68,6 +70,39 @@ export default function RootLayout() {
             name="(modals)"
             options={{ headerShown: false, presentation: "modal" }}
           /> */}
+          <Stack.Screen
+            name="(modals)/new-chat"
+            options={{
+              presentation: "modal",
+              title: "New Chat",
+              headerTransparent: true,
+              headerBlurEffect: "regular",
+              headerStyle: {
+                backgroundColor: Colors.light.background,
+              },
+              headerRight: () => (
+                <Link href={"/(tabs)/chats"} asChild>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: Colors.light.lightGray,
+                      borderRadius: 20,
+                      padding: 4,
+                    }}
+                  >
+                    <Ionicons
+                      name="close"
+                      color={Colors.light.gray}
+                      size={30}
+                    />
+                  </TouchableOpacity>
+                </Link>
+              ),
+              headerSearchBarOptions: {
+                placeholder: "Search name or number",
+                hideWhenScrolling: false,
+              },
+            }}
+          />
         </Stack>
       </Provider>
     </ThemeProvider>
