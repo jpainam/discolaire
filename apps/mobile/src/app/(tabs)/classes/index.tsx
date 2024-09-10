@@ -3,9 +3,10 @@ import { Stack } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import { useDebounce } from "use-debounce";
 
+import type { RouterOutputs } from "~/utils/api";
 import { Loader } from "~/components/Loader";
 import { useThemeColor, View } from "~/components/Themed";
-import { api, RouterOutputs } from "~/utils/api";
+import { api } from "~/utils/api";
 import { ClassroomListItem } from "./classroom-list-item";
 
 type Classroom = RouterOutputs["classroom"]["all"][number];
