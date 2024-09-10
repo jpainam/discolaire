@@ -5,8 +5,8 @@ import { routes } from "~/configs/routes";
 
 export function Footer() {
   return (
-    <footer className="border-t py-6 md:py-8">
-      <div className="container flex max-w-7xl flex-col items-center justify-between gap-4 md:flex-row">
+    <footer className="container py-2">
+      <div className="container fixed bottom-0 flex max-w-7xl flex-col items-center justify-between gap-4 py-1 md:flex-row">
         <div className="text-sm text-muted-foreground">
           &copy; 2024 School Management. All rights reserved.
         </div>

@@ -7,6 +7,8 @@
   "resend": "Renvoyer",
   "attach_role": "Attacher rôle",
   "policies": "Règles",
+  "role": "Rôle",
+  "permissions": "Permissions",
   "attach": "Attacher",
   "add_user_to_group": "Ajouter l'utilisateur au groupe",
   "add_user_to_group_description": "Ajoutez un utilisateur à un groupe existant ou créez un nouveau groupe. Nous vous recommandons d'utiliser des groupes pour gérer les autorisations des utilisateurs par fonction professionnelle.",

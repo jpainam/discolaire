@@ -36,16 +36,16 @@ export function UserDataTable() {
     columns: columns,
     rowCount: userCount.data ?? 0,
   });
-  const filterFields = [
-    {
-      label: "Email verified",
-      value: "emailVerified",
-      options: [
-        { label: "Yes", value: "true" },
-        { label: "No", value: "false" },
-      ],
-    },
-  ];
+  // const filterFields = [
+  //   {
+  //     label: "Email verified",
+  //     value: "emailVerified",
+  //     options: [
+  //       { label: "Yes", value: "true" },
+  //       { label: "No", value: "false" },
+  //     ],
+  //   },
+  // ];
   if (usersQuery.isPending || userCount.isPending) {
     return <DataTableSkeleton className="mx-2" rowCount={10} columnCount={8} />;
   }

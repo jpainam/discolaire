@@ -18,6 +18,41 @@ export const roleRouter = createTRPCRouter({
       },
     });
   }),
+  users: protectedProcedure
+    .input(
+      z.object({
+        roleId: z.string(),
+        q: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const qq = input.q ? `%${input.q}%` : "%";
+      return ctx.db.userRole.findMany({
+        where: {
+          roleId: input.roleId,
+          user: {
+            OR: [
+              {
+                name: {
+                  contains: qq,
+                  mode: "insensitive",
+                },
+              },
+              {
+                email: {
+                  contains: qq,
+                  mode: "insensitive",
+                },
+              },
+            ],
+          },
+        },
+        include: {
+          user: true,
+          role: true,
+        },
+      });
+    }),
   attachPolicies: protectedProcedure
     .input(
       z.object({

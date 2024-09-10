@@ -17,7 +17,7 @@ export default async function Layout({
       {/* <NoticeBanner /> */}
       <Header />
 
-      <main className="min-h-[80vh] flex-1">{children}</main>
+      <main className="min-h-screen flex-1">{children}</main>
       <Footer />
     </>
   );

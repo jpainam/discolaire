@@ -16,7 +16,6 @@ export const env = createEnv({
    * This way you can ensure the app isn't built with invalid env vars.
    */
   server: {
-    //DATABASE_URL: z.string().url(),
     AWS_S3_ACCESS_KEY_ID: z.string().min(10),
     AWS_S3_REGION: z.string().min(2),
     AWS_S3_BUCKET_NAME: z.string().min(2),
@@ -28,7 +27,6 @@ export const env = createEnv({
    * For them to be exposed to the client, prefix them with `NEXT_PUBLIC_`.
    */
   client: {
-    // NEXT_PUBLIC_CLIENTVAR: z.string(),
     NEXT_PUBLIC_BASE_URL: z.string().url(),
     NEXT_PUBLIC_PROSPECT_SERVICE_URL: z.string().url(),
     NEXT_PUBLIC_LIBRARY_SERVICE_URL: z.string().url(),
