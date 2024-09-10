@@ -127,11 +127,11 @@ export function DataTable<TData, TValue>({
   return (
     <div className={cn("w-full space-y-2.5 overflow-auto", className)}>
       <DataTableToolbar table={table} />
-      <div className="rounded-md border">
+      <div className="rounded-lg border">
         <Table>
-          <TableHeader className="sticky top-0">
+          <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow className="bg-muted/50" key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id} colSpan={header.colSpan}>
@@ -150,7 +150,8 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+
+          <TableBody className="h-[calc(100vh-20rem)] w-full">
             {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
@@ -158,7 +159,7 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell className="py-0" key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
@@ -171,7 +172,7 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={table.getAllColumns().length}
+                  colSpan={table.getAllColumns().length + 1}
                   className="h-24 text-center"
                 >
                   No results.

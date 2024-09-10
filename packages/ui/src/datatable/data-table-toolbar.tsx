@@ -33,7 +33,6 @@ interface DataTableToolbarProps<TData>
 
 export function DataTableToolbar<TData>({
   table,
-  searchPlaceholder,
   filterFields = [],
   children,
   className,
@@ -53,48 +52,49 @@ export function DataTableToolbar<TData>({
   return (
     <div
       className={cn(
-        "flex w-full items-center justify-between space-x-2 overflow-auto p-1",
+        "flex w-full items-center justify-between overflow-auto p-1",
         className,
       )}
       {...props}
     >
-      <div className="flex flex-1 items-center space-x-2">
-        {searchPlaceholder && (
-          <Input
-            placeholder={searchPlaceholder}
-            value={table.getState().globalFilter as string}
-            onChange={(event) => {
-              table.setGlobalFilter(event.target.value);
-              void setSearchQuery(event.target.value);
-            }}
-            className="h-8 w-40 lg:w-64"
-          />
-        )}
-        {filterableColumns.length > 0 &&
-          filterableColumns.map(
-            (column) =>
-              table.getColumn(column.value ? String(column.value) : "") && (
-                <DataTableFacetedFilter
-                  key={String(column.value)}
-                  column={table.getColumn(
-                    column.value ? String(column.value) : "",
-                  )}
-                  title={column.label}
-                  options={column.options ?? []}
-                />
-              ),
+      <div className="flex flex-1 items-center justify-between">
+        <div>
+          {filterableColumns.length > 0 &&
+            filterableColumns.map(
+              (column) =>
+                table.getColumn(column.value ? String(column.value) : "") && (
+                  <DataTableFacetedFilter
+                    key={String(column.value)}
+                    column={table.getColumn(
+                      column.value ? String(column.value) : "",
+                    )}
+                    title={column.label}
+                    options={column.options ?? []}
+                  />
+                ),
+            )}
+          {isFiltered && (
+            <Button
+              aria-label="Reset filters"
+              variant="ghost"
+              className="h-8 px-2 lg:px-3"
+              onClick={() => table.resetColumnFilters()}
+            >
+              Reset
+              <Cross2Icon className="ml-2 size-4" aria-hidden="true" />
+            </Button>
           )}
-        {isFiltered && (
-          <Button
-            aria-label="Reset filters"
-            variant="ghost"
-            className="h-8 px-2 lg:px-3"
-            onClick={() => table.resetColumnFilters()}
-          >
-            Reset
-            <Cross2Icon className="ml-2 size-4" aria-hidden="true" />
-          </Button>
-        )}
+        </div>
+
+        <Input
+          placeholder={"Search"}
+          value={table.getState().globalFilter as string}
+          onChange={(event) => {
+            table.setGlobalFilter(event.target.value);
+            void setSearchQuery(event.target.value);
+          }}
+          className="h-8 w-40 lg:w-64"
+        />
       </div>
       <div className="flex items-center gap-2">{children}</div>
     </div>
