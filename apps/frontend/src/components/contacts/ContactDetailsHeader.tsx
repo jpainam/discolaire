@@ -113,7 +113,7 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
             onClick={() => {
               openModal({
                 className: "p-0 w-[600px]",
-                title: <div className="px-4 py-2">{t("link_students")}</div>,
+                title: <p className="px-4 py-2">{t("link_students")}</p>,
                 view: <LinkStudent contactId={contactId} />,
               });
             }}

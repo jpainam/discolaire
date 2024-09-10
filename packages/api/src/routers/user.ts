@@ -42,17 +42,12 @@ export const userRouter = createTRPCRouter({
       });
     }),
   delete: protectedProcedure
-    .input(z.object({ id: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      return ctx.db.user.delete({ where: { id: input.id } });
-    }),
-  deleteMany: protectedProcedure
-    .input(z.object({ ids: z.array(z.string()) }))
+    .input(z.union([z.array(z.string()), z.string()]))
     .mutation(async ({ ctx, input }) => {
       return ctx.db.user.deleteMany({
         where: {
           id: {
-            in: input.ids,
+            in: Array.isArray(input) ? input : [input],
           },
         },
       });

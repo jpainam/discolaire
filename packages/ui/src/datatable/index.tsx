@@ -146,7 +146,7 @@ export function DataTable<TData>({
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow className="bg-muted/50" key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
+                {headerGroup.headers.slice(0, -1).map((header) => {
                   return (
                     <TableHead key={header.id} colSpan={header.colSpan}>
                       {header.isPlaceholder
@@ -180,7 +180,6 @@ export function DataTable<TData>({
                       )}
                     </TableCell>
                   ))}
-                  <TableCell></TableCell>
                 </TableRow>
               ))
             ) : (

@@ -13,6 +13,7 @@ import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { useConfirm } from "@repo/ui/confirm-dialog";
@@ -34,6 +35,7 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { api } from "~/trpc/react";
 import { selectedPoliciesAtom } from "./_selected_policies_atom";
 import { CreateEditPolicy } from "./CreateEditPolicy";
@@ -43,6 +45,10 @@ export function PolicyTable() {
   const [expandedPolicies, setExpandedPolicies] = useState<string[]>([]);
   const policiesQuery = api.policy.all.useQuery();
   const { t } = useLocale();
+  const canDeletePolicy = useCheckPermissions(
+    PermissionAction.DELETE,
+    "policy",
+  );
   const utils = api.useUtils();
   const { openModal } = useModal();
   const deletePolicyMutation = api.policy.delete.useMutation({
@@ -181,28 +187,33 @@ export function PolicyTable() {
                           >
                             <Pencil className="mr-2 h-4 w-4" /> {t("edit")}
                           </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            className="flex items-center gap-2 bg-destructive text-destructive-foreground"
-                            onSelect={async () => {
-                              const isConfirmed = await confirm({
-                                title: t("delete"),
-                                icon: (
-                                  <Trash2 className="size-4 text-destructive" />
-                                ),
-                                alertDialogTitle: {
-                                  className: "flex items-center gap-2",
-                                },
-                                description: t("delete_confirmation"),
-                              });
-                              if (isConfirmed) {
-                                toast.loading(t("deleting"), { id: 0 });
-                                deletePolicyMutation.mutate(policy.id);
-                              }
-                            }}
-                          >
-                            <Trash2 className="mr-2 h-4 w-4" /> {t("delete")}
-                          </DropdownMenuItem>
+                          {canDeletePolicy && (
+                            <>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                className="flex items-center gap-2 bg-destructive text-destructive-foreground"
+                                onSelect={async () => {
+                                  const isConfirmed = await confirm({
+                                    title: t("delete"),
+                                    icon: (
+                                      <Trash2 className="size-4 text-destructive" />
+                                    ),
+                                    alertDialogTitle: {
+                                      className: "flex items-center gap-2",
+                                    },
+                                    description: t("delete_confirmation"),
+                                  });
+                                  if (isConfirmed) {
+                                    toast.loading(t("deleting"), { id: 0 });
+                                    deletePolicyMutation.mutate(policy.id);
+                                  }
+                                }}
+                              >
+                                <Trash2 className="mr-2 h-4 w-4" />{" "}
+                                {t("delete")}
+                              </DropdownMenuItem>
+                            </>
+                          )}
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>

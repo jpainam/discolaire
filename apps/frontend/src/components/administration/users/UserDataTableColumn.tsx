@@ -1,11 +1,28 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
+import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
+import { useRouter } from "@repo/hooks/use-router";
+import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
+import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/dropdown-menu";
 import { Switch } from "@repo/ui/switch";
+
+import { useCheckPermissions } from "~/hooks/use-permissions";
+import { api } from "~/trpc/react";
 
 type User = RouterOutputs["user"]["all"][number];
 
@@ -77,5 +94,73 @@ export function getUserColumns({
         return fullDateFormatter.format(new Date(row.getValue("createdAt")));
       },
     },
+    {
+      accessorKey: "actions",
+      cell: ({ row }) => <ActionCell user={row.original} />,
+    },
   ] as ColumnDef<User, unknown>[];
+}
+
+function ActionCell({ user }: { user: User }) {
+  const { t } = useLocale();
+  const confirm = useConfirm();
+  const utils = api.useUtils();
+  const router = useRouter();
+  const canDeleteUser = useCheckPermissions(PermissionAction.DELETE, "user");
+  const deleteUserMutation = api.user.delete.useMutation({
+    onSettled: () => utils.user.invalidate(),
+    onSuccess: () => {
+      toast.success(t("deleted_successfully"), { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
+  return (
+    <div className="flex justify-end">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={"ghost"} size={"icon"}>
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem
+            onSelect={() => {
+              router.push(`/administration/users/${user.id}`);
+            }}
+          >
+            <Eye className="mr-2 h-4 w-4" />
+            {t("details")}
+          </DropdownMenuItem>
+          {canDeleteUser && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onSelect={async () => {
+                  const isConfirmed = await confirm({
+                    title: t("delete"),
+                    icon: <Trash2 className="size-4 text-destructive" />,
+                    alertDialogTitle: {
+                      className: "flex items-center gap-2",
+                    },
+                    description: t("delete_confirmation"),
+                  });
+
+                  if (isConfirmed) {
+                    toast.loading(t("deleting"), { id: 0 });
+                    deleteUserMutation.mutate(user.id);
+                  }
+                }}
+                className="text-destructive"
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                {t("delete")}
+              </DropdownMenuItem>
+            </>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  );
 }

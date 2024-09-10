@@ -18,6 +18,26 @@ export const roleRouter = createTRPCRouter({
       },
     });
   }),
+  addUsers: protectedProcedure
+    .input(
+      z.object({
+        roleId: z.string(),
+        userIds: z.array(z.string()),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const data = input.userIds.map((userId) => {
+        return {
+          roleId: input.roleId,
+          userId: userId,
+          createdById: ctx.session.user.id,
+        };
+      });
+      return ctx.db.userRole.createMany({
+        data: data,
+        skipDuplicates: true,
+      });
+    }),
   users: protectedProcedure
     .input(
       z.object({

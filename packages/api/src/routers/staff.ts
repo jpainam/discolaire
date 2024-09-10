@@ -100,17 +100,7 @@ export const staffRouter = {
         data: input,
       });
     }),
-  deleteMany: protectedProcedure
-    .input(z.array(z.string()))
-    .mutation(async ({ ctx, input }) => {
-      return ctx.db.staff.deleteMany({
-        where: {
-          id: {
-            in: input,
-          },
-        },
-      });
-    }),
+
   update: protectedProcedure
     .input(createUpdateSchema.extend({ id: z.string() }))
     .mutation(({ ctx, input }) => {

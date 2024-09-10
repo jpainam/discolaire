@@ -37,7 +37,7 @@ export default async function Page({
           <span>{dateFormatter.format(role.createdAt)}</span>
         </div>
       </div>
-      <Tabs defaultValue="permissions">
+      <Tabs defaultValue="users">
         <TabsList>
           <TabsTrigger value="users">{t("users")}</TabsTrigger>
           <TabsTrigger value="permissions">{t("permissions")}</TabsTrigger>
