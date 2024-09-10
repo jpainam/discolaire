@@ -95,7 +95,8 @@ export function getUserColumns({
       },
     },
     {
-      accessorKey: "actions",
+      id: "actions",
+
       cell: ({ row }) => <ActionCell user={row.original} />,
     },
   ] as ColumnDef<User, unknown>[];

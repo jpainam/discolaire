@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
+import { PlusIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { toast } from "sonner";
 
@@ -53,7 +54,7 @@ export function PolicyHeader() {
       <div className="flex flex-row items-center py-2">
         <Label>{t("policy")}</Label>
         <div className="ml-auto flex flex-row gap-3">
-          {canCreatePolicy && (
+          {!canCreatePolicy && (
             <Button
               size="sm"
               onClick={() => {
@@ -64,7 +65,8 @@ export function PolicyHeader() {
                 });
               }}
             >
-              {t("create")}
+              <PlusIcon size={16} className="mr-2" />
+              {t("add")}
             </Button>
           )}
 
