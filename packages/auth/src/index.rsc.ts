@@ -13,10 +13,11 @@ const { handlers, auth: defaultAuth, signIn, signOut } = NextAuth(authConfig);
  */
 const auth = cache(defaultAuth);
 
-export { handlers, auth, signIn, signOut };
+export { auth, handlers, signIn, signOut };
 
 export {
+  generateToken,
   invalidateSessionToken,
-  validateToken,
   isSecureContext,
+  validateToken,
 } from "./config";

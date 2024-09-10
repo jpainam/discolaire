@@ -8,6 +8,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 
@@ -43,7 +44,8 @@ export function UserDataTableAction({ table }: TasksTableFloatingBarProps) {
         <DropdownMenuContent>
           <DropdownMenuItem>Export in csv</DropdownMenuItem>
           <DropdownMenuItem>Export in excel</DropdownMenuItem>
-          <DropdownMenuItem className="text-destructive">
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="text-destructive focus:text-destructive">
             Delete
           </DropdownMenuItem>
         </DropdownMenuContent>

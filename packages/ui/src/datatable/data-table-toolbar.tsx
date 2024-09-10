@@ -7,7 +7,6 @@ import { useQueryState } from "nuqs";
 
 import { Button } from "@repo/ui/button";
 import { DataTableFacetedFilter } from "@repo/ui/data-table/data-table-faceted-filter";
-import { DataTableViewOptions } from "@repo/ui/data-table/data-table-view-options";
 import { Input } from "@repo/ui/input";
 
 import { cn } from "..";
@@ -97,10 +96,7 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
       </div>
-      <div className="flex items-center gap-2">
-        {children}
-        <DataTableViewOptions table={table} />
-      </div>
+      <div className="flex items-center gap-2">{children}</div>
     </div>
   );
 }

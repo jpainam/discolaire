@@ -32,6 +32,7 @@ import {
 } from "../table";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
+import { DataTableViewOptions } from "./data-table-view-options";
 
 interface UseDataTableProps<TData, TValue> {
   data: TData[];
@@ -128,7 +129,7 @@ export function DataTable<TData, TValue>({
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="sticky top-0">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -143,6 +144,9 @@ export function DataTable<TData, TValue>({
                     </TableHead>
                   );
                 })}
+                <TableHead className="w-12">
+                  <DataTableViewOptions table={table} />
+                </TableHead>
               </TableRow>
             ))}
           </TableHeader>
@@ -161,6 +165,7 @@ export function DataTable<TData, TValue>({
                       )}
                     </TableCell>
                   ))}
+                  <TableCell></TableCell>
                 </TableRow>
               ))
             ) : (
@@ -176,7 +181,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex flex-col gap-2.5">
+      <div className="flex flex-col gap-2.5 py-2">
         <DataTablePagination table={table} />
         {table.getFilteredSelectedRowModel().rows.length > 0 && actionBar}
       </div>

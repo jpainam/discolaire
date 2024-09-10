@@ -9,16 +9,35 @@ export const userRouter = createTRPCRouter({
     .input(
       z.object({
         pageSize: z.number().default(30),
+        q: z.string().optional(),
         pageIndex: z.number().default(0),
       }),
     )
     .query(({ ctx, input }) => {
       const offset = input.pageSize * input.pageIndex;
+      const qq = `%${input.q}%`;
       return ctx.db.user.findMany({
         skip: offset,
         take: input.pageSize,
+        where: {
+          name: { startsWith: qq, mode: "insensitive" },
+        },
         orderBy: {
           createdAt: "desc",
+        },
+      });
+    }),
+  count: protectedProcedure
+    .input(
+      z.object({
+        q: z.string().optional(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      const qq = `%${input.q}%`;
+      return ctx.db.user.count({
+        where: {
+          name: { startsWith: qq, mode: "insensitive" },
         },
       });
     }),
