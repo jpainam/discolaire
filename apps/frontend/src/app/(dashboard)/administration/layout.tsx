@@ -1,14 +1,21 @@
-import { AdminSidebar } from "~/components/administration/AdminSidebar";
+import { AppSidebar } from "~/components/administration/app-sidebar";
+import {
+  SidebarLayout,
+  SidebarTrigger,
+} from "~/components/administration/sidebar";
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function Page() {
+  const { cookies } = await import("next/headers");
   return (
-    <div className="flex flex-row">
-      <AdminSidebar className="w-[250px]" />
-      <div className="flex-1">{children}</div>
-    </div>
+    <SidebarLayout
+      defaultOpen={cookies().get("sidebar:state")?.value === "true"}
+    >
+      <AppSidebar />
+      <main className="flex flex-1 flex-col p-2 transition-all duration-300 ease-in-out">
+        <div className="h-full rounded-md border-2 border-dashed p-2">
+          <SidebarTrigger />
+        </div>
+      </main>
+    </SidebarLayout>
   );
 }
