@@ -58,7 +58,7 @@ export function DataTableToolbar<TData>({
       {...props}
     >
       <div className="flex flex-1 items-center justify-between">
-        <div>
+        <div className="flex flex-row items-center gap-2">
           {filterableColumns.length > 0 &&
             filterableColumns.map(
               (column) =>
