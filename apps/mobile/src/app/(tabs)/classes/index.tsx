@@ -1,57 +1,37 @@
-import { ActivityIndicator, Pressable } from "react-native";
-import { Link } from "expo-router";
+import { ActivityIndicator } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 
-import { Text, View } from "~/components/Themed";
+import { useThemeColor, View } from "~/components/Themed";
 import { api } from "~/utils/api";
-
-function ListItem({
-  name,
-  id,
-  levelName,
-}: {
-  name: string;
-  id: string;
-  levelName: string;
-}) {
-  return (
-    <View>
-      <View>
-        <Link
-          asChild
-          href={{
-            pathname: "/post/[id]",
-            params: { id: id },
-          }}
-        >
-          <Pressable>
-            <Text>{name}</Text>
-            <Text>{levelName}</Text>
-          </Pressable>
-        </Link>
-      </View>
-    </View>
-  );
-}
+import { ClassroomListItem } from "./classroom-list-item";
 
 const Page = () => {
   const classroomsQuery = api.classroom.all.useQuery();
+  const borderColor = useThemeColor({}, "borderColor");
 
   const data = classroomsQuery.data;
   return (
-    <View>
+    <View
+      style={{
+        flex: 1,
+      }}
+    >
       {classroomsQuery.isPending && <ActivityIndicator />}
-      <Text>{JSON.stringify(classroomsQuery.data)}</Text>
+
       {classroomsQuery.data && (
         <FlashList
           data={data}
           estimatedItemSize={20}
-          ItemSeparatorComponent={() => <View className="h-2" />}
+          ItemSeparatorComponent={() => (
+            <View style={{ borderColor: borderColor, borderWidth: 0.5 }} />
+          )}
           renderItem={({ item }) => (
-            <ListItem
+            <ClassroomListItem
+              key={item.id}
+              id={item.id}
               name={item.name ?? ""}
-              id={`${item.id}-index`}
-              levelName={item.level.name}
+              size={item.size}
+              maxSize={item.maxSize}
             />
           )}
         />
