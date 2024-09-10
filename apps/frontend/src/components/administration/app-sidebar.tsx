@@ -3,9 +3,7 @@
 import {
   Atom,
   Bird,
-  BookOpen,
   Bot,
-  Code2,
   Eclipse,
   Frame,
   History,
@@ -13,11 +11,13 @@ import {
   Map,
   PieChart,
   Rabbit,
+  School,
   Send,
   Settings2,
   SquareTerminal,
   Star,
   Turtle,
+  Users,
 } from "lucide-react";
 
 import { NavMain } from "./nav-main";
@@ -111,52 +111,36 @@ const data = {
       ],
     },
     {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
+      title: "Utilisateurs",
+      url: "/administration/users",
+      icon: Users,
       items: [
         {
-          title: "Introduction",
-          url: "#",
+          title: "Liste",
+          url: "/administration/users",
         },
         {
-          title: "Get Started",
-          url: "#",
+          title: "Roles",
+          url: "/administration/users/roles",
         },
         {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
+          title: "Permissions",
+          url: "/administration/users/policies",
         },
       ],
     },
     {
-      title: "API",
-      url: "#",
-      icon: Code2,
+      title: "Classrooms",
+      url: "/administration/classrooms",
+      icon: School,
       items: [
         {
-          title: "Chat",
-          url: "#",
+          title: "Liste",
+          url: "/administration/classrooms",
         },
         {
-          title: "Completion",
-          url: "#",
-        },
-        {
-          title: "Images",
-          url: "#",
-        },
-        {
-          title: "Video",
-          url: "#",
-        },
-        {
-          title: "Speech",
-          url: "#",
+          title: "Niveau",
+          url: "/administration/classrooms/levels",
         },
       ],
     },

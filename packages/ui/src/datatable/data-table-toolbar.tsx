@@ -3,6 +3,7 @@
 import type { Table } from "@tanstack/react-table";
 import * as React from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import { useQueryState } from "nuqs";
 
 import { Button } from "@repo/ui/button";
 import { DataTableFacetedFilter } from "@repo/ui/data-table/data-table-faceted-filter";
@@ -41,6 +42,8 @@ export function DataTableToolbar<TData>({
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
 
+  const [searchQuery, setSearchQuery] = useQueryState("searchQuery");
+
   // Memoize computation of searchableColumns and filterableColumns
   const { filterableColumns } = React.useMemo(() => {
     return {
@@ -63,6 +66,7 @@ export function DataTableToolbar<TData>({
             value={table.getState().globalFilter as string}
             onChange={(event) => {
               table.setGlobalFilter(event.target.value);
+              void setSearchQuery(event.target.value);
             }}
             className="h-8 w-40 lg:w-64"
           />

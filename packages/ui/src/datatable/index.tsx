@@ -21,6 +21,7 @@ import {
 } from "@tanstack/react-table";
 import { parseAsInteger, useQueryState } from "nuqs";
 
+import { cn } from "..";
 import {
   Table,
   TableBody,
@@ -52,7 +53,6 @@ export function useDataTable<TData, TValue>({
   );
   const [sortBy, setSortBy] = useQueryState("sortBy");
   const [sortDirection, setSortDirection] = useQueryState("sortDirection");
-  const [searchQuery, setSearchQuery] = useQueryState("searchQuery");
   const [pageIndex, setPageIndex] = useQueryState(
     "pageIndex",
     parseAsInteger.withDefault(0),
@@ -114,17 +114,15 @@ export function useDataTable<TData, TValue>({
 }
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
   table: TanstackTable<TData>;
+  className?: string;
 }
 export function DataTable<TData, TValue>({
-  columns,
   table,
-  data,
+  className,
 }: DataTableProps<TData, TValue>) {
   return (
-    <div className="space-y-4">
+    <div className={cn("w-full space-y-2.5 overflow-auto", className)}>
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>
@@ -166,7 +164,7 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={table.getAllColumns().length}
                   className="h-24 text-center"
                 >
                   No results.

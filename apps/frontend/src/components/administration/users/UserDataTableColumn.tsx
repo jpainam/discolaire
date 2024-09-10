@@ -4,7 +4,7 @@ import type { TFunction } from "i18next";
 import type { RouterOutputs } from "@repo/api";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Checkbox } from "@repo/ui/checkbox";
-import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
+import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 import { Switch } from "@repo/ui/switch";
 
 type User = RouterOutputs["user"]["all"][number];

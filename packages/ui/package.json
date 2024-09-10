@@ -16,6 +16,13 @@
         "./src/Stepper/*.tsx"
       ]
     },
+    "./datatable": {
+      "types": "./dist/datatable/index.d.ts",
+      "default": [
+        "./src/datatable/*.ts",
+        "./src/datatable/*.tsx"
+      ]
+    },
     "./*": {
       "types": "./dist/*.d.ts",
       "default": [

@@ -5,13 +5,23 @@ import { userService } from "../services/user-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const userRouter = createTRPCRouter({
-  all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.user.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-  }),
+  all: protectedProcedure
+    .input(
+      z.object({
+        pageSize: z.number().default(30),
+        pageIndex: z.number().default(0),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      const offset = input.pageSize * input.pageIndex;
+      return ctx.db.user.findMany({
+        skip: offset,
+        take: input.pageSize,
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }),
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
