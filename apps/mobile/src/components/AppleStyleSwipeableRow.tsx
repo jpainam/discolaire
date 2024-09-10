@@ -6,12 +6,11 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 import { Ionicons } from "@expo/vector-icons";
 
 import Colors from "~/constants/Colors";
-import { useColorScheme } from "./useColorScheme";
 
 export default class AppleStyleSwipeableRow extends Component<
   PropsWithChildren<unknown>
 > {
-  private theme = useColorScheme() ?? "light";
+  private theme = "light";
   private renderRightAction = (
     text: string,
     color: string,
@@ -56,12 +55,7 @@ export default class AppleStyleSwipeableRow extends Component<
       }}
     >
       {this.renderRightAction("More", "#C8C7CD", 192, progress)}
-      {this.renderRightAction(
-        "Archive",
-        Colors[this.theme].muted,
-        128,
-        progress,
-      )}
+      {this.renderRightAction("Archive", Colors.light.muted, 128, progress)}
     </View>
   );
 

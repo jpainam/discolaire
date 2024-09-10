@@ -392,6 +392,9 @@ importers:
       react-native-screens:
         specifier: ~3.34.0
         version: 3.34.0(react-native@0.75.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))(react@18.3.1)
+      react-native-section-alphabet-list:
+        specifier: ^3.0.0
+        version: 3.0.0
       react-native-url-polyfill:
         specifier: ^2.0.0
         version: 2.0.0(react-native@0.75.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))
@@ -8899,6 +8902,12 @@ packages:
     peerDependencies:
       react: '*'
       react-native: '*'
+
+  react-native-section-alphabet-list@3.0.0:
+    resolution: {integrity: sha512-nM7xBwux21dbOxrti9bQLYYmbnd/E8u7feLnr97Ne1E+XpIp7KRMzqA1YG/WPzQ4bYKC6baulQ/KVM4flmzBxw==}
+
+  react-native-section-list-get-item-layout@2.2.3:
+    resolution: {integrity: sha512-fzCW5SiYP6qCZyDHebaElHonIFr8NFrZK9JDkxFLnpxMJih4d+HQ4rHyOs0Z4Gb/FjyCVbRH7RtEnjeQ0XffMg==}
 
   react-native-swipe-gestures@1.0.5:
     resolution: {integrity: sha512-Ns7Bn9H/Tyw278+5SQx9oAblDZ7JixyzeOczcBK8dipQk2pD7Djkcfnf1nB/8RErAmMLL9iXgW0QHqiII8AhKw==}
@@ -19999,6 +20008,12 @@ snapshots:
       react-freeze: 1.0.4(react@18.3.1)
       react-native: 0.75.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4)
       warn-once: 0.1.1
+
+  react-native-section-alphabet-list@3.0.0:
+    dependencies:
+      react-native-section-list-get-item-layout: 2.2.3
+
+  react-native-section-list-get-item-layout@2.2.3: {}
 
   react-native-swipe-gestures@1.0.5: {}
 

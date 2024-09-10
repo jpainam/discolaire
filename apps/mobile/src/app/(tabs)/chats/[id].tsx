@@ -125,7 +125,7 @@ const Page = () => {
         renderSystemMessage={(props) => (
           <SystemMessage {...props} textStyle={{ color: Colors[theme].gray }} />
         )}
-        bottomOffset={insets.bottom}
+        //bottomOffset={insets.bottom}
         renderAvatar={null}
         maxComposerHeight={100}
         textInputProps={styles.composer}

@@ -34,7 +34,7 @@ const Layout = () => {
                   size={30}
                 />
               </TouchableOpacity>
-              <Link href="#" asChild>
+              <Link href="/" asChild>
                 <TouchableOpacity>
                   <Ionicons
                     name="add-circle"

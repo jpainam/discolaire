@@ -3,7 +3,7 @@ import { FlatList, ScrollView } from "react-native";
 import chats from "~/../assets/data/chats.json";
 import ChatRow from "~/components/ChatRow";
 import { View } from "~/components/Themed";
-import { defaultStyles } from "~/constants/Colors";
+import { defaultStyles } from "~/constants/Styles";
 
 // import { defaultStyles } from "~/constants/Styles";
 
