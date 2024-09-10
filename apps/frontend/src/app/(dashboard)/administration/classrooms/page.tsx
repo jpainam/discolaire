@@ -1,11 +1,14 @@
-import AdminClassroomTable from "~/components/administration/classrooms/tab-content";
+import { Separator } from "@repo/ui/separator";
 
-export default function AdminClassroomPage() {
+import { ClassroomHeader } from "~/components/administration/classrooms/ClassroomHeader";
+import ClassroomTable from "~/components/administration/classrooms/ClassroomTable";
+
+export default function Page() {
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex flex-1 flex-col px-2">
-        <AdminClassroomTable />
-      </div>
+    <div className="mx-2 flex flex-col gap-2">
+      <ClassroomHeader />
+      <Separator />
+      <ClassroomTable />
     </div>
   );
 }

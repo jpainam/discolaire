@@ -14,7 +14,7 @@ import { UserDataTableAction } from "./UserDataTableAction";
 import { getUserColumns } from "./UserDataTableColumn";
 
 export function UserDataTable() {
-  const [pageSize] = useQueryState("pageSize", parseAsInteger.withDefault(10));
+  const [pageSize] = useQueryState("pageSize", parseAsInteger.withDefault(30));
   const [pageIndex] = useQueryState("pageIndex", parseAsInteger.withDefault(0));
   const [searchQuery] = useQueryState("searchQuery");
   const usersQuery = api.user.all.useQuery({
