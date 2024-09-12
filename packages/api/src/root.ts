@@ -1,3 +1,4 @@
+import { accountingRouter } from "./routers/accounting";
 import { announcementRouter } from "./routers/announcement";
 import { appreciationRouter } from "./routers/appreciation";
 import { assignmentRouter } from "./routers/assignment";
@@ -71,6 +72,7 @@ export const appRouter = createTRPCRouter({
   enrollment: enrollmentRouter,
   appreciation: appreciationRouter,
   reportCard: reportCardRouter,
+  accounting: accountingRouter,
   announcement: announcementRouter,
   recipient: recipientRouter,
   schoolYear: schoolYearRouter,

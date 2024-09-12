@@ -126,7 +126,7 @@ export const userRouter = createTRPCRouter({
         },
       });
     }),
-  permissions: protectedProcedure.query(async ({ ctx }) => {
+  permissions: protectedProcedure.query(({ ctx }) => {
     const userId = ctx.session.user.id;
     return userService.getPermissions(userId);
   }),
