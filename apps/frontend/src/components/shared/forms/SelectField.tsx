@@ -49,7 +49,7 @@ export function SelectField({
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem className={cn(className)}>
+        <FormItem className={cn("space-y-0", className)}>
           <FormLabel className={cn(labelClassName)}>{label}</FormLabel>
           <Select
             disabled={disabled}

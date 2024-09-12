@@ -54,49 +54,51 @@ export function DatePickerField({
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem className={cn(className)}>
+        <FormItem className={cn("space-y-0", className)}>
           <FormLabel className={labelClassName}>{label}</FormLabel>
-          <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
-              <FormControl>
-                <Button
-                  variant={"outline"}
+          <FormControl>
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <FormControl>
+                  <Button
+                    variant={"outline"}
+                    disabled={disabled}
+                    className={cn(
+                      "w-full text-left font-normal",
+                      inputClassName,
+                      !field.value && "text-muted-foreground",
+                    )}
+                  >
+                    {field.value ? (
+                      format(field.value, "PPP")
+                    ) : (
+                      <span>{placeholder ?? "Pick a date"}</span>
+                    )}
+                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                  </Button>
+                </FormControl>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
                   disabled={disabled}
-                  className={cn(
-                    "w-full text-left font-normal",
-                    inputClassName,
-                    !field.value && "text-muted-foreground",
-                  )}
-                >
-                  {field.value ? (
-                    format(field.value, "PPP")
-                  ) : (
-                    <span>{placeholder ?? "Pick a date"}</span>
-                  )}
-                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                </Button>
-              </FormControl>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                mode="single"
-                disabled={disabled}
-                selected={field.value}
-                onSelect={(date) => {
-                  field.onChange(date);
-                  setOpen(false);
-                }}
-                /*disabled={(date) =>
+                  selected={field.value}
+                  onSelect={(date) => {
+                    field.onChange(date);
+                    setOpen(false);
+                  }}
+                  /*disabled={(date) =>
                   date > new Date() || date < new Date("1900-01-01")
                 }*/
-                captionLayout="dropdown-buttons"
-                fromYear={1930}
-                toYear={2050}
-                locale={currentLocale}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
+                  captionLayout="dropdown-buttons"
+                  fromYear={1930}
+                  toYear={2050}
+                  locale={currentLocale}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
           <FormMessage />
         </FormItem>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import type { Student } from "@repo/api";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -13,7 +14,6 @@ import {
 } from "@repo/ui/pagination";
 import { Skeleton } from "@repo/ui/skeleton";
 
-import type { Student } from "~/types/student";
 import { api } from "~/trpc/react";
 
 export function StudentFooter() {
@@ -68,7 +68,6 @@ export function StudentFooter() {
                 router.push(pathname.replace(params.id, prevStudent.id));
               }}
               variant="outline"
-              className="h-6 w-8"
             >
               <ChevronLeft className="h-4 w-4" />
               <span className="sr-only">{t("previousStudent")}</span>
@@ -83,7 +82,6 @@ export function StudentFooter() {
               }}
               size="icon"
               variant="outline"
-              className="h-6 w-8"
             >
               <ChevronRight className="h-4 w-4" />
               <span className="sr-only">{t("nextStudent")}</span>

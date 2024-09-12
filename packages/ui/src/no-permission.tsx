@@ -28,7 +28,7 @@ export const NoPermission = ({
 }: NoPermissionProps) => {
   const { t } = useLocale();
   const NoPermissionMessage = ({ className }: { className?: string }) => (
-    <Card className="mx-auto w-full max-w-md">
+    <Card className="mx-auto my-4 w-full max-w-md">
       <CardHeader className="text-center">
         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border bg-yellow-100">
           <ShieldAlert className="h-6 w-6 text-yellow-600" />
