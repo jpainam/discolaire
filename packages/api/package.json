@@ -12,6 +12,10 @@
     "./permission": {
       "types": "./dist/permission.d.ts",
       "default": "./src/permission.ts"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "default": "./src/types.ts"
     }
   },
   "scripts": {

@@ -32,5 +32,6 @@ type RouterOutputs = inferRouterOutputs<AppRouter>;
 // export type RouterInputs = inferRouterInputs<AppRouter>;
 // export type RouterOutputs = inferRouterOutputs<AppRouter>;
 
+export type { Student } from "./types";
 export { appRouter, createCaller, createTRPCContext };
 export type { AppRouter, RouterInputs, RouterOutputs };

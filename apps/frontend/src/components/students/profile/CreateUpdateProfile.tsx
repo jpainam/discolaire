@@ -3,7 +3,7 @@
 import { toast } from "sonner";
 import { z } from "zod";
 
-import type { Student } from "@repo/api";
+import type { Student } from "@repo/api/types";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
