@@ -1,20 +1,20 @@
 "use client";
 
 import type { Table } from "@tanstack/react-table";
+import { router } from "expo-router";
 import { DownloadIcon } from "@radix-ui/react-icons";
 import { Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";
 
+import { routes } from "~/configs/routes";
 import { exportTableToCSV } from "~/lib/export";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
-import CreateEditStudent from "./CreateEditStudent";
 
 type StudentGetAllProcedureOutput = NonNullable<
   RouterOutputs["student"]["all"]
@@ -25,7 +25,6 @@ interface StudentToolbarActionsProps {
 }
 
 export function StudentDataTableActions({ table }: StudentToolbarActionsProps) {
-  const { openSheet } = useSheet();
   const confirm = useConfirm();
   const { t } = useLocale();
   const utils = api.useUtils();
@@ -72,11 +71,7 @@ export function StudentDataTableActions({ table }: StudentToolbarActionsProps) {
         className="h-8"
         variant={"default"}
         onClick={() => {
-          openSheet({
-            className: "w-[750px]",
-            title: <div className="p-2">{t("create")}</div>,
-            view: <CreateEditStudent />,
-          });
+          router.push(routes.students.create);
         }}
       >
         <Plus className="mr-2 size-4" aria-hidden="true" />

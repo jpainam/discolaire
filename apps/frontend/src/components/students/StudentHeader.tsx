@@ -20,7 +20,6 @@ import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
-import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
@@ -40,12 +39,10 @@ import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
 import { CountryComponent } from "../shared/CountryPicker";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { StudentSelector } from "../shared/selects/StudentSelector2";
-import CreateEditStudent from "./CreateEditStudent";
 import { SquaredAvatar } from "./SquaredAvatar";
 
 interface StudentHeaderProps {
@@ -55,7 +52,6 @@ interface StudentHeaderProps {
 export function StudentHeader({ className }: StudentHeaderProps) {
   const router = useRouter();
   const { t } = useLocale();
-  const { openSheet } = useSheet();
   const params = useParams<{ id: string }>();
   const studentQuery = api.student.get.useQuery(params.id);
   const canUpdateStudent = useCheckPermissions(
@@ -125,15 +121,7 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                     size={"icon"}
                     onClick={() => {
                       if (!student) return;
-                      openSheet({
-                        className: "w-[700px]",
-                        title: (
-                          <div className="px-2">
-                            {t("edit")} {getFullName(student)}
-                          </div>
-                        ),
-                        view: <CreateEditStudent student={student} />,
-                      });
+                      router.push(routes.students.edit(student.id));
                     }}
                     aria-label={t("edit")}
                     variant="ghost"

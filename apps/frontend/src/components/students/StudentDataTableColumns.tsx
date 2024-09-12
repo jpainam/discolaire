@@ -12,7 +12,6 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { useRouter } from "@repo/hooks/use-router";
-import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
@@ -33,7 +32,6 @@ import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
-import CreateEditStudent from "./CreateEditStudent";
 
 type StudentAllProcedureOutput = RouterOutputs["student"]["all"][number];
 
@@ -325,7 +323,7 @@ export function fetchStudentColumns({
 function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
   const { t } = useLocale();
   const router = useRouter();
-  const { openSheet } = useSheet();
+
   const confirm = useConfirm();
   const utils = api.useUtils();
   const deleteStudentMutation = api.student.delete.useMutation({
@@ -356,15 +354,7 @@ function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
           <DropdownMenuItem
             className="cursor-pointer"
             onSelect={() => {
-              openSheet({
-                className: "w-[750px]",
-                title: (
-                  <div className="p-2">
-                    {t("edit") + " " + getFullName(student)}
-                  </div>
-                ),
-                view: <CreateEditStudent student={student} />,
-              });
+              router.push(routes.students.edit(student.id));
             }}
           >
             <Pencil className="mr-2 h-4 w-4" />
