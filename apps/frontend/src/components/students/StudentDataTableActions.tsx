@@ -1,12 +1,12 @@
 "use client";
 
 import type { Table } from "@tanstack/react-table";
-import { router } from "expo-router";
 import { DownloadIcon } from "@radix-ui/react-icons";
 import { Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";
@@ -27,6 +27,7 @@ interface StudentToolbarActionsProps {
 export function StudentDataTableActions({ table }: StudentToolbarActionsProps) {
   const confirm = useConfirm();
   const { t } = useLocale();
+  const router = useRouter();
   const utils = api.useUtils();
   const deleteStudentMutation = api.student.delete.useMutation({
     onSettled: () => utils.student.invalidate(),
