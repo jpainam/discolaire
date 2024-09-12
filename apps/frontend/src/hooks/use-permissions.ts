@@ -1,9 +1,13 @@
+import { useAtomValue, useSetAtom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 import { useSession } from "next-auth/react";
 
 import type { Permission } from "@repo/lib/permission";
 import { doPermissionsCheck } from "@repo/lib/permission";
 
 import { api } from "~/trpc/react";
+
+export const permissionAtom = atomWithStorage<Permission[]>("permissions", []);
 
 const useIsLoggedIn = () => {
   const session = useSession();
@@ -12,9 +16,10 @@ const useIsLoggedIn = () => {
 };
 
 export function useGetPermissions(permissionsOverride?: Permission[]) {
-  const permissionsResult = api.user.permissions.useQuery();
+  //const permissionsResult = api.user.permissions.useQuery();
+  const permissionsResult = useAtomValue(permissionAtom);
 
-  const permissions = permissionsOverride ?? permissionsResult.data;
+  const permissions = permissionsOverride ?? permissionsResult;
 
   return {
     permissions,
@@ -49,7 +54,14 @@ export function useCheckPermissions(
 }
 
 export function usePermissionsLoaded() {
+  console.log("Executing permission loaded");
   const isLoggedIn = useIsLoggedIn();
-  const { isFetched: isPermissionsFetched } = api.user.permissions.useQuery();
-  return isLoggedIn && isPermissionsFetched;
+  const permissionsQuery = api.user.permissions.useQuery();
+  const setPermissionsAtom = useSetAtom(permissionAtom);
+  if (!permissionsQuery.isPending) {
+    console.log("permissionsQuery.data", permissionsQuery.data);
+    console.log("Setting perssions");
+    setPermissionsAtom(permissionsQuery.data ?? []);
+  }
+  return isLoggedIn && permissionsQuery.isFetched;
 }
