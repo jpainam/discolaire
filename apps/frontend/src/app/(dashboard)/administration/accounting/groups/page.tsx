@@ -2,6 +2,7 @@ import { checkPermissions } from "@repo/api/permission";
 import { getServerTranslations } from "@repo/i18n/server";
 import { PermissionAction } from "@repo/lib/permission";
 import { EmptyState } from "@repo/ui/EmptyState";
+import FlatBadge from "@repo/ui/FlatBadge";
 import { Label } from "@repo/ui/label";
 import { NoPermission } from "@repo/ui/no-permission";
 import { Separator } from "@repo/ui/separator";
@@ -14,8 +15,9 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
+import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/server";
-import { CreateFinanceGroup } from "./CreateFinanceGroup";
+import { FinanceGroupAction } from "./FinanceGroupAction";
 import { GroupTableAction } from "./GroupTableAction";
 
 export default async function Page() {
@@ -28,6 +30,10 @@ export default async function Page() {
   }
   const canCreateGroups = await checkPermissions(
     PermissionAction.CREATE,
+    "accounting:group",
+  );
+  const canEditGroup = await checkPermissions(
+    PermissionAction.UPDATE,
     "accounting:group",
   );
   const canDeleteGroups = await checkPermissions(
@@ -49,7 +55,7 @@ export default async function Page() {
         <Label>
           {t("finances")} - {t("group")}
         </Label>
-        {canCreateGroups && <CreateFinanceGroup />}
+        {canCreateGroups && <FinanceGroupAction />}
       </div>
       <Separator />
       <div className="rounded-lg border">
@@ -57,6 +63,7 @@ export default async function Page() {
           <TableHeader>
             <TableRow className="bg-muted/50">
               <TableHead>{t("name")}</TableHead>
+              <TableHead>{t("type")}</TableHead>
               <TableHead>{t("createdAt")}</TableHead>
               <TableHead>{t("createdBy")}</TableHead>
               <TableHead className="text-right"></TableHead>
@@ -75,6 +82,16 @@ export default async function Page() {
                 <TableRow key={group.id}>
                   <TableCell className="py-0">{group.name}</TableCell>
                   <TableCell className="py-0">
+                    <FlatBadge
+                      variant={group.type == "AMOUNT" ? "yellow" : "blue"}
+                    >
+                      {group.type == "AMOUNT" ? t("amount") : t("percent")}
+                    </FlatBadge>
+                    <FlatBadge className="ml-2 px-2">
+                      {group.value} {group.type == "AMOUNT" ? CURRENCY : "%"}
+                    </FlatBadge>
+                  </TableCell>
+                  <TableCell className="py-0">
                     {dateFormatter.format(new Date(group.createdAt))}
                   </TableCell>
                   <TableCell className="py-0">
@@ -83,6 +100,10 @@ export default async function Page() {
                   <TableCell className="py-0 text-right">
                     {(canCreateGroups || canDeleteGroups) && (
                       <GroupTableAction
+                        canEdit={canEditGroup}
+                        type={group.type}
+                        value={group.value}
+                        name={group.name}
                         canAdd={canCreateGroups}
                         canDelete={canDeleteGroups}
                         id={group.id}

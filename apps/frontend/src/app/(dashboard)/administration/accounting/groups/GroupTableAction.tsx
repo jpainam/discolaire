@@ -1,9 +1,10 @@
 "use client";
 
-import { MoreHorizontal, Trash2, Users } from "lucide-react";
-import { FaUsers } from "react-icons/fa";
+import { MoreHorizontal, Pencil, Trash2, UserRoundPlus } from "lucide-react";
+import { FaUserPlus } from "react-icons/fa";
 import { toast } from "sonner";
 
+import { useModal } from "@repo/hooks/use-modal";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -17,20 +18,30 @@ import {
 } from "@repo/ui/dropdown-menu";
 
 import { api } from "~/trpc/react";
+import { CreateEditFinanceGroup } from "./CreateEditFinanceGroup";
 
 export function GroupTableAction({
   canDelete,
   canAdd,
+  canEdit,
   id,
+  name,
+  type,
+  value,
 }: {
   canDelete: boolean;
+  canEdit: boolean;
   id: string;
   canAdd: boolean;
+  name: string;
+  type: "AMOUNT" | "PERCENT";
+  value: number;
 }) {
   const { t } = useLocale();
   const confirm = useConfirm();
   const router = useRouter();
   const utils = api.useUtils();
+  const { openModal } = useModal();
   const deleteFinanceGroup = api.accounting.deleteGroup.useMutation({
     onSettled: () => utils.accounting.groups.invalidate(),
     onSuccess: () => {
@@ -52,12 +63,36 @@ export function GroupTableAction({
         {canAdd && (
           <>
             <DropdownMenuItem>
-              <Users className="mr-2 h-4 w-4" />
-              <span>+ {t("students")}</span>
+              <UserRoundPlus className="mr-2 h-4 w-4" />
+              {t("students")}
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <FaUsers className="mr-2 h-4 w-4" />
-              <span>+ {t("staffs")}</span>
+              <FaUserPlus className="mr-2 h-4 w-4" />
+              {t("staffs")}
+            </DropdownMenuItem>
+          </>
+        )}
+        {canEdit && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => {
+                openModal({
+                  className: "w-[400px] p-2",
+                  title: t("edit"),
+                  view: (
+                    <CreateEditFinanceGroup
+                      id={id}
+                      name={name}
+                      type={type}
+                      value={value}
+                    />
+                  ),
+                });
+              }}
+            >
+              <Pencil className="mr-2 h-4 w-4" />
+              {t("edit")}
             </DropdownMenuItem>
           </>
         )}
@@ -66,7 +101,7 @@ export function GroupTableAction({
           <>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              className="bg-destructive text-destructive-foreground"
+              className="text-destructive"
               onSelect={async () => {
                 const isConfirmed = await confirm({
                   title: t("delete"),

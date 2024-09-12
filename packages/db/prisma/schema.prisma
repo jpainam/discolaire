@@ -14,13 +14,20 @@ model RecipientGroup {
     recipients Recipient[]
 }
 
+enum AccountingGroupType {
+    AMOUNT  @map("amount")
+    PERCENT @map("percent")
+}
+
 model AccountingGroup {
-    id          String   @id @default(cuid())
+    id          String              @id @default(cuid())
     name        String
-    createdAt   DateTime @default(now()) @db.Timestamp(6)
-    updatedAt   DateTime @updatedAt
+    type        AccountingGroupType @default(AMOUNT)
+    value       Float               @default(1)
+    createdAt   DateTime            @default(now()) @db.Timestamp(6)
+    updatedAt   DateTime            @updatedAt
     createdById String?
-    createdBy   User?    @relation(fields: [createdById], references: [id])
+    createdBy   User?               @relation(fields: [createdById], references: [id])
 }
 
 model Feedback {

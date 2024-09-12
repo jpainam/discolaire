@@ -2,6 +2,11 @@ import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
+const createFinanceGroupSchema = z.object({
+  name: z.string(),
+  value: z.number().min(1),
+  type: z.enum(["AMOUNT", "PERCENT"]).default("AMOUNT"),
+});
 export const accountingRouter = createTRPCRouter({
   groups: protectedProcedure.query(({ ctx }) => {
     return ctx.db.accountingGroup.findMany({
@@ -25,12 +30,7 @@ export const accountingRouter = createTRPCRouter({
       });
     }),
   updateGroup: protectedProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        name: z.string(),
-      }),
-    )
+    .input(createFinanceGroupSchema.extend({ id: z.string() }))
     .mutation(({ ctx, input }) => {
       return ctx.db.accountingGroup.update({
         where: {
@@ -38,20 +38,20 @@ export const accountingRouter = createTRPCRouter({
         },
         data: {
           name: input.name,
+          type: input.type,
+          value: input.value,
           createdById: ctx.session.user.id,
         },
       });
     }),
   createGroup: protectedProcedure
-    .input(
-      z.object({
-        name: z.string(),
-      }),
-    )
+    .input(createFinanceGroupSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.accountingGroup.create({
         data: {
           name: input.name,
+          type: input.type,
+          value: input.value,
           createdById: ctx.session.user.id,
         },
       });
