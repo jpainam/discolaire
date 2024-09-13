@@ -8,6 +8,7 @@ import {
   MoreVertical,
   NotebookTabs,
   Pencil,
+  PencilIcon,
   Phone,
   Printer,
   ShieldBan,
@@ -17,12 +18,13 @@ import {
   Users,
 } from "lucide-react";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
+import { toast } from "sonner";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
-import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,7 +38,6 @@ import { Skeleton } from "@repo/ui/skeleton";
 
 import { SimpleTooltip } from "~/components/simple-tooltip";
 import { routes } from "~/configs/routes";
-import { useCheckPermissions } from "~/hooks/use-permissions";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { CountryComponent } from "../shared/CountryPicker";
@@ -47,27 +48,33 @@ import { SquaredAvatar } from "./SquaredAvatar";
 
 interface StudentHeaderProps {
   className?: string;
+  canDelete: boolean;
+  canEdit: boolean;
 }
 
-export function StudentHeader({ className }: StudentHeaderProps) {
+export function StudentHeader({
+  className,
+  canEdit,
+  canDelete,
+}: StudentHeaderProps) {
   const router = useRouter();
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
   const studentQuery = api.student.get.useQuery(params.id);
-  const canUpdateStudent = useCheckPermissions(
-    PermissionAction.UPDATE,
-    "student:profile",
-    {
-      id: params.id,
+  const utils = api.useUtils();
+
+  const deleteStudentMutation = api.student.delete.useMutation({
+    onSettled: async () => {
+      await utils.student.invalidate();
     },
-  );
-  const canDeleteStudent = useCheckPermissions(
-    PermissionAction.DELETE,
-    "student:profile",
-    {
-      id: params.id,
+    onSuccess: () => {
+      router.push(routes.students.index);
+      toast.success(t("deleted_successfully"), { id: 0 });
     },
-  );
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
 
   const { createQueryString } = useCreateQueryString();
   const pathname = usePathname();
@@ -80,6 +87,7 @@ export function StudentHeader({ className }: StudentHeaderProps) {
     const newPath = pathname.replace(params.id, id);
     router.push(`${newPath}/?${createQueryString({})}`);
   };
+  const confirm = useConfirm();
 
   const student = studentQuery.data;
   const studentTags = JSON.stringify(student?.tags ?? []);
@@ -87,8 +95,7 @@ export function StudentHeader({ className }: StudentHeaderProps) {
   return (
     <header className={cn(className)}>
       <div className="flex w-full gap-1">
-        <SquaredAvatar student={student ?? undefined} />
-        <div>{canDeleteStudent}</div>
+        <SquaredAvatar student={student} />
         <div className="flex w-full flex-col gap-1">
           <StudentSelector
             className="w-full md:w-[500px]"
@@ -113,11 +120,11 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                 <FlatBadge variant={"red"}>Deactiver</FlatBadge>
               )}
 
-              {canUpdateStudent && (
+              {canEdit && (
                 <>
                   <Separator orientation="vertical" className="h-4" />
                   <Button
-                    disabled={!canUpdateStudent}
+                    disabled={!canEdit}
                     size={"icon"}
                     onClick={() => {
                       if (!student) return;
@@ -197,11 +204,37 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                     <ShieldBan className="mr-2 h-4 w-4" />
                     {t("disable")}
                   </DropdownMenuItem>
-                  {canDeleteStudent && (
+                  {canEdit && student && (
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        router.push(routes.students.edit(student.id));
+                      }}
+                    >
+                      <PencilIcon className="mr-2 h-4 w-4" />
+                      {t("edit")}
+                    </DropdownMenuItem>
+                  )}
+                  {canDelete && student && (
                     <>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
-                        disabled={!canDeleteStudent}
+                        onSelect={async () => {
+                          const isConfirm = await confirm({
+                            title: t("delete"),
+                            description: t("delete_confirmation"),
+                            icon: (
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                            ),
+                            alertDialogTitle: {
+                              className: "flex items-center gap-2",
+                            },
+                          });
+                          if (isConfirm) {
+                            toast.loading(t("deleting"), { id: 0 });
+                            deleteStudentMutation.mutate(student.id);
+                          }
+                        }}
+                        disabled={!canDelete}
                         className="text-destructive"
                       >
                         <Trash2 className="mr-2 h-4 w-4" />

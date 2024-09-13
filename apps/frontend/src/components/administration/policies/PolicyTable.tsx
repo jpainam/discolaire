@@ -13,7 +13,6 @@ import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { useConfirm } from "@repo/ui/confirm-dialog";
@@ -35,20 +34,21 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
-import { useCheckPermissions } from "~/hooks/use-permissions";
 import { api } from "~/trpc/react";
 import { selectedPoliciesAtom } from "./_selected_policies_atom";
 import { CreateEditPolicy } from "./CreateEditPolicy";
 
-export function PolicyTable() {
+export function PolicyTable({
+  canDelete,
+  canEdit,
+}: {
+  canEdit: boolean;
+  canDelete: boolean;
+}) {
   const [selectedPolicies, setSelectedPolicies] = useAtom(selectedPoliciesAtom);
   const [expandedPolicies, setExpandedPolicies] = useState<string[]>([]);
   const policiesQuery = api.policy.all.useQuery();
   const { t } = useLocale();
-  const canDeletePolicy = useCheckPermissions(
-    PermissionAction.DELETE,
-    "policy",
-  );
   const utils = api.useUtils();
   const { openModal } = useModal();
   const deletePolicyMutation = api.policy.delete.useMutation({
@@ -168,54 +168,58 @@ export function PolicyTable() {
                   </TableCell>
                   <TableCell className="py-0">
                     <div className="flex justify-end">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant={"ghost"} size={"icon"}>
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            className="flex items-center gap-2"
-                            onSelect={() => {
-                              openModal({
-                                title: t("edit") + " - " + t("policy"),
-                                className: "w-[600px]",
-                                view: <CreateEditPolicy policy={policy} />,
-                              });
-                            }}
-                          >
-                            <Pencil className="mr-2 h-4 w-4" /> {t("edit")}
-                          </DropdownMenuItem>
-                          {canDeletePolicy && (
-                            <>
-                              <DropdownMenuSeparator />
+                      {(canEdit || canDelete) && (
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant={"ghost"} size={"icon"}>
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            {canEdit && (
                               <DropdownMenuItem
-                                className="flex items-center gap-2 bg-destructive text-destructive-foreground"
-                                onSelect={async () => {
-                                  const isConfirmed = await confirm({
-                                    title: t("delete"),
-                                    icon: (
-                                      <Trash2 className="size-4 text-destructive" />
-                                    ),
-                                    alertDialogTitle: {
-                                      className: "flex items-center gap-2",
-                                    },
-                                    description: t("delete_confirmation"),
+                                className="flex items-center gap-2"
+                                onSelect={() => {
+                                  openModal({
+                                    title: t("edit") + " - " + t("policy"),
+                                    className: "w-[600px]",
+                                    view: <CreateEditPolicy policy={policy} />,
                                   });
-                                  if (isConfirmed) {
-                                    toast.loading(t("deleting"), { id: 0 });
-                                    deletePolicyMutation.mutate(policy.id);
-                                  }
                                 }}
                               >
-                                <Trash2 className="mr-2 h-4 w-4" />{" "}
-                                {t("delete")}
+                                <Pencil className="mr-2 h-4 w-4" /> {t("edit")}
                               </DropdownMenuItem>
-                            </>
-                          )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                            )}
+                            {canDelete && (
+                              <>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  className="flex items-center gap-2 bg-destructive text-destructive-foreground"
+                                  onSelect={async () => {
+                                    const isConfirmed = await confirm({
+                                      title: t("delete"),
+                                      icon: (
+                                        <Trash2 className="size-4 text-destructive" />
+                                      ),
+                                      alertDialogTitle: {
+                                        className: "flex items-center gap-2",
+                                      },
+                                      description: t("delete_confirmation"),
+                                    });
+                                    if (isConfirmed) {
+                                      toast.loading(t("deleting"), { id: 0 });
+                                      deletePolicyMutation.mutate(policy.id);
+                                    }
+                                  }}
+                                >
+                                  <Trash2 className="mr-2 h-4 w-4" />{" "}
+                                  {t("delete")}
+                                </DropdownMenuItem>
+                              </>
+                            )}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      )}
                     </div>
                   </TableCell>
                 </TableRow>
