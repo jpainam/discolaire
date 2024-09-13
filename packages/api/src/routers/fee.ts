@@ -11,6 +11,13 @@ export const feeRouter = createTRPCRouter({
         greeting: `Hello ${input.text}`,
       };
     }),
+  types: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.db.feeType.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  }),
   delete: protectedProcedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
@@ -63,7 +70,7 @@ export const feeRouter = createTRPCRouter({
         description: z.string().min(1),
         amount: z.number().min(1),
         dueDate: z.date(),
-        journalId: z.number(),
+        feeTypeId: z.string(),
         classroomId: z.string(),
         isActive: z.boolean().default(true),
       }),
@@ -75,7 +82,7 @@ export const feeRouter = createTRPCRouter({
           description: input.description,
           amount: input.amount,
           dueDate: input.dueDate,
-          journal: { connect: { id: input.journalId } },
+          feeType: { connect: { id: input.feeTypeId } },
           classroom: { connect: { id: input.classroomId } },
           isActive: input.isActive,
         },
@@ -89,7 +96,7 @@ export const feeRouter = createTRPCRouter({
         description: z.string().min(1),
         amount: z.number().min(1),
         dueDate: z.date(),
-        journalId: z.number(),
+        feeTypeId: z.string(),
         isActive: z.boolean().default(true),
       }),
     )
@@ -103,7 +110,7 @@ export const feeRouter = createTRPCRouter({
           description: input.description,
           amount: input.amount,
           dueDate: input.dueDate,
-          journal: { connect: { id: input.journalId } },
+          feeType: { connect: { id: input.feeTypeId } },
           isActive: input.isActive,
         },
       });

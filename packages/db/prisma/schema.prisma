@@ -546,6 +546,19 @@ model Fee {
     classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
     journal     Journal?  @relation(fields: [journalId], references: [id])
     journalId   Int?
+    feeTypeId   String?
+    feeType     FeeType?  @relation(fields: [feeTypeId], references: [id])
+}
+
+model FeeType {
+    id          String   @id @default(cuid())
+    name        String
+    createdAt   DateTime @default(now()) @db.Timestamp(6)
+    updatedAt   DateTime @updatedAt
+    createdBy   User     @relation(fields: [userId], references: [id])
+    createdById String
+    userId      String
+    Fee         Fee[]
 }
 
 model StudentContact {
@@ -966,6 +979,7 @@ model User {
     accounts        Account[]
     sessions        Session[]
     AccountingGroup AccountingGroup[]
+    FeeType         FeeType[]
 }
 
 model VerificationToken {

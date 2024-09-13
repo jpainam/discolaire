@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 
 import { useRouter } from "@repo/hooks/use-router";
-import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
+import { Skeleton } from "@repo/ui/skeleton";
 
 import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";
@@ -17,13 +17,11 @@ export function ProgramList({ classroomId }: { classroomId: string }) {
   const subjects = subjectsQuery.data;
   if (subjectsQuery.isPending) {
     return (
-      <DataTableSkeleton
-        rowCount={8}
-        columnCount={2}
-        className="p-2"
-        withPagination={false}
-        showViewOptions={false}
-      />
+      <div className="flex w-[350px] flex-col gap-2 p-2">
+        {Array.from({ length: 16 }).map((_, index) => (
+          <Skeleton key={index} className="h-8 w-full" />
+        ))}
+      </div>
     );
   }
   return (

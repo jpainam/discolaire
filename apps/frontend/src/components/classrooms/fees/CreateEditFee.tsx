@@ -22,8 +22,7 @@ import {
 
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";
-import { JournalSelector } from "~/components/shared/selects/JounalSelector";
-import { getErrorMessage } from "~/lib/handle-error";
+import { FeeTypeSelector } from "~/components/shared/selects/FeeTypeSelector";
 import { api } from "~/trpc/react";
 
 const createEditFeeSchema = z.object({
@@ -31,7 +30,7 @@ const createEditFeeSchema = z.object({
   description: z.string().min(1),
   amount: z.coerce.number().min(1),
   dueDate: z.coerce.date(),
-  journalId: z.coerce.number(),
+  feeTypeId: z.string().min(1),
   isActive: z.boolean().default(true),
 });
 
@@ -44,7 +43,7 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
       description: fee?.description ?? "",
       amount: fee?.amount ?? 0,
       dueDate: fee?.dueDate ?? new Date(),
-      journalId: fee?.journalId ?? 0,
+      feeTypeId: fee?.feeTypeId ?? "",
       isActive: fee?.isActive ?? true,
     },
   });
@@ -52,8 +51,31 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
   const classroomId = params.id;
 
   const { closeModal } = useModal();
-  const updateFeeMutation = api.fee.update.useMutation();
-  const createFeeMutation = api.fee.create.useMutation();
+  const utils = api.useUtils();
+  const updateFeeMutation = api.fee.update.useMutation({
+    onSettled: async () => {
+      await utils.fee.invalidate();
+      await utils.classroom.fees.invalidate();
+    },
+    onSuccess: () => {
+      toast.success(t("updated_successfully"), { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
+  const createFeeMutation = api.fee.create.useMutation({
+    onSettled: async () => {
+      await utils.fee.invalidate();
+      await utils.classroom.fees.invalidate();
+    },
+    onSuccess: () => {
+      toast.success(t("created_successfully"), { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
 
   const onSubmit: SubmitHandler<z.infer<typeof createEditFeeSchema>> = (
     data: z.infer<typeof createEditFeeSchema>,
@@ -65,30 +87,14 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
       dueDate: data.dueDate,
       isActive: data.isActive,
       classroomId: classroomId,
-      journalId: data.journalId,
+      feeTypeId: data.feeTypeId,
     };
     if (fee) {
-      toast.promise(updateFeeMutation.mutateAsync({ id: fee.id, ...values }), {
-        loading: t("loading"),
-        success: () => {
-          closeModal();
-          return t("updated_successfully");
-        },
-        error: (error) => {
-          return getErrorMessage(error);
-        },
-      });
+      toast.loading(t("updating"), { id: 0 });
+      updateFeeMutation.mutate({ id: fee.id, ...values });
     } else {
-      toast.promise(createFeeMutation.mutateAsync(values), {
-        loading: t("adding"),
-        success: () => {
-          closeModal();
-          return t("added_successfully");
-        },
-        error: (error) => {
-          return getErrorMessage(error);
-        },
-      });
+      toast.loading(t("creating"), { id: 0 });
+      createFeeMutation.mutate(values);
     }
   };
 
@@ -98,67 +104,52 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
 
   return (
     <Form {...form}>
-      <form className="flex flex-col" onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="mt-2 flex flex-col gap-4">
-          <div className="flex flex-row gap-2">
-            <InputField
-              inputClassName="h-8"
-              className="w-[75px]"
-              label="Code"
-              name="code"
-            />
-            <InputField
-              inputClassName="h-8"
-              className="flex-1"
-              label="Description"
-              name="description"
-            />
-          </div>
-          <div className="flex flex-row items-center gap-2">
-            <InputField
-              inputClassName="h-8"
-              className="w-[50%]"
-              label="Amount"
-              name="amount"
-            />
-            <DatePickerField
-              inputClassName="h-8"
-              className="mt-1.5 w-[50%]"
-              label={t("due_date")}
-              name="dueDate"
-            />
-          </div>
-          <div className="flex flex-row items-center justify-between">
-            <FormField
-              control={form.control}
-              name="journalId"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-4 space-y-0 py-4">
-                  <FormControl>
-                    <JournalSelector onChange={field.onChange} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="isActive"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-4 space-y-0 py-4">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormLabel>{t("is_active")}</FormLabel>
-                </FormItem>
-              )}
-            />
-          </div>
+      <form
+        className="grid grid-cols-2 gap-2"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        <div className="col-span-full flex flex-row gap-2">
+          <InputField className="w-[75px]" label="Code" name="code" />
+          <InputField
+            className="flex-1"
+            label="Description"
+            name="description"
+          />
         </div>
-        <div className="ml-auto flex flex-row items-center gap-2">
+
+        <InputField label="Amount" name="amount" />
+        <DatePickerField label={t("due_date")} name="dueDate" />
+
+        <FormField
+          control={form.control}
+          name="feeTypeId"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-start space-x-4 space-y-0 py-4">
+              <FormControl>
+                <FeeTypeSelector onChange={field.onChange} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="isActive"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-start space-x-4 space-y-0 py-4">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <FormLabel>{t("is_active")}</FormLabel>
+            </FormItem>
+          )}
+        />
+
+        <div className="col-span-full ml-auto flex flex-row items-center gap-2">
           <Button
             onClick={() => {
               closeModal();

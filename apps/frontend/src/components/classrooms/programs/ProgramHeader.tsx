@@ -3,22 +3,25 @@
 import { useEffect } from "react";
 import { useParams, usePathname } from "next/navigation";
 import { MoreVertical, Pencil } from "lucide-react";
+import { toast } from "sonner";
 
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Label } from "@repo/ui/label";
 
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
 import { routes } from "~/configs/routes";
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
@@ -30,10 +33,13 @@ export function ProgramHeader() {
   });
   const subject = subjectQuery.data;
   const pathname = usePathname();
-
-  // const [breadcrumbs, setBreadcrumbs] = useState<
-  //   { label: string; href: string }[]
-  // >([{ label: t("programs"), href: routes.classrooms.programs(params.id) }]);
+  const canEditSubjectProgram = useCheckPermissions(
+    PermissionAction.UPDATE,
+    "subject:program",
+    {
+      subjectId: Number(params.subjectId),
+    },
+  );
   useEffect(() => {
     if (subject) {
       const breads = [
@@ -75,34 +81,45 @@ export function ProgramHeader() {
       </div>
 
       <div className="ml-auto flex flex-row gap-1">
-        <Button
-          onClick={() => {
-            router.push(
-              routes.classrooms.programs(params.id) +
-                `/${subject?.id}` +
-                "/create-or-edit",
-            );
-          }}
-          size={"icon"}
-          variant={"outline"}
-        >
-          <Pencil className="h-4 w-4" />
-        </Button>
+        {canEditSubjectProgram && (
+          <Button
+            onClick={() => {
+              router.push(
+                routes.classrooms.programs(params.id) +
+                  `/${subject?.id}` +
+                  "/create-or-edit",
+              );
+            }}
+            size={"icon"}
+            variant={"outline"}
+          >
+            <Pencil className="h-4 w-4" />
+          </Button>
+        )}
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="icon" variant="outline">
               <MoreVertical className="h-4 w-4" />
-              <span className="sr-only">More</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Team</DropdownMenuItem>
-            <DropdownMenuItem>Subscription</DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                toast.warning("PDF export is not implemented yet");
+              }}
+            >
+              <PDFIcon className="h- 4 mr-2 w-4" />
+              {t("pdf_export")}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                toast.warning("XML export is not implemented yet");
+              }}
+            >
+              <XMLIcon className="h- 4 mr-2 w-4" />
+              {t("xml_export")}
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
