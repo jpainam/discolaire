@@ -2,18 +2,26 @@
 
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
-import { Form, FormField } from "@repo/ui/form";
+import FlatBadge from "@repo/ui/FlatBadge";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+  useForm,
+} from "@repo/ui/form";
+import { Label } from "@repo/ui/label";
 import { Skeleton } from "@repo/ui/skeleton";
 
-import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
+import { html_content } from "./editor-content";
 
 const QuillEditor = dynamic(() => import("@repo/ui/quill-editor"), {
   ssr: false,
@@ -23,7 +31,6 @@ const QuillEditor = dynamic(() => import("@repo/ui/quill-editor"), {
 const programFormSchema = z.object({
   content: z.string().min(1, { message: "Content is required" }),
 });
-type ProgramFormValues = z.infer<typeof programFormSchema>;
 
 export function CreateEditProgram({
   defaultContent,
@@ -35,51 +42,79 @@ export function CreateEditProgram({
   const router = useRouter();
   const pathname = usePathname();
 
-  const form = useForm<ProgramFormValues>({
+  const form = useForm({
     defaultValues: { content: defaultContent },
-    resolver: zodResolver(programFormSchema),
+    schema: programFormSchema,
+  });
+  const utils = api.useUtils();
+  const updateSubjectProgram = api.subject.updateProgram.useMutation({
+    onSettled: () => utils.subject.invalidate(),
+    onSuccess: () => {
+      toast.success(t("added_successfully"), { id: 0 });
+      router.push(pathname.split("/").slice(0, -1).join("/"));
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
   });
 
-  // const mutation = useMutation({
-  //   mutationFn: ,
-  //   onError: (error) => {
-  //     console.error(error);
-  //     showErrorToast(error);
-  //   },
-  //   onSuccess: () => {
-  //     toast.success(t("added_successfully"));
-  //     queryClient.invalidateQueries({
-  //       queryKey: [tags.subjects.list, subjectId],
-  //     });
-  //     form.reset();
-  //     returnToSubjectPage();
-  //   },
-  // });
-  const returnToSubjectPage = () => {
-    const returnUrl = pathname.split("/").slice(0, -1).join("/");
-    router.push(returnUrl);
-  };
-  const submitProgram = (data: ProgramFormValues) => {
-    console.log(data);
-    //subjectId && mutation.mutate({ content: data.content, id: subjectId });
+  const submitProgram = (data: z.infer<typeof programFormSchema>) => {
+    toast.loading(t("updating"), { id: 0 });
+    updateSubjectProgram.mutate({
+      content: data.content,
+      id: Number(subjectId),
+    });
   };
 
   const subjectQuery = api.subject.get.useQuery({ id: subjectId });
 
   const { t } = useLocale();
-  if (subjectQuery.isPending) {
-    return null;
-  }
+
   if (subjectQuery.isError) {
-    showErrorToast(subjectQuery.error);
+    toast.error(subjectQuery.error.message);
     return;
   }
+  const subject = subjectQuery.data;
   return (
     <Form {...form}>
       <form
-        className="mx-2 flex flex-col"
+        className="flex flex-col"
         onSubmit={form.handleSubmit(submitProgram)}
       >
+        <div className="flex flex-row justify-end gap-4 bg-muted/50 px-4 py-1">
+          {subjectQuery.isPending ? (
+            <Skeleton className="w-96" />
+          ) : (
+            <div className="flex flex-row items-center gap-2">
+              <Label>{subject?.course?.name}</Label>
+              <FlatBadge variant={"green"}>
+                {t("coeff")}: {subject?.coefficient}
+              </FlatBadge>
+              <FlatBadge variant={"blue"}>
+                {t("teacher")}: {subject?.teacher?.lastName}
+              </FlatBadge>
+            </div>
+          )}
+          <div className="ml-auto flex flex-row items-center gap-2">
+            <Button
+              size={"sm"}
+              isLoading={updateSubjectProgram.isPending}
+              type="submit"
+            >
+              {t("submit")}
+            </Button>
+            <Button
+              type="button"
+              onClick={() => {
+                router.push(pathname.split("/").slice(0, -1).join("/"));
+              }}
+              variant={"outline"}
+              size={"sm"}
+            >
+              {t("cancel")}
+            </Button>
+          </div>
+        </div>
         <FormField
           control={form.control}
           name="content"
@@ -90,28 +125,18 @@ export function CreateEditProgram({
             //   className="col-span-full [&_.ql-editor]:min-h-[calc(100vh-15rem)]"
             //   labelClassName="font-medium text-gray-700 dark:text-gray-600 mb-1.5"
             // />
-            <QuillEditor
-              className="h-full"
-              onChange={onChange}
-              defaultValue={subjectQuery.data?.program ?? ""}
-            />
+            <FormItem className="">
+              <FormControl>
+                <QuillEditor
+                  className="h-[calc(100vh-15rem)]"
+                  onChange={onChange}
+                  defaultValue={subjectQuery.data?.program ?? html_content}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
         />
-        <div className="mt-2 flex flex-row justify-end gap-4">
-          <Button
-            onClick={() => {
-              returnToSubjectPage();
-            }}
-            variant={"outline"}
-            size={"sm"}
-          >
-            {t("cancel")}
-          </Button>
-
-          <Button size={"sm"} type="submit">
-            {t("submit")}
-          </Button>
-        </div>
       </form>
     </Form>
   );

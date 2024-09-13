@@ -15,6 +15,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
+import FlatBadge from "@repo/ui/FlatBadge";
+import { Label } from "@repo/ui/label";
 
 import { routes } from "~/configs/routes";
 import { showErrorToast } from "~/lib/handle-error";
@@ -61,23 +63,16 @@ export function ProgramHeader() {
   }
 
   return (
-    <div className="flex flex-row items-center gap-2 border-b bg-secondary px-2 py-1 text-secondary-foreground">
-      {/* <BreadCrumb
-        orientation="horizontal"
-        variant={"ghost"}
-        className="gap-1 rounded-lg bg-background px-2"
-      >
-        {breadcrumbs.map((breadcrumb, index) => {
-          return (
-            <Fragment key={index}>
-              <BreadCrumbItem className="h-7 px-2" index={index}>
-                <Link href={breadcrumb.href}>{breadcrumb.label}</Link>
-              </BreadCrumbItem>
-              {index != breadcrumbs.length - 1 && <BreadCrumbSeparator />}
-            </Fragment>
-          );
-        })}
-      </BreadCrumb> */}
+    <div className="flex flex-row items-center gap-2 bg-secondary px-2 py-1 text-secondary-foreground">
+      <div className="flex flex-row items-center gap-2">
+        <Label>{subject?.course?.name}</Label>
+        <FlatBadge variant={"green"}>
+          {t("coeff")}: {subject?.coefficient}
+        </FlatBadge>
+        <FlatBadge variant={"blue"}>
+          {t("teacher")}: {subject?.teacher?.lastName}
+        </FlatBadge>
+      </div>
 
       <div className="ml-auto flex flex-row gap-1">
         <Button

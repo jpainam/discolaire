@@ -135,7 +135,7 @@ export function UserDataTable({ roleId }: { roleId: string }) {
                               className="text-destructive"
                               onSelect={async () => {
                                 const isConfirmed = await confirm({
-                                  title: t("are_you_sure"),
+                                  title: t("delete"),
                                   description: t("remove_user_from_role"),
                                 });
                                 if (isConfirmed) {

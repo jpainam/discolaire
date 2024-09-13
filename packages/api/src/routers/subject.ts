@@ -63,6 +63,19 @@ export const subjectRouter = createTRPCRouter({
       });
     }),
 
+  updateProgram: protectedProcedure
+    .input(z.object({ id: z.coerce.number(), content: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.subject.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          program: input.content,
+        },
+      });
+    }),
+
   update: protectedProcedure
     .input(
       z.object({

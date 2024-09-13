@@ -30,6 +30,7 @@ export default function QuillEditor({
 
       ["bold", "italic", "underline", "strike"], // toggled buttons
       ["blockquote", "code-block"],
+      [{ size: ["small", false, "large", "huge"] }],
 
       [{ list: "ordered" }, { list: "bullet" }],
       [{ script: "sub" }, { script: "super" }], // superscript/subscript
@@ -80,3 +81,5 @@ export default function QuillEditor({
     </div>
   );
 }
+
+export { ReactQuill };
