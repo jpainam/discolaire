@@ -17,7 +17,6 @@ export async function Header() {
 
   const schoolYear = await getSchoolYearFromCookie();
   const permissions = await api.user.permissions();
-  console.log(">>>>>>>>>>>>>>>> From server", permissions?.length);
 
   return (
     <header className="w-ful sticky top-0 z-40 flex flex-col items-center border-b border-primary bg-background dark:border-muted-foreground/20 dark:bg-background">

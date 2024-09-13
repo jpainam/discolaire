@@ -59,6 +59,7 @@ export function PolicyDataTable({ roleId }: { roleId: string }) {
     <div className="flex flex-col gap-2">
       <div className="flex justify-end">
         <Button
+          isLoading={attachPoliciesMutation.isPending}
           onClick={() => {
             toast.loading("Attaching policies...", { id: 0 });
             attachPoliciesMutation.mutate({

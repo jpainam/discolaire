@@ -54,7 +54,7 @@ export function PolicyHeader() {
       <div className="flex flex-row items-center py-2">
         <Label>{t("policy")}</Label>
         <div className="ml-auto flex flex-row gap-3">
-          {!canCreatePolicy && (
+          {canCreatePolicy && (
             <Button
               size="sm"
               onClick={() => {

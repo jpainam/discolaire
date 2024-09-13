@@ -10,7 +10,6 @@ export default async function Page({
 }: {
   params: { id: string };
 }) {
-  // const classroom = await api.classroom.get(id);
   const canReadEnrollment = await checkPermissions(
     PermissionAction.READ,
     "classroom:enrollment",

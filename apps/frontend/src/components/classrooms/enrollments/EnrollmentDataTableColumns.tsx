@@ -1,5 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import i18next from "i18next";
 import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
@@ -23,10 +24,8 @@ import {
 import FlatBadge from "@repo/ui/FlatBadge";
 
 import { AvatarState } from "~/components/AvatarState";
-import { StudentCard } from "~/components/students/StudentCard";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
-import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 
@@ -105,7 +104,15 @@ export function fetchEnrollmentColumns({
       ),
       cell: ({ row }) => {
         const student = row.original;
-        return <StudentCard name={student.lastName} />;
+        return (
+          <Link
+            className="hover:text-blue-600 hover:underline"
+            href={routes.students.details(student.id)}
+          >
+            {student.lastName}
+          </Link>
+        );
+        // return <StudentCard name={student.lastName} />;
       },
     },
     {
@@ -115,7 +122,15 @@ export function fetchEnrollmentColumns({
       ),
       cell: ({ row }) => {
         const student = row.original;
-        return <StudentCard name={student.firstName} />;
+        return (
+          <Link
+            className="hover:text-blue-600 hover:underline"
+            href={routes.students.details(student.id)}
+          >
+            {student.firstName}
+          </Link>
+        );
+        // return <StudentCard name={student.firstName} />;
       },
     },
     {
@@ -195,6 +210,12 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
   const unenrollStudentsMutation =
     api.enrollment.deleteByStudentIdClassroomId.useMutation({
       onSettled: () => utils.classroom.students.invalidate(params.id),
+      onSuccess: () => {
+        toast.success(t("unenrolled_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
     });
 
   const confirm = useConfirm();
@@ -227,21 +248,11 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
                     description: t("delete_confirmation"),
                   });
                   if (isConfirmed) {
-                    toast.promise(
-                      unenrollStudentsMutation.mutateAsync({
-                        classroomId: params.id,
-                        studentId: student.id,
-                      }),
-                      {
-                        loading: t("unenrolling"),
-                        error: (error) => {
-                          return getErrorMessage(error);
-                        },
-                        success: () => {
-                          return t("unenrolled_sucessfully");
-                        },
-                      },
-                    );
+                    toast.loading(t("unenrolling"), { id: 0 });
+                    unenrollStudentsMutation.mutate({
+                      classroomId: params.id,
+                      studentId: student.id,
+                    });
                   }
                 }}
               >
