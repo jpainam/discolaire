@@ -6,7 +6,6 @@ import { schoolYearSchema } from "./school_year";
 export const classroomSchema = z.object({
   id: z.string(),
   name: z.string().nullish(),
-  shortName: z.string().nullish(),
   reportName: z.string().nullish(),
   maxSize: z.number().nullish(),
   size: z.number().nullish(),

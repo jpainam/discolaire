@@ -44,10 +44,6 @@ export function CreateEditClassroom({
       .string()
       .trim()
       .min(1, { message: t("this_field_is_required") }),
-    shortName: z
-      .string()
-      .trim()
-      .min(1, { message: t("this_field_is_required") }),
     maxSize: z.coerce.number().int().positive(t("must_be_a_positive_number")),
     cycleId: z.string().min(1, { message: t("this_field_is_required") }),
     sectionId: z.string().min(1, { message: t("this_field_is_required") }),
@@ -71,7 +67,6 @@ export function CreateEditClassroom({
     resolver: zodResolver(updateClassroomSchema),
     defaultValues: {
       name: classroom?.name ?? "",
-      shortName: classroom?.shortName ?? "",
       maxSize: classroom?.maxSize ?? 0,
       cycleId: classroom?.cycleId?.toString() ?? "",
       reportName: classroom?.reportName ?? "",
@@ -130,7 +125,6 @@ export function CreateEditClassroom({
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="h-[calc(100vh-10rem)] items-start overflow-y-auto">
           <div className="grid gap-x-4 p-2 md:grid-cols-2">
-            <InputField label={t("class_name_short")} name="shortName" />
             <InputField label={t("class_name_report")} name="reportName" />
             <InputField label={t("class_name")} name="name" />
             <InputField type="number" label={t("max_size")} name="maxSize" />

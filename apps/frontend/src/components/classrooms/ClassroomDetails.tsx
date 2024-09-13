@@ -44,7 +44,7 @@ export async function ClassroomDetails({
             {t("shortName")}
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-            {classroom.shortName}
+            {classroom.name}
           </span>
         </li>
         <li className="flex items-center justify-between">

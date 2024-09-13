@@ -20,14 +20,15 @@ enum AccountingGroupType {
 }
 
 model AccountingGroup {
-    id          String              @id @default(cuid())
-    name        String
-    type        AccountingGroupType @default(AMOUNT)
-    value       Float               @default(1)
-    createdAt   DateTime            @default(now()) @db.Timestamp(6)
-    updatedAt   DateTime            @updatedAt
-    createdById String?
-    createdBy   User?               @relation(fields: [createdById], references: [id])
+    id           String              @id @default(cuid())
+    name         String
+    schoolYearId String
+    type         AccountingGroupType @default(AMOUNT)
+    value        Float               @default(1)
+    createdAt    DateTime            @default(now()) @db.Timestamp(6)
+    updatedAt    DateTime            @updatedAt
+    createdById  String?
+    createdBy    User?               @relation(fields: [createdById], references: [id])
 }
 
 model Feedback {
@@ -194,7 +195,6 @@ model Report {
 model Classroom {
     id                String         @id @default(uuid())
     name              String?
-    shortName         String?
     reportName        String?
     maxSize           Int            @default(45)
     levelId           String

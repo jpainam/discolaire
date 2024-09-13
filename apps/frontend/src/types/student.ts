@@ -34,7 +34,6 @@ export const studentSchema = z.object({
     .object({
       id: z.string(),
       name: z.string(),
-      shortName: z.string().nullish(),
       reportName: z.string().nullish(),
     })
     .nullish(),

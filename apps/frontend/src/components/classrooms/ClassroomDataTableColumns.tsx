@@ -104,23 +104,8 @@ export function getColumns({
     //     );
     //   },
     // },
-    {
-      accessorKey: "shortName",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("shortName")} />
-      ),
-      cell: ({ row }) => {
-        const classroom = row.original;
-        return (
-          <Link
-            className="hover:text-blue-600 hover:underline"
-            href={routes.classrooms.details(classroom.id)}
-          >
-            {classroom.shortName}
-          </Link>
-        );
-      },
-    },
+    // {
+
     {
       accessorKey: "maxSize",
       header: ({ column }) => (

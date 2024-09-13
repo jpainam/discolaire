@@ -52,7 +52,7 @@ export function DashboardClassroomSize({ className }: { className?: string }) {
   useEffect(() => {
     const data = classroomsQuery.data?.map((classroom) => {
       return {
-        name: classroom.shortName ?? classroom.name ?? "",
+        name: classroom.name ?? classroom.name ?? "",
         maxSize: classroom.maxSize || 0,
         size: classroom.size,
         difference: (classroom.maxSize || 0) - classroom.size,

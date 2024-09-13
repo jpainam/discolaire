@@ -12,11 +12,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/card";
-import { Form, useForm } from "@repo/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useForm,
+} from "@repo/ui/form";
+import MultipleSelector from "@repo/ui/multiple-selector";
 
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";
-import { SelectField } from "~/components/shared/forms/SelectField";
 import { api } from "~/trpc/react";
 
 const createEditSchema = z.object({
@@ -26,6 +34,7 @@ const createEditSchema = z.object({
   placeOfBirth: z.string().min(1),
   gender: z.string().min(1),
   residence: z.string().optional(),
+  applicableFees: z.array(z.string()).optional(),
 });
 
 export function CreateUpdateDenom({
@@ -54,13 +63,11 @@ export function CreateUpdateDenom({
       dateOfBirth: dateOfBirth ?? new Date(),
       placeOfBirth: placeOfBirth ?? "",
       gender: gender ?? "",
+      applicableFees: [],
       residence: residence ?? "",
     },
   });
-  const genders = [
-    { label: t("male"), value: "male" },
-    { label: t("female"), value: "female" },
-  ];
+  const financeGroupQuery = api.accounting.groups.useQuery();
 
   const createStudentMutation = api.student.create.useMutation({
     onSettled: () => utils.student.all.invalidate(),
@@ -116,22 +123,24 @@ export function CreateUpdateDenom({
               name="dateOfBirth"
               label={t("dateOfBirth")}
             />
-            <InputField
-              name="placeOfBirth"
-              placeholder={t("placeOfBirth")}
-              label={t("placeOfBirth")}
-            />
-            <SelectField
-              name="gender"
-              label={t("gender")}
-              placeholder={t("gender")}
-              items={genders}
-            />
-            <InputField
-              className="gap-2"
-              name="residence"
-              placeholder="Résidence"
-              label="Résidence"
+            <FormField
+              control={form.control}
+              name="applicableFees"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Frais appliqués</FormLabel>
+                  <FormControl>
+                    <MultipleSelector
+                      {...field}
+                      options={financeGroupQuery.data?.map((g) => {
+                        return { label: g.name, value: g.id };
+                      })} // using 'options' instead of 'defaultOptions' because they have an async source and I'm not early returning a loading state while waiting for fetching to finish
+                      hidePlaceholderWhenSelected
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </CardContent>
           <CardFooter className="flex items-center justify-end border-t bg-muted/50 py-2">

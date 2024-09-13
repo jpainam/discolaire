@@ -259,7 +259,7 @@ export function StudentHeader({
                   <SquareEqual className="h-4 w-4 text-foreground" />
                   <span className="line-clamp-1">
                     {" "}
-                    {student.classroom.shortName}
+                    {student.classroom.name}
                   </span>
                 </div>
               )}

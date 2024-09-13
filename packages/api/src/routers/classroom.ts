@@ -8,7 +8,6 @@ const createUpdateSchema = z.object({
   levelId: z.string(),
   cycleId: z.number(),
   sectionId: z.number(),
-  shortName: z.string().nullable(),
   reportName: z.string().nullable(),
 });
 export const classroomRouter = createTRPCRouter({
@@ -119,7 +118,6 @@ export const classroomRouter = createTRPCRouter({
         data: {
           name: input.name,
           levelId: input.levelId,
-          shortName: input.shortName,
           reportName: input.reportName,
           schoolYearId: ctx.schoolYearId,
           cycleId: input.cycleId,
@@ -218,7 +216,6 @@ export const classroomRouter = createTRPCRouter({
         data: {
           name: input.name,
           levelId: input.levelId,
-          shortName: input.shortName,
           reportName: input.reportName,
           cycleId: input.cycleId,
           sectionId: input.sectionId,

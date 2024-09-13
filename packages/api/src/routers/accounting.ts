@@ -13,6 +13,9 @@ export const accountingRouter = createTRPCRouter({
       include: {
         createdBy: true,
       },
+      where: {
+        schoolYearId: ctx.schoolYearId,
+      },
       orderBy: {
         updatedAt: "desc",
       },
@@ -52,6 +55,7 @@ export const accountingRouter = createTRPCRouter({
           name: input.name,
           type: input.type,
           value: input.value,
+          schoolYearId: ctx.schoolYearId,
           createdById: ctx.session.user.id,
         },
       });

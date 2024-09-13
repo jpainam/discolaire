@@ -98,7 +98,7 @@ export function ContactStudentTable({ id }: { id: string }) {
                   </Link>
                 </TableCell>
                 <TableCell className="py-0">
-                  {student.classroom?.shortName}
+                  {student.classroom?.name}
                 </TableCell>
                 <TableCell className="py-0">{student.email}</TableCell>
                 <TableCell className="py-0 text-right">

@@ -158,7 +158,7 @@ export const transactionRouter = createTRPCRouter({
       );
 
       return {
-        classroom: classroom.shortName,
+        classroom: classroom.name,
         paid: totalPaid,
         revenue: totalFee * enrollmentsIds.length,
         remaining: Math.abs(totalFee * enrollmentsIds.length - totalPaid),

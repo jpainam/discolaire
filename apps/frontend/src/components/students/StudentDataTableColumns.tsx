@@ -193,7 +193,7 @@ export function fetchStudentColumns({
             className="hover:text-blue-600 hover:underline"
             href={routes.classrooms.details(classroom.id)}
           >
-            {classroom.shortName}
+            {classroom.name}
           </Link>
         );
       },

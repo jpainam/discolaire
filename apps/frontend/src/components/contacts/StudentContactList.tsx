@@ -156,7 +156,7 @@ export default function StudentContactList({
                       <dt className="text-muted-foreground">
                         {t("classroom")}
                       </dt>
-                      <dd>{student.classroom?.shortName ?? ""}</dd>
+                      <dd>{student.classroom?.name ?? ""}</dd>
                     </div>
                     <div className="flex items-center justify-between">
                       <dt className="text-muted-foreground">

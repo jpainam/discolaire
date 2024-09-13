@@ -73,7 +73,7 @@ export async function StudentSiblingTable({
                       </Link>
                     </TableCell>
                     <TableCell>{linkedStd.relationship?.name}</TableCell>
-                    <TableCell>{student.classroom?.shortName}</TableCell>
+                    <TableCell>{student.classroom?.name}</TableCell>
                   </TableRow>
                 );
               })}

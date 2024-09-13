@@ -17,7 +17,7 @@ export default function Post() {
         <Text className="py-2 text-3xl font-bold text-primary">
           {data?.name}
         </Text>
-        <Text className="py-4 text-foreground">{data?.shortName}</Text>
+        <Text className="py-4 text-foreground">{data?.name}</Text>
       </View>
     </SafeAreaView>
   );

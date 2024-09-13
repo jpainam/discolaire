@@ -39,7 +39,7 @@ export const feeService = {
       },
     });
     const result = fees.reduce((acc: Record<string, number>, fee) => {
-      const name = fee.classroom.shortName ?? fee.classroom.name ?? "Unknown";
+      const name = fee.classroom.name ?? fee.classroom.name ?? "Unknown";
       if (acc[name]) {
         acc[name] += fee.amount;
       } else {
