@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
@@ -31,7 +32,7 @@ import { AvatarState } from "~/components/AvatarState";
 import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import { routes } from "~/configs/routes";
-import { getErrorMessage, showErrorToast } from "~/lib/handle-error";
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
@@ -48,9 +49,35 @@ export function StudentContactTable({
   const confirm = useConfirm();
   const router = useRouter();
 
-  const updateStudentContactMutation = api.studentContact.update.useMutation();
-  const deleteStudentContactMutation = api.studentContact.delete.useMutation();
+  const updateStudentContactMutation = api.studentContact.update.useMutation({
+    onSettled: async () => {
+      await utils.contact.students.invalidate();
+      await utils.student.contacts.invalidate(studentId);
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+    onSuccess: () => {
+      toast.success(t("updated_successfully"));
+    },
+  });
+  const deleteStudentContactMutation = api.studentContact.delete.useMutation({
+    onSettled: async () => {
+      await utils.student.contacts.invalidate();
+      await utils.contact.students.invalidate();
+    },
+    onSuccess: () => {
+      toast.success(t("deleted_successfully"));
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
   const utils = api.useUtils();
+  const canDeleteStudentContact = useCheckPermissions(
+    PermissionAction.DELETE,
+    "student:contact",
+  );
 
   if (studentContactsQuery.isPending) {
     return (
@@ -125,38 +152,14 @@ export function StudentContactTable({
                             c.relationshipId?.toString() ?? undefined
                           }
                           onChange={(v) => {
-                            toast.promise(
-                              updateStudentContactMutation.mutateAsync(
-                                {
-                                  studentId: c.studentId,
-                                  contactId: c.contactId,
-                                  data: {
-                                    relationshipId: Number(v),
-                                  },
-                                },
-                                {
-                                  onSuccess: () => {
-                                    void utils.contact.students.invalidate();
-                                    void utils.student.contacts.invalidate(
-                                      studentId,
-                                    );
-                                    toast.success(t("added_successfully"));
-                                  },
-                                  onError: (error) => {
-                                    showErrorToast(error);
-                                  },
-                                },
-                              ),
-                              {
-                                loading: t("updating"),
-                                error: (error) => {
-                                  return getErrorMessage(error);
-                                },
-                                success: () => {
-                                  return t("updated_successfully");
-                                },
+                            toast.loading(t("updating"), { id: 0 });
+                            updateStudentContactMutation.mutate({
+                              studentId: c.studentId,
+                              contactId: c.contactId,
+                              data: {
+                                relationshipId: Number(v),
                               },
-                            );
+                            });
                           }}
                         />
                       </PopoverContent>
@@ -178,44 +181,38 @@ export function StudentContactTable({
                           <Eye className="mr-2 h-4 w-4" /> {t("details")}
                         </DropdownMenuItem>
                         <DropdownInvitation email={c.contact.email} />
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          className="text-destructive"
-                          onSelect={async () => {
-                            const isConfirmed = await confirm({
-                              title: t("delete"),
-                              description: t("delete_confirmation", {
-                                name: getFullName(contact),
-                              }),
-                            });
-                            if (isConfirmed) {
-                              toast.promise(
-                                deleteStudentContactMutation.mutateAsync({
-                                  studentId: c.studentId,
-                                  contactId: c.contactId,
-                                }),
-                                {
-                                  loading: t("deleting"),
-                                  success: async () => {
-                                    await utils.student.contacts.invalidate(
-                                      studentId,
-                                    );
-                                    await utils.contact.students.invalidate(
-                                      c.contactId,
-                                    );
-                                    return t("deleted_successfully");
+                        {canDeleteStudentContact && (
+                          <>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              className="text-destructive"
+                              onSelect={async () => {
+                                const isConfirmed = await confirm({
+                                  title: t("delete"),
+                                  icon: (
+                                    <Trash2 className="h-6 w-6 text-destructive" />
+                                  ),
+                                  alertDialogTitle: {
+                                    className: "flex items-center gap-2",
                                   },
-                                  error: (error) => {
-                                    return getErrorMessage(error);
-                                  },
-                                },
-                              );
-                            }
-                          }}
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          {t("delete")}
-                        </DropdownMenuItem>
+                                  description: t("delete_confirmation", {
+                                    name: getFullName(contact),
+                                  }),
+                                });
+                                if (isConfirmed) {
+                                  toast.loading(t("deleting"), { id: 0 });
+                                  deleteStudentContactMutation.mutate({
+                                    studentId: c.studentId,
+                                    contactId: c.contactId,
+                                  });
+                                }
+                              }}
+                            >
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              {t("delete")}
+                            </DropdownMenuItem>
+                          </>
+                        )}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>

@@ -16,7 +16,9 @@ import {
   SquareUserRound,
 } from "lucide-react";
 
+import { checkPermissions } from "@repo/api/permission";
 import { getServerTranslations } from "@repo/i18n/server";
+import { PermissionAction } from "@repo/lib/permission";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Separator } from "@repo/ui/separator";
@@ -35,6 +37,13 @@ export async function StudentDetails({ id }: { id: string }) {
     month: "long",
     year: "numeric",
   });
+  const canReadContacts = await checkPermissions(
+    PermissionAction.READ,
+    "student:contact",
+    {
+      id: id,
+    },
+  );
   return (
     <div className="grid py-2 text-sm">
       <div className="grid grid-cols-2 gap-y-3 px-2 xl:grid-cols-4">
@@ -176,14 +185,16 @@ export async function StudentDetails({ id }: { id: string }) {
         </ul>
       </div>
       <Separator className="my-2 w-full" />
-      <div className="w-full">
+
+      {canReadContacts && (
         <Suspense
           key={id}
           fallback={<DataTableSkeleton columnCount={8} rowCount={3} />}
         >
           <StudentContactTable studentId={id} />
         </Suspense>
-      </div>
+      )}
+
       <Separator className="my-2 w-full" />
       <div className="flex w-full flex-col items-start">
         <span className="font-semibold">{t("observation")}</span>

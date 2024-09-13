@@ -50,17 +50,14 @@ export function useCheckPermissions(
 
   if (!isLoggedIn) return false;
 
-  return doPermissionsCheck(allPermissions, action, resource, data);
+  return doPermissionsCheck(allPermissions, action, resource, data, "IPW");
 }
 
 export function usePermissionsLoaded() {
-  console.log("Executing permission loaded");
   const isLoggedIn = useIsLoggedIn();
   const permissionsQuery = api.user.permissions.useQuery();
   const setPermissionsAtom = useSetAtom(permissionAtom);
   if (!permissionsQuery.isPending) {
-    console.log("permissionsQuery.data", permissionsQuery.data);
-    console.log("Setting perssions");
     setPermissionsAtom(permissionsQuery.data ?? []);
   }
   return isLoggedIn && permissionsQuery.isFetched;
