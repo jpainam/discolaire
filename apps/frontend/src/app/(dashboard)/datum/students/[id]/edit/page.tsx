@@ -4,9 +4,7 @@ import { checkPermissions } from "@repo/api/permission";
 import { PermissionAction } from "@repo/lib/permission";
 import { NoPermission } from "@repo/ui/no-permission";
 
-import { CreateUpdateAddress } from "~/components/students/profile/CreateUpdateAddress";
-import { CreateUpdateDenom } from "~/components/students/profile/CreateUpdateDenom";
-import { CreateUpdateProfile } from "~/components/students/profile/CreateUpdateProfile";
+import { UpdateStudent } from "~/components/students/profile/UpdateStudent";
 import { api } from "~/trpc/server";
 
 export default async function Page({
@@ -27,11 +25,5 @@ export default async function Page({
   if (!student) {
     notFound();
   }
-  return (
-    <div className="grid grid-cols-1 gap-4 p-2 xl:grid-cols-2">
-      <CreateUpdateProfile student={student} />
-      <CreateUpdateAddress />
-      <CreateUpdateDenom />
-    </div>
-  );
+  return <UpdateStudent student={student} />;
 }
