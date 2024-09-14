@@ -25,9 +25,9 @@ export default async function Layout({
     return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
   }
   return (
-    <div className="flex flex-row">
-      <ClassroomSidebar />
-      <div className="flex-1 flex-col border-l">
+    <div className="flex flex-1 flex-row">
+      <ClassroomSidebar className="border-r" />
+      <div className="ml-[220px] w-full flex-col">
         <ClassroomHeader />
         {children}
       </div>

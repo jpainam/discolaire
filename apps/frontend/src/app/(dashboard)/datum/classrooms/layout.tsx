@@ -16,5 +16,5 @@ export default async function Layout({
   if (!canReadClassroom) {
     return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
   }
-  return <div className="min-h-[60vh]">{children}</div>;
+  return <>{children}</>;
 }

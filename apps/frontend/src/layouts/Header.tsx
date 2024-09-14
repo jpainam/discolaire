@@ -19,7 +19,7 @@ export async function Header() {
   const permissions = await api.user.permissions();
 
   return (
-    <header className="w-ful sticky top-0 z-40 flex flex-col items-center border-b border-primary bg-background dark:border-muted-foreground/20 dark:bg-background">
+    <header className="fixed top-0 z-40 flex w-full flex-col items-center border-b border-primary bg-background dark:border-muted-foreground/20 dark:bg-background">
       <div
         className={
           "ml-auto flex w-full flex-row items-center gap-2 px-2 text-sm text-secondary-foreground md:w-auto"

@@ -8,11 +8,11 @@ export default function SearchLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <div className="bg-primary/80 text-primary-foreground dark:bg-muted dark:text-secondary-foreground">
+    <div className="flex-1 pt-[90px]">
+      <div className="fixed top-[90px] z-10 w-full bg-gray-800 text-primary-foreground dark:bg-muted dark:text-secondary-foreground">
         <SubMenuNav />
       </div>
-      {children}
-    </>
+      <div className="pt-[40px]">{children}</div>
+    </div>
   );
 }

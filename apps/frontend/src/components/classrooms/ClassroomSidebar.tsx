@@ -50,10 +50,11 @@ export function ClassroomSidebar({ className }: { className?: string }) {
     return;
   }
 
+  ////fixed h-screen top-16 overflow-y-auto
   return (
     <aside
       className={cn(
-        "m-2 hidden flex-col text-sm md:flex md:w-[200px]",
+        "fixed top-[120px] hidden h-screen flex-col overflow-y-auto pl-1 pt-2 text-sm md:flex md:w-[220px]",
         className,
       )}
     >
