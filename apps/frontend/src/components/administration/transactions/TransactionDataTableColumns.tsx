@@ -9,7 +9,7 @@ import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
-import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
+import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,8 +17,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
-import FlatBadge from "@repo/ui/FlatBadge";
 
+import { TransactionStatus } from "~/components/students/transactions/TransactionTable";
 import { TransactionDeleteModal } from "./TransactionDeleteModal";
 import { TransactionDetails } from "./TransactionDetails";
 
@@ -111,20 +111,7 @@ export const fetchTransactionColumns = ({
       ),
       cell: ({ row }) => {
         const status = row.original.status;
-        return (
-          <FlatBadge
-            className="flex w-20 justify-center"
-            variant={
-              status == "VALIDATED"
-                ? "green"
-                : status == "CANCELLED"
-                  ? "red"
-                  : "yellow"
-            }
-          >
-            {t(status?.toLowerCase() ?? "")}
-          </FlatBadge>
-        );
+        return <>{status ? <TransactionStatus status={status} /> : <></>}</>;
       },
     }),
     {

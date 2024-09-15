@@ -169,8 +169,8 @@ export const routes = {
       import: "/administration/students/import",
       excluded: "/administration/students/excluded",
     },
-    transactions: "/administration/transactions",
-    deleteTransactions: "/administration/transactions/deleted",
+    transactions: "/administration/accounting/transactions",
+    deleteTransactions: "/administration/accounting/transactions/deleted",
     photos: {
       index: "/administration/photos",
       content: "/administration/photos/content",

@@ -238,7 +238,7 @@ export function TransactionTable() {
   );
 }
 
-function TransactionStatus({ status }: { status: string }) {
+export function TransactionStatus({ status }: { status: string }) {
   const { t } = useLocale();
   let variant = "gray";
   if (status === "VALIDATED") {

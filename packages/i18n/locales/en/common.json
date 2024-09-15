@@ -82,6 +82,7 @@
   "terms": "Terms",
   "weight": "Weight",
   "type": "Type",
+  "bulk_actions": "Bulk Actions",
   "COMPLETED": "Completed",
   "VALIDATED": "Validated",
   "FAILED": "Failed",

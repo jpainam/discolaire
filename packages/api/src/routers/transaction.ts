@@ -15,6 +15,14 @@ const createUpdateSchema = z.object({
 });
 
 export const transactionRouter = createTRPCRouter({
+  count: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.transaction.count({
+      where: {
+        schoolYearId: ctx.schoolYearId,
+        deletedAt: null,
+      },
+    });
+  }),
   all: protectedProcedure
     .input(
       z.object({

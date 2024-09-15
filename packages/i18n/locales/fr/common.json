@@ -288,6 +288,7 @@
   "totalFeesPaid": "Montant des frais payés",
   "fieldDelimiter": "Délimiteur de champ",
   "columnTitleOnFirstRow": "Titre de colonne sur la première ligne",
+  "bulk_actions": "Actions groupées",
   "reportings": "Rapports",
   "programs": "Programmes",
   "roles": "Rôles",

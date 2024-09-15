@@ -165,7 +165,7 @@ export function DataTable<TData>({
             ))}
           </TableHeader>
 
-          <TableBody className="h-[calc(100vh-20rem)] w-full">
+          <TableBody>
             {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
@@ -197,7 +197,11 @@ export function DataTable<TData>({
       </div>
       <div className="flex flex-col gap-2.5 py-2">
         <DataTablePagination table={table} />
-        {table.getFilteredSelectedRowModel().rows.length > 0 && floatingBar}
+        {table.getFilteredSelectedRowModel().rows.length > 0 && (
+          <div className="animate-fadeIn fixed inset-x-0 bottom-12 z-50 mx-auto flex h-[60px] max-w-xl items-center justify-between rounded-md border bg-background px-6 py-3 shadow">
+            {floatingBar}
+          </div>
+        )}
       </div>
     </div>
   );

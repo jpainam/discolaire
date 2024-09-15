@@ -33,7 +33,7 @@ export function UserDataTableAction({ table }: TasksTableFloatingBarProps) {
   }, [table]);
 
   return (
-    <div className="animate-fadeIn fixed inset-x-0 bottom-12 z-50 mx-auto flex h-[60px] max-w-xl items-center justify-between rounded-md border bg-background px-6 py-3 shadow">
+    <>
       <p className="text-sm font-semibold">{rows.length} selected</p>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -50,7 +50,7 @@ export function UserDataTableAction({ table }: TasksTableFloatingBarProps) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
+    </>
     // <div className="fixed inset-x-0 bottom-10 z-50 mx-auto w-fit px-4">
     //   <div className="w-full overflow-x-auto">
     //     <div className="shadow-3xl mx-auto flex w-fit items-center gap-2 rounded-md border bg-card p-2">
