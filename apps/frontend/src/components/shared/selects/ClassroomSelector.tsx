@@ -54,7 +54,7 @@ export function ClassroomSelector({
   React.useEffect(() => {
     setItems(
       classroomsQuery.data?.map((it) => ({
-        label: it.name ?? "",
+        label: it.name,
         value: it.id,
       })) ?? [],
     );
@@ -63,11 +63,9 @@ export function ClassroomSelector({
   const handleSearch = (search: string) => {
     if (!classroomsQuery.data) return;
     const filteredItems = classroomsQuery.data.filter((it) =>
-      it.name?.toLowerCase().includes(search.toLowerCase()),
+      it.name.toLowerCase().includes(search.toLowerCase()),
     );
-    setItems(
-      filteredItems.map((it) => ({ label: it.name ?? "", value: it.id })),
-    );
+    setItems(filteredItems.map((it) => ({ label: it.name, value: it.id })));
   };
   if (classroomsQuery.isPending) {
     return <Skeleton className={cn("h-8 w-[300px]", className)} />;

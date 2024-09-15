@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import type { ChangeEventHandler } from "react";
@@ -116,11 +117,11 @@ export function DateTimePicker({
           disabled={disabled}
           selected={selectedDate}
           onSelect={handleDaySelect}
-          captionLayout="dropdown-buttons"
-          fromYear={fromYear}
-          toYear={toYear}
+          //captionLayout="dropdown-buttons"
+          // fromYear={fromYear}
+          // toYear={toYear}
           locale={currentLocale}
-          initialFocus
+          //initialFocus
         />
         <div className="p-2">
           <Input

@@ -25,7 +25,7 @@ const Page = () => {
     if (!classroomsQuery.data) return;
     setItems(
       classroomsQuery.data.filter((item) =>
-        item.name?.toLowerCase().includes(debounceValue.toLowerCase()),
+        item.name.toLowerCase().includes(debounceValue.toLowerCase()),
       ),
     );
   }, [classroomsQuery.data, debounceValue]);
@@ -73,7 +73,7 @@ const Page = () => {
             <ClassroomListItem
               key={item.id}
               id={item.id}
-              name={item.name ?? ""}
+              name={item.name}
               size={item.size}
               maxSize={item.maxSize}
             />

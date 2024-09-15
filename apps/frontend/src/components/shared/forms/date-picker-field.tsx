@@ -90,11 +90,10 @@ export function DatePickerField({
                   /*disabled={(date) =>
                   date > new Date() || date < new Date("1900-01-01")
                 }*/
-                  captionLayout="dropdown-buttons"
-                  fromYear={1930}
-                  toYear={2050}
+                  startMonth={new Date(1930, 0)}
+                  endMonth={new Date(2050, 11)}
                   locale={currentLocale}
-                  initialFocus
+                  autoFocus
                 />
               </PopoverContent>
             </Popover>

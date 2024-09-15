@@ -24,6 +24,7 @@ interface DatePickerProps {
 export function DatePicker({
   placeholder,
   className,
+
   toYear = 2050,
   onChange,
   disabled = false,
@@ -75,11 +76,11 @@ export function DatePicker({
           /*disabled={(date) =>
                   date > new Date() || date < new Date("1900-01-01")
                 }*/
-          captionLayout="dropdown-buttons"
-          fromYear={fromYear}
-          toYear={toYear}
+
+          startMonth={new Date(fromYear, 0)}
+          endMonth={new Date(toYear, 11)}
           locale={currentLocale}
-          initialFocus
+          autoFocus
         />
       </PopoverContent>
     </Popover>
