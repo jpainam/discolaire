@@ -1,8 +1,10 @@
+import { getServerTranslations } from "@repo/i18n/server";
+import { EmptyState } from "@repo/ui/EmptyState";
 import { Separator } from "@repo/ui/separator";
 
 import FinanceHeader from "~/components/students/transactions/FinanceHeader";
 import { TransactionStats } from "~/components/students/transactions/transaction-stats";
-import { TransactionDataTable } from "~/components/students/transactions/TransactionDataTable";
+import { TransactionTable } from "~/components/students/transactions/TransactionTable";
 import { api } from "~/trpc/server";
 
 export default async function Page({
@@ -12,21 +14,24 @@ export default async function Page({
 }) {
   const classroom = await api.student.classroom(id);
   const transactions = await api.student.transactions(id);
+  const { t } = await getServerTranslations();
 
   return (
     <div className="flex w-full flex-col gap-0">
       <FinanceHeader />
       <Separator />
+
       {classroom && (
         <TransactionStats
           classroomId={classroom.id}
           transactions={transactions}
         />
       )}
-      <TransactionDataTable
-        count={transactions.length}
-        transactions={transactions}
-      />
+      {classroom ? (
+        <TransactionTable />
+      ) : (
+        <EmptyState className="my-8" title={t("student_not_registered_yet")} />
+      )}
     </div>
   );
 }
