@@ -15,7 +15,7 @@
   },
   "prettier": "@repo/prettier-config",
   "dependencies": {
-    "@floating-ui/react": "^0.26.23",
+    "@floating-ui/react": "^0.26.24",
     "@hookform/resolvers": "^3.9.0",
     "@repo/api": "workspace:*",
     "@repo/auth": "workspace:*",
