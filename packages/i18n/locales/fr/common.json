@@ -346,8 +346,6 @@
   "select_chef_de_class": "Choisir un chef de classe",
   "class_name_report_description": "Tel que visible sur les rapports et bulletins",
   "upload_files_description": "Téléchargez les fichiers nécessaires pour compléter votre demande",
-  "registered_students": "Elèves inscrits",
-  "unregistered_students": "Elèves non inscrits",
   "country": "Pays",
   "register_these_students": "Inscrire ces élèves",
   "personal_information": "Information personnelle",

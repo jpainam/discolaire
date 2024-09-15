@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDownIcon, PrinterIcon } from "lucide-react";
+import { MoreVertical } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -94,14 +94,8 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
       <div className="ml-auto">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              variant={"outline"}
-              className="flex flex-row gap-1"
-              size={"sm"}
-            >
-              <PrinterIcon className="h-4 w-4" />
-              {t("print")}
-              <ChevronDownIcon className="h-4 w-4" />
+            <Button variant={"outline"} size={"icon"}>
+              <MoreVertical className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -120,11 +114,11 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
               }}
             >
               <XMLIcon className="mr-2 h-4 w-4" />
-              {t("registered_students")}
+              {t("xml_export")}
             </DropdownMenuItem>
             <DropdownMenuItem>
               <PDFIcon className="mr-2 h-4 w-4" />
-              {t("registered_students")}
+              {t("pdf_export")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
