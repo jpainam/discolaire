@@ -29,30 +29,12 @@ export default async function Layout({
     return <NoPermission isFullPage={true} className="mt-8" resourceText="" />;
   }
 
-  const canDeleteStudent = await checkPermissions(
-    PermissionAction.DELETE,
-    "student:profile",
-    {
-      id: id,
-    },
-  );
-  const canEditStudent = await checkPermissions(
-    PermissionAction.UPDATE,
-    "student:profile",
-    {
-      id: id,
-    },
-  );
-
   return (
     <div className="flex flex-1 flex-row">
       <StudentSidebar className="border-r" />
       <Card className="ml-[220px] flex-1 border-none shadow-none">
         <CardHeader className="bg-muted/50 p-1">
-          <StudentHeader
-            canEdit={canEditStudent}
-            canDelete={canDeleteStudent}
-          />
+          <StudentHeader />
         </CardHeader>
         <Separator />
         {/* <CardContent className="flex h-[calc(100vh-20rem)] flex-1 w-full p-0"> */}

@@ -196,7 +196,7 @@ export async function StudentDetails({ id }: { id: string }) {
       )}
 
       <Separator className="my-2 w-full" />
-      <div className="flex w-full flex-col items-start">
+      <div className="flex w-full flex-col items-start px-2">
         <span className="font-semibold">{t("observation")}</span>
         <span>{student.observation ?? "N/A"}</span>
       </div>

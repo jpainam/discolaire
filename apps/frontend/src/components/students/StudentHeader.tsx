@@ -1,9 +1,11 @@
 "use client";
 
 import type * as RPNInput from "react-phone-number-input";
+import React from "react";
 import { useParams, usePathname } from "next/navigation";
 import {
   BellRing,
+  ChevronDownIcon,
   MessageCircleMore,
   MoreVertical,
   NotebookTabs,
@@ -23,6 +25,7 @@ import { toast } from "sonner";
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";
 import {
@@ -38,25 +41,21 @@ import { Skeleton } from "@repo/ui/skeleton";
 
 import { SimpleTooltip } from "~/components/simple-tooltip";
 import { routes } from "~/configs/routes";
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
+import { getFullName } from "../../utils/full-name";
 import { CountryComponent } from "../shared/CountryPicker";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
-import { StudentSelector } from "../shared/selects/StudentSelector2";
 import { SquaredAvatar } from "./SquaredAvatar";
+import { StudentSearch } from "./StudentSearch";
 
 interface StudentHeaderProps {
   className?: string;
-  canDelete: boolean;
-  canEdit: boolean;
 }
 
-export function StudentHeader({
-  className,
-  canEdit,
-  canDelete,
-}: StudentHeaderProps) {
+export function StudentHeader({ className }: StudentHeaderProps) {
   const router = useRouter();
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
@@ -92,20 +91,49 @@ export function StudentHeader({
   const student = studentQuery.data;
   const studentTags = JSON.stringify(student?.tags ?? []);
 
+  const canDeleteStudent = useCheckPermissions(
+    PermissionAction.DELETE,
+    "student:profile",
+    {
+      id: params.id,
+    },
+  );
+  const canEditStudent = useCheckPermissions(
+    PermissionAction.UPDATE,
+    "student:profile",
+    {
+      id: params.id,
+    },
+  );
+  const [open, setOpen] = React.useState(false);
+
   return (
     <header className={cn(className)}>
       <div className="flex w-full gap-1">
         <SquaredAvatar student={student} />
         <div className="flex w-full flex-col gap-1">
-          <StudentSelector
-            className="w-full md:w-[500px]"
-            defaultValue={params.id}
+          {studentQuery.isPending ? (
+            <Skeleton className="w-full 2xl:w-[500px]" />
+          ) : (
+            <Button
+              variant="outline"
+              className={cn(
+                "flex w-full justify-between bg-background text-sm font-semibold shadow-none 2xl:w-[500px]",
+              )}
+              onClick={() => setOpen(true)}
+            >
+              <span>{getFullName(student)}</span>
+              <ChevronDownIcon className="ml-2 h-4 w-4" />
+            </Button>
+          )}
+          <StudentSearch
             onChange={(val) => {
-              if (val) {
-                navigateToStudent(val);
-              }
+              navigateToStudent(val);
             }}
+            open={open}
+            setOpen={setOpen}
           />
+
           {studentQuery.isPending && (
             <>
               <Skeleton className="h-8 w-full lg:w-[25%]" />
@@ -120,11 +148,11 @@ export function StudentHeader({
                 <FlatBadge variant={"red"}>Deactiver</FlatBadge>
               )}
 
-              {canEdit && (
+              {canEditStudent && (
                 <>
                   <Separator orientation="vertical" className="h-4" />
                   <Button
-                    disabled={!canEdit}
+                    disabled={!canEditStudent}
                     size={"icon"}
                     onClick={() => {
                       if (!student) return;
@@ -204,7 +232,7 @@ export function StudentHeader({
                     <ShieldBan className="mr-2 h-4 w-4" />
                     {t("disable")}
                   </DropdownMenuItem>
-                  {canEdit && student && (
+                  {canEditStudent && student && (
                     <DropdownMenuItem
                       onSelect={() => {
                         router.push(routes.students.edit(student.id));
@@ -214,7 +242,7 @@ export function StudentHeader({
                       {t("edit")}
                     </DropdownMenuItem>
                   )}
-                  {canDelete && student && (
+                  {canDeleteStudent && student && (
                     <>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
@@ -234,7 +262,7 @@ export function StudentHeader({
                             deleteStudentMutation.mutate(student.id);
                           }
                         }}
-                        disabled={!canDelete}
+                        disabled={!canDeleteStudent}
                         className="text-destructive"
                       >
                         <Trash2 className="mr-2 h-4 w-4" />
