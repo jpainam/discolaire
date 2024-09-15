@@ -138,6 +138,7 @@ export function StudentHeader({ className }: StudentHeaderProps) {
             <>
               <Skeleton className="h-8 w-full lg:w-[25%]" />
               <Skeleton className="h-8 w-full lg:w-[35%]" />
+              <Skeleton className="h-8 w-full lg:w-[45%]" />
             </>
           )}
           {!studentQuery.isPending && (

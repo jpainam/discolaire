@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
 import { useLocale } from "@repo/i18n";
-import { DataTableSkeleton } from "@repo/ui/data-table/v2/data-table-skeleton";
 import { SortableList } from "@repo/ui/dnd/dnd-sortable-list";
+import { Skeleton } from "@repo/ui/skeleton";
 
 import Menu from "~/components/menu/dropdown/menu";
 import { cn } from "~/lib/utils";
@@ -40,18 +40,6 @@ export function StudentSidebar({ className }: { className?: string }) {
 
   const { t } = useLocale();
 
-  if (menusQuery.isPending) {
-    return (
-      <div className="w-[200px] px-1">
-        <DataTableSkeleton
-          rowCount={15}
-          columnCount={1}
-          withPagination={false}
-          showViewOptions={false}
-        />
-      </div>
-    );
-  }
   // "fixed top-0 hidden h-screen flex-col overflow-y-auto px-1 pt-[130px] text-sm md:flex md:w-[220px]",
   return (
     <aside
@@ -60,6 +48,13 @@ export function StudentSidebar({ className }: { className?: string }) {
         className,
       )}
     >
+      {menusQuery.isPending && (
+        <div className="grid gap-2 p-2">
+          {Array.from({ length: 32 }).map((_, index) => (
+            <Skeleton key={index} className="h-8 w-full" />
+          ))}
+        </div>
+      )}
       <ul className="w-full">
         <SortableList items={items} onChange={setItems}>
           {items.map((item, index) => {

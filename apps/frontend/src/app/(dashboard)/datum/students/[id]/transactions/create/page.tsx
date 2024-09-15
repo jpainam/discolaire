@@ -1,23 +1,44 @@
 import { CircleDollarSign } from "lucide-react";
 
 import { getServerTranslations } from "@repo/i18n/server";
+import { EmptyState } from "@repo/ui/EmptyState";
 import { Label } from "@repo/ui/label";
 
-import MakePaymentStepper from "~/components/students/transactions/create";
-import { StudentFeeType } from "~/components/students/transactions/StudentFeeType";
+import { Step1 } from "~/components/students/transactions/create/step1";
+import { Step2 } from "~/components/students/transactions/create/step2";
+import { api } from "~/trpc/server";
 
-export default async function Page() {
+export default async function Page({
+  searchParams: { step },
+  params: { id },
+}: {
+  searchParams: { step: string };
+  params: { id: string };
+}) {
   const { t } = await getServerTranslations();
+  const classroom = await api.student.classroom(id);
   return (
     <div className="flex w-full flex-col gap-2">
-      <div className="border-b bg-secondary px-2 py-2 text-secondary-foreground">
+      <div className="flex items-center border-b bg-secondary px-2 py-2 text-secondary-foreground">
         <CircleDollarSign className="mr-2 h-4 w-4" />
         <Label> {t("make_payment")}</Label>
       </div>
-      <div className="grid flex-row items-start gap-4 px-2 xl:flex">
-        <MakePaymentStepper />
-        <StudentFeeType />
-      </div>
+      {!classroom ? (
+        <EmptyState
+          className="my-8"
+          title={t("no_data")}
+          description={t("student_not_registered_yet")}
+        />
+      ) : (
+        <>
+          {" "}
+          {Number(step) === 2 ? (
+            <Step2 classroomName={classroom.name} classroomId={classroom.id} />
+          ) : (
+            <Step1 />
+          )}
+        </>
+      )}
     </div>
   );
 }

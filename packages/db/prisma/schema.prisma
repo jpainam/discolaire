@@ -194,8 +194,8 @@ model Report {
 
 model Classroom {
     id                String         @id @default(uuid())
-    name              String?
-    reportName        String?
+    name              String
+    reportName        String
     maxSize           Int            @default(45)
     levelId           String
     sectionId         Int?           @default(1)

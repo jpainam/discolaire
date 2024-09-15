@@ -1,9 +1,11 @@
-import { useParams } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft, Printer } from "lucide-react";
-import { useForm } from "react-hook-form";
+"use client";
+
+import { useAtomValue } from "jotai";
+import { sumBy } from "lodash";
+import { ArrowLeft, Save } from "lucide-react";
 import { z } from "zod";
 
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
@@ -14,46 +16,69 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  useForm,
 } from "@repo/ui/form";
-import { useStepper } from "@repo/ui/Stepper/use-stepper";
+import { Skeleton } from "@repo/ui/skeleton";
 
+import { makePaymentAtom } from "~/atoms/payment";
+import { api } from "~/trpc/react";
 import Step2Details from "./step2details";
 
 const step2Schema = z.object({
   paymentReceived: z.boolean(),
   paymentCorrectness: z.boolean(),
-  notifications: z.object({
-    emails: z.array(z.string()),
-    sms: z.array(z.string()),
-  }),
+  notifications: z.array(z.string()),
 });
 
-export default function Step2() {
-  const { nextStep, isDisabledStep, prevStep } = useStepper();
-  const params = useParams();
+export function Step2({
+  classroomName,
+  classroomId,
+}: {
+  classroomName: string;
+  classroomId: string;
+}) {
+  const router = useRouter();
+
   const form = useForm({
-    resolver: zodResolver(step2Schema),
+    schema: step2Schema,
     defaultValues: {
       paymentReceived: false,
       paymentCorrectness: false,
-      notifications: {
-        emails: [params.id as string],
-        sms: [params.id as string],
-      },
+      notifications: [],
     },
   });
   function onSubmit(data: z.infer<typeof step2Schema>) {
     console.log(data);
-    nextStep();
   }
 
   const { t } = useLocale();
+  const payment = useAtomValue(makePaymentAtom);
+  if (
+    !payment.amount ||
+    !payment.description ||
+    !payment.transactionType ||
+    !payment.paymentMethod
+  ) {
+    router.push("./create?step=1");
+  }
+
+  const feesQuery = api.classroom.fees.useQuery(classroomId);
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-        <Step2Details />
-        <div className="flex flex-row justify-between border">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="mx-auto w-full max-w-3xl space-y-2"
+      >
+        {feesQuery.isPending && <Skeleton className="h-1/4 w-full" />}
+        {feesQuery.data && (
+          <Step2Details
+            classroomName={classroomName}
+            totalFee={sumBy(feesQuery.data, "amount")}
+          />
+        )}
+
+        <div className="flex flex-row justify-between rounded-xl border">
           <FormField
             control={form.control}
             name="paymentReceived"
@@ -82,12 +107,15 @@ export default function Step2() {
               <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md p-4">
                 <FormControl>
                   <Checkbox
+                    id={"paymentCorrectness"}
                     checked={field.value}
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel>Détails de versement</FormLabel>
+                  <FormLabel htmlFor="paymentCorrectness">
+                    Détails de versement
+                  </FormLabel>
                   <FormDescription>
                     En cochant cette case, vous certifiez que les détails (Reçu
                     de, Pour, Montant et Reste) sont corrects.
@@ -99,22 +127,19 @@ export default function Step2() {
         </div>
         <div className="flex w-full justify-end gap-2">
           <Button
-            disabled={isDisabledStep}
-            onClick={prevStep}
+            onClick={() => {
+              router.push("./create?step=1");
+            }}
             size="sm"
             type="button"
-            variant="secondary"
+            variant="outline"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             {t("prev")}
           </Button>
           <Button type="submit" size="sm">
-            <Printer className="mr-2 h-4 w-4" /> {t("print")}
+            <Save className="mr-2 h-4 w-4" /> {t("submit")}
           </Button>
-          {/* <Button size="sm" type="submit">
-            {t("next")}
-            <ArrowRight className="h-4 w-4 ml-2" />
-          </Button> */}
         </div>
       </form>
     </Form>
