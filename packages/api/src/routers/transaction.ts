@@ -143,7 +143,7 @@ export const transactionRouter = createTRPCRouter({
 
     const transactions = await ctx.db.transaction.findMany({
       where: {
-         deletedAt: null,
+        deletedAt: null,
         schoolYearId: ctx.schoolYearId,
         account: {
           studentId: {
@@ -273,7 +273,7 @@ export const transactionRouter = createTRPCRouter({
         },
         where: {
           schoolYearId: ctx.schoolYearId,
-           deletedAt: null,
+          deletedAt: null,
           status: "VALIDATED",
         },
       });
@@ -286,7 +286,7 @@ export const transactionRouter = createTRPCRouter({
             gte: input.from,
             lte: input.to,
           },
-           deletedAt: null,
+          deletedAt: null,
           status: "PENDING",
         },
       });
