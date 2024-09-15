@@ -307,6 +307,7 @@ export const studentRouter = createTRPCRouter({
         account: {
           studentId: input,
         },
+        deletedAt: null,
         schoolYearId: ctx.schoolYearId,
       },
       include: {

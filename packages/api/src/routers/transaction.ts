@@ -32,6 +32,7 @@ export const transactionRouter = createTRPCRouter({
         where: {
           AND: [
             { schoolYearId: ctx.schoolYearId },
+            { deletedAt: null },
             {
               createdAt: {
                 gte: input.from,
@@ -86,11 +87,16 @@ export const transactionRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.transaction.deleteMany({
+      return ctx.db.transaction.updateMany({
         where: {
           id: {
             in: Array.isArray(input.ids) ? input.ids : [input.ids],
           },
+        },
+        data: {
+          deletedAt: new Date(),
+          deletedBy: ctx.session.user.id,
+          observation: input.observation,
         },
       });
     }),
@@ -137,6 +143,7 @@ export const transactionRouter = createTRPCRouter({
 
     const transactions = await ctx.db.transaction.findMany({
       where: {
+         deletedAt: null,
         schoolYearId: ctx.schoolYearId,
         account: {
           studentId: {
@@ -220,6 +227,7 @@ export const transactionRouter = createTRPCRouter({
     const result = await ctx.db.transaction.groupBy({
       where: {
         schoolYearId: ctx.schoolYearId,
+        deletedAt: null,
       },
       by: ["createdAt"],
       _sum: {
@@ -265,6 +273,7 @@ export const transactionRouter = createTRPCRouter({
         },
         where: {
           schoolYearId: ctx.schoolYearId,
+           deletedAt: null,
           status: "VALIDATED",
         },
       });
@@ -277,6 +286,7 @@ export const transactionRouter = createTRPCRouter({
             gte: input.from,
             lte: input.to,
           },
+           deletedAt: null,
           status: "PENDING",
         },
       });
