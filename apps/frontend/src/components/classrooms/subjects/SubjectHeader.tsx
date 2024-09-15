@@ -43,7 +43,11 @@ export function SubjectHeader() {
             size={"sm"}
             onClick={() => {
               openSheet({
-                title: `${t("create")}-${t("subject")}`,
+                title: (
+                  <p className="px-2">
+                    {t("create")}-{t("subject")}
+                  </p>
+                ),
                 view: <CreateEditSubject />,
               });
             }}
