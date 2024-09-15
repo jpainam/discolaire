@@ -52,9 +52,14 @@ export function StudentSidebar({ className }: { className?: string }) {
       </div>
     );
   }
-
+  // "fixed top-0 hidden h-screen flex-col overflow-y-auto px-1 pt-[130px] text-sm md:flex md:w-[220px]",
   return (
-    <aside className={cn("mb-0 hidden md:flex md:w-[200px]", className)}>
+    <aside
+      className={cn(
+        "fixed top-0 hidden h-screen flex-col overflow-y-auto pt-[130px] md:flex md:w-[220px]",
+        className,
+      )}
+    >
       <ul className="w-full">
         <SortableList items={items} onChange={setItems}>
           {items.map((item, index) => {

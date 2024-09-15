@@ -45,9 +45,9 @@ export default async function Layout({
   );
 
   return (
-    <div className="grid w-full flex-row md:flex">
-      <StudentSidebar />
-      <Card className="m-1 flex-1">
+    <div className="flex flex-1 flex-row">
+      <StudentSidebar className="border-r" />
+      <Card className="ml-[220px] flex-1 border-none shadow-none">
         <CardHeader className="bg-muted/50 p-1">
           <StudentHeader
             canEdit={canEditStudent}
@@ -57,13 +57,12 @@ export default async function Layout({
         <Separator />
         {/* <CardContent className="flex h-[calc(100vh-20rem)] flex-1 w-full p-0"> */}
         <CardContent className="min-h-[60vh] p-0">{children}</CardContent>
-        <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-1">
+        <CardFooter className="flex flex-row items-center border-y bg-muted/50 px-6 py-1">
           <Suspense fallback={<Skeleton className="h-full w-full" />}>
             <StudentFooter />
           </Suspense>
         </CardFooter>
       </Card>
-      {/* <StudentRightbar /> */}
     </div>
   );
 }
