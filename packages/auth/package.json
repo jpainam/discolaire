@@ -19,13 +19,13 @@
   },
   "prettier": "@repo/prettier-config",
   "dependencies": {
-    "@auth/core": "0.34.2",
+    "@auth/core": "0.35.0",
     "@repo/db": "workspace:*",
     "@t3-oss/env-nextjs": "^0.11.1",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
     "next": "^14.2.11",
-    "next-auth": "5.0.0-beta.20",
+    "next-auth": "5.0.0-beta.21",
     "react": "catalog:react18",
     "react-dom": "catalog:react18",
     "zod": "catalog:"

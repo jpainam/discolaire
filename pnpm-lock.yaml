@@ -73,8 +73,8 @@ importers:
   apps/auth-proxy:
     dependencies:
       '@auth/core':
-        specifier: 0.34.2
-        version: 0.34.2
+        specifier: 0.35.0
+        version: 0.35.0
     devDependencies:
       '@repo/eslint-config':
         specifier: workspace:*
@@ -521,8 +521,8 @@ importers:
   packages/auth:
     dependencies:
       '@auth/core':
-        specifier: 0.34.2
-        version: 0.34.2
+        specifier: 0.35.0
+        version: 0.35.0
       '@repo/db':
         specifier: workspace:*
         version: link:../db
@@ -539,8 +539,8 @@ importers:
         specifier: ^14.2.11
         version: 14.2.11(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-auth:
-        specifier: 5.0.0-beta.20
-        version: 5.0.0-beta.20(next@14.2.11(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        specifier: 5.0.0-beta.21
+        version: 5.0.0-beta.21(next@14.2.11(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       react:
         specifier: catalog:react18
         version: 18.3.1
@@ -579,8 +579,8 @@ importers:
   packages/db:
     dependencies:
       '@auth/prisma-adapter':
-        specifier: ^2.4.2
-        version: 2.4.2(@prisma/client@5.19.1(prisma@5.19.1))
+        specifier: ^2.5.0
+        version: 2.5.0(@prisma/client@5.19.1(prisma@5.19.1))
       '@faker-js/faker':
         specifier: ^9.0.1
         version: 9.0.1
@@ -904,8 +904,8 @@ importers:
         specifier: ^0.3.0
         version: 0.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-day-picker:
-        specifier: 9.0.4
-        version: 9.0.4(react@18.3.1)
+        specifier: 9.0.9
+        version: 9.0.9(react@18.3.1)
       react-dropzone:
         specifier: ^14.2.3
         version: 14.2.3(react@18.3.1)
@@ -1103,8 +1103,8 @@ packages:
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
 
-  '@auth/core@0.34.2':
-    resolution: {integrity: sha512-KywHKRgLiF3l7PLyL73fjLSIBe1YNcA6sMeew4yMP6cfCWGXZrkkXd32AjRi1hlJ9nvovUBGZHvbn+LijO6ZeQ==}
+  '@auth/core@0.35.0':
+    resolution: {integrity: sha512-XvMALiYn5ZQd1hVeG1t+jCU89jRrc7ortl/05wkBrPHnRWZScxAK5jKuzBz+AOBQXewDjYcMpzeF5tTqg6rDhQ==}
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
       '@simplewebauthn/server': ^9.0.2
@@ -1117,8 +1117,8 @@ packages:
       nodemailer:
         optional: true
 
-  '@auth/prisma-adapter@2.4.2':
-    resolution: {integrity: sha512-QQwnGYfDiyTcAxMVhTrim+lLFFA3TKq3nIrbPtGZXlkiuNQ5t0rUg//Km7Wv21pD5bxhy4aRPlfq7TdFKk3XIw==}
+  '@auth/prisma-adapter@2.5.0':
+    resolution: {integrity: sha512-A+sd+mqV+7i9a5FcP9oZSIJTBHsidd5xA0abGSaAeek8OaA1LebbX20kjggFRIeP/UlKiQERXar/e1Q4mJjp/w==}
     peerDependencies:
       '@prisma/client': '>=2.26.0 || >=3 || >=4 || >=5'
 
@@ -8024,8 +8024,8 @@ packages:
     resolution: {integrity: sha512-dBpDMdxv9Irdq66304OLfEmQ9tbNRFnFTuZiLo+bD+r332bBmMJ8GBLXklIXXgxd3+v9+KUnZaUR5PJMa75Gsg==}
     engines: {node: '>= 0.4.0'}
 
-  next-auth@5.0.0-beta.20:
-    resolution: {integrity: sha512-+48SjV9k9AtUU3JbEIa4PXNjKIewfFjVGL7Xs2RKkuQ5QqegDNIQiIG8sLk6/qo7RTScQYIGKgeQ5IuQRtrTQg==}
+  next-auth@5.0.0-beta.21:
+    resolution: {integrity: sha512-VrT6LV9u/o5tMuWxRDN5d/K1OgPskrMHy+aITTwasVfIrkIaU/8UVg3TXH8ynJgzhfzlDx/3hLWGhi+eXQw4qg==}
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
       '@simplewebauthn/server': ^9.0.2
@@ -8766,8 +8766,8 @@ packages:
     peerDependencies:
       react: '>= 16.3.0'
 
-  react-day-picker@9.0.4:
-    resolution: {integrity: sha512-hT4yv89vfXjxEu+TKGfRlhIDi8kipy/Z8XDglT1VeskaTzNNIGfB8eCfF2AqT/WT32rfD6et+q61hiZPJi8HZw==}
+  react-day-picker@9.0.9:
+    resolution: {integrity: sha512-Sj+1UuuUmdxSKPmJlQFb6h1wKw9N7gG0K4db9mQtHm/qzd94t6LT9X8cGwDHaW9Pdb9dua4/sLhUSW06A1Xqkg==}
     peerDependencies:
       react: '>=16.8.0'
 
@@ -10515,7 +10515,7 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.5
       '@jridgewell/trace-mapping': 0.3.25
 
-  '@auth/core@0.34.2':
+  '@auth/core@0.35.0':
     dependencies:
       '@panva/hkdf': 1.2.1
       '@types/cookie': 0.6.0
@@ -10525,9 +10525,9 @@ snapshots:
       preact: 10.11.3
       preact-render-to-string: 5.2.3(preact@10.11.3)
 
-  '@auth/prisma-adapter@2.4.2(@prisma/client@5.19.1(prisma@5.19.1))':
+  '@auth/prisma-adapter@2.5.0(@prisma/client@5.19.1(prisma@5.19.1))':
     dependencies:
-      '@auth/core': 0.34.2
+      '@auth/core': 0.35.0
       '@prisma/client': 5.19.1(prisma@5.19.1)
     transitivePeerDependencies:
       - '@simplewebauthn/browser'
@@ -19004,9 +19004,9 @@ snapshots:
 
   netmask@2.0.2: {}
 
-  next-auth@5.0.0-beta.20(next@14.2.11(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
+  next-auth@5.0.0-beta.21(next@14.2.11(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
     dependencies:
-      '@auth/core': 0.34.2
+      '@auth/core': 0.35.0
       next: 14.2.11(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
 
@@ -19838,7 +19838,7 @@ snapshots:
       countup.js: 2.8.0
       react: 18.3.1
 
-  react-day-picker@9.0.4(react@18.3.1):
+  react-day-picker@9.0.9(react@18.3.1):
     dependencies:
       date-fns: 3.6.0
       react: 18.3.1
