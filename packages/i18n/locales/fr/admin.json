@@ -11,7 +11,10 @@
     "templates_description": "Créez des modèles de SMS pour envoyer des messages à des groupes de personnes"
   },
   "classrooms": "Classes",
+  "establishment": "Établissement",
+  "periods": "Périodes",
   "students": "Éleves",
+  "my_school": "Mon école",
   "transactions": "Transactions",
   "calendar": "Calendrier",
   "school_noticeboard": "Tableau d'affichage"

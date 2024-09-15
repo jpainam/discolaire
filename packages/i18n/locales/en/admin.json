@@ -9,9 +9,12 @@
     "check_balance": "Check SMS Balance",
     "templates_description": "Create and manage SMS templates for sending messages to parents and students"
   },
+  "establishment": "Establishment",
+  "Periods": "periods",
   "classrooms": "Classrooms",
   "students": "Students",
   "transactions": "Transactions",
   "calendar": "Calendar",
-  "school_noticeboard": "School Noticeboard"
+  "school_noticeboard": "School Noticeboard",
+  "my_school": "My School"
 }
