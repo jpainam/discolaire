@@ -15,3 +15,8 @@ export type Policy =
 export type User =
   | RouterOutputs["user"]["get"]
   | RouterOutputs["user"]["all"][number];
+
+export type Subject =
+  | RouterOutputs["subject"]["get"]
+  | RouterOutputs["subject"]["all"][number]
+  | RouterOutputs["classroom"]["subjects"][number];

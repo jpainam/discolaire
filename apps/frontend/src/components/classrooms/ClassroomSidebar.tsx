@@ -3,13 +3,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
+import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
-import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
+import { Skeleton } from "@repo/ui/skeleton";
 
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
-import { showErrorToast } from "../../lib/handle-error";
 import { sidebarIcons } from "./sidebar-icons";
 
 export function ClassroomSidebar({ className }: { className?: string }) {
@@ -34,19 +34,9 @@ export function ClassroomSidebar({ className }: { className?: string }) {
   }, [menusQuery.data, params.id]);
 
   const { t } = useLocale();
-  if (menusQuery.isPending) {
-    return (
-      <DataTableSkeleton
-        rowCount={18}
-        className="w-[200px] px-1"
-        columnCount={1}
-        withPagination={false}
-        showViewOptions={false}
-      />
-    );
-  }
+
   if (menusQuery.isError) {
-    showErrorToast(menusQuery.error);
+    toast.error(menusQuery.error.message);
     return;
   }
 
@@ -54,10 +44,17 @@ export function ClassroomSidebar({ className }: { className?: string }) {
   return (
     <aside
       className={cn(
-        "fixed top-[120px] hidden h-screen flex-col overflow-y-auto pl-1 pt-2 text-sm md:flex md:w-[220px]",
+        "fixed top-0 hidden h-screen flex-col overflow-y-auto px-1 pt-[130px] text-sm md:flex md:w-[220px]",
         className,
       )}
     >
+      {menusQuery.isPending && (
+        <div className="grid gap-2 p-2">
+          {Array.from({ length: 32 }).map((_, index) => (
+            <Skeleton key={index} className="h-8 w-full" />
+          ))}
+        </div>
+      )}
       {items.map((item, index) => {
         const isActive = pathname === item.href;
         const Icon = sidebarIcons[item.name];

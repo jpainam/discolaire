@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
+import { useRouter } from "@repo/hooks/use-router";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -23,7 +24,6 @@ import { Skeleton } from "@repo/ui/skeleton";
 
 import { CourseSelector } from "~/components/shared/selects/CourseSelector";
 import { StaffSelector } from "~/components/shared/selects/StaffSelector";
-import { getErrorMessage } from "~/lib/handle-error";
 import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";
 import { SelectField } from "../../shared/forms/SelectField";
@@ -41,6 +41,8 @@ type Subject = NonNullable<RouterOutputs["subject"]["get"]>;
 export function CreateEditSubject({ subject }: { subject?: Subject }) {
   const { t } = useLocale();
   const { closeSheet } = useSheet();
+  const utils = api.useUtils();
+  const router = useRouter();
   const form = useForm<CreateEditSubjectValue>({
     defaultValues: {
       courseId: subject?.courseId?.toString() ?? "",
@@ -53,8 +55,26 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
   });
 
   const subjectGroupsQuery = api.subjectGroup.all.useQuery();
-  const subjectCreateMutation = api.subject.create.useMutation();
-  const subjectUpdateMutation = api.subject.update.useMutation();
+  const subjectCreateMutation = api.subject.create.useMutation({
+    onSettled: () => utils.classroom.subjects.invalidate(),
+    onSuccess: () => {
+      toast.success(t("created_successfully"), { id: 0 });
+      router.refresh();
+    },
+    onError: (err) => {
+      toast.error(err.message, { id: 0 });
+    },
+  });
+  const subjectUpdateMutation = api.subject.update.useMutation({
+    onSettled: () => utils.classroom.subjects.invalidate(),
+    onSuccess: () => {
+      toast.success(t("updated_successfully"), { id: 0 });
+      router.refresh();
+    },
+    onError: (err) => {
+      toast.error(err.message, { id: 0 });
+    },
+  });
 
   const params = useParams<{ id: string }>();
 
@@ -68,30 +88,12 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
       coefficient: Number(data.coefficient),
     };
     if (subject) {
-      toast.promise(
-        subjectUpdateMutation.mutateAsync({ id: subject.id, ...formValues }),
-        {
-          success: () => {
-            closeSheet();
-            return t("updated_successfully");
-          },
-          loading: t("updating"),
-          error: (error) => {
-            return getErrorMessage(error);
-          },
-        },
-      );
+      toast.loading(t("updating"), { id: 0 });
+
+      subjectUpdateMutation.mutate({ id: subject.id, ...formValues });
     } else {
-      toast.promise(subjectCreateMutation.mutateAsync(formValues), {
-        success: () => {
-          closeSheet();
-          return t("created_successfully");
-        },
-        loading: t("creating"),
-        error: (error) => {
-          return getErrorMessage(error);
-        },
-      });
+      toast.loading(t("creating"), { id: 0 });
+      subjectCreateMutation.mutate(formValues);
     }
   };
 

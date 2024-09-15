@@ -2,14 +2,7 @@
 
 import { useEffect } from "react";
 import { useParams, usePathname } from "next/navigation";
-import {
-  Forward,
-  MoreVertical,
-  Pencil,
-  Printer,
-  Reply,
-  Trash2,
-} from "lucide-react";
+import { Forward, MoreVertical, Pencil, Reply, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
@@ -23,11 +16,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import { Separator } from "@repo/ui/separator";
@@ -195,24 +184,17 @@ export function ClassroomHeader() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownHelp />
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger>
-                <Printer className="mr-2 h-4 w-4" />
-                <span>{t("export")}</span>
-              </DropdownMenuSubTrigger>
-              <DropdownMenuPortal>
-                <DropdownMenuSubContent>
-                  <DropdownMenuItem>
-                    <PDFIcon className="mr-2 h-4 w-4" />
-                    <span>{t("pdf_export")}</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <XMLIcon className="mr-2 h-4 w-4" />
-                    <span>{t("excel_export")}</span>
-                  </DropdownMenuItem>
-                </DropdownMenuSubContent>
-              </DropdownMenuPortal>
-            </DropdownMenuSub>
+            <DropdownMenuSeparator />
+
+            <DropdownMenuItem>
+              <PDFIcon className="mr-2 h-4 w-4" />
+              <span>{t("pdf_export")}</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <XMLIcon className="mr-2 h-4 w-4" />
+              <span>{t("xml_export")}</span>
+            </DropdownMenuItem>
+
             {canDeleteClassroom && (
               <>
                 <DropdownMenuSeparator />
