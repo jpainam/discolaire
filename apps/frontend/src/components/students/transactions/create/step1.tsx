@@ -1,7 +1,8 @@
 "use client";
 
-import { useAtom } from "jotai";
+import { useSearchParams } from "next/navigation";
 import { ArrowRight } from "lucide-react";
+import { parseAsFloat, useQueryState } from "nuqs";
 import { z } from "zod";
 
 import { useRouter } from "@repo/hooks/use-router";
@@ -25,8 +26,6 @@ import {
   SelectValue,
 } from "@repo/ui/select";
 
-import { makePaymentAtom } from "~/atoms/payment";
-
 const makePaymentFormSchema = z.object({
   amount: z.coerce.number().min(1),
   description: z.string().min(1),
@@ -35,14 +34,22 @@ const makePaymentFormSchema = z.object({
 });
 
 export function Step1() {
-  const [makePayment, setMakePayment] = useAtom(makePaymentAtom);
-
+  const [amount] = useQueryState("amount", parseAsFloat.withDefault(0));
+  const [description] = useQueryState("description", {
+    defaultValue: "",
+  });
+  const [transactionType] = useQueryState("transactionType", {
+    defaultValue: "",
+  });
+  const [paymentMethod] = useQueryState("paymentMethod", {
+    defaultValue: "",
+  });
   const form = useForm({
     defaultValues: {
-      amount: Number(makePayment.amount),
-      description: makePayment.description,
-      transactionType: makePayment.transactionType,
-      paymentMethod: makePayment.paymentMethod,
+      amount: amount,
+      description: description,
+      transactionType: transactionType,
+      paymentMethod: paymentMethod,
     },
     schema: makePaymentFormSchema,
   });
@@ -50,18 +57,27 @@ export function Step1() {
   const { t } = useLocale();
 
   function onSubmit(data: z.infer<typeof makePaymentFormSchema>) {
-    setMakePayment((prev) => ({ ...prev, ...data }));
-    router.push("./create?step=2");
+    const values = {
+      amount: `${data.amount}`,
+      description: data.description,
+      transactionType: data.transactionType,
+      paymentMethod: data.paymentMethod,
+    };
+    const searchParams = new URLSearchParams(values).toString();
+
+    router.push(`./create?${searchParams}`);
   }
   const items: { label: string; value: string }[] = [
     { label: "credit", value: "CREDIT" },
     { label: "debit", value: "DEBIT" },
     { label: "discount", value: "REFUND" },
   ];
+  const searchParams = useSearchParams();
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div>{JSON.stringify(searchParams)}</div>
         <div className="mx-auto grid w-full max-w-3xl grid-cols-1 gap-2 px-4 md:grid-cols-2 md:gap-4">
           <FormField
             control={form.control}

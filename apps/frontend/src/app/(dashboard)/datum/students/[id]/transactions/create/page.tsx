@@ -9,14 +9,20 @@ import { Step2 } from "~/components/students/transactions/create/step2";
 import { api } from "~/trpc/server";
 
 export default async function Page({
-  searchParams: { step },
+  searchParams: { amount, description, transactionType, paymentMethod },
   params: { id },
 }: {
-  searchParams: { step: string };
+  searchParams: {
+    amount: string;
+    description: string;
+    transactionType: string;
+    paymentMethod: string;
+  };
   params: { id: string };
 }) {
   const { t } = await getServerTranslations();
   const classroom = await api.student.classroom(id);
+  const isStep2 = amount && description && transactionType && paymentMethod;
   return (
     <div className="flex w-full flex-col gap-2">
       <div className="flex items-center border-b bg-secondary px-2 py-2 text-secondary-foreground">
@@ -30,14 +36,7 @@ export default async function Page({
           description={t("student_not_registered_yet")}
         />
       ) : (
-        <>
-          {" "}
-          {Number(step) === 2 ? (
-            <Step2 classroomName={classroom.name} classroomId={classroom.id} />
-          ) : (
-            <Step1 />
-          )}
-        </>
+        <>{isStep2 ? <Step2 classroomId={classroom.id} /> : <Step1 />}</>
       )}
     </div>
   );

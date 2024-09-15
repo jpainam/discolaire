@@ -1,7 +1,6 @@
 "use client";
 
-import { useAtomValue } from "jotai";
-import { sumBy } from "lodash";
+import { useParams } from "next/navigation";
 import { ArrowLeft, Save } from "lucide-react";
 import { z } from "zod";
 
@@ -18,33 +17,25 @@ import {
   FormLabel,
   useForm,
 } from "@repo/ui/form";
-import { Skeleton } from "@repo/ui/skeleton";
 
-import { makePaymentAtom } from "~/atoms/payment";
-import { api } from "~/trpc/react";
 import Step2Details from "./step2details";
 
 const step2Schema = z.object({
   paymentReceived: z.boolean(),
   paymentCorrectness: z.boolean(),
-  notifications: z.array(z.string()),
+  notifications: z.array(z.string()).default([]),
 });
 
-export function Step2({
-  classroomName,
-  classroomId,
-}: {
-  classroomName: string;
-  classroomId: string;
-}) {
+export function Step2({ classroomId }: { classroomId: string }) {
   const router = useRouter();
+  const params = useParams<{ id: string }>();
 
   const form = useForm({
     schema: step2Schema,
     defaultValues: {
       paymentReceived: false,
       paymentCorrectness: false,
-      notifications: [],
+      notifications: [params.id],
     },
   });
   function onSubmit(data: z.infer<typeof step2Schema>) {
@@ -52,17 +43,6 @@ export function Step2({
   }
 
   const { t } = useLocale();
-  const payment = useAtomValue(makePaymentAtom);
-  if (
-    !payment.amount ||
-    !payment.description ||
-    !payment.transactionType ||
-    !payment.paymentMethod
-  ) {
-    router.push("./create?step=1");
-  }
-
-  const feesQuery = api.classroom.fees.useQuery(classroomId);
 
   return (
     <Form {...form}>
@@ -70,14 +50,7 @@ export function Step2({
         onSubmit={form.handleSubmit(onSubmit)}
         className="mx-auto w-full max-w-3xl space-y-2"
       >
-        {feesQuery.isPending && <Skeleton className="h-1/4 w-full" />}
-        {feesQuery.data && (
-          <Step2Details
-            classroomName={classroomName}
-            totalFee={sumBy(feesQuery.data, "amount")}
-          />
-        )}
-
+        <Step2Details classroomId={classroomId} />
         <div className="flex flex-row justify-between rounded-xl border">
           <FormField
             control={form.control}
