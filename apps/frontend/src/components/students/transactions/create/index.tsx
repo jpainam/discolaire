@@ -19,7 +19,7 @@ const steps = [
 
 export default function MakePaymentStepper() {
   return (
-    <div className="flex w-full flex-col gap-4 px-2">
+    <div className="flex w-full flex-col gap-4">
       <Stepper initialStep={0} steps={steps}>
         {steps.map((stepProps, index) => {
           return (
