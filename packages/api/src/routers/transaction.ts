@@ -8,6 +8,7 @@ const createUpdateSchema = z.object({
   amount: z.number(),
   studentId: z.string(),
   description: z.string().optional(),
+  method: z.string().optional().default("CASH"),
   status: z.string().optional().default("IN_PROGRESS"),
   transactionType: z.string().optional().default("CREDIT"),
   observation: z.string().optional(),
@@ -186,12 +187,13 @@ export const transactionRouter = createTRPCRouter({
       }
       const result = await ctx.db.transaction.create({
         data: {
-          accountId: Number(account.id),
-          amount: input.amount,
+          accountId: account.id,
+          amount: Number(input.amount),
           transactionRef: transactionRef,
           transactionType: input.transactionType,
           schoolYearId: ctx.schoolYearId,
           description: input.description,
+          receivedById: ctx.session.user.id,
         },
       });
       // TODO : send notification

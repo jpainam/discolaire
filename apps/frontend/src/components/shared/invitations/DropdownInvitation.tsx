@@ -19,7 +19,7 @@ export function DropdownInvitation({ email }: { email?: string | null }) {
   const { t } = useLocale();
   const sendEmailMutation = api.messaging.sendEmail.useMutation({
     onSuccess: () => {
-      toast.success(t("email_sent"), { id: 0 });
+      toast.success(t("email_sent_successfully"), { id: 0 });
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });

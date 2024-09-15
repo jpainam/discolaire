@@ -1,11 +1,14 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { render } from "@react-email/components";
 import { ArrowLeft, Save } from "lucide-react";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
+import { TransactionAcknowledgment } from "@repo/transactional/emails/TransactionAcknowledgment";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import {
@@ -18,6 +21,8 @@ import {
   useForm,
 } from "@repo/ui/form";
 
+import { routes } from "~/configs/routes";
+import { api } from "~/trpc/react";
 import Step2Details from "./step2details";
 
 const step2Schema = z.object({
@@ -26,9 +31,46 @@ const step2Schema = z.object({
   notifications: z.array(z.string()).default([]),
 });
 
-export function Step2({ classroomId }: { classroomId: string }) {
+export function Step2({
+  classroomId,
+  amount,
+  description,
+  transactionType,
+  paymentMethod,
+}: {
+  classroomId: string;
+  amount: number;
+  paymentMethod: string;
+  description: string;
+  transactionType: string;
+}) {
   const router = useRouter();
   const params = useParams<{ id: string }>();
+  const sendNotification = api.messaging.sendEmail.useMutation({
+    onSuccess: () => {
+      toast.success(t("email_sent_successfully"), { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
+  const createTransactionMutation = api.transaction.create.useMutation({
+    onSuccess: async (result) => {
+      toast.success(t("created_successfully"), { id: 0 });
+      const emailHtml = await render(
+        <TransactionAcknowledgment transactionId={result.id} />,
+      );
+      void sendNotification.mutate({
+        subject: "Transaction Acknowledgment",
+        to: ["jpainam@gmail.com"],
+        body: emailHtml,
+      });
+      router.push(routes.students.transactions.details(params.id, result.id));
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
 
   const form = useForm({
     schema: step2Schema,
@@ -39,7 +81,22 @@ export function Step2({ classroomId }: { classroomId: string }) {
     },
   });
   function onSubmit(data: z.infer<typeof step2Schema>) {
-    console.log(data);
+    if (!data.paymentReceived) {
+      toast.warning("Veuillez cocher la case 'Montant perçu'");
+      return;
+    }
+    if (!data.paymentCorrectness) {
+      toast.warning("Veuillez cocher la case 'Détails de versement'");
+      return;
+    }
+    toast.loading(t("creating"), { id: 0 });
+    createTransactionMutation.mutate({
+      method: paymentMethod,
+      description: description,
+      studentId: params.id,
+      transactionType: transactionType,
+      amount: Number(amount),
+    });
   }
 
   const { t } = useLocale();
@@ -101,7 +158,7 @@ export function Step2({ classroomId }: { classroomId: string }) {
         <div className="flex w-full justify-end gap-2">
           <Button
             onClick={() => {
-              router.push("./create?step=1");
+              router.push("./create");
             }}
             size="sm"
             type="button"
@@ -110,7 +167,11 @@ export function Step2({ classroomId }: { classroomId: string }) {
             <ArrowLeft className="mr-2 h-4 w-4" />
             {t("prev")}
           </Button>
-          <Button type="submit" size="sm">
+          <Button
+            isLoading={createTransactionMutation.isPending}
+            type="submit"
+            size="sm"
+          >
             <Save className="mr-2 h-4 w-4" /> {t("submit")}
           </Button>
         </div>

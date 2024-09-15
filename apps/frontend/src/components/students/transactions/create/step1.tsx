@@ -1,6 +1,5 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { parseAsFloat, useQueryState } from "nuqs";
 import { z } from "zod";
@@ -72,12 +71,10 @@ export function Step1() {
     { label: "debit", value: "DEBIT" },
     { label: "discount", value: "REFUND" },
   ];
-  const searchParams = useSearchParams();
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div>{JSON.stringify(searchParams)}</div>
         <div className="mx-auto grid w-full max-w-3xl grid-cols-1 gap-2 px-4 md:grid-cols-2 md:gap-4">
           <FormField
             control={form.control}
@@ -95,10 +92,10 @@ export function Step1() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="cash">{t("cash")}</SelectItem>
-                    <SelectItem value="card">{t("card")}</SelectItem>
-                    <SelectItem value="check">{t("check")}</SelectItem>
-                    <SelectItem value="emoney">{t("emoney")}</SelectItem>
+                    <SelectItem value="CASH">{t("cash")}</SelectItem>
+                    <SelectItem value="CARD">{t("card")}</SelectItem>
+                    <SelectItem value="CHECK">{t("check")}</SelectItem>
+                    <SelectItem value="EMONEY">{t("emoney")}</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />

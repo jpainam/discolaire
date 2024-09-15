@@ -36,7 +36,19 @@ export default async function Page({
           description={t("student_not_registered_yet")}
         />
       ) : (
-        <>{isStep2 ? <Step2 classroomId={classroom.id} /> : <Step1 />}</>
+        <>
+          {isStep2 ? (
+            <Step2
+              amount={Number(amount)}
+              paymentMethod={paymentMethod}
+              transactionType={transactionType}
+              description={description}
+              classroomId={classroom.id}
+            />
+          ) : (
+            <Step1 />
+          )}
+        </>
       )}
     </div>
   );

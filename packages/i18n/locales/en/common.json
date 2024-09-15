@@ -382,6 +382,7 @@
   "subject_order_description": "Order on which subjects appear in grade reports",
   "weekly_view": "Weekly View",
   "messaging": "Messaging",
+  "email_sent_successfully": "Email sent successfully",
   "prospects_description": "Prospects are students who have not yet been enrolled",
   "library_description": "Library is a collection of educational resources",
   "messaging_description": "Communication with students, parents, and staffs",
