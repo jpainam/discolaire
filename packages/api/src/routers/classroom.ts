@@ -8,7 +8,7 @@ const createUpdateSchema = z.object({
   levelId: z.string(),
   cycleId: z.number(),
   sectionId: z.number(),
-  reportName: z.string().nullable(),
+  reportName: z.string(),
 });
 export const classroomRouter = createTRPCRouter({
   all: protectedProcedure.query(async ({ ctx }) => {
