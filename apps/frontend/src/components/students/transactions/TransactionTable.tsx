@@ -8,15 +8,22 @@ import {
   StopwatchIcon,
 } from "@radix-ui/react-icons";
 import { MoreHorizontal, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 import type { FlatBadgeVariant } from "@repo/ui/FlatBadge";
+import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import { EmptyState } from "@repo/ui/EmptyState";
@@ -35,12 +42,28 @@ import { routes } from "~/configs/routes";
 import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
+import { DeleteTransaction } from "./DeleteTransaction";
 
 export function TransactionTable() {
   const params = useParams<{ id: string }>();
   const { t, i18n } = useLocale();
   const { fullDateFormatter } = useDateFormat();
   const transactionsQuery = api.student.transactions.useQuery(params.id);
+  const utils = api.useUtils();
+
+  const updateTransactionMutation = api.transaction.updateStatus.useMutation({
+    onSettled: async () => {
+      await utils.transaction.invalidate();
+      await utils.student.transactions.invalidate();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+    onSuccess: () => {
+      toast.success(t("updated_successfully"), { id: 0 });
+    },
+  });
+  const { openModal } = useModal();
   return (
     <div className="mx-2 rounded-lg border">
       <Table>
@@ -118,11 +141,86 @@ export function TransactionTable() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-40">
+                      <DropdownMenuSub>
+                        <DropdownMenuSubTrigger>
+                          {t("status")}
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuSubContent>
+                          <DropdownMenuRadioGroup
+                            value={transaction.status ?? "PENDING"}
+                            onValueChange={(value) => {
+                              if (
+                                ["PENDING", "CANCELLED", "VALIDATED"].includes(
+                                  value,
+                                )
+                              ) {
+                                const v = value as
+                                  | "PENDING"
+                                  | "CANCELLED"
+                                  | "VALIDATED";
+                                toast.loading(t("updating"), { id: 0 });
+                                updateTransactionMutation.mutate({
+                                  transactionId: transaction.id,
+                                  status: v,
+                                });
+                              } else {
+                                toast.error(t("invalid_status"), { id: 0 });
+                              }
+                            }}
+                          >
+                            <DropdownMenuRadioItem
+                              value={"VALIDATED"}
+                              className="capitalize"
+                            >
+                              <FlatBadge variant={"green"}>
+                                <CheckCircledIcon
+                                  className="mr-2 size-4 text-muted-foreground"
+                                  aria-hidden="true"
+                                />
+                                {t("validate")}
+                              </FlatBadge>
+                            </DropdownMenuRadioItem>
+                            <DropdownMenuRadioItem
+                              value={"CANCELLED"}
+                              className="capitalize"
+                            >
+                              <FlatBadge variant={"red"}>
+                                <CrossCircledIcon
+                                  className="mr-2 size-4 text-muted-foreground"
+                                  aria-hidden="true"
+                                />
+                                {t("cancel")}
+                              </FlatBadge>
+                            </DropdownMenuRadioItem>
+                            <DropdownMenuRadioItem
+                              value={"PENDING"}
+                              className="capitalize"
+                            >
+                              <FlatBadge variant={"yellow"}>
+                                <StopwatchIcon
+                                  className="mr-2 size-4 text-muted-foreground"
+                                  aria-hidden="true"
+                                />
+                                {t("pending")}
+                              </FlatBadge>
+                            </DropdownMenuRadioItem>
+                          </DropdownMenuRadioGroup>
+                        </DropdownMenuSubContent>
+                      </DropdownMenuSub>
                       <DropdownMenuSeparator />
+
                       <DropdownMenuItem
                         className="bg-destructive text-destructive-foreground"
                         onSelect={() => {
-                          console.log("clicked");
+                          openModal({
+                            title: t("delete"),
+                            className: "w-96",
+                            view: (
+                              <DeleteTransaction
+                                transactionId={transaction.id}
+                              />
+                            ),
+                          });
                         }}
                       >
                         <Trash2 className="mr-2 size-4" aria-hidden="true" />
@@ -146,8 +244,8 @@ function TransactionStatus({ status }: { status: string }) {
   if (status === "VALIDATED") {
     variant = "green";
   } else if (status === "CANCELLED") {
-    variant = "pink";
-  } else if (status === "IN_PROGRESS") {
+    variant = "red";
+  } else if (status === "PENDING") {
     variant = "yellow";
   }
 

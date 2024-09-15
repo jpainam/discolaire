@@ -35,17 +35,17 @@ export function ReportQueueTableActions({ report }: { report: ReportQueue }) {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              // toast.promise(updateReportQueueStatus(report.id, "IN_PROGRESS"), {
+              // toast.promise(updateReportQueueStatus(report.id, "PENDING"), {
               //   loading: t("updating_status"),
               //   success: () => {
-              //     return t("in_progress");
+              //     return t("pending");
               //   },
               //   error: (error) => {
               //     return getErrorMessage(error);
               //   },
               // });
             }}
-            disabled={report.status == "IN_PROGRESS"}
+            disabled={report.status == "PENDING"}
           >
             <RefreshCcw className="mr-2 h-4 w-4" />
             <span>{t("retry")}</span>
@@ -62,7 +62,7 @@ export function ReportQueueTableActions({ report }: { report: ReportQueue }) {
               //   },
               // });
             }}
-            disabled={report.status != "IN_PROGRESS"}
+            disabled={report.status != "PENDING"}
           >
             <Ban className="mr-2 h-4 w-4" />
             <span>{t("cancel")}</span>

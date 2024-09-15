@@ -74,7 +74,7 @@ export function ReportQueueTable({ reports }: { reports: ReportQueue[] }) {
                   <FlatBadge
                     className=""
                     variant={
-                      rep.status == "IN_PROGRESS"
+                      rep.status == "PENDING"
                         ? "yellow"
                         : rep.status == "COMPLETED"
                           ? "green"
@@ -83,7 +83,7 @@ export function ReportQueueTable({ reports }: { reports: ReportQueue[] }) {
                             : "red"
                     }
                   >
-                    {rep.status == "IN_PROGRESS" && (
+                    {rep.status == "PENDING" && (
                       <ReloadIcon className="h-4 w-4 animate-spin" />
                     )}
                     {rep.status == "COMPLETED" && <Check className="h-4 w-4" />}

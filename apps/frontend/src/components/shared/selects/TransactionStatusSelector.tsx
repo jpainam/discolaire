@@ -43,10 +43,10 @@ export function TransactionStatusSelector({
               {t("validated")}
             </div>
           </SelectItem>
-          <SelectItem value="IN_PROGRESS">
+          <SelectItem value="PENDING">
             <div className="flex flex-row items-center gap-1 text-yellow-600">
               <AlarmClock className="h-4 w-4" />
-              {t("in_progress")}
+              {t("pending")}
             </div>
           </SelectItem>
           <SelectItem value="CANCELLED">

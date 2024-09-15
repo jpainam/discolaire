@@ -863,7 +863,7 @@ model ReportQueue {
     fromUrl      String?
     filePath     String?
     content      Json?
-    status       String?   @default("IN_PROGRESS")
+    status       String?   @default("PENDING")
     expectedDate DateTime  @default(now()) @db.Timestamp(6)
     createdAt    DateTime  @default(now()) @db.Timestamp(6)
     startedAt    DateTime? @db.Timestamp(6)

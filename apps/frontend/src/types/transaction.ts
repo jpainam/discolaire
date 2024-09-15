@@ -3,7 +3,7 @@ import { z } from "zod";
 import { studentAccountSchema } from "./student-account";
 
 export const transactionStatusSchema = z.enum([
-  "IN_PROGRESS",
+  "PENDING",
   "VALIDATED",
   "CANCELLED",
 ]);

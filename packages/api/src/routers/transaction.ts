@@ -9,7 +9,7 @@ const createUpdateSchema = z.object({
   studentId: z.string(),
   description: z.string().optional(),
   method: z.string().optional().default("CASH"),
-  status: z.string().optional().default("IN_PROGRESS"),
+  status: z.string().optional().default("PENDING"),
   transactionType: z.string().optional().default("CREDIT"),
   observation: z.string().optional(),
 });
@@ -43,6 +43,23 @@ export const transactionRouter = createTRPCRouter({
         },
         orderBy: {
           createdAt: "desc",
+        },
+      });
+    }),
+  updateStatus: protectedProcedure
+    .input(
+      z.object({
+        transactionId: z.number(),
+        status: z.enum(["PENDING", "VALIDATED", "CANCELLED"]),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.transaction.update({
+        where: {
+          id: input.transactionId,
+        },
+        data: {
+          status: input.status,
         },
       });
     }),
@@ -260,7 +277,7 @@ export const transactionRouter = createTRPCRouter({
             gte: input.from,
             lte: input.to,
           },
-          status: "IN_PROGRESS",
+          status: "PENDING",
         },
       });
 
