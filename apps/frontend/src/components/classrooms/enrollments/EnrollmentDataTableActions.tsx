@@ -119,7 +119,7 @@ export function EnrollmentDataTableActions({
                     });
                   }
                 }}
-                className="text-destructive focus:text-destructive"
+                className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
               >
                 {t("delete")}
               </DropdownMenuItem>

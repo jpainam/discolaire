@@ -274,7 +274,7 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             disabled={deleteStaffMutation.isPending}
-            className="text-destructive"
+            className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
             onClick={async () => {
               const isConfirmed = await confirm({
                 title: t("delete"),

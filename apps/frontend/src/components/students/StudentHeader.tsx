@@ -264,7 +264,7 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                           }
                         }}
                         disabled={!canDeleteStudent}
-                        className="text-destructive"
+                        className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
                       >
                         <Trash2 className="mr-2 h-4 w-4" />
                         {t("delete")}

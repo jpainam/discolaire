@@ -241,7 +241,7 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 disabled={!canDeleteEnrollment}
-                className="flex items-center gap-2 bg-destructive text-destructive-foreground"
+                className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
                 onSelect={async () => {
                   const isConfirmed = await confirm({
                     title: t("unenroll") + " " + student.lastName,

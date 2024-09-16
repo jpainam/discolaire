@@ -364,7 +364,7 @@ function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
           <DropdownInvitation email={student.email} />
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            className="cursor-pointer text-destructive"
+            className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
             onSelect={async () => {
               const isConfirmed = await confirm({
                 title: t("delete"),

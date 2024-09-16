@@ -214,7 +214,7 @@ export function getColumns({
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 disabled={deleteContactMutation.isPending}
-                className="text-destructive"
+                className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
                 onSelect={async () => {
                   const isConfirmed = await confirm({
                     title: t("delete"),

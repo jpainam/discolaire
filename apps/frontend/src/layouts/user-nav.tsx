@@ -75,7 +75,7 @@ export function UserNav({ className }: { className?: string }) {
         <MobileActionButtions />
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          className="text-destructive"
+          className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
           onClick={() => {
             void signOut({ callbackUrl: "/", redirect: true });
           }}

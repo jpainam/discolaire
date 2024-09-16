@@ -126,7 +126,7 @@ export function ContactStudentTable({ id }: { id: string }) {
                       <DropdownHelp />
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
-                        className="text-destructive"
+                        className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
                         onSelect={async () => {
                           if (!student.id) return;
 

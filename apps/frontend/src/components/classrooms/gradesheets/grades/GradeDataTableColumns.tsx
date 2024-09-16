@@ -197,7 +197,7 @@ function ActionCells({
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            className="bg-destructive text-destructive-foreground"
+            className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
             onSelect={async () => {
               const isConfirmed = await confirm({
                 title: t("delete"),
