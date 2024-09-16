@@ -15,7 +15,7 @@ export const studentAccountRouter = createTRPCRouter({
       },
     });
   }),
-  get: protectedProcedure.input(z.number()).query(({ ctx, input }) => {
+  get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
     return ctx.db.studentAccount.findUnique({
       where: {
         id: input,

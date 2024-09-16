@@ -27,7 +27,7 @@ export function CreateEditPeriodicAttendance() {
           <InputField
             name="absences"
             labelClassName="w-[300px]"
-            label={t("total_absences")}
+            label={t("absences")}
             inputClassName="h-8"
             className="flex flex-row items-center"
           />
@@ -35,14 +35,14 @@ export function CreateEditPeriodicAttendance() {
             name="justified"
             inputClassName="h-8"
             labelClassName="w-[300px]"
-            label={t("total_absences")}
+            label={t("justified")}
             className="flex flex-row items-center"
           />
           <InputField
             name="consignes"
             inputClassName="h-8"
             labelClassName="w-[300px]"
-            label={t("total_absences")}
+            label={t("consignes")}
             className="flex flex-row items-center"
           />
         </div>

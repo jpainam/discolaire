@@ -160,25 +160,20 @@ model ReportCard {
 }
 
 model Attendance {
-    id          Int            @id @default(autoincrement())
-    date        DateTime       @default(now()) @db.Timestamp(6)
-    type        AttendanceType
-    asbence     Int            @default(0)
-    late        Int            @default(0)
-    excluded    Boolean        @default(false)
-    justified   Json?
-    termId      Int?
-    observation String?
-    createdAt   DateTime       @default(now()) @db.Timestamp(6)
-    updatedAt   DateTime       @updatedAt
-    createdBy   String?
-    updatedBy   String?
-
+    id           Int            @id @default(autoincrement())
+    date         DateTime       @default(now()) @db.Timestamp(6)
+    type         AttendanceType @default(DAILY)
+    data         Json?
+    termId       Int?
+    classroomId  String
+    createdAt    DateTime       @default(now()) @db.Timestamp(6)
+    updatedAt    DateTime       @updatedAt
     studentId    String
     schoolYearId String
-    term         Term?      @relation(fields: [termId], references: [id], onDelete: SetNull)
-    schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
-    student      Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+    classroom    Classroom      @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+    term         Term?          @relation(fields: [termId], references: [id], onDelete: SetNull)
+    schoolYear   SchoolYear     @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    student      Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
 }
 
 model Report {
@@ -223,6 +218,7 @@ model Classroom {
     assignments       Assignment[]
     studentId         String?
     reportCards       ReportCard[]
+    Attendance        Attendance[]
 }
 
 model ClassroomLevel {
@@ -914,13 +910,6 @@ enum TokenType {
     VERIFY_EMAIL
 }
 
-enum AttendanceType {
-    DAILY
-    WEEKLY
-    MONTHLY
-    PERIODICALLY
-}
-
 enum Gender {
     male
     female
@@ -993,4 +982,11 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+enum AttendanceType {
+    DAILY
+    WEEKLY
+    MONTHLY
+    PERIODICALLY
 }

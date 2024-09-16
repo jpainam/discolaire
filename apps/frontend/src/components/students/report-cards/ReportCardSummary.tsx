@@ -28,7 +28,7 @@ export async function ReportCardSummary() {
               {t("unjustified_absences")}
             </TableCell>
             <TableCell className={cn(rowClassName)}>0</TableCell>
-            <TableCell className="border">{t("lates")}</TableCell>
+            <TableCell className="border">{t("lateness")}</TableCell>
             <TableCell className={cn(rowClassName)}>0</TableCell>
           </TableRow>
           <TableRow>

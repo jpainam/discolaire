@@ -1,11 +1,12 @@
 "use client";
 
-import { BookMarked, Check, X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
+import FlatBadge from "@repo/ui/FlatBadge";
 import { Label } from "@repo/ui/label";
 
 export function PeriodicAttendanceHeader() {
@@ -23,15 +24,19 @@ export function PeriodicAttendanceHeader() {
               .students.map(
                 (student: {
                   id: string;
-                  asbence: number;
-                  late: number;
-                  consigned: number;
-                  exclusion: number;
+                  asbence: string;
+                  chatter: string;
+                  lateness: string;
+                  consigne: string;
+                  exclusion: string;
                 }) => {
                   return {
                     ...student,
                     absence: "",
-                    late: "",
+                    lateness: "",
+                    consigne: "",
+                    exclusion: "",
+                    chatter: "",
                   };
                 },
               ),
@@ -54,8 +59,8 @@ export function PeriodicAttendanceHeader() {
                 (student: {
                   id: string;
                   asbence: number;
-                  late: number;
-                  consigned: number;
+                  lateness: number;
+                  consigne: number;
                   exclusion: number;
                 }) => {
                   return {
@@ -76,7 +81,7 @@ export function PeriodicAttendanceHeader() {
           {t("mark_all_absent")}
         </span>
       </Button>
-      <Button
+      {/* <Button
         type="button"
         size="sm"
         variant="outline"
@@ -94,7 +99,7 @@ export function PeriodicAttendanceHeader() {
                 }) => {
                   return {
                     ...student,
-                    late: "1",
+                    lateness: "1",
                   };
                 },
               ),
@@ -106,7 +111,11 @@ export function PeriodicAttendanceHeader() {
         <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
           {t("mark_all_late")}
         </span>
-      </Button>
+      </Button> */}
+
+      <FlatBadge variant={"blue"}>
+        {t("format")}: {t("value")} / {t("justified")}
+      </FlatBadge>
 
       <div className="flex flex-row items-center gap-1">
         <Checkbox defaultChecked id="notifyParents" />{" "}

@@ -64,7 +64,7 @@ export function AttendanceTable() {
               </TableHead>
               <TableHead>{t("fullName")}</TableHead>
               <TableHead>{t("asbent")}</TableHead>
-              <TableHead>{t("late")}</TableHead>
+              <TableHead>{t("lateness")}</TableHead>
               <TableHead>{t("consignes")}</TableHead>
               <TableHead>{t("exclusion")}</TableHead>
             </TableRow>

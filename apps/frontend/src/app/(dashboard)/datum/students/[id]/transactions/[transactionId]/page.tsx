@@ -1,11 +1,12 @@
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Calendar, ReceiptIcon } from "lucide-react";
 
 import { getServerTranslations } from "@repo/i18n/server";
 import { Button } from "@repo/ui/button";
 import { Separator } from "@repo/ui/separator";
 
+import { routes } from "~/configs/routes";
 import { api } from "~/trpc/server";
 
 export default async function Page({
@@ -13,12 +14,16 @@ export default async function Page({
 }: {
   params: { id: string; transactionId: number };
 }) {
-  const transaction = await api.transaction.get(transactionId);
-  console.log(id);
-  const { t } = await getServerTranslations();
+  const transaction = await api.transaction.get(Number(transactionId));
+
   if (!transaction) {
     notFound();
   }
+  const studentAccount = await api.studentAccount.get(transaction.accountId);
+  if (studentAccount?.studentId !== id) {
+    redirect(routes.students.transactions.index(id));
+  }
+  const { t } = await getServerTranslations();
   return (
     <div className="relative h-full bg-[url('/placeholder.svg')] bg-cover bg-center bg-no-repeat">
       <div className="absolute inset-0 bg-gray-600 backdrop-blur-sm" />

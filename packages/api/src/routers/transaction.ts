@@ -72,7 +72,7 @@ export const transactionRouter = createTRPCRouter({
         },
       });
     }),
-  get: protectedProcedure.input(z.number()).query(({ ctx, input }) => {
+  get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
     return ctx.db.transaction.findUnique({
       include: {
         journal: true,

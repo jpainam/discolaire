@@ -22,11 +22,11 @@ export async function PeriodicAttendanceTable({
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>{t("total_absences")}</TableHead>
+          <TableHead>{t("absences")}</TableHead>
           <TableHead>{t("justified_absences")}</TableHead>
           <TableHead>{t("unjustified_absences")}</TableHead>
           <TableHead>{t("consignes")}</TableHead>
-          <TableHead>Amount</TableHead>
+          <TableHead></TableHead>
           <TableHead></TableHead>
         </TableRow>
       </TableHeader>

@@ -54,7 +54,7 @@ export function AttendanceHeader() {
   const { createQueryString } = useCreateQueryString();
 
   return (
-    <div className="flex flex-row items-center gap-4 border-b bg-secondary px-2 py-1 text-secondary-foreground">
+    <div className="flex flex-row items-center gap-4 border-b bg-muted px-2 py-1 text-muted-foreground">
       <Label className="min-w-[150px] max-w-[150px]">
         {t("attendance_type")}
       </Label>

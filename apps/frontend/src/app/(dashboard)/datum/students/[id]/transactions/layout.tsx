@@ -13,11 +13,7 @@ export default async function Layout({
   const { t } = await getServerTranslations();
   if (!classroom) {
     return (
-      <EmptyState
-        className="my-8"
-        title={t("no_data")}
-        description={t("student_not_registered_yet")}
-      />
+      <EmptyState className="my-8" title={t("student_not_registered_yet")} />
     );
   }
   return <>{children}</>;

@@ -308,7 +308,7 @@ export function StudentHeader({ className }: StudentHeaderProps) {
 
               <FlatBadge
                 variant={student?.gender == "female" ? "pink" : "blue"}
-                className="flex h-5 w-[85px] flex-row items-center gap-1"
+                className="flex flex-row items-center gap-1"
               >
                 {student?.gender == "male" ? (
                   <PiGenderMaleThin className="h-4 w-4" />

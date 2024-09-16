@@ -30,11 +30,7 @@ export default async function Page({
         <Label> {t("make_payment")}</Label>
       </div>
       {!classroom ? (
-        <EmptyState
-          className="my-8"
-          title={t("no_data")}
-          description={t("student_not_registered_yet")}
-        />
+        <EmptyState className="my-8" title={t("student_not_registered_yet")} />
       ) : (
         <>
           {isStep2 ? (
