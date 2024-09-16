@@ -4,23 +4,26 @@ import { cva } from "class-variance-authority";
 
 import { cn } from "./utils";
 
+//border border-red-500 bg-red-100 dark:bg-red-900/20 text-red-600 text-xs rounded-full px-2 py-0.5 mt-4
 const flatBadgeVariants = cva(
-  "inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset",
+  "inline-flex items-center rounded-full rounded-md border px-2 py-1 text-xs",
   {
     variants: {
       variant: {
-        gray: "bg-gray-50 text-gray-600 ring-gray-500/10 dark:bg-gray-700/10 dark:text-gray-50",
-        red: "dark:ring-red-60/10 bg-red-50 text-red-700 ring-red-600/10 dark:bg-red-700/10 dark:text-red-50",
+        gray: "border-gray-500 bg-gray-100 text-gray-600 dark:bg-gray-900/20",
+        red: "border-red-500 bg-red-100 text-red-600 dark:bg-red-900/20",
+        orange:
+          "border-orange-500 bg-orange-100 text-orange-600 dark:bg-orange-900/20",
         yellow:
-          "bg-yellow-50 text-yellow-800 ring-yellow-600/20 dark:bg-yellow-400/10 dark:text-yellow-50",
+          "border-yellow-500 bg-yellow-100 text-yellow-600 dark:bg-yellow-900/20",
         green:
-          "bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-700/10 dark:text-green-50",
-        blue: "bg-blue-50 text-blue-700 ring-blue-700/10 dark:bg-blue-400/10 dark:text-blue-50",
+          "border-green-500 bg-green-100 text-green-600 dark:bg-green-900/20",
+        blue: "border-blue-500 bg-blue-100 text-blue-600 dark:bg-blue-900/20",
         indigo:
-          "bg-indigo-50 text-indigo-700 ring-indigo-700/10 dark:bg-indigo-400/10 dark:text-indigo-50",
+          "border-indigo-500 bg-indigo-100 text-indigo-600 dark:bg-indigo-900/20",
         purple:
-          "bg-purple-50 text-purple-700 ring-purple-700/10 dark:bg-purple-700/10 dark:text-purple-50",
-        pink: "bg-pink-50 text-pink-700 ring-pink-700/10 dark:bg-pink-400/10 dark:text-pink-50",
+          "border-purple-500 bg-purple-100 text-purple-600 dark:bg-purple-900/20",
+        pink: "border-pink-500 bg-pink-100 text-pink-600 dark:bg-pink-900/20",
       },
     },
     defaultVariants: {

@@ -40,8 +40,9 @@ export function StudentContactHeader() {
     <div className="flex flex-row items-center gap-2 bg-secondary p-1 px-2">
       {Icon && <Icon className="h-6 w-6" />}
       <Label>{t("contacts")}</Label>
-      {canAddContact && (
-        <div className="ml-auto flex flex-row gap-2">
+
+      <div className="ml-auto flex flex-row gap-2">
+        {canAddContact && (
           <SimpleTooltip content={t("link_contacts")}>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -76,18 +77,19 @@ export function StudentContactHeader() {
               </DropdownMenuContent>
             </DropdownMenu>
           </SimpleTooltip>
-        </div>
-      )}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button size={"icon"} variant={"outline"}>
-            <MoreVertical className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownHelp />
-        </DropdownMenuContent>
-      </DropdownMenu>
+        )}
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button size={"icon"} variant={"outline"}>
+              <MoreVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownHelp />
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </div>
   );
 }
