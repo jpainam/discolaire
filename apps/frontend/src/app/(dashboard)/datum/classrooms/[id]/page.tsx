@@ -2,7 +2,7 @@ import { checkPermissions } from "@repo/api/permission";
 import { PermissionAction } from "@repo/lib/permission";
 
 import { ClassroomDetails } from "~/components/classrooms/ClassroomDetails";
-import EnrollmentDataTable from "~/components/classrooms/enrollments/EnrollmentDataTable";
+import { EnrollmentDataTable } from "~/components/classrooms/enrollments/EnrollmentDataTable";
 import { EnrollmentHeader } from "~/components/classrooms/enrollments/EnrollmentHeader";
 
 export default async function Page({
@@ -32,7 +32,11 @@ export default async function Page({
         <GenderPie classroom={classroom} />
         <GenderPie classroom={classroom} />
       </div> */}
-      {canReadEnrollment && <EnrollmentDataTable classroomId={id} />}
+      {canReadEnrollment && (
+        <div className="px-2">
+          <EnrollmentDataTable classroomId={id} />
+        </div>
+      )}
     </div>
   );
 }

@@ -1,90 +1,48 @@
 "use client";
 
 import { useMemo } from "react";
+import { toast } from "sonner";
 
-import type { RouterOutputs } from "@repo/api";
-import type { DataTableFilterField } from "@repo/ui/data-table/types";
 import { useLocale } from "@repo/i18n";
-import { DataTable } from "@repo/ui/data-table/data-table";
-import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
-import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
-import { useDataTable } from "@repo/ui/data-table/index";
+import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
+import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
+import { DataTable, useDataTable } from "@repo/ui/datatable/index";
 
-import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { EnrollmentDataTableActions } from "./EnrollmentDataTableActions";
 import { fetchEnrollmentColumns } from "./EnrollmentDataTableColumns";
 
-type ClassroomStudentProcedureOutput =
-  RouterOutputs["classroom"]["students"][number];
-
-export default function EnrollmentDataTable({
-  classroomId,
-}: {
-  classroomId: string;
-}) {
+export function EnrollmentDataTable({ classroomId }: { classroomId: string }) {
   const { t } = useLocale();
   const classroomStudentsQuery = api.classroom.students.useQuery(classroomId);
-  // const canUnEnrollStudent = useCheckPermissions(
-  //   PermissionAction.DELETE,
-  //   "classroom:enrollment"
-  // );
-
-  const filterFields: DataTableFilterField<ClassroomStudentProcedureOutput>[] =
-    [
-      {
-        label: t("fullName"),
-        value: "firstName",
-        placeholder: t("search"),
-      },
-      {
-        label: t("gender"),
-        value: "gender",
-        options: ["female", "male"].map((gender) => ({
-          label: t(gender),
-          value: gender,
-        })),
-      },
-    ];
+  const students = classroomStudentsQuery.data ?? [];
 
   const columns = useMemo(() => {
     const columns = fetchEnrollmentColumns({
       t: t,
-      //canUnEnrollStudent: true,
     });
     return columns;
   }, [t]);
-  const pageCount = classroomStudentsQuery.data?.length ?? 0 / 50;
 
   const { table } = useDataTable({
     data: classroomStudentsQuery.data ?? [],
     columns: columns,
-    filterFields: filterFields,
-    pageCount: pageCount,
+    rowCount: students.length,
   });
 
   if (classroomStudentsQuery.isPending) {
     return <DataTableSkeleton rowCount={15} columnCount={7} />;
   }
   if (classroomStudentsQuery.error) {
-    showErrorToast(classroomStudentsQuery.error);
+    toast.error(classroomStudentsQuery.error.message);
     return;
   }
   return (
-    <div className="p-1">
-      <DataTable
-        table={table}
-        variant={"compact"}
-        // floatingBar={<EnrollFloatingBar table={table} />}
-      >
-        <DataTableToolbar
-          searchPlaceholder={t("search")}
-          table={table}
-          filterFields={filterFields}
-        >
-          <EnrollmentDataTableActions table={table} />
-        </DataTableToolbar>
-      </DataTable>
-    </div>
+    <DataTable
+      table={table}
+      floatingBar={<EnrollmentDataTableActions table={table} />}
+    >
+      <DataTableToolbar table={table} />
+    </DataTable>
   );
 }

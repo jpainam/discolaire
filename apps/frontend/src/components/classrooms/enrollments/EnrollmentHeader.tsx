@@ -1,10 +1,10 @@
 "use client";
 
-import { MoreVertical } from "lucide-react";
+import { MoreVertical, Plus } from "lucide-react";
 
+import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
-import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,19 +14,20 @@ import {
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Label } from "@repo/ui/label";
 import { Separator } from "@repo/ui/separator";
+import { Skeleton } from "@repo/ui/skeleton";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { api } from "~/trpc/react";
 import { getAge } from "~/utils/student-utils";
+import { EnrollStudent } from "./EnrollStudent";
 
 export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
   const { t } = useLocale();
+  const { openModal } = useModal();
 
   const classroomStudentsQuery = api.classroom.students.useQuery(classroomId);
-  if (classroomStudentsQuery.isPending) {
-    return <DataTableSkeleton rowCount={1} columnCount={8} />;
-  }
+
   const students = classroomStudentsQuery.data ?? [];
   const male = students.filter((student) => student.gender == "male").length;
   const total = students.length || 1e9;
@@ -41,6 +42,16 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
     students.length > 0
       ? Math.min(...students.map((student) => getAge(student.dateOfBirth) || 0))
       : 0;
+
+  if (classroomStudentsQuery.isPending) {
+    return (
+      <div className="grid grid-cols-4 gap-2 px-2">
+        {Array.from({ length: 8 }).map((_, index) => (
+          <Skeleton key={index} className="h-8 w-full" />
+        ))}
+      </div>
+    );
+  }
   return (
     <div className="grid grid-cols-1 items-center gap-2 border-y bg-secondary px-2 py-1 text-secondary-foreground md:flex md:flex-row">
       <FlatBadge
@@ -91,7 +102,27 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
           {oldest} {t("old")}
         </span>
       </FlatBadge>
-      <div className="ml-auto">
+      <div className="ml-auto flex flex-row items-center gap-2">
+        <Button
+          variant="default"
+          size="sm"
+          disabled={false}
+          onClick={() => {
+            openModal({
+              title: (
+                <div className="px-4 pt-4">{t("enroll_new_students")}</div>
+              ),
+              className: "w-[600px] p-0",
+              description: (
+                <p className="px-4">{t("enroll_new_students_description")}</p>
+              ),
+              view: <EnrollStudent classroomId={classroomId} />,
+            });
+          }}
+        >
+          <Plus className="mr-2 size-4" aria-hidden="true" />
+          {t("enroll")}
+        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant={"outline"} size={"icon"}>

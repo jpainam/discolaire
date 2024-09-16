@@ -202,6 +202,9 @@ export function DataTable<TData>({
             {floatingBar}
           </div>
         )}
+        {/* {table.getFilteredSelectedRowModel().rows.length > 0 && ( */}
+
+        {/* )} */}
       </div>
     </div>
   );

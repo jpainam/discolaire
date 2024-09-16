@@ -2,7 +2,7 @@ import { checkPermissions } from "@repo/api/permission";
 import { PermissionAction } from "@repo/lib/permission";
 import { NoPermission } from "@repo/ui/no-permission";
 
-import EnrollmentDataTable from "~/components/classrooms/enrollments/EnrollmentDataTable";
+import { EnrollmentDataTable } from "~/components/classrooms/enrollments/EnrollmentDataTable";
 
 export default async function Page({
   params: { id },
@@ -17,7 +17,7 @@ export default async function Page({
     return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
   }
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col px-2">
       <EnrollmentDataTable classroomId={id} />
     </div>
   );
