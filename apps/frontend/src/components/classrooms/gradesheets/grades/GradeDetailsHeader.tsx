@@ -1,11 +1,19 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { MoreVertical, Pencil, Trash2 } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
-import { Label } from "@repo/ui/label";
+import { useConfirm } from "@repo/ui/confirm-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/dropdown-menu";
 import { Skeleton } from "@repo/ui/skeleton";
 import {
   Table,
@@ -18,6 +26,7 @@ import {
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { api } from "~/trpc/react";
 
 type GradeSheetGetGradeProcedureOutput = NonNullable<
@@ -28,7 +37,7 @@ type GradeSheetGetProcedureOutput = NonNullable<
   RouterOutputs["gradeSheet"]["get"]
 >;
 
-export function GradeHeader({
+export function GradeDetailsHeader({
   grades,
   gradesheet,
 }: {
@@ -63,9 +72,11 @@ export function GradeHeader({
     grades.reduce((acc, grade) => acc + grade.grade, 0) /
     (grades.length || 1e9);
 
+  const confirm = useConfirm();
+  const deleteGradeSheetMutation = api.gradeSheet.delete.useMutation();
   return (
     <div className="flex flex-col gap-2 border-b">
-      <div className="grid px-2 italic md:grid-cols-3">
+      <div className="grid px-2 md:grid-cols-3">
         <span>
           {classroomQuery.isPending ? (
             <Skeleton className="h-8 w-full" />
@@ -77,7 +88,6 @@ export function GradeHeader({
         <span> {gradesheet.subject.teacher?.lastName}</span>
         <span>{dateFormatter.format(gradesheet.createdAt)}</span>
         <span>
-          {" "}
           {t("max_grade")} : {maxGrade}
         </span>
         <span> {gradesheet.subject.course?.name} </span>
@@ -148,15 +158,50 @@ export function GradeHeader({
           </TableBody>
         </Table>
       </div>
-      <div className="flex border-t bg-muted/40 px-2 py-1">
+      <div className="flex border-t bg-muted/50 px-2 py-1">
         <div className="ml-auto flex flex-row items-center gap-4">
-          <Label>{t("export")}</Label>
-          <Button className="h-6 w-6" variant={"ghost"} size={"icon"}>
-            <PDFIcon className="h-4 w-4" />
-          </Button>
-          <Button className="h-6 w-6" variant={"ghost"} size={"icon"}>
-            <XMLIcon className="h-4 w-4" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant={"outline"} size={"icon"}>
+                <MoreVertical className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>
+                <Pencil className="mr-2 size-4" />
+                {t("edit")}
+              </DropdownMenuItem>
+              <DropdownHelp />
+              <DropdownMenuItem>
+                <PDFIcon className="mr-2 size-4" />
+                {t("pdf_export")}
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <XMLIcon className="mr-2 size-4" />
+                {t("xml_export")}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onSelect={async () => {
+                  const isConfirmed = await confirm({
+                    title: t("delete"),
+                    description: t("delete_confirmation"),
+                    icon: <Trash2 className="size-6 text-destructive" />,
+                    alertDialogTitle: {
+                      className: "flex items-center gap-2",
+                    },
+                  });
+                  if (isConfirmed) {
+                    deleteGradeSheetMutation.mutate(gradesheet.id);
+                  }
+                }}
+                className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+              >
+                <Trash2 className="mr-2 size-4" />
+                {t("delete")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </div>
