@@ -33,11 +33,10 @@ const createGradeSchema = z.object({
   subjectId: z.string().min(1),
   weight: z.coerce.number().nonnegative(),
   name: z.string().min(1),
-  date: z.coerce.date(),
   scale: z.coerce.number().nonnegative(),
   grades: z.array(
     z.object({
-      id: z.string(),
+      studentId: z.string(),
       absent: z.boolean().default(false),
       grade: z.coerce.number().nonnegative(),
     }),
@@ -56,7 +55,7 @@ export function CreateGradeSheet() {
       subjectId: searchParams.get("subject") ?? "",
       weight: 100,
       name: t("harmonized_grade"),
-      date: new Date(),
+
       scale: 20,
     },
   });
@@ -151,7 +150,7 @@ export function CreateGradeSheet() {
                       <Input
                         value={st.id}
                         className="hidden"
-                        {...form.register(`grades.${index}.id`)}
+                        {...form.register(`grades.${index}.studentId`)}
                       />
                       <Input
                         {...form.register(`grades.${index}.grade`)}

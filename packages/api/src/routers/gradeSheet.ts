@@ -1,6 +1,8 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
+import type { Prisma } from "@repo/db";
+
 import { gradeSheetService } from "../services/gradesheet-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -11,11 +13,10 @@ const createGradeSheetSchema = z.object({
   subjectId: z.coerce.number(),
   weight: z.coerce.number().nonnegative(),
   name: z.string().min(1),
-  date: z.coerce.date(),
   scale: z.coerce.number().nonnegative(),
   grades: z.array(
     z.object({
-      id: z.string(),
+      studentId: z.string(),
       absent: z.boolean().default(false),
       grade: z.coerce.number().nonnegative(),
     }),
@@ -47,7 +48,7 @@ export const gradeSheetRouter = createTRPCRouter({
       });
       let errorMessage = "";
       gradeExists.forEach((grade) => {
-        if (grade.weight == 100) {
+        if (grade.weight == 100 && input.weight == 100) {
           errorMessage = "Grade with 100% weight already exists";
         }
       });
@@ -74,7 +75,6 @@ export const gradeSheetRouter = createTRPCRouter({
       const sheet = await ctx.db.gradeSheet.create({
         data: {
           name: input.name,
-          createdAt: input.date,
           scale: input.scale,
           weight: input.weight,
           createdBy: { connect: { id: ctx.session.user.id } },
@@ -83,17 +83,19 @@ export const gradeSheetRouter = createTRPCRouter({
         },
       });
       errorMessage = "";
-      const grades = input.grades.map((grade) => {
-        if (grade.grade > input.scale) {
-          errorMessage = "Grade cannot be greater than scale";
-        }
-        return {
-          grade: grade.grade,
-          studentId: grade.id,
-          gradeSheetId: sheet.id,
-          absent: grade.absent,
-        };
-      });
+      const grades: Prisma.GradeCreateManyInput[] = input.grades.map(
+        (grade) => {
+          if (grade.grade > input.scale) {
+            errorMessage = "Grade cannot be greater than scale";
+          }
+          return {
+            grade: grade.grade,
+            studentId: grade.studentId,
+            gradeSheetId: sheet.id,
+            isAbsent: grade.absent,
+          };
+        },
+      );
       if (errorMessage) {
         throw new TRPCError({
           code: "BAD_REQUEST",

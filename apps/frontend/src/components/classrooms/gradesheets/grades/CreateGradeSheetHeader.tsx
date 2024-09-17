@@ -16,7 +16,6 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 
-import { DatePicker } from "~/components/shared/date-picker";
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
 import { InputField } from "~/components/shared/forms/input-field";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
@@ -37,7 +36,7 @@ export function CreateGradeSheetHeader({
   const form = useFormContext();
   return (
     <div className="grid flex-row gap-2 border-b md:flex">
-      <div className="grid w-[85%] grid-cols-1 items-center gap-x-4 gap-y-2 border-r p-2 lg:grid-cols-2 xl:grid-cols-3">
+      <div className="grid w-[75%] grid-cols-1 items-center gap-x-4 gap-y-2 border-r p-2 md:grid-cols-2">
         <FormField
           control={form.control}
           name="termId"
@@ -67,30 +66,19 @@ export function CreateGradeSheetHeader({
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="date"
-          render={({ field }) => (
-            <FormItem className="space-y-0">
-              <FormLabel>{t("grade_date")}</FormLabel>
-              <FormControl>
-                <DatePicker defaultValue={new Date()} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
         <InputField label={t("grade_name")} name="name" />
-        <InputField name="scale" label={t("grade_scale")} type="number" />
-        <FormField
-          control={form.control}
-          name={"weight"}
-          render={({ field }) => (
-            <FormItem className={cn("space-y-0")}>
-              <FormLabel>{t("weight")} (0-100)</FormLabel>
-              <FormControl>
-                <Input {...field} type="number" />
-                {/* <Slider
+        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+          <InputField name="scale" label={t("grade_scale")} type="number" />
+          <FormField
+            control={form.control}
+            name={"weight"}
+            render={({ field }) => (
+              <FormItem className={cn("space-y-0")}>
+                <FormLabel>{t("weight")} (0-100)</FormLabel>
+                <FormControl>
+                  <Input {...field} type="number" />
+                  {/* <Slider
                   onValueChange={(val) => {
                     setWeight(val[0] ? val[0] : 0);
                     field.onChange(val[0]);
@@ -100,10 +88,11 @@ export function CreateGradeSheetHeader({
                   step={10}
                   className="[&_[role=slider]]:h-8 [&_[role=slider]]:w-5 [&_[role=slider]]:rounded-md [&_[role=slider]]:border-neutral-100/10 [&_[role=slider]]:bg-neutral-900 [&_[role=slider]]:hover:border-[#13EEE3]/70"
                 /> */}
-              </FormControl>
-            </FormItem>
-          )}
-        />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </div>
       </div>
       <div className="flex flex-col justify-between gap-4 py-2">
         {/* <span className="font-semibold">{t("notifications")}</span> */}
