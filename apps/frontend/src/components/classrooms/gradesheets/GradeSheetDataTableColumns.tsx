@@ -74,16 +74,16 @@ export function fetchGradeSheetColumns({
       enableHiding: false,
     },
     {
-      accessorKey: "startDate",
+      accessorKey: "createdAt",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("date")} />
       ),
       cell: ({ row }) => {
-        const startDate = row.original.startDate;
+        const createdAt = row.original.createdAt;
         //const endDate = row.original.endDate;
         return (
           <div>
-            {startDate && startDateFormatter.format(new Date(startDate))}
+            {startDateFormatter.format(createdAt)}
             {/* -{" "}
             {endDate && endDateFormatter.format(new Date(endDate))} */}
           </div>
