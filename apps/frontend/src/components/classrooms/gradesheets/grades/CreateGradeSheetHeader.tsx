@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useParams } from "next/navigation";
 import { useFormContext } from "react-hook-form";
 
@@ -8,10 +7,14 @@ import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
-import FlatBadge from "@repo/ui/FlatBadge";
-import { FormControl, FormField, FormItem, FormLabel } from "@repo/ui/form";
-import { Label } from "@repo/ui/label";
-import { Slider } from "@repo/ui/slider";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@repo/ui/form";
+import { Input } from "@repo/ui/input";
 
 import { DatePicker } from "~/components/shared/date-picker";
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
@@ -21,28 +24,30 @@ import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";
 
-export function CreateGradeSheetHeader() {
+export function CreateGradeSheetHeader({
+  isSubmitting,
+}: {
+  isSubmitting: boolean;
+}) {
   const { t } = useLocale();
   const params = useParams<{ id: string; classroomId: string }>();
   const router = useRouter();
-  const [weight, setWeight] = useState<number>(100);
+
   const { createQueryString } = useCreateQueryString();
   const form = useFormContext();
   return (
     <div className="grid flex-row gap-2 border-b md:flex">
-      <div className="grid w-[85%] grid-cols-1 items-center gap-4 border-r p-2 lg:grid-cols-2 xl:grid-cols-3">
+      <div className="grid w-[85%] grid-cols-1 items-center gap-x-4 gap-y-2 border-r p-2 lg:grid-cols-2 xl:grid-cols-3">
         <FormField
           control={form.control}
           name="termId"
           render={({ field }) => (
-            <FormItem className="space-y-1">
+            <FormItem className="space-y-0">
               <FormLabel>{t("term")} </FormLabel>
               <FormControl>
-                <TermSelector
-                  // defaultValue={field.value ? field.value : null}
-                  onChange={field.onChange}
-                />
+                <TermSelector onChange={field.onChange} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -50,7 +55,7 @@ export function CreateGradeSheetHeader() {
           control={form.control}
           name="subjectId"
           render={({ field }) => (
-            <FormItem className="w-full space-y-1">
+            <FormItem className="w-full space-y-0">
               <FormLabel>{t("subject")}</FormLabel>
               <FormControl>
                 <SubjectSelector
@@ -58,32 +63,34 @@ export function CreateGradeSheetHeader() {
                   classroomId={params.id}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
-        <div className="flex flex-col gap-2">
-          <Label>{t("grade_date")}</Label>
-          <DatePicker defaultValue={new Date()} />
-        </div>
+        <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => (
+            <FormItem className="space-y-0">
+              <FormLabel>{t("grade_date")}</FormLabel>
+              <FormControl>
+                <DatePicker defaultValue={new Date()} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <InputField label={t("grade_name")} name="name" />
         <InputField name="scale" label={t("grade_scale")} type="number" />
         <FormField
           control={form.control}
           name={"weight"}
           render={({ field }) => (
-            <FormItem className={cn("space-y-1")}>
-              <FormLabel>
-                {t("weight")} -{" "}
-                <FlatBadge
-                  variant={
-                    weight <= 25 ? "red" : weight <= 50 ? "yellow" : "green"
-                  }
-                >
-                  {field.value}%
-                </FlatBadge>
-              </FormLabel>
+            <FormItem className={cn("space-y-0")}>
+              <FormLabel>{t("weight")} (0-100)</FormLabel>
               <FormControl>
-                <Slider
+                <Input {...field} type="number" />
+                {/* <Slider
                   onValueChange={(val) => {
                     setWeight(val[0] ? val[0] : 0);
                     field.onChange(val[0]);
@@ -92,7 +99,7 @@ export function CreateGradeSheetHeader() {
                   max={100}
                   step={10}
                   className="[&_[role=slider]]:h-8 [&_[role=slider]]:w-5 [&_[role=slider]]:rounded-md [&_[role=slider]]:border-neutral-100/10 [&_[role=slider]]:bg-neutral-900 [&_[role=slider]]:hover:border-[#13EEE3]/70"
-                />
+                /> */}
               </FormControl>
             </FormItem>
           )}
@@ -117,7 +124,9 @@ export function CreateGradeSheetHeader() {
           >
             {t("cancel")}
           </Button>
-          <Button type="submit">{t("submit")}</Button>
+          <Button isLoading={isSubmitting} type="submit">
+            {t("submit")}
+          </Button>
         </div>
       </div>
     </div>

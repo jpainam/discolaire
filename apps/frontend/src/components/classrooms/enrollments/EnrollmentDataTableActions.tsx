@@ -71,7 +71,7 @@ export function EnrollmentDataTableActions({
   }, [table]);
 
   return (
-    <>
+    <div className="animate-fadeIn fixed inset-x-0 bottom-12 z-50 mx-auto flex h-[60px] max-w-xl items-center justify-between rounded-md border bg-background px-6 py-3 shadow">
       <p className="text-sm font-semibold">
         {rows.length} {t("selected")}
       </p>
@@ -119,7 +119,7 @@ export function EnrollmentDataTableActions({
                     });
                   }
                 }}
-                className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
               >
                 {t("delete")}
               </DropdownMenuItem>
@@ -127,6 +127,6 @@ export function EnrollmentDataTableActions({
           )}
         </DropdownMenuContent>
       </DropdownMenu>
-    </>
+    </div>
   );
 }

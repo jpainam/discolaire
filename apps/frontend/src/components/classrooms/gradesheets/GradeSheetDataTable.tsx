@@ -5,9 +5,8 @@ import { useParams } from "next/navigation";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
-import { DataTable } from "@repo/ui/data-table/data-table";
-import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
-import { useDataTable } from "@repo/ui/data-table/index";
+import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
+import { DataTable, useDataTable } from "@repo/ui/datatable/index";
 
 import { GradeSheetDataTableActions } from "./GradeSheetDataTableActions";
 import { fetchGradeSheetColumns } from "./GradeSheetDataTableColumns";
@@ -33,17 +32,14 @@ export function GradeSheetDataTable({
   const { table } = useDataTable({
     columns: columns,
     data: gradesheets,
-    pageCount: 1,
+    rowCount: gradesheets.length,
   });
   return (
-    <DataTable className="px-2" variant="normal" table={table}>
-      <DataTableToolbar
-        searchPlaceholder={t("search")}
-        table={table}
-        //filterFields={filterFields}
-      >
-        <GradeSheetDataTableActions table={table} />
-      </DataTableToolbar>
+    <DataTable
+      table={table}
+      floatingBar={<GradeSheetDataTableActions table={table} />}
+    >
+      <DataTableToolbar table={table} />
     </DataTable>
   );
 }

@@ -1,9 +1,12 @@
 import type { Table } from "@tanstack/react-table";
 import * as React from "react";
-import { ChevronsUpDown } from "lucide-react";
+import { ChevronsUpDown, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +15,8 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 
+import { api } from "~/trpc/react";
+
 type User = RouterOutputs["user"]["all"][number];
 interface TasksTableFloatingBarProps {
   table: Table<User>;
@@ -19,6 +24,18 @@ interface TasksTableFloatingBarProps {
 
 export function UserDataTableAction({ table }: TasksTableFloatingBarProps) {
   const rows = table.getFilteredSelectedRowModel().rows;
+  const utils = api.useUtils();
+  const { t } = useLocale();
+  const deleteUsersMutation = api.user.delete.useMutation({
+    onSettled: () => utils.user.invalidate(),
+    onSuccess: () => {
+      table.toggleAllRowsSelected(false);
+      toast.success("deleted_successfully", { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
 
   // Clear selection on Escape key press
   React.useEffect(() => {
@@ -32,73 +49,45 @@ export function UserDataTableAction({ table }: TasksTableFloatingBarProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [table]);
 
+  const confirm = useConfirm();
+
   return (
-    <>
-      <p className="text-sm font-semibold">{rows.length} selected</p>
+    <div className="animate-fadeIn fixed inset-x-0 bottom-12 z-50 mx-auto flex h-[60px] max-w-xl items-center justify-between rounded-md border bg-background px-6 py-3 shadow">
+      <p className="text-sm font-semibold">
+        {rows.length} {t("selected")}
+      </p>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant={"outline"}>
-            Bulk Actions <ChevronsUpDown className="ml-1 h-4 w-4" />
+            {t("bulk_actions")} <ChevronsUpDown className="ml-1 h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem>Export in csv</DropdownMenuItem>
           <DropdownMenuItem>Export in excel</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="text-destructive focus:text-destructive">
-            Delete
+          <DropdownMenuItem
+            onSelect={async () => {
+              const isConfirmed = await confirm({
+                title: t("delete"),
+                description: t("delete_confirmation"),
+                icon: <Trash2 className="h-6 w-6 text-destructive" />,
+                alertDialogTitle: {
+                  className: "flex items-center gap-2",
+                },
+              });
+              if (isConfirmed) {
+                toast.loading("deleting", { id: 0 });
+                const selectedIds = rows.map((row) => row.original.id);
+                deleteUsersMutation.mutate(selectedIds);
+              }
+            }}
+            className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+          >
+            {t("delete")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </>
-    // <div className="fixed inset-x-0 bottom-10 z-50 mx-auto w-fit px-4">
-    //   <div className="w-full overflow-x-auto">
-    //     <div className="shadow-3xl mx-auto flex w-fit items-center gap-2 rounded-md border bg-card p-2">
-    //       <div className="flex h-7 items-center rounded-md border border-dashed pl-2.5 pr-1">
-    //         <span className="whitespace-nowrap text-xs">
-    //           {rows.length} selected
-    //         </span>
-    //         <Separator orientation="vertical" className="ml-2 mr-1" />
-    //         <Tooltip>
-    //           <TooltipTrigger asChild>
-    //             <Button
-    //               variant="ghost"
-    //               size="icon"
-    //               className="size-5 hover:border"
-    //               onClick={() => table.toggleAllRowsSelected(false)}
-    //             >
-    //               <Cross2Icon
-    //                 className="size-3.5 shrink-0"
-    //                 aria-hidden="true"
-    //               />
-    //             </Button>
-    //           </TooltipTrigger>
-    //           <TooltipContent className="flex items-center border bg-accent px-2 py-1 font-semibold text-foreground dark:bg-zinc-900">
-    //             <p className="mr-2">Clear selection</p>
-    //           </TooltipContent>
-    //         </Tooltip>
-    //       </div>
-    //       <Separator orientation="vertical" className="hidden h-5 sm:block" />
-    //       <div className="flex items-center gap-1.5">
-    //         <DropdownMenu>
-    //           <DropdownMenuTrigger asChild>
-    //             <Button variant={"outline"}>
-    //               Bulk Actions
-    //               <ChevronsUpDown className="ml-1 h-4 w-4" />
-    //             </Button>
-    //           </DropdownMenuTrigger>
-    //           <DropdownMenuContent>
-    //             <DropdownMenuLabel>My Account</DropdownMenuLabel>
-    //             <DropdownMenuSeparator />
-    //             <DropdownMenuItem>Profile</DropdownMenuItem>
-    //             <DropdownMenuItem>Billing</DropdownMenuItem>
-    //             <DropdownMenuItem>Team</DropdownMenuItem>
-    //             <DropdownMenuItem>Subscription</DropdownMenuItem>
-    //           </DropdownMenuContent>
-    //         </DropdownMenu>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
+    </div>
   );
 }

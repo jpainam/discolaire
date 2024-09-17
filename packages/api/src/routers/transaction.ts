@@ -90,7 +90,7 @@ export const transactionRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(
       z.object({
-        ids: z.union([z.number(), z.array(z.number())]),
+        ids: z.union([z.coerce.number(), z.array(z.coerce.number())]),
         observation: z.string().optional(),
       }),
     )

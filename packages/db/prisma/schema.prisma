@@ -249,22 +249,21 @@ model CalendarEvent {
 }
 
 model GradeSheet {
-    id          Int       @id @default(autoincrement())
+    id          Int      @id @default(autoincrement())
     name        String
-    startDate   DateTime? @default(now()) @db.Timestamp(6)
-    endDate     DateTime? @default(now()) @db.Timestamp(6)
-    isActive    Boolean?  @default(true)
-    createdAt   DateTime  @default(now()) @db.Timestamp(6)
-    updatedAt   DateTime  @updatedAt
-    createdBy   String?
+    isActive    Boolean? @default(true)
+    createdAt   DateTime @default(now()) @db.Timestamp(6)
+    updatedAt   DateTime @updatedAt
+    createdById String?
     observation String?
-    weight      Float     @default(1)
-    scale       Float     @default(20)
+    weight      Float    @default(100)
+    scale       Float    @default(20)
     subjectId   Int
     termId      Int
     grades      Grade[]
-    subject     Subject   @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-    term        Term      @relation(fields: [termId], references: [id], onDelete: Cascade)
+    createdBy   User?    @relation(fields: [createdById], references: [id])
+    subject     Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
 }
 
 model Grade {
@@ -974,6 +973,7 @@ model User {
     AccountingGroup AccountingGroup[]
     FeeType         FeeType[]
     transactions    Transaction[]
+    GradeSheet      GradeSheet[]
 }
 
 model VerificationToken {

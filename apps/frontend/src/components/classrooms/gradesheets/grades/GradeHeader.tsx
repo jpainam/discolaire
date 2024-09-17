@@ -75,9 +75,7 @@ export function GradeHeader({
         </span>
         <span> Note sur : 20.00</span>
         <span> {gradesheet.subject.teacher?.lastName}</span>
-        <span>
-          {gradesheet.startDate && dateFormatter.format(gradesheet.startDate)}
-        </span>
+        <span>{dateFormatter.format(gradesheet.createdAt)}</span>
         <span>
           {" "}
           {t("max_grade")} : {maxGrade}

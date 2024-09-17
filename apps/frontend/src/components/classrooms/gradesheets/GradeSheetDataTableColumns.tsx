@@ -23,7 +23,6 @@ import {
 import FlatBadge from "@repo/ui/FlatBadge";
 
 import { routes } from "~/configs/routes";
-import { getErrorMessage } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
@@ -39,7 +38,7 @@ export function fetchGradeSheetColumns({
   classroomId: string;
 }): ColumnDef<ClassroomGradeSheetProcedureOutput, unknown>[] {
   const startDateFormatter = Intl.DateTimeFormat(i18next.language, {
-    month: "short",
+    month: "numeric",
     day: "numeric",
     year: "numeric",
   });
@@ -91,24 +90,24 @@ export function fetchGradeSheetColumns({
         );
       },
     },
-    {
-      accessorKey: "name",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("name")} />
-      ),
-      cell: ({ row }) => {
-        const grade = row.original;
-        return (
-          <Link
-            className="hover:text-blue-600 hover:underline"
-            href={routes.classrooms.gradesheets.details(classroomId, grade.id)}
-          >
-            {grade.name}
-          </Link>
-        );
-      },
-      enableSorting: true,
-    },
+    // {
+    //   accessorKey: "name",
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title={t("name")} />
+    //   ),
+    //   cell: ({ row }) => {
+    //     const grade = row.original;
+    //     return (
+    //       <Link
+    //         className="hover:text-blue-600 hover:underline"
+    //         href={routes.classrooms.gradesheets.details(classroomId, grade.id)}
+    //       >
+    //         {grade.name}
+    //       </Link>
+    //     );
+    //   },
+    //   enableSorting: true,
+    // },
     {
       accessorKey: "subject.course.reportName",
       header: ({ column }) => (
@@ -255,18 +254,26 @@ function ActionCells({
 }) {
   const confirm = useConfirm();
   const { t } = useLocale();
-  const deleteGradeSheetMutation = api.gradeSheet.delete.useMutation();
   const utils = api.useUtils();
+  const deleteGradeSheetMutation = api.gradeSheet.delete.useMutation({
+    onSettled: async () => {
+      await utils.gradeSheet.invalidate();
+      await utils.grade.invalidate();
+    },
+    onSuccess: () => {
+      toast.success("deleted_successfully", { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
+
   const router = useRouter();
   return (
     <div className="flex justify-end">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            aria-label="Open menu"
-            variant="ghost"
-            className="flex size-8 p-0 data-[state=open]:bg-muted"
-          >
+          <Button aria-label="Open menu" size={"icon"} variant="ghost">
             <DotsHorizontalIcon className="size-4" aria-hidden="true" />
           </Button>
         </DropdownMenuTrigger>
@@ -302,22 +309,14 @@ function ActionCells({
               const isConfirmed = await confirm({
                 title: t("delete"),
                 description: t("delete_confirmation"),
+                icon: <Trash2 className="h-6 w-6 text-destructive" />,
+                alertDialogTitle: {
+                  className: "flex items-center gap-2",
+                },
               });
               if (isConfirmed) {
-                toast.promise(
-                  deleteGradeSheetMutation.mutateAsync(gradesheet.id),
-                  {
-                    loading: t("deleting"),
-                    success: () => {
-                      void utils.gradeSheet.invalidate();
-                      void utils.grade.invalidate();
-                      return t("deleted_successfully");
-                    },
-                    error: (error) => {
-                      return getErrorMessage(error);
-                    },
-                  },
-                );
+                toast.loading("deleting", { id: 0 });
+                deleteGradeSheetMutation.mutate(gradesheet.id);
               }
             }}
           >

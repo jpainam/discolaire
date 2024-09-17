@@ -1,9 +1,9 @@
 "use client";
 
-import { useParams, useSearchParams } from "next/navigation";
-import { ChevronDown, Printer } from "lucide-react";
+import { useParams } from "next/navigation";
+import { MoreVertical, PlusIcon } from "lucide-react";
+import { useQueryState } from "nuqs";
 
-import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -19,50 +19,61 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { routes } from "~/configs/routes";
 
 export function GradeSheetHeader() {
   const params = useParams<{ id: string }>();
-  const searchParams = useSearchParams();
+
+  const [term, setTerm] = useQueryState("term", { shallow: false });
+  const [subject, setSubject] = useQueryState("subject", { shallow: false });
   const { t } = useLocale();
   const router = useRouter();
-  const { createQueryString } = useCreateQueryString();
+
   return (
     <div className="grid flex-row items-center gap-2 bg-muted/40 px-2 py-1 md:flex md:border-b">
       <Label className="hidden w-[70px] md:flex">{t("term")}</Label>
       <TermSelector
         showAllOption={true}
-        defaultValue={searchParams.get("term")}
+        defaultValue={term ?? undefined}
         onChange={(val) => {
-          router.push(`?${createQueryString({ term: val })}`);
+          void setTerm(val);
         }}
         className="w-[300px]"
       />
       <Label className="hidden w-[75px] md:flex">{t("subject")}</Label>
       <SubjectSelector
         className="md:w-[350px]"
-        defaultValue={searchParams.get("subject") ?? ""}
+        defaultValue={subject ?? undefined}
         onChange={(val) => {
-          router.push(`?${createQueryString({ subject: val })}`);
+          void setSubject(val ?? null);
         }}
         classroomId={params.id}
       />
-      <div className="ml-auto">
+      <div className="ml-auto flex flex-row items-center gap-2">
+        <Button
+          onClick={() => {
+            router.push(routes.classrooms.gradesheets.create(params.id));
+          }}
+          variant={"default"}
+          size={"sm"}
+        >
+          <PlusIcon className="mr-2 h-4 w-4" />
+          {t("new")}
+        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} className="flex flex-row gap-1">
-              <Printer className="h-4 w-4" />
-              {t("print")}
-              <ChevronDown className="h-4 w-4" />
+            <Button variant={"outline"} size={"icon"}>
+              <MoreVertical className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem>
               <PDFIcon className="mr-2 h-4 w-4" />
-              Liste des notes
+              {t("pdf_export")}
             </DropdownMenuItem>
             <DropdownMenuItem>
               <XMLIcon className="mr-2 h-4 w-4" />
-              Liste des notes
+              {t("xml_export")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

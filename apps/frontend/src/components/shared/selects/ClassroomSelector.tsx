@@ -14,7 +14,6 @@ import {
   CommandList,
 } from "@repo/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
-import { ScrollArea } from "@repo/ui/scroll-area";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { showErrorToast } from "~/lib/handle-error";
@@ -101,28 +100,26 @@ export function ClassroomSelector({
           <CommandList>
             <CommandEmpty>{t("select_an_option")}</CommandEmpty>
             <CommandGroup>
-              <ScrollArea className="h-[300px] w-full">
-                {items.map((item) => (
-                  <CommandItem
-                    key={item.value}
-                    className="overflow-hidden"
-                    value={item.value}
-                    onSelect={(currentValue) => {
-                      onChange?.(currentValue == value ? null : currentValue);
-                      setValue(currentValue === value ? "" : currentValue);
-                      setOpen(false);
-                    }}
-                  >
-                    <Check
-                      className={cn(
-                        "mr-2 h-4 w-4",
-                        value === item.value ? "opacity-100" : "opacity-0",
-                      )}
-                    />
-                    {item.label}
-                  </CommandItem>
-                ))}
-              </ScrollArea>
+              {items.map((item) => (
+                <CommandItem
+                  key={item.value}
+                  className="overflow-hidden"
+                  value={item.value}
+                  onSelect={(currentValue) => {
+                    onChange?.(currentValue == value ? null : currentValue);
+                    setValue(currentValue === value ? "" : currentValue);
+                    setOpen(false);
+                  }}
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      value === item.value ? "opacity-100" : "opacity-0",
+                    )}
+                  />
+                  {item.label}
+                </CommandItem>
+              ))}
             </CommandGroup>
           </CommandList>
         </Command>

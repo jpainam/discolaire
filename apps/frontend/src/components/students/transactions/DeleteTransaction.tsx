@@ -23,7 +23,7 @@ const deleteTransactionSchema = z.object({
 export function DeleteTransaction({
   transactionId,
 }: {
-  transactionId: number;
+  transactionId: number | number[];
 }) {
   const form = useForm({
     schema: deleteTransactionSchema,

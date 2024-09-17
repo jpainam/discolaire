@@ -23,3 +23,20 @@ export const createUpdateStudentSchema = z.object({
   tags: z.array(z.string()).optional(),
   observation: z.string().optional(),
 });
+
+// export const createGradeSheetSchema = z.object({
+//   notifyParents: z.boolean().default(true),
+//   notifyStudents: z.boolean().default(true),
+//   termId: z.coerce.number(),
+//   subjectId: z.coerce.number(),
+//   weight: z.coerce.number().nonnegative(),
+//   name: z.string().optional(),
+//   date: z.coerce.date(),
+//   scale: z.coerce.number().nonnegative(),
+//   grades: z.array(
+//     z.object({
+//       id: z.string(),
+//       grade: z.coerce.number().nonnegative(),
+//     }),
+//   ),
+// });
