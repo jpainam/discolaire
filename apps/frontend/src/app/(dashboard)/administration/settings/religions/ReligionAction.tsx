@@ -15,7 +15,7 @@ export function ReligionAction() {
     <Button
       onClick={() => {
         openModal({
-          className: "w-[400px] p-2",
+          className: "w-[400px]",
           title: t("create"),
           view: <CreateEditReligion />,
         });

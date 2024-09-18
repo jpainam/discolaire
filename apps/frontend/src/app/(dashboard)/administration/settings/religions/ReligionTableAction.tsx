@@ -53,7 +53,7 @@ export function ReligionTableAction({
         <DropdownMenuItem
           onClick={() => {
             openModal({
-              className: "w-[400px] p-2",
+              className: "w-[400px]",
               title: t("edit"),
               view: <CreateEditReligion id={id} name={name} />,
             });

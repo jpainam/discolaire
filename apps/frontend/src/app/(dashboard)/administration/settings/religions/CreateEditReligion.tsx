@@ -21,7 +21,7 @@ import { Input } from "@repo/ui/input";
 import { api } from "~/trpc/react";
 
 const createReligionSchema = z.object({
-  name: z.string(),
+  name: z.string().min(1),
 });
 export function CreateEditReligion({
   id,
