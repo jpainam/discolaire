@@ -38,7 +38,7 @@ const createUpdateSchema = z.object({
   formerSchoolId: z.string().optional(),
   countryId: z.string().optional(),
   isBaptized: z.boolean().optional().default(false),
-  denominationId: z.string().optional(),
+  religionId: z.string().optional(),
   dateOfEntry: z.coerce.date().optional(),
   dateOfExit: z.coerce.date().optional(),
   tags: z.array(z.string()).optional(),
@@ -176,7 +176,7 @@ export const studentRouter = createTRPCRouter({
       include: {
         formerSchool: true,
         country: true,
-        denomination: true,
+        religion: true,
         studentContacts: {
           include: {
             contact: true,

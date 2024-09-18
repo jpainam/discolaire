@@ -34,7 +34,7 @@ export function UpdateStudent({ student }: { student: Student }) {
       dateOfEntry: student.dateOfEntry ?? new Date(),
       formerSchoolId: student.formerSchoolId ?? "",
       observation: student.observation ?? "",
-      denominationId: student.denominationId ?? "",
+      religionId: student.religionId ?? "",
       isBaptized: student.isBaptized,
     },
   });

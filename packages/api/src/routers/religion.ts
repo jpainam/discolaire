@@ -2,9 +2,9 @@ import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
-export const denominationRouter = createTRPCRouter({
+export const religionRouter = createTRPCRouter({
   all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.denomination.findMany({
+    return ctx.db.religion.findMany({
       include: {
         createdBy: true,
       },
@@ -14,7 +14,7 @@ export const denominationRouter = createTRPCRouter({
     });
   }),
   get: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
-    return ctx.db.denomination.findUnique({
+    return ctx.db.religion.findUnique({
       where: {
         id: input,
       },
@@ -23,7 +23,7 @@ export const denominationRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(({ ctx, input }) => {
-      return ctx.db.denomination.deleteMany({
+      return ctx.db.religion.deleteMany({
         where: {
           id: {
             in: Array.isArray(input) ? input : [input],
@@ -39,7 +39,7 @@ export const denominationRouter = createTRPCRouter({
       }),
     )
     .mutation(({ ctx, input }) => {
-      return ctx.db.denomination.update({
+      return ctx.db.religion.update({
         where: {
           id: input.id,
         },
@@ -56,7 +56,7 @@ export const denominationRouter = createTRPCRouter({
       }),
     )
     .mutation(({ ctx, input }) => {
-      return ctx.db.denomination.create({
+      return ctx.db.religion.create({
         data: {
           name: input.name,
           createdBy: { connect: { id: ctx.session.user.id } },

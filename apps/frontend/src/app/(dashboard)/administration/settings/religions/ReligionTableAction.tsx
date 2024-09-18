@@ -17,9 +17,9 @@ import {
 } from "@repo/ui/dropdown-menu";
 
 import { api } from "~/trpc/react";
-import { CreateEditDenomination } from "./CreateEditDenomination";
+import { CreateEditReligion } from "./CreateEditReligion";
 
-export function DenominationTableAction({
+export function ReligionTableAction({
   id,
   name,
 }: {
@@ -32,8 +32,8 @@ export function DenominationTableAction({
   const router = useRouter();
   const utils = api.useUtils();
   const { openModal } = useModal();
-  const deleteDenomination = api.denomination.delete.useMutation({
-    onSettled: () => utils.denomination.invalidate(),
+  const deleteReligion = api.religion.delete.useMutation({
+    onSettled: () => utils.religion.invalidate(),
     onSuccess: () => {
       toast.success(t("deleted_successfully"), { id: 0 });
       router.refresh();
@@ -55,7 +55,7 @@ export function DenominationTableAction({
             openModal({
               className: "w-[400px] p-2",
               title: t("edit"),
-              view: <CreateEditDenomination id={id} name={name} />,
+              view: <CreateEditReligion id={id} name={name} />,
             });
           }}
         >
@@ -77,7 +77,7 @@ export function DenominationTableAction({
             });
             if (isConfirmed) {
               toast.loading(t("deleting"), { id: 0 });
-              deleteDenomination.mutate(id);
+              deleteReligion.mutate(id);
             }
           }}
         >

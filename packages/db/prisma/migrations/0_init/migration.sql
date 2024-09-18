@@ -445,7 +445,7 @@ CREATE TABLE "Student" (
     "gender" TEXT,
     "churchFamily" TEXT,
     "pastorName" TEXT,
-    "denomination" TEXT,
+    "religion" TEXT,
     "isChurchMember" BOOLEAN NOT NULL DEFAULT false,
     "churchAttendanceFrequency" TEXT,
     "isBaptized" BOOLEAN NOT NULL DEFAULT false,

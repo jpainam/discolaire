@@ -62,9 +62,9 @@ export default async function Page({
         <span>{student.firstName ?? "N/A"} </span>
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <PiChurchDuotone className="h-4 w-4 stroke-1" />
-          {t("denomination")}
+          {t("religion")}
         </span>
-        <span>{student.denomination ? student.denomination.name : "N/A"}</span>
+        <span>{student.religion ? student.religion.name : "N/A"}</span>
         <span className="flex flex-row items-center gap-1 text-muted-foreground md:text-xs 2xl:text-sm">
           <Cake className="h-4 w-4 stroke-1" />
           {t("dateOfBirth")}

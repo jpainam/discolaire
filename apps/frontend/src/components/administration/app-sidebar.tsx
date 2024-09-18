@@ -157,8 +157,8 @@ export function AppSidebar() {
         icon: Settings,
         items: [
           {
-            title: t("denominations"),
-            url: "/administration/settings/denominations",
+            title: t("religions"),
+            url: "/administration/settings/religions",
           },
           {
             title: "Team",

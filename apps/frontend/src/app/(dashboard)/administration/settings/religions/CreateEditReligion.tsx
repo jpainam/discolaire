@@ -20,10 +20,10 @@ import { Input } from "@repo/ui/input";
 
 import { api } from "~/trpc/react";
 
-const createDenominationSchema = z.object({
+const createReligionSchema = z.object({
   name: z.string(),
 });
-export function CreateEditDenomination({
+export function CreateEditReligion({
   id,
   name,
 }: {
@@ -31,7 +31,7 @@ export function CreateEditDenomination({
   name?: string;
 }) {
   const form = useForm({
-    schema: createDenominationSchema,
+    schema: createReligionSchema,
     defaultValues: {
       name: name ?? "",
     },
@@ -40,8 +40,8 @@ export function CreateEditDenomination({
   const utils = api.useUtils();
   const { t } = useLocale();
   const router = useRouter();
-  const createDenominationMutation = api.denomination.create.useMutation({
-    onSettled: () => utils.denomination.invalidate(),
+  const createReligionMutation = api.religion.create.useMutation({
+    onSettled: () => utils.religion.invalidate(),
     onSuccess: () => {
       toast.success("created_successfully", { id: 0 });
       router.refresh();
@@ -52,7 +52,7 @@ export function CreateEditDenomination({
     },
   });
 
-  const updateDenominationMutation = api.denomination.update.useMutation({
+  const updateReligionMutation = api.religion.update.useMutation({
     onSettled: () => utils.accounting.groups.invalidate(),
     onSuccess: () => {
       toast.success("updated_successfully", { id: 0 });
@@ -63,16 +63,16 @@ export function CreateEditDenomination({
       toast.error(error.message, { id: 0 });
     },
   });
-  const onSubmit = (data: z.infer<typeof createDenominationSchema>) => {
+  const onSubmit = (data: z.infer<typeof createReligionSchema>) => {
     if (id) {
       toast.loading("updating", { id: 0 });
-      updateDenominationMutation.mutate({
+      updateReligionMutation.mutate({
         id: id,
         name: data.name,
       });
     } else {
       toast.loading("creating", { id: 0 });
-      createDenominationMutation.mutate({ name: data.name });
+      createReligionMutation.mutate({ name: data.name });
     }
   };
 
@@ -109,8 +109,8 @@ export function CreateEditDenomination({
           <Button
             size={"sm"}
             isLoading={
-              createDenominationMutation.isPending ||
-              updateDenominationMutation.isPending
+              createReligionMutation.isPending ||
+              updateReligionMutation.isPending
             }
             variant={"default"}
           >

@@ -77,6 +77,9 @@ export function StudentContactTable({
   const canDeleteStudentContact = useCheckPermissions(
     PermissionAction.DELETE,
     "student:contact",
+    {
+      id: studentId,
+    },
   );
 
   if (studentContactsQuery.isPending) {

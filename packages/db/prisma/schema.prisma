@@ -434,7 +434,7 @@ model Student {
     placeOfBirth       String?
     residence          String?
     gender             String?
-    denominationId     String?
+    religionId         String?
     isBaptized         Boolean          @default(false)
     phoneNumber        String?
     parentDivorced     Boolean          @default(false)
@@ -449,6 +449,9 @@ model Student {
     updatedAt          DateTime         @updatedAt
     createdBy          String?
     formerSchoolId     String?
+    achievements       Json?
+    hobbies            Json?
+    socialMedias       Json?
     enrollments        Enrollment[]
     grades             Grade[]
     country            Country?         @relation(fields: [countryId], references: [id])
@@ -461,7 +464,9 @@ model Student {
     attendances        Attendance[]
     classrooms         Classroom[]      @relation("classroomLeader")
     reportCards        ReportCard[]
-    denomination       Denomination?    @relation(fields: [denominationId], references: [id])
+    religion           Religion?        @relation(fields: [religionId], references: [id])
+    sports             StudentSport[]
+    clubs              StudentClub[]
 }
 
 model StudentSibling {
@@ -968,8 +973,10 @@ model User {
     AccountingGroup AccountingGroup[]
     FeeType         FeeType[]
     transactions    Transaction[]
-    GradeSheet      GradeSheet[]
-    Denomination    Denomination[]
+    gradeSheets     GradeSheet[]
+    Religion        Religion[]
+    clubs           Club[]            @relation("president")
+    clubs2          Club[]            @relation("deputy")
 }
 
 model VerificationToken {
@@ -987,7 +994,7 @@ enum AttendanceType {
     PERIODICALLY
 }
 
-model Denomination {
+model Religion {
     id          String    @id @default(cuid())
     name        String
     createdById String
@@ -995,4 +1002,41 @@ model Denomination {
     createdAt   DateTime  @default(now()) @db.Timestamp(6)
     updatedAt   DateTime  @updatedAt
     students    Student[]
+}
+
+model Club {
+    id          String        @id @default(cuid())
+    name        String
+    description String?
+    createdAt   DateTime      @default(now()) @db.Timestamp(6)
+    updatedAt   DateTime      @updatedAt
+    presidentId String?
+    president   User?         @relation("president", fields: [presidentId], references: [id])
+    deputyId    String?
+    deputy      User?         @relation("deputy", fields: [deputyId], references: [id])
+    StudentClub StudentClub[]
+}
+
+model StudentClub {
+    studentId String
+    clubId    String
+    club      Club    @relation(fields: [clubId], references: [id], onDelete: Cascade)
+    student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+    @@id([studentId, clubId])
+}
+
+model StudentSport {
+    studentId String
+    sportId   String
+    sport     Sport   @relation(fields: [sportId], references: [id], onDelete: Cascade)
+    student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+    @@id([studentId, sportId])
+}
+
+model Sport {
+    id       String         @id @default(cuid())
+    name     String
+    students StudentSport[]
 }

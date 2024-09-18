@@ -15,20 +15,20 @@ import {
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
-interface DenominationSelectorProps {
+interface ReligionSelectorProps {
   className?: string;
   defaultValue?: string | null;
   onChange?: (value: string) => void;
 }
-export function DenominationSelector({
+export function ReligionSelector({
   className,
   onChange,
   defaultValue,
-}: DenominationSelectorProps) {
+}: ReligionSelectorProps) {
   const { t } = useLocale();
-  const denominationsQuery = api.denomination.all.useQuery();
-  if (denominationsQuery.error) {
-    toast.error(denominationsQuery.error.message);
+  const religionsQuery = api.religion.all.useQuery();
+  if (religionsQuery.error) {
+    toast.error(religionsQuery.error.message);
   }
   return (
     <Select
@@ -38,15 +38,15 @@ export function DenominationSelector({
       }}
     >
       <SelectTrigger className={cn("w-full", className)}>
-        <SelectValue placeholder={t("denomination")} />
+        <SelectValue placeholder={t("religion")} />
       </SelectTrigger>
       <SelectContent>
-        {denominationsQuery.data?.map((denomination) => (
-          <SelectItem key={denomination.id} value={denomination.id}>
-            {denomination.name}
+        {religionsQuery.data?.map((religion) => (
+          <SelectItem key={religion.id} value={religion.id}>
+            {religion.name}
           </SelectItem>
         ))}
-        {denominationsQuery.isPending && (
+        {religionsQuery.isPending && (
           <SelectItem value="loading">
             <Loader className="h-4 w-4 animate-spin" />
           </SelectItem>

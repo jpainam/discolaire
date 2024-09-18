@@ -26,7 +26,7 @@ export function ChurchDetailsForm() {
   const schema = z.object({
     churchFamily: z.string().min(1),
     pastorName: z.string().optional(),
-    denomination: z.string().min(1),
+    religion: z.string().min(1),
     churchAttendanceFrequency: z.string().min(1),
     isChurchMember: z.boolean().optional(),
     isBaptized: z.boolean().optional(),
@@ -37,7 +37,7 @@ export function ChurchDetailsForm() {
     defaultValues: {
       churchFamily: "",
       pastorName: "",
-      denomination: "",
+      religion: "",
       churchAttendanceFrequency: "",
       isChurchMember: false,
       isBaptized: false,
@@ -67,8 +67,8 @@ export function ChurchDetailsForm() {
           />
           <InputField
             inputClassName="h-8"
-            name="denomination"
-            label={t("denomination")}
+            name="religion"
+            label={t("religion")}
           />
         </div>
         <Separator />

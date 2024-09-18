@@ -6,9 +6,9 @@ import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 
-import { CreateEditDenomination } from "./CreateEditDenomination";
+import { CreateEditReligion } from "./CreateEditReligion";
 
-export function DenominationAction() {
+export function ReligionAction() {
   const { t } = useLocale();
   const { openModal } = useModal();
   return (
@@ -17,7 +17,7 @@ export function DenominationAction() {
         openModal({
           className: "w-[400px] p-2",
           title: t("create"),
-          view: <CreateEditDenomination />,
+          view: <CreateEditReligion />,
         });
       }}
       variant={"default"}
