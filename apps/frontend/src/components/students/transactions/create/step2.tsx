@@ -46,6 +46,7 @@ export function Step2({
 }) {
   const router = useRouter();
   const params = useParams<{ id: string }>();
+  const studentId = params.id;
   const sendNotification = api.messaging.sendEmail.useMutation({
     onSuccess: () => {
       toast.success(t("email_sent_successfully"), { id: 0 });
@@ -54,7 +55,11 @@ export function Step2({
       toast.error(error.message, { id: 0 });
     },
   });
+  const utils = api.useUtils();
   const createTransactionMutation = api.transaction.create.useMutation({
+    onSettled: async () => {
+      await utils.student.transactions.invalidate(studentId);
+    },
     onSuccess: async (result) => {
       toast.success(t("created_successfully"), { id: 0 });
       const emailHtml = await render(
@@ -93,7 +98,7 @@ export function Step2({
     createTransactionMutation.mutate({
       method: paymentMethod,
       description: description,
-      studentId: params.id,
+      studentId: studentId,
       transactionType: transactionType,
       amount: Number(amount),
     });
