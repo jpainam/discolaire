@@ -28,6 +28,7 @@ export function TopRightMenu({ className }: { className?: string }) {
 
 export function TopRightButtons() {
   const { openModal } = useModal();
+  //const isActive = false;
   const { t } = useLocale("description");
   return (
     <div className="hidden items-center gap-1 pl-2 md:flex">
@@ -82,6 +83,21 @@ export function TopRightButtons() {
         </Button>
       </SimpleTooltip>
       <SimpleTooltip content="Imprimer">
+        {/* <Button
+          variant={"ghost"}
+          size={"icon"}
+          aria-busy={isActive}
+          className="relative size-8"
+        >
+          <div className="absolute -right-1 -top-1 rounded-full bg-transparent bg-white p-0.5">
+            {isActive ? (
+              <Loader2 className="h-3 w-3 animate-spin text-yellow-400" />
+            ) : (
+              <Check className="h-3 w-3 text-green-500" />
+            )}
+          </div>
+          <Printer className="h-4 w-4 text-gray-600" />
+        </Button> */}
         <Button
           className="size-8"
           size={"icon"}

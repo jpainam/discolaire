@@ -1,7 +1,10 @@
 "use client";
 
+import { PiChurchDuotone } from "react-icons/pi";
+
 import { useLocale } from "@repo/i18n";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import { Checkbox } from "@repo/ui/checkbox";
 import {
   FormControl,
   FormField,
@@ -10,56 +13,52 @@ import {
   FormMessage,
   useFormContext,
 } from "@repo/ui/form";
-import MultipleSelector from "@repo/ui/multiple-selector";
 
-import { DatePickerField } from "~/components/shared/forms/date-picker-field";
-import { InputField } from "~/components/shared/forms/input-field";
-import { api } from "~/trpc/react";
+import { DenominationSelector } from "~/components/shared/selects/DenominationSelector";
 
 export function CreateUpdateDenom() {
   const { t } = useLocale();
   const form = useFormContext();
-  const financeGroupQuery = api.accounting.groups.useQuery();
 
   return (
     <Card className="rounded-md">
       <CardHeader className="border-b bg-muted/50 py-2.5">
-        <CardTitle className="text-sm">{t("information")}</CardTitle>
+        <CardTitle className="flex items-center gap-1 text-sm">
+          <PiChurchDuotone className="h-4 w-4" />
+          {t("denomination")}
+        </CardTitle>
         {/* <CardDescription></CardDescription> */}
       </CardHeader>
       <CardContent className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <InputField
-          name="lastName"
-          placeholder={t("lastName")}
-          label={t("lastName")}
-        />
-        <InputField
-          name="firstName"
-          placeholder={t("firstName")}
-          label={t("firstName")}
-        />
-
-        <DatePickerField
-          placeholder={t("dateOfBirth")}
-          name="dateOfBirth"
-          label={t("dateOfBirth")}
-        />
         <FormField
           control={form.control}
-          name="applicableFees"
+          name="denominationId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Frais appliqués</FormLabel>
+              <FormLabel>{t("denomination")}</FormLabel>
               <FormControl>
-                <MultipleSelector
-                  {...field}
-                  options={financeGroupQuery.data?.map((g) => {
-                    return { label: g.name, value: g.id };
-                  })} // using 'options' instead of 'defaultOptions' because they have an async source and I'm not early returning a loading state while waiting for fetching to finish
-                  hidePlaceholderWhenSelected
+                <DenominationSelector {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="isBaptized"
+          render={({ field }) => (
+            <FormItem className="mt-10 flex flex-row items-start space-x-3 space-y-0">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
                 />
               </FormControl>
-              <FormMessage />
+              <div className="space-y-1 leading-none">
+                <FormLabel>{t("baptized")} ?</FormLabel>
+              </div>
             </FormItem>
           )}
         />

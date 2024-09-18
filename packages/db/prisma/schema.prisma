@@ -423,50 +423,45 @@ model Staff {
 }
 
 model Student {
-    id                        String           @id @default(uuid())
-    avatar                    String?
-    registrationNumber        String?
-    isActive                  Boolean          @default(true)
-    email                     String?
-    firstName                 String?
-    lastName                  String?
-    dateOfBirth               DateTime?        @db.Date
-    placeOfBirth              String?
-    residence                 String?
-    gender                    String?
-    churchFamily              String?
-    pastorName                String?
-    denomination              String?
-    isChurchMember            Boolean          @default(false)
-    churchAttendanceFrequency String?
-    isBaptized                Boolean          @default(false)
-    dateOfBaptism             DateTime?        @db.Date
-    phoneNumber               String?
-    parentDivorced            Boolean          @default(false)
-    dateOfEntry               DateTime?        @db.Date
-    dateOfExit                DateTime?        @db.Date
-    dateOfWithdraw            DateTime?        @db.Date
-    observation               String?
-    countryId                 String?
-    userId                    String?
-    tags                      Json?
-    createdAt                 DateTime         @default(now()) @db.Timestamp(6)
-    updatedAt                 DateTime         @updatedAt
-    createdBy                 String?
-    formerSchoolId            String?
-    religion                  String?
-    enrollments               Enrollment[]
-    Grade                     Grade[]
-    country                   Country?         @relation(fields: [countryId], references: [id])
-    formerSchool              FormerSchool?    @relation(fields: [formerSchoolId], references: [id])
-    user                      User?            @relation(fields: [userId], references: [id])
-    accounts                  StudentAccount[]
-    studentContacts           StudentContact[]
-    siblings                  StudentSibling[] @relation("sibling")
-    siblings2                 StudentSibling[] @relation("student")
-    Attendance                Attendance[]
-    classrooms                Classroom[]      @relation("classroomLeader")
-    reportCards               ReportCard[]
+    id                 String           @id @default(uuid())
+    avatar             String?
+    registrationNumber String?
+    isActive           Boolean          @default(true)
+    email              String?
+    firstName          String?
+    lastName           String?
+    dateOfBirth        DateTime?        @db.Date
+    placeOfBirth       String?
+    residence          String?
+    gender             String?
+    denominationId     String?
+    isBaptized         Boolean          @default(false)
+    phoneNumber        String?
+    parentDivorced     Boolean          @default(false)
+    dateOfEntry        DateTime?        @db.Date
+    dateOfExit         DateTime?        @db.Date
+    dateOfWithdraw     DateTime?        @db.Date
+    observation        String?
+    countryId          String?
+    userId             String?
+    tags               Json?
+    createdAt          DateTime         @default(now()) @db.Timestamp(6)
+    updatedAt          DateTime         @updatedAt
+    createdBy          String?
+    formerSchoolId     String?
+    enrollments        Enrollment[]
+    grades             Grade[]
+    country            Country?         @relation(fields: [countryId], references: [id])
+    formerSchool       FormerSchool?    @relation(fields: [formerSchoolId], references: [id])
+    user               User?            @relation(fields: [userId], references: [id])
+    accounts           StudentAccount[]
+    studentContacts    StudentContact[]
+    siblings           StudentSibling[] @relation("sibling")
+    siblings2          StudentSibling[] @relation("student")
+    attendances        Attendance[]
+    classrooms         Classroom[]      @relation("classroomLeader")
+    reportCards        ReportCard[]
+    denomination       Denomination?    @relation(fields: [denominationId], references: [id])
 }
 
 model StudentSibling {
@@ -974,6 +969,7 @@ model User {
     FeeType         FeeType[]
     transactions    Transaction[]
     GradeSheet      GradeSheet[]
+    Denomination    Denomination[]
 }
 
 model VerificationToken {
@@ -989,4 +985,14 @@ enum AttendanceType {
     WEEKLY
     MONTHLY
     PERIODICALLY
+}
+
+model Denomination {
+    id          String    @id @default(cuid())
+    name        String
+    createdById String
+    createdBy   User      @relation(fields: [createdById], references: [id])
+    createdAt   DateTime  @default(now()) @db.Timestamp(6)
+    updatedAt   DateTime  @updatedAt
+    students    Student[]
 }

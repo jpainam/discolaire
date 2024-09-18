@@ -26,7 +26,7 @@ export const studentSchema = z.object({
   formerSchoolId: z.string().nullish(),
   countryId: z.string().nullish(),
   country: countrySchema.nullish(),
-  religion: z.string().nullish(),
+
   formerSchool: schoolSchema.nullish(),
   enrollments: z.any().nullish(),
   isRepeating: z.coerce.boolean().nullish(),

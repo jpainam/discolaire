@@ -15,6 +15,7 @@ import {
   ReceiptIcon,
   SchoolIcon,
   Send,
+  Settings,
   Settings2,
   Star,
   Users,
@@ -151,13 +152,13 @@ export function AppSidebar() {
         ],
       },
       {
-        title: "Settings",
-        url: "#",
-        icon: Settings2,
+        title: t("settings"),
+        url: "/administration/settings",
+        icon: Settings,
         items: [
           {
-            title: "General",
-            url: "#",
+            title: t("denominations"),
+            url: "/administration/settings/denominations",
           },
           {
             title: "Team",

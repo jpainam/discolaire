@@ -7,7 +7,6 @@ import {
   CakeSlice,
   CalendarMinus,
   CalendarPlus,
-  Church,
   CircleUser,
   ExternalLink,
   Phone,
@@ -15,6 +14,7 @@ import {
   ShieldCheck,
   SquareUserRound,
 } from "lucide-react";
+import { PiChurchDuotone } from "react-icons/pi";
 
 import { checkPermissions } from "@repo/api/permission";
 import { getServerTranslations } from "@repo/i18n/server";
@@ -61,10 +61,10 @@ export default async function Page({
         </span>
         <span>{student.firstName ?? "N/A"} </span>
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
-          <Church className="h-4 w-4 stroke-1" />
-          {t("religion")}
+          <PiChurchDuotone className="h-4 w-4 stroke-1" />
+          {t("denomination")}
         </span>
-        <span>{student.religion ? t(student.religion) : "N/A"}</span>
+        <span>{student.denomination ? student.denomination.name : "N/A"}</span>
         <span className="flex flex-row items-center gap-1 text-muted-foreground md:text-xs 2xl:text-sm">
           <Cake className="h-4 w-4 stroke-1" />
           {t("dateOfBirth")}
@@ -127,7 +127,7 @@ export default async function Page({
           <School className="h-4 w-4 stroke-1" />
           {t("formerSchool")}
         </span>
-        <span className="line-clamp-1">
+        <span className="line-clamp-1 overflow-ellipsis">
           {student.formerSchool?.name ?? "N/A"}
         </span>
       </div>

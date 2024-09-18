@@ -101,7 +101,7 @@ export function GroupTableAction({
           <>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              className="text-destructive"
+              className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
               onSelect={async () => {
                 const isConfirmed = await confirm({
                   title: t("delete"),

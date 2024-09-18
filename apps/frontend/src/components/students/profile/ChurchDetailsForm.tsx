@@ -24,12 +24,10 @@ import { InputField } from "~/components/shared/forms/input-field";
 export function ChurchDetailsForm() {
   const { t } = useLocale();
   const schema = z.object({
-    churchFamily: z.string().min(1, { message: t("this_field_is_required") }),
+    churchFamily: z.string().min(1),
     pastorName: z.string().optional(),
-    denomination: z.string().min(1, { message: t("this_field_is_required") }),
-    churchAttendanceFrequency: z
-      .string()
-      .min(1, { message: t("this_field_is_required") }),
+    denomination: z.string().min(1),
+    churchAttendanceFrequency: z.string().min(1),
     isChurchMember: z.boolean().optional(),
     isBaptized: z.boolean().optional(),
     dateOfBaptism: z.coerce.date().optional(),

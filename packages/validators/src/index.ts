@@ -10,8 +10,10 @@ export const unused = z.string().describe(
 export const createUpdateStudentSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
+  denominationId: z.string().optional(),
   dateOfBirth: z.coerce.date(),
   placeOfBirth: z.string().min(1),
+  isBaptized: z.boolean().optional().default(false),
   gender: z.string().min(1),
   email: z.string().email().optional().or(z.literal("")),
   residence: z.string().optional(),

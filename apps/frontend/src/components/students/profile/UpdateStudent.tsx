@@ -10,6 +10,7 @@ import { Button } from "@repo/ui/button";
 import { Form, useForm } from "@repo/ui/form";
 import { createUpdateStudentSchema } from "@repo/validators";
 
+import { routes } from "~/configs/routes";
 import { api } from "~/trpc/react";
 import { CreateUpdateAddress } from "./CreateUpdateAddress";
 import { CreateUpdateDenom } from "./CreateUpdateDenom";
@@ -19,6 +20,23 @@ export function UpdateStudent({ student }: { student: Student }) {
   const { t } = useLocale();
   const form = useForm({
     schema: createUpdateStudentSchema,
+    defaultValues: {
+      firstName: student.firstName ?? "",
+      lastName: student.lastName ?? "",
+      dateOfBirth: student.dateOfBirth ?? new Date(),
+      placeOfBirth: student.placeOfBirth ?? "",
+      gender: student.gender ?? "",
+      residence: student.residence ?? "",
+      phoneNumber: student.phoneNumber ?? "",
+      email: student.email ?? "",
+      countryId: student.countryId ?? "",
+      dateOfExit: student.dateOfExit ?? undefined,
+      dateOfEntry: student.dateOfEntry ?? new Date(),
+      formerSchoolId: student.formerSchoolId ?? "",
+      observation: student.observation ?? "",
+      denominationId: student.denominationId ?? "",
+      isBaptized: student.isBaptized,
+    },
   });
 
   const updateStudentMutation = api.student.update.useMutation({
@@ -27,6 +45,8 @@ export function UpdateStudent({ student }: { student: Student }) {
       toast.error(error.message, { id: 0 });
     },
     onSuccess: () => {
+      router.refresh();
+      router.push(routes.students.details(student.id));
       toast.success(t("updated_successfully"), { id: 0 });
     },
   });

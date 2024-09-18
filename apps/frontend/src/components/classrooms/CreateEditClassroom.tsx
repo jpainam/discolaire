@@ -19,7 +19,6 @@ import {
 } from "@repo/ui/form";
 import { Separator } from "@repo/ui/separator";
 
-import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { InputField } from "../shared/forms/input-field";
 import { SelectField } from "../shared/forms/SelectField";
@@ -40,22 +39,14 @@ export function CreateEditClassroom({
 }) {
   const { t } = useLocale();
   const updateClassroomSchema = z.object({
-    name: z
-      .string()
-      .trim()
-      .min(1, { message: t("this_field_is_required") }),
-    maxSize: z.coerce.number().int().positive(t("must_be_a_positive_number")),
-    cycleId: z.string().min(1, { message: t("this_field_is_required") }),
-    sectionId: z.string().min(1, { message: t("this_field_is_required") }),
-    reportName: z
-      .string()
-      .trim()
-      .min(1, { message: t("this_field_is_required") }),
-    levelId: z.string().min(1, { message: t("this_field_is_required") }),
-    seniorAdvisorId: z
-      .string()
-      .min(1, { message: t("this_field_is_required") }),
-    headTeacherId: z.string().min(1, { message: t("this_field_is_required") }),
+    name: z.string().trim().min(1),
+    maxSize: z.coerce.number().int().positive(),
+    cycleId: z.string().min(1),
+    sectionId: z.string().min(1),
+    reportName: z.string().trim().min(1),
+    levelId: z.string().min(1),
+    seniorAdvisorId: z.string().min(1),
+    headTeacherId: z.string().min(1),
   });
   type UpdateClassroomValues = z.infer<typeof updateClassroomSchema>;
 
@@ -81,9 +72,23 @@ export function CreateEditClassroom({
 
   const updateClassroomMutation = api.classroom.update.useMutation({
     onSettled: () => utils.classroom.invalidate(),
+    onSuccess: () => {
+      toast.success(t("updated_successfully"), { id: 0 });
+      closeSheet();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
   });
   const createClassroomMutation = api.classroom.create.useMutation({
     onSettled: () => utils.classroom.invalidate(),
+    onSuccess: () => {
+      closeSheet();
+      toast.success(t("created_successfully"), { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
   });
   const utils = api.useUtils();
 
@@ -95,28 +100,11 @@ export function CreateEditClassroom({
       sectionId: parseInt(data.sectionId),
     };
     if (classroom?.id) {
-      toast.promise(
-        updateClassroomMutation.mutateAsync({ id: classroom.id, ...values }),
-        {
-          loading: t("updating"),
-          error: (error) => {
-            return getErrorMessage(error);
-          },
-          success: () => {
-            return t("updated_successfully");
-          },
-        },
-      );
+      toast.loading(t("updating"), { id: 0 });
+      updateClassroomMutation.mutate({ id: classroom.id, ...values });
     } else {
-      toast.promise(createClassroomMutation.mutateAsync(values), {
-        loading: t("creating"),
-        error: (error) => {
-          return getErrorMessage(error);
-        },
-        success: () => {
-          return t("created_successfully");
-        },
-      });
+      toast.loading(t("creating"), { id: 0 });
+      createClassroomMutation.mutate(values);
     }
   }
 

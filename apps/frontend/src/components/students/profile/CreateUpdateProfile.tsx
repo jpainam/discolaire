@@ -1,5 +1,7 @@
 "use client";
 
+import { PiAddressBookTabsDuotone } from "react-icons/pi";
+
 import { useLocale } from "@repo/i18n";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 
@@ -18,7 +20,10 @@ export function CreateUpdateProfile() {
   return (
     <Card className="rounded-md">
       <CardHeader className="border-b bg-muted/50 py-2.5">
-        <CardTitle className="text-sm">{t("information")}</CardTitle>
+        <CardTitle className="flex items-center gap-1 text-sm">
+          <PiAddressBookTabsDuotone className="h-4 w-4" />
+          {t("information")}
+        </CardTitle>
         {/* <CardDescription></CardDescription> */}
       </CardHeader>
       <CardContent className="grid grid-cols-1 gap-4 md:grid-cols-2">
