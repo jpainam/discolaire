@@ -3,7 +3,7 @@
 import type { z } from "zod";
 import { toast } from "sonner";
 
-import type { Student } from "@repo/api";
+import type { RouterOutputs } from "@repo/api";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -14,10 +14,13 @@ import { routes } from "~/configs/routes";
 import { api } from "~/trpc/react";
 import { CreateUpdateAddress } from "./CreateUpdateAddress";
 import { CreateUpdateDenom } from "./CreateUpdateDenom";
+import { CreateUpdateExtra } from "./CreateUpdateExtra";
 import { CreateUpdateProfile } from "./CreateUpdateProfile";
 
-export function UpdateStudent({ student }: { student: Student }) {
+type UpdateGetStudent = RouterOutputs["student"]["get"];
+export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
   const { t } = useLocale();
+
   const form = useForm({
     schema: createUpdateStudentSchema,
     defaultValues: {
@@ -36,6 +39,9 @@ export function UpdateStudent({ student }: { student: Student }) {
       observation: student.observation ?? "",
       religionId: student.religionId ?? "",
       isBaptized: student.isBaptized,
+      status: student.status,
+      clubs: student.clubs.map((cl) => cl.clubId),
+      sports: student.sports.map((sp) => sp.sportId),
     },
   });
 
@@ -85,6 +91,7 @@ export function UpdateStudent({ student }: { student: Student }) {
           <CreateUpdateProfile />
           <CreateUpdateAddress />
           <CreateUpdateDenom />
+          <CreateUpdateExtra />
         </div>
       </form>
     </Form>

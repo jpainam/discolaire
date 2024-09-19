@@ -1,6 +1,6 @@
 "use client";
 
-import { PiChurchDuotone } from "react-icons/pi";
+import { LiaDumbbellSolid } from "react-icons/lia";
 
 import { useLocale } from "@repo/i18n";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
@@ -15,6 +15,7 @@ import {
 } from "@repo/ui/form";
 
 import { ReligionSelector } from "~/components/shared/selects/ReligionSelector";
+import { StudentStatusSelector } from "~/components/shared/selects/StudentStatusSelector";
 
 export function CreateUpdateDenom() {
   const { t } = useLocale();
@@ -24,7 +25,8 @@ export function CreateUpdateDenom() {
     <Card className="rounded-md">
       <CardHeader className="border-b bg-muted/50 py-2.5">
         <CardTitle className="flex items-center gap-1 text-sm">
-          <PiChurchDuotone className="h-4 w-4" />
+          {/* <PiChurchDuotone className="h-4 w-4" /> */}
+          <LiaDumbbellSolid className="h-4 w-4" />
           {t("religion")}
         </CardTitle>
         {/* <CardDescription></CardDescription> */}
@@ -37,19 +39,32 @@ export function CreateUpdateDenom() {
             <FormItem>
               <FormLabel>{t("religion")}</FormLabel>
               <FormControl>
-                <ReligionSelector {...field} />
+                <ReligionSelector defaultValue={field.value} {...field} />
               </FormControl>
 
               <FormMessage />
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="status"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("status")}</FormLabel>
+              <FormControl>
+                <StudentStatusSelector defaultValue={field.value} {...field} />
+              </FormControl>
 
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="isBaptized"
           render={({ field }) => (
-            <FormItem className="mt-10 flex flex-row items-start space-x-3 space-y-0">
+            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
               <FormControl>
                 <Checkbox
                   checked={field.value}

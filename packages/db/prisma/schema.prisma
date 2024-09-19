@@ -433,6 +433,7 @@ model Student {
     dateOfBirth        DateTime?        @db.Date
     placeOfBirth       String?
     residence          String?
+    status             StudentStatus    @default(ACTIVE)
     gender             String?
     religionId         String?
     isBaptized         Boolean          @default(false)
@@ -447,7 +448,7 @@ model Student {
     tags               Json?
     createdAt          DateTime         @default(now()) @db.Timestamp(6)
     updatedAt          DateTime         @updatedAt
-    createdBy          String?
+    createdById        String?
     formerSchoolId     String?
     achievements       Json?
     hobbies            Json?
@@ -1039,4 +1040,11 @@ model Sport {
     id       String         @id @default(cuid())
     name     String
     students StudentSport[]
+}
+
+enum StudentStatus {
+    ACTIVE
+    INACTIVE
+    GRADUATED
+    EXPELLED
 }

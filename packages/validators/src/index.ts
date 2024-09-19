@@ -10,7 +10,7 @@ export const unused = z.string().describe(
 export const createUpdateStudentSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
-  religionId: z.string().optional(),
+  religionId: z.string().min(1),
   dateOfBirth: z.coerce.date(),
   placeOfBirth: z.string().min(1),
   isBaptized: z.boolean().optional().default(false),
@@ -24,6 +24,11 @@ export const createUpdateStudentSchema = z.object({
   dateOfExit: z.coerce.date().optional(),
   tags: z.array(z.string()).optional(),
   observation: z.string().optional(),
+  status: z
+    .enum(["ACTIVE", "GRADUATED", "INACTIVE", "EXPELLED"])
+    .default("ACTIVE"),
+  clubs: z.array(z.string()).optional(),
+  sports: z.array(z.string()).optional(),
 });
 
 // export const createGradeSheetSchema = z.object({

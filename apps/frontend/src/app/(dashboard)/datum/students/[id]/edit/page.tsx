@@ -18,7 +18,7 @@ export default async function Page({
     "student:profile",
     { id },
   );
-  if (canEditStudent) {
+  if (!canEditStudent) {
     return <NoPermission className="my-8" />;
   }
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition

@@ -22,6 +22,7 @@ import {
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import { toast } from "sonner";
 
+import { StudentStatus } from "@repo/db";
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
@@ -143,11 +144,13 @@ export function StudentHeader({ className }: StudentHeaderProps) {
           )}
           {!studentQuery.isPending && (
             <div className="flex flex-row items-center gap-1">
-              {studentQuery.data?.isActive ? (
-                <FlatBadge variant={"green"}>Active</FlatBadge>
-              ) : (
-                <FlatBadge variant={"red"}>Deactiver</FlatBadge>
-              )}
+              <FlatBadge
+                variant={
+                  student?.status == StudentStatus.ACTIVE ? "green" : "red"
+                }
+              >
+                {t(`${student?.status}`)}
+              </FlatBadge>
 
               {canEditStudent && (
                 <>

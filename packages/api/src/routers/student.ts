@@ -43,6 +43,9 @@ const createUpdateSchema = z.object({
   dateOfExit: z.coerce.date().optional(),
   tags: z.array(z.string()).optional(),
   observation: z.string().optional(),
+  status: z
+    .enum(["ACTIVE", "GRADUATED", "INACTIVE", "EXPELLED"])
+    .default("ACTIVE"),
 });
 export const studentRouter = createTRPCRouter({
   all: protectedProcedure
@@ -108,7 +111,10 @@ export const studentRouter = createTRPCRouter({
       const { id, ...data } = input;
       return ctx.db.student.update({
         where: { id: id },
-        data: data,
+        data: {
+          ...data,
+          createdById: ctx.session.user.id,
+        },
       });
     }),
   count: protectedProcedure

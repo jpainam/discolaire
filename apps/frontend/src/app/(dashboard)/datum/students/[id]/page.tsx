@@ -3,18 +3,19 @@ import Link from "next/link";
 import {
   AtSign,
   BookHeart,
+  BoxesIcon,
   Cake,
   CakeSlice,
   CalendarMinus,
   CalendarPlus,
   CircleUser,
   ExternalLink,
+  MedalIcon,
   Phone,
   School,
   ShieldCheck,
   SquareUserRound,
 } from "lucide-react";
-import { MdOutlineSportsHandball } from "react-icons/md";
 import { PiChurchDuotone } from "react-icons/pi";
 
 import { checkPermissions } from "@repo/api/permission";
@@ -52,11 +53,11 @@ export default async function Page({
   return (
     <div className="grid py-2 text-sm">
       <div className="grid grid-cols-2 gap-y-3 px-2 xl:grid-cols-4">
-        <span className="flex flex-row items-center gap-1 text-xs text-muted-foreground 2xl:text-sm">
+        <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <SquareUserRound className="h-4 w-4 stroke-1" /> {t("lastName")}
         </span>
         <span>{student.lastName ?? "N/A"}</span>
-        <span className="flex flex-row items-center gap-1 text-muted-foreground md:text-xs 2xl:text-sm">
+        <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <SquareUserRound className="h-4 w-4 stroke-1" />
           {t("firstName")}
         </span>
@@ -66,7 +67,7 @@ export default async function Page({
           {t("religion")}
         </span>
         <span>{student.religion ? student.religion.name : "N/A"}</span>
-        <span className="flex flex-row items-center gap-1 text-muted-foreground md:text-xs 2xl:text-sm">
+        <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <Cake className="h-4 w-4 stroke-1" />
           {t("dateOfBirth")}
         </span>
@@ -80,10 +81,10 @@ export default async function Page({
         </span>
         <span>{student.placeOfBirth ?? "N/A"}</span>
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
-          <MdOutlineSportsHandball className="h-5 w-5" />
+          <BoxesIcon className="h-4 w-4 stroke-1" />
           {t("clubs")}
         </span>
-        <span>
+        <span className="line-clamp-1 overflow-ellipsis">
           {JSON.stringify(student.clubs.map((club) => club.club.name))}
         </span>
       </div>
@@ -130,7 +131,7 @@ export default async function Page({
         <span>{student.userId ?? "N/A"}</span>
       </div>
       <Separator className="my-2 w-full" />
-      <div className="flex flex-row items-center justify-between px-2">
+      <div className="grid grid-cols-2 gap-y-3 px-2 xl:grid-cols-4">
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <School className="h-4 w-4 stroke-1" />
           {t("formerSchool")}
@@ -138,6 +139,15 @@ export default async function Page({
         <span className="line-clamp-1 overflow-ellipsis">
           {student.formerSchool?.name ?? "N/A"}
         </span>
+        <span className="flex flex-row items-center gap-1 text-muted-foreground">
+          <BookHeart className="h-4 w-4 stroke-1" /> {t("hobbies")}
+        </span>
+        <span>{student.hobbies && JSON.stringify(student.hobbies)}</span>
+        <span className="flex flex-row items-center gap-1 text-muted-foreground">
+          <MedalIcon className="h-4 w-4 stroke-1" />
+          {t("sports")}
+        </span>
+        <span>{JSON.stringify(student.sports.map((sp) => sp.sport.name))}</span>
       </div>
 
       <Separator className="my-2 w-full" />
