@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   SquareUserRound,
 } from "lucide-react";
+import { MdOutlineSportsHandball } from "react-icons/md";
 import { PiChurchDuotone } from "react-icons/pi";
 
 import { checkPermissions } from "@repo/api/permission";
@@ -78,6 +79,13 @@ export default async function Page({
           {t("placeOfBirth")}
         </span>
         <span>{student.placeOfBirth ?? "N/A"}</span>
+        <span className="flex flex-row items-center gap-1 text-muted-foreground">
+          <MdOutlineSportsHandball className="h-5 w-5" />
+          {t("clubs")}
+        </span>
+        <span>
+          {JSON.stringify(student.clubs.map((club) => club.club.name))}
+        </span>
       </div>
       <Separator className="my-2 w-full" />
       <div className="grid grid-cols-2 gap-y-3 px-2 xl:grid-cols-4">

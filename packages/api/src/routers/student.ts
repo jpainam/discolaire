@@ -175,6 +175,16 @@ export const studentRouter = createTRPCRouter({
       },
       include: {
         formerSchool: true,
+        sports: {
+          include: {
+            sport: true,
+          },
+        },
+        clubs: {
+          include: {
+            club: true,
+          },
+        },
         country: true,
         religion: true,
         studentContacts: {
