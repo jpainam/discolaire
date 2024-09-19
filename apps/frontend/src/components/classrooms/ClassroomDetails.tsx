@@ -4,7 +4,6 @@ import {
   CircleDollarSign,
   CircleGauge,
   CircleUser,
-  File,
   Hash,
   Newspaper,
   Recycle,
@@ -40,11 +39,13 @@ export async function ClassroomDetails({
         </li>
         <li className="flex items-center justify-between">
           <div className="flex flex-row items-center gap-1 text-muted-foreground">
-            <File className="h-4 w-4" />
-            {t("shortName")}
+            <Newspaper className="h-4 w-4" />
+            <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+              {t("reportName")}
+            </span>
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-            {classroom.name}
+            {classroom.reportName}
           </span>
         </li>
         <li className="flex items-center justify-between">
@@ -69,17 +70,6 @@ export async function ClassroomDetails({
       <ul className="grid gap-3 p-2 text-sm">
         <li className="flex items-center justify-between">
           <div className="flex flex-row items-center gap-1 text-muted-foreground">
-            <Newspaper className="h-4 w-4" />
-            <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-              {t("reportName")}
-            </span>
-          </div>
-          <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-            {classroom.reportName}
-          </span>
-        </li>
-        <li className="flex items-center justify-between">
-          <div className="flex flex-row items-center gap-1 text-muted-foreground">
             <CircleGauge className="h-4 w-4" />
             {t("level")}
           </div>
@@ -96,12 +86,6 @@ export async function ClassroomDetails({
             {classroom.cycle?.name}
           </span>
         </li>
-        <li className="flex items-center justify-between">
-          <span className="text-muted-foreground"></span>
-          <span className="opacity-0">.</span>
-        </li>
-      </ul>
-      <ul className="grid gap-3 p-2 text-sm">
         <li className="flex items-center justify-between">
           <div className="flex flex-row items-center gap-1 text-muted-foreground">
             <SquareUser className="h-4 w-4" />
@@ -122,6 +106,8 @@ export async function ClassroomDetails({
             {classroom.classroomLeader?.lastName}
           </span>
         </li>
+      </ul>
+      <ul className="grid gap-3 p-2 text-sm">
         <li className="flex items-center justify-between">
           <div className="flex flex-row items-center gap-1 text-muted-foreground">
             <Hash className="h-4 w-4" />
@@ -139,6 +125,14 @@ export async function ClassroomDetails({
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
             {classroom.headTeacher?.lastName}
           </span>
+        </li>
+        <li className="flex items-center justify-between">
+          <span className="text-muted-foreground"></span>
+          <span className="opacity-0">.</span>
+        </li>
+        <li className="flex items-center justify-between">
+          <span className="text-muted-foreground"></span>
+          <span className="opacity-0">.</span>
         </li>
       </ul>
     </div>

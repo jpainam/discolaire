@@ -21,7 +21,6 @@ import {
 import { Separator } from "@repo/ui/separator";
 import { Textarea } from "@repo/ui/textarea";
 
-import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { DatePickerField } from "../shared/forms/date-picker-field";
 import { InputField } from "../shared/forms/input-field";
@@ -42,7 +41,7 @@ const staffCreateEditSchema = z.object({
   degreeId: z.string().optional(),
   employmentType: z.string().optional(),
   address: z.string().optional(),
-  email: z.string().email(),
+  email: z.string().email().optional().or(z.literal("")),
   phoneNumber1: z.string().min(1),
   phoneNumber2: z.string().optional(),
   dateOfHire: z.coerce.date().optional(),
@@ -91,8 +90,31 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
     },
   });
   const { t } = useLocale();
-  const createStaffMutation = api.staff.create.useMutation();
-  const updateStaffMutation = api.staff.update.useMutation();
+  const utils = api.useUtils();
+  const createStaffMutation = api.staff.create.useMutation({
+    onSettled: async () => {
+      await utils.staff.invalidate();
+    },
+    onSuccess: () => {
+      toast.success(t("created_successfully"), { id: 0 });
+      closeSheet();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
+  const updateStaffMutation = api.staff.update.useMutation({
+    onSettled: async () => {
+      await utils.staff.invalidate();
+    },
+    onSuccess: () => {
+      toast.success(t("updated_successfully"), { id: 0 });
+      closeSheet();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
 
   const onSubmit = (data: z.infer<typeof staffCreateEditSchema>) => {
     const values = {
@@ -119,30 +141,11 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
       dateOfBirth: data.dateOfBirth,
     };
     if (staff) {
-      toast.promise(
-        updateStaffMutation.mutateAsync({ id: staff.id, ...values }),
-        {
-          loading: t("updating"),
-          success: () => {
-            closeSheet();
-            return t("updated_successfully");
-          },
-          error: (error) => {
-            return getErrorMessage(error);
-          },
-        },
-      );
+      toast.loading(t("updating"), { id: 0 });
+      updateStaffMutation.mutate({ id: staff.id, ...values });
     } else {
-      toast.promise(createStaffMutation.mutateAsync(values), {
-        loading: t("creating"),
-        success: () => {
-          closeSheet();
-          return t("created_successfully");
-        },
-        error: (error) => {
-          return getErrorMessage(error);
-        },
-      });
+      toast.loading(t("creating"), { id: 0 });
+      createStaffMutation.mutate(values);
     }
   };
 

@@ -15,7 +15,7 @@ const createUpdateSchema = z.object({
   dateOfBirth: z.coerce.date().optional(),
   isTeacher: z.boolean().default(false),
   gender: z.enum(["female", "male"]).default("male"),
-  email: z.string().email(),
+  email: z.string().email().optional().or(z.literal("")),
   phoneNumber1: z.string().optional(),
   phoneNumber2: z.string().optional(),
   observation: z.string().optional(),
