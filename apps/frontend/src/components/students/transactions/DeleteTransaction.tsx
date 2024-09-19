@@ -13,8 +13,11 @@ import {
   FormMessage,
   useForm,
 } from "@repo/ui/form";
+import { Label } from "@repo/ui/label";
+import { Skeleton } from "@repo/ui/skeleton";
 import { Textarea } from "@repo/ui/textarea";
 
+import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/react";
 
 const deleteTransactionSchema = z.object({
@@ -34,6 +37,10 @@ export function DeleteTransaction({
   const { t } = useLocale();
   const utils = api.useUtils();
   const { closeModal } = useModal();
+  const transactionQuery = api.transaction.get.useQuery(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    Array.isArray(transactionId) ? transactionId[0]! : transactionId,
+  );
   const deleteTransactionMutation = api.transaction.delete.useMutation({
     onSuccess: () => {
       toast.success(t("deleted_successfully"), { id: 0 });
@@ -54,10 +61,28 @@ export function DeleteTransaction({
       observation: data.observation,
     });
   };
-
+  const transaction = transactionQuery.data;
   return (
     <Form {...form}>
-      <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="grid gap-2" onSubmit={form.handleSubmit(onSubmit)}>
+        {transactionQuery.isPending ? (
+          <div className="grid grid-cols-2 gap-2">
+            {Array.from({ length: 4 }, (_, i) => (
+              <Skeleton key={i} className="h-8 w-full" />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2">
+            <Label>{t("account")}</Label>
+            <span className="text-sm text-muted-foreground">
+              {transaction?.account.student.lastName}
+            </span>
+            <Label>{t("amount")}</Label>
+            <span className="text-sm text-muted-foreground">
+              {transaction?.amount} {CURRENCY}
+            </span>
+          </div>
+        )}
         <FormField
           control={form.control}
           name="observation"

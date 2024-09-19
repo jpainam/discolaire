@@ -613,7 +613,6 @@
   "the_student_has_parent_add": "L'élève n'a pas de parent. Veuillez ajouter un parent",
   "no_parent": "Aucun parent ou contact",
   "list_of_registered_students": "Liste des élèves inscrits",
-  "enter_the_reason_for_deleting_this_transaction": "Entrez la raison de la suppression de cette transaction",
   "verified_class_before_add_text": "Rassurez vous que la classe n'existe pas avant d'ajouter une nouvelle",
   "grades": "Notes",
   "relationship": "Relation",

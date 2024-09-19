@@ -140,7 +140,7 @@ export function TransactionTable() {
                         <MoreHorizontal className="size-4" aria-hidden="true" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-40">
+                    <DropdownMenuContent align="end">
                       <DropdownMenuSub>
                         <DropdownMenuSubTrigger>
                           {t("status")}

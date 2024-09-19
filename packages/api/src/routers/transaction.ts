@@ -23,6 +23,7 @@ export const transactionRouter = createTRPCRouter({
       },
     });
   }),
+
   all: protectedProcedure
     .input(
       z.object({

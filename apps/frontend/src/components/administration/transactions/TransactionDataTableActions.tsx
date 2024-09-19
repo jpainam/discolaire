@@ -82,6 +82,7 @@ export function TransactionDataTableActions({
                     openModal({
                       title: t("delete"),
                       view: <DeleteTransaction transactionId={selectedIds} />,
+                      className: "w-[400px]",
                     });
                   }
                 }}
