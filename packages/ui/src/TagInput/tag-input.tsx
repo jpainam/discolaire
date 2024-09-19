@@ -414,7 +414,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
                     onBlur={handleInputBlur}
                     {...inputProps}
                     className={cn(
-                      "h-5 w-fit flex-1 border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0",
+                      "h-5 w-fit flex-1 border-0 bg-transparent shadow-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0",
                       // className,
                       styleClasses.input,
                     )}

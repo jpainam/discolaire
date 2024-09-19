@@ -450,9 +450,9 @@ model Student {
     updatedAt          DateTime         @updatedAt
     createdById        String?
     formerSchoolId     String?
-    achievements       Json?
-    hobbies            Json?
-    socialMedias       Json?
+    achievements       String[]         @default([])
+    hobbies            String[]         @default([])
+    socialMedias       String[]         @default([])
     enrollments        Enrollment[]
     grades             Grade[]
     country            Country?         @relation(fields: [countryId], references: [id])

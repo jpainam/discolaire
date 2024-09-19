@@ -13,7 +13,6 @@ import {
   MedalIcon,
   Phone,
   School,
-  ShieldCheck,
   SquareUserRound,
 } from "lucide-react";
 import { PiChurchDuotone } from "react-icons/pi";
@@ -22,7 +21,6 @@ import { checkPermissions } from "@repo/api/permission";
 import { getServerTranslations } from "@repo/i18n/server";
 import { PermissionAction } from "@repo/lib/permission";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
-import FlatBadge from "@repo/ui/FlatBadge";
 import { Separator } from "@repo/ui/separator";
 
 import House from "~/components/lucide/House";
@@ -85,7 +83,7 @@ export default async function Page({
           {t("clubs")}
         </span>
         <span className="line-clamp-1 overflow-ellipsis">
-          {JSON.stringify(student.clubs.map((club) => club.club.name))}
+          {student.clubs.map((club) => club.club.name).join(", ")}
         </span>
       </div>
       <Separator className="my-2 w-full" />
@@ -142,17 +140,17 @@ export default async function Page({
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <BookHeart className="h-4 w-4 stroke-1" /> {t("hobbies")}
         </span>
-        <span>{student.hobbies && JSON.stringify(student.hobbies)}</span>
+        <span>{student.hobbies && student.hobbies.join(", ")}</span>
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <MedalIcon className="h-4 w-4 stroke-1" />
           {t("sports")}
         </span>
-        <span>{JSON.stringify(student.sports.map((sp) => sp.sport.name))}</span>
+        <span>{student.sports.map((sp) => sp.sport.name).join(", ")}</span>
       </div>
 
       <Separator className="my-2 w-full" />
       <div className="grid w-full justify-between px-2 md:flex">
-        <ul className="grid w-[350px] gap-3">
+        {/*<ul className="grid w-[350px] gap-3">
           <li className="flex items-center justify-between">
             <span className="flex flex-row items-center gap-1 text-muted-foreground">
               <ShieldCheck className="h-4 w-4 stroke-1" /> {t("is_active")}?
@@ -183,7 +181,7 @@ export default async function Page({
               )}
             </span>
           </li>
-        </ul>
+        </ul>*/}
         <ul className="grid w-[350px] gap-3">
           {siblings.map((sibling, index) => {
             return (

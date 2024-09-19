@@ -128,8 +128,8 @@ export function CreateUpdateExtra() {
               control={form.control}
               name={"observation"}
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="formerSchoolId">
+                <FormItem className="space-y-0">
+                  <FormLabel htmlFor="observation">
                     {t("observation")}
                   </FormLabel>
                   <FormControl>

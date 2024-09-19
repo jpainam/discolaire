@@ -13,6 +13,30 @@ export const studentService = {
       },
     });
   },
+  addClubs: async (studentId: string, clubs: string[]) => {
+    const studentClubs = clubs.map((clubId) => {
+      return {
+        clubId: clubId,
+        studentId: studentId,
+      };
+    });
+    return db.studentClub.createMany({
+      data: studentClubs,
+      skipDuplicates: true,
+    });
+  },
+  addSports: async (studentId: string, sports: string[]) => {
+    const studentSports = sports.map((sportId) => {
+      return {
+        sportId: sportId,
+        studentId: studentId,
+      };
+    });
+    return db.studentSport.createMany({
+      data: studentSports,
+      skipDuplicates: true,
+    });
+  },
   isRepeating: async (studentId: string, schoolYearId: string) => {
     const currentClassroom = await studentService.classroom(
       studentId,

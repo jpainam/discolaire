@@ -43,6 +43,10 @@ const createUpdateSchema = z.object({
   dateOfExit: z.coerce.date().optional(),
   tags: z.array(z.string()).optional(),
   observation: z.string().optional(),
+  socialMedias: z.array(z.string()).optional().default([]),
+  clubs: z.array(z.string()).optional(),
+  sports: z.array(z.string()).optional(),
+  hobbies: z.array(z.string()).optional().default([]),
   status: z
     .enum(["ACTIVE", "GRADUATED", "INACTIVE", "EXPELLED"])
     .default("ACTIVE"),
@@ -100,19 +104,60 @@ export const studentRouter = createTRPCRouter({
     }),
   create: protectedProcedure
     .input(createUpdateSchema)
-    .mutation(({ ctx, input }) => {
-      return ctx.db.student.create({
-        data: input,
+    .mutation(async ({ ctx, input }) => {
+      const student = await ctx.db.student.create({
+        data: {
+          firstName: input.firstName,
+          lastName: input.lastName,
+          dateOfBirth: input.dateOfBirth,
+          placeOfBirth: input.placeOfBirth,
+          gender: input.gender,
+          email: input.email,
+          residence: input.residence,
+          phoneNumber: input.phoneNumber,
+          formerSchoolId: input.formerSchoolId,
+          countryId: input.countryId,
+          isBaptized: input.isBaptized,
+          religionId: input.religionId,
+          dateOfEntry: input.dateOfEntry,
+          dateOfExit: input.dateOfEntry,
+          tags: input.tags,
+          observation: input.observation,
+          status: input.status,
+          hobbies: input.hobbies,
+          createdById: ctx.session.user.id,
+        },
       });
+      void studentService.addClubs(student.id, input.clubs ?? []);
+      void studentService.addSports(student.id, input.sports ?? []);
+      return student;
     }),
   update: protectedProcedure
     .input(createUpdateSchema.extend({ id: z.string() }))
-    .mutation(({ ctx, input }) => {
-      const { id, ...data } = input;
+    .mutation(async ({ ctx, input }) => {
+      void studentService.addClubs(input.id, input.clubs ?? []);
+      void studentService.addSports(input.id, input.sports ?? []);
       return ctx.db.student.update({
-        where: { id: id },
+        where: { id: input.id },
         data: {
-          ...data,
+          firstName: input.firstName,
+          lastName: input.lastName,
+          dateOfBirth: input.dateOfBirth,
+          placeOfBirth: input.placeOfBirth,
+          gender: input.gender,
+          email: input.email,
+          residence: input.residence,
+          phoneNumber: input.phoneNumber,
+          formerSchoolId: input.formerSchoolId,
+          countryId: input.countryId,
+          isBaptized: input.isBaptized,
+          religionId: input.religionId,
+          dateOfEntry: input.dateOfEntry,
+          dateOfExit: input.dateOfEntry,
+          tags: input.tags,
+          observation: input.observation,
+          status: input.status,
+          hobbies: input.hobbies,
           createdById: ctx.session.user.id,
         },
       });

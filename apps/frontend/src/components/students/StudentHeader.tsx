@@ -15,7 +15,6 @@ import {
   Printer,
   ShieldBan,
   SquareEqual,
-  Tags,
   Trash2,
   Users,
 } from "lucide-react";
@@ -90,7 +89,7 @@ export function StudentHeader({ className }: StudentHeaderProps) {
   const confirm = useConfirm();
 
   const student = studentQuery.data;
-  const studentTags = JSON.stringify(student?.tags ?? []);
+  //const studentTags = JSON.stringify(student?.tags ?? []);
 
   const canDeleteStudent = useCheckPermissions(
     PermissionAction.DELETE,
@@ -321,12 +320,6 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                 {t(student?.gender ?? "male")}
               </FlatBadge>
 
-              {student?.tags && (
-                <div className="flex flex-row items-center gap-1 rounded dark:bg-secondary">
-                  <Tags className="h-4 w-4 text-foreground" />
-                  <span>{studentTags}</span>
-                </div>
-              )}
               {student?.countryId && (
                 <CountryComponent
                   className="text-sm"
