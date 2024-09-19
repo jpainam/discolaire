@@ -32,6 +32,7 @@ import { reportCardRouter } from "./routers/reportCard";
 import { roleRouter } from "./routers/role";
 import { schoolRouter } from "./routers/school";
 import { schoolYearRouter } from "./routers/schoolYear";
+import { settingRouter } from "./routers/setting";
 import { staffRouter } from "./routers/staff";
 import { studentRouter } from "./routers/student";
 import { studentAccountRouter } from "./routers/studentAccount";
@@ -67,6 +68,7 @@ export const appRouter = createTRPCRouter({
   calendarEvent: calendarEventRouter,
   studentAccount: studentAccountRouter,
   school: schoolRouter,
+  setting: settingRouter,
   grade: gradeRouter,
   religion: religionRouter,
   permission: permissionRouter,

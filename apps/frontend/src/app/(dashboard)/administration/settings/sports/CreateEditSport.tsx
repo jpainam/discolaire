@@ -20,18 +20,12 @@ import { Input } from "@repo/ui/input";
 
 import { api } from "~/trpc/react";
 
-const createReligionSchema = z.object({
+const createSportSchema = z.object({
   name: z.string().min(1),
 });
-export function CreateEditReligion({
-  id,
-  name,
-}: {
-  id?: string;
-  name?: string;
-}) {
+export function CreateEditSport({ id, name }: { id?: string; name?: string }) {
   const form = useForm({
-    schema: createReligionSchema,
+    schema: createSportSchema,
     defaultValues: {
       name: name ?? "",
     },
@@ -40,8 +34,8 @@ export function CreateEditReligion({
   const utils = api.useUtils();
   const { t } = useLocale();
   const router = useRouter();
-  const createReligionMutation = api.religion.create.useMutation({
-    onSettled: () => utils.religion.invalidate(),
+  const createSportMutation = api.setting.createSport.useMutation({
+    onSettled: () => utils.setting.sports.invalidate(),
     onSuccess: () => {
       toast.success("created_successfully", { id: 0 });
       router.refresh();
@@ -52,8 +46,8 @@ export function CreateEditReligion({
     },
   });
 
-  const updateReligionMutation = api.religion.update.useMutation({
-    onSettled: () => utils.religion.invalidate(),
+  const updateSportMutation = api.setting.updateSport.useMutation({
+    onSettled: () => utils.setting.sports.invalidate(),
     onSuccess: () => {
       toast.success("updated_successfully", { id: 0 });
       router.refresh();
@@ -63,16 +57,16 @@ export function CreateEditReligion({
       toast.error(error.message, { id: 0 });
     },
   });
-  const onSubmit = (data: z.infer<typeof createReligionSchema>) => {
+  const onSubmit = (data: z.infer<typeof createSportSchema>) => {
     if (id) {
       toast.loading("updating", { id: 0 });
-      updateReligionMutation.mutate({
+      updateSportMutation.mutate({
         id: id,
         name: data.name,
       });
     } else {
       toast.loading("creating", { id: 0 });
-      createReligionMutation.mutate({ name: data.name });
+      createSportMutation.mutate({ name: data.name });
     }
   };
 
@@ -109,8 +103,7 @@ export function CreateEditReligion({
           <Button
             size={"sm"}
             isLoading={
-              createReligionMutation.isPending ||
-              updateReligionMutation.isPending
+              createSportMutation.isPending || updateSportMutation.isPending
             }
             variant={"default"}
           >

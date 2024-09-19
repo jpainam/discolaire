@@ -161,12 +161,12 @@ export function AppSidebar() {
             url: "/administration/settings/religions",
           },
           {
-            title: "Team",
-            url: "#",
+            title: t("sports"),
+            url: "/administration/settings/sports",
           },
           {
-            title: "Billing",
-            url: "#",
+            title: t("clubs"),
+            url: "/administration/settings/clubs",
           },
           {
             title: "Limits",
