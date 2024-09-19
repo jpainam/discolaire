@@ -22,25 +22,26 @@ export function StudentEnrollmentHeader({
   return (
     <div className="flex flex-row items-center border-b bg-secondary px-2 py-1">
       <Label>{t("enrollments")}</Label>
-      <div className="ml-auto flex h-10 flex-row gap-2">
+      <div className="ml-auto flex flex-row items-center gap-2">
         {!isEnrolled && (
           <Button
             onClick={() => {
               openModal({
-                title: <div className="px-2">{t("enrollment")}</div>,
-                description: (
-                  <div className="px-2">{t("enroll_student_description")} </div>
-                ),
+                title: t("enrollment"),
+                className: "w-[400px]",
+                description: t("enroll_student_description"),
                 view: <EnrollStudentModal studentId={params.id} />,
               });
             }}
-            size="sm"
             variant="outline"
           >
             <ChevronRight className="mr-2 h-4 w-4" />
             {t("enroll")}
           </Button>
         )}
+        <Button variant="outline" className="opacity-0">
+          {t("export")}
+        </Button>
       </div>
     </div>
   );

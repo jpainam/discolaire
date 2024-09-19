@@ -36,6 +36,7 @@ interface VirtualizedCommandProps {
 }
 
 const VirtualizedCommand = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   height,
   options,
   placeholder,
@@ -78,7 +79,7 @@ const VirtualizedCommand = ({
         <CommandGroup
           ref={parentRef}
           style={{
-            height: height,
+            //height: height,
             width: "100%",
             overflow: "auto",
           }}

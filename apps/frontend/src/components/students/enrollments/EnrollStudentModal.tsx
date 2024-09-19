@@ -18,14 +18,12 @@ import {
 
 import { InputField } from "~/components/shared/forms/input-field";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
-import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
 const enrollFormSchema = z.object({
   classroomId: z.string().min(1),
   observation: z.string().optional(),
 });
-type EnrollFormValues = z.infer<typeof enrollFormSchema>;
 
 export function EnrollStudentModal({ studentId }: { studentId: string }) {
   const form = useForm({
@@ -36,30 +34,28 @@ export function EnrollStudentModal({ studentId }: { studentId: string }) {
     resolver: zodResolver(enrollFormSchema),
   });
   const { t } = useLocale();
-  //const params = useParams<{ id: string }>();
-  const createEnrollmentMutation = api.enrollment.create.useMutation();
   const utils = api.useUtils();
+  //const params = useParams<{ id: string }>();
+  const createEnrollmentMutation = api.enrollment.create.useMutation({
+    onSettled: async () => {
+      await utils.student.invalidate();
+    },
+    onSuccess: () => {
+      toast.success(t("enrolled_successfully"), { id: 0 });
+      closeModal();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
 
-  const onSubmitEnrollment = (data: EnrollFormValues) => {
-    toast.promise(
-      createEnrollmentMutation.mutateAsync({
-        studentId: studentId,
-        classroomId: data.classroomId,
-        observation: data.observation ?? "",
-      }),
-      {
-        error: (error) => {
-          closeModal();
-          return getErrorMessage(error);
-        },
-        loading: t("enrolling"),
-        success: async () => {
-          await utils.student.invalidate();
-          closeModal();
-          return t("enrolled_successfully");
-        },
-      },
-    );
+  const onSubmitEnrollment = (data: z.infer<typeof enrollFormSchema>) => {
+    toast.loading(t("enrolling"), { id: 0 });
+    createEnrollmentMutation.mutate({
+      studentId: studentId,
+      classroomId: data.classroomId,
+      observation: data.observation ?? "",
+    });
   };
   const { closeModal } = useModal();
   return (
@@ -92,7 +88,9 @@ export function EnrollStudentModal({ studentId }: { studentId: string }) {
           >
             {t("cancel")}
           </Button>
-          <Button type="submit">{t("enroll")}</Button>
+          <Button isLoading={createEnrollmentMutation.isPending} type="submit">
+            {t("enroll")}
+          </Button>
         </div>
       </form>
     </Form>

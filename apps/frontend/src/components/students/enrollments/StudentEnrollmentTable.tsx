@@ -26,10 +26,9 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
-import { getErrorMessage } from "~/lib/handle-error";
+import { routes } from "~/configs/routes";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
-import { routes } from "../../../configs/routes";
 
 type StudentEnrollmentProcedureOutput = NonNullable<
   RouterOutputs["student"]["enrollments"]
@@ -45,7 +44,15 @@ export function StudentEnrollmentTable({
   const { fullDateFormatter } = useDateFormat();
   const utils = api.useUtils();
   const deleteEnrollmentMutation = api.enrollment.delete.useMutation({
-    onSettled: () => utils.student.invalidate(),
+    onSettled: async () => {
+      await utils.student.invalidate();
+    },
+    onSuccess: () => {
+      toast.success(t("unenrolled"), { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
   });
 
   if (enrollments.length === 0) {
@@ -114,25 +121,21 @@ export function StudentEnrollmentTable({
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem
-                        className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                        className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
                         onSelect={async () => {
                           const isConfirmed = await confirm({
                             title: t("delete"),
                             description: t("delete_confirmation"),
+                            icon: (
+                              <Trash2 className="h-5 w-5 text-destructive" />
+                            ),
+                            alertDialogTitle: {
+                              className: "flex items-center gap-2",
+                            },
                           });
                           if (isConfirmed) {
-                            toast.promise(
-                              deleteEnrollmentMutation.mutateAsync(c.id),
-                              {
-                                loading: t("unenrolling"),
-                                error: (error) => {
-                                  return getErrorMessage(error);
-                                },
-                                success: () => {
-                                  return t("unenrolled");
-                                },
-                              },
-                            );
+                            toast.loading(t("unenrolling"));
+                            deleteEnrollmentMutation.mutate(c.id);
                           }
                         }}
                       >
