@@ -140,7 +140,7 @@ export default async function Page({
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <BookHeart className="h-4 w-4 stroke-1" /> {t("hobbies")}
         </span>
-        <span>{student.hobbies && student.hobbies.join(", ")}</span>
+        <span>{student.hobbies.join(", ")}</span>
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <MedalIcon className="h-4 w-4 stroke-1" />
           {t("sports")}
