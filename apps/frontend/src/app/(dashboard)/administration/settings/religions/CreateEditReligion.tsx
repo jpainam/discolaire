@@ -43,7 +43,7 @@ export function CreateEditReligion({
   const createReligionMutation = api.religion.create.useMutation({
     onSettled: () => utils.religion.invalidate(),
     onSuccess: () => {
-      toast.success("created_successfully", { id: 0 });
+      toast.success(t("created_successfully"), { id: 0 });
       router.refresh();
       closeModal();
     },
@@ -55,7 +55,7 @@ export function CreateEditReligion({
   const updateReligionMutation = api.religion.update.useMutation({
     onSettled: () => utils.religion.invalidate(),
     onSuccess: () => {
-      toast.success("updated_successfully", { id: 0 });
+      toast.success(t("updated_successfully"), { id: 0 });
       router.refresh();
       closeModal();
     },
@@ -65,13 +65,13 @@ export function CreateEditReligion({
   });
   const onSubmit = (data: z.infer<typeof createReligionSchema>) => {
     if (id) {
-      toast.loading("updating", { id: 0 });
+      toast.loading(t("updating"), { id: 0 });
       updateReligionMutation.mutate({
         id: id,
         name: data.name,
       });
     } else {
-      toast.loading("creating", { id: 0 });
+      toast.loading(t("creating"), { id: 0 });
       createReligionMutation.mutate({ name: data.name });
     }
   };

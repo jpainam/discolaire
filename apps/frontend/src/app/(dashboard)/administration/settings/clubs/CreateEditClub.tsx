@@ -37,7 +37,7 @@ export function CreateEditClub({ id, name }: { id?: string; name?: string }) {
   const createClubMutation = api.setting.createClub.useMutation({
     onSettled: () => utils.setting.clubs.invalidate(),
     onSuccess: () => {
-      toast.success("created_successfully", { id: 0 });
+      toast.success(t("created_successfully"), { id: 0 });
       router.refresh();
       closeModal();
     },
@@ -49,7 +49,7 @@ export function CreateEditClub({ id, name }: { id?: string; name?: string }) {
   const updateClubMutation = api.setting.updateClub.useMutation({
     onSettled: () => utils.setting.clubs.invalidate(),
     onSuccess: () => {
-      toast.success("updated_successfully", { id: 0 });
+      toast.success(t("updated_successfully"), { id: 0 });
       router.refresh();
       closeModal();
     },
@@ -59,13 +59,13 @@ export function CreateEditClub({ id, name }: { id?: string; name?: string }) {
   });
   const onSubmit = (data: z.infer<typeof createClubSchema>) => {
     if (id) {
-      toast.loading("updating", { id: 0 });
+      toast.loading(t("updating"), { id: 0 });
       updateClubMutation.mutate({
         id: id,
         name: data.name,
       });
     } else {
-      toast.loading("creating", { id: 0 });
+      toast.loading(t("creating"), { id: 0 });
       createClubMutation.mutate({ name: data.name });
     }
   };
