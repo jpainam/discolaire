@@ -2,9 +2,40 @@ import { z } from "zod";
 
 import { encryptPassword } from "../encrypt";
 import { userService } from "../services/user-service";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const userRouter = createTRPCRouter({
+  updateall: publicProcedure.mutation(async ({ ctx }) => {
+    const users = await ctx.db.user.findMany();
+    await Promise.all(
+      users.map((user) => {
+        return ctx.db.user.update({
+          data: {
+            username: user.id,
+          },
+          where: {
+            id: user.id,
+          },
+        });
+      }),
+    );
+    const user = await ctx.db.user.findFirst({
+      where: {
+        email: "jpainam@gmail.com",
+      },
+    });
+    if (user) {
+      void ctx.db.user.update({
+        data: {
+          username: "admin",
+        },
+        where: {
+          id: user.id,
+        },
+      });
+    }
+    return true;
+  }),
   all: protectedProcedure
     .input(
       z.object({
@@ -78,8 +109,9 @@ export const userRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
-        email: z.string().email(),
+        email: z.string().email().optional(),
         name: z.string().min(1),
+        username: z.string().min(1),
         avatar: z.string().optional(),
         password: z.string().min(6),
         emailVerified: z.coerce.date().optional(),
@@ -90,6 +122,7 @@ export const userRouter = createTRPCRouter({
       return ctx.db.user.create({
         data: {
           email: input.email,
+          username: input.username,
           name: input.name,
           avatar: input.avatar,
           password: await encryptPassword(input.password),

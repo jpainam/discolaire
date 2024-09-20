@@ -945,6 +945,7 @@ model Session {
 
 model User {
     id              String            @id @default(uuid())
+    username        String            @unique
     email           String?           @unique
     name            String?
     avatar          String?

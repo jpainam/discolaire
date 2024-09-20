@@ -17,20 +17,20 @@ export const authRouter = {
   signInWithPassword: publicProcedure
     .input(
       z.object({
-        email: z.string().email(),
+        username: z.string().min(1),
         password: z.string().min(1),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.db.user.findFirst({
         where: {
-          email: input.email,
+          username: input.username,
         },
       });
       if (!user || !(await isPasswordMatch(input.password, user.password))) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Incorrect email or password",
+          message: "Incorrect username or password",
         });
       }
       const token = generateToken({ id: user.id });

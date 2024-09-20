@@ -56,19 +56,18 @@ export const authConfig = {
       credentials: {},
       async authorize(credentials) {
         const parsed = z
-          .object({ username: z.string().email(), password: z.string().min(1) })
+          .object({ username: z.string().min(1), password: z.string().min(1) })
           .safeParse(credentials);
-
         if (parsed.success) {
           const { username, password } = parsed.data;
           const user = await db.user.findFirst({
             where: {
-              email: username,
+              username: username,
             },
           });
 
           if (!user || !(await isPasswordMatch(password, user.password))) {
-            throw new Error("Incorrect email or password");
+            throw new Error("Incorrect username or password");
           }
           const returnedUser = exclude(user, ["password"]);
           return returnedUser;

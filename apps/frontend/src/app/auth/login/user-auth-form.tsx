@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
@@ -21,14 +22,13 @@ import {
 import { Input } from "@repo/ui/input";
 
 import { createSchoolYearCookie } from "~/actions/schoolYear";
-import { Icons } from "~/components/icons";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
 type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
 
 const authFormSchema = z.object({
-  email: z.string().email().min(1),
+  username: z.string().min(1),
   password: z.string().min(1),
 });
 
@@ -38,7 +38,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const form = useForm({
     schema: authFormSchema,
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
@@ -53,7 +53,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   async function onSubmit(data: z.infer<typeof authFormSchema>) {
     setIsLoading(true);
     const res = await signIn("credentials", {
-      username: data.email,
+      username: data.username,
       password: data.password,
       redirect: false,
     });
@@ -72,19 +72,16 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           <div className="grid gap-2">
             <FormField
               control={form.control}
-              name={"email"}
+              name={"username"}
               render={({ field }) => (
                 <FormItem className={className}>
-                  <FormLabel>{t("email")}</FormLabel>
+                  <FormLabel>{t("username")}</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isLoading}
                       autoCorrect="off"
-                      autoComplete="email"
-                      type="email"
                       required
                       autoCapitalize="none"
-                      placeholder={"m@example.com"}
                       {...field}
                     />
                   </FormControl>
@@ -117,10 +114,17 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               )}
               {t("signin_with_email")}
             </Button>
+
+            <Link
+              href="/auth/password/forgot"
+              className="ml-auto text-sm text-primary hover:underline"
+            >
+              {t("forgot_password")}?
+            </Link>
           </div>
         </form>
       </Form>
-      <div className="relative">
+      {/* <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
         </div>
@@ -140,7 +144,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       >
         <Icons.google className="mr-2 h-4 w-4" />
         Google
-      </Button>
+      </Button> */}
     </div>
   );
 }
