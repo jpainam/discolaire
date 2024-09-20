@@ -1,13 +1,13 @@
 import { notFound } from "next/navigation";
 
 import { getServerTranslations } from "@repo/i18n/server";
-import { Button } from "@repo/ui/button";
 import { Card, CardContent, CardHeader } from "@repo/ui/card";
 import { Separator } from "@repo/ui/separator";
 
 import { AvatarState } from "~/components/AvatarState";
 import { api } from "~/trpc/server";
 import { getFullName } from "~/utils/full-name";
+import { StaffProfileHeader } from "./StaffProfileHeader";
 
 export async function StaffProfile({ staffId }: { staffId: string }) {
   const staff = await api.staff.get({ id: staffId });
@@ -25,14 +25,11 @@ export async function StaffProfile({ staffId }: { staffId: string }) {
       <Card className="md:col-span-1">
         <CardHeader className="flex flex-row items-start gap-4 border-b bg-muted/50">
           <AvatarState
-            className="h-[100px] w-[100px] xl:h-[200px] xl:w-[200px]"
+            className="h-[50px] w-[50px] xl:h-[100px] xl:w-[100px]"
             avatar={staff.avatar}
             pos={getFullName(staff).length}
           />
-          <div className="flex flex-col gap-4">
-            <Button variant={"outline"}>{t("change_avatar")}</Button>
-            <Button variant={"outline"}>{t("change_avatar")}</Button>
-          </div>
+          <StaffProfileHeader />
         </CardHeader>
         <CardContent className="p-2 text-sm">
           <div className="grid gap-2">
@@ -77,7 +74,7 @@ export async function StaffProfile({ staffId }: { staffId: string }) {
             <div className="font-semibold">{t("otherInformation")}</div>
             <dl className="grid gap-2">
               <div className="flex items-center justify-between">
-                <dt className="text-muted-foreground">Email</dt>
+                <dt className="text-muted-foreground">{t("email")}</dt>
                 <dd>
                   {staff.dateOfBirth &&
                     dateFormatter.format(new Date(staff.dateOfBirth))}
@@ -94,30 +91,15 @@ export async function StaffProfile({ staffId }: { staffId: string }) {
               </div>
 
               <div className="flex items-center justify-between">
-                <dt className="text-muted-foreground">Phone</dt>
+                <dt className="text-muted-foreground">{t("phoneNumber")} 1</dt>
                 <dd>
-                  <a href="tel:">+1 234 567 890</a>
-                </dd>
-              </div>
-            </dl>
-          </div>
-          <div className="grid gap-2">
-            <div className="font-semibold">Customer Information</div>
-            <dl className="grid gap-2">
-              <div className="flex items-center justify-between">
-                <dt className="text-muted-foreground">Customer</dt>
-                <dd>Liam Johnson</dd>
-              </div>
-              <div className="flex items-center justify-between">
-                <dt className="text-muted-foreground">Email</dt>
-                <dd>
-                  <a href="mailto:">liam@acme.com</a>
+                  <a href="tel:">{staff.phoneNumber1}</a>
                 </dd>
               </div>
               <div className="flex items-center justify-between">
-                <dt className="text-muted-foreground">Phone</dt>
+                <dt className="text-muted-foreground">{t("phoneNumber")} 2 </dt>
                 <dd>
-                  <a href="tel:">+1 234 567 890</a>
+                  <a href="tel:">{staff.phoneNumber2}</a>
                 </dd>
               </div>
             </dl>
