@@ -6,6 +6,7 @@ import { useParams, usePathname } from "next/navigation";
 import {
   BellRing,
   ChevronDownIcon,
+  KeyRound,
   MessageCircleMore,
   MoreVertical,
   NotebookTabs,
@@ -16,6 +17,7 @@ import {
   ShieldBan,
   SquareEqual,
   Trash2,
+  UserPlus2,
   Users,
 } from "lucide-react";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
@@ -23,6 +25,7 @@ import { toast } from "sonner";
 
 import { StudentStatus } from "@repo/db";
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
+import { useModal } from "@repo/hooks/use-modal";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
@@ -48,6 +51,8 @@ import { getFullName } from "../../utils/full-name";
 import { CountryComponent } from "../shared/CountryPicker";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
+import { ChangePassword } from "../users/ChangePassword";
+import { CreateUser } from "../users/CreateUser";
 import { SquaredAvatar } from "./SquaredAvatar";
 import { StudentSearch } from "./StudentSearch";
 
@@ -75,6 +80,8 @@ export function StudentHeader({ className }: StudentHeaderProps) {
     },
   });
 
+  const { openModal } = useModal();
+
   const { createQueryString } = useCreateQueryString();
   const pathname = usePathname();
 
@@ -89,6 +96,7 @@ export function StudentHeader({ className }: StudentHeaderProps) {
   const confirm = useConfirm();
 
   const student = studentQuery.data;
+  const attachUserMutation = api.user.attachUser.useMutation();
   //const studentTags = JSON.stringify(student?.tags ?? []);
 
   const canDeleteStudent = useCheckPermissions(
@@ -231,6 +239,45 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                   <DropdownMenuSeparator />
                   <DropdownHelp />
                   <DropdownMenuSeparator />
+                  {student && !student.id && (
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        openModal({
+                          className: "w-[500px]",
+                          title: t("attach_user"),
+                          view: (
+                            <CreateUser
+                              onSuccess={function (userId: string): void {
+                                attachUserMutation.mutate({
+                                  userId: userId,
+                                  entityId: student.id,
+                                  type: "student",
+                                });
+                              }}
+                            />
+                          ),
+                        });
+                      }}
+                    >
+                      <UserPlus2 className="mr-2 h-4 w-4" />
+                      {t("attach_user")}
+                    </DropdownMenuItem>
+                  )}
+                  {student?.userId && (
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        if (!student.userId) return;
+                        openModal({
+                          className: "w-[500px]",
+                          title: t("change_password"),
+                          view: <ChangePassword userId={student.userId} />,
+                        });
+                      }}
+                    >
+                      <KeyRound className="mr-2 h-4 w-4" />
+                      {t("change_password")}
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem>
                     <ShieldBan className="mr-2 h-4 w-4" />
                     {t("disable")}

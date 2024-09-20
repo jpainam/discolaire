@@ -31,6 +31,7 @@ export async function StaffProfile({ staffId }: { staffId: string }) {
           />
           <div className="flex flex-col gap-4">
             <Button variant={"outline"}>{t("change_avatar")}</Button>
+            <Button variant={"outline"}>{t("change_avatar")}</Button>
           </div>
         </CardHeader>
         <CardContent className="p-2 text-sm">

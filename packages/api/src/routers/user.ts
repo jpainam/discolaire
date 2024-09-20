@@ -2,40 +2,21 @@ import { z } from "zod";
 
 import { encryptPassword } from "../encrypt";
 import { userService } from "../services/user-service";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const userRouter = createTRPCRouter({
-  updateall: publicProcedure.mutation(async ({ ctx }) => {
-    const users = await ctx.db.user.findMany();
-    await Promise.all(
-      users.map((user) => {
-        return ctx.db.user.update({
-          data: {
-            username: user.id,
-          },
-          where: {
-            id: user.id,
-          },
-        });
-      }),
-    );
-    const user = await ctx.db.user.findFirst({
-      where: {
-        email: "jpainam@gmail.com",
-      },
-    });
-    if (user) {
-      void ctx.db.user.update({
-        data: {
-          username: "admin",
-        },
+  updatePassword: protectedProcedure
+    .input(z.object({ userId: z.string(), password: z.string().min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.user.update({
         where: {
-          id: user.id,
+          id: input.userId,
+        },
+        data: {
+          password: await encryptPassword(input.password),
         },
       });
-    }
-    return true;
-  }),
+    }),
   all: protectedProcedure
     .input(
       z.object({
@@ -109,28 +90,26 @@ export const userRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
-        email: z.string().email().optional(),
-        name: z.string().min(1),
         username: z.string().min(1),
-        avatar: z.string().optional(),
-        password: z.string().min(6),
+        password: z.string().min(1),
         emailVerified: z.coerce.date().optional(),
         isActive: z.boolean().default(true),
+        roleId: z.array(z.string().min(1)),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.user.create({
+      const user = await ctx.db.user.create({
         data: {
-          email: input.email,
+          email: `${input.username}@discolaire.com`,
           username: input.username,
-          name: input.name,
-          avatar: input.avatar,
+          name: input.username,
           password: await encryptPassword(input.password),
           emailVerified: input.emailVerified,
-
           isActive: input.isActive,
         },
       });
+      await userService.attachRoles(user.id, input.roleId);
+      return user;
     }),
   update: protectedProcedure
     .input(
@@ -171,5 +150,70 @@ export const userRouter = createTRPCRouter({
     )
     .mutation(() => {
       return [];
+    }),
+
+  attachUser: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        entityId: z.string(),
+        type: z.enum(["staff", "contact", "student"]),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      let email: string | null;
+      let name = "";
+      let avatar: string | null;
+
+      if (input.type === "staff") {
+        const d = await ctx.db.staff.update({
+          where: {
+            id: input.entityId,
+          },
+          data: {
+            user: {
+              connect: {
+                id: input.userId,
+              },
+            },
+          },
+        });
+        email = d.email;
+        name = `${d.lastName} ${d.firstName}`;
+        avatar = d.avatar;
+      } else if (input.type === "contact") {
+        const d = await ctx.db.contact.update({
+          where: {
+            id: input.entityId,
+          },
+          data: {
+            user: {
+              connect: {
+                id: input.userId,
+              },
+            },
+          },
+        });
+        email = d.email;
+        name = `${d.lastName} ${d.firstName}`;
+        avatar = d.avatar;
+      } else {
+        const d = await ctx.db.student.update({
+          where: {
+            id: input.entityId,
+          },
+          data: {
+            user: {
+              connect: {
+                id: input.userId,
+              },
+            },
+          },
+        });
+        email = d.email;
+        name = `${d.lastName} ${d.firstName}`;
+        avatar = d.avatar;
+      }
+      return userService.updateProfile(input.userId, name, email, avatar);
     }),
 });

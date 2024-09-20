@@ -34,4 +34,38 @@ export const userService = {
 
     return policies;
   },
+
+  updateProfile: async (
+    userId: string,
+    name: string,
+    email: string | null,
+    avatar: string | null,
+  ) => {
+    return db.user.update({
+      where: { id: userId },
+      data: {
+        name,
+        email,
+        avatar,
+      },
+    });
+  },
+  attachRoles: async (userId: string, roleId: string | string[]) => {
+    if (Array.isArray(roleId)) {
+      return db.userRole.createMany({
+        skipDuplicates: true,
+        data: roleId.map((id) => ({
+          userId,
+          roleId: id,
+        })),
+      });
+    } else {
+      return db.userRole.create({
+        data: {
+          userId,
+          roleId,
+        },
+      });
+    }
+  },
 };
