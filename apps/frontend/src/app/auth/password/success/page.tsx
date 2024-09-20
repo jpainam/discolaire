@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { CheckCircle } from "lucide-react";
 
 import { Button } from "@repo/ui/button";
@@ -10,7 +9,7 @@ import {
   CardTitle,
 } from "@repo/ui/card";
 
-export default function ResetPasswordSuccess() {
+export default function Page() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-secondary">
       <Card className="w-full max-w-md">
@@ -29,11 +28,9 @@ export default function ResetPasswordSuccess() {
           </p>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <Button asChild className="w-full">
-            <Link href="/login">Go to Login</Link>
-          </Button>
-          <Button asChild variant="outline" className="w-full">
-            <Link href="/">Return to Home</Link>
+          <Button className="w-full">Go to Login</Button>
+          <Button variant="outline" className="w-full">
+            Return to Home
           </Button>
         </CardFooter>
       </Card>

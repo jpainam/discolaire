@@ -6,6 +6,7 @@ import { KeyRound } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+import { useRouter } from "@repo/hooks/use-router";
 import { Alert, AlertDescription, AlertTitle } from "@repo/ui/alert";
 import { Button } from "@repo/ui/button";
 import {
@@ -63,6 +64,7 @@ export default function ResetPassword() {
     // In a real application, you would call your API here to reset the password
     console.log(values);
   }
+  const router = useRouter();
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-secondary">
@@ -132,7 +134,7 @@ export default function ResetPassword() {
           <Button
             variant="link"
             className="text-sm text-muted-foreground"
-            onClick={() => (window.location.href = "/login")}
+            onClick={() => router.push("/auth/login")}
           >
             Back to Login
           </Button>

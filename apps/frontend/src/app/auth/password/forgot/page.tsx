@@ -6,6 +6,7 @@ import { Mail } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+import { useRouter } from "@repo/hooks/use-router";
 import { Alert, AlertDescription, AlertTitle } from "@repo/ui/alert";
 import { Button } from "@repo/ui/button";
 import {
@@ -33,6 +34,7 @@ const formSchema = z.object({
 export default function ForgotPassword() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -99,7 +101,7 @@ export default function ForgotPassword() {
           <Button
             variant="link"
             className="text-sm text-muted-foreground"
-            onClick={() => window.history.back()}
+            onClick={() => router.push("/auth/login")}
           >
             Back to Login
           </Button>
