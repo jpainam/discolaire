@@ -48,7 +48,7 @@ export function UserLoginCard({ userId }: { userId: string }) {
     }
   }, [form, userQuery.data]);
 
-  const user = userQuery.data;
+  //const user = userQuery.data;
   if (userQuery.isPending) {
     return (
       <div className="flex w-full flex-col gap-2">

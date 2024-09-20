@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail } from "lucide-react";
+import { KeyRound } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -26,18 +26,31 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 
-const formSchema = z.object({
-  email: z.string().email("Invalid email address"),
-});
+const formSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+      ),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
-export default function ForgotPassword() {
+export default function ResetPassword() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      password: "",
+      confirmPassword: "",
     },
   });
 
@@ -47,7 +60,7 @@ export default function ForgotPassword() {
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsLoading(false);
     setIsSuccess(true);
-    // In a real application, you would call your API here
+    // In a real application, you would call your API here to reset the password
     console.log(values);
   }
 
@@ -55,18 +68,17 @@ export default function ForgotPassword() {
     <div className="flex min-h-screen items-center justify-center bg-secondary">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Forgot Password</CardTitle>
-          <CardDescription>
-            Enter your email to reset your password
-          </CardDescription>
+          <CardTitle>Reset Password</CardTitle>
+          <CardDescription>Enter your new password</CardDescription>
         </CardHeader>
         <CardContent>
           {isSuccess ? (
             <Alert>
-              <Mail className="h-4 w-4" />
-              <AlertTitle>Check your email</AlertTitle>
+              <KeyRound className="h-4 w-4" />
+              <AlertTitle>Password Reset Successful</AlertTitle>
               <AlertDescription>
-                We've sent you a password reset link. Please check your inbox.
+                Your password has been successfully reset. You can now log in
+                with your new password.
               </AlertDescription>
             </Alert>
           ) : (
@@ -77,19 +89,40 @@ export default function ForgotPassword() {
               >
                 <FormField
                   control={form.control}
-                  name="email"
+                  name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>New Password</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter your email" {...field} />
+                        <Input
+                          type="password"
+                          placeholder="Enter your new password"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Confirm New Password</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          placeholder="Confirm your new password"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Sending..." : "Send Reset Link"}
+                  {isLoading ? "Resetting..." : "Reset Password"}
                 </Button>
               </form>
             </Form>
@@ -99,7 +132,7 @@ export default function ForgotPassword() {
           <Button
             variant="link"
             className="text-sm text-muted-foreground"
-            onClick={() => window.history.back()}
+            onClick={() => (window.location.href = "/login")}
           >
             Back to Login
           </Button>
