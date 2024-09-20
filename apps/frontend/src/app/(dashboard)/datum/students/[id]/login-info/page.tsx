@@ -1,10 +1,10 @@
 import { getServerTranslations } from "@repo/i18n/server";
+import { Button } from "@repo/ui/button";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Label } from "@repo/ui/label";
 import { Separator } from "@repo/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
 
-import { AssociatedUserNotFound } from "~/components/students/login-info/AssociatedUserNotFound";
 import { LoginInfoHeader } from "~/components/students/login-info/LoginInfoHeader";
 import { UserLoginCard } from "~/components/students/login-info/UserLoginCard";
 import { api } from "~/trpc/server";
@@ -19,6 +19,7 @@ export default async function Page({
   const { t } = await getServerTranslations();
   const student = await api.student.get(id);
   const studentcontacts = await api.student.contacts(id);
+  //const user = student.userId ? await api.user.get(student.userId) : null;
 
   return (
     <div className="flex flex-col text-sm">
@@ -98,11 +99,9 @@ export default async function Page({
             ))}
           </TabsList>
           <TabsContent value={`student-${student.id}`}>
-            {student.userId ? (
-              <UserLoginCard userId={student.userId} />
-            ) : (
-              <AssociatedUserNotFound />
-            )}
+            <Button>
+              {student.userId ? t("create_user") : t("renitialize_password")}
+            </Button>
           </TabsContent>
           {studentcontacts.map((std, _index) => (
             <TabsContent
@@ -112,7 +111,7 @@ export default async function Page({
               {std.contact.userId ? (
                 <UserLoginCard userId={std.contact.userId} />
               ) : (
-                <AssociatedUserNotFound />
+                <></>
               )}
             </TabsContent>
           ))}
