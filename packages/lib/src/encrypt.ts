@@ -11,8 +11,9 @@ export const encryptPassword = async (password: string) => {
   const encryptedPassword = await bcrypt.hash(password, 8);
   return encryptedPassword;
 };
-const INVITATION_LINK_SECRET = crypto.randomUUID();
+
 export const getInvitationCode = async (email: string) => {
+  const INVITATION_LINK_SECRET = crypto.randomUUID();
   const encryptedCode = await bcrypt.hash(email + INVITATION_LINK_SECRET, 8);
   console.log("Encrypted code: ", encryptedCode);
   const code = crypto.randomUUID();
@@ -23,6 +24,7 @@ export const isInvitationLinkMatch = async (
   invitationCode: string,
   email: string,
 ) => {
+  const INVITATION_LINK_SECRET = crypto.randomUUID();
   const isMatch = await bcrypt.compare(
     email + INVITATION_LINK_SECRET,
     invitationCode,
