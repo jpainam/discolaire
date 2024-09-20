@@ -4,7 +4,6 @@ import Link from "next/link";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import type { RouterOutputs } from "@repo/api";
 import { useRouter } from "@repo/hooks/use-router";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
@@ -18,6 +17,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
+import { Skeleton } from "@repo/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -32,13 +32,12 @@ import { useCheckPermissions } from "~/hooks/use-permissions";
 import { api } from "~/trpc/react";
 import { CreateEditSubject } from "./CreateEditSubject";
 
-type ClassroomSubject = RouterOutputs["classroom"]["subjects"][number];
-export function SubjectTable({ subjects }: { subjects: ClassroomSubject[] }) {
+//type ClassroomSubject = RouterOutputs["classroom"]["subjects"][number];
+export function SubjectTable({ classroomId }: { classroomId: string }) {
   const { t } = useLocale();
   const { openSheet } = useSheet();
-
+  const subjectsQuery = api.classroom.subjects.useQuery({ id: classroomId });
   const confirm = useConfirm();
-
   const canDeleteClassroomSubject = useCheckPermissions(
     PermissionAction.DELETE,
     "classroom:subject",
@@ -59,6 +58,7 @@ export function SubjectTable({ subjects }: { subjects: ClassroomSubject[] }) {
       toast.error(err.message, { id: 0 });
     },
   });
+  const subjects = subjectsQuery.data ?? [];
   return (
     <div className="m-2 rounded-lg border">
       <Table>
@@ -73,6 +73,17 @@ export function SubjectTable({ subjects }: { subjects: ClassroomSubject[] }) {
           </TableRow>
         </TableHeader>
         <TableBody>
+          {subjectsQuery.isPending && (
+            <TableRow>
+              <TableCell colSpan={6} className="text-center">
+                <div className="grid w-full grid-cols-6 gap-2">
+                  {Array.from({ length: 30 }).map((_, index) => (
+                    <Skeleton key={`subject-table-${index}`} className="h-8" />
+                  ))}
+                </div>
+              </TableCell>
+            </TableRow>
+          )}
           {subjects.map((subject, index) => (
             <TableRow key={`subject-${index}`}>
               <TableCell className="py-0">

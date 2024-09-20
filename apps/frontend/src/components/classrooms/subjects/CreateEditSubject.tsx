@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { useRouter } from "@repo/hooks/use-router";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -41,8 +40,9 @@ type Subject = NonNullable<RouterOutputs["subject"]["get"]>;
 export function CreateEditSubject({ subject }: { subject?: Subject }) {
   const { t } = useLocale();
   const { closeSheet } = useSheet();
+  const params = useParams<{ id: string }>();
   const utils = api.useUtils();
-  const router = useRouter();
+
   const form = useForm<CreateEditSubjectValue>({
     defaultValues: {
       courseId: subject?.courseId?.toString() ?? "",
@@ -56,27 +56,30 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
 
   const subjectGroupsQuery = api.subjectGroup.all.useQuery();
   const subjectCreateMutation = api.subject.create.useMutation({
-    onSettled: () => utils.classroom.subjects.invalidate(),
+    onSettled: async () => {
+      await utils.classroom.subjects.invalidate({ id: params.id });
+    },
     onSuccess: () => {
       toast.success(t("created_successfully"), { id: 0 });
-      router.refresh();
+
+      closeSheet();
     },
     onError: (err) => {
       toast.error(err.message, { id: 0 });
     },
   });
   const subjectUpdateMutation = api.subject.update.useMutation({
-    onSettled: () => utils.classroom.subjects.invalidate(),
+    onSettled: async () => {
+      await utils.classroom.subjects.invalidate({ id: params.id });
+    },
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
-      router.refresh();
+      closeSheet();
     },
     onError: (err) => {
       toast.error(err.message, { id: 0 });
     },
   });
-
-  const params = useParams<{ id: string }>();
 
   const onSubmit = (data: CreateEditSubjectValue) => {
     const formValues = {
@@ -89,7 +92,6 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
     };
     if (subject) {
       toast.loading(t("updating"), { id: 0 });
-
       subjectUpdateMutation.mutate({ id: subject.id, ...formValues });
     } else {
       toast.loading(t("creating"), { id: 0 });
