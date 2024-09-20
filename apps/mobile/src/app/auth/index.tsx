@@ -37,7 +37,7 @@ export default function Page() {
 
   const onSignIn = () => {
     signInMutation.mutate({
-      email: "jpainam@gmail.com",
+      username: "admin",
       password: "admin1234",
     });
     // if (!email || !password) {
