@@ -60,7 +60,7 @@ export function StudentSidebar({ className }: { className?: string }) {
           {items.map((item, index) => {
             //const Icon = item.icon;
             const Icon = sidebarIcons[item.name];
-            const isActive = pathname === item.href;
+            const isActive = item.href ? pathname.includes(item.href) : false;
             return (
               <Fragment key={"sortable-menu" + item.name + "-" + index}>
                 <SortableList.Item id={item.id}>

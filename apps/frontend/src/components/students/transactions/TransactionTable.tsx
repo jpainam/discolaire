@@ -7,12 +7,13 @@ import {
   CrossCircledIcon,
   StopwatchIcon,
 } from "@radix-ui/react-icons";
-import { MoreHorizontal, Trash2 } from "lucide-react";
+import { BookCopy, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { FlatBadgeVariant } from "@repo/ui/FlatBadge";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -39,6 +40,7 @@ import {
 } from "@repo/ui/table";
 
 import { routes } from "~/configs/routes";
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
@@ -50,6 +52,10 @@ export function TransactionTable() {
   const { fullDateFormatter } = useDateFormat();
   const transactionsQuery = api.student.transactions.useQuery(params.id);
   const utils = api.useUtils();
+  const canDeleteTransaction = useCheckPermissions(
+    PermissionAction.DELETE,
+    "transaction",
+  );
 
   const updateTransactionMutation = api.transaction.updateStatus.useMutation({
     onSettled: async () => {
@@ -143,6 +149,7 @@ export function TransactionTable() {
                     <DropdownMenuContent align="end">
                       <DropdownMenuSub>
                         <DropdownMenuSubTrigger>
+                          <BookCopy className="mr-2 h-4 w-4" />
                           {t("status")}
                         </DropdownMenuSubTrigger>
                         <DropdownMenuSubContent>
@@ -207,25 +214,31 @@ export function TransactionTable() {
                           </DropdownMenuRadioGroup>
                         </DropdownMenuSubContent>
                       </DropdownMenuSub>
-                      <DropdownMenuSeparator />
-
-                      <DropdownMenuItem
-                        className="bg-destructive text-destructive-foreground"
-                        onSelect={() => {
-                          openModal({
-                            title: t("delete"),
-                            className: "w-96",
-                            view: (
-                              <DeleteTransaction
-                                transactionId={transaction.id}
-                              />
-                            ),
-                          });
-                        }}
-                      >
-                        <Trash2 className="mr-2 size-4" aria-hidden="true" />
-                        {t("delete")}
-                      </DropdownMenuItem>
+                      {canDeleteTransaction && (
+                        <>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                            onSelect={() => {
+                              openModal({
+                                title: t("delete"),
+                                className: "w-[400px]",
+                                view: (
+                                  <DeleteTransaction
+                                    transactionId={transaction.id}
+                                  />
+                                ),
+                              });
+                            }}
+                          >
+                            <Trash2
+                              className="mr-2 size-4"
+                              aria-hidden="true"
+                            />
+                            {t("delete")}
+                          </DropdownMenuItem>
+                        </>
+                      )}
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>

@@ -56,7 +56,7 @@ export function ClassroomSidebar({ className }: { className?: string }) {
         </div>
       )}
       {items.map((item, index) => {
-        const isActive = pathname === item.href;
+        const isActive = item.href ? pathname.includes(item.href) : false;
         const Icon = sidebarIcons[item.name];
 
         return (
