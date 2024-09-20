@@ -1,4 +1,4 @@
-import { fetchStats } from "@/lib/fetch-stats";
+import { fetchStats } from "~/lib/fetch-stats";
 import Link from "next/link";
 
 export async function TransactionEnrichmentsChart() {

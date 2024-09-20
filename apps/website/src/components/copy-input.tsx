@@ -1,9 +1,11 @@
 "use client";
 
-import { cn } from "@midday/ui/cn";
-import { Icons } from "@midday/ui/icons";
-import { motion } from "framer-motion";
 import { useState } from "react";
+import { CheckIcon } from "@radix-ui/react-icons";
+import { motion } from "framer-motion";
+import { CopyIcon } from "lucide-react";
+
+import { cn } from "~/lib/utils";
 
 type Props = {
   value: string;
@@ -28,18 +30,18 @@ export function CopyInput({ value, className }: Props) {
   return (
     <div
       className={cn(
-        "flex items-center relative w-full border border-border py-2 px-4",
+        "relative flex w-full items-center border border-border px-4 py-2",
         className,
       )}
     >
-      <div className="pr-7 text-[#878787] text-sm">{value}</div>
+      <div className="pr-7 text-sm text-[#878787]">{value}</div>
       <button type="button" onClick={handleClipboard} className="block">
         <motion.div
           className="absolute right-4 top-2.5"
           initial={{ opacity: 1, scale: 1 }}
           animate={{ opacity: isCopied ? 0 : 1, scale: isCopied ? 0 : 1 }}
         >
-          <Icons.Copy />
+          <CopyIcon />
         </motion.div>
 
         <motion.div
@@ -47,7 +49,7 @@ export function CopyInput({ value, className }: Props) {
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: isCopied ? 1 : 0, scale: isCopied ? 1 : 0 }}
         >
-          <Icons.Check />
+          <CheckIcon />
         </motion.div>
       </button>
     </div>

@@ -1,5 +1,7 @@
-import { Button } from "@midday/ui/button";
-import { Icons } from "@midday/ui/icons";
+import { Button } from "@repo/ui/button";
+
+import { Icons } from "~/components/icons";
+
 // import { Experimental } from "../experimental";
 
 type Props = {
@@ -9,12 +11,12 @@ type Props = {
 
 export function Header({ toggleSidebar, isExpanded }: Props) {
   return (
-    <div className="px-4 py-3 flex justify-between items-center border-border border-b-[1px]">
+    <div className="flex items-center justify-between border-b-[1px] border-border px-4 py-3">
       <div className="flex items-center space-x-3">
         <Button
           variant="outline"
           size="icon"
-          className="size-8 z-50 p-0"
+          className="z-50 size-8 p-0"
           onClick={toggleSidebar}
         >
           {isExpanded ? (
@@ -27,7 +29,7 @@ export function Header({ toggleSidebar, isExpanded }: Props) {
         <h2>Assistant</h2>
       </div>
 
-      <div className="flex space-x-2 items-center">
+      <div className="flex items-center space-x-2">
         {/* <Experimental className="border-border text-[#878787]" /> */}
       </div>
     </div>

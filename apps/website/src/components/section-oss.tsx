@@ -1,10 +1,3 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@midday/ui/accordion";
-import { Button } from "@midday/ui/button";
 import Link from "next/link";
 import {
   MdDataArray,
@@ -12,14 +5,23 @@ import {
   MdOutlineAssuredWorkload,
   MdOutlineDiversity2,
 } from "react-icons/md";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@repo/ui/accordion";
+import { Button } from "@repo/ui/button";
+
 import { GithubStats } from "./github-stats";
 
 export function SectionOSS() {
   return (
     <section className="container mb-16 md:mb-32">
       <div className="mb-12">
-        <h2 className="text-4xl mb-4 font-medium">Open startup</h2>
-        <p className="text-[#707070] max-w-[500px]">
+        <h2 className="mb-4 text-4xl font-medium">Open startup</h2>
+        <p className="max-w-[500px] text-[#707070]">
           We believe in being as transparent as possible, from{" "}
           <a
             href="https://git.new/midday"
@@ -69,7 +71,7 @@ export function SectionOSS() {
                     >
                       <Button
                         variant="outline"
-                        className="mt-8 mb-2 border-primary text-primary"
+                        className="mb-2 mt-8 border-primary text-primary"
                       >
                         View repository
                       </Button>
@@ -95,7 +97,7 @@ export function SectionOSS() {
                     >
                       <Button
                         variant="outline"
-                        className="mt-8 mb-2 border-primary text-primary"
+                        className="mb-2 mt-8 border-primary text-primary"
                       >
                         Join the community
                       </Button>
@@ -121,7 +123,7 @@ export function SectionOSS() {
                     >
                       <Button
                         variant="outline"
-                        className="mt-8 mb-2 border-primary text-primary"
+                        className="mb-2 mt-8 border-primary text-primary"
                       >
                         Open roadmap
                       </Button>
@@ -145,28 +147,28 @@ export function SectionOSS() {
           </div>
           <div className="md:basis-1/2">
             <a href="https://git.new/midday" target="_blank" rel="noreferrer">
-              <div className="aspect-square md:max-h-[280px] w-full md:border border-border md:p-10 mt-0 md:mt-0">
-                <div className="md:border-b-[1px] border-border pb-8 mb-8">
-                  <h3 className="font-medium text-xl md:text-2xl hidden md:block">
+              <div className="mt-0 aspect-square w-full border-border md:mt-0 md:max-h-[280px] md:border md:p-10">
+                <div className="mb-8 border-border pb-8 md:border-b-[1px]">
+                  <h3 className="hidden text-xl font-medium md:block md:text-2xl">
                     Midday
                   </h3>
                 </div>
 
                 <div>
-                  <div className="flex space-x-2 overflow-auto scrollbar-hide">
-                    <span className="border border-border py-1.5 px-4 text-sm rounded-full">
+                  <div className="scrollbar-hide flex space-x-2 overflow-auto">
+                    <span className="rounded-full border border-border px-4 py-1.5 text-sm">
                       finance
                     </span>
-                    <span className="border border-border py-1.5 px-4 text-sm rounded-full">
+                    <span className="rounded-full border border-border px-4 py-1.5 text-sm">
                       typescript
                     </span>
-                    <span className="border border-border py-1.5 px-4 text-sm rounded-full">
+                    <span className="rounded-full border border-border px-4 py-1.5 text-sm">
                       nextjs
                     </span>
-                    <span className="border border-border py-1.5 px-4 text-sm rounded-full">
+                    <span className="rounded-full border border-border px-4 py-1.5 text-sm">
                       tailwind
                     </span>
-                    <span className="border border-border py-1.5 px-4 text-sm rounded-full">
+                    <span className="rounded-full border border-border px-4 py-1.5 text-sm">
                       supabase
                     </span>
                   </div>

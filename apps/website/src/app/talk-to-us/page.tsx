@@ -1,5 +1,6 @@
-import { CalEmbed } from "@/components/cal-embed";
 import type { Metadata } from "next";
+
+import { CalEmbed } from "~/components/cal-embed";
 
 export const metadata: Metadata = {
   title: "Talk to us",

@@ -1,17 +1,18 @@
 "use client";
 
-import { subscribeAction } from "@/actions/subscribe-action";
-import { Loader2 } from "lucide-react";
 import { useState } from "react";
+import { Loader2 } from "lucide-react";
 import { useFormStatus } from "react-dom";
+
+import { subscribeAction } from "~/actions/subscribe-action";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
 
   if (pending) {
     return (
-      <div className="absolute top-1 right-0">
-        <Loader2 className="absolute w-4 h-4 mr-3 text-base animate-spin top-2.5 right-2" />
+      <div className="absolute right-0 top-1">
+        <Loader2 className="absolute right-2 top-2.5 mr-3 h-4 w-4 animate-spin text-base" />
       </div>
     );
   }
@@ -19,7 +20,7 @@ function SubmitButton() {
   return (
     <button
       type="submit"
-      className="absolute right-2 h-7 bg-primary top-2 px-4 font-medium text-sm z-10 text-primary-foreground"
+      className="absolute right-2 top-2 z-10 h-7 bg-primary px-4 text-sm font-medium text-primary-foreground"
     >
       Subscribe
     </button>
@@ -37,7 +38,7 @@ export function SubscribeInput({ group }: Props) {
     <div>
       <div className="flex justify-center">
         {isSubmitted ? (
-          <div className="border border-[#2C2C2C] font-sm text-primary h-11 w-[330px] flex items-center py-1 px-3 justify-between">
+          <div className="font-sm flex h-11 w-[330px] items-center justify-between border border-[#2C2C2C] px-3 py-1 text-primary">
             <p>Subscribed</p>
 
             <svg
@@ -73,7 +74,7 @@ export function SubscribeInput({ group }: Props) {
                 autoComplete="email"
                 aria-label="Email address"
                 required
-                className="bg-transparent font-sm text-primary outline-none py-1 px-3 w-[360px] placeholder-[#606060] h-11 border border-border"
+                className="font-sm h-11 w-[360px] border border-border bg-transparent px-3 py-1 text-primary placeholder-[#606060] outline-none"
               />
               <SubmitButton />
             </fieldset>

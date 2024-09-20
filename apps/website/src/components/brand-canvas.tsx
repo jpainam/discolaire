@@ -1,6 +1,10 @@
 "use client";
 
-import { Button } from "@midday/ui/button";
+import { useRef, useState } from "react";
+import Image from "next/image";
+import { useDraggable } from "react-use-draggable-scroll";
+
+import { Button } from "@repo/ui/button";
 import {
   Select,
   SelectContent,
@@ -8,10 +12,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@midday/ui/select";
-import Image from "next/image";
-import { useRef, useState } from "react";
-import { useDraggable } from "react-use-draggable-scroll";
+} from "@repo/ui/select";
 
 const assets = [
   <Image
@@ -102,14 +103,14 @@ export function BrandCanvas() {
   const { events } = useDraggable(ref);
 
   return (
-    <div className="sm:h-screen sm:w-screen overflow-hidden">
+    <div className="overflow-hidden sm:h-screen sm:w-screen">
       <div
-        className="fixed bg-background z-10 top-0 left-0 right-0 overflow-scroll scrollbar-hide cursor-grabbing"
+        className="scrollbar-hide fixed left-0 right-0 top-0 z-10 cursor-grabbing overflow-scroll bg-background"
         {...events}
         ref={ref}
       >
-        <div className="w-[4900px] flex h-screen">
-          <div className="grid grid-cols-8 gap-4 items-center">
+        <div className="flex h-screen w-[4900px]">
+          <div className="grid grid-cols-8 items-center gap-4">
             {repeated.map((asset, index) => (
               <div className="h-auto max-w-full" key={index.toString()}>
                 {asset}
@@ -119,10 +120,10 @@ export function BrandCanvas() {
         </div>
       </div>
 
-      <div className="fixed bottom-10 z-20 w-full flex justify-center items-center -ml-[80px]">
-        <div className="h-[48px] w-[200px] rounded-full border border-border backdrop-filter backdrop-blur-xl bg-[#121212] bg-opacity-70 text-center flex items-center p-1 pl-2 justify-between space-x-4">
+      <div className="fixed bottom-10 z-20 -ml-[80px] flex w-full items-center justify-center">
+        <div className="flex h-[48px] w-[200px] items-center justify-between space-x-4 rounded-full border border-border bg-[#121212] bg-opacity-70 p-1 pl-2 text-center backdrop-blur-xl backdrop-filter">
           <Select onValueChange={setValue} value={value}>
-            <SelectTrigger className="w-[180px] border-0 space-x-2">
+            <SelectTrigger className="w-[180px] space-x-2 border-0">
               <SelectValue placeholder="All" className="border-0" />
             </SelectTrigger>
             <SelectContent>

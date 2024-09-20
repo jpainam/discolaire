@@ -256,3 +256,6 @@ ssh root@37.27.188.136
 docker exec -it qgs0so4 bash
 SELECT setval(pg_get_serial_sequence('"Policy"', 'id'), coalesce(max(id) + 1, 1), false ) FROM "Policy";
 ```
+
+- `npx sort-package-json`
+- `git commit --no-verify --message ""` to skip husky

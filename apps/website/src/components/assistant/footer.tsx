@@ -1,6 +1,8 @@
-import { Icons } from "@midday/ui/icons";
-import { Popover, PopoverContent, PopoverTrigger } from "@midday/ui/popover";
 import { useRouter } from "next/navigation";
+
+import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+
+import { Icons } from "~/components/icons";
 
 type Props = {
   onSubmit: () => void;
@@ -10,16 +12,16 @@ export function Footer({ onSubmit }: Props) {
   const router = useRouter();
 
   return (
-    <div className="flex px-3 h-[40px] w-full border-t-[1px] items-center bg-background backdrop-filter dark:border-[#2C2C2C] backdrop-blur-lg dark:bg-[#151515]/[99]">
+    <div className="flex h-[40px] w-full items-center border-t-[1px] bg-background px-3 backdrop-blur-lg backdrop-filter dark:border-[#2C2C2C] dark:bg-[#151515]/[99]">
       <Popover>
         <PopoverTrigger>
-          <div className="scale-50 opacity-50 -ml-2">
+          <div className="-ml-2 scale-50 opacity-50">
             <Icons.LogoSmall />
           </div>
         </PopoverTrigger>
 
         <PopoverContent
-          className="bg-background backdrop-filter dark:border-[#2C2C2C] backdrop-blur-lg dark:bg-[#1A1A1A]/95 p-2 rounded-lg -ml-2 w-auto"
+          className="-ml-2 w-auto rounded-lg bg-background p-2 backdrop-blur-lg backdrop-filter dark:border-[#2C2C2C] dark:bg-[#1A1A1A]/95"
           side="top"
           align="start"
           sideOffset={10}
@@ -28,20 +30,20 @@ export function Footer({ onSubmit }: Props) {
             <li>
               <button
                 type="button"
-                className="flex space-x-2 items-center text-xs hover:bg-[#2b2b2b] rounded-md transition-colors w-full p-1"
+                className="flex w-full items-center space-x-2 rounded-md p-1 text-xs transition-colors hover:bg-[#2b2b2b]"
                 onClick={() => router.push("https://x.com/middayai")}
               >
-                <Icons.X className="w-[16px] h-[16px]" />
+                <Icons.X className="h-[16px] w-[16px]" />
                 <span>Follow us</span>
               </button>
             </li>
             <li>
               <button
                 type="button"
-                className="flex space-x-2 items-center text-xs hover:bg-[#2b2b2b] rounded-md transition-colors w-full p-1"
+                className="flex w-full items-center space-x-2 rounded-md p-1 text-xs transition-colors hover:bg-[#2b2b2b]"
                 onClick={() => router.push("https://go.midday.ai/anPiuRx")}
               >
-                <Icons.Discord className="w-[16px] h-[16px]" />
+                <Icons.Discord className="h-[16px] w-[16px]" />
                 <span>Join Our Community</span>
               </button>
             </li>
@@ -49,10 +51,10 @@ export function Footer({ onSubmit }: Props) {
             <li>
               <button
                 type="button"
-                className="flex space-x-2 items-center text-xs hover:bg-[#2b2b2b] rounded-md transition-colors w-full p-1"
+                className="flex w-full items-center space-x-2 rounded-md p-1 text-xs transition-colors hover:bg-[#2b2b2b]"
                 onClick={() => router.push("https://git.new/midday")}
               >
-                <Icons.GithubOutline className="w-[16px] h-[16px]" />
+                <Icons.GithubOutline className="h-[16px] w-[16px]" />
                 <span>Github</span>
               </button>
             </li>
@@ -62,7 +64,7 @@ export function Footer({ onSubmit }: Props) {
 
       <div className="ml-auto flex space-x-4">
         <button
-          className="flex space-x-2 items-center text-xs"
+          className="flex items-center space-x-2 text-xs"
           type="button"
           onClick={onSubmit}
         >

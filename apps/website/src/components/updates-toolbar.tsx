@@ -1,24 +1,26 @@
 "use client";
 
-import { Button } from "@midday/ui/button";
-import { cn } from "@midday/ui/cn";
+import { usePathname } from "next/navigation";
+import { useHotkeys } from "react-hotkeys-hook";
+import { FaXTwitter } from "react-icons/fa6";
+
+import { Button } from "@repo/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@midday/ui/dialog";
-import { Icons } from "@midday/ui/icons";
+} from "@repo/ui/dialog";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@midday/ui/tooltip";
-import { usePathname } from "next/navigation";
-import { useHotkeys } from "react-hotkeys-hook";
-import { FaXTwitter } from "react-icons/fa6";
+} from "@repo/ui/tooltip";
+
+import { Icons } from "~/components/icons";
+import { cn } from "~/lib/utils";
 import { CopyInput } from "./copy-input";
 
 const popupCenter = ({ url, title, w, h }) => {
@@ -30,13 +32,13 @@ const popupCenter = ({ url, title, w, h }) => {
   const width = window.innerWidth
     ? window.innerWidth
     : document.documentElement.clientWidth
-    ? document.documentElement.clientWidth
-    : screen.width;
+      ? document.documentElement.clientWidth
+      : screen.width;
   const height = window.innerHeight
     ? window.innerHeight
     : document.documentElement.clientHeight
-    ? document.documentElement.clientHeight
-    : screen.height;
+      ? document.documentElement.clientHeight
+      : screen.height;
 
   const systemZoom = width / window.screen.availWidth;
   const left = (width - w) / 2 / systemZoom + dualScreenLeft;
@@ -50,7 +52,7 @@ const popupCenter = ({ url, title, w, h }) => {
       height=${h / systemZoom}, 
       top=${top}, 
       left=${left}
-      `
+      `,
   );
 
   return newWindow;
@@ -101,17 +103,17 @@ export function UpdatesToolbar({ posts }) {
 
   return (
     <Dialog>
-      <div className="fixed right-6 bottom-0 top-0 flex-col items-center justify-center hidden md:flex">
+      <div className="fixed bottom-0 right-6 top-0 hidden flex-col items-center justify-center md:flex">
         <TooltipProvider delayDuration={20}>
-          <div className="flex flex-col items-center backdrop-filter backdrop-blur-lg bg-[#1A1A1A]/80 p-2 border border-[#2C2C2C] space-y-4 rounded-full">
+          <div className="flex flex-col items-center space-y-4 rounded-full border border-[#2C2C2C] bg-[#1A1A1A]/80 p-2 backdrop-blur-lg backdrop-filter">
             <Tooltip>
               <TooltipTrigger>
                 <DialogTrigger asChild>
-                  <Icons.Share size={18} className="text-[#606060] -mt-[1px]" />
+                  <Icons.Share size={18} className="-mt-[1px] text-[#606060]" />
                 </DialogTrigger>
               </TooltipTrigger>
               <TooltipContent
-                className="py-1 px-3 rounded-sm"
+                className="rounded-sm px-3 py-1"
                 sideOffset={25}
                 side="right"
               >
@@ -119,7 +121,7 @@ export function UpdatesToolbar({ posts }) {
               </TooltipContent>
             </Tooltip>
 
-            <div className="flex flex-col items-center border-t-[1px] border-border space-y-2 pt-2">
+            <div className="flex flex-col items-center space-y-2 border-t-[1px] border-border pt-2">
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
@@ -131,7 +133,7 @@ export function UpdatesToolbar({ posts }) {
                   </button>
                 </TooltipTrigger>
                 <TooltipContent
-                  className="py-1 px-3 rounded-sm"
+                  className="rounded-sm px-3 py-1"
                   sideOffset={25}
                   side="right"
                 >
@@ -143,7 +145,7 @@ export function UpdatesToolbar({ posts }) {
                   <button
                     type="button"
                     className={cn(
-                      currentIndex === posts.length - 1 && "opacity-50"
+                      currentIndex === posts.length - 1 && "opacity-50",
                     )}
                     onClick={handleNext}
                   >
@@ -151,7 +153,7 @@ export function UpdatesToolbar({ posts }) {
                   </button>
                 </TooltipTrigger>
                 <TooltipContent
-                  className="py-1 px-3 rounded-sm"
+                  className="rounded-sm px-3 py-1"
                   sideOffset={25}
                   side="right"
                 >
@@ -172,7 +174,7 @@ export function UpdatesToolbar({ posts }) {
           <div className="grid gap-6 py-4">
             <CopyInput value={`https://midday.ai${pathname}`} />
             <Button
-              className="w-full flex items-center space-x-2 h-10"
+              className="flex h-10 w-full items-center space-x-2"
               onClick={handleOnShare}
             >
               <span>Share on</span>

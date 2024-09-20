@@ -1,11 +1,13 @@
 "use client";
 
-import { Button } from "@midday/ui/button";
-import { useMediaQuery } from "@midday/ui/hooks";
-import { Icons } from "@midday/ui/icons";
-import { motion } from "framer-motion";
-import dynamic from "next/dynamic";
 import { useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { motion } from "framer-motion";
+
+import { Button } from "@repo/ui/button";
+
+import { Icons } from "~/components/icons";
+import { useMediaQuery } from "~/hooks/use-media-query";
 
 const ReactHlsPlayer = dynamic(() => import("react-hls-player"), {
   ssr: false,
@@ -34,7 +36,7 @@ export function SectionVideo() {
 
   return (
     <motion.div
-      className="flex flex-col justify-center container pb-20"
+      className="container flex flex-col justify-center pb-20"
       onViewportEnter={() => {
         if (!isPlaying && isDesktop) {
           timer.current = setTimeout(() => {
@@ -53,10 +55,10 @@ export function SectionVideo() {
     >
       <div className="relative">
         {isPlaying && (
-          <div className="absolute md:top-12 md:right-12 top-4 right-4 space-x-4 items-center justify-center z-30 transition-all">
+          <div className="absolute right-4 top-4 z-30 items-center justify-center space-x-4 transition-all md:right-12 md:top-12">
             <Button
               size="icon"
-              className="rounded-full size-10 md:size-14 transition ease-in-out hover:scale-110"
+              className="size-10 rounded-full transition ease-in-out hover:scale-110 md:size-14"
               onClick={toggleMute}
             >
               {isMuted ? <Icons.Mute size={24} /> : <Icons.UnMute size={24} />}
@@ -65,10 +67,10 @@ export function SectionVideo() {
         )}
 
         {!isPlaying && (
-          <div className="absolute md:top-12 md:right-12 top-4 right-4 space-x-4 items-center justify-center z-30 transition-all">
+          <div className="absolute right-4 top-4 z-30 items-center justify-center space-x-4 transition-all md:right-12 md:top-12">
             <Button
               size="icon"
-              className="rounded-full size-10 md:size-14 transition ease-in-out hover:scale-110"
+              className="size-10 rounded-full transition ease-in-out hover:scale-110 md:size-14"
               onClick={togglePlay}
             >
               <Icons.Play size={24} />

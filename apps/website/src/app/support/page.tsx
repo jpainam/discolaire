@@ -1,5 +1,6 @@
-import { SupportForm } from "@/components/support-form";
 import type { Metadata } from "next";
+
+import { SupportForm } from "~/components/support-form";
 
 export const metadata: Metadata = {
   title: "Support",
@@ -8,8 +9,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div className="max-w-[750px] m-auto">
-      <h1 className="mt-24 font-medium text-center text-5xl mb-16 leading-snug">
+    <div className="m-auto max-w-[750px]">
+      <h1 className="mb-16 mt-24 text-center text-5xl font-medium leading-snug">
         Support
       </h1>
 

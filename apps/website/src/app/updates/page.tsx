@@ -1,7 +1,8 @@
-import { Article } from "@/components/article";
-import { UpdatesToolbar } from "@/components/updates-toolbar";
-import { getBlogPosts } from "@/lib/blog";
 import type { Metadata } from "next";
+import { getBlogPosts } from "~/lib/blog";
+
+import { Article } from "~/components/article";
+import { UpdatesToolbar } from "~/components/updates-toolbar";
 
 export const metadata: Metadata = {
   title: "Updates",
@@ -22,7 +23,7 @@ export default async function Page() {
 
   return (
     <div className="container flex justify-center scroll-smooth">
-      <div className="max-w-[680px] pt-[80px] md:pt-[150px] w-full">
+      <div className="w-full max-w-[680px] pt-[80px] md:pt-[150px]">
         {posts}
       </div>
 

@@ -1,15 +1,18 @@
-import { DevMessage } from "@/components/dev-message";
-import { Footer } from "@/components/footer";
-import { FooterCTA } from "@/components/footer-cta";
-import { Header } from "@/components/header";
-import "@/styles/globals.css";
-import { cn } from "@midday/ui/cn";
-import "@midday/ui/globals.css";
-import { Provider as Analytics } from "@midday/events/client";
-import { GeistMono } from "geist/font/mono";
-import { GeistSans } from "geist/font/sans";
+import { DevMessage } from "~/components/dev-message";
+import { Footer } from "~/components/footer";
+import { FooterCTA } from "~/components/footer-cta";
+import { Header } from "~/components/header";
+
+import "~/styles/globals.css";
+
 import type { Metadata } from "next";
 import type { ReactElement } from "react";
+import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
+
+//import { Provider as Analytics } from "@repo/events/client";
+
+import { cn } from "~/lib/utils";
 import { baseUrl } from "./sitemap";
 
 export const preferredRegion = ["fra1", "sfo1", "iad1"];
@@ -81,17 +84,18 @@ export default function Layout({ children }: { children: ReactElement }) {
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          `${GeistSans.variable} ${GeistMono.variable}`,
-          "bg-[#0C0C0C] overflow-x-hidden dark antialiased",
+          "min-h-screen bg-background font-sans text-foreground antialiased",
+          GeistSans.variable,
+          GeistMono.variable,
         )}
       >
         <Header />
-        <main className="container mx-auto px-4 overflow-hidden md:overflow-visible">
+        <main className="container mx-auto overflow-hidden px-4 md:overflow-visible">
           {children}
         </main>
         <FooterCTA />
         <Footer />
-        <Analytics />
+        {/* <Analytics /> */}
         <DevMessage />
       </body>
     </html>

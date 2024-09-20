@@ -1,8 +1,11 @@
 "use client";
 
-import { Button } from "@midday/ui/button";
-import { useCarousel } from "@midday/ui/carousel";
-import { cn } from "@midday/ui/cn";
+import { AnimatePresence, motion } from "framer-motion";
+import { useHotkeys } from "react-hotkeys-hook";
+import { FaXTwitter } from "react-icons/fa6";
+
+import { Button } from "@repo/ui/button";
+import { useCarousel } from "@repo/ui/carousel";
 import {
   Dialog,
   DialogContent,
@@ -10,17 +13,16 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@midday/ui/dialog";
-import { Icons } from "@midday/ui/icons";
+} from "@repo/ui/dialog";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@midday/ui/tooltip";
-import { AnimatePresence, motion } from "framer-motion";
-import { useHotkeys } from "react-hotkeys-hook";
-import { FaXTwitter } from "react-icons/fa6";
+} from "@repo/ui/tooltip";
+
+import { Icons } from "~/components/icons";
+import { cn } from "~/lib/utils";
 import { CopyInput } from "../copy-input";
 
 type Props = {
@@ -36,13 +38,13 @@ const popupCenter = ({ url, title, w, h }) => {
   const width = window.innerWidth
     ? window.innerWidth
     : document.documentElement.clientWidth
-    ? document.documentElement.clientWidth
-    : screen.width;
+      ? document.documentElement.clientWidth
+      : screen.width;
   const height = window.innerHeight
     ? window.innerHeight
     : document.documentElement.clientHeight
-    ? document.documentElement.clientHeight
-    : screen.height;
+      ? document.documentElement.clientHeight
+      : screen.height;
 
   const systemZoom = width / window.screen.availWidth;
   const left = (width - w) / 2 / systemZoom + dualScreenLeft;
@@ -56,7 +58,7 @@ const popupCenter = ({ url, title, w, h }) => {
     height=${h / systemZoom}, 
     top=${top}, 
     left=${left}
-    `
+    `,
   );
 
   return newWindow;
@@ -81,14 +83,14 @@ export function CarouselToolbar({ views }: Props) {
 
   return (
     <Dialog>
-      <div className="fixed flex justify-center left-0 bottom-5 w-full">
+      <div className="fixed bottom-5 left-0 flex w-full justify-center">
         <AnimatePresence>
           <motion.div animate={{ y: views > 0 ? 0 : 100 }} initial={{ y: 100 }}>
             <TooltipProvider delayDuration={20}>
-              <div className="flex backdrop-filter backdrop-blur-lg bg-[#1A1A1A]/80 h-10 px-4 py-2 border border-[#2C2C2C] items-center space-x-4">
+              <div className="flex h-10 items-center space-x-4 border border-[#2C2C2C] bg-[#1A1A1A]/80 px-4 py-2 backdrop-blur-lg backdrop-filter">
                 <Tooltip>
                   <TooltipTrigger>
-                    <div className="text-[#878787] flex items-center space-x-2 border-r-[1px] border-border pr-4">
+                    <div className="flex items-center space-x-2 border-r-[1px] border-border pr-4 text-[#878787]">
                       <Icons.Visibility size={18} />
 
                       <span className="text-sm">
@@ -102,7 +104,7 @@ export function CarouselToolbar({ views }: Props) {
                   </TooltipTrigger>
 
                   <TooltipContent
-                    className="py-1 px-3 rounded-sm"
+                    className="rounded-sm px-3 py-1"
                     sideOffset={25}
                   >
                     <span className="text-xs">Views</span>
@@ -116,7 +118,7 @@ export function CarouselToolbar({ views }: Props) {
                     </button>
                   </TooltipTrigger>
                   <TooltipContent
-                    className="py-1 px-3 rounded-sm"
+                    className="rounded-sm px-3 py-1"
                     sideOffset={25}
                   >
                     <span className="text-xs">Book a meeting</span>
@@ -128,12 +130,12 @@ export function CarouselToolbar({ views }: Props) {
                     <DialogTrigger asChild>
                       <Icons.Share
                         size={18}
-                        className="text-[#878787] -mt-[1px]"
+                        className="-mt-[1px] text-[#878787]"
                       />
                     </DialogTrigger>
                   </TooltipTrigger>
                   <TooltipContent
-                    className="py-1 px-3 rounded-sm"
+                    className="rounded-sm px-3 py-1"
                     sideOffset={25}
                   >
                     <span className="text-xs">Share</span>
@@ -155,7 +157,7 @@ export function CarouselToolbar({ views }: Props) {
                       </button>
                     </TooltipTrigger>
                     <TooltipContent
-                      className="py-1 px-3 rounded-sm"
+                      className="rounded-sm px-3 py-1"
                       sideOffset={25}
                     >
                       <span className="text-xs">Previous slide</span>
@@ -175,7 +177,7 @@ export function CarouselToolbar({ views }: Props) {
                       </button>
                     </TooltipTrigger>
                     <TooltipContent
-                      className="py-1 px-3 rounded-sm"
+                      className="rounded-sm px-3 py-1"
                       sideOffset={25}
                     >
                       <span className="text-xs">Next slide</span>
@@ -200,7 +202,7 @@ export function CarouselToolbar({ views }: Props) {
           <div className="grid gap-6 py-4">
             <CopyInput value="https://midday.ai/pitch" />
             <Button
-              className="w-full flex items-center space-x-2 h-10"
+              className="flex h-10 w-full items-center space-x-2"
               onClick={handleOnShare}
             >
               <span>Share on</span>

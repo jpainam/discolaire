@@ -1,14 +1,16 @@
 "use client";
 
-import { useMediaQuery } from "@midday/ui/hooks";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@midday/ui/tooltip";
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+} from "@repo/ui/tooltip";
+
+import { useMediaQuery } from "~/hooks/use-media-query";
 
 let interval: any;
 
@@ -62,14 +64,14 @@ export const CardStack = ({
   // TODO: Get screen width
   return (
     <div
-      className="relative h-[220px] md:h-[670px] w-[331px] md:w-[1031px] z-10"
+      className="relative z-10 h-[220px] w-[331px] md:h-[670px] md:w-[1031px]"
       onMouseEnter={() => clearInterval(interval)}
     >
       {cards.map((card, index) => {
         return (
           <motion.div
             key={card.id}
-            className="absolute h-[220px] md:h-[670px] w-[331px] md:w-[1031px] flex flex-col justify-between"
+            className="absolute flex h-[220px] w-[331px] flex-col justify-between md:h-[670px] md:w-[1031px]"
             style={{
               transformOrigin: "top center",
               display: index > 2 ? "none" : "block",
@@ -90,7 +92,7 @@ export const CardStack = ({
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    className="w-[35px] h-[20px] z-20 absolute top-[75px] left-[8px]"
+                    className="absolute left-[8px] top-[75px] z-20 h-[20px] w-[35px]"
                     onClick={() => onChangeCard(cards.find((c) => c.id === 1))}
                   >
                     <span className="sr-only">Overview</span>
@@ -98,7 +100,7 @@ export const CardStack = ({
                 </TooltipTrigger>
                 <TooltipContent
                   side="right"
-                  className="py-1 px-3 rounded-sm"
+                  className="rounded-sm px-3 py-1"
                   sideOffset={8}
                 >
                   <p className="text-xs">Overview</p>
@@ -109,7 +111,7 @@ export const CardStack = ({
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    className="w-[35px] h-[20px] z-20 absolute top-[105px] left-[8px]"
+                    className="absolute left-[8px] top-[105px] z-20 h-[20px] w-[35px]"
                     onClick={() => onChangeCard(cards.find((c) => c.id === 5))}
                   >
                     <span className="sr-only">Transactions</span>
@@ -117,7 +119,7 @@ export const CardStack = ({
                 </TooltipTrigger>
                 <TooltipContent
                   side="right"
-                  className="py-1 px-3 rounded-sm"
+                  className="rounded-sm px-3 py-1"
                   sideOffset={8}
                 >
                   <p className="text-xs">Transactions</p>
@@ -128,7 +130,7 @@ export const CardStack = ({
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    className="w-[35px] h-[20px] z-20 absolute top-[135px] left-[8px]"
+                    className="absolute left-[8px] top-[135px] z-20 h-[20px] w-[35px]"
                     onClick={() => onChangeCard(cards.find((c) => c.id === 3))}
                   >
                     <span className="sr-only">Inbox</span>
@@ -136,7 +138,7 @@ export const CardStack = ({
                 </TooltipTrigger>
                 <TooltipContent
                   side="right"
-                  className="py-1 px-3 rounded-sm"
+                  className="rounded-sm px-3 py-1"
                   sideOffset={8}
                 >
                   <p className="text-xs">Inbox</p>
@@ -147,7 +149,7 @@ export const CardStack = ({
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    className="w-[35px] h-[20px] z-20 absolute top-[170px] left-[8px]"
+                    className="absolute left-[8px] top-[170px] z-20 h-[20px] w-[35px]"
                     onClick={() => onChangeCard(cards.find((c) => c.id === 2))}
                   >
                     <span className="sr-only">Tracker</span>
@@ -155,7 +157,7 @@ export const CardStack = ({
                 </TooltipTrigger>
                 <TooltipContent
                   side="right"
-                  className="py-1 px-3 rounded-sm"
+                  className="rounded-sm px-3 py-1"
                   sideOffset={8}
                 >
                   <p className="text-xs">Tracker</p>
@@ -166,7 +168,7 @@ export const CardStack = ({
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    className="w-[35px] h-[20px] z-20 absolute top-[230px] left-[8px]"
+                    className="absolute left-[8px] top-[230px] z-20 h-[20px] w-[35px]"
                     onClick={() => onChangeCard(cards.find((c) => c.id === 4))}
                   >
                     <span className="sr-only">Vault</span>
@@ -174,7 +176,7 @@ export const CardStack = ({
                 </TooltipTrigger>
                 <TooltipContent
                   side="right"
-                  className="py-1 px-3 rounded-sm"
+                  className="rounded-sm px-3 py-1"
                   sideOffset={8}
                 >
                   <p className="text-xs">Vault</p>

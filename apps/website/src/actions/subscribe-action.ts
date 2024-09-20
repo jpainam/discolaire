@@ -1,10 +1,10 @@
 "use server";
 
-import { getCountryCode } from "@midday/location";
+//import { getCountryCode } from "@repo/location";
 
 export async function subscribeAction(formData: FormData, userGroup: string) {
   const email = formData.get("email") as string;
-  const country = await getCountryCode();
+  const country = "CM";
 
   const res = await fetch(
     "https://app.loops.so/api/newsletter-form/clna1p09j00d3l60og56gj3u1",

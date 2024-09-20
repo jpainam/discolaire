@@ -1,9 +1,11 @@
 "use client";
 
-import { Button } from "@midday/ui/button";
-import { cn } from "@midday/ui/cn";
-import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+
+import { Button } from "@repo/ui/button";
+
+import { cn } from "~/lib/utils";
 import { ChatAvatar } from "./chat-avatar";
 import { spinner } from "./spinner";
 
@@ -17,7 +19,7 @@ async function concatCharacter(inputString, callback) {
   for (let i = 0; i < words.length; i++) {
     result += (i > 0 ? " " : "") + words[i];
     await new Promise((resolve) =>
-      setTimeout(resolve, getRandomDelay(70, 100))
+      setTimeout(resolve, getRandomDelay(70, 100)),
     );
     callback(result); // Call the callback with the intermediate result
   }
@@ -30,7 +32,7 @@ export function UserMessage({ children }: { children: React.ReactNode }) {
         <ChatAvatar role="user" />
       </div>
 
-      <div className="ml-4 flex-1 space-y-2 overflow-hidden pl-2 text-xs font-mono leading-relaxed">
+      <div className="ml-4 flex-1 space-y-2 overflow-hidden pl-2 font-mono text-xs leading-relaxed">
         {children}
       </div>
     </div>
@@ -76,8 +78,8 @@ export function BotCard({
 
       <div
         className={cn(
-          "ml-4 flex-1 space-y-2 overflow-hidden pl-2 text-xs font-mono leading-relaxed",
-          className
+          "ml-4 flex-1 space-y-2 overflow-hidden pl-2 font-mono text-xs leading-relaxed",
+          className,
         )}
       >
         {text}
@@ -113,8 +115,8 @@ export function SignUpCard({
 
         <div
           className={cn(
-            "ml-4 flex-1 space-y-2 overflow-hidden pl-2 text-xs font-mono leading-relaxed",
-            className
+            "ml-4 flex-1 space-y-2 overflow-hidden pl-2 font-mono text-xs leading-relaxed",
+            className,
           )}
         >
           {text}

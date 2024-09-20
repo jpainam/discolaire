@@ -1,13 +1,15 @@
-import { Testimonials } from "@/components/testimonials";
+import type { Metadata } from "next";
+import Link from "next/link";
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@midday/ui/accordion";
-import { Button } from "@midday/ui/button";
-import type { Metadata } from "next";
-import Link from "next/link";
+} from "@repo/ui/accordion";
+import { Button } from "@repo/ui/button";
+
+import { Testimonials } from "~/components/testimonials";
 
 export const metadata: Metadata = {
   title: "Pricing",
@@ -19,24 +21,24 @@ export default function Page() {
     <>
       <div className="container">
         <div className="min-h-[950px]">
-          <h1 className="mt-24 font-medium text-center text-[100px] md:text-[170px] mb-2 leading-none">
+          <h1 className="mb-2 mt-24 text-center text-[100px] font-medium leading-none md:text-[170px]">
             Free
           </h1>
 
-          <h3 className="font-medium text-center text-[100px] md:text-[170px] mb-2 text-stroke leading-none">
+          <h3 className="text-stroke mb-2 text-center text-[100px] font-medium leading-none md:text-[170px]">
             while in beta
           </h3>
 
-          <div className="flex items-center flex-col text-center relative">
-            <div className="mt-12 mb-12" />
-            <p className="text-xl mt-4">Claim $49/mo deal</p>
+          <div className="relative flex flex-col items-center text-center">
+            <div className="mb-12 mt-12" />
+            <p className="mt-4 text-xl">Claim $49/mo deal</p>
 
             <div className="mt-8">
               <div className="flex items-center space-x-4">
                 <Link href="/talk-to-us">
                   <Button
                     variant="outline"
-                    className="border border-primary h-12 px-6"
+                    className="h-12 border border-primary px-6"
                   >
                     Talk to us
                   </Button>
@@ -54,13 +56,13 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="container  max-w-[800px]">
-          <div className="-mt-[200px] ">
+        <div className="container max-w-[800px]">
+          <div className="-mt-[200px]">
             <div className="text-center">
               <h4 className="text-4xl">Frequently asked questions</h4>
             </div>
 
-            <Accordion type="single" collapsible className="w-full mt-10 mb-48">
+            <Accordion type="single" collapsible className="mb-48 mt-10 w-full">
               <AccordionItem value="item-1">
                 <AccordionTrigger>
                   <span className="truncate">Can I self-host Midday.ai?</span>
@@ -114,7 +116,7 @@ export default function Page() {
               </AccordionItem>
               <AccordionItem value="item-4">
                 <AccordionTrigger>
-                  <span className="truncate max-w-[300px] md:max-w-full">
+                  <span className="max-w-[300px] truncate md:max-w-full">
                     What are your data privacy & security policies?
                   </span>
                 </AccordionTrigger>
@@ -130,7 +132,7 @@ export default function Page() {
 
               <AccordionItem value="item-5">
                 <AccordionTrigger>
-                  <span className="truncate max-w-[300px] md:max-w-full">
+                  <span className="max-w-[300px] truncate md:max-w-full">
                     Can I cancel my subscription at any time?
                   </span>
                 </AccordionTrigger>
@@ -143,7 +145,7 @@ export default function Page() {
 
               <AccordionItem value="item-6">
                 <AccordionTrigger>
-                  <span className="truncate max-w-[300px] md:max-w-full">
+                  <span className="max-w-[300px] truncate md:max-w-full">
                     I have more questions about Midday.ai. How can I get in
                     touch?
                   </span>

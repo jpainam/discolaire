@@ -1,11 +1,13 @@
 "use client";
 
-import { useEnterSubmit } from "@midday/ui/hooks";
-import { ScrollArea } from "@midday/ui/scroll-area";
-import { Textarea } from "@midday/ui/textarea";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { nanoid } from "nanoid";
-import { useState } from "react";
+
+import { ScrollArea } from "@repo/ui/scroll-area";
+import { Textarea } from "@repo/ui/textarea";
+
+import { useEnterSubmit } from "~/hooks/use-enter-submit";
 import { ChatEmpty } from "./chat-empty";
 import { ChatExamples } from "./chat-examples";
 import { ChatList } from "./chat-list";
@@ -83,7 +85,7 @@ export function Chat({ messages, submitMessage, input, setInput }) {
         {messages.length ? <ChatList messages={messages} /> : <ChatEmpty />}
       </ScrollArea>
 
-      <div className="absolute bottom-[1px] left-[1px] right-[1px] h-[88px] border-border border-t-[1px]">
+      <div className="absolute bottom-[1px] left-[1px] right-[1px] h-[88px] border-t-[1px] border-border">
         {showExamples && <ChatExamples onSubmit={onSubmit} />}
 
         <form
@@ -100,7 +102,7 @@ export function Chat({ messages, submitMessage, input, setInput }) {
             autoComplete="off"
             autoCorrect="off"
             value={input}
-            className="h-12 min-h-12 pt-3 resize-none border-none"
+            className="h-12 min-h-12 resize-none border-none pt-3"
             placeholder="Ask Midday a question..."
             onKeyDown={onKeyDown}
             onChange={(evt) => {

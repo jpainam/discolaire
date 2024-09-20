@@ -1,6 +1,7 @@
-import { PitchCarusel } from "@/components/pitch/pitch-carousel";
-import { Grid } from "@/components/pitch/ui";
 import type { Metadata } from "next";
+
+import { PitchCarusel } from "~/components/pitch/pitch-carousel";
+import { Grid } from "~/components/pitch/ui";
 
 export const metadata: Metadata = {
   title: "Pitch",
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div className="fixed top-0 bottom-0 right-0 left-0 h-screen bg-background z-50">
+    <div className="fixed bottom-0 left-0 right-0 top-0 z-50 h-screen bg-background">
       <Grid />
       <PitchCarusel />
     </div>

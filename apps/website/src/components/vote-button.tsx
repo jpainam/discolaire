@@ -1,9 +1,11 @@
 "use client";
 
-import { voteAction } from "@/actions/vote-action";
-import { Button } from "@midday/ui/button";
 import { ChevronUp } from "lucide-react";
 import { useOptimisticAction } from "next-safe-action/hooks";
+
+import { Button } from "@repo/ui/button";
+
+import { voteAction } from "~/actions/vote-action";
 
 type Props = {
   id: string;
@@ -21,10 +23,10 @@ export function VoteButton({ count, id }: Props) {
   return (
     <Button
       variant="outline"
-      className="p-6 flex-col w-14 h-16"
+      className="h-16 w-14 flex-col p-6"
       onClick={() => execute({ id })}
     >
-      <div className="flex space-x-2 items-center flex-col">
+      <div className="flex flex-col items-center space-x-2">
         <ChevronUp size={16} />
         {optimisticState}
       </div>

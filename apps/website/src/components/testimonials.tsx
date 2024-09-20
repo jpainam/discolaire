@@ -1,4 +1,4 @@
-import { InfiniteMovingCards } from "@/components/infinite-moving-cards";
+import { InfiniteMovingCards } from "~/components/infinite-moving-cards";
 
 const testimonials = [
   {
@@ -120,8 +120,8 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <div className="relative pb-22">
-      <h3 className="text-4xl mb-8 font-medium">What people say</h3>
+    <div className="pb-22 relative">
+      <h3 className="mb-8 text-4xl font-medium">What people say</h3>
       <InfiniteMovingCards items={testimonials} direction="left" speed="slow" />
     </div>
   );

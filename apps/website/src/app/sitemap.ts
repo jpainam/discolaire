@@ -1,4 +1,4 @@
-import { getBlogPosts } from "@/lib/blog";
+import { getBlogPosts } from "~/lib/blog";
 import type { MetadataRoute } from "next";
 
 export const baseUrl = "https://midday.ai";

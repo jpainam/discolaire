@@ -1,5 +1,6 @@
-import { VoteButton } from "@/components/vote-button";
-import { client } from "@midday/kv";
+import { client } from "@repo/kv";
+
+import { VoteButton } from "~/components/vote-button";
 
 type Props = {
   id: string;

@@ -1,16 +1,20 @@
 "use client";
 
-import { featureRequestAction } from "@/actions/feature-request-action";
-import { featureRequestSchema } from "@/actions/schema";
+import type { z } from "zod";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@midday/ui/button";
+import { Loader2 } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
+import { useForm } from "react-hook-form";
+
+import { Button } from "@repo/ui/button";
 import {
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@midday/ui/dialog";
+} from "@repo/ui/dialog";
 import {
   Form,
   FormControl,
@@ -18,21 +22,19 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@midday/ui/form";
-import { Input } from "@midday/ui/input";
+} from "@repo/ui/form";
+import { Input } from "@repo/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@midday/ui/select";
-import { Textarea } from "@midday/ui/textarea";
-import { Loader2 } from "lucide-react";
-import { useAction } from "next-safe-action/hooks";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import type { z } from "zod";
+} from "@repo/ui/select";
+import { Textarea } from "@repo/ui/textarea";
+
+import { featureRequestAction } from "~/actions/feature-request-action";
+import { featureRequestSchema } from "~/actions/schema";
 
 const categories = ["Feature", "Integration", "API"];
 
@@ -59,8 +61,8 @@ export function FeatureRequestModal() {
     <DialogContent className="sm:max-w-[500px]">
       <div className="p-4">
         {isSubmitted ? (
-          <div className="text-center p-8 pb-12">
-            <h2 className="font-semibold text-lg mb-4">Thank you</h2>
+          <div className="p-8 pb-12 text-center">
+            <h2 className="mb-4 text-lg font-semibold">Thank you</h2>
 
             <p className="text-sm">
               We'll inform you when your feature request is <br />
@@ -75,7 +77,7 @@ export function FeatureRequestModal() {
 
             <form
               onSubmit={form.handleSubmit(featureRequest.execute)}
-              className="space-y-4 mt-4"
+              className="mt-4 space-y-4"
             >
               <FormField
                 control={form.control}
@@ -159,7 +161,7 @@ export function FeatureRequestModal() {
                 )}
               />
 
-              <DialogFooter className="md:flex md:space-x-4 pt-4">
+              <DialogFooter className="pt-4 md:flex md:space-x-4">
                 <DialogTrigger asChild>
                   <Button
                     type="button"

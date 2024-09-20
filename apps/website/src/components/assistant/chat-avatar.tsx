@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, AvatarImage } from "@midday/ui/avatar";
+import { Avatar, AvatarImage } from "@repo/ui/avatar";
 
 type Props = {
   role: "assistant" | "user";

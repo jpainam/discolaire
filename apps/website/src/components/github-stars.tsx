@@ -1,4 +1,4 @@
-import { fetchGithubStars } from "@/lib/fetch-github-stars";
+import { fetchGithubStars } from "~/lib/fetch-github-stars";
 
 export async function GithubStars() {
   const data = await fetchGithubStars();

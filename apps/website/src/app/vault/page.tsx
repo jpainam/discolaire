@@ -1,8 +1,9 @@
-import { Assistant } from "@/components/assistant";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Files from "public/product-files.png";
 import Vault from "public/product-vault.jpg";
+
+import { Assistant } from "~/components/assistant";
 
 export const metadata: Metadata = {
   title: "Vault",
@@ -14,16 +15,16 @@ export default function Page() {
   return (
     <div className="container mb-52">
       <div className="mb-40">
-        <h1 className="mt-24 font-medium text-center text-[75px] md:text-[170px] mb-2 leading-none text-stroke">
+        <h1 className="text-stroke mb-2 mt-24 text-center text-[75px] font-medium leading-none md:text-[170px]">
           Your Files
         </h1>
 
-        <h3 className="font-medium text-center text-[75px] md:text-[170px] mb-2 leading-none">
+        <h3 className="mb-2 text-center text-[75px] font-medium leading-none md:text-[170px]">
           Vault
         </h3>
 
-        <div className="flex items-center flex-col text-center relative">
-          <p className="text-lg mt-4 max-w-[600px]">
+        <div className="relative flex flex-col items-center text-center">
+          <p className="mt-4 max-w-[600px] text-lg">
             Don’t waste time searching through old emails and random folders.
             Keep all your contracts, agreements and more safe in one place.
           </p>
@@ -32,12 +33,12 @@ export default function Page() {
 
       <Image src={Vault} quality={100} alt="Vault" />
 
-      <div className="flex items-center flex-col text-center relative mt-28">
+      <div className="relative mt-28 flex flex-col items-center text-center">
         <div className="max-w-[600px]">
-          <h4 className="font-medium text-xl md:text-2xl mb-4">
+          <h4 className="mb-4 text-xl font-medium md:text-2xl">
             All your files in one place
           </h4>
-          <p className="text-[#878787] text-sm">
+          <p className="text-sm text-[#878787]">
             Gather all your business files you have laying around and have them
             in one place. Upload quickly and be able to share them with whomever
             you want.
@@ -48,14 +49,14 @@ export default function Page() {
           src={Files}
           quality={100}
           alt="Files"
-          className="mt-10 max-w-[834px] w-full"
+          className="mt-10 w-full max-w-[834px]"
         />
 
         <div className="mt-32 max-w-[550px]">
-          <h4 className="font-medium text-xl md:text-2xl mb-4">
+          <h4 className="mb-4 text-xl font-medium md:text-2xl">
             Use assistant to search
           </h4>
-          <p className="text-[#878787] text-sm mb-10">
+          <p className="mb-10 text-sm text-[#878787]">
             Use the assistant to search for your files or even within your
             files. Say you want to find that old contract but can’t remember
             which client it was for, just search for details around it and the
@@ -63,7 +64,7 @@ export default function Page() {
           </p>
         </div>
 
-        <div className="text-left scale-[0.45] md:scale-100 -mt-20 md:mt-0">
+        <div className="-mt-20 scale-[0.45] text-left md:mt-0 md:scale-100">
           <Assistant />
         </div>
       </div>

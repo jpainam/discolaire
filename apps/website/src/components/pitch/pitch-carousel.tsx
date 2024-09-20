@@ -1,23 +1,21 @@
 "use client";
 
-import { setViewCount } from "@/actions/set-view-count";
-import { SectionBook } from "@/components/pitch/section-book";
-import { SectionDemo } from "@/components/pitch/section-demo";
-import { SectionNext } from "@/components/pitch/section-next";
-import { SectionProblem } from "@/components/pitch/section-problem";
-import { SectionSolution } from "@/components/pitch/section-solution";
-import { SectionStart } from "@/components/pitch/section-start";
-import { SectionSubscription } from "@/components/pitch/section-subscription";
-import { SectionTeam } from "@/components/pitch/section-team";
-import { SectionTraction } from "@/components/pitch/section-traction";
-import { SectionVision } from "@/components/pitch/section-vision";
-import {
-  Carousel,
-  type CarouselApi,
-  CarouselContent,
-  CarouselItem,
-} from "@midday/ui/carousel";
 import { useEffect, useRef, useState } from "react";
+
+import type { CarouselApi } from "@repo/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "@repo/ui/carousel";
+
+import { setViewCount } from "~/actions/set-view-count";
+import { SectionBook } from "~/components/pitch/section-book";
+import { SectionDemo } from "~/components/pitch/section-demo";
+import { SectionNext } from "~/components/pitch/section-next";
+import { SectionProblem } from "~/components/pitch/section-problem";
+import { SectionSolution } from "~/components/pitch/section-solution";
+import { SectionStart } from "~/components/pitch/section-start";
+import { SectionSubscription } from "~/components/pitch/section-subscription";
+import { SectionTeam } from "~/components/pitch/section-team";
+import { SectionTraction } from "~/components/pitch/section-traction";
+import { SectionVision } from "~/components/pitch/section-vision";
 import { CarouselToolbar } from "./carousel-toolbar";
 
 export function PitchCarusel() {
@@ -53,7 +51,7 @@ export function PitchCarusel() {
   }, [api]);
 
   return (
-    <Carousel className="w-full min-h-full relative" setApi={setApi}>
+    <Carousel className="relative min-h-full w-full" setApi={setApi}>
       <CarouselContent>
         <CarouselItem>
           <SectionStart />

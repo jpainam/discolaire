@@ -1,4 +1,4 @@
-import { fetchStats } from "@/lib/fetch-stats";
+import { fetchStats } from "~/lib/fetch-stats";
 
 export async function BankAccountsChart() {
   const { bankAccounts } = await fetchStats();

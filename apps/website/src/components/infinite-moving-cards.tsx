@@ -2,9 +2,10 @@
 
 "use client";
 
-import { cn } from "@midday/ui/cn";
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
+
+import { cn } from "~/lib/utils";
 
 export const InfiniteMovingCards = ({
   items,
@@ -51,12 +52,12 @@ export const InfiniteMovingCards = ({
       if (direction === "left") {
         containerRef.current.style.setProperty(
           "--animation-direction",
-          "forwards"
+          "forwards",
         );
       } else {
         containerRef.current.style.setProperty(
           "--animation-direction",
-          "reverse"
+          "reverse",
         );
       }
     }
@@ -77,21 +78,21 @@ export const InfiniteMovingCards = ({
     <div
       ref={containerRef}
       className={cn(
-        "scroller relative z-20 overflow-hidden -ml-4 md:-ml-[1200px] w-screen md:w-[calc(100vw+1400px)]",
-        className
+        "scroller relative z-20 -ml-4 w-screen overflow-hidden md:-ml-[1200px] md:w-[calc(100vw+1400px)]",
+        className,
       )}
     >
       <ul
         ref={scrollerRef}
         className={cn(
-          "flex min-w-full shrink-0 gap-8 py-4 w-max flex-nowrap items-start",
+          "flex w-max min-w-full shrink-0 flex-nowrap items-start gap-8 py-4",
           start && "animate-scroll",
-          pauseOnHover && "hover:[animation-play-state:paused]"
+          pauseOnHover && "hover:[animation-play-state:paused]",
         )}
       >
         {items.map((item, idx) => (
           <li
-            className="w-[310px] max-w-full relative flex-shrink-0 border border-border rounded-2xl bg-[#121212] px-8 py-6 md:w-[310px]"
+            className="relative w-[310px] max-w-full flex-shrink-0 rounded-2xl border border-border bg-[#121212] px-8 py-6 md:w-[310px]"
             key={item.name}
           >
             <blockquote>
@@ -100,17 +101,17 @@ export const InfiniteMovingCards = ({
                 className="user-select-none -z-1 pointer-events-none absolute -left-0.5 -top-0.5 h-[calc(100%_+_4px)] w-[calc(100%_+_4px)]"
               />
 
-              <div className="flex space-x-2 items-center mb-6">
+              <div className="mb-6 flex items-center space-x-2">
                 <Image
                   src={item.avatarUrl}
                   width={48}
                   height={48}
                   alt="Tweet"
-                  className="rounded-full overflow-hidden"
+                  className="overflow-hidden rounded-full"
                 />
                 <div className="flex flex-col">
                   <div className="flex items-center space-x-2">
-                    <span className="truncate max-w-36">{item.name}</span>
+                    <span className="max-w-36 truncate">{item.name}</span>
                     {item.verified && (
                       <svg
                         width={2500}
@@ -125,12 +126,12 @@ export const InfiniteMovingCards = ({
                       </svg>
                     )}
                   </div>
-                  <span className="text-sm text-[#878787] font-normal">
+                  <span className="text-sm font-normal text-[#878787]">
                     {item.handle}
                   </span>
                 </div>
               </div>
-              <span className="relative z-20 text-sm leading-[1.6] text-[#878787] font-normal">
+              <span className="relative z-20 text-sm font-normal leading-[1.6] text-[#878787]">
                 {item.quote}
               </span>
             </blockquote>

@@ -1,4 +1,4 @@
-import { cn } from "@midday/ui/cn";
+import { cn } from "~/lib/utils";
 
 interface SidebarItemProps {
   chat: any;
@@ -10,11 +10,11 @@ export function SidebarItem({ chat, onSelect }: SidebarItemProps) {
     <button
       type="button"
       className={cn(
-        "text-left transition-colors px-0 py-1 rounded-lg w-full text-[#878787] hover:text-primary"
+        "w-full rounded-lg px-0 py-1 text-left text-[#878787] transition-colors hover:text-primary",
       )}
       onClick={() => onSelect(chat.title)}
     >
-      <span className="text-xs line-clamp-1">{chat.title}</span>
+      <span className="line-clamp-1 text-xs">{chat.title}</span>
     </button>
   );
 }

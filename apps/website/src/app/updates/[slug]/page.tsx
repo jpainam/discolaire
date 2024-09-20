@@ -1,10 +1,11 @@
-import { baseUrl } from "@/app/sitemap";
-import { CustomMDX } from "@/components/mdx";
-import { PostStatus } from "@/components/post-status";
-import { getBlogPosts } from "@/lib/blog";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { baseUrl } from "@/app/sitemap";
+import { getBlogPosts } from "~/lib/blog";
+
+import { CustomMDX } from "~/components/mdx";
+import { PostStatus } from "~/components/post-status";
 
 export async function generateStaticParams() {
   const posts = getBlogPosts();
@@ -65,7 +66,7 @@ export default async function Page({
   }
 
   return (
-    <div className="container max-w-[1140px] flex justify-center">
+    <div className="container flex max-w-[1140px] justify-center">
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -83,10 +84,10 @@ export default async function Page({
         }}
       />
 
-      <article className="max-w-[680px] pt-[80px] md:pt-[150px] w-full">
+      <article className="w-full max-w-[680px] pt-[80px] md:pt-[150px]">
         <PostStatus status={post.metadata.tag} />
 
-        <h2 className="font-medium text-2xl mb-6">{post.metadata.title}</h2>
+        <h2 className="mb-6 text-2xl font-medium">{post.metadata.title}</h2>
 
         <div className="updates">
           {post.metadata.image && (

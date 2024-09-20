@@ -1,9 +1,10 @@
-import { CopyInput } from "@/components/copy-input";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Inbox from "public/product-inbox.jpg";
 import Match from "public/product-match.png";
 import Receipt from "public/product-receipt.png";
+
+import { CopyInput } from "~/components/copy-input";
 
 export const metadata: Metadata = {
   title: "Inbox",
@@ -15,16 +16,16 @@ export default function Page() {
   return (
     <div className="container mb-52">
       <div className="mb-40">
-        <h1 className="mt-24 font-medium text-center text-[75px] md:text-[170px] mb-2 leading-none text-stroke">
+        <h1 className="text-stroke mb-2 mt-24 text-center text-[75px] font-medium leading-none md:text-[170px]">
           Magic
         </h1>
 
-        <h3 className="font-medium text-center text-[75px] md:text-[170px] mb-2 leading-none">
+        <h3 className="mb-2 text-center text-[75px] font-medium leading-none md:text-[170px]">
           Inbox
         </h3>
 
-        <div className="flex items-center flex-col text-center relative">
-          <p className="text-lg mt-4 max-w-[600px]">
+        <div className="relative flex flex-col items-center text-center">
+          <p className="mt-4 max-w-[600px] text-lg">
             Automatically match incoming invoices or receipts to the correct
             transaction.
           </p>
@@ -33,12 +34,12 @@ export default function Page() {
 
       <Image src={Inbox} quality={100} alt="Inbox" />
 
-      <div className="flex items-center flex-col text-center relative mt-28">
+      <div className="relative mt-28 flex flex-col items-center text-center">
         <div>
-          <h4 className="font-medium text-xl md:text-2xl mb-4">
+          <h4 className="mb-4 text-xl font-medium md:text-2xl">
             Automatic reconciliation
           </h4>
-          <p className="text-[#878787] text-sm">
+          <p className="text-sm text-[#878787]">
             1. Use your personalized email address for your invoices and
             receipts.
             <br /> 2. When the invoice arrives in the inbox, our AI solution
@@ -50,21 +51,21 @@ export default function Page() {
 
         <CopyInput
           value="inbox.f3f1s@midday.ai"
-          className="max-w-[240px] mt-8"
+          className="mt-8 max-w-[240px]"
         />
 
         <Image
           src={Match}
           quality={100}
           alt="Matching"
-          className="mt-10 max-w-[834px] w-full"
+          className="mt-10 w-full max-w-[834px]"
         />
 
         <div className="mt-32 max-w-[600px]">
-          <h4 className="font-medium text-xl md:text-2xl mb-4">
+          <h4 className="mb-4 text-xl font-medium md:text-2xl">
             Keep track and find that old receipt
           </h4>
-          <p className="text-[#878787] text-sm mb-10">
+          <p className="mb-10 text-sm text-[#878787]">
             Have a clear picture of which receipts or invoices are missing a
             transaction and which ones are completed. Use the assistant to find
             the right receipts or invoices by searching keywords or amounts
@@ -76,7 +77,7 @@ export default function Page() {
           src={Receipt}
           quality={100}
           alt="Receipt"
-          className="mt-10 max-w-[432px] w-full"
+          className="mt-10 w-full max-w-[432px]"
         />
       </div>
     </div>

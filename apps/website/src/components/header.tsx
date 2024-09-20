@@ -1,32 +1,34 @@
 "use client";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@midday/ui/accordion";
-import { cn } from "@midday/ui/cn";
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuTrigger,
-} from "@midday/ui/context-menu";
-import { Icons } from "@midday/ui/icons";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
 import menuAssistant from "public/menu-assistant.jpg";
 import menuEngine from "public/menu-engine.png";
-import { useEffect, useState } from "react";
 import { FaDiscord, FaGithub } from "react-icons/fa";
 import {
   MdOutlineDescription,
   MdOutlineIntegrationInstructions,
   MdOutlineMemory,
 } from "react-icons/md";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@repo/ui/accordion";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@repo/ui/context-menu";
+
+import { cn } from "~/lib/utils";
+import { Icons } from "./icons";
 import { LogoIcon } from "./logo-icon";
 
 const listVariant = {
@@ -180,12 +182,12 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky mt-4 top-4 z-50 px-2 md:px-4 md:flex justify-center",
+        "sticky top-4 z-50 mt-4 justify-center px-2 md:flex md:px-4",
         pathname === "/" &&
-          "transition duration-1s ease-in-out animate-header-slide-down-fade",
+          "duration-1s animate-header-slide-down-fade transition ease-in-out",
       )}
     >
-      <nav className="border border-border px-4 flex items-center backdrop-filter backdrop-blur-xl bg-[#121212] bg-opacity-70 h-[50px] z-20">
+      <nav className="z-20 flex h-[50px] items-center border border-border bg-[#121212] bg-opacity-70 px-4 backdrop-blur-xl backdrop-filter">
         <ContextMenu>
           <ContextMenuTrigger>
             <Link href="/">
@@ -195,7 +197,7 @@ export function Header() {
           </ContextMenuTrigger>
 
           <ContextMenuContent
-            className="w-[200px] bg-[#121212] rounded-none"
+            className="w-[200px] rounded-none bg-[#121212]"
             alignOffset={20}
           >
             <div className="divide-y">
@@ -227,12 +229,12 @@ export function Header() {
                 }}
               >
                 <Icons.LogoIcon />
-                <span className="font-medium text-sm">Copy Logo as SVG</span>
+                <span className="text-sm font-medium">Copy Logo as SVG</span>
               </ContextMenuItem>
               <ContextMenuItem asChild>
                 <Link href="/branding" className="flex items-center space-x-2">
                   <Icons.Change />
-                  <span className="font-medium text-sm">Branding</span>
+                  <span className="text-sm font-medium">Branding</span>
                 </Link>
               </ContextMenuItem>
               <ContextMenuItem>
@@ -241,14 +243,14 @@ export function Header() {
                   className="flex items-center space-x-2"
                 >
                   <Icons.Palette />
-                  <span className="font-medium text-sm">Design System</span>
+                  <span className="text-sm font-medium">Design System</span>
                 </a>
               </ContextMenuItem>
             </div>
           </ContextMenuContent>
         </ContextMenu>
 
-        <ul className="space-x-2 font-medium text-sm hidden md:flex mx-3">
+        <ul className="mx-3 hidden space-x-2 text-sm font-medium md:flex">
           {links.map(({ path, title, children, cover }) => {
             if (path) {
               return (
@@ -256,7 +258,7 @@ export function Header() {
                   <Link
                     onClick={handleOnClick}
                     href={path}
-                    className="h-8 items-center justify-center text-sm font-medium px-3 py-2 inline-flex text-secondary-foreground transition-opacity hover:opacity-70 duration-200"
+                    className="inline-flex h-8 items-center justify-center px-3 py-2 text-sm font-medium text-secondary-foreground transition-opacity duration-200 hover:opacity-70"
                   >
                     {title}
                   </Link>
@@ -271,25 +273,25 @@ export function Header() {
                 onMouseEnter={() => setShowBlur(true)}
                 onMouseLeave={() => setShowBlur(false)}
               >
-                <span className="h-8 items-center justify-center text-sm font-medium transition-opacity hover:opacity-70 duration-200 px-3 py-2 inline-flex text-secondary-foreground cursor-pointer">
+                <span className="inline-flex h-8 cursor-pointer items-center justify-center px-3 py-2 text-sm font-medium text-secondary-foreground transition-opacity duration-200 hover:opacity-70">
                   {title}
                 </span>
 
                 {children && (
                   <div
                     className={cn(
-                      "absolute top-[48px] left-0 -mx-[calc(var(--pixel-ratio)_*_2px)] bg-[#121212] flex h-0 group-hover:h-[250px] overflow-hidden transition-all duration-300 ease-in-out border-l border-r",
+                      "absolute left-0 top-[48px] -mx-[calc(var(--pixel-ratio)_*_2px)] flex h-0 overflow-hidden border-l border-r bg-[#121212] transition-all duration-300 ease-in-out group-hover:h-[250px]",
                       hidden && "hidden",
                     )}
                   >
-                    <ul className="p-4 w-[200px] flex-0 space-y-5 mt-2">
+                    <ul className="flex-0 mt-2 w-[200px] space-y-5 p-4">
                       {children.map((child) => {
                         return (
                           <li key={child.title}>
                             <Link
                               onClick={handleOnClick}
                               href={child.path}
-                              className="flex space-x-2 items-center transition-opacity hover:opacity-70 duration-200"
+                              className="flex items-center space-x-2 transition-opacity duration-200 hover:opacity-70"
                             >
                               <span>{child.icon}</span>
                               <span className="text-sm font-medium">
@@ -312,7 +314,7 @@ export function Header() {
 
         <button
           type="button"
-          className="ml-auto md:hidden p-2"
+          className="ml-auto p-2 md:hidden"
           onClick={() => handleToggleMenu()}
         >
           <svg
@@ -329,7 +331,7 @@ export function Header() {
         </button>
 
         <a
-          className="text-sm font-medium pr-2 border-l-[1px] border-border pl-4 hidden md:block"
+          className="hidden border-l-[1px] border-border pl-4 pr-2 text-sm font-medium md:block"
           href="https://app.midday.ai"
         >
           Sign in
@@ -338,11 +340,11 @@ export function Header() {
 
       {isOpen && (
         <motion.div
-          className="fixed bg-background -top-[2px] right-0 left-0 bottom-0 h-screen z-10 px-2"
+          className="fixed -top-[2px] bottom-0 left-0 right-0 z-10 h-screen bg-background px-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
-          <div className="mt-4 flex justify-between p-3 px-4 relative ml-[1px]">
+          <div className="relative ml-[1px] mt-4 flex justify-between p-3 px-4">
             <button type="button" onClick={handleToggleMenu}>
               <span className="sr-only">Midday Logo</span>
               <LogoIcon />
@@ -350,7 +352,7 @@ export function Header() {
 
             <button
               type="button"
-              className="ml-auto md:hidden p-2 absolute right-[10px] top-2"
+              className="absolute right-[10px] top-2 ml-auto p-2 md:hidden"
               onClick={handleToggleMenu}
             >
               <svg
@@ -365,11 +367,11 @@ export function Header() {
             </button>
           </div>
 
-          <div className="h-screen pb-[150px] overflow-auto">
+          <div className="h-screen overflow-auto pb-[150px]">
             <motion.ul
               initial="hidden"
               animate="show"
-              className="px-3 pt-8 text-xl text-[#878787] space-y-8 mb-8 overflow-auto"
+              className="mb-8 space-y-8 overflow-auto px-3 pt-8 text-xl text-[#878787]"
               variants={listVariant}
             >
               {links.map(({ path, title, children }) => {
@@ -396,13 +398,13 @@ export function Header() {
                   <li key={path}>
                     <Accordion collapsible type="single">
                       <AccordionItem value="item-1" className="border-none">
-                        <AccordionTrigger className="flex items-center justify-between w-full font-normal p-0 hover:no-underline">
+                        <AccordionTrigger className="flex w-full items-center justify-between p-0 font-normal hover:no-underline">
                           <span className="text-[#878787]">{title}</span>
                         </AccordionTrigger>
 
                         {children && (
                           <AccordionContent className="text-xl">
-                            <ul className="space-y-8 ml-4 mt-6" key={path}>
+                            <ul className="ml-4 mt-6 space-y-8" key={path}>
                               {children.map((child) => {
                                 return (
                                   <li key={child.path}>
@@ -443,8 +445,8 @@ export function Header() {
 
       <div
         className={cn(
-          "fixed w-screen h-screen backdrop-blur-md left-0 top-0 invisible opacity-0 transition-all duration-300 z-10",
-          showBlur && "md:visible opacity-100",
+          "invisible fixed left-0 top-0 z-10 h-screen w-screen opacity-0 backdrop-blur-md transition-all duration-300",
+          showBlur && "opacity-100 md:visible",
         )}
       />
     </header>

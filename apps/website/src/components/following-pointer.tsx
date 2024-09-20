@@ -1,11 +1,10 @@
 "use client";
 
 // Thank you: https://ui.aceternity.com/components/following-pointer
-
 import React, { useEffect, useState } from "react";
-
-import { cn } from "@midday/ui/cn";
 import { AnimatePresence, motion, useMotionValue } from "framer-motion";
+
+import { cn } from "~/lib/utils";
 
 export const FollowerPointerCard = ({
   children,
@@ -75,7 +74,7 @@ export const FollowPointer = ({
 }) => {
   return (
     <motion.div
-      className="h-4 w-4 rounded-full absolute z-50"
+      className="absolute z-50 h-4 w-4 rounded-full"
       style={{
         top: y,
         left: x,
@@ -99,7 +98,7 @@ export const FollowPointer = ({
         fill="currentColor"
         strokeWidth="1"
         viewBox="0 0 16 16"
-        className="h-6 w-6 text-sky-500 transform -rotate-[70deg] -translate-x-[12px] -translate-y-[10px] stroke-sky-600"
+        className="h-6 w-6 -translate-x-[12px] -translate-y-[10px] -rotate-[70deg] transform stroke-sky-600 text-sky-500"
         height="1em"
         width="1em"
         xmlns="http://www.w3.org/2000/svg"
@@ -123,7 +122,7 @@ export const FollowPointer = ({
           opacity: 0,
         }}
         className={
-          "px-2 py-2 bg-neutral-200 text-white whitespace-nowrap min-w-max text-xs rounded-full"
+          "min-w-max whitespace-nowrap rounded-full bg-neutral-200 px-2 py-2 text-xs text-white"
         }
       >
         {title}

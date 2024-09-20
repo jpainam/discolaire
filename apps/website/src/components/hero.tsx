@@ -1,18 +1,20 @@
-import { Button } from "@midday/ui/button";
+import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import Link from "next/link";
-import { Suspense } from "react";
+
+import { Button } from "@repo/ui/button";
+
 import { Donut } from "./donut";
 import { ErrorFallback } from "./error-fallback";
 
 export function Hero() {
   return (
-    <section className="md:mt-[250px] relative md:min-h-[375px]">
-      <div className="hero-slide-up flex flex-col mt-[240px]">
+    <section className="relative md:mt-[250px] md:min-h-[375px]">
+      <div className="hero-slide-up mt-[240px] flex flex-col">
         <Link href="/updates/august-product-updates">
           <Button
             variant="outline"
-            className="rounded-full border-border flex space-x-2 items-center"
+            className="flex items-center space-x-2 rounded-full border-border"
           >
             <span className="font-mono text-xs">August Product Updates</span>
             <svg
@@ -29,12 +31,12 @@ export function Hero() {
           </Button>
         </Link>
 
-        <h1 className="text-[30px] md:text-[90px] font-medium mt-6 leading-none">
+        <h1 className="mt-6 text-[30px] font-medium leading-none md:text-[90px]">
           Run your
           <br /> business smarter.
         </h1>
 
-        <p className="mt-4 md:mt-6 max-w-[600px] text-[#878787]">
+        <p className="mt-4 max-w-[600px] text-[#878787] md:mt-6">
           An all-in-one tool for freelancers, contractors, consultants, and
           micro businesses to monitor financial health, time-track projects,
           store files, and send invoices.
@@ -45,7 +47,7 @@ export function Hero() {
             <Link href="/talk-to-us">
               <Button
                 variant="outline"
-                className="border border-primary h-12 px-6"
+                className="h-12 border border-primary px-6"
               >
                 Talk to us
               </Button>
@@ -57,7 +59,7 @@ export function Hero() {
           </div>
         </div>
 
-        <p className="text-xs text-[#707070] mt-8 font-mono">
+        <p className="mt-8 font-mono text-xs text-[#707070]">
           Used by over{" "}
           <Link href="/open-startup" prefetch>
             <span className="underline">7,800+</span>
@@ -66,7 +68,7 @@ export function Hero() {
         </p>
       </div>
 
-      <div className="scale-50 lg:scale-[0.50] xl:scale-100 -top-[500px] -right-[380px] pointer-events-none transform-gpu grayscale sm:flex xl:flex lg:animate-[open-scale-up-fade_1.5s_ease-in-out] absolute md:-right-[200px] xl:-right-[100px] w-auto h-auto md:-top-[200px]">
+      <div className="pointer-events-none absolute -right-[380px] -top-[500px] h-auto w-auto scale-50 transform-gpu grayscale sm:flex md:-right-[200px] md:-top-[200px] lg:scale-[0.50] lg:animate-[open-scale-up-fade_1.5s_ease-in-out] xl:-right-[100px] xl:flex xl:scale-100">
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense>
             <Donut />

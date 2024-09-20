@@ -1,12 +1,14 @@
 "use client";
 
-import { Button } from "@midday/ui/button";
-import { useMediaQuery } from "@midday/ui/hooks";
-import { Icons } from "@midday/ui/icons";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
+
+import { Button } from "@repo/ui/button";
+
+import { Icons } from "~/components/icons";
+import { useMediaQuery } from "~/hooks/use-media-query";
 
 const ReactHlsPlayer = dynamic(() => import("react-hls-player"), {
   ssr: false,
@@ -63,26 +65,26 @@ export function SectionDemo({ playVideo }: Props) {
   };
 
   return (
-    <div className="min-h-screen relative w-screen">
-      <div className="absolute left-4 right-4 md:left-8 md:right-8 top-4 flex justify-between text-lg">
+    <div className="relative min-h-screen w-screen">
+      <div className="absolute left-4 right-4 top-4 flex justify-between text-lg md:left-8 md:right-8">
         <span>Demo - Version 0.5 (Private beta)</span>
         <span className="text-[#878787]">
           <Link href="/">midday.ai</Link>
         </span>
       </div>
-      <div className="flex flex-col min-h-screen justify-center container">
+      <div className="container flex min-h-screen flex-col justify-center">
         <div className="group">
-          <div className="absolute top-[50%] left-[50%] w-[200px] h-[50px] -ml-[100px] -mt-[50px] group-hover:opacity-100 hidden md:flex space-x-4 items-center justify-center opacity-0 z-30 transition-all">
+          <div className="absolute left-[50%] top-[50%] z-30 -ml-[100px] -mt-[50px] hidden h-[50px] w-[200px] items-center justify-center space-x-4 opacity-0 transition-all group-hover:opacity-100 md:flex">
             <Button
               size="icon"
-              className="rounded-full w-14 h-14 bg-transparent border border-white text-white hover:bg-transparent"
+              className="h-14 w-14 rounded-full border border-white bg-transparent text-white hover:bg-transparent"
               onClick={handleRestart}
             >
               <Icons.Reply size={24} />
             </Button>
             <Button
               size="icon"
-              className="rounded-full w-14 h-14"
+              className="h-14 w-14 rounded-full"
               onClick={togglePlay}
             >
               {isPlaying ? (
@@ -98,7 +100,7 @@ export function SectionDemo({ playVideo }: Props) {
             autoPlay={false}
             controls={!isDesktop}
             playerRef={playerRef}
-            className="w-full max-h-[90%] lg:max-h-full mt-8 bg-[#121212] max-w-[1280px] m-auto"
+            className="m-auto mt-8 max-h-[90%] w-full max-w-[1280px] bg-[#121212] lg:max-h-full"
             loop
           />
         </div>

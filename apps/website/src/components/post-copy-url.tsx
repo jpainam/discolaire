@@ -1,8 +1,9 @@
 "use client";
 
-import { Icons } from "@midday/ui/icons";
-import { motion } from "framer-motion";
 import { useState } from "react";
+import { motion } from "framer-motion";
+
+import { Icons } from "~/components/icons";
 
 export function PostCopyURL({ slug }) {
   const [isCopied, setCopied] = useState(false);
@@ -24,10 +25,10 @@ export function PostCopyURL({ slug }) {
     <button
       type="button"
       onClick={handleClipboard}
-      className="relative flex space-x-2 items-center"
+      className="relative flex items-center space-x-2"
     >
       <motion.div
-        className="absolute -left-4 top-0.3"
+        className="top-0.3 absolute -left-4"
         initial={{ opacity: 1, scale: 1 }}
         animate={{ opacity: isCopied ? 0 : 1, scale: isCopied ? 0 : 1 }}
       >
@@ -35,7 +36,7 @@ export function PostCopyURL({ slug }) {
       </motion.div>
 
       <motion.div
-        className="absolute -left-[24px] top-0.3"
+        className="top-0.3 absolute -left-[24px]"
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: isCopied ? 1 : 0, scale: isCopied ? 1 : 0 }}
       >

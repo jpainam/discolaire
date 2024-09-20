@@ -1,9 +1,11 @@
 "use server";
 
-import { client } from "@midday/kv";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { z } from "zod";
+
+import { client } from "@repo/kv";
+
 import { actionClient } from "./safe-action";
 
 export const voteAction = actionClient
