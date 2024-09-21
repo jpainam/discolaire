@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { useModal } from "@repo/hooks/use-modal";
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -36,12 +37,14 @@ export function EnrollStudentModal({ studentId }: { studentId: string }) {
   const { t } = useLocale();
   const utils = api.useUtils();
   //const params = useParams<{ id: string }>();
+  const router = useRouter();
   const createEnrollmentMutation = api.enrollment.create.useMutation({
     onSettled: async () => {
       await utils.student.invalidate();
     },
     onSuccess: () => {
       toast.success(t("enrolled_successfully"), { id: 0 });
+      router.refresh();
       closeModal();
     },
     onError: (error) => {

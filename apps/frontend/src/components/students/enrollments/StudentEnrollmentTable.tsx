@@ -6,6 +6,7 @@ import { MoreVertical, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";
@@ -43,12 +44,14 @@ export function StudentEnrollmentTable({
   const confirm = useConfirm();
   const { fullDateFormatter } = useDateFormat();
   const utils = api.useUtils();
+  const router = useRouter();
   const deleteEnrollmentMutation = api.enrollment.delete.useMutation({
     onSettled: async () => {
       await utils.student.invalidate();
     },
     onSuccess: () => {
       toast.success(t("unenrolled"), { id: 0 });
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
