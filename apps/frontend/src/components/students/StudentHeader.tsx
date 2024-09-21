@@ -239,7 +239,7 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                   <DropdownMenuSeparator />
                   <DropdownHelp />
                   <DropdownMenuSeparator />
-                  {student && !student.id && (
+                  {student && !student.userId && (
                     <DropdownMenuItem
                       onSelect={() => {
                         openModal({
