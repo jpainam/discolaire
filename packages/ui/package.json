@@ -104,7 +104,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
-    "@tanstack/eslint-plugin-query": "^5.57.0",
+    "@tanstack/eslint-plugin-query": "^5.57.1",
     "@tanstack/react-query-devtools": "^5.56.2",
     "@types/react": "catalog:react18",
     "eslint": "catalog:",
