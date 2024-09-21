@@ -24,7 +24,7 @@
     "@t3-oss/env-nextjs": "^0.11.1",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
-    "next": "^14.2.11",
+    "next": "^14.2.13",
     "next-auth": "5.0.0-beta.21",
     "react": "catalog:react18",
     "react-dom": "catalog:react18",
@@ -35,7 +35,7 @@
     "@repo/prettier-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
     "@types/bcryptjs": "^2.4.6",
-    "@types/jsonwebtoken": "^9.0.6",
+    "@types/jsonwebtoken": "^9.0.7",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"
