@@ -244,6 +244,7 @@ export const classroomRouter = createTRPCRouter({
           subject: {
             include: {
               course: true,
+              teacher: true,
             },
           },
         },

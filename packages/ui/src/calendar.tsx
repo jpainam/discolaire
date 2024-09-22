@@ -18,6 +18,8 @@ function Calendar({
 }: CalendarProps) {
   return (
     <DayPicker
+      //hideNavigation
+      //captionLayout="dropdown"
       showOutsideDays={showOutsideDays}
       className={cn("p-3", className)}
       // style={{

@@ -13,6 +13,7 @@ export const routes = {
   },
   assignments: {
     index: "/datum/assignments",
+    details: (id: string) => `/datum/assignments/${id}`,
   },
   staffs: {
     index: `/datum/staffs`,

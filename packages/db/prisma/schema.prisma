@@ -307,6 +307,8 @@ model Assignment {
     isActive    Boolean?  @default(true)
     categoryId  Int?
     subjectId   Int
+    termId      Int
+    term        Term      @relation(fields: [termId], references: [id], onDelete: Cascade)
     post        Boolean?  @default(false)
     dueDate     DateTime? @default(now()) @db.Timestamp(6)
     createdAt   DateTime? @default(now()) @db.Timestamp(6)
@@ -350,6 +352,7 @@ model Term {
     schoolYear   SchoolYear   @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
     attendances  Attendance[]
     reportCards  ReportCard[]
+    Assignment   Assignment[]
 }
 
 model Enrollment {

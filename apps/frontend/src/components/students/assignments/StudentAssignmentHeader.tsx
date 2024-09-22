@@ -1,0 +1,57 @@
+"use client";
+
+import { Mail, MoreVertical } from "lucide-react";
+import { parseAsInteger, useQueryState } from "nuqs";
+
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@repo/ui/dropdown-menu";
+import { Label } from "@repo/ui/label";
+
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
+
+export function StudentAssignmentHeader() {
+  const { t } = useLocale();
+  const [_, setTerm] = useQueryState("term", parseAsInteger);
+  return (
+    <div className="flex flex-row items-center gap-2 bg-secondary px-2 py-1">
+      <Label>{t("assignments")}</Label>
+      <TermSelector
+        onChange={(val) => {
+          void setTerm(val ? Number(val) : null);
+        }}
+        className="md:w-[250px]"
+      />
+      <div className="ml-auto">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant={"outline"} size={"icon"}>
+              <MoreVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>
+              <Mail className="mr-2 h-4 w-4" />
+              {t("notify")}
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <PDFIcon className="mr-2 h-4 w-4" />
+              {t("pdf_export")}
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <XMLIcon className="mr-2 h-4 w-4" />
+              {t("xml_export")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </div>
+  );
+}
