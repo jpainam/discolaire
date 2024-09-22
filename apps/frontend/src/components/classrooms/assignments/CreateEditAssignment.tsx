@@ -24,7 +24,6 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { Label } from "@repo/ui/label";
-import { Separator } from "@repo/ui/separator";
 import { Skeleton } from "@repo/ui/skeleton";
 import { FileUploader } from "@repo/ui/uploads/file-uploader";
 
@@ -119,9 +118,9 @@ export function CreateEditAssignment({
     onError: (err) => {
       toast.error(err.message, { id: 0 });
     },
-    onSuccess: () => {
+    onSuccess: (result) => {
       toast.success(t("created_successfully"), { id: 0 });
-      router.push(routes.classrooms.assignments.index(params.id));
+      router.push(routes.classrooms.assignments.details(params.id, result.id));
     },
   });
   const updateAssignmentMutation = api.assignment.update.useMutation({
@@ -129,9 +128,9 @@ export function CreateEditAssignment({
       await utils.assignment.invalidate();
       await utils.classroom.assignments.invalidate(params.id);
     },
-    onSuccess: () => {
+    onSuccess: (result) => {
       toast.success(t("updated_successfully"), { id: 0 });
-      router.push(routes.classrooms.assignments.index(params.id));
+      router.push(routes.classrooms.assignments.details(params.id, result.id));
     },
     onError: (err) => {
       toast.error(err.message, { id: 0 });
@@ -169,10 +168,25 @@ export function CreateEditAssignment({
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-4 p-2"
+        className="flex flex-col gap-4"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-3">
+        <div className="flex items-center justify-end gap-2 border-b px-2 py-1">
+          <Button
+            onClick={() => {
+              router.push(routes.classrooms.assignments.index(params.id));
+            }}
+            variant={"outline"}
+            type="button"
+            size={"sm"}
+          >
+            {t("cancel")}
+          </Button>
+          <Button type="submit" size={"sm"}>
+            {t("submit")}
+          </Button>
+        </div>
+        <div className="grid grid-cols-1 gap-x-8 gap-y-4 px-2 md:grid-cols-3">
           <FormField
             control={form.control}
             name="title"
@@ -217,7 +231,7 @@ export function CreateEditAssignment({
             )}
           />
         </div>
-        <div className="grid grid-cols-1 gap-x-8 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-x-8 px-2 md:grid-cols-3">
           <FormField
             control={form.control}
             name="description"
@@ -257,7 +271,7 @@ export function CreateEditAssignment({
             />
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-x-8 gap-y-4 px-2 md:grid-cols-3">
           <FormField
             control={form.control}
             name="links"
@@ -429,12 +443,6 @@ export function CreateEditAssignment({
               </FormItem>
             )}
           />
-          <Separator className="col-span-full" />
-          <div className="col-span-full flex justify-end">
-            <Button type="submit" size={"sm"}>
-              {t("Submit")}
-            </Button>
-          </div>
         </div>
       </form>
     </Form>
