@@ -910,8 +910,8 @@ importers:
         specifier: ^0.5.0
         version: 0.5.0(@tiptap/extension-code-block@2.7.2(@tiptap/core@2.7.2(@tiptap/pm@2.7.2))(@tiptap/pm@2.7.2))(@types/react@18.3.3)(highlight.js@11.10.0)(lowlight@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-day-picker:
-        specifier: 9.1.1
-        version: 9.1.1(react@18.3.1)
+        specifier: 9.1.2
+        version: 9.1.2(react@18.3.1)
       react-dropzone:
         specifier: ^14.2.3
         version: 14.2.3(react@18.3.1)
@@ -2107,8 +2107,8 @@ packages:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
 
-  '@date-fns/tz@1.0.2':
-    resolution: {integrity: sha512-iKxj0kXMy7Qe6vjK+flz33cpy2j0dnTKT5i54p3fFlB411J47aSs6HBg7LOO5X9LjDi2iNlctD9rFn738ySOGQ==}
+  '@date-fns/tz@1.1.0':
+    resolution: {integrity: sha512-ebywM7KeJY5cm13Aq037FmjjghyOAMxccqQn0BIpHkvdAZe+gb7V18Sz2usKECguMcSrvy49TR1gR7Y9naGseQ==}
 
   '@daybrush/utils@1.13.0':
     resolution: {integrity: sha512-ALK12C6SQNNHw1enXK+UO8bdyQ+jaWNQ1Af7Z3FNxeAwjYhQT7do+TRE4RASAJ3ObaS2+TJ7TXR3oz2Gzbw0PQ==}
@@ -9359,8 +9359,8 @@ packages:
   react-css-styled@1.1.9:
     resolution: {integrity: sha512-M7fJZ3IWFaIHcZEkoFOnkjdiUFmwd8d+gTh2bpqMOcnxy/0Gsykw4dsL4QBiKsxcGow6tETUa4NAUcmJF+/nfw==}
 
-  react-day-picker@9.1.1:
-    resolution: {integrity: sha512-z+xPpd5N42kIqt27XEIyawJgKEya2l5GJMTpZ9FIclqdu40BFfKR4rjQlnXz05h2Gxh0s2F72gL/JCYWuteCIg==}
+  react-day-picker@9.1.2:
+    resolution: {integrity: sha512-r3MEbmcnfem3v9M+ScnbmjNNh4wiE803sjJb4Gf2eHtPan2or4/6Ya5kbAKyAndxznAyTU97VukYAbAfM2fV6g==}
     peerDependencies:
       react: '>=16.8.0'
 
@@ -12875,7 +12875,7 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@date-fns/tz@1.0.2': {}
+  '@date-fns/tz@1.1.0': {}
 
   '@daybrush/utils@1.13.0': {}
 
@@ -21381,9 +21381,9 @@ snapshots:
       css-styled: 1.0.8
       framework-utils: 1.1.0
 
-  react-day-picker@9.1.1(react@18.3.1):
+  react-day-picker@9.1.2(react@18.3.1):
     dependencies:
-      '@date-fns/tz': 1.0.2
+      '@date-fns/tz': 1.1.0
       date-fns: 4.1.0
       react: 18.3.1
 
