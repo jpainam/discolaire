@@ -17,7 +17,7 @@ import { Label } from "@repo/ui/label";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
-import { DateRangePicker } from "~/components/shared/DateRangePicker";
+import { DateRangePicker } from "~/components/shared/DateRangePicker2";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { routes } from "~/configs/routes";
 import { sidebarIcons } from "../sidebar-icons";

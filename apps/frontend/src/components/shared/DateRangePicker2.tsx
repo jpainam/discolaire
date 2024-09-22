@@ -26,7 +26,7 @@ import {
 } from "@repo/ui/select";
 
 interface Props {
-  defaultValue: {
+  defaultValue?: {
     to: string;
     from: string;
   };
@@ -86,10 +86,15 @@ const periods = [
   },
 ];
 export function DateRangePicker({ defaultValue, disabled, onChange }: Props) {
+  const defaultRange = defaultValue ?? {
+    from: subMonths(startOfMonth(new Date()), 12).toISOString(),
+    to: new Date().toISOString(),
+    period: "monthly",
+  };
   const [params, setParams] = useQueryStates(
     {
-      from: parseAsString.withDefault(defaultValue.from),
-      to: parseAsString.withDefault(defaultValue.to),
+      from: parseAsString.withDefault(defaultRange.from),
+      to: parseAsString.withDefault(defaultRange.to),
       period: parseAsString,
     },
     {
@@ -137,7 +142,7 @@ export function DateRangePicker({ defaultValue, disabled, onChange }: Props) {
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="flex w-screen flex-col space-y-4 p-0 md:w-[550px]"
+          className="flex w-full flex-col space-y-4 p-0"
           align="end"
           sideOffset={10}
         >

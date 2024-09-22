@@ -3,7 +3,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
-import { Loader, X } from "lucide-react";
+import { X } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -24,20 +24,14 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { Label } from "@repo/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@repo/ui/select";
 import { Separator } from "@repo/ui/separator";
 import { Skeleton } from "@repo/ui/skeleton";
 import { FileUploader } from "@repo/ui/uploads/file-uploader";
 
 import { DateRangePicker } from "~/components/shared/DateRangePicker";
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
-import { InputField } from "~/components/shared/forms/input-field";
+import { AssignmentCategorySelector } from "~/components/shared/selects/AssignmentCategorySelector";
+import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { routes } from "~/configs/routes";
 import { api } from "~/trpc/react";
 
@@ -88,10 +82,7 @@ export function CreateEditAssignment({
       visibles: assignment?.visibles ?? [],
     },
   });
-  const assignmentCategoriesQuery = api.assignment.categories.useQuery();
-  const assignmentSubjectsQuery = api.classroom.subjects.useQuery({
-    id: params.id,
-  });
+
   const [link, setLink] = useState("");
 
   const handleRemoveLink = (index: number) => {
@@ -177,15 +168,19 @@ export function CreateEditAssignment({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 gap-4 p-8 md:grid-cols-2">
+      <form
+        className="flex flex-col gap-4 p-2"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        <div className="grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-3">
           <FormField
             control={form.control}
             name="title"
             render={({ field }) => (
-              <FormItem className="">
-                <FormLabel>{t("Title")}</FormLabel>
-                <InputField {...field} />
+              <FormItem className="space-y-0">
+                <FormLabel>{t("title")}</FormLabel>
+                <Input {...field} />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -194,33 +189,14 @@ export function CreateEditAssignment({
             control={form.control}
             name="categoryId"
             render={({ field }) => (
-              <FormItem className="">
-                <FormLabel>{t("Category")}</FormLabel>
-                <Select
-                  onValueChange={(value) => {
-                    field.onChange(value);
-                  }}
-                  defaultValue={String(field.value)}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder={t("select_an_option")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {assignmentCategoriesQuery.isPending && (
-                      <SelectItem value="0">
-                        <Loader className="w-8 animate-spin" />
-                      </SelectItem>
-                    )}
-                    {assignmentCategoriesQuery.data?.map((cat) => (
-                      <SelectItem
-                        key={cat.id.toString()}
-                        value={cat.id.toString()}
-                      >
-                        {cat.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              <FormItem className="space-y-0">
+                <FormLabel>{t("category")}</FormLabel>
+                <FormControl>
+                  <AssignmentCategorySelector
+                    defaultValue={field.value}
+                    onChange={(val) => field.onChange(val)}
+                  />
+                </FormControl>
               </FormItem>
             )}
           />
@@ -229,42 +205,24 @@ export function CreateEditAssignment({
             control={form.control}
             name="subjectId"
             render={({ field }) => (
-              <FormItem className="">
-                <FormLabel>{t("Subject")}</FormLabel>
-                <Select
-                  onValueChange={(value) => {
-                    field.onChange(value);
-                  }}
-                  defaultValue={String(field.value)}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder={t("select_an_option")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {assignmentSubjectsQuery.isPending && (
-                      <SelectItem value="0">
-                        <Loader className="w-8 animate-spin" />
-                      </SelectItem>
-                    )}
-                    {assignmentSubjectsQuery.data?.map((sub) => (
-                      <SelectItem
-                        key={sub.id.toString()}
-                        value={sub.id.toString()}
-                      >
-                        {sub.course?.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              <FormItem className="space-y-0">
+                <FormLabel>{t("subject")}</FormLabel>
+                <FormControl>
+                  <SubjectSelector
+                    onChange={(val) => field.onChange(val)}
+                    classroomId={params.id}
+                  />
+                </FormControl>
               </FormItem>
             )}
           />
-
+        </div>
+        <div className="grid grid-cols-1 gap-x-8 md:grid-cols-3">
           <FormField
             control={form.control}
             name="description"
             render={({ field: { onChange, value } }) => (
-              <FormItem className="col-span-full mb-16">
+              <FormItem className="col-span-2 mb-16">
                 <FormLabel>{t("Description")}</FormLabel>
                 <QuillEditor
                   className="h-full min-h-[200px]"
@@ -275,10 +233,9 @@ export function CreateEditAssignment({
             )}
           />
 
-          <div className="col-span-full my-4">
-            <Label className=" ">Attachments</Label>
+          <div className="">
+            <Label className=" ">{t("attachments")}</Label>
             <FileUploader
-              className="mt-4"
               maxFileCount={100}
               maxSize={1 * 1024 * 1024}
               onValueChange={(files) => {
@@ -299,13 +256,14 @@ export function CreateEditAssignment({
               //disabled={isUploading}
             />
           </div>
-
+        </div>
+        <div className="grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-3">
           <FormField
             control={form.control}
             name="links"
             render={() => (
-              <FormItem className="col-span-full mt-8 lg:mt-2">
-                <FormLabel>{t("Links")}</FormLabel>
+              <FormItem className="space-y-0">
+                <FormLabel>{t("links")}</FormLabel>
                 <div className="flex gap-2">
                   <Input
                     value={link}
@@ -334,7 +292,7 @@ export function CreateEditAssignment({
                       }
                     }}
                   >
-                    {t("Add Link")}
+                    {t("add_link")}
                   </Button>
                 </div>
                 <FormMessage />
@@ -361,8 +319,8 @@ export function CreateEditAssignment({
             control={form.control}
             name="dueDate"
             render={({ field }) => (
-              <FormItem className="">
-                <DatePickerField label={t("Due Date")} {...field} />
+              <FormItem className="space-y-0">
+                <DatePickerField label={t("due_date")} {...field} />
               </FormItem>
             )}
           />
@@ -371,8 +329,8 @@ export function CreateEditAssignment({
             control={form.control}
             name="from"
             render={() => (
-              <FormItem className="flex flex-col gap-2">
-                <FormLabel>{t("Visible From - To")}</FormLabel>
+              <FormItem className="space-y-0">
+                <FormLabel>{t("visble_from_to")}</FormLabel>
                 <DateRangePicker
                   className="w-full"
                   from={form.getValues("from")}
@@ -393,7 +351,7 @@ export function CreateEditAssignment({
             control={form.control}
             name="post"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+              <FormItem className="flex flex-row items-start space-x-2 space-y-0">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
@@ -410,7 +368,7 @@ export function CreateEditAssignment({
             control={form.control}
             name="notify"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+              <FormItem className="flex flex-row items-start space-x-2 space-y-0">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
@@ -428,10 +386,9 @@ export function CreateEditAssignment({
             control={form.control}
             name="visibles"
             render={() => (
-              <FormItem>
-                <div className="mb-4">
-                  <FormLabel className="text-base">{t("visible_to")}</FormLabel>
-                </div>
+              <FormItem className="flex flex-row items-start space-x-4 space-y-0">
+                <FormLabel>{t("visible_to")}</FormLabel>
+
                 {visiblesTo.map((item) => (
                   <FormField
                     key={item.value}
@@ -441,7 +398,7 @@ export function CreateEditAssignment({
                       return (
                         <FormItem
                           key={item.value}
-                          className="flex flex-row items-start space-x-3 space-y-0"
+                          className="flex flex-row items-start space-x-1 space-y-0"
                         >
                           <FormControl>
                             <Checkbox
