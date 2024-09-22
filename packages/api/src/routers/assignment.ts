@@ -4,17 +4,17 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const createUpdateCategorySchema = z.object({
   name: z.string(),
-  description: z.string(),
 });
 const createUpdateSchema = z.object({
   title: z.string(),
   description: z.string(),
   isActive: z.boolean().optional().default(true),
-  categoryId: z.coerce.number(),
+  categoryId: z.string(),
   subjectId: z.coerce.number(),
   classroomId: z.string(),
   attachments: z.array(z.string()).optional(),
   from: z.coerce.date(),
+  termId: z.coerce.number(),
   to: z.coerce.date(),
   links: z.array(z.string()).optional(),
   notify: z.boolean().optional().default(false),
@@ -58,7 +58,7 @@ export const assignmentRouter = createTRPCRouter({
       });
     }),
   updateCategory: protectedProcedure
-    .input(createUpdateCategorySchema.extend({ id: z.number() }))
+    .input(createUpdateCategorySchema.extend({ id: z.string() }))
     .mutation(({ ctx, input }) => {
       return ctx.db.assignmentCategory.update({
         where: { id: input.id },
@@ -66,7 +66,7 @@ export const assignmentRouter = createTRPCRouter({
       });
     }),
   deleteCategory: protectedProcedure
-    .input(z.number())
+    .input(z.string())
     .mutation(({ ctx, input }) => {
       return ctx.db.assignmentCategory.delete({
         where: {

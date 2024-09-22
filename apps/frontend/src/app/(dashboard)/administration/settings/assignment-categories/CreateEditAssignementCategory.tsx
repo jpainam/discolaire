@@ -1,0 +1,129 @@
+"use client";
+
+import { toast } from "sonner";
+import { z } from "zod";
+
+import { useModal } from "@repo/hooks/use-modal";
+import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useForm,
+} from "@repo/ui/form";
+import { Input } from "@repo/ui/input";
+
+import { api } from "~/trpc/react";
+
+const createAssignmentCategorySchema = z.object({
+  name: z.string().min(1),
+});
+export function CreateEditAssignmentCategory({
+  id,
+  name,
+}: {
+  id?: string;
+  name?: string;
+}) {
+  const form = useForm({
+    schema: createAssignmentCategorySchema,
+    defaultValues: {
+      name: name ?? "",
+    },
+  });
+  const utils = api.useUtils();
+  const { t } = useLocale();
+  const createAssignmentCategoryMutation =
+    api.assignment.createCategory.useMutation({
+      onSettled: async () => {
+        await utils.assignment.categories.invalidate();
+      },
+      onSuccess: () => {
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    });
+
+  const { closeModal } = useModal();
+
+  const updateAssignmentCategoryMutation =
+    api.assignment.updateCategory.useMutation({
+      onSettled: async () => {
+        await utils.assignment.categories.invalidate();
+      },
+      onSuccess: () => {
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    });
+
+  const onSubmit = (data: z.infer<typeof createAssignmentCategorySchema>) => {
+    if (id) {
+      toast.success(t("updating"), { id: 0 });
+      updateAssignmentCategoryMutation.mutate({
+        id: id,
+        name: data.name,
+      });
+    } else {
+      toast.success(t("creating"), { id: 0 });
+      createAssignmentCategoryMutation.mutate({
+        name: data.name,
+      });
+    }
+  };
+  return (
+    <Form {...form}>
+      <form
+        className="flex flex-col gap-2"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem className="space-y-0">
+              <FormLabel></FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="mt-4 flex flex-row items-center justify-end gap-2">
+          <Button
+            onClick={() => {
+              closeModal();
+            }}
+            variant={"outline"}
+            size={"sm"}
+          >
+            {t("cancel")}
+          </Button>
+          <Button
+            isLoading={
+              createAssignmentCategoryMutation.isPending ||
+              updateAssignmentCategoryMutation.isPending
+            }
+            variant={"default"}
+            size={"sm"}
+          >
+            {t("submit")}
+          </Button>
+        </div>
+      </form>
+    </Form>
+  );
+}

@@ -11,14 +11,16 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import { Label } from "@repo/ui/label";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/toggle-group";
 
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
 import { DateRangePicker } from "~/components/shared/DateRangePicker";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function AssignmentHeader() {
@@ -40,12 +42,16 @@ export function AssignmentHeader() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownHelp />
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
-              <DropdownMenuItem>Team</DropdownMenuItem>
-              <DropdownMenuItem>Subscription</DropdownMenuItem>
+              <DropdownMenuItem>
+                <PDFIcon className="h-4 w-4" />
+                {t("pdf_export")}
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <XMLIcon className="h-4 w-4" />
+                {t("xml_export")}
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

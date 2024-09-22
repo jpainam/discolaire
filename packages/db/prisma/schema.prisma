@@ -280,7 +280,7 @@ model Grade {
 }
 
 model AssignmentCategory {
-    id          Int          @id @default(autoincrement())
+    id          String       @id @default(cuid())
     name        String
     isActive    Boolean?     @default(true)
     createdAt   DateTime?    @default(now()) @db.Timestamp(6)
@@ -305,7 +305,7 @@ model Assignment {
     title       String
     description String?
     isActive    Boolean?  @default(true)
-    categoryId  Int?
+    categoryId  String?
     subjectId   Int
     termId      Int
     term        Term      @relation(fields: [termId], references: [id], onDelete: Cascade)

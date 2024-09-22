@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useParams } from "next/navigation";
 import { Loader, X } from "lucide-react";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
@@ -17,8 +16,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  useForm,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
+import { Label } from "@repo/ui/label";
 import {
   Select,
   SelectContent,
@@ -33,7 +34,6 @@ import { DateRangePicker } from "~/components/shared/DateRangePicker";
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";
-import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
 const QuillEditor = dynamic(() => import("@repo/ui/quill-editor"), {
@@ -47,16 +47,18 @@ type AssignemntGetProcedureOutput = NonNullable<
 
 const assignmentSchema = z.object({
   id: z.string().optional(),
-  title: z.string().min(1, "Title is required"),
+  title: z.string().min(1),
   categoryId: z.coerce.number(),
   description: z.string().optional(),
   links: z.array(z.string().url()).optional(),
   dueDate: z.date(),
   post: z.boolean(),
   notify: z.boolean(),
+  subjectId: z.coerce.number(),
+  attachments: z.array(z.string()).optional(),
   from: z.coerce.date(),
   to: z.coerce.date(),
-  visibles: z.array(z.string()).optional(), // student or parent
+  visibles: z.array(z.string()).optional(),
 });
 
 export function CreateEditAssignment({
@@ -64,27 +66,31 @@ export function CreateEditAssignment({
 }: {
   assignment?: AssignemntGetProcedureOutput;
 }) {
+  const params = useParams<{ id: string }>();
   const form = useForm({
-    resolver: zodResolver(assignmentSchema),
+    schema: assignmentSchema,
     defaultValues: {
       title: assignment?.title ?? "",
-      category: assignment?.category ?? "",
+      categoryId: assignment?.categoryId ?? -1,
       description: assignment?.description ?? "",
       links: assignment?.links ?? [],
       dueDate: assignment?.dueDate ? new Date(assignment.dueDate) : new Date(),
       post: assignment?.post ?? true,
-      sendNotifications: assignment?.notify ?? false,
+      sendNotifications: false,
       from: assignment?.from ?? new Date(),
       to: assignment?.to ?? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       visibles: assignment?.visibles ?? [],
     },
   });
   const assignmentCategoriesQuery = api.assignment.categories.useQuery();
+  const assignmentSubjectsQuery = api.classroom.subjects.useQuery({
+    id: params.id,
+  });
   const [link, setLink] = useState("");
 
   const handleRemoveLink = (index: number) => {
     const currentLinks = form.getValues("links");
-    const newLinks = currentLinks.filter((_, i) => i !== index);
+    const newLinks = currentLinks?.filter((_, i) => i !== index);
     form.setValue("links", newLinks);
   };
 
@@ -95,15 +101,13 @@ export function CreateEditAssignment({
   };
 
   const { t } = useLocale();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = (data: any) => {
+  const utils = api.useUtils();
+  const createAssignmentMutation = api.assignment.create.useMutation();
+  const updateAssignmentMutation = api.assignment.update.useMutation();
+  const onSubmit = (data: z.infer<typeof assignmentSchema>) => {
     console.log(data);
   };
 
-  if (assignmentCategoriesQuery.isError) {
-    showErrorToast(assignmentCategoriesQuery.error);
-    return;
-  }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -121,7 +125,7 @@ export function CreateEditAssignment({
 
           <FormField
             control={form.control}
-            name="category"
+            name="categoryId"
             render={({ field }) => (
               <FormItem className="">
                 <FormLabel>{t("Category")}</FormLabel>
@@ -129,7 +133,7 @@ export function CreateEditAssignment({
                   onValueChange={(value) => {
                     field.onChange(value);
                   }}
-                  //defaultValue={field.value}
+                  defaultValue={String(field.value)}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder={t("select_an_option")} />
@@ -140,12 +144,47 @@ export function CreateEditAssignment({
                         <Loader className="w-8 animate-spin" />
                       </SelectItem>
                     )}
-                    {assignmentCategoriesQuery.data?.map((cat) => (
+                    {assignmentCategoriesQuery.data?.map((cat: any) => (
                       <SelectItem
                         key={cat.id.toString()}
                         value={cat.id.toString()}
                       >
                         {cat.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="subjectId"
+            render={({ field }) => (
+              <FormItem className="">
+                <FormLabel>{t("Subject")}</FormLabel>
+                <Select
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                  }}
+                  defaultValue={String(field.value)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder={t("select_an_option")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {assignmentSubjectsQuery.isPending && (
+                      <SelectItem value="0">
+                        <Loader className="w-8 animate-spin" />
+                      </SelectItem>
+                    )}
+                    {assignmentSubjectsQuery.data?.map((sub: any) => (
+                      <SelectItem
+                        key={sub.id.toString()}
+                        value={sub.id.toString()}
+                      >
+                        {sub?.course?.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -169,6 +208,31 @@ export function CreateEditAssignment({
             )}
           />
 
+          <div className="col-span-full my-4">
+            <Label className=" ">Attachments</Label>
+            <FileUploader
+              className="mt-4"
+              maxFileCount={100}
+              maxSize={1 * 1024 * 1024}
+              onValueChange={(files) => {
+                if (files.length === 0) {
+                  return;
+                }
+                toast.promise(onUpload(files), {
+                  loading: t("uploading"),
+                  success: () => {
+                    return t("uploaded_successfully");
+                  },
+                  error: (err) => {
+                    return getErrorMessage(err);
+                  },
+                });
+              }}
+              progresses={progresses}
+              disabled={isUploading}
+            />
+          </div>
+
           <FormField
             control={form.control}
             name="links"
@@ -189,7 +253,7 @@ export function CreateEditAssignment({
                       if (link) {
                         if (isValidURL(link)) {
                           form.setValue("links", [
-                            ...form.getValues("links"),
+                            ...(form.getValues("links") as string[]),
                             link,
                           ]);
                           setLink("");
@@ -208,7 +272,7 @@ export function CreateEditAssignment({
                 </div>
                 <FormMessage />
                 <div className="flex flex-wrap gap-4 pt-2">
-                  {form.getValues("links").map((link, index) => (
+                  {(form.getValues("links") as string[]).map((link, index) => (
                     <div key={index}>
                       <Badge variant="secondary" className="px-4 py-2">
                         {link}
@@ -249,8 +313,8 @@ export function CreateEditAssignment({
                   onChange={(val) => {
                     if (val) {
                       const dateRange = val as { from: Date; to: Date };
-                      form.setValue("from", dateRange.from);
-                      form.setValue("to", dateRange.to);
+                      form.setValue("from", dateRange?.from);
+                      form.setValue("to", dateRange?.to);
                     }
                   }}
                 />
@@ -258,22 +322,38 @@ export function CreateEditAssignment({
             )}
           />
 
-          <CheckboxField
-            label={
-              <div className="flex flex-row items-center gap-1">
-                {t("Post to Calendar")}
-              </div>
-            }
-            name="postToCalendar"
+          <FormField
+            control={form.control}
+            name="post"
+            render={({ field }) => (
+              <FormItem className="col-span-full mt-4">
+                <CheckboxField
+                  label={
+                    <div className="flex flex-row items-center gap-1">
+                      {t("Post to Calendar")}
+                    </div>
+                  }
+                  name="post"
+                />
+              </FormItem>
+            )}
           />
 
-          <CheckboxField
-            label={
-              <div className="flex flex-row items-center gap-1">
-                {t("Send Notifications")}
-              </div>
-            }
-            name="sendNotifications"
+          <FormField
+            control={form.control}
+            name="notify"
+            render={({ field }) => (
+              <FormItem className="col-span-full">
+                <CheckboxField
+                  label={
+                    <div className="flex flex-row items-center gap-1">
+                      {t("Send Notifications")}
+                    </div>
+                  }
+                  name="notify"
+                />
+              </FormItem>
+            )}
           />
 
           {/* <FormField
