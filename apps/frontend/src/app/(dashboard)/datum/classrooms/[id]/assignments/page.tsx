@@ -12,7 +12,9 @@ export default async function Page({ params }: AssignmentPageProps) {
   return (
     <div className="flex flex-col">
       <AssignmentHeader />
-      <AssignmentDataTable assignments={assignemts} />
+      <div className="px-2">
+        <AssignmentDataTable assignments={assignemts} />
+      </div>
     </div>
   );
 }
