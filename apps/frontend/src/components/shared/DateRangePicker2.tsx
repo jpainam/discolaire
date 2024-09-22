@@ -114,7 +114,10 @@ export function DateRangePicker({ defaultValue, disabled, onChange }: Props) {
     };
 
     void setParams(newRange);
-    onChange?.({ from: newRange.from, to: newRange.to });
+    onChange?.({
+      from: newRange.from ? new Date(newRange.from) : subDays(new Date(), 7),
+      to: newRange.to ? new Date(newRange.to) : new Date(),
+    });
   };
 
   return (
