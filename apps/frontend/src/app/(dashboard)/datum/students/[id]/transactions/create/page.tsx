@@ -27,7 +27,7 @@ export default async function Page({
     <div className="flex w-full flex-col gap-2">
       <div className="flex items-center border-b bg-secondary px-2 py-2 text-secondary-foreground">
         <CircleDollarSign className="mr-2 h-4 w-4" />
-        <Label> {t("make_payment")}</Label>
+        <Label className="py-2"> {t("make_payment")}</Label>
       </div>
       {!classroom ? (
         <EmptyState className="my-8" title={t("student_not_registered_yet")} />

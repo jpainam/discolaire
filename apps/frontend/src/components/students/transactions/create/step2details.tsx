@@ -162,7 +162,7 @@ export default function Step2Details({ classroomId }: { classroomId: string }) {
             control={form.control}
             name="notifications"
             render={() => (
-              <FormItem className="space-y-0">
+              <FormItem className="flex flex-col gap-2 space-y-0">
                 {studentContactsQuery.data?.map((item) => (
                   <FormField
                     key={`form-field-contact-${item.studentId}-${item.contactId}`}
@@ -172,7 +172,7 @@ export default function Step2Details({ classroomId }: { classroomId: string }) {
                       return (
                         <FormItem
                           key={`form-item-contact-${item.studentId}-${item.contactId}`}
-                          className="flex flex-row items-start space-x-3 space-y-0"
+                          className="flex flex-row items-center space-x-2 space-y-0"
                         >
                           <FormControl>
                             <Checkbox

@@ -171,7 +171,7 @@ export function CreateEditAssignment({
         className="flex flex-col gap-4"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="flex items-center justify-end gap-2 border-b px-2 py-1">
+        <div className="flex items-center justify-end gap-2 border-b bg-muted/50 px-2 py-1">
           <Button
             onClick={() => {
               router.push(routes.classrooms.assignments.index(params.id));

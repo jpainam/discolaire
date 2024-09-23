@@ -126,10 +126,9 @@ export function Step2({
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel>Montant perçu ?</FormLabel>
+                  <FormLabel>{t("amount_received")} ?</FormLabel>
                   <FormDescription>
-                    En cochant cette case, vous certifiez avoir recu ce montant
-                    en votre nom
+                    {t("amount_received_confirmation")}
                   </FormDescription>
                 </div>
               </FormItem>
@@ -149,11 +148,10 @@ export function Step2({
                 </FormControl>
                 <div className="space-y-1 leading-none">
                   <FormLabel htmlFor="paymentCorrectness">
-                    Détails de versement
+                    {t("payment_details")}
                   </FormLabel>
                   <FormDescription>
-                    En cochant cette case, vous certifiez que les détails (Reçu
-                    de, Pour, Montant et Reste) sont corrects.
+                    {t("amount_details_confirmation")}
                   </FormDescription>
                 </div>
               </FormItem>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { ChevronDownIcon, Plus, PrinterIcon } from "lucide-react";
+import { MoreVertical, Plus } from "lucide-react";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
@@ -55,24 +55,22 @@ export function ClassroomFeeHeader() {
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} className="flex h-8 flex-row">
-              <PrinterIcon className="mr-2 h-4 w-4" />
-              <span className="text-xs 2xl:text-sm">{t("print")}</span>
-              <ChevronDownIcon className="ml-2 h-4 w-4" />
+            <Button variant={"outline"} size={"icon"}>
+              <MoreVertical className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent align="end">
             <DropdownMenuItem
               onSelect={() => {
                 console.log("PDF");
               }}
             >
               <PDFIcon className="mr-2 h-4 w-4" />
-              {t("fees")}
+              {t("pdf_export")}
             </DropdownMenuItem>
             <DropdownMenuItem>
               <XMLIcon className="mr-2 h-4 w-4" />
-              {t("fees")}
+              {t("xml_export")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
