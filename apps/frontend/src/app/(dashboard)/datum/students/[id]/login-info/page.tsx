@@ -25,7 +25,7 @@ export default async function Page({
       <LoginInfoHeader />
       <div className="flex flex-col gap-2 px-2">
         <Separator />
-        <div className="font-bold">{t2("loginInformation")}</div>
+        <div className="font-bold">{t("loginInformation")}</div>
         <Separator />
         <div className="flex flex-row items-center gap-4">
           <Label className="w-[150px] font-semibold">{t("fullName")}</Label>
@@ -38,50 +38,50 @@ export default async function Page({
           <span>{student.registrationNumber ?? "N/A"}</span>
         </div>
         <div className="flex flex-wrap">
-          {t2("loginInfoDescription1")} {t2("loginInfoDescription2")}
+          {t("loginInfoDescription1")} {t("loginInfoDescription2")}
         </div>
         <div className="mb-4 flex flex-col items-start justify-start gap-1 px-4">
           <div className="flex flex-row gap-4">
             <FlatBadge className="flex w-6 items-center" variant={"green"}>
               1{" "}
             </FlatBadge>
-            {t2("loginInfo1")}
+            {t("loginInfo1")}
           </div>
           <div className="flex flex-row gap-4">
             <FlatBadge variant={"red"}>2</FlatBadge>
-            {t2("loginInfo2")}
+            {t("loginInfo2")}
           </div>
           <div className="flex flex-row gap-4">
             <FlatBadge variant={"purple"}>3</FlatBadge>
-            {t2("loginInfo3")}
+            {t("loginInfo3")}
           </div>
           <div className="flex flex-row gap-4">
             <FlatBadge variant={"blue"}>4</FlatBadge>
-            {t2("loginInfo4")}
+            {t("loginInfo4")}
           </div>
           <div className="flex flex-row gap-4">
             <FlatBadge variant={"yellow"}>5</FlatBadge>
-            {t2("loginInfo5")}
+            {t("loginInfo5")}
           </div>
           <div className="flex flex-row gap-4">
             <FlatBadge variant={"gray"}>6</FlatBadge>
-            {t2("loginInfo6")}
+            {t("loginInfo6")}
           </div>
           <div className="flex flex-row gap-4">
             <FlatBadge variant={"pink"}>7</FlatBadge>
-            {t2("loginInfo7")}
+            {t("loginInfo7")}
           </div>
           <div className="flex flex-row gap-4">
             <FlatBadge variant={"indigo"}>8</FlatBadge>
-            {t2("loginInfo8")}
+            {t("loginInfo8")}
           </div>
           <div className="flex flex-row gap-4">
             <FlatBadge variant={"red"}>2</FlatBadge>
-            {t2("loginInfo9")}
+            {t("loginInfo9")}
           </div>
         </div>
         <Separator />
-        <div>{t2("loginInfoDescription3")}</div>
+        <div>{t("loginInfoDescription3")}</div>
 
         <Tabs defaultValue={`student-${student.id}`} className="w-[400px]">
           <TabsList>
@@ -117,11 +117,11 @@ export default async function Page({
         </Tabs>
         <div className="flex flex-row items-center gap-2">
           <span className="font-bold">Note:</span>
-          <span>{t2("thePasswordIsCaseSensitive")}</span>
+          <span>{t("thePasswordIsCaseSensitive")}</span>
         </div>
-        <div>{t2("loginInfoDescription4")}</div>
+        <div>{t("loginInfoDescription4")}</div>
         <Separator className="my-4" />
-        <div>{t2("loginInfoDescription5")}</div>
+        <div>{t("loginInfoDescription5")}</div>
       </div>
     </div>
   );

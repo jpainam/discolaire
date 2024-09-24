@@ -95,16 +95,16 @@ export function FinanceHeader() {
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
                   <DropdownMenuItem>
-                    <span>{t2("financial_situation")}</span>
+                    <span>{t("financial_situation")}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <span>{t2("theDebtorList")}</span>
+                    <span>{t("theDebtorList")}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <span>{t2("theCreditorList")}</span>
+                    <span>{t("theCreditorList")}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem disabled={selectedStudents.length == 0}>
-                    {t2("currentSelection")} ({selectedStudents.length})
+                    {t("currentSelection")} ({selectedStudents.length})
                   </DropdownMenuItem>
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>
@@ -118,16 +118,16 @@ export function FinanceHeader() {
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
                   <DropdownMenuItem>
-                    <span> {t2("financial_situation")}</span>
+                    <span> {t("financial_situation")}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <span>{t2("theDebtorList")}</span>
+                    <span>{t("theDebtorList")}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <span>{t2("theCreditorList")}</span>
+                    <span>{t("theCreditorList")}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem disabled={selectedStudents.length == 0}>
-                    {t2("currentSelection")} ({selectedStudents.length})
+                    {t("currentSelection")} ({selectedStudents.length})
                   </DropdownMenuItem>
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>

@@ -65,7 +65,7 @@ export default async function Page() {
               <TableHead>{t("name")}</TableHead>
               <TableHead>{t("type")}</TableHead>
               <TableHead>{t("createdAt")}</TableHead>
-              <TableHead>{t("createdBy")}</TableHead>
+              <TableHead>{t("created_by")}</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>

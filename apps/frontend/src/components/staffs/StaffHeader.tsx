@@ -92,7 +92,7 @@ export function StaffHeader() {
                 // toast.promise(
                 //   publishReportQueue({
                 //     code: "staff_list",
-                //     name: t2("staff_list"),
+                //     name: t("staff_list"),
                 //     type: "pdf",
                 //   }),
                 //   {
@@ -116,7 +116,7 @@ export function StaffHeader() {
                 //   toast.promise(
                 //     publishReportQueue({
                 //       code: "staff_list",
-                //       name: t2("staff_list"),
+                //       name: t("staff_list"),
                 //       type: "pdf",
                 //     }),
                 //     {

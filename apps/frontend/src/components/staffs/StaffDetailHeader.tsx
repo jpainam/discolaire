@@ -142,10 +142,10 @@ export function StaffDetailHeader() {
               <DropdownMenuItem
                 onClick={() => {
                   toast.promise(Promise.resolve(), {
-                    loading: t2("exporting_staff_information"),
+                    loading: t("exporting_staff_information"),
                     success: () => {
                       router.push(routes.reports.index);
-                      return t2("staff_information_exported_successfully");
+                      return t("staff_information_exported_successfully");
                     },
                     error: (e) => {
                       console.error(e);
@@ -155,16 +155,16 @@ export function StaffDetailHeader() {
                 }}
               >
                 <PDFIcon className="h-4 w-4 mr-2" />
-                {t2("staff_information")}
+                {t("staff_information")}
               </DropdownMenuItem>
               <DropdownMenuItem
                 // TODO implement exporting staff information
                 onClick={() => {
                   toast.promise(Promise.resolve(), {
-                    loading: t2("exporting_staff_information"),
+                    loading: t("exporting_staff_information"),
                     success: () => {
                       router.push(routes.reports.index);
-                      return t2("staff_information_exported_successfully");
+                      return t("staff_information_exported_successfully");
                     },
                     error: (e) => {
                       console.error(e);
@@ -173,7 +173,7 @@ export function StaffDetailHeader() {
                   });
                 }}
               >
-                <XMLIcon className="size-4 mr-2" /> {t2("staff_information")}
+                <XMLIcon className="size-4 mr-2" /> {t("staff_information")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu> */}

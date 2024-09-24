@@ -43,7 +43,7 @@ export default async function Page() {
             <TableRow className="bg-muted/50">
               <TableHead>{t("name")}</TableHead>
               <TableHead>{t("createdAt")}</TableHead>
-              <TableHead>{t("createdBy")}</TableHead>
+              <TableHead>{t("created_by")}</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
