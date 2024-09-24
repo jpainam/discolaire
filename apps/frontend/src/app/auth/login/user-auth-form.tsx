@@ -64,7 +64,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     }
     setIsLoading(false);
   }
-  const { t } = useLocale("auth");
+  const { t } = useLocale();
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <Form {...form}>

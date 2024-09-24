@@ -16,7 +16,7 @@ import { SMSHistoryHeader } from "~/components/administration/sms-management/SMS
 //type SMSHistoryType = z.infer<typeof smsHistorySchema>;
 export default async function Page() {
   //const smsHistory = await getSMSHistory();
-  const { t } = await getServerTranslations("admin");
+  const { t } = await getServerTranslations();
   //const d = new Date();
   const f = [];
   for (let i = 0; i < 10; i++) {

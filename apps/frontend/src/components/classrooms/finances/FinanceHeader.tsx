@@ -32,7 +32,6 @@ import { FinanceBulkAction } from "./FinanceBulkAction";
 
 export function FinanceHeader() {
   const { t } = useLocale();
-  const { t: t2 } = useLocale("print");
   const searchParams = useSearchParams();
   //const { createQueryString } = useCreateQueryString();
   const [_, setType] = useQueryState("type");

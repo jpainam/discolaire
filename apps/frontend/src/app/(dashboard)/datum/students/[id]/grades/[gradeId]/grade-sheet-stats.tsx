@@ -18,7 +18,7 @@ export async function GradeSheetStats({
   gradeSheetId: number;
   className?: string;
 }) {
-  const { t } = await getServerTranslations("print");
+  const { t } = await getServerTranslations();
   const successRate = await api.gradeSheet.successRate(gradeSheetId);
 
   return (

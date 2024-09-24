@@ -14,7 +14,7 @@ import XMLIcon from "../icons/xml-solid";
 
 export function StudentReportBlock({ item }: { item: Report }) {
   const [studentReport, setStudentReport] = useAtom(studentReportsAtom);
-  const { t } = useLocale("print");
+  const { t } = useLocale();
   const link = `${item.link}/?type=${item.type}`;
 
   return (

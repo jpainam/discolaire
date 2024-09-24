@@ -11,7 +11,7 @@ import { cn } from "~/lib/utils";
 import { TransactionStatCard } from "./TransactionStatCard";
 
 export async function TransactionStat({ className }: { className?: string }) {
-  const { t } = await getServerTranslations("description");
+  const { t } = await getServerTranslations();
   return (
     <div className={cn("grid flex-row gap-2 md:flex", className)}>
       <TransactionStatCard

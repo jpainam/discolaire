@@ -15,7 +15,7 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  const { t } = await getServerTranslations("admin");
+  const { t } = await getServerTranslations();
   const userLinks: UserLink[] = [
     {
       name: t("sms_management.history"),

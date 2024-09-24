@@ -21,7 +21,7 @@ export function SMSHistoryDataTable({
   count: number;
   smsHistory: SMSHistory[];
 }) {
-  const { t } = useLocale("admin");
+  const { t } = useLocale();
   const { fullDateFormatter } = useDateFormat();
   const columns = useMemo(() => {
     const columns = fetchSmsHistoryColumns({

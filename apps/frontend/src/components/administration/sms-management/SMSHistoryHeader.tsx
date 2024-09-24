@@ -14,7 +14,7 @@ import { routes } from "~/configs/routes";
 export function SMSHistoryHeader() {
   const d = new Date();
   //const [status, setStatus] = useState<string | null>(null);
-  const { t } = useLocale("admin");
+  const { t } = useLocale();
   const router = useRouter();
   const { createQueryString } = useCreateQueryString();
   return (

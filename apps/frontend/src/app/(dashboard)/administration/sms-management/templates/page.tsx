@@ -21,7 +21,7 @@ import {
 export default async function Page() {
   // const templates = await getSMSTemplates();
   // const tags = await getSMSTemplateTags();
-  const { t } = await getServerTranslations("admin");
+  const { t } = await getServerTranslations();
   return (
     <Card className="m-2">
       <CardHeader className="flex flex-row items-start border-b bg-muted/50 py-2">

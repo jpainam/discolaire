@@ -23,7 +23,7 @@ interface AdminSidebarProps {
   className?: string;
 }
 export function AdminSidebar({ className }: AdminSidebarProps) {
-  const { t } = useLocale("admin");
+  const { t } = useLocale();
   //const { data: users } = useAtomValue(usersAtom);
   //const users: any[] = [];
 

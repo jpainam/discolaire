@@ -39,7 +39,7 @@ import { StorageCard } from "./storage-card";
 import { TeamSwitcher } from "./team-switcher";
 
 export function AppSidebar() {
-  const { t } = useLocale("admin");
+  const { t } = useLocale();
   const data = {
     teams: [
       {

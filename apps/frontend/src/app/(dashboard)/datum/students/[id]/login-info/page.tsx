@@ -15,7 +15,6 @@ export default async function Page({
 }: {
   params: { id: string };
 }) {
-  const { t: t2 } = await getServerTranslations("description");
   const { t } = await getServerTranslations();
   const student = await api.student.get(id);
   const studentcontacts = await api.student.contacts(id);

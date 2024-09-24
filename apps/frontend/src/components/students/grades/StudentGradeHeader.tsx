@@ -35,7 +35,6 @@ export function StudentGradeHeader({
     id: studentId,
     termId: term ? Number(term) : undefined,
   });
-  const { t: t2 } = useLocale("print");
 
   // const router = useRouter();
 
@@ -134,19 +133,19 @@ export function StudentGradeHeader({
           <DropdownMenuContent align="end">
             <DropdownMenuItem>
               <PDFIcon className="mr-2 h-4 w-4" />
-              {t2("student_grade_list")}
+              {t("student_grade_list")}
             </DropdownMenuItem>
             <DropdownMenuItem>
               <XMLIcon className="mr-2 h-4 w-4" />
-              {t2("student_grade_list")}
+              {t("student_grade_list")}
             </DropdownMenuItem>
             <DropdownMenuItem>
               <PDFIcon className="mr-2 h-4 w-4" />{" "}
-              {t2("details_of_the_selected_grade")}
+              {t("details_of_the_selected_grade")}
             </DropdownMenuItem>
             <DropdownMenuItem>
               <XMLIcon className="mr-2 h-4 w-4" />{" "}
-              {t2("details_of_the_selected_grade")}
+              {t("details_of_the_selected_grade")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -37,7 +37,7 @@ import { CreateEditStaff } from "./CreateEditStaff";
 import { StaffEffectif } from "./StaffEffectif";
 
 export function StaffHeader() {
-  const { t: t2 } = useLocale("print");
+  const { t } = useLocale();
   const jobTitlesQuery = api.staff.jobTitles.useQuery();
   //const levels = api.staff.levels.useQuery();
   const canCreateStaff = useCheckPermissions(
@@ -109,7 +109,7 @@ export function StaffHeader() {
               }}
             >
               <PDFIcon className="mr-2 h-4 w-4" />
-              {t2("staff_list")}
+              {t("staff_list")}
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
@@ -133,7 +133,7 @@ export function StaffHeader() {
               }}
             >
               <XMLIcon className="mr-2 h-4 w-4" />
-              {t2("staff_list")}
+              {t("staff_list")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

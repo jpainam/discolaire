@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AuthenticationPage() {
-  const { t } = await getServerTranslations("auth");
+  const { t } = await getServerTranslations();
   const schoolYears = await api.schoolYear.getDefault();
 
   if (!schoolYears) {

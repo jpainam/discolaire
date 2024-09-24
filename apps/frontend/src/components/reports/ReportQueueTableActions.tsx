@@ -17,7 +17,7 @@ import {
 import type { ReportQueue } from "~/types/report";
 
 export function ReportQueueTableActions({ report }: { report: ReportQueue }) {
-  const { t } = useLocale("print");
+  const { t } = useLocale();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
