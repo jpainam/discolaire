@@ -14,3 +14,5 @@ export const getInvitationCode = async (email: string): Promise<string> => {
   const code = crypto.randomUUID();
   return code.slice(0, 4);
 };
+
+export { numberToWords } from "./toword";

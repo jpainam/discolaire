@@ -2,6 +2,7 @@ import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
 
 import { getServerTranslations } from "@repo/i18n/server";
+import { numberToWords } from "@repo/lib/toword";
 import { EmptyState } from "@repo/ui/EmptyState";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Separator } from "@repo/ui/separator";
@@ -10,7 +11,6 @@ import { routes } from "~/configs/routes";
 import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/server";
 import { getFullName } from "~/utils/full-name";
-import { numberToWords } from "../../../../../../../../../../packages/lib/src/toword";
 
 export default async function Page({
   params: { id, transactionId },
