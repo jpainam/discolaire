@@ -49,7 +49,7 @@ export function FormerSchoolSelector({
   onChange,
   defaultValue,
 }: FormerSchoolSelectorProps) {
-  const formerSchoolsQuery = api.school.formerSchools.useQuery();
+  const formerSchoolsQuery = api.formerSchool.all.useQuery();
 
   const [open, setOpen] = useState<boolean>(false);
   const { openModal } = useModal();
@@ -161,9 +161,9 @@ function CreateFormerSchool() {
   const utils = api.useUtils();
   const router = useRouter();
   const { closeModal } = useModal();
-  const createFormerSchoolMutation = api.school.createFormerSchool.useMutation({
+  const createFormerSchoolMutation = api.formerSchool.create.useMutation({
     onSettled: async () => {
-      await utils.school.invalidate();
+      await utils.formerSchool.all.invalidate();
     },
     onSuccess: () => {
       toast.success("created_successfully", { id: 0 });

@@ -17,7 +17,7 @@ import {
 
 import { api } from "~/trpc/react";
 
-type FormerSchool = RouterOutputs["school"]["formerSchools"][number];
+type FormerSchool = RouterOutputs["formerSchool"]["formerSchools"][number];
 
 export function SchoolDataTableAction({
   table,
@@ -27,7 +27,7 @@ export function SchoolDataTableAction({
   const rows = table.getFilteredSelectedRowModel().rows;
   const utils = api.useUtils();
   const { t } = useLocale();
-  const deleteSchoolsMutation = api.school.deleteFormerSchool.useMutation({
+  const deleteSchoolsMutation = api.formerSchool.delete.useMutation({
     onSettled: () => utils.user.invalidate(),
     onSuccess: () => {
       table.toggleAllRowsSelected(false);

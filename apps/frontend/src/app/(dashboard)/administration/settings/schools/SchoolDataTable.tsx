@@ -13,7 +13,7 @@ import { SchoolDataTableAction } from "./SchoolDataTableAction";
 import { getSchoolColumns } from "./SchoolDataTableColumn";
 
 export function SchoolDataTable() {
-  const schoolsQuery = api.school.formerSchools.useQuery();
+  const schoolsQuery = api.formerSchool.formerSchools.useQuery();
   const { t } = useLocale();
 
   const { fullDateFormatter } = useDateFormat();

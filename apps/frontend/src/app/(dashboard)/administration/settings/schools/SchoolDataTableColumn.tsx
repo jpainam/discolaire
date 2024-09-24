@@ -89,7 +89,7 @@ function ActionCell({ school }: { school: FormerSchool }) {
   const { openModal } = useModal();
 
   const deleteSchoolMutation = api.user.delete.useMutation({
-    onSettled: () => utils.school.invalidate(),
+    onSettled: () => utils.formerSchool.invalidate(),
     onSuccess: () => {
       toast.success(t("deleted_successfully"), { id: 0 });
     },

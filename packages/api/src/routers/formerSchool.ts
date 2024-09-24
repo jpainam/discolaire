@@ -2,15 +2,15 @@ import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
-export const schoolRouter = createTRPCRouter({
-  formerSchools: protectedProcedure.query(({ ctx }) => {
+export const formerShoolRouter = createTRPCRouter({
+  all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.formerSchool.findMany({
       orderBy: {
         name: "asc",
       },
     });
   }),
-  deleteFormerSchool: protectedProcedure
+  delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(({ ctx, input }) => {
       return ctx.db.formerSchool.deleteMany({
@@ -21,7 +21,7 @@ export const schoolRouter = createTRPCRouter({
         },
       });
     }),
-  updateFormerSchool: protectedProcedure
+  update: protectedProcedure
     .input(z.object({ name: z.string().min(1), id: z.string() }))
     .mutation(({ ctx, input }) => {
       return ctx.db.formerSchool.update({
@@ -33,7 +33,7 @@ export const schoolRouter = createTRPCRouter({
         },
       });
     }),
-  createFormerSchool: protectedProcedure
+  create: protectedProcedure
     .input(z.object({ name: z.string().min(1) }))
     .mutation(({ ctx, input }) => {
       return ctx.db.formerSchool.create({

@@ -219,6 +219,8 @@ model Classroom {
     studentId         String?
     reportCards       ReportCard[]
     Attendance        Attendance[]
+    school            School?        @relation(fields: [schoolId], references: [id])
+    schoolId          String?
 }
 
 model ClassroomLevel {
@@ -423,6 +425,8 @@ model Staff {
     degree                    Degree?     @relation(fields: [degreeId], references: [id])
     classrooms                Classroom[] @relation("seniorAdvisor")
     classrooms2               Classroom[] @relation("headTeacher")
+    school                    School?     @relation(fields: [schoolId], references: [id])
+    schoolId                  String?
 }
 
 model Student {
@@ -471,6 +475,8 @@ model Student {
     religion           Religion?        @relation(fields: [religionId], references: [id])
     sports             StudentSport[]
     clubs              StudentClub[]
+    school             School?          @relation(fields: [schoolId], references: [id])
+    schoolId           String?
 }
 
 model StudentSibling {
@@ -607,6 +613,8 @@ model Contact {
     country         Country?         @relation(fields: [countryId], references: [id])
     user            User?            @relation(fields: [userId], references: [id])
     studentContacts StudentContact[]
+    school          School?          @relation(fields: [schoolId], references: [id])
+    schoolId        String?
 }
 
 model Country {
@@ -619,13 +627,18 @@ model Country {
 }
 
 model School {
-    id        String   @id
-    name      String
-    createdAt DateTime @default(now()) @db.Timestamp(6)
-    updatedAt DateTime @updatedAt
-    isActive  Boolean  @default(true)
-    isDefault Boolean  @default(false)
-    color     String?
+    id         String      @id
+    name       String
+    createdAt  DateTime    @default(now()) @db.Timestamp(6)
+    updatedAt  DateTime    @updatedAt
+    isActive   Boolean     @default(true)
+    isDefault  Boolean     @default(false)
+    color      String?
+    contacts   Contact[]
+    users      User[]
+    students   Student[]
+    classrooms Classroom[]
+    staffs     Staff[]
 }
 
 model FormerSchool {
@@ -980,6 +993,8 @@ model User {
     religion        Religion[]
     clubs           Club[]            @relation("president")
     clubs2          Club[]            @relation("deputy")
+    schoolId        String?
+    school          School?           @relation(fields: [schoolId], references: [id])
 }
 
 model VerificationToken {

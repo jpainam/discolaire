@@ -34,8 +34,8 @@ export function CreateEditSchool({ id, name }: { id?: string; name?: string }) {
   const utils = api.useUtils();
   const { t } = useLocale();
   const router = useRouter();
-  const createSchoolMutation = api.school.createFormerSchool.useMutation({
-    onSettled: () => utils.school.formerSchools.invalidate(),
+  const createSchoolMutation = api.formerSchool.create.useMutation({
+    onSettled: () => utils.formerSchool.all.invalidate(),
     onSuccess: () => {
       toast.success(t("created_successfully"), { id: 0 });
       router.refresh();
@@ -46,8 +46,8 @@ export function CreateEditSchool({ id, name }: { id?: string; name?: string }) {
     },
   });
 
-  const updateSchoolMutation = api.school.updateFormerSchool.useMutation({
-    onSettled: () => utils.setting.sports.invalidate(),
+  const updateSchoolMutation = api.formerSchool.update.useMutation({
+    onSettled: () => utils.formerSchool.all.invalidate(),
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
       router.refresh();
