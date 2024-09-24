@@ -813,6 +813,7 @@
   "xml_export": "Excel Export",
   "year": "Year",
   "yearly": "Yearly",
+  "create_new": "Create New",
   "yes": "Yes",
   "yesterday": "Yesterday",
   "youNeedAdditionalPermissionTo": "You need additional permissions to access this ressource {{resource}}",

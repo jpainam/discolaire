@@ -1,9 +1,23 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
+import { toast } from "sonner";
+import { z } from "zod";
 
+import { useModal } from "@repo/hooks/use-modal";
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useForm,
+} from "@repo/ui/form";
+import { Input } from "@repo/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { Skeleton } from "@repo/ui/skeleton";
 
@@ -38,6 +52,7 @@ export function FormerSchoolSelector({
   const formerSchoolsQuery = api.school.formerSchools.useQuery();
 
   const [open, setOpen] = useState<boolean>(false);
+  const { openModal } = useModal();
   const [selectedOption, setSelectedOption] = useState<Option>({
     label: "",
     value: defaultValue ?? "",
@@ -120,8 +135,85 @@ export function FormerSchoolSelector({
             });
             setOpen(false);
           }}
+          onAddButton={() => {
+            openModal({
+              className: "w-[400px]",
+              title: `${t("create")} - ${t("school")}`,
+              view: <CreateFormerSchool />,
+            });
+          }}
         />
       </PopoverContent>
     </Popover>
+  );
+}
+
+const createSchoolSchema = z.object({
+  name: z.string().min(1),
+});
+function CreateFormerSchool() {
+  const form = useForm({
+    schema: createSchoolSchema,
+    defaultValues: {
+      name: "",
+    },
+  });
+  const utils = api.useUtils();
+  const router = useRouter();
+  const { closeModal } = useModal();
+  const createFormerSchoolMutation = api.school.createFormerSchool.useMutation({
+    onSettled: async () => {
+      await utils.school.invalidate();
+    },
+    onSuccess: () => {
+      toast.success("created_successfully", { id: 0 });
+      router.refresh();
+      closeModal();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
+  const onSubmit = (data: z.infer<typeof createSchoolSchema>) => {
+    toast.loading(t("creating"), { id: 0 });
+    createFormerSchoolMutation.mutate(data);
+  };
+  const { t } = useLocale();
+
+  return (
+    <Form {...form}>
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("name")}</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="flex items-center justify-end gap-4">
+          <Button
+            onClick={() => {
+              closeModal();
+            }}
+            variant={"outline"}
+            size={"sm"}
+          >
+            {t("cancel")}
+          </Button>
+          <Button type="submit" size={"sm"}>
+            {t("submit")}
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }

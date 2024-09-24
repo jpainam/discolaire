@@ -1,7 +1,10 @@
+"use client";
+
 import * as React from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { Check } from "lucide-react";
+import { Check, PlusIcon } from "lucide-react";
 
+import { useLocale } from "@repo/i18n";
 import {
   Command,
   CommandEmpty,
@@ -9,6 +12,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
+  CommandSeparator,
 } from "@repo/ui/command";
 
 import { AvatarState } from "~/components/AvatarState";
@@ -25,6 +29,7 @@ interface VirtualizedCommandProps {
   options: Option[];
   placeholder: string;
   selectedOption: string;
+  onAddButton?: () => void;
   renderOption?: ({
     option,
     isSelected,
@@ -42,6 +47,7 @@ const VirtualizedCommand = ({
   placeholder,
   selectedOption,
   renderOption,
+  onAddButton,
   onSelectOption,
 }: VirtualizedCommandProps) => {
   const [filteredOptions, setFilteredOptions] =
@@ -56,6 +62,7 @@ const VirtualizedCommand = ({
   });
 
   const virtualOptions = virtualizer.getVirtualItems();
+  const { t } = useLocale();
 
   const handleSearch = (search: string) => {
     setFilteredOptions(
@@ -145,6 +152,23 @@ const VirtualizedCommand = ({
           </div>
         </CommandGroup>
       </CommandList>
+      {onAddButton && (
+        <>
+          <CommandSeparator />
+          <CommandList>
+            <CommandGroup>
+              <CommandItem
+                onSelect={() => {
+                  onAddButton();
+                }}
+              >
+                <PlusIcon className="mr-2 h-5 w-5" />
+                {t("create_new")}
+              </CommandItem>
+            </CommandGroup>
+          </CommandList>
+        </>
+      )}
     </Command>
   );
 };

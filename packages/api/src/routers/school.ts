@@ -10,6 +10,26 @@ export const schoolRouter = createTRPCRouter({
       },
     });
   }),
+  deleteFormerSchool: protectedProcedure
+    .input(z.union([z.string(), z.array(z.string())]))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.formerSchool.deleteMany({
+        where: {
+          id: {
+            in: Array.isArray(input) ? input : [input],
+          },
+        },
+      });
+    }),
+  createFormerSchool: protectedProcedure
+    .input(z.object({ name: z.string().min(1) }))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.formerSchool.create({
+        data: {
+          name: input.name,
+        },
+      });
+    }),
   get: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.formerSchool.findUnique({
       where: {
