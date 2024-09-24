@@ -21,6 +21,18 @@ export const schoolRouter = createTRPCRouter({
         },
       });
     }),
+  updateFormerSchool: protectedProcedure
+    .input(z.object({ name: z.string().min(1), id: z.string() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.formerSchool.update({
+        data: {
+          name: input.name,
+        },
+        where: {
+          id: input.id,
+        },
+      });
+    }),
   createFormerSchool: protectedProcedure
     .input(z.object({ name: z.string().min(1) }))
     .mutation(({ ctx, input }) => {

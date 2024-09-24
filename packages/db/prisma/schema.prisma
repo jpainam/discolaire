@@ -637,6 +637,8 @@ model FormerSchool {
     address      String?
     type         String?
     students     Student[]
+    createdAt    DateTime  @default(now()) @db.Timestamp(6)
+    createdById  String?
 }
 
 model Subject {

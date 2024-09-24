@@ -1,7 +1,5 @@
 import { getServerTranslations } from "@repo/i18n/server";
 import { EmptyState } from "@repo/ui/EmptyState";
-import { Label } from "@repo/ui/label";
-import { Separator } from "@repo/ui/separator";
 import {
   Table,
   TableBody,
@@ -11,8 +9,8 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
-import { SidebarTrigger } from "~/components/administration/sidebar";
 import { api } from "~/trpc/server";
+import { PageHeader } from "../../PageHeader";
 import { SportAction } from "./SportAction";
 import { SportTableAction } from "./SportTableAction";
 
@@ -21,18 +19,12 @@ export default async function Page() {
   const sports = await api.setting.sports();
 
   return (
-    <div className="flex flex-col gap-2 p-2">
-      <div className="flex flex-row items-center gap-2">
-        <SidebarTrigger />
-        <Label>
-          {t("settings")} - {t("sports")}
-        </Label>
-        <div className="ml-auto flex items-center gap-2">
-          <SportAction />
-        </div>
-      </div>
-      <Separator />
-      <div className="rounded-lg border">
+    <div className="flex flex-col gap-2">
+      <PageHeader title={`${t("settings")} - ${t("sports")}`}>
+        <SportAction />
+      </PageHeader>
+
+      <div className="mx-2 rounded-lg border">
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">

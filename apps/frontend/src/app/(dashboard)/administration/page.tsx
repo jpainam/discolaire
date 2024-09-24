@@ -1,19 +1,12 @@
-"use client";
+import { getServerTranslations } from "@repo/i18n/server";
 
-import { Input } from "@repo/ui/input";
+import { PageHeader } from "./PageHeader";
 
-import { DateTimePicker } from "~/components/shared/date-time-picker";
-
-export default function AdminPage() {
+export default async function Page() {
+  const { t } = await getServerTranslations();
   return (
-    <div>
-      <h1>Admin Page</h1>
-      <DateTimePicker
-        onChange={(val) => {
-          console.log(val);
-        }}
-      />
-      <Input type="datetime-local" placeholder="Enter your name" />
+    <div className="flex flex-col gap-2">
+      <PageHeader title={t("administration")}></PageHeader>
     </div>
   );
 }
