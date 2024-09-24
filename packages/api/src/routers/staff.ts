@@ -41,19 +41,17 @@ export const staffRouter = {
       },
     });
   }),
-  get: protectedProcedure
-    .input(z.object({ id: z.string() }))
-    .query(({ ctx, input }) => {
-      return ctx.db.staff.findUnique({
-        where: {
-          id: input.id,
-        },
-        include: {
-          country: true,
-          degree: true,
-        },
-      });
-    }),
+  get: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
+    return ctx.db.staff.findUnique({
+      where: {
+        id: input,
+      },
+      include: {
+        country: true,
+        degree: true,
+      },
+    });
+  }),
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(({ ctx, input }) => {

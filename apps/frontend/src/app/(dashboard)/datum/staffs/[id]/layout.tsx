@@ -33,7 +33,7 @@ export default async function Layout({
   if (!canReadStaff) {
     return <NoPermission className="my-8" isFullPage resourceText="" />;
   }
-  const staff = await api.staff.get({ id });
+  const staff = await api.staff.get(id);
   if (!staff) {
     notFound();
   }

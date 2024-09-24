@@ -12,7 +12,7 @@ export default async function Page({
 }: {
   params: { id: string };
 }) {
-  const classroom = await api.student.classroom(id);
+  const classroom = await api.student.classroom({ studentId: id });
   const transactions = await api.student.transactions(id);
   const { t } = await getServerTranslations();
 

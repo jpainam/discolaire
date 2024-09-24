@@ -21,7 +21,7 @@ export default async function Page({
   params: { id: string };
 }) {
   const { t } = await getServerTranslations();
-  const classroom = await api.student.classroom(id);
+  const classroom = await api.student.classroom({ studentId: id });
   const isStep2 = amount && description && transactionType && paymentMethod;
   return (
     <div className="flex w-full flex-col gap-2">

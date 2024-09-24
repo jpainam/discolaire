@@ -24,7 +24,9 @@ export default function FinanceHeader() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const { t } = useLocale();
-  const classroomQuery = api.student.classroom.useQuery(params.id);
+  const classroomQuery = api.student.classroom.useQuery({
+    studentId: params.id,
+  });
 
   return (
     <div className="flex flex-row items-center gap-4 bg-muted/50 px-2 py-1">

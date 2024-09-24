@@ -10,7 +10,7 @@ import { getFullName } from "~/utils/full-name";
 import { StaffProfileHeader } from "./StaffProfileHeader";
 
 export async function StaffProfile({ staffId }: { staffId: string }) {
-  const staff = await api.staff.get({ id: staffId });
+  const staff = await api.staff.get(staffId);
 
   const { t, i18n } = await getServerTranslations();
   const dateFormatter = new Intl.DateTimeFormat(i18n.language, {

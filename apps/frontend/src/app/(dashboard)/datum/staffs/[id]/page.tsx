@@ -10,7 +10,7 @@ export default async function Page({
 }: {
   params: { id: string };
 }) {
-  const staff = await api.staff.get({ id });
+  const staff = await api.staff.get(id);
   if (!staff) {
     notFound();
   }

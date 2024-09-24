@@ -9,7 +9,7 @@ export default async function Layout({
   children,
   params: { id },
 }: PropsWithChildren<{ params: { id: string } }>) {
-  const classroom = await api.student.classroom(id);
+  const classroom = await api.student.classroom({ studentId: id });
   const { t } = await getServerTranslations();
   if (!classroom) {
     return (

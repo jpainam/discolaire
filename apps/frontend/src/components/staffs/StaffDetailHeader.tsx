@@ -22,7 +22,7 @@ export function StaffDetailHeader() {
 
   const [nextStaff, setNextStaff] = useState<StaffProcedureOutput | null>(null);
   const [prevStaff, setPrevStaff] = useState<StaffProcedureOutput | null>(null);
-  const staffQuery = api.staff.get.useQuery({ id: params.id });
+  const staffQuery = api.staff.get.useQuery(params.id);
   const staffsQuery = api.staff.all.useQuery();
 
   const router = useRouter();

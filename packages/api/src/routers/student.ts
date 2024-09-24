@@ -214,10 +214,17 @@ export const studentRouter = createTRPCRouter({
       });
     }),
 
-  classroom: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
-    // return the current classroom
-    return studentService.classroom(input, ctx.schoolYearId);
-  }),
+  classroom: protectedProcedure
+    .input(
+      z.object({ studentId: z.string(), schoolYearId: z.string().optional() }),
+    )
+    .query(({ ctx, input }) => {
+      // return the current classroom
+      if (input.schoolYearId) {
+        return studentService.classroom(input.studentId, input.schoolYearId);
+      }
+      return studentService.classroom(input.studentId, ctx.schoolYearId);
+    }),
 
   get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
     const student = await ctx.db.student.findUnique({
