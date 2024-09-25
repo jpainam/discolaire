@@ -24,7 +24,7 @@ export function CreateEditSchoolForm() {
   const { onUpload, isPending, data: uploadedFiles } = useUpload();
 
   return (
-    <div>
+    <>
       <FormField
         control={form.control}
         name="name"
@@ -245,6 +245,6 @@ export function CreateEditSchoolForm() {
           </FormItem>
         )}
       />
-    </div>
+    </>
   );
 }

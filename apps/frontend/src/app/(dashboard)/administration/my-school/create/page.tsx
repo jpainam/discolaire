@@ -3,6 +3,7 @@
 import { toast } from "sonner";
 import * as z from "zod";
 
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Form, useForm } from "@repo/ui/form";
@@ -30,10 +31,12 @@ const formSchema = z.object({
 export default function Page() {
   const { t } = useLocale();
   const utils = api.useUtils();
+  const router = useRouter();
   const createSchoolMutation = api.school.create.useMutation({
     onSettled: () => utils.school.all.invalidate(),
     onSuccess: () => {
       toast.success("create_successfully", { id: 0 });
+      router.push("/administration/my-school");
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -43,12 +46,24 @@ export default function Page() {
   const form = useForm({
     schema: formSchema,
     defaultValues: {
+      name: "",
+      authorization: "",
+      ministry: "",
+      department: "",
+      address: "",
+      region: "",
+      city: "",
+      headmaster: "",
+      phoneNumber1: "",
+      phoneNumber2: "",
+      email: "",
+      website: "",
       isActive: true,
     },
   });
 
   function onSubmit(data: z.infer<typeof formSchema>) {
-    toast.loading("updating", { id: 0 });
+    toast.loading("creating", { id: 0 });
     createSchoolMutation.mutate(data);
   }
   return (
