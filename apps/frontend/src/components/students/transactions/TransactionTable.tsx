@@ -106,7 +106,17 @@ export function TransactionTable() {
           {transactionsQuery.data?.map((transaction) => {
             return (
               <TableRow key={transaction.id}>
-                <TableCell>{transaction.transactionRef}</TableCell>
+                <TableCell>
+                  <Link
+                    className="hover:text-blue-600 hover:underline"
+                    href={routes.students.transactions.details(
+                      params.id,
+                      transaction.id,
+                    )}
+                  >
+                    {transaction.transactionRef}
+                  </Link>
+                </TableCell>
                 <TableCell>{transaction.transactionType}</TableCell>
                 <TableCell>
                   {fullDateFormatter.format(transaction.createdAt)}

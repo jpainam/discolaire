@@ -12,9 +12,8 @@ import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import { Input } from "@repo/ui/input";
-import { Label } from "@repo/ui/label";
-import { Separator } from "@repo/ui/separator";
 
+import { PageHeader } from "~/app/(dashboard)/administration/PageHeader";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { api } from "~/trpc/react";
 import { selectedPoliciesAtom } from "./_selected_policies_atom";
@@ -50,42 +49,38 @@ export function PolicyHeader() {
   }, [debounceValue, setSearchValue]);
 
   return (
-    <div className="flex flex-col gap-2 px-2">
-      <div className="flex flex-row items-center py-2">
-        <Label>{t("policy")}</Label>
-        <div className="ml-auto flex flex-row gap-3">
-          {canCreatePolicy && (
-            <Button
-              size="sm"
-              onClick={() => {
-                openModal({
-                  className: "w-[500px]",
-                  title: t("create") + " - " + t("policy"),
-                  view: <CreateEditPolicy />,
-                });
-              }}
-            >
-              <PlusIcon size={16} className="mr-2" />
-              {t("add")}
-            </Button>
-          )}
+    <div className="flex flex-col gap-2">
+      <PageHeader title={t("policies")}>
+        {canCreatePolicy && (
+          <Button
+            size="sm"
+            onClick={() => {
+              openModal({
+                className: "w-[500px]",
+                title: t("create") + " - " + t("policy"),
+                view: <CreateEditPolicy />,
+              });
+            }}
+          >
+            <PlusIcon size={16} className="mr-2" />
+            {t("add")}
+          </Button>
+        )}
 
-          {canDeletePolicy && selectedPolicies.length > 0 && (
-            <Button
-              onClick={() => {
-                toast.loading(t("deleting"), { id: 0 });
-                deletePolicyMutation.mutate(selectedPolicies);
-              }}
-              size={"sm"}
-              variant={"destructive"}
-            >
-              {t("delete")} ({selectedPolicies.length})
-            </Button>
-          )}
-        </div>
-      </div>
-      <Separator />
-      <div className="flex items-center">
+        {canDeletePolicy && selectedPolicies.length > 0 && (
+          <Button
+            onClick={() => {
+              toast.loading(t("deleting"), { id: 0 });
+              deletePolicyMutation.mutate(selectedPolicies);
+            }}
+            size={"sm"}
+            variant={"destructive"}
+          >
+            {t("delete")} ({selectedPolicies.length})
+          </Button>
+        )}
+      </PageHeader>
+      <div className="flex items-center px-2">
         <Input
           placeholder={t("search") + " " + t("policy")}
           className="xl:w-1/4"

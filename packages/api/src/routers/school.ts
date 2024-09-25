@@ -4,7 +4,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const createSchoolSchema = z.object({
   name: z.string().min(1),
-  autorization: z.string().optional(),
+  authorization: z.string().optional(),
   ministry: z.string().optional(),
   department: z.string().optional(),
   region: z.string().optional(),

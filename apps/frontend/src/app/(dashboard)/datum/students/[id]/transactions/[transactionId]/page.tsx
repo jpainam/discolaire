@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
 
+import { auth } from "@repo/auth";
 import { getServerTranslations } from "@repo/i18n/server";
 import { numberToWords } from "@repo/lib/toword";
 import { EmptyState } from "@repo/ui/EmptyState";
@@ -18,10 +19,14 @@ export default async function Page({
   params: { id: string; transactionId: number };
 }) {
   const transaction = await api.transaction.get(Number(transactionId));
+  const session = await auth();
+  const user = session?.user;
 
-  if (!transaction) {
+  if (!transaction || !user) {
     notFound();
   }
+  const school = await api.school.get(user.schoolId);
+
   const classroom = await api.student.classroom({
     studentId: id,
     schoolYearId: transaction.schoolYearId,
@@ -92,9 +97,11 @@ export default async function Page({
             />
           </div>
           <div className="text-right">
-            <p className="font-bold">INSTITUT POLYVALENT BILINGUE WAGUE</p>
-            <p>BP : 5062 YAOUNDE / CAMEROUN</p>
-            <p>Téléphone : +23797868499</p>
+            <p className="font-bold">{school?.name}</p>
+            <p>{school?.address}</p>
+            <p>
+              {t("phoneNumber")} : {school?.phoneNumber1}
+            </p>
             <p>************</p>
           </div>
         </div>

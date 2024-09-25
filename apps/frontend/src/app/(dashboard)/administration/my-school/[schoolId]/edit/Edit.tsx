@@ -37,7 +37,7 @@ export default function Edit({ school }: { school: School }) {
   const updateSchoolMutation = api.school.update.useMutation({
     onSettled: () => utils.school.all.invalidate(),
     onSuccess: () => {
-      toast.success("updated_successfully", { id: 0 });
+      toast.success(t("updated_successfully"), { id: 0 });
       router.push("/administration/my-school");
     },
     onError: (error) => {
@@ -65,8 +65,8 @@ export default function Edit({ school }: { school: School }) {
   });
 
   function onSubmit(data: z.infer<typeof formSchema>) {
-    toast.loading("updating", { id: 0 });
-    updateSchoolMutation.mutate({ id: "wgwgwe", ...data });
+    toast.loading(t("updating"), { id: 0 });
+    updateSchoolMutation.mutate({ id: school.id, ...data });
   }
   return (
     <Form {...form}>
