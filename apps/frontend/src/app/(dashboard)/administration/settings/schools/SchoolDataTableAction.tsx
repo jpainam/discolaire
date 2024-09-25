@@ -17,7 +17,7 @@ import {
 
 import { api } from "~/trpc/react";
 
-type FormerSchool = RouterOutputs["formerSchool"]["formerSchools"][number];
+type FormerSchool = RouterOutputs["formerSchool"]["all"][number];
 
 export function SchoolDataTableAction({
   table,

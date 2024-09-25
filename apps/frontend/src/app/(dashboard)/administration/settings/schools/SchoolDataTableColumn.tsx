@@ -21,7 +21,7 @@ import {
 import { api } from "~/trpc/react";
 import { CreateEditSchool } from "./CreateEditSchool";
 
-type FormerSchool = RouterOutputs["school"]["formerSchools"][number];
+type FormerSchool = RouterOutputs["formerSchool"]["all"][number];
 
 export function getSchoolColumns({
   t,
