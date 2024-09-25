@@ -5,9 +5,7 @@ export const userService = {
     const user = await db.user.findUnique({
       where: { id: userId },
     });
-    if (!user) {
-      throw new Error("User not found");
-    }
+
     const userWithRolesAndPolicies = await db.user.findUnique({
       where: { id: userId },
       include: {
@@ -34,7 +32,7 @@ export const userService = {
         effect: rolePolicy.policy.effect,
         resources: rolePolicy.policy.resources,
         condition: rolePolicy.policy.condition,
-        schoolId: user.schoolId,
+        schoolId: user?.schoolId ?? "UNKNOWN",
       })),
     );
 

@@ -2,8 +2,10 @@
 
 import { useParams } from "next/navigation";
 import { MoreVertical, Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";
@@ -27,6 +29,7 @@ import {
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { routes } from "~/configs/routes";
 import { api } from "~/trpc/react";
 
 type GradeSheetGetGradeProcedureOutput = NonNullable<
@@ -73,7 +76,20 @@ export function GradeDetailsHeader({
     (grades.length || 1e9);
 
   const confirm = useConfirm();
-  const deleteGradeSheetMutation = api.gradeSheet.delete.useMutation();
+  const router = useRouter();
+  const utils = api.useUtils();
+  const deleteGradeSheetMutation = api.gradeSheet.delete.useMutation({
+    onSettled: async () => {
+      await utils.gradeSheet.grades.invalidate();
+    },
+    onSuccess: () => {
+      toast.success(t("deleted_successfully"), { id: 0 });
+      router.push(routes.classrooms.gradesheets.index(params.id));
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
   return (
     <div className="flex flex-col gap-2 border-b">
       <div className="grid px-2 md:grid-cols-3">
@@ -182,6 +198,7 @@ export function GradeDetailsHeader({
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
+                disabled={deleteGradeSheetMutation.isPending}
                 onSelect={async () => {
                   const isConfirmed = await confirm({
                     title: t("delete"),
@@ -192,6 +209,7 @@ export function GradeDetailsHeader({
                     },
                   });
                   if (isConfirmed) {
+                    toast.loading(t("deleting"), { id: 0 });
                     deleteGradeSheetMutation.mutate(gradesheet.id);
                   }
                 }}

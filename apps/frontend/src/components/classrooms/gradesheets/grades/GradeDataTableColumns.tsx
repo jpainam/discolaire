@@ -178,10 +178,11 @@ function ActionCells({
                 return;
               }
               openModal({
-                title: <div>{t("edit")}</div>,
+                title: t("edit"),
                 description: t("edit_grade_description", {
                   name: `${st.lastName} ${st.firstName}`,
                 }),
+                className: "w-[400px]",
                 view: (
                   <EditGradeStudent
                     gradeId={grade.id}

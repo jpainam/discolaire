@@ -1,18 +1,15 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
-import { Form } from "@repo/ui/form";
+import { Form, useForm } from "@repo/ui/form";
 
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
 import { InputField } from "~/components/shared/forms/input-field";
-import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
 const editGradeStudentSchema = z.object({
@@ -21,7 +18,6 @@ const editGradeStudentSchema = z.object({
   grade: z.coerce.number(),
   isAbsent: z.coerce.boolean(),
 });
-type EditGradeStudentValue = z.infer<typeof editGradeStudentSchema>;
 
 export function EditGradeStudent({
   studentId,
@@ -32,37 +28,35 @@ export function EditGradeStudent({
   grade: number;
   gradeId: number;
 }) {
-  const form = useForm<EditGradeStudentValue>({
-    resolver: zodResolver(editGradeStudentSchema),
+  const form = useForm({
+    schema: editGradeStudentSchema,
     defaultValues: {
       studentId: studentId,
       grade: grade,
       gradeId: gradeId,
     },
   });
-  const updateGradeMutation = api.grade.update.useMutation();
+  const updateGradeMutation = api.grade.update.useMutation({
+    onSettled: async () => {
+      await utils.grade.invalidate();
+      await utils.gradeSheet.invalidate();
+    },
+    onSuccess: () => {
+      toast.success(t("updated_successfully"), { id: 0 });
+      closeModal();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
   const utils = api.useUtils();
-  const onSubmit = (data: EditGradeStudentValue) => {
-    toast.promise(
-      updateGradeMutation.mutateAsync({
-        grade: data.grade,
-        id: Number(data.gradeId),
-        isAbsent: data.isAbsent,
-      }),
-      {
-        loading: t("updating"),
-        success: () => {
-          void utils.grade.invalidate();
-          void utils.gradeSheet.invalidate();
-          closeModal();
-          return t("updated");
-        },
-        error: (error) => {
-          closeModal();
-          return getErrorMessage(error);
-        },
-      },
-    );
+  const onSubmit = (data: z.infer<typeof editGradeStudentSchema>) => {
+    toast.loading(t("updating"), { id: 0 });
+    updateGradeMutation.mutate({
+      grade: data.grade,
+      id: Number(data.gradeId),
+      isAbsent: data.isAbsent,
+    });
   };
   const { t } = useLocale();
   const { closeModal } = useModal();
@@ -74,7 +68,7 @@ export function EditGradeStudent({
           <InputField className="hidden" name="studentId" />
           <InputField className="hidden" name="gradeId" />
           <InputField name="grade" label={t("grade")} type="number" />
-          <CheckboxField name="isAbsent" label={t("isAbsent")} />
+          <CheckboxField name="isAbsent" label={t("is_absent")} />
         </div>
         <div className="ml-auto mt-4 flex flex-row gap-4">
           <Button
@@ -82,11 +76,18 @@ export function EditGradeStudent({
               closeModal();
             }}
             type="button"
+            size={"sm"}
             variant={"outline"}
           >
             {t("cancel")}
           </Button>
-          <Button type="submit">{t("submit")}</Button>
+          <Button
+            isLoading={updateGradeMutation.isPending}
+            size={"sm"}
+            type="submit"
+          >
+            {t("submit")}
+          </Button>
         </div>
       </form>
     </Form>

@@ -174,9 +174,9 @@ export function numberToWords(num: number, language = "en") {
   return word.trim();
 }
 
-const amount = "50 000".replace(/\s+/g, ""); // Remove spaces
-const number = parseInt(amount, 10);
+// const amount = "50 000".replace(/\s+/g, ""); // Remove spaces
+// const number = parseInt(amount, 10);
 
-const wordsInFrench = numberToWords(number, "fr");
+// const wordsInFrench = numberToWords(number, "fr");
 
-console.log("French: ", wordsInFrench); // Outputs: "cinquante mille"
+// console.log("French: ", wordsInFrench); // Outputs: "cinquante mille"
