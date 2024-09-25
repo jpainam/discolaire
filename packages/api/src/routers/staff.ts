@@ -30,8 +30,11 @@ export const staffRouter = {
   hello: publicProcedure.query(() => {
     return { hello: "world" };
   }),
-  all: publicProcedure.query(({ ctx }) => {
+  all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.staff.findMany({
+      where: {
+        schoolId: ctx.schoolId,
+      },
       include: {
         country: true,
         degree: true,
@@ -95,7 +98,10 @@ export const staffRouter = {
     .input(createUpdateSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.staff.create({
-        data: input,
+        data: {
+          ...input,
+          schoolId: ctx.schoolId,
+        },
       });
     }),
 

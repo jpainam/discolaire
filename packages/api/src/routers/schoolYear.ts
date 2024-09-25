@@ -5,8 +5,11 @@ import { schoolYearService } from "../services/school-year-service";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const schoolYearRouter = createTRPCRouter({
-  all: publicProcedure.query(async ({ ctx }) => {
+  all: protectedProcedure.query(async ({ ctx }) => {
     const schoolYears = await ctx.db.schoolYear.findMany({
+      where: {
+        schoolId: ctx.schoolId,
+      },
       orderBy: {
         startDate: "desc",
       },
@@ -76,6 +79,7 @@ export const schoolYearRouter = createTRPCRouter({
           endDate: input.endDate,
           id: input.name,
           name: input.name,
+          schoolId: ctx.schoolId,
           isActive: input.isActive,
         },
       });
@@ -87,8 +91,8 @@ export const schoolYearRouter = createTRPCRouter({
       },
     });
   }),
-  getDefault: publicProcedure.query(() => {
-    return schoolYearService.getDefault();
+  getDefault: protectedProcedure.query(({ ctx }) => {
+    return schoolYearService.getDefault(ctx.schoolId);
   }),
   delete: protectedProcedure
     .input(z.string())

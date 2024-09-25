@@ -60,7 +60,7 @@ export const schoolRouter = createTRPCRouter({
     .input(createSchoolSchema)
     .mutation(async ({ ctx, input }) => {
       return ctx.db.school.create({
-        data: { ...input, id: "forst" },
+        data: input,
       });
     }),
 });

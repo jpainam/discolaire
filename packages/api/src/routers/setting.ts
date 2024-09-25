@@ -5,6 +5,9 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 export const settingRouter = createTRPCRouter({
   sports: protectedProcedure.query(({ ctx }) => {
     return ctx.db.sport.findMany({
+      where: {
+        schoolId: ctx.schoolId,
+      },
       orderBy: {
         name: "asc",
       },
@@ -12,6 +15,9 @@ export const settingRouter = createTRPCRouter({
   }),
   clubs: protectedProcedure.query(({ ctx }) => {
     return ctx.db.club.findMany({
+      where: {
+        schoolId: ctx.schoolId,
+      },
       orderBy: {
         name: "asc",
       },
@@ -82,6 +88,7 @@ export const settingRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.sport.create({
         data: {
+          schoolId: ctx.schoolId,
           name: input.name,
         },
       });
@@ -95,6 +102,7 @@ export const settingRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.club.create({
         data: {
+          schoolId: ctx.schoolId,
           name: input.name,
         },
       });

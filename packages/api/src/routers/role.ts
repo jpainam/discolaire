@@ -175,12 +175,16 @@ export const roleRouter = createTRPCRouter({
       return ctx.db.role.create({
         data: {
           ...input,
+          schoolId: ctx.schoolId,
           createdBy: ctx.session.user.id,
         },
       });
     }),
   all: protectedProcedure.query(async ({ ctx }) => {
     const roles = await ctx.db.role.findMany({
+      where: {
+        schoolId: ctx.schoolId,
+      },
       orderBy: {
         createdAt: "desc",
       },

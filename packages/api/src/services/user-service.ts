@@ -2,6 +2,12 @@ import { db } from "@repo/db";
 
 export const userService = {
   getPermissions: async (userId: string) => {
+    const user = await db.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) {
+      throw new Error("User not found");
+    }
     const userWithRolesAndPolicies = await db.user.findUnique({
       where: { id: userId },
       include: {
@@ -28,7 +34,7 @@ export const userService = {
         effect: rolePolicy.policy.effect,
         resources: rolePolicy.policy.resources,
         condition: rolePolicy.policy.condition,
-        schoolId: "IPW",
+        schoolId: user.schoolId,
       })),
     );
 

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 import { getServerTranslations } from "@repo/i18n/server";
 
@@ -10,16 +9,11 @@ import { UserAuthForm } from "./user-auth-form";
 
 export const metadata: Metadata = {
   title: "Authentication",
-  description: "Authentication forms built using the components.",
+  description: "Authentication page.",
 };
 
-export default async function AuthenticationPage() {
+export default async function Page() {
   const { t } = await getServerTranslations();
-  const schoolYears = await api.schoolYear.getDefault();
-
-  if (!schoolYears) {
-    redirect("/setup");
-  }
 
   const randomVerse = await api.bible.random();
   const verse = randomVerse.verses.length > 0 ? randomVerse.verses[0] : null;

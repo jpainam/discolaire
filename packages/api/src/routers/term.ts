@@ -16,6 +16,7 @@ export const termRouter = createTRPCRouter({
         startDate: "asc",
       },
       where: {
+        schoolId: ctx.schoolId,
         schoolYearId: ctx.schoolYearId,
       },
     });
@@ -45,6 +46,7 @@ export const termRouter = createTRPCRouter({
       return ctx.db.term.create({
         data: {
           ...input,
+          schoolId: ctx.schoolId,
           schoolYearId: ctx.schoolYearId,
         },
       });

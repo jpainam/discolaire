@@ -122,6 +122,7 @@ export const classroomRouter = createTRPCRouter({
           schoolYearId: ctx.schoolYearId,
           cycleId: input.cycleId,
           sectionId: input.sectionId,
+          schoolId: ctx.session.user.schoolId,
           //createdById: { connect: { id: ctx.session.user.id } },
         },
       });

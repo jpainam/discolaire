@@ -98,8 +98,8 @@ model Policy {
     condition   Json?
     roles       RolePolicy[]
     users       UserPolicy[]
-    school      School?      @relation(fields: [schoolId], references: [id])
-    schoolId    String?
+    school      School       @relation(fields: [schoolId], references: [id])
+    schoolId    String
 }
 
 model Role {
@@ -113,8 +113,8 @@ model Role {
     updatedBy   String?
     policies    RolePolicy[]
     roles       UserRole[]
-    school      School?      @relation(fields: [schoolId], references: [id])
-    schoolId    String?
+    school      School       @relation(fields: [schoolId], references: [id])
+    schoolId    String
 }
 
 model RolePolicy {
@@ -223,8 +223,8 @@ model Classroom {
     studentId         String?
     reportCards       ReportCard[]
     Attendance        Attendance[]
-    school            School?        @relation(fields: [schoolId], references: [id])
-    schoolId          String?
+    school            School         @relation(fields: [schoolId], references: [id])
+    schoolId          String
 }
 
 model ClassroomLevel {
@@ -232,6 +232,8 @@ model ClassroomLevel {
     name       String
     order      Int         @default(1)
     classrooms Classroom[]
+    school     School      @relation(fields: [schoolId], references: [id])
+    schoolId   String      @default("cm1hbntgn00001h578bvyjxln")
 }
 
 model CalendarType {
@@ -359,6 +361,8 @@ model Term {
     attendances  Attendance[]
     reportCards  ReportCard[]
     Assignment   Assignment[]
+    School       School       @relation(fields: [schoolId], references: [id])
+    schoolId     String       @default("cm1hbntgn00001h578bvyjxln")
 }
 
 model Enrollment {
@@ -429,8 +433,8 @@ model Staff {
     degree                    Degree?     @relation(fields: [degreeId], references: [id])
     classrooms                Classroom[] @relation("seniorAdvisor")
     classrooms2               Classroom[] @relation("headTeacher")
-    school                    School?     @relation(fields: [schoolId], references: [id])
-    schoolId                  String?
+    school                    School      @relation(fields: [schoolId], references: [id])
+    schoolId                  String
 }
 
 model Student {
@@ -479,8 +483,8 @@ model Student {
     religion           Religion?        @relation(fields: [religionId], references: [id])
     sports             StudentSport[]
     clubs              StudentClub[]
-    school             School?          @relation(fields: [schoolId], references: [id])
-    schoolId           String?
+    school             School           @relation(fields: [schoolId], references: [id])
+    schoolId           String
 }
 
 model StudentSibling {
@@ -617,8 +621,8 @@ model Contact {
     country         Country?         @relation(fields: [countryId], references: [id])
     user            User?            @relation(fields: [userId], references: [id])
     studentContacts StudentContact[]
-    school          School?          @relation(fields: [schoolId], references: [id])
-    schoolId        String?
+    school          School           @relation(fields: [schoolId], references: [id])
+    schoolId        String
 }
 
 model Country {
@@ -631,7 +635,7 @@ model Country {
 }
 
 model School {
-    id            String         @id @default(cuid())
+    id            String           @id @default(cuid())
     name          String
     authorization String?
     ministry      String?
@@ -644,9 +648,9 @@ model School {
     email         String?
     website       String?
     logo          String?
-    createdAt     DateTime       @default(now()) @db.Timestamp(6)
-    updatedAt     DateTime       @updatedAt
-    isActive      Boolean        @default(true)
+    createdAt     DateTime         @default(now()) @db.Timestamp(6)
+    updatedAt     DateTime         @updatedAt
+    isActive      Boolean          @default(true)
     address       String?
     contacts      Contact[]
     users         User[]
@@ -664,6 +668,8 @@ model School {
     schoolYears   SchoolYear[]
     cycles        Cycle[]
     sections      Section[]
+    levels        ClassroomLevel[]
+    terms         Term[]
 }
 
 model FormerSchool {
@@ -677,8 +683,8 @@ model FormerSchool {
     students     Student[]
     createdAt    DateTime  @default(now()) @db.Timestamp(6)
     createdById  String?
-    school       School?   @relation(fields: [schoolId], references: [id])
-    schoolId     String?
+    school       School    @relation(fields: [schoolId], references: [id])
+    schoolId     String
 }
 
 model Subject {
@@ -705,8 +711,8 @@ model SubjectGroup {
     id       Int       @id @default(autoincrement())
     name     String
     subjects Subject[]
-    school   School?   @relation(fields: [schoolId], references: [id])
-    schoolId String?
+    school   School    @relation(fields: [schoolId], references: [id])
+    schoolId String
 }
 
 model Course {
@@ -720,8 +726,8 @@ model Course {
     isActive     Boolean?       @default(true)
     ProgramTheme ProgramTheme[]
     subjects     Subject[]
-    school       School?        @relation(fields: [schoolId], references: [id])
-    schoolId     String?
+    school       School         @relation(fields: [schoolId], references: [id])
+    schoolId     String
 }
 
 model SchoolYear {
@@ -750,24 +756,24 @@ model SchoolYear {
     terms               Term[]
     transactions        Transaction[]
     attendances         Attendance[]
-    school              School?           @relation(fields: [schoolId], references: [id])
-    schoolId            String?
+    school              School            @relation(fields: [schoolId], references: [id])
+    schoolId            String
 }
 
 model Cycle {
     id         Int         @id @default(autoincrement())
     name       String
     classrooms Classroom[]
-    school     School?     @relation(fields: [schoolId], references: [id])
-    schoolId   String?
+    school     School      @relation(fields: [schoolId], references: [id])
+    schoolId   String
 }
 
 model Section {
     id         Int         @id @default(autoincrement())
     name       String
     classrooms Classroom[]
-    school     School?     @relation(fields: [schoolId], references: [id])
-    schoolId   String?
+    school     School      @relation(fields: [schoolId], references: [id])
+    schoolId   String
 }
 
 model UserRole {
@@ -1030,8 +1036,8 @@ model User {
     religion        Religion[]
     clubs           Club[]            @relation("president")
     clubs2          Club[]            @relation("deputy")
-    schoolId        String?
-    school          School?           @relation(fields: [schoolId], references: [id])
+    schoolId        String
+    school          School            @relation(fields: [schoolId], references: [id])
 }
 
 model VerificationToken {
@@ -1057,8 +1063,8 @@ model Religion {
     createdAt   DateTime  @default(now()) @db.Timestamp(6)
     updatedAt   DateTime  @updatedAt
     students    Student[]
-    school      School?   @relation(fields: [schoolId], references: [id])
-    schoolId    String?
+    school      School    @relation(fields: [schoolId], references: [id])
+    schoolId    String
 }
 
 model Club {
@@ -1072,8 +1078,8 @@ model Club {
     deputyId    String?
     deputy      User?         @relation("deputy", fields: [deputyId], references: [id])
     StudentClub StudentClub[]
-    school      School?       @relation(fields: [schoolId], references: [id])
-    schoolId    String?
+    school      School        @relation(fields: [schoolId], references: [id])
+    schoolId    String
 }
 
 model StudentClub {
@@ -1098,8 +1104,8 @@ model Sport {
     id       String         @id @default(cuid())
     name     String
     students StudentSport[]
-    school   School?        @relation(fields: [schoolId], references: [id])
-    schoolId String?
+    school   School         @relation(fields: [schoolId], references: [id])
+    schoolId String
 }
 
 enum StudentStatus {

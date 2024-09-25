@@ -78,7 +78,7 @@ export const studentRouter = createTRPCRouter({
         orderBy: {
           [column ?? "lastName"]: order ?? "desc",
         },
-        where: whereClause(input.q ?? "").where,
+        where: { schoolId: ctx.schoolId, ...whereClause(input.q ?? "").where },
         include: {
           formerSchool: true,
           country: true,
@@ -126,6 +126,7 @@ export const studentRouter = createTRPCRouter({
           status: input.status,
           hobbies: input.hobbies,
           createdById: ctx.session.user.id,
+          schoolId: ctx.schoolId,
         },
       });
       void studentService.addClubs(student.id, input.clubs ?? []);
@@ -172,7 +173,7 @@ export const studentRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const students = await ctx.db.student.findMany({
-        where: whereClause(input?.q ?? "").where,
+        where: { schoolId: ctx.schoolId, ...whereClause(input?.q ?? "").where },
       });
       const female = students.filter((std) => std.gender == "female").length;
       const male = students.length - female;
@@ -273,6 +274,9 @@ export const studentRouter = createTRPCRouter({
   }),
   selector: protectedProcedure.query(({ ctx }) => {
     return ctx.db.student.findMany({
+      where: {
+        schoolId: ctx.schoolId,
+      },
       orderBy: {
         lastName: "asc",
       },
@@ -323,6 +327,9 @@ export const studentRouter = createTRPCRouter({
         },
         where: {
           AND: [
+            {
+              schoolId: ctx.schoolId,
+            },
             {
               OR: [
                 { firstName: { startsWith: qq, mode: "insensitive" } },

@@ -35,7 +35,7 @@ export default function Page() {
   const createSchoolMutation = api.school.create.useMutation({
     onSettled: () => utils.school.all.invalidate(),
     onSuccess: () => {
-      toast.success("create_successfully", { id: 0 });
+      toast.success(t("created_successfully"), { id: 0 });
       router.push("/administration/my-school");
     },
     onError: (error) => {
@@ -63,7 +63,7 @@ export default function Page() {
   });
 
   function onSubmit(data: z.infer<typeof formSchema>) {
-    toast.loading("creating", { id: 0 });
+    toast.loading(t("creating"), { id: 0 });
     createSchoolMutation.mutate(data);
   }
   return (

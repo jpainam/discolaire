@@ -21,9 +21,7 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 
-import { createSchoolYearCookie } from "~/actions/schoolYear";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
 
 type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -42,13 +40,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       password: "",
     },
   });
-  const schoolYearsQuery = api.schoolYear.getDefault.useQuery();
-
-  React.useEffect(() => {
-    if (schoolYearsQuery.data) {
-      void createSchoolYearCookie(schoolYearsQuery.data.id);
-    }
-  }, [schoolYearsQuery.data]);
 
   async function onSubmit(data: z.infer<typeof authFormSchema>) {
     setIsLoading(true);

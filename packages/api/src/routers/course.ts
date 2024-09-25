@@ -31,6 +31,9 @@ export const courseRouter = createTRPCRouter({
     }),
   all: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.course.findMany({
+      where: {
+        schoolId: ctx.schoolId,
+      },
       orderBy: {
         createdAt: "desc",
       },
@@ -52,6 +55,7 @@ export const courseRouter = createTRPCRouter({
           name: input.name,
           reportName: input.reportName,
           isActive: input.isActive,
+          schoolId: ctx.schoolId,
           color: generateStringColor(),
         },
       });

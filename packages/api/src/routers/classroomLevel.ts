@@ -116,6 +116,7 @@ export const classroomLevelRouter = createTRPCRouter({
       return ctx.db.classroomLevel.create({
         data: {
           name: input.name,
+          schoolId: ctx.session.user.schoolId,
           order: input.order == 0 ? count + 1 : input.order,
         },
       });

@@ -32,6 +32,7 @@ export const userRouter = createTRPCRouter({
         skip: offset,
         take: input.pageSize,
         where: {
+          schoolId: ctx.schoolId,
           name: { startsWith: qq, mode: "insensitive" },
         },
         orderBy: {
@@ -49,6 +50,7 @@ export const userRouter = createTRPCRouter({
       const qq = `%${input.q}%`;
       return ctx.db.user.count({
         where: {
+          schoolId: ctx.schoolId,
           name: { startsWith: qq, mode: "insensitive" },
         },
       });
@@ -103,6 +105,7 @@ export const userRouter = createTRPCRouter({
           email: `${input.username}@discolaire.com`,
           username: input.username,
           name: input.username,
+          schoolId: ctx.schoolId,
           password: await encryptPassword(input.password),
           emailVerified: input.emailVerified,
           isActive: input.isActive,

@@ -5,6 +5,9 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 export const religionRouter = createTRPCRouter({
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.religion.findMany({
+      where: {
+        schoolId: ctx.schoolId,
+      },
       include: {
         createdBy: true,
       },
@@ -59,7 +62,8 @@ export const religionRouter = createTRPCRouter({
       return ctx.db.religion.create({
         data: {
           name: input.name,
-          createdBy: { connect: { id: ctx.session.user.id } },
+          schoolId: ctx.schoolId,
+          createdById: ctx.session.user.id,
         },
       });
     }),

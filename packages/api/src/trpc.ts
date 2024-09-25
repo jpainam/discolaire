@@ -140,6 +140,7 @@ export const protectedProcedure = t.procedure
       ctx: {
         // infers the `session` as non-nullable
         session: { ...ctx.session, user: ctx.session.user },
+        schoolId: ctx.session.user.schoolId,
         schoolYearId: "2022-2023", // TODO: get this from the session or header
       },
     });

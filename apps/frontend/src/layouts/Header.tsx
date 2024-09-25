@@ -15,7 +15,8 @@ export async function Header() {
   const { i18n } = await getServerTranslations();
   const lng = i18n.resolvedLanguage ?? "FR";
 
-  const schoolYear = await getSchoolYearFromCookie();
+  const defaultSchoolYear = await api.schoolYear.getDefault();
+  const schoolYear = (await getSchoolYearFromCookie()) ?? defaultSchoolYear?.id;
   const permissions = await api.user.permissions();
 
   return (

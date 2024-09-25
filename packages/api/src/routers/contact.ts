@@ -50,6 +50,7 @@ export const contactRouter = createTRPCRouter({
         skip: offset,
         take: input.per_page,
         where: {
+          schoolId: ctx.schoolId,
           OR: [
             { firstName: { startsWith: `%${input.q}%` } },
             { lastName: { startsWith: `%${input.q}%` } },
@@ -161,6 +162,7 @@ export const contactRouter = createTRPCRouter({
           address: input.address,
           phoneNumber1: input.phoneNumber1,
           phoneNumber2: input.phoneNumber2,
+          schoolId: ctx.schoolId,
         },
       });
     }),

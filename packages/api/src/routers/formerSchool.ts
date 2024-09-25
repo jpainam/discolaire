@@ -5,6 +5,9 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 export const formerShoolRouter = createTRPCRouter({
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.formerSchool.findMany({
+      where: {
+        schoolId: ctx.schoolId,
+      },
       orderBy: {
         name: "asc",
       },
@@ -39,6 +42,7 @@ export const formerShoolRouter = createTRPCRouter({
       return ctx.db.formerSchool.create({
         data: {
           name: input.name,
+          schoolId: ctx.schoolId,
         },
       });
     }),

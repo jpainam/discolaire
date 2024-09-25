@@ -13,6 +13,9 @@ const createUpdateSchema = z.object({
 export const policyRouter = createTRPCRouter({
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.policy.findMany({
+      where: {
+        schoolId: ctx.schoolId,
+      },
       orderBy: {
         name: "asc",
       },
@@ -55,7 +58,11 @@ export const policyRouter = createTRPCRouter({
     .input(createUpdateSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.policy.create({
-        data: { ...input, createdBy: ctx.session.user.id },
+        data: {
+          ...input,
+          createdBy: ctx.session.user.id,
+          schoolId: ctx.schoolId,
+        },
       });
     }),
   update: protectedProcedure
