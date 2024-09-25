@@ -30,10 +30,10 @@ const formSchema = z.object({
 export default function Page() {
   const { t } = useLocale();
   const utils = api.useUtils();
-  const updateSchoolMutation = api.school.update.useMutation({
+  const createSchoolMutation = api.school.create.useMutation({
     onSettled: () => utils.school.all.invalidate(),
     onSuccess: () => {
-      toast.success("updated_successfully", { id: 0 });
+      toast.success("create_successfully", { id: 0 });
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -49,7 +49,7 @@ export default function Page() {
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     toast.loading("updating", { id: 0 });
-    updateSchoolMutation.mutate({ id: "wgwgwe", ...data });
+    createSchoolMutation.mutate(data);
   }
   return (
     <Form {...form}>
@@ -58,7 +58,7 @@ export default function Page() {
         className="mx-auto grid max-w-3xl grid-cols-1 gap-x-8 gap-y-2 pt-8 md:grid-cols-2"
       >
         <CreateEditSchoolForm />
-        <Button isLoading={updateSchoolMutation.isPending} type="submit">
+        <Button isLoading={createSchoolMutation.isPending} type="submit">
           {t("submit")}
         </Button>
       </form>
