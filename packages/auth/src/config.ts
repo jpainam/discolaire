@@ -133,7 +133,7 @@ export const validateToken = async (
             email: user.email,
             id: user.id,
             name: user.name,
-            schoolId: user.schoolId ?? "IPW",
+            schoolId: user.schoolId,
             avatar: user.avatar ?? "",
           },
           expires: addDays(new Date(), 30).toISOString(),

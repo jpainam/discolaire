@@ -44,13 +44,21 @@ export function useCheckPermissions(
   // e.g If you want to use useCheckPermissions in a loop like organization settings
   permissions?: Permission[],
 ) {
-  const isLoggedIn = useIsLoggedIn();
+  const session = useSession();
+  const user = session.data?.user;
+  //const isLoggedIn = useIsLoggedIn();
 
   const { permissions: allPermissions } = useGetPermissions(permissions);
 
-  if (!isLoggedIn) return false;
+  if (!user) return false;
 
-  return doPermissionsCheck(allPermissions, action, resource, data, "IPW");
+  return doPermissionsCheck(
+    allPermissions,
+    action,
+    resource,
+    data,
+    user.schoolId,
+  );
 }
 
 export function usePermissionsLoaded() {

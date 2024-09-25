@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Globe, Mail, MapPin, Phone } from "lucide-react";
 
 import { auth } from "@repo/auth";
@@ -11,8 +11,11 @@ import { PageHeader } from "../../PageHeader";
 
 export default async function Page() {
   const session = await auth();
-  const schoolId = session?.user.schoolId;
-  const school = await api.school.get(schoolId ?? "IPW");
+  if (!session) {
+    redirect("/auth/login");
+  }
+  const schoolId = session.user.schoolId;
+  const school = await api.school.get(schoolId);
   if (!school) {
     notFound();
   }
