@@ -15,19 +15,34 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 
+import { deleteFileFromAws, downloadFileFromAws } from "~/actions/upload";
+import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
-export function DocumentTableAction({ documentId }: { documentId: string }) {
+export function DocumentTableAction({
+  documentId,
+  url,
+}: {
+  documentId: string;
+  url: string;
+}) {
   const { t } = useLocale();
   const utils = api.useUtils();
   const router = useRouter();
+
   const deleteDocumentMutation = api.document.delete.useMutation({
     onSettled: async () => {
       await utils.document.invalidate();
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       router.refresh();
       toast.success(t("deleted_successfully"), { id: 0 });
+      try {
+        await deleteFileFromAws(url);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        toast.error(error?.message, { id: 0 });
+      }
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -41,23 +56,36 @@ export function DocumentTableAction({ documentId }: { documentId: string }) {
           <MoreHorizontal className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent align="end">
         <DropdownMenuItem>
           <Pencil className="mr-2 h-4 w-4" />
           {t("edit")}
         </DropdownMenuItem>
-
-        <DropdownMenuItem>
+        <DropdownMenuItem
+          onSelect={() => {
+            toast.promise(downloadFileFromAws(url), {
+              success: (signedUrl) => {
+                window.open(signedUrl, "_blank");
+                return t("downloaded");
+              },
+              loading: t("downloading"),
+              error: (error) => {
+                return getErrorMessage(error);
+              },
+            });
+          }}
+        >
           <DownloadCloud className="mr-2 h-4 w-4" />
           {t("download")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
+          className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
           onSelect={async () => {
             const isConfirm = await confirm({
               title: t("delete"),
               description: t("delete_confirmation"),
-              icon: <Trash2 className="h-6 w-6 text-destructive" />,
+              icon: <Trash2 className="h-4 w-4 text-destructive" />,
               alertDialogTitle: {
                 className: "flex items-center gap-2",
               },

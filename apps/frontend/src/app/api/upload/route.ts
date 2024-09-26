@@ -1,5 +1,9 @@
 import type { NextRequest } from "next/server";
-import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { v4 as uuidv4 } from "uuid";
@@ -49,11 +53,9 @@ export async function GET(
 ) {
   const searchParams = request.nextUrl.searchParams;
   const key = searchParams.get("key") ?? params.key;
+
   if (!key) {
-    return Response.json(
-      { error: "A query/params key is required" },
-      { status: 400 },
-    );
+    throw new Error("A query/params key is required");
   }
   const bucket = env.AWS_S3_BUCKET_NAME;
   const command = new GetObjectCommand({
@@ -62,4 +64,26 @@ export async function GET(
   });
   const signedUrl = await getSignedUrl(client, command, { expiresIn: 3600 });
   return Response.json(signedUrl);
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { key: string } },
+) {
+  const searchParams = request.nextUrl.searchParams;
+  const key = searchParams.get("key") ?? params.key;
+
+  if (!key) {
+    throw new Error("A query/params key is required");
+  }
+  const bucket = env.AWS_S3_BUCKET_NAME;
+
+  const deleteCommand = new DeleteObjectCommand({
+    Bucket: bucket,
+    Key: key,
+  });
+
+  const response = await client.send(deleteCommand);
+  console.log("File deleted successfully", response);
+  return Response.json({ message: "File deleted successfully" });
 }

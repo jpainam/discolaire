@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { Trash2, UploadIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -36,13 +37,13 @@ export function CreateEditDocument({
   title,
   description,
   url,
-  userId,
+  ownerId,
 }: {
   documentId?: string;
   title?: string;
   description?: string;
   url?: string;
-  userId: string;
+  ownerId: string;
 }) {
   const form = useForm({
     schema: createEditDocumentSchema,
@@ -54,7 +55,7 @@ export function CreateEditDocument({
   });
   const utils = api.useUtils();
   const router = useRouter();
-  const userQuery = api.user.get.useQuery(userId);
+  const userQuery = api.user.get.useQuery(ownerId);
   const user = userQuery.data;
   const createDocumentMutation = api.document.create.useMutation({
     onSettled: async () => {
@@ -62,11 +63,11 @@ export function CreateEditDocument({
     },
     onSuccess: () => {
       router.refresh();
-      toast.success(t("created_successfully"));
+      toast.success(t("created_successfully"), { id: 0 });
       closeModal();
     },
     onError: (error) => {
-      toast.error(error.message);
+      toast.error(error.message, { id: 0 });
     },
   });
   const updateDocumentMutation = api.document.update.useMutation({
@@ -75,24 +76,24 @@ export function CreateEditDocument({
     },
     onSuccess: () => {
       router.refresh();
-      toast.success(t("updated_successfully"));
+      toast.success(t("updated_successfully"), { id: 0 });
       closeModal();
     },
     onError: (error) => {
-      toast.error(error.message);
+      toast.error(error.message, { id: 0 });
     },
   });
   const { closeModal } = useModal();
   const handleSubmit = (data: z.infer<typeof createEditDocumentSchema>) => {
     if (!data.url) {
-      toast.error(t("please_upload_a_file"));
+      toast.error(t("please_upload_a_file"), { id: 0 });
       return;
     }
     const values = {
       title: data.title,
       description: data.description,
       url: data.url,
-      userId: userId,
+      ownerId: ownerId,
     };
     if (documentId) {
       toast.loading(t("updating"), { id: 0 });
@@ -109,6 +110,15 @@ export function CreateEditDocument({
     data: uploadedFiles,
     clearUploadedFiles,
   } = useUpload();
+
+  useEffect(() => {
+    if (uploadedFiles.length > 0) {
+      const uploadedFile = uploadedFiles[0];
+      const url = uploadedFile?.data?.id;
+      form.setValue("url", url);
+    }
+  }, [form, uploadedFiles]);
+
   const handleUpload = (file: File) => {
     toast.promise(
       onUpload(file, {
@@ -117,14 +127,7 @@ export function CreateEditDocument({
       {
         loading: t("uploading"),
         success: () => {
-          if (uploadedFiles.length > 0) {
-            const uploadedFile = uploadedFiles[0];
-            const url = uploadedFile?.data?.url;
-            form.setValue("url", url);
-            return t("uploaded_successfully");
-          } else {
-            return t("unexpected_error");
-          }
+          return t("uploaded_successfully");
         },
         error: (err) => {
           return getErrorMessage(err);
@@ -189,17 +192,16 @@ export function CreateEditDocument({
             ) : (
               <FileUploader
                 maxFileCount={1}
-                accept={{ "application/octet-stream": [], "image/*": [] }}
                 disabled={isPending}
                 maxSize={1 * 1024 * 1024}
                 onValueChange={(files) => {
                   if (files.length === 0) {
-                    toast.warning(t("please_upload_a_file"));
+                    toast.warning(t("please_upload_a_file"), { id: 0 });
                     return;
                   }
                   const file = files[0];
                   if (!file) {
-                    toast.warning(t("please_upload_a_file"));
+                    toast.warning(t("please_upload_a_file"), { id: 0 });
                     return;
                   }
                   handleUpload(file);
@@ -221,7 +223,16 @@ export function CreateEditDocument({
             <XIcon className="mr-2 h-4 w-4" />
             {t("cancel")}
           </Button>
-          <Button variant={"default"} size={"sm"} type="submit">
+          <Button
+            disabled={
+              isPending ||
+              createDocumentMutation.isPending ||
+              updateDocumentMutation.isPending
+            }
+            variant={"default"}
+            size={"sm"}
+            type="submit"
+          >
             <UploadIcon className="mr-2 h-4 w-4" /> {t("submit")}
           </Button>
         </div>

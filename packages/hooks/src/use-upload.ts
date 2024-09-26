@@ -16,8 +16,10 @@ export const useUpload = () => {
   const updateFileState = (index: number, newState: Partial<UploadState>) => {
     setData((prevUploads) => {
       const updatedUploads = [...prevUploads];
-      // @ts-expect-error TODO: fix this
-      updatedUploads[index] = { ...updatedUploads[index], ...newState };
+      updatedUploads[index] = {
+        ...updatedUploads[index],
+        ...newState,
+      } as UploadState;
       return updatedUploads;
     });
   };

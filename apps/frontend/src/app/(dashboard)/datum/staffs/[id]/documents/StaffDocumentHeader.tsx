@@ -13,7 +13,7 @@ export function StaffDocumentHeader({ userId }: { userId: string }) {
   const { t } = useLocale();
   const { openModal } = useModal();
   return (
-    <div className="flex flex-row items-center py-2">
+    <div className="flex flex-row items-center pt-2">
       <FolderOpen className="mr-2 h-6 w-6" />
       <Label>{t("documents")}</Label>
       <div className="ml-auto flex items-center gap-2">
@@ -22,7 +22,7 @@ export function StaffDocumentHeader({ userId }: { userId: string }) {
             openModal({
               className: "w-[600px]",
               title: `${t("upload")} ${t("document")}`,
-              view: <CreateEditDocument userId={userId} />,
+              view: <CreateEditDocument ownerId={userId} />,
             });
           }}
           variant={"default"}

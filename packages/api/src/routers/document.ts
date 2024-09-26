@@ -6,7 +6,7 @@ const createEditDocumentSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional(),
   url: z.string().min(1),
-  userId: z.string().min(1),
+  ownerId: z.string().min(1),
 });
 
 export const documentRouter = createTRPCRouter({
@@ -16,7 +16,8 @@ export const documentRouter = createTRPCRouter({
         createdAt: "desc",
       },
       include: {
-        user: true,
+        createdBy: true,
+        owner: true,
       },
       where: {
         schoolId: ctx.schoolId,
@@ -24,14 +25,18 @@ export const documentRouter = createTRPCRouter({
     });
   }),
   byUserId: protectedProcedure
-    .input(z.object({ userId: z.string() }))
+    .input(z.object({ ownerId: z.string() }))
     .query(({ ctx, input }) => {
       return ctx.db.document.findMany({
         orderBy: {
           createdAt: "desc",
         },
+        include: {
+          createdBy: true,
+          owner: true,
+        },
         where: {
-          userId: input.userId,
+          ownerId: input.ownerId,
         },
       });
     }),
@@ -68,7 +73,7 @@ export const documentRouter = createTRPCRouter({
         data: {
           title: input.title,
           description: input.description,
-          userId: input.userId,
+          ownerId: input.ownerId,
           url: input.url,
           createdById: ctx.session.user.id,
           schoolId: ctx.schoolId,
@@ -78,7 +83,8 @@ export const documentRouter = createTRPCRouter({
   get: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.document.findUnique({
       include: {
-        user: true,
+        owner: true,
+        createdBy: true,
       },
       where: {
         id: input,
