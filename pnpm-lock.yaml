@@ -538,6 +538,9 @@ importers:
       react-dom:
         specifier: catalog:react18
         version: 18.3.1(react@18.3.1)
+      simplex-noise:
+        specifier: ^4.0.3
+        version: 4.0.3
     devDependencies:
       '@repo/eslint-config':
         specifier: workspace:*
@@ -10205,6 +10208,9 @@ packages:
     resolution: {integrity: sha512-8jDiBuVCG86JmOrsmkA+4q77iFAEbhU9EX62PohLisg3dnxdLXFFhkxnx2Es3Cxt8IlZFlJsF9GaobFL3ukwiA==}
     peerDependencies:
       react: '>=16.8.0'
+
+  simplex-noise@4.0.3:
+    resolution: {integrity: sha512-qSE2I4AngLQG7BXqoZj51jokT4WUXe8mOBrvfOXpci8+6Yu44+/dD5zqDpOx3Ux792eamTd2lLcI8jqFntk/lg==}
 
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
@@ -22508,6 +22514,8 @@ snapshots:
     dependencies:
       react: 18.3.1
       simplebar-core: 1.2.6
+
+  simplex-noise@4.0.3: {}
 
   sisteransi@1.0.5: {}
 
