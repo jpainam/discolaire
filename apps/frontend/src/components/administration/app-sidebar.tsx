@@ -146,6 +146,10 @@ export function AppSidebar() {
         icon: CalendarDays,
         items: [
           {
+            title: t("schoolYear"),
+            url: "/administration/school-years",
+          },
+          {
             title: t("periods"),
             url: "/administration/school-years/terms",
           },
@@ -169,8 +173,8 @@ export function AppSidebar() {
             url: "/administration/settings/clubs",
           },
           {
-            title: "Limits",
-            url: "#",
+            title: t("former_schools"),
+            url: "/administration/settings/schools",
           },
         ],
       },
