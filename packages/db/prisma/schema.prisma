@@ -437,6 +437,20 @@ model Staff {
     schoolId                  String
 }
 
+model Document {
+    id          String   @id @default(uuid())
+    title       String
+    description String?
+    user        User     @relation(fields: [userId], references: [id])
+    userId      String
+    createdAt   DateTime @default(now()) @db.Timestamp(6)
+    updatedAt   DateTime @updatedAt
+    createdById String?
+    url         String
+    school      School   @relation(fields: [schoolId], references: [id])
+    schoolId    String
+}
+
 model Student {
     id                 String           @id @default(uuid())
     avatar             String?
@@ -670,6 +684,7 @@ model School {
     sections      Section[]
     levels        ClassroomLevel[]
     terms         Term[]
+    documents     Document[]
 }
 
 model FormerSchool {
@@ -1038,6 +1053,7 @@ model User {
     clubs2          Club[]            @relation("deputy")
     schoolId        String
     school          School            @relation(fields: [schoolId], references: [id])
+    documents       Document[]
 }
 
 model VerificationToken {

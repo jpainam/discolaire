@@ -765,6 +765,7 @@
   "totals": "Totals",
   "note": "Note",
   "create_user": "Create User",
+  "created_at": "Created At",
   "transactionDetails": "Transaction Details",
   "transactionRef": "Transaction Ref",
   "transactionType": "Transaction Type",

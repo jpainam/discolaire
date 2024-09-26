@@ -12,6 +12,7 @@ import { classroomLevelRouter } from "./routers/classroomLevel";
 import { classroomSectionRouter } from "./routers/classroomSection";
 import { contactRouter } from "./routers/contact";
 import { courseRouter } from "./routers/course";
+import { documentRouter } from "./routers/document";
 import { enrollmentRouter } from "./routers/enrollment";
 import { feeRouter } from "./routers/fee";
 import { feedbackRouter } from "./routers/feedback";
@@ -65,6 +66,7 @@ export const appRouter = createTRPCRouter({
   student: studentRouter,
   assignment: assignmentRouter,
   term: termRouter,
+  document: documentRouter,
   school: schoolRouter,
   studentContact: studentContactRouter,
   calendarEvent: calendarEventRouter,

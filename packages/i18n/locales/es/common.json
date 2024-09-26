@@ -764,6 +764,7 @@
   "total_success_rate": "Tasa total de éxito",
   "note": "Nota",
   "create_user": "Crear usuario",
+  "created_at": "Creado en",
   "totals": "Totales",
   "transactionDetails": "Detalles de la transacción",
   "transactionRef": "Ref. de transacción",

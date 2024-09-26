@@ -43,7 +43,7 @@ export const Vortex = (props: VortexProps) => {
   const xOff = 0.00125;
   const yOff = 0.00125;
   const zOff = 0.0005;
-  const backgroundColor = props.backgroundColor || "#000000";
+  const backgroundColor = props.backgroundColor ?? "#000000";
   let tick = 0;
   const noise3D = createNoise3D();
   let particleProps = new Float32Array(particlePropsLength);
@@ -139,18 +139,18 @@ export const Vortex = (props: VortexProps) => {
       i9 = 8 + i;
     let n, x, y, vx, vy, life, ttl, speed, x2, y2, radius, hue;
 
-    x = particleProps[i];
-    y = particleProps[i2];
+    x = particleProps[i] ?? 0;
+    y = particleProps[i2] ?? 0;
     n = noise3D(x * xOff, y * yOff, tick * zOff) * noiseSteps * TAU;
-    vx = lerp(particleProps[i3], Math.cos(n), 0.5);
-    vy = lerp(particleProps[i4], Math.sin(n), 0.5);
-    life = particleProps[i5];
-    ttl = particleProps[i6];
-    speed = particleProps[i7];
+    vx = lerp(particleProps[i3] ?? 0, Math.cos(n), 0.5);
+    vy = lerp(particleProps[i4] ?? 0, Math.sin(n), 0.5);
+    life = particleProps[i5] ?? 1;
+    ttl = particleProps[i6] ?? 1;
+    speed = particleProps[i7] ?? 1;
     x2 = x + vx * speed;
     y2 = y + vy * speed;
-    radius = particleProps[i8];
-    hue = particleProps[i9];
+    radius = particleProps[i8] ?? 1;
+    hue = particleProps[i9] ?? 1;
 
     drawParticle(x, y, x2, y2, life, ttl, radius, hue, ctx);
 
