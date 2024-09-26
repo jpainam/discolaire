@@ -51,8 +51,7 @@ import { getFullName } from "../../utils/full-name";
 import { CountryComponent } from "../shared/CountryPicker";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
-import { ChangePassword } from "../users/ChangePassword";
-import { CreateUser } from "../users/CreateUser";
+import { CreateEditUser } from "../users/CreateEditUser";
 import { SquaredAvatar } from "./SquaredAvatar";
 import { StudentSearch } from "./StudentSearch";
 
@@ -96,7 +95,7 @@ export function StudentHeader({ className }: StudentHeaderProps) {
   const confirm = useConfirm();
 
   const student = studentQuery.data;
-  const attachUserMutation = api.user.attachUser.useMutation();
+
   //const studentTags = JSON.stringify(student?.tags ?? []);
 
   const canDeleteStudent = useCheckPermissions(
@@ -246,14 +245,9 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                           className: "w-[500px]",
                           title: t("attach_user"),
                           view: (
-                            <CreateUser
-                              onSuccess={function (userId: string): void {
-                                attachUserMutation.mutate({
-                                  userId: userId,
-                                  entityId: student.id,
-                                  type: "student",
-                                });
-                              }}
+                            <CreateEditUser
+                              entityId={params.id}
+                              type="student"
                             />
                           ),
                         });
@@ -270,7 +264,15 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                         openModal({
                           className: "w-[500px]",
                           title: t("change_password"),
-                          view: <ChangePassword userId={student.userId} />,
+                          view: (
+                            <CreateEditUser
+                              userId={student.userId}
+                              type="student"
+                              roleIds={student.user?.roles.map((r) => r.roleId)}
+                              entityId={params.id}
+                              username={student.user?.username}
+                            />
+                          ),
                         });
                       }}
                     >

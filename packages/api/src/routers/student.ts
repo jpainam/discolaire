@@ -185,7 +185,15 @@ export const studentRouter = createTRPCRouter({
         studentId: input,
       },
       include: {
-        contact: true,
+        contact: {
+          include: {
+            user: {
+              include: {
+                roles: true,
+              },
+            },
+          },
+        },
         relationship: true,
       },
     });
@@ -257,7 +265,11 @@ export const studentRouter = createTRPCRouter({
             classroom: true,
           },
         },
-        user: true,
+        user: {
+          include: {
+            roles: true,
+          },
+        },
       },
     });
     if (!student) {

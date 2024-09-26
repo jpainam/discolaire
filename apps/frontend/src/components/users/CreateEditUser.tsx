@@ -20,23 +20,31 @@ import MultipleSelector from "@repo/ui/multiple-selector";
 
 import { api } from "~/trpc/react";
 
-const createUserSchema = z.object({
+const createEditUserSchema = z.object({
   username: z.string().min(1),
   password: z.string().min(1),
   roleId: z.array(z.string().min(1)),
 });
 
-export function CreateUser({
-  onSuccess,
+export function CreateEditUser({
+  entityId,
+  userId,
+  username,
+  type,
+  roleIds,
 }: {
-  onSuccess: (userId: string) => void;
+  entityId: string;
+  userId?: string;
+  username?: string;
+  roleIds?: string[];
+  type: "staff" | "contact" | "student";
 }) {
   const form = useForm({
-    schema: createUserSchema,
+    schema: createEditUserSchema,
     defaultValues: {
-      username: "",
+      username: username ?? "",
       password: "",
-      roleId: [],
+      roleId: roleIds ?? [],
     },
   });
   const { closeModal } = useModal();
@@ -44,11 +52,38 @@ export function CreateUser({
   const utils = api.useUtils();
   const router = useRouter();
 
+  const attachUserMutation = api.user.attachUser.useMutation({
+    onSuccess: () => {
+      toast.success(t("attached_successfully"), { id: 0 });
+    },
+    onError: (err) => {
+      toast.error(err.message, { id: 0 });
+    },
+  });
+
   const createUserMutation = api.user.create.useMutation({
     onSuccess: (user) => {
-      onSuccess(user.id);
+      toast.loading(t("attaching_user"), { id: 0 });
+      attachUserMutation.mutate({
+        userId: user.id,
+        entityId: entityId,
+        type: type,
+      });
       router.refresh();
-      toast.success(t("created_sucessfully"), { id: 0 });
+      toast.success(t("created_successfully"), { id: 0 });
+      closeModal();
+    },
+    onError: (err) => {
+      toast.error(err.message, { id: 0 });
+    },
+    onSettled: async () => {
+      await utils.user.invalidate();
+    },
+  });
+  const updateUserMutation = api.user.update.useMutation({
+    onSuccess: () => {
+      router.refresh();
+      toast.success(t("updated_successfully"), { id: 0 });
       closeModal();
     },
     onError: (err) => {
@@ -67,13 +102,23 @@ export function CreateUser({
       }))
     : [];
 
-  const handleSubmit = (data: z.infer<typeof createUserSchema>) => {
-    toast.loading(t("creating"), { id: 0 });
-    createUserMutation.mutate({
-      username: data.username,
-      password: data.password,
-      roleId: data.roleId,
-    });
+  const handleSubmit = (data: z.infer<typeof createEditUserSchema>) => {
+    if (userId) {
+      toast.loading(t("updating"), { id: 0 });
+      updateUserMutation.mutate({
+        id: userId,
+        username: data.username,
+        password: data.password,
+        roleId: data.roleId,
+      });
+    } else {
+      toast.loading(t("creating"), { id: 0 });
+      createUserMutation.mutate({
+        username: data.username,
+        password: data.password,
+        roleId: data.roleId,
+      });
+    }
   };
 
   return (
@@ -134,6 +179,7 @@ export function CreateUser({
         <div className="mt-4 flex flex-row items-center justify-end gap-2">
           <Button
             type="button"
+            size={"sm"}
             variant="secondary"
             onClick={() => {
               closeModal();
@@ -141,7 +187,13 @@ export function CreateUser({
           >
             {t("cancel")}
           </Button>
-          <Button isLoading={createUserMutation.isPending} type="submit">
+          <Button
+            size={"sm"}
+            isLoading={
+              createUserMutation.isPending || updateUserMutation.isPending
+            }
+            type="submit"
+          >
             {t("submit")}
           </Button>
         </div>

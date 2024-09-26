@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { encryptPassword } from "../encrypt";
@@ -117,29 +118,40 @@ export const userRouter = createTRPCRouter({
   update: protectedProcedure
     .input(
       z.object({
-        id: z.number(),
-        code: z.string().min(1),
-        description: z.string().min(1),
-        amount: z.number().min(1),
-        dueDate: z.date(),
-        journalId: z.number(),
+        id: z.string().min(1),
+        username: z.string().min(1),
+        password: z.string().min(1),
         isActive: z.boolean().default(true),
+        roleId: z.array(z.string().min(1)),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.fee.update({
+      const existingUser = await ctx.db.user.findFirst({
+        where: {
+          username: input.username,
+          id: {
+            not: input.id,
+          },
+        },
+      });
+      if (existingUser) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "User with this username already exists",
+        });
+      }
+      const user = await ctx.db.user.update({
         where: {
           id: input.id,
         },
         data: {
-          code: input.code,
-          description: input.description,
-          amount: input.amount,
-          dueDate: input.dueDate,
-          journal: { connect: { id: input.journalId } },
+          username: input.username,
+          password: await encryptPassword(input.password),
           isActive: input.isActive,
         },
       });
+      await userService.attachRoles(user.id, input.roleId);
+      return user;
     }),
   permissions: protectedProcedure.query(({ ctx }) => {
     const userId = ctx.session.user.id;

@@ -1,14 +1,13 @@
 import { getServerTranslations } from "@repo/i18n/server";
-import { Button } from "@repo/ui/button";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Label } from "@repo/ui/label";
 import { Separator } from "@repo/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
 
 import { LoginInfoHeader } from "~/components/students/login-info/LoginInfoHeader";
-import { UserLoginCard } from "~/components/students/login-info/UserLoginCard";
 import { api } from "~/trpc/server";
 import { getFullName } from "~/utils/full-name";
+import { AttachUserButton } from "./AttachUserButton";
 
 export default async function Page({
   params: { id },
@@ -98,25 +97,31 @@ export default async function Page({
             ))}
           </TabsList>
           <TabsContent value={`student-${student.id}`}>
-            <Button>
-              {student.userId ? t("create_user") : t("renitialize_password")}
-            </Button>
+            <AttachUserButton
+              entityId={student.id}
+              type={"student"}
+              roleIds={student.user?.roles.map((r) => r.roleId)}
+              userId={student.userId ?? undefined}
+              username={student.user?.username}
+            />
           </TabsContent>
           {studentcontacts.map((std, _index) => (
             <TabsContent
               key={`content-${std.contactId}`}
               value={`contact-${std.contactId}`}
             >
-              {std.contact.userId ? (
-                <UserLoginCard userId={std.contact.userId} />
-              ) : (
-                <></>
-              )}
+              <AttachUserButton
+                entityId={std.contactId}
+                type={"contact"}
+                roleIds={std.contact.user?.roles.map((r) => r.roleId)}
+                userId={std.contact.userId ?? undefined}
+                username={std.contact.user?.username}
+              />
             </TabsContent>
           ))}
         </Tabs>
         <div className="flex flex-row items-center gap-2">
-          <span className="font-bold">Note:</span>
+          <span className="font-bold">{t("note")}: </span>
           <span>{t("thePasswordIsCaseSensitive")}</span>
         </div>
         <div>{t("loginInfoDescription4")}</div>
