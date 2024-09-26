@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${GeistSans.variable} ${GeistMono.variable} overflow-x-hidden antialiased`}
+        className={`${GeistSans.variable} ${GeistMono.variable} dark overflow-x-hidden font-sans antialiased`}
       >
         <Header />
         <main className="container mx-auto overflow-hidden px-4 md:overflow-visible">

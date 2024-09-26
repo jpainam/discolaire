@@ -4,49 +4,47 @@
 
 @layer base {
   :root {
-    --background: 0, 0%, 100%;
-    --foreground: 0, 0%, 7%;
-    --card: 45 18% 96%;
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
-    --popover: 45 18% 96%;
+    --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
     --primary: 240 5.9% 10%;
     --primary-foreground: 0 0% 98%;
-    --secondary: 40, 11%, 89%;
+    --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
-    --muted: 40, 11%, 89%;
+    --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
-    --accent: 40, 10%, 94%;
+    --accent: 240 4.8% 95.9%;
     --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 72.22% 50.59%;
     --destructive-foreground: 0 0% 98%;
-    --muted-foreground: 0, 0%, 38%;
-    --border: 45, 5%, 85%;
+    --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
+    --ring: 240 5% 64.9%;
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 0, 0%, 7%;
+    --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
-    --card: 0, 0%, 7%;
+    --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
-    --popover: 0, 0%, 7%;
+    --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
     --primary: 0 0% 98%;
     --primary-foreground: 240 5.9% 10%;
-    --secondary: 0, 0%, 11%;
+    --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 0, 0%, 11%;
+    --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
-    --accent: 0, 0%, 11%;
+    --accent: 240 3.7% 15.9%;
     --accent-foreground: 0 0% 98%;
-    --destructive: 359, 100%, 61%;
-    --destructive-foreground: 0, 0%, 100%;
-    --muted-foreground: 0, 0%, 38%;
-    --border: 0, 0%, 17%;
-    --input: 0, 0%, 11%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 85.7% 97.3%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
   }
 }
@@ -74,4 +72,13 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.dotted-bg {
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    #232323 1px,
+    transparent 0
+  );
+  background-size: 8px 8px;
 }

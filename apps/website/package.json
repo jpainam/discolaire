@@ -16,6 +16,8 @@
   "prettier": "@repo/prettier-config",
   "dependencies": {
     "@repo/ui": "workspace:*",
+    "@splinetool/react-spline": "^4.0.0",
+    "@splinetool/runtime": "^1.9.28",
     "framer-motion": "^11.5.6",
     "next": "^14.2.13",
     "next-themes": "^0.3.0",
