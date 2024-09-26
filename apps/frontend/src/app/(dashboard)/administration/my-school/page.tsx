@@ -1,3 +1,6 @@
+import { redirect } from "next/navigation";
+
+import { auth } from "@repo/auth";
 import { getServerTranslations } from "@repo/i18n/server";
 import { EmptyState } from "@repo/ui/EmptyState";
 import {
@@ -9,10 +12,19 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
+import { env } from "~/env";
 import { api } from "~/trpc/server";
 import { SchoolTableAction } from "./SchoolTableAction";
 
 export default async function Page() {
+  const sessions = await auth();
+  if (!sessions) {
+    redirect("/auth/login");
+  }
+  const user = sessions.user;
+  if (user.username != env.SUPER_ADMIN_USERNAME) {
+    redirect(`/administration/my-school/${user.schoolId}`);
+  }
   const schools = await api.school.all();
   const { t } = await getServerTranslations();
 

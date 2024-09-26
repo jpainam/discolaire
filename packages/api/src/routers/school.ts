@@ -4,6 +4,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const createSchoolSchema = z.object({
   name: z.string().min(1),
+
   authorization: z.string().optional(),
   ministry: z.string().optional(),
   department: z.string().optional(),
@@ -57,7 +58,7 @@ export const schoolRouter = createTRPCRouter({
       });
     }),
   create: protectedProcedure
-    .input(createSchoolSchema)
+    .input(z.object({ name: z.string().min(1), code: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
       return ctx.db.school.create({
         data: input,

@@ -10,7 +10,7 @@ import { Button } from "@repo/ui/button";
 import { Form, useForm } from "@repo/ui/form";
 
 import { api } from "~/trpc/react";
-import { CreateEditSchoolForm } from "../../CreateEditSchoolForm";
+import { CreateEditSchoolForm } from "./CreateEditSchoolForm";
 
 const formSchema = z.object({
   name: z.string().min(1),

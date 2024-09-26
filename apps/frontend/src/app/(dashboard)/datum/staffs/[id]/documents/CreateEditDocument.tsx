@@ -1,12 +1,13 @@
 "use client";
 
-import { UploadIcon, XIcon } from "lucide-react";
+import { Trash2, UploadIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import { useLocale } from "@repo/hooks/use-locale";
 import { useModal } from "@repo/hooks/use-modal";
 import { useRouter } from "@repo/hooks/use-router";
+import { useUpload } from "@repo/hooks/use-upload";
 import { Button } from "@repo/ui/button";
 import {
   Form,
@@ -18,14 +19,17 @@ import {
   useForm,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
+import { Skeleton } from "@repo/ui/skeleton";
 import { Textarea } from "@repo/ui/textarea";
+import { FileUploader } from "@repo/ui/uploads/file-uploader";
 
+import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
 const createEditDocumentSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional(),
-  url: z.string().min(1),
+  url: z.string().optional(),
 });
 export function CreateEditDocument({
   documentId,
@@ -50,6 +54,8 @@ export function CreateEditDocument({
   });
   const utils = api.useUtils();
   const router = useRouter();
+  const userQuery = api.user.get.useQuery(userId);
+  const user = userQuery.data;
   const createDocumentMutation = api.document.create.useMutation({
     onSettled: async () => {
       await utils.document.invalidate();
@@ -78,6 +84,10 @@ export function CreateEditDocument({
   });
   const { closeModal } = useModal();
   const handleSubmit = (data: z.infer<typeof createEditDocumentSchema>) => {
+    if (!data.url) {
+      toast.error(t("please_upload_a_file"));
+      return;
+    }
     const values = {
       title: data.title,
       description: data.description,
@@ -91,9 +101,37 @@ export function CreateEditDocument({
       toast.loading(t("creating"), { id: 0 });
       createDocumentMutation.mutate(values);
     }
-    console.log(data);
   };
   const { t } = useLocale();
+  const {
+    onUpload,
+    isPending,
+    data: uploadedFiles,
+    clearUploadedFiles,
+  } = useUpload();
+  const handleUpload = (file: File) => {
+    toast.promise(
+      onUpload(file, {
+        destination: `${user?.school.code}/documents`,
+      }),
+      {
+        loading: t("uploading"),
+        success: () => {
+          if (uploadedFiles.length > 0) {
+            const uploadedFile = uploadedFiles[0];
+            const url = uploadedFile?.data?.url;
+            form.setValue("url", url);
+            return t("uploaded_successfully");
+          } else {
+            return t("unexpected_error");
+          }
+        },
+        error: (err) => {
+          return getErrorMessage(err);
+        },
+      },
+    );
+  };
   return (
     <Form {...form}>
       <form
@@ -127,6 +165,50 @@ export function CreateEditDocument({
             </FormItem>
           )}
         />
+
+        {uploadedFiles.length > 0 ? (
+          <div className="flex flex-row items-stretch justify-between">
+            <span className="line-clamp-1 flex-1 overflow-ellipsis text-sm">
+              {uploadedFiles[0]?.file.name}
+            </span>
+            <Button
+              onClick={() => {
+                form.setValue("url", "");
+                clearUploadedFiles();
+              }}
+              size={"icon"}
+              variant={"ghost"}
+            >
+              <Trash2 className="h-4 w-4 text-destructive" />
+            </Button>
+          </div>
+        ) : (
+          <>
+            {userQuery.isPending ? (
+              <Skeleton className="h-16 w-full" />
+            ) : (
+              <FileUploader
+                maxFileCount={1}
+                accept={{ "application/octet-stream": [], "image/*": [] }}
+                disabled={isPending}
+                maxSize={1 * 1024 * 1024}
+                onValueChange={(files) => {
+                  if (files.length === 0) {
+                    toast.warning(t("please_upload_a_file"));
+                    return;
+                  }
+                  const file = files[0];
+                  if (!file) {
+                    toast.warning(t("please_upload_a_file"));
+                    return;
+                  }
+                  handleUpload(file);
+                }}
+                //progresses={progresses}
+              />
+            )}
+          </>
+        )}
 
         <div className="ml-auto flex flex-row items-center gap-2">
           <Button

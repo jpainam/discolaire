@@ -650,6 +650,7 @@ model Country {
 
 model School {
     id            String           @id @default(cuid())
+    code          String           @unique
     name          String
     authorization String?
     ministry      String?

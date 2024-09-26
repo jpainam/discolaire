@@ -23,6 +23,7 @@ declare module "next-auth" {
     user: {
       id: string;
       avatar: string;
+      username: string;
       schoolId: string;
     } & DefaultSession["user"];
   }
@@ -133,6 +134,7 @@ export const validateToken = async (
             email: user.email,
             id: user.id,
             name: user.name,
+            username: user.username,
             schoolId: user.schoolId,
             avatar: user.avatar ?? "",
           },

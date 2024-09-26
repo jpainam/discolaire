@@ -174,7 +174,7 @@ export function AppSidebar() {
           },
           {
             title: t("former_schools"),
-            url: "/administration/settings/schools",
+            url: "/administration/settings/former-schools",
           },
         ],
       },

@@ -22,6 +22,10 @@ export const useUpload = () => {
     });
   };
 
+  const clearUploadedFiles = () => {
+    setData([]);
+  };
+
   const onUpload = async (
     inputs: File | File[],
     metadata?: { destination: string },
@@ -103,5 +107,12 @@ export const useUpload = () => {
     setIsPending(false);
   };
 
-  return { onUpload, isPending, data, error, isError: !!error };
+  return {
+    onUpload,
+    isPending,
+    data,
+    error,
+    isError: !!error,
+    clearUploadedFiles,
+  };
 };

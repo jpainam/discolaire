@@ -20,6 +20,7 @@ export const env = createEnv({
     AWS_S3_REGION: z.string().min(2),
     AWS_S3_BUCKET_NAME: z.string().min(2),
     AWS_S3_SECRET_ACCESS_KEY: z.string().min(1),
+    SUPER_ADMIN_USERNAME: z.string().min(1),
   },
 
   /**
@@ -37,6 +38,7 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    SUPER_ADMIN_USERNAME: process.env.SUPER_ADMIN_USERNAME,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     NEXT_PUBLIC_PROSPECT_SERVICE_URL:
       process.env.NEXT_PUBLIC_PROSPECT_SERVICE_URL,
