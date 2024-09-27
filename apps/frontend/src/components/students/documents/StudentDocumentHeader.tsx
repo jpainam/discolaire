@@ -9,12 +9,12 @@ import { Label } from "@repo/ui/label";
 
 import { CreateEditDocument } from "~/components/shared/CreateEditDocument";
 
-export function StaffDocumentHeader({ userId }: { userId: string }) {
+export function StudentDocumentHeader({ userId }: { userId: string }) {
   const { t } = useLocale();
   const { openModal } = useModal();
   return (
-    <div className="flex flex-row items-center pt-2">
-      <FolderOpen className="mr-2 h-6 w-6" />
+    <div className="flex flex-row items-center border-b bg-secondary px-2 py-1">
+      <FolderOpen className="mr-2 h-4 w-4" />
       <Label>{t("documents")}</Label>
       <div className="ml-auto flex items-center gap-2">
         <Button

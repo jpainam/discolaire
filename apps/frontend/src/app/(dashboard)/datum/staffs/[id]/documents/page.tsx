@@ -13,8 +13,8 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
+import { DocumentTableAction } from "~/components/shared/DocumentTableAction";
 import { api } from "~/trpc/server";
-import { DocumentTableAction } from "./DocumentTableAction";
 import { StaffDocumentHeader } from "./StaffDocumentHeader";
 
 export default async function Page({

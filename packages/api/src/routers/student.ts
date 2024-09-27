@@ -294,9 +294,7 @@ export const studentRouter = createTRPCRouter({
       },
     });
   }),
-  documents: protectedProcedure.input(z.string()).query(() => {
-    return [];
-  }),
+
   enrollments: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.enrollment.findMany({
       where: {
