@@ -746,13 +746,13 @@ model SubjectGroup {
 
 model Course {
     id           String         @id @default(uuid())
-    name         String?
-    color        String?
+    name         String
+    color        String
     createdAt    DateTime       @default(now()) @db.Timestamp(6)
     updatedAt    DateTime       @updatedAt
-    shortName    String?
-    reportName   String?
-    isActive     Boolean?       @default(true)
+    shortName    String
+    reportName   String
+    isActive     Boolean        @default(true)
     ProgramTheme ProgramTheme[]
     subjects     Subject[]
     school       School         @relation(fields: [schoolId], references: [id])

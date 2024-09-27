@@ -1,0 +1,73 @@
+import {
+  addDays,
+  eachWeekOfInterval,
+  setHours,
+  setMinutes,
+  startOfWeek,
+} from "date-fns";
+
+interface Event {
+  start: Date;
+  end: Date;
+}
+
+const dayOfWeekMap: Record<string, number> = {
+  monday: 1,
+  tuesday: 2,
+  wednesday: 3,
+  thursday: 4,
+  friday: 5,
+  saturday: 6,
+  sunday: 0,
+};
+export const timetableService = {
+  generateRange: ({
+    startTime,
+    endTime,
+    daysOfWeek,
+    startDate,
+    finalDate,
+  }: {
+    startTime: string;
+    startDate: Date;
+    finalDate: Date;
+    endTime: string;
+    daysOfWeek: string[];
+  }) => {
+    const events: Event[] = [];
+    const weekRange = eachWeekOfInterval({ start: startDate, end: finalDate });
+    const [startHour, startMinute] = startTime.split(":").map(Number);
+    const [endHour, endMinute] = endTime.split(":").map(Number);
+    if (!startHour || !startMinute || !endHour || !endMinute) {
+      throw new Error("Invalid time format");
+    }
+
+    for (const week of weekRange) {
+      for (const day of daysOfWeek) {
+        const dayOfWeek = dayOfWeekMap[day];
+        if (dayOfWeek === undefined) {
+          throw new Error(`Invalid day of week: ${day}`);
+        }
+        const eventDay = addDays(
+          startOfWeek(week, { weekStartsOn: 0 }),
+          dayOfWeek,
+        );
+        if (eventDay >= startDate && eventDay <= finalDate) {
+          const eventStartDateTime = setMinutes(
+            setHours(eventDay, startHour),
+            startMinute,
+          );
+          const eventEndDateTime = setMinutes(
+            setHours(eventDay, endHour),
+            endMinute,
+          );
+          events.push({
+            start: eventStartDateTime,
+            end: eventEndDateTime,
+          });
+        }
+      }
+    }
+    return events;
+  },
+};

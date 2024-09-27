@@ -11,9 +11,9 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from "@repo/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
-import { ScrollArea } from "@repo/ui/scroll-area";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { cn } from "~/lib/utils";
@@ -24,9 +24,10 @@ interface SelectCoursesProps {
   className?: string;
   defaultValue?: string;
   contentClassName?: string;
-  onChange?: (value: string) => void;
+  onChange?: (value: string | null | undefined) => void;
   disabled?: boolean;
 }
+
 export function CourseSelector({
   placeholder,
   className,
@@ -39,16 +40,18 @@ export function CourseSelector({
 
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState(defaultValue);
-  const data = coursesQuery.data;
 
   const { t } = useLocale();
   if (coursesQuery.isPending) {
     return (
       <div>
-        <Skeleton className="h-5 w-full" />
+        <Skeleton className="h-8 w-full" />
       </div>
     );
   }
+
+  const data = coursesQuery.data ?? [];
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -60,7 +63,7 @@ export function CourseSelector({
           className={cn("w-[200px] justify-between", className)}
         >
           {value
-            ? data?.find((d) => d.id === value)?.name
+            ? data.find((d) => d.id === value)?.name
             : (placeholder ?? t("select_an_option"))}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -69,42 +72,51 @@ export function CourseSelector({
         className={cn("p-0", contentClassName)}
         sameWidthAsTrigger={true}
       >
-        <Command>
+        <Command
+          filter={(value, search) => {
+            const item = data.find((it) => it.id === value);
+            if (item?.name.toLowerCase().includes(search.toLowerCase())) {
+              return 1;
+            }
+            return 0;
+          }}
+        >
           <CommandInput
             placeholder={placeholder ?? t("search_for_an_option")}
           />
-          <CommandEmpty>{t("not_found")}</CommandEmpty>
-          <CommandGroup>
-            <ScrollArea className="h-[400px]">
-              {data?.map((d) => (
+          <CommandList>
+            <CommandEmpty>{t("not_found")}</CommandEmpty>
+            <CommandGroup>
+              {coursesQuery.data?.map((item) => (
                 <CommandItem
-                  key={d.id}
-                  //value={`${d.id}`}
-                  onSelect={(_currentValue) => {
-                    setValue(d.id === value ? "" : `${d.id}`);
-                    onChange?.(d.id === value ? "" : `${d.id}`);
+                  key={item.id}
+                  className="overflow-hidden"
+                  value={item.id}
+                  onSelect={(currentValue) => {
+                    onChange?.(currentValue == value ? null : currentValue);
+                    setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
                   }}
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === d.id ? "opacity-100" : "opacity-0",
+                      value === item.id ? "opacity-100" : "opacity-0",
                     )}
                   />
                   <div className="flex flex-row items-center space-x-1">
                     <div
                       className="flex h-4 w-4 rounded-full"
                       style={{
-                        backgroundColor: d.color ?? "lightgray",
+                        backgroundColor: item.color ?? "lightgray",
                       }}
                     ></div>
-                    <div> {d.name}</div>
+                    <div> {item.name}</div>
                   </div>
                 </CommandItem>
               ))}
-            </ScrollArea>
-          </CommandGroup>
+            </CommandGroup>
+          </CommandList>
         </Command>
       </PopoverContent>
     </Popover>

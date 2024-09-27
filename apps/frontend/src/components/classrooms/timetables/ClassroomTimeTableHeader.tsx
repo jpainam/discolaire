@@ -50,7 +50,7 @@ export function ClassroomTimeTableHeader() {
           onClick={() => {
             openModal({
               title: t("create_timetable"),
-              className: "w-[500px]",
+              className: "w-[550px]",
               view: <CreateEditTimetable classroomId={params.id} />,
             });
           }}
@@ -66,7 +66,7 @@ export function ClassroomTimeTableHeader() {
               <MoreVerticalIcon className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent align="end">
             <DropdownHelp />
             <DropdownMenuItem>
               <PDFIcon className="mr-2 h-4 w-4" />

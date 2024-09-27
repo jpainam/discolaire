@@ -2,6 +2,7 @@ import type { LucideIcon } from "lucide-react";
 import {
   BookOpenText,
   BookText,
+  CalendarDays,
   Captions,
   Contact,
   FolderOpen,
@@ -27,4 +28,5 @@ export const sidebarIcons: Record<string, LucideIcon> = {
   programs: BookText,
   attendances: Contact,
   report_cards: Proportions,
+  timetables: CalendarDays,
 };

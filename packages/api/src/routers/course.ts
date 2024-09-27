@@ -35,7 +35,7 @@ export const courseRouter = createTRPCRouter({
         schoolId: ctx.schoolId,
       },
       orderBy: {
-        createdAt: "desc",
+        name: "asc",
       },
     });
   }),

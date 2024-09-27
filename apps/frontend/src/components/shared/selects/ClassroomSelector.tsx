@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
+import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -16,14 +17,8 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { Skeleton } from "@repo/ui/skeleton";
 
-import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
-
-interface Option {
-  label: string;
-  value: string;
-}
 
 interface ClassroomSelectorProps {
   searchPlaceholder?: string;
@@ -42,37 +37,19 @@ export function ClassroomSelector({
 }: ClassroomSelectorProps) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState(defaultValue);
-  const [items, setItems] = React.useState<Option[]>([]);
+
   const { t } = useLocale();
   const classroomsQuery = api.classroom.all.useQuery();
 
-  React.useEffect(() => {
-    setValue(defaultValue);
-  }, [defaultValue]);
-
-  React.useEffect(() => {
-    setItems(
-      classroomsQuery.data?.map((it) => ({
-        label: it.name,
-        value: it.id,
-      })) ?? [],
-    );
-  }, [classroomsQuery.data]);
-
-  const handleSearch = (search: string) => {
-    if (!classroomsQuery.data) return;
-    const filteredItems = classroomsQuery.data.filter((it) =>
-      it.name.toLowerCase().includes(search.toLowerCase()),
-    );
-    setItems(filteredItems.map((it) => ({ label: it.name, value: it.id })));
-  };
   if (classroomsQuery.isPending) {
-    return <Skeleton className={cn("h-8 w-[300px]", className)} />;
+    return <Skeleton className={cn("h-8 w-full", className)} />;
   }
   if (classroomsQuery.isError) {
-    showErrorToast(classroomsQuery.error);
+    toast.error(classroomsQuery.error.message);
     return null;
   }
+
+  const data = classroomsQuery.data;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -83,16 +60,23 @@ export function ClassroomSelector({
           aria-expanded={open}
           className={cn("w-full justify-between", className)}
         >
-          {items.find((it) => it.value === value)?.label ??
+          {data.find((it) => it.id === value)?.name ??
             placeholder ??
             t("select_an_option")}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="p-0" sameWidthAsTrigger={true}>
-        <Command>
+        <Command
+          filter={(value, search) => {
+            const item = data.find((it) => it.id === value);
+            if (item?.name.toLowerCase().includes(search.toLowerCase())) {
+              return 1;
+            }
+            return 0;
+          }}
+        >
           <CommandInput
-            onValueChange={handleSearch}
             placeholder={
               searchPlaceholder ? searchPlaceholder : t("search_for_an_option")
             }
@@ -100,11 +84,11 @@ export function ClassroomSelector({
           <CommandList>
             <CommandEmpty>{t("select_an_option")}</CommandEmpty>
             <CommandGroup>
-              {items.map((item) => (
+              {classroomsQuery.data.map((item) => (
                 <CommandItem
-                  key={item.value}
+                  key={item.id}
                   className="overflow-hidden"
-                  value={item.value}
+                  value={item.id}
                   onSelect={(currentValue) => {
                     onChange?.(currentValue == value ? null : currentValue);
                     setValue(currentValue === value ? "" : currentValue);
@@ -114,10 +98,10 @@ export function ClassroomSelector({
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === item.value ? "opacity-100" : "opacity-0",
+                      value === item.id ? "opacity-100" : "opacity-0",
                     )}
                   />
-                  {item.label}
+                  {item.name}
                 </CommandItem>
               ))}
             </CommandGroup>

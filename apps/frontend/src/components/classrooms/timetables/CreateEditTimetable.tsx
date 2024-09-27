@@ -3,6 +3,7 @@
 import { toast } from "sonner";
 import { z } from "zod";
 
+import type { Option } from "@repo/ui/multiple-selector";
 import { useLocale } from "@repo/hooks/use-locale";
 import { useModal } from "@repo/hooks/use-modal";
 import { Button } from "@repo/ui/button";
@@ -16,17 +17,27 @@ import {
   useForm,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
-
-import "react-datepicker/dist/react-datepicker.css";
+import MultipleSelector from "@repo/ui/multiple-selector";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/select";
 
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { api } from "~/trpc/react";
 
 const createEditTimetable = z.object({
-  start: z.coerce.date(),
-  end: z.coerce.date(),
+  startTime: z.string().min(1),
+  endTime: z.string().min(1),
   description: z.string().optional(),
-  subjectId: z.coerce.number(),
+  days: z.array(z.string()).default([]),
+  repeat: z
+    .enum(["daily", "weekly", "biweekly", "monthly", "yearly"])
+    .default("weekly"),
+  subjectId: z.string().min(1),
 });
 export function CreateEditTimetable({
   timetableId,
@@ -43,18 +54,34 @@ export function CreateEditTimetable({
   subjectId?: number;
   classroomId: string;
 }) {
+  const startTimeString = start
+    ? start.toLocaleTimeString("en-GB", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      })
+    : "";
+  const endTimeString = end
+    ? end.toLocaleTimeString("en-GB", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      })
+    : "";
   const form = useForm({
     schema: createEditTimetable,
     defaultValues: {
-      start: start ?? new Date(),
-      end: end ?? new Date(),
+      startTime: startTimeString,
+      endTime: endTimeString,
       description: description ?? "",
-      subjectId: subjectId ? subjectId : 0,
+      subjectId: subjectId ? `${subjectId}` : "",
+      days: start && end ? getUniqueWeekdaysBetweenDates(start, end) : [],
     },
   });
   const { t } = useLocale();
   const utils = api.useUtils();
   const { closeModal } = useModal();
+
   const createTimetableMutation = api.timetable.create.useMutation({
     onSettled: async () => {
       await utils.timetable.invalidate();
@@ -68,51 +95,141 @@ export function CreateEditTimetable({
     },
   });
 
+  const daysOptions: Option<string>[] = [
+    {
+      label: t("monday"),
+      value: "monday",
+    },
+    {
+      label: t("tuesday"),
+      value: "tuesday",
+    },
+    {
+      label: t("wednesday"),
+      value: "wednesday",
+    },
+    {
+      label: t("thursday"),
+      value: "thursday",
+    },
+    {
+      label: t("friday"),
+      value: "friday",
+    },
+    {
+      label: t("saturday"),
+      value: "saturday",
+    },
+    {
+      label: t("sunday"),
+      value: "sunday",
+    },
+  ];
+
   const handleSubmit = (data: z.infer<typeof createEditTimetable>) => {
+    if (!data.subjectId) {
+      toast.error(t("subject_required"), { id: 0 });
+      return;
+    }
     const values = {
-      start: data.start,
-      end: data.end,
+      startTime: data.startTime,
+      endTime: data.endTime,
       description: data.description,
       subjectId: Number(data.subjectId),
+      repeat: data.repeat,
+      daysOfWeek: data.days,
+      startDate: start ?? new Date(),
     };
     if (timetableId) {
       //
     } else {
+      toast.loading(t("creating"), { id: 0 });
       createTimetableMutation.mutate(values);
     }
   };
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <FormField
-          control={form.control}
-          name="subjectId"
-          render={({ field }) => (
-            <FormItem className="space-y-0">
-              <FormLabel>{t("subject")}</FormLabel>
-              <FormControl>
-                <SubjectSelector
-                  defaultValue={subjectId ? `${subjectId}` : undefined}
-                  classroomId={classroomId}
-                  {...field}
-                />
-              </FormControl>
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={form.handleSubmit(handleSubmit)}
+      >
+        <div className="grid gap-x-4 md:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="subjectId"
+            render={({ field }) => (
+              <FormItem className="space-y-0">
+                <FormLabel>{t("subject")}</FormLabel>
+                <FormControl>
+                  <SubjectSelector
+                    defaultValue={subjectId ? `${subjectId}` : undefined}
+                    classroomId={classroomId}
+                    {...field}
+                  />
+                </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="repeat"
+            render={({ field }) => (
+              <FormItem className="space-y-0">
+                <FormLabel>{t("repeat")} ?</FormLabel>
+                <FormControl>
+                  <Select
+                    defaultValue={"weekly"}
+                    onValueChange={(val) => {
+                      field.onChange(val);
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder={t("repeat")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="daily">{t("daily")}</SelectItem>
+                      <SelectItem value="weekly">{t("weekly")}</SelectItem>
+                      <SelectItem value="biweekly">{t("biweekly")}</SelectItem>
+                      <SelectItem value="monthly">{t("monthly")}</SelectItem>
+                      <SelectItem value="yearly">{t("yearly")}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        {/* <FormField
           control={form.control}
           name="description"
           render={({ field }) => (
             <FormItem className="space-y-0">
-              <FormLabel>
-                {t("description")}
-                {start?.toISOString()} {end?.toISOString()}
-              </FormLabel>
+              <FormLabel>{t("description")}</FormLabel>
               <FormControl>
                 <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        /> */}
+        <FormField
+          control={form.control}
+          name="days"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("week_days")}</FormLabel>
+              <FormControl>
+                <MultipleSelector
+                  {...field}
+                  // @ts-expect-error TODO: fix this
+                  defaultOptions={form.getValues("days")}
+                  options={daysOptions}
+                  hidePlaceholderWhenSelected
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -121,17 +238,14 @@ export function CreateEditTimetable({
         <div className="grid grid-cols-2 gap-x-4">
           <FormField
             control={form.control}
-            name="start"
+            name="startTime"
             render={({ field }) => (
               <FormItem className="space-y-0">
                 <FormLabel>{t("start_date")}</FormLabel>
                 <FormControl>
                   <Input
-                    type="datetime-local"
-                    defaultValue={field.value.toLocaleTimeString()}
-                    onChange={(e) => {
-                      form.setValue("start", new Date(e.target.value));
-                    }}
+                    type="time"
+                    onChange={(e) => field.onChange(e.target.value)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -140,17 +254,14 @@ export function CreateEditTimetable({
           />
           <FormField
             control={form.control}
-            name="end"
+            name="endTime"
             render={({ field }) => (
               <FormItem className="space-y-0">
                 <FormLabel>{t("end_date")}</FormLabel>
                 <FormControl>
                   <Input
-                    type="datetime-local"
-                    defaultValue={field.value.toISOString()}
-                    onChange={(e) => {
-                      form.setValue("end", new Date(e.target.value));
-                    }}
+                    type="time"
+                    onChange={(e) => field.onChange(e.target.value)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -177,3 +288,32 @@ export function CreateEditTimetable({
     </Form>
   );
 }
+
+const getUniqueWeekdaysBetweenDates = (
+  startDate: Date,
+  endDate: Date,
+): string[] => {
+  const dayNames = [
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+  ];
+  const uniqueWeekdays = new Set<string>();
+
+  const currentDate = new Date(startDate);
+
+  while (currentDate < endDate) {
+    const dayIndex = currentDate.getDay(); // Get day index (0 for Sunday, 1 for Monday, etc.)
+    // @ts-expect-error TODO: fix this
+    uniqueWeekdays.add(dayNames[dayIndex]); // Add to Set for uniqueness
+
+    // Increment the date by 1 day
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return Array.from(uniqueWeekdays); // Convert the Set back to an array
+};

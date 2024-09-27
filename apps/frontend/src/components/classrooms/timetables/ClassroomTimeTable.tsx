@@ -1,64 +1,26 @@
 "use client";
 
-import type {
-  Culture,
-  DateLocalizer,
-  EventProps,
-  Formats,
-  View as RbcView,
-} from "react-big-calendar";
-import { useCallback, useMemo, useState } from "react";
-import {
-  addMonths,
-  format,
-  getDay,
-  getMonth,
-  getYear,
-  isToday,
-  parse,
-  startOfWeek,
-} from "date-fns";
+import type { EventProps, View as RbcView } from "react-big-calendar";
+import { useCallback, useState } from "react";
+import { useParams } from "next/navigation";
 //import { enUS, fr } from "date-fns/locale";
 
-import { enUS, es, fr } from "date-fns/locale";
-import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-
-import { useModal } from "@repo/hooks/use-modal";
-import { useResolvedTheme } from "@repo/hooks/use-resolved-theme";
-import { useLocale } from "@repo/i18n";
-
-import "react-big-calendar/lib/css/react-big-calendar.css";
-
-import { useParams } from "next/navigation";
+import i18next from "i18next";
+import moment from "moment";
 
 import type { RouterOutputs } from "@repo/api";
+import { useModal } from "@repo/hooks/use-modal";
+import { useLocale } from "@repo/i18n";
+import BigCalendar, { momentLocalizer, RbcViews } from "@repo/ui/big-calendar";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import rangeMap from "~/lib/range-map";
-import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { CreateEditTimetable } from "./CreateEditTimetable";
 
-// const calendarTypeColors = {
-//   "School Year": "#4fc793",
-//   Teaching: "#F1595C",
-//   Holidays: "#4669FA",
-// };
-
-// export interface CalendarEvent {
-//   id: string;
-//   calendarType: "School Year" | "Teaching" | "Holidays";
-//   title?: string;
-//   description?: string;
-//   classroom?: string;
-//   subject?: string;
-//   repeat?: "None" | "Daily" | "Weekly" | "Monthly" | "Yearly";
-//   alert?: "None" | "15min" | "30min" | "1hour";
-//   start: Date;
-//   end: Date;
-// }
-
+moment.locale(i18next.language);
+const localizer = momentLocalizer(moment);
 type TimetableEventType = RouterOutputs["timetable"]["classroom"][number];
 
 export function ClassroomTimeTable() {
@@ -66,16 +28,10 @@ export function ClassroomTimeTable() {
   const calendarEventsQuery = api.timetable.classroom.useQuery({
     classroomId: params.id,
   });
-
-  const theme = useResolvedTheme();
-  const [view, setView] = useState<RbcView>("month");
+  const [view, setView] = useState<RbcView>(RbcViews.AGENDA);
+  const [date, setDate] = useState(new Date());
   const { openModal } = useModal();
-  const { t, i18n } = useLocale();
-  const locales = {
-    fr: fr,
-    en: enUS,
-    es: es,
-  };
+  const { t } = useLocale();
 
   const messages = {
     agenda: t("agenda"),
@@ -94,27 +50,11 @@ export function ClassroomTimeTable() {
     yesterday: t("yesterday"),
   };
 
-  const localizer = dateFnsLocalizer({
-    format,
-    parse,
-    startOfWeek,
-    getDay,
-    locales,
-  });
-
-  const calendarToolbarClassName = cn(
-    "[&_.rbc-btn-group_button]:duration-200 [&_.rbc-toolbar_.rbc-toolbar-label]:my-1 [&_.rbc-toolbar_.rbc-toolbar-label]:whitespace-nowrap",
-    "[&_.rbc-btn-group_button.rbc-active]:bg-primary [&_.rbc-btn-group_button]:text-sm [&_.rbc-time-gutter]:text-sm [&_.rbc-toolbar_.rbc-toolbar-label]:text-sm",
-    theme === "dark"
-      ? "[&_.rbc-toolbar_>_*:last-child_>_button:focus]:!text-gray-0 [&_.rbc-toolbar_>_*:last-child_>_button.rbc-active:hover]:!bg-primary-dark [&_.rbc-btn-group_button.rbc-active:hover]:bg-white [&_.rbc-btn-group_button.rbc-active:hover]:text-black [&_.rbc-btn-group_button.rbc-active]:text-black [&_.rbc-btn-group_button:hover]:bg-gray-600 [&_.rbc-btn-group_button]:text-gray-50 [&_.rbc-toolbar_>_*:last-child_>_button.rbc-active:hover]:!text-gray-50 [&_.rbc-toolbar_>_*:last-child_>_button:focus]:!bg-primary [&_.rbc-toolbar_>_*:last-child_>_button:hover]:!bg-gray-600 [&_.rbc-toolbar_>_*:last-child_>_button:hover]:!text-gray-50"
-      : "[&_.rbc-toolbar_>_*:last-child_>_button:focus]:!text-gray-0 [&_.rbc-toolbar_>_*:last-child_>_button.rbc-active:hover]:!bg-primary-dark [&_.rbc-toolbar_>_*:last-child_>_button.rbc-active:hover]:!text-gray-0 [&_.rbc-btn-group_button.rbc-active:hover]:bg-black [&_.rbc-btn-group_button.rbc-active:hover]:text-white [&_.rbc-btn-group_button.rbc-active]:text-white [&_.rbc-btn-group_button:hover]:bg-gray-300 [&_.rbc-btn-group_button]:text-gray-900 [&_.rbc-toolbar_>_*:last-child_>_button.rbc-active]:!text-white [&_.rbc-toolbar_>_*:last-child_>_button:focus]:!bg-primary [&_.rbc-toolbar_>_*:last-child_>_button:hover]:!bg-gray-300 [&_.rbc-toolbar_>_*:last-child_>_button:hover]:!text-gray-900",
-  );
-
   const handleSelectSlot = useCallback(
     ({ start, end }: { start: Date; end: Date }) => {
       openModal({
         title: t("create_timetable"),
-        className: "w-full md:w-[500px]",
+        className: "w-[550px]",
         view: (
           <CreateEditTimetable
             classroomId={params.id}
@@ -124,15 +64,14 @@ export function ClassroomTimeTable() {
         ),
       });
     },
-
-    [], // eslint-disable-line react-hooks/exhaustive-deps
+    [openModal, params.id, t],
   );
 
   const handleSelectEvent = useCallback(
     (event: TimetableEventType) => {
       openModal({
         title: t("update"),
-        className: "w-full sm:w-[650px] sm:px-8 p-4  ",
+        className: "w-[550px]",
         view: (
           <CreateEditTimetable
             classroomId={params.id}
@@ -147,41 +86,41 @@ export function ClassroomTimeTable() {
     [openModal, params.id, t],
   );
 
-  const { views, scrollToTime, formats } = useMemo(
-    () => ({
-      views: {
-        month: true,
-        week: true,
-        day: true,
-        agenda: true,
-      },
-      scrollToTime: new Date(2023, 10, 27, 6),
-      formats: {
-        dateFormat: "d",
-        weekdayFormat: (
-          date: Date,
-          culture?: Culture,
-          localizer?: DateLocalizer,
-        ) => localizer?.format(date, "EEE", culture),
-        dayFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) =>
-          localizer?.format(date, "EEE M/d", culture),
-        timeGutterFormat: (
-          date: Date,
-          culture?: Culture,
-          localizer?: DateLocalizer,
-        ) => localizer?.format(date, "HH:mm", culture),
-      } as Formats,
-    }),
-    [],
-  );
+  // const { views, scrollToTime, formats } = useMemo(
+  //   () => ({
+  //     views: {
+  //       month: true,
+  //       week: true,
+  //       day: true,
+  //       agenda: true,
+  //     },
+  //     scrollToTime: new Date(2023, 10, 27, 6),
+  //     formats: {
+  //       dateFormat: "d",
+  //       weekdayFormat: (
+  //         date: Date,
+  //         culture?: Culture,
+  //         localizer?: DateLocalizer,
+  //       ) => localizer?.format(date, "EEE", culture),
+  //       dayFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) =>
+  //         localizer?.format(date, "EEE M/d", culture),
+  //       timeGutterFormat: (
+  //         date: Date,
+  //         culture?: Culture,
+  //         localizer?: DateLocalizer,
+  //       ) => localizer?.format(date, "HH:mm", culture),
+  //     } as Formats,
+  //   }),
+  //   [],
+  // );
 
   const handleViewChange = (view: RbcView) => {
     setView(view);
   };
 
-  const eventPropGetter = (_event: TimetableEventType) => {
+  const eventPropGetter = (event: TimetableEventType) => {
     //const bgColor = calendarTypeColors[event.calendarType] || "lightgrey";
-    const bgColor = "lightgrey";
+    const bgColor = event.subject.course?.color ?? "lightgray";
 
     const newStyle = {
       backgroundColor: bgColor,
@@ -196,35 +135,15 @@ export function ClassroomTimeTable() {
 
   const CustomEvent: React.FC<EventProps<TimetableEventType>> = ({ event }) => {
     return (
-      <div className="hidden text-sm text-white md:block">
+      <div
+        className="hidden text-sm font-bold text-white md:block"
+        style={{
+          backgroundColor: event.subject.course?.color ?? "lightgray",
+        }}
+      >
         {event.subject.course?.name}
       </div>
     );
-  };
-
-  const dayPropGetter = (date: Date) => {
-    const dayOfWeek = getDay(date);
-    const isWeekend = dayOfWeek === 6 || dayOfWeek === 0;
-    const today = new Date();
-    const nextMonth = addMonths(today, 1);
-    const isNextMonth =
-      getMonth(date) === getMonth(nextMonth) &&
-      getYear(date) === getYear(nextMonth);
-
-    const style = {};
-    let className = "";
-
-    if (isWeekend) {
-      className = "text-secondary-foreground bg-secondary";
-    } else if (isNextMonth) {
-      className = "text-muted-foreground/40 bg-muted/40";
-    } else if (isToday(date)) {
-      className = "text-accent-foreground bg-accent";
-    } else {
-      className = "";
-    }
-
-    return { style, className };
   };
 
   if (calendarEventsQuery.isPending) {
@@ -247,28 +166,33 @@ export function ClassroomTimeTable() {
     );
   }
 
+  const handleNavigate = (newDate: Date) => {
+    setDate(newDate);
+  };
+
   return (
-    <div className="h-[calc(100vh-15rem)] px-2">
-      <Calendar
+    <div className="p-2">
+      <BigCalendar
         localizer={localizer}
-        events={calendarEventsQuery.data ?? []}
-        views={views}
+        style={{ height: 600, width: "100%" }}
+        selectable
+        date={date}
+        onNavigate={handleNavigate}
         view={view}
-        messages={messages}
         onView={handleViewChange}
+        events={calendarEventsQuery.data ?? []}
+        //views={views}
+        messages={messages}
         eventPropGetter={eventPropGetter}
-        dayPropGetter={dayPropGetter}
-        defaultView="month"
-        formats={formats}
-        startAccessor="start"
-        culture={i18n.language}
-        endAccessor="end"
-        dayLayoutAlgorithm="no-overlap"
+        //dayPropGetter={dayPropGetter}
+        //defaultView="agenda"
+        //formats={formats}
+        //startAccessor="start"
+        //endAccessor="end"
+        //dayLayoutAlgorithm="no-overlap"
         onSelectEvent={handleSelectEvent}
         onSelectSlot={handleSelectSlot}
-        selectable
-        scrollToTime={scrollToTime}
-        className={calendarToolbarClassName}
+        //scrollToTime={scrollToTime}
         components={{
           event: CustomEvent,
         }}

@@ -1,5 +1,7 @@
+import { addMonths } from "date-fns";
 import { z } from "zod";
 
+import { timetableService } from "../services/timetable-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const createTimetableSchema = z.object({
@@ -75,16 +77,38 @@ export const timetableRouter = createTRPCRouter({
       });
     }),
   create: protectedProcedure
-    .input(createTimetableSchema)
-    .mutation(({ ctx, input }) => {
-      return ctx.db.timetable.create({
-        data: {
-          start: input.start,
-          end: input.end,
-          description: input.description,
+    .input(
+      z.object({
+        startTime: z.string().min(1),
+        endTime: z.string().min(1),
+        subjectId: z.coerce.number(),
+        daysOfWeek: z.array(z.string()).default([]),
+        startDate: z.coerce.date(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const schoolYear = await ctx.db.schoolYear.findUnique({
+        where: {
+          id: ctx.schoolYearId,
+        },
+      });
+      const events = timetableService.generateRange({
+        startDate: input.startDate,
+        startTime: input.startTime,
+        endTime: input.endTime,
+        daysOfWeek: input.daysOfWeek,
+        finalDate: schoolYear?.endDate ?? addMonths(new Date(), 9),
+      });
+      const data = events.map((event) => {
+        return {
+          start: event.start,
+          end: event.end,
           subjectId: input.subjectId,
           createdById: ctx.session.user.id,
-        },
+        };
+      });
+      return ctx.db.timetable.createMany({
+        data: data,
       });
     }),
   get: protectedProcedure.input(z.string()).query(({ ctx, input }) => {

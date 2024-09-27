@@ -67,7 +67,7 @@ export function SubjectSelector({
   const handleSearch = (search: string) => {
     if (!subjects) return;
     const filteredItems = subjects.filter((it) =>
-      it.course?.name?.toLowerCase().includes(search.toLowerCase()),
+      it.course?.name.toLowerCase().includes(search.toLowerCase()),
     );
     setItems(
       filteredItems.map((it) => ({

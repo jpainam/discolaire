@@ -2,6 +2,8 @@
 
 import { MoreVertical, PlusIcon } from "lucide-react";
 
+import type { RouterOutputs } from "@repo/api";
+import type { FlatBadgeVariant } from "@repo/ui/FlatBadge";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
@@ -13,7 +15,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
+import FlatBadge from "@repo/ui/FlatBadge";
 import { Label } from "@repo/ui/label";
+import { Separator } from "@repo/ui/separator";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
@@ -21,22 +25,72 @@ import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { sidebarIcons } from "../sidebar-icons";
 import { CreateEditSubject } from "./CreateEditSubject";
-import { SubjectStats } from "./SubjectStats";
 
-export function SubjectHeader() {
+export function SubjectHeader({
+  subjects,
+}: {
+  subjects: RouterOutputs["classroom"]["subjects"];
+}) {
   const Icon = sidebarIcons.subjects;
   const { t } = useLocale();
+
+  const v = new Set<string>(subjects.map((s) => s.teacherId ?? ""));
+  const nbTeacher = v.size;
+  const groups: Record<string, number> = {};
+  const coeff = subjects
+    .map((s) => s.coefficient)
+    .reduce((a, b) => (a ?? 0) + (b ?? 0), 0);
+  subjects.forEach((s) => {
+    if (s.subjectGroup) {
+      const name = s.subjectGroup.name;
+      if (name && groups[name]) {
+        groups[name]++;
+      } else {
+        groups[name] = 1;
+      }
+    }
+  });
+
   const { openSheet } = useSheet();
   const canAddClassroomSubject = useCheckPermissions(
     PermissionAction.CREATE,
     "classroom:subject",
   );
 
+  const badgeVariants = [
+    "blue",
+    "red",
+    "yellow",
+    "gray",
+    "purple",
+  ] as FlatBadgeVariant[];
+
   return (
     <div className="flex w-full flex-row items-center gap-2 border-b bg-muted px-2 py-1 text-secondary-foreground">
       {Icon && <Icon className="h-6 w-6" />}
       <Label>{t("subjects")}</Label>
-      <SubjectStats />
+      <div className="flex flex-row items-center gap-2">
+        <FlatBadge variant={"indigo"}>
+          {subjects.length} {t("subjects")}
+        </FlatBadge>
+        <FlatBadge variant={"green"}>
+          {nbTeacher} {t("teachers")}
+        </FlatBadge>
+        {Object.keys(groups).map((key, index) => {
+          return (
+            <FlatBadge
+              key={key}
+              variant={badgeVariants[index % badgeVariants.length]}
+            >
+              {groups[key]} {key}
+            </FlatBadge>
+          );
+        })}
+        <Separator orientation="vertical" />
+        <FlatBadge variant={"pink"}>
+          {coeff} {t("coefficient")}
+        </FlatBadge>
+      </div>
       <div className="ml-auto flex flex-row items-center gap-1">
         {canAddClassroomSubject && (
           <Button
