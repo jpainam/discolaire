@@ -108,7 +108,7 @@ export function CourseSelector({
                     <div
                       className="flex h-4 w-4 rounded-full"
                       style={{
-                        backgroundColor: item.color ?? "lightgray",
+                        backgroundColor: item.color,
                       }}
                     ></div>
                     <div> {item.name}</div>
