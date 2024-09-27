@@ -256,6 +256,17 @@ model CalendarEvent {
     data           Json?
 }
 
+model Timetable {
+    id          String   @id @default(cuid())
+    description String?
+    start       DateTime
+    end         DateTime
+    subjectId   Int
+    subject     Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+    createdAt   DateTime @default(now()) @db.Timestamp(6)
+    createdById String
+}
+
 model GradeSheet {
     id          Int      @id @default(autoincrement())
     name        String
@@ -720,6 +731,7 @@ model Subject {
     subjectGroup   SubjectGroup? @relation(fields: [subjectGroupId], references: [id])
     teacher        Staff?        @relation(fields: [teacherId], references: [id])
     assignments    Assignment[]
+    timetables     Timetable[]
 
     @@unique([courseId, teacherId, classroomId])
 }

@@ -1,12 +1,11 @@
 import Image from "next/image";
-import computer from "public/computer.png";
 
 export function SectionTwo() {
   return (
     <section className="container mb-12 overflow-hidden md:pb-0">
       <div className="flex flex-col md:flex-row md:space-x-12">
         <Image
-          src={computer}
+          src={"/computer.png"}
           height={346}
           width={636}
           className="-mb-[1px] object-contain"

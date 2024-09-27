@@ -42,6 +42,7 @@ import { studentContactRouter } from "./routers/studentContact";
 import { subjectRouter } from "./routers/subject";
 import { subjectGroupRouter } from "./routers/subjectGroup";
 import { termRouter } from "./routers/term";
+import { timetableRouter } from "./routers/timetable";
 import { transactionRouter } from "./routers/transaction";
 import { uploadRouter } from "./routers/upload";
 import { userRouter } from "./routers/user";
@@ -54,6 +55,7 @@ export const appRouter = createTRPCRouter({
   classroom: classroomRouter,
   contact: contactRouter,
   subject: subjectRouter,
+  timetable: timetableRouter,
   subjectGroup: subjectGroupRouter,
   fee: feeRouter,
   course: courseRouter,

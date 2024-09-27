@@ -1,3 +1,7 @@
 export default function Page() {
-  return <div>The staff timetable. with timeline</div>;
+  return (
+    <div>
+      <h1>Staff Timetables</h1>
+    </div>
+  );
 }
