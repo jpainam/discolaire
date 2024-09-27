@@ -1,8 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { getServerTranslations } from "@repo/i18n/server";
-
-import { TimelineAction } from "~/components/staffs/timelines/TimelineAction";
+import { TimelineActivity } from "~/components/staffs/timelines/TimelineActivity";
 import { api } from "~/trpc/server";
 
 export default async function Page({
@@ -14,17 +12,18 @@ export default async function Page({
   if (!staff) {
     notFound();
   }
-  const timelines = await api.staff.timelines(id);
-  const { i18n } = await getServerTranslations();
-  const dateFormat = Intl.DateTimeFormat(i18n.language, {
+  //const timelines = await api.staff.timelines(id);
+  //const { i18n } = await getServerTranslations();
+  /*const dateFormat = Intl.DateTimeFormat(i18n.language, {
     year: "numeric",
     month: "short",
     day: "numeric",
-  });
+  });*/
 
   return (
     <div className="flex flex-col p-2">
-      {timelines.map((timeline) => {
+      <TimelineActivity />
+      {/* {timelines.map((timeline) => {
         return (
           <div
             key={timeline.id}
@@ -50,7 +49,7 @@ export default async function Page({
             </div>
           </div>
         );
-      })}
+      })} */}
     </div>
   );
 }

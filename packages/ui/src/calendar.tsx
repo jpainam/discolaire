@@ -18,21 +18,21 @@ function Calendar({
 }: CalendarProps) {
   return (
     <DayPicker
-      //hideNavigation
-      //captionLayout="dropdown"
+      hideNavigation
+      captionLayout="dropdown"
       showOutsideDays={showOutsideDays}
       className={cn("p-3", className)}
       // style={{
       //   width: 248.8 * (columnsDisplayed ?? 1) + "px",
       // }}
       classNames={{
-        months: "flex flex-col relative",
-        month_caption: "flex justify-center h-7 mx-10 relative items-center",
+        months: "flex flex-col",
+        month_caption: "flex  h-7 justify-between items-center",
         weekdays: "flex flex-row",
         weekday: "text-muted-foreground w-8 font-normal text-[0.8rem]",
         month: "gap-y-4 overflow-x-hidden w-full",
         caption: "flex justify-center pt-1 relative items-center",
-        caption_label: "text-sm font-medium truncate",
+        caption_label: "hidden",
         button_next: cn(
           buttonVariants({
             variant: "outline",
