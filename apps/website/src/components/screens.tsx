@@ -1,9 +1,4 @@
 import Image from "next/image";
-import screen3 from "public/classroom-details.png";
-import screen4 from "public/classroom-list.png";
-import screen5 from "public/classroom-subjects.png";
-import screen2 from "public/student-details.png";
-import screen1 from "public/student-list.png";
 
 import { CardStack } from "./card-stack";
 
@@ -29,7 +24,7 @@ export function Screens() {
                 <Image
                   quality={100}
                   alt="Dashboard - Overview"
-                  src={screen1}
+                  src={"/student-list.png"}
                   width={1231}
                   height={670}
                   priority
@@ -43,7 +38,7 @@ export function Screens() {
                 <Image
                   quality={100}
                   alt="Dashboard - Tracker"
-                  src={screen2}
+                  src={"/student-details.png"}
                   width={1231}
                   height={670}
                 />
@@ -56,7 +51,7 @@ export function Screens() {
                 <Image
                   quality={100}
                   alt="Dashboard - Inbox"
-                  src={screen3}
+                  src={"/classroom-details.png"}
                   width={1231}
                   height={670}
                 />
@@ -69,7 +64,7 @@ export function Screens() {
                 <Image
                   quality={100}
                   alt="Dashboard - Vault"
-                  src={screen4}
+                  src={"/classroom-list.png"}
                   width={1231}
                   height={670}
                 />
@@ -82,7 +77,7 @@ export function Screens() {
                 <Image
                   quality={100}
                   alt="Dashboard - Transactions"
-                  src={screen5}
+                  src={"/classroom-subjects.png"}
                   width={1231}
                   height={670}
                 />
