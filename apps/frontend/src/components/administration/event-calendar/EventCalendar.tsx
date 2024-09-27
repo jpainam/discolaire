@@ -1,37 +1,25 @@
 "use client";
 
+import { useCallback, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { addMonths, getDay, getMonth, getYear, isToday } from "date-fns";
+import i18next from "i18next";
+import moment from "moment";
+
+import type { RouterOutputs } from "@repo/api";
 import type {
   Culture,
   DateLocalizer,
   EventProps,
   Formats,
-  View as RbcView,
-} from "react-big-calendar";
-import { useCallback, useMemo, useState } from "react";
-import {
-  addMonths,
-  format,
-  getDay,
-  getMonth,
-  getYear,
-  isToday,
-  parse,
-  startOfWeek,
-} from "date-fns";
-//import { enUS, fr } from "date-fns/locale";
-
-import { enUS, es, fr } from "date-fns/locale";
-import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-
+  RbcView,
+} from "@repo/ui/big-calendar";
 import { useModal } from "@repo/hooks/use-modal";
 import { useResolvedTheme } from "@repo/hooks/use-resolved-theme";
 import { useLocale } from "@repo/i18n";
+//import { enUS, fr } from "date-fns/locale";
 
-import "react-big-calendar/lib/css/react-big-calendar.css";
-
-import { useSearchParams } from "next/navigation";
-
-import type { RouterOutputs } from "@repo/api";
+import BigCalendar, { momentLocalizer } from "@repo/ui/big-calendar";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
@@ -63,6 +51,9 @@ type CalendarEventProcedureOutput = NonNullable<
   RouterOutputs["calendarEvent"]["all"]
 >[number];
 
+moment.locale(i18next.language);
+const localizer = momentLocalizer(moment);
+
 export function EventCalendar() {
   const searchParams = useSearchParams();
   const calendarEventsQuery = api.calendarEvent.all.useQuery({
@@ -78,11 +69,6 @@ export function EventCalendar() {
   const [view, setView] = useState<RbcView>("month");
   const { openModal } = useModal();
   const { t, i18n } = useLocale();
-  const locales = {
-    fr: fr,
-    en: enUS,
-    es: es,
-  };
 
   const messages = {
     agenda: t("agenda"),
@@ -100,14 +86,6 @@ export function EventCalendar() {
     work_week: t("work_week"),
     yesterday: t("yesterday"),
   };
-
-  const localizer = dateFnsLocalizer({
-    format,
-    parse,
-    startOfWeek,
-    getDay,
-    locales,
-  });
 
   const calendarToolbarClassName = cn(
     "[&_.rbc-btn-group_button]:duration-200 [&_.rbc-toolbar_.rbc-toolbar-label]:my-1 [&_.rbc-toolbar_.rbc-toolbar-label]:whitespace-nowrap",
@@ -242,7 +220,7 @@ export function EventCalendar() {
 
   return (
     <div className="h-[calc(100vh-15rem)] px-2">
-      <Calendar
+      <BigCalendar
         localizer={localizer}
         events={calendarEventsQuery.data ?? []}
         views={views}

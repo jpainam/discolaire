@@ -16,7 +16,11 @@ export type {
 
 const BigCalendar = Calendar;
 
-export { momentLocalizer, Views as RbcViews } from "react-big-calendar";
+export {
+  dateFnsLocalizer,
+  momentLocalizer,
+  Views as RbcViews,
+} from "react-big-calendar";
 
 export default BigCalendar;
 
