@@ -2,6 +2,7 @@
 
 import {
   Atom,
+  BookUserIcon,
   BoxesIcon,
   CalendarDays,
   CircleDollarSign,
@@ -16,8 +17,6 @@ import {
   SchoolIcon,
   Send,
   Settings,
-  Settings2,
-  Star,
   Users,
 } from "lucide-react";
 
@@ -77,22 +76,10 @@ export function AppSidebar() {
             description: "All your courses",
           },
           {
-            title: t("classrooms"),
-            url: "/administration/classrooms",
-            icon: Star,
-            description: "Browse your starred prompts",
-          },
-          {
-            title: t("staffs"),
-            url: "/administration/staffs",
-            icon: Settings2,
-            description: "Configure your playground",
-          },
-          {
-            title: t("contacts"),
-            url: "/administration/contacts",
-            icon: Settings2,
-            description: "Configure your playground",
+            title: t("directory"),
+            url: "/administration/directory",
+            icon: BookUserIcon,
+            description: "All your directory",
           },
         ],
       },
