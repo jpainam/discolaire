@@ -45,7 +45,7 @@ export function ProgramHeader() {
       const breads = [
         { label: t("programs"), href: routes.classrooms.programs(params.id) },
         {
-          label: subject.course?.name ?? "",
+          label: subject.course.name,
           href: routes.classrooms.programs(params.id) + `/${subject.id}`,
         },
       ];
@@ -71,7 +71,7 @@ export function ProgramHeader() {
   return (
     <div className="flex flex-row items-center gap-2 bg-secondary px-2 py-1 text-secondary-foreground">
       <div className="flex flex-row items-center gap-2">
-        <Label>{subject?.course?.name}</Label>
+        <Label>{subject?.course.name}</Label>
         <FlatBadge variant={"green"}>
           {t("coeff")}: {subject?.coefficient}
         </FlatBadge>

@@ -106,7 +106,7 @@ export function GradeDetailsHeader({
         <span>
           {t("max_grade")} : {maxGrade}
         </span>
-        <span> {gradesheet.subject.course?.name} </span>
+        <span> {gradesheet.subject.course.name} </span>
         <span>{gradesheet.name}</span>
         <span>Effectif : {classroomQuery.data?.size} </span>
         <span>

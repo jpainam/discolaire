@@ -37,9 +37,7 @@ export function SubjectHeader({
   const v = new Set<string>(subjects.map((s) => s.teacherId ?? ""));
   const nbTeacher = v.size;
   const groups: Record<string, number> = {};
-  const coeff = subjects
-    .map((s) => s.coefficient)
-    .reduce((a, b) => (a ?? 0) + (b ?? 0), 0);
+  const coeff = subjects.map((s) => s.coefficient).reduce((a, b) => a + b, 0);
   subjects.forEach((s) => {
     if (s.subjectGroup) {
       const name = s.subjectGroup.name;

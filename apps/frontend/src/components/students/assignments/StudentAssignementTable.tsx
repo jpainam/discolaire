@@ -74,7 +74,7 @@ export function StudentAssignmentTable({
                 </TableCell>
                 <TableCell className="py-0">{item.title}</TableCell>
                 <TableCell className="py-0">
-                  {item.subject.course?.name}
+                  {item.subject.course.name}
                 </TableCell>
                 <TableCell className="py-0">
                   {item.subject.teacher?.lastName}

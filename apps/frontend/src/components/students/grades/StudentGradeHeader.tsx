@@ -68,8 +68,8 @@ export function StudentGradeHeader({
     if (term) {
       studentGradesQuery.data.forEach((grade) => {
         if (grade.gradeSheet.termId == Number(term)) {
-          gradeSum += grade.grade * (grade.gradeSheet.subject.coefficient ?? 0);
-          coeffSum += grade.gradeSheet.subject.coefficient ?? 0;
+          gradeSum += grade.grade * grade.gradeSheet.subject.coefficient;
+          coeffSum += grade.gradeSheet.subject.coefficient;
         }
       });
       setStudentAvg(gradeSum / (coeffSum || 1e9));

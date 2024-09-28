@@ -121,7 +121,7 @@ export function ClassroomTimeTable() {
 
   const eventPropGetter = (event: TimetableEventType) => {
     //const bgColor = calendarTypeColors[event.calendarType] || "lightgrey";
-    const bgColor = event.subject.course?.color ?? "lightgray";
+    const bgColor = event.subject.course.color;
 
     const newStyle = {
       backgroundColor: bgColor,
@@ -139,10 +139,10 @@ export function ClassroomTimeTable() {
       <div
         className="hidden text-sm font-bold text-white md:block"
         style={{
-          backgroundColor: event.subject.course?.color ?? "lightgray",
+          backgroundColor: event.subject.course.color,
         }}
       >
-        {event.subject.course?.name}
+        {event.subject.course.name}
       </div>
     );
   };

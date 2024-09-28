@@ -26,7 +26,7 @@ export function GradeSheetTable({ studentId }: { studentId: string }) {
         if (!vv[grade.gradeSheet.subjectId]) {
           vv[grade.gradeSheet.subjectId] = {
             id: grade.gradeSheet.subjectId,
-            subject: grade.gradeSheet.subject.course?.name ?? "",
+            subject: grade.gradeSheet.subject.course.name,
             observation: grade.observation ?? "",
             grades: [],
           };

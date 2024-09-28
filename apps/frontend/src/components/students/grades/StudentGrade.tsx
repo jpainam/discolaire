@@ -52,7 +52,7 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
     } else {
       sortedGrades = _.sortBy(
         sortedGrades,
-        (grade) => grade.gradeSheet.subject.course?.name,
+        (grade) => grade.gradeSheet.subject.course.name,
       );
       sortedGrades.reverse();
     }

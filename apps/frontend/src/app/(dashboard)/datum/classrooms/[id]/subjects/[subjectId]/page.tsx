@@ -22,7 +22,7 @@ export default async function Page({
       <div className="grid gap-8 p-2 lg:grid-cols-2">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
-            {subject.course?.name}
+            {subject.course.name}
           </h1>
           <p className="mt-4 text-muted-foreground">
             {id}

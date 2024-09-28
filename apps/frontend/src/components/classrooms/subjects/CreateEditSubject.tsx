@@ -45,11 +45,11 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
 
   const form = useForm<CreateEditSubjectValue>({
     defaultValues: {
-      courseId: subject?.courseId?.toString() ?? "",
+      courseId: subject?.courseId.toString() ?? "",
       teacherId: subject?.teacherId?.toString() ?? "",
       subjectGroupId: subject?.subjectGroupId?.toString() ?? "",
-      coefficient: subject?.coefficient?.toString() ?? "",
-      order: subject?.order?.toString() ?? "",
+      coefficient: subject?.coefficient.toString() ?? "",
+      order: subject?.order.toString() ?? "",
     },
     resolver: zodResolver(createEditSubjectSchema),
   });

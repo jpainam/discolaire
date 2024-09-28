@@ -97,12 +97,12 @@ export function SubjectTable({ classroomId }: { classroomId: string }) {
                   <div
                     className="flex h-4 w-4 rounded-full"
                     style={{
-                      backgroundColor: subject.course?.color ?? "lightgray",
+                      backgroundColor: subject.course.color,
                     }}
                   ></div>
                   <div>
-                    {subject.course?.shortName.toUpperCase()} -{" "}
-                    {subject.course?.name}
+                    {subject.course.shortName.toUpperCase()} -{" "}
+                    {subject.course.name}
                   </div>
                 </Link>
               </TableCell>

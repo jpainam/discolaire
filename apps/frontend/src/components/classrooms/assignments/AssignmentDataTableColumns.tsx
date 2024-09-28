@@ -76,7 +76,7 @@ export function fetchAssignmentTableColumns({
       ),
       cell: ({ row }) => {
         const subject = row.original.subject;
-        return <div>{subject.course?.shortName}</div>;
+        return <div>{subject.course.shortName}</div>;
       },
     },
     {

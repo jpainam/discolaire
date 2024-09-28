@@ -115,7 +115,7 @@ export function fetchGradeSheetColumns({
       ),
       cell: ({ row }) => {
         const subject = row.original.subject;
-        return <div>{subject.course?.reportName}</div>;
+        return <div>{subject.course.reportName}</div>;
       },
     },
     {

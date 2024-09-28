@@ -34,7 +34,7 @@ export async function ReportCard({ searchParams }: ReportCardProps) {
             subject: {
               teacher: report.subject.teacher?.lastName ?? "",
               teacherId: report.subject.teacherId ?? "",
-              name: report.subject.course?.name ?? "",
+              name: report.subject.course.name,
             },
           };
         })}
