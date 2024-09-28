@@ -9,15 +9,10 @@ import i18next from "i18next";
 import moment from "moment";
 
 import type { RouterOutputs } from "@repo/api";
+import type { Culture, DateLocalizer, Formats } from "@repo/ui/big-calendar";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import BigCalendar, {
-  Culture,
-  DateLocalizer,
-  Formats,
-  momentLocalizer,
-  RbcViews,
-} from "@repo/ui/big-calendar";
+import BigCalendar, { momentLocalizer, RbcViews } from "@repo/ui/big-calendar";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
@@ -92,7 +87,7 @@ export function ClassroomTimeTable() {
     [openModal, params.id, t],
   );
 
-  const { views, scrollToTime, formats } = useMemo(
+  const { views, _scrollToTime, formats } = useMemo(
     () => ({
       views: {
         month: true,
@@ -100,7 +95,7 @@ export function ClassroomTimeTable() {
         day: true,
         agenda: true,
       },
-      scrollToTime: new Date(2023, 10, 27, 6),
+      _scrollToTime: new Date(2023, 10, 27, 6),
       formats: {
         dateFormat: "d",
         weekdayFormat: (

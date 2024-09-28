@@ -15,7 +15,6 @@ import type {
   RbcView,
 } from "@repo/ui/big-calendar";
 import { useModal } from "@repo/hooks/use-modal";
-import { useResolvedTheme } from "@repo/hooks/use-resolved-theme";
 import { useLocale } from "@repo/i18n";
 //import { enUS, fr } from "date-fns/locale";
 
@@ -64,7 +63,7 @@ export function EventCalendar() {
       : undefined,
   });
 
-  const theme = useResolvedTheme();
+  //const theme = useResolvedTheme();
   const [view, setView] = useState<RbcView>("month");
   const { openModal } = useModal();
   const { t, i18n } = useLocale();
