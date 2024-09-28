@@ -5,9 +5,9 @@ import { generateStringColor } from "../utils";
 
 export const courseRouter = createTRPCRouter({
   delete: protectedProcedure
-    .input(z.object({ id: z.string() }))
+    .input(z.string())
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.course.delete({ where: { id: input.id } });
+      return ctx.db.course.delete({ where: { id: input } });
     }),
   deleteMany: protectedProcedure
     .input(z.object({ ids: z.array(z.string()) }))

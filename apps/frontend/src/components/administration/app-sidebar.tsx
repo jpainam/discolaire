@@ -71,10 +71,10 @@ export function AppSidebar() {
         isActive: true,
         items: [
           {
-            title: t("students"),
-            url: "/administration/students",
+            title: t("courses"),
+            url: "/administration/course",
             icon: Users,
-            description: "View your recent prompts",
+            description: "All your courses",
           },
           {
             title: t("classrooms"),
