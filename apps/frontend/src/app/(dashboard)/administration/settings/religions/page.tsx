@@ -28,7 +28,7 @@ export default async function Page() {
       <PageHeader title={`${t("settings")} - ${t("religions")}`}>
         <ReligionAction />
       </PageHeader>
-      <div className="rounded-lg border">
+      <div className="mx-2 rounded-lg border">
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">
