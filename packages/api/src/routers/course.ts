@@ -63,26 +63,22 @@ export const courseRouter = createTRPCRouter({
   update: protectedProcedure
     .input(
       z.object({
-        id: z.number(),
-        code: z.string().min(1),
-        description: z.string().min(1),
-        amount: z.number().min(1),
-        dueDate: z.date(),
-        journalId: z.number(),
+        id: z.string().min(1),
+        name: z.string().min(1),
+        shortName: z.string().min(1),
+        reportName: z.string().min(1),
         isActive: z.boolean().default(true),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.fee.update({
+      return ctx.db.course.update({
         where: {
           id: input.id,
         },
         data: {
-          code: input.code,
-          description: input.description,
-          amount: input.amount,
-          dueDate: input.dueDate,
-          journal: { connect: { id: input.journalId } },
+          shortName: input.shortName,
+          name: input.name,
+          reportName: input.reportName,
           isActive: input.isActive,
         },
       });

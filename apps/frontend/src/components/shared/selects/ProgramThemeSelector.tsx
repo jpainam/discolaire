@@ -91,7 +91,7 @@ export function ProgramThemeSelector({
                       <div
                         className="flex h-4 w-4 rounded-full"
                         style={{
-                          backgroundColor: d.course.color ?? "lightgray",
+                          backgroundColor: d.course.color,
                         }}
                       ></div>
                       <div className="font-semibold"> {d.course.name}</div>

@@ -101,7 +101,7 @@ export function SubjectTable({ classroomId }: { classroomId: string }) {
                     }}
                   ></div>
                   <div>
-                    {subject.course?.shortName?.toUpperCase()} -{" "}
+                    {subject.course?.shortName.toUpperCase()} -{" "}
                     {subject.course?.name}
                   </div>
                 </Link>

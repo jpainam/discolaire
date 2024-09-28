@@ -24,7 +24,6 @@ import { Skeleton } from "@repo/ui/skeleton";
 
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import rangeMap from "~/lib/range-map";
-import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import EventForm from "./EventForm";
 
@@ -86,14 +85,6 @@ export function EventCalendar() {
     work_week: t("work_week"),
     yesterday: t("yesterday"),
   };
-
-  const calendarToolbarClassName = cn(
-    "[&_.rbc-btn-group_button]:duration-200 [&_.rbc-toolbar_.rbc-toolbar-label]:my-1 [&_.rbc-toolbar_.rbc-toolbar-label]:whitespace-nowrap",
-    "[&_.rbc-btn-group_button.rbc-active]:bg-primary [&_.rbc-btn-group_button]:text-sm [&_.rbc-time-gutter]:text-sm [&_.rbc-toolbar_.rbc-toolbar-label]:text-sm",
-    theme === "dark"
-      ? "[&_.rbc-toolbar_>_*:last-child_>_button:focus]:!text-gray-0 [&_.rbc-toolbar_>_*:last-child_>_button.rbc-active:hover]:!bg-primary-dark [&_.rbc-btn-group_button.rbc-active:hover]:bg-white [&_.rbc-btn-group_button.rbc-active:hover]:text-black [&_.rbc-btn-group_button.rbc-active]:text-black [&_.rbc-btn-group_button:hover]:bg-gray-600 [&_.rbc-btn-group_button]:text-gray-50 [&_.rbc-toolbar_>_*:last-child_>_button.rbc-active:hover]:!text-gray-50 [&_.rbc-toolbar_>_*:last-child_>_button:focus]:!bg-primary [&_.rbc-toolbar_>_*:last-child_>_button:hover]:!bg-gray-600 [&_.rbc-toolbar_>_*:last-child_>_button:hover]:!text-gray-50"
-      : "[&_.rbc-toolbar_>_*:last-child_>_button:focus]:!text-gray-0 [&_.rbc-toolbar_>_*:last-child_>_button.rbc-active:hover]:!bg-primary-dark [&_.rbc-toolbar_>_*:last-child_>_button.rbc-active:hover]:!text-gray-0 [&_.rbc-btn-group_button.rbc-active:hover]:bg-black [&_.rbc-btn-group_button.rbc-active:hover]:text-white [&_.rbc-btn-group_button.rbc-active]:text-white [&_.rbc-btn-group_button:hover]:bg-gray-300 [&_.rbc-btn-group_button]:text-gray-900 [&_.rbc-toolbar_>_*:last-child_>_button.rbc-active]:!text-white [&_.rbc-toolbar_>_*:last-child_>_button:focus]:!bg-primary [&_.rbc-toolbar_>_*:last-child_>_button:hover]:!bg-gray-300 [&_.rbc-toolbar_>_*:last-child_>_button:hover]:!text-gray-900",
-  );
 
   const handleSelectSlot = useCallback(
     ({ start, end }: { start: Date; end: Date }) => {
@@ -239,7 +230,6 @@ export function EventCalendar() {
         onSelectSlot={handleSelectSlot}
         selectable
         scrollToTime={scrollToTime}
-        className={calendarToolbarClassName}
         components={{
           event: CustomEvent,
         }}

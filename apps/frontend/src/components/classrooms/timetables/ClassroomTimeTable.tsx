@@ -1,7 +1,7 @@
 "use client";
 
 import type { EventProps, View as RbcView } from "react-big-calendar";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 //import { enUS, fr } from "date-fns/locale";
 
@@ -11,7 +11,13 @@ import moment from "moment";
 import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import BigCalendar, { momentLocalizer, RbcViews } from "@repo/ui/big-calendar";
+import BigCalendar, {
+  Culture,
+  DateLocalizer,
+  Formats,
+  momentLocalizer,
+  RbcViews,
+} from "@repo/ui/big-calendar";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
@@ -86,33 +92,33 @@ export function ClassroomTimeTable() {
     [openModal, params.id, t],
   );
 
-  // const { views, scrollToTime, formats } = useMemo(
-  //   () => ({
-  //     views: {
-  //       month: true,
-  //       week: true,
-  //       day: true,
-  //       agenda: true,
-  //     },
-  //     scrollToTime: new Date(2023, 10, 27, 6),
-  //     formats: {
-  //       dateFormat: "d",
-  //       weekdayFormat: (
-  //         date: Date,
-  //         culture?: Culture,
-  //         localizer?: DateLocalizer,
-  //       ) => localizer?.format(date, "EEE", culture),
-  //       dayFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) =>
-  //         localizer?.format(date, "EEE M/d", culture),
-  //       timeGutterFormat: (
-  //         date: Date,
-  //         culture?: Culture,
-  //         localizer?: DateLocalizer,
-  //       ) => localizer?.format(date, "HH:mm", culture),
-  //     } as Formats,
-  //   }),
-  //   [],
-  // );
+  const { views, scrollToTime, formats } = useMemo(
+    () => ({
+      views: {
+        month: true,
+        week: true,
+        day: true,
+        agenda: true,
+      },
+      scrollToTime: new Date(2023, 10, 27, 6),
+      formats: {
+        dateFormat: "d",
+        weekdayFormat: (
+          date: Date,
+          culture?: Culture,
+          localizer?: DateLocalizer,
+        ) => localizer?.format(date, "EEE", culture),
+        dayFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) =>
+          localizer?.format(date, "EEE M/d", culture),
+        timeGutterFormat: (
+          date: Date,
+          culture?: Culture,
+          localizer?: DateLocalizer,
+        ) => localizer?.format(date, "HH:mm", culture),
+      } as Formats,
+    }),
+    [],
+  );
 
   const handleViewChange = (view: RbcView) => {
     setView(view);
@@ -181,12 +187,12 @@ export function ClassroomTimeTable() {
         view={view}
         onView={handleViewChange}
         events={calendarEventsQuery.data ?? []}
-        //views={views}
+        views={views}
         messages={messages}
         eventPropGetter={eventPropGetter}
         //dayPropGetter={dayPropGetter}
         //defaultView="agenda"
-        //formats={formats}
+        formats={formats}
         //startAccessor="start"
         //endAccessor="end"
         //dayLayoutAlgorithm="no-overlap"
