@@ -86,7 +86,7 @@
     "cmdk": "1.0.0",
     "date-fns": "^4.1.0",
     "i18n-iso-countries": "^7.12.0",
-    "lucide-react": "^0.445.0",
+    "lucide-react": "^0.446.0",
     "next-themes": "^0.3.0",
     "novel": "^0.5.0",
     "react-big-calendar": "^1.14.1",
@@ -101,14 +101,14 @@
     "recharts": "^2.12.7",
     "sonner": "1.5.0",
     "tailwind-merge": "^2.5.2",
-    "vaul": "^0.9.4"
+    "vaul": "^0.9.9"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
-    "@tanstack/eslint-plugin-query": "^5.57.1",
-    "@tanstack/react-query-devtools": "^5.56.2",
+    "@tanstack/eslint-plugin-query": "^5.58.1",
+    "@tanstack/react-query-devtools": "^5.58.0",
     "@types/react": "catalog:react18",
     "@types/react-big-calendar": "^1.8.12",
     "eslint": "catalog:",
