@@ -54,8 +54,8 @@ export const subjectRouter = createTRPCRouter({
         courseId: z.string().min(1),
         teacherId: z.string().min(1),
         subjectGroupId: z.number(),
-        order: z.number(),
-        coefficient: z.number(),
+        order: z.coerce.number().default(1),
+        coefficient: z.coerce.number().default(1),
       }),
     )
     .mutation(async ({ ctx, input }) => {

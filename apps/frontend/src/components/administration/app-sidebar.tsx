@@ -72,7 +72,7 @@ export function AppSidebar() {
         items: [
           {
             title: t("courses"),
-            url: "/administration/course",
+            url: "/administration/courses",
             icon: Users,
             description: "All your courses",
           },

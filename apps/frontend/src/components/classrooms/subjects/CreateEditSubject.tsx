@@ -31,8 +31,8 @@ const createEditSubjectSchema = z.object({
   courseId: z.string().min(1),
   teacherId: z.string().min(1),
   subjectGroupId: z.string().min(1),
-  coefficient: z.string().min(0),
-  order: z.string().min(1).optional(),
+  coefficient: z.string().min(1),
+  order: z.string().min(1).optional().default("1"),
 });
 type CreateEditSubjectValue = z.infer<typeof createEditSubjectSchema>;
 type Subject = NonNullable<RouterOutputs["subject"]["get"]>;
