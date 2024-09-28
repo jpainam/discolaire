@@ -86,7 +86,7 @@ export function CreateEditProgram({
             <Skeleton className="w-96" />
           ) : (
             <div className="flex flex-row items-center gap-2">
-              <Label>{subject?.course?.name}</Label>
+              <Label>{subject?.course.name}</Label>
               <FlatBadge variant={"green"}>
                 {t("coeff")}: {subject?.coefficient}
               </FlatBadge>
