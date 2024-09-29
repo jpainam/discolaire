@@ -11,16 +11,25 @@ const createUpdateSchema = z.object({
   condition: z.any(),
 });
 export const policyRouter = createTRPCRouter({
-  all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.policy.findMany({
-      where: {
-        schoolId: ctx.schoolId,
-      },
-      orderBy: {
-        name: "asc",
-      },
-    });
-  }),
+  all: protectedProcedure
+    .input(z.object({ q: z.string().optional().default("") }))
+    .query(({ ctx, input }) => {
+      const qq = `%${input.q}%`;
+      return ctx.db.policy.findMany({
+        where: {
+          schoolId: ctx.schoolId,
+          OR: [
+            {
+              name: { contains: qq, mode: "insensitive" },
+            },
+            { description: { contains: qq, mode: "insensitive" } },
+          ],
+        },
+        orderBy: {
+          name: "asc",
+        },
+      });
+    }),
   get: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.policy.findUnique({
       where: {

@@ -9,6 +9,7 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
+import { useQueryState } from "nuqs";
 import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
@@ -47,7 +48,10 @@ export function PolicyTable({
 }) {
   const [selectedPolicies, setSelectedPolicies] = useAtom(selectedPoliciesAtom);
   const [expandedPolicies, setExpandedPolicies] = useState<string[]>([]);
-  const policiesQuery = api.policy.all.useQuery();
+  const [q] = useQueryState("q", {
+    defaultValue: "",
+  });
+  const policiesQuery = api.policy.all.useQuery({ q });
   const { t } = useLocale();
   const utils = api.useUtils();
   const { openModal } = useModal();
