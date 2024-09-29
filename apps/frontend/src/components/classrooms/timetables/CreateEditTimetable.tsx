@@ -220,7 +220,7 @@ export function CreateEditTimetable({
           control={form.control}
           name="days"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="space-y-0">
               <FormLabel>{t("week_days")}</FormLabel>
               <FormControl>
                 <MultipleSelector

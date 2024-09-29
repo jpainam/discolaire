@@ -1,7 +1,7 @@
 "use client";
 
 import type { EventProps, View as RbcView } from "react-big-calendar";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { useParams } from "next/navigation";
 //import { enUS, fr } from "date-fns/locale";
 
@@ -9,7 +9,6 @@ import i18next from "i18next";
 import moment from "moment";
 
 import type { RouterOutputs } from "@repo/api";
-import type { Culture, DateLocalizer, Formats } from "@repo/ui/big-calendar";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import BigCalendar, { momentLocalizer, RbcViews } from "@repo/ui/big-calendar";
@@ -87,7 +86,7 @@ export function ClassroomTimeTable() {
     [openModal, params.id, t],
   );
 
-  const { views, _scrollToTime, formats } = useMemo(
+  /*const { views, _scrollToTime, _formats } = useMemo(
     () => ({
       views: {
         month: true,
@@ -96,7 +95,7 @@ export function ClassroomTimeTable() {
         agenda: true,
       },
       _scrollToTime: new Date(2023, 10, 27, 6),
-      formats: {
+      _formats: {
         dateFormat: "d",
         weekdayFormat: (
           date: Date,
@@ -113,7 +112,7 @@ export function ClassroomTimeTable() {
       } as Formats,
     }),
     [],
-  );
+  );*/
 
   const handleViewChange = (view: RbcView) => {
     setView(view);
@@ -182,12 +181,12 @@ export function ClassroomTimeTable() {
         view={view}
         onView={handleViewChange}
         events={calendarEventsQuery.data ?? []}
-        views={views}
+        //views={views}
         messages={messages}
         eventPropGetter={eventPropGetter}
         //dayPropGetter={dayPropGetter}
         //defaultView="agenda"
-        formats={formats}
+        //formats={formats}
         //startAccessor="start"
         //endAccessor="end"
         //dayLayoutAlgorithm="no-overlap"
