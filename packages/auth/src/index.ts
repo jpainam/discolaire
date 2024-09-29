@@ -1,16 +1,13 @@
-"server-only";
+"use server";
 
 import { cookies } from "next/headers";
 
-import type { User } from "@repo/db";
+import { db } from "@repo/db";
 
-import { getUser, verifyToken } from "./session";
+import type { Session } from "./session";
+import { verifyToken } from "./session";
 
-export interface Session {
-  user: User;
-  expires: string;
-}
-
+export type { Session } from "./session";
 //export type { Session } from "next-auth";
 
 export async function auth() {
@@ -31,7 +28,11 @@ export async function auth() {
     return null;
   }
   console.log(">>>>>>>>>sessionData.expires", sessionData.expires);
-  const user = await getUser(sessionData.user.id);
+  const user = await db.user.findUnique({
+    where: {
+      id: sessionData.user.id,
+    },
+  });
 
   console.log(">>>>>>>>>userRunning a function ", user);
   if (!user) {

@@ -27,7 +27,6 @@
     "next-auth": "5.0.0-beta.22",
     "react": "catalog:react18",
     "react-dom": "catalog:react18",
-    "server-only": "^0.0.1",
     "zod": "catalog:"
   },
   "devDependencies": {

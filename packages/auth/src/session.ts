@@ -5,7 +5,6 @@ import { compare, hash } from "bcryptjs";
 import { jwtVerify, SignJWT } from "jose";
 
 import type { User } from "@repo/db";
-import { db } from "@repo/db";
 
 import { env } from "../env";
 
@@ -14,6 +13,11 @@ const SALT_ROUNDS = 10;
 
 export async function hashPassword(password: string) {
   return hash(password, SALT_ROUNDS);
+}
+
+export interface Session {
+  user: User;
+  expires: string;
 }
 
 export async function comparePasswords(
@@ -48,15 +52,6 @@ export async function getSession() {
   const session = cookies().get("session")?.value;
   if (!session) return null;
   return await verifyToken(session);
-}
-
-export async function getUser(userId: string) {
-  const user = await db.user.findUnique({
-    where: {
-      id: userId,
-    },
-  });
-  return user;
 }
 
 export async function setSession(user: User) {
