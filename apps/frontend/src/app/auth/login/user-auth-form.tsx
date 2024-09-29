@@ -2,13 +2,12 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import { useLocale } from "@repo/hooks/use-locale";
-import { useRouter } from "@repo/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import {
   Form,
@@ -21,6 +20,7 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 
+import { signIn } from "~/actions/signin";
 import { cn } from "~/lib/utils";
 
 type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
@@ -32,7 +32,7 @@ const authFormSchema = z.object({
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const router = useRouter();
+  const searchParams = useSearchParams();
   const form = useForm({
     schema: authFormSchema,
     defaultValues: {
@@ -43,15 +43,15 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
   async function onSubmit(data: z.infer<typeof authFormSchema>) {
     setIsLoading(true);
-    const res = await signIn("credentials", {
-      username: data.username,
-      password: data.password,
-      redirect: false,
-    });
-    if (res?.error) {
+    try {
+      await signIn({
+        username: data.username,
+        password: data.password,
+        redirectTo: searchParams.get("redirect") ?? undefined,
+      });
+    } catch (e) {
+      console.error(e);
       toast.error("Invalid credentials");
-    } else {
-      router.push("/");
     }
     setIsLoading(false);
   }
@@ -72,6 +72,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                       disabled={isLoading}
                       autoCorrect="off"
                       required
+                      autoComplete="current-password"
                       autoCapitalize="none"
                       {...field}
                     />

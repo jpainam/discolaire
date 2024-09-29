@@ -1,16 +1,41 @@
-import NextAuth from "next-auth";
+"server-only";
 
-import { authConfig } from "./config";
+import { cookies } from "next/headers";
 
-export type { Session } from "next-auth";
+import type { User } from "@repo/db";
 
-const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
+import { getUser, verifyToken } from "./session";
 
-export { auth, handlers, signIn, signOut };
+export interface Session {
+  user: User;
+  expires: string;
+}
 
-export {
-  generateToken,
-  invalidateSessionToken,
-  isSecureContext,
-  validateToken,
-} from "./config";
+//export type { Session } from "next-auth";
+
+export async function auth() {
+  console.log(">>>>>>>>>running auth");
+  const sessionCookie = cookies().get("session");
+  if (!sessionCookie?.value) {
+    return null;
+  }
+  console.log(">>>>>>>>>sessionCookie", sessionCookie);
+  const sessionData = await verifyToken(sessionCookie.value);
+  console.log(">>>>>>>>>sessionData", sessionData);
+  if (!sessionData.user.id) {
+    return null;
+  }
+  console.log(">>>>>>>>>sessionData.user.id", sessionData.user.id);
+
+  if (new Date(sessionData.expires) < new Date()) {
+    return null;
+  }
+  console.log(">>>>>>>>>sessionData.expires", sessionData.expires);
+  const user = await getUser(sessionData.user.id);
+
+  console.log(">>>>>>>>>userRunning a function ", user);
+  if (!user) {
+    return null;
+  }
+  return { user: user, expires: sessionData.expires } as Session;
+}

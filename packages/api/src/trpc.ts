@@ -11,7 +11,7 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import type { Session } from "@repo/auth";
-import { auth, validateToken } from "@repo/auth";
+import { auth } from "@repo/auth";
 import { db } from "@repo/db";
 
 /**
@@ -21,7 +21,8 @@ import { db } from "@repo/db";
  */
 const isomorphicGetSession = async (headers: Headers) => {
   const authToken = headers.get("Authorization") ?? null;
-  if (authToken) return validateToken(authToken);
+  console.log(">>> authToken", authToken);
+  //if (authToken) return validateToken(authToken);
   return auth();
 };
 

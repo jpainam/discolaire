@@ -18,6 +18,7 @@ export const env = createEnv({
   client: {},
   runtimeEnv: {
     ...process.env,
+    NODE_ENV: process.env.NODE_ENV,
     DATABASE_URL: process.env.DATABASE_URL,
     INVITATION_LINK_SECRET: process.env.INVITATION_LINK_SECRET,
     AUTH_DISCORD_ID: process.env.AUTH_DISCORD_ID,

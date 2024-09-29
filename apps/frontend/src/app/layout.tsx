@@ -21,7 +21,8 @@ import { ThemeProvider } from "~/components/theme-provider";
 import { env } from "~/env";
 import GlobalModal from "~/layouts/GlobalModal";
 import GlobalSheet from "~/layouts/GlobalSheet";
-import AuthProvider from "~/providers/auth-provider";
+import { AuthProvider } from "~/providers/AuthProvider";
+//import AuthProvider from "~/providers/auth-provider";
 import ConfirmDialogProvider from "~/providers/confirm-dialog-provider";
 
 export const metadata: Metadata = {
@@ -54,7 +55,6 @@ export const viewport: Viewport = {
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const session = await auth();
-
   const lng = await detectLanguage();
   return (
     <I18nProvider language={lng}>

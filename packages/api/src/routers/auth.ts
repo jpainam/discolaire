@@ -2,7 +2,7 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { generateToken, invalidateSessionToken } from "@repo/auth";
+//import { generateToken, invalidateSessionToken } from "@repo/auth";
 
 import { isPasswordMatch } from "../encrypt";
 import { protectedProcedure, publicProcedure } from "../trpc";
@@ -33,14 +33,14 @@ export const authRouter = {
           message: "Incorrect username or password",
         });
       }
-      const token = generateToken({ id: user.id });
-      return token;
+      //const token = generateToken({ id: user.id });
+      return "token";
     }),
-  signOut: protectedProcedure.mutation(async (opts) => {
+  signOut: protectedProcedure.mutation((opts) => {
     if (!opts.ctx.token) {
       return { success: false };
     }
-    await invalidateSessionToken(opts.ctx.token);
+    //await invalidateSessionToken(opts.ctx.token);
     return { success: true };
   }),
 } satisfies TRPCRouterRecord;

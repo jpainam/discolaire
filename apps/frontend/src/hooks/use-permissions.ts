@@ -1,18 +1,18 @@
 import { useAtomValue, useSetAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
-import { useSession } from "next-auth/react";
 
 import type { Permission } from "@repo/lib/permission";
 import { doPermissionsCheck } from "@repo/lib/permission";
 
+import { useUser } from "~/providers/AuthProvider";
 import { api } from "~/trpc/react";
 
 export const permissionAtom = atomWithStorage<Permission[]>("permissions", []);
 
 const useIsLoggedIn = () => {
-  const session = useSession();
-  const user = session.data?.user;
-  return user !== undefined;
+  const session = useUser();
+  const user = session.user;
+  return user !== null;
 };
 
 export function useGetPermissions(permissionsOverride?: Permission[]) {
@@ -44,8 +44,8 @@ export function useCheckPermissions(
   // e.g If you want to use useCheckPermissions in a loop like organization settings
   permissions?: Permission[],
 ) {
-  const session = useSession();
-  const user = session.data?.user;
+  const session = useUser();
+  const user = session.user;
   //const isLoggedIn = useIsLoggedIn();
 
   const { permissions: allPermissions } = useGetPermissions(permissions);

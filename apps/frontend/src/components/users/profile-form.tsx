@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 //import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -86,8 +85,7 @@ export function ProfileForm() {
     //   ),
     // });
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data } = useSession();
+
   //const user = data?.user;
   //const { t } = useLocale();
 
