@@ -23,7 +23,7 @@ export function ClassroomDataTable() {
 
   const canDeleteClassroom = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:profile",
+    "classroom:details",
   );
 
   const columns = React.useMemo(

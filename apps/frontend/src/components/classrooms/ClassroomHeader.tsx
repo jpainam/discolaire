@@ -41,14 +41,14 @@ export function ClassroomHeader() {
   const router = useRouter();
   const canDeleteClassroom = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:profile",
+    "classroom:details",
     {
       id: params.id,
     },
   );
   const canUpdateClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
-    "classroom:profile",
+    "classroom:details",
     {
       id: params.id,
     },
