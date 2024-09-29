@@ -22,7 +22,7 @@ import { api } from "~/trpc/react";
 export function PolicyDataTable({ roleId }: { roleId: string }) {
   const { t } = useLocale();
 
-  const policiesQuery = api.policy.all.useQuery();
+  const policiesQuery = api.policy.all.useQuery({});
   const rolePoliciesQuery = api.role.policies.useQuery(roleId);
   const [selectedPolicies, setSelectedPolicies] = useState<string[]>([]);
   const utils = api.useUtils();
