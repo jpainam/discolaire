@@ -24,6 +24,7 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
   const form = useForm({
     schema: createUpdateStudentSchema,
     defaultValues: {
+      id: student.id,
       firstName: student.firstName ?? "",
       lastName: student.lastName ?? "",
       dateOfBirth: student.dateOfBirth ?? new Date(),

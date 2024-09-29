@@ -32,6 +32,7 @@ export function CreateStudent() {
       phoneNumber: "",
       email: "",
       countryId: "",
+      classroom: "",
       dateOfExit: undefined,
       dateOfEntry: new Date(),
       formerSchoolId: "",

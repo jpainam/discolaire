@@ -50,6 +50,7 @@ const createUpdateSchema = z.object({
   status: z
     .enum(["ACTIVE", "GRADUATED", "INACTIVE", "EXPELLED"])
     .default("ACTIVE"),
+  classroom: z.string().optional(),
 });
 export const studentRouter = createTRPCRouter({
   all: protectedProcedure
@@ -131,6 +132,16 @@ export const studentRouter = createTRPCRouter({
       });
       void studentService.addClubs(student.id, input.clubs ?? []);
       void studentService.addSports(student.id, input.sports ?? []);
+      if (input.classroom) {
+        await ctx.db.enrollment.create({
+          data: {
+            studentId: student.id,
+            classroomId: input.classroom,
+            schoolYearId: ctx.schoolYearId,
+            createdBy: ctx.session.user.id,
+          },
+        });
+      }
       return student;
     }),
   update: protectedProcedure

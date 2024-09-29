@@ -8,6 +8,7 @@ export const unused = z.string().describe(
 );
 
 export const createUpdateStudentSchema = z.object({
+  id: z.string().optional(),
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   religionId: z.string().min(1),
@@ -29,6 +30,7 @@ export const createUpdateStudentSchema = z.object({
     .default("ACTIVE"),
   clubs: z.array(z.string()).optional(),
   sports: z.array(z.string()).optional(),
+  classroom: z.string().optional(),
 });
 
 // export const createGradeSheetSchema = z.object({
