@@ -2,6 +2,8 @@ import { TRPCError } from "@trpc/server";
 import { subDays } from "date-fns";
 import { z } from "zod";
 
+import { submitReportJob } from "../services/reporting-service";
+import { transactionService } from "../services/transaction-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -23,6 +25,12 @@ export const transactionRouter = createTRPCRouter({
       },
     });
   }),
+  printReceipt: protectedProcedure
+    .input(z.coerce.number())
+    .mutation(async ({ input }) => {
+      const data = await transactionService.getReceiptInfo(input);
+      return submitReportJob("pdf", { reportType: "receipt", ...data });
+    }),
 
   all: protectedProcedure
     .input(
@@ -88,6 +96,11 @@ export const transactionRouter = createTRPCRouter({
       },
     });
   }),
+  getReceiptInfo: protectedProcedure
+    .input(z.coerce.number())
+    .query(({ input }) => {
+      return transactionService.getReceiptInfo(input);
+    }),
   delete: protectedProcedure
     .input(
       z.object({

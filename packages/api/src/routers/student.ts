@@ -94,7 +94,7 @@ export const studentRouter = createTRPCRouter({
               student.id,
               ctx.schoolYearId,
             ),
-            classroom: await studentService.classroom(
+            classroom: await studentService.getClassroom(
               student.id,
               ctx.schoolYearId,
             ),
@@ -241,9 +241,9 @@ export const studentRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       // return the current classroom
       if (input.schoolYearId) {
-        return studentService.classroom(input.studentId, input.schoolYearId);
+        return studentService.getClassroom(input.studentId, input.schoolYearId);
       }
-      return studentService.classroom(input.studentId, ctx.schoolYearId);
+      return studentService.getClassroom(input.studentId, ctx.schoolYearId);
     }),
 
   get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
@@ -289,7 +289,10 @@ export const studentRouter = createTRPCRouter({
         message: "Student not found",
       });
     }
-    const classroom = await studentService.classroom(input, ctx.schoolYearId);
+    const classroom = await studentService.getClassroom(
+      input,
+      ctx.schoolYearId,
+    );
     return {
       ...student,
       classroom: classroom,

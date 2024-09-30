@@ -1,10 +1,8 @@
 import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
 
-import { auth } from "@repo/auth";
 import { getServerTranslations } from "@repo/i18n/server";
 import { numberToWords } from "@repo/lib/toword";
-import { EmptyState } from "@repo/ui/EmptyState";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Separator } from "@repo/ui/separator";
 
@@ -19,51 +17,25 @@ export default async function Page({
   params: { id: string; transactionId: number };
 }) {
   const transaction = await api.transaction.get(Number(transactionId));
-  const session = await auth();
-  const user = session?.user;
-
-  if (!transaction || !user) {
+  if (!transaction) {
     notFound();
   }
-  const school = await api.school.get(user.schoolId);
+  const {
+    student,
+    createdBy,
+    printedBy,
+    receivedBy,
+    classroom,
+    school,
+    contact,
+    remaining,
+  } = await api.transaction.getReceiptInfo(transactionId);
 
-  const classroom = await api.student.classroom({
-    studentId: id,
-    schoolYearId: transaction.schoolYearId,
-  });
-  if (!classroom) {
-    return <EmptyState className="my-8" title="student_not_registered_yet" />;
-  }
   const { t, i18n } = await getServerTranslations();
   const studentAccount = await api.studentAccount.get(transaction.accountId);
   if (studentAccount?.studentId !== id) {
     redirect(routes.students.transactions.index(id));
   }
-
-  const student = await api.student.get(studentAccount.studentId);
-  const studentContact = await api.student.contacts(studentAccount.studentId);
-  // Get the primary contact
-  let contact = studentContact.find((c) => c.primaryContact)?.contact;
-  if (!contact) {
-    contact = studentContact[0]?.contact;
-  }
-  // Get fees, remaining, and paid
-  const fees = await api.classroom.fees(classroom.id);
-  const totalFee = fees.reduce((acc, fee) => acc + fee.amount, 0);
-  const transactions = await api.student.transactions(id);
-  const paid = transactions.reduce((acc, t) => acc + t.amount, 0);
-  const remaining = totalFee - paid;
-
-  // Get the staff who created, printed and received the transaction
-  const createdBy = transaction.createdById
-    ? await api.staff.get(transaction.createdById)
-    : null;
-  const printedBy = transaction.printedById
-    ? await api.staff.get(transaction.printedById)
-    : null;
-  const receivedBy = transaction.receivedById
-    ? await api.staff.get(transaction.receivedById)
-    : null;
 
   const fullDateFormatter = Intl.DateTimeFormat(i18n.language, {
     year: "numeric",
@@ -199,31 +171,6 @@ export default async function Page({
         </div> */}
         </div>
       </div>
-      {/* <PdfReceiptDownloadButton
-        remaining={remaining}
-        amount={transaction.amount}
-        classroomName={classroom.name}
-        contactName={contact?.lastName ?? ""}
-        contactPhoneNumber={contact?.phoneNumber1 ?? ""}
-        contactPrefix={contact?.prefix ?? ""}
-        createdBy={createdBy?.lastName ?? ""}
-        createdByPrefix={createdBy?.prefix ?? ""}
-        createdAt={fullDateFormatter.format(transaction.createdAt)}
-        printedBy={printedBy?.lastName ?? ""}
-        printedByPrefix={printedBy?.prefix ?? ""}
-        printedAt={
-          (transaction.printedAt &&
-            fullDateFormatter.format(transaction.printedAt)) ??
-          ""
-        }
-        receivedBy={receivedBy?.lastName ?? ""}
-        receivedByPrefix={receivedBy?.prefix ?? ""}
-        receivedAt={
-          (transaction.receivedAt &&
-            fullDateFormatter.format(transaction.receivedAt)) ??
-          ""
-        }
-      /> */}
     </>
   );
 }

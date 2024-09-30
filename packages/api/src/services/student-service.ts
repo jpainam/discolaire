@@ -1,7 +1,7 @@
 import { db } from "@repo/db";
 
 export const studentService = {
-  classroom: (studentId: string, schoolYearId: string) => {
+  getClassroom: (studentId: string, schoolYearId: string) => {
     return db.classroom.findFirst({
       where: {
         enrollments: {
@@ -38,7 +38,7 @@ export const studentService = {
     });
   },
   isRepeating: async (studentId: string, schoolYearId: string) => {
-    const currentClassroom = await studentService.classroom(
+    const currentClassroom = await studentService.getClassroom(
       studentId,
       schoolYearId,
     );
