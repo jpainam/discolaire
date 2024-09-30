@@ -22,6 +22,8 @@ import { CreateEditTimetable } from "./CreateEditTimetable";
 // const localizer = momentLocalizer(moment);
 type TimetableEventType = RouterOutputs["timetable"]["classroom"][number];
 
+const CalendarWrapper = BigCalendar;
+
 export function ClassroomTimeTable() {
   const params = useParams<{ id: string }>();
   const calendarEventsQuery = api.timetable.classroom.useQuery({
@@ -185,7 +187,7 @@ export function ClassroomTimeTable() {
 
   return (
     <div className="p-2">
-      <BigCalendar
+      <CalendarWrapper
         localizer={localizer}
         style={{ height: 600, width: "100%" }}
         selectable

@@ -4,13 +4,11 @@ import { useState } from "react";
 import moment from "moment";
 
 import type { RbcView } from "@repo/ui/big-calendar";
-import BigCalendar, {
-  momentLocalizer,
-  RbcViews,
-  withDragAndDrop,
-} from "@repo/ui/big-calendar";
+import BigCalendar, { momentLocalizer, RbcViews } from "@repo/ui/big-calendar";
 
-const DnDCalendar = withDragAndDrop(BigCalendar);
+//const DnDCalendar = withDragAndDrop(BigCalendar);
+
+const CalendarWrapper = BigCalendar;
 const localizer = momentLocalizer(moment);
 
 const LandingPage = () => {
@@ -27,7 +25,7 @@ const LandingPage = () => {
 
   return (
     <div className="m-4">
-      <DnDCalendar
+      <CalendarWrapper
         localizer={localizer}
         style={{ height: 600, width: "100%" }}
         selectable
@@ -35,9 +33,9 @@ const LandingPage = () => {
         onNavigate={handleNavigate}
         view={view}
         onView={handleViewChange}
-        resizable
+        /*resizable
         draggableAccessor={() => true}
-        resizableAccessor={() => true}
+        resizableAccessor={() => true}*/
       />
     </div>
   );

@@ -32,6 +32,8 @@ import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";
 import EventForm from "./EventForm";
 
+const CalendarWrapper = BigCalendar;
+
 // const calendarTypeColors = {
 //   "School Year": "#4fc793",
 //   Teaching: "#F1595C",
@@ -128,9 +130,9 @@ export function EventCalendar() {
     [], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
-  const { views, scrollToTime, formats } = useMemo(
+  const { _views, scrollToTime, formats } = useMemo(
     () => ({
-      views: {
+      _views: {
         month: true,
         week: true,
         day: true,
@@ -230,7 +232,7 @@ export function EventCalendar() {
 
   return (
     <div className="h-[calc(100vh-15rem)] px-2">
-      <BigCalendar
+      <CalendarWrapper
         localizer={localizer}
         events={calendarEventsQuery.data ?? []}
         //views={views}

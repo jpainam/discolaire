@@ -14,7 +14,8 @@ export type {
   View as RbcView,
 } from "react-big-calendar";
 
-const BigCalendar = Calendar;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const BigCalendar = Calendar as any;
 
 export {
   dateFnsLocalizer,
