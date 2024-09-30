@@ -15,9 +15,6 @@ const config = {
   //   return config;
   // },
   reactStrictMode: true,
-  experimental: {
-    serverComponentsExternalPackages: ["@react-pdf/renderer"],
-  },
 
   /** Enables hot reloading for local packages without a build step */
   transpilePackages: [
