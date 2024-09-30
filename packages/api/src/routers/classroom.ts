@@ -6,8 +6,8 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 const createUpdateSchema = z.object({
   name: z.string().min(1),
   levelId: z.string(),
-  cycleId: z.number(),
-  sectionId: z.number(),
+  cycleId: z.string(),
+  sectionId: z.string(),
   reportName: z.string(),
 });
 export const classroomRouter = createTRPCRouter({

@@ -197,8 +197,8 @@ model Classroom {
     reportName        String
     maxSize           Int            @default(45)
     levelId           String
-    sectionId         Int?           @default(1)
-    cycleId           Int?           @default(1)
+    sectionId         String?
+    cycleId           String?
     schoolYearId      String
     seniorAdvisorId   String?
     headTeacherId     String?
@@ -790,7 +790,7 @@ model SchoolYear {
 }
 
 model Cycle {
-    id         Int         @id @default(autoincrement())
+    id         String      @id @default(cuid())
     name       String
     classrooms Classroom[]
     school     School      @relation(fields: [schoolId], references: [id])
@@ -798,7 +798,7 @@ model Cycle {
 }
 
 model Section {
-    id         Int         @id @default(autoincrement())
+    id         String      @id @default(cuid())
     name       String
     classrooms Classroom[]
     school     School      @relation(fields: [schoolId], references: [id])

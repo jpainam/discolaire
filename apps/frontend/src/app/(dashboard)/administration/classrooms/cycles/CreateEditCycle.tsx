@@ -1,0 +1,112 @@
+"use client";
+
+import { toast } from "sonner";
+import { z } from "zod";
+
+import { useLocale } from "@repo/hooks/use-locale";
+import { useModal } from "@repo/hooks/use-modal";
+import { Button } from "@repo/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useForm,
+} from "@repo/ui/form";
+import { Input } from "@repo/ui/input";
+
+import { api } from "~/trpc/react";
+
+const createEditSchema = z.object({
+  name: z.string().min(1),
+});
+export function CreateEditCycle({ id, name }: { id?: string; name?: string }) {
+  const form = useForm({
+    schema: createEditSchema,
+    defaultValues: {
+      name: name ?? "",
+    },
+  });
+  const { closeModal } = useModal();
+
+  const utils = api.useUtils();
+  const createCycleMutation = api.classroomCycle.create.useMutation({
+    onSettled: () => utils.classroomCycle.invalidate(),
+    onSuccess: () => {
+      toast.success(t("created_successfully"), { id: 0 });
+      closeModal();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
+  const updateCycleMutation = api.classroomCycle.update.useMutation({
+    onSettled: () => utils.classroomCycle.invalidate(),
+    onSuccess: () => {
+      toast.success(t("updated_successfully"), { id: 0 });
+      closeModal();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
+
+  const handleSubmit = (data: z.infer<typeof createEditSchema>) => {
+    if (id) {
+      toast.loading(t("updating"), { id: 0 });
+      updateCycleMutation.mutate({ id: id, name: data.name });
+    } else {
+      toast.loading(t("creating"), { id: 0 });
+      createCycleMutation.mutate(data);
+    }
+  };
+  const { t } = useLocale();
+
+  return (
+    <Form {...form}>
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={form.handleSubmit(handleSubmit)}
+      >
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("name")}</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="ml-auto flex items-center gap-2">
+          <Button
+            onClick={() => {
+              closeModal();
+            }}
+            type="button"
+            size={"sm"}
+            variant={"outline"}
+          >
+            {t("cancel")}
+          </Button>
+          <Button
+            isLoading={
+              createCycleMutation.isPending || updateCycleMutation.isPending
+            }
+            type="submit"
+            size={"sm"}
+            variant={"default"}
+          >
+            {t("submit")}
+          </Button>
+        </div>
+      </form>
+    </Form>
+  );
+}

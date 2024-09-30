@@ -6,6 +6,9 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 export const classroomLevelRouter = createTRPCRouter({
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.classroomLevel.findMany({
+      where: {
+        schoolId: ctx.schoolId,
+      },
       orderBy: {
         order: "asc",
       },
@@ -17,6 +20,7 @@ export const classroomLevelRouter = createTRPCRouter({
       by: ["levelId"],
       where: {
         schoolYearId: ctx.schoolYearId,
+        schoolId: ctx.schoolId,
       },
       _count: {
         levelId: true,
@@ -26,6 +30,7 @@ export const classroomLevelRouter = createTRPCRouter({
       by: ["classroomId"],
       where: {
         classroom: {
+          schoolId: ctx.schoolId,
           schoolYearId: ctx.schoolYearId,
         },
       },
@@ -35,6 +40,7 @@ export const classroomLevelRouter = createTRPCRouter({
     });
     const classrooms = await ctx.db.classroom.findMany({
       where: {
+        schoolId: ctx.schoolId,
         schoolYearId: ctx.schoolYearId,
       },
     });
@@ -47,6 +53,9 @@ export const classroomLevelRouter = createTRPCRouter({
           0);
     });
     const levels = await ctx.db.classroomLevel.findMany({
+      where: {
+        schoolId: ctx.schoolId,
+      },
       orderBy: {
         order: "asc",
       },
@@ -66,6 +75,7 @@ export const classroomLevelRouter = createTRPCRouter({
       const ids = Array.isArray(input) ? input : [input];
       const classrooms = await ctx.db.classroom.findMany({
         where: {
+          schoolId: ctx.schoolId,
           levelId: {
             in: ids,
           },

@@ -4,10 +4,14 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const classroomCycleRouter = createTRPCRouter({
   all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.cycle.findMany();
+    return ctx.db.cycle.findMany({
+      where: {
+        schoolId: ctx.schoolId,
+      },
+    });
   }),
   delete: protectedProcedure
-    .input(z.coerce.number())
+    .input(z.string())
     .mutation(async ({ ctx, input }) => {
       return ctx.db.cycle.delete({
         where: {
@@ -19,7 +23,7 @@ export const classroomCycleRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string().min(1),
-        id: z.coerce.number(),
+        id: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -43,7 +47,7 @@ export const classroomCycleRouter = createTRPCRouter({
       return ctx.db.cycle.create({
         data: {
           name: input.name,
-          schoolId: ctx.session.user.schoolId,
+          schoolId: ctx.schoolId,
         },
       });
     }),

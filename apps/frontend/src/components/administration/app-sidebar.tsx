@@ -14,6 +14,7 @@ import {
   PieChart,
   Rabbit,
   ReceiptIcon,
+  School,
   SchoolIcon,
   Send,
   Settings,
@@ -74,6 +75,12 @@ export function AppSidebar() {
             url: "/administration/courses",
             icon: Users,
             description: "All your courses",
+          },
+          {
+            title: t("classroom_settings"),
+            url: "/administration/classrooms",
+            icon: School,
+            description: "Classroom settings",
           },
           {
             title: t("directory"),

@@ -182,7 +182,11 @@ export const routes = {
       profile: (id: string) => `/administration/users/${id}/profile`,
       credentials: (id: string) => `/administration/users/${id}/credentials`,
     },
-    classrooms: "/administration/classrooms",
+    classrooms: {
+      levels: `/administration/classrooms/levels`,
+      cycles: `/administration/classrooms/cycles`,
+      sections: `/administration/classrooms/sections`,
+    },
     fees: "/administration/fees",
   },
 };

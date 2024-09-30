@@ -95,9 +95,9 @@ export function CreateEditClassroom({
   function onSubmit(data: UpdateClassroomValues) {
     const values = {
       ...data,
-      cycleId: parseInt(data.cycleId),
+      cycleId: data.cycleId,
       levelId: data.levelId,
-      sectionId: parseInt(data.sectionId),
+      sectionId: data.sectionId,
     };
     if (classroom?.id) {
       toast.loading(t("updating"), { id: 0 });
