@@ -1,7 +1,5 @@
 //import { MobileNav } from "~/components/mobile-nav";
 
-import { getServerTranslations } from "@repo/i18n/server";
-
 import { getSchoolYearFromCookie } from "~/actions/schoolYear";
 import { api } from "~/trpc/server";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -12,9 +10,6 @@ import { ServiceSwitcher } from "./ServiceSwitcher";
 import { TopRightMenu } from "./top-right-menu";
 
 export async function Header() {
-  const { i18n } = await getServerTranslations();
-  const lng = i18n.resolvedLanguage ?? "FR";
-
   const defaultSchoolYear = await api.schoolYear.getDefault();
   const schoolYear = (await getSchoolYearFromCookie()) ?? defaultSchoolYear?.id;
   const permissions = await api.user.permissions();
@@ -35,7 +30,7 @@ export async function Header() {
         <MainNav permissions={permissions ?? []} />
         <SchoolYearSwitcher defaultValue={schoolYear} />
         <ServiceSwitcher />
-        <LanguageSwitcher currentLanguage={lng} />
+        <LanguageSwitcher />
       </div>
     </header>
   );

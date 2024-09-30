@@ -1,17 +1,16 @@
 "use client";
 
 import type { EventProps, View as RbcView } from "react-big-calendar";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
-//import { enUS, fr } from "date-fns/locale";
-
-import i18next from "i18next";
-import moment from "moment";
+import { format, getDay, parse, startOfWeek } from "date-fns";
+import { enUS, es, fr } from "date-fns/locale";
 
 import type { RouterOutputs } from "@repo/api";
+import type { Culture, DateLocalizer, Formats } from "@repo/ui/big-calendar";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import BigCalendar, { momentLocalizer, RbcViews } from "@repo/ui/big-calendar";
+import BigCalendar, { dateFnsLocalizer, RbcViews } from "@repo/ui/big-calendar";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
@@ -19,8 +18,8 @@ import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";
 import { CreateEditTimetable } from "./CreateEditTimetable";
 
-moment.locale(i18next.language);
-const localizer = momentLocalizer(moment);
+// moment.locale(i18next.language);
+// const localizer = momentLocalizer(moment);
 type TimetableEventType = RouterOutputs["timetable"]["classroom"][number];
 
 export function ClassroomTimeTable() {
@@ -31,7 +30,21 @@ export function ClassroomTimeTable() {
   const [view, setView] = useState<RbcView>(RbcViews.AGENDA);
   const [date, setDate] = useState(new Date());
   const { openModal } = useModal();
-  const { t } = useLocale();
+  const { t, i18n } = useLocale();
+
+  const locales = {
+    fr: fr,
+    en: enUS,
+    es: es,
+  };
+
+  const localizer = dateFnsLocalizer({
+    format,
+    parse,
+    startOfWeek,
+    getDay,
+    locales,
+  });
 
   const messages = {
     agenda: t("agenda"),
@@ -86,16 +99,16 @@ export function ClassroomTimeTable() {
     [openModal, params.id, t],
   );
 
-  /*const { views, _scrollToTime, _formats } = useMemo(
+  const { _views, _scrollToTime, formats } = useMemo(
     () => ({
-      views: {
+      _views: {
         month: true,
         week: true,
         day: true,
         agenda: true,
       },
       _scrollToTime: new Date(2023, 10, 27, 6),
-      _formats: {
+      formats: {
         dateFormat: "d",
         weekdayFormat: (
           date: Date,
@@ -112,7 +125,7 @@ export function ClassroomTimeTable() {
       } as Formats,
     }),
     [],
-  );*/
+  );
 
   const handleViewChange = (view: RbcView) => {
     setView(view);
@@ -182,17 +195,22 @@ export function ClassroomTimeTable() {
         onView={handleViewChange}
         events={calendarEventsQuery.data ?? []}
         //views={views}
+        culture={i18n.language}
         messages={messages}
         eventPropGetter={eventPropGetter}
         //dayPropGetter={dayPropGetter}
         //defaultView="agenda"
-        //formats={formats}
-        //startAccessor="start"
-        //endAccessor="end"
+        formats={formats}
+        startAccessor="start"
+        endAccessor="end"
         //dayLayoutAlgorithm="no-overlap"
         onSelectEvent={handleSelectEvent}
         onSelectSlot={handleSelectSlot}
         //scrollToTime={scrollToTime}
+        // formats={{
+        //   weekdayFormat: (date, culture, localizer) =>
+        //     localizer?.format(date, "dddd", culture).substring(0, 3), // Translate the weekday names
+        // }}
         components={{
           event: CustomEvent,
         }}

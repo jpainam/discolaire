@@ -2,9 +2,17 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { addMonths, getDay, getMonth, getYear, isToday } from "date-fns";
-import i18next from "i18next";
-import moment from "moment";
+import {
+  addMonths,
+  format,
+  getDay,
+  getMonth,
+  getYear,
+  isToday,
+  parse,
+  startOfWeek,
+} from "date-fns";
+import { enUS, es, fr } from "date-fns/locale";
 
 import type { RouterOutputs } from "@repo/api";
 import type {
@@ -16,9 +24,7 @@ import type {
 } from "@repo/ui/big-calendar";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-//import { enUS, fr } from "date-fns/locale";
-
-import BigCalendar, { momentLocalizer } from "@repo/ui/big-calendar";
+import BigCalendar, { dateFnsLocalizer } from "@repo/ui/big-calendar";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
@@ -49,8 +55,8 @@ type CalendarEventProcedureOutput = NonNullable<
   RouterOutputs["calendarEvent"]["all"]
 >[number];
 
-moment.locale(i18next.language);
-const localizer = momentLocalizer(moment);
+// moment.locale(i18next.language);
+// const localizer = momentLocalizer(moment);
 
 export function EventCalendar() {
   const searchParams = useSearchParams();
@@ -61,6 +67,20 @@ export function EventCalendar() {
     end: searchParams.get("end")
       ? new Date(searchParams.get("end") ?? "")
       : undefined,
+  });
+
+  const locales = {
+    fr: fr,
+    en: enUS,
+    es: es,
+  };
+
+  const localizer = dateFnsLocalizer({
+    format,
+    parse,
+    startOfWeek,
+    getDay,
+    locales,
   });
 
   //const theme = useResolvedTheme();
@@ -213,7 +233,7 @@ export function EventCalendar() {
       <BigCalendar
         localizer={localizer}
         events={calendarEventsQuery.data ?? []}
-        views={views}
+        //views={views}
         view={view}
         messages={messages}
         onView={handleViewChange}

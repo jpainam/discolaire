@@ -218,6 +218,7 @@ export function CreateEditDocument({
               closeModal();
             }}
             size={"sm"}
+            type="button"
             variant={"outline"}
           >
             <XIcon className="mr-2 h-4 w-4" />

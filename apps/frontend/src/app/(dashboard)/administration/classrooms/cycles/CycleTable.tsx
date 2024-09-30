@@ -48,7 +48,7 @@ export function CycleTable() {
     <div className="rounded-lg border">
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className="bg-muted/50">
             <TableHead>{t("name")}</TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>

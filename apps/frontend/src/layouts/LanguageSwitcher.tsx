@@ -3,7 +3,6 @@
 import type * as RPNInput from "react-phone-number-input";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import i18next from "i18next";
 import flags from "react-phone-number-input/flags";
 
 import { useLocale } from "@repo/i18n";
@@ -17,20 +16,14 @@ import {
 
 import { cn } from "~/lib/utils";
 
-export const LanguageSwitcher = ({
-  currentLanguage,
-  className,
-}: {
-  currentLanguage: string;
-  className?: string;
-}) => {
+export const LanguageSwitcher = ({ className }: { className?: string }) => {
   const router = useRouter();
 
-  const { t } = useLocale();
-  const [value, setValue] = useState<string>(currentLanguage);
+  const { t, i18n } = useLocale();
+  const [value, setValue] = useState<string>(i18n.language);
 
   const onChangeLanguage = (value: string) => {
-    void i18next.changeLanguage(value);
+    void i18n.changeLanguage(value);
     setValue(value == "en" ? "US" : value == "fr" ? "FR" : "ES");
     router.refresh();
   };
@@ -44,7 +37,11 @@ export const LanguageSwitcher = ({
           className={cn("rounded-lg hover:bg-transparent", className)}
         >
           <RenderSwitchItem
-            countryId={value.toUpperCase() as RPNInput.Country}
+            countryId={
+              (value.toUpperCase() == "EN"
+                ? "US"
+                : value.toUpperCase()) as RPNInput.Country
+            }
           />
         </Button>
       </DropdownMenuTrigger>

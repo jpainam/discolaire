@@ -22,7 +22,7 @@ export function DirectoryTable({
     <div className="mx-2 rounded-lg border">
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className="bg-muted/50">
             <TableHead>{t("lastName")}</TableHead>
             <TableHead>{t("firstName")}</TableHead>
             <TableHead>{t("phone")} 1</TableHead>
