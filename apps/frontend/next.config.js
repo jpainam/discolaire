@@ -48,6 +48,11 @@ const config = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+
+      {
+        protocol: "https",
+        hostname: "discolaire-public.s3.eu-central-1.amazonaws.com",
+      },
     ],
   },
 };
