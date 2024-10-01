@@ -18,11 +18,15 @@ const reportQueue = new Queue("reportQueue", { connection: getRedis() });
 
 export async function submitReportJob(
   format: "pdf" | "excel",
-  data: Record<string, unknown> & { reportType: string },
+  data: Record<string, unknown> & {
+    reportType: string;
+    id: number;
+    userId: string;
+  },
 ) {
   await reportQueue.add("generateReport", {
     format,
-    data: { content: "shortcontent", reportType: "receipt" },
+    data,
   });
   console.log("Report job submitted:", data.reportType);
 }

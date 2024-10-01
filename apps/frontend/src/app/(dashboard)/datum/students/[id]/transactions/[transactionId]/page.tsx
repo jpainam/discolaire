@@ -44,11 +44,11 @@ export default async function Page({
   });
   return (
     <>
-      <div className="relative mx-auto overflow-hidden rounded-md border p-4 2xl:w-1/2">
+      <div className="relative mx-2 overflow-hidden rounded-md border p-4 2xl:mx-auto 2xl:w-1/2">
         {/* Watermark */}
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-10">
           <Image
-            src="/images/logo.png?height=350&width=350"
+            src={`${school.logo}?height=350&width=350`}
             alt="Watermark"
             width={350}
             height={350}
@@ -63,17 +63,17 @@ export default async function Page({
           <div className="flex items-start justify-between">
             <div className="flex items-center">
               <Image
-                src="/images/logo.png?height=100&width=100"
+                src={`${school.logo}?height=100&width=100`}
                 alt="Institut Logo"
                 width={200}
                 height={500}
               />
             </div>
             <div className="text-right">
-              <p className="font-bold">{school?.name}</p>
-              <p>{school?.address}</p>
+              <p className="font-bold">{school.name}</p>
+              <p>{school.address}</p>
               <p>
-                {t("phoneNumber")} : {school?.phoneNumber1}
+                {t("phoneNumber")} : {school.phoneNumber1}
               </p>
               <p>************</p>
             </div>

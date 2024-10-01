@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleHelp, Mail, Printer } from "lucide-react";
+import { CircleHelp, Mail } from "lucide-react";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
@@ -12,6 +12,7 @@ import { UserNav } from "~/layouts/user-nav";
 import { cn } from "~/lib/utils";
 import { FeedBackDialog } from "./FeedbackDialog";
 import { SearchCommandMenu } from "./search-command-menu";
+import { TopRightPrinter } from "./TopRightPrinter";
 
 export function TopRightMenu({ className }: { className?: string }) {
   return (
@@ -82,8 +83,9 @@ export function TopRightButtons() {
           <CircleHelp className="h-4 w-4" />
         </Button>
       </SimpleTooltip>
-      <SimpleTooltip content="Imprimer">
-        {/* <Button
+      <TopRightPrinter />
+      {/* <SimpleTooltip content="Imprimer">
+        <Button
           variant={"ghost"}
           size={"icon"}
           aria-busy={isActive}
@@ -97,7 +99,7 @@ export function TopRightButtons() {
             )}
           </div>
           <Printer className="h-4 w-4 text-gray-600" />
-        </Button> */}
+        </Button>
         <Button
           className="size-8"
           size={"icon"}
@@ -106,7 +108,7 @@ export function TopRightButtons() {
         >
           <Printer className="h-4 w-4" />
         </Button>
-      </SimpleTooltip>
+      </SimpleTooltip> */}
     </div>
   );
 }

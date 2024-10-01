@@ -13,15 +13,16 @@ import { api } from "~/trpc/react";
 export function TransactionDetailsHeader() {
   const params = useParams<{ transactionId: string }>();
   const { t } = useLocale();
+  const utils = api.useUtils();
   const printTransactionMutation = api.transaction.printReceipt.useMutation({
     onSuccess: () => {
-      toast.success(t("printJobSubmitted"), { id: 0 });
+      toast.success(t("printing_job_submitted"), { id: 0 });
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
     },
-    onSettled: () => {
-      console.log("settled");
+    onSettled: async () => {
+      await utils.reporting.all.invalidate();
     },
   });
   return (

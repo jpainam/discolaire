@@ -70,6 +70,10 @@ export const transactionService = {
       },
     });
 
+    if (!school) {
+      throw new Error("School not found");
+    }
+
     const studentContact = await db.studentContact.findMany({
       include: {
         contact: true,

@@ -8,6 +8,7 @@ import { ContactCard } from "~/components/contacts/ContactCard";
 import { DashboardClassroomSize } from "~/components/dashboard/DashboardClassroomSize";
 import { DashboardTransactionTrend } from "~/components/dashboard/DashboardTransactionTrend";
 import { EffectiveStat } from "~/components/dashboard/EffectiveStat";
+import { SchoolLife } from "~/components/dashboard/SchoolLife";
 import { SearchBlock } from "~/components/dashboard/SearchBlock";
 
 export default async function DashboardPage() {
@@ -36,6 +37,7 @@ export default async function DashboardPage() {
         </Link>
       </div>
       <SearchBlock className="col-span-full md:col-span-6" />
+      <SchoolLife />
       <Suspense>
         <EffectiveStat className="col-span-full" />
       </Suspense>

@@ -1,0 +1,162 @@
+"use client";
+
+import { useEffect } from "react";
+import { format } from "date-fns";
+import {
+  CheckCircleIcon,
+  ClockIcon,
+  Loader,
+  LoaderIcon,
+  PrinterIcon,
+  Trash2Icon,
+  XCircleIcon,
+} from "lucide-react";
+import { toast } from "sonner";
+
+import { useLocale } from "@repo/hooks/use-locale";
+import { Badge } from "@repo/ui/badge";
+import { Button } from "@repo/ui/button";
+import { useConfirm } from "@repo/ui/confirm-dialog";
+import { EmptyState } from "@repo/ui/EmptyState";
+import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+
+import { deleteFileFromAws, downloadFileFromAws } from "~/actions/upload";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { getErrorMessage } from "~/lib/handle-error";
+import { api } from "~/trpc/react";
+
+export function TopRightPrinter() {
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "COMPLETED":
+        return <CheckCircleIcon className="h-4 w-4 text-green-500" />;
+      case "FAILED":
+        return <XCircleIcon className="h-4 w-4 text-red-500" />;
+      case "PENDING":
+        return <LoaderIcon className="h-4 w-4 animate-spin text-blue-500" />;
+      case "SCHEDULED":
+        return <ClockIcon className="h-4 w-4 text-yellow-500" />;
+    }
+  };
+  const getReportTypeIcon = (type: string) => {
+    return type === "pdf" ? (
+      <PDFIcon className="h-6 w-6" />
+    ) : (
+      <XMLIcon className="h-6 w-6" />
+    );
+  };
+
+  const reportingQuery = api.reporting.all.useQuery();
+  const utils = api.useUtils();
+  const deleteReportingMutation = api.reporting.delete.useMutation();
+  useEffect(() => {
+    const interval = setInterval(() => {
+      void reportingQuery.refetch();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [reportingQuery]);
+
+  const { t } = useLocale();
+  const confirm = useConfirm();
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <PrinterIcon className="h-4 w-4" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-96 p-2" align="end">
+        <h4 className="mb-2 font-medium">{t("reports")}</h4>
+        {reportingQuery.isPending && (
+          <div className="flex items-center justify-center">
+            <Loader className="h-6 w-6 animate-spin" />
+          </div>
+        )}
+        {reportingQuery.data?.length === 0 && (
+          <EmptyState title={t("no_reports")} />
+        )}
+        <div className="flex flex-col gap-2">
+          {reportingQuery.data?.map((activity) => (
+            <div
+              key={activity.id}
+              className="flex items-center justify-between rounded-lg border p-2 hover:bg-muted hover:text-muted-foreground"
+            >
+              <div
+                onClick={() => {
+                  toast.promise(downloadFileFromAws(activity.url), {
+                    success: (signedUrl) => {
+                      window.open(signedUrl, "_blank");
+                      return t("downloaded");
+                    },
+                    loading: t("downloading"),
+                    error: (error) => {
+                      return getErrorMessage(error);
+                    },
+                  });
+                }}
+                className="flex cursor-pointer items-center space-x-2"
+              >
+                {getReportTypeIcon(activity.type)}
+                <div className="flex flex-col">
+                  <span className="line-clamp-1 truncate text-xs">
+                    {activity.title}
+                  </span>
+                  <div className="flex flex-row justify-between text-xs text-muted-foreground">
+                    {format(activity.createdAt, "MMM d, yyyy")}
+                    <Badge
+                      variant="outline"
+                      className="flex items-center space-x-1 text-xs"
+                    >
+                      {getStatusIcon(activity.status)}
+                      <span className="text-xs">{activity.status}</span>
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center space-x-4">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={async () => {
+                    const isConfirmed = await confirm({
+                      title: t("delete"),
+                      description: t("delete_confirmation"),
+                      icon: <Trash2Icon className="h-4 w-4 text-destructive" />,
+                      alertDialogTitle: {
+                        className: "flex items-center gap-2",
+                      },
+                    });
+                    if (isConfirmed) {
+                      toast.loading(t("deleting"), { id: 0 });
+                      void deleteReportingMutation.mutate(activity.id, {
+                        onSettled: () => {
+                          void utils.reporting.all.invalidate();
+                        },
+                        onSuccess: () => {
+                          toast.success(t("deleted_successfully"), { id: 0 });
+                          try {
+                            void deleteFileFromAws(activity.url);
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                          } catch (error: any) {
+                            toast.error(error?.message, { id: 0 });
+                          }
+                        },
+                        onError: (error) => {
+                          toast.error(error.message, { id: 0 });
+                        },
+                      });
+                    }
+                  }}
+                >
+                  <Trash2Icon className="h-4 w-4 text-destructive" />
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}

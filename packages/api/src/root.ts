@@ -32,6 +32,7 @@ import { programRouter } from "./routers/program";
 import { recipientRouter } from "./routers/recipient";
 import { religionRouter } from "./routers/religion";
 import { reportCardRouter } from "./routers/reportCard";
+import { reportingRouter } from "./routers/reporting";
 import { roleRouter } from "./routers/role";
 import { schoolRouter } from "./routers/school";
 import { schoolYearRouter } from "./routers/schoolYear";
@@ -98,6 +99,7 @@ export const appRouter = createTRPCRouter({
   attendance: attendanceRouter,
   messaging: messagingRouter,
   transaction: transactionRouter,
+  reporting: reportingRouter,
   invitation: invitationRouter,
 });
 

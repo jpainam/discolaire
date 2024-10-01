@@ -27,9 +27,25 @@ export const transactionRouter = createTRPCRouter({
   }),
   printReceipt: protectedProcedure
     .input(z.coerce.number())
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
       const data = await transactionService.getReceiptInfo(input);
-      return submitReportJob("pdf", { reportType: "receipt", ...data });
+      const report = await ctx.db.reporting.create({
+        data: {
+          userId: ctx.session.user.id,
+          title: `Receipt - ${data.student.lastName} ${data.transaction.transactionRef}`,
+          status: "PENDING",
+          type: "pdf",
+          url: "",
+          schoolId: ctx.schoolId,
+        },
+      });
+
+      return submitReportJob("pdf", {
+        reportType: "receipt",
+        id: report.id,
+        userId: ctx.session.user.id,
+        ...data,
+      });
     }),
 
   all: protectedProcedure

@@ -227,6 +227,17 @@ model Classroom {
     schoolId          String
 }
 
+model Reporting {
+    id        Int      @id @default(autoincrement())
+    url       String
+    title     String
+    type      String   @default("pdf")
+    createdAt DateTime @default(now()) @db.Timestamp(6)
+    status    String   @default("PENDING")
+    userId    String
+    schoolId  String
+}
+
 model ClassroomLevel {
     id         String      @id @default(cuid())
     name       String

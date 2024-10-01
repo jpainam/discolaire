@@ -21,6 +21,8 @@ export const env = createEnv({
     AWS_S3_BUCKET_NAME: z.string().min(2),
     AWS_S3_SECRET_ACCESS_KEY: z.string().min(1),
     SUPER_ADMIN_USERNAME: z.string().min(1),
+
+    REPORT_API_KEY: z.string().min(1),
   },
 
   /**
@@ -46,6 +48,7 @@ export const env = createEnv({
       process.env.NEXT_PUBLIC_DEFAULT_COUNTRY_CODE,
     NEXT_PUBLIC_LIBRARY_SERVICE_URL:
       process.env.NEXT_PUBLIC_LIBRARY_SERVICE_URL,
+    REPORT_API_KEY: process.env.REPORT_API_KEY,
 
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
     // AWS S3
