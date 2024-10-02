@@ -72,9 +72,9 @@ export function ClassroomLevelHeader() {
               const isConfirm = await confirm({
                 title: t("delete"),
                 description: t("delete_confirmation"),
-                icon: <Trash2 className="h-6 w-6" />,
+                icon: <Trash2 className="h-4 w-4 text-destructive" />,
                 alertDialogTitle: {
-                  className: "flex items-center gap-2",
+                  className: "flex items-center gap-1",
                 },
               });
               if (isConfirm) {
@@ -97,12 +97,12 @@ export function ClassroomLevelHeader() {
           <DropdownMenuContent align="end">
             <DropdownHelp />
             <DropdownMenuItem>
-              <XMLIcon className="mr-2 h-4 w-4" />
-              {t("print")}
+              <PDFIcon className="mr-2 h-4 w-4" />
+              {t("pdf_export")}
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <PDFIcon className="mr-2 h-4 w-4" />
-              {t("print")}
+              <XMLIcon className="mr-2 h-4 w-4" />
+              {t("xml_export")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
