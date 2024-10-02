@@ -29,11 +29,11 @@ export function FeeDataTable() {
 
   useEffect(() => {
     if (fees) {
-      setFilteredFees(
-        journal
-          ? fees.filter((fee) => fee.journalId === Number(journal))
-          : fees,
-      );
+      setFilteredFees(fees);
+      // journal
+      //   ? fees.filter((fee) => fee.journalId === Number(journal))
+      //   : fees,
+      // );
     }
   }, [fees, journal]);
 

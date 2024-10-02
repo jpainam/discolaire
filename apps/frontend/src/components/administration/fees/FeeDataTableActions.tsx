@@ -24,7 +24,7 @@ export function FeeDataTableActions({
   const { t } = useLocale();
   const confirm = useConfirm();
   const utils = api.useUtils();
-  const feesMutation = api.fee.deleteMany.useMutation({
+  const feesMutation = api.fee.delete.useMutation({
     onSettled: () => utils.fee.invalidate(),
   });
   return (
@@ -44,7 +44,7 @@ export function FeeDataTableActions({
                 .getFilteredSelectedRowModel()
                 .rows.map((row) => row.original.id);
 
-              toast.promise(feesMutation.mutateAsync({ ids: selectedRowIds }), {
+              toast.promise(feesMutation.mutateAsync(selectedRowIds), {
                 loading: t("deleting"),
                 success: () => {
                   table.toggleAllRowsSelected(false);

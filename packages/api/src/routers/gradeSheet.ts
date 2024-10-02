@@ -153,32 +153,4 @@ export const gradeSheetRouter = createTRPCRouter({
         },
       });
     }),
-
-  update: protectedProcedure
-    .input(
-      z.object({
-        id: z.coerce.number(),
-        code: z.string().min(1),
-        description: z.string().min(1),
-        amount: z.number().min(1),
-        dueDate: z.date(),
-        journalId: z.number(),
-        isActive: z.boolean().default(true),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      return ctx.db.fee.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          code: input.code,
-          description: input.description,
-          amount: input.amount,
-          dueDate: input.dueDate,
-          journal: { connect: { id: input.journalId } },
-          isActive: input.isActive,
-        },
-      });
-    }),
 });

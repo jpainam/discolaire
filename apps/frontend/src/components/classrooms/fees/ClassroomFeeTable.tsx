@@ -88,7 +88,7 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
             <TableHead>{t("due_date")}</TableHead>
             <TableHead>{t("status")}</TableHead>
             <TableHead>{t("is_active")} ?</TableHead>
-            <TableHead>{t("journal")}</TableHead>
+            <TableHead>{t("required_fees")} ?</TableHead>
             <TableHead></TableHead>
           </TableRow>
         </TableHeader>
@@ -124,7 +124,11 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
                     <FlatBadge variant={"red"}>{t("inactive")}</FlatBadge>
                   )}
                 </TableCell>
-                <TableCell className="">{fee.journal?.name}</TableCell>
+                <TableCell className="">
+                  <FlatBadge variant={fee.isRequired ? "red" : "green"}>
+                    {fee.isRequired ? t("yes") : t("no")}
+                  </FlatBadge>
+                </TableCell>
                 <TableCell className="">
                   {canUpdateClassroomFee || canDeleteClassroomFee ? (
                     <div className="flex flex-row items-center justify-end gap-0">
@@ -161,9 +165,7 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
                                   });
                                   if (isConfirmed) {
                                     toast.loading(t("deleting"), { id: 0 });
-                                    deleteFeeMutation.mutate({
-                                      id: fee.id,
-                                    });
+                                    deleteFeeMutation.mutate(fee.id);
                                   }
                                 }}
                               >

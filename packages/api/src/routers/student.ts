@@ -411,9 +411,6 @@ export const studentRouter = createTRPCRouter({
         deletedAt: null,
         schoolYearId: ctx.schoolYearId,
       },
-      include: {
-        journal: true,
-      },
       orderBy: {
         createdAt: "desc",
       },

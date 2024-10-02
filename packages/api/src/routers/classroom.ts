@@ -149,7 +149,6 @@ export const classroomRouter = createTRPCRouter({
       },
       include: {
         classroom: true,
-        journal: true,
       },
       orderBy: {
         dueDate: "asc",

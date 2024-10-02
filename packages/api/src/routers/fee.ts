@@ -1,62 +1,41 @@
 import { z } from "zod";
 
 import { feeService } from "../services/fee-service";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const feeRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
-  types: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db.feeType.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-  }),
   delete: protectedProcedure
-    .input(z.object({ id: z.number() }))
-    .mutation(async ({ ctx, input }) => {
-      return ctx.db.fee.delete({ where: { id: input.id } });
-    }),
-  deleteMany: protectedProcedure
-    .input(z.object({ ids: z.array(z.number()) }))
+    .input(z.union([z.number(), z.array(z.number())]))
     .mutation(async ({ ctx, input }) => {
       return ctx.db.fee.deleteMany({
         where: {
           id: {
-            in: input.ids,
+            in: Array.isArray(input) ? input : [input],
           },
         },
       });
     }),
-  get: protectedProcedure
-    .input(z.object({ id: z.number() }))
-    .query(async ({ ctx, input }) => {
-      return ctx.db.fee.findUnique({
-        where: {
-          id: input.id,
-        },
-        include: {
-          classroom: true,
-          journal: true,
-        },
-      });
-    }),
+
+  get: protectedProcedure.input(z.number()).query(async ({ ctx, input }) => {
+    return ctx.db.fee.findUnique({
+      where: {
+        id: input,
+      },
+      include: {
+        classroom: true,
+      },
+    });
+  }),
   all: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.fee.findMany({
       where: {
         classroom: {
           schoolYearId: ctx.schoolYearId,
+          schoolId: ctx.schoolId,
         },
       },
       include: {
         classroom: true,
-        journal: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -68,11 +47,11 @@ export const feeRouter = createTRPCRouter({
       z.object({
         code: z.string().min(1),
         description: z.string().min(1),
-        amount: z.number().min(1),
-        dueDate: z.date(),
-        feeTypeId: z.string(),
-        classroomId: z.string(),
+        amount: z.coerce.number().min(0),
+        dueDate: z.coerce.date(),
+        classroomId: z.string().min(1),
         isActive: z.boolean().default(true),
+        isRequired: z.boolean().default(false),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -82,8 +61,8 @@ export const feeRouter = createTRPCRouter({
           description: input.description,
           amount: input.amount,
           dueDate: input.dueDate,
-          feeType: { connect: { id: input.feeTypeId } },
-          classroom: { connect: { id: input.classroomId } },
+          isRequired: input.isRequired,
+          classroomId: input.classroomId,
           isActive: input.isActive,
         },
       });
@@ -91,12 +70,12 @@ export const feeRouter = createTRPCRouter({
   update: protectedProcedure
     .input(
       z.object({
-        id: z.number(),
+        id: z.coerce.number(),
         code: z.string().min(1),
         description: z.string().min(1),
-        amount: z.number().min(1),
-        dueDate: z.date(),
-        feeTypeId: z.string(),
+        amount: z.coerce.number().min(1),
+        dueDate: z.coerce.date(),
+        isRequired: z.boolean().default(false),
         isActive: z.boolean().default(true),
       }),
     )
@@ -110,7 +89,7 @@ export const feeRouter = createTRPCRouter({
           description: input.description,
           amount: input.amount,
           dueDate: input.dueDate,
-          feeType: { connect: { id: input.feeTypeId } },
+          isRequired: input.isRequired,
           isActive: input.isActive,
         },
       });

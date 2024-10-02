@@ -60,7 +60,6 @@ export const transactionRouter = createTRPCRouter({
       return ctx.db.transaction.findMany({
         include: {
           account: true,
-          journal: true,
         },
         where: {
           AND: [
@@ -100,7 +99,6 @@ export const transactionRouter = createTRPCRouter({
   get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
     return ctx.db.transaction.findUnique({
       include: {
-        journal: true,
         account: {
           include: {
             student: true,

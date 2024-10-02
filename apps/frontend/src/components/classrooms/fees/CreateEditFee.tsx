@@ -14,15 +14,14 @@ import { Checkbox } from "@repo/ui/checkbox";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@repo/ui/form";
 
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";
-import { FeeTypeSelector } from "~/components/shared/selects/FeeTypeSelector";
 import { api } from "~/trpc/react";
 
 const createEditFeeSchema = z.object({
@@ -30,7 +29,7 @@ const createEditFeeSchema = z.object({
   description: z.string().min(1),
   amount: z.coerce.number().min(1),
   dueDate: z.coerce.date(),
-  feeTypeId: z.string().min(1),
+  isRequired: z.boolean().default(false),
   isActive: z.boolean().default(true),
 });
 
@@ -43,7 +42,7 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
       description: fee?.description ?? "",
       amount: fee?.amount ?? 0,
       dueDate: fee?.dueDate ?? new Date(),
-      feeTypeId: fee?.feeTypeId ?? "",
+      isRequired: fee?.isRequired ?? false,
       isActive: fee?.isActive ?? true,
     },
   });
@@ -87,7 +86,7 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
       dueDate: data.dueDate,
       isActive: data.isActive,
       classroomId: classroomId,
-      feeTypeId: data.feeTypeId,
+      isRequired: data.isRequired,
     };
     if (fee) {
       toast.loading(t("updating"), { id: 0 });
@@ -122,17 +121,22 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
 
         <FormField
           control={form.control}
-          name="feeTypeId"
+          name="isRequired"
           render={({ field }) => (
             <FormItem className="flex flex-row items-start space-x-4 space-y-0 py-4">
               <FormControl>
-                <FeeTypeSelector onChange={field.onChange} />
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
               </FormControl>
-              <FormMessage />
+              <FormLabel>{t("required_fees")}</FormLabel>
+              <FormDescription>
+                {t("required_fees_description")}
+              </FormDescription>
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="isActive"

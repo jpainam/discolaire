@@ -147,13 +147,17 @@ export function fetchFeesColumns({
       },
     },
     {
-      accessorKey: "journal.name",
+      accessorKey: "isRequired",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("journal")} />
+        <DataTableColumnHeader column={column} title={t("required_fees")} />
       ),
       cell: ({ row }) => {
         const fee = row.original;
-        return <div>{fee.journal?.name ?? "N/A"}</div>;
+        return (
+          <FlatBadge variant={fee.isRequired ? "red" : "green"}>
+            {fee.isRequired ? t("yes") : t("no")}
+          </FlatBadge>
+        );
       },
     },
     {
@@ -200,7 +204,7 @@ function ActionCell({ fee }: { fee: Fee }) {
                 description: t("delete_confirmation"),
               });
               if (isConfirmed) {
-                toast.promise(feeMutation.mutateAsync({ id: fee.id }), {
+                toast.promise(feeMutation.mutateAsync(fee.id), {
                   loading: t("deleting"),
                   error: (error) => {
                     return getErrorMessage(error);

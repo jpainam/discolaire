@@ -29,7 +29,7 @@ export default function FeesDetails({ fee }: { fee?: Fee }) {
   const feeMutation = api.fee.delete.useMutation();
   const utils = api.useUtils();
   const onDeleteFee = (id: number) => {
-    toast.promise(feeMutation.mutateAsync({ id }), {
+    toast.promise(feeMutation.mutateAsync(id), {
       loading: t("deleting"),
       success: (data) => {
         console.log(data);
