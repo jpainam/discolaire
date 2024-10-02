@@ -1,13 +1,13 @@
 "use client";
 
-import { useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { MoreVertical, PlusIcon, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,7 +19,6 @@ import { Label } from "@repo/ui/label";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
-import { useCheckPermissions } from "~/hooks/use-permissions";
 import { api } from "~/trpc/react";
 import { selectedClassroomLevelAtom } from "./_atom";
 import { CreateEditLevel } from "./CreateEditLevel";
@@ -27,45 +26,64 @@ import { CreateEditLevel } from "./CreateEditLevel";
 export function ClassroomLevelHeader() {
   const { t } = useLocale();
   const { openModal } = useModal();
-  const selectedLevels = useAtomValue(selectedClassroomLevelAtom);
-  const toastId = 0;
-  const canAddLevel = useCheckPermissions(
-    PermissionAction.CREATE,
-    "classroom:level",
+  const [selectedLevels, setSelectedLevels] = useAtom(
+    selectedClassroomLevelAtom,
   );
+
+  // const canAddLevel = useCheckPermissions(
+  //   PermissionAction.CREATE,
+  //   "classroom:level",
+  // );
   const utils = api.useUtils();
   const deleteClassroomLevelMutation = api.classroomLevel.delete.useMutation({
     onSettled: () => utils.classroomLevel.invalidate(),
+    onSuccess: () => {
+      toast.success(t("deleted_successfully"), { id: 0 });
+      setSelectedLevels([]);
+    },
     onError: (error) => {
-      toast.error(error.message, { id: toastId });
+      toast.error(error.message, { id: 0 });
     },
   });
-  if (deleteClassroomLevelMutation.isPending) {
-    toast.loading(t("deleting"), { id: toastId });
-  }
 
+  const confirm = useConfirm();
   return (
     <div className="flex flex-row items-center gap-2">
       <Label>{t("Niveau des classes")}</Label>
       <div className="ml-auto flex flex-row items-center gap-2">
-        {canAddLevel && (
-          <Button
-            onClick={() => {
-              openModal({
-                className: "w-96",
-                title: t("level"),
-                view: <CreateEditLevel />,
-              });
-            }}
-            size={"sm"}
-            variant={"default"}
-          >
-            <PlusIcon className="mr-2 h-4 w-4" />
-            {t("add")}
-          </Button>
-        )}
+        <Button
+          onClick={() => {
+            openModal({
+              className: "w-96",
+              title: t("level"),
+              view: <CreateEditLevel />,
+            });
+          }}
+          size={"sm"}
+          variant={"default"}
+        >
+          <PlusIcon className="mr-2 h-4 w-4" />
+          {t("add")}
+        </Button>
+
         {selectedLevels.length > 0 && (
-          <Button variant={"destructive"}>
+          <Button
+            onClick={async () => {
+              const isConfirm = await confirm({
+                title: t("delete"),
+                description: t("delete_confirmation"),
+                icon: <Trash2 className="h-6 w-6" />,
+                alertDialogTitle: {
+                  className: "flex items-center gap-2",
+                },
+              });
+              if (isConfirm) {
+                toast.loading(t("deleting"), { id: 0 });
+                deleteClassroomLevelMutation.mutate(selectedLevels);
+              }
+            }}
+            variant={"destructive"}
+          >
             <Trash2 className="mr-2 h-4 w-4" />
             <span className="mr-2">{t("delete")}</span>({selectedLevels.length})
           </Button>

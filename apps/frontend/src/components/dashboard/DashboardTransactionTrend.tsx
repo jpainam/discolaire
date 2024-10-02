@@ -97,7 +97,7 @@ export function DashboardTransactionTrend({
 
   if (transactionsTrendQuery.isPending) {
     return (
-      <div className="flex w-full flex-row gap-4 p-2">
+      <div className="col-span-full flex w-full flex-row gap-4 p-2">
         <Skeleton className="h-[200px] w-2/3" />
         <Skeleton className="h-[200px] w-1/3" />
       </div>

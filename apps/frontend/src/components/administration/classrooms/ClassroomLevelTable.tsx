@@ -20,7 +20,9 @@ export function ClassroomLevelTable() {
     selectedClassroomLevelAtom,
   );
   const { t } = useLocale();
-  const [items, setItems] = useState<{ id: string; name: string }[]>([]);
+  const [items, setItems] = useState<
+    { id: string; name: string; order: number }[]
+  >([]);
   useEffect(() => {
     if (classroomLevelsQuery.data) {
       setItems(classroomLevelsQuery.data);
@@ -69,7 +71,13 @@ export function ClassroomLevelTable() {
                   openModal({
                     className: "w-96",
                     title: t("level"),
-                    view: <CreateEditLevel name={item.name} id={item.id} />,
+                    view: (
+                      <CreateEditLevel
+                        order={item.order}
+                        name={item.name}
+                        id={item.id}
+                      />
+                    ),
                   });
                 }}
                 size={"icon"}

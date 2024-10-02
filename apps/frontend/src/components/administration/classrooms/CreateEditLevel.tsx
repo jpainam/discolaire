@@ -20,7 +20,7 @@ import { api } from "~/trpc/react";
 
 const createLevelSchema = z.object({
   name: z.string().min(1),
-  order: z.coerce.number().int().min(0),
+  order: z.string().min(1).default("0"),
 });
 export function CreateEditLevel({
   name,
@@ -35,7 +35,7 @@ export function CreateEditLevel({
     schema: createLevelSchema,
     defaultValues: {
       name: name ?? "",
-      order: order ?? 0,
+      order: order ? `${order}` : "0",
     },
   });
   const { t } = useLocale();
@@ -65,7 +65,7 @@ export function CreateEditLevel({
   const onSubmit = (data: z.infer<typeof createLevelSchema>) => {
     const values = {
       name: data.name,
-      order: data.order,
+      order: Number(data.order),
     };
     if (id) {
       toast.loading(t("updating"), { id: 0 });
@@ -100,7 +100,7 @@ export function CreateEditLevel({
             <FormItem>
               <FormLabel>{t("order")}</FormLabel>
               <FormControl>
-                <Input type="number" {...field} placeholder="Order" />
+                <Input {...field} placeholder="Order" />
               </FormControl>
             </FormItem>
           )}
