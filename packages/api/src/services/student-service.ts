@@ -37,13 +37,32 @@ export const studentService = {
       skipDuplicates: true,
     });
   },
-  isRepeating: async (studentId: string, schoolYearId: string) => {
+  isRepeating: async (
+    studentId: string,
+    schoolYearId: string,
+  ): Promise<boolean> => {
     const currentClassroom = await studentService.getClassroom(
       studentId,
       schoolYearId,
     );
+    const student = await db.student.findUnique({
+      where: {
+        id: studentId,
+      },
+    });
+    if (!student) {
+      return false;
+    }
     if (!currentClassroom) {
       return false;
+    }
+    const enrollments = await db.enrollment.findMany({
+      where: {
+        studentId: studentId,
+      },
+    });
+    if (enrollments.length <= 1) {
+      return student.isRepeating;
     }
     const enrollement = await db.enrollment.findFirst({
       where: {

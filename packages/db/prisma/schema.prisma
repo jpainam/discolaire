@@ -489,6 +489,7 @@ model Student {
     gender             String?
     religionId         String?
     isBaptized         Boolean          @default(false)
+    isRepeating        Boolean          @default(false)
     phoneNumber        String?
     parentDivorced     Boolean          @default(false)
     dateOfEntry        DateTime?        @db.Date
