@@ -3,8 +3,6 @@ import { Screens } from "./screens";
 import { SectionFour } from "./section-four";
 import { SectionOne } from "./section-one";
 import { SectionSeven } from "./section-seven";
-import { SectionSix } from "./section-six";
-import { SectionThree } from "./section-three";
 import { SectionTwo } from "./section-two";
 
 export function StartPage() {
@@ -15,10 +13,11 @@ export function StartPage() {
       <SectionOne />
       <SectionTwo />
       <SectionFour />
-      <SectionThree />
+      {/* <SectionThree /> */}
       <SectionSeven />
-      <SectionSix />
+      {/* <SectionSix /> */}
       {/* <SectionFive /> */}
+      <div className="my-8"></div>
     </>
   );
 }

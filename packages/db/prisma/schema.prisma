@@ -571,16 +571,12 @@ model Transaction {
     accountId       Int
     account         StudentAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
     schoolYear      SchoolYear     @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
-    journal         Journal?       @relation(fields: [journalId], references: [id])
-    journalId       Int?
 }
 
 model Journal {
-    id           Int           @id @default(autoincrement())
-    name         String
-    description  String?
-    fees         Fee[]
-    transactions Transaction[]
+    id          Int     @id @default(autoincrement())
+    name        String
+    description String?
 }
 
 model Fee {
@@ -595,11 +591,8 @@ model Fee {
     updatedBy   String?
     classroomId String
     isActive    Boolean?  @default(true)
+    isRequired  Boolean?  @default(false)
     classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
-    journal     Journal?  @relation(fields: [journalId], references: [id])
-    journalId   Int?
-    feeTypeId   String?
-    feeType     FeeType?  @relation(fields: [feeTypeId], references: [id])
 }
 
 model FeeType {
@@ -610,7 +603,6 @@ model FeeType {
     createdBy   User     @relation(fields: [userId], references: [id])
     createdById String
     userId      String
-    Fee         Fee[]
 }
 
 model StudentContact {
