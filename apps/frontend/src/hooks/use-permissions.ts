@@ -17,6 +17,7 @@ const useIsLoggedIn = () => {
 
 export function useGetPermissions(permissionsOverride?: Permission[]) {
   //const permissionsResult = api.user.permissions.useQuery();
+  // Assuming permissionAtom is loaded the Header.tsx file
   const permissionsResult = useAtomValue(permissionAtom);
 
   const permissions = permissionsOverride ?? permissionsResult;
@@ -60,7 +61,7 @@ export function useCheckPermissions(
     user.schoolId,
   );
 }
-
+// Not Used now. Moved to Header. to load permissions on login
 export function usePermissionsLoaded() {
   const isLoggedIn = useIsLoggedIn();
   const permissionsQuery = api.user.permissions.useQuery();

@@ -198,7 +198,7 @@ export function PolicyTable({
                               <>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
-                                  className="flex items-center gap-2 bg-destructive text-destructive-foreground"
+                                  className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
                                   onSelect={async () => {
                                     const isConfirmed = await confirm({
                                       title: t("delete"),
@@ -216,7 +216,7 @@ export function PolicyTable({
                                     }
                                   }}
                                 >
-                                  <Trash2 className="mr-2 h-4 w-4" />{" "}
+                                  <Trash2 className="mr-2 h-4 w-4" />
                                   {t("delete")}
                                 </DropdownMenuItem>
                               </>
