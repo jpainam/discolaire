@@ -15,7 +15,6 @@ import {
   CommandSeparator,
 } from "@repo/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
-import { ScrollArea } from "@repo/ui/scroll-area";
 
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
@@ -93,24 +92,22 @@ export const StaffSelector = ({
           <CommandList>
             <CommandEmpty>{t("not_found")}</CommandEmpty>
             <CommandGroup>
-              <ScrollArea className={staffs.length > 7 ? "h-[350px]" : ""}>
-                {staffs.map((staff) => (
-                  <CommandItem
-                    key={staff.id}
-                    className="flex w-full cursor-pointer items-center justify-between space-x-2"
-                    onSelect={() => {
-                      setValue(staff.id);
-                      setOpen(false);
-                      onChange?.(staff.id);
-                    }}
-                  >
-                    <span>{getFullName(staff)}</span>
-                    {value === staff.id && (
-                      <Check className="text-brand" strokeWidth={2} size={16} />
-                    )}
-                  </CommandItem>
-                ))}
-              </ScrollArea>
+              {staffs.map((staff) => (
+                <CommandItem
+                  key={staff.id}
+                  className="flex w-full cursor-pointer items-center justify-between space-x-2"
+                  onSelect={() => {
+                    setValue(staff.id);
+                    setOpen(false);
+                    onChange?.(staff.id);
+                  }}
+                >
+                  <span>{getFullName(staff)}</span>
+                  {value === staff.id && (
+                    <Check className="text-brand" strokeWidth={2} size={16} />
+                  )}
+                </CommandItem>
+              ))}
             </CommandGroup>
             {onSelectCreateLevel !== undefined && (
               <>

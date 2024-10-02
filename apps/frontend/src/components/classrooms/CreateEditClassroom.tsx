@@ -112,11 +112,11 @@ export function CreateEditClassroom({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="h-[calc(100vh-10rem)] items-start overflow-y-auto">
-          <div className="grid gap-x-4 p-2 md:grid-cols-2">
+          <div className="grid gap-4 p-2 md:grid-cols-2">
             <InputField label={t("class_name_report")} name="reportName" />
             <InputField label={t("class_name")} name="name" />
             <InputField type="number" label={t("max_size")} name="maxSize" />
-            <Separator className="col-span-full" />
+
             <SelectField
               label={t("level")}
               placeholder={t("choose_class_level")}
@@ -144,12 +144,12 @@ export function CreateEditClassroom({
                 value: l.id.toString(),
               }))}
             />
-            <Separator className="my-0z col-span-full" />
+
             <FormField
               control={form.control}
               name={"seniorAdvisorId"}
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="space-y-0">
                   <FormLabel>{t("senior_advisor")}</FormLabel>
                   <StaffSelector
                     placeholder={t("choose_senior_advisor")}
@@ -165,7 +165,7 @@ export function CreateEditClassroom({
               control={form.control}
               name={"headTeacherId"}
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="space-y-0">
                   <FormLabel>{t("head_teacher")}</FormLabel>
                   <StaffSelector
                     placeholder={t("choose_head_teacher")}

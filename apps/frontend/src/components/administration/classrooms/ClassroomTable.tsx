@@ -107,7 +107,7 @@ export default function ClassroomTable() {
                         <DropdownMenuItem
                           onSelect={() => {
                             openSheet({
-                              title: t("edit"),
+                              title: <span className="px-4">{t("edit")}</span>,
                               className: "w-[600px]",
                               view: (
                                 <CreateEditClassroom classroom={classroom} />
