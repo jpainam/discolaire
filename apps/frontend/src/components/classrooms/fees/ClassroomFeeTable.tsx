@@ -31,7 +31,6 @@ import {
 
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { CURRENCY } from "~/lib/constants";
-import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
 import { CreateEditFee } from "./CreateEditFee";
@@ -58,6 +57,12 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
   const utils = api.useUtils();
   const deleteFeeMutation = api.fee.delete.useMutation({
     onSettled: () => utils.fee.invalidate(),
+    onSuccess: () => {
+      toast.success(t("deleted_successfully"), { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
   });
   const { openModal } = useModal();
   const confirm = useConfirm();
@@ -134,13 +139,13 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
                             <DropdownMenuItem
                               onSelect={() => {
                                 openModal({
-                                  title: <div>{t("edit")}</div>,
+                                  title: t("edit"),
                                   className: "w-[500px]",
                                   view: <CreateEditFee fee={fee} />,
                                 });
                               }}
                             >
-                              <Pencil className="mr-2 h-3 w-3" />
+                              <Pencil className="mr-2 h-4 w-4" />
                               {t("edit")}
                             </DropdownMenuItem>
                           )}
@@ -155,25 +160,15 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
                                     description: t("delete_confirmation"),
                                   });
                                   if (isConfirmed) {
-                                    toast.promise(
-                                      deleteFeeMutation.mutateAsync({
-                                        id: fee.id,
-                                      }),
-                                      {
-                                        loading: t("deleting"),
-                                        success: () => {
-                                          return t("deleted_successfully");
-                                        },
-                                        error: (error) => {
-                                          return getErrorMessage(error);
-                                        },
-                                      },
-                                    );
+                                    toast.loading(t("deleting"), { id: 0 });
+                                    deleteFeeMutation.mutate({
+                                      id: fee.id,
+                                    });
                                   }
                                 }}
                               >
-                                <Trash2 className="mr-2 h-3 w-3" />
-                                <span>{t("delete")}</span>
+                                <Trash2 className="mr-2 h-4 w-4" />
+                                {t("delete")}
                               </DropdownMenuItem>
                             </>
                           )}
