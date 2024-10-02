@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { format } from "date-fns";
 import {
   CheckCircleIcon,
   ClockIcon,
@@ -14,6 +13,7 @@ import {
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/hooks/use-locale";
+import { useRouter } from "@repo/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import { EmptyState } from "@repo/ui/EmptyState";
 import FlatBadge from "@repo/ui/FlatBadge";
@@ -23,6 +23,7 @@ import { ScrollArea } from "@repo/ui/scroll-area";
 import { deleteFileFromAws, downloadFileFromAws } from "~/actions/upload";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
+import { routes } from "~/configs/routes";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
@@ -46,9 +47,22 @@ export function TopRightPrinter() {
       <XMLIcon className="h-6 w-6" />
     );
   };
-
-  const reportingQuery = api.reporting.all.useQuery();
+  const router = useRouter();
   const utils = api.useUtils();
+  const deleteAllMutation = api.reporting.clearAll.useMutation({
+    onSettled: () => {
+      void utils.reporting.invalidate();
+    },
+    onSuccess: () => {
+      toast.success(t("deleted_successfully"), { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const reportingQuery = api.reporting.userReports.useQuery();
+
   const deleteReportingMutation = api.reporting.delete.useMutation();
   useEffect(() => {
     const interval = setInterval(() => {
@@ -57,8 +71,13 @@ export function TopRightPrinter() {
     return () => clearInterval(interval);
   }, [reportingQuery]);
 
-  const { t } = useLocale();
+  const { t, i18n } = useLocale();
   //const confirm = useConfirm();
+  const dateFormat = Intl.DateTimeFormat(i18n.language, {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  });
 
   return (
     <Popover>
@@ -67,8 +86,8 @@ export function TopRightPrinter() {
           <PrinterIcon className="h-4 w-4" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-96 p-2" align="end">
-        <h4 className="mb-2 font-medium">{t("reports")}</h4>
+      <PopoverContent className="w-96 p-0" align="end">
+        {/* <h4 className="mb-2 font-medium">{t("reports")}</h4> */}
         {reportingQuery.isPending && (
           <div className="flex items-center justify-center">
             <Loader className="h-6 w-6 animate-spin" />
@@ -77,7 +96,7 @@ export function TopRightPrinter() {
         {reportingQuery.data?.length === 0 && (
           <EmptyState title={t("no_reports")} />
         )}
-        <ScrollArea className="h-1/2">
+        <ScrollArea className="max-h-[calc(100vh-20rem)] w-full px-2">
           {reportingQuery.data?.map((activity) => (
             <div
               key={activity.id}
@@ -104,17 +123,21 @@ export function TopRightPrinter() {
                     {activity.title}
                   </span>
                   <div className="flex flex-row text-xs text-muted-foreground">
-                    {format(activity.createdAt, "MMM d, yyyy")}
+                    {dateFormat.format(activity.createdAt)}
                     <div className="ml-auto">
                       <FlatBadge
                         variant={
-                          activity.status == "COMPLETED" ? "green" : "red"
+                          activity.status == "COMPLETED"
+                            ? "green"
+                            : activity.status == "PENDING"
+                              ? "yellow"
+                              : "red"
                         }
                         className="flex w-[100px] items-center space-x-1 py-0 text-xs"
                       >
                         {getStatusIcon(activity.status)}
                         <span className="text-xs lowercase">
-                          {activity.status}
+                          {t(activity.status.toLowerCase())}
                         </span>
                       </FlatBadge>
                     </div>
@@ -122,46 +145,69 @@ export function TopRightPrinter() {
                 </div>
               </div>
               <div className="flex items-center space-x-4">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => {
-                    // const isConfirmed = await confirm({
-                    //   title: t("delete"),
-                    //   description: t("delete_confirmation"),
-                    //   icon: <Trash2Icon className="h-4 w-4 text-destructive" />,
-                    //   alertDialogTitle: {
-                    //     className: "flex items-center gap-2",
-                    //   },
-                    // });
-                    //if (isConfirmed) {
-                    toast.loading(t("deleting"), { id: 0 });
-                    void deleteReportingMutation.mutate(activity.id, {
-                      onSettled: () => {
-                        void utils.reporting.all.invalidate();
-                      },
-                      onSuccess: () => {
-                        toast.success(t("deleted_successfully"), { id: 0 });
-                        try {
-                          void deleteFileFromAws(activity.url);
-                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        } catch (error: any) {
-                          toast.error(error?.message, { id: 0 });
-                        }
-                      },
-                      onError: (error) => {
-                        toast.error(error.message, { id: 0 });
-                      },
-                    });
-                    //}
-                  }}
-                >
-                  <Trash2Icon className="h-4 w-4 text-destructive" />
-                </Button>
+                {activity.status == "COMPLETED" && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => {
+                      // const isConfirmed = await confirm({
+                      //   title: t("delete"),
+                      //   description: t("delete_confirmation"),
+                      //   icon: <Trash2Icon className="h-4 w-4 text-destructive" />,
+                      //   alertDialogTitle: {
+                      //     className: "flex items-center gap-2",
+                      //   },
+                      // });
+                      //if (isConfirmed) {
+                      toast.loading(t("deleting"), { id: 0 });
+                      void deleteReportingMutation.mutate(activity.id, {
+                        onSettled: () => {
+                          void utils.reporting.invalidate();
+                        },
+                        onSuccess: () => {
+                          toast.success(t("deleted_successfully"), { id: 0 });
+                          try {
+                            void deleteFileFromAws(activity.url);
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                          } catch (error: any) {
+                            toast.error(error?.message, { id: 0 });
+                          }
+                        },
+                        onError: (error) => {
+                          toast.error(error.message, { id: 0 });
+                        },
+                      });
+                      //}
+                    }}
+                  >
+                    <Trash2Icon className="h-4 w-4 text-destructive" />
+                  </Button>
+                )}
               </div>
             </div>
           ))}
         </ScrollArea>
+        {(reportingQuery.data ?? []).length > 0 && (
+          <div className="grid grid-cols-2 gap-2 border-t p-2">
+            <Button
+              onClick={() => {
+                router.push(routes.reports.index);
+              }}
+              variant={"ghost"}
+            >
+              {t("view_all")}
+            </Button>
+            <Button
+              onClick={() => {
+                toast.loading(t("deleting"), { id: 0 });
+                deleteAllMutation.mutate();
+              }}
+              variant={"ghost"}
+            >
+              <span className="text-destructive">{t("clear_all")}</span>
+            </Button>
+          </div>
+        )}
       </PopoverContent>
     </Popover>
   );

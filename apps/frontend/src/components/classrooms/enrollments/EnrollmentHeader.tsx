@@ -56,7 +56,7 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
         toast.error(error.message, { id: 0 });
       },
       onSettled: async () => {
-        await utils.reporting.all.invalidate();
+        await utils.reporting.invalidate();
       },
     },
   );

@@ -13,6 +13,23 @@ export const reportingRouter = createTRPCRouter({
       },
     });
   }),
+  clearAll: protectedProcedure.mutation(({ ctx }) => {
+    return ctx.db.reporting.deleteMany({
+      where: {
+        userId: ctx.session.user.id,
+      },
+    });
+  }),
+  userReports: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.reporting.findMany({
+      where: {
+        userId: ctx.session.user.id,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  }),
   get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
     return ctx.db.reporting.findUnique({
       where: {

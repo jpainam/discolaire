@@ -40,8 +40,8 @@ export default async function Layout({
     },
   ];
   return (
-    <div className="flex flex-col gap-2 p-2">
-      <div className="flex max-w-fit items-center rounded-full bg-muted text-muted-foreground">
+    <div className="flex flex-1 flex-col gap-2 pt-[100px]">
+      <div className="flex max-w-fit items-center rounded-full bg-muted px-2 text-muted-foreground">
         {userLinks.map((link: UserLink, _index) => {
           return (
             <TabLink

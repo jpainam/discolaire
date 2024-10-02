@@ -13,7 +13,7 @@ export default async function Page() {
   // ]);
 
   return (
-    <div className="px-0 md:px-0">
+    <div className="px-2">
       <div className="flex flex-col gap-2">
         <div className="flex flex-row justify-between">
           <h2 className="text-xl font-bold tracking-tight">

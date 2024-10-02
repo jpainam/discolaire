@@ -22,7 +22,7 @@ export function TransactionDetailsHeader() {
       toast.error(error.message, { id: 0 });
     },
     onSettled: async () => {
-      await utils.reporting.all.invalidate();
+      await utils.reporting.invalidate();
     },
   });
   return (

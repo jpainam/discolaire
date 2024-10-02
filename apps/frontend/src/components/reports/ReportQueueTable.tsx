@@ -28,7 +28,7 @@ export function ReportQueueTable({ reports }: { reports: ReportQueue[] }) {
     <div className="flex flex-col gap-4">
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className="bg-muted/50">
             <TableHead>{t("created")}</TableHead>
             <TableHead>{t("jobName")}</TableHead>
             <TableHead>{t("expectedDate")}</TableHead>

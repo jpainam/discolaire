@@ -1,15 +1,9 @@
-import { Suspense } from "react";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { auth } from "@repo/auth";
 
-import { ContactCard } from "~/components/contacts/ContactCard";
 import { DashboardClassroomSize } from "~/components/dashboard/DashboardClassroomSize";
 import { DashboardTransactionTrend } from "~/components/dashboard/DashboardTransactionTrend";
-import { EffectiveStat } from "~/components/dashboard/EffectiveStat";
-import { SchoolLife } from "~/components/dashboard/SchoolLife";
-import { SearchBlock } from "~/components/dashboard/SearchBlock";
 
 export default async function DashboardPage() {
   // const signedUrl = await fetch(
@@ -29,19 +23,16 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="grid grid-cols-12 gap-4 px-6 md:mt-4 md:px-8 2xl:px-10">
+    <div className="grid grid-cols-12 gap-4 px-4 pt-[100px]">
       <div className="col-span-full text-lg font-bold md:text-2xl">
         Dashboard
-        <Link target="_blank" href={"#"}>
-          The link
-        </Link>
       </div>
-      <SearchBlock className="col-span-full md:col-span-6" />
-      <SchoolLife />
-      <Suspense>
+      {/* <SearchBlock className="col-span-full md:col-span-6" /> */}
+      {/* <SchoolLife /> */}
+      {/* <Suspense>
         <EffectiveStat className="col-span-full" />
       </Suspense>
-      <ContactCard className="col-span-4" />
+      <ContactCard className="col-span-4" /> */}
 
       {/* <Suspense>
         <TransactionStat className="col-span-full" />
