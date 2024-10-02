@@ -1,6 +1,8 @@
 import { z } from "zod";
 
 import { classroomService } from "../services/classroom-service";
+import { submitReportJob } from "../services/reporting-service";
+import { schoolService } from "../services/school-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -108,9 +110,11 @@ export const classroomRouter = createTRPCRouter({
       size: count.size,
     };
   }),
-  students: protectedProcedure.input(z.string()).query(async ({ input }) => {
-    return classroomService.getStudents(input);
-  }),
+  students: protectedProcedure
+    .input(z.string().min(1))
+    .query(async ({ input }) => {
+      return classroomService.getStudents(input);
+    }),
   create: protectedProcedure
     .input(createUpdateSchema)
     .mutation(async ({ ctx, input }) => {
@@ -249,6 +253,36 @@ export const classroomRouter = createTRPCRouter({
             },
           },
         },
+      });
+    }),
+
+  printStudents: protectedProcedure
+    .input(
+      z.object({
+        title: z.string().min(1),
+        type: z.enum(["pdf", "excel"]),
+        classroomId: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const data = await classroomService.getStudents(input.classroomId);
+      const report = await ctx.db.reporting.create({
+        data: {
+          userId: ctx.session.user.id,
+          title: input.title,
+          status: "PENDING",
+          type: input.type,
+          url: "",
+          schoolId: ctx.schoolId,
+        },
+      });
+      const school = await schoolService.get(ctx.schoolId);
+      return submitReportJob(input.type, {
+        reportType: "classroom_students",
+        id: report.id,
+        school: school,
+        userId: ctx.session.user.id,
+        students: data,
       });
     }),
 });

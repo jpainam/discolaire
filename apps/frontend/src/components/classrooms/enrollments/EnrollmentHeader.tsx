@@ -1,6 +1,7 @@
 "use client";
 
 import { MoreVertical, Plus } from "lucide-react";
+import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
@@ -27,6 +28,8 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
   const { openModal } = useModal();
 
   const classroomStudentsQuery = api.classroom.students.useQuery(classroomId);
+  const classroomQuery = api.classroom.get.useQuery(classroomId);
+  const classroom = classroomQuery.data;
 
   const students = classroomStudentsQuery.data ?? [];
   const male = students.filter((student) => student.gender == "male").length;
@@ -43,6 +46,20 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
       ? Math.min(...students.map((student) => getAge(student.dateOfBirth) || 0))
       : 0;
 
+  const utils = api.useUtils();
+  const printClassroomStudentMutation = api.classroom.printStudents.useMutation(
+    {
+      onSuccess: () => {
+        toast.success(t("printing_job_submitted"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSettled: async () => {
+        await utils.reporting.all.invalidate();
+      },
+    },
+  );
   if (classroomStudentsQuery.isPending) {
     return (
       <div className="grid grid-cols-4 gap-2 px-2">
@@ -131,23 +148,29 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
+              disabled={classroomQuery.isPending}
               onSelect={() => {
-                // toast.promise(printStudents(params.id, "excel"), {
-                //   loading: t("printing"),
-                //   success: () => {
-                //     router.push(routes.reports.index);
-                //     return t("printed");
-                //   },
-                //   error: (err) => {
-                //     return getErrorMessage(err);
-                //   },
-                // });
+                toast.loading(t("printing"), { id: 0 });
+                printClassroomStudentMutation.mutate({
+                  title: `${t("student_list")} ${classroom?.name} - ${t("students")}`,
+                  type: "excel",
+                  classroomId: classroomId,
+                });
               }}
             >
               <XMLIcon className="mr-2 h-4 w-4" />
               {t("xml_export")}
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                toast.loading(t("printing"), { id: 0 });
+                printClassroomStudentMutation.mutate({
+                  title: `${t("student_list")} - ${classroom?.name} - ${t("students")}`,
+                  type: "pdf",
+                  classroomId: classroomId,
+                });
+              }}
+            >
               <PDFIcon className="mr-2 h-4 w-4" />
               {t("pdf_export")}
             </DropdownMenuItem>
