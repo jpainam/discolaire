@@ -35,7 +35,7 @@ export default async function Page({
   }
   const { t } = await getServerTranslations();
   return (
-    <div className="flex flex-col gap-4 p-2">
+    <div className="flex flex-col gap-2 p-2">
       <Card>
         <CardHeader className="flex flex-row items-center space-x-4 border-b bg-muted/50 p-2">
           <Avatar className="h-20 w-20">
@@ -54,7 +54,7 @@ export default async function Page({
           <SchoolDetailAction schoolId={school.id} />
         </CardHeader>
         <CardContent className="py-4">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
             <InfoItem label={t("authorization")} value={school.authorization} />
             <InfoItem label={t("ministry")} value={school.ministry} />
             <InfoItem label={t("department")} value={school.department} />
@@ -87,14 +87,14 @@ export default async function Page({
               icon={<MapPin className="h-4 w-4" />}
             />
           </div>
-          <div className="mt-4 text-sm text-muted-foreground">
+          {/* <div className="mt-4 text-sm text-muted-foreground">
             <p>
               {t("created_at")}: {school.createdAt.toLocaleString()}
             </p>
             <p>
               {t("last_updated")}: {school.updatedAt.toLocaleString()}
             </p>
-          </div>
+          </div> */}
         </CardContent>
       </Card>
       <Card>
