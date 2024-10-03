@@ -11,7 +11,6 @@ import { Button } from "@repo/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -21,6 +20,7 @@ import {
 import { Textarea } from "@repo/ui/textarea";
 
 import { api } from "~/trpc/react";
+import { CountryPicker } from "../shared/CountryPicker";
 import { DatePickerField } from "../shared/forms/date-picker-field";
 import { InputField } from "../shared/forms/input-field";
 import { SelectField } from "../shared/forms/SelectField";
@@ -34,8 +34,8 @@ const staffCreateEditSchema = z.object({
   lastName: z.string().min(1),
   gender: z.enum(["female", "male"]).default("male"),
   isActive: z.coerce.boolean().default(true),
-  jobTitle: z.string().min(1),
-  countryId: z.string().min(1),
+  jobTitle: z.string().optional(),
+  countryId: z.string().optional(),
   observation: z.string().optional(),
   degreeId: z.string().optional(),
   employmentType: z.string().optional(),
@@ -176,28 +176,36 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
     <Form {...form}>
       <form className="h-full" onSubmit={form.handleSubmit(onSubmit)}>
         <div
-          className={"grid max-h-[85vh] grid-cols-2 gap-2 overflow-y-auto p-2"}
+          className={
+            "grid max-h-[85vh] grid-cols-2 gap-x-8 gap-y-2 overflow-y-auto p-2"
+          }
         >
-          <SelectField
-            label={t("civility")}
-            {...classNames}
-            name="prefix"
-            items={prefixes}
-          />
-          <InputField name="lastName" {...classNames} label={t("lastName")} />
-          <InputField name="firstName" {...classNames} label={t("firstName")} />
-          <InputField name="email" {...classNames} label={t("email")} />
+          <SelectField label={t("civility")} name="prefix" items={prefixes} />
+          <InputField name="lastName" label={t("lastName")} />
+          <InputField name="firstName" label={t("firstName")} />
+          <InputField name="email" label={t("email")} />
 
-          <InputField
-            name="phoneNumber1"
-            {...classNames}
-            label={`${t("phone")} 1`}
+          <InputField name="phoneNumber1" label={`${t("phone")} 1`} />
+          <InputField name="phoneNumber2" label={`${t("phone")} 2`} />
+          <InputField name="jobTitle" label={t("jobTitle")} />
+          <FormField
+            control={form.control}
+            name="countryId"
+            render={({ field }) => (
+              <FormItem className="space-y-0">
+                <FormLabel htmlFor="countryId">{t("citizenship")}</FormLabel>
+                <FormControl>
+                  <CountryPicker
+                    placeholder={t("citizenship")}
+                    onChange={field.onChange}
+                    defaultValue={field.value}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          <InputField
-            name="phoneNumber2"
-            {...classNames}
-            label={`${t("phone")} 2`}
-          />
+
           <InputField
             name="address"
             {...classNames}
@@ -225,7 +233,6 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
                       defaultValue={staff?.degreeId?.toString() ?? undefined}
                     />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -268,7 +275,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
                         className="h-24 rounded-md border p-2"
                       />
                     </FormControl>
-                    <FormDescription></FormDescription>
+
                     <FormMessage />
                   </FormItem>
                 )}
@@ -279,7 +286,8 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
 
         <div className="m-4 flex items-center justify-end gap-4">
           <Button
-            className="h-8 w-auto"
+            size={"sm"}
+            type="button"
             variant={"outline"}
             onClick={() => {
               closeSheet();
@@ -287,7 +295,13 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
           >
             {t("cancel")}
           </Button>
-          <Button className="h-8 w-auto" size={"sm"} type="submit">
+          <Button
+            isLoading={
+              updateStaffMutation.isPending || createStaffMutation.isPending
+            }
+            size={"sm"}
+            type="submit"
+          >
             {staff ? t("edit") : t("submit")}
           </Button>
         </div>

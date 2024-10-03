@@ -596,6 +596,7 @@
   "reinitializeUserPasswordDescription2": " This will log out the user and require a new login with the new password.",
   "relationship": "Relationship",
   "religion": "Religion",
+  "edit_staff": "Edit Staff",
   "religions": "Religions",
   "reload": "Reload",
   "remaining": "Remaining",
