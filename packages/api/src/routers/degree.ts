@@ -4,6 +4,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const degreeRouter = createTRPCRouter({
   all: protectedProcedure.query(({ ctx }) => {
+    console.log(">>>>>>>>>>>>>>", ctx.schoolId);
     return ctx.db.degree.findMany({
       orderBy: {
         name: "asc",

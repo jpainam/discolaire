@@ -120,6 +120,7 @@ export const StaffLevelSelector = ({
                   className="flex w-full cursor-pointer items-center gap-x-2"
                   onSelect={() => {
                     openModal({
+                      className: "w-96",
                       title: t("createANewLevel"),
                       view: <CreateStaffLevel />,
                     });
@@ -147,11 +148,12 @@ function CreateStaffLevel() {
       name: "",
     },
   });
+  const { t } = useLocale();
   const utils = api.useUtils();
   const createStaffLevelMutation = api.degree.create.useMutation({
     onSettled: () => utils.degree.invalidate(),
     onSuccess: () => {
-      toast.success("created_successfully", { id: 0 });
+      toast.success(t("created_successfully"), { id: 0 });
       closeModal();
     },
     onError: (error) => {
@@ -160,9 +162,10 @@ function CreateStaffLevel() {
   });
 
   const handleSubmit = (data: z.infer<typeof createLevelSchema>) => {
+    toast.loading(t("creating"), { id: 0 });
     createStaffLevelMutation.mutate(data);
   };
-  const { t } = useLocale();
+
   const { closeModal } = useModal();
   return (
     <Form {...form}>
@@ -194,8 +197,12 @@ function CreateStaffLevel() {
           >
             {t("cancel")}
           </Button>
-          <Button type="submit" size={"sm"}>
-            {t("submit")}{" "}
+          <Button
+            isLoading={createStaffLevelMutation.isPending}
+            type="submit"
+            size={"sm"}
+          >
+            {t("submit")}
           </Button>
         </div>
       </form>
