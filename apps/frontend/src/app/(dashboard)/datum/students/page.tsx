@@ -3,7 +3,7 @@ import { StudentPageHeader } from "./StudentPageHeader";
 
 export default function Page() {
   return (
-    <div className="flex flex-col gap-4 pt-[10px]">
+    <div className="flex flex-col pt-[10px]">
       <StudentPageHeader />
       <StudentDataTable />
     </div>

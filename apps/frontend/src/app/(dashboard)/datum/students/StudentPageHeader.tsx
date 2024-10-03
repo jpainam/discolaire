@@ -1,15 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import { PlusIcon } from "lucide-react";
+import { ChevronDownIcon, MoreVertical, PlusIcon } from "lucide-react";
 
 import { useLocale } from "@repo/hooks/use-locale";
 import { useRouter } from "@repo/hooks/use-router";
 import { Button } from "@repo/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/dropdown-menu";
 import { Label } from "@repo/ui/label";
 
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { StudentSearch } from "~/components/students/StudentSearch";
 import { routes } from "~/configs/routes";
+import { cn } from "~/lib/utils";
 
 export function StudentPageHeader() {
   const { t } = useLocale();
@@ -19,6 +30,16 @@ export function StudentPageHeader() {
   return (
     <div className="flex flex-row items-center gap-2 border-b px-2 py-1">
       <Label>{t("students")}</Label>
+      <Button
+        variant="outline"
+        className={cn(
+          "flex w-full justify-between bg-background text-sm font-semibold shadow-none 2xl:w-[500px]",
+        )}
+        onClick={() => setOpen(true)}
+      >
+        {t("search")}
+        <ChevronDownIcon className="ml-2 h-4 w-4" />
+      </Button>
       <StudentSearch
         open={open}
         setOpen={setOpen}
@@ -26,7 +47,7 @@ export function StudentPageHeader() {
           router.push(routes.students.details(val));
         }}
       />
-      <div className="ml-auto">
+      <div className="ml-auto flex flex-row items-center gap-2">
         <Button
           variant={"default"}
           size={"sm"}
@@ -37,6 +58,25 @@ export function StudentPageHeader() {
           <PlusIcon className="mr-2 h-4 w-4" />
           {t("create")}
         </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant={"outline"} size={"icon"}>
+              <MoreVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownHelp />
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <PDFIcon className="mr-2 h-4 w-4" />
+              {t("pdf_export")}
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <XMLIcon className="mr-2 h-4 w-4" />
+              {t("xml_export")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );

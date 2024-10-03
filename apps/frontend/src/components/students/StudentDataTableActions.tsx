@@ -1,98 +1,114 @@
 "use client";
 
 import type { Table } from "@tanstack/react-table";
-import { DownloadIcon } from "@radix-ui/react-icons";
-import { Plus, Trash2 } from "lucide-react";
+import { useEffect } from "react";
+import { ChevronsUpDown, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/dropdown-menu";
 
-import { routes } from "~/configs/routes";
-import { exportTableToCSV } from "~/lib/export";
-import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
 type StudentGetAllProcedureOutput = NonNullable<
   RouterOutputs["student"]["all"]
 >[number];
 
-interface StudentToolbarActionsProps {
+export function StudentDataTableActions({
+  table,
+}: {
   table: Table<StudentGetAllProcedureOutput>;
-}
-
-export function StudentDataTableActions({ table }: StudentToolbarActionsProps) {
+}) {
   const confirm = useConfirm();
   const { t } = useLocale();
-  const router = useRouter();
   const utils = api.useUtils();
   const deleteStudentMutation = api.student.delete.useMutation({
     onSettled: () => utils.student.invalidate(),
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+    onSuccess: () => {
+      table.toggleAllRowsSelected(false);
+      toast.success("deleted_successfully", { id: 0 });
+    },
   });
-  return (
-    <div className="flex items-center gap-2">
-      {table.getFilteredSelectedRowModel().rows.length > 0 ? (
-        <Button
-          variant={"destructive"}
-          className="h-8"
-          onClick={async () => {
-            const selectedStudentIds = table
-              .getFilteredSelectedRowModel()
-              .rows.map((row) => row.original.id);
-            const isConfirmed = await confirm({
-              title: t("delete"),
-              description: t("delete_confirmation"),
-            });
-            if (isConfirmed) {
-              toast.promise(
-                deleteStudentMutation.mutateAsync(selectedStudentIds),
-                {
-                  loading: t("deleting"),
-                  success: () => {
-                    table.toggleAllRowsSelected(false);
-                    return t("deleted_successfully");
-                  },
-                  error: (error) => {
-                    return getErrorMessage(error);
-                  },
-                },
-              );
-            }
-          }}
-        >
-          <Trash2 className="mr-2 h-4 w-4" />
-          {t("delete")} ({table.getFilteredSelectedRowModel().rows.length})
-        </Button>
-      ) : null}
-      <Button
-        size={"sm"}
-        className="h-8"
-        variant={"default"}
-        onClick={() => {
-          router.push(routes.students.create);
-        }}
-      >
-        <Plus className="mr-2 size-4" aria-hidden="true" />
-        {t("new")}
-      </Button>
+  const rows = table.getFilteredSelectedRowModel().rows;
 
-      <Button
-        variant="outline"
-        size="sm"
-        className="h-8"
-        onClick={() =>
-          exportTableToCSV(table, {
-            filename: "students",
-            excludeColumns: ["select", "actions"],
-          })
-        }
-      >
-        <DownloadIcon className="mr-2 size-4" aria-hidden="true" />
-        {t("export")}
-      </Button>
+  const deleteUsersMutation = api.user.delete.useMutation({
+    onSettled: () => utils.user.invalidate(),
+    onSuccess: () => {
+      table.toggleAllRowsSelected(false);
+      toast.success("deleted_successfully", { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
+
+  // Clear selection on Escape key press
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        table.toggleAllRowsSelected(false);
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [table]);
+
+  return (
+    <div className="animate-fadeIn fixed inset-x-0 bottom-12 z-50 mx-auto flex h-[60px] max-w-xl items-center justify-between rounded-md border bg-background px-6 py-3 shadow">
+      <p className="text-sm font-semibold">
+        {rows.length} {t("selected")}
+      </p>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={"outline"}>
+            {t("bulk_actions")} <ChevronsUpDown className="ml-1 h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>{t("pdf_export")}</DropdownMenuItem>
+          <DropdownMenuItem>{t("xml_export")}</DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onSelect={async () => {
+              const isConfirmed = await confirm({
+                title: t("delete"),
+                description: t("delete_confirmation"),
+                icon: <Trash2 className="h-6 w-6 text-destructive" />,
+                alertDialogTitle: {
+                  className: "flex items-center gap-2",
+                },
+              });
+
+              if (isConfirmed) {
+                const selectedStudentIds = rows.map((row) => row.original.id);
+                toast.loading("deleting", { id: 0 });
+                deleteStudentMutation.mutate(selectedStudentIds);
+              }
+              if (isConfirmed) {
+                toast.loading("deleting", { id: 0 });
+                const selectedIds = rows.map((row) => row.original.id);
+                deleteUsersMutation.mutate(selectedIds);
+              }
+            }}
+            className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+          >
+            {t("delete")}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }

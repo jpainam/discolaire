@@ -2,23 +2,18 @@
 
 import { useMemo } from "react";
 import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
+import { toast } from "sonner";
 
-import type { RouterOutputs } from "@repo/api";
-import type { DataTableFilterField } from "@repo/ui/data-table/v2/datatypes";
 import { useLocale } from "@repo/i18n";
-import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
-import { DataTable } from "@repo/ui/data-table/v2/data-table";
-import { DataTableToolbar } from "@repo/ui/data-table/v2/data-table-toolbar";
-import { useDataTable } from "@repo/ui/data-table/v2/use-data-table";
+import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
+import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
+import { DataTable, useDataTable } from "@repo/ui/datatable/index";
 import { EmptyState } from "@repo/ui/EmptyState";
 
-import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
 import { StudentDataTableActions } from "./StudentDataTableActions";
 import { fetchStudentColumns } from "./StudentDataTableColumns";
-
-type StudentGetAllProcedureOutput = RouterOutputs["student"]["all"][number];
 
 export function StudentDataTable() {
   const { t } = useLocale();
@@ -40,22 +35,6 @@ export function StudentDataTable() {
     q: lastName ?? undefined,
   });
 
-  const filterFields: DataTableFilterField<StudentGetAllProcedureOutput>[] = [
-    {
-      label: t("fullName"),
-      value: "lastName",
-      placeholder: t("search"),
-    },
-    // {
-    //   label: t("gender"),
-    //   value: "gender",
-    //   options: ["female", "male"].map((gender) => ({
-    //     label: t(gender),
-    //     value: gender,
-    //   })),
-    // },
-  ];
-
   const columns = useMemo(() => {
     const { columns } = fetchStudentColumns({
       t: t,
@@ -64,25 +43,17 @@ export function StudentDataTable() {
     return columns;
   }, [t, fullDateFormatter]);
 
-  const pageCount = Math.ceil(
-    (studentsCountQuery.data?.total ?? 0) / (studentsQuery.data?.length ?? 1),
-  );
-
   const { table } = useDataTable({
     data: studentsQuery.data ?? [],
     columns: columns,
-    pageCount: pageCount,
-    // optional props
-    filterFields: filterFields,
-    defaultPerPage: 20,
-    defaultSort: "lastName.asc",
+    rowCount: studentsCountQuery.data?.total ?? 0,
   });
 
   if (studentsQuery.isPending) {
     return <DataTableSkeleton rowCount={15} columnCount={8} />;
   }
   if (studentsQuery.error) {
-    showErrorToast(studentsQuery.error);
+    toast(studentsQuery.error.message);
     return;
   }
   if (studentsQuery.data.length === 0) {
@@ -90,11 +61,12 @@ export function StudentDataTable() {
   }
 
   return (
-    <div className="p-2">
-      <DataTable table={table} variant={"compact"}>
-        <DataTableToolbar table={table} filterFields={filterFields}>
-          <StudentDataTableActions table={table} />
-        </DataTableToolbar>
+    <div className="px-2">
+      <DataTable
+        table={table}
+        floatingBar={<StudentDataTableActions table={table} />}
+      >
+        <DataTableToolbar table={table}></DataTableToolbar>
       </DataTable>
     </div>
   );
