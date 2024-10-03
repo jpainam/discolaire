@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Check, ChevronsUpDown, Plus } from "lucide-react";
+import { toast } from "sonner";
+import { z } from "zod";
 
+import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -12,6 +15,16 @@ import {
   CommandList,
   CommandSeparator,
 } from "@repo/ui/command";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useForm,
+} from "@repo/ui/form";
+import { Input } from "@repo/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { ScrollArea } from "@repo/ui/scroll-area";
 import { Skeleton } from "@repo/ui/skeleton";
@@ -25,7 +38,6 @@ interface StaffLevelSelectorProps {
   disabled?: boolean;
   defaultValue?: string;
   onChange: (value: string) => void;
-  onSelectCreateLevel?: () => void;
 }
 
 export const StaffLevelSelector = ({
@@ -33,13 +45,13 @@ export const StaffLevelSelector = ({
   disabled = false,
   onChange,
   defaultValue,
-  onSelectCreateLevel,
 }: StaffLevelSelectorProps) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<string>(defaultValue ?? "");
   const { t } = useLocale();
+  const { openModal } = useModal();
 
-  const staffLevelsQuery = api.staff.levels.useQuery();
+  const staffLevelsQuery = api.degree.all.useQuery();
   const staffLevels = staffLevelsQuery.data ?? [];
 
   if (staffLevelsQuery.isError) {
@@ -54,7 +66,6 @@ export const StaffLevelSelector = ({
       <Popover open={open} onOpenChange={setOpen} modal={false}>
         <PopoverTrigger asChild>
           <Button
-            size={"sm"}
             variant={"outline"}
             disabled={disabled}
             className={cn(`w-[250px] justify-between`, className)}
@@ -83,7 +94,7 @@ export const StaffLevelSelector = ({
                     <CommandItem
                       key={level.id}
                       className="flex w-full cursor-pointer items-center justify-between space-x-2"
-                      onSelect={() => {
+                      onSelect={(_selectedValue) => {
                         const v =
                           level.id == Number(value) ? undefined : level.id;
                         onChange(v?.toString() ?? "");
@@ -103,27 +114,21 @@ export const StaffLevelSelector = ({
                   ))}
                 </ScrollArea>
               </CommandGroup>
-              {onSelectCreateLevel !== undefined && (
-                <>
-                  <CommandSeparator />
-                  <CommandGroup>
-                    <CommandItem
-                      className="flex w-full cursor-pointer items-center gap-x-2"
-                      onSelect={() => {
-                        onSelectCreateLevel();
-                        setOpen(false);
-                      }}
-                      onClick={() => {
-                        onSelectCreateLevel();
-                        setOpen(false);
-                      }}
-                    >
-                      <Plus size={12} />
-                      {t("createANewLevel")}
-                    </CommandItem>
-                  </CommandGroup>
-                </>
-              )}
+              <CommandSeparator />
+              <CommandGroup>
+                <CommandItem
+                  className="flex w-full cursor-pointer items-center gap-x-2"
+                  onSelect={() => {
+                    openModal({
+                      title: t("createANewLevel"),
+                      view: <CreateStaffLevel />,
+                    });
+                  }}
+                >
+                  <Plus size={12} />
+                  {t("createANewLevel")}
+                </CommandItem>
+              </CommandGroup>
             </CommandList>
           </Command>
         </PopoverContent>
@@ -131,3 +136,69 @@ export const StaffLevelSelector = ({
     </div>
   );
 };
+
+const createLevelSchema = z.object({
+  name: z.string().min(1),
+});
+function CreateStaffLevel() {
+  const form = useForm({
+    schema: createLevelSchema,
+    defaultValues: {
+      name: "",
+    },
+  });
+  const utils = api.useUtils();
+  const createStaffLevelMutation = api.degree.create.useMutation({
+    onSettled: () => utils.degree.invalidate(),
+    onSuccess: () => {
+      toast.success("created_successfully", { id: 0 });
+      closeModal();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
+
+  const handleSubmit = (data: z.infer<typeof createLevelSchema>) => {
+    createStaffLevelMutation.mutate(data);
+  };
+  const { t } = useLocale();
+  const { closeModal } = useModal();
+  return (
+    <Form {...form}>
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={form.handleSubmit(handleSubmit)}
+      >
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("name")}</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="ml-auto flex flex-row items-center gap-2">
+          <Button
+            onClick={() => {
+              closeModal();
+            }}
+            type="button"
+            variant={"outline"}
+            size={"sm"}
+          >
+            {t("cancel")}
+          </Button>
+          <Button type="submit" size={"sm"}>
+            {t("submit")}{" "}
+          </Button>
+        </div>
+      </form>
+    </Form>
+  );
+}

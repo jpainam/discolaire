@@ -82,7 +82,7 @@ const VirtualizedCommand = ({
     <Command shouldFilter={false} onKeyDown={handleKeyDown}>
       <CommandInput onValueChange={handleSearch} placeholder={placeholder} />
       <CommandList>
-        <CommandEmpty>No item found.</CommandEmpty>
+        <CommandEmpty>{t("no_item_found")}</CommandEmpty>
         <CommandGroup
           ref={parentRef}
           style={{

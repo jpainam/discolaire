@@ -607,6 +607,8 @@
   "reportName": "Report Name",
   "report_cards": "Report Cards",
   "reportings": "Reportings",
+  "no_item_found": "No item found",
+  "create_staff": "Create Staff",
   "request": "Request",
   "required_fees": "Required fees",
   "required_fees_description": "This fee is required before the student can be enrolled",

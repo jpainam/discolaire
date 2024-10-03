@@ -18,11 +18,8 @@ import {
 import { api } from "~/trpc/react";
 
 type User = RouterOutputs["user"]["all"][number];
-interface TasksTableFloatingBarProps {
-  table: Table<User>;
-}
 
-export function UserDataTableAction({ table }: TasksTableFloatingBarProps) {
+export function UserDataTableAction({ table }: { table: Table<User> }) {
   const rows = table.getFilteredSelectedRowModel().rows;
   const utils = api.useUtils();
   const { t } = useLocale();
@@ -63,8 +60,8 @@ export function UserDataTableAction({ table }: TasksTableFloatingBarProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem>Export in csv</DropdownMenuItem>
-          <DropdownMenuItem>Export in excel</DropdownMenuItem>
+          <DropdownMenuItem>{t("pdf_export")}</DropdownMenuItem>
+          <DropdownMenuItem>{t("xml_export")}</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onSelect={async () => {

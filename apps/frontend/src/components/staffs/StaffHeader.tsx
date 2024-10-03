@@ -39,7 +39,7 @@ import { StaffEffectif } from "./StaffEffectif";
 export function StaffHeader() {
   const { t } = useLocale();
   const jobTitlesQuery = api.staff.jobTitles.useQuery();
-  //const levels = api.staff.levels.useQuery();
+
   const canCreateStaff = useCheckPermissions(
     PermissionAction.CREATE,
     "staff:profile",
@@ -68,72 +68,31 @@ export function StaffHeader() {
           <Button
             onClick={() => {
               openSheet({
+                title: t("create_staff"),
                 className: "w-[750px]",
                 view: <CreateEditStaff />,
               });
             }}
             size="icon"
             variant="outline"
-            className="h-8 w-8"
           >
             <Plus className="h-4 w-4" />
           </Button>
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size="icon" variant="outline" className="h-8 w-8">
+            <Button size="icon" variant="outline">
               <MoreVertical className="h-4 w-4" />
-              <span className="sr-only">More</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() => {
-                // toast.promise(
-                //   publishReportQueue({
-                //     code: "staff_list",
-                //     name: t("staff_list"),
-                //     type: "pdf",
-                //   }),
-                //   {
-                //     loading: "Publishing report queue...",
-                //     success: () => {
-                //       router.push(routes.reports.index);
-                //       return "Report queue published";
-                //     },
-                //     error: (e) => {
-                //       return getErrorMessage(e);
-                //     },
-                //   }
-                // );
-              }}
-            >
+            <DropdownMenuItem>
               <PDFIcon className="mr-2 h-4 w-4" />
-              {t("staff_list")}
+              {t("pdf_export")}
             </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                //   toast.promise(
-                //     publishReportQueue({
-                //       code: "staff_list",
-                //       name: t("staff_list"),
-                //       type: "pdf",
-                //     }),
-                //     {
-                //       loading: "Publishing report queue...",
-                //       success: () => {
-                //         router.push(routes.reports.index);
-                //         return "Report queue published";
-                //       },
-                //       error: (e) => {
-                //         return getErrorMessage(e);
-                //       },
-                //     }
-                //   );
-              }}
-            >
+            <DropdownMenuItem>
               <XMLIcon className="mr-2 h-4 w-4" />
-              {t("staff_list")}
+              {t("xml_export")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

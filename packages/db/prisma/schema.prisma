@@ -415,9 +415,11 @@ model ContactRelationship {
 }
 
 model Degree {
-    id    Int     @id @default(autoincrement())
-    name  String
-    Staff Staff[]
+    id       Int     @id @default(autoincrement())
+    name     String
+    Staff    Staff[]
+    School   School  @relation(fields: [schoolId], references: [id])
+    schoolId String
 }
 
 model Staff {
@@ -702,6 +704,7 @@ model School {
     levels        ClassroomLevel[]
     terms         Term[]
     documents     Document[]
+    degrees       Degree[]
 }
 
 model FormerSchool {

@@ -51,7 +51,6 @@ export function UserDataTable() {
   }
   return (
     <DataTable
-      className="mx-2"
       floatingBar={<UserDataTableAction table={table} />}
       table={table}
     >

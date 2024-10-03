@@ -18,7 +18,6 @@ import {
   FormMessage,
   useForm,
 } from "@repo/ui/form";
-import { Separator } from "@repo/ui/separator";
 import { Textarea } from "@repo/ui/textarea";
 
 import { api } from "~/trpc/react";
@@ -176,7 +175,9 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
   return (
     <Form {...form}>
       <form className="h-full" onSubmit={form.handleSubmit(onSubmit)}>
-        <div className={"grid max-h-[85vh] grid-cols-2 overflow-y-auto py-4"}>
+        <div
+          className={"grid max-h-[85vh] grid-cols-2 gap-2 overflow-y-auto p-2"}
+        >
           <SelectField
             label={t("civility")}
             {...classNames}
@@ -186,7 +187,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
           <InputField name="lastName" {...classNames} label={t("lastName")} />
           <InputField name="firstName" {...classNames} label={t("firstName")} />
           <InputField name="email" {...classNames} label={t("email")} />
-          <Separator className="col-span-full my-8" />
+
           <InputField
             name="phoneNumber1"
             {...classNames}
@@ -203,99 +204,79 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
             className="col-span-full px-2"
             label={t("address")}
           />
-          <Separator className="col-span-full my-4" />
-          <SelectField
-            label={t("employmentType")}
-            inputClassName="h-8"
-            className="mx-2"
-            items={employmentTypeItems}
-            name="employmentType"
-          />
-          <FormField
-            control={form.control}
-            name={"degreeId"}
-            render={({ field }) => (
-              <FormItem className="mx-2">
-                <FormLabel>{t("degree")}</FormLabel>
-                <FormControl>
-                  <StaffLevelSelector
-                    className="w-full"
-                    onChange={(val) => {
-                      field.onChange(val);
-                    }}
-                    defaultValue={staff?.degreeId?.toString() ?? undefined}
-                    onSelectCreateLevel={() => console.log("create level")}
-                  />
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Separator className="col-span-full my-4" />
-          <DatePickerField
-            inputClassName="h-8"
-            className="mx-2"
-            name={"dateOfBirth"}
-            label={t("dateOfBirth")}
-          />
-          <DatePickerField
-            className="mx-2"
-            inputClassName="h-8"
-            name={"dateOfHire"}
-            label={t("dateOfHire")}
-          />
-          <DatePickerField
-            className="mx-2 mt-4"
-            inputClassName="h-8"
-            name={"dateOfLastAdvancement"}
-            label={t("dateOfLastAdvancement")}
-          />
-          <DatePickerField
-            className="mx-2 mt-4"
-            inputClassName="h-8"
-            name={"dateOfCriminalRecordCheck"}
-            label={t("lastCriminalRecordCheck")}
-          />
-          <Separator className="col-span-full my-4" />
-          <SelectField
-            label={t("sendAgenda")}
-            inputClassName="h-8"
-            className="mx-2"
-            items={sendAgendaFrequency}
-            name="sendAgendaFrequency"
-          />
-          <SelectField
-            label={t("isTeacher")}
-            inputClassName="h-8"
-            className="mx-2"
-            items={isTeacherItems}
-            name="isTeacher"
-          />
-          <Separator className="col-span-full my-4" />
-          <div className="col-span-full mx-2 flex flex-col gap-2">
+          <div className="col-span-full grid w-full grid-cols-2 gap-2 gap-x-8">
+            <SelectField
+              label={t("employmentType")}
+              items={employmentTypeItems}
+              name="employmentType"
+            />
             <FormField
               control={form.control}
-              name={"observation"}
+              name={"degreeId"}
               render={({ field }) => (
-                <FormItem className="mx-2">
-                  <FormLabel>{t("observations")}</FormLabel>
+                <FormItem className="space-y-0">
+                  <FormLabel>{t("degree")}</FormLabel>
                   <FormControl>
-                    <Textarea
-                      onChange={(event) => {
-                        field.onChange(event.target.value);
+                    <StaffLevelSelector
+                      className="w-full"
+                      onChange={(val) => {
+                        field.onChange(val);
                       }}
-                      className="h-24 rounded-md border p-2"
+                      defaultValue={staff?.degreeId?.toString() ?? undefined}
                     />
                   </FormControl>
-                  <FormDescription></FormDescription>
+
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            <DatePickerField name={"dateOfBirth"} label={t("dateOfBirth")} />
+            <DatePickerField name={"dateOfHire"} label={t("dateOfHire")} />
+            <DatePickerField
+              name={"dateOfLastAdvancement"}
+              label={t("dateOfLastAdvancement")}
+            />
+            <DatePickerField
+              name={"dateOfCriminalRecordCheck"}
+              label={t("lastCriminalRecordCheck")}
+            />
+
+            <SelectField
+              label={t("sendAgenda")}
+              items={sendAgendaFrequency}
+              name="sendAgendaFrequency"
+            />
+            <SelectField
+              label={t("isTeacher")}
+              items={isTeacherItems}
+              name="isTeacher"
+            />
+
+            <div className="col-span-full mx-2 flex flex-col gap-2">
+              <FormField
+                control={form.control}
+                name={"observation"}
+                render={({ field }) => (
+                  <FormItem className="space-y-0">
+                    <FormLabel>{t("observations")}</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        onChange={(event) => {
+                          field.onChange(event.target.value);
+                        }}
+                        className="h-24 rounded-md border p-2"
+                      />
+                    </FormControl>
+                    <FormDescription></FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
         </div>
-        <Separator />
+
         <div className="m-4 flex items-center justify-end gap-4">
           <Button
             className="h-8 w-auto"

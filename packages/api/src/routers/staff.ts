@@ -87,13 +87,7 @@ export const staffRouter = {
     });
     return result.map((item) => item.jobTitle);
   }),
-  levels: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.degree.findMany({
-      orderBy: {
-        name: "asc",
-      },
-    });
-  }),
+
   create: protectedProcedure
     .input(createUpdateSchema)
     .mutation(({ ctx, input }) => {

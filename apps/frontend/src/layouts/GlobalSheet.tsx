@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
 import { useSheet } from "@repo/hooks/use-sheet";
-import { Separator } from "@repo/ui/separator";
 import {
   Sheet,
   SheetContent,
@@ -37,10 +36,10 @@ export default function GlobalSheet() {
         className={cn("w-[400px] p-0 sm:max-w-none", className)}
         side={placement}
       >
-        <SheetHeader>
+        <SheetHeader className="gap-0 space-y-0 border-b p-2">
           <SheetTitle>{title}</SheetTitle>
           <SheetDescription>{description}</SheetDescription>
-          {title || description ? <Separator /> : null}
+          {/* {title || description ? <Separator /> : null} */}
         </SheetHeader>
         {view}
       </SheetContent>
