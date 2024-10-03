@@ -67,7 +67,7 @@ export function TopRightPrinter() {
   useEffect(() => {
     const interval = setInterval(() => {
       void reportingQuery.refetch();
-    }, 15000);
+    }, 1500000);
     return () => clearInterval(interval);
   }, [reportingQuery]);
 
