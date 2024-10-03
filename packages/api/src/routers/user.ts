@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server";
+import bcrypt from "bcryptjs";
 import { z } from "zod";
 
 import { encryptPassword } from "../encrypt";
@@ -253,9 +254,9 @@ export const userRouter = createTRPCRouter({
           message: "User not found",
         });
       }
-      if (
-        !(await encryptPassword(input.oldPassword)).startsWith(user.password)
-      ) {
+      console.log(input.oldPassword, user.password);
+      console.log(await encryptPassword(input.oldPassword));
+      if (!(await bcrypt.compare(input.oldPassword, user.password))) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Old password is incorrect",
