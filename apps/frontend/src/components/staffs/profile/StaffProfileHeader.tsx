@@ -74,9 +74,7 @@ export function StaffProfileHeader() {
                   openModal({
                     className: "w-[500px]",
                     title: t("attach_user"),
-                    view: (
-                      <CreateEditUser entityId={params.id} type="student" />
-                    ),
+                    view: <CreateEditUser entityId={params.id} type="staff" />,
                   });
                 }}
               >
