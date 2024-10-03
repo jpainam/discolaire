@@ -74,7 +74,7 @@ export default function Edit({ school }: { school: School }) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="mx-auto grid max-w-3xl grid-cols-1 gap-x-8 gap-y-2 pt-8 md:grid-cols-2"
       >
-        <CreateEditSchoolForm />
+        <CreateEditSchoolForm school={school} />
         <Button isLoading={updateSchoolMutation.isPending} type="submit">
           {t("submit")}
         </Button>

@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect } from "react";
 import { toast } from "sonner";
 
+import type { School } from "@repo/db";
 import { useUpload } from "@repo/hooks/use-upload";
 import { useLocale } from "@repo/i18n";
 import { Checkbox } from "@repo/ui/checkbox";
@@ -18,10 +20,20 @@ import { FileUploader } from "@repo/ui/uploads/file-uploader";
 
 import { getErrorMessage } from "~/lib/handle-error";
 
-export function CreateEditSchoolForm() {
+export function CreateEditSchoolForm({ school }: { school: School }) {
   const { t } = useLocale();
   const form = useFormContext();
   const { onUpload, isPending, data: uploadedFiles } = useUpload();
+
+  useEffect(() => {
+    if (uploadedFiles.length > 0) {
+      const uploadedFile = uploadedFiles[0];
+      if (uploadedFile?.data?.id && uploadedFile.data.url) {
+        const url = `${uploadedFile.data.url}${uploadedFile.data.id}`;
+        form.setValue("logo", url);
+      }
+    }
+  }, [form, uploadedFiles]);
 
   return (
     <>
@@ -184,16 +196,12 @@ export function CreateEditSchoolForm() {
           }
           toast.promise(
             onUpload(file, {
-              destination: "/logos",
+              destination: `${school.code}`,
+              bucket: "discolaire-public",
             }),
             {
               loading: t("uploading"),
               success: () => {
-                if (uploadedFiles.length > 0) {
-                  const uploadedFile = uploadedFiles[0];
-                  console.log("setting up url", uploadedFile?.data?.url);
-                  form.setValue("logo", uploadedFile?.data?.url);
-                }
                 return t("uploaded_successfully");
               },
               error: (err) => {
@@ -204,7 +212,7 @@ export function CreateEditSchoolForm() {
         }}
         //progresses={progresses}
       />
-      {uploadedFiles.map((d, index) => (
+      {/* {uploadedFiles.map((d, index) => (
         <div key={index}>
           <p>File: {d.file.name}</p>
           {d.isPending && <p>Uploading...</p>}
@@ -213,7 +221,7 @@ export function CreateEditSchoolForm() {
           )}
           {<p>Error: {JSON.stringify(d.error)}</p>}
         </div>
-      ))}
+      ))} */}
 
       <FormField
         control={form.control}

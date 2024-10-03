@@ -30,7 +30,7 @@ export const useUpload = () => {
 
   const onUpload = async (
     inputs: File | File[],
-    metadata?: { destination: string },
+    metadata?: { destination: string; bucket?: string },
   ) => {
     const files = Array.isArray(inputs) ? inputs : [inputs];
     const initialUploads = files.map((file) => ({
@@ -59,6 +59,7 @@ export const useUpload = () => {
               body: JSON.stringify({
                 filename: file.name,
                 destination: metadata?.destination,
+                bucket: metadata?.bucket,
                 contentType: file.type,
               }),
             },
