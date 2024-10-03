@@ -170,6 +170,10 @@ export function AppSidebar() {
             title: t("former_schools"),
             url: "/administration/settings/former-schools",
           },
+          {
+            title: t("staff_level"),
+            url: "/administration/settings/staff-levels",
+          },
         ],
       },
     ],
