@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";
 import {
@@ -17,6 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { api } from "~/trpc/react";
 
 type StudentGetAllProcedureOutput = NonNullable<
@@ -31,6 +33,10 @@ export function StudentDataTableActions({
   const confirm = useConfirm();
   const { t } = useLocale();
   const utils = api.useUtils();
+  const canDeleteStudent = useCheckPermissions(
+    PermissionAction.DELETE,
+    "student:profile",
+  );
   const deleteStudentMutation = api.student.delete.useMutation({
     onSettled: () => utils.student.invalidate(),
     onError: (error) => {
@@ -42,17 +48,6 @@ export function StudentDataTableActions({
     },
   });
   const rows = table.getFilteredSelectedRowModel().rows;
-
-  const deleteUsersMutation = api.user.delete.useMutation({
-    onSettled: () => utils.user.invalidate(),
-    onSuccess: () => {
-      table.toggleAllRowsSelected(false);
-      toast.success("deleted_successfully", { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
 
   // Clear selection on Escape key press
   useEffect(() => {
@@ -80,33 +75,34 @@ export function StudentDataTableActions({
         <DropdownMenuContent>
           <DropdownMenuItem>{t("pdf_export")}</DropdownMenuItem>
           <DropdownMenuItem>{t("xml_export")}</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onSelect={async () => {
-              const isConfirmed = await confirm({
-                title: t("delete"),
-                description: t("delete_confirmation"),
-                icon: <Trash2 className="h-6 w-6 text-destructive" />,
-                alertDialogTitle: {
-                  className: "flex items-center gap-2",
-                },
-              });
+          {canDeleteStudent && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onSelect={async () => {
+                  const isConfirmed = await confirm({
+                    title: t("delete"),
+                    description: t("delete_confirmation"),
+                    icon: <Trash2 className="h-6 w-6 text-destructive" />,
+                    alertDialogTitle: {
+                      className: "flex items-center gap-2",
+                    },
+                  });
 
-              if (isConfirmed) {
-                const selectedStudentIds = rows.map((row) => row.original.id);
-                toast.loading("deleting", { id: 0 });
-                deleteStudentMutation.mutate(selectedStudentIds);
-              }
-              if (isConfirmed) {
-                toast.loading("deleting", { id: 0 });
-                const selectedIds = rows.map((row) => row.original.id);
-                deleteUsersMutation.mutate(selectedIds);
-              }
-            }}
-            className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
-          >
-            {t("delete")}
-          </DropdownMenuItem>
+                  if (isConfirmed) {
+                    const selectedStudentIds = rows.map(
+                      (row) => row.original.id,
+                    );
+                    toast.loading("deleting", { id: 0 });
+                    deleteStudentMutation.mutate(selectedStudentIds);
+                  }
+                }}
+                className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+              >
+                {t("delete")}
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

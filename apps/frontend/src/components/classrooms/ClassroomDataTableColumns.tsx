@@ -18,6 +18,7 @@ import type { RouterOutputs } from "@repo/api";
 import { useRouter } from "@repo/hooks/use-router";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { useConfirm } from "@repo/ui/confirm-dialog";
@@ -32,6 +33,7 @@ import {
 import FlatBadge from "@repo/ui/FlatBadge";
 
 import { routes } from "~/configs/routes";
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { CreateEditClassroom } from "./CreateEditClassroom";
@@ -40,10 +42,8 @@ type ClassroomProcedureOutput = RouterOutputs["classroom"]["all"][number];
 
 export function getColumns({
   t,
-  canDeleteClassroom,
 }: {
   t: TFunction<string, unknown>;
-  canDeleteClassroom: boolean;
 }): ColumnDef<ClassroomProcedureOutput, unknown>[] {
   return [
     {
@@ -290,29 +290,26 @@ export function getColumns({
     {
       id: "actions",
       cell: function Cell({ row }) {
-        return (
-          <ActionCells
-            canDeleteClassroom={canDeleteClassroom}
-            classroom={row.original}
-          />
-        );
+        return <ActionCells classroom={row.original} />;
       },
     },
   ];
 }
 
-function ActionCells({
-  classroom,
-  canDeleteClassroom,
-}: {
-  classroom: ClassroomProcedureOutput;
-  canDeleteClassroom: boolean;
-}) {
+function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
   const { openSheet } = useSheet();
   const confirm = useConfirm();
   const { t } = useLocale();
   const router = useRouter();
   const utils = api.useUtils();
+  const canDeleteClassroom = useCheckPermissions(
+    PermissionAction.DELETE,
+    "classroom:details",
+  );
+  const canUpdateClassroom = useCheckPermissions(
+    PermissionAction.UPDATE,
+    "classroom:details",
+  );
   const classroomMutation = api.classroom.delete.useMutation({
     onSettled: () => utils.classroom.invalidate(),
   });
@@ -338,28 +335,30 @@ function ActionCells({
             <Eye className="mr-2 size-4" />
             {t("details")}
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onSelect={() => {
-              openSheet({
-                className: "w-[700px]",
-                title: (
-                  <div className="p-2">
-                    {t("edit", { name: classroom.name })}
-                  </div>
-                ),
-                view: <CreateEditClassroom classroom={classroom} />,
-              });
-            }}
-          >
-            <Pencil className="mr-2 size-4" />
-            {t("edit")}
-          </DropdownMenuItem>
+          {canUpdateClassroom && (
+            <DropdownMenuItem
+              onSelect={() => {
+                openSheet({
+                  className: "w-[700px]",
+                  title: (
+                    <div className="p-2">
+                      {t("edit", { name: classroom.name })}
+                    </div>
+                  ),
+                  view: <CreateEditClassroom classroom={classroom} />,
+                });
+              }}
+            >
+              <Pencil className="mr-2 size-4" />
+              {t("edit")}
+            </DropdownMenuItem>
+          )}
           {canDeleteClassroom && (
             <>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 disabled={!canDeleteClassroom}
-                className="bg-destructive text-destructive-foreground"
+                className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
                 onSelect={async () => {
                   const isConfirmed = await confirm({
                     title: t("delete"),

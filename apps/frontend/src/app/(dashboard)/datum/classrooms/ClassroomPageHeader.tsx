@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { ChevronDownIcon, MoreVertical, PlusIcon } from "lucide-react";
+import { MoreVertical, Plus } from "lucide-react";
 
 import { useLocale } from "@repo/hooks/use-locale";
-import { useRouter } from "@repo/hooks/use-router";
+import { useSheet } from "@repo/hooks/use-sheet";
 import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import {
@@ -16,54 +15,40 @@ import {
 } from "@repo/ui/dropdown-menu";
 import { Label } from "@repo/ui/label";
 
+import { CreateEditClassroom } from "~/components/classrooms/CreateEditClassroom";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
-import { StudentSearch } from "~/components/students/StudentSearch";
-import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
-import { cn } from "~/lib/utils";
 
-export function StudentPageHeader() {
+export function ClassroomPageHeader() {
   const { t } = useLocale();
-  const router = useRouter();
-  const [open, setOpen] = useState(false);
-  const canCreateStudent = useCheckPermissions(
+  const { openSheet } = useSheet();
+
+  const canCreateClassroom = useCheckPermissions(
     PermissionAction.CREATE,
-    "student:profile",
+    "classroom:details",
   );
 
   return (
     <div className="flex flex-row items-center gap-2 border-b px-2 py-1">
-      <Label>{t("students")}</Label>
-      <Button
-        variant="outline"
-        className={cn(
-          "flex w-full justify-between bg-background text-sm font-semibold shadow-none 2xl:w-[500px]",
-        )}
-        onClick={() => setOpen(true)}
-      >
-        {t("search")}
-        <ChevronDownIcon className="ml-2 h-4 w-4" />
-      </Button>
-      <StudentSearch
-        open={open}
-        setOpen={setOpen}
-        onChange={(val) => {
-          router.push(routes.students.details(val));
-        }}
-      />
+      <Label>{t("classrooms")}</Label>
+
       <div className="ml-auto flex flex-row items-center gap-2">
-        {canCreateStudent && (
+        {canCreateClassroom && (
           <Button
-            variant={"default"}
             size={"sm"}
+            disabled={!canCreateClassroom}
             onClick={() => {
-              router.push(routes.students.create);
+              openSheet({
+                className: "w-[700px]",
+                title: t("create"),
+                view: <CreateEditClassroom />,
+              });
             }}
           >
-            <PlusIcon className="mr-2 h-4 w-4" />
-            {t("create")}
+            <Plus className="mr-2 size-4" aria-hidden="true" />
+            {t("new")}
           </Button>
         )}
         <DropdownMenu>

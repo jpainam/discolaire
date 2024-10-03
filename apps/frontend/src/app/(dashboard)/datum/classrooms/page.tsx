@@ -1,11 +1,11 @@
 import { ClassroomDataTable } from "~/components/classrooms/ClassroomDataTable";
+import { ClassroomPageHeader } from "./ClassroomPageHeader";
 
 export default function Page() {
-  //const classrooms = await api.classroom.all();
   return (
-    <div className="grid w-full flex-row md:flex">
+    <div className="flex flex-col pt-[10px]">
+      <ClassroomPageHeader />
       <ClassroomDataTable />
-      {/* <ClassroomEffectif stats={classrooms || []} /> */}
     </div>
   );
 }

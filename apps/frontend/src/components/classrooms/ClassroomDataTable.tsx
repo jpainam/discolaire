@@ -3,13 +3,12 @@
 import * as React from "react";
 
 import { useLocale } from "@repo/i18n";
-import { PermissionAction } from "@repo/lib/permission";
 import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
 import { DataTable, useDataTable } from "@repo/ui/datatable/index";
 
-import { useCheckPermissions } from "~/hooks/use-permissions";
 import { api } from "~/trpc/react";
+import { ClassroomDataTableActions } from "./ClassroomDataTableActions";
 import { getColumns } from "./ClassroomDataTableColumns";
 
 //type ClassroomProcedureOutput = RouterOutputs["classroom"]["all"][number];
@@ -21,15 +20,7 @@ export function ClassroomDataTable() {
   // const classroomCyclesQuery = api.classroomCycle.all.useQuery();
   // const classroomSectionsQuery = api.classroomSection.all.useQuery();
 
-  const canDeleteClassroom = useCheckPermissions(
-    PermissionAction.DELETE,
-    "classroom:details",
-  );
-
-  const columns = React.useMemo(
-    () => getColumns({ t: t, canDeleteClassroom }),
-    [t, canDeleteClassroom],
-  );
+  const columns = React.useMemo(() => getColumns({ t: t }), [t]);
 
   // const filterFields: DataTableFilterField<ClassroomProcedureOutput>[] = [
   //   {
@@ -66,21 +57,17 @@ export function ClassroomDataTable() {
     data: data,
     columns: columns,
     rowCount: data.length,
-    // optional props
-    //filterFields: filterFields,
   });
 
   if (classroomsQuery.isPending) {
     return <DataTableSkeleton rowCount={15} columnCount={8} />;
   }
   return (
-    <DataTable className="w-full p-2" table={table}>
-      <DataTableToolbar
-        searchPlaceholder={t("search")}
-        table={table}
-        //filterFields={filterFields}
-      />
-      {/* <ClassroomDataTableActions table={table} /> */}
+    <DataTable
+      table={table}
+      floatingBar={<ClassroomDataTableActions table={table} />}
+    >
+      <DataTableToolbar searchPlaceholder={t("search")} table={table} />
     </DataTable>
   );
 }
