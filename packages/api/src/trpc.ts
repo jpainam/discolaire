@@ -45,11 +45,13 @@ export const createTRPCContext = async (opts: {
   const session = await isomorphicGetSession(opts.headers);
 
   const source = opts.headers.get("x-trpc-source") ?? "unknown";
+  const schoolYearId = opts.headers.get("schoolYearId") ?? null;
   console.log(">>> tRPC Request from", source, "by", session?.user.name);
 
   return {
     session,
     db,
+    schoolYearId,
     token: authToken,
   };
 };
@@ -141,7 +143,7 @@ export const protectedProcedure = t.procedure
         // infers the `session` as non-nullable
         session: { ...ctx.session, user: ctx.session.user },
         schoolId: ctx.session.user.schoolId,
-        schoolYearId: "2022-2023", // TODO: get this from the session or header
+        schoolYearId: ctx.schoolYearId ?? "",
       },
     });
   });
