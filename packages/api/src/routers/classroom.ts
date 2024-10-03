@@ -57,7 +57,6 @@ export const classroomRouter = createTRPCRouter({
         },
       },
     });
-    console.log("classroomsWithStats", classroomsWithStats);
 
     const classroomsWithSize = classroomsWithStats.map((c) => {
       const totalStudents = c.enrollments.length;

@@ -10,6 +10,7 @@ import { NoPermission } from "@repo/ui/no-permission";
 
 import { env } from "~/env";
 import { api } from "~/trpc/server";
+import { DefaultSettings } from "./DefaultSettings";
 import { SchoolDetailAction } from "./SchoolDetailAction";
 
 export default async function Page({
@@ -34,7 +35,7 @@ export default async function Page({
   }
   const { t } = await getServerTranslations();
   return (
-    <div className="m-8">
+    <div className="flex flex-col gap-4 p-2">
       <Card>
         <CardHeader className="flex flex-row items-center space-x-4 border-b bg-muted/50 p-2">
           <Avatar className="h-20 w-20">
@@ -94,6 +95,14 @@ export default async function Page({
               {t("last_updated")}: {school.updatedAt.toLocaleString()}
             </p>
           </div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader className="border-b bg-muted/50 p-2">
+          <CardTitle>{t("default_settings")}</CardTitle>
+        </CardHeader>
+        <CardContent className="p-4">
+          <DefaultSettings />
         </CardContent>
       </Card>
     </div>

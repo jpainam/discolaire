@@ -25,7 +25,7 @@ export function SchoolTableAction({ schoolId }: { schoolId: string }) {
   const utils = api.useUtils();
 
   const deleteSchoolMutation = api.school.delete.useMutation({
-    onSettled: () => utils.school.all.invalidate(),
+    onSettled: () => utils.school.invalidate(),
     onSuccess: () => {
       toast.success(t("deleted_successfully"), { id: 0 });
       router.refresh();

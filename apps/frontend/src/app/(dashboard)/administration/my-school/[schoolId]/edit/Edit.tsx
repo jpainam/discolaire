@@ -35,7 +35,7 @@ export default function Edit({ school }: { school: School }) {
   const router = useRouter();
 
   const updateSchoolMutation = api.school.update.useMutation({
-    onSettled: () => utils.school.all.invalidate(),
+    onSettled: () => utils.school.invalidate(),
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
       router.push("/administration/my-school");

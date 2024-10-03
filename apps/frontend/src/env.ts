@@ -33,7 +33,6 @@ export const env = createEnv({
     NEXT_PUBLIC_BASE_URL: z.string().url(),
     NEXT_PUBLIC_PROSPECT_SERVICE_URL: z.string().url(),
     NEXT_PUBLIC_LIBRARY_SERVICE_URL: z.string().url(),
-    NEXT_PUBLIC_DEFAULT_COUNTRY_CODE: z.string(),
   },
   /**
    * Destructure all variables from `process.env` to make sure they aren't tree-shaken away.
@@ -44,8 +43,6 @@ export const env = createEnv({
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     NEXT_PUBLIC_PROSPECT_SERVICE_URL:
       process.env.NEXT_PUBLIC_PROSPECT_SERVICE_URL,
-    NEXT_PUBLIC_DEFAULT_COUNTRY_CODE:
-      process.env.NEXT_PUBLIC_DEFAULT_COUNTRY_CODE,
     NEXT_PUBLIC_LIBRARY_SERVICE_URL:
       process.env.NEXT_PUBLIC_LIBRARY_SERVICE_URL,
     REPORT_API_KEY: process.env.REPORT_API_KEY,

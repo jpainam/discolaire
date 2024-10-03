@@ -1,7 +1,7 @@
 "use client";
 
 import type * as RPNInput from "react-phone-number-input";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { t } from "i18next";
 import { CheckIcon, ChevronsUpDown } from "lucide-react";
 import { getCountries } from "react-phone-number-input";
@@ -17,12 +17,12 @@ import {
   CommandItem,
   CommandList,
 } from "@repo/ui/command";
-import { FormControl } from "@repo/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { ScrollArea } from "@repo/ui/scroll-area";
+import { Skeleton } from "@repo/ui/skeleton";
 
-import { env } from "~/env";
 import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
 
 interface CountryPickerFieldProps {
   emptyPlaceholder?: React.ReactNode;
@@ -44,14 +44,26 @@ export function CountryPicker({
 }: CountryPickerFieldProps) {
   const countries = useMemo(() => getCountries(), []);
   const [value, setValue] = React.useState(
-    defaultValue ?? env.NEXT_PUBLIC_DEFAULT_COUNTRY_CODE,
+    defaultValue ? defaultValue : undefined,
   );
   const [open, setOpen] = React.useState(false);
+  const schoolQuery = api.school.mySchool.useQuery();
+  useEffect(() => {
+    if (!schoolQuery.data) return;
+    if (!defaultValue) {
+      if (schoolQuery.data.defaultCountryId) {
+        setValue(schoolQuery.data.defaultCountryId);
+        onChange?.(schoolQuery.data.defaultCountryId);
+      }
+    }
+  }, [defaultValue, onChange, schoolQuery.data]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <FormControl>
+        {schoolQuery.isPending ? (
+          <Skeleton className="h-8 w-full" />
+        ) : (
           <Button
             variant="outline"
             disabled={disabled}
@@ -72,7 +84,7 @@ export function CountryPicker({
             )}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
-        </FormControl>
+        )}
       </PopoverTrigger>
       <PopoverContent className="w-full p-0" sameWidthAsTrigger={true}>
         <Command>

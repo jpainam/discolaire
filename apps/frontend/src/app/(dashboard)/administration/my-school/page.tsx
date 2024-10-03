@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { auth } from "@repo/auth";
@@ -52,7 +53,14 @@ export default async function Page() {
           {schools.map((school) => {
             return (
               <TableRow key={school.id}>
-                <TableCell>{school.name}</TableCell>
+                <TableCell>
+                  <Link
+                    className="hover:text-blue-600 hover:underline"
+                    href={`/administration/my-school/${school.id}`}
+                  >
+                    {school.name}
+                  </Link>
+                </TableCell>
                 <TableCell>{school.authorization}</TableCell>
                 <TableCell>{school.headmaster}</TableCell>
                 <TableCell>{school.address}</TableCell>

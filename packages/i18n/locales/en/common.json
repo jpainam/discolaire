@@ -597,6 +597,8 @@
   "relationship": "Relationship",
   "religion": "Religion",
   "edit_staff": "Edit Staff",
+  "default_country": "Default Country",
+  "default_settings": "Default Settings",
   "religions": "Religions",
   "reload": "Reload",
   "remaining": "Remaining",

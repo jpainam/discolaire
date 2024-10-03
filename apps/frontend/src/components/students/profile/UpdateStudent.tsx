@@ -29,7 +29,7 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
       lastName: student.lastName ?? "",
       dateOfBirth: student.dateOfBirth ?? new Date(),
       placeOfBirth: student.placeOfBirth ?? "",
-      gender: student.gender ?? "",
+      gender: student.gender ?? "male",
       residence: student.residence ?? "",
       phoneNumber: student.phoneNumber ?? "",
       email: student.email ?? "",

@@ -29,6 +29,13 @@ export const schoolRouter = createTRPCRouter({
       },
     });
   }),
+  mySchool: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.db.school.findUnique({
+      where: {
+        id: ctx.schoolId,
+      },
+    });
+  }),
   get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
     return ctx.db.school.findUnique({
       where: {
@@ -62,6 +69,20 @@ export const schoolRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       return ctx.db.school.create({
         data: input,
+      });
+    }),
+  updateDefaultCountry: protectedProcedure
+    .input(
+      z.object({ schoolId: z.string().min(1), countryId: z.string().min(1) }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.school.update({
+        where: {
+          id: input.schoolId,
+        },
+        data: {
+          defaultCountryId: input.countryId,
+        },
       });
     }),
 });

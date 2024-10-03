@@ -667,44 +667,45 @@ model Country {
 }
 
 model School {
-    id            String           @id @default(cuid())
-    code          String           @unique
-    name          String
-    authorization String?
-    ministry      String?
-    department    String?
-    region        String?
-    city          String?
-    headmaster    String?
-    phoneNumber1  String?
-    phoneNumber2  String?
-    email         String?
-    website       String?
-    logo          String?
-    createdAt     DateTime         @default(now()) @db.Timestamp(6)
-    updatedAt     DateTime         @updatedAt
-    isActive      Boolean          @default(true)
-    address       String?
-    contacts      Contact[]
-    users         User[]
-    students      Student[]
-    classrooms    Classroom[]
-    staffs        Staff[]
-    formerSchools FormerSchool[]
-    religions     Religion[]
-    sports        Sport[]
-    clubs         Club[]
-    permissions   Policy[]
-    roles         Role[]
-    subjectGroup  SubjectGroup[]
-    courses       Course[]
-    schoolYears   SchoolYear[]
-    cycles        Cycle[]
-    sections      Section[]
-    levels        ClassroomLevel[]
-    terms         Term[]
-    documents     Document[]
-    degrees       Degree[]
+    id               String           @id @default(cuid())
+    code             String           @unique
+    name             String
+    authorization    String?
+    ministry         String?
+    department       String?
+    region           String?
+    city             String?
+    headmaster       String?
+    phoneNumber1     String?
+    phoneNumber2     String?
+    email            String?
+    website          String?
+    logo             String?
+    createdAt        DateTime         @default(now()) @db.Timestamp(6)
+    updatedAt        DateTime         @updatedAt
+    isActive         Boolean          @default(true)
+    address          String?
+    defaultCountryId String?
+    contacts         Contact[]
+    users            User[]
+    students         Student[]
+    classrooms       Classroom[]
+    staffs           Staff[]
+    formerSchools    FormerSchool[]
+    religions        Religion[]
+    sports           Sport[]
+    clubs            Club[]
+    permissions      Policy[]
+    roles            Role[]
+    subjectGroup     SubjectGroup[]
+    courses          Course[]
+    schoolYears      SchoolYear[]
+    cycles           Cycle[]
+    sections         Section[]
+    levels           ClassroomLevel[]
+    terms            Term[]
+    documents        Document[]
+    degrees          Degree[]
 }
 
 model FormerSchool {
