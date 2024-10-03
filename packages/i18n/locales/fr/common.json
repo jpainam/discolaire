@@ -719,6 +719,8 @@
   },
   "spanish": "Espagnol",
   "staff_level": "Niveau du personnel",
+  "number_of_classes_per_level": "Nombre de classe par niveau",
+  "number_of_classroom_per_level": "Nombre d'effectif par niveau",
   "edit_staff": "Modifier le personnel",
   "default_country": "Pays par défaut",
   "default_settings": "Paramètres par défaut",

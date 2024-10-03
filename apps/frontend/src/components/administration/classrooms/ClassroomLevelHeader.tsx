@@ -48,7 +48,7 @@ export function ClassroomLevelHeader() {
 
   const confirm = useConfirm();
   return (
-    <div className="flex flex-row items-center gap-2">
+    <div className="col-span-full flex flex-row items-center gap-2 border-b px-2 py-1">
       <Label>{t("Niveau des classes")}</Label>
       <div className="ml-auto flex flex-row items-center gap-2">
         <Button

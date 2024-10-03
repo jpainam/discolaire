@@ -10,6 +10,7 @@ import {
 } from "recharts";
 
 import type { ChartConfig } from "@repo/ui/chart";
+import { useLocale } from "@repo/hooks/use-locale";
 import {
   Card,
   CardContent,
@@ -38,14 +39,16 @@ const chartConfig = {
 
 export function ClassroomLevelChart() {
   const classroomLevelCountQuery = api.classroomLevel.count.useQuery();
+  const { t } = useLocale();
   if (classroomLevelCountQuery.isPending) {
     return <Skeleton className="h-full w-full" />;
   }
+
   const chartData = classroomLevelCountQuery.data;
   return (
-    <Card className="my-2 rounded-md shadow-none">
+    <Card className="rounded-md shadow-none">
       <CardHeader>
-        <CardTitle>Nombre de classe par niveau</CardTitle>
+        <CardTitle>{t("number_of_classes_per_level")}</CardTitle>
         <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>

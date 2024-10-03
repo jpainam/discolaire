@@ -15,6 +15,30 @@ export const classroomLevelRouter = createTRPCRouter({
     });
   }),
 
+  updateOrder: protectedProcedure
+    .input(
+      z.array(
+        z.object({
+          levelId: z.string().min(1),
+          order: z.coerce.number(),
+        }),
+      ),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await Promise.all(
+        input.map(async (d) => {
+          await ctx.db.classroomLevel.update({
+            where: {
+              id: d.levelId,
+            },
+            data: {
+              order: d.order,
+            },
+          });
+        }),
+      );
+      return true;
+    }),
   count: protectedProcedure.query(async ({ ctx }) => {
     const countClassroom = await ctx.db.classroom.groupBy({
       by: ["levelId"],

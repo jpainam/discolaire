@@ -599,6 +599,8 @@
   "edit_staff": "Edit Staff",
   "default_country": "Default Country",
   "default_settings": "Default Settings",
+  "number_of_classes_per_level": "Number of classes per level",
+  "number_of_classroom_per_level": "Number of classrooms per level",
   "religions": "Religions",
   "reload": "Reload",
   "remaining": "Remaining",

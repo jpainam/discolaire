@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, Reorder } from "framer-motion";
 import { useAtom } from "jotai";
 import { Pencil } from "lucide-react";
+import { toast } from "sonner";
+import { useDebouncedCallback } from "use-debounce";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
@@ -19,10 +21,35 @@ export function ClassroomLevelTable() {
   const [selectedLevels, setSelectedLevels] = useAtom(
     selectedClassroomLevelAtom,
   );
+  const utils = api.useUtils();
   const { t } = useLocale();
+  const updateLevelOrder = api.classroomLevel.updateOrder.useMutation({
+    onSettled: () => utils.classroomLevel.invalidate(),
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+    onSuccess: () => {
+      toast.success(t("updated_successfully"), { id: 0 });
+    },
+  });
+
   const [items, setItems] = useState<
     { id: string; name: string; order: number }[]
   >([]);
+
+  const debounced = useDebouncedCallback((value) => {
+    const levelWithOrders = value.map(
+      (level: { id: unknown }, index: number) => {
+        return {
+          levelId: level.id,
+          order: index,
+        };
+      },
+    );
+
+    updateLevelOrder.mutate(levelWithOrders);
+  }, 1000);
+
   useEffect(() => {
     if (classroomLevelsQuery.data) {
       setItems(classroomLevelsQuery.data);
@@ -32,14 +59,16 @@ export function ClassroomLevelTable() {
   const { openModal } = useModal();
   return (
     <Reorder.Group
+      className="px-2"
       onDragEnd={(newItems) => {
+        toast.loading(t("updating"), { id: 0 });
         console.log(newItems);
       }}
       axis="y"
       values={items}
       onReorder={(newOrders) => {
-        //console.log(newOrders);
         setItems(newOrders);
+        debounced(newOrders);
       }}
     >
       <AnimatePresence>
@@ -48,7 +77,7 @@ export function ClassroomLevelTable() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="my-2 flex w-full flex-row items-center gap-4 rounded-md border bg-muted pl-4 text-muted-foreground"
+            className="my-1 flex w-full flex-row items-center gap-4 rounded-md border bg-muted/50 pl-4 text-sm"
             key={item.id}
             value={item}
           >
