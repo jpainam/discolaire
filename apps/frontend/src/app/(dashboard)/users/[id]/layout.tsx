@@ -67,7 +67,7 @@ export default async function Layout({
   const session = await auth();
   const user = session?.user;
   return (
-    <div>
+    <div className="pt-[100px]">
       <div className="flex flex-row items-center gap-4 px-4">
         {user?.avatar && (
           <Avatar>

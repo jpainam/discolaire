@@ -234,4 +234,40 @@ export const userRouter = createTRPCRouter({
       }
       return userService.updateProfile(input.userId, name, email, avatar);
     }),
+  updateMyPassword: protectedProcedure
+    .input(
+      z.object({
+        oldPassword: z.string().min(1),
+        newPassword: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.db.user.findUnique({
+        where: {
+          id: ctx.session.user.id,
+        },
+      });
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found",
+        });
+      }
+      if (
+        !(await encryptPassword(input.oldPassword)).startsWith(user.password)
+      ) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Old password is incorrect",
+        });
+      }
+      return ctx.db.user.update({
+        where: {
+          id: ctx.session.user.id,
+        },
+        data: {
+          password: await encryptPassword(input.newPassword),
+        },
+      });
+    }),
 });

@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -15,32 +15,45 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  useForm,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 
 import { routes } from "~/configs/routes";
+import { api } from "~/trpc/react";
 
 const passwordFormSchema = z.object({
-  oldPassword: z.string().min(6, {}),
-  newPassword: z.string().min(6, {}),
+  oldPassword: z.string().min(1),
+  newPassword: z.string().min(1),
 });
-type PasswordFormValues = z.infer<typeof passwordFormSchema>;
 
-// This can come from your database or API.
-const defaultValues: Partial<PasswordFormValues> = {
+const defaultValues: Partial<z.infer<typeof passwordFormSchema>> = {
   oldPassword: "",
   newPassword: "",
 };
 
 export function ReinitializePasswordForm() {
-  const form = useForm<PasswordFormValues>({
-    resolver: zodResolver(passwordFormSchema),
+  const form = useForm({
+    schema: passwordFormSchema,
     defaultValues,
     mode: "onChange",
   });
+  const utils = api.useUtils();
+  const router = useRouter();
 
-  function onSubmit(data: PasswordFormValues) {
-    console.log(data);
+  const updateUserPasswordMutation = api.user.updateMyPassword.useMutation({
+    onSuccess: () => {
+      toast.success(t("updated_successfully"), { id: 0 });
+      router.push(routes.auth.login);
+    },
+    onSettled: () => utils.user.invalidate(),
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+  function onSubmit(data: z.infer<typeof passwordFormSchema>) {
+    toast.loading(t("updating"), { id: 0 });
+    updateUserPasswordMutation.mutate(data);
   }
   const { t } = useLocale();
   return (
@@ -83,7 +96,7 @@ export function ReinitializePasswordForm() {
           )}
         />
         <Button size={"sm"} type="submit">
-          Update profile
+          {t("submit")}
         </Button>
       </form>
     </Form>

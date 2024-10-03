@@ -1,9 +1,13 @@
-export default function Page() {
-  return (
-    <div>
-      page for the current user, change password, update avatar. List type of
-      message: 1. request a new right (Open a send message with the subject.) 2.
-      Another help. notifcation list
-    </div>
-  );
+import { redirect } from "next/navigation";
+
+import { auth } from "@repo/auth";
+
+import { routes } from "~/configs/routes";
+
+export default async function Page() {
+  const session = await auth();
+  if (!session) {
+    redirect("/auth/login");
+  }
+  redirect(routes.users.details(session.user.id));
 }
