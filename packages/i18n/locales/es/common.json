@@ -784,6 +784,7 @@
   "examination_findings_placeholder": "Describa los hallazgos del examen",
   "view_all": "Ver todo",
   "medical_visits": "Visitas médicas",
+  "invalid_credentials": "Credenciales inválidas",
   "no_item_found": "No se encontró ningún elemento",
   "create_staff": "Crear personal",
   "today_attendance": "Asistencia de hoy",

@@ -3,139 +3,73 @@
 import * as React from "react";
 import Link from "next/link";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { signIn } from "next-auth/react";
-import { toast } from "sonner";
-import { z } from "zod";
+import { useFormState, useFormStatus } from "react-dom";
 
 import { useLocale } from "@repo/hooks/use-locale";
-import { useRouter } from "@repo/hooks/use-router";
 import { Button } from "@repo/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  useForm,
-} from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
+import { Label } from "@repo/ui/label";
 
 import { cn } from "~/lib/utils";
+import { authenticate } from "./signin";
 
 type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
 
-const authFormSchema = z.object({
-  username: z.string().min(1),
-  password: z.string().min(1),
-});
-
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const router = useRouter();
-  const form = useForm({
-    schema: authFormSchema,
-    defaultValues: {
-      username: "",
-      password: "",
-    },
+  const [state, submitAction] = useFormState(authenticate, {
+    error: "",
   });
 
-  async function onSubmit(data: z.infer<typeof authFormSchema>) {
-    setIsLoading(true);
-    const res = await signIn("credentials", {
-      username: data.username,
-      password: data.password,
-      redirect: false,
-    });
-    if (res?.error) {
-      toast.error("Invalid credentials");
-    } else {
-      router.push("/");
-    }
-    setIsLoading(false);
-  }
   const { t } = useLocale();
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid gap-2">
-            <FormField
-              control={form.control}
-              name={"username"}
-              render={({ field }) => (
-                <FormItem className={className}>
-                  <FormLabel>{t("username")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isLoading}
-                      autoCorrect="off"
-                      required
-                      autoCapitalize="none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+      <form action={submitAction}>
+        <div className="grid gap-2">
+          <div className={className}>
+            <Label htmlFor="username">{t("username")}</Label>
+            <Input
+              autoCorrect="off"
+              required
+              id="username"
+              autoCapitalize="none"
+              name="username"
             />
-            <FormField
-              control={form.control}
-              name={"password"}
-              render={({ field }) => (
-                <FormItem className={className}>
-                  <FormLabel>{t("password")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      required
-                      current-password="true"
-                      disabled={isLoading}
-                      type="password"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button disabled={isLoading}>
-              {isLoading && (
-                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              {t("signin_with_email")}
-            </Button>
-
-            <Link
-              href="/auth/password/forgot"
-              className="ml-auto text-sm text-primary hover:underline"
-            >
-              {t("forgot_password")}?
-            </Link>
           </div>
-        </form>
-      </Form>
-      {/* <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
+
+          <div className={className}>
+            <Label htmlFor="password">{t("password")}</Label>
+            <Input
+              required
+              current-password="true"
+              type="password"
+              id="password"
+              name="password"
+            />
+          </div>
+
+          {state.error && (
+            <div className="text-sm text-red-500">{t(state.error)}</div>
+          )}
+          <SubmitButton />
+          <Link
+            href="/auth/password/forgot"
+            className="ml-auto text-sm text-primary hover:underline"
+          >
+            {t("forgot_password")}?
+          </Link>
         </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            {t("or_continue_with")}
-          </span>
-        </div>
-      </div>
-      <Button
-        variant="outline"
-        type="button"
-        onClick={() => {
-          void signIn("google");
-        }}
-        disabled={isLoading}
-      >
-        <Icons.google className="mr-2 h-4 w-4" />
-        Google
-      </Button> */}
+      </form>
     </div>
+  );
+}
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  const { t } = useLocale();
+  return (
+    <Button disabled={pending}>
+      {pending && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+      {t("signin_with_email")}
+    </Button>
   );
 }

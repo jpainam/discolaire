@@ -608,6 +608,7 @@
   "assessment": "Assessment",
   "plan_of_care": "Plan of Care",
   "medical_visits": "Medical Visits",
+  "invalid_credentials": "Invalid credentials",
   "plan_of_care_placeholder": "Outline the plan of care for the patient",
   "assessment_placeholder": "Provide assessment of the patient's condition",
   "examination_findings_placeholder": "Describe examination findings",

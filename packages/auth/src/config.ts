@@ -48,7 +48,6 @@ export const authConfig = {
   pages: {
     signIn: "/auth/login",
     signOut: "/auth/logout",
-    error: "/auth/error",
     verifyRequest: "/auth/verify-request",
   },
   providers: [
