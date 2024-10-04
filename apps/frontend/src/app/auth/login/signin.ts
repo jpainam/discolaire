@@ -14,30 +14,35 @@ export async function authenticate(
   previousState: { error: string },
   formData: FormData,
 ) {
-  let res = null;
+  const parsed = signInSchema.safeParse(Object.fromEntries(formData));
+  let isError = false;
+  if (!parsed.success) {
+    return {
+      error: "Invalid form data",
+    };
+  }
+  const { username, password } = parsed.data;
   try {
-    const parsed = signInSchema.safeParse(Object.fromEntries(formData));
-    if (!parsed.success) {
-      return {
-        error: "Invalid form data",
-      };
-    }
-    const { username, password } = parsed.data;
-    res = await signIn("credentials", {
+    const res = await signIn("credentials", {
       username: username,
       password: password,
+      redirect: false,
     });
 
-    redirect("/");
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (_error) {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (res == null) {
-      redirect("/");
+    if (!res || res?.error) {
+      return {
+        error: "invalid_credentials",
+      };
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error) {
+    isError = true;
     return {
       error: "invalid_credentials",
     };
+  } finally {
+    if (!isError) {
+      redirect("/");
+    }
   }
 }

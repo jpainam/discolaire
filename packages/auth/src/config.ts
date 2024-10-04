@@ -68,12 +68,12 @@ export const authConfig = {
           });
 
           if (!user || !(await isPasswordMatch(password, user.password))) {
-            throw new Error("Incorrect username or password");
+            return null;
           }
           const returnedUser = exclude(user, ["password"]);
           return returnedUser;
         }
-        throw new Error("Invalid credentials");
+        return null;
       },
     }),
     GoogleProvider({
