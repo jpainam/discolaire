@@ -15,6 +15,7 @@ import {
 } from "@repo/ui/dropdown-menu";
 import { Label } from "@repo/ui/label";
 
+import CreateEditContact from "~/components/contacts/CreateEditContact";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { SimpleTooltip } from "~/components/simple-tooltip";
 import { useCheckPermissions } from "~/hooks/use-permissions";
@@ -56,9 +57,7 @@ export function StudentContactHeader() {
                     openModal({
                       className: "w-[600px] p-0",
                       title: (
-                        <div className="px-2 pt-4">
-                          {t("add_from_existing")}
-                        </div>
+                        <p className="px-2 pt-4">{t("add_from_existing")}</p>
                       ),
                       // description: (
                       //   <div className="px-2">{t("add_from_existing")}</div>
@@ -70,7 +69,19 @@ export function StudentContactHeader() {
                   <UserSearch className="mr-2 h-4 w-4" />
                   {t("add_from_existing")}
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={() => {
+                    openModal({
+                      className: "w-[600px]",
+                      title: (
+                        <p className="px-4 py-2">
+                          {t("create")} - {t("contact")}
+                        </p>
+                      ),
+                      view: <CreateEditContact />,
+                    });
+                  }}
+                >
                   <UserPlus className="mr-2 h-4 w-4" />
                   {t("new")}
                 </DropdownMenuItem>

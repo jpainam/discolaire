@@ -9,11 +9,15 @@ import {
   Printer,
   Trash2,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
+import { useRouter } from "@repo/hooks/use-router";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +28,8 @@ import {
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { AvatarState } from "~/components/AvatarState";
+import { routes } from "~/configs/routes";
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";
 import { DropdownHelp } from "../shared/DropdownHelp";
@@ -33,6 +39,26 @@ import { LinkStudent } from "./LinkStudent";
 
 export function ContactDetailsHeader({ contactId }: { contactId: string }) {
   const contactQuery = api.contact.get.useQuery(contactId);
+  const utils = api.useUtils();
+  const router = useRouter();
+  const confirm = useConfirm();
+  const deleteContactMutation = api.contact.delete.useMutation({
+    onSettled: () => utils.contact.invalidate(),
+    onSuccess: () => {
+      toast.success(t("deleted_successfully"), { id: 0 });
+      router.push(routes.contacts.index);
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
+  const canDeleteContact = useCheckPermissions(
+    PermissionAction.DELETE,
+    "contact:profile",
+    {
+      id: contactId,
+    },
+  );
   const { t } = useLocale();
   const { openSheet } = useSheet();
   const { openModal } = useModal();
@@ -82,11 +108,31 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
               <DropdownHelp />
               <DropdownMenuSeparator />
               <DropdownInvitation email={contactQuery.data?.email} />
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive">
-                <Trash2 className="mr-2 h-4 w-4" />
-                {t("delete")}
-              </DropdownMenuItem>
+              {canDeleteContact && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onSelect={async () => {
+                      const isConfirmed = await confirm({
+                        title: t("delete"),
+                        description: t("delete_confirmation"),
+                        icon: <Trash2 className="h-6 w-6 text-destructive" />,
+                        alertDialogTitle: {
+                          className: "flex items-center gap-1",
+                        },
+                      });
+                      if (isConfirmed) {
+                        toast.loading(t("deleting"), { id: 0 });
+                        deleteContactMutation.mutate(contactId);
+                      }
+                    }}
+                    className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    {t("delete")}
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

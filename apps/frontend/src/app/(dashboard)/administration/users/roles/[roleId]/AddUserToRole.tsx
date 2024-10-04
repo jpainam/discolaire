@@ -156,7 +156,7 @@ export function AddUserToRole({ roleId }: { roleId: string }) {
           </div>
         ) : (
           <span className="text-sm text-muted-foreground">
-            {t("select_students_to_enroll")}
+            {t("select_students_to_add")}
           </span>
         )}
         <Button
