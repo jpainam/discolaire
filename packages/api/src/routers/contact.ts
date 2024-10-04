@@ -20,7 +20,7 @@ export const contactRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.course.deleteMany({
+      return ctx.db.contact.deleteMany({
         where: {
           id: {
             in: Array.isArray(input) ? input : [input],
