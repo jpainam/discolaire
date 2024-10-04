@@ -38,12 +38,12 @@ const getActivityTypeInfo = (type: Activity["type"]) => {
 // ActivityItem component to render individual activity items
 const ActivityItem = ({ activity, onDelete }: ActivityItemProps) => {
   const { icon: Icon, color } = getActivityTypeInfo(activity.type);
-  const { t, i18n } = useLocale();
-  const dateFormat = Intl.DateTimeFormat(i18n.language, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  const { t } = useLocale();
+  // const dateFormat = Intl.DateTimeFormat(i18n.language, {
+  //   year: "numeric",
+  //   month: "short",
+  //   day: "numeric",
+  // });
 
   return (
     <div className="group flex items-center space-x-4 border-b py-2 last:border-b-0 hover:bg-muted/50">
@@ -53,8 +53,8 @@ const ActivityItem = ({ activity, onDelete }: ActivityItemProps) => {
       <div className="flex-1">
         <p className="text-sm font-semibold">{activity.description}</p>
         <p className="text-sm text-muted-foreground">
-          {dateFormat.format(new Date(activity.date))} | Entity ID:{" "}
-          {activity.entityId} | Table: {activity.table}
+          {activity.date} | Entity ID: {activity.entityId} | Table:{" "}
+          {activity.table}
         </p>
       </div>
       <Button
