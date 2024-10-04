@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { Eye, MailIcon, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useSheet } from "@repo/hooks/use-sheet";
@@ -36,7 +37,16 @@ export function HealthVisitTable({ className }: { className?: string }) {
   const params = useParams<{ id: string }>();
   const { openSheet } = useSheet();
   const { openModal } = useModal();
-  const deleteHealthVisit = api.health.deleteVisit.useMutation();
+  const utils = api.useUtils();
+  const deleteHealthVisit = api.health.deleteVisit.useMutation({
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+    onSuccess: () => {
+      toast.success(t("deleted"), { id: 0 });
+    },
+    onSettled: () => utils.health.invalidate(),
+  });
   const confirm = useConfirm();
   //const router = useRouter();
   const dateFormat = Intl.DateTimeFormat(i18n.language, {
@@ -138,7 +148,8 @@ export function HealthVisitTable({ className }: { className?: string }) {
                               },
                             });
                             if (isConfirmed) {
-                              deleteHealthVisit.mutate("");
+                              toast.loading(t("deleting"), { id: 0 });
+                              deleteHealthVisit.mutate(visit.id);
                             }
                           }}
                           className="text-destructive focus:bg-[#FF666618] focus:text-destructive"

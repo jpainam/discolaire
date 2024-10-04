@@ -39,12 +39,12 @@ import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 
 const createEditVisitSchema = z.object({
-  date: z.coerce.date(),
-  complaint: z.string(),
-  signs: z.string(),
-  examination: z.string(),
-  assessment: z.string(),
-  plan: z.string(),
+  date: z.coerce.date().default(() => new Date()),
+  complaint: z.string().min(1),
+  signs: z.string().optional(),
+  examination: z.string().optional(),
+  assessment: z.string().optional(),
+  plan: z.string().optional(),
   notify: z.boolean().default(true),
   //attachments: z.array(z.instanceof(File)),
   attachments: z.array(z.string()).default([]),
@@ -107,7 +107,17 @@ export function CreateEditHealthVisit({
   };
 
   const router = useRouter();
-  const createVisitMutation = api.health.createVisit.useMutation();
+  const utils = api.useUtils();
+  const createVisitMutation = api.health.createVisit.useMutation({
+    onSuccess: () => {
+      toast.success(t("created_successfully"), { id: 0 });
+      router.push(routes.students.health.index(params.id));
+    },
+    onSettled: () => utils.health.invalidate(),
+    onError: (err) => {
+      toast.error(err.message, { id: 0 });
+    },
+  });
   const onSubmit = (data: z.infer<typeof createEditVisitSchema>) => {
     const values = {
       ...data,
@@ -134,7 +144,9 @@ export function CreateEditHealthVisit({
             >
               {t("cancel")}
             </Button>
-            <Button type="submit">{t("submit")}</Button>
+            <Button isLoading={createVisitMutation.isPending} type="submit">
+              {t("submit")}
+            </Button>
           </div>
         </div>
         <span className="px-2 text-sm text-muted-foreground">
