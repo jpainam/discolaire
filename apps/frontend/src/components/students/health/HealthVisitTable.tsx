@@ -1,11 +1,13 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import { Eye, MailIcon, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +15,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
+import { EmptyState } from "@repo/ui/EmptyState";
+import { Skeleton } from "@repo/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -23,76 +27,132 @@ import {
 } from "@repo/ui/table";
 
 import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
 import { CreateEditHealthVisit } from "./CreateEditHealthVisit";
 import { HealthVisitDetails } from "./HealthVisitDetails";
 
 export function HealthVisitTable({ className }: { className?: string }) {
-  const { t } = useLocale();
+  const { t, i18n } = useLocale();
+  const params = useParams<{ id: string }>();
   const { openSheet } = useSheet();
   const { openModal } = useModal();
+  const deleteHealthVisit = api.health.deleteVisit.useMutation();
+  const confirm = useConfirm();
+  //const router = useRouter();
+  const dateFormat = Intl.DateTimeFormat(i18n.language, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+
+  const visitsQuery = api.health.visits.useQuery({ studentId: params.id });
+
   return (
-    <div className={cn("overflow-hidden rounded-lg border", className)}>
+    <div className={cn("rounded-lg border", className)}>
       <Table>
         <TableHeader>
           <TableRow className="bg-muted/50">
-            <TableHead>Date</TableHead>
-            <TableHead>Chief Complaint</TableHead>
-            <TableHead>Diagnosis</TableHead>
-            <TableHead>Treatment</TableHead>
+            <TableHead>{t("date_of_visit")}</TableHead>
+            <TableHead>{t("chief_complaint")}</TableHead>
+            <TableHead>{t("assessment")}</TableHead>
+            <TableHead>{t("examination_findings")}</TableHead>
+            <TableHead>{t("vital_signs")}</TableHead>
             <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
-            <TableCell className="py-0">2022-11-10</TableCell>
-            <TableCell className="py-0">Cough</TableCell>
-            <TableCell className="py-0">Common cold</TableCell>
-            <TableCell className="py-0">Rest and fluids</TableCell>
-            <TableCell className="py-0 text-right">
-              <div className="flex items-center justify-end gap-2">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      onClick={() => {
-                        openModal({
-                          className: "w-[600px]",
-                          view: <HealthVisitDetails />,
-                        });
-                      }}
-                    >
-                      <Eye className="mr-2 h-4 w-4" />
-                      {t("Details")}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <MailIcon className="mr-2 h-4 w-4" />
-                      {t("send_message")}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        openSheet({
-                          className: "w-[700px]",
-                          view: <CreateEditHealthVisit />,
-                        });
-                      }}
-                    >
-                      <Pencil className="mr-2 h-4 w-4" />
-                      {t("edit")}
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem className="text-destructive">
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      {t("delete")}
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </TableCell>
-          </TableRow>
+          {visitsQuery.isPending && (
+            <TableRow>
+              <TableCell colSpan={6}>
+                <div className="grid w-full grid-cols-6 gap-2">
+                  {Array.from({ length: 30 }).map((_, i) => (
+                    <Skeleton key={i} className="h-10" />
+                  ))}
+                </div>
+              </TableCell>
+            </TableRow>
+          )}
+          {visitsQuery.data?.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={6} className="text-center">
+                <EmptyState className="my-8" />
+              </TableCell>
+            </TableRow>
+          )}
+          {visitsQuery.data?.map((visit) => {
+            return (
+              <TableRow>
+                <TableCell className="py-0">
+                  {dateFormat.format(visit.date)}
+                </TableCell>
+                <TableCell className="py-0">{visit.complaint}</TableCell>
+                <TableCell className="py-0">{visit.assessment}</TableCell>
+                <TableCell className="py-0">{visit.examination}</TableCell>
+                <TableCell className="py-0">{visit.signs}</TableCell>
+                <TableCell className="py-0 text-right">
+                  <div className="flex items-center justify-end gap-2">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          onSelect={() => {
+                            openModal({
+                              className: "w-[600px]",
+                              view: <HealthVisitDetails />,
+                            });
+                          }}
+                        >
+                          <Eye className="mr-2 h-4 w-4" />
+                          {t("Details")}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <MailIcon className="mr-2 h-4 w-4" />
+                          {t("send_message")}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => {
+                            openSheet({
+                              className: "w-[700px]",
+                              view: <CreateEditHealthVisit />,
+                            });
+                          }}
+                        >
+                          <Pencil className="mr-2 h-4 w-4" />
+                          {t("edit")}
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          onSelect={async () => {
+                            const isConfirmed = await confirm({
+                              title: t("delete"),
+                              description: t("delete_confirmation"),
+                              icon: (
+                                <Trash2 className="h-6 w-6 text-destructive" />
+                              ),
+                              alertDialogTitle: {
+                                className: "flex items-center gap-2",
+                              },
+                            });
+                            if (isConfirmed) {
+                              deleteHealthVisit.mutate("");
+                            }
+                          }}
+                          className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          {t("delete")}
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>

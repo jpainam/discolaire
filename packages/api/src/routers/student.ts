@@ -253,6 +253,7 @@ export const studentRouter = createTRPCRouter({
       },
       include: {
         formerSchool: true,
+        school: true,
         sports: {
           include: {
             sport: true,

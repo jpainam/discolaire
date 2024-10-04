@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const healthVisitSchema = z.object({
   date: z.coerce.date().default(() => new Date()),
@@ -9,25 +9,41 @@ const healthVisitSchema = z.object({
   examination: z.string().optional(),
   assessment: z.string().optional(),
   plan: z.string().optional(),
-  attachments: z.array(z.string()).optional(),
+  studentId: z.string().min(1),
+  attachments: z.array(z.string()).default([]),
 });
 
 export const healthRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
+  createVisit: protectedProcedure
+    .input(healthVisitSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.healthVisit.create({
+        data: {
+          date: input.date,
+          complaint: input.complaint,
+          signs: input.signs,
+          studentId: input.studentId,
+          createdById: ctx.session.user.id,
+          examination: input.examination,
+          assessment: input.assessment,
+          plan: input.plan,
+          attachments: input.attachments,
+        },
+      });
     }),
-  visit: protectedProcedure.input(healthVisitSchema).mutation(async () => {
-    // return ctx.db.healthVisit.create({
-    //   data: {
-    //     date: new Date(),
-    //     complaint: "headache",
-    //   },
-    // });
-  }),
+  visits: protectedProcedure
+    .input(
+      z.object({
+        studentId: z.string().min(1),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.healthVisit.findMany({
+        where: {
+          studentId: input.studentId,
+        },
+      });
+    }),
   issues: protectedProcedure.query(() => {
     return [
       "ADD_ADHD",
@@ -41,9 +57,9 @@ export const healthRouter = createTRPCRouter({
       "HEADACHES",
     ];
   }),
-  delete: protectedProcedure
-    .input(z.object({ id: z.number() }))
+  deleteVisit: protectedProcedure
+    .input(z.string().min(1))
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.fee.delete({ where: { id: input.id } });
+      return ctx.db.healthVisit.delete({ where: { id: input } });
     }),
 });

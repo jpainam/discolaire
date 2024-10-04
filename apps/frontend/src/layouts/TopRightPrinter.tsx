@@ -67,7 +67,7 @@ export function TopRightPrinter() {
   useEffect(() => {
     const interval = setInterval(() => {
       void reportingQuery.refetch();
-    }, 1500000);
+    }, 15000000);
     return () => clearInterval(interval);
   }, [reportingQuery]);
 
@@ -118,7 +118,7 @@ export function TopRightPrinter() {
                 className="flex w-full cursor-pointer items-center space-x-2"
               >
                 {getReportTypeIcon(activity.type)}
-                <div className="flex w-full flex-col">
+                <div className="flex w-full flex-col gap-1">
                   <span className="line-clamp-1 truncate text-xs">
                     {activity.title}
                   </span>
@@ -133,7 +133,7 @@ export function TopRightPrinter() {
                               ? "yellow"
                               : "red"
                         }
-                        className="flex w-[100px] items-center space-x-1 py-0 text-xs"
+                        className="flex w-[100px] items-center space-x-1 border-none bg-transparent py-0 text-xs"
                       >
                         {getStatusIcon(activity.status)}
                         <span className="text-xs lowercase">

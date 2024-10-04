@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { Printer } from "lucide-react";
+import { EuroIcon, Printer } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
@@ -27,6 +27,7 @@ export function TransactionDetailsHeader() {
   });
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1 text-secondary-foreground">
+      <EuroIcon className="h-5 w-5" />
       <Label>{t("receipt")}</Label>
       <div className="ml-auto">
         <Button

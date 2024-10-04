@@ -58,8 +58,6 @@ export default async function Page({
 
         {/* Receipt content */}
         <div className="relative z-10">
-          {/* <h1 className="mb-4 text-2xl font-bold text-red-700">Reçu de caisse</h1> */}
-
           <div className="flex items-start justify-between">
             <div className="flex items-center">
               <Image

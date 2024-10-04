@@ -191,6 +191,21 @@ model Report {
     createdAt DateTime @default(now()) @db.Timestamp(6)
 }
 
+model HealthVisit {
+    id          String   @id @default(cuid())
+    createdAt   DateTime @default(now()) @db.Timestamp(6)
+    complaint   String?
+    date        DateTime
+    signs       String?
+    examination String?
+    assessment  String?
+    plan        String?
+    notify      Boolean  @default(true)
+    attachments String[]
+    studentId   String
+    createdById String
+}
+
 model Classroom {
     id                String         @id @default(uuid())
     name              String
