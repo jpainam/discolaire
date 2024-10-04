@@ -34,9 +34,13 @@ export async function authenticate(
         error: "invalid_credentials",
       };
     }
+    return {
+      error: "",
+    };
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     isError = true;
+    // import { isRedirectError } from 'next/dist/client/components/redirect'
     return {
       error: "invalid_credentials",
     };
