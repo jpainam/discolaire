@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import type { Prisma } from "@repo/db";
@@ -79,15 +80,25 @@ export const schoolRouter = createTRPCRouter({
         schoolId: z.string().min(1),
         countryId: z.string().optional(),
         applyRequiredFee: z.enum(["NO", "YES", "PASSIVE"]).optional(),
+        includeRequiredFee: z.boolean().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       const data = {} as Prisma.SchoolUpdateInput;
-      if (input.countryId) {
+      if (input.countryId !== undefined) {
         data.defaultCountryId = input.countryId;
       }
-      if (input.applyRequiredFee) {
+      if (input.applyRequiredFee !== undefined) {
         data.applyRequiredFee = input.applyRequiredFee;
+      }
+      if (input.includeRequiredFee !== undefined) {
+        data.includeRequiredFee = input.includeRequiredFee;
+      }
+      if (Object.keys(data).length === 0) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "No data to update",
+        });
       }
       return ctx.db.school.update({
         where: {

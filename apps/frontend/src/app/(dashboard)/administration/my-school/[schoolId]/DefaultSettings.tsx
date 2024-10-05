@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@repo/ui/select";
 import { Skeleton } from "@repo/ui/skeleton";
+import { Switch } from "@repo/ui/switch";
 
 import { CountryPicker } from "~/components/shared/CountryPicker";
 import { api } from "~/trpc/react";
@@ -54,8 +55,9 @@ export function DefaultSettings() {
         }}
         defaultValue={school?.defaultCountryId ?? undefined}
       />
-      <Label>{t("activate_require_fees")}</Label>
+      <Label>{t("activate_required_fees")}</Label>
       <Select
+        defaultValue={school?.applyRequiredFee ?? "NO"}
         onValueChange={(val) => {
           toast.success(t("updating"), { id: 0 });
           updateDefaultSettings.mutate({
@@ -73,6 +75,18 @@ export function DefaultSettings() {
           <SelectItem value="NO">{t("no")}</SelectItem>
         </SelectContent>
       </Select>
+      <Label>{t("include_required_fees_in_finances")}</Label>
+      <Switch
+        defaultChecked={school?.includeRequiredFee ?? false}
+        //checked={school?.includeRequiredFee ?? false}
+        onCheckedChange={(checked) => {
+          toast.success(t("updating"), { id: 0 });
+          updateDefaultSettings.mutate({
+            schoolId: params.schoolId,
+            includeRequiredFee: checked,
+          });
+        }}
+      />
     </div>
   );
 }
