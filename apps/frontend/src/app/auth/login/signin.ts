@@ -48,7 +48,9 @@ export async function authenticate(
         error: "invalid_credentials",
       };
     }
-    const schoolYear = await api.schoolYear.getDefault();
+    const schoolYear = await api.schoolYear.getDefault({
+      schoolId: user.schoolId,
+    });
     if (!schoolYear) {
       return {
         error: "no_school_year",
@@ -62,7 +64,7 @@ export async function authenticate(
       path: "/",
     });
     return {
-      error: "",
+      error: "3",
     };
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {

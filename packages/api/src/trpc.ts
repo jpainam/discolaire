@@ -135,7 +135,7 @@ export const publicProcedure = t.procedure.use(timingMiddleware);
 export const protectedProcedure = t.procedure
   .use(timingMiddleware)
   .use(({ ctx, next }) => {
-    if (!ctx.session?.user) {
+    if (!ctx.session?.user || !ctx.schoolYearId) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
     return next({
@@ -143,7 +143,7 @@ export const protectedProcedure = t.procedure
         // infers the `session` as non-nullable
         session: { ...ctx.session, user: ctx.session.user },
         schoolId: ctx.session.user.schoolId,
-        schoolYearId: ctx.schoolYearId ?? "",
+        schoolYearId: ctx.schoolYearId,
       },
     });
   });

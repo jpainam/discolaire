@@ -91,9 +91,11 @@ export const schoolYearRouter = createTRPCRouter({
       },
     });
   }),
-  getDefault: protectedProcedure.query(({ ctx }) => {
-    return schoolYearService.getDefault(ctx.schoolId);
-  }),
+  getDefault: publicProcedure
+    .input(z.object({ schoolId: z.string().min(1) }))
+    .query(({ input }) => {
+      return schoolYearService.getDefault(input.schoolId);
+    }),
   delete: protectedProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
