@@ -1,10 +1,11 @@
 import { z } from "zod";
 
+import type { Prisma } from "@repo/db";
+
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const createSchoolSchema = z.object({
   name: z.string().min(1),
-
   authorization: z.string().optional(),
   ministry: z.string().optional(),
   department: z.string().optional(),
@@ -43,6 +44,7 @@ export const schoolRouter = createTRPCRouter({
       },
     });
   }),
+
   delete: protectedProcedure
     .input(z.union([z.string().min(1), z.array(z.string().min(1))]))
     .mutation(async ({ ctx, input }) => {
@@ -71,18 +73,27 @@ export const schoolRouter = createTRPCRouter({
         data: input,
       });
     }),
-  updateDefaultCountry: protectedProcedure
+  updateDefaultSettings: protectedProcedure
     .input(
-      z.object({ schoolId: z.string().min(1), countryId: z.string().min(1) }),
+      z.object({
+        schoolId: z.string().min(1),
+        countryId: z.string().optional(),
+        applyRequiredFee: z.enum(["NO", "YES", "PASSIVE"]).optional(),
+      }),
     )
     .mutation(async ({ ctx, input }) => {
+      const data = {} as Prisma.SchoolUpdateInput;
+      if (input.countryId) {
+        data.defaultCountryId = input.countryId;
+      }
+      if (input.applyRequiredFee) {
+        data.applyRequiredFee = input.applyRequiredFee;
+      }
       return ctx.db.school.update({
         where: {
           id: input.schoolId,
         },
-        data: {
-          defaultCountryId: input.countryId,
-        },
+        data: data,
       });
     }),
 });

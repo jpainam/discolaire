@@ -701,6 +701,7 @@ model School {
     isActive         Boolean          @default(true)
     address          String?
     defaultCountryId String?
+    applyRequiredFee ApplyRequiredFee @default(NO)
     contacts         Contact[]
     users            User[]
     students         Student[]
@@ -1018,6 +1019,12 @@ enum TokenType {
     REFRESH
     RESET_PASSWORD
     VERIFY_EMAIL
+}
+
+enum ApplyRequiredFee {
+    YES
+    PASSIVE
+    NO
 }
 
 enum Gender {

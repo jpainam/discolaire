@@ -56,7 +56,10 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
   );
   const utils = api.useUtils();
   const disableFeeMutation = api.fee.disable.useMutation({
-    onSettled: () => utils.fee.invalidate(),
+    onSettled: async () => {
+      await utils.classroom.fees.invalidate(classroomId);
+      await utils.fee.invalidate();
+    },
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
     },
@@ -65,7 +68,10 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
     },
   });
   const deleteFeeMutation = api.fee.delete.useMutation({
-    onSettled: () => utils.fee.invalidate(),
+    onSettled: async () => {
+      await utils.classroom.fees.invalidate(classroomId);
+      await utils.fee.invalidate();
+    },
     onSuccess: () => {
       toast.success(t("deleted_successfully"), { id: 0 });
     },

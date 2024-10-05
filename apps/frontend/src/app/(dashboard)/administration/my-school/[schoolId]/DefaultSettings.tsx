@@ -5,6 +5,13 @@ import { toast } from "sonner";
 
 import { useLocale } from "@repo/hooks/use-locale";
 import { Label } from "@repo/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/select";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { CountryPicker } from "~/components/shared/CountryPicker";
@@ -15,7 +22,7 @@ export function DefaultSettings() {
   const params = useParams<{ schoolId: string }>();
   const schoolQuery = api.school.get.useQuery(params.schoolId);
   const utils = api.useUtils();
-  const updateDefaultCountry = api.school.updateDefaultCountry.useMutation({
+  const updateDefaultSettings = api.school.updateDefaultSettings.useMutation({
     onSettled: () => utils.school.invalidate(),
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
@@ -40,13 +47,32 @@ export function DefaultSettings() {
       <CountryPicker
         placeholder={t("country")}
         onChange={(country) => {
-          updateDefaultCountry.mutate({
+          updateDefaultSettings.mutate({
             schoolId: params.schoolId,
             countryId: country,
           });
         }}
         defaultValue={school?.defaultCountryId ?? undefined}
       />
+      <Label>{t("activate_require_fees")}</Label>
+      <Select
+        onValueChange={(val) => {
+          toast.success(t("updating"), { id: 0 });
+          updateDefaultSettings.mutate({
+            schoolId: params.schoolId,
+            applyRequiredFee: val as "YES" | "PASSIVE" | "NO",
+          });
+        }}
+      >
+        <SelectTrigger>
+          <SelectValue placeholder={t("status")} />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="YES">{t("yes_and_strict")}</SelectItem>
+          <SelectItem value="PASSIVE">{t("yes_but_passive")}</SelectItem>
+          <SelectItem value="NO">{t("no")}</SelectItem>
+        </SelectContent>
+      </Select>
     </div>
   );
 }

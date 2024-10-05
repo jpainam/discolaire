@@ -1,9 +1,9 @@
+import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
 import { Globe, Mail, MapPin, Phone } from "lucide-react";
 
 import { auth } from "@repo/auth";
 import { getServerTranslations } from "@repo/i18n/server";
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { NoPermission } from "@repo/ui/no-permission";
@@ -35,15 +35,16 @@ export default async function Page({
   }
   const { t } = await getServerTranslations();
   return (
-    <div className="flex flex-col gap-2 p-2">
+    <div className="flex flex-col gap-2 p-2 text-sm">
       <Card>
         <CardHeader className="flex flex-row items-center space-x-4 border-b bg-muted/50 p-2">
-          <Avatar className="h-20 w-20">
-            <AvatarImage src={school.logo ?? ""} alt={school.name} />
-            <AvatarFallback>
-              {school.name.slice(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
+          <Image
+            src={school.logo ?? ""}
+            alt={school.name}
+            width={80}
+            height={80}
+          />
+
           <div className="flex-1">
             <CardTitle className="text-xl">{school.name}</CardTitle>
             <p className="text-sm text-muted-foreground">ID: {school.id}</p>
@@ -53,7 +54,7 @@ export default async function Page({
           </FlatBadge>
           <SchoolDetailAction schoolId={school.id} />
         </CardHeader>
-        <CardContent className="py-4">
+        <CardContent className="p-2">
           <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
             <InfoItem label={t("authorization")} value={school.authorization} />
             <InfoItem label={t("ministry")} value={school.ministry} />
