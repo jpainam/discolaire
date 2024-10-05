@@ -30,7 +30,7 @@ const createEditFeeSchema = z.object({
   amount: z.coerce.number().min(1),
   dueDate: z.coerce.date(),
   isRequired: z.boolean().default(false),
-  isActive: z.boolean().default(true),
+  //isActive: z.boolean().default(true),
 });
 
 export function CreateEditFee({ fee }: { fee?: Fee }) {
@@ -43,7 +43,7 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
       amount: fee?.amount ?? 0,
       dueDate: fee?.dueDate ?? new Date(),
       isRequired: fee?.isRequired ?? false,
-      isActive: fee?.isActive ?? true,
+      //isActive: fee?.isActive ?? true,
     },
   });
   const params = useParams<{ id: string }>();
@@ -58,6 +58,7 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
     },
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
+      closeModal();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -70,6 +71,7 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
     },
     onSuccess: () => {
       toast.success(t("created_successfully"), { id: 0 });
+      closeModal();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -84,7 +86,7 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
       description: data.description,
       amount: data.amount,
       dueDate: data.dueDate,
-      isActive: data.isActive,
+      isActive: true,
       classroomId: classroomId,
       isRequired: data.isRequired,
     };
@@ -123,21 +125,23 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
           control={form.control}
           name="isRequired"
           render={({ field }) => (
-            <FormItem className="flex flex-row items-start space-x-4 space-y-0 py-4">
+            <FormItem className="col-span-full flex flex-row items-center space-x-2 space-y-0 py-2">
               <FormControl>
                 <Checkbox
                   checked={field.value}
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
-              <FormLabel>{t("required_fees")}</FormLabel>
-              <FormDescription>
-                {t("required_fees_description")}
-              </FormDescription>
+              <div className="space-y-1 leading-none">
+                <FormLabel>{t("required_fees")}</FormLabel>
+                <FormDescription>
+                  {t("required_fees_description")}
+                </FormDescription>
+              </div>
             </FormItem>
           )}
         />
-        <FormField
+        {/* <FormField
           control={form.control}
           name="isActive"
           render={({ field }) => (
@@ -151,7 +155,7 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
               <FormLabel>{t("is_active")}</FormLabel>
             </FormItem>
           )}
-        />
+        /> */}
 
         <div className="col-span-full ml-auto flex flex-row items-center gap-2">
           <Button
@@ -166,7 +170,13 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
             {t("cancel")}
           </Button>
 
-          <Button size={"sm"} type="submit">
+          <Button
+            isLoading={
+              updateFeeMutation.isPending || createFeeMutation.isPending
+            }
+            size={"sm"}
+            type="submit"
+          >
             <Save size={15} className={"mr-2"} />
             {fee ? t("edit") : t("submit")}
           </Button>
