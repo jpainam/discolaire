@@ -3,7 +3,7 @@
 import { subDays } from "date-fns";
 import { addDays } from "date-fns/addDays";
 import { sumBy } from "lodash";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { MoreHorizontal, Pencil, ShieldOff, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
@@ -55,6 +55,15 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
     },
   );
   const utils = api.useUtils();
+  const disableFeeMutation = api.fee.disable.useMutation({
+    onSettled: () => utils.fee.invalidate(),
+    onSuccess: () => {
+      toast.success(t("updated_successfully"), { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
   const deleteFeeMutation = api.fee.delete.useMutation({
     onSettled: () => utils.fee.invalidate(),
     onSuccess: () => {
@@ -156,6 +165,18 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
                           {canDeleteClassroomFee && (
                             <>
                               <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                onSelect={() => {
+                                  toast.loading(t("updating"), { id: 0 });
+                                  disableFeeMutation.mutate({
+                                    id: fee.id,
+                                    isActive: !fee.isActive,
+                                  });
+                                }}
+                              >
+                                <ShieldOff className="mr-2 h-4 w-4" />
+                                {fee.isActive ? t("disable") : t("enable")}
+                              </DropdownMenuItem>
                               <DropdownMenuItem
                                 className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
                                 onSelect={async () => {

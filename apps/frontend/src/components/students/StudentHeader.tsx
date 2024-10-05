@@ -84,6 +84,16 @@ export function StudentHeader({ className }: StudentHeaderProps) {
   const { createQueryString } = useCreateQueryString();
   const pathname = usePathname();
 
+  const disableStudentMutation = api.student.disable.useMutation({
+    onSettled: () => utils.student.invalidate(),
+    onSuccess: () => {
+      toast.success(t("updated_successfully"), { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
+
   const navigateToStudent = (id: string) => {
     if (!pathname.includes(params.id)) {
       router.push(`${pathname}/${id}/?${createQueryString({})}`);
@@ -280,9 +290,18 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                       {t("change_password")}
                     </DropdownMenuItem>
                   )}
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      if (!student) return;
+                      toast.loading(t("updating"), { id: 0 });
+                      disableStudentMutation.mutate({
+                        id: student.id,
+                        isActive: !student.isActive,
+                      });
+                    }}
+                  >
                     <ShieldBan className="mr-2 h-4 w-4" />
-                    {t("disable")}
+                    {student?.isActive ? t("disable") : t("enable")}
                   </DropdownMenuItem>
                   {canEditStudent && student && (
                     <DropdownMenuItem

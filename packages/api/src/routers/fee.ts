@@ -15,7 +15,23 @@ export const feeRouter = createTRPCRouter({
         },
       });
     }),
-
+  disable: protectedProcedure
+    .input(
+      z.object({
+        id: z.coerce.number(),
+        isActive: z.boolean(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.fee.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          isActive: input.isActive,
+        },
+      });
+    }),
   get: protectedProcedure.input(z.number()).query(async ({ ctx, input }) => {
     return ctx.db.fee.findUnique({
       where: {

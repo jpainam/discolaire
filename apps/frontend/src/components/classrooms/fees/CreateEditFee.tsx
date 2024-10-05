@@ -133,7 +133,7 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
                 />
               </FormControl>
               <div className="space-y-1 leading-none">
-                <FormLabel>{t("required_fees")}</FormLabel>
+                <FormLabel>{t("required_fees")} ? </FormLabel>
                 <FormDescription>
                   {t("required_fees_description")}
                 </FormDescription>

@@ -417,4 +417,16 @@ export const studentRouter = createTRPCRouter({
       },
     });
   }),
+  disable: protectedProcedure
+    .input(z.object({ id: z.string().min(1), isActive: z.boolean() }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.student.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          isActive: input.isActive,
+        },
+      });
+    }),
 });
