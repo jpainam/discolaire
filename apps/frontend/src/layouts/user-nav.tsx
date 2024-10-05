@@ -1,7 +1,6 @@
 "use client";
 
 import { Computer, LogOut, Settings, User } from "lucide-react";
-import { signOut } from "next-auth/react";
 
 import type { RouterOutputs } from "@repo/api";
 import { useRouter } from "@repo/hooks/use-router";
@@ -18,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 
+import { signinout } from "~/app/auth/login/signin";
 import { routes } from "~/configs/routes";
 import { MobileActionButtions } from "~/layouts/mobile-nav";
 
@@ -81,12 +81,19 @@ export function UserNav({
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
-          onClick={() => {
-            void signOut({ callbackUrl: "/", redirect: true });
-          }}
+          // onClick={() => {
+          //   void signOut({ callbackUrl: "/", redirect: true });
+          // }}
         >
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>{t("logout")}</span>
+          <form action={signinout}>
+            <button
+              className="flex flex-row items-center justify-between"
+              type="submit"
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>{t("logout")}</span>
+            </button>
+          </form>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

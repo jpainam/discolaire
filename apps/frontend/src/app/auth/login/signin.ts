@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-import { signIn } from "@repo/auth";
+import { signIn, signOut } from "@repo/auth";
 import { db } from "@repo/db";
 
 import { api } from "~/trpc/server";
@@ -76,4 +76,8 @@ export async function authenticate(
       redirect("/");
     }
   }
+}
+
+export async function signinout() {
+  await signOut({ redirectTo: "/auth/login" });
 }
