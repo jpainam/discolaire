@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useTransition } from "react";
+import { useTransition } from "react";
 
 import { useLocale } from "@repo/i18n";
 //import { useConfig } from "@repo/hooks/use-config";
@@ -24,9 +24,9 @@ export function SchoolYearSwitcher({ defaultValue }: SchoolYearSwitcherProps) {
   const schoolYearsQuery = api.schoolYear.all.useQuery();
   const [isUpdatePending, startUpdateTransition] = useTransition();
 
-  useEffect(() => {
-    void (defaultValue && createSchoolYearCookie(defaultValue));
-  }, [defaultValue]);
+  // useEffect(() => {
+  //   void (defaultValue && createSchoolYearCookie(defaultValue));
+  // }, [defaultValue]);
 
   const { t } = useLocale();
   if (isUpdatePending) {

@@ -2,6 +2,7 @@
 
 import { CircleHelp, Mail } from "lucide-react";
 
+import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -14,14 +15,20 @@ import { FeedBackDialog } from "./FeedbackDialog";
 import { SearchCommandMenu } from "./search-command-menu";
 import { TopRightPrinter } from "./TopRightPrinter";
 
-export function TopRightMenu({ className }: { className?: string }) {
+export function TopRightMenu({
+  className,
+  user,
+}: {
+  className?: string;
+  user: NonNullable<RouterOutputs["user"]["get"]>;
+}) {
   return (
     <div className={cn("flex flex-row items-center", className)}>
       <SearchCommandMenu />
       <nav className="flex items-center gap-2">
         <TopRightButtons />
         <ModeToggle />
-        <UserNav />
+        <UserNav user={user} />
       </nav>
     </div>
   );

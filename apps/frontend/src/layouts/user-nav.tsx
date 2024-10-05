@@ -1,8 +1,9 @@
 "use client";
 
 import { Computer, LogOut, Settings, User } from "lucide-react";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
+import type { RouterOutputs } from "@repo/api";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
@@ -20,18 +21,22 @@ import {
 import { routes } from "~/configs/routes";
 import { MobileActionButtions } from "~/layouts/mobile-nav";
 
-export function UserNav({ className }: { className?: string }) {
+export function UserNav({
+  className,
+  user,
+}: {
+  className?: string;
+  user: NonNullable<RouterOutputs["user"]["get"]>;
+}) {
   const { t } = useLocale();
   const router = useRouter();
-  const { data } = useSession();
-  const user = data?.user;
-  if (!user) return null;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className={className}>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={user.avatar} alt={"AV"} />
+            <AvatarImage src={user.avatar ?? undefined} alt={"AV"} />
             <AvatarFallback className="uppercase">{`${user.name?.charAt(0)}${user.name?.charAt(1)}`}</AvatarFallback>
           </Avatar>
         </Button>
