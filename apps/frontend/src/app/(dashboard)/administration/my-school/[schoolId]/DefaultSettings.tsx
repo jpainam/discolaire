@@ -32,6 +32,7 @@ export function DefaultSettings() {
       toast.error(error.message, { id: 0 });
     },
   });
+
   if (schoolQuery.isPending) {
     return (
       <div className="grid grid-cols-2 gap-2">
@@ -45,6 +46,7 @@ export function DefaultSettings() {
   return (
     <div className="grid grid-cols-2 gap-2">
       <Label>{t("default_country")}</Label>
+
       <CountryPicker
         placeholder={t("country")}
         onChange={(country) => {

@@ -34,6 +34,7 @@ import { FileUploader } from "@repo/ui/uploads/file-uploader";
 
 import { DatePicker } from "~/components/shared/date-picker";
 import { routes } from "~/configs/routes";
+import { useSchool } from "~/contexts/SchoolContext";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
@@ -88,11 +89,13 @@ export function CreateEditHealthVisit({
     }
   }, [form, uploadedFiles]);
 
+  const { school } = useSchool();
+
   const handleUpload = (files: File[]) => {
     if (!student) return;
     toast.promise(
       onUpload(files, {
-        destination: `${student.school.code}/health-visit-attachments`,
+        destination: `${school.code}/health-visit-attachments`,
       }),
       {
         loading: t("uploading"),
