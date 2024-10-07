@@ -77,7 +77,6 @@ export const schoolYearRouter = createTRPCRouter({
         data: {
           startDate: input.startDate,
           endDate: input.endDate,
-          id: input.name,
           name: input.name,
           schoolId: ctx.schoolId,
           isActive: input.isActive,

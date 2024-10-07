@@ -785,7 +785,7 @@ model Course {
 }
 
 model SchoolYear {
-    id                  String            @id
+    id                  String            @id @default(cuid())
     observation         String?
     createdAt           DateTime?         @default(now()) @db.Timestamp(6)
     updatedAt           DateTime          @updatedAt

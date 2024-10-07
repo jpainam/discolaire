@@ -47,7 +47,7 @@ export function SchoolYearSwitcher({ defaultValue }: SchoolYearSwitcherProps) {
       <SelectContent>
         {schoolYearsQuery.data?.map((item) => (
           <SelectItem key={item.id} value={item.id}>
-            {item.id}
+            {item.name}
           </SelectItem>
         ))}
       </SelectContent>
