@@ -3,22 +3,15 @@
 import React from "react";
 import { useSearchParams } from "next/navigation";
 
-import type { RouterOutputs } from "@repo/api";
-import type { DataTableFilterField } from "@repo/ui/data-table/v2/datatypes";
 import { useLocale } from "@repo/i18n";
-import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
-import { DataTable } from "@repo/ui/data-table/v2/data-table";
-import { DataTableToolbar } from "@repo/ui/data-table/v2/data-table-toolbar";
-import { useDataTable } from "@repo/ui/data-table/v2/use-data-table";
+import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
+import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
+import { DataTable, useDataTable } from "@repo/ui/datatable/index";
 
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
-import { ContactDataTableActions } from "./ContactDataTableActions";
+import { ContactDataTableAction } from "./ContactDataTableAction";
 import { getColumns } from "./ContactDataTableColumns";
-
-type ContactAllProcedureOutput = NonNullable<
-  RouterOutputs["contact"]["all"]
->[number];
 
 export function ContactDataTable({ className }: { className?: string }) {
   const { t } = useLocale();
@@ -36,45 +29,11 @@ export function ContactDataTable({ className }: { className?: string }) {
 
   const countQuery = api.contact.count.useQuery();
   const columns = React.useMemo(() => getColumns({ t: t }), [t]);
-  // const {
-  //   data: count,
-  //   isPending,
-  //   isError,
-  //   error,
-  // } = useQuery({
-  //   queryKey: [tags.contacts.list, "count"],
-  //   queryFn: async () => {
-  //     return await getContactCount();
-  //   },
-  // });
-  const filterFields: DataTableFilterField<ContactAllProcedureOutput>[] = [
-    {
-      label: t("firstName"),
-      value: "firstName",
-      placeholder: t("search"),
-    },
-    {
-      label: t("gender"),
-      value: "gender",
-      options: ["female", "male"].map((gender) => ({
-        label: gender,
-        value: gender,
-        withCount: true,
-      })),
-    },
-  ];
-  const pageCount = countQuery.data
-    ? Math.ceil(countQuery.data / (contactsQuery.data?.length ?? 1))
-    : 1;
 
   const { table } = useDataTable({
     data: contactsQuery.data ?? [],
     columns: columns,
-    pageCount: pageCount,
-    // optional props
-    filterFields: filterFields,
-    defaultPerPage: 30,
-    defaultSort: "createdAt.desc",
+    rowCount: countQuery.data ?? 1,
   });
 
   if (contactsQuery.isPending) {
@@ -91,14 +50,11 @@ export function ContactDataTable({ className }: { className?: string }) {
 
   return (
     <DataTable
-      variant="compact"
-      className={cn("p-2", className)}
+      className={cn(className)}
       table={table}
-      //floatingBar={<ContactDataTableBar table={table} />}
+      floatingBar={<ContactDataTableAction table={table} />}
     >
-      <DataTableToolbar table={table} filterFields={filterFields}>
-        <ContactDataTableActions table={table} />
-      </DataTableToolbar>
+      <DataTableToolbar table={table} />
     </DataTable>
   );
 }
