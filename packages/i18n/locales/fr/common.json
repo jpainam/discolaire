@@ -243,6 +243,7 @@
   "include_required_fees_in_finances": "Inclure les frais obligatoires dans les etats financier?",
   "activate_required_fees": "Exiger les frais obligatoires à l'inscription",
   "discipline": "Discipline",
+  "number_of_receipts_to_print": "Nombre de reçus à imprimer",
   "discount": "Remise",
   "discounts": "Remises",
   "documents": "Documents",

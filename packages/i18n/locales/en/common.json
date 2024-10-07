@@ -247,6 +247,7 @@
   "discipline": "Discipline",
   "include_required_fees_in_finances": "Include required fees in cash reports?",
   "discount": "Discount",
+  "number_of_receipts_to_print": "Number of receipts to print",
   "discounts": "Discounts",
   "documents": "Documents",
   "double_clicked_to_edit_or_add_remarks": "Double click to edit or add remarks for this student",

@@ -240,6 +240,7 @@
   "include_required_fees_in_finances": "Incluir tarifas obligatorias en los informes de caja?",
   "activate_required_fees": "Exigir tarifas obligatorias en la inscripción",
   "diplomas": "Diplomas",
+  "number_of_receipts_to_print": "Número de recibos a imprimir",
   "disable": "Deshabilitar",
   "yes_and_strict": "Sí y estricto",
   "yes_but_passive": "Sí pero pasivo",

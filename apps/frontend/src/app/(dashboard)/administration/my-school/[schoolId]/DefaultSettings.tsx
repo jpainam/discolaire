@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/hooks/use-locale";
+import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
 import {
   Select,
@@ -89,6 +90,30 @@ export function DefaultSettings() {
           });
         }}
       />
+      <Label>{t("Numbre de recu a imprimer:")}</Label>
+      {/* <Input type="number" /> */}
+
+      <div className="col-span-full flex flex-row justify-end gap-2">
+        <Button
+          variant={"outline"}
+          type="button"
+          onClick={() => {
+            console.log("reset");
+          }}
+          size={"sm"}
+        >
+          {t("reset")}
+        </Button>
+        <Button
+          type="submit"
+          onClick={() => {
+            console.log("save");
+          }}
+          size={"sm"}
+        >
+          {t("submit")}
+        </Button>
+      </div>
     </div>
   );
 }
