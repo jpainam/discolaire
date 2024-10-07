@@ -74,7 +74,7 @@ export function CourseTable() {
           )}
           {coursesQuery.data?.length === 0 && (
             <TableRow>
-              <TableCell colSpan={2}>
+              <TableCell colSpan={5}>
                 <EmptyState />
               </TableCell>
             </TableRow>

@@ -103,4 +103,30 @@ export const policyRouter = createTRPCRouter({
         },
       });
     }),
+
+  createFromJson: protectedProcedure
+    .input(z.object({ schoolId: z.string().min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      const policies = await ctx.db.policy.findMany({
+        where: {
+          schoolId: "cm1hbntgn00001h578bvyjxln",
+        },
+      });
+      const data = policies.map((d) => {
+        return {
+          name: d.name,
+          actions: d.actions,
+          resources: d.resources,
+          description: d.description,
+          effect: d.effect,
+          condition: {},
+          createdBy: ctx.session.user.id,
+          schoolId: input.schoolId,
+        };
+      });
+
+      return ctx.db.policy.createMany({
+        data: data,
+      });
+    }),
 });

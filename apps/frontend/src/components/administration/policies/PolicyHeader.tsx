@@ -26,6 +26,7 @@ export function PolicyHeader() {
   const [_, setSearchValue] = useQueryState("q");
   const [selectedPolicies, setSelectedPolicies] = useAtom(selectedPoliciesAtom);
   const utils = api.useUtils();
+
   const canCreatePolicy = useCheckPermissions(
     PermissionAction.CREATE,
     "policy",
@@ -42,6 +43,19 @@ export function PolicyHeader() {
       setSelectedPolicies([]);
     },
   });
+
+  // const { school } = useSchool();
+  // const addAllMutation = api.policy.createFromJson.useMutation({
+  //   onSuccess: () => {
+  //     toast.success(t("created_successfully"), { id: 0 });
+  //   },
+  //   onError: (error) => {
+  //     toast.error(error.message, { id: 0 });
+  //   },
+  //   onSettled: async () => {
+  //     await utils.policy.invalidate();
+  //   },
+  // });
 
   useEffect(() => {
     void setSearchValue(debounceValue);
@@ -69,6 +83,15 @@ export function PolicyHeader() {
           {t("add")}
         </Button>
       )}
+
+      {/* <Button
+        onClick={() => {
+          toast.loading(t("creating"), { id: 0 });
+          addAllMutation.mutate({ schoolId: school.id });
+        }}
+      >
+        Create all
+      </Button> */}
 
       {canDeletePolicy && selectedPolicies.length > 0 && (
         <Button
