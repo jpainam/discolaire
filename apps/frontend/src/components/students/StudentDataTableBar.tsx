@@ -10,6 +10,7 @@ import {
 } from "@radix-ui/react-icons";
 import { SelectTrigger } from "@radix-ui/react-select";
 
+import type { Student } from "@repo/db";
 import { Button } from "@repo/ui/button";
 import {
   Select,
@@ -20,7 +21,6 @@ import {
 import { Separator } from "@repo/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
 
-import type { Student } from "~/types/student";
 import { Kbd } from "~/components/kbd";
 import { exportTableToCSV } from "~/lib/export";
 

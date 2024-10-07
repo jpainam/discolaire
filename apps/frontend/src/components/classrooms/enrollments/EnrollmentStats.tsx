@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
+import type { Student } from "@repo/db";
 import { useLocale } from "@repo/i18n";
-
-import type { Student } from "~/types/student";
 
 export function EnrollmentStats({ students }: { students: Student[] }) {
   const { t } = useLocale();
