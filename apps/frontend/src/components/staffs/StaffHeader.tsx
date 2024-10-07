@@ -57,7 +57,7 @@ export function StaffHeader() {
 
       <StaffLevelSelector
         defaultValue={level ? level : undefined}
-        onChange={(val) => setLevel(val == "" ? null : val)}
+        onChange={(val) => setLevel(val ?? null)}
       />
 
       <Separator orientation="vertical" />
