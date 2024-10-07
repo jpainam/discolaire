@@ -125,7 +125,11 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
       jobTitle: data.jobTitle,
       countryId: data.countryId,
       observation: data.observation,
-      degreeId: data.degreeId ? parseInt(data.degreeId) : undefined,
+      degreeId: data.degreeId
+        ? !Number.isNaN(parseInt(data.degreeId, 10))
+          ? parseInt(data.degreeId, 10)
+          : undefined
+        : undefined,
       employmentType: data.employmentType,
       address: data.address,
       email: data.email,
@@ -302,7 +306,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
             size={"sm"}
             type="submit"
           >
-            {staff ? t("edit") : t("submit")}
+            {t("submit")}
           </Button>
         </div>
       </form>

@@ -37,7 +37,7 @@ interface StaffLevelSelectorProps {
   className?: string;
   disabled?: boolean;
   defaultValue?: string;
-  onChange: (value: string) => void;
+  onChange: (value: string | undefined) => void;
 }
 
 export const StaffLevelSelector = ({
@@ -97,7 +97,7 @@ export const StaffLevelSelector = ({
                       onSelect={(_selectedValue) => {
                         const v =
                           level.id == Number(value) ? undefined : level.id;
-                        onChange(v?.toString() ?? "");
+                        onChange(v?.toString() ?? undefined);
                         setValue(v?.toString() ?? "");
                         setOpen(false);
                       }}
