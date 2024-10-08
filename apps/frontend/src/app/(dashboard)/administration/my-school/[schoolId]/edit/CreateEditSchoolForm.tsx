@@ -48,7 +48,7 @@ export function CreateEditSchoolForm({ school }: { school: School }) {
         //form.setValue("logo", url);
       }
     }
-  }, [form, params.schoolId, updateLogoMutation, uploadedFiles]);
+  }, [uploadedFiles]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
