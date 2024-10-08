@@ -47,7 +47,7 @@ export function CountryPicker({
     defaultValue ? defaultValue : undefined,
   );
   const [open, setOpen] = React.useState(false);
-  const schoolQuery = api.school.mySchool.useQuery();
+  const schoolQuery = api.school.getSchool.useQuery();
   useEffect(() => {
     if (!schoolQuery.data) return;
     if (!defaultValue) {

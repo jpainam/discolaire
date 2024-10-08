@@ -31,7 +31,7 @@ export const schoolRouter = createTRPCRouter({
       },
     });
   }),
-  mySchool: protectedProcedure.query(async ({ ctx }) => {
+  getSchool: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.school.findUnique({
       where: {
         id: ctx.schoolId,

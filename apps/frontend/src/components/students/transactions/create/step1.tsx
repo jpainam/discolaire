@@ -34,8 +34,13 @@ const makePaymentFormSchema = z.object({
   paymentMethod: z.string().min(1),
 });
 
-export function Step1() {
+export function Step1({
+  applyRequiredFee,
+}: {
+  applyRequiredFee: "YES" | "NO" | "PASSIVE";
+}) {
   const [amount] = useQueryState("amount", parseAsFloat.withDefault(0));
+
   const [description] = useQueryState("description", {
     defaultValue: "",
   });
@@ -76,7 +81,7 @@ export function Step1() {
 
   return (
     <div className="mx-auto w-full max-w-3xl">
-      <RequiredFeeForm />
+      {applyRequiredFee != "YES" && <RequiredFeeForm />}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 gap-2 px-4 md:grid-cols-2 md:gap-4">

@@ -23,6 +23,10 @@ export default async function Page({
   const { t } = await getServerTranslations();
   const classroom = await api.student.classroom({ studentId: id });
   const isStep2 = amount && description && transactionType && paymentMethod;
+  const school = await api.school.getSchool();
+  if (!school) {
+    throw new Error("School not found");
+  }
   return (
     <div className="flex w-full flex-col gap-2">
       <div className="flex items-center border-b bg-secondary px-2 py-2 text-secondary-foreground">
@@ -42,7 +46,7 @@ export default async function Page({
               classroomId={classroom.id}
             />
           ) : (
-            <Step1 />
+            <Step1 applyRequiredFee={school.applyRequiredFee} />
           )}
         </>
       )}

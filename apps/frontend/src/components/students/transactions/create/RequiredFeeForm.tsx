@@ -18,8 +18,12 @@ import { Label } from "@repo/ui/label";
 import { api } from "~/trpc/react";
 
 type RequiredFee = RouterOutputs["student"]["unpaidRequiredFees"][number];
+
 export function RequiredFeeForm() {
   const params = useParams<{ id: string }>();
+  const unpaidRequiredFeeQuery = api.student.unpaidRequiredFees.useQuery(
+    params.id,
+  );
   const [selectedItems, setSelectedItems] = useState<RequiredFee[]>([]);
   const { t } = useLocale();
   const handleCheckboxChange = (fee: RequiredFee) => {
@@ -27,9 +31,6 @@ export function RequiredFeeForm() {
       prev.includes(fee) ? prev.filter((i) => i.id !== fee.id) : [...prev, fee],
     );
   };
-  const unpaidRequiredFeeQuery = api.student.unpaidRequiredFees.useQuery(
-    params.id,
-  );
   const data = unpaidRequiredFeeQuery.data ?? [];
   return (
     <Card className="mx-4 mb-4 border-t-4 border-t-orange-600">
