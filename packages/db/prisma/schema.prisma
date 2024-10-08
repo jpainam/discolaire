@@ -553,7 +553,6 @@ model StudentSibling {
 
 model StudentAccount {
     id           Int           @id @default(autoincrement())
-    code         String? //@unique
     name         String?
     studentId    String
     createdBy    String?

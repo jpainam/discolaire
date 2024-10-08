@@ -5,6 +5,7 @@ import { z } from "zod";
 import type { Prisma, Student } from "@repo/db";
 
 import { encryptPassword } from "../encrypt";
+import { accountService } from "../services/account-service";
 import { studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -134,6 +135,11 @@ export const studentRouter = createTRPCRouter({
       });
       void studentService.addClubs(student.id, input.clubs ?? []);
       void studentService.addSports(student.id, input.sports ?? []);
+      void accountService.attachAccount(
+        student.id,
+        `${student.firstName} ${student.lastName}`,
+        ctx.session.user.id,
+      );
       if (input.classroom) {
         await ctx.db.enrollment.create({
           data: {
@@ -169,6 +175,11 @@ export const studentRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       void studentService.addClubs(input.id, input.clubs ?? []);
       void studentService.addSports(input.id, input.sports ?? []);
+      void accountService.attachAccount(
+        input.id,
+        `${input.firstName} ${input.lastName}`,
+        ctx.session.user.id,
+      );
       return ctx.db.student.update({
         where: { id: input.id },
         data: {
