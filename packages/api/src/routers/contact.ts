@@ -37,34 +37,36 @@ export const contactRouter = createTRPCRouter({
       },
     });
   }),
+
   all: protectedProcedure
     .input(
       z.object({
-        per_page: z.coerce.number().optional().default(20),
-        page: z.coerce.number().optional().default(1),
-        sort: z.string().optional().default("lastName"),
+        // per_page: z.coerce.number().optional().default(30),
+        // page: z.coerce.number().optional().default(1),
+        // sort: z.string().optional().default("lastName"),
         q: z.string().optional().default(""),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const offset = (input.page - 1) * input.per_page;
+      //const offset = (input.page - 1) * input.per_page;
+      const qq = `%${input.q}%`;
       return ctx.db.contact.findMany({
-        skip: offset,
-        take: input.per_page,
+        //skip: offset,
+        take: 30, //input.per_page,
         where: {
           schoolId: ctx.schoolId,
           OR: [
-            { firstName: { startsWith: `%${input.q}%` } },
-            { lastName: { startsWith: `%${input.q}%` } },
-            { phoneNumber1: { startsWith: `%${input.q}%` } },
-            { phoneNumber2: { startsWith: `%${input.q}%` } },
-            { email: { startsWith: `%${input.q}%` } },
-            { employer: { startsWith: `%${input.q}%` } },
-            { title: { startsWith: `%${input.q}%` } },
+            { firstName: { startsWith: qq, mode: "insensitive" } },
+            { lastName: { startsWith: qq, mode: "insensitive" } },
+            { phoneNumber1: { startsWith: qq, mode: "insensitive" } },
+            { phoneNumber2: { startsWith: qq, mode: "insensitive" } },
+            { email: { startsWith: qq, mode: "insensitive" } },
+            { employer: { startsWith: qq, mode: "insensitive" } },
+            { title: { startsWith: qq, mode: "insensitive" } },
           ],
         },
         orderBy: {
-          createdAt: "desc",
+          lastName: "asc",
         },
       });
     }),
@@ -123,13 +125,16 @@ export const contactRouter = createTRPCRouter({
   count: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.contact.count();
   }),
-  selector: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db.contact.findMany({
-      orderBy: {
-        lastName: "asc",
-      },
-    });
-  }),
+  // selector: protectedProcedure.query(async ({ ctx }) => {
+  //   return ctx.db.contact.findMany({
+  //     where: {
+  //       schoolId: ctx.schoolId,
+  //     },
+  //     orderBy: {
+  //       lastName: "asc",
+  //     },
+  //   });
+  // }),
   search: protectedProcedure
     .input(z.object({ q: z.string() }))
     .query(async ({ ctx, input }) => {

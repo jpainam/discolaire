@@ -18,7 +18,7 @@ export default function Page() {
   //const count = await api.contact.count();
 
   return (
-    <div className="flex w-full flex-row">
+    <div className="flex w-full flex-row px-2">
       <ContactDataTable />
       {/* <div className="grid md:grid-cols-2 p-1 gap-2">
         <ContactEffectif />

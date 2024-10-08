@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 "use client";
 
-import { useParams } from "next/navigation";
-import { MoreVertical, PlusIcon } from "lucide-react";
+import { useState } from "react";
+import { ChevronDownIcon, MoreVertical, PlusIcon } from "lucide-react";
 
 import { useRouter } from "@repo/hooks/use-router";
 import { useSheet } from "@repo/hooks/use-sheet";
@@ -17,20 +16,41 @@ import { Label } from "@repo/ui/label";
 import { Separator } from "@repo/ui/separator";
 
 import { routes } from "~/configs/routes";
+import { cn } from "~/lib/utils";
 import { DropdownHelp } from "../shared/DropdownHelp";
-import { ContactSelector } from "../shared/selects/ContactSelector";
+import { ContactSearch } from "./ContactSearch";
 import CreateEditContact from "./CreateEditContact";
 
 export function ContactHeader() {
   const router = useRouter();
   const { t } = useLocale();
-  const params = useParams<{ id: string }>();
+  //const params = useParams<{ id: string }>();
   const { openSheet } = useSheet();
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="grid flex-row items-center gap-4 px-4 py-1 md:flex">
-      <Label className="hidden md:block"> {t("contacts")}</Label>
-      <ContactSelector
+    <div className="grid flex-row items-center gap-4 px-4 py-2 md:flex">
+      <Label className="hidden md:block">{t("contacts")}</Label>
+      <Button
+        variant="outline"
+        className={cn(
+          "flex w-full justify-between bg-background text-sm font-semibold shadow-none 2xl:w-[500px]",
+        )}
+        onClick={() => setOpen(true)}
+      >
+        {t("search")}
+        <ChevronDownIcon className="ml-2 h-4 w-4" />
+      </Button>
+      <ContactSearch
+        open={open}
+        setOpen={setOpen}
+        onChange={(val) => {
+          router.push(routes.contacts.details(val));
+        }}
+      />
+
+      {/* <Label className="hidden md:block"> {t("contacts")}</Label> */}
+      {/* <ContactSelector
         defaultValue={params.id}
         className="w-full md:w-[400px]"
         searchPlaceholder={t("search_for_an_option")}
@@ -38,7 +58,7 @@ export function ContactHeader() {
         onChange={(val) => {
           val && router.push(routes.contacts.details(val));
         }}
-      />
+      /> */}
 
       <div className="ml-auto flex flex-row items-center gap-2">
         <Button

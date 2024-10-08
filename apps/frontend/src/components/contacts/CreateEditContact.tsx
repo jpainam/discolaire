@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
+import { useRouter } from "@repo/hooks/use-router";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -23,7 +24,7 @@ import { Textarea } from "@repo/ui/textarea";
 
 import { InputField } from "~/components/shared/forms/input-field";
 import PrefixSelector from "~/components/shared/forms/PrefixSelector";
-import { getErrorMessage } from "~/lib/handle-error";
+import { routes } from "~/configs/routes";
 import { api } from "~/trpc/react";
 
 const createEditContactSchema = z.object({
@@ -69,10 +70,31 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
     },
   });
   const { t } = useLocale();
-
-  const createContactMutation = api.contact.create.useMutation();
-  const updateContactMutation = api.contact.update.useMutation();
   const utils = api.useUtils();
+  const router = useRouter();
+
+  const createContactMutation = api.contact.create.useMutation({
+    onSettled: () => utils.contact.invalidate(),
+    onSuccess: (result) => {
+      closeSheet();
+      toast.success(t("created_successfully"), { id: 0 });
+      router.push(routes.contacts.details(result.id));
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
+  const updateContactMutation = api.contact.update.useMutation({
+    onSettled: () => utils.contact.invalidate(),
+    onSuccess: (result) => {
+      closeSheet();
+      toast.success(t("updated_successfully"), { id: 0 });
+      router.push(routes.contacts.details(result.id));
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
 
   const onSubmit = (data: z.infer<typeof createEditContactSchema>) => {
     const values = {
@@ -80,32 +102,11 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
       email: data.email || "",
     };
     if (contact) {
-      toast.promise(
-        updateContactMutation.mutateAsync({ id: contact.id, ...values }),
-        {
-          loading: t("updating"),
-          error: (error) => {
-            return getErrorMessage(error);
-          },
-          success: () => {
-            void utils.contact.get.invalidate(contact.id);
-            closeSheet();
-            return t("updated_successfully");
-          },
-        },
-      );
+      toast.loading(t("updating"), { id: 0 });
+      updateContactMutation.mutate({ id: contact.id, ...values });
     } else {
-      toast.promise(createContactMutation.mutateAsync({ ...values }), {
-        loading: t("creating"),
-        error: (error) => {
-          return getErrorMessage(error);
-        },
-        success: () => {
-          void utils.contact.all.invalidate();
-          closeSheet();
-          return t("created_successfully");
-        },
-      });
+      toast.loading(t("creating"), { id: 0 });
+      createContactMutation.mutate({ ...values });
     }
   };
 
