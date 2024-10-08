@@ -125,16 +125,16 @@ export const contactRouter = createTRPCRouter({
   count: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.contact.count();
   }),
-  // selector: protectedProcedure.query(async ({ ctx }) => {
-  //   return ctx.db.contact.findMany({
-  //     where: {
-  //       schoolId: ctx.schoolId,
-  //     },
-  //     orderBy: {
-  //       lastName: "asc",
-  //     },
-  //   });
-  // }),
+  selector: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.db.contact.findMany({
+      where: {
+        schoolId: ctx.schoolId,
+      },
+      orderBy: {
+        lastName: "asc",
+      },
+    });
+  }),
   search: protectedProcedure
     .input(z.object({ q: z.string() }))
     .query(async ({ ctx, input }) => {
