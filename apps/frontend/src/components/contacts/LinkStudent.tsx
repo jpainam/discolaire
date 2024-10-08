@@ -117,9 +117,9 @@ export function LinkStudent({ contactId }: { contactId: string }) {
                     <span className="text-xs font-medium leading-none">
                       {stud.lastName} {stud.firstName}
                     </span>
-                    <span className="text-xs text-muted-foreground">
+                    {/* <span className="text-xs text-muted-foreground">
                       {stud.email}
-                    </span>
+                    </span> */}
                   </div>
                   {selectedStudents.includes(stud) ? (
                     <Check className="ml-auto flex h-5 w-5 text-primary" />

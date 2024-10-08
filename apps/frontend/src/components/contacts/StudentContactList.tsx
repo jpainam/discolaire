@@ -72,7 +72,7 @@ export default function StudentContactList({
             if (!contact) return;
             openModal({
               className: "p-0 w-[600px]",
-              title: <div className="px-4 py-2">{t("link_students")}</div>,
+              title: <div className="px-4 pt-2">{t("link_students")}</div>,
               view: <LinkStudent contactId={contact.id} />,
             });
           }}
