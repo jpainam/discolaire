@@ -25,7 +25,7 @@ const formSchema = z.object({
   phoneNumber2: z.string().optional(),
   email: z.string().email().optional(),
   website: z.string().url().optional(),
-  logo: z.string().optional(),
+  //logo: z.string().optional(),
   isActive: z.boolean().default(true),
 });
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
 import type { School } from "@repo/db";
@@ -19,21 +20,35 @@ import { Input } from "@repo/ui/input";
 import { FileUploader } from "@repo/ui/uploads/file-uploader";
 
 import { getErrorMessage } from "~/lib/handle-error";
+import { api } from "~/trpc/react";
 
 export function CreateEditSchoolForm({ school }: { school: School }) {
   const { t } = useLocale();
   const form = useFormContext();
+  const params = useParams<{ schoolId: string }>();
   const { onUpload, isPending, data: uploadedFiles } = useUpload();
+  const updateLogoMutation = api.school.updateLogo.useMutation({
+    onSuccess: () => {
+      toast.success(t("updated_successfully"), { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
 
   useEffect(() => {
     if (uploadedFiles.length > 0) {
       const uploadedFile = uploadedFiles[0];
       if (uploadedFile?.data?.id && uploadedFile.data.url) {
         const url = `${uploadedFile.data.url}${uploadedFile.data.id}`;
-        form.setValue("logo", url);
+        updateLogoMutation.mutate({
+          id: params.schoolId,
+          logo: url,
+        });
+        //form.setValue("logo", url);
       }
     }
-  }, [form, uploadedFiles]);
+  }, [form, params.schoolId, updateLogoMutation, uploadedFiles]);
 
   return (
     <>

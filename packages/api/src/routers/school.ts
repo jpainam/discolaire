@@ -17,7 +17,7 @@ const createSchoolSchema = z.object({
   phoneNumber2: z.string().optional(),
   email: z.string().optional(),
   website: z.string().optional(),
-  logo: z.string().optional(),
+  //logo: z.string().optional(),
   createdAt: z.coerce.date().default(() => new Date()),
   updatedAt: z.coerce.date().default(() => new Date()),
   isActive: z.boolean().default(true),
@@ -65,6 +65,18 @@ export const schoolRouter = createTRPCRouter({
           id: input.id,
         },
         data: input,
+      });
+    }),
+  updateLogo: protectedProcedure
+    .input(z.object({ id: z.string().min(1), logo: z.string().min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.school.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          logo: input.logo,
+        },
       });
     }),
   create: protectedProcedure
