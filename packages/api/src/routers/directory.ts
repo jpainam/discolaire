@@ -19,6 +19,7 @@ export const directoryRouter = createTRPCRouter({
         orderBy: { lastName: "asc" },
         take: 10,
         where: {
+          schoolId: ctx.schoolId,
           OR: [
             { firstName: { contains: qq, mode: "insensitive" } },
             { email: { contains: qq, mode: "insensitive" } },
@@ -40,6 +41,7 @@ export const directoryRouter = createTRPCRouter({
         take: 10,
         orderBy: { lastName: "asc" },
         where: {
+          schoolId: ctx.schoolId,
           OR: [
             { firstName: { contains: qq, mode: "insensitive" } },
             { lastName: { contains: qq, mode: "insensitive" } },
@@ -62,6 +64,7 @@ export const directoryRouter = createTRPCRouter({
         orderBy: { lastName: "asc" },
         take: 10,
         where: {
+          schoolId: ctx.schoolId,
           OR: [
             { firstName: { contains: qq, mode: "insensitive" } },
             { lastName: { contains: qq, mode: "insensitive" } },
