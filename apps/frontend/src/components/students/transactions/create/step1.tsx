@@ -104,7 +104,7 @@ export function Step1({
 
   return (
     <div className="mx-auto w-full max-w-3xl">
-      {applyRequiredFee != "YES" && <RequiredFeeForm />}
+      {applyRequiredFee !== "NO" && <RequiredFeeForm />}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 gap-2 px-4 md:grid-cols-2 md:gap-4">

@@ -142,6 +142,7 @@ export const feeRouter = createTRPCRouter({
           id: ctx.schoolId,
         },
       });
+      console.log(school);
       if (school?.applyRequiredFee !== "YES") {
         return true;
       }

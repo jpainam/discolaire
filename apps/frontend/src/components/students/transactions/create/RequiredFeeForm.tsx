@@ -14,6 +14,7 @@ import {
 } from "@repo/ui/card";
 import { Checkbox } from "@repo/ui/checkbox";
 import { Label } from "@repo/ui/label";
+import { Skeleton } from "@repo/ui/skeleton";
 
 import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/react";
@@ -45,6 +46,9 @@ export function RequiredFeeForm() {
         </CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-2 gap-2 p-2">
+        {unpaidRequiredFeeQuery.isPending && (
+          <Skeleton className="col-span-full h-8 w-full" />
+        )}
         {data.map((fee, index) => {
           return (
             <div className="flex items-center space-x-2">
