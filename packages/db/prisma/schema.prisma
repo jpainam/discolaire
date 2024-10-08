@@ -703,6 +703,7 @@ model School {
     phoneNumber2       String?
     email              String?
     website            String?
+    numberOfReceipts   Int?             @default(1)
     logo               String?
     createdAt          DateTime         @default(now()) @db.Timestamp(6)
     updatedAt          DateTime         @updatedAt

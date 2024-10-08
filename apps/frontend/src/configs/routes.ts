@@ -148,6 +148,10 @@ export const routes = {
       index: "/administration/schools",
       details: (id: string) => `/administration/schools/${id}`,
     },
+    my_school: {
+      index: `/administration/my-school`,
+      details: (id: string) => `/administration/my-school/${id}`,
+    },
     subjects: {
       index: "/administration/subjects",
       details: (id: string) => `/

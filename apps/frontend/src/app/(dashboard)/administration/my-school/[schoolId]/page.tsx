@@ -103,7 +103,7 @@ export default async function Page({
           <CardTitle>{t("default_settings")}</CardTitle>
         </CardHeader>
         <CardContent className="p-4">
-          <DefaultSettings />
+          <DefaultSettings school={school} />
         </CardContent>
       </Card>
     </div>
