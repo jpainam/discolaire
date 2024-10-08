@@ -254,8 +254,7 @@ export const userRouter = createTRPCRouter({
           message: "User not found",
         });
       }
-      console.log(input.oldPassword, user.password);
-      console.log(await encryptPassword(input.oldPassword));
+
       if (!(await bcrypt.compare(input.oldPassword, user.password))) {
         throw new TRPCError({
           code: "BAD_REQUEST",

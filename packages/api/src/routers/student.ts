@@ -1,8 +1,10 @@
 import { TRPCError } from "@trpc/server";
+import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
 import type { Prisma, Student } from "@repo/db";
 
+import { encryptPassword } from "../encrypt";
 import { studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -142,6 +144,24 @@ export const studentRouter = createTRPCRouter({
           },
         });
       }
+      // create user
+      const userData = {
+        username: uuidv4(),
+        password: await encryptPassword("password"),
+        schoolId: ctx.schoolId,
+        name: `${student.firstName} ${student.lastName}`,
+      };
+      const user = await ctx.db.user.create({
+        data: userData,
+      });
+      await ctx.db.student.update({
+        where: {
+          id: student.id,
+        },
+        data: {
+          userId: user.id,
+        },
+      });
       return student;
     }),
   update: protectedProcedure

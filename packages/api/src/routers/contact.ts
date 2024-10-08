@@ -1,5 +1,7 @@
+import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
+import { encryptPassword } from "../encrypt";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -148,7 +150,7 @@ export const contactRouter = createTRPCRouter({
   create: protectedProcedure
     .input(createUpdateSchema)
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.contact.create({
+      const contact = await ctx.db.contact.create({
         data: {
           firstName: input.firstName,
           lastName: input.lastName,
@@ -165,6 +167,25 @@ export const contactRouter = createTRPCRouter({
           schoolId: ctx.schoolId,
         },
       });
+      // create user
+      const userData = {
+        username: uuidv4(),
+        password: await encryptPassword("password"),
+        schoolId: ctx.schoolId,
+        name: `${contact.firstName} ${contact.lastName}`,
+      };
+      const user = await ctx.db.user.create({
+        data: userData,
+      });
+      await ctx.db.contact.update({
+        where: {
+          id: contact.id,
+        },
+        data: {
+          userId: user.id,
+        },
+      });
+      return contact;
     }),
   update: protectedProcedure
     .input(createUpdateSchema.extend({ id: z.string() }))

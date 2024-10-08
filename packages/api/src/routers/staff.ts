@@ -1,6 +1,8 @@
 import type { TRPCRouterRecord } from "@trpc/server";
+import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
+import { encryptPassword } from "../encrypt";
 import { protectedProcedure, publicProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -95,13 +97,32 @@ export const staffRouter = {
 
   create: protectedProcedure
     .input(createUpdateSchema)
-    .mutation(({ ctx, input }) => {
-      return ctx.db.staff.create({
+    .mutation(async ({ ctx, input }) => {
+      const staff = await ctx.db.staff.create({
         data: {
           ...input,
           schoolId: ctx.schoolId,
         },
       });
+      // create user
+      const userData = {
+        username: uuidv4(),
+        password: await encryptPassword("password"),
+        schoolId: ctx.schoolId,
+        name: `${staff.firstName} ${staff.lastName}`,
+      };
+      const user = await ctx.db.user.create({
+        data: userData,
+      });
+      await ctx.db.staff.update({
+        where: {
+          id: staff.id,
+        },
+        data: {
+          userId: user.id,
+        },
+      });
+      return staff;
     }),
 
   update: protectedProcedure
