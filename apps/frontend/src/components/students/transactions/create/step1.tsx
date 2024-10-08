@@ -1,7 +1,10 @@
 "use client";
 
+import { useParams } from "next/navigation";
+import { useAtomValue } from "jotai";
 import { ArrowRight } from "lucide-react";
 import { parseAsFloat, useQueryState } from "nuqs";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { useRouter } from "@repo/hooks/use-router";
@@ -25,6 +28,8 @@ import {
   SelectValue,
 } from "@repo/ui/select";
 
+import { api } from "~/trpc/react";
+import { requiredFeesAtom } from "./required-fees-atom";
 import { RequiredFeeForm } from "./RequiredFeeForm";
 
 const makePaymentFormSchema = z.object({
@@ -40,6 +45,8 @@ export function Step1({
   applyRequiredFee: "YES" | "NO" | "PASSIVE";
 }) {
   const [amount] = useQueryState("amount", parseAsFloat.withDefault(0));
+
+  const requiredFeeIds = useAtomValue(requiredFeesAtom);
 
   const [description] = useQueryState("description", {
     defaultValue: "",
@@ -61,6 +68,9 @@ export function Step1({
   });
   const router = useRouter();
   const { t } = useLocale();
+  const params = useParams<{ id: string }>();
+
+  const checkRequiredFeeMutation = api.fee.checkRequiredFees.useMutation();
 
   function onSubmit(data: z.infer<typeof makePaymentFormSchema>) {
     const values = {
@@ -70,8 +80,21 @@ export function Step1({
       paymentMethod: data.paymentMethod,
     };
     const searchParams = new URLSearchParams(values).toString();
-
-    router.push(`./create?${searchParams}`);
+    checkRequiredFeeMutation.mutate(
+      { studentId: params.id, feeIds: requiredFeeIds },
+      {
+        onError: (error) => {
+          toast.error(error.message);
+        },
+        onSuccess: (result) => {
+          if (result) {
+            router.push(`./create?${searchParams}`);
+          } else {
+            toast.error(t("required_fee_warning"));
+          }
+        },
+      },
+    );
   }
   const items: { label: string; value: string }[] = [
     { label: "credit", value: "CREDIT" },
@@ -168,7 +191,11 @@ export function Step1({
             />
 
             <div className="col-span-full flex justify-end gap-2">
-              <Button size="sm" type="submit">
+              <Button
+                isLoading={checkRequiredFeeMutation.isPending}
+                size="sm"
+                type="submit"
+              >
                 {t("next")}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>

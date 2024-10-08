@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { useParams } from "next/navigation";
+import { useAtom } from "jotai";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/hooks/use-locale";
@@ -15,7 +15,9 @@ import {
 import { Checkbox } from "@repo/ui/checkbox";
 import { Label } from "@repo/ui/label";
 
+import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/react";
+import { requiredFeesAtom } from "./required-fees-atom";
 
 type RequiredFee = RouterOutputs["student"]["unpaidRequiredFees"][number];
 
@@ -24,18 +26,21 @@ export function RequiredFeeForm() {
   const unpaidRequiredFeeQuery = api.student.unpaidRequiredFees.useQuery(
     params.id,
   );
-  const [selectedItems, setSelectedItems] = useState<RequiredFee[]>([]);
-  const { t } = useLocale();
+  const [requiredFees, setRequiredFees] = useAtom(requiredFeesAtom);
+
+  const { t, i18n } = useLocale();
   const handleCheckboxChange = (fee: RequiredFee) => {
-    setSelectedItems((prev) =>
-      prev.includes(fee) ? prev.filter((i) => i.id !== fee.id) : [...prev, fee],
+    setRequiredFees((prev) =>
+      prev.includes(fee.id)
+        ? prev.filter((i) => i !== fee.id)
+        : [...prev, fee.id],
     );
   };
   const data = unpaidRequiredFeeQuery.data ?? [];
   return (
-    <Card className="mx-4 mb-4 border-t-4 border-t-orange-600">
+    <Card className="mx-4 mb-4 border-t-4 border-t-destructive">
       <CardHeader className="border-b p-0">
-        <CardTitle className="p-2 text-lg font-semibold text-orange-600">
+        <CardTitle className="p-2 text-lg font-semibold text-destructive">
           {t("required_fees")}
         </CardTitle>
       </CardHeader>
@@ -45,14 +50,21 @@ export function RequiredFeeForm() {
             <div className="flex items-center space-x-2">
               <Checkbox
                 id={`requiredfee-${index}`}
-                checked={selectedItems.includes(fee)}
+                checked={requiredFees.includes(fee.id)}
                 onCheckedChange={() => handleCheckboxChange(fee)}
               />
               <Label
                 htmlFor={`requiredfee-${index}`}
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                Frais obligatoire (20 000 FCFA)
+                {fee.description} (
+                {fee.amount.toLocaleString(i18n.language, {
+                  style: "currency",
+                  currency: CURRENCY,
+                  maximumFractionDigits: 0,
+                  minimumFractionDigits: 0,
+                })}
+                )
               </Label>
             </div>
           );
