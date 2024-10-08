@@ -29,7 +29,7 @@ export function ContactHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="grid flex-row items-center gap-4 px-4 py-2 md:flex">
+    <div className="grid flex-row items-center gap-4 px-4 py-1 md:flex">
       <Label className="hidden md:block">{t("contacts")}</Label>
       <Button
         variant="outline"
