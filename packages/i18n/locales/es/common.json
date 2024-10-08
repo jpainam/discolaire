@@ -241,6 +241,7 @@
   "activate_required_fees": "Exigir tarifas obligatorias en la inscripción",
   "diplomas": "Diplomas",
   "number_of_receipts_to_print": "Número de recibos a imprimir",
+  "required_fee_warning": "¡Asegúrese de pagar las tarifas requeridas marcando las casillas de arriba!",
   "disable": "Deshabilitar",
   "yes_and_strict": "Sí y estricto",
   "yes_but_passive": "Sí pero pasivo",

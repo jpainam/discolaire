@@ -116,4 +116,15 @@ export const feeRouter = createTRPCRouter({
   trend: protectedProcedure.query(async ({ ctx }) => {
     return feeService.getAmountTrend(ctx.schoolYearId);
   }),
+  requiredFees: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.db.fee.findMany({
+      where: {
+        isRequired: true,
+        classroom: {
+          schoolYearId: ctx.schoolYearId,
+          schoolId: ctx.schoolId,
+        },
+      },
+    });
+  }),
 });

@@ -25,6 +25,8 @@ import {
   SelectValue,
 } from "@repo/ui/select";
 
+import { RequiredFeeForm } from "./RequiredFeeForm";
+
 const makePaymentFormSchema = z.object({
   amount: z.coerce.number().min(1),
   description: z.string().min(1),
@@ -73,99 +75,102 @@ export function Step1() {
   ];
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="mx-auto grid w-full max-w-3xl grid-cols-1 gap-2 px-4 md:grid-cols-2 md:gap-4">
-          <FormField
-            control={form.control}
-            name="paymentMethod"
-            render={({ field }) => (
-              <FormItem className="space-y-0">
-                <FormLabel>{t("payment_method")}</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+    <div className="mx-auto w-full max-w-3xl">
+      <RequiredFeeForm />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="grid grid-cols-1 gap-2 px-4 md:grid-cols-2 md:gap-4">
+            <FormField
+              control={form.control}
+              name="paymentMethod"
+              render={({ field }) => (
+                <FormItem className="space-y-0">
+                  <FormLabel>{t("payment_method")}</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t("select_an_option")} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="CASH">{t("cash")}</SelectItem>
+                      <SelectItem value="CARD">{t("card")}</SelectItem>
+                      <SelectItem value="CHECK">{t("check")}</SelectItem>
+                      <SelectItem value="EMONEY">{t("emoney")}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="transactionType"
+              render={({ field }) => (
+                <FormItem className="space-y-0">
+                  <FormLabel>{t("transaction_type")}</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t("select_an_option")} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {items.map((item) => (
+                        <SelectItem key={item.value} value={item.value}>
+                          {t(item.label)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem className="space-y-0">
+                  <FormLabel>{t("Description")}</FormLabel>
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder={t("select_an_option")} />
-                    </SelectTrigger>
+                    <Input placeholder={t("Description")} {...field} />
                   </FormControl>
-                  <SelectContent>
-                    <SelectItem value="CASH">{t("cash")}</SelectItem>
-                    <SelectItem value="CARD">{t("card")}</SelectItem>
-                    <SelectItem value="CHECK">{t("check")}</SelectItem>
-                    <SelectItem value="EMONEY">{t("emoney")}</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="transactionType"
-            render={({ field }) => (
-              <FormItem className="space-y-0">
-                <FormLabel>{t("transaction_type")}</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="amount"
+              render={({ field }) => (
+                <FormItem className="space-y-0">
+                  <FormLabel>{t("amount")}</FormLabel>
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder={t("select_an_option")} />
-                    </SelectTrigger>
+                    <Input type="number" placeholder={t("amount")} {...field} />
                   </FormControl>
-                  <SelectContent>
-                    {items.map((item) => (
-                      <SelectItem key={item.value} value={item.value}>
-                        {t(item.label)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem className="space-y-0">
-                <FormLabel>{t("Description")}</FormLabel>
-                <FormControl>
-                  <Input placeholder={t("Description")} {...field} />
-                </FormControl>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="amount"
-            render={({ field }) => (
-              <FormItem className="space-y-0">
-                <FormLabel>{t("amount")}</FormLabel>
-                <FormControl>
-                  <Input type="number" placeholder={t("amount")} {...field} />
-                </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="col-span-full flex justify-end gap-2">
-            <Button size="sm" type="submit">
-              {t("next")}
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+            <div className="col-span-full flex justify-end gap-2">
+              <Button size="sm" type="submit">
+                {t("next")}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
           </div>
-        </div>
-      </form>
-    </Form>
+        </form>
+      </Form>
+    </div>
   );
 }

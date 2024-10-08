@@ -249,6 +249,7 @@
   "discount": "Discount",
   "number_of_receipts_to_print": "Number of receipts to print",
   "discounts": "Discounts",
+  "required_fee_warning": "Please ensure that the required fees are paid by checking the boxes above!!!",
   "documents": "Documents",
   "double_clicked_to_edit_or_add_remarks": "Double click to edit or add remarks for this student",
   "download": "Download",

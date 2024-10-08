@@ -563,6 +563,15 @@ model StudentAccount {
     transactions Transaction[]
 }
 
+model RequiredFeeTransaction {
+    studentId   String
+    feeId       Int
+    createdAt   DateTime @default(now()) @db.Timestamp(6)
+    createdById String
+
+    @@id([studentId, feeId])
+}
+
 model Transaction {
     id              Int            @id @default(autoincrement())
     transactionRef  String?

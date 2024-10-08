@@ -447,6 +447,21 @@ export const studentRouter = createTRPCRouter({
       },
     });
   }),
+  unpaidRequiredFees: protectedProcedure
+    .input(z.string().min(1))
+    .query(async ({ ctx, input }) => {
+      const classroom = await studentService.getClassroom(
+        input,
+        ctx.schoolYearId,
+      );
+      if (!classroom) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Classroom not found",
+        });
+      }
+      return studentService.getUnpaidRequiredFees(input, classroom.id);
+    }),
   disable: protectedProcedure
     .input(z.object({ id: z.string().min(1), isActive: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
