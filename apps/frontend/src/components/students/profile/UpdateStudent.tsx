@@ -33,7 +33,7 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
       residence: student.residence ?? "",
       phoneNumber: student.phoneNumber ?? "",
       email: student.email ?? "",
-      isRepeating: student.isRepeating ?? false,
+      isRepeating: student.isRepeating,
       countryId: student.countryId ?? "",
       dateOfExit: student.dateOfExit ?? undefined,
       dateOfEntry: student.dateOfEntry ?? new Date(),
