@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
 import {
   CheckCircleIcon,
   ClockIcon,
   Loader,
   LoaderIcon,
   PrinterIcon,
+  RefreshCcw,
   Trash2Icon,
   XCircleIcon,
 } from "lucide-react";
@@ -25,6 +25,7 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { routes } from "~/configs/routes";
 import { getErrorMessage } from "~/lib/handle-error";
+import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
 export function TopRightPrinter() {
@@ -64,12 +65,6 @@ export function TopRightPrinter() {
   const reportingQuery = api.reporting.userReports.useQuery();
 
   const deleteReportingMutation = api.reporting.delete.useMutation();
-  useEffect(() => {
-    const interval = setInterval(() => {
-      void reportingQuery.refetch();
-    }, 15000000);
-    return () => clearInterval(interval);
-  }, [reportingQuery]);
 
   const { t, i18n } = useLocale();
   //const confirm = useConfirm();
@@ -96,6 +91,25 @@ export function TopRightPrinter() {
         {reportingQuery.data?.length === 0 && (
           <EmptyState title={t("no_reports")} />
         )}
+        <div className="ml-auto flex justify-end">
+          <Button
+            onClick={async () => {
+              toast.loading(t("refreshing"), { id: 0 });
+              await reportingQuery.refetch();
+              toast.success(t("refreshed"), { id: 0 });
+            }}
+            variant={"ghost"}
+            size={"sm"}
+          >
+            <RefreshCcw
+              className={cn(
+                "mr-2 h-4 w-4",
+                reportingQuery.isFetching && "animate-spin",
+              )}
+            />
+            {t("refresh")}
+          </Button>
+        </div>
         <ScrollArea className="max-h-[calc(100vh-20rem)] w-full px-2">
           {reportingQuery.data?.map((activity) => (
             <div
