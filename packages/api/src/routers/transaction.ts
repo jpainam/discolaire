@@ -28,11 +28,20 @@ export const transactionRouter = createTRPCRouter({
   printReceipt: protectedProcedure
     .input(z.coerce.number())
     .mutation(async ({ ctx, input }) => {
+      await ctx.db.transaction.update({
+        data: {
+          printedAt: new Date(),
+          printedById: ctx.session.user.id,
+        },
+        where: {
+          id: input,
+        },
+      });
       const data = await transactionService.getReceiptInfo(input);
       const report = await ctx.db.reporting.create({
         data: {
           userId: ctx.session.user.id,
-          title: `Receipt - ${data.student.lastName} ${data.transaction.transactionRef}`,
+          title: `${data.student.lastName} ${data.transaction.transactionRef}`,
           status: "PENDING",
           type: "pdf",
           url: "",
@@ -253,6 +262,7 @@ export const transactionRouter = createTRPCRouter({
           transactionType: input.transactionType,
           schoolYearId: ctx.schoolYearId,
           description: input.description,
+          createdById: ctx.session.user.id,
           receivedById: ctx.session.user.id,
         },
       });

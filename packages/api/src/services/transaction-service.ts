@@ -55,13 +55,19 @@ export const transactionService = {
 
     // Get the staff who created, printed and received the transaction
     const createdBy = transaction.createdById
-      ? await db.staff.findUnique({ where: { id: transaction.createdById } })
+      ? await db.staff.findFirst({
+          where: { user: { id: transaction.createdById } },
+        })
       : null;
     const printedBy = transaction.printedById
-      ? await db.staff.findUnique({ where: { id: transaction.printedById } })
+      ? await db.staff.findFirst({
+          where: { user: { id: transaction.printedById } },
+        })
       : null;
     const receivedBy = transaction.receivedById
-      ? await db.staff.findUnique({ where: { id: transaction.receivedById } })
+      ? await db.staff.findFirst({
+          where: { user: { id: transaction.receivedById } },
+        })
       : null;
 
     const school = await db.school.findUnique({

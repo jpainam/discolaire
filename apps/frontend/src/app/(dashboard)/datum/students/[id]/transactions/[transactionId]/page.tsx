@@ -46,6 +46,7 @@ export default async function Page({
     <>
       <div className="relative mx-2 overflow-hidden rounded-md border p-4 2xl:mx-auto 2xl:w-1/2">
         {/* Watermark */}
+
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-10">
           <Image
             src={`${school.logo}?height=350&width=350`}

@@ -159,44 +159,45 @@ export function TopRightPrinter() {
                 </div>
               </div>
               <div className="flex items-center space-x-4">
-                {activity.status == "COMPLETED" && (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => {
-                      // const isConfirmed = await confirm({
-                      //   title: t("delete"),
-                      //   description: t("delete_confirmation"),
-                      //   icon: <Trash2Icon className="h-4 w-4 text-destructive" />,
-                      //   alertDialogTitle: {
-                      //     className: "flex items-center gap-2",
-                      //   },
-                      // });
-                      //if (isConfirmed) {
-                      toast.loading(t("deleting"), { id: 0 });
-                      void deleteReportingMutation.mutate(activity.id, {
-                        onSettled: () => {
-                          void utils.reporting.invalidate();
-                        },
-                        onSuccess: () => {
-                          toast.success(t("deleted_successfully"), { id: 0 });
-                          try {
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => {
+                    // const isConfirmed = await confirm({
+                    //   title: t("delete"),
+                    //   description: t("delete_confirmation"),
+                    //   icon: <Trash2Icon className="h-4 w-4 text-destructive" />,
+                    //   alertDialogTitle: {
+                    //     className: "flex items-center gap-2",
+                    //   },
+                    // });
+                    //if (isConfirmed) {
+                    toast.loading(t("deleting"), { id: 0 });
+                    void deleteReportingMutation.mutate(activity.id, {
+                      onSettled: () => {
+                        void utils.reporting.invalidate();
+                      },
+                      onSuccess: () => {
+                        toast.success(t("deleted_successfully"), { id: 0 });
+                        try {
+                          if (activity.url) {
                             void deleteFileFromAws(activity.url);
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                          } catch (error: any) {
-                            toast.error(error?.message, { id: 0 });
                           }
-                        },
-                        onError: (error) => {
-                          toast.error(error.message, { id: 0 });
-                        },
-                      });
-                      //}
-                    }}
-                  >
-                    <Trash2Icon className="h-4 w-4 text-destructive" />
-                  </Button>
-                )}
+                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        } catch (error: any) {
+                          console.error(error);
+                          //toast.error(error?.message, { id: 0 });
+                        }
+                      },
+                      onError: (error) => {
+                        toast.error(error.message, { id: 0 });
+                      },
+                    });
+                    //}
+                  }}
+                >
+                  <Trash2Icon className="h-4 w-4 text-destructive" />
+                </Button>
               </div>
             </div>
           ))}
