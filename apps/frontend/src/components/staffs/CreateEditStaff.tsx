@@ -176,6 +176,11 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
     { label: t("Dr"), value: "dr" },
   ];
 
+  const genders = [
+    { label: t("male"), value: "male" },
+    { label: t("female"), value: "female" },
+  ];
+
   return (
     <Form {...form}>
       <form className="h-full" onSubmit={form.handleSubmit(onSubmit)}>
@@ -209,11 +214,17 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
               </FormItem>
             )}
           />
+          <SelectField
+            name="gender"
+            label={t("gender")}
+            placeholder={t("gender")}
+            items={genders}
+          />
 
           <InputField
             name="address"
             {...classNames}
-            className="col-span-full px-2"
+            className="px-2"
             label={t("address")}
           />
           <div className="col-span-full grid w-full grid-cols-2 gap-2 gap-x-8">
