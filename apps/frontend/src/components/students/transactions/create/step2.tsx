@@ -6,6 +6,7 @@ import { ArrowLeft, Save } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import type { RouterOutputs } from "@repo/api";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { TransactionAcknowledgment } from "@repo/transactional/emails/TransactionAcknowledgment";
@@ -37,15 +38,18 @@ export function Step2({
   description,
   transactionType,
   paymentMethod,
+  contacts,
 }: {
   classroomId: string;
   amount: number;
   paymentMethod: string;
   description: string;
   transactionType: string;
+  contacts: RouterOutputs["student"]["contacts"][number][];
 }) {
   const router = useRouter();
   const params = useParams<{ id: string }>();
+
   const studentId = params.id;
   const sendNotification = api.messaging.sendEmail.useMutation({
     onSuccess: () => {
@@ -82,7 +86,7 @@ export function Step2({
     defaultValues: {
       paymentReceived: false,
       paymentCorrectness: false,
-      notifications: [params.id],
+      notifications: [params.id, ...contacts.map((c) => c.contactId)],
     },
   });
   function onSubmit(data: z.infer<typeof step2Schema>) {

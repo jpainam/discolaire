@@ -21,6 +21,7 @@ export default async function Page({
   params: { id: string };
 }) {
   const { t } = await getServerTranslations();
+  const studentContacts = await api.student.contacts(id);
   const classroom = await api.student.classroom({ studentId: id });
   const isStep2 = amount && description && transactionType && paymentMethod;
   const school = await api.school.getSchool();
@@ -31,7 +32,7 @@ export default async function Page({
     <div className="flex w-full flex-col gap-2">
       <div className="flex items-center border-b bg-secondary px-2 py-2 text-secondary-foreground">
         <CircleDollarSign className="mr-2 h-4 w-4" />
-        <Label className="py-2"> {t("make_payment")}</Label>
+        <Label className="py-1.5"> {t("make_payment")}</Label>
       </div>
       {!classroom ? (
         <EmptyState className="my-8" title={t("student_not_registered_yet")} />
@@ -44,6 +45,7 @@ export default async function Page({
               transactionType={transactionType}
               description={description}
               classroomId={classroom.id}
+              contacts={studentContacts}
             />
           ) : (
             <Step1 applyRequiredFee={school.applyRequiredFee} />
