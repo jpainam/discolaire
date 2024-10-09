@@ -20,6 +20,7 @@ export const classroomRouter = createTRPCRouter({
       },
       where: {
         schoolYearId: ctx.schoolYearId,
+        schoolId: ctx.schoolId,
       },
       include: {
         level: true,
@@ -155,6 +156,7 @@ export const classroomRouter = createTRPCRouter({
       },
     });
   }),
+
   studentsBalance: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {

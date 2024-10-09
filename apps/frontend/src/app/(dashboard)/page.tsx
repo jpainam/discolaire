@@ -4,6 +4,7 @@ import { auth } from "@repo/auth";
 
 import { DashboardClassroomSize } from "~/components/dashboard/DashboardClassroomSize";
 import { DashboardTransactionTrend } from "~/components/dashboard/DashboardTransactionTrend";
+import { QuickStatistics } from "~/components/dashboard/QuickStatistics";
 
 export default async function DashboardPage() {
   // const signedUrl = await fetch(
@@ -27,6 +28,7 @@ export default async function DashboardPage() {
       <div className="col-span-full text-lg font-bold md:text-2xl">
         Dashboard
       </div>
+      <QuickStatistics />
       {/* <SearchBlock className="col-span-full md:col-span-6" /> */}
       {/* <SchoolLife /> */}
       {/* <Suspense>

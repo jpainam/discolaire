@@ -136,6 +136,22 @@ export const staffRouter = {
         data: data,
       });
     }),
+  count: protectedProcedure
+    .input(
+      z
+        .object({
+          q: z.string().optional(),
+        })
+        .optional(),
+    )
+    .query(async ({ ctx }) => {
+      const staffs = await ctx.db.staff.findMany({
+        where: { schoolId: ctx.schoolId },
+      });
+      const female = staffs.filter((stf) => stf.gender == "female").length;
+      const male = staffs.length - female;
+      return { total: staffs.length, female, male };
+    }),
   timelines: protectedProcedure.input(z.string()).query(() => {
     return [
       // generate 10 random timelines

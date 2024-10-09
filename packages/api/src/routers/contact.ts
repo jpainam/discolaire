@@ -130,7 +130,12 @@ export const contactRouter = createTRPCRouter({
       return result;
     }),
   count: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db.contact.count();
+    const result = await ctx.db.contact.count({
+      where: {
+        schoolId: ctx.schoolId,
+      },
+    });
+    return { total: result };
   }),
   selector: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.contact.findMany({
@@ -147,6 +152,7 @@ export const contactRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       return ctx.db.contact.findMany({
         where: {
+          schoolId: ctx.schoolId,
           OR: [
             { firstName: { startsWith: `%${input.q}%` } },
             { lastName: { startsWith: `%${input.q}%` } },
@@ -239,6 +245,7 @@ export const contactRouter = createTRPCRouter({
           lastName: "asc",
         },
         where: {
+          schoolId: ctx.schoolId,
           AND: [
             {
               OR: [
