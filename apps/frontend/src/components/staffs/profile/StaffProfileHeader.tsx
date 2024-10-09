@@ -14,6 +14,7 @@ import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useRouter } from "@repo/hooks/use-router";
+import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";
@@ -30,6 +31,8 @@ import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvi
 import { CreateEditUser } from "~/components/users/CreateEditUser";
 import { routes } from "~/configs/routes";
 import { api } from "~/trpc/react";
+import { getFullName } from "~/utils/full-name";
+import { CreateEditStaff } from "../CreateEditStaff";
 
 export function StaffProfileHeader() {
   const confirm = useConfirm();
@@ -52,6 +55,7 @@ export function StaffProfileHeader() {
   const staffQuery = api.staff.get.useQuery(params.id);
   const staff = staffQuery.data;
   const { openModal } = useModal();
+  const { openSheet } = useSheet();
   return (
     <div className="flex flex-col gap-1">
       <div className="flex flex-row items-center gap-2">
@@ -63,7 +67,17 @@ export function StaffProfileHeader() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                if (!staff) return;
+                openSheet({
+                  view: <CreateEditStaff staff={staff} />,
+                  title: t("edit_staff"),
+                  description: `${getFullName(staff)}`,
+                  className: "w-[750px]",
+                });
+              }}
+            >
               <Pencil className="mr-2 h-4 w-4" />
               {t("edit")}
             </DropdownMenuItem>
