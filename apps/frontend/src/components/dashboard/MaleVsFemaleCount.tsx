@@ -34,15 +34,15 @@ export function MaleVsFemaleCount({
       <CardHeader className="p-2">
         <CardTitle className="text-xl">{title}</CardTitle>
       </CardHeader>
-      <CardContent className="flex gap-2 p-0">
+      <CardContent className="flex gap-2 p-2">
         <ChartContainer
           config={{
-            male: {
-              label: t("male"),
+            boys: {
+              label: t("boys"),
               color: "hsl(var(--chart-1))",
             },
-            female: {
-              label: t("female"),
+            girls: {
+              label: t("girls"),
               color: "hsl(var(--chart-2))",
             },
           }}
@@ -57,17 +57,17 @@ export function MaleVsFemaleCount({
             }}
             data={[
               {
-                activity: "female",
+                activity: t("girls"),
                 value: femaleCount,
                 label: `${((femaleCount / totalCount) * 100).toFixed(2)} %`,
-                fill: "var(--color-female)",
+                fill: "var(--color-girls)",
               },
 
               {
-                activity: "male",
+                activity: t("boys"),
                 value: maleCount,
                 label: `${((maleCount / totalCount) * 100).toFixed(2)} %`,
-                fill: "var(--color-male)",
+                fill: "var(--color-boys)",
               },
             ]}
             layout="vertical"
@@ -98,7 +98,7 @@ export function MaleVsFemaleCount({
       <CardFooter className="flex flex-row border-t p-4">
         <div className="flex w-full items-center gap-2">
           <div className="grid flex-1 auto-rows-min gap-0.5">
-            <div className="text-md text-muted-foreground">{t("male")}</div>
+            <div className="text-md text-muted-foreground">{t("boys")}</div>
             <div className="flex items-baseline gap-1 text-xl font-bold tabular-nums leading-none">
               {maleCount}
             </div>
@@ -106,7 +106,7 @@ export function MaleVsFemaleCount({
           <Separator orientation="vertical" className="mx-2 h-10 w-px" />
 
           <div className="grid flex-1 auto-rows-min gap-0.5">
-            <div className="text-md text-muted-foreground">{t("female")}</div>
+            <div className="text-md text-muted-foreground">{t("girls")}</div>
             <div className="flex items-baseline gap-1 text-xl font-bold tabular-nums leading-none">
               {femaleCount}
             </div>

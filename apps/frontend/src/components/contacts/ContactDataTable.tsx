@@ -33,7 +33,7 @@ export function ContactDataTable({ className }: { className?: string }) {
   const { table } = useDataTable({
     data: contactsQuery.data ?? [],
     columns: columns,
-    rowCount: countQuery.data ?? 1,
+    rowCount: countQuery.data?.total ?? 1,
   });
 
   if (contactsQuery.isPending) {

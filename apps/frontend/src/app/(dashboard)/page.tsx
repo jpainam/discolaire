@@ -33,8 +33,8 @@ export default async function DashboardPage() {
       {/* <SchoolLife /> */}
       {/* <Suspense>
         <EffectiveStat className="col-span-full" />
-      </Suspense>
-      <ContactCard className="col-span-4" /> */}
+      </Suspense> */}
+      {/*<ContactCard className="col-span-4" /> */}
 
       {/* <Suspense>
         <TransactionStat className="col-span-full" />
