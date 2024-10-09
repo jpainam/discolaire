@@ -1,3 +1,4 @@
+import { subMonths } from "date-fns";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
@@ -135,7 +136,13 @@ export const contactRouter = createTRPCRouter({
         schoolId: ctx.schoolId,
       },
     });
-    return { total: result };
+    const newContacts = await ctx.db.contact.count({
+      where: {
+        schoolId: ctx.schoolId,
+        createdAt: { gte: subMonths(new Date(), 1) },
+      },
+    });
+    return { total: result, new: newContacts };
   }),
   selector: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.contact.findMany({

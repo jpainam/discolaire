@@ -1,4 +1,5 @@
 import type { TRPCRouterRecord } from "@trpc/server";
+import { subMonths } from "date-fns";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
@@ -150,7 +151,13 @@ export const staffRouter = {
       });
       const female = staffs.filter((stf) => stf.gender == "female").length;
       const male = staffs.length - female;
-      return { total: staffs.length, female, male };
+      const newStaffs = await ctx.db.staff.count({
+        where: {
+          schoolId: ctx.schoolId,
+          createdAt: { gte: subMonths(new Date(), 1) },
+        },
+      });
+      return { total: staffs.length, new: newStaffs, female, male };
     }),
   timelines: protectedProcedure.input(z.string()).query(() => {
     return [

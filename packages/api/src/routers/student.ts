@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server";
+import { subMonths } from "date-fns";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
@@ -219,7 +220,13 @@ export const studentRouter = createTRPCRouter({
       });
       const female = students.filter((std) => std.gender == "female").length;
       const male = students.length - female;
-      return { total: students.length, female, male };
+      const newStudents = await ctx.db.student.count({
+        where: {
+          schoolId: ctx.schoolId,
+          createdAt: { gte: subMonths(new Date(), 1) },
+        },
+      });
+      return { total: students.length, new: newStudents, female, male };
     }),
   contacts: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.studentContact.findMany({

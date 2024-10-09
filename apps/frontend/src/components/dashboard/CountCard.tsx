@@ -7,15 +7,18 @@ export async function CountCard({
   icon,
   title,
   count,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   description,
+  percentage,
 }: {
   icon: LucideIcon;
   title: string;
   count: number;
-  description: string;
+  description?: string;
+  percentage: number;
 }) {
   const Icon = icon;
-  const { i18n } = await getServerTranslations();
+  const { i18n, t } = await getServerTranslations();
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -26,7 +29,9 @@ export async function CountCard({
         <div className="text-2xl font-bold">
           {count.toLocaleString(i18n.language)}
         </div>
-        <p className="text-xs text-muted-foreground">{description}</p>
+        <p className="text-xs text-muted-foreground">
+          {percentage.toFixed(0) + t("percent_from_last_month")}
+        </p>
       </CardContent>
     </Card>
   );
