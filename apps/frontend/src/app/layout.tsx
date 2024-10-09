@@ -58,7 +58,16 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   const lng = await detectLanguage();
   return (
     <I18nProvider language={lng}>
-      <html lang="en" suppressHydrationWarning>
+      <html
+        // https://github.com/facebook/react/issues/11538#issuecomment-350110297
+        lang="en"
+        className="notranslate"
+        translate="no"
+        suppressHydrationWarning
+      >
+        <head>
+          <meta name="google" content="notranslate" />
+        </head>
         <body
           className={cn(
             "min-h-screen bg-background font-sans text-foreground antialiased",

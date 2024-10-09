@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { useSearchParams } from "next/navigation";
-import _ from "lodash";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import type { ChartConfig } from "@repo/ui/chart";
@@ -36,7 +35,6 @@ import { Skeleton } from "@repo/ui/skeleton";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
-import { useMoneyFormat } from "~/utils/money-format";
 
 export function DashboardTransactionTrend({
   className,
@@ -60,14 +58,14 @@ export function DashboardTransactionTrend({
   // const status = searchParams.get("status");
   // const from = searchParams.get("from");
   // const to = searchParams.get("to");
-  const { moneyFormatter } = useMoneyFormat();
+  //const { moneyFormatter } = useMoneyFormat();
   const transactionsTrendQuery = api.transaction.trends.useQuery();
 
   const [filteredData, setFilteredData] = React.useState<
     { date: string; amount: number }[]
   >([]);
 
-  const [totalAmount, setTotalAmount] = React.useState(0);
+  //const [totalAmount, setTotalAmount] = React.useState(0);
 
   const timeRange = searchParams.get("timeRange");
   const timeRanges = [
@@ -90,7 +88,7 @@ export function DashboardTransactionTrend({
       return date >= now;
     });
 
-    setTotalAmount(_.sumBy(f, "amount"));
+    //setTotalAmount(_.sumBy(f, "amount"));
     // @ts-expect-error TODO fix this
     setFilteredData(f);
   }, [timeRange, transactionsTrendQuery.data]);
@@ -129,7 +127,7 @@ export function DashboardTransactionTrend({
               {t("transactions")}
             </span>
             <span className="text-lg font-bold leading-none sm:text-xl">
-              {moneyFormatter.format(totalAmount)}
+              {/*moneyFormatter.format(totalAmount)*/ 0}
             </span>
           </div>
           <div className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-4">

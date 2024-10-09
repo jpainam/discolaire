@@ -24,8 +24,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  //https://github.com/facebook/react/issues/11538#issuecomment-350110297
   return (
-    <html lang="en">
+    <html lang="en" className="notranslate" translate="no">
+      <head>
+        <meta name="google" content="notranslate" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
