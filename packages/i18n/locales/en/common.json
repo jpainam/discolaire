@@ -243,6 +243,8 @@
   "enable": "Enable",
   "yes_and_strict": "Yes and strict",
   "yes_but_passive": "Yes but passive",
+  "please_check_the_amount_received_box": "Please check the 'Amount received' box",
+  "please_check_the_payment_details_box": "Please check the 'Payment details' box",
   "number_of_receipts_to_print": "Number of receipts to print",
   "activate_required_fees": "Require fees at registration",
   "discipline": "Discipline",

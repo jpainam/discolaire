@@ -446,6 +446,8 @@
   "makePayment": "Effectuer un versement",
   "make_payment": "Effectuer le paiement",
   "male": "Masculin",
+  "please_check_the_amount_received_box": "Veuillez cocher la case 'Montant perçu'",
+  "please_check_the_payment_details_box": "Veuillez cocher la case 'Détails de versement'",
   "manual_attendance": "Présence manuelle",
   "mapping_file": "Fichier de correspondance",
   "mark_absent": "Marquer absent",

@@ -91,11 +91,11 @@ export function Step2({
   });
   function onSubmit(data: z.infer<typeof step2Schema>) {
     if (!data.paymentReceived) {
-      toast.warning("Veuillez cocher la case 'Montant perçu'");
+      toast.warning(t("please_check_the_amount_received_box"));
       return;
     }
     if (!data.paymentCorrectness) {
-      toast.warning("Veuillez cocher la case 'Détails de versement'");
+      toast.warning(t("please_check_the_payment_details_box"));
       return;
     }
     toast.loading(t("creating"), { id: 0 });
