@@ -13,6 +13,13 @@ import {
   FormMessage,
   useFormContext,
 } from "@repo/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/select";
 
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { ReligionSelector } from "~/components/shared/selects/ReligionSelector";
@@ -97,6 +104,37 @@ export function CreateUpdateDenom() {
             )}
           />
         )}
+        <FormField
+          control={form.control}
+          name="isRepeating"
+          render={({ field }) => (
+            <FormItem className="space-y-0">
+              <FormLabel>{t("is_repeating")}</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={(val) => {
+                    if (val === "yes") {
+                      form.setValue("isRepeating", true);
+                    } else {
+                      form.setValue("isRepeating", false);
+                    }
+                  }}
+                  defaultValue={field.value ? "yes" : "no"}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder={t("select_an_option")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="yes">{t("yes")}</SelectItem>
+                    <SelectItem value="no">{t("no")}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </CardContent>
     </Card>
   );

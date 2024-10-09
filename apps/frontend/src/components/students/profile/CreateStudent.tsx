@@ -30,6 +30,7 @@ export function CreateStudent() {
       gender: "male",
       residence: "",
       phoneNumber: "",
+      isRepeating: false,
       email: "",
       countryId: "",
       classroom: "",

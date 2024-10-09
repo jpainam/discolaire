@@ -37,13 +37,13 @@ export function StudentStatusSelector({
       <SelectContent>
         <SelectItem value="ACTIVE">{t(`${StudentStatus.ACTIVE}`)}</SelectItem>
         <SelectItem value="GRADUATED">
-          {t(`${StudentStatus.GRADUATED}`)}
+          {t(`${StudentStatus.GRADUATED.toLowerCase()}`)}
         </SelectItem>
         <SelectItem value="INACTIVE">
-          {t(`${StudentStatus.INACTIVE}`)}
+          {t(`${StudentStatus.INACTIVE.toLowerCase()}`)}
         </SelectItem>
         <SelectItem value="EXPELLED">
-          {t(`${StudentStatus.EXPELLED}`)}
+          {t(`${StudentStatus.EXPELLED.toLowerCase()}`)}
         </SelectItem>
       </SelectContent>
     </Select>
