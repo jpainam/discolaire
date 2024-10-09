@@ -30,7 +30,7 @@ export function CreateStudent() {
       gender: "male",
       residence: "",
       phoneNumber: "",
-      isRepeating: false,
+      isRepeating: "no",
       email: "",
       countryId: "",
       classroom: "",
@@ -61,7 +61,10 @@ export function CreateStudent() {
 
   const onSubmit = (data: z.infer<typeof createUpdateStudentSchema>) => {
     toast.loading(t("creating"), { id: 0 });
-    createStudentMutation.mutate({ ...data });
+    createStudentMutation.mutate({
+      ...data,
+      isRepeating: data.isRepeating === "yes",
+    });
   };
   const router = useRouter();
 

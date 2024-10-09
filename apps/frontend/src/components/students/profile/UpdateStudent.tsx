@@ -33,7 +33,7 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
       residence: student.residence ?? "",
       phoneNumber: student.phoneNumber ?? "",
       email: student.email ?? "",
-      isRepeating: student.isRepeating,
+      isRepeating: student.isRepeating ? "yes" : "no",
       countryId: student.countryId ?? "",
       dateOfExit: student.dateOfExit ?? undefined,
       dateOfEntry: student.dateOfEntry ?? new Date(),
@@ -62,7 +62,11 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
 
   const onSubmit = (data: z.infer<typeof createUpdateStudentSchema>) => {
     toast.loading(t("updating"), { id: 0 });
-    updateStudentMutation.mutate({ id: student.id, ...data });
+    updateStudentMutation.mutate({
+      ...data,
+      id: student.id,
+      isRepeating: data.isRepeating === "yes",
+    });
   };
   const router = useRouter();
 

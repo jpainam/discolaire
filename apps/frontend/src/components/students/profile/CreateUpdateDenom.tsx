@@ -112,14 +112,8 @@ export function CreateUpdateDenom() {
               <FormLabel>{t("is_repeating")}</FormLabel>
               <FormControl>
                 <Select
-                  onValueChange={(val) => {
-                    if (val === "yes") {
-                      form.setValue("isRepeating", true);
-                    } else {
-                      form.setValue("isRepeating", false);
-                    }
-                  }}
-                  defaultValue={field.value ? "yes" : "no"}
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder={t("select_an_option")} />

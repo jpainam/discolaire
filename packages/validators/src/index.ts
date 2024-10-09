@@ -24,7 +24,7 @@ export const createUpdateStudentSchema = z.object({
   dateOfEntry: z.coerce.date().optional(),
   dateOfExit: z.coerce.date().optional(),
   tags: z.array(z.string()).optional(),
-  isRepeating: z.boolean().optional().default(false),
+  isRepeating: z.enum(["yes", "no"]).optional().default("no"),
   observation: z.string().optional(),
   status: z
     .enum(["ACTIVE", "GRADUATED", "INACTIVE", "EXPELLED"])

@@ -376,6 +376,9 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                   </div>
                 )} */}
 
+              {student && student.isRepeating && (
+                <FlatBadge variant={"red"}>{t("is_repeating")}</FlatBadge>
+              )}
               <FlatBadge
                 variant={student?.gender == "female" ? "pink" : "blue"}
                 className="flex flex-row items-center gap-1"

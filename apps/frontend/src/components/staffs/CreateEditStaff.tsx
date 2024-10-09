@@ -84,7 +84,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
       dateOfCriminalRecordCheck: staff?.dateOfCriminalRecordCheck ?? new Date(),
       sendAgendaFrequency: staff?.sendAgendaFrequency ?? "",
       dateOfLastAdvancement: staff?.dateOfLastAdvancement ?? new Date(),
-      isTeacher: staff?.isActive ? "yes" : "no",
+      isTeacher: staff?.isTeacher ? "yes" : "no",
       dateOfBirth: staff?.dateOfBirth ?? subMonths(new Date(), 100),
     },
   });
@@ -140,12 +140,12 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
       dateOfCriminalRecordCheck: data.dateOfCriminalRecordCheck,
       sendAgendaFrequency: data.sendAgendaFrequency,
       dateOfLastAdvancement: data.dateOfLastAdvancement,
-      isTeacher: data.isTeacher == "yes" ? true : false,
+      isTeacher: data.isTeacher === "yes",
       dateOfBirth: data.dateOfBirth,
     };
     if (staff) {
       toast.loading(t("updating"), { id: 0 });
-      updateStaffMutation.mutate({ id: staff.id, ...values });
+      updateStaffMutation.mutate({ ...values, id: staff.id });
     } else {
       toast.loading(t("creating"), { id: 0 });
       createStaffMutation.mutate(values);
