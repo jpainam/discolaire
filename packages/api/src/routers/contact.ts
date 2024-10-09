@@ -32,6 +32,13 @@ export const contactRouter = createTRPCRouter({
     }),
   get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
     return ctx.db.contact.findUnique({
+      include: {
+        user: {
+          include: {
+            roles: true,
+          },
+        },
+      },
       where: {
         id: input,
       },

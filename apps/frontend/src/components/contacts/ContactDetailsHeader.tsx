@@ -3,11 +3,13 @@
 import {
   ChevronDown,
   ImageUpIcon,
+  KeyRound,
   MoreVertical,
   Pencil,
   PlusIcon,
   Printer,
   Trash2,
+  UserPlus2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -34,6 +36,7 @@ import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
+import { CreateEditUser } from "../users/CreateEditUser";
 import CreateEditContact from "./CreateEditContact";
 import { LinkStudent } from "./LinkStudent";
 
@@ -106,6 +109,45 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownHelp />
+              {contact && !contact.userId && (
+                <DropdownMenuItem
+                  onSelect={() => {
+                    openModal({
+                      className: "w-[500px]",
+                      title: t("attach_user"),
+                      view: (
+                        <CreateEditUser entityId={contact.id} type="contact" />
+                      ),
+                    });
+                  }}
+                >
+                  <UserPlus2 className="mr-2 h-4 w-4" />
+                  {t("attach_user")}
+                </DropdownMenuItem>
+              )}
+              {contact?.userId && (
+                <DropdownMenuItem
+                  onSelect={() => {
+                    if (!contact.userId) return;
+                    openModal({
+                      className: "w-[500px]",
+                      title: t("change_password"),
+                      view: (
+                        <CreateEditUser
+                          userId={contact.userId}
+                          type="contact"
+                          roleIds={contact.user?.roles.map((r) => r.roleId)}
+                          entityId={contact.id}
+                          username={contact.user?.username}
+                        />
+                      ),
+                    });
+                  }}
+                >
+                  <KeyRound className="mr-2 h-4 w-4" />
+                  {t("change_password")}
+                </DropdownMenuItem>
+              )}
               <DropdownMenuSeparator />
               <DropdownInvitation email={contactQuery.data?.email} />
               {canDeleteContact && (

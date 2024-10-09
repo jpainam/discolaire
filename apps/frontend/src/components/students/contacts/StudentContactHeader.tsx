@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { MoreVertical, PlusIcon, UserPlus, UserSearch } from "lucide-react";
 
 import { useModal } from "@repo/hooks/use-modal";
+import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
@@ -36,6 +37,7 @@ export function StudentContactHeader() {
   const Icon = sidebarIcons.contacts;
 
   const { openModal } = useModal();
+  const { openSheet } = useSheet();
 
   return (
     <div className="flex flex-row items-center gap-2 bg-secondary p-1 px-2">
@@ -71,13 +73,12 @@ export function StudentContactHeader() {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onSelect={() => {
-                    openModal({
+                    openSheet({
                       className: "w-[600px]",
-                      title: (
-                        <p className="px-4 py-2">
-                          {t("create")} - {t("contact")}
-                        </p>
-                      ),
+                      title: <p className="px-4 py-2">{t("create")}</p>,
+                      // description: (
+                      //   <p className="px-4">{getFullName(contactQuery.data)}</p>
+                      // ),
                       view: <CreateEditContact />,
                     });
                   }}
