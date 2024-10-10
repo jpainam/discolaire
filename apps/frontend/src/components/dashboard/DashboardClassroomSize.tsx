@@ -26,6 +26,9 @@ import { api } from "~/trpc/react";
 
 export function DashboardClassroomSize({ className }: { className?: string }) {
   const { t } = useLocale();
+  // useEffect(() => {
+  //   void captureException(new Error("DashboardClassroomSize").stack ?? "");
+  // }, []);
   const chartConfig = useMemo(() => {
     return {
       maxSize: {

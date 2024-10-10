@@ -23,6 +23,7 @@ export const env = createEnv({
     SUPER_ADMIN_USERNAME: z.string().min(1),
 
     REPORT_API_KEY: z.string().min(1),
+    DISCORD_WEBHOOK_URL: z.string().url(),
   },
 
   /**
@@ -46,6 +47,7 @@ export const env = createEnv({
     NEXT_PUBLIC_LIBRARY_SERVICE_URL:
       process.env.NEXT_PUBLIC_LIBRARY_SERVICE_URL,
     REPORT_API_KEY: process.env.REPORT_API_KEY,
+    DISCORD_WEBHOOK_URL: process.env.DISCORD_WEBHOOK_URL,
 
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
     // AWS S3
