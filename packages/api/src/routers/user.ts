@@ -59,14 +59,8 @@ export const userRouter = createTRPCRouter({
     }),
   delete: protectedProcedure
     .input(z.union([z.array(z.string()), z.string()]))
-    .mutation(async ({ ctx, input }) => {
-      return ctx.db.user.deleteMany({
-        where: {
-          id: {
-            in: Array.isArray(input) ? input : [input],
-          },
-        },
-      });
+    .mutation(async ({ input }) => {
+      return userService.deleteUsers(Array.isArray(input) ? input : [input]);
     }),
   roles: protectedProcedure
     .input(

@@ -84,7 +84,10 @@ export const studentRouter = createTRPCRouter({
         orderBy: {
           [column ?? "lastName"]: order ?? "desc",
         },
-        where: { schoolId: ctx.schoolId, ...whereClause(input.q ?? "").where },
+        where: {
+          schoolId: ctx.schoolId,
+          ...whereClause(input.q ?? "").where,
+        },
         include: {
           formerSchool: true,
           country: true,
@@ -226,6 +229,7 @@ export const studentRouter = createTRPCRouter({
       const newStudents = await ctx.db.student.count({
         where: {
           schoolId: ctx.schoolId,
+
           createdAt: { gte: subMonths(new Date(), 1) },
         },
       });

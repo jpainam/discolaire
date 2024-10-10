@@ -4,7 +4,8 @@ import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
 import { encryptPassword } from "../encrypt";
-import { protectedProcedure, publicProcedure } from "../trpc";
+import { userService } from "../services/user-service";
+import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
   prefix: z.string(),
@@ -30,9 +31,6 @@ const createUpdateSchema = z.object({
   degreeId: z.number().optional(),
 });
 export const staffRouter = {
-  hello: publicProcedure.query(() => {
-    return { hello: "world" };
-  }),
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.staff.findMany({
       where: {
@@ -66,12 +64,26 @@ export const staffRouter = {
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(({ ctx, input }) => {
-      return ctx.db.staff.deleteMany({
-        where: {
-          id: {
-            in: Array.isArray(input) ? input : [input],
+      return ctx.db.$transaction(async (tx) => {
+        const staffs = await tx.staff.findMany({
+          where: {
+            schoolId: ctx.schoolId,
+            id: {
+              in: Array.isArray(input) ? input : [input],
+            },
           },
-        },
+        });
+        await tx.staff.deleteMany({
+          where: {
+            id: {
+              in: Array.isArray(input) ? input : [input],
+            },
+          },
+        });
+        await userService.deleteUsers(
+          staffs.map((c) => c.userId).filter((t) => t !== null),
+        );
+        return staffs;
       });
     }),
   teachers: protectedProcedure.query(({ ctx }) => {

@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
 import { encryptPassword } from "../encrypt";
+import { userService } from "../services/user-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -23,12 +24,27 @@ export const contactRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.contact.deleteMany({
-        where: {
-          id: {
-            in: Array.isArray(input) ? input : [input],
+      return ctx.db.$transaction(async (tx) => {
+        const contacts = await tx.contact.findMany({
+          where: {
+            schoolId: ctx.schoolId,
+            id: {
+              in: Array.isArray(input) ? input : [input],
+            },
           },
-        },
+        });
+        await tx.contact.deleteMany({
+          where: {
+            schoolId: ctx.schoolId,
+            id: {
+              in: Array.isArray(input) ? input : [input],
+            },
+          },
+        });
+        await userService.deleteUsers(
+          contacts.map((c) => c.userId).filter((t) => t !== null),
+        );
+        return true;
       });
     }),
   get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {

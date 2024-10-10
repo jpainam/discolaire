@@ -459,8 +459,6 @@ model Staff {
     address                   String?
     observation               String?
     dateOfCriminalRecordCheck DateTime?   @db.Date
-    deletedAt                 String?
-    deletedBy                 String?
     createdAt                 DateTime?   @default(now()) @db.Timestamp(6)
     updatedAt                 DateTime    @updatedAt
     userId                    String?

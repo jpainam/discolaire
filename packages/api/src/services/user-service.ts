@@ -72,4 +72,14 @@ export const userService = {
       });
     }
   },
+
+  deleteUsers: async (userIds: string[]) => {
+    return db.user.deleteMany({
+      where: {
+        id: {
+          in: userIds,
+        },
+      },
+    });
+  },
 };
