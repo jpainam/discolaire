@@ -11,6 +11,9 @@ const createUpdateSchema = z.object({
   cycleId: z.string(),
   sectionId: z.string(),
   reportName: z.string(),
+  maxSize: z.coerce.number().int().positive(),
+  seniorAdvisorId: z.string().min(1),
+  headTeacherId: z.string().min(1),
 });
 export const classroomRouter = createTRPCRouter({
   all: protectedProcedure.query(async ({ ctx }) => {
@@ -128,6 +131,10 @@ export const classroomRouter = createTRPCRouter({
           cycleId: input.cycleId,
           sectionId: input.sectionId,
           schoolId: ctx.session.user.schoolId,
+          maxSize: input.maxSize,
+          seniorAdvisorId: input.seniorAdvisorId,
+          headTeacherId: input.headTeacherId,
+
           //createdById: { connect: { id: ctx.session.user.id } },
         },
       });
@@ -225,6 +232,9 @@ export const classroomRouter = createTRPCRouter({
           reportName: input.reportName,
           cycleId: input.cycleId,
           sectionId: input.sectionId,
+          maxSize: input.maxSize,
+          seniorAdvisorId: input.seniorAdvisorId,
+          headTeacherId: input.headTeacherId,
         },
       });
     }),
