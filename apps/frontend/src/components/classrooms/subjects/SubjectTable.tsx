@@ -17,6 +17,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
+import { EmptyState } from "@repo/ui/EmptyState";
 import { Skeleton } from "@repo/ui/skeleton";
 import {
   Table,
@@ -73,6 +74,13 @@ export function SubjectTable({ classroomId }: { classroomId: string }) {
           </TableRow>
         </TableHeader>
         <TableBody>
+          {!subjectsQuery.isPending && subjects.length == 0 && (
+            <TableRow>
+              <TableCell colSpan={6} className="text-center">
+                <EmptyState />
+              </TableCell>
+            </TableRow>
+          )}
           {subjectsQuery.isPending && (
             <TableRow>
               <TableCell colSpan={6} className="text-center">
