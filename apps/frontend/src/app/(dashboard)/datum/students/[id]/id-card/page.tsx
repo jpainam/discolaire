@@ -42,7 +42,7 @@ export default async function Page({
           </div>
           <div className="flex h-[250px] justify-end px-4 text-right">
             <span className="text-3xl font-bold tracking-tighter">
-              Portail Scolaire <br />
+              {t("school_portal")} <br />
               de Diourbel
             </span>
           </div>

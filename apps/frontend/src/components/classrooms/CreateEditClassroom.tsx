@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
+import { useRouter } from "@repo/hooks/use-router";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -69,22 +70,29 @@ export function CreateEditClassroom({
   });
 
   const { closeSheet } = useSheet();
+  const router = useRouter();
 
   const updateClassroomMutation = api.classroom.update.useMutation({
-    onSettled: () => utils.classroom.invalidate(),
+    onSettled: async () => {
+      await utils.classroom.invalidate();
+    },
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
       closeSheet();
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
     },
   });
   const createClassroomMutation = api.classroom.create.useMutation({
-    onSettled: () => utils.classroom.invalidate(),
+    onSettled: async () => {
+      await utils.classroom.invalidate();
+    },
     onSuccess: () => {
-      closeSheet();
       toast.success(t("created_successfully"), { id: 0 });
+      closeSheet();
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
