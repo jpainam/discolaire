@@ -19,7 +19,10 @@ export async function submitReportJob(
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        ...data,
+        callback: `${env.NEXT_PUBLIC_BASE_URL}/api/reports`,
+      }),
     });
     if (!response.ok) {
       throw new Error(`Failed to submit report job: ${response.statusText}`);
