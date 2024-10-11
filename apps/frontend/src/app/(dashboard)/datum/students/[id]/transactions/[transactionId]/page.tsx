@@ -44,7 +44,7 @@ export default async function Page({
   });
   return (
     <>
-      <div className="relative mx-2 overflow-hidden rounded-md border p-4 2xl:mx-auto 2xl:w-1/2">
+      <div className="relative mx-2 overflow-hidden rounded-md border p-4">
         {/* Watermark */}
 
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-10">
