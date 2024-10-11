@@ -55,7 +55,7 @@ export async function GET(
   const key = searchParams.get("key") ?? params.key;
 
   if (!key) {
-    throw new Error("A query/params key is required");
+    throw new Error("File not found");
   }
   const bucket = env.AWS_S3_BUCKET_NAME;
   const command = new GetObjectCommand({
@@ -74,7 +74,7 @@ export async function DELETE(
   const key = searchParams.get("key") ?? params.key;
 
   if (!key) {
-    throw new Error("A query/params key is required");
+    throw new Error("File not found");
   }
   const bucket = env.AWS_S3_BUCKET_NAME;
 

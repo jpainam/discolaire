@@ -2,6 +2,8 @@ import { TRPCError } from "@trpc/server";
 import { subDays } from "date-fns";
 import { z } from "zod";
 
+import { numberToWords } from "@repo/lib";
+
 import { submitReportJob } from "../services/reporting-service";
 import { transactionService } from "../services/transaction-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
@@ -48,10 +50,12 @@ export const transactionRouter = createTRPCRouter({
           schoolId: ctx.schoolId,
         },
       });
+      const lang = "fr"; // TODO: get the lang from the user
 
-      return submitReportJob("pdf", {
-        reportType: "receipt",
+      return submitReportJob("receipt", {
         id: report.id,
+        inLetter: `${data.transaction.amount.toLocaleString(lang)} ${data.school.currency} (${numberToWords(data.transaction.amount, lang)})`,
+        lang: lang,
         userId: ctx.session.user.id,
         ...data,
       });

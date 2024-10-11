@@ -17,6 +17,7 @@ import {
   FormMessage,
   useForm,
 } from "@repo/ui/form";
+import { Input } from "@repo/ui/input";
 import {
   Select,
   SelectContent,
@@ -35,6 +36,7 @@ const defaultSettingsSchema = z.object({
   applyRequiredFee: z.enum(["YES", "PASSIVE", "NO"]),
   includeRequiredFee: z.boolean(),
   numberOfReceipts: z.coerce.number().min(1),
+  currency: z.string().min(1).default("FCFA"),
 });
 export function DefaultSettings({
   school,
@@ -51,6 +53,7 @@ export function DefaultSettings({
       applyRequiredFee: school.applyRequiredFee,
       includeRequiredFee: school.includeRequiredFee ?? false,
       numberOfReceipts: school.numberOfReceipts ?? 1,
+      currency: school.currency,
     },
   });
   const router = useRouter();
@@ -135,6 +138,19 @@ export function DefaultSettings({
                   />
                 </FormControl>
 
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="currency"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("currency")}</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

@@ -82,7 +82,10 @@ export const schoolRouter = createTRPCRouter({
     .input(z.object({ name: z.string().min(1), code: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
       return ctx.db.school.create({
-        data: input,
+        data: {
+          ...input,
+          currency: "FCFA",
+        },
       });
     }),
   updateDefaultSettings: protectedProcedure
@@ -92,6 +95,7 @@ export const schoolRouter = createTRPCRouter({
         defaultCountryId: z.string().min(1),
         applyRequiredFee: z.enum(["NO", "YES", "PASSIVE"]),
         includeRequiredFee: z.boolean(),
+        currency: z.string().min(1),
         numberOfReceipts: z.coerce.number().min(1),
       }),
     )
@@ -101,6 +105,7 @@ export const schoolRouter = createTRPCRouter({
         defaultCountryId: input.defaultCountryId,
         applyRequiredFee: input.applyRequiredFee,
         includeRequiredFee: input.includeRequiredFee,
+        currency: input.currency,
       } as Prisma.SchoolUpdateInput;
 
       return ctx.db.school.update({

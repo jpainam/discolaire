@@ -713,6 +713,7 @@ model School {
     contacts           Contact[]
     users              User[]
     students           Student[]
+    currency           String
     classrooms         Classroom[]
     staffs             Staff[]
     formerSchools      FormerSchool[]

@@ -1,32 +1,32 @@
-import { Queue } from "bullmq";
-import IORedis from "ioredis";
+// import { Queue } from "bullmq";
+// import IORedis from "ioredis";
 
 import { env } from "../../env";
 
-export let connection: IORedis | null = null;
-
-export const getRedis = () => {
-  if (!connection) {
-    connection = new IORedis(`${env.REDIS_URL}?family=0`, {
-      maxRetriesPerRequest: null,
-    });
-  }
-  return connection;
-};
-
-const reportQueue = new Queue("reportQueue", { connection: getRedis() });
-
 export async function submitReportJob(
-  format: "pdf" | "excel",
+  url: string,
   data: Record<string, unknown> & {
-    reportType: string;
     id: number;
     userId: string;
   },
 ) {
-  await reportQueue.add("generateReport", {
-    format,
-    data,
-  });
-  console.log("Report job submitted:", data.reportType);
+  try {
+    console.log("submitReportJob", url, data.id);
+    const fullUrl = `${env.REPORTING_URL}/${url}`;
+    const response = await fetch(fullUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to submit report job: ${response.statusText}`);
+    }
+    return response.json() as unknown;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
 }
