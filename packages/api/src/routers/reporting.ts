@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { submitReportJob } from "../services/reporting-service";
+import { schoolService } from "../services/school-service";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const reportingRouter = createTRPCRouter({
@@ -67,6 +69,33 @@ export const reportingRouter = createTRPCRouter({
           url: input.url,
           status: input.status,
         },
+      });
+    }),
+  submitReport: protectedProcedure
+    .input(
+      z.object({
+        endpoint: z.string().min(1),
+        title: z.string().min(1),
+        data: z.record(z.any()),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const report = await ctx.db.reporting.create({
+        data: {
+          userId: ctx.session.user.id,
+          title: input.title,
+          status: "PENDING",
+          type: input.endpoint.includes("excel") ? "excel" : "pdf",
+          url: "",
+          schoolId: ctx.schoolId,
+        },
+      });
+      const school = await schoolService.get(ctx.schoolId);
+      return submitReportJob(input.endpoint, {
+        id: report.id,
+        school: school,
+        userId: ctx.session.user.id,
+        ...input.data,
       });
     }),
   create: protectedProcedure

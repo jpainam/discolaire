@@ -2,9 +2,6 @@ import { TRPCError } from "@trpc/server";
 import { subDays } from "date-fns";
 import { z } from "zod";
 
-import { numberToWords } from "@repo/lib";
-
-import { submitReportJob } from "../services/reporting-service";
 import { transactionService } from "../services/transaction-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -27,39 +24,6 @@ export const transactionRouter = createTRPCRouter({
       },
     });
   }),
-  printReceipt: protectedProcedure
-    .input(z.coerce.number())
-    .mutation(async ({ ctx, input }) => {
-      await ctx.db.transaction.update({
-        data: {
-          printedAt: new Date(),
-          printedById: ctx.session.user.id,
-        },
-        where: {
-          id: input,
-        },
-      });
-      const data = await transactionService.getReceiptInfo(input);
-      const report = await ctx.db.reporting.create({
-        data: {
-          userId: ctx.session.user.id,
-          title: `${data.student.lastName} ${data.transaction.transactionRef}`,
-          status: "PENDING",
-          type: "pdf",
-          url: "",
-          schoolId: ctx.schoolId,
-        },
-      });
-      const lang = "fr"; // TODO: get the lang from the user
-
-      return submitReportJob("receipt", {
-        id: report.id,
-        inLetter: `${data.transaction.amount.toLocaleString(lang)} ${data.school.currency} (${numberToWords(data.transaction.amount, lang)})`,
-        lang: lang,
-        userId: ctx.session.user.id,
-        ...data,
-      });
-    }),
 
   all: protectedProcedure
     .input(

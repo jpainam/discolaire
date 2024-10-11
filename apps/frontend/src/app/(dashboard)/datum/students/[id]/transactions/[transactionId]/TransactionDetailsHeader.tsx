@@ -8,23 +8,12 @@ import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
 
-import { api } from "~/trpc/react";
+import { printReceipt } from "~/actions/reporting";
 
 export function TransactionDetailsHeader() {
   const params = useParams<{ transactionId: string }>();
   const { t } = useLocale();
-  const utils = api.useUtils();
-  const printTransactionMutation = api.transaction.printReceipt.useMutation({
-    onSuccess: () => {
-      toast.success(t("printing_job_submitted"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSettled: async () => {
-      await utils.reporting.invalidate();
-    },
-  });
+
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1 text-secondary-foreground">
       <EuroIcon className="h-5 w-5" />
@@ -33,7 +22,9 @@ export function TransactionDetailsHeader() {
         <Button
           onClick={() => {
             toast.loading(t("printing"), { id: 0 });
-            printTransactionMutation.mutate(Number(params.transactionId));
+            void printReceipt(Number(params.transactionId)).then(() =>
+              toast.success(t("printing_job_submitted"), { id: 0 }),
+            );
           }}
           variant={"outline"}
           size={"sm"}

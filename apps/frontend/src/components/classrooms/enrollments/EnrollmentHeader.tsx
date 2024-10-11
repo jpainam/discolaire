@@ -17,6 +17,7 @@ import { Label } from "@repo/ui/label";
 import { Separator } from "@repo/ui/separator";
 import { Skeleton } from "@repo/ui/skeleton";
 
+import { printClassroomStudent } from "~/actions/reporting";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { api } from "~/trpc/react";
@@ -46,20 +47,6 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
       ? Math.min(...students.map((student) => getAge(student.dateOfBirth) || 0))
       : 0;
 
-  const utils = api.useUtils();
-  const printClassroomStudentMutation = api.classroom.printStudents.useMutation(
-    {
-      onSuccess: () => {
-        toast.success(t("printing_job_submitted"), { id: 0 });
-      },
-      onError: (error) => {
-        toast.error(error.message, { id: 0 });
-      },
-      onSettled: async () => {
-        await utils.reporting.invalidate();
-      },
-    },
-  );
   if (classroomStudentsQuery.isPending) {
     return (
       <div className="grid grid-cols-4 gap-2 px-2">
@@ -151,11 +138,12 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
               disabled={classroomQuery.isPending}
               onSelect={() => {
                 toast.loading(t("printing"), { id: 0 });
-                printClassroomStudentMutation.mutate({
-                  title: `${t("student_list")} ${classroom?.name} - ${t("students")}`,
-                  type: "excel",
-                  classroomId: classroomId,
-                });
+                void printClassroomStudent(
+                  classroomId,
+                  `${t("student_list")} ${classroom?.name} - ${t("students")}`,
+                ).then(() =>
+                  toast.success(t("printing_job_submitted"), { id: 0 }),
+                );
               }}
             >
               <XMLIcon className="mr-2 h-4 w-4" />
@@ -164,11 +152,12 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
             <DropdownMenuItem
               onSelect={() => {
                 toast.loading(t("printing"), { id: 0 });
-                printClassroomStudentMutation.mutate({
-                  title: `${t("student_list")} - ${classroom?.name} - ${t("students")}`,
-                  type: "pdf",
-                  classroomId: classroomId,
-                });
+                void printClassroomStudent(
+                  classroomId,
+                  `${t("student_list")} ${classroom?.name} - ${t("students")}`,
+                ).then(() =>
+                  toast.success(t("printing_job_submitted"), { id: 0 }),
+                );
               }}
             >
               <PDFIcon className="mr-2 h-4 w-4" />

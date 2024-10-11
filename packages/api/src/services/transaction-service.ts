@@ -95,7 +95,7 @@ export const transactionService = {
 
     return {
       student,
-      contact,
+      contact: contact ? contact : null,
       remaining,
       totalFee,
       school,
