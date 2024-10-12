@@ -109,7 +109,7 @@ export function DefaultSettings({
                       <SelectValue placeholder={t("status")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="YES">{t("yes_and_strict")}</SelectItem>
+                      <SelectItem value="YES">{t("yes_and_active")}</SelectItem>
                       <SelectItem value="PASSIVE">
                         {t("yes_but_passive")}
                       </SelectItem>

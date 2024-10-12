@@ -259,3 +259,7 @@ SELECT setval(pg_get_serial_sequence('"Section"', 'id'), coalesce(max(id) + 1, 1
 
 - `npx sort-package-json`
 - `git commit --no-verify --message ""` to skip husky, first `git add -A .`
+
+| Service   | Port |
+| --------- | ---- |
+| Messaging | 6000 |
