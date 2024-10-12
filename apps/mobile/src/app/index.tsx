@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Button, Pressable, TextInput } from "react-native";
+import { Button, Pressable, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Link, router, Stack } from "expo-router";
+import { Link, Stack } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 
 import type { RouterOutputs } from "~/utils/api";
-import { Text, View } from "~/components/Themed";
 import { api } from "~/utils/api";
 import { useSignIn, useSignOut, useUser } from "~/utils/auth";
 
@@ -14,8 +13,8 @@ function PostCard(props: {
   onDelete: () => void;
 }) {
   return (
-    <View>
-      <View>
+    <View className="flex flex-row rounded-lg bg-muted p-4">
+      <View className="flex-grow">
         <Link
           asChild
           href={{
@@ -23,14 +22,16 @@ function PostCard(props: {
             params: { id: props.post.id },
           }}
         >
-          <Pressable>
-            <Text>{props.post.title}</Text>
-            <Text>{props.post.content}</Text>
+          <Pressable className="">
+            <Text className="text-xl font-semibold text-primary">
+              {props.post.title}
+            </Text>
+            <Text className="mt-2 text-foreground">{props.post.content}</Text>
           </Pressable>
         </Link>
       </View>
       <Pressable onPress={props.onDelete}>
-        <Text>Delete</Text>
+        <Text className="font-bold uppercase text-primary">Delete</Text>
       </Pressable>
     </View>
   );
@@ -51,20 +52,31 @@ function CreatePost() {
   });
 
   return (
-    <View>
-      <TextInput value={title} onChangeText={setTitle} placeholder="Title" />
+    <View className="mt-4 flex gap-2">
+      <TextInput
+        className="items-center rounded-md border border-input bg-background px-3 text-lg leading-[1.25] text-foreground"
+        value={title}
+        onChangeText={setTitle}
+        placeholder="Title"
+      />
       {error?.data?.zodError?.fieldErrors.title && (
-        <Text>{error.data.zodError.fieldErrors.title}</Text>
+        <Text className="mb-2 text-destructive">
+          {error.data.zodError.fieldErrors.title}
+        </Text>
       )}
       <TextInput
+        className="items-center rounded-md border border-input bg-background px-3 text-lg leading-[1.25] text-foreground"
         value={content}
         onChangeText={setContent}
         placeholder="Content"
       />
       {error?.data?.zodError?.fieldErrors.content && (
-        <Text>{error.data.zodError.fieldErrors.content}</Text>
+        <Text className="mb-2 text-destructive">
+          {error.data.zodError.fieldErrors.content}
+        </Text>
       )}
       <Pressable
+        className="flex items-center rounded bg-primary p-2"
         onPress={() => {
           mutate({
             title,
@@ -72,10 +84,12 @@ function CreatePost() {
           });
         }}
       >
-        <Text>Create</Text>
+        <Text className="text-foreground">Create</Text>
       </Pressable>
       {error?.data?.code === "UNAUTHORIZED" && (
-        <Text>You need to be logged in to create a post</Text>
+        <Text className="mt-2 text-destructive">
+          You need to be logged in to create a post
+        </Text>
       )}
     </View>
   );
@@ -119,12 +133,7 @@ export default function Index() {
         </Text>
 
         <MobileAuth />
-        <Button
-          title="Welcome"
-          onPress={() => {
-            router.push("/welcome");
-          }}
-        ></Button>
+
         <View className="py-2">
           <Text className="font-semibold italic text-primary">
             Press on a post
