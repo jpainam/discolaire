@@ -38,7 +38,12 @@ export default function RootLayout() {
             <Stack.Screen name="index" />
 
             <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-            <Stack.Screen name="welcome" />
+            <Stack.Screen
+              name="welcome"
+              options={{
+                headerShown: false,
+              }}
+            />
           </Stack>
         </NavThemeProvider>
       </ActionSheetProvider>

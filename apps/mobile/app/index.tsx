@@ -1,8 +1,9 @@
-import { Button, Pressable, ScrollView, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { Link, Stack } from "expo-router";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { Icon } from "@roninoss/icons";
 
+import { Button } from "~/components/nativewindui/Button";
 import { useColorScheme } from "~/lib/useColorScheme";
 
 export default function Screen() {
@@ -35,8 +36,14 @@ export default function Screen() {
           Action Sheet
         </Text>
 
+        <Link href="/welcome" asChild>
+          <Button>
+            <Text>Welcome here</Text>
+          </Button>
+        </Link>
+
         <Button
-          color="grey"
+          //color="grey"
           onPress={() => {
             const options = ["Delete", "Save", "Cancel"];
             const destructiveButtonIndex = 0;
@@ -70,8 +77,9 @@ export default function Screen() {
               },
             );
           }}
-          title="Open action sheet"
-        />
+        >
+          <Text>Open action sheet</Text>
+        </Button>
       </View>
     </ScrollView>
   );
