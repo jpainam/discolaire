@@ -4,8 +4,10 @@ import "../global.css";
 import { Pressable, View } from "react-native";
 import { Link, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+// import { Icon } from "@roninoss/icons";
+
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { ThemeProvider as NavThemeProvider } from "@react-navigation/native";
-import { Icon } from "@roninoss/icons";
 
 import { ThemeToggle } from "~/components/ThemeToggle";
 import { cn } from "~/lib/cn";
@@ -60,7 +62,7 @@ function SettingsIcon() {
       <Pressable className="opacity-80">
         {({ pressed }) => (
           <View className={cn(pressed ? "opacity-50" : "opacity-90")}>
-            <Icon name="cog-outline" color={colors.foreground} />
+            <Ionicons name="cog-outline" size={32} color={colors.foreground} />
           </View>
         )}
       </Pressable>
