@@ -1,14 +1,24 @@
 import { Linking, Platform, View } from "react-native";
+import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Icon } from "@roninoss/icons";
 
 import { Text } from "~/components/nativewindui/Text";
+import { ThemeToggle } from "~/components/ThemeToggle";
 import { useColorScheme } from "~/lib/useColorScheme";
 
 export default function ModalScreen() {
   const { colors, colorScheme } = useColorScheme();
   return (
     <>
+      <Stack.Screen
+        options={{
+          presentation: "modal",
+          animation: "fade_from_bottom", // for android
+          title: "Settings",
+          headerRight: () => <ThemeToggle />,
+        }}
+      />
       <StatusBar
         style={
           Platform.OS === "ios"
