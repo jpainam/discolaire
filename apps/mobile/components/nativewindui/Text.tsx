@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { UITextView } from "react-native-uitextview";
@@ -45,7 +43,6 @@ function Text({
   variant,
   color,
   ...props
-  // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 }: React.ComponentPropsWithoutRef<typeof UITextView> &
   VariantProps<typeof textVariants>) {
   const textClassName = React.useContext(TextClassContext);
