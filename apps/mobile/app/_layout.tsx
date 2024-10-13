@@ -2,10 +2,11 @@ import "expo-dev-client";
 import "../global.css";
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Stack } from "expo-router";
+import { Link, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 // import { Icon } from "@roninoss/icons";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
+import { Ionicons } from "@expo/vector-icons";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { ThemeProvider as NavThemeProvider } from "@react-navigation/native";
 
@@ -19,7 +20,7 @@ export {
 
 export default function RootLayout() {
   useInitialAndroidBarSync();
-  const { colorScheme, isDarkColorScheme } = useColorScheme();
+  const { colorScheme, isDarkColorScheme, colors } = useColorScheme();
 
   return (
     <>
@@ -39,7 +40,24 @@ export default function RootLayout() {
                 }}
               >
                 <Stack.Screen name="index" />
-                <Stack.Screen name="student" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="student"
+                  options={{
+                    headerTitle: "Student Profile",
+                    headerBackTitle: "Back",
+                    headerRight() {
+                      return (
+                        <Link href=".." className="mb-2">
+                          <Ionicons
+                            name="chatbubble-ellipses-outline"
+                            size={24}
+                            color={colors.foreground}
+                          />
+                        </Link>
+                      );
+                    },
+                  }}
+                />
                 <Stack.Screen name="auth" options={{ headerShown: false }} />
                 <Stack.Screen
                   name="modal"

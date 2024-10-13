@@ -1,11 +1,9 @@
 import React from "react";
-import { Image, ScrollView, TouchableOpacity, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, useLocalSearchParams } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
-import { Button } from "~/components/nativewindui/Button";
 import { Text } from "~/components/nativewindui/Text";
 import { useColorScheme } from "~/lib/useColorScheme";
 
@@ -90,48 +88,10 @@ export default function StudentScreen() {
   console.log("Student ID:", id);
 
   // Placeholder student data
-  const student = {
-    name: "Joshua Andrews",
-    classroom: "Beautiful Butterflies - Family 139",
-    avatarUrl: "https://example.com/avatar.jpg",
-    status: "Signed out",
-  };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View className="p-4">
-        <Link href=".." className="mb-2">
-          <Ionicons name="arrow-back" size={24} color={colors.foreground} />
-        </Link>
-        <Text className="mb-4 text-xl font-bold">Student Profile</Text>
-        <View className="mb-4 flex-row items-center">
-          <Image
-            source={{ uri: student.avatarUrl }}
-            className="mr-4 h-16 w-16 rounded-full"
-          />
-          <View>
-            <Text className="text-lg font-semibold">{student.name}</Text>
-            <Text className="text-gray-500">{student.classroom}</Text>
-            <Text className="text-red-500">{student.status}</Text>
-          </View>
-        </View>
-        <View className="mb-4 flex-row justify-between">
-          <Button>
-            <Text>Add post</Text>
-          </Button>
-          <Button>
-            <Text>Sign in</Text>
-          </Button>
-          <TouchableOpacity>
-            <Ionicons
-              name="ellipsis-horizontal"
-              size={24}
-              color={colors.foreground}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-
+    <SafeAreaView style={{ flex: 1, backgroundColor: "yellow" }}>
+      {/* <StudentDetails /> */}
       <Tab.Navigator
         screenOptions={{
           tabBarLabelStyle: { textTransform: "none" },

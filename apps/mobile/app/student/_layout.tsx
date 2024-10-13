@@ -1,10 +1,15 @@
 import { Stack } from "expo-router";
 
 export default function Layout() {
+  //const { colors } = useColorScheme();
   return (
-    <Stack>
+    <Stack
+      screenOptions={{
+        headerShadowVisible: false,
+      }}
+    >
       <Stack.Screen
-        name="index"
+        name="[id]"
         options={{
           headerShown: false,
         }}
