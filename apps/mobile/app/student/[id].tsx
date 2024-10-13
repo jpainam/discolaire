@@ -133,15 +133,33 @@ export default function StudentScreen() {
       </View>
 
       <Tab.Navigator
-      // screenOptions={{
-      //   tabBarLabelStyle: { textTransform: "none" },
-      //   tabBarIndicatorStyle: { backgroundColor: colors.primary },
-      // }}
+        screenOptions={{
+          tabBarLabelStyle: { textTransform: "none" },
+          tabBarIndicatorStyle: { backgroundColor: colors.primary },
+        }}
       >
-        <Tab.Screen name="Overview" component={OverviewTab} />
-        <Tab.Screen name="Documents" component={DocumentsTab} />
-        <Tab.Screen name="Guardians" component={GuardiansTab} />
-        <Tab.Screen name="Settings" component={SettingsTab} />
+        <Tab.Screen key={"Overview"} name="Overview" component={OverviewTab} />
+        <Tab.Screen
+          key={"Documents"}
+          name="Documents"
+          component={DocumentsTab}
+        />
+        <Tab.Screen
+          key={"Guardians"}
+          name="Guardians"
+          component={GuardiansTab}
+        />
+        <Tab.Screen key="Settings" name="Settings" component={SettingsTab} />
+        <Tab.Screen
+          key={"Guardians2"}
+          name="Guardians2"
+          component={GuardiansTab}
+        />
+        <Tab.Screen
+          key={"Guardians3"}
+          name="Guardians3"
+          component={GuardiansTab}
+        />
       </Tab.Navigator>
     </SafeAreaView>
   );
