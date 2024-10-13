@@ -41,9 +41,9 @@ export default function RootLayout() {
               >
                 <Stack.Screen name="index" />
                 <Stack.Screen
-                  name="student"
+                  name="student/[id]"
                   options={{
-                    headerTitle: "Student Profile",
+                    headerTitle: "collpasing-top-tabs",
                     headerBackTitle: "Back",
                     headerRight() {
                       return (
