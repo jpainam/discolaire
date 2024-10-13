@@ -47,6 +47,11 @@ export default function Screen() {
             <Text>Login here</Text>
           </Button>
         </Link>
+        <Link href="/student/1234" asChild>
+          <Button>
+            <Text>Student</Text>
+          </Button>
+        </Link>
 
         <Button
           //color="grey"

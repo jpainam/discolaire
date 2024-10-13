@@ -30,7 +30,9 @@ export default function SignIn() {
       >
         <ScrollView
           contentContainerStyle={{ flexGrow: 1 }}
+          contentInsetAdjustmentBehavior="automatic"
           keyboardShouldPersistTaps="handled"
+          className="p-4"
         >
           <View className="mx-auto w-full max-w-sm flex-1 justify-between gap-4 px-4 py-4">
             <View className="ios:pt-8 pt-12">

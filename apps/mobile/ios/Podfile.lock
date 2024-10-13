@@ -1828,10 +1828,10 @@ SPEC CHECKSUMS:
   EXSplashScreen: 17a656c08a0095be15b620c52e61dfdb665863d2
   EXUpdatesInterface: 996527fd7d1a5d271eb523258d603f8f92038f24
   FBLazyVector: 4b1589d37c9ff4dba11a63083fe7515fad3ac111
-  fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
-  glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
-  hermes-engine: 2102c92e54a031a270fd1fe84169ec8a0901b7bd
-  RCT-Folly: 02617c592a293bd6d418e0a88ff4ee1f88329b47
+  fmt: 8083860262b879fc92bca720969c91bdb88ada93
+  glog: 77f46f3d5c779b34a09b51a92fa9e0fcab64df1c
+  hermes-engine: 3b47f05aaf5af60b6802d6a3b47a7909c73dd1b0
+  RCT-Folly: 36944e180e3143948e1c8b0c5eade65a3dd45142
   RCTDeprecation: 5f1d7e1f8ef6c53f0207e3ac0d0ca23575e8a6ab
   RCTRequired: dcfd24ece09940bbf24b7c2974f4eb68a9baee55
   RCTTypeSafety: 3d65944055cc73f3bb28c3f05c7eaff2bb7ceb83
