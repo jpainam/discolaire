@@ -1,159 +1,178 @@
-import { useState } from "react";
-import { Button, Pressable, Text, TextInput, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Link, Stack } from "expo-router";
+import * as React from "react";
+import { Linking, useWindowDimensions, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Link } from "expo-router";
+import { useHeaderHeight } from "@react-navigation/elements";
+import { Icon } from "@roninoss/icons";
 import { FlashList } from "@shopify/flash-list";
+import { cssInterop } from "nativewind";
 
-import type { RouterOutputs } from "~/utils/api";
-import { api } from "~/utils/api";
-import { useSignIn, useSignOut, useUser } from "~/utils/auth";
+import { Text } from "~/components/nativewindui/Text";
+import { useColorScheme } from "~/lib/useColorScheme";
+import { useHeaderSearchBar } from "~/lib/useHeaderSearchBar";
 
-function PostCard(props: {
-  post: RouterOutputs["post"]["all"][number];
-  onDelete: () => void;
+cssInterop(FlashList, {
+  className: "style",
+  contentContainerClassName: "contentContainerStyle",
+});
+
+export default function Screen() {
+  const searchValue = useHeaderSearchBar({
+    hideWhenScrolling: COMPONENTS.length === 0,
+  });
+
+  const data = searchValue
+    ? COMPONENTS.filter((c) =>
+        c.name.toLowerCase().includes(searchValue.toLowerCase()),
+      )
+    : COMPONENTS;
+
+  return (
+    <FlashList
+      contentInsetAdjustmentBehavior="automatic"
+      keyboardShouldPersistTaps="handled"
+      data={data}
+      estimatedItemSize={200}
+      contentContainerClassName="py-4 android:pb-12"
+      extraData={searchValue}
+      removeClippedSubviews={false} // used for selecting text on android
+      keyExtractor={keyExtractor}
+      ItemSeparatorComponent={renderItemSeparator}
+      renderItem={renderItem}
+      ListEmptyComponent={
+        COMPONENTS.length === 0 ? ListEmptyComponent : undefined
+      }
+    />
+  );
+}
+
+function ListEmptyComponent() {
+  const insets = useSafeAreaInsets();
+  const dimensions = useWindowDimensions();
+  const headerHeight = useHeaderHeight();
+  const { colors } = useColorScheme();
+  const height = dimensions.height - headerHeight - insets.bottom - insets.top;
+
+  return (
+    <View
+      style={{ height }}
+      className="flex-1 items-center justify-center gap-1 px-12"
+    >
+      <Icon name="file-plus-outline" size={42} color={colors.grey} />
+      <Text variant="title3" className="pb-1 text-center font-semibold">
+        No Components Installed
+      </Text>
+      <Text color="tertiary" variant="subhead" className="pb-4 text-center">
+        You can install any of the free components from the{" "}
+        <Text
+          onPress={() => Linking.openURL("https://nativewindui.com")}
+          variant="subhead"
+          className="text-primary"
+        >
+          NativeWindUI
+        </Text>
+        {" website."}
+      </Text>
+    </View>
+  );
+}
+
+interface ComponentItem {
+  name: string;
+  component: React.FC;
+}
+
+function keyExtractor(item: ComponentItem) {
+  return item.name;
+}
+
+function renderItemSeparator() {
+  return <View className="p-2" />;
+}
+
+function renderItem({ item }: { item: ComponentItem }) {
+  return (
+    <Card title={item.name}>
+      <item.component />
+    </Card>
+  );
+}
+
+function Card({
+  children,
+  title,
+}: {
+  children: React.ReactNode;
+  title: string;
 }) {
   return (
-    <View className="flex flex-row rounded-lg bg-muted p-4">
-      <View className="flex-grow">
-        <Link
-          asChild
-          href={{
-            pathname: "/post/[id]",
-            params: { id: props.post.id },
-          }}
-        >
-          <Pressable className="">
-            <Text className="text-xl font-semibold text-primary">
-              {props.post.title}
-            </Text>
-            <Text className="mt-2 text-foreground">{props.post.content}</Text>
-          </Pressable>
-        </Link>
+    <View className="px-4">
+      <View className="gap-4 rounded-xl border border-border bg-card p-4 pb-6 shadow-sm shadow-black/10 dark:shadow-none">
+        <Text className="text-center text-sm font-medium tracking-wider opacity-60">
+          {title}
+        </Text>
+        {children}
       </View>
-      <Pressable onPress={props.onDelete}>
-        <Text className="font-bold uppercase text-primary">Delete</Text>
-      </Pressable>
     </View>
   );
 }
 
-function CreatePost() {
-  const utils = api.useUtils();
-
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-
-  const { mutate, error } = api.post.create.useMutation({
-    async onSuccess() {
-      setTitle("");
-      setContent("");
-      await utils.post.all.invalidate();
-    },
-  });
-
-  return (
-    <View className="mt-4 flex gap-2">
-      <TextInput
-        className="items-center rounded-md border border-input bg-background px-3 text-lg leading-[1.25] text-foreground"
-        value={title}
-        onChangeText={setTitle}
-        placeholder="Title"
-      />
-      {error?.data?.zodError?.fieldErrors.title && (
-        <Text className="mb-2 text-destructive">
-          {error.data.zodError.fieldErrors.title}
-        </Text>
-      )}
-      <TextInput
-        className="items-center rounded-md border border-input bg-background px-3 text-lg leading-[1.25] text-foreground"
-        value={content}
-        onChangeText={setContent}
-        placeholder="Content"
-      />
-      {error?.data?.zodError?.fieldErrors.content && (
-        <Text className="mb-2 text-destructive">
-          {error.data.zodError.fieldErrors.content}
-        </Text>
-      )}
-      <Pressable
-        className="flex items-center rounded bg-primary p-2"
-        onPress={() => {
-          mutate({
-            title,
-            content,
-          });
-        }}
-      >
-        <Text className="text-foreground">Create</Text>
-      </Pressable>
-      {error?.data?.code === "UNAUTHORIZED" && (
-        <Text className="mt-2 text-destructive">
-          You need to be logged in to create a post
-        </Text>
-      )}
-    </View>
-  );
-}
-
-function MobileAuth() {
-  const user = useUser();
-  const signIn = useSignIn();
-  const signOut = useSignOut();
-
-  return (
-    <>
-      <Text className="pb-2 text-center text-xl font-semibold text-white">
-        {user?.name ?? "Not logged in"}
-      </Text>
-      <Button
-        onPress={() => (user ? signOut() : signIn())}
-        title={user ? "Sign Out" : "Sign In With Discord"}
-        color={"#5B65E9"}
-      />
-    </>
-  );
-}
-
-export default function Index() {
-  const utils = api.useUtils();
-
-  const postQuery = api.post.all.useQuery();
-
-  const deletePostMutation = api.post.delete.useMutation({
-    onSettled: () => utils.post.all.invalidate(),
-  });
-
-  return (
-    <SafeAreaView className="bg-background">
-      {/* Changes page title visible on the header */}
-      <Stack.Screen options={{ title: "Home Page" }} />
-      <View className="h-full w-full bg-background p-4">
-        <Text className="pb-2 text-center text-5xl font-bold text-foreground">
-          Create <Text className="text-primary">T3</Text> Turbo
-        </Text>
-
-        <MobileAuth />
-
-        <View className="py-2">
-          <Text className="font-semibold italic text-primary">
-            Press on a post
+const COMPONENTS: ComponentItem[] = [
+  {
+    name: "Text",
+    component: function TextExample() {
+      return (
+        <View className="gap-2">
+          <Text variant="largeTitle" className="text-center">
+            Large Title
+          </Text>
+          <Text variant="title1" className="text-center">
+            Title 1
+          </Text>
+          <Link href="/welcome">
+            <Text variant="title2" className="text-center">
+              Welcome page
+            </Text>
+          </Link>
+          <Text variant="title2" className="text-center">
+            Title 2
+          </Text>
+          <Text variant="title3" className="text-center">
+            Title 3
+          </Text>
+          <Text variant="heading" className="text-center">
+            Heading
+          </Text>
+          <Text variant="body" className="text-center">
+            Body
+          </Text>
+          <Text variant="callout" className="text-center">
+            Callout
+          </Text>
+          <Text variant="subhead" className="text-center">
+            Subhead
+          </Text>
+          <Text variant="footnote" className="text-center">
+            Footnote
+          </Text>
+          <Text variant="caption1" className="text-center">
+            Caption 1
+          </Text>
+          <Text variant="caption2" className="text-center">
+            Caption 2
           </Text>
         </View>
-
-        <FlashList
-          data={postQuery.data}
-          estimatedItemSize={20}
-          ItemSeparatorComponent={() => <View className="h-2" />}
-          renderItem={(p) => (
-            <PostCard
-              post={p.item}
-              onDelete={() => deletePostMutation.mutate(p.item.id)}
-            />
-          )}
-        />
-
-        <CreatePost />
-      </View>
-    </SafeAreaView>
-  );
-}
+      );
+    },
+  },
+  {
+    name: "Selectable Text",
+    component: function SelectableTextExample() {
+      return (
+        <Text uiTextView selectable>
+          Long press or double press this text
+        </Text>
+      );
+    },
+  },
+];
