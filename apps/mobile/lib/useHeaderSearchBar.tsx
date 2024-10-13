@@ -1,5 +1,5 @@
+import type { SearchBarProps } from "react-native-screens";
 import * as React from "react";
-import { SearchBarProps } from "react-native-screens";
 import { useNavigation } from "expo-router";
 
 import { COLORS } from "~/theme/colors";
@@ -26,7 +26,14 @@ export function useHeaderSearchBar(props: SearchBarProps = {}) {
         ...props,
       } satisfies SearchBarProps,
     });
-  }, [navigation, colorScheme]);
+  }, [
+    navigation,
+    colorScheme,
+    colors.foreground,
+    colors.primary,
+    colors.grey,
+    props,
+  ]);
 
   return search;
 }
