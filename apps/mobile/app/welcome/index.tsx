@@ -70,7 +70,7 @@ export default function WelcomeConsentScreen() {
               </Link>
             </Text>
           </View>
-          <Link href="../" replace asChild>
+          <Link href="/auth" asChild>
             <Button size={Platform.select({ ios: "lg", default: "md" })}>
               <Text>Continue</Text>
             </Button>

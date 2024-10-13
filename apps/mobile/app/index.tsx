@@ -1,9 +1,10 @@
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Pressable, ScrollView, View } from "react-native";
 import { Link, Stack } from "expo-router";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { Icon } from "@roninoss/icons";
 
 import { Button } from "~/components/nativewindui/Button";
+import { Text } from "~/components/nativewindui/Text";
 import { useColorScheme } from "~/lib/useColorScheme";
 
 export default function Screen() {
@@ -39,6 +40,11 @@ export default function Screen() {
         <Link href="/welcome" asChild>
           <Button>
             <Text>Welcome here</Text>
+          </Button>
+        </Link>
+        <Link href="/auth" asChild>
+          <Button>
+            <Text>Login here</Text>
           </Button>
         </Link>
 
