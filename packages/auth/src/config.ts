@@ -4,7 +4,6 @@ import type {
   Session as NextAuthSession,
 } from "next-auth";
 import type { Adapter } from "next-auth/adapters";
-import { skipCSRFCheck } from "@auth/core";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { addDays } from "date-fns";
 import jwt from "jsonwebtoken";
@@ -32,13 +31,13 @@ const adapter: Adapter = PrismaAdapter(db);
 export const isSecureContext = env.NODE_ENV !== "development";
 export const authConfig = {
   adapter,
-  // In development, we need to skip checks to allow Expo to work
-  ...(!isSecureContext
-    ? {
-        skipCSRFCheck: skipCSRFCheck,
-        trustHost: true,
-      }
-    : {}),
+  // // In development, we need to skip checks to allow Expo to work
+  // ...(!isSecureContext
+  //   ? {
+  //       skipCSRFCheck: skipCSRFCheck,
+  //       trustHost: true,
+  //     }
+  //   : {}),
   secret: env.AUTH_SECRET,
   session: {
     strategy: "jwt",
