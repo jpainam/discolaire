@@ -12,6 +12,7 @@ import { ThemeProvider as NavThemeProvider } from "@react-navigation/native";
 
 import { useColorScheme, useInitialAndroidBarSync } from "~/lib/useColorScheme";
 import { NAV_THEME } from "~/theme";
+import { TRPCProvider } from "~/utils/api";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -23,7 +24,7 @@ export default function RootLayout() {
   const { colorScheme, isDarkColorScheme, colors } = useColorScheme();
 
   return (
-    <>
+    <TRPCProvider>
       <StatusBar
         key={`root-status-bar-${isDarkColorScheme ? "light" : "dark"}`}
         style={isDarkColorScheme ? "light" : "dark"}
@@ -83,6 +84,6 @@ export default function RootLayout() {
       </GestureHandlerRootView>
 
       {/* </ExampleProvider> */}
-    </>
+    </TRPCProvider>
   );
 }

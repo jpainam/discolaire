@@ -6,10 +6,12 @@ import { Icon } from "@roninoss/icons";
 import { Button } from "~/components/nativewindui/Button";
 import { Text } from "~/components/nativewindui/Text";
 import { useColorScheme } from "~/lib/useColorScheme";
+import { useUser } from "~/utils/auth";
 
 export default function Screen() {
   const { colorScheme, colors } = useColorScheme();
   const { showActionSheetWithOptions } = useActionSheet();
+  const user = useUser();
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic" className="p-4">
       <Stack.Screen
@@ -33,6 +35,7 @@ export default function Screen() {
         }}
       />
       <View className="gap-4 rounded-xl border border-border bg-card p-4 pb-6 shadow-sm shadow-black/10 dark:shadow-none">
+        <Text>{JSON.stringify(user)}</Text>
         <Text className="text-center text-sm font-medium tracking-wider text-foreground opacity-60">
           Action Sheet
         </Text>
