@@ -54,6 +54,23 @@ export const userService = {
       },
     });
   },
+  updateAvatar: async ({
+    userId,
+    avatar,
+  }: {
+    userId?: string | null;
+    avatar: string;
+  }) => {
+    if (!userId) {
+      return;
+    }
+    return db.user.update({
+      where: { id: userId },
+      data: {
+        avatar,
+      },
+    });
+  },
   attachRoles: async (userId: string, roleId: string | string[]) => {
     if (Array.isArray(roleId)) {
       return db.userRole.createMany({

@@ -4,6 +4,8 @@ import { auth } from "@repo/auth";
 
 import { SchoolContextProvider } from "~/contexts/SchoolContext";
 import { Footer } from "~/layouts/Footer";
+import GlobalModal from "~/layouts/GlobalModal";
+import GlobalSheet from "~/layouts/GlobalSheet";
 import { Header } from "~/layouts/Header";
 import { api } from "~/trpc/server";
 
@@ -22,8 +24,9 @@ export default async function Layout({
     <SchoolContextProvider school={school}>
       {/* <NoticeBanner /> */}
       <Header />
-
       <main className="min-h-screen flex-1">{children}</main>
+      <GlobalSheet />
+      <GlobalModal />
       <Footer />
     </SchoolContextProvider>
   );

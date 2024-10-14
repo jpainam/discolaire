@@ -8,6 +8,7 @@ import type { Prisma, Student } from "@repo/db";
 import { encryptPassword } from "../encrypt";
 import { accountService } from "../services/account-service";
 import { studentService } from "../services/student-service";
+import { userService } from "../services/user-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const whereClause = (q: string): Prisma.StudentFindManyArgs => {
@@ -416,7 +417,7 @@ export const studentRouter = createTRPCRouter({
   updateAvatar: protectedProcedure
     .input(z.object({ id: z.string(), avatar: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      await ctx.db.student.update({
+      const student = await ctx.db.student.update({
         data: {
           avatar: input.avatar,
         },
@@ -424,22 +425,12 @@ export const studentRouter = createTRPCRouter({
           id: input.id,
         },
       });
-      const student = await ctx.db.student.findUnique({
-        where: {
-          id: input.id,
-        },
+      await userService.updateAvatar({
+        userId: student.userId,
+        avatar: input.avatar,
       });
-      if (student?.userId) {
-        await ctx.db.user.update({
-          data: {
-            avatar: input.avatar,
-          },
-          where: {
-            id: student.userId,
-          },
-        });
-      }
-      return true;
+
+      return student;
     }),
   transactions: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.transaction.findMany({

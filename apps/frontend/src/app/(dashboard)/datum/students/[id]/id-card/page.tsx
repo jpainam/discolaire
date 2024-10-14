@@ -81,7 +81,13 @@ export default async function Page({
                   id={"123456789012"}
                 />
                 {school.logo && (
-                  <Image src={school.logo} height={40} width={120} alt="Logo" />
+                  <Image
+                    src={school.logo}
+                    height={40}
+                    width={120}
+                    alt="Logo"
+                    className="rounded-lg"
+                  />
                 )}
               </div>
             </div>

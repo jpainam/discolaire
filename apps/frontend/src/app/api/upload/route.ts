@@ -19,17 +19,18 @@ const client = new S3Client({
 });
 
 export async function POST(request: Request) {
-  const { destination, contentType, bucket } = await request.json();
+  const { destination, contentType, bucket, key } = await request.json();
   if (typeof destination !== "string" || destination.length === 0) {
     return Response.json(
       { error: "Invalid dest " + destination },
       { status: 400 },
     );
   }
+  const fileKey = key ? `${destination}/${key}` : `${destination}/${uuidv4()}`;
   try {
     const { url, fields } = await createPresignedPost(client, {
       Bucket: bucket ?? env.AWS_S3_BUCKET_NAME,
-      Key: `${destination}/${uuidv4()}`,
+      Key: fileKey,
       Conditions: [
         ["content-length-range", 0, 10485760], // up to 10 MB
         ["starts-with", "$Content-Type", contentType],

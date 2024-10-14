@@ -28,10 +28,9 @@ export function SquaredAvatar({ student }: { student?: Student }) {
             onClick={() => {
               if (!student?.id) return;
               openModal({
-                title: "Upload files",
+                title: t("upload_files"),
                 className: "w-[500px]",
-                description:
-                  "Drag and drop your files here or click to browse.",
+                description: t("upload_files_description"),
                 view: <ChangeAvatar studentId={student.id} />,
               });
             }}

@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
@@ -8,29 +7,35 @@ import { useUpload } from "@repo/hooks/use-upload";
 import { useLocale } from "@repo/i18n";
 import { FileUploader } from "@repo/ui/uploads/file-uploader";
 
+import { useSchool } from "~/contexts/SchoolContext";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
 export function ChangeAvatar({ studentId }: { studentId: string }) {
   const { t } = useLocale();
   const { closeModal } = useModal();
+  const { school } = useSchool();
 
-  const { onUpload, isPending, data: uploadedFiles } = useUpload();
-  const updateStudentAvatarMutation = api.student.updateAvatar.useMutation();
-
-  React.useEffect(() => {
-    if (uploadedFiles.length == 0) {
-      return;
-    }
-    // @ts-expect-error - TODO  fix this
-    const avatarId = uploadedFiles[0].data?.id;
-    if (avatarId) {
-      updateStudentAvatarMutation.mutate({
-        id: studentId,
-        avatar: avatarId,
-      });
-    }
-  }, [studentId, uploadedFiles, updateStudentAvatarMutation]);
+  const {
+    unstable_onUpload: onUpload,
+    isPending,
+    //data: uploadedFiles,
+  } = useUpload();
+  const utils = api.useUtils();
+  //const router = useRouter();
+  const updateStudentAvatarMutation = api.student.updateAvatar.useMutation({
+    onSuccess: () => {
+      toast.success(t("updated_successfully"), { id: 0 });
+      closeModal();
+      //router.refresh();
+    },
+    onSettled: async () => {
+      await utils.student.get.invalidate(studentId);
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
 
   return (
     <div>
@@ -50,12 +55,23 @@ export function ChangeAvatar({ studentId }: { studentId: string }) {
 
           toast.promise(
             onUpload(file, {
-              destination: "avatars",
+              destination: `${school.code}/avatars`,
+              bucket: "discolaire-public",
+              key: studentId,
             }),
             {
               loading: t("uploading"),
-              success: () => {
-                closeModal();
+              success: (result) => {
+                const uploadedFile = result[0];
+                if (!uploadedFile?.data) {
+                  toast.error("No file uploaded");
+                  return;
+                }
+                const url = `${uploadedFile.data.url}${uploadedFile.data.id}`;
+                updateStudentAvatarMutation.mutate({
+                  id: studentId,
+                  avatar: url,
+                });
                 return t("uploaded_successfully");
               },
               error: (err) => {
@@ -66,16 +82,6 @@ export function ChangeAvatar({ studentId }: { studentId: string }) {
         }}
         //progresses={progresses}
       />
-      {uploadedFiles.map((d, index) => (
-        <div key={index}>
-          <p>File: {d.file.name}</p>
-          {d.isPending && <p>Uploading...</p>}
-          {!d.isPending && (
-            <p>Upload complete! File ID: {JSON.stringify(d.data)}</p>
-          )}
-          {<p>Error: {JSON.stringify(d.error)}</p>}
-        </div>
-      ))}
     </div>
   );
 }
