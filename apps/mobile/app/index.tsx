@@ -53,7 +53,7 @@ export default function Screen() {
           </Button>
         </Link>
 
-         <Link href="/List" asChild>
+        <Link href="/List" asChild>
           <Button>
             <Text>List</Text>
           </Button>
