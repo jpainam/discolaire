@@ -216,7 +216,7 @@ function ActionCell({ fee }: { fee: Fee }) {
                 });
               }
             }}
-            className="bg-destructive text-destructive-foreground"
+            className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
           >
             <Trash2 className="mr-2 h-4 w-4" />
             {t("delete")}
