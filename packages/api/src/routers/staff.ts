@@ -64,27 +64,30 @@ export const staffRouter = {
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(({ ctx, input }) => {
-      return ctx.db.$transaction(async (tx) => {
-        const staffs = await tx.staff.findMany({
-          where: {
-            schoolId: ctx.schoolId,
-            id: {
-              in: Array.isArray(input) ? input : [input],
+      return ctx.db.$transaction(
+        async (tx) => {
+          const staffs = await tx.staff.findMany({
+            where: {
+              schoolId: ctx.schoolId,
+              id: {
+                in: Array.isArray(input) ? input : [input],
+              },
             },
-          },
-        });
-        await tx.staff.deleteMany({
-          where: {
-            id: {
-              in: Array.isArray(input) ? input : [input],
+          });
+          await tx.staff.deleteMany({
+            where: {
+              id: {
+                in: Array.isArray(input) ? input : [input],
+              },
             },
-          },
-        });
-        await userService.deleteUsers(
-          staffs.map((c) => c.userId).filter((t) => t !== null),
-        );
-        return staffs;
-      });
+          });
+          await userService.deleteUsers(
+            staffs.map((c) => c.userId).filter((t) => t !== null),
+          );
+          return staffs;
+        },
+        { maxWait: 5000, timeout: 20000 },
+      );
     }),
   teachers: protectedProcedure.query(({ ctx }) => {
     return ctx.db.staff.findMany({

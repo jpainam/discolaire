@@ -1,5 +1,7 @@
 import { db } from "@repo/db";
 
+import { userService } from "./user-service";
+
 export const studentService = {
   getClassroom: (studentId: string, schoolYearId: string) => {
     return db.classroom.findFirst({
@@ -132,5 +134,31 @@ export const studentService = {
     });
     const paidRequiredFeeIds = paidRequiredFees.map((fee) => fee.feeId);
     return requiredFees.filter((fee) => !paidRequiredFeeIds.includes(fee.id));
+  },
+  delete: async (studentIds: string | string[], schoolId: string) => {
+    return db.$transaction(
+      async (tx) => {
+        const students = await tx.student.findMany({
+          where: {
+            schoolId: schoolId,
+            id: {
+              in: Array.isArray(studentIds) ? studentIds : [studentIds],
+            },
+          },
+        });
+        await tx.student.deleteMany({
+          where: {
+            id: {
+              in: Array.isArray(studentIds) ? studentIds : [studentIds],
+            },
+          },
+        });
+        await userService.deleteUsers(
+          students.map((c) => c.userId).filter((t) => t !== null),
+        );
+        return students;
+      },
+      { maxWait: 5000, timeout: 20000 },
+    );
   },
 };

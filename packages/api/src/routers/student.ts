@@ -257,13 +257,7 @@ export const studentRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(({ ctx, input }) => {
-      return ctx.db.student.deleteMany({
-        where: {
-          id: {
-            in: Array.isArray(input) ? input : [input],
-          },
-        },
-      });
+      return studentService.delete(input, ctx.schoolId);
     }),
   siblings: protectedProcedure
     .input(z.string())

@@ -214,7 +214,10 @@ export function fetchStaffColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("employmentType")} />
       ),
-      cell: (info) => info.getValue(),
+      cell: ({ row }) => {
+        const staff = row.original;
+        return <div>{t(staff.employmentType ?? "")}</div>;
+      },
       enableSorting: true,
     },
     {

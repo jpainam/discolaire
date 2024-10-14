@@ -1,25 +1,14 @@
 {
-  "extends": [
-    "@repo/tsconfig/base.json"
-  ],
+  "extends": ["@repo/tsconfig/base.json"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "~/*": [
-        "./*"
-      ]
+      "~/*": ["./*"]
     },
     "jsx": "react-native",
-    "types": [
-      "nativewind/types"
-    ],
+    "types": ["nativewind/types"],
     "checkJs": false,
-    "moduleSuffixes": [
-      ".ios",
-      ".android",
-      ".native",
-      ""
-    ]
+    "moduleSuffixes": [".ios", ".android", ".native", ""]
   },
   "include": [
     "**/*.ts",
@@ -32,7 +21,5 @@
     "utils",
     "nativewind-env.d.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

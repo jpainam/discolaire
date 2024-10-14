@@ -24,28 +24,34 @@ export const contactRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.$transaction(async (tx) => {
-        const contacts = await tx.contact.findMany({
-          where: {
-            schoolId: ctx.schoolId,
-            id: {
-              in: Array.isArray(input) ? input : [input],
+      return ctx.db.$transaction(
+        async (tx) => {
+          const contacts = await tx.contact.findMany({
+            where: {
+              schoolId: ctx.schoolId,
+              id: {
+                in: Array.isArray(input) ? input : [input],
+              },
             },
-          },
-        });
-        await tx.contact.deleteMany({
-          where: {
-            schoolId: ctx.schoolId,
-            id: {
-              in: Array.isArray(input) ? input : [input],
+          });
+          await tx.contact.deleteMany({
+            where: {
+              schoolId: ctx.schoolId,
+              id: {
+                in: Array.isArray(input) ? input : [input],
+              },
             },
-          },
-        });
-        await userService.deleteUsers(
-          contacts.map((c) => c.userId).filter((t) => t !== null),
-        );
-        return true;
-      });
+          });
+          await userService.deleteUsers(
+            contacts.map((c) => c.userId).filter((t) => t !== null),
+          );
+          return true;
+        },
+        {
+          maxWait: 5000,
+          timeout: 20000,
+        },
+      );
     }),
   get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
     return ctx.db.contact.findUnique({
