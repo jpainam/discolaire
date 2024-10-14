@@ -4,6 +4,7 @@ import { auth } from "@repo/auth";
 
 import { DashboardClassroomSize } from "~/components/dashboard/DashboardClassroomSize";
 import { DashboardTransactionTrend } from "~/components/dashboard/DashboardTransactionTrend";
+import { EducationalRessource } from "~/components/dashboard/EducationalRessource";
 import { QuickStatistics } from "~/components/dashboard/QuickStatistics";
 import { ScheduleCard } from "~/components/dashboard/ScheduleCard";
 import { SchoolLife } from "~/components/dashboard/SchoolLife";
@@ -34,6 +35,7 @@ export default async function DashboardPage() {
       {/* <SearchBlock className="col-span-full md:col-span-6" /> */}
       <SchoolLife />
       <ScheduleCard />
+      <EducationalRessource />
       {/* <Suspense>
         <EffectiveStat className="col-span-full" />
       </Suspense> */}
