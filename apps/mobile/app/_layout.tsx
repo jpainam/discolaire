@@ -11,6 +11,7 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { ThemeProvider as NavThemeProvider } from "@react-navigation/native";
 
 import { useColorScheme, useInitialAndroidBarSync } from "~/lib/useColorScheme";
+import { AuthProvider } from "~/providers/AuthProvider";
 import { NAV_THEME } from "~/theme";
 import { TRPCProvider } from "~/utils/api";
 
@@ -24,66 +25,70 @@ export default function RootLayout() {
   const { colorScheme, isDarkColorScheme, colors } = useColorScheme();
 
   return (
-    <TRPCProvider>
+    <>
       <StatusBar
         key={`root-status-bar-${isDarkColorScheme ? "light" : "dark"}`}
         style={isDarkColorScheme ? "light" : "dark"}
       />
       {/* WRAP YOUR APP WITH ANY ADDITIONAL PROVIDERS HERE */}
-      {/* <ExampleProvider> */}
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <BottomSheetModalProvider>
-          <ActionSheetProvider>
-            <NavThemeProvider value={NAV_THEME[colorScheme]}>
-              <Stack
-                screenOptions={{
-                  animation: "ios", // for android
-                }}
-              >
-                <Stack.Screen name="index" />
-                <Stack.Screen
-                  name="List"
-                  options={{
-                    headerShown: false,
-                  }}
-                />
-                <Stack.Screen
-                  name="student/[id]"
-                  options={{
-                    headerTitle: "Student Profile",
-                    headerBackTitle: "Back",
-                    //headerShadowVisible: false,
-                    headerRight() {
-                      return (
-                        <Link href=".." className="mb-2">
-                          <Ionicons
-                            name="chatbubble-ellipses-outline"
-                            size={24}
-                            color={colors.foreground}
-                          />
-                        </Link>
-                      );
-                    },
-                  }}
-                />
-                <Stack.Screen name="auth" options={{ headerShown: false }} />
-                <Stack.Screen
-                  name="modal"
-                  options={{ presentation: "modal" }}
-                />
-                <Stack.Screen
-                  name="welcome"
-                  options={{
-                    headerShown: false,
-                  }}
-                />
-              </Stack>
-            </NavThemeProvider>
-          </ActionSheetProvider>
-        </BottomSheetModalProvider>
-      </GestureHandlerRootView>
-
-      {/* </ExampleProvider> */}
-    </TRPCProvider>
+      <TRPCProvider>
+        <AuthProvider>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <BottomSheetModalProvider>
+              <ActionSheetProvider>
+                <NavThemeProvider value={NAV_THEME[colorScheme]}>
+                  <Stack
+                    screenOptions={{
+                      animation: "ios", // for android
+                    }}
+                  >
+                    <Stack.Screen name="index" />
+                    <Stack.Screen
+                      name="List"
+                      options={{
+                        headerShown: false,
+                      }}
+                    />
+                    <Stack.Screen
+                      name="student/[id]"
+                      options={{
+                        headerTitle: "Student Profile",
+                        headerBackTitle: "Back",
+                        //headerShadowVisible: false,
+                        headerRight() {
+                          return (
+                            <Link href=".." className="mb-2">
+                              <Ionicons
+                                name="chatbubble-ellipses-outline"
+                                size={24}
+                                color={colors.foreground}
+                              />
+                            </Link>
+                          );
+                        },
+                      }}
+                    />
+                    <Stack.Screen
+                      name="auth"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="modal"
+                      options={{ presentation: "modal" }}
+                    />
+                    <Stack.Screen
+                      name="welcome"
+                      options={{
+                        headerShown: false,
+                      }}
+                    />
+                  </Stack>
+                </NavThemeProvider>
+              </ActionSheetProvider>
+            </BottomSheetModalProvider>
+          </GestureHandlerRootView>
+        </AuthProvider>
+      </TRPCProvider>
+    </>
   );
 }
