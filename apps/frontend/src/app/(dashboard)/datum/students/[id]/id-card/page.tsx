@@ -17,6 +17,10 @@ export default async function Page({
 }) {
   const { t } = await getServerTranslations();
   const student = await api.student.get(id);
+  const school = await api.school.get(student.schoolId);
+  if (!school) {
+    throw new Error("School not found");
+  }
 
   return (
     <div className="flex flex-col">
@@ -41,16 +45,15 @@ export default async function Page({
             )}
           </div>
           <div className="flex h-[250px] justify-end px-4 text-right">
-            <span className="text-3xl font-bold tracking-tighter">
-              {t("school_portal")} <br />
-              de Diourbel
+            <span className="line-clamp-1 overflow-hidden text-xl font-bold tracking-tighter">
+              {school.name}
             </span>
           </div>
           <div className="flex h-[100px] items-center justify-end bg-[#002D5D] px-4 text-2xl font-semibold uppercase tracking-tight text-[#E4EEF8]">
             {t("id_card")}
           </div>
           <div className="grid h-full w-full grid-cols-3 gap-4 rounded-b-xl bg-[#E4EEF8] text-[#002D5D]">
-            <div className="ml-[10px] mt-[80px] flex flex-col gap-4 pl-2">
+            <div className="ml-[10px] mt-[120px] flex flex-col gap-4 pl-2">
               <span className="text-xl font-bold uppercase tracking-tighter">
                 {getFullName(student)}
               </span>
@@ -70,19 +73,16 @@ export default async function Page({
               <div className="font-mono uppercase">
                 {t("expired")}: 01.01.2024
               </div>
-              <div className="mt-10 flex flex-row pb-1">
+              <div className="mt-10 flex flex-row pb-1 pr-2">
                 <IdCardBarCode
                   width={2}
                   height={40}
                   backgroundColor="#E4EEF8"
                   id={"123456789012"}
                 />
-                <Image
-                  src={"/images/logo.webp"}
-                  height={40}
-                  width={120}
-                  alt="Logo"
-                />
+                {school.logo && (
+                  <Image src={school.logo} height={40} width={120} alt="Logo" />
+                )}
               </div>
             </div>
           </div>
