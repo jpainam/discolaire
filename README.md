@@ -263,3 +263,16 @@ SELECT setval(pg_get_serial_sequence('"Section"', 'id'), coalesce(max(id) + 1, 1
 | Service   | Port |
 | --------- | ---- |
 | Messaging | 6000 |
+
+# Docker - no more space
+
+https://depot.dev/blog/docker-clear-cache
+
+```bash
+docker system df # to display information regarding the amount of disk space used
+docker image prune -a -f # to remove unused image
+docker buildx prune -f # to clear the build cache
+
+ATT
+docker system prune -f # clean all, remove all unused docker
+```
