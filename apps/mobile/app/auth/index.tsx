@@ -49,6 +49,9 @@ export default function SignIn() {
   }, [session]);
 
   const onSignIn = () => {
+    console.log("Signing in...");
+    console.log("Email: ", email);
+    console.log("Password", password);
     signInMutation.mutate({
       username: "admin",
       password: "admin1234",
