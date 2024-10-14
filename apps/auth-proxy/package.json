@@ -11,14 +11,14 @@
   },
   "prettier": "@repo/prettier-config",
   "dependencies": {
-    "@auth/core": "0.35.3"
+    "@auth/core": "0.37.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
-    "@types/node": "^20.16.10",
+    "@types/node": "^20.16.11",
     "eslint": "catalog:",
     "h3": "^1.13.0",
     "nitropack": "^2.9.7",
