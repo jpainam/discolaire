@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   Image,
@@ -9,18 +9,56 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import Animated, { FadeIn } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Icon } from "@roninoss/icons";
 
+import { ActivityIndicator } from "~/components/nativewindui/ActivityIndicator";
 import { Button } from "~/components/nativewindui/Button";
 import { Text } from "~/components/nativewindui/Text";
 import { useColorScheme } from "~/lib/useColorScheme";
+import { useAuth } from "~/providers/AuthProvider";
+import { api } from "~/utils/api";
+import { setToken } from "~/utils/session-store";
 
 export default function SignIn() {
   const { colors } = useColorScheme();
   const [showPassword, setShowPassword] = useState(false);
+  const { session } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const utils = api.useUtils();
+  const signInMutation = api.auth.signInWithPassword.useMutation({
+    onSuccess: async (sessionToken) => {
+      setToken(sessionToken);
+      await utils.invalidate();
+      router.replace("/");
+    },
+    onError: (error) => {
+      console.error(error);
+      Alert.alert("Error", error.message);
+    },
+  });
+
+  useEffect(() => {
+    if (session) {
+      router.replace("/");
+    }
+  }, [session]);
+
+  const onSignIn = () => {
+    signInMutation.mutate({
+      username: "admin",
+      password: "admin1234",
+    });
+    // if (!email || !password) {
+    //   Alert.alert("Error", "Please fill in all fields");
+    // } else {
+    //   signInMutation.mutate({ email, password });
+    // }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -51,6 +89,7 @@ export default function SignIn() {
               <TextInput
                 className="mb-4 rounded-xl border border-gray-300 p-4"
                 placeholder="Enter your username"
+                onChangeText={setEmail}
               />
 
               <Text className="mb-2 font-medium">Password</Text>
@@ -58,6 +97,7 @@ export default function SignIn() {
                 <TextInput
                   className="flex-1 p-4"
                   placeholder="Enter your password"
+                  onChangeText={setPassword}
                   secureTextEntry={!showPassword}
                 />
                 <TouchableOpacity
@@ -97,11 +137,14 @@ export default function SignIn() {
                 </Text>
               </View>
               <Button
-                onPress={() => {
-                  Alert.alert("Continue");
-                }}
+                onPress={onSignIn}
                 size={Platform.select({ ios: "lg", default: "md" })}
               >
+                {signInMutation.isPending && (
+                  <Animated.View entering={FadeIn.delay(200)}>
+                    <ActivityIndicator size="small" />
+                  </Animated.View>
+                )}
                 <Text>Continue</Text>
               </Button>
             </View>
