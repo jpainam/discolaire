@@ -18,13 +18,14 @@ interface DatePickerProps {
   fromYear?: number;
   disabled?: boolean;
   toYear?: number;
+  formatStr?: string;
   onChange?: (date: Date) => void;
   defaultValue?: Date;
 }
 export function DatePicker({
   placeholder,
   className,
-
+  formatStr = "PPP",
   toYear = 2050,
   onChange,
   disabled = false,
@@ -54,9 +55,9 @@ export function DatePicker({
           )}
         >
           {value ? (
-            format(value, "PPP", { locale: currentLocale })
+            format(value, formatStr, { locale: currentLocale })
           ) : defaultValue ? (
-            format(defaultValue, "PPP", { locale: currentLocale })
+            format(defaultValue, formatStr, { locale: currentLocale })
           ) : (
             <span>{placeholder ?? t("pick_a_date")}</span>
           )}

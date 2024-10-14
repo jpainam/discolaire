@@ -5,6 +5,8 @@ import { auth } from "@repo/auth";
 import { DashboardClassroomSize } from "~/components/dashboard/DashboardClassroomSize";
 import { DashboardTransactionTrend } from "~/components/dashboard/DashboardTransactionTrend";
 import { QuickStatistics } from "~/components/dashboard/QuickStatistics";
+import { ScheduleCard } from "~/components/dashboard/ScheduleCard";
+import { SchoolLife } from "~/components/dashboard/SchoolLife";
 
 export default async function DashboardPage() {
   // const signedUrl = await fetch(
@@ -30,7 +32,8 @@ export default async function DashboardPage() {
       </div>
       <QuickStatistics />
       {/* <SearchBlock className="col-span-full md:col-span-6" /> */}
-      {/* <SchoolLife /> */}
+      <SchoolLife />
+      <ScheduleCard />
       {/* <Suspense>
         <EffectiveStat className="col-span-full" />
       </Suspense> */}
