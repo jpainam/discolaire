@@ -1627,7 +1627,7 @@ DEPENDENCIES:
   - React-jsitracing (from `../../../node_modules/react-native/ReactCommon/hermes/executor/`)
   - React-logger (from `../../../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../../../node_modules/react-native/ReactCommon`)
-  - react-native-pager-view (from `../../../node_modules/react-native-pager-view`)
+  - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../../../node_modules/react-native-safe-area-context`)
   - react-native-uitextview (from `../../../node_modules/react-native-uitextview`)
   - React-nativeconfig (from `../../../node_modules/react-native/ReactCommon`)
@@ -1765,7 +1765,7 @@ EXTERNAL SOURCES:
   React-Mapbuffer:
     :path: "../../../node_modules/react-native/ReactCommon"
   react-native-pager-view:
-    :path: "../../../node_modules/react-native-pager-view"
+    :path: "../node_modules/react-native-pager-view"
   react-native-safe-area-context:
     :path: "../../../node_modules/react-native-safe-area-context"
   react-native-uitextview:
