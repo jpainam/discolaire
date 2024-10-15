@@ -14,7 +14,6 @@ import { getServerTranslations } from "@repo/i18n/server";
 import { Button } from "@repo/ui/button";
 import { Separator } from "@repo/ui/separator";
 
-import { StudentGradeChart } from "~/components/students/grades/charts/StudentGradeChart";
 import { GradeSheetStats } from "./grade-sheet-stats";
 
 interface GradeSheetPageProps {
@@ -127,7 +126,7 @@ export default async function Page(props: GradeSheetPageProps) {
       </ul>
       <Separator className="my-2" />
       <GradeSheetStats gradeSheetId={Number(searchParams.gradesheetId)} />
-      <StudentGradeChart grades={[]} />
+      {/* <StudentGradeChart grades={[]} /> */}
     </div>
   );
 }

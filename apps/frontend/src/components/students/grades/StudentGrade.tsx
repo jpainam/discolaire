@@ -1,6 +1,5 @@
 "use client";
 
-import type { Grade } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import _ from "lodash";
@@ -8,10 +7,11 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
-import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import { ScrollArea } from "@repo/ui/scroll-area";
+import { Skeleton } from "@repo/ui/skeleton";
 
 import { api } from "~/trpc/react";
 import { ByChronologicalOrder } from "./by-chronological-order";
@@ -29,8 +29,11 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
     id: studentId,
     termId: term ? Number(term) : undefined,
   });
-  const [items, setItems] = useState<Grade[]>([]);
-  const view = searchParams.get("view") ?? "by_chronological_order";
+  const [items, setItems] = useState<RouterOutputs["student"]["grades"]>([]);
+  const [view] = useQueryState("view", {
+    defaultValue: "by_chronological_order",
+  });
+
   const [orderBy, setOrderBy] = useQueryState("orderBy");
   const { t } = useLocale();
 
@@ -93,13 +96,10 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
         </Button>
       </div>
       {classroomMoyMinMaxGrades.isPending ? (
-        <div className="m-2">
-          <DataTableSkeleton
-            withPagination={false}
-            showViewOptions={false}
-            rowCount={15}
-            columnCount={3}
-          />
+        <div className="m-2 grid w-full grid-cols-2 gap-2">
+          {Array.from({ length: 20 }).map((_, index) => (
+            <Skeleton key={index} className="h-8 w-full" />
+          ))}
         </div>
       ) : (
         <ScrollArea className="flex h-[calc(100vh-15rem)] rounded-b-sm border-b border-r">

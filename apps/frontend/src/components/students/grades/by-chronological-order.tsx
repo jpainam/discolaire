@@ -2,16 +2,16 @@
 
 import { useParams, useRouter } from "next/navigation";
 
+import type { RouterOutputs } from "@repo/api";
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
 
-import type { Grade } from "~/types/grade";
 import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";
 import { useDateFormat } from "~/utils/date-format";
 
 interface ByChronologicalOrderProps {
-  grades: Grade[];
+  grades: RouterOutputs["student"]["grades"][number][];
   minMaxMoy: {
     min: number | null;
     max: number | null;
@@ -37,8 +37,8 @@ export function ByChronologicalOrder({
   return (
     <div>
       {grades.map((grade) => {
-        const m = grade.createdAt ? monthFormatter.format(grade.createdAt) : "";
-        const d = grade.createdAt ? dayFormatter.format(grade.createdAt) : "";
+        const m = monthFormatter.format(grade.gradeSheet.createdAt);
+        const d = dayFormatter.format(grade.gradeSheet.createdAt);
         return (
           <div
             onClick={() => {
@@ -48,13 +48,13 @@ export function ByChronologicalOrder({
               // );
               // router.push(`#${grade.id}`);
               const query = {
-                color: grade.gradeSheet?.subject?.course?.color ?? "lightgray",
-                name: grade.gradeSheet?.name,
+                color: grade.gradeSheet.subject.course.color,
+                name: grade.gradeSheet.name,
                 gradesheetId: grade.gradeSheetId.toString(),
-                reportName: grade.gradeSheet?.subject?.course?.name,
-                date: grade.gradeSheet?.createdAt?.toISOString(),
+                reportName: grade.gradeSheet.subject.course.name,
+                date: grade.gradeSheet.createdAt.toISOString(),
                 grade: grade.grade,
-                termName: grade.gradeSheet?.term?.name,
+                termName: grade.gradeSheet.term.name,
                 moy: minMaxMoy
                   .find((g) => g.gradeSheetId === grade.gradeSheetId)
                   ?.avg?.toFixed(2),
@@ -64,7 +64,7 @@ export function ByChronologicalOrder({
                 min: minMaxMoy
                   .find((g) => g.gradeSheetId === grade.gradeSheetId)
                   ?.min?.toFixed(2),
-                coef: grade.gradeSheet?.subject?.coefficient?.toString() ?? "-",
+                coef: grade.gradeSheet.subject.coefficient.toString(),
               };
               router.push(
                 `${routes.students.grades(params.id)}/${grade.id}/?${createQueryString({ ...query })}`,
@@ -84,17 +84,16 @@ export function ByChronologicalOrder({
               <div
                 className="h-1 w-full rounded-sm"
                 style={{
-                  backgroundColor:
-                    grade.gradeSheet?.subject?.course?.color ?? "lightgray",
+                  backgroundColor: grade.gradeSheet.subject.course.color,
                 }}
               ></div>
             </div>
             <div className="flex flex-col gap-0">
               <div className="py-0 text-sm font-bold uppercase">
-                {grade.gradeSheet?.subject?.course?.name}
+                {grade.gradeSheet.subject.course.name}
               </div>
               <div className="py-0 text-sm text-muted-foreground">
-                {grade.gradeSheet?.name}
+                {grade.gradeSheet.name}
               </div>
               <div className="py-0 text-xs text-muted-foreground">
                 {t("average_of_classroom")}{" "}
@@ -106,7 +105,7 @@ export function ByChronologicalOrder({
             <div className="ml-auto flex flex-col text-sm">
               <span className="font-bold">{grade.grade}</span>
               <span className="text-xs text-muted-foreground">
-                {grade.gradeSheet?.term?.name}
+                {grade.gradeSheet.term.name}
               </span>
             </div>
           </div>

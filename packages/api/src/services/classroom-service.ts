@@ -89,7 +89,6 @@ export const classroomService = {
         },
       },
     });
-
     const gradesheetMap = _.keyBy(gradesheets, "id");
     const result = gradeAggregation.map((grade) => {
       const gr = gradesheetMap[grade.gradeSheetId];
