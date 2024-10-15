@@ -839,6 +839,7 @@
   "type": "Type",
   "unenroll": "Unenroll",
   "uploaded_on": "Uploaded on",
+  "dashboard": "Dashboard",
   "unenrolled_successfully": "Unenrolled successfully",
   "unenrolling": "Unenrolling...",
   "unexpected_error": "An unexpected error occurred",

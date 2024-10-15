@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { auth } from "@repo/auth";
+import { getServerTranslations } from "@repo/i18n/server";
 
 import { DashboardClassroomSize } from "~/components/dashboard/DashboardClassroomSize";
 import { DashboardTransactionTrend } from "~/components/dashboard/DashboardTransactionTrend";
@@ -9,7 +10,7 @@ import { QuickStatistics } from "~/components/dashboard/QuickStatistics";
 import { ScheduleCard } from "~/components/dashboard/ScheduleCard";
 import { SchoolLife } from "~/components/dashboard/SchoolLife";
 
-export default async function DashboardPage() {
+export default async function Page() {
   // const signedUrl = await fetch(
   //   "http://localhost:3000/api/upload?key=avatars/011ece07-f378-47de-bbe5-d1cb8618dd8e"
   // );
@@ -20,6 +21,7 @@ export default async function DashboardPage() {
   //   43
   // );
   //const staff = await api.staff.all();
+  const { t } = await getServerTranslations();
 
   const session = await auth();
   if (!session) {
@@ -27,9 +29,9 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="grid grid-cols-12 gap-4 px-4 pt-[100px]">
+    <div className="grid grid-cols-12 gap-4 px-4 pt-[110px]">
       <div className="col-span-full text-lg font-bold md:text-2xl">
-        Dashboard
+        {t("dashboard")}
       </div>
       <QuickStatistics />
       {/* <SearchBlock className="col-span-full md:col-span-6" /> */}
