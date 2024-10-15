@@ -1,9 +1,31 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { reportCardService } from "../services/report-card-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const reportCardRouter = createTRPCRouter({
+  getStudent: protectedProcedure
+    .input(
+      z.object({
+        studentId: z.string().min(1),
+        termId: z.coerce.number(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const student = await ctx.db.student.findUnique({
+        where: {
+          id: input.studentId,
+        },
+      });
+      if (!student || student.schoolId !== ctx.schoolId) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Student not found",
+        });
+      }
+      return reportCardService.getStudent(input.studentId, input.termId);
+    }),
   getRemarks: protectedProcedure
     .input(
       z.object({

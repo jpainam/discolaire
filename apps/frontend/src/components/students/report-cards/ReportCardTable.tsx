@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 import { sortBy, sum } from "lodash";
 
+import type { RouterOutputs } from "@repo/api";
 import type { FlatBadgeVariant } from "@repo/ui/FlatBadge";
 //import { StudentReportCard } from "~/types/report-card";
 import { useLocale } from "@repo/i18n";
@@ -23,19 +22,24 @@ import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";
 import { getAppreciations } from "~/utils/get-appreciation";
 
-export function ReportCardTable({ reportCard }: { reportCard: any[] }) {
+type ReportCardType = RouterOutputs["reportCard"]["getStudent"][number];
+export function ReportCardTable({
+  reportCard,
+}: {
+  reportCard: ReportCardType[];
+}) {
   const { t } = useLocale();
-  const [groups, setGroups] = useState<Record<number, any[]>>({});
+  const [groups, setGroups] = useState<Record<number, ReportCardType[]>>({});
   const [totalCoeff, setTotalCoeff] = useState<number>(0);
   const [totalPoints, setTotalPoints] = useState<number>(0);
   const [totalAvg, setTotalAvg] = useState<number>(0);
 
   useEffect(() => {
-    const ggs: Record<number, any[]> = {};
+    const ggs: Record<number, ReportCardType[]> = {};
     let coeff = 0;
     reportCard.forEach((card) => {
-      coeff += card?.isAbsent ? 0 : card?.coefficient || 0;
-      const groupId = card?.subjectGroupId;
+      coeff += card.isAbsent ? 0 : card.coefficient;
+      const groupId = card.subjectGroupId;
       if (!groupId) return;
       if (!ggs[groupId]) {
         ggs[groupId] = [];
@@ -45,17 +49,12 @@ export function ReportCardTable({ reportCard }: { reportCard: any[] }) {
     setGroups(ggs);
     setTotalCoeff(coeff);
     const ttPoints = sum(
-      reportCard.map((c) =>
-        c.isAbsent ? 0 : (c.avg || 0) * (c?.coefficient || 0),
-      ),
+      reportCard.map((c) => (c.isAbsent ? 0 : c.avg * c.coefficient)),
     );
     setTotalPoints(ttPoints);
     const ttavg =
-      sum(
-        reportCard.map((c) =>
-          c.isAbsent ? 0 : (c.avg || 0) * (c?.coefficient || 0),
-        ),
-      ) / (coeff || 1e9);
+      sum(reportCard.map((c) => (c.isAbsent ? 0 : c.avg * c.coefficient))) /
+      (coeff || 1e9);
     setTotalAvg(ttavg);
   }, [reportCard]);
 
@@ -81,7 +80,10 @@ export function ReportCardTable({ reportCard }: { reportCard: any[] }) {
           let cards = groups[Number(groupId)];
           if (!cards || cards.length == 0) return null;
           cards = sortBy(cards, "order");
-          const group = cards[0]?.subjectGroup;
+          const card = cards[0];
+          if (!card) return null;
+          const group = card.subjectGroup;
+          if (!group) return null;
           return (
             <Fragment key={`fragment-${groupId}`}>
               <ReportCardGroup
@@ -95,25 +97,23 @@ export function ReportCardTable({ reportCard }: { reportCard: any[] }) {
               >
                 <TableCell></TableCell>
                 <TableCell className="" colSpan={2}>
-                  {group?.name}
+                  {group.name}
                 </TableCell>
                 <TableCell className={cn(rowClassName)}>
-                  {sum(cards.map((c) => c?.coefficient || 0))}
+                  {sum(cards.map((c) => c.coefficient))}
                 </TableCell>
                 <TableCell className="text-center" colSpan={3}>
                   {t("points")}:{" "}
-                  {sum(
-                    cards.map((c) => (c.avg || 0) * (c?.coefficient || 0)),
-                  ).toFixed(1)}{" "}
-                  /{" "}
-                  {sum(cards.map((c) => 20 * (c?.coefficient || 0))).toFixed(1)}
+                  {sum(cards.map((c) => (c.avg || 0) * c.coefficient)).toFixed(
+                    1,
+                  )}{" "}
+                  / {sum(cards.map((c) => 20 * c.coefficient)).toFixed(1)}
                 </TableCell>
                 <TableCell colSpan={2}>
                   {t("average")} :
                   {(
-                    sum(
-                      cards.map((c) => (c.avg || 0) * (c?.coefficient || 0)),
-                    ) / sum(cards.map((c) => c?.coefficient || 0))
+                    sum(cards.map((c) => (c.avg || 0) * c.coefficient)) /
+                    sum(cards.map((c) => c.coefficient))
                   ).toFixed(2)}
                 </TableCell>
               </TableRow>
@@ -129,7 +129,7 @@ export function ReportCardTable({ reportCard }: { reportCard: any[] }) {
           <TableCell className="border text-center">{totalCoeff}</TableCell>
           <TableCell colSpan={3} className={cn(rowClassName)}>
             {t("points")}: {totalPoints.toFixed(2)} /{" "}
-            {sum(reportCard.map((c) => 20 * (c?.coefficient || 0))).toFixed(2)}
+            {sum(reportCard.map((c) => 20 * c.coefficient)).toFixed(2)}
           </TableCell>
           <TableCell colSpan={2}></TableCell>
         </TableRow>
@@ -156,48 +156,45 @@ function ReportCardGroup({
   groupId,
 }: {
   groupId: number;
-  cards: any[];
+  cards: ReportCardType[];
 }) {
-  const rowClassName = "border text-center py-0 text-sm";
+  const rowClassName = "border text-center py-0";
 
   return (
     <>
       {cards.map((card, index) => {
+        if (card.rank <= 0) return;
         return (
-          <TableRow key={`card-${groupId}-${index}`}>
+          <TableRow className="text-xs" key={`card-${groupId}-${index}`}>
             <TableCell>{index + 1}</TableCell>
             <TableCell className={cn(rowClassName, "text-left")}>
               <div className="flex flex-col">
-                <span className="font-semibold">
-                  {card?.course?.reportName}
-                </span>
+                <span className="font-semibold">{card.course.reportName}</span>
                 <Link
-                  href={routes.staffs.details(card?.teacherId || "")}
+                  href={routes.staffs.details(card.teacherId ?? "#")}
                   className="ml-4 hover:text-blue-500 hover:underline"
                 >
-                  {card?.teacher?.prefix} {card?.teacher?.lastName}
+                  {card.teacher?.prefix} {card.teacher?.lastName}
                 </Link>
               </div>
             </TableCell>
             <TableCell className={cn(rowClassName, "font-bold")}>
-              {!card.isAbsent && <Cell n={card?.avg} />}
+              {!card.isAbsent && <Cell n={card.avg} />}
             </TableCell>
             <TableCell className={cn(rowClassName)}>
-              {!card.isAbsent && card?.coefficient}
+              {!card.isAbsent && card.coefficient}
             </TableCell>
             <TableCell className={cn(rowClassName)}>
-              {!card?.isAbsent &&
-                ((card?.avg || 0) * (card?.coefficient || 0)).toFixed(2)}
+              {!card.isAbsent && (card.avg * card.coefficient).toFixed(2)}
             </TableCell>
             <TableCell className={cn(rowClassName)}>
-              {!card.isAbsent && card?.rank}
+              {!card.isAbsent && card.rank}
             </TableCell>
             <TableCell className={cn(rowClassName)}>
-              {card?.classroom.avg.toFixed(2) || "-"}
+              {card.classroom.avg.toFixed(2)}
             </TableCell>
             <TableCell className={cn(rowClassName)}>
-              {card?.classroom.min.toFixed(2) || "-"} /{" "}
-              {card?.classroom.max.toFixed(2) || "-"}
+              {card.classroom.min.toFixed(2)} / {card.classroom.max.toFixed(2)}
             </TableCell>
             <TableCell className={cn("border-y text-left uppercase")}>
               {!card.isAbsent && getAppreciations(card.avg || 0)}
@@ -223,5 +220,12 @@ function Cell({ n }: { n?: number | null }) {
   } else if (n < 14) {
     v = "blue";
   }
-  return <FlatBadge variant={v}>{n.toFixed(2)}</FlatBadge>;
+  return (
+    <FlatBadge
+      className="w-[50px] justify-center text-center text-xs font-normal"
+      variant={v}
+    >
+      {n.toFixed(2)}
+    </FlatBadge>
+  );
 }

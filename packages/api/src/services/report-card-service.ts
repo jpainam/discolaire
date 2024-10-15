@@ -201,7 +201,7 @@ export const reportCardService = {
 
       return {
         ...subject,
-        avg: currentStudentGrade?.grade ?? null,
+        avg: currentStudentGrade?.grade ?? 0,
         isAbsent: currentStudentGrade?.isAbsent ?? false,
         rank: rank,
         num_grades: allgrades.length,
