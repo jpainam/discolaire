@@ -137,7 +137,9 @@ export const reportCardService = {
       });
     });
 
-    const subjects = await db.subject.findMany({
+    const subjectIds = Object.keys(gradeSheetMap);
+
+    let subjects = await db.subject.findMany({
       include: {
         course: true,
         subjectGroup: true,
@@ -147,6 +149,7 @@ export const reportCardService = {
         classroomId: classroom.id,
       },
     });
+    subjects = subjects.filter((s) => subjectIds.includes(s.id.toString()));
     const result = subjects.map((subject) => {
       const sheets = gradeSheetMap[subject.id] ?? [];
       const studentMapGrades: Record<string, Grade[]> = {};
