@@ -63,7 +63,7 @@ export function ScheduleCard() {
   //const [today, setToday] = useState(new Date());
   const today = new Date();
   return (
-    <div className="col-span-3 rounded-lg border">
+    <div className="col-span-4 rounded-lg border">
       <div className="px-4 pt-2 text-center text-lg font-bold">
         {t("timetable")}
       </div>
