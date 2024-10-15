@@ -121,7 +121,13 @@ export const reportCardService = {
     });
     const gradeSheetMap: Record<
       string,
-      { id: number; weight: number; subjectId: number; grades: Grade[] }[]
+      {
+        id: number;
+        weight: number;
+        scale: number;
+        subjectId: number;
+        grades: Grade[];
+      }[]
     > = {};
 
     gradeSheets.forEach((sheet) => {
@@ -132,6 +138,7 @@ export const reportCardService = {
       gradeSheetMap[sheet.subjectId]?.push({
         id: sheet.id,
         weight: sheet.weight,
+        scale: sheet.scale,
         subjectId: sheet.subjectId,
         grades: sheet.grades,
       });
@@ -204,6 +211,7 @@ export const reportCardService = {
 
       return {
         ...subject,
+
         avg: currentStudentGrade?.grade ?? 0,
         isAbsent: currentStudentGrade?.isAbsent ?? false,
         rank: rank,

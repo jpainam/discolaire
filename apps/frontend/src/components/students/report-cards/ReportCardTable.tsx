@@ -79,11 +79,12 @@ export function ReportCardTable({
         {Object.keys(groups).map((groupId: string) => {
           let cards = groups[Number(groupId)];
           if (!cards || cards.length == 0) return null;
-          cards = sortBy(cards, "order");
+          cards = sortBy(cards, "order").filter((c) => !c.isAbsent);
           const card = cards[0];
           if (!card) return null;
           const group = card.subjectGroup;
           if (!group) return null;
+          console.log("cards", cards);
           return (
             <Fragment key={`fragment-${groupId}`}>
               <ReportCardGroup
@@ -112,7 +113,7 @@ export function ReportCardTable({
                 <TableCell colSpan={2}>
                   {t("average")} :
                   {(
-                    sum(cards.map((c) => (c.avg || 0) * c.coefficient)) /
+                    sum(cards.map((c) => c.avg * c.coefficient)) /
                     sum(cards.map((c) => c.coefficient))
                   ).toFixed(2)}
                 </TableCell>
@@ -163,7 +164,6 @@ function ReportCardGroup({
   return (
     <>
       {cards.map((card, index) => {
-        if (card.rank <= 0) return;
         return (
           <TableRow className="text-xs" key={`card-${groupId}-${index}`}>
             <TableCell>{index + 1}</TableCell>
