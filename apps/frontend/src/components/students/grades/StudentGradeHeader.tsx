@@ -83,10 +83,7 @@ export function StudentGradeHeader({
 
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
-  // const toggleItems = [
-  //   { value: "by_chronological_order", label: t("by_chronological_order") },
-  //   { value: "by_subject", label: t("bySubject") },
-  // ];
+
   if (classroomMinMaxMoyGrades.isPending) {
     return <Skeleton className="h-8 w-full" />;
   }
@@ -102,18 +99,16 @@ export function StudentGradeHeader({
         defaultValue={term ? `${term}` : undefined}
       />
 
-      {studentAvg && (
+      <>
         <FlatBadge variant={"yellow"}>
-          {t("student_general_avg")} : {studentAvg.toFixed(2)}
+          {t("student_general_avg")} : {studentAvg?.toFixed(2)}
         </FlatBadge>
-      )}
+      </>
 
-      {classroomAvg ? (
-        <FlatBadge variant={"pink"}>
+      {classroomAvg && (
+        <FlatBadge variant={"blue"}>
           {t("classroom_general_avg")} : {classroomAvg.toFixed(2)}
         </FlatBadge>
-      ) : (
-        <></>
       )}
       <div className="ml-auto flex flex-row items-center gap-2">
         <ToggleGroup
@@ -130,11 +125,16 @@ export function StudentGradeHeader({
         >
           <ToggleGroupItem
             value="by_chronological_order"
-            aria-label="Toggle bold"
+            className="active:bg-slate-500"
+            aria-label="Toggle by_chronological_order"
           >
             <ListIcon className="h-4 w-4" />
           </ToggleGroupItem>
-          <ToggleGroupItem value="by_subject" aria-label="Toggle italic">
+          <ToggleGroupItem
+            className="active:bg-slate-500"
+            value="by_subject"
+            aria-label="Toggle by_subject"
+          >
             <LayoutGridIcon className="h-4 w-4" />
           </ToggleGroupItem>
         </ToggleGroup>

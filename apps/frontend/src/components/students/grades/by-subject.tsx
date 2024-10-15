@@ -20,17 +20,7 @@ import { useDateFormat } from "~/utils/date-format";
 
 interface BySubjectProps {
   grades: RouterOutputs["student"]["grades"][number][];
-  minMaxMoy: {
-    min: number | null;
-    max: number | null;
-    avg: number | null;
-    gradeSheetId: number;
-    weight: number;
-    subjectId: number;
-    termId: number;
-    name: string;
-    coefficient: number | null;
-  }[];
+  minMaxMoy: RouterOutputs["classroom"]["getMinMaxMoyGrades"][number][];
 }
 export function BySubject({ grades, minMaxMoy }: BySubjectProps) {
   const [subjects, setSubjects] = useState<
@@ -115,17 +105,7 @@ function BySubjectItem({
   minMaxMoy,
 }: {
   grade: RouterOutputs["student"]["grades"][number];
-  minMaxMoy?: {
-    min: number | null;
-    max: number | null;
-    avg: number | null;
-    gradeSheetId: number;
-    weight: number;
-    subjectId: number;
-    termId: number;
-    name: string;
-    coefficient: number | null;
-  }[];
+  minMaxMoy: RouterOutputs["classroom"]["getMinMaxMoyGrades"][number][];
 }) {
   const { monthFormatter, dayFormatter } = useDateFormat();
   const m = monthFormatter.format(grade.gradeSheet.createdAt);
@@ -146,13 +126,13 @@ function BySubjectItem({
           grade: grade.grade,
           termName: grade.gradeSheet.term.name,
           moy: minMaxMoy
-            ?.find((g) => g.gradeSheetId === grade.gradeSheetId)
+            .find((g) => g.gradeSheetId === grade.gradeSheetId)
             ?.avg?.toFixed(2),
           max: minMaxMoy
-            ?.find((g) => g.gradeSheetId === grade.gradeSheetId)
+            .find((g) => g.gradeSheetId === grade.gradeSheetId)
             ?.max?.toFixed(2),
           min: minMaxMoy
-            ?.find((g) => g.gradeSheetId === grade.gradeSheetId)
+            .find((g) => g.gradeSheetId === grade.gradeSheetId)
             ?.min?.toFixed(2),
           coef: grade.gradeSheet.subject.coefficient.toString(),
         };

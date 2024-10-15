@@ -12,17 +12,7 @@ import { useDateFormat } from "~/utils/date-format";
 
 interface ByChronologicalOrderProps {
   grades: RouterOutputs["student"]["grades"][number][];
-  minMaxMoy: {
-    min: number | null;
-    max: number | null;
-    avg: number | null;
-    gradeSheetId: number;
-    weight: number;
-    subjectId: number;
-    termId: number;
-    name: string;
-    coefficient: number | null;
-  }[];
+  minMaxMoy: RouterOutputs["classroom"]["getMinMaxMoyGrades"][number][];
 }
 export function ByChronologicalOrder({
   grades,
@@ -42,11 +32,6 @@ export function ByChronologicalOrder({
         return (
           <div
             onClick={() => {
-              // setSelectedGrade(grade);
-              // setCurrentMinMaxMoy(
-              //   minMaxMoy.find((g) => g.id === grade.gradeSheetId) || null
-              // );
-              // router.push(`#${grade.id}`);
               const query = {
                 color: grade.gradeSheet.subject.course.color,
                 name: grade.gradeSheet.name,

@@ -1,15 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import _ from "lodash";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { useQueryState } from "nuqs";
+import { parseAsInteger, useQueryState } from "nuqs";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import { EmptyState } from "@repo/ui/EmptyState";
 import { ScrollArea } from "@repo/ui/scroll-area";
 import { Skeleton } from "@repo/ui/skeleton";
 
@@ -22,12 +22,11 @@ interface StudentGradeProps {
   studentId: string;
 }
 export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
-  const searchParams = useSearchParams();
-  const term = searchParams.get("term");
+  const [term] = useQueryState("term", parseAsInteger);
 
   const studentGradesQuery = api.student.grades.useQuery({
     id: studentId,
-    termId: term ? Number(term) : undefined,
+    termId: term ?? undefined,
   });
   const [items, setItems] = useState<RouterOutputs["student"]["grades"]>([]);
   const [view] = useQueryState("view", {
@@ -67,7 +66,7 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
   }
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row justify-between gap-4 border-b border-r bg-muted/50">
+      <div className="flex flex-row justify-between gap-4 border-b border-r bg-muted/50 py-1">
         <Button
           variant={"ghost"}
           onClick={() => {
@@ -95,30 +94,30 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
           )}
         </Button>
       </div>
-      {classroomMoyMinMaxGrades.isPending ? (
-        <div className="m-2 grid w-full grid-cols-2 gap-2">
+      {classroomMoyMinMaxGrades.isPending && (
+        <div className="grid w-full grid-cols-2 gap-2 p-2">
           {Array.from({ length: 20 }).map((_, index) => (
             <Skeleton key={index} className="h-8 w-full" />
           ))}
         </div>
-      ) : (
-        <ScrollArea className="flex h-[calc(100vh-15rem)] rounded-b-sm border-b border-r">
-          {view === "by_chronological_order" && (
-            <ByChronologicalOrder
-              grades={items}
-              // @ts-expect-error TODO fix this
-              minMaxMoy={classroomMoyMinMaxGrades.data}
-            />
-          )}
-          {view === "by_subject" && (
-            <BySubject
-              // @ts-expect-error TODO fix this
-              minMaxMoy={classroomMoyMinMaxGrades.data}
-              grades={items}
-            />
-          )}
-        </ScrollArea>
       )}
+      {items.length === 0 && !studentGradesQuery.isPending && (
+        <EmptyState title={t("no_grades")} className="my-8" />
+      )}
+      <ScrollArea className="flex h-[calc(100vh-15rem)] rounded-b-sm border-b border-r">
+        {view === "by_chronological_order" && (
+          <ByChronologicalOrder
+            grades={items}
+            minMaxMoy={classroomMoyMinMaxGrades.data ?? []}
+          />
+        )}
+        {view === "by_subject" && (
+          <BySubject
+            minMaxMoy={classroomMoyMinMaxGrades.data ?? []}
+            grades={items}
+          />
+        )}
+      </ScrollArea>
     </div>
   );
 }

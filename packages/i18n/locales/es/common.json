@@ -865,6 +865,7 @@
   "type": "Tipo",
   "uploaded_on": "Subido el",
   "dashboard": "Tablero",
+  "no_grades": "Sin calificaciones",
   "unenroll": "Desinscribir",
   "unenrolled_successfully": "Desinscrito con éxito",
   "unenrolling": "Desmatriculando...",

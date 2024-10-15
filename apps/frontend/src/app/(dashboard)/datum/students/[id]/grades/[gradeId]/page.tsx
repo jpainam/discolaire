@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 
 import { getServerTranslations } from "@repo/i18n/server";
-import { Button } from "@repo/ui/button";
 import { Separator } from "@repo/ui/separator";
 
 import { GradeSheetStats } from "./grade-sheet-stats";
@@ -51,10 +50,10 @@ export default async function Page(props: GradeSheetPageProps) {
       //   borderTopColor: searchParams.color ?? "lightgray",
       // }}
     >
-      <div className="flex flex-row items-center justify-between gap-4 border-b bg-muted/50 px-4">
+      <div className="flex flex-row items-center justify-between gap-4 border-b bg-muted/50 px-4 py-3">
         {t("subject")}
         <span className="font-bold"> {searchParams.reportName}</span>
-        <Button variant={"ghost"} className="opacity-0"></Button>
+        {/* <Button variant={"ghost"} className="opacity-0"></Button> */}
       </div>
       <ul className="grid gap-3 px-1">
         <li className="flex items-center justify-between">
