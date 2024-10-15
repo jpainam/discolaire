@@ -6,13 +6,13 @@ import { useSearchParams } from "next/navigation";
 import _ from "lodash";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useQueryState } from "nuqs";
+import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import { ScrollArea } from "@repo/ui/scroll-area";
 
-import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { ByChronologicalOrder } from "./by-chronological-order";
 import { BySubject } from "./by-subject";
@@ -31,7 +31,6 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
   });
   const [items, setItems] = useState<Grade[]>([]);
   const view = searchParams.get("view") ?? "by_chronological_order";
-  //const orderBy = searchParams.get("orderBy") ?? "grade";
   const [orderBy, setOrderBy] = useQueryState("orderBy");
   const { t } = useLocale();
 
@@ -60,7 +59,8 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
   }, [orderBy, studentGradesQuery.data, term]);
 
   if (classroomMoyMinMaxGrades.isError) {
-    showErrorToast(classroomMoyMinMaxGrades.error);
+    toast.error(classroomMoyMinMaxGrades.error.message);
+    return null;
   }
   return (
     <div className="flex flex-col">
@@ -93,12 +93,14 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
         </Button>
       </div>
       {classroomMoyMinMaxGrades.isPending ? (
-        <DataTableSkeleton
-          withPagination={false}
-          showViewOptions={false}
-          rowCount={15}
-          columnCount={3}
-        />
+        <div className="m-2">
+          <DataTableSkeleton
+            withPagination={false}
+            showViewOptions={false}
+            rowCount={15}
+            columnCount={3}
+          />
+        </div>
       ) : (
         <ScrollArea className="flex h-[calc(100vh-15rem)] rounded-b-sm border-b border-r">
           {view === "by_chronological_order" && (

@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MoreVertical } from "lucide-react";
+import { LayoutGridIcon, ListIcon, MoreVertical } from "lucide-react";
 import { parseAsInteger, useQueryState } from "nuqs";
 
+import { useCreateQueryString } from "@repo/hooks/create-query-string";
+import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -15,6 +17,7 @@ import {
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Label } from "@repo/ui/label";
 import { Skeleton } from "@repo/ui/skeleton";
+import { ToggleGroup, ToggleGroupItem } from "@repo/ui/toggle-group";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
@@ -78,7 +81,8 @@ export function StudentGradeHeader({
     }
   }, [studentGradesQuery.data, term]);
 
-  // const { createQueryString } = useCreateQueryString();
+  const { createQueryString } = useCreateQueryString();
+  const router = useRouter();
   // const toggleItems = [
   //   { value: "by_chronological_order", label: t("by_chronological_order") },
   //   { value: "by_subject", label: t("bySubject") },
@@ -97,18 +101,7 @@ export function StudentGradeHeader({
         }}
         defaultValue={term ? `${term}` : undefined}
       />
-      {/* <ToggleSelector
-        items={toggleItems}
-        defaultValue={searchParams.get("view") ?? "by_chronological_order"}
-        onChange={(v) => {
-          router.push(
-            "?" +
-              createQueryString({
-                view: v,
-              }),
-          );
-        }}
-      /> */}
+
       {studentAvg && (
         <FlatBadge variant={"yellow"}>
           {t("student_general_avg")} : {studentAvg.toFixed(2)}
@@ -122,7 +115,29 @@ export function StudentGradeHeader({
       ) : (
         <></>
       )}
-      <div className="ml-auto">
+      <div className="ml-auto flex flex-row items-center gap-2">
+        <ToggleGroup
+          defaultValue="by_chronological_order"
+          onValueChange={(v) => {
+            router.push(
+              "?" +
+                createQueryString({
+                  view: v,
+                }),
+            );
+          }}
+          type="single"
+        >
+          <ToggleGroupItem
+            value="by_chronological_order"
+            aria-label="Toggle bold"
+          >
+            <ListIcon className="h-4 w-4" />
+          </ToggleGroupItem>
+          <ToggleGroupItem value="by_subject" aria-label="Toggle italic">
+            <LayoutGridIcon className="h-4 w-4" />
+          </ToggleGroupItem>
+        </ToggleGroup>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="icon" variant="outline">
