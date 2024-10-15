@@ -22,6 +22,7 @@ import { ToggleGroup, ToggleGroupItem } from "@repo/ui/toggle-group";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
 export function StudentGradeHeader({
@@ -33,7 +34,10 @@ export function StudentGradeHeader({
 }) {
   const { t } = useLocale();
   // const searchParams = useSearchParams();
-  const [term, setTerm] = useQueryState("term", parseAsInteger);
+  const [term] = useQueryState("term", parseAsInteger);
+  const [view, setView] = useQueryState("view", {
+    defaultValue: "by_chronological_order",
+  });
   const studentGradesQuery = api.student.grades.useQuery({
     id: studentId,
     termId: term ? Number(term) : undefined,
@@ -94,7 +98,13 @@ export function StudentGradeHeader({
         className="w-[300px]"
         showAllOption={true}
         onChange={(val) => {
-          void setTerm(Number(val));
+          //void setTerm(Number(val));
+          router.push(
+            "?" +
+              createQueryString({
+                term: val,
+              }),
+          );
         }}
         defaultValue={term ? `${term}` : undefined}
       />
@@ -114,24 +124,21 @@ export function StudentGradeHeader({
         <ToggleGroup
           defaultValue="by_chronological_order"
           onValueChange={(v) => {
-            router.push(
-              "?" +
-                createQueryString({
-                  view: v,
-                }),
-            );
+            void setView(v);
           }}
           type="single"
         >
           <ToggleGroupItem
             value="by_chronological_order"
-            className="active:bg-slate-500"
+            className={cn(
+              view == "by_chronological_order" ? "bg-blue-500" : "",
+            )}
             aria-label="Toggle by_chronological_order"
           >
             <ListIcon className="h-4 w-4" />
           </ToggleGroupItem>
           <ToggleGroupItem
-            className="active:bg-slate-500"
+            className={cn(view == "by_subject" ? "bg-blue-500" : "")}
             value="by_subject"
             aria-label="Toggle by_subject"
           >
