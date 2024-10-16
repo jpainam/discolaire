@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+import { doPermissionsCheck, PermissionAction } from "@repo/lib/permission";
+
+import { checkPermissions } from "../permission";
 import { classroomService } from "../services/classroom-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -15,69 +18,23 @@ const createUpdateSchema = z.object({
 });
 export const classroomRouter = createTRPCRouter({
   all: protectedProcedure.query(async ({ ctx }) => {
-    const classroomsWithStats = await ctx.db.classroom.findMany({
-      orderBy: {
-        levelId: "asc",
-      },
-      where: {
-        schoolYearId: ctx.schoolYearId,
-        schoolId: ctx.schoolId,
-      },
-      include: {
-        level: true,
-        cycle: true,
-        section: true,
-        classroomLeader: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-          },
-        },
-        headTeacher: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-          },
-        },
-        seniorAdvisor: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-          },
-        },
-        enrollments: {
-          select: {
-            student: {
-              select: {
-                gender: true,
-              },
-            },
-          },
-        },
-      },
+    const classrooms = await classroomService.getAll({
+      schoolYearId: ctx.schoolYearId,
+      schoolId: ctx.session.user.schoolId,
     });
-
-    const classroomsWithSize = classroomsWithStats.map((c) => {
-      const totalStudents = c.enrollments.length;
-      const femaleCount = c.enrollments.filter(
-        (e) => e.student.gender === "female",
-      ).length;
-      const maleCount = c.enrollments.filter(
-        (e) => e.student.gender === "male",
-      ).length;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { enrollments, ...classroomWithoutEnrollments } = c;
-      return {
-        ...classroomWithoutEnrollments,
-        size: totalStudents,
-        femaleCount,
-        maleCount,
-      };
+    if (await checkPermissions(PermissionAction.READ, "classroom:list")) {
+      return classrooms;
+    }
+    return classrooms.filter((cl) => {
+      return doPermissionsCheck(
+        ctx.permissions,
+        PermissionAction.READ,
+        "classroom:list",
+        {
+          id: cl.id,
+        },
+      );
     });
-    return classroomsWithSize;
   }),
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))

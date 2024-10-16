@@ -30,7 +30,8 @@
   },
   "packageManager": "pnpm@9.12.1",
   "engines": {
-    "node": ">=20.18.0"
+    "node": ">=20.18.0",
+    "pnpm": "^9.6.0"
   },
   "prisma": {
     "schema": "packages/db/prisma/schema.prisma",

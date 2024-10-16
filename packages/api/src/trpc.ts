@@ -14,6 +14,8 @@ import type { Session } from "@repo/auth";
 import { auth, validateToken } from "@repo/auth";
 import { db } from "@repo/db";
 
+import { userService } from "./services/user-service";
+
 /**
  * Isomorphic Session getter for API requests
  * - Expo requests will have a session token in the Authorization header
@@ -134,14 +136,16 @@ export const publicProcedure = t.procedure.use(timingMiddleware);
  */
 export const protectedProcedure = t.procedure
   .use(timingMiddleware)
-  .use(({ ctx, next }) => {
+  .use(async ({ ctx, next }) => {
     if (!ctx.session?.user || !ctx.schoolYearId) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
+    const permissions = await userService.getPermissions(ctx.session.user.id);
     return next({
       ctx: {
         // infers the `session` as non-nullable
         session: { ...ctx.session, user: ctx.session.user },
+        permissions: permissions ?? [],
         schoolId: ctx.session.user.schoolId,
         schoolYearId: ctx.schoolYearId,
       },

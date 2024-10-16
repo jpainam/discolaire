@@ -3,6 +3,77 @@ import _ from "lodash";
 import { db } from "@repo/db";
 
 export const classroomService = {
+  getAll: async ({
+    schoolYearId,
+    schoolId,
+  }: {
+    schoolYearId: string;
+    schoolId: string;
+  }) => {
+    const classroomsWithStats = await db.classroom.findMany({
+      orderBy: {
+        levelId: "asc",
+      },
+      where: {
+        schoolYearId: schoolYearId,
+        schoolId: schoolId,
+      },
+      include: {
+        level: true,
+        cycle: true,
+        section: true,
+        classroomLeader: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+        headTeacher: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+        seniorAdvisor: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+        enrollments: {
+          select: {
+            student: {
+              select: {
+                gender: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const classroomsWithSize = classroomsWithStats.map((c) => {
+      const totalStudents = c.enrollments.length;
+      const femaleCount = c.enrollments.filter(
+        (e) => e.student.gender === "female",
+      ).length;
+      const maleCount = c.enrollments.filter(
+        (e) => e.student.gender === "male",
+      ).length;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { enrollments, ...classroomWithoutEnrollments } = c;
+      return {
+        ...classroomWithoutEnrollments,
+        size: totalStudents,
+        femaleCount,
+        maleCount,
+      };
+    });
+    return classroomsWithSize;
+  },
   getCount: async (classroomId: string) => {
     const enrollments = await db.enrollment.findMany({
       where: {
