@@ -1,5 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
+import Link from "next/link";
 import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -7,7 +8,6 @@ import type { RouterOutputs } from "@repo/api";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { useConfirm } from "@repo/ui/confirm-dialog";
@@ -19,8 +19,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
-import { Switch } from "@repo/ui/switch";
 
+import { AvatarState } from "~/components/AvatarState";
+import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { api } from "~/trpc/react";
 
@@ -65,11 +66,39 @@ export function getUserColumns({
         <DataTableColumnHeader column={column} title="Avatar" />
       ),
       cell: ({ row }) => (
-        <Avatar className="flex h-[20px] w-[20px] items-center justify-center rounded">
-          <AvatarImage src={row.original.avatar ?? ""} alt="Avatar" />
-          <AvatarFallback>JL</AvatarFallback>
-        </Avatar>
+        <AvatarState
+          pos={row.original.name?.length ?? 0}
+          avatar={row.original.avatar}
+        />
       ),
+    },
+    {
+      accessorKey: "username",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("username")} />
+      ),
+      cell: ({ row }) => {
+        const user = row.original;
+        return (
+          <Link
+            href={routes.administration.users.details(user.id)}
+            className="hover:text-blue-600 hover:underline"
+          >
+            {user.username}
+          </Link>
+        );
+      },
+    },
+    {
+      accessorKey: "name",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("name")} />
+      ),
+      cell: ({ row }) => {
+        const user = row.original;
+
+        return <div className="flex">{user.name}</div>;
+      },
     },
     {
       accessorKey: "email",
@@ -78,13 +107,13 @@ export function getUserColumns({
       ),
       cell: ({ row }) => <div className="flex">{row.getValue("email")}</div>,
     },
-    {
-      accessorKey: "emailVerified",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("is_email_verified")} />
-      ),
-      cell: () => <Switch checked={false} />,
-    },
+    // {
+    //   accessorKey: "emailVerified",
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title={t("is_email_verified")} />
+    //   ),
+    //   cell: () => <Switch checked={false} />,
+    // },
     {
       accessorKey: "createdAt",
       header: ({ column }) => (

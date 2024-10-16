@@ -48,12 +48,12 @@ export const userRouter = createTRPCRouter({
         q: z.string().optional(),
       }),
     )
-    .query(({ ctx, input }) => {
-      const qq = `%${input.q}%`;
+    .query(({ ctx }) => {
+      //const qq = `%${input.q}%`;
       return ctx.db.user.count({
         where: {
           schoolId: ctx.schoolId,
-          name: { startsWith: qq, mode: "insensitive" },
+          //name: { startsWith: qq, mode: "insensitive" },
         },
       });
     }),
