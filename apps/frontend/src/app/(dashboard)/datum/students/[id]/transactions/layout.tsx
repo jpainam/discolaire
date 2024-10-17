@@ -4,6 +4,7 @@ import { getServerTranslations } from "@repo/i18n/server";
 import { EmptyState } from "@repo/ui/EmptyState";
 
 import { api } from "~/trpc/server";
+import { TransactionTabMenu } from "./TransactionTabMenu";
 
 export default async function Layout({
   children,
@@ -16,5 +17,13 @@ export default async function Layout({
       <EmptyState className="my-8" title={t("student_not_registered_yet")} />
     );
   }
-  return <>{children}</>;
+
+  return (
+    <div className="flex flex-col">
+      <div className="border-b py-1">
+        <TransactionTabMenu />
+      </div>
+      {children}
+    </div>
+  );
 }

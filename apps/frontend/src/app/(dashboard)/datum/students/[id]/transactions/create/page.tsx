@@ -48,7 +48,7 @@ export default async function Page({
               contacts={studentContacts}
             />
           ) : (
-            <Step1 applyRequiredFee={school.applyRequiredFee} />
+            <Step1 />
           )}
         </>
       )}

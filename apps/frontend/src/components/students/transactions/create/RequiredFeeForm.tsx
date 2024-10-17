@@ -37,7 +37,14 @@ export function RequiredFeeForm() {
         : [...prev, fee.id],
     );
   };
+
+  if (unpaidRequiredFeeQuery.isPending) {
+    return <Skeleton className="col-span-full h-8 w-full" />;
+  }
   const data = unpaidRequiredFeeQuery.data ?? [];
+  if (data.length === 0) {
+    return null;
+  }
   return (
     <Card className="mx-4 mb-4 border-t-4 border-t-destructive">
       <CardHeader className="border-b p-0">
@@ -46,9 +53,6 @@ export function RequiredFeeForm() {
         </CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-2 gap-2 p-2">
-        {unpaidRequiredFeeQuery.isPending && (
-          <Skeleton className="col-span-full h-8 w-full" />
-        )}
         {data.map((fee, index) => {
           return (
             <div className="flex items-center space-x-2">

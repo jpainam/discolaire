@@ -28,6 +28,7 @@ import {
   SelectValue,
 } from "@repo/ui/select";
 
+import { useSchool } from "~/contexts/SchoolContext";
 import { api } from "~/trpc/react";
 import { requiredFeesAtom } from "./required-fees-atom";
 import { RequiredFeeForm } from "./RequiredFeeForm";
@@ -39,12 +40,9 @@ const makePaymentFormSchema = z.object({
   paymentMethod: z.string().min(1),
 });
 
-export function Step1({
-  applyRequiredFee,
-}: {
-  applyRequiredFee: "YES" | "NO" | "PASSIVE";
-}) {
+export function Step1() {
   const [amount] = useQueryState("amount", parseAsFloat.withDefault(0));
+  const { school } = useSchool();
 
   const requiredFeeIds = useAtomValue(requiredFeesAtom);
 
@@ -104,7 +102,7 @@ export function Step1({
 
   return (
     <div className="mx-auto w-full max-w-3xl">
-      {applyRequiredFee !== "NO" && <RequiredFeeForm />}
+      {school.applyRequiredFee !== "NO" && <RequiredFeeForm />}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 gap-2 px-4 md:grid-cols-2 md:gap-4">

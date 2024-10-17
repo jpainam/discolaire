@@ -1,0 +1,45 @@
+"use client";
+
+import { useParams, usePathname } from "next/navigation";
+import { CircleGauge, Recycle } from "lucide-react";
+
+import { useLocale } from "@repo/i18n";
+
+import type { TabMenuOption } from "~/components/shared/TabMenu";
+import { TabMenu } from "~/components/shared/TabMenu";
+import { routes } from "~/configs/routes";
+
+export function TransactionTabMenu() {
+  const { t } = useLocale();
+  const pathname = usePathname();
+  const params = useParams<{ id: string }>();
+
+  const menuTabs: TabMenuOption[] = [
+    {
+      name: t("transactions"),
+      href: routes.students.transactions.index(params.id),
+      icon: <CircleGauge className="h-4 w-4" />,
+    },
+    {
+      name: t("account"),
+      href: routes.students.transactions.account(params.id),
+      icon: <Recycle className="h-4 w-4" />,
+    },
+  ];
+
+  return (
+    <div className="flex max-w-fit items-center rounded-full bg-muted text-muted-foreground">
+      {menuTabs.map((link, _index) => {
+        return (
+          <TabMenu
+            key={link.href}
+            isActive={pathname === link.href}
+            href={link.href}
+            icon={link.icon}
+            title={link.name}
+          />
+        );
+      })}
+    </div>
+  );
+}

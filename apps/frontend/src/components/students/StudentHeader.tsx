@@ -2,6 +2,7 @@
 
 import type * as RPNInput from "react-phone-number-input";
 import React from "react";
+import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import {
   BellRing,
@@ -356,10 +357,12 @@ export function StudentHeader({ className }: StudentHeaderProps) {
               {student?.classroom && (
                 <div className="flex flex-row items-center gap-2 rounded dark:bg-secondary">
                   <SquareEqual className="h-4 w-4 text-foreground" />
-                  <span className="line-clamp-1">
-                    {" "}
+                  <Link
+                    href={routes.classrooms.details(student.classroom.id)}
+                    className="line-clamp-1 text-blue-700 hover:underline"
+                  >
                     {student.classroom.name}
-                  </span>
+                  </Link>
                 </div>
               )}
 

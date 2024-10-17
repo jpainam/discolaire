@@ -97,6 +97,7 @@ export const routes = {
     transactions: {
       create: (id: string) => `/datum/students/${id}/transactions/create`,
       index: (id: string) => `/datum/students/${id}/transactions`,
+      account: (id: string) => `/datum/students/${id}/transactions/account`,
       managePlan: (id: string) => `/datum/students/${id}/account/manage-plan`,
       details: (studentId: string, transactionId: number) =>
         "/datum/students/" + studentId + "/transactions/" + transactionId,
