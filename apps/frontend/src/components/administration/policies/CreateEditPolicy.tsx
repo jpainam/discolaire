@@ -99,13 +99,13 @@ export function CreateEditPolicy({ policy }: { policy?: Policy }) {
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-0"
+        className="flex flex-col gap-2"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField
           name="name"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="space-y-0">
               <FormLabel>{t("name")}</FormLabel>
               <FormControl>
                 <Input {...field} />
@@ -116,7 +116,7 @@ export function CreateEditPolicy({ policy }: { policy?: Policy }) {
         <FormField
           name="description"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="space-y-0">
               <FormLabel>{t("description")}</FormLabel>
               <FormControl>
                 <Input {...field} />
@@ -128,10 +128,14 @@ export function CreateEditPolicy({ policy }: { policy?: Policy }) {
         <FormField
           name="content"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="space-y-0">
               <FormLabel>{t("policy")}</FormLabel>
               <FormControl>
                 <Textarea {...field} rows={10} />
+                {/* <PolicyEditor
+                  defaultValue={field.value}
+                  onChange={field.onChange}
+                /> */}
               </FormControl>
             </FormItem>
           )}
