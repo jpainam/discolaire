@@ -79,13 +79,13 @@ export function CreateEditFinanceGroup({
       value: data.value,
     };
     if (id) {
-      toast.loading("updating", { id: 0 });
+      toast.loading(t("updating"), { id: 0 });
       updateFinanceGroup.mutate({
         id,
         ...values,
       });
     } else {
-      toast.loading("creating", { id: 0 });
+      toast.loading(t("creating"), { id: 0 });
       createFinanceGroup.mutate(values);
     }
   };

@@ -4,6 +4,7 @@ import { getServerTranslations } from "@repo/i18n/server";
 import { EmptyState } from "@repo/ui/EmptyState";
 
 import { api } from "~/trpc/server";
+import { PrintAction } from "./PrintAction";
 import { TransactionTabMenu } from "./TransactionTabMenu";
 
 export default async function Layout({
@@ -20,8 +21,9 @@ export default async function Layout({
 
   return (
     <div className="flex flex-col">
-      <div className="border-b py-1">
+      <div className="flex flex-row items-center justify-between border-b py-1 pr-2">
         <TransactionTabMenu />
+        <PrintAction />
       </div>
       {children}
     </div>

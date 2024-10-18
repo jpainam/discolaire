@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams, usePathname } from "next/navigation";
-import { CircleGauge, Recycle } from "lucide-react";
+import { CircleGauge, PlusIcon, Recycle } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
 
@@ -24,6 +24,11 @@ export function TransactionTabMenu() {
       name: t("account"),
       href: routes.students.transactions.account(params.id),
       icon: <Recycle className="h-4 w-4" />,
+    },
+    {
+      name: t("create"),
+      href: routes.students.transactions.create(params.id),
+      icon: <PlusIcon className="h-4 w-4" />,
     },
   ];
 

@@ -114,7 +114,7 @@ export function Step2({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="mx-auto w-full max-w-3xl space-y-2"
+        className="mx-auto mb-8 w-full max-w-3xl space-y-2"
       >
         <Step2Details classroomId={classroomId} />
         <div className="flex flex-row justify-between rounded-xl border">

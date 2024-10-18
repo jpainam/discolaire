@@ -115,9 +115,11 @@ export const routes = {
   },
   classrooms: {
     index: "/datum/classrooms",
+    fees: (id: string) => `/datum/classrooms/${id}/fees`,
     assignments: {
       index: (id: string) => `/datum/classrooms/${id}/assignments`,
       create: (id: string) => `/datum/classrooms/${id}/assignments/create`,
+
       edit: (id: string, assignmentId: string) =>
         `/datum/classrooms/${id}/assignments/${assignmentId}/edit`,
       details: (id: string, assignmentId: string) =>

@@ -36,7 +36,7 @@ export default function PrefixSelector({
       defaultValue={defaultValue ?? "M"}
     >
       <SelectTrigger className={cn("w-[180px]", className)}>
-        <SelectValue placeholder={placeholder ?? t("selectAPrefix")} />
+        <SelectValue placeholder={placeholder ?? t("prefix")} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
