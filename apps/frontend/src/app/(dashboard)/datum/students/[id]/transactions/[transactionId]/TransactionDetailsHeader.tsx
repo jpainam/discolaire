@@ -9,10 +9,13 @@ import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
 
 import { printReceipt } from "~/actions/reporting";
+import { getErrorMessage } from "~/lib/handle-error";
+import { api } from "~/trpc/react";
 
 export function TransactionDetailsHeader() {
   const params = useParams<{ transactionId: string }>();
   const { t } = useLocale();
+  const utils = api.useUtils();
 
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1 text-secondary-foreground">
@@ -22,9 +25,14 @@ export function TransactionDetailsHeader() {
         <Button
           onClick={() => {
             toast.loading(t("printing"), { id: 0 });
-            void printReceipt(Number(params.transactionId)).then(() =>
-              toast.success(t("printing_job_submitted"), { id: 0 }),
-            );
+            void printReceipt(Number(params.transactionId))
+              .then(() => {
+                void utils.reporting.invalidate();
+                toast.success(t("printing_job_submitted"), { id: 0 });
+              })
+              .catch((e) => {
+                toast.error(getErrorMessage(e), { id: 0 });
+              });
           }}
           variant={"outline"}
           size={"sm"}
