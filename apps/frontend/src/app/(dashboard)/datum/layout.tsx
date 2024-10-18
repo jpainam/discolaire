@@ -12,7 +12,7 @@ export default function SearchLayout({
       <div className="fixed top-[95px] z-10 w-full bg-gray-800 text-primary-foreground dark:bg-muted dark:text-secondary-foreground">
         <SubMenuNav />
       </div>
-      <div className="pt-[40px]">{children}</div>
+      <div className="pt-[35px]">{children}</div>
     </div>
   );
 }

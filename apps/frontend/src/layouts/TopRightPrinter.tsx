@@ -74,6 +74,7 @@ export function TopRightPrinter() {
     day: "2-digit",
   });
 
+  console.log("reportingQuery", reportingQuery.data);
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -138,6 +139,11 @@ export function TopRightPrinter() {
                   </span>
                   <div className="flex flex-row text-xs text-muted-foreground">
                     {dateFormat.format(activity.createdAt)}
+                    <span className="pl-10">
+                      {activity.size >= 0
+                        ? `${(activity.size / 1000).toFixed(1)}KB`
+                        : ""}
+                    </span>
                     <div className="ml-auto">
                       <FlatBadge
                         variant={
@@ -162,6 +168,7 @@ export function TopRightPrinter() {
                 <Button
                   variant="ghost"
                   size="icon"
+                  disabled={deleteReportingMutation.isPending}
                   onClick={() => {
                     // const isConfirmed = await confirm({
                     //   title: t("delete"),
@@ -213,6 +220,7 @@ export function TopRightPrinter() {
               {t("view_all")}
             </Button>
             <Button
+              disabled={deleteAllMutation.isPending}
               onClick={() => {
                 toast.loading(t("deleting"), { id: 0 });
                 deleteAllMutation.mutate();

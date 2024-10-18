@@ -23,11 +23,26 @@ export async function printClassroomStudent(
 ) {
   const students = await api.classroom.students(classroomId);
   const v = await api.reporting.submitReport({
-    endpoint: "classroom-students",
+    endpoint: "classroom/students",
     data: students,
     title: title,
   });
   return v;
+}
+export async function printClassroom(title: string, type: "pdf" | "excel") {
+  try {
+    const classrooms = await api.classroom.all();
+    const v = await api.reporting.submitReport({
+      endpoint: "classroom/list",
+      type: type,
+      data: { data: classrooms },
+      title: title,
+    });
+    return v;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
 }
 
 export async function printReceipt(transactionId: number) {

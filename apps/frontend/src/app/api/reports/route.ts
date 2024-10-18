@@ -3,7 +3,7 @@ import { db } from "@repo/db";
 import { env } from "~/env";
 
 export async function POST(request: Request) {
-  const { url, userId, id, reportApiKey } = await request.json();
+  const { url, userId, size, id, reportApiKey } = await request.json();
   if (reportApiKey !== env.REPORT_API_KEY) {
     return Response.json({ error: "Not authorized" }, { status: 401 });
   }
@@ -21,6 +21,7 @@ export async function POST(request: Request) {
       },
       data: {
         url: url,
+        size: size,
         status: "COMPLETED",
       },
     });

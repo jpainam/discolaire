@@ -14,6 +14,7 @@ import {
   Pencil,
   PencilIcon,
   Phone,
+  PlusIcon,
   Printer,
   ShieldBan,
   SquareEqual,
@@ -229,6 +230,19 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                   }}
                 >
                   <Printer className="h-4 w-4" />
+                </Button>
+              </SimpleTooltip>
+              <Separator orientation="vertical" className="h-4" />
+              <SimpleTooltip content={t("add")}>
+                <Button
+                  size={"icon"}
+                  aria-label="add"
+                  variant="ghost"
+                  onClick={() => {
+                    router.push(routes.students.create);
+                  }}
+                >
+                  <PlusIcon className="h-4 w-4" />
                 </Button>
               </SimpleTooltip>
               <Separator orientation="vertical" className="h-4" />

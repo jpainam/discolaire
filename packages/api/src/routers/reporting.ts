@@ -76,6 +76,7 @@ export const reportingRouter = createTRPCRouter({
       z.object({
         endpoint: z.string().min(1),
         title: z.string().min(1),
+        type: z.enum(["pdf", "excel"]).default("pdf"),
         data: z.record(z.any()),
       }),
     )
@@ -85,7 +86,7 @@ export const reportingRouter = createTRPCRouter({
           userId: ctx.session.user.id,
           title: input.title,
           status: "PENDING",
-          type: input.endpoint.includes("excel") ? "excel" : "pdf",
+          type: input.type,
           url: "",
           schoolId: ctx.schoolId,
         },
@@ -111,6 +112,7 @@ export const reportingRouter = createTRPCRouter({
           title: input.title,
           schoolId: ctx.schoolId,
           type: input.type,
+          size: -1,
           url: "",
           userId: ctx.session.user.id,
         },

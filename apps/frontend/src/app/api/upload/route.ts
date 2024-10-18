@@ -84,7 +84,7 @@ export async function DELETE(
     Key: key,
   });
 
-  const response = await client.send(deleteCommand);
-  console.log("File deleted successfully", response);
+  await client.send(deleteCommand);
+  //console.log("File deleted successfully", response);
   return Response.json({ message: "File deleted successfully" });
 }

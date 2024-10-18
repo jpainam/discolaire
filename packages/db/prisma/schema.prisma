@@ -247,6 +247,7 @@ model Reporting {
     url       String
     title     String
     type      String   @default("pdf")
+    size      Int      @default(10)
     createdAt DateTime @default(now()) @db.Timestamp(6)
     status    String   @default("PENDING")
     userId    String

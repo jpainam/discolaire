@@ -1,8 +1,8 @@
-import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
+import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 
 export default function Loading() {
   return (
-    <div className="w-full p-2">
+    <div className="w-full pt-[90px]">
       <DataTableSkeleton
         withPagination={false}
         showViewOptions={false}
