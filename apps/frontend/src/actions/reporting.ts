@@ -9,9 +9,11 @@ import { api } from "~/trpc/server";
 
 export async function printStudentList() {
   const students = await api.student.all({});
+  const { i18n } = await getServerTranslations();
+  const lang = i18n.language;
   const v = await api.reporting.submitReport({
     endpoint: "student-list",
-    data: students,
+    data: { data: students, lang: lang },
     title: "Student List",
   });
   return v;
@@ -20,22 +22,33 @@ export async function printStudentList() {
 export async function printClassroomStudent(
   classroomId: string,
   title: string,
+  type: "pdf" | "excel",
 ) {
-  const students = await api.classroom.students(classroomId);
-  const v = await api.reporting.submitReport({
-    endpoint: "classroom/students",
-    data: students,
-    title: title,
-  });
-  return v;
+  try {
+    const students = await api.classroom.students(classroomId);
+    const { i18n } = await getServerTranslations();
+    const lang = i18n.language;
+    const v = await api.reporting.submitReport({
+      endpoint: "classroom/students",
+      data: { data: students, lang: lang },
+      type: type,
+      title: title,
+    });
+    return v;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
 }
 export async function printClassroom(title: string, type: "pdf" | "excel") {
   try {
     const classrooms = await api.classroom.all();
+    const { i18n } = await getServerTranslations();
+    const lang = i18n.language;
     const v = await api.reporting.submitReport({
       endpoint: "classroom/list",
       type: type,
-      data: { data: classrooms },
+      data: { data: classrooms, lang: lang },
       title: title,
     });
     return v;

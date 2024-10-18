@@ -226,6 +226,7 @@ export const classroomService = {
             schoolYear: true,
           },
         },
+        religion: true,
         studentContacts: {
           include: {
             contact: true,

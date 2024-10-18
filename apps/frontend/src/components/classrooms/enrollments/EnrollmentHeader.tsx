@@ -20,6 +20,7 @@ import { Skeleton } from "@repo/ui/skeleton";
 import { printClassroomStudent } from "~/actions/reporting";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
+import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { getAge } from "~/utils/student-utils";
 import { EnrollStudent } from "./EnrollStudent";
@@ -31,6 +32,7 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
   const classroomStudentsQuery = api.classroom.students.useQuery(classroomId);
   const classroomQuery = api.classroom.get.useQuery(classroomId);
   const classroom = classroomQuery.data;
+  const utils = api.useUtils();
 
   const students = classroomStudentsQuery.data ?? [];
   const male = students.filter((student) => student.gender == "male").length;
@@ -56,6 +58,7 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
       </div>
     );
   }
+  if (!classroom) return null;
   return (
     <div className="grid grid-cols-1 items-center gap-2 border-y bg-secondary px-2 py-1 text-secondary-foreground md:flex md:flex-row">
       <FlatBadge
@@ -140,10 +143,16 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
                 toast.loading(t("printing"), { id: 0 });
                 void printClassroomStudent(
                   classroomId,
-                  `${t("student_list")} ${classroom?.name} - ${t("students")}`,
-                ).then(() =>
-                  toast.success(t("printing_job_submitted"), { id: 0 }),
-                );
+                  `${t("student_list")} ${classroom.name} - ${t("students")}`,
+                  "excel",
+                )
+                  .then(() => {
+                    void utils.reporting.invalidate();
+                    toast.success(t("printing_job_submitted"), { id: 0 });
+                  })
+                  .catch((e) => {
+                    toast.error(getErrorMessage(e), { id: 0 });
+                  });
               }}
             >
               <XMLIcon className="mr-2 h-4 w-4" />
@@ -154,10 +163,16 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
                 toast.loading(t("printing"), { id: 0 });
                 void printClassroomStudent(
                   classroomId,
-                  `${t("student_list")} ${classroom?.name} - ${t("students")}`,
-                ).then(() =>
-                  toast.success(t("printing_job_submitted"), { id: 0 }),
-                );
+                  `${t("student_list")} ${classroom.name} - ${t("students")}`,
+                  "excel",
+                )
+                  .then(() => {
+                    void utils.reporting.invalidate();
+                    toast.success(t("printing_job_submitted"), { id: 0 });
+                  })
+                  .catch((e) => {
+                    toast.error(getErrorMessage(e), { id: 0 });
+                  });
               }}
             >
               <PDFIcon className="mr-2 h-4 w-4" />
