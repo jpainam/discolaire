@@ -14,7 +14,6 @@ import {
 } from "@repo/ui/table";
 
 import { routes } from "~/configs/routes";
-import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/server";
 
 export default async function Page({
@@ -61,8 +60,6 @@ export default async function Page({
         {statements.map((item, index: number) => {
           balance += item.type == "DEBIT" ? -item.amount : item.amount;
           const amount = item.amount.toLocaleString(i18n.language, {
-            currency: CURRENCY,
-            style: "currency",
             maximumFractionDigits: 0,
             minimumFractionDigits: 0,
           });
@@ -124,12 +121,10 @@ export default async function Page({
                 <TableCell>{item.type !== "DEBIT" ? amount : ""}</TableCell>
                 <TableCell>
                   {Math.abs(balance).toLocaleString(i18n.language, {
-                    currency: CURRENCY,
-                    style: "currency",
                     maximumFractionDigits: 0,
                     minimumFractionDigits: 0,
                   })}
-                  {balance > 0 ? "cr" : ""}
+                  {balance > 0 ? " cr" : ""}
                 </TableCell>
               </TableRow>
             </Fragment>
@@ -149,12 +144,10 @@ export default async function Page({
           <TableCell colSpan={4}>{t("total_for_account")}</TableCell>
           <TableCell>
             {Math.abs(balance).toLocaleString(i18n.language, {
-              currency: CURRENCY,
-              style: "currency",
               maximumFractionDigits: 0,
               minimumFractionDigits: 0,
             })}
-            {balance > 0 ? "cr" : ""}
+            {balance > 0 ? " cr" : ""}
           </TableCell>
         </TableRow>
       </TableBody>
@@ -175,8 +168,6 @@ async function SubTotal({
     year: "numeric",
   });
   const amount = Math.abs(totalperiod).toLocaleString(i18n.language, {
-    currency: CURRENCY,
-    style: "currency",
     maximumFractionDigits: 0,
     minimumFractionDigits: 0,
   });

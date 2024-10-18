@@ -1,8 +1,7 @@
 import { getServerTranslations } from "@repo/i18n/server";
 import { EmptyState } from "@repo/ui/EmptyState";
-import { Separator } from "@repo/ui/separator";
 
-import FinanceHeader from "~/components/students/transactions/FinanceHeader";
+//import FinanceHeader from "~/components/students/transactions/FinanceHeader";
 import { TransactionStats } from "~/components/students/transactions/transaction-stats";
 import { TransactionTable } from "~/components/students/transactions/TransactionTable";
 import { api } from "~/trpc/server";
@@ -18,8 +17,8 @@ export default async function Page({
 
   return (
     <div className="flex w-full flex-col gap-0">
-      <FinanceHeader />
-      <Separator />
+      {/* <FinanceHeader />
+      <Separator /> */}
 
       {classroom && (
         <TransactionStats

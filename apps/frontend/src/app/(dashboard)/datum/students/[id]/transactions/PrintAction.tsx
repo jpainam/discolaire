@@ -14,6 +14,7 @@ import {
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
 
 export function PrintAction() {
   const { t } = useLocale();
@@ -25,6 +26,7 @@ export function PrintAction() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
+        <DropdownHelp />
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <XMLIcon className="mr-2 h-4 w-4" />
