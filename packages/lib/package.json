@@ -26,12 +26,12 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "i18next": "^23.16.0",
-    "jotai": "^2.10.0",
+    "jotai": "^2.10.1",
     "json-logic-js": "^2.0.5",
     "next-i18next": "^15.3.1",
     "next-nprogress-bar": "^2.3.14",
     "react-use": "^17.5.1",
-    "tailwind-merge": "^2.5.3",
+    "tailwind-merge": "^2.5.4",
     "uploadthing": "^7.1.0"
   },
   "devDependencies": {
