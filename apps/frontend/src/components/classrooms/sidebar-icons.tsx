@@ -8,6 +8,7 @@ import {
   FolderOpen,
   HandCoins,
   NotebookPen,
+  NotepadTextDashed,
   Printer,
   Proportions,
   Receipt,
@@ -29,4 +30,5 @@ export const sidebarIcons: Record<string, LucideIcon> = {
   attendances: Contact,
   report_cards: Proportions,
   timetables: CalendarDays,
+  subject_journal: NotepadTextDashed,
 };
