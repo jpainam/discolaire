@@ -26,14 +26,6 @@ import {
 import { Switch } from "@repo/ui/switch";
 import { Textarea } from "@repo/ui/textarea";
 
-const courses = [
-  "Introduction to Programming",
-  "Web Development Fundamentals",
-  "Data Structures and Algorithms",
-  "Machine Learning Basics",
-  "Mobile App Development",
-];
-
 const samplePosts = [
   {
     id: 1,
@@ -98,7 +90,7 @@ const samplePosts = [
 ];
 
 export function SubjectJournalEditor() {
-  const [selectedCourse, setSelectedCourse] = useState(courses[0]);
+  //const [selectedCourse, setSelectedCourse] = useState(courses[0]);
   const [richText, setRichText] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [isEditing, setIsEditing] = useState(false);
