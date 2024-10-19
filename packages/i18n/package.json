@@ -23,7 +23,7 @@
   "prettier": "@repo/prettier-config",
   "dependencies": {
     "accept-language": "^3.0.20",
-    "i18next": "^23.16.0",
+    "i18next": "^23.16.1",
     "i18next-browser-languagedetector": "^8.0.0",
     "i18next-resources-to-backend": "^1.2.1",
     "react-i18next": "^15.0.3"
