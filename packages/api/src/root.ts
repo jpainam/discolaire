@@ -44,6 +44,7 @@ import { studentAccountRouter } from "./routers/studentAccount";
 import { studentContactRouter } from "./routers/studentContact";
 import { subjectRouter } from "./routers/subject";
 import { subjectGroupRouter } from "./routers/subjectGroup";
+import { subjectJournalRouter } from "./routers/subjectJournal";
 import { termRouter } from "./routers/term";
 import { timetableRouter } from "./routers/timetable";
 import { transactionRouter } from "./routers/transaction";
@@ -103,6 +104,7 @@ export const appRouter = createTRPCRouter({
   transaction: transactionRouter,
   reporting: reportingRouter,
   invitation: invitationRouter,
+  subjectJournal: subjectJournalRouter,
 });
 
 // export type definition of API

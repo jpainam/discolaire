@@ -74,7 +74,6 @@ export function TopRightPrinter() {
     day: "2-digit",
   });
 
-  console.log("reportingQuery", reportingQuery.data);
   return (
     <Popover>
       <PopoverTrigger asChild>

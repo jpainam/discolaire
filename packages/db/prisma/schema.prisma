@@ -242,6 +242,21 @@ model Classroom {
     schoolId          String
 }
 
+model SubjectJournal {
+    id          Int      @id @default(autoincrement())
+    subjectId   Int
+    title       String
+    content     String
+    schoolId    String
+    createdById String
+    attachments String[]
+    createdAt   DateTime @default(now()) @db.Timestamp(6)
+    date        DateTime @default(now()) @db.Timestamp(6)
+    status      String   @default("PENDING")
+    createdBy   User     @relation("createdBy", fields: [createdById], references: [id])
+    subject     Subject  @relation("subject", fields: [subjectId], references: [id])
+}
+
 model Reporting {
     id        Int      @id @default(autoincrement())
     url       String
@@ -750,22 +765,23 @@ model FormerSchool {
 }
 
 model Subject {
-    id             Int           @id @default(autoincrement())
-    courseId       String
-    teacherId      String?
-    classroomId    String
-    subjectGroupId Int?
-    order          Int           @default(1)
-    coefficient    Float         @default(1)
-    program        String?       @db.Text
-    gradeSheets    GradeSheet[]
-    Program        Program[]
-    classroom      Classroom     @relation(fields: [classroomId], references: [id], onDelete: Cascade)
-    course         Course        @relation(fields: [courseId], references: [id])
-    subjectGroup   SubjectGroup? @relation(fields: [subjectGroupId], references: [id])
-    teacher        Staff?        @relation(fields: [teacherId], references: [id])
-    assignments    Assignment[]
-    timetables     Timetable[]
+    id              Int              @id @default(autoincrement())
+    courseId        String
+    teacherId       String?
+    classroomId     String
+    subjectGroupId  Int?
+    order           Int              @default(1)
+    coefficient     Float            @default(1)
+    program         String?          @db.Text
+    gradeSheets     GradeSheet[]
+    Program         Program[]
+    classroom       Classroom        @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+    course          Course           @relation(fields: [courseId], references: [id])
+    subjectGroup    SubjectGroup?    @relation(fields: [subjectGroupId], references: [id])
+    teacher         Staff?           @relation(fields: [teacherId], references: [id])
+    assignments     Assignment[]
+    timetables      Timetable[]
+    subjectJournals SubjectJournal[] @relation("subject")
 
     @@unique([courseId, teacherId, classroomId])
 }
@@ -1109,6 +1125,7 @@ model User {
     school            School            @relation(fields: [schoolId], references: [id])
     documents         Document[]        @relation("owner")
     documentCreatedBy Document[]        @relation("createdBy")
+    subjectJournals   SubjectJournal[]  @relation("createdBy")
 }
 
 model VerificationToken {
