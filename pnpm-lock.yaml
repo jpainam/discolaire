@@ -306,8 +306,8 @@ importers:
         specifier: ^14.0.4
         version: 14.0.4
       '@gorhom/bottom-sheet':
-        specifier: ^5.0.3
-        version: 5.0.3(@types/react@18.3.3)(react-native-gesture-handler@2.20.0(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))(react@18.3.1))(react-native-reanimated@3.16.0(@babel/core@7.25.8)(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))(react@18.3.1))(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))(react@18.3.1)
+        specifier: ^5.0.4
+        version: 5.0.4(@types/react@18.3.3)(react-native-gesture-handler@2.20.0(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))(react@18.3.1))(react-native-reanimated@3.16.0(@babel/core@7.25.8)(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))(react@18.3.1))(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))(react@18.3.1)
       '@react-navigation/material-top-tabs':
         specifier: ^6.6.14
         version: 6.6.14(@react-navigation/native@6.1.18(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))(react@18.3.1))(react-native-pager-view@6.4.1(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))(react@18.3.1))(react-native-tab-view@3.5.2(react-native-pager-view@6.4.1(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))(react@18.3.1))(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))(react@18.3.1))(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))(react@18.3.1)
@@ -2764,8 +2764,8 @@ packages:
   '@floating-ui/utils@0.2.8':
     resolution: {integrity: sha512-kym7SodPp8/wloecOpcmSnWJsK7M0E5Wg8UcFA+uO4B9s5d0ywXOEro/8HM9x0rW+TljRzul/14UYz3TleT3ig==}
 
-  '@gorhom/bottom-sheet@5.0.3':
-    resolution: {integrity: sha512-9x7YK+BAQfCnXqxNoT/AB4fXvDS4qjGBcC6SARpsyKtmNAix8cOTimOddqwRtnjV+NfRmro66hXusuZW370aPg==}
+  '@gorhom/bottom-sheet@5.0.4':
+    resolution: {integrity: sha512-DTKFE+KwcS4Du5hbzTzh3r9hdfEfYmChcRi6hSeiDPGiCMq8GQ7VD5VE1WaFRrEbcc0+Seu1ZEjsf+JMcFM4vg==}
     peerDependencies:
       '@types/react': '*'
       '@types/react-native': '*'
@@ -14037,7 +14037,7 @@ snapshots:
 
   '@floating-ui/utils@0.2.8': {}
 
-  '@gorhom/bottom-sheet@5.0.3(@types/react@18.3.3)(react-native-gesture-handler@2.20.0(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))(react@18.3.1))(react-native-reanimated@3.16.0(@babel/core@7.25.8)(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))(react@18.3.1))(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))(react@18.3.1)':
+  '@gorhom/bottom-sheet@5.0.4(@types/react@18.3.3)(react-native-gesture-handler@2.20.0(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))(react@18.3.1))(react-native-reanimated@3.16.0(@babel/core@7.25.8)(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))(react@18.3.1))(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))(react@18.3.1)':
     dependencies:
       '@gorhom/portal': 1.0.14(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.5.4))(react@18.3.1)
       invariant: 2.2.4
