@@ -26,6 +26,16 @@ export const subjectJournalRouter = createTRPCRouter({
       },
     });
   }),
+  clearAll: protectedProcedure
+    .input(z.object({ subjectId: z.coerce.number() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.subjectJournal.deleteMany({
+        where: {
+          subjectId: input.subjectId,
+          schoolId: ctx.schoolId,
+        },
+      });
+    }),
   bySubject: protectedProcedure
     .input(
       z.object({

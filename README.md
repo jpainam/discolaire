@@ -276,3 +276,5 @@ docker buildx prune -f # to clear the build cache
 ATT
 docker system prune -f # clean all, remove all unused docker
 ```
+
+USE `npx turbo run dev -F @repo/frontend` to run
