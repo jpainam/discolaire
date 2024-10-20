@@ -60,7 +60,7 @@ export function SubjectJournalList({ subjectId }: { subjectId: number }) {
   });
   const journals = subjectJournalsQuery.data ?? [];
   return (
-    <div className="mb-4 flex flex-col gap-2 px-4">
+    <div className="mb-4 flex flex-col gap-2 px-2">
       <h3 className="text-xl font-bold">Existing Posts</h3>
       {subjectJournalsQuery.isPending && (
         <div className="grid gap-2">
@@ -70,7 +70,7 @@ export function SubjectJournalList({ subjectId }: { subjectId: number }) {
         </div>
       )}
       {journals.map((journal) => (
-        <div key={journal.id} className="rounded-lg bg-white p-4 shadow">
+        <div key={journal.id} className="rounded-lg bg-white p-2 shadow">
           <div className="mb-2 flex items-start justify-between">
             <h4 className="text-lg font-semibold">{journal.title}</h4>
             {getStatusBadge(journal.status)}
@@ -92,7 +92,7 @@ export function SubjectJournalList({ subjectId }: { subjectId: number }) {
           </div>
         </div>
       ))}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pb-4">
         <Button
           size={"sm"}
           onClick={() => paginate(pageIndex - 1)}

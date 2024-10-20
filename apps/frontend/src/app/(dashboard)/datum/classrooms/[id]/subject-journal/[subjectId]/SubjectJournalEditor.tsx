@@ -82,7 +82,7 @@ export function SubjectJournalEditor({ subjectId }: { subjectId: number }) {
         onSubmit={form.handleSubmit(handleSubmit)}
         className="w-full flex-1 overflow-y-auto p-2"
       >
-        <div className="mb-6 rounded-lg p-6 shadow">
+        <div className="mb-2 rounded-lg p-6 shadow">
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center">
               <div className="mr-2 flex h-10 w-10 items-center justify-center rounded-full bg-red-500 font-bold text-white">
