@@ -37,6 +37,7 @@ import { Switch } from "@repo/ui/switch";
 import { Textarea } from "@repo/ui/textarea";
 
 import { api } from "~/trpc/react";
+import { SubjectJournalAttachment } from "./SubjectJournalAttachment";
 import { SubjectJournalTemplate } from "./SubjectJournalTemplate";
 
 const createSubjectJournalSchema = z.object({
@@ -195,6 +196,14 @@ export function SubjectJournalEditor({ subjectId }: { subjectId: number }) {
 
         <div className="mb-2 flex flex-wrap items-center">
           <Button
+            onClick={() => {
+              openModal({
+                title: t("upload_files"),
+                className: "w-[500px]",
+                description: t("upload_files_description"),
+                view: <SubjectJournalAttachment />,
+              });
+            }}
             type="button"
             variant="outline"
             size="icon"

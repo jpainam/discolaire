@@ -1,22 +1,54 @@
-import Link from "next/link";
+"use client";
 
-import { api } from "~/trpc/server";
+import { useParams } from "next/navigation";
 
-export async function SubjectList({ classroomId }: { classroomId: string }) {
-  const subjects = await api.classroom.subjects({ id: classroomId });
-  //const { t } = await getServerTranslations();
+import { useRouter } from "@repo/hooks/use-router";
+import { Skeleton } from "@repo/ui/skeleton";
+
+import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
+
+export function SubjectList({ classroomId }: { classroomId: string }) {
+  const subjectsQuery = api.classroom.subjects.useQuery({ id: classroomId });
+  const router = useRouter();
+  const params = useParams<{ subjectId: string }>();
+  if (subjectsQuery.isPending) {
+    return (
+      <div className="flex w-[350px] flex-col gap-2 p-2">
+        {Array.from({ length: 16 }).map((_, index) => (
+          <Skeleton key={index} className="h-8 w-full" />
+        ))}
+      </div>
+    );
+  }
+
+  const subjects = subjectsQuery.data ?? [];
   return (
-    <div className="overflow-y-auto border-r bg-muted/50 text-sm">
+    <div className="overflow-y-auto border-r text-sm">
       {/* <h2 className="mb-4 text-xl font-bold">{t("courses")}</h2> */}
       <ul>
         {subjects.map((subject, index) => (
-          <li key={index} className={`cursor-pointer p-2 hover:bg-secondary`}>
-            <Link
-              className="rounded-lg p-2 hover:text-blue-700 hover:underline"
-              href={`/datum/classrooms/${classroomId}/subject-journal/${subject.id}`}
-            >
-              {subject.course.name}
-            </Link>
+          <li
+            key={index}
+            onClick={() => {
+              router.push(
+                `/datum/classrooms/${classroomId}/subject-journal/${subject.id}`,
+              );
+            }}
+            className={cn(
+              `flex cursor-pointer flex-row items-center gap-2 border-b p-2 hover:bg-secondary`,
+              subject.id === Number(params.subjectId)
+                ? "bg-secondary font-bold text-secondary-foreground"
+                : "text-secondary-foreground/80 hover:bg-secondary/10",
+            )}
+          >
+            <div
+              className="h-6 w-1 rounded-lg"
+              style={{
+                backgroundColor: subject.course.color,
+              }}
+            ></div>
+            <span>{subject.course.name}</span>
           </li>
         ))}
       </ul>
