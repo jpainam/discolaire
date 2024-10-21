@@ -10,7 +10,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
-
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -19,7 +18,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "./sidebar";
+} from "@repo/ui/sidebar";
 
 export function NavProjects({
   projects,

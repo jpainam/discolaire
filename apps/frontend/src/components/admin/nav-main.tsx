@@ -8,7 +8,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@repo/ui/collapsible";
-
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -18,7 +17,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "./sidebar";
+} from "@repo/ui/sidebar";
 
 export function NavMain({
   items,

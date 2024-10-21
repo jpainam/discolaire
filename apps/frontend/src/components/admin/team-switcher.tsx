@@ -12,13 +12,12 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
-
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "./sidebar";
+} from "@repo/ui/sidebar";
 
 export function TeamSwitcher({
   teams,

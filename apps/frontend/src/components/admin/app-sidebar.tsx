@@ -2,161 +2,211 @@
 
 import * as React from "react";
 import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
+  Atom,
+  BookUserIcon,
+  BoxesIcon,
+  CalendarDays,
+  CircleDollarSign,
+  Eclipse,
   Frame,
-  GalleryVerticalEnd,
+  HandCoinsIcon,
+  LifeBuoy,
   Map,
   PieChart,
-  Settings2,
-  SquareTerminal,
+  Rabbit,
+  ReceiptIcon,
+  School,
+  SchoolIcon,
+  Send,
+  Settings,
+  Users,
 } from "lucide-react";
 
-import { NavMain } from "./nav-main";
-import { NavProjects } from "./nav-projects";
-import { NavUser } from "./nav-user";
+import { useLocale } from "@repo/hooks/use-locale";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "./sidebar";
+} from "@repo/ui/sidebar";
+
+import { routes } from "~/configs/routes";
+import { NavMain } from "./nav-main";
+import { NavProjects } from "./nav-projects";
+import { NavUser } from "./nav-user";
 import { TeamSwitcher } from "./team-switcher";
 
-// This is sample data.
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
-  navMain: [
-    {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
-};
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { t } = useLocale();
+  const data = {
+    teams: [
+      {
+        name: "Acme Inc",
+        logo: Atom,
+        plan: "Enterprise",
+      },
+      {
+        name: "Acme Corp.",
+        logo: Eclipse,
+        plan: "Startup",
+      },
+      {
+        name: "Evil Corp.",
+        logo: Rabbit,
+        plan: "Free",
+      },
+    ],
+    user: {
+      name: "shadcn",
+      email: "m@example.com",
+      avatar: "/avatars/shadcn.jpg",
+    },
+    navMain: [
+      {
+        title: t("my_school"),
+        url: routes.administration.my_school.index,
+        icon: SchoolIcon,
+        isActive: true,
+        items: [
+          {
+            title: t("courses"),
+            url: routes.administration.courses.index,
+            icon: Users,
+            description: "All your courses",
+          },
+          {
+            title: t("classroom_settings"),
+            url: routes.administration.classrooms.index,
+            icon: School,
+            description: "Classroom settings",
+          },
+          {
+            title: t("directory"),
+            url: routes.administration.directory.index,
+            icon: BookUserIcon,
+            description: "All your directory",
+          },
+        ],
+      },
+      {
+        title: "Finances",
+        url: "#",
+        icon: CircleDollarSign,
+        items: [
+          {
+            title: "Frais",
+            url: "/administration/accounting/fees",
+            icon: ReceiptIcon,
+            description: "Our fastest model for general use cases.",
+          },
+          {
+            title: "Transactions",
+            url: "/administration/accounting/transactions",
+            icon: HandCoinsIcon,
+            description: "Performance and speed for efficiency.",
+          },
+          {
+            title: "Groupes",
+            url: "/administration/accounting/groups",
+            icon: BoxesIcon,
+            description: "The most powerful model for complex computations.",
+          },
+        ],
+      },
+      {
+        title: "Utilisateurs",
+        url: "/administration/users",
+        icon: Users,
+        items: [
+          {
+            title: "Liste",
+            url: "/administration/users",
+          },
+          {
+            title: "Roles",
+            url: "/administration/users/roles",
+          },
+          {
+            title: "Permissions",
+            url: "/administration/users/policies",
+          },
+        ],
+      },
+      {
+        title: t("schoolYear"),
+        url: "/administration/school-years",
+        icon: CalendarDays,
+        items: [
+          {
+            title: t("schoolYear"),
+            url: "/administration/school-years",
+          },
+          {
+            title: t("periods"),
+            url: "/administration/school-years/terms",
+          },
+        ],
+      },
+      {
+        title: t("settings"),
+        url: "/administration/settings",
+        icon: Settings,
+        items: [
+          {
+            title: t("religions"),
+            url: "/administration/settings/religions",
+          },
+          {
+            title: t("sports"),
+            url: "/administration/settings/sports",
+          },
+          {
+            title: t("clubs"),
+            url: "/administration/settings/clubs",
+          },
+          {
+            title: t("former_schools"),
+            url: "/administration/settings/former-schools",
+          },
+          {
+            title: t("staff_level"),
+            url: "/administration/settings/staff-levels",
+          },
+        ],
+      },
+    ],
+
+    navSecondary: [
+      {
+        title: "Support",
+        url: "#",
+        icon: LifeBuoy,
+      },
+      {
+        title: "Feedback",
+        url: "#",
+        icon: Send,
+      },
+    ],
+    projects: [
+      {
+        name: "Design Engineering",
+        url: "#",
+        icon: Frame,
+      },
+      {
+        name: "Sales & Marketing",
+        url: "#",
+        icon: PieChart,
+      },
+      {
+        name: "Travel",
+        url: "#",
+        icon: Map,
+      },
+    ],
+  };
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
