@@ -4,6 +4,7 @@ import * as React from "react";
 import { ChevronsUpDown, Plus } from "lucide-react";
 
 import { useLocale } from "@repo/hooks/use-locale";
+import { useRouter } from "@repo/hooks/use-router";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,8 +31,9 @@ export function TeamSwitcher({
   }[];
 }) {
   const { isMobile } = useSidebar();
-  const [activeTeam, setActiveTeam] = React.useState(teams[0]);
+  const [activeTeam, _setActiveTeam] = React.useState(teams[0]);
   const { t } = useLocale();
+  const router = useRouter();
 
   return (
     <SidebarMenu>
@@ -66,7 +68,9 @@ export function TeamSwitcher({
             {teams.map((team, index) => (
               <DropdownMenuItem
                 key={team.name}
-                onClick={() => setActiveTeam(team)}
+                onClick={() => {
+                  router.push("/");
+                }}
                 className="gap-2 p-2"
               >
                 <div className="flex size-6 items-center justify-center rounded-sm border">
