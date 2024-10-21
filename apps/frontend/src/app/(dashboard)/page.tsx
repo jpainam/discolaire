@@ -29,7 +29,7 @@ export default async function Page() {
   }
 
   return (
-    <div className="grid grid-cols-12 gap-4 px-4 pt-[110px]">
+    <div className="grid grid-cols-1 gap-4 px-4 md:pt-[110px] 2xl:grid-cols-12">
       <div className="col-span-full text-lg font-bold md:text-2xl">
         {t("dashboard")}
       </div>
@@ -46,8 +46,8 @@ export default async function Page() {
       {/* <Suspense>
         <TransactionStat className="col-span-full" />
       </Suspense> */}
-      <DashboardClassroomSize className="col-span-full" />
-      <DashboardTransactionTrend className="col-span-full" />
+      <DashboardClassroomSize className="col-span-full hidden md:block" />
+      <DashboardTransactionTrend className="col-span-full hidden md:block" />
       {/*
         <ClassroomEffectiveStats className="text-sm col-span-8" />
         <GenderStats className="col-span-4" /> */}

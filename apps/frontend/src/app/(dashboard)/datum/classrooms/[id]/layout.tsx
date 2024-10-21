@@ -26,8 +26,8 @@ export default async function Layout({
   }
   return (
     <div className="flex flex-1 flex-row">
-      <ClassroomSidebar className="border-r" />
-      <div className="ml-[220px] w-full flex-col">
+      <ClassroomSidebar className="hidden border-r md:block" />
+      <div className="w-full flex-col md:ml-[220px]">
         <ClassroomHeader />
         {children}
       </div>

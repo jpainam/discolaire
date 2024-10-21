@@ -31,8 +31,8 @@ export default async function Layout({
 
   return (
     <div className="flex flex-1 flex-row">
-      <StudentSidebar className="border-r" />
-      <Card className="ml-[220px] flex-1 border-none shadow-none">
+      <StudentSidebar className="hidden border-r md:block" />
+      <Card className="flex-1 border-none shadow-none md:ml-[220px]">
         <CardHeader className="bg-muted/50 p-1">
           <StudentHeader />
         </CardHeader>

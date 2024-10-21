@@ -60,7 +60,7 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
   }
   if (!classroom) return null;
   return (
-    <div className="grid grid-cols-1 items-center gap-2 border-y bg-secondary px-2 py-1 text-secondary-foreground md:flex md:flex-row">
+    <div className="grid grid-cols-3 items-center gap-2 border-y bg-secondary px-2 py-1 text-secondary-foreground md:flex md:flex-row">
       <FlatBadge
         variant={"yellow"}
         className="flex flex-row items-center gap-2"
@@ -68,14 +68,14 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
         <Label>{t("effective")}: </Label>
         <span className="text-muted-foreground">{students.length}</span>
       </FlatBadge>
-      <Separator orientation="vertical" className="h-5" />
+      <Separator orientation="vertical" className="hidden h-5 md:block" />
       <FlatBadge variant={"green"} className="flex flex-row items-center gap-2">
         <Label>{t("male")}: </Label>
         <span className="text-muted-foreground">
           {male} - ({((male / total) * 100).toFixed()}%)
         </span>
       </FlatBadge>
-      <Separator orientation="vertical" className="h-5" />
+      <Separator orientation="vertical" className="hidden h-5 md:block" />
       <FlatBadge
         variant={"indigo"}
         className="flex flex-row items-center gap-2"
@@ -85,7 +85,7 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
           {female} - ({((female / total) * 100).toFixed()}%)
         </span>
       </FlatBadge>
-      <Separator orientation="vertical" className="h-5" />
+      <Separator orientation="vertical" className="hidden h-5 md:block" />
       <FlatBadge
         variant={"purple"}
         className="flex flex-row items-center gap-2"
@@ -95,14 +95,14 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
           {repeating} - ({((repeating / total) * 100).toFixed()}%)
         </span>
       </FlatBadge>
-      <Separator orientation="vertical" className="h-5" />
+      <Separator orientation="vertical" className="hidden h-5 md:block" />
       <FlatBadge variant={"red"} className="flex flex-row items-center gap-2">
         <Label>{t("oldest")}: </Label>
         <span className="text-muted-foreground">
           {youngest} {t("old")}
         </span>
       </FlatBadge>
-      <Separator orientation="vertical" className="h-5" />
+      <Separator orientation="vertical" className="hidden h-5 md:block" />
       <FlatBadge variant={"blue"} className="flex flex-row items-center gap-2">
         <Label>{t("youngest")}: </Label>
         <span className="text-muted-foreground">
