@@ -69,6 +69,7 @@ export const studentAccountRouter = createTRPCRouter({
       });
       const transactions = await ctx.db.transaction.findMany({
         where: {
+          deletedAt: null,
           status: "VALIDATED",
           account: {
             studentId: input.studentId,

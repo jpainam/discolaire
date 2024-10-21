@@ -61,6 +61,7 @@ export function TransactionTable() {
     onSettled: async () => {
       await utils.transaction.invalidate();
       await utils.student.transactions.invalidate();
+      await utils.studentAccount.invalidate();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
