@@ -1,9 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { EmptyState } from "@repo/ui/EmptyState";
-import { Separator } from "@repo/ui/separator";
-
-import { ProgramHeader } from "~/components/classrooms/programs/ProgramHeader";
+import { CreateEditProgram } from "~/components/classrooms/programs/CreateEditProgram";
 import { api } from "~/trpc/server";
 
 export default async function Page({
@@ -17,9 +14,10 @@ export default async function Page({
   }
   return (
     <div className="flex flex-col">
-      <ProgramHeader />
-      <Separator />
-      {subject.program ? (
+      {/* <ProgramHeader />
+      <Separator /> */}
+      <CreateEditProgram subjectId={Number(subjectId)} />
+      {/* {subject.program ? (
         <div
           className="p-4"
           dangerouslySetInnerHTML={{
@@ -28,7 +26,7 @@ export default async function Page({
         />
       ) : (
         <EmptyState title="No Program" className="my-8" />
-      )}
+      )} */}
     </div>
   );
 }

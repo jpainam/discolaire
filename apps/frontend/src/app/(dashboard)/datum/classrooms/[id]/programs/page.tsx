@@ -1,15 +1,26 @@
+import { redirect } from "next/navigation";
+
 import { getServerTranslations } from "@repo/i18n/server";
 import { EmptyState } from "@repo/ui/EmptyState";
 
-export default async function Page() {
+import { api } from "~/trpc/server";
+
+export default async function Page({
+  params: { id },
+}: {
+  params: { id: string };
+}) {
   const { t } = await getServerTranslations();
+  const subjects = await api.classroom.subjects({ id: id });
+  const subject = subjects.length > 0 ? subjects[0] : null;
+  if (subject) {
+    redirect(`/datum/classrooms/${id}/programs/${subject.id}`);
+  }
   return (
-    <div className="flex flex-col">
-      <div className="flex flex-row items-center gap-2 border-b bg-secondary px-2 py-2 text-xs text-secondary-foreground 2xl:text-sm">
-        {t("programs")}
-      </div>
-      <br />
-      <EmptyState />
-    </div>
+    <EmptyState
+      className="my-8"
+      title={t("to_get_started")}
+      description={t("select_a_subject")}
+    />
   );
 }

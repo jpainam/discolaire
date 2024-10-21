@@ -1,16 +1,13 @@
+import type { PropsWithChildren } from "react";
+
 import { ProgramList } from "~/components/classrooms/programs/ProgramList";
 
 export default function Layout({
   children,
   params: { id },
-}: {
-  children: React.ReactNode;
-  params: { id: string };
-}) {
-  //const subjects = await api.classroom.subjects({ id });
-
+}: PropsWithChildren<{ params: { id: string } }>) {
   return (
-    <div className="flex w-full flex-row">
+    <div className="flex h-screen flex-col md:flex-row">
       <ProgramList classroomId={id} />
       <div className="flex-1">{children}</div>
     </div>

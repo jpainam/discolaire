@@ -5,16 +5,13 @@ import { useParams } from "next/navigation";
 import { useRouter } from "@repo/hooks/use-router";
 import { Skeleton } from "@repo/ui/skeleton";
 
-import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function ProgramList({ classroomId }: { classroomId: string }) {
-  const params = useParams<{ id: string; subjectId: string }>();
+  const subjectsQuery = api.classroom.subjects.useQuery({ id: classroomId });
   const router = useRouter();
-  const subjectsQuery = api.classroom.subjects.useQuery({ id: params.id });
-  const subjects = subjectsQuery.data;
+  const params = useParams<{ subjectId: string }>();
   if (subjectsQuery.isPending) {
     return (
       <div className="flex w-[350px] flex-col gap-2 p-2">
@@ -24,37 +21,37 @@ export function ProgramList({ classroomId }: { classroomId: string }) {
       </div>
     );
   }
+
+  const subjects = subjectsQuery.data ?? [];
   return (
-    <nav className="flex w-[350px] flex-col overflow-hidden border-r">
-      {subjects?.map((subj, index) => {
-        return (
-          <div
-            key={`${subj.id}-${index}`}
-            className={cn(
-              "flex cursor-pointer flex-col justify-center border-b",
-              subj.id === Number(params.subjectId)
-                ? "bg-secondary text-secondary-foreground"
-                : "text-secondary-foreground/80 hover:bg-secondary/10",
-            )}
+    <div className="overflow-y-auto border-r text-sm">
+      {/* <h2 className="mb-4 text-xl font-bold">{t("courses")}</h2> */}
+      <ul>
+        {subjects.map((subject, index) => (
+          <li
+            key={index}
             onClick={() => {
               router.push(
-                routes.classrooms.programs(params.id) + "/" + subj.id,
+                `/datum/classrooms/${classroomId}/programs/${subject.id}`,
               );
             }}
+            className={cn(
+              `flex cursor-pointer flex-row items-center gap-2 border-b p-2 hover:bg-secondary`,
+              subject.id === Number(params.subjectId)
+                ? "bg-secondary font-bold text-secondary-foreground"
+                : "text-secondary-foreground/80 hover:bg-secondary/10",
+            )}
           >
-            <div className="flex h-10 flex-row items-center gap-2 px-2">
-              <div
-                className="h-6 w-1 rounded-lg"
-                style={{
-                  backgroundColor: subj.course.color,
-                }}
-              ></div>
-              <div className="truncate text-sm">{subj.course.name}</div>
-            </div>
-          </div>
-        );
-      })}
-      <div></div>
-    </nav>
+            <div
+              className="h-6 w-1 rounded-lg"
+              style={{
+                backgroundColor: subject.course.color,
+              }}
+            ></div>
+            <span>{subject.course.name}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

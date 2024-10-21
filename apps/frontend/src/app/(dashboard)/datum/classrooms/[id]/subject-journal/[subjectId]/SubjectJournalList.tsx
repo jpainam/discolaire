@@ -102,7 +102,7 @@ export function SubjectJournalList({ subjectId }: { subjectId: number }) {
           <ChevronLeftIcon className="mr-2 h-4 w-4" />
           {t("previous")}
         </Button>
-        <span>
+        <span className="text-xs">
           {t("page")} {pageIndex} of {Math.ceil(journals.length / pageSize)}
         </span>
         <Button

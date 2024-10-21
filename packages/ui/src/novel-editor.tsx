@@ -1,14 +1,14 @@
 // "use client";
 
-// import {
-//     EditorBubble,
-//     EditorBubbleItem,
-//     EditorCommand,
-//     EditorCommandItem,
-//     EditorContent,
-//     EditorRoot,
-// } from "novel";
 // import { useEffect, useState, useTransition } from "react";
+// import {
+//   EditorBubble,
+//   EditorBubbleItem,
+//   EditorCommand,
+//   EditorCommandItem,
+//   EditorContent,
+//   EditorRoot,
+// } from "novel";
 
 // export function Editor({ defaultValue }: { defaultValue: string }) {
 //   const [isPendingSaving, startTransitionSaving] = useTransition();
@@ -38,9 +38,10 @@
 //         <EditorContent>
 //           <EditorCommand>
 //             <EditorCommandItem
-//                 value={""}
-//                 onCommand={(val) => console.log(val)}>
-//                 Do something
+//               value={""}
+//               onCommand={(val) => console.log(val)}
+//             />
+//             Do something
 //             <EditorCommandItem />
 //             <EditorCommandItem />
 //           </EditorCommand>
