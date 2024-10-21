@@ -13,6 +13,8 @@ export const env = createEnv({
     INVITATION_LINK_SECRET: z.string().min(1),
     REDIS_URL: z.string().min(1),
     REPORTING_URL: z.string().min(1).url(),
+    UNKEY_ROOT_KEY: z.string().optional(),
+    AUTH_SECRET: z.string().min(1),
   },
   client: { NEXT_PUBLIC_BASE_URL: z.string().min(1).url() },
   runtimeEnv: {
@@ -22,6 +24,8 @@ export const env = createEnv({
     REDIS_URL: process.env.REDIS_URL,
     REPORTING_URL: process.env.REPORTING_URL,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+    UNKEY_ROOT_KEY: process.env.UNKEY_ROOT_KEY,
+    AUTH_SECRET: process.env.AUTH_SECRET,
 
     // AWS S3
     AWS_S3_ACCESS_KEY_ID: process.env.AWS_S3_ACCESS_KEY_ID,

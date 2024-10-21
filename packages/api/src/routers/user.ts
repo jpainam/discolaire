@@ -99,6 +99,13 @@ export const userRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const exists = await userService.validateUsername(input.username);
+      if (exists.error) {
+        throw new TRPCError({
+          message: exists.error,
+          code: "FORBIDDEN",
+        });
+      }
       const user = await ctx.db.user.create({
         data: {
           email: `${input.username}@discolaire.com`,
@@ -134,7 +141,7 @@ export const userRouter = createTRPCRouter({
       });
       if (existingUser) {
         throw new TRPCError({
-          code: "BAD_REQUEST",
+          code: "FORBIDDEN",
           message: "User with this username already exists",
         });
       }

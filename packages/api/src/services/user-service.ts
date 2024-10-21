@@ -99,4 +99,20 @@ export const userService = {
       },
     });
   },
+
+  validateUsername: async (username: string) => {
+    const registeredUser = await db.user.findFirst({
+      where: {
+        username,
+      },
+    });
+    if (registeredUser) {
+      return {
+        error: "Username already exists",
+      };
+    }
+    return {
+      error: null,
+    };
+  },
 };

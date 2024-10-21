@@ -2,10 +2,12 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { generateToken, invalidateSessionToken } from "@repo/auth";
+import { invalidateSessionToken } from "@repo/auth";
 
 import { isPasswordMatch } from "../encrypt";
+import { ratelimiter } from "../rateLimit";
 import { protectedProcedure, publicProcedure } from "../trpc";
+import { generateToken } from "../utils";
 
 export const authRouter = {
   getSession: publicProcedure.query(({ ctx }) => {
@@ -15,6 +17,7 @@ export const authRouter = {
     return "you can see this secret message!";
   }),
   signInWithPassword: publicProcedure
+    .use(ratelimiter({ limit: 20, namespace: "signIn.password" }))
     .input(
       z.object({
         username: z.string().min(1),
@@ -29,7 +32,7 @@ export const authRouter = {
       });
       if (!user || !(await isPasswordMatch(input.password, user.password))) {
         throw new TRPCError({
-          code: "BAD_REQUEST",
+          code: "UNAUTHORIZED",
           message: "Incorrect username or password",
         });
       }
