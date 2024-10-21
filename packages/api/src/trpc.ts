@@ -7,7 +7,7 @@
  * The pieces you will need to use are documented accordingly near the end
  */
 import { redirect } from "next/navigation";
-import { initTRPC } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
@@ -140,19 +140,29 @@ export const publicProcedure = t.procedure.use(timingMiddleware);
 export const protectedProcedure = t.procedure
   .use(timingMiddleware)
   .use(async ({ ctx, next }) => {
-    if (!ctx.session?.user || !ctx.schoolYearId) {
-      // TODO - this should be a TRPCError
-      redirect("/auth/login");
-      //throw new TRPCError({ code: "UNAUTHORIZED" });
+    let isError = false;
+    try {
+      if (!ctx.session?.user || !ctx.schoolYearId) {
+        isError = true;
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
+
+      const permissions = await userService.getPermissions(ctx.session.user.id);
+      return next({
+        ctx: {
+          // infers the `session` as non-nullable
+          session: { ...ctx.session, user: ctx.session.user },
+          permissions: permissions ?? [],
+          schoolId: ctx.session.user.schoolId,
+          schoolYearId: ctx.schoolYearId,
+        },
+      });
+    } catch (e) {
+      console.error(e);
+      throw e;
+    } finally {
+      if (isError) {
+        redirect("/auth/login");
+      }
     }
-    const permissions = await userService.getPermissions(ctx.session.user.id);
-    return next({
-      ctx: {
-        // infers the `session` as non-nullable
-        session: { ...ctx.session, user: ctx.session.user },
-        permissions: permissions ?? [],
-        schoolId: ctx.session.user.schoolId,
-        schoolYearId: ctx.schoolYearId,
-      },
-    });
   });
