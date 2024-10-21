@@ -6,7 +6,8 @@
  * tl;dr - this is where all the tRPC server stuff is created and plugged in.
  * The pieces you will need to use are documented accordingly near the end
  */
-import { initTRPC, TRPCError } from "@trpc/server";
+import { redirect } from "next/navigation";
+import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
@@ -140,7 +141,8 @@ export const protectedProcedure = t.procedure
   .use(timingMiddleware)
   .use(async ({ ctx, next }) => {
     if (!ctx.session?.user || !ctx.schoolYearId) {
-      throw new TRPCError({ code: "UNAUTHORIZED" });
+      redirect("/auth/login");
+      //throw new TRPCError({ code: "UNAUTHORIZED" });
     }
     const permissions = await userService.getPermissions(ctx.session.user.id);
     return next({
