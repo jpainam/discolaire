@@ -141,6 +141,7 @@ export const protectedProcedure = t.procedure
   .use(timingMiddleware)
   .use(async ({ ctx, next }) => {
     if (!ctx.session?.user || !ctx.schoolYearId) {
+      // TODO - this should be a TRPCError
       redirect("/auth/login");
       //throw new TRPCError({ code: "UNAUTHORIZED" });
     }
