@@ -1,6 +1,7 @@
 "use client";
 
 import type { QueryClient } from "@tanstack/react-query";
+import type { TRPCError } from "@trpc/server";
 import { useState } from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client";
@@ -8,6 +9,7 @@ import { createTRPCReact } from "@trpc/react-query";
 import SuperJSON from "superjson";
 
 import type { AppRouter } from "@repo/api";
+import { useRouter } from "@repo/hooks/use-router";
 
 import { env } from "~/env";
 import { createQueryClient } from "./query-client";
@@ -27,6 +29,27 @@ export const api = createTRPCReact<AppRouter>();
 
 export function TRPCReactProvider(props: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
+  const router = useRouter();
+  queryClient.setDefaultOptions({
+    queries: {
+      retry: (failureCount, error: unknown) => {
+        const err = error as TRPCError;
+        if (err.code === "UNAUTHORIZED") {
+          router.push("/auth/login");
+          return false;
+        }
+        return failureCount <= 3;
+      },
+    },
+    mutations: {
+      onError: (error: unknown) => {
+        const err = error as TRPCError;
+        if (err.code === "UNAUTHORIZED") {
+          router.push("/auth/login");
+        }
+      },
+    },
+  });
 
   const [trpcClient] = useState(() =>
     api.createClient({
