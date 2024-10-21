@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Loader } from "lucide-react";
 
+import { useLocale } from "@repo/hooks/use-locale";
 import { useRouter } from "@repo/hooks/use-router";
 
 import { env } from "~/env";
@@ -25,7 +26,7 @@ export default function Error({
       setIsLoading(false);
     }
   }, [error, router]);
-
+  const { t } = useLocale();
   return (
     <main className="flex h-screen flex-col items-center justify-center gap-4">
       {isLoading ? (
@@ -33,7 +34,7 @@ export default function Error({
       ) : (
         <>
           <h2 className="text-center">
-            Something went wrong!{" "}
+            {t("your_session_has_expired")}
             {env.NODE_ENV == "development" ? error.message : ""}
           </h2>
           <button
@@ -43,9 +44,9 @@ export default function Error({
               () => router.push("/auth/login")
             }
           >
-            Reconnectez
+            {t("click_here")}
           </button>
-          <button onClick={() => reset()}>Reset</button>
+          <button onClick={() => reset()}></button>
         </>
       )}
     </main>
