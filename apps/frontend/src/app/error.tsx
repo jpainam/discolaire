@@ -5,6 +5,8 @@ import { Loader } from "lucide-react";
 
 import { useRouter } from "@repo/hooks/use-router";
 
+import { env } from "~/env";
+
 export default function Error({
   error,
   reset,
@@ -25,23 +27,25 @@ export default function Error({
   }, [error, router]);
 
   return (
-    <main className="flex h-screen flex-col items-center justify-center">
+    <main className="flex h-screen flex-col items-center justify-center gap-4">
       {isLoading ? (
         <Loader className="h-6 w-6 animate-spin" />
       ) : (
         <>
           <h2 className="text-center">
-            Something went wrong! from {error.message}
+            Something went wrong!{" "}
+            {env.NODE_ENV == "development" ? error.message : ""}
           </h2>
           <button
             className="mt-4 rounded-md bg-blue-500 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400"
             onClick={
               // Attempt to recover by trying to re-render the invoices route
-              () => reset()
+              () => router.push("/auth/login")
             }
           >
-            Try again
+            Reconnectez
           </button>
+          <button onClick={() => reset()}>Reset</button>
         </>
       )}
     </main>
