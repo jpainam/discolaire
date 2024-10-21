@@ -3,6 +3,7 @@
 import * as React from "react";
 import { ChevronsUpDown, Plus } from "lucide-react";
 
+import { useLocale } from "@repo/hooks/use-locale";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,6 +31,7 @@ export function TeamSwitcher({
 }) {
   const { isMobile } = useSidebar();
   const [activeTeam, setActiveTeam] = React.useState(teams[0]);
+  const { t } = useLocale();
 
   return (
     <SidebarMenu>
@@ -59,7 +61,7 @@ export function TeamSwitcher({
             sideOffset={4}
           >
             <DropdownMenuLabel className="text-xs text-muted-foreground">
-              Teams
+              {t("dashboard")}
             </DropdownMenuLabel>
             {teams.map((team, index) => (
               <DropdownMenuItem

@@ -42,12 +42,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const data = {
     teams: [
       {
-        name: "Acme Inc",
+        name: t("dashboard"),
         logo: Atom,
         plan: "Enterprise",
       },
       {
-        name: "Acme Corp.",
+        name: t("datum"),
         logo: Eclipse,
         plan: "Startup",
       },
@@ -96,19 +96,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         items: [
           {
             title: "Frais",
-            url: "/administration/accounting/fees",
+            url: "/admin/accounting/fees",
             icon: ReceiptIcon,
             description: "Our fastest model for general use cases.",
           },
           {
             title: "Transactions",
-            url: "/administration/accounting/transactions",
+            url: "/admin/accounting/transactions",
             icon: HandCoinsIcon,
             description: "Performance and speed for efficiency.",
           },
           {
             title: "Groupes",
-            url: "/administration/accounting/groups",
+            url: "/admin/accounting/groups",
             icon: BoxesIcon,
             description: "The most powerful model for complex computations.",
           },
@@ -116,62 +116,62 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       },
       {
         title: "Utilisateurs",
-        url: "/administration/users",
+        url: "/admin/users",
         icon: Users,
         items: [
           {
             title: "Liste",
-            url: "/administration/users",
+            url: "/admin/users",
           },
           {
             title: "Roles",
-            url: "/administration/users/roles",
+            url: "/admin/users/roles",
           },
           {
             title: "Permissions",
-            url: "/administration/users/policies",
+            url: "/admin/users/policies",
           },
         ],
       },
       {
         title: t("schoolYear"),
-        url: "/administration/school-years",
+        url: "/admin/school-years",
         icon: CalendarDays,
         items: [
           {
             title: t("schoolYear"),
-            url: "/administration/school-years",
+            url: "/admin/school-years",
           },
           {
             title: t("periods"),
-            url: "/administration/school-years/terms",
+            url: "/admin/school-years/terms",
           },
         ],
       },
       {
         title: t("settings"),
-        url: "/administration/settings",
+        url: "/admin/settings",
         icon: Settings,
         items: [
           {
             title: t("religions"),
-            url: "/administration/settings/religions",
+            url: "/admin/settings/religions",
           },
           {
             title: t("sports"),
-            url: "/administration/settings/sports",
+            url: "/admin/settings/sports",
           },
           {
             title: t("clubs"),
-            url: "/administration/settings/clubs",
+            url: "/admin/settings/clubs",
           },
           {
             title: t("former_schools"),
-            url: "/administration/settings/former-schools",
+            url: "/admin/settings/former-schools",
           },
           {
             title: t("staff_level"),
-            url: "/administration/settings/staff-levels",
+            url: "/admin/settings/staff-levels",
           },
         ],
       },

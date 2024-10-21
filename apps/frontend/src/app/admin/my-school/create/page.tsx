@@ -32,7 +32,7 @@ export default function Page() {
     onSettled: () => utils.school.invalidate(),
     onSuccess: () => {
       toast.success(t("created_successfully"), { id: 0 });
-      router.push("/administration/my-school");
+      router.push("/admin/my-school");
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -90,7 +90,7 @@ export default function Page() {
           <Button
             type="button"
             onClick={() => {
-              router.push("/administration/my-school");
+              router.push("/admin/my-school");
             }}
             variant={"outline"}
           >

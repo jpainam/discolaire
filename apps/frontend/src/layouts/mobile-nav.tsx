@@ -38,7 +38,7 @@ export function MobileNav() {
     { href: "/programs", label: t("programs") },
     { href: "/report-cards", label: t("report_cards") },
     { href: "/reports", label: t("reportings") },
-    { href: "/administration", label: t("administration") },
+    { href: "/admin", label: t("administration") },
   ];
   return (
     <Sheet open={open} onOpenChange={setOpen}>

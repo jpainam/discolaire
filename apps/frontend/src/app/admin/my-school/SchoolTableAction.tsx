@@ -44,7 +44,7 @@ export function SchoolTableAction({ schoolId }: { schoolId: string }) {
       <DropdownMenuContent align="end">
         <DropdownMenuItem
           onSelect={() => {
-            router.push("/administration/my-school/" + schoolId + "/edit");
+            router.push("/admin/my-school/" + schoolId + "/edit");
           }}
         >
           <Pencil className="mr-2 h-4 w-4" />

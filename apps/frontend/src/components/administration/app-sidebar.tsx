@@ -97,7 +97,7 @@ export function AppSidebar() {
         items: [
           {
             title: "Frais",
-            url: "/administration/accounting/fees",
+            url: "/admin/accounting/fees",
             icon: ReceiptIcon,
             description: "Our fastest model for general use cases.",
           },

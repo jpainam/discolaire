@@ -12,7 +12,7 @@ export function CreateSchoolAction() {
   return (
     <Button
       onClick={() => {
-        router.push("/administration/my-school/create");
+        router.push("/admin/my-school/create");
       }}
       variant={"default"}
       size={"sm"}
