@@ -1,4 +1,5 @@
 import type { Grade } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 import _ from "lodash";
 
 import { db } from "@repo/db";
@@ -92,25 +93,34 @@ export const reportCardService = {
   getStudent: async (studentId: string, termId: number) => {
     const term = await db.term.findUnique({
       where: {
-        id: Number(termId),
+        id: termId,
       },
     });
+    if (!term) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Term not found",
+      });
+    }
     const classroom = await db.classroom.findFirst({
       where: {
         enrollments: {
           some: {
             studentId: studentId,
-            schoolYearId: term?.schoolYearId,
+            schoolYearId: term.schoolYearId,
           },
         },
       },
     });
     if (!classroom) {
-      throw new Error("Student is not registered in any classroom");
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Student is not registered in any classroom",
+      });
     }
     const gradeSheets = await db.gradeSheet.findMany({
       where: {
-        termId: Number(termId),
+        termId: termId,
         subject: {
           classroomId: classroom.id,
         },
@@ -119,6 +129,7 @@ export const reportCardService = {
         grades: true,
       },
     });
+    console.log(gradeSheets);
     const gradeSheetMap: Record<
       string,
       {

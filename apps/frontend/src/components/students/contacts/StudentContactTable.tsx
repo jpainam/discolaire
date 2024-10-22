@@ -9,7 +9,6 @@ import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";
-import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,8 +16,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
+import { EmptyState } from "@repo/ui/EmptyState";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+import { Skeleton } from "@repo/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -82,36 +83,40 @@ export function StudentContactTable({
     },
   );
 
-  if (studentContactsQuery.isPending) {
-    return (
-      <DataTableSkeleton
-        columnCount={6}
-        rowCount={3}
-        className="px-4"
-        withPagination={false}
-        showViewOptions={false}
-      />
-    );
-  }
+  const studentContacts = studentContactsQuery.data ?? [];
   return (
     <div className={cn("m-2 rounded-lg border", className)}>
       <Table>
         <TableHeader>
-          <TableRow className="bg-muted/50 font-semibold">
-            <TableHead className="font-semibold">{t("fullName")}</TableHead>
-            <TableHead className="font-semibold">{t("relationship")}</TableHead>
-            <TableHead className="text-right font-semibold">
-              {t("email")}
-            </TableHead>
-            <TableHead className="text-right font-semibold">
-              {t("phone")}
-            </TableHead>
+          <TableRow className="bg-muted/50">
+            <TableHead>{t("fullName")}</TableHead>
+            <TableHead>{t("relationship")}</TableHead>
+            <TableHead>{t("email")}</TableHead>
+            <TableHead>{t("phone")}</TableHead>
             <TableHead>{t("status")}</TableHead>
             <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {studentContactsQuery.data?.map((c, index) => {
+          {studentContactsQuery.isPending && (
+            <TableRow>
+              <TableCell colSpan={6}>
+                <div className="grid grid-cols-6 gap-2">
+                  {Array.from({ length: 12 }).map((_, index) => (
+                    <Skeleton key={index} className="h-8" />
+                  ))}
+                </div>
+              </TableCell>
+            </TableRow>
+          )}
+          {!studentContactsQuery.isPending && studentContacts.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={6}>
+                <EmptyState />
+              </TableCell>
+            </TableRow>
+          )}
+          {studentContacts.map((c, index) => {
             const contact = c.contact;
             const relationship = c.relationship;
             return (

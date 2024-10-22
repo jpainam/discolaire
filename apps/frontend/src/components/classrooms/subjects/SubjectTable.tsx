@@ -94,7 +94,7 @@ export function SubjectTable({ classroomId }: { classroomId: string }) {
           )}
           {subjects.map((subject, index) => (
             <TableRow key={`subject-${index}`}>
-              <TableCell className="py-0">
+              <TableCell>
                 <Link
                   href={
                     routes.classrooms.subjects(`${subject.classroomId}`) +
@@ -114,7 +114,7 @@ export function SubjectTable({ classroomId }: { classroomId: string }) {
                   </div>
                 </Link>
               </TableCell>
-              <TableCell className="py-0">
+              <TableCell>
                 <Link
                   className="hover:text-blue-600 hover:underline"
                   href={routes.staffs.details(subject.teacher?.id ?? "#")}
@@ -122,11 +122,9 @@ export function SubjectTable({ classroomId }: { classroomId: string }) {
                   {subject.teacher?.lastName} {subject.teacher?.firstName}
                 </Link>
               </TableCell>
-              <TableCell className="py-0">{subject.coefficient}</TableCell>
-              <TableCell className="py-0">
-                {subject.subjectGroup?.name}
-              </TableCell>
-              <TableCell className="py-0">{subject.order}</TableCell>
+              <TableCell>{subject.coefficient}</TableCell>
+              <TableCell>{subject.subjectGroup?.name}</TableCell>
+              <TableCell>{subject.order}</TableCell>
               <TableCell className="py-0 text-right">
                 {(canEditClassroomSubject || canDeleteClassroomSubject) && (
                   <DropdownMenu>
