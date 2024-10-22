@@ -5,6 +5,7 @@ import type { TFunction } from "i18next";
 import type * as RPNInput from "react-phone-number-input";
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import i18next from "i18next";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import flags from "react-phone-number-input/flags";
@@ -37,13 +38,9 @@ type StudentAllProcedureOutput = RouterOutputs["student"]["all"][number];
 
 interface UseStudentColumnsProps {
   t: TFunction<string, unknown>;
-  dateFormatter: Intl.DateTimeFormat;
 }
 
-export function fetchStudentColumns({
-  t,
-  dateFormatter,
-}: UseStudentColumnsProps): {
+export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
   columns: ColumnDef<StudentAllProcedureOutput, unknown>[];
 } {
   const allcolumns = [
@@ -239,8 +236,17 @@ export function fetchStudentColumns({
         <DataTableColumnHeader column={column} title={t("dateOfBirth")} />
       ),
       cell: ({ row }) => {
-        const d = dateFormatter.format(new Date(row.getValue("dateOfBirth")));
-        return <div>{d}</div>;
+        const dateOfBirth = row.original.dateOfBirth;
+        return (
+          <div>
+            {dateOfBirth?.toLocaleDateString(i18next.language, {
+              timeZone: "UTC",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </div>
+        );
       },
     },
     // columnHelper.accessor("dateOfEntry", {

@@ -20,6 +20,7 @@ export function DateOfBirthWidget({
     day: "numeric",
     month: "long",
     year: "numeric",
+    timeZone: "UTC",
   });
   //const confettiRef = useRef<ConfettiRef>(null);
   useEffect(() => {
