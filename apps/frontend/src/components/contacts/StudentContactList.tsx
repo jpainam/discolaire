@@ -57,6 +57,7 @@ export default function StudentContactList({
     year: "numeric",
     month: "short",
     day: "numeric",
+    timeZone: "UTC",
   });
   if (contactStudentsQuery.isPending || contactQuery.isPending) {
     return <Skeleton className="h-full w-48" />;
@@ -130,8 +131,7 @@ export default function StudentContactList({
                     <div className="pl-1 text-xs text-muted-foreground">
                       {t("bornOn")}:{" "}
                       {student.dateOfBirth &&
-                        dateFormatter.format(new Date(student.dateOfBirth))}
-                      {!student.dateOfBirth && "N/A"}
+                        dateFormatter.format(student.dateOfBirth)}
                     </div>
                   </div>
                 </CardHeader>

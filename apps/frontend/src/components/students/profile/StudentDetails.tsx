@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { format } from "date-fns";
-import { enUS, es, fr } from "date-fns/locale";
 import {
   AtSign,
   BookHeart,
@@ -32,8 +30,7 @@ import { api } from "~/trpc/react";
 export default function StudentDetails() {
   const params = useParams<{ id: string }>();
   const { t, i18n } = useLocale();
-  const locale =
-    i18n.language === "fr" ? fr : i18n.language === "es" ? es : enUS;
+
   const siblingsQuery = api.student.siblings.useQuery(params.id);
   const studentQuery = api.student.get.useQuery(params.id);
 
@@ -49,6 +46,12 @@ export default function StudentDetails() {
   const student = studentQuery.data;
   if (!student) return null;
   const siblings = siblingsQuery.data ?? [];
+  const dateFormat = Intl.DateTimeFormat(i18n.language, {
+    timeZone: "UTC",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   return (
     <>
@@ -72,10 +75,7 @@ export default function StudentDetails() {
           {t("dateOfBirth")}
         </span>
         <span>
-          {student.dateOfBirth &&
-            format(student.dateOfBirth, "dd MMMM yyyy", {
-              locale,
-            })}
+          {student.dateOfBirth && dateFormat.format(student.dateOfBirth)}
         </span>
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <CakeSlice className="h-4 w-4 stroke-1" />
@@ -102,10 +102,7 @@ export default function StudentDetails() {
           {t("dateOfEntry")}
         </span>
         <span>
-          {student.dateOfEntry &&
-            format(student.dateOfEntry, "dd MMMM yyyy", {
-              locale,
-            })}
+          {student.dateOfEntry && dateFormat.format(student.dateOfEntry)}
         </span>
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <CalendarMinus className="h-4 w-4 stroke-1" />
@@ -113,10 +110,7 @@ export default function StudentDetails() {
         </span>
         <span>
           {" "}
-          {student.dateOfExit &&
-            format(student.dateOfExit, "dd MMMM yyyy", {
-              locale,
-            })}
+          {student.dateOfExit && dateFormat.format(student.dateOfExit)}
         </span>
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <Phone className="h-4 w-4 stroke-1" />

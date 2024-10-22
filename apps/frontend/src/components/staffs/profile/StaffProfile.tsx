@@ -15,6 +15,7 @@ export async function StaffProfile({ staffId }: { staffId: string }) {
   const { t, i18n } = await getServerTranslations();
   const dateFormatter = new Intl.DateTimeFormat(i18n.language, {
     dateStyle: "long",
+    timeZone: "UTC",
   });
   if (!staff) {
     notFound();
@@ -76,9 +77,7 @@ export async function StaffProfile({ staffId }: { staffId: string }) {
               <div className="flex items-center justify-between">
                 <dt className="text-muted-foreground">{t("email")}</dt>
                 <dd>
-                  {staff.dateOfBirth &&
-                    dateFormatter.format(new Date(staff.dateOfBirth))}
-                  {!staff.dateOfBirth && "N/A"}
+                  {staff.dateOfBirth && dateFormatter.format(staff.dateOfBirth)}
                 </dd>
               </div>
               <div className="flex items-center justify-between">

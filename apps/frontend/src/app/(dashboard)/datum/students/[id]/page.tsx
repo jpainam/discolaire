@@ -32,12 +32,6 @@ export default async function Page({ params }: { params: { id: string } }) {
       id: params.id,
     },
   );
-  console.log(student.dateOfBirth);
-  console.log(student.dateOfBirth?.toDateString());
-  console.log(student.dateOfBirth?.toLocaleDateString());
-  console.log(student.dateOfBirth?.toLocaleDateString("fr"));
-  console.log(student.dateOfBirth?.toISOString());
-  console.log(student.dateOfBirth?.toUTCString());
   return (
     <div className="grid py-2 text-sm">
       <StudentDetails />

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { notFound } from "next/navigation";
 
 import { getServerTranslations } from "@repo/i18n/server";
 import { Avatar, AvatarImage } from "@repo/ui/avatar";
@@ -15,11 +16,11 @@ export default async function Page({
 }: {
   params: { id: string };
 }) {
-  const { t } = await getServerTranslations();
+  const { t, i18n } = await getServerTranslations();
   const student = await api.student.get(id);
   const school = await api.school.get(student.schoolId);
-  if (!school) {
-    throw new Error("School not found");
+  if (!school || student.schoolId !== school.id) {
+    notFound();
   }
 
   return (
@@ -59,8 +60,12 @@ export default async function Page({
               </span>
               <span className="font-mono text-sm uppercase">
                 {t("dateOfBirth")}{" "}
-                {student.dateOfBirth &&
-                  Intl.DateTimeFormat().format(new Date(student.dateOfBirth))}
+                {student.dateOfBirth?.toLocaleDateString(i18n.language, {
+                  timeZone: "UTC",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
               </span>
             </div>
             <div className="col-span-2 mt-[10px]">
