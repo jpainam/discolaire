@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 
+import { env } from "~/env";
 import { getErrorMessage } from "~/lib/handle-error";
 
 export default function Error({
@@ -18,8 +19,11 @@ export default function Error({
 
   return (
     <main className="flex h-screen flex-col items-center justify-center">
-      <h2 className="text-center">{JSON.stringify(error)}</h2>
-      <div>{getErrorMessage(error)}</div>
+      <div className="px-4">
+        {env.NODE_ENV === "production"
+          ? "Something is wrong!!!"
+          : getErrorMessage(error)}
+      </div>
       <button
         className="mt-4 rounded-md bg-blue-500 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400"
         onClick={
