@@ -2,7 +2,6 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { reportCardService } from "../services/report-card-service";
-import { getReportCardTerm } from "../services/report-card-term";
 import { studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -36,12 +35,12 @@ export const reportCardRouter = createTRPCRouter({
           message: "Student is not registered in any classroom",
         });
       }
-      return getReportCardTerm({
-        studentId: input.studentId,
-        termId: input.termId,
-        classroomId: classroom.id,
-      });
-      //return reportCardService.getStudent(input.studentId, input.termId);
+      // return getReportCardTerm({
+      //   studentId: input.studentId,
+      //   termId: input.termId,
+      //   classroomId: classroom.id,
+      // });
+      return reportCardService.getStudent(input.studentId, input.termId);
     }),
   getRemarks: protectedProcedure
     .input(
