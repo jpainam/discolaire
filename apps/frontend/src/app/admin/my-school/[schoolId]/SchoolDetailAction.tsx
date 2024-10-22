@@ -13,7 +13,7 @@ export function SchoolDetailAction({ schoolId }: { schoolId: string }) {
     <div className="flex flex-row items-center gap-2">
       <Button
         onClick={() => {
-          router.push(`/administration/my-school/${schoolId}/edit`);
+          router.push(`/admin/my-school/${schoolId}/edit`);
         }}
         variant={"outline"}
         size={"sm"}

@@ -11,13 +11,11 @@ import { DataTable, useDataTable } from "@repo/ui/datatable/index";
 import { EmptyState } from "@repo/ui/EmptyState";
 
 import { api } from "~/trpc/react";
-import { useDateFormat } from "~/utils/date-format";
 import { StudentDataTableActions } from "./StudentDataTableActions";
 import { fetchStudentColumns } from "./StudentDataTableColumns";
 
 export function StudentDataTable() {
   const { t } = useLocale();
-  const { fullDateFormatter } = useDateFormat();
 
   const [page] = useQueryState("page", parseAsInteger);
   const [per_page] = useQueryState("per_page", parseAsInteger);
@@ -38,10 +36,9 @@ export function StudentDataTable() {
   const columns = useMemo(() => {
     const { columns } = fetchStudentColumns({
       t: t,
-      dateFormatter: fullDateFormatter,
     });
     return columns;
-  }, [t, fullDateFormatter]);
+  }, [t]);
 
   const { table } = useDataTable({
     data: studentsQuery.data ?? [],

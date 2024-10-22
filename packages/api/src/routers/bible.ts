@@ -35,4 +35,26 @@ export const bibleRouter = createTRPCRouter({
     }
     return parsed.data;
   }),
+  updateMatricule: publicProcedure.mutation(async ({ ctx }) => {
+    const students = await ctx.db.student.findMany({
+      where: {
+        schoolId: "cm1hbntgn00001h578bvyjxln",
+      },
+      orderBy: {
+        createdAt: "asc",
+      },
+    });
+    let startMatric = 2512000;
+    for (const student of students) {
+      await ctx.db.student.update({
+        where: {
+          id: student.id,
+        },
+        data: {
+          registrationNumber: startMatric.toString(),
+        },
+      });
+      startMatric++;
+    }
+  }),
 });

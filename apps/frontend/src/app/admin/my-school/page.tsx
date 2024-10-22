@@ -24,7 +24,7 @@ export default async function Page() {
   }
   const user = sessions.user;
   if (user.username != env.SUPER_ADMIN_USERNAME) {
-    redirect(`/administration/my-school/${user.schoolId}`);
+    redirect(`/admin/my-school/${user.schoolId}`);
   }
   const schools = await api.school.all();
   const { t } = await getServerTranslations();
@@ -56,7 +56,7 @@ export default async function Page() {
                 <TableCell>
                   <Link
                     className="hover:text-blue-600 hover:underline"
-                    href={`/administration/my-school/${school.id}`}
+                    href={`/admin/my-school/${school.id}`}
                   >
                     {school.name}
                   </Link>

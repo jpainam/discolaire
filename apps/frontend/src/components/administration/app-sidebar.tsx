@@ -66,7 +66,7 @@ export function AppSidebar() {
     navMain: [
       {
         title: t("my_school"),
-        url: "/administration/my-school",
+        url: "/admin/my-school",
         icon: SchoolIcon,
         isActive: true,
         items: [
