@@ -99,3 +99,35 @@ export async function printReceipt(transactionId: number) {
     throw e;
   }
 }
+
+export async function printStudentGrade({
+  studentId,
+  termId,
+  title,
+  type,
+}: {
+  studentId: string;
+  termId: number | null;
+  title: string;
+  type: "pdf" | "excel";
+}) {
+  try {
+    const student = await api.student.get(studentId);
+    const grades = await api.student.grades({
+      id: studentId,
+      termId: termId ?? undefined,
+    });
+    return api.reporting.submitReport({
+      endpoint: "student/grades",
+      type: type,
+      title: title,
+      data: {
+        student: student,
+        grades: grades,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+}

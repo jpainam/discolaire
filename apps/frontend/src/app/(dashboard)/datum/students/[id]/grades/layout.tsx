@@ -13,6 +13,7 @@ export default async function Layout({
   params: { id: string };
 }) {
   const classroom = await api.student.classroom({ studentId: id });
+  const student = await api.student.get(id);
   const { t } = await getServerTranslations();
   if (!classroom) {
     return (
@@ -22,7 +23,7 @@ export default async function Layout({
 
   return (
     <div className="flex h-full w-full flex-col">
-      <StudentGradeHeader studentId={id} classroomId={classroom.id} />
+      <StudentGradeHeader student={student} classroomId={classroom.id} />
       <div className="grid gap-0 p-0 pb-2 text-sm md:grid-cols-2">
         <StudentGrade classroomId={classroom.id} studentId={id} />
         {children}

@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import { LayoutGridIcon, ListIcon, MoreVertical } from "lucide-react";
 import { parseAsInteger, useQueryState } from "nuqs";
+import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
@@ -19,17 +21,20 @@ import { Label } from "@repo/ui/label";
 import { Skeleton } from "@repo/ui/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/toggle-group";
 
+import { printStudentGrade } from "~/actions/reporting";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { getErrorMessage } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
+import { getFullName } from "~/utils/full-name";
 
 export function StudentGradeHeader({
-  studentId,
+  student,
   classroomId,
 }: {
-  studentId: string;
+  student: RouterOutputs["student"]["get"];
   classroomId: string;
 }) {
   const { t } = useLocale();
@@ -39,7 +44,7 @@ export function StudentGradeHeader({
     defaultValue: "by_chronological_order",
   });
   const studentGradesQuery = api.student.grades.useQuery({
-    id: studentId,
+    id: student.id,
     termId: term ? Number(term) : undefined,
   });
 
@@ -87,6 +92,7 @@ export function StudentGradeHeader({
 
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
+  const utils = api.useUtils();
 
   if (classroomMinMaxMoyGrades.isPending) {
     return <Skeleton className="h-8 w-full" />;
@@ -149,25 +155,56 @@ export function StudentGradeHeader({
           <DropdownMenuTrigger asChild>
             <Button size="icon" variant="outline">
               <MoreVertical className="h-4 w-4" />
-              <span className="sr-only">More</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>
-              <PDFIcon className="mr-2 h-4 w-4" />
-              {t("student_grade_list")}
+            <DropdownMenuItem
+              onSelect={() => {
+                toast.promise(
+                  printStudentGrade({
+                    studentId: student.id,
+                    title: `${getFullName(student)} - ${t("grades")}`,
+                    termId: term,
+                    type: "pdf",
+                  }),
+                  {
+                    loading: t("printing"),
+                    success: () => {
+                      void utils.reporting.invalidate();
+                      return t("printing_job_submitted");
+                    },
+                    error: (error) => {
+                      return getErrorMessage(error);
+                    },
+                  },
+                );
+              }}
+            >
+              <PDFIcon className="mr-2 h-4 w-4" /> {t("pdf_export")}
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <XMLIcon className="mr-2 h-4 w-4" />
-              {t("student_grade_list")}
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <PDFIcon className="mr-2 h-4 w-4" />{" "}
-              {t("details_of_the_selected_grade")}
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <XMLIcon className="mr-2 h-4 w-4" />{" "}
-              {t("details_of_the_selected_grade")}
+            <DropdownMenuItem
+              onSelect={() => {
+                toast.promise(
+                  printStudentGrade({
+                    studentId: student.id,
+                    title: `${getFullName(student)} - ${t("grades")}`,
+                    termId: term,
+                    type: "excel",
+                  }),
+                  {
+                    loading: t("printing"),
+                    success: () => {
+                      void utils.reporting.invalidate();
+                      return t("printing_job_submitted");
+                    },
+                    error: (error) => {
+                      return getErrorMessage(error);
+                    },
+                  },
+                );
+              }}
+            >
+              <XMLIcon className="mr-2 h-4 w-4" /> {t("xml_export")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

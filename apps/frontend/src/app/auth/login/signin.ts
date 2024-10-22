@@ -81,5 +81,6 @@ export async function authenticate(
 }
 
 export async function signinout() {
-  await signOut({ redirectTo: "/auth/login" });
+  await signOut({ redirectTo: "/auth/login", redirect: true });
+  redirect("/auth/login");
 }
