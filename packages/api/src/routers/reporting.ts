@@ -95,6 +95,8 @@ export const reportingRouter = createTRPCRouter({
       return submitReportJob(input.endpoint, {
         id: report.id,
         school: school,
+        title: input.title,
+        type: input.type,
         userId: ctx.session.user.id,
         ...input.data,
       });

@@ -117,13 +117,25 @@ export async function printStudentGrade({
       id: studentId,
       termId: termId ?? undefined,
     });
+    const data = grades.map((g) => {
+      return {
+        id: g.id,
+        name: g.gradeSheet.name,
+        subject: g.gradeSheet.subject.course.name,
+        term: g.gradeSheet.term.name,
+        grade: g.grade,
+        coefficient: g.gradeSheet.subject.coefficient,
+        scale: g.gradeSheet.scale,
+        weight: g.gradeSheet.weight,
+      };
+    });
     return api.reporting.submitReport({
       endpoint: "student/grades",
       type: type,
       title: title,
       data: {
         student: student,
-        grades: grades,
+        grades: data,
       },
     });
   } catch (e) {
