@@ -47,7 +47,7 @@ export function MainNav({
     { label: t("reportings"), href: "/reports" },
     {
       label: t("administration"),
-      href: "/admin",
+      href: "/administration",
     },
   ];
   const pathname = usePathname();

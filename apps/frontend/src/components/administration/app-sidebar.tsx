@@ -66,7 +66,7 @@ export function AppSidebar() {
     navMain: [
       {
         title: t("my_school"),
-        url: "/admin/my-school",
+        url: "/administration/my-school",
         icon: SchoolIcon,
         isActive: true,
         items: [
@@ -97,7 +97,7 @@ export function AppSidebar() {
         items: [
           {
             title: "Frais",
-            url: "/admin/accounting/fees",
+            url: "/administration/accounting/fees",
             icon: ReceiptIcon,
             description: "Our fastest model for general use cases.",
           },
