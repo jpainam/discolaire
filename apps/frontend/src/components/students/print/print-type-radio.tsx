@@ -16,12 +16,12 @@ export default function PrintTypeRadio() {
   const form = useFormContext();
   return (
     <>
-      <FormLabel>Imprimer le rapport en ?</FormLabel>
       <FormField
         control={form.control}
         name="type"
         render={({ field }) => (
           <FormItem className="flex gap-3">
+            <FormLabel>Imprimer le rapport en ?</FormLabel>
             <FormControl>
               <RadioGroup
                 onValueChange={field.onChange}

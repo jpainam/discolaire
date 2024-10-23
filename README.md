@@ -278,3 +278,5 @@ docker system prune -f # clean all, remove all unused docker
 ```
 
 USE `npx turbo run dev -F @repo/frontend` to run
+
+Remove `"dev": "email dev -p 3001",` from transactional

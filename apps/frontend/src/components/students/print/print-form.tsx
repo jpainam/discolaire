@@ -1,20 +1,16 @@
 "use client";
 
-//import { toast } from "@repo/ui/use-toast";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
-import { Form } from "@repo/ui/form";
+import { Form, useForm } from "@repo/ui/form";
 
 import { routes } from "~/configs/routes";
 import PrintSelector from "./print-selector";
 import PrintTypeRadio from "./print-type-radio";
-import SchoolYearSelector from "./school-year-selector";
 
 // type PrintStart =
 //   | "Maintenant"
@@ -48,16 +44,14 @@ export default function PrintForm() {
   //const schoolYearId = useSchoolYear();
   const { t } = useLocale();
 
-  const defaultValues: Partial<PrintFormValues> = {
-    type: "pdf",
-    date: new Date(),
-    start: "Maintenant",
-    school_year: "2022-2023",
-  };
-
-  const form = useForm<PrintFormValues>({
-    resolver: zodResolver(printFormSchema),
-    defaultValues,
+  const form = useForm({
+    schema: printFormSchema,
+    defaultValues: {
+      type: "pdf",
+      date: new Date(),
+      start: "Maintenant",
+      school_year: "2022-2023",
+    },
   });
   const router = useRouter();
 
@@ -80,7 +74,7 @@ export default function PrintForm() {
         >
           <PrintTypeRadio />
           <PrintSelector />
-          <SchoolYearSelector />
+
           {/*<PrintStartSelector form={form} />*/}
           {/* <PrintStartEndDateSelector /> */}
           <div className="col-span-1 col-start-2 flex gap-5">

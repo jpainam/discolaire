@@ -1,15 +1,14 @@
 import { sumBy } from "lodash";
 
-import { GridViewFinanceCard } from "~/components/classrooms/finances/GridViewFinanceCard";
-import { ListViewFinance } from "~/components/classrooms/finances/ListViewFinance";
+import { FinanceContentView } from "~/components/classrooms/finances/FinanceContentView";
 import { api } from "~/trpc/server";
 
 export default async function Page({
   params: { id },
-  searchParams: { query, view },
+  searchParams: { query },
 }: {
   params: { id: string };
-  searchParams: { query: string; view: string };
+  searchParams: { query: string };
 }) {
   const fees = await api.classroom.fees(id);
   const balances = await api.classroom.studentsBalance({ id });
@@ -32,23 +31,5 @@ export default async function Page({
     fees.filter((fee) => fee.dueDate <= new Date()),
     "amount",
   );
-  return (
-    <>
-      {view === "list" ? (
-        <ListViewFinance amountDue={amountDue} students={students} />
-      ) : (
-        <div className="grid gap-4 p-2 text-sm md:grid-cols-2 xl:md:grid-cols-3">
-          {students.map((balance) => {
-            return (
-              <GridViewFinanceCard
-                amountDue={amountDue}
-                studentBalance={balance}
-                key={balance.id}
-              />
-            );
-          })}
-        </div>
-      )}
-    </>
-  );
+  return <FinanceContentView amountDue={amountDue} students={students} />;
 }

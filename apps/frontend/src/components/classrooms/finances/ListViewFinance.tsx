@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useAtom } from "jotai";
 
 import type { RouterOutputs } from "@repo/api";
@@ -34,10 +35,13 @@ export function ListViewFinance({
   students: StudentAccountWithBalance;
   amountDue: number;
 }) {
-  const { t } = useLocale();
+  const { t, i18n } = useLocale();
   const [selectedStudents, setSelectedStudents] = useAtom(
     selectedStudentIdsAtom,
   );
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type");
+  let total = 0;
   return (
     <div className="m-2 rounded-lg border">
       <Table>
@@ -56,12 +60,18 @@ export function ListViewFinance({
             <TableHead>{t("registrationNumber")}</TableHead>
             <TableHead>{t("fullName")}</TableHead>
             <TableHead>{t("balance")}</TableHead>
-            <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {students.map((stud) => {
             const remaining = stud.balance - amountDue;
+            if (type == "credit" && remaining < 0) {
+              return null;
+            }
+            if (type == "debit" && remaining > 0) {
+              return null;
+            }
+            total += remaining;
             return (
               <TableRow key={stud.id}>
                 <TableCell className="py-0">
@@ -98,15 +108,21 @@ export function ListViewFinance({
                     {remaining} {CURRENCY}
                   </FlatBadge>
                 </TableCell>
-                <TableCell className="py-0">{}</TableCell>
               </TableRow>
             );
           })}
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={3}>Total</TableCell>
-            <TableCell className="text-right">$2,500.00</TableCell>
+            <TableCell colSpan={3}>{t("total")}</TableCell>
+            <TableCell className="text-right">
+              {total.toLocaleString(i18n.language, {
+                style: "currency",
+                currency: CURRENCY,
+                maximumFractionDigits: 0,
+                minimumFractionDigits: 0,
+              })}
+            </TableCell>
           </TableRow>
         </TableFooter>
       </Table>

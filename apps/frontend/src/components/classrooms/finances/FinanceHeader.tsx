@@ -1,9 +1,9 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { useAtomValue } from "jotai";
-import { ChevronDown, Printer } from "lucide-react";
+import { CreditCardIcon, MoreVertical, WalletIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
+import { FaHandHoldingUsd } from "react-icons/fa";
 import { PiGridFour, PiListBullets } from "react-icons/pi";
 
 import { useLocale } from "@repo/i18n";
@@ -21,7 +21,6 @@ import {
 } from "@repo/ui/dropdown-menu";
 import { Input } from "@repo/ui/input";
 import { Label } from "@repo/ui/label";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/toggle-group";
 
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
@@ -32,10 +31,14 @@ import { FinanceBulkAction } from "./FinanceBulkAction";
 
 export function FinanceHeader() {
   const { t } = useLocale();
-  const searchParams = useSearchParams();
   //const { createQueryString } = useCreateQueryString();
-  const [_, setType] = useQueryState("type");
+  const [type, setType] = useQueryState("type");
   const [search, setSearch] = useQueryState("query");
+  const options = [
+    { label: t("all"), value: "all", icon: WalletIcon },
+    { label: t("debit"), value: "debit", icon: CreditCardIcon },
+    { label: t("credit"), value: "credit", icon: FaHandHoldingUsd },
+  ];
 
   const selectedStudents = useAtomValue(selectedStudentIdsAtom);
   const Icon = sidebarIcons.financial_situation;
@@ -44,49 +47,45 @@ export function FinanceHeader() {
       {Icon && <Icon className="h-6 w-6" />}
       <Label>{t("financial_situation")}</Label>
       <Input
-        onChange={(v) => setSearch(v.target.value)}
+        onChange={(v) => setSearch(v.target.value, { shallow: false })}
         className="w-64"
         defaultValue={search ?? ""}
         placeholder={t("search")}
       />
-
-      <RadioGroup
+      <ToggleGroup
+        className="rounded-md border border-primary"
+        size={"sm"}
+        defaultValue={type ?? "all"}
         onValueChange={(val) => {
           void setType(val == "all" ? null : val);
         }}
-        className="flex flex-row"
-        defaultValue={searchParams.get("type") ?? "all"}
+        type="single"
       >
-        <div className="flex items-center space-x-2">
-          <RadioGroupItem value="all" id="r1" />
-          <Label htmlFor="r1">{t("all")}</Label>
-        </div>
-        <div className="flex items-center space-x-2">
-          <RadioGroupItem value="debit" id="r2" />
-          <Label htmlFor="r2">{t("debit")}</Label>
-        </div>
-        <div className="flex items-center space-x-2">
-          <RadioGroupItem value="credit" id="r3" />
-          <Label htmlFor="r3">{t("credit")}</Label>
-        </div>
-      </RadioGroup>
+        {options.map((option) => {
+          const Icon = option.icon;
+          return (
+            <ToggleGroupItem
+              className="rounded-sm data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+              key={option.value}
+              value={option.value}
+            >
+              <Icon className="mr-2 h-3 w-3" />
+              {option.label}
+            </ToggleGroupItem>
+          );
+        })}
+      </ToggleGroup>
 
       <div className="ml-auto flex items-center gap-1">
-        <CreditOrDebit />
-        <FinanceBulkAction />
+        <ChangeFinanceView />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              size="sm"
-              variant="outline"
-              className="flex flex-row items-center gap-1"
-            >
-              <Printer className="h-4 w-4" />
-              <span className="text-xs">{t("print")}</span>
-              <ChevronDown className="h-4 w-4" />
+            <Button size="icon" variant="outline">
+              <MoreVertical className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
+            <FinanceBulkAction />
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <XMLIcon className="h-4 w-4" />
@@ -139,7 +138,7 @@ export function FinanceHeader() {
   );
 }
 
-function CreditOrDebit() {
+function ChangeFinanceView() {
   const [view, setView] = useQueryState("view");
 
   const options = [
@@ -162,7 +161,13 @@ function CreditOrDebit() {
       type="single"
     >
       {options.map((option) => (
-        <ToggleGroupItem value={option.value}>{option.label}</ToggleGroupItem>
+        <ToggleGroupItem
+          className="font-bold data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+          key={option.value}
+          value={option.value}
+        >
+          {option.label}
+        </ToggleGroupItem>
       ))}
     </ToggleGroup>
   );
