@@ -310,21 +310,22 @@ model Timetable {
 }
 
 model GradeSheet {
-    id          Int      @id @default(autoincrement())
+    id          Int        @id @default(autoincrement())
     name        String
-    isActive    Boolean? @default(true)
-    createdAt   DateTime @default(now()) @db.Timestamp(6)
-    updatedAt   DateTime @updatedAt
+    isActive    Boolean?   @default(true)
+    createdAt   DateTime   @default(now()) @db.Timestamp(6)
+    updatedAt   DateTime   @updatedAt
+    status      StatusEnum @default(PENDING)
     createdById String?
     observation String?
-    weight      Float    @default(100)
-    scale       Float    @default(20)
+    weight      Float      @default(100)
+    scale       Float      @default(20)
     subjectId   Int
     termId      Int
     grades      Grade[]
-    createdBy   User?    @relation(fields: [createdById], references: [id])
-    subject     Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
+    createdBy   User?      @relation(fields: [createdById], references: [id])
+    subject     Subject    @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+    term        Term       @relation(fields: [termId], references: [id], onDelete: Cascade)
 }
 
 model Grade {
@@ -1194,6 +1195,12 @@ model Sport {
     students StudentSport[]
     school   School         @relation(fields: [schoolId], references: [id])
     schoolId String
+}
+
+enum StatusEnum {
+    PENDING
+    APPROVED
+    REJECTED
 }
 
 enum StudentStatus {
