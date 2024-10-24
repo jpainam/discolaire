@@ -148,6 +148,11 @@ export const gradeSheetRouter = createTRPCRouter({
           student: true,
           gradeSheet: true,
         },
+        orderBy: {
+          student: {
+            lastName: "asc",
+          },
+        },
         where: {
           gradeSheetId: input,
         },

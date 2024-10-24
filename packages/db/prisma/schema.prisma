@@ -301,8 +301,8 @@ model CalendarEvent {
 model Timetable {
     id          String   @id @default(cuid())
     description String?
-    start       DateTime
-    end         DateTime
+    start       DateTime @db.Timestamptz()
+    end         DateTime @db.Timestamptz()
     subjectId   Int
     subject     Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
     createdAt   DateTime @default(now()) @db.Timestamp(6)

@@ -39,12 +39,6 @@ export function fetchGradeColumns({
   t: TFunction<string, unknown>;
   classroomId: string;
 }): ColumnDef<GradeSheetGetGradeProcedureOutput, unknown>[] {
-  // const dateFormatter = Intl.DateTimeFormat(i18next.language, {
-  //   month: "short",
-  //   day: "numeric",
-  //   year: "numeric",
-  // });
-
   return [
     {
       id: "select",
@@ -84,19 +78,57 @@ export function fetchGradeColumns({
       },
     },
     {
-      accessorKey: "student",
+      accessorKey: "student.registrationNumber",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("fullName")} />
+        <DataTableColumnHeader
+          column={column}
+          title={t("registrationNumber")}
+        />
       ),
       cell: ({ row }) => {
         const student = row.original.student;
-        if (!student.id) return <></>;
         return (
           <Link
             className="hover:text-blue-600 hover:underline"
             href={routes.students.details(student.id)}
           >
-            {student.firstName} {student.lastName}
+            {student.registrationNumber}
+          </Link>
+        );
+      },
+      enableSorting: true,
+    },
+    {
+      accessorKey: "student.lastName",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("lastName")} />
+      ),
+      cell: ({ row }) => {
+        const student = row.original.student;
+        return (
+          <Link
+            className="hover:text-blue-600 hover:underline"
+            href={routes.students.details(student.id)}
+          >
+            {student.lastName}
+          </Link>
+        );
+      },
+      enableSorting: true,
+    },
+    {
+      accessorKey: "student.firstName",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("firstName")} />
+      ),
+      cell: ({ row }) => {
+        const student = row.original.student;
+        return (
+          <Link
+            className="hover:text-blue-600 hover:underline"
+            href={routes.students.details(student.id)}
+          >
+            {student.firstName}
           </Link>
         );
       },

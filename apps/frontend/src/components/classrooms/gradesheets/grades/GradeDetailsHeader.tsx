@@ -16,7 +16,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
-import { Skeleton } from "@repo/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -49,7 +48,7 @@ export function GradeDetailsHeader({
 }) {
   const params = useParams<{ id: string }>();
 
-  const classroomQuery = api.classroom.get.useQuery(params.id);
+  //const classroomQuery = api.classroom.get.useQuery(params.id);
   const { t, i18n } = useLocale();
   const maxGrade = Math.max(...grades.map((grade) => grade.grade));
   const minGrade = Math.min(...grades.map((grade) => grade.grade));
@@ -92,36 +91,46 @@ export function GradeDetailsHeader({
   });
   return (
     <div className="flex flex-col gap-2 border-b">
-      <div className="grid px-2 md:grid-cols-3">
-        <span>
-          {classroomQuery.isPending ? (
-            <Skeleton className="h-8 w-full" />
-          ) : (
-            classroomQuery.data?.name
-          )}
-        </span>
-        <span> Note sur : 20.00</span>
-        <span> {gradesheet.subject.teacher?.lastName}</span>
-        <span>{dateFormatter.format(gradesheet.createdAt)}</span>
-        <span>
-          {t("max_grade")} : {maxGrade}
-        </span>
-        <span> {gradesheet.subject.course.name} </span>
-        <span>{gradesheet.name}</span>
-        <span>Effectif : {classroomQuery.data?.size} </span>
-        <span>
-          {t("min_grade")} : {minGrade}
-        </span>
-        <span>
-          {t("coefficient")} : {gradesheet.subject.coefficient}{" "}
-        </span>
-        <span>
-          {t("avg_grade")} : {average.toFixed(2)}
-        </span>
-        <span>
-          {" "}
-          {t("term")} : {gradesheet.term.name}
-        </span>
+      <div className="grid gap-4 p-2 text-sm md:grid-cols-3">
+        <div className="flex flex-col gap-2 rounded border bg-secondary p-2 shadow-sm">
+          {/* <span>
+            {classroomQuery.isPending ? (
+              <Skeleton className="h-8 w-full" />
+            ) : (
+              classroomQuery.data?.name
+            )}
+          </span> */}
+          <span>
+            {gradesheet.subject.course.name}
+            {" / "} {t("coeff")} :{gradesheet.subject.coefficient}
+          </span>
+          <span>{gradesheet.name}</span>
+
+          <span> {gradesheet.subject.teacher?.lastName}</span>
+        </div>
+        <div className="flex flex-col gap-2 rounded border bg-secondary p-2 shadow-sm">
+          <span>{dateFormatter.format(gradesheet.createdAt)}</span>
+
+          <span>
+            {t("scale")}: {gradesheet.scale}
+          </span>
+          <span>
+            {t("term")} : {gradesheet.term.name}
+          </span>
+        </div>
+
+        <div className="flex flex-col gap-2 rounded border bg-secondary p-2 shadow-sm">
+          <span>
+            {t("max_grade")} : {maxGrade}
+          </span>
+          <span>
+            {t("min_grade")} : {minGrade}
+          </span>
+
+          <span>
+            {t("avg_grade")} : {average.toFixed(2)}
+          </span>
+        </div>
       </div>
       <div className="mx-2 mb-2">
         <Table className="border text-center">

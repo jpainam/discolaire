@@ -108,6 +108,9 @@ export const classroomService = {
           },
         },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
       where: {
         subject: {
           classroomId: classroomId,
