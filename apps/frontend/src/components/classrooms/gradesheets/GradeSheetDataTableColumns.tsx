@@ -223,7 +223,7 @@ export function fetchGradeSheetColumns({
       ),
       cell: ({ row }) => {
         const weight = row.original.weight;
-        return <div>{(weight || 0) * 100} %</div>;
+        return <div>{weight || 0} %</div>;
       },
     },
     {

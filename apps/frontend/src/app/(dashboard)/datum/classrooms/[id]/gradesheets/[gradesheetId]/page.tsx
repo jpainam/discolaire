@@ -11,7 +11,7 @@ export default async function Page({
 }) {
   const grades = await api.gradeSheet.grades(Number(gradesheetId));
   const gradesheet = await api.gradeSheet.get(Number(gradesheetId));
-  if (grades.length == 0 || !gradesheet) {
+  if (!gradesheet) {
     notFound();
   }
 

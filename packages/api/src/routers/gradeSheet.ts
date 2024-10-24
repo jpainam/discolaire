@@ -18,7 +18,7 @@ const createGradeSheetSchema = z.object({
     z.object({
       studentId: z.string(),
       absent: z.boolean().default(false),
-      grade: z.coerce.number().nonnegative(),
+      grade: z.coerce.number().nonnegative().optional(),
     }),
   ),
 });
@@ -85,14 +85,14 @@ export const gradeSheetRouter = createTRPCRouter({
       errorMessage = "";
       const grades: Prisma.GradeCreateManyInput[] = input.grades.map(
         (grade) => {
-          if (grade.grade > input.scale) {
+          if (grade.grade && grade.grade > input.scale) {
             errorMessage = "Grade cannot be greater than scale";
           }
           return {
-            grade: grade.grade,
+            grade: grade.grade ?? 0,
             studentId: grade.studentId,
             gradeSheetId: sheet.id,
-            isAbsent: grade.absent,
+            isAbsent: !grade.grade ? true : grade.absent,
           };
         },
       );

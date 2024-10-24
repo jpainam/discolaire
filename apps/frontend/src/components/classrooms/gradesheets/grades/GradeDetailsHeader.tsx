@@ -121,10 +121,10 @@ export function GradeDetailsHeader({
 
         <div className="flex flex-col gap-2 rounded border bg-secondary p-2 shadow-sm">
           <span>
-            {t("max_grade")} : {maxGrade}
+            {t("max_grade")} : {isFinite(maxGrade) ? maxGrade : "-"}
           </span>
           <span>
-            {t("min_grade")} : {minGrade}
+            {t("min_grade")} : {isFinite(minGrade) ? minGrade : "-"}
           </span>
 
           <span>

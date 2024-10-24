@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback, useRef } from "react";
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -8,7 +9,14 @@ import { z } from "zod";
 import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Checkbox } from "@repo/ui/checkbox";
-import { Form, useForm } from "@repo/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+  useForm,
+} from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { Skeleton } from "@repo/ui/skeleton";
 import {
@@ -38,13 +46,28 @@ const createGradeSchema = z.object({
     z.object({
       studentId: z.string(),
       absent: z.boolean().default(false),
-      grade: z.coerce.number().nonnegative(),
+      grade: z.string().default(""),
     }),
   ),
 });
 
 export function CreateGradeSheet() {
   const { t } = useLocale();
+  const inputRefs = useRef<HTMLInputElement[]>([]);
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>, rowIndex: number) => {
+      if (event.key === "ArrowDown") {
+        if (rowIndex < inputRefs.current.length - 1) {
+          inputRefs.current[rowIndex + 1]?.focus();
+        }
+      } else if (event.key === "ArrowUp") {
+        if (rowIndex > 0) {
+          inputRefs.current[rowIndex - 1]?.focus();
+        }
+      }
+    },
+    [], // No dependencies, so this function is only created once
+  );
   const searchParams = useSearchParams();
   const form = useForm({
     schema: createGradeSchema,
@@ -55,7 +78,6 @@ export function CreateGradeSheet() {
       subjectId: searchParams.get("subject") ?? "",
       weight: 100,
       name: t("harmonized_grade"),
-
       scale: 20,
     },
   });
@@ -66,7 +88,7 @@ export function CreateGradeSheet() {
       await utils.gradeSheet.invalidate();
     },
     onSuccess: (result) => {
-      toast.success("created_successfully", { id: 0 });
+      toast.success(t("created_successfully"), { id: 0 });
       router.push(routes.classrooms.gradesheets.details(params.id, result.id));
     },
     onError: (error) => {
@@ -81,7 +103,7 @@ export function CreateGradeSheet() {
       subjectId: Number(data.subjectId),
       grades: data.grades.map((grade) => ({
         ...grade,
-        grade: Number(grade.grade),
+        grade: isNaN(Number(grade.grade)) ? undefined : Number(grade.grade),
       })),
     };
     createGradesheetMutation.mutate(values);
@@ -99,11 +121,14 @@ export function CreateGradeSheet() {
           isSubmitting={createGradesheetMutation.isPending}
         />
 
-        <div className="mb-8=10 mx-2 w-full rounded-lg border">
+        <div className="mb-10 border-y">
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/50">
-                <TableHead>{t("name")}</TableHead>
+                <TableHead className="w-[10px]"></TableHead>
+                <TableHead className="w-[10px]"></TableHead>
+                <TableHead>{t("lastName")}</TableHead>
+                <TableHead>{t("firstName")}</TableHead>
                 <TableHead>{t("grade")}</TableHead>
                 <TableHead>{t("absence")}</TableHead>
                 <TableHead>{t("appreciation")}</TableHead>
@@ -112,9 +137,9 @@ export function CreateGradeSheet() {
             <TableBody>
               {classroomStudentsQuery.isPending && (
                 <TableRow>
-                  <TableCell colSpan={4}>
-                    <div className="grid w-full grid-cols-3 gap-4 px-2">
-                      {Array.from({ length: 30 }).map((_, index) => (
+                  <TableCell colSpan={7}>
+                    <div className="grid w-full grid-cols-4 gap-4 px-2">
+                      {Array.from({ length: 40 }).map((_, index) => (
                         <Skeleton
                           key={`gradesheet-table-${index}`}
                           className="h-8 w-full"
@@ -130,21 +155,28 @@ export function CreateGradeSheet() {
                     key={st.id}
                     className="hover:bg-green-50 hover:text-green-700 hover:ring-green-600/20 dark:hover:bg-green-700/10 dark:hover:text-green-50"
                   >
+                    <TableCell className="py-0">{index + 1}.</TableCell>
                     <TableCell className="py-0">
-                      <div className="flex flex-row items-center gap-1">
-                        <AvatarState
-                          avatar={st.avatar}
-                          pos={getFullName(st).length}
-                        />
-
-                        <span>{index + 1}.</span>
-                        <Link
-                          className="hover:text-blue-600 hover:underline"
-                          href={routes.students.details(st.id)}
-                        >
-                          {getFullName(st)}
-                        </Link>
-                      </div>
+                      <AvatarState
+                        avatar={st.avatar}
+                        pos={getFullName(st).length}
+                      />
+                    </TableCell>
+                    <TableCell className="py-0">
+                      <Link
+                        className="hover:text-blue-600 hover:underline"
+                        href={routes.students.details(st.id)}
+                      >
+                        {st.lastName}
+                      </Link>
+                    </TableCell>
+                    <TableCell className="py-0">
+                      <Link
+                        className="hover:text-blue-600 hover:underline"
+                        href={routes.students.details(st.id)}
+                      >
+                        {st.firstName}
+                      </Link>
                     </TableCell>
                     <TableCell className="py-0">
                       <Input
@@ -152,20 +184,58 @@ export function CreateGradeSheet() {
                         className="hidden"
                         {...form.register(`grades.${index}.studentId`)}
                       />
-                      <Input
-                        {...form.register(`grades.${index}.grade`)}
-                        maxLength={6}
-                        size={6}
-                        // step=".01"
-                        // type="number"
-                        className="h-8 w-[150px] text-sm"
+                      <FormField
+                        control={form.control}
+                        name={`grades.${index}.grade`}
+                        render={({ field }) => (
+                          <FormItem className="space-y-0">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                maxLength={6}
+                                size={6}
+                                // step=".01"
+                                // type="number"
+
+                                className="h-8 w-[150px] text-sm"
+                                ref={(el) => {
+                                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                                  inputRefs.current[index] = el!; // TODO: Fix this shouldn't use null assession
+                                }}
+                                onKeyDown={(event) =>
+                                  handleKeyDown(event, index)
+                                }
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
                       />
                     </TableCell>
                     <TableCell className="py-0">
-                      <Checkbox
-                        onCheckedChange={(checked: boolean) => {
-                          form.setValue(`grades.${index}.absent`, checked);
-                        }}
+                      <FormField
+                        control={form.control}
+                        name={`grades.${index}.absent`}
+                        render={({ field }) => (
+                          <FormItem className="space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                defaultChecked={true}
+                                checked={
+                                  form.watch(`grades.${index}.grade`)
+                                    ? false
+                                    : true
+                                }
+                                onCheckedChange={(checked: boolean) => {
+                                  console.log("checked change", checked);
+                                  field.onChange(checked);
+                                }}
+                              />
+                            </FormControl>
+
+                            <FormMessage />
+                          </FormItem>
+                        )}
                       />
                     </TableCell>
                     <TableCell className="py-0">
