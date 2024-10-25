@@ -700,6 +700,8 @@
   "select_the_record_delimiter": "Select the record delimiter",
   "selected": "Selected",
   "semester": "Semester",
+  "start_time": "Start Time",
+  "end_time": "End Time",
   "semicolon": "Semicolon",
   "send": "Send",
   "sendAgenda": "Send Agenda",

@@ -38,6 +38,7 @@
     "@t3-oss/env-nextjs": "^0.11.1",
     "@trpc/server": "catalog:",
     "@unkey/ratelimit": "^0.4.5",
+    "date-fns-tz": "^3.2.0",
     "jsonwebtoken": "^9.0.2",
     "superjson": "2.2.1",
     "uuid": "^10.0.0",

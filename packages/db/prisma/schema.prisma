@@ -465,6 +465,7 @@ model Staff {
     employmentType            String?
     degreeId                  Int?
     dateOfHire                DateTime?   @db.Date
+    bloodType                 String?
     dateOfBirth               DateTime?   @db.Date
     sendAgendaFrequency       String?
     dateOfRelease             DateTime?   @db.Date
@@ -515,6 +516,7 @@ model Student {
     firstName          String?
     lastName           String?
     dateOfBirth        DateTime?        @db.Date
+    bloodType          String?
     placeOfBirth       String?
     residence          String?
     status             StudentStatus    @default(ACTIVE)
@@ -776,15 +778,29 @@ model Subject {
     program         String?          @db.Text
     gradeSheets     GradeSheet[]
     Program         Program[]
-    classroom       Classroom        @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+    classroom       Classroom        @relation(fields: [classroomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     course          Course           @relation(fields: [courseId], references: [id])
     subjectGroup    SubjectGroup?    @relation(fields: [subjectGroupId], references: [id])
     teacher         Staff?           @relation(fields: [teacherId], references: [id])
     assignments     Assignment[]
     timetables      Timetable[]
     subjectJournals SubjectJournal[] @relation("subject")
+    lessons         Lesson[]
 
     @@unique([courseId, teacherId, classroomId])
+}
+
+model Lesson {
+    id        Int      @id @default(autoincrement())
+    startTime DateTime @db.Timetz()
+    endTime   DateTime @db.Timetz()
+    dayOfWeek Int      @db.SmallInt
+    subjectId Int
+    schoolId  String
+    isActive  Boolean? @default(true)
+    subject   Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+    @@unique([dayOfWeek, startTime, endTime, subjectId])
 }
 
 model SubjectGroup {

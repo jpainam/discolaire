@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Body,
   Button,
@@ -14,56 +13,56 @@ import {
 
 import { EmailFooter } from "./Footer";
 
-interface ResetPasswordEmailProps {
-  username: string;
-  resetLink: string;
-}
-
-export const ResetPasswordEmail: React.FC<ResetPasswordEmailProps> = ({
+export function ResetPassword({
   username,
   resetLink,
-}) => (
-  <Html>
-    <Head />
-    <Preview>Reset your password</Preview>
-    <Body style={main}>
-      <Container style={container}>
-        <Heading style={h1}>Password Reset Request</Heading>
-        <Text style={text}>Hello {username},</Text>
-        <Text style={text}>
-          We received a request to reset your password. If you didn't make this
-          request, you can safely ignore this email.
-        </Text>
-        <Section style={buttonContainer}>
-          <Button
-            style={{
-              ...button,
-              paddingLeft: 20,
-              paddingRight: 20,
-              paddingTop: 12,
-              paddingBottom: 12,
-            }}
-            href={resetLink}
-          >
-            Reset Your Password
-          </Button>
-        </Section>
-        <Text style={text}>
-          If the button doesn't work, copy and paste this link into your
-          browser:
-        </Text>
-        <Link href={resetLink} style={link}>
-          {resetLink}
-        </Link>
-        <Text style={text}>
-          This link will expire in 24 hours. If you need assistance, please
-          contact our support team.
-        </Text>
-        <EmailFooter />
-      </Container>
-    </Body>
-  </Html>
-);
+}: {
+  username: string;
+  resetLink: string;
+}) {
+  return (
+    <Html>
+      <Head />
+      <Preview>Reset your password</Preview>
+      <Body style={main}>
+        <Container style={container}>
+          <Heading style={h1}>Password Reset Request</Heading>
+          <Text style={text}>Hello {username},</Text>
+          <Text style={text}>
+            We received a request to reset your password. If you didn't make
+            this request, you can safely ignore this email.
+          </Text>
+          <Section style={buttonContainer}>
+            <Button
+              style={{
+                ...button,
+                paddingLeft: 20,
+                paddingRight: 20,
+                paddingTop: 12,
+                paddingBottom: 12,
+              }}
+              href={resetLink}
+            >
+              Reset Your Password
+            </Button>
+          </Section>
+          <Text style={text}>
+            If the button doesn't work, copy and paste this link into your
+            browser:
+          </Text>
+          <Link href={resetLink} style={link}>
+            {resetLink}
+          </Link>
+          <Text style={text}>
+            This link will expire in 24 hours. If you need assistance, please
+            contact our support team.
+          </Text>
+          <EmailFooter />
+        </Container>
+      </Body>
+    </Html>
+  );
+}
 
 // Styles
 const main = {
@@ -112,5 +111,3 @@ const link = {
   color: "#007bff",
   textDecoration: "underline",
 };
-
-export default ResetPasswordEmail;

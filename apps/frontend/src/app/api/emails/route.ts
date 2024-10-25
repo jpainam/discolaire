@@ -1,6 +1,8 @@
 import type { NextRequest } from "next/server";
 import { Resend } from "resend";
 
+import { ResetPassword } from "@repo/transactional";
+
 import { env } from "~/env";
 
 const resend = new Resend(env.RESEND_API_KEY);
@@ -13,8 +15,11 @@ export async function GET(req: NextRequest) {
     from: "Discolaire <no-reply@discolaire.com>",
     to: ["jpainam@gmail.com"],
     subject: "Running Discolaire",
-    html: "<h1>Running Discolaire</h1>",
-    //react: EmailTemplate({ firstName: "John" }),
+    //html: "<h1>Running Discolaire</h1>",
+    react: ResetPassword({
+      username: "John",
+      resetLink: "https://discolaire.com",
+    }),
   });
   console.log("data", data);
 

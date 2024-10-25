@@ -736,6 +736,8 @@
   "select_the_record_delimiter": "Sélectionner le délimiteur de ligne",
   "selected": "Sélectionné(s)",
   "semester": "Semestre",
+  "end_time": "Heure de fin",
+  "start_time": "Heure de début",
   "semicolon": "Point-virgule",
   "send": "Envoyer",
   "sendAgenda": "Envoyer l'agenda",

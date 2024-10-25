@@ -40,7 +40,7 @@ export const EmailFooter = () => {
       <Section style={appStoreContainer}>
         <Link href="#">
           <Img
-            src="https://discolaire-public.s3.eu-central-1.amazonaws.com/images/app-store-badge.svg"
+            src="https://discolaire-public.s3.eu-central-1.amazonaws.com/images/app-store-link.png"
             alt="App Store"
             width="135"
             height="auto"
@@ -50,7 +50,7 @@ export const EmailFooter = () => {
         &nbsp;&nbsp;&nbsp;
         <Link href="#">
           <Img
-            src="https://discolaire-public.s3.eu-central-1.amazonaws.com/images/google-play-badge.svg"
+            src="https://discolaire-public.s3.eu-central-1.amazonaws.com/images/google-play-link.png"
             alt="Google Play"
             width="135"
             height="auto"

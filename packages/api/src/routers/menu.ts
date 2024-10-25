@@ -24,6 +24,6 @@ export const menuRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.fee.delete({ where: { id: input.id } });
+      return ctx.db.menuItem.delete({ where: { id: input.id } });
     }),
 });

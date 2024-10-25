@@ -9,13 +9,7 @@
       "types": "./dist/emails/*.d.ts",
       "default": "./emails/*.tsx"
     },
-    "./*": {
-      "types": "./dist/*.d.ts",
-      "default": [
-        "./*.ts",
-        "./*.tsx"
-      ]
-    }
+    ".": "./index.ts"
   },
   "workspaces": [
     ".react-email"
