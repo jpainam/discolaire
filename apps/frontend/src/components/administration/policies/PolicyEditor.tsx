@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useRef } from "react";
@@ -12,8 +13,17 @@ export const PolicyEditor = ({
   defaultValue?: string;
 }) => {
   const { theme } = useTheme();
+  const editorRef = useRef();
 
   const parent = useRef<HTMLDivElement | null>(null);
+
+  function handleEditorOnMount(editor: any, _monaco: any) {
+    editorRef.current = editor;
+    const handler = editor.onDidChangeModelDecorations((_: any) => {
+      handler.dispose();
+      editor.getAction("editor.action.formatDocument").run();
+    });
+  }
 
   return (
     <div ref={parent} className="w-full">
@@ -23,7 +33,8 @@ export const PolicyEditor = ({
         //   // vercel thing, basename type gets widened when building prod
         //   //m.editor.defineTheme("night-owl", nightOwlTheme as any);
         // }}
-        height={"150px"}
+        onMount={handleEditorOnMount}
+        height={"200px"}
         theme={
           theme === "dark" ? "vs-dark" : theme === "light" ? "light" : "vs-dark"
         }
@@ -33,7 +44,7 @@ export const PolicyEditor = ({
         onChange={(v) => onChange?.(v)}
         //value={defaultValue ?? ""}
         options={{
-          //minimap: { enabled: false },
+          minimap: { enabled: false },
           lineNumbers: "on",
           scrollbar: {
             vertical: "hidden",

@@ -12,6 +12,8 @@ import {
   Text,
 } from "@react-email/components";
 
+import { EmailFooter } from "./Footer";
+
 interface ResetPasswordEmailProps {
   username: string;
   resetLink: string;
@@ -57,6 +59,7 @@ export const ResetPasswordEmail: React.FC<ResetPasswordEmailProps> = ({
           This link will expire in 24 hours. If you need assistance, please
           contact our support team.
         </Text>
+        <EmailFooter />
       </Container>
     </Body>
   </Html>

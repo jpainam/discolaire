@@ -1,4 +1,5 @@
 import { Document, Font, Image, Page, Text, View } from "@react-pdf/renderer";
+import QRCodeUtil from "qrcode";
 
 import type { RouterOutputs } from "@repo/api";
 
@@ -60,14 +61,15 @@ export async function AcccountStatement({
   transactions,
   size = "letter",
 }: Props) {
-  // const qrCode = await QRCodeUtil.toDataURL(
-  //   "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-  //   {
-  //     width: 40 * 3,
-  //     height: 40 * 3,
-  //     margin: 0,
-  //   },
-  // );
+  // @ts-expect-error Fix this later
+  const _qrCode = await QRCodeUtil.toDataURL(
+    "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    {
+      width: 40 * 3,
+      height: 40 * 3,
+      margin: 0,
+    },
+  );
 
   await new Promise((resolve) => setTimeout(resolve, 1000));
 

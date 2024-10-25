@@ -17,9 +17,9 @@ import {
   FormLabel,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
-import { Textarea } from "@repo/ui/textarea";
 
 import { api } from "~/trpc/react";
+import { PolicyEditor } from "./PolicyEditor";
 
 const createEditPolicySchema = z.object({
   name: z.string().min(1),
@@ -131,11 +131,11 @@ export function CreateEditPolicy({ policy }: { policy?: Policy }) {
             <FormItem className="space-y-0">
               <FormLabel>{t("policy")}</FormLabel>
               <FormControl>
-                <Textarea {...field} rows={10} />
-                {/* <PolicyEditor
+                {/* <Textarea {...field} rows={10} /> */}
+                <PolicyEditor
                   defaultValue={field.value}
                   onChange={field.onChange}
-                /> */}
+                />
               </FormControl>
             </FormItem>
           )}
@@ -146,11 +146,14 @@ export function CreateEditPolicy({ policy }: { policy?: Policy }) {
               closeModal();
             }}
             type="button"
+            size={"sm"}
             variant={"outline"}
           >
             {t("cancel")}
           </Button>
-          <Button type="submit">{t("submit")}</Button>
+          <Button size={"sm"} type="submit">
+            {t("submit")}
+          </Button>
         </div>
       </form>
     </Form>
