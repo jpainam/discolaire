@@ -26,6 +26,17 @@ export const lessonRouter = createTRPCRouter({
         data: data,
       });
     }),
+  clearByClassroom: protectedProcedure
+    .input(z.object({ classroomId: z.string().min(1) }))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.lesson.deleteMany({
+        where: {
+          subject: {
+            classroomId: input.classroomId,
+          },
+        },
+      });
+    }),
   byClassroom: protectedProcedure
     .input(
       z.object({

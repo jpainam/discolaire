@@ -21,7 +21,7 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { api } from "~/trpc/react";
-import { CreateEditTimetable } from "./CreateEditTimetable";
+import { CreateEditLesson } from "./CreateEditLesson";
 
 export function ClassroomTimeTableHeader() {
   const { t } = useLocale();
@@ -29,18 +29,17 @@ export function ClassroomTimeTableHeader() {
   const params = useParams<{ id: string }>();
   const utils = api.useUtils();
   const { openModal } = useModal();
-  const clearClassroomTimeTableMutation =
-    api.timetable.clearByClassroom.useMutation({
-      onSettled: async () => {
-        await utils.timetable.invalidate();
-      },
-      onSuccess: () => {
-        toast.success(t("deleted_successfully"), { id: 0 });
-      },
-      onError: (error) => {
-        toast.error(error.message, { id: 0 });
-      },
-    });
+  const clearClassroomLessonMutation = api.lesson.clearByClassroom.useMutation({
+    onSettled: async () => {
+      await utils.lesson.invalidate();
+    },
+    onSuccess: () => {
+      toast.success(t("deleted_successfully"), { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary px-2 py-1">
       <CalendarDays className="h-4 w-4" />
@@ -51,7 +50,7 @@ export function ClassroomTimeTableHeader() {
             openModal({
               title: t("create_timetable"),
               className: "w-[550px]",
-              view: <CreateEditTimetable classroomId={params.id} />,
+              view: <CreateEditLesson />,
             });
           }}
           variant={"default"}
@@ -89,7 +88,7 @@ export function ClassroomTimeTableHeader() {
                 });
                 if (isConfirmed) {
                   toast.loading(t("deleting"), { id: 0 });
-                  clearClassroomTimeTableMutation.mutate({
+                  clearClassroomLessonMutation.mutate({
                     classroomId: params.id,
                   });
                 }
