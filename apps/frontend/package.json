@@ -24,6 +24,7 @@
     "@repo/hooks": "workspace:*",
     "@repo/i18n": "workspace:*",
     "@repo/lib": "workspace:*",
+    "@repo/reports": "workspace:*",
     "@repo/transactional": "workspace:*",
     "@repo/ui": "workspace:*",
     "@repo/validators": "workspace:*",
