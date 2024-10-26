@@ -37,7 +37,7 @@ export default async function Page({
               <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <BookOpen className="h-4 w-4" />
-                  {assignment.category?.name}
+                  {assignment.category.name}
                 </span>
                 <span className="flex items-center gap-1">
                   <GraduationCap className="h-4 w-4" />
