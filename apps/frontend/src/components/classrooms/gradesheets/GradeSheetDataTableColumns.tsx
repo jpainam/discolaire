@@ -194,7 +194,7 @@ export function fetchGradeSheetColumns({
         <DataTableColumnHeader column={column} title={t("min")} />
       ),
       cell: ({ row }) => {
-        const min = row.original.min || 0;
+        const min = isFinite(row.original.min) ? row.original.min : 0;
         return (
           <FlatBadge variant={min < 10 ? "purple" : "yellow"}>
             {min.toFixed(2)}
@@ -208,7 +208,7 @@ export function fetchGradeSheetColumns({
         <DataTableColumnHeader column={column} title={t("max")} />
       ),
       cell: ({ row }) => {
-        const max = row.original.max || 0;
+        const max = isFinite(row.original.max) ? row.original.max : 0;
         return (
           <FlatBadge variant={max < 10 ? "pink" : "blue"}>
             {max.toFixed(2)}
