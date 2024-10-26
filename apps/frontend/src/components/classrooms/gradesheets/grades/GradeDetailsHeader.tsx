@@ -78,7 +78,8 @@ export function GradeDetailsHeader({
   const utils = api.useUtils();
   const deleteGradeSheetMutation = api.gradeSheet.delete.useMutation({
     onSettled: async () => {
-      await utils.gradeSheet.grades.invalidate();
+      await utils.gradeSheet.invalidate();
+      await utils.grade.invalidate();
     },
     onSuccess: () => {
       toast.success(t("deleted_successfully"), { id: 0 });

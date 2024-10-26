@@ -367,7 +367,7 @@ model Assignment {
     title       String
     description String?
     isActive    Boolean?  @default(true)
-    categoryId  String?
+    categoryId  String
     subjectId   Int
     termId      Int
     term        Term      @relation(fields: [termId], references: [id], onDelete: Cascade)
@@ -387,8 +387,8 @@ model Assignment {
     subject     Subject   @relation(fields: [subjectId], references: [id], onDelete: Cascade)
     notify      Boolean?  @default(true)
 
-    classroom Classroom           @relation(fields: [classroomId], references: [id], onDelete: Cascade)
-    category  AssignmentCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+    classroom Classroom          @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+    category  AssignmentCategory @relation(fields: [categoryId], references: [id])
 }
 
 model Event {

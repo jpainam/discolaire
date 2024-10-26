@@ -37,6 +37,12 @@ export const assignmentRouter = createTRPCRouter({
       include: {
         classroom: true,
         category: true,
+        subject: {
+          include: {
+            course: true,
+            teacher: true,
+          },
+        },
       },
       where: {
         id: input,
