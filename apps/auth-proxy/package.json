@@ -18,7 +18,7 @@
     "@repo/prettier-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
-    "@types/node": "^20.16.13",
+    "@types/node": "^20.17.1",
     "eslint": "catalog:",
     "h3": "^1.13.0",
     "nitropack": "^2.9.7",
