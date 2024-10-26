@@ -165,7 +165,7 @@ export function fetchGradeColumns({
       ),
       cell: ({ row }) => {
         const grade = row.original;
-        return <div>{getAppreciations(grade.grade)}</div>;
+        return <div>{grade.isAbsent ? "" : getAppreciations(grade.grade)}</div>;
       },
     },
     {

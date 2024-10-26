@@ -53,16 +53,17 @@ export function GradeDetailsHeader({
   const maxGrade = Math.max(...grades.map((grade) => grade.grade));
   const minGrade = Math.min(...grades.map((grade) => grade.grade));
   const grades10 = grades.filter((grade) => grade.grade >= 10).length;
+  const len = grades.filter((grade) => !grade.isAbsent).length || 1e9;
 
   const males10Rate =
     grades.filter(
       (grade) => grade.grade >= 10 && grade.student.gender == "male",
-    ).length / (grades.length || 1e9);
+    ).length / len;
 
   const females10Rate =
     grades.filter(
       (grade) => grade.grade >= 10 && grade.student.gender == "female",
-    ).length / (grades.length || 1e9);
+    ).length / len;
 
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
     day: "numeric",
@@ -70,9 +71,7 @@ export function GradeDetailsHeader({
     year: "numeric",
     weekday: "short",
   });
-  const average =
-    grades.reduce((acc, grade) => acc + grade.grade, 0) /
-    (grades.length || 1e9);
+  const average = grades.reduce((acc, grade) => acc + grade.grade, 0) / len;
 
   const confirm = useConfirm();
   const router = useRouter();
@@ -176,7 +175,7 @@ export function GradeDetailsHeader({
                 {(females10Rate * 100).toFixed(2)} %
               </TableCell>
               <TableCell className="border">
-                {((grades10 * 100) / (grades.length || 1e9)).toFixed(2)}%
+                {((grades10 * 100) / len).toFixed(2)}%
               </TableCell>
               <TableCell className="border">Passable</TableCell>
             </TableRow>

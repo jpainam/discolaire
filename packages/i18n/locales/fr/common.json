@@ -9,6 +9,8 @@
   "NOT_STARTED": "Non démarrée",
   "PENDING": "En attente",
   "Running": "En cours",
+  "males": "Garçons",
+  "females": "Filles",
   "SKIPPED": "Passée",
   "SUSPENDED": "Suspendue",
   "Scheduled": "Planifiée",
