@@ -203,8 +203,8 @@ importers:
         specifier: ^3.7.15
         version: 3.7.15(next@14.2.16(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       nuqs:
-        specifier: ^1.20.0
-        version: 1.20.0(next@14.2.16(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+        specifier: ^2.0.4
+        version: 2.0.4(next@14.2.16(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       puppeteer:
         specifier: ^23.6.0
         version: 23.6.0(bufferutil@4.0.8)(typescript@5.5.4)(utf-8-validate@6.0.4)
@@ -9587,10 +9587,20 @@ packages:
   nullthrows@1.1.1:
     resolution: {integrity: sha512-2vPPEi+Z7WqML2jZYddDIfy5Dqb0r2fze2zTxNNknZaFpVHU3mFB3R+DWeJWGVx0ecvttSGlJTI+WG+8Z4cDWw==}
 
-  nuqs@1.20.0:
-    resolution: {integrity: sha512-nGVfv7eWMNxAzOJ9n8ARTo6ObqeEr1ETYZ+dIMCg/VfGUoZoPrqyTOndIvQIgUzK3pIC41mTXg10JJxh9ziEhw==}
+  nuqs@2.0.4:
+    resolution: {integrity: sha512-d0GQCOHW9o04slcTe9nfTgskCT/09K5pOMXu671Y8p7d/48KEKJLzZjklWXIt3pFjYaplErMZpXiLiYo0w8uQQ==}
     peerDependencies:
-      next: '>=13.4 <14.0.2 || ^14.0.3'
+      '@remix-run/react': '>= 2'
+      next: '>= 14.2.0'
+      react: '>= 18.2.0'
+      react-router-dom: '>= 6'
+    peerDependenciesMeta:
+      '@remix-run/react':
+        optional: true
+      next:
+        optional: true
+      react-router-dom:
+        optional: true
 
   nypm@0.3.9:
     resolution: {integrity: sha512-BI2SdqqTHg2d4wJh8P9A1W+bslg33vOE9IZDY6eR2QC+Pu1iNBVZUqczrd43rJb+fMzHU7ltAYKsEFY/kHMFcw==}
@@ -21889,7 +21899,7 @@ snapshots:
   metro-source-map@0.81.0:
     dependencies:
       '@babel/traverse': 7.25.7
-      '@babel/traverse--for-generate-function-map': '@babel/traverse@7.25.7'
+      '@babel/traverse--for-generate-function-map': '@babel/traverse@7.25.9'
       '@babel/types': 7.25.8
       flow-enums-runtime: 0.0.6
       invariant: 2.2.4
@@ -22587,9 +22597,11 @@ snapshots:
 
   nullthrows@1.1.1: {}
 
-  nuqs@1.20.0(next@14.2.16(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
+  nuqs@2.0.4(next@14.2.16(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
     dependencies:
       mitt: 3.0.1
+      react: 18.3.1
+    optionalDependencies:
       next: 14.2.16(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   nypm@0.3.9:
