@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { I18nProvider } from "@repo/i18n/i18n-context";
 import { cn } from "@repo/ui";
@@ -73,22 +74,26 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
             GeistMono.variable,
           )}
         >
-          <ThemeProvider
-            disableTransitionOnChange
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-          >
-            <ProgressBar />
-            <TRPCReactProvider>
-              <AuthProvider session={session}>
-                <ConfirmDialogProvider>{props.children}</ConfirmDialogProvider>
-                {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-              </AuthProvider>
-            </TRPCReactProvider>
-            <TailwindIndicator />
-            <Toaster richColors />
-          </ThemeProvider>
+          <NuqsAdapter>
+            <ThemeProvider
+              disableTransitionOnChange
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+            >
+              <ProgressBar />
+              <TRPCReactProvider>
+                <AuthProvider session={session}>
+                  <ConfirmDialogProvider>
+                    {props.children}
+                  </ConfirmDialogProvider>
+                  {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+                </AuthProvider>
+              </TRPCReactProvider>
+              <TailwindIndicator />
+              <Toaster richColors />
+            </ThemeProvider>
+          </NuqsAdapter>
         </body>
       </html>
     </I18nProvider>
