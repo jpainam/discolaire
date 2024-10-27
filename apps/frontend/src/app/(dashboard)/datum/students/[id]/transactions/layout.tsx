@@ -1,5 +1,3 @@
-import type { PropsWithChildren } from "react";
-
 import { getServerTranslations } from "@repo/i18n/server";
 import { EmptyState } from "@repo/ui/EmptyState";
 
@@ -7,10 +5,16 @@ import { api } from "~/trpc/server";
 import { PrintAction } from "./PrintAction";
 import { TransactionTabMenu } from "./TransactionTabMenu";
 
-export default async function Layout({
-  children,
-  params: { id },
-}: PropsWithChildren<{ params: { id: string } }>) {
+export default async function Layout(props: {
+  params: Promise<{ id: string }>;
+  children: React.ReactNode;
+}) {
+  const params = await props.params;
+
+  const { id } = params;
+
+  const { children } = props;
+
   const classroom = await api.student.classroom({ studentId: id });
   const { t } = await getServerTranslations();
   if (!classroom) {

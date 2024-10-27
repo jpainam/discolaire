@@ -11,11 +11,18 @@ import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/server";
 import { getFullName } from "~/utils/full-name";
 
-export default async function Page({
-  params: { id, transactionId },
-}: {
-  params: { id: string; transactionId: number };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ id: string; transactionId: number }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    id,
+    transactionId
+  } = params;
+
   const transaction = await api.transaction.get(Number(transactionId));
   if (!transaction) {
     notFound();

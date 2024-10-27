@@ -5,13 +5,24 @@ import { Separator } from "@repo/ui/separator";
 import { ReportCardTable } from "~/components/students/report-cards/ReportCardTable";
 import { api } from "~/trpc/server";
 
-export default async function Page({
-  searchParams: { term },
-  params: { id },
-}: {
-  params: { id: string };
-  searchParams: { term: string };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ id: string }>;
+    searchParams: Promise<{ term: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
+  const searchParams = await props.searchParams;
+
+  const {
+    term
+  } = searchParams;
+
   const { t } = await getServerTranslations();
   if (!term) {
     return <EmptyState className="my-8" title={t("select_terms")} />;

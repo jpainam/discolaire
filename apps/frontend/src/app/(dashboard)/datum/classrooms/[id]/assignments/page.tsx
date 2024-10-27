@@ -3,11 +3,12 @@ import { AssignmentHeader } from "~/components/classrooms/assignments/Assignment
 import { api } from "~/trpc/server";
 
 interface AssignmentPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
-export default async function Page({ params }: AssignmentPageProps) {
+export default async function Page(props: AssignmentPageProps) {
+  const params = await props.params;
   const assignemts = await api.classroom.assignments(params.id);
   return (
     <div className="flex flex-col">

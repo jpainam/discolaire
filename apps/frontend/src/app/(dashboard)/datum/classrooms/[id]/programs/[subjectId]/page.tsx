@@ -3,11 +3,17 @@ import { notFound } from "next/navigation";
 import { CreateEditProgram } from "~/components/classrooms/programs/CreateEditProgram";
 import { api } from "~/trpc/server";
 
-export default async function Page({
-  params: { subjectId },
-}: {
-  params: { subjectId: string };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ subjectId: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    subjectId
+  } = params;
+
   const subject = await api.subject.get({ id: Number(subjectId) });
   if (!subject) {
     notFound();

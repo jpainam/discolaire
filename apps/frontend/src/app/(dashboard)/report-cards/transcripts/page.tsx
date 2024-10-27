@@ -3,13 +3,17 @@ import { TranscriptGrid } from "~/components/grades/transcripts/transcript-grid"
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 
 interface TranscriptPageProps {
-  searchParams: {
+  searchParams: Promise<{
     studentId: string;
-  };
+  }>;
 }
-export default function Page({
-  searchParams: { studentId },
-}: TranscriptPageProps) {
+export default async function Page(props: TranscriptPageProps) {
+  const searchParams = await props.searchParams;
+
+  const {
+    studentId
+  } = searchParams;
+
   return (
     <div className="flex flex-col">
       <div className="flex flex-row gap-2">

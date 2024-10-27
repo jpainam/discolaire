@@ -13,11 +13,17 @@ import { api } from "~/trpc/server";
 import { DefaultSettings } from "./DefaultSettings";
 import { SchoolDetailAction } from "./SchoolDetailAction";
 
-export default async function Page({
-  params: { schoolId },
-}: {
-  params: { schoolId: string };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ schoolId: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    schoolId
+  } = params;
+
   const session = await auth();
   if (!session) {
     redirect("/auth/login");

@@ -56,7 +56,7 @@ export function PolicyDataTable({ roleId }: { roleId: string }) {
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    (<div className="flex flex-col gap-2">
       <div className="flex justify-end">
         <Button
           isLoading={attachPoliciesMutation.isPending}
@@ -127,6 +127,6 @@ export function PolicyDataTable({ roleId }: { roleId: string }) {
           </TableBody>
         </Table>
       </div>
-    </div>
+    </div>)
   );
 }

@@ -1,6 +1,5 @@
 export function Footer() {
   return (
-    <></>
     // <footer className="container py-2">
     //   <div className="container fixed bottom-0 flex max-w-7xl flex-col items-center justify-between gap-4 py-1 md:flex-row">
     //     <div className="text-sm text-muted-foreground">
@@ -32,5 +31,6 @@ export function Footer() {
     //     </nav>
     //   </div>
     // </footer>
+    (<></>)
   );
 }

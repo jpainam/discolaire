@@ -6,11 +6,17 @@ import { StudentAssignmentTable } from "~/components/students/assignments/Studen
 import { StudentAssignmentHeader } from "~/components/students/assignments/StudentAssignmentHeader";
 import { api } from "~/trpc/server";
 
-export default async function Page({
-  params: { id },
-}: {
-  params: { id: string };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ id: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const classroom = await api.student.classroom({ studentId: id });
   const { t } = await getServerTranslations();
   if (!classroom) {

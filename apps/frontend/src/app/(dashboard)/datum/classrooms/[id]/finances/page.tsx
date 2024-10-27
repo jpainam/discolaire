@@ -3,13 +3,24 @@ import { sumBy } from "lodash";
 import { FinanceContentView } from "~/components/classrooms/finances/FinanceContentView";
 import { api } from "~/trpc/server";
 
-export default async function Page({
-  params: { id },
-  searchParams: { query },
-}: {
-  params: { id: string };
-  searchParams: { query: string };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ id: string }>;
+    searchParams: Promise<{ query: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+
+  const {
+    query
+  } = searchParams;
+
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const fees = await api.classroom.fees(id);
   const balances = await api.classroom.studentsBalance({ id });
 

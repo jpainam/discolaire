@@ -76,7 +76,7 @@ export function CreateEditProgram({
   }
   const subject = subjectQuery.data;
   return (
-    <Form {...form}>
+    (<Form {...form}>
       <form
         className="flex flex-col"
         onSubmit={form.handleSubmit(submitProgram)}
@@ -125,7 +125,7 @@ export function CreateEditProgram({
             //   className="col-span-full [&_.ql-editor]:min-h-[calc(100vh-15rem)]"
             //   labelClassName="font-medium text-gray-700 dark:text-gray-600 mb-1.5"
             // />
-            <FormItem className="">
+            (<FormItem className="">
               <FormControl>
                 <QuillEditor
                   className="h-[calc(100vh-15rem)]"
@@ -134,10 +134,10 @@ export function CreateEditProgram({
                 />
               </FormControl>
               <FormMessage />
-            </FormItem>
+            </FormItem>)
           )}
         />
       </form>
-    </Form>
+    </Form>)
   );
 }

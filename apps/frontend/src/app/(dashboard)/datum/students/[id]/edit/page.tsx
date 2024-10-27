@@ -7,11 +7,17 @@ import { NoPermission } from "@repo/ui/no-permission";
 import { UpdateStudent } from "~/components/students/profile/UpdateStudent";
 import { api } from "~/trpc/server";
 
-export default async function Page({
-  params: { id },
-}: {
-  params: { id: string };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ id: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const student = await api.student.get(id);
   const canEditStudent = await checkPermissions(
     PermissionAction.UPDATE,

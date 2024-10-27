@@ -16,11 +16,11 @@ import {
 import { routes } from "~/configs/routes";
 import { api } from "~/trpc/server";
 
-export default async function Page({
-  params: { id },
-}: {
-  params: { id: string };
-}) {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+
+  const { id } = params;
+
   const { t, i18n } = await getServerTranslations();
   const school = await api.school.getSchool();
   if (!school) {
@@ -38,9 +38,23 @@ export default async function Page({
     day: "numeric",
   });
 
-  let balance = 0;
+  const totalPeriodPerMonths: Record<string, number> = {};
+  statements.forEach((item) => {
+    const month = item.transactionDate.getMonth();
+    if (item.type == "DEBIT") {
+      totalPeriodPerMonths[month] =
+        (totalPeriodPerMonths[month] ?? 0) - item.amount;
+    } else {
+      totalPeriodPerMonths[month] =
+        (totalPeriodPerMonths[month] ?? 0) + item.amount;
+    }
+  });
+
+  const balance = statements.reduce((acc, item) => {
+    return acc + (item.type == "DEBIT" ? -item.amount : item.amount);
+  }, 0);
   let currentMonth: number | null = null;
-  let totalperiod = 0;
+
   let previousDate: Date | null = null;
 
   return (
@@ -58,7 +72,6 @@ export default async function Page({
       </TableHeader>
       <TableBody>
         {statements.map((item, index: number) => {
-          balance += item.type == "DEBIT" ? -item.amount : item.amount;
           const amount = item.amount.toLocaleString(i18n.language, {
             maximumFractionDigits: 0,
             minimumFractionDigits: 0,
@@ -75,16 +88,14 @@ export default async function Page({
             subtotal = (
               <SubTotal
                 key={`subtotal-${currentMonth}`}
-                totalperiod={totalperiod}
+                totalperiod={totalPeriodPerMonths[currentMonth] ?? 0}
                 previousDate={previousDate}
               />
             );
-            totalperiod = 0;
           }
 
           currentMonth = itemMonth;
           previousDate = item.transactionDate;
-          totalperiod += item.type == "DEBIT" ? -item.amount : item.amount;
 
           return (
             <Fragment key={`${item.transactionRef}-${index}`}>

@@ -11,13 +11,22 @@ import { StudentFooter } from "~/components/students/StudentFooter";
 import { StudentHeader } from "~/components/students/StudentHeader";
 import { StudentSidebar } from "~/components/students/StudentSidebar";
 
-export default async function Layout({
-  children,
-  params: { id },
-}: {
-  children: React.ReactNode;
-  params: { id: string };
-}) {
+export default async function Layout(
+  props: {
+    children: React.ReactNode;
+    params: Promise<{ id: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
+  const {
+    children
+  } = props;
+
   const canReadStudent = await checkPermissions(
     PermissionAction.READ,
     "student:profile",

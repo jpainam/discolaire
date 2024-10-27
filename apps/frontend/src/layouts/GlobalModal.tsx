@@ -20,8 +20,7 @@ export default function GlobalModal() {
   const pathname = usePathname();
   useEffect(() => {
     closeModal();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, [closeModal, pathname]);
 
   return (
     <Dialog

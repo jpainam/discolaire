@@ -17,11 +17,17 @@ import { DocumentTableAction } from "~/components/shared/DocumentTableAction";
 import { api } from "~/trpc/server";
 import { StaffDocumentHeader } from "./StaffDocumentHeader";
 
-export default async function Page({
-  params: { id },
-}: {
-  params: { id: string };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ id: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const staff = await api.staff.get(id);
   if (!staff) {
     notFound();

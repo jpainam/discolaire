@@ -4,7 +4,13 @@ import { ContactDetails } from "~/components/contacts/ContactDetails";
 import { ContactDetailsHeader } from "~/components/contacts/ContactDetailsHeader";
 import { ContactStudentTable } from "~/components/contacts/ContactStudentTable";
 
-export default function Page({ params: { id } }: { params: { id: string } }) {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   // const contact = await api.contact.get(id);
 
   // const { t } = await getServerTranslations();

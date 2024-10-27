@@ -5,11 +5,17 @@ import { EmptyState } from "@repo/ui/EmptyState";
 
 import { api } from "~/trpc/server";
 
-export default async function Page({
-  params: { id },
-}: {
-  params: { id: string };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ id: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const { t } = await getServerTranslations();
   const subjects = await api.classroom.subjects({ id: id });
   const subject = subjects.length > 0 ? subjects[0] : null;

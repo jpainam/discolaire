@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+ 
 import { forwardRef, useRef } from "react";
 
 import { cn } from "@repo/lib";
@@ -41,12 +41,12 @@ export const MenuItem = forwardRef<
     const Component = as;
     const ctx = useMenuContext();
     const itemRef = useRef<HTMLButtonElement>();
-    const itemIndex = ctx.getItemIndex(itemRef.current!);
+    const itemIndex = ctx.getItemIndex(itemRef.current);
     const isProps: any = props;
 
     const handleMouseEnter = (event: any) => {
       isProps.onMouseEnter?.(event);
-      ctx.setHovered(ctx.getItemIndex(itemRef.current!));
+      ctx.setHovered(ctx.getItemIndex(itemRef.current));
     };
 
     const handleMouseLeave = (event: any) => {
@@ -65,7 +65,7 @@ export const MenuItem = forwardRef<
 
     const handleFocus = (event?: Event) => {
       isProps.onFocus?.(event);
-      ctx.setHovered(ctx.getItemIndex(itemRef.current!));
+      ctx.setHovered(ctx.getItemIndex(itemRef.current));
     };
 
     return (

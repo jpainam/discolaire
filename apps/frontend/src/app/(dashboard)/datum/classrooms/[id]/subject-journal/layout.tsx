@@ -1,11 +1,15 @@
-import type { PropsWithChildren } from "react";
-
 import { SubjectList } from "./SubjectList";
 
-export default function Layout({
-  children,
-  params: { id },
-}: PropsWithChildren<{ params: { id: string } }>) {
+export default async function Layout(props: {
+  params: Promise<{ id: string }>;
+  children: React.ReactNode;
+}) {
+  const params = await props.params;
+
+  const { id } = params;
+
+  const { children } = props;
+
   return (
     <div className="flex h-screen flex-col md:flex-row">
       <SubjectList classroomId={id} />

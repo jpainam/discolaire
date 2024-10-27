@@ -1,6 +1,6 @@
 import type { ImperativePanelHandle } from "react-resizable-panels";
 import { useRef, useState } from "react";
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 
 export const leftPanelSizeAtom = atomWithStorage<number>("leftPanelSize", 15);
@@ -48,10 +48,6 @@ export const useAdminLayout = () => {
   const [rightPanelSize, setRightPanelSize] = useAtom(rightPanelSizeAtom);
   const [navCollapsedSize, setNavCollapsedSize] = useAtom(navCollapsedSizeAtom);
   const [isCollapsed, setIsCollapsed] = useAtom(isCollapsedAtom);
-
-  const _leftPanelRef = atom(useRef<ImperativePanelHandle>(null));
-  const _middlePanelRef = useRef<ImperativePanelHandle>(null);
-  const _rightPanelRef = useRef<ImperativePanelHandle>(null);
 
   return {
     //leftPanelRef,

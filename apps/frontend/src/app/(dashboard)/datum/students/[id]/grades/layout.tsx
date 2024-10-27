@@ -5,13 +5,22 @@ import { StudentGrade } from "~/components/students/grades/StudentGrade";
 import { StudentGradeHeader } from "~/components/students/grades/StudentGradeHeader";
 import { api } from "~/trpc/server";
 
-export default async function Layout({
-  children,
-  params: { id },
-}: {
-  children: React.ReactNode;
-  params: { id: string };
-}) {
+export default async function Layout(
+  props: {
+    children: React.ReactNode;
+    params: Promise<{ id: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
+  const {
+    children
+  } = props;
+
   const classroom = await api.student.classroom({ studentId: id });
   const student = await api.student.get(id);
   const { t } = await getServerTranslations();

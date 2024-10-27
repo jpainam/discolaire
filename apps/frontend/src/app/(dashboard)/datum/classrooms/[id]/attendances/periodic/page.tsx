@@ -2,13 +2,14 @@ import { CreateEditPeridicAttendance } from "~/components/classrooms/attendances
 import { PeriodicAttendanceTable } from "~/components/classrooms/attendances/periodic/PeriodicAttendanceTable";
 import { api } from "~/trpc/server";
 
-export default async function Page({
-  searchParams,
-  params,
-}: {
-  searchParams: { term: number };
-  params: { id: string };
-}) {
+export default async function Page(
+  props: {
+    searchParams: Promise<{ term: number }>;
+    params: Promise<{ id: string }>;
+  }
+) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
   const students = await api.classroom.students(params.id);
 
   return (

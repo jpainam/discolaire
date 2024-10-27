@@ -48,10 +48,8 @@ export async function POST(request: Request) {
   }
 }
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { key: string } },
-) {
+export async function GET(request: NextRequest, props: { params: Promise<{ key: string }> }) {
+  const params = await props.params;
   const searchParams = request.nextUrl.searchParams;
   const key = searchParams.get("key") ?? params.key;
 
@@ -67,10 +65,8 @@ export async function GET(
   return Response.json(signedUrl);
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { key: string } },
-) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ key: string }> }) {
+  const params = await props.params;
   const searchParams = request.nextUrl.searchParams;
   const key = searchParams.get("key") ?? params.key;
 

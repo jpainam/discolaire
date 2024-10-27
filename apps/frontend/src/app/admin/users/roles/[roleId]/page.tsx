@@ -8,11 +8,17 @@ import { PageHeader } from "../../../../(dashboard)/administration/PageHeader";
 import { PolicyDataTable } from "./PolicyDataTable";
 import { UserDataTable } from "./UserDataTable";
 
-export default async function Page({
-  params: { roleId },
-}: {
-  params: { roleId: string };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ roleId: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    roleId
+  } = params;
+
   const { t } = await getServerTranslations();
   const role = await api.role.get(roleId);
 

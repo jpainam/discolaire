@@ -16,8 +16,8 @@ import { Separator } from "@repo/ui/separator";
 import { GradeSheetStats } from "./grade-sheet-stats";
 
 interface GradeSheetPageProps {
-  params: { id: string; gradeId: number };
-  searchParams: {
+  params: Promise<{ id: string; gradeId: number }>;
+  searchParams: Promise<{
     color: string;
     name: string;
     reportName: string;
@@ -29,10 +29,10 @@ interface GradeSheetPageProps {
     min: string;
     coef: string;
     termName: string;
-  };
+  }>;
 }
 export default async function Page(props: GradeSheetPageProps) {
-  const searchParams = props.searchParams;
+  const searchParams = (await props.searchParams);
 
   const { t, i18n } = await getServerTranslations();
   const dateFormat = new Intl.DateTimeFormat(i18n.language, {

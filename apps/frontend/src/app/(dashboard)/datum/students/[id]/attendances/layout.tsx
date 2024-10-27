@@ -10,13 +10,18 @@ interface UserLink {
   name: string;
   href: string;
 }
-export default async function Layout({
-  children,
-  params,
-}: {
-  params: { id: string };
-  children: React.ReactNode;
-}) {
+export default async function Layout(
+  props: {
+    params: Promise<{ id: string }>;
+    children: React.ReactNode;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   const { t } = await getServerTranslations();
   const userLinks: UserLink[] = [
     {

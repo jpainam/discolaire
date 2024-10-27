@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from "react";
+import React from "react";
 import { notFound } from "next/navigation";
 import { CalendarDays, DollarSign, Folders, History } from "lucide-react";
 
@@ -19,10 +19,16 @@ interface UserLink {
   href: string;
 }
 
-export default async function Layout({
-  children,
-  params: { id },
-}: PropsWithChildren<{ params: { id: string } }>) {
+export default async function Layout(props: {
+  params: Promise<{ id: string }>;
+  children: React.ReactNode;
+}) {
+  const params = await props.params;
+
+  const { id } = params;
+
+  const { children } = props;
+
   const canReadStaff = await checkPermissions(
     PermissionAction.READ,
     "staff:profile",

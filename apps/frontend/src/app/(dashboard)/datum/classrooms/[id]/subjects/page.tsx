@@ -6,11 +6,17 @@ import { SubjectHeader } from "~/components/classrooms/subjects/SubjectHeader";
 import { SubjectTable } from "~/components/classrooms/subjects/SubjectTable";
 import { api } from "~/trpc/server";
 
-export default async function Page({
-  params: { id },
-}: {
-  params: { id: string };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ id: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const canReadClassroomSubject = await checkPermissions(
     PermissionAction.READ,
     "classroom:subject",

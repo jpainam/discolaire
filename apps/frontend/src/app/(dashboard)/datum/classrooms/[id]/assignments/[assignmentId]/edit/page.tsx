@@ -4,12 +4,13 @@ import { CreateEditAssignment } from "~/components/classrooms/assignments/Create
 import { api } from "~/trpc/server";
 
 interface EditPageProps {
-  params: {
+  params: Promise<{
     id: string;
     assignmentId: string;
-  };
+  }>;
 }
-export default async function Page({ params }: EditPageProps) {
+export default async function Page(props: EditPageProps) {
+  const params = await props.params;
   const assignment = await api.assignment.get(params.assignmentId);
   if (!assignment) {
     notFound();

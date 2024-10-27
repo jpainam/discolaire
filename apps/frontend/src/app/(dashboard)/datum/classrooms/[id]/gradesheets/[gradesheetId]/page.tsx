@@ -4,11 +4,17 @@ import { GradeDataTable } from "~/components/classrooms/gradesheets/grades/Grade
 import { GradeDetailsHeader } from "~/components/classrooms/gradesheets/grades/GradeDetailsHeader";
 import { api } from "~/trpc/server";
 
-export default async function Page({
-  params: { gradesheetId },
-}: {
-  params: { gradesheetId: number };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ gradesheetId: number }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    gradesheetId
+  } = params;
+
   const grades = await api.gradeSheet.grades(Number(gradesheetId));
   const gradesheet = await api.gradeSheet.get(Number(gradesheetId));
   if (!gradesheet) {
