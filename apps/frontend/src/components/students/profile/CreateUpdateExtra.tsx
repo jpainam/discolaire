@@ -1,11 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { LuActivitySquare } from "react-icons/lu";
 import { toast } from "sonner";
 
 import type { Option } from "@repo/ui/multiple-selector";
-import type { Tag } from "@repo/ui/TagInput/tag-input";
 import { useLocale } from "@repo/i18n";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import {
@@ -18,7 +16,6 @@ import {
 } from "@repo/ui/form";
 import MultipleSelector from "@repo/ui/multiple-selector";
 import { Skeleton } from "@repo/ui/skeleton";
-import { TagInput } from "@repo/ui/TagInput/index";
 import { Textarea } from "@repo/ui/textarea";
 
 import { api } from "~/trpc/react";
@@ -26,8 +23,6 @@ import { api } from "~/trpc/react";
 export function CreateUpdateExtra() {
   const { t } = useLocale();
   const clubsQuery = api.setting.clubs.useQuery();
-  const [_tags, setTags] = useState<Tag[]>([]);
-  const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
   const sportsQuery = api.setting.sports.useQuery();
   const sportOptions: Option<string>[] = sportsQuery.data
     ? sportsQuery.data.map((sport) => ({
@@ -104,26 +99,13 @@ export function CreateUpdateExtra() {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="tags"
               render={({ field }) => (
-                <TagInput
-                  activeTagIndex={activeTagIndex}
-                  setActiveTagIndex={setActiveTagIndex}
-                  {...field}
-                  placeholder={t("enter_tags")}
-                  tags={_tags}
-                  setTags={(newTags) => {
-                    setTags(newTags);
-                    form.setValue(
-                      "tags",
-                      (newTags as Tag[]).map((tag) => tag.text),
-                    );
-                  }}
-                />
+                <Textarea {...field} placeholder={t("enter_tags")} />
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name={"observation"}
