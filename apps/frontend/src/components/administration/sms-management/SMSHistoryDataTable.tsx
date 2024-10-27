@@ -4,8 +4,8 @@ import { useMemo } from "react";
 
 import type { DataTableFilterField } from "@repo/ui/datatable/data-table-toolbar";
 import { useLocale } from "@repo/i18n";
+import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
-import { DataTable, useDataTable } from "@repo/ui/datatable/index";
 
 import type { SMSHistory } from "~/types/sms";
 import { useDateFormat } from "~/utils/date-format";

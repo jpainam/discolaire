@@ -3,9 +3,9 @@
 import { useMemo } from "react";
 
 import { useLocale } from "@repo/i18n";
+import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
-import { DataTable, useDataTable } from "@repo/ui/datatable/index";
 
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";

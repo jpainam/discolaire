@@ -5,8 +5,8 @@ import { parseAsIsoDateTime, useQueryState } from "nuqs";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
+import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
-import { DataTable, useDataTable } from "@repo/ui/datatable/index";
 
 import { api } from "~/trpc/react";
 import { useMoneyFormat } from "~/utils/money-format";

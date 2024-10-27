@@ -4,9 +4,9 @@ import { GeistSans } from "geist/font/sans";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { I18nProvider } from "@repo/i18n/i18n-context";
-import { cn } from "@repo/ui";
 import { Toaster } from "@repo/ui/sonner";
 
+import { cn } from "~/lib/utils";
 import { TRPCReactProvider } from "~/trpc/react";
 
 import "~/styles/globals.css";

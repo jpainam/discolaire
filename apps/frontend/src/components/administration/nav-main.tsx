@@ -4,7 +4,6 @@ import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { ChevronRight, Search } from "lucide-react";
 
-import { cn } from "@repo/ui";
 import { Button } from "@repo/ui/button";
 import {
   Collapsible,
@@ -17,6 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { Separator } from "@repo/ui/separator";
 
 import { useIsMobile } from "~/hooks/use-mobile";
+import { cn } from "~/lib/utils";
 
 export function NavMain({
   className,
