@@ -3,9 +3,9 @@ import { cookies } from "next/headers";
 import { accounts, mails } from "~/app/(dashboard)/mail/data";
 import { Mail } from "~/components/shared/mail/mail";
 
-export default function MailPage() {
-  const layout = cookies().get("react-resizable-panels:layout");
-  const collapsed = cookies().get("react-resizable-panels:collapsed");
+export default async function MailPage() {
+  const layout = (await cookies()).get("react-resizable-panels:layout");
+  const collapsed = (await cookies()).get("react-resizable-panels:collapsed");
 
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
   console.log("collapsed", collapsed);

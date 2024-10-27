@@ -1,9 +1,14 @@
+;
 //import { MobileNav } from "~/components/mobile-nav";
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+
+
 import { auth } from "@repo/auth";
+
+
 
 import { api } from "~/trpc/server";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -13,10 +18,11 @@ import { SchoolYearSwitcher } from "./SchoolYearSwitcher";
 import { ServiceSwitcher } from "./ServiceSwitcher";
 import { TopRightMenu } from "./top-right-menu";
 
+
 export async function Header() {
   //const defaultSchoolYear = await api.schoolYear.getDefault();
   //const schoolYear = (await getSchoolYearFromCookie()) ?? defaultSchoolYear?.id;
-  const schoolYear = cookies().get("schoolYear")?.value;
+  const schoolYear = (await cookies()).get("schoolYear")?.value;
   const permissions = await api.user.permissions();
   const session = await auth();
   if (!session) {

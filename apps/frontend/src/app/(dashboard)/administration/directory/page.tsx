@@ -5,11 +5,8 @@ import { PageHeader } from "../PageHeader";
 import DirectoryHeader from "./DirectoryHeader";
 import { DirectoryTable } from "./DirectoryTable";
 
-export default async function Page({
-  searchParams: { q },
-}: {
-  searchParams: { q: string };
-}) {
+export default async function Page(props: { searchParams: { q: string } }) {
+  c;
   const directories = await api.directory.all({ q: q });
 
   const { t } = await getServerTranslations();

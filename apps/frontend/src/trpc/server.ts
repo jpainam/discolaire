@@ -15,7 +15,7 @@ import { createQueryClient } from "./query-client";
 const createContext = cache(async () => {
   const heads = new Headers(await headers());
   heads.set("x-trpc-source", "rsc");
-  heads.set("schoolYearId", cookies().get("schoolYear")?.value ?? "");
+  heads.set("schoolYearId", (await cookies()).get("schoolYear")?.value ?? "");
 
   return createTRPCContext({
     session: await auth(),

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-/* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import type { i18n } from "i18next";
 import { cache } from "react";
@@ -31,8 +30,8 @@ acceptLanguage.languages(languages);
 const cookieName = "i18next";
 
 export async function detectLanguage() {
-  const cookies = getCookies();
-  const headers = getHeaders();
+  const cookies = await getCookies();
+  const headers = await getHeaders();
 
   // here we can read the session data
   // const session = await getSession();

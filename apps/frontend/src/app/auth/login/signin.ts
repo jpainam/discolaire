@@ -56,7 +56,7 @@ export async function authenticate(
         error: "no_school_year",
       };
     }
-    cookies().set({
+    (await cookies()).set({
       name: "schoolYear",
       value: schoolYear.id,
       // Set httpOnly to false when creating the cookie. So the cookie is visible in the client
