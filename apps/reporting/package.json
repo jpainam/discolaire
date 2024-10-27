@@ -17,9 +17,9 @@
     "@repo/api": "workspace:*",
     "@repo/auth": "workspace:*",
     "@repo/i18n": "workspace:*",
-    "next": "^14.2.16",
-    "react": "catalog:react18",
-    "react-dom": "catalog:react18"
+    "next": "^15.0.1",
+    "react": "catalog:react19",
+    "react-dom": "catalog:react19"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
@@ -27,8 +27,8 @@
     "@repo/tailwind-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
     "@types/node": "^20.17.1",
-    "@types/react": "catalog:react18",
-    "@types/react-dom": "catalog:react18",
+    "@types/react": "catalog:react19",
+    "@types/react-dom": "catalog:react19",
     "eslint": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"

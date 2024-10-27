@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./*"]
+      "~/*": ["./*"],
+      "react": ["./node_modules/@types/react"]
     },
     "jsx": "react-native",
     "types": ["nativewind/types"],
