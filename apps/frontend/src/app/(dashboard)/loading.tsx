@@ -1,6 +1,6 @@
-import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
+import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 
-export default function LoadingDashboard() {
+export default function Loading() {
   return (
     <DataTableSkeleton
       columnCount={4}

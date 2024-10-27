@@ -8,7 +8,7 @@ import { useSearchParams } from "next/navigation";
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
 import { Checkbox } from "@repo/ui/checkbox";
-import { DataTableSkeleton } from "@repo/ui/data-table/v2/data-table-skeleton";
+import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 import FlatBadge from "@repo/ui/FlatBadge";
 import {
   Table,

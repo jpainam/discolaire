@@ -4,10 +4,9 @@ import { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 
 import { useLocale } from "@repo/i18n";
-import { DataTable } from "@repo/ui/data-table/data-table";
-import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
-import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
-import { useDataTable } from "@repo/ui/data-table/index";
+import { DataTable, useDataTable } from "@repo/ui/datatable";
+import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
+import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
 
 import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
@@ -41,7 +40,7 @@ export function RequiredFeeDataTable() {
   const { table } = useDataTable({
     data: transactionsQuery.data ?? [],
     columns: columns,
-    pageCount: 1,
+    rowCount: transactionsQuery.data?.length ?? 0,
   });
   if (transactionsQuery.isPending) {
     return <DataTableSkeleton className="px-2" rowCount={15} columnCount={8} />;
@@ -51,7 +50,7 @@ export function RequiredFeeDataTable() {
     return;
   }
   return (
-    <DataTable className="px-2" variant="compact" table={table}>
+    <DataTable className="px-2" table={table}>
       <DataTableToolbar searchPlaceholder={t("search")} table={table}>
         <TransactionDataTableActions table={table} />
       </DataTableToolbar>

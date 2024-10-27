@@ -11,7 +11,7 @@ import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";
-import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
+import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 import {
   DropdownMenu,
   DropdownMenuContent,

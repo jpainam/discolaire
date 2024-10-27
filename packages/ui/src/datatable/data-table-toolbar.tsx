@@ -7,8 +7,8 @@ import { useQueryState } from "nuqs";
 
 import { cn } from "..";
 import { Button } from "../button";
-import { DataTableFacetedFilter } from "../data-table/data-table-faceted-filter";
 import { Input } from "../input";
+import { DataTableFacetedFilter } from "./data-table-faceted-filter";
 
 export interface Option {
   label: string;

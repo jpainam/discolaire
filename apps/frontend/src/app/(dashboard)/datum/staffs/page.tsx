@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
+import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 import { Separator } from "@repo/ui/separator";
 
 import { StaffDataTable } from "~/components/staffs/StaffDataTable";

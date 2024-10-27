@@ -5,10 +5,9 @@ import { useSearchParams } from "next/navigation";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
-import { DataTable } from "@repo/ui/data-table/data-table";
-import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
-import { DataTableToolbar } from "@repo/ui/data-table/data-table-toolbar";
-import { useDataTable } from "@repo/ui/data-table/index";
+import { DataTable, useDataTable } from "@repo/ui/datatable";
+import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
+import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
 
 import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
@@ -50,7 +49,7 @@ export function FeeDataTable() {
   const { table } = useDataTable({
     data: filteredFees,
     columns,
-    pageCount: Math.ceil(filteredFees.length / 10),
+    rowCount: Math.ceil(filteredFees.length / 10),
     defaultPageSize: 10,
   });
 
@@ -70,7 +69,7 @@ export function FeeDataTable() {
   }
 
   return (
-    <DataTable className="px-2" variant="compact" table={table}>
+    <DataTable className="px-2" table={table}>
       <DataTableToolbar searchPlaceholder={t("search")} table={table}>
         <FeeDataTableActions table={table} />
       </DataTableToolbar>

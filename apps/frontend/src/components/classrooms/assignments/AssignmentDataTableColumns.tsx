@@ -8,7 +8,7 @@ import i18next from "i18next";
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
-import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
+import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 import {
   DropdownMenu,
   DropdownMenuContent,

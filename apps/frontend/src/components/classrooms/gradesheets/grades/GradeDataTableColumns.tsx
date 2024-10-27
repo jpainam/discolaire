@@ -11,7 +11,7 @@ import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { useConfirm } from "@repo/ui/confirm-dialog";
-import { DataTableColumnHeader } from "@repo/ui/data-table/data-table-column-header";
+import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 import {
   DropdownMenu,
   DropdownMenuContent,

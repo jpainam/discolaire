@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { useLocale } from "@repo/i18n";
-import { useDataTable } from "@repo/ui/data-table/index";
+import { useDataTable } from "@repo/ui/datatable";
 
 import type { GradeSheetTableType } from "./gradesheet-columns";
 import { api } from "~/trpc/react";
@@ -55,7 +55,7 @@ export function GradeSheetTable({ studentId }: { studentId: string }) {
   const { table } = useDataTable({
     data: data,
     columns: columns,
-    pageCount: -1,
+    rowCount: 1,
   });
 
   return (

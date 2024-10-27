@@ -14,7 +14,7 @@ import {
 
 import { getServerTranslations } from "@repo/i18n/server";
 import { Button } from "@repo/ui/button";
-import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
+import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 import { Label } from "@repo/ui/label";
 import { Separator } from "@repo/ui/separator";
 

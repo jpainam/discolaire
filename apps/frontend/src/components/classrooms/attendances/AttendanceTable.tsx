@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 import { useLocale } from "@repo/i18n";
-import { DataTableSkeleton } from "@repo/ui/data-table/data-table-skeleton";
+import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 import { Form } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import {
