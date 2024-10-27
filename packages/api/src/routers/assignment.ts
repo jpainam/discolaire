@@ -105,6 +105,11 @@ export const assignmentRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.assignment.deleteMany({
         where: {
+          subject: {
+            classroom: {
+              schoolId: ctx.schoolId,
+            },
+          },
           id: {
             in: Array.isArray(input) ? input : [input],
           },

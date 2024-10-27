@@ -10,9 +10,10 @@ import {
 
 import { getServerTranslations } from "@repo/i18n/server";
 import { Badge } from "@repo/ui/badge";
-import { Card, CardContent, CardHeader } from "@repo/ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "@repo/ui/card";
 import { Separator } from "@repo/ui/separator";
 
+import { AssignmentDetailsHeader } from "~/components/classrooms/assignments/AssignmentDetailsHeader";
 import { api } from "~/trpc/server";
 
 export default async function Page({
@@ -26,104 +27,102 @@ export default async function Page({
     notFound();
   }
   return (
-    <div className="p-4">
-      <Card className="overflow-hidden">
-        <CardHeader className="border-b bg-primary/5 pb-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="mb-1 text-2xl font-semibold">
-                {assignment.title}
-              </h1>
-              <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
-                <span className="flex items-center gap-1">
-                  <BookOpen className="h-4 w-4" />
-                  {assignment.category.name}
-                </span>
-                <span className="flex items-center gap-1">
-                  <GraduationCap className="h-4 w-4" />
-                  {assignment.subject.course.name}
-                </span>
-              </div>
+    <Card className="overflow-hidden rounded-none border-none shadow-none">
+      <CardHeader className="border-b bg-muted/50 px-4 py-1">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="mb-1 text-xl font-semibold">{assignment.title}</h1>
+            <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
+              <span className="flex items-center gap-1">
+                <BookOpen className="h-4 w-4" />
+                {assignment.category.name}
+              </span>
+              <span className="flex items-center gap-1">
+                <GraduationCap className="h-4 w-4" />
+                {assignment.subject.course.name}
+              </span>
             </div>
-            <Badge variant="secondary" className="text-xs">
+          </div>
+          <div className="flex flex-col items-end justify-end gap-2">
+            <Badge variant="default" className="text-xs">
               {assignment.dueDate?.toLocaleDateString(i18n.language, {
                 year: "numeric",
                 month: "short",
                 day: "numeric",
               })}
             </Badge>
+            <AssignmentDetailsHeader assignmentId={assignmentId} />
           </div>
-        </CardHeader>
-        <CardContent className="p-0">
-          <div className="p-4">
-            <h2 className="mb-2 text-sm font-semibold">{t("description")}</h2>
-            <div
-              className="prose prose-sm max-w-none"
-              dangerouslySetInnerHTML={{
-                __html: assignment.description ?? "",
-              }}
-            ></div>
+        </div>
+      </CardHeader>
+      <CardContent className="p-0">
+        <div className="p-4">
+          <h2 className="mb-2 text-sm font-semibold">{t("description")}</h2>
+          <div
+            className="prose prose-sm max-w-none"
+            dangerouslySetInnerHTML={{
+              __html: assignment.description ?? "",
+            }}
+          ></div>
+        </div>
+        <Separator />
+        <div className="grid gap-4 p-4 sm:grid-cols-2">
+          <div>
+            <h2 className="mb-2 text-sm font-semibold">{t("attachments")}</h2>
+            <ul className="space-y-1 text-sm">
+              <li className="flex items-center gap-2">
+                <FileText className="h-4 w-4 text-muted-foreground" />
+                <span className="cursor-pointer text-blue-600 hover:underline">
+                  assignment_instructions.pdf
+                </span>
+              </li>
+              <li className="flex items-center gap-2">
+                <FileText className="h-4 w-4 text-muted-foreground" />
+                <span className="cursor-pointer text-blue-600 hover:underline">
+                  reference_material.docx
+                </span>
+              </li>
+            </ul>
           </div>
-          <Separator />
-          <div className="grid gap-4 p-4 sm:grid-cols-2">
+          <div>
+            <h2 className="mb-2 text-sm font-semibold">{t("links")}</h2>
+            <ul className="space-y-1 text-sm">
+              <li className="flex items-center gap-2">
+                <Link className="h-4 w-4 text-muted-foreground" />
+                <a href="#" className="text-blue-600 hover:underline">
+                  Research Resource 1
+                </a>
+              </li>
+              <li className="flex items-center gap-2">
+                <Link className="h-4 w-4 text-muted-foreground" />
+                <a href="#" className="text-blue-600 hover:underline">
+                  Additional Reading
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter className="w-full border-y bg-secondary/50 p-4 text-xs">
+        <dl className="grid w-full gap-2 sm:grid-cols-2">
+          <div className="flex items-center gap-2">
+            <Calendar className="h-4 w-4 text-muted-foreground" />
             <div>
-              <h2 className="mb-2 text-sm font-semibold">{t("attachments")}</h2>
-              <ul className="space-y-1 text-sm">
-                <li className="flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-muted-foreground" />
-                  <span className="cursor-pointer text-blue-600 hover:underline">
-                    assignment_instructions.pdf
-                  </span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-muted-foreground" />
-                  <span className="cursor-pointer text-blue-600 hover:underline">
-                    reference_material.docx
-                  </span>
-                </li>
-              </ul>
+              <dt className="font-medium">Visible Period</dt>
+              <dd className="text-muted-foreground">
+                Oct 26, 2024 - Nov 02, 2024
+              </dd>
             </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Clock className="h-4 w-4 text-muted-foreground" />
             <div>
-              <h2 className="mb-2 text-sm font-semibold">{t("links")}</h2>
-              <ul className="space-y-1 text-sm">
-                <li className="flex items-center gap-2">
-                  <Link className="h-4 w-4 text-muted-foreground" />
-                  <a href="#" className="text-blue-600 hover:underline">
-                    Research Resource 1
-                  </a>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Link className="h-4 w-4 text-muted-foreground" />
-                  <a href="#" className="text-blue-600 hover:underline">
-                    Additional Reading
-                  </a>
-                </li>
-              </ul>
+              <dt className="font-medium">Posted on Calendar</dt>
+              <dd className="text-muted-foreground">Yes</dd>
             </div>
           </div>
-          <Separator />
-          <div className="bg-secondary/20 p-4 text-xs">
-            <dl className="grid gap-2 sm:grid-cols-2">
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-                <div>
-                  <dt className="font-medium">Visible Period</dt>
-                  <dd className="text-muted-foreground">
-                    Oct 26, 2024 - Nov 02, 2024
-                  </dd>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-muted-foreground" />
-                <div>
-                  <dt className="font-medium">Posted on Calendar</dt>
-                  <dd className="text-muted-foreground">Yes</dd>
-                </div>
-              </div>
-            </dl>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+        </dl>
+      </CardFooter>
+    </Card>
   );
 }

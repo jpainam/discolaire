@@ -13,11 +13,13 @@ import { Button } from "@repo/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@repo/ui/form";
+import { Input } from "@repo/ui/input";
 import { Separator } from "@repo/ui/separator";
 import { Skeleton } from "@repo/ui/skeleton";
 
@@ -32,7 +34,7 @@ const createEditSubjectSchema = z.object({
   teacherId: z.string().min(1),
   subjectGroupId: z.string().min(1),
   coefficient: z.string().min(1),
-  order: z.string().min(1).optional().default("1"),
+  order: z.coerce.number().default(1),
 });
 type CreateEditSubjectValue = z.infer<typeof createEditSubjectSchema>;
 type Subject = NonNullable<RouterOutputs["subject"]["get"]>;
@@ -49,7 +51,7 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
       teacherId: subject?.teacherId?.toString() ?? "",
       subjectGroupId: subject?.subjectGroupId?.toString() ?? "",
       coefficient: subject?.coefficient.toString() ?? "",
-      order: subject?.order.toString() ?? "",
+      order: subject?.order ?? 1,
     },
     resolver: zodResolver(createEditSubjectSchema),
   });
@@ -103,10 +105,7 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
     value: i.toString(),
     label: i.toString(),
   }));
-  const orders = rangeMap(10, (i) => ({
-    value: i.toString(),
-    label: i.toString(),
-  }));
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -167,12 +166,26 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
               description={t("subject_group_description")}
             />
           )}
-          <SelectField
-            label={t("order")}
-            description={t("subject_order_description")}
+          <FormField
+            control={form.control}
             name="order"
-            placeholder={t("subject_order")}
-            items={orders}
+            render={({ field }) => (
+              <FormItem className="space-y-0">
+                <FormLabel>{t("order")}</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder={t("subject_order")}
+                    {...field}
+                    defaultValue={subject?.order.toString()}
+                  />
+                </FormControl>
+                <FormDescription>
+                  {t("subject_order_description")}
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
           />
         </div>
         <div className="flex flex-row items-end justify-end gap-2 px-2 py-4">
