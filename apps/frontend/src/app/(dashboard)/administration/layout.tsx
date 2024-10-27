@@ -1,12 +1,14 @@
-import type { PropsWithChildren } from "react";
+import React from "react";
+import { cookies } from "next/headers";
 
 import { AppSidebar } from "~/components/administration/app-sidebar";
 import { SidebarLayout } from "~/components/administration/sidebar";
 
-export default async function Layout({ children }: PropsWithChildren) {
-  const { cookies } =
-    await /* @next-codemod-error The APIs under 'next/headers' are async now, need to be manually awaited. */
-    import("next/headers");
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <SidebarLayout
       defaultOpen={(await cookies()).get("sidebar:state")?.value === "true"}
