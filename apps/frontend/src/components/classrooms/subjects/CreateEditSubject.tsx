@@ -1,8 +1,6 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -18,6 +16,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  useForm,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { Separator } from "@repo/ui/separator";
@@ -36,7 +35,7 @@ const createEditSubjectSchema = z.object({
   coefficient: z.string().min(1),
   order: z.coerce.number().default(1),
 });
-type CreateEditSubjectValue = z.infer<typeof createEditSubjectSchema>;
+
 type Subject = NonNullable<RouterOutputs["subject"]["get"]>;
 
 export function CreateEditSubject({ subject }: { subject?: Subject }) {
@@ -45,7 +44,8 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
   const params = useParams<{ id: string }>();
   const utils = api.useUtils();
 
-  const form = useForm<CreateEditSubjectValue>({
+  const form = useForm({
+    schema: createEditSubjectSchema,
     defaultValues: {
       courseId: subject?.courseId.toString() ?? "",
       teacherId: subject?.teacherId?.toString() ?? "",
@@ -53,7 +53,6 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
       coefficient: subject?.coefficient.toString() ?? "",
       order: subject?.order ?? 1,
     },
-    resolver: zodResolver(createEditSubjectSchema),
   });
 
   const subjectGroupsQuery = api.subjectGroup.all.useQuery();
@@ -83,7 +82,7 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
     },
   });
 
-  const onSubmit = (data: CreateEditSubjectValue) => {
+  const onSubmit = (data: z.infer<typeof createEditSubjectSchema>) => {
     const formValues = {
       courseId: data.courseId,
       teacherId: data.teacherId,

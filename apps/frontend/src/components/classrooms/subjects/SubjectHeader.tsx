@@ -64,10 +64,10 @@ export function SubjectHeader({
   ] as FlatBadgeVariant[];
 
   return (
-    <div className="flex w-full flex-row items-center gap-2 border-b bg-muted px-2 py-1 text-secondary-foreground">
-      {Icon && <Icon className="h-6 w-6" />}
-      <Label>{t("subjects")}</Label>
-      <div className="flex flex-row items-center gap-2">
+    <div className="grid w-full grid-cols-1 flex-row items-center gap-2 border-b bg-muted px-2 py-1 text-secondary-foreground md:flex">
+      {Icon && <Icon className="hidden h-6 w-6 md:block" />}
+      <Label className="hidden md:block">{t("subjects")}</Label>
+      <div className="grid grid-cols-3 flex-row items-center gap-2 md:flex">
         <FlatBadge variant={"indigo"}>
           {subjects.length} {t("subjects")}
         </FlatBadge>
@@ -89,7 +89,7 @@ export function SubjectHeader({
           {coeff} {t("coefficient")}
         </FlatBadge>
       </div>
-      <div className="ml-auto flex flex-row items-center gap-1">
+      <div className="grid flex-row items-center gap-1 md:ml-auto md:flex">
         {canAddClassroomSubject && (
           <Button
             size={"sm"}
