@@ -5,11 +5,10 @@ import * as React from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useQueryState } from "nuqs";
 
-import { Button } from "@repo/ui/button";
-import { DataTableFacetedFilter } from "@repo/ui/data-table/data-table-faceted-filter";
-import { Input } from "@repo/ui/input";
-
 import { cn } from "..";
+import { Button } from "../button";
+import { DataTableFacetedFilter } from "../data-table/data-table-faceted-filter";
+import { Input } from "../input";
 
 export interface Option {
   label: string;

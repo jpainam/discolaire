@@ -6,7 +6,7 @@ import * as SheetPrimitive from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { cva } from "class-variance-authority";
 
-import { cn } from "@repo/ui";
+import { cn } from "./utils";
 
 const Sheet = SheetPrimitive.Root;
 
@@ -129,13 +129,13 @@ SheetDescription.displayName = SheetPrimitive.Description.displayName;
 
 export {
   Sheet,
-  SheetPortal,
-  SheetOverlay,
-  SheetTrigger,
   SheetClose,
   SheetContent,
-  SheetHeader,
-  SheetFooter,
-  SheetTitle,
   SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetOverlay,
+  SheetPortal,
+  SheetTitle,
+  SheetTrigger,
 };

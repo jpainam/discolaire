@@ -8,7 +8,7 @@ import {
 } from "@radix-ui/react-icons";
 import * as MenubarPrimitive from "@radix-ui/react-menubar";
 
-import { cn } from "@repo/ui";
+import { cn } from "./utils";
 
 const MenubarMenu = MenubarPrimitive.Menu;
 
@@ -222,19 +222,19 @@ MenubarShortcut.displayname = "MenubarShortcut";
 
 export {
   Menubar,
-  MenubarMenu,
-  MenubarTrigger,
-  MenubarContent,
-  MenubarItem,
-  MenubarSeparator,
-  MenubarLabel,
   MenubarCheckboxItem,
+  MenubarContent,
+  MenubarGroup,
+  MenubarItem,
+  MenubarLabel,
+  MenubarMenu,
+  MenubarPortal,
   MenubarRadioGroup,
   MenubarRadioItem,
-  MenubarPortal,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarSub,
   MenubarSubContent,
   MenubarSubTrigger,
-  MenubarGroup,
-  MenubarSub,
-  MenubarShortcut,
+  MenubarTrigger,
 };

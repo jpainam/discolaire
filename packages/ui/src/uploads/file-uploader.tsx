@@ -9,10 +9,10 @@ import Dropzone from "react-dropzone";
 import { toast } from "sonner";
 
 import { useControllableState } from "@repo/hooks/use-controllable-state";
-import { Button } from "@repo/ui/button";
-import { Progress } from "@repo/ui/progress";
-import { ScrollArea } from "@repo/ui/scroll-area";
 
+import { Button } from "../button";
+import { Progress } from "../progress";
+import { ScrollArea } from "../scroll-area";
 import { cn, formatBytes } from "../utils";
 
 interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {

@@ -9,15 +9,17 @@ import {
 } from "@radix-ui/react-icons";
 
 import { useDebounce } from "@repo/hooks/use-debounce";
-import { Button } from "@repo/ui/button";
+
+import type { DataTableFilterOption } from "../types";
+import { Button } from "../../button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import { Input } from "@repo/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+} from "../../dropdown-menu";
+import { Input } from "../../input";
+import { Popover, PopoverContent, PopoverTrigger } from "../../popover";
 import {
   Select,
   SelectContent,
@@ -25,10 +27,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
-import { Separator } from "@repo/ui/separator";
-
-import type { DataTableFilterOption } from "../types";
+} from "../../select";
+import { Separator } from "../../separator";
 import { DataTableFacetedFilter } from "../data-table-faceted-filter";
 
 const operators = [

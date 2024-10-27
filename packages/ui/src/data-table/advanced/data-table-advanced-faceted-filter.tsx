@@ -1,6 +1,8 @@
 import type { Column } from "@tanstack/react-table";
 import { CheckIcon } from "@radix-ui/react-icons";
 
+import type { Option } from "../types";
+import { cn } from "../..";
 import {
   Command,
   CommandEmpty,
@@ -9,10 +11,7 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@repo/ui/command";
-
-import type { Option } from "../types";
-import { cn } from "../..";
+} from "../../command";
 
 interface DataTableAdvancedFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;

@@ -18,9 +18,8 @@ import {
   useFormContext,
 } from "react-hook-form";
 
-import { cn } from "@repo/ui";
-
 import { Label } from "./label";
+import { cn } from "./utils";
 
 const useForm = <
   TOut extends FieldValues,

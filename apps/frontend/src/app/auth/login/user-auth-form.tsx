@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormStatus } from "react-dom";
 
 import { useLocale } from "@repo/hooks/use-locale";
 import { Button } from "@repo/ui/button";
@@ -16,9 +16,10 @@ import { authenticate } from "./signin";
 type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const [state, submitAction] = useFormState(authenticate, {
+  const [state, submitAction, isPending] = React.useActionState(authenticate, {
     error: "",
   });
+  console.log(isPending);
 
   const { t } = useLocale();
   return (

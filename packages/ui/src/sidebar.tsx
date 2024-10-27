@@ -6,18 +6,17 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 import { PanelLeft } from "lucide-react";
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@repo/ui/tooltip";
-
 import { Button } from "./button";
 import { Input } from "./input";
 import { Separator } from "./separator";
 import { Sheet, SheetContent } from "./sheet";
 import { Skeleton } from "./skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./tooltip";
 import { useIsMobile } from "./use-mobile";
 import { cn } from "./utils";
 

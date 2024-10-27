@@ -5,31 +5,43 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./src/index.ts"
-    },
-    "./Stepper/*": {
-      "types": "./dist/Stepper/index.d.ts",
-      "default": [
-        "./src/Stepper/*.ts",
-        "./src/Stepper/*.tsx"
-      ]
-    },
-    "./datatable": {
-      "types": "./dist/datatable/index.d.ts",
-      "default": [
-        "./src/datatable/*.ts",
-        "./src/datatable/*.tsx"
-      ]
-    },
-    "./*": {
-      "types": "./dist/*.d.ts",
-      "default": [
-        "./src/*.ts",
-        "./src/*.tsx"
-      ]
-    }
+    "./button": "./src/button.tsx",
+    "./dropdown-menu": "./src/dropdown-menu.tsx",
+    "./form": "./src/form.tsx",
+    "./input": "./src/input.tsx",
+    "./label": "./src/label.tsx",
+    "./theme": "./src/theme.tsx",
+    "./toast": "./src/toast.tsx",
+    "./tooltip": "./src/tooltip.tsx",
+    "./textarea": "./src/textarea.tsx",
+    "./select": "./src/select.tsx",
+    "./radio": "./src/radio.tsx",
+    "./checkbox": "./src/checkbox.tsx",
+    "./switch": "./src/switch.tsx",
+    "./slider": "./src/slider.tsx",
+    "./tabs": "./src/tabs.tsx",
+    "./dialog": "./src/dialog.tsx",
+    "./alert-dialog": "./src/alert-dialog.tsx",
+    "./popover": "./src/popover.tsx",
+    "./accordion": "./src/accordion.tsx",
+    "./collapsible": "./src/collapsible.tsx",
+    "./scroll-area": "./src/scroll-area.tsx",
+    "./progress": "./src/progress.tsx",
+    "./avatar": "./src/avatar.tsx",
+    "./aspect-ratio": "./src/aspect-ratio.tsx",
+    "./separator": "./src/separator.tsx",
+    "./breadcrumb": "./src/breadcrumb.tsx",
+    "./calendar": "./src/calendar.tsx",
+    "./command": "./src/command.tsx",
+    "./card": "./src/card.tsx",
+    "./menu": "./src/menu.tsx",
+    "./pagination": "./src/pagination.tsx",
+    "./table": "./src/table.tsx",
+    "./toggle": "./src/toggle.tsx",
+    "./toggle-group": "./src/toggle-group.tsx",
+    "./visually-hidden": "./src/visually-hidden.tsx",
+    "./icons": "./src/icons.tsx",
+    "./navigation-menu": "./src/navigation"
   },
   "scripts": {
     "build": "tsc",

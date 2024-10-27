@@ -3,10 +3,9 @@
 import * as React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 
-import { cn } from "@repo/ui";
-
 // @ts-expect-error TODO  - fix this
 import styles from "./popover.module.css";
+import { cn } from "./utils";
 
 const Popover = PopoverPrimitive.Root;
 

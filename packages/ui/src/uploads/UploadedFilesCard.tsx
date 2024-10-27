@@ -6,9 +6,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/card";
-import { ScrollArea, ScrollBar } from "@repo/ui/scroll-area";
-
+} from "../card";
+import { ScrollArea, ScrollBar } from "../scroll-area";
 import { EmptyCard } from "./EmptyCard";
 
 interface UploadedFile {

@@ -6,13 +6,12 @@ import type { Table } from "@tanstack/react-table";
 import * as React from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
 
-import { Button } from "@repo/ui/button";
-import { DataTableFacetedFilter } from "@repo/ui/data-table/data-table-faceted-filter";
-import { DataTableViewOptions } from "@repo/ui/data-table/data-table-view-options";
-import { Input } from "@repo/ui/input";
-
 import type { DataTableFilterField } from "./types";
 import { cn } from "..";
+import { Button } from "../button";
+import { DataTableFacetedFilter } from "../data-table/data-table-faceted-filter";
+import { DataTableViewOptions } from "../data-table/data-table-view-options";
+import { Input } from "../input";
 
 interface DataTableToolbarProps<TData>
   extends React.HTMLAttributes<HTMLDivElement> {

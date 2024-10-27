@@ -5,16 +5,15 @@ import type { Table } from "@tanstack/react-table";
 import * as React from "react";
 import { PlusIcon, SwitchIcon } from "@radix-ui/react-icons";
 
-import { Button } from "@repo/ui/button";
-import { DataTableAdvancedFilter } from "@repo/ui/data-table/advanced/data-table-advanced-filter";
-import { DataTableViewOptions } from "@repo/ui/data-table/data-table-view-options";
-import { Input } from "@repo/ui/input";
-
 import type {
   DataTableFilterableColumn,
   DataTableFilterOption,
   DataTableSearchableColumn,
 } from "../types";
+import { Button } from "../../button";
+import { DataTableAdvancedFilter } from "../../data-table/advanced/data-table-advanced-filter";
+import { DataTableViewOptions } from "../../data-table/data-table-view-options";
+import { Input } from "../../input";
 import { DataTableAdvancedFilterItem } from "./data-table-advanced-filter-item";
 import { DataTableMultiFilter } from "./data-table-multi-filter";
 

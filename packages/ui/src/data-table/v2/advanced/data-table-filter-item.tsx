@@ -4,9 +4,12 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { TrashIcon } from "@radix-ui/react-icons";
 
 import { useDebounce } from "@repo/hooks/use-debounce";
-import { Button } from "@repo/ui/button";
-import { Input } from "@repo/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+
+import type { DataTableFilterOption } from "../datatypes";
+import { cn } from "../../..";
+import { Button } from "../../../button";
+import { Input } from "../../../input";
+import { Popover, PopoverContent, PopoverTrigger } from "../../../popover";
 import {
   Select,
   SelectContent,
@@ -14,10 +17,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
-
-import type { DataTableFilterOption } from "../datatypes";
-import { cn } from "../../..";
+} from "../../../select";
 import { dataTableConfig } from "../config";
 import { DataTableAdvancedFacetedFilter } from "./data-table-advanced-faceted-filter";
 

@@ -6,14 +6,14 @@ import {
   DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
 
-import { Button } from "@repo/ui/button";
+import { Button } from "../button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
+} from "../select";
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;

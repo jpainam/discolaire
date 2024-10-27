@@ -5,9 +5,12 @@ import { TrashIcon } from "@radix-ui/react-icons";
 
 import { useDebounce } from "@repo/hooks/use-debounce";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Input } from "@repo/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+
+import type { DataTableFilterOption } from "../types";
+import { cn } from "../..";
+import { Button } from "../../button";
+import { Input } from "../../input";
+import { Popover, PopoverContent, PopoverTrigger } from "../../popover";
 import {
   Select,
   SelectContent,
@@ -15,10 +18,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
-
-import type { DataTableFilterOption } from "../types";
-import { cn } from "../..";
+} from "../../select";
 import { DataTableAdvancedFacetedFilter } from "./data-table-advanced-faceted-filter";
 
 interface DataTableAdvancedFilterItemProps<TData> {

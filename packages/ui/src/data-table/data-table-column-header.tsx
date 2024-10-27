@@ -6,16 +6,15 @@ import {
   EyeNoneIcon,
 } from "@radix-ui/react-icons";
 
-import { Button } from "@repo/ui/button";
+import { cn } from "..";
+import { Button } from "../button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-
-import { cn } from "..";
+} from "../dropdown-menu";
 
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {

@@ -8,7 +8,8 @@ import {
   TextIcon,
 } from "@radix-ui/react-icons";
 
-import { Button } from "@repo/ui/button";
+import type { DataTableFilterOption } from "../types";
+import { Button } from "../../button";
 import {
   Command,
   CommandEmpty,
@@ -17,10 +18,8 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@repo/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
-
-import type { DataTableFilterOption } from "../types";
+} from "../../command";
+import { Popover, PopoverContent, PopoverTrigger } from "../../popover";
 
 interface DataTableAdvancedFilterProps<TData> {
   options: DataTableFilterOption<TData>[];

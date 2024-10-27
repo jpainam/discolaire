@@ -5,10 +5,9 @@ import * as React from "react";
 import { useSearchParams } from "next/navigation";
 import { CaretSortIcon, PlusIcon } from "@radix-ui/react-icons";
 
-import { Button } from "@repo/ui/button";
-
 import type { DataTableFilterField, DataTableFilterOption } from "../datatypes";
 import { cn } from "../../..";
+import { Button } from "../../../button";
 import { DataTableViewOptions } from "../data-table-view-options";
 import { DataTableFilterCombobox } from "./data-table-filter-combobox";
 import { DataTableFilterItem } from "./data-table-filter-item";

@@ -9,15 +9,18 @@ import {
 } from "@radix-ui/react-icons";
 
 import { useDebounce } from "@repo/hooks/use-debounce";
-import { Button } from "@repo/ui/button";
+
+import type { DataTableConfig } from "../config";
+import type { DataTableFilterOption } from "../datatypes";
+import { Button } from "../../../button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import { Input } from "@repo/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+} from "../../../dropdown-menu";
+import { Input } from "../../../input";
+import { Popover, PopoverContent, PopoverTrigger } from "../../../popover";
 import {
   Select,
   SelectContent,
@@ -25,11 +28,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
-import { Separator } from "@repo/ui/separator";
-
-import type { DataTableConfig } from "../config";
-import type { DataTableFilterOption } from "../datatypes";
+} from "../../../select";
+import { Separator } from "../../../separator";
 import { dataTableConfig } from "../config";
 import { DataTableFacetedFilter } from "../data-table-faceted-filter";
 
