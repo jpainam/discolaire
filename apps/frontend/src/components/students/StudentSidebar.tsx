@@ -8,7 +8,6 @@ import { useLocale } from "@repo/i18n";
 import { SortableList } from "@repo/ui/dnd/dnd-sortable-list";
 import { Skeleton } from "@repo/ui/skeleton";
 
-import Menu from "~/components/menu/dropdown/menu";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { sidebarIcons } from "./sidebar-icons";
@@ -70,14 +69,8 @@ export function StudentSidebar({ className }: { className?: string }) {
             return (
               <Fragment key={"sortable-menu" + item.name + "-" + index}>
                 <SortableList.Item id={item.id}>
-                  <Menu
-                    trigger="hover"
-                    placement="right-start"
-                    offset={2}
-                    //opened={true}
-                    closeDelay={0}
-                  >
-                    <Menu.Trigger>
+                  <div>
+                    <div>
                       <div
                         className={cn(
                           "relative m-1 flex grow cursor-pointer items-center justify-between overflow-hidden rounded-md px-2 py-2 transition-all hover:ps-7",
@@ -98,8 +91,8 @@ export function StudentSidebar({ className }: { className?: string }) {
                           {t(item.title)}
                         </Link>
                       </div>
-                    </Menu.Trigger>
-                  </Menu>
+                    </div>
+                  </div>
                 </SortableList.Item>
               </Fragment>
             );

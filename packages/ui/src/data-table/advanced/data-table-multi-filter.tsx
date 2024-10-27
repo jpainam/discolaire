@@ -194,8 +194,14 @@ export function MultiFilterRow<TData>({
         },
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debounceValue, filterVariety, selectedOption?.value]);
+  }, [
+    createQueryString,
+    debounceValue,
+    filterVariety,
+    pathname,
+    router,
+    selectedOption?.value,
+  ]);
 
   // Update operator query string
   React.useEffect(() => {
@@ -209,8 +215,7 @@ export function MultiFilterRow<TData>({
         },
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [operator?.value]);
+  }, [createQueryString, operator?.value, pathname, router]);
 
   return (
     <div className="flex items-center space-x-2">

@@ -1,22 +1,16 @@
 import { isInvitationLinkMatch } from "@repo/lib/encrypt";
 
-export default async function Page(
-  props: {
-    params: Promise<{ code: string }>;
-    searchParams: Promise<{ email: string }>;
-  }
-) {
+export default async function Page(props: {
+  params: Promise<{ code: string }>;
+  searchParams: Promise<{ email: string }>;
+}) {
   const searchParams = await props.searchParams;
 
-  const {
-    email
-  } = searchParams;
+  const { email } = searchParams;
 
   const params = await props.params;
 
-  const {
-    code
-  } = params;
+  const { code } = params;
 
   const isMatch = await isInvitationLinkMatch(decodeURIComponent(code), email);
 

@@ -20,8 +20,7 @@ export default function GlobalSheet() {
   const pathname = usePathname();
   useEffect(() => {
     closeSheet();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, [closeSheet, pathname]);
 
   return (
     <Sheet

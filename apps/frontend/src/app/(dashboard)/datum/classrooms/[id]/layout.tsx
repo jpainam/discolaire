@@ -7,21 +7,15 @@ import { NoPermission } from "@repo/ui/no-permission";
 import { ClassroomHeader } from "~/components/classrooms/ClassroomHeader";
 import { ClassroomSidebar } from "~/components/classrooms/ClassroomSidebar";
 
-export default async function Layout(
-  props: {
-    children: React.ReactNode;
-    params: Promise<{ id: string }>;
-  }
-) {
+export default async function Layout(props: {
+  children: React.ReactNode;
+  params: Promise<{ id: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    id
-  } = params;
+  const { id } = params;
 
-  const {
-    children
-  } = props;
+  const { children } = props;
 
   const canReadStudent = await checkPermissions(
     PermissionAction.READ,

@@ -1,14 +1,9 @@
-;
 //import { MobileNav } from "~/components/mobile-nav";
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-
-
 import { auth } from "@repo/auth";
-
-
 
 import { api } from "~/trpc/server";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -17,7 +12,6 @@ import { MobileNav } from "./mobile-nav";
 import { SchoolYearSwitcher } from "./SchoolYearSwitcher";
 import { ServiceSwitcher } from "./ServiceSwitcher";
 import { TopRightMenu } from "./top-right-menu";
-
 
 export async function Header() {
   //const defaultSchoolYear = await api.schoolYear.getDefault();

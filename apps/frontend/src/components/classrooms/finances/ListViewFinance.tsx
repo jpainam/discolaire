@@ -41,7 +41,11 @@ export function ListViewFinance({
   );
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
-  let total = 0;
+
+  const total = students.reduce(
+    (acc, stud) => acc + (stud.balance - amountDue),
+    0,
+  );
   return (
     <div className="m-2 rounded-lg border">
       <Table>
@@ -71,7 +75,6 @@ export function ListViewFinance({
             if (type == "debit" && remaining > 0) {
               return null;
             }
-            total += remaining;
             return (
               <TableRow key={stud.id}>
                 <TableCell className="py-0">

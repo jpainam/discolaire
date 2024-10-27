@@ -7,10 +7,8 @@ import { v4 as uuidv4 } from "uuid";
 
 import type { tagVariants } from "./tag";
 import { Button } from "../button";
-import { CommandInput } from "../command";
 import { Input } from "../input";
 import { cn } from "../utils";
-import { Autocomplete } from "./autocomplete";
 import { TagList } from "./tag-list";
 import { TagPopover } from "./tag-popover";
 
@@ -433,7 +431,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
           ))}
         {enableAutocomplete ? (
           <div className="w-full">
-            <Autocomplete
+            {/* <Autocomplete
               tags={tags}
               setTags={setTags}
               autocompleteOptions={filteredAutocompleteOptions!}
@@ -581,7 +579,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
                   />
                 </TagPopover>
               )}
-            </Autocomplete>
+            </Autocomplete> */}
           </div>
         ) : (
           <div className="w-full">

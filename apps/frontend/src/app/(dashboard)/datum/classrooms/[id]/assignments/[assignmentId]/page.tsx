@@ -16,16 +16,12 @@ import { Separator } from "@repo/ui/separator";
 import { AssignmentDetailsHeader } from "~/components/classrooms/assignments/AssignmentDetailsHeader";
 import { api } from "~/trpc/server";
 
-export default async function Page(
-  props: {
-    params: Promise<{ assignmentId: string }>;
-  }
-) {
+export default async function Page(props: {
+  params: Promise<{ assignmentId: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    assignmentId
-  } = params;
+  const { assignmentId } = params;
 
   const assignment = await api.assignment.get(assignmentId);
   const { t, i18n } = await getServerTranslations();

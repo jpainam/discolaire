@@ -60,10 +60,6 @@ export function ClassroomLevelTable() {
   return (
     <Reorder.Group
       className="px-2"
-      onDragEnd={(newItems) => {
-        toast.loading(t("updating"), { id: 0 });
-        console.log(newItems);
-      }}
       axis="y"
       values={items}
       onReorder={(newOrders) => {

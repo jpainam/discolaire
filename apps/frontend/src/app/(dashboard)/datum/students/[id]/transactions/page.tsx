@@ -6,16 +6,10 @@ import { TransactionStats } from "~/components/students/transactions/transaction
 import { TransactionTable } from "~/components/students/transactions/TransactionTable";
 import { api } from "~/trpc/server";
 
-export default async function Page(
-  props: {
-    params: Promise<{ id: string }>;
-  }
-) {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
 
-  const {
-    id
-  } = params;
+  const { id } = params;
 
   const classroom = await api.student.classroom({ studentId: id });
   const transactions = await api.student.transactions(id);

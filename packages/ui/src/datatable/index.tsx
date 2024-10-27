@@ -73,6 +73,7 @@ export function useDataTable<TData, TValue>({
     pageSize,
   });
   const [mounted, setMounted] = React.useState(false);
+
   React.useEffect(() => {
     // Prevent resetting the page on initial render
     if (!mounted) {
@@ -83,8 +84,17 @@ export function useDataTable<TData, TValue>({
     void setPageSize(pagination.pageSize);
     void setSortBy(sorting[0]?.id ?? null);
     void setSortDirection(sorting[0]?.desc ? "desc" : "asc");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pagination, sortBy, sortDirection]);
+  }, [
+    mounted,
+    pagination,
+    setPageIndex,
+    setPageSize,
+    setSortBy,
+    setSortDirection,
+    sortBy,
+    sortDirection,
+    sorting,
+  ]);
 
   const table = useReactTable({
     data,

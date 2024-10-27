@@ -15,16 +15,10 @@ import { DocumentTableAction } from "~/components/shared/DocumentTableAction";
 import { StudentDocumentHeader } from "~/components/students/documents/StudentDocumentHeader";
 import { api } from "~/trpc/server";
 
-export default async function Page(
-  props: {
-    params: Promise<{ id: string }>;
-  }
-) {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
 
-  const {
-    id
-  } = params;
+  const { id } = params;
 
   const student = await api.student.get(id);
   const { t, i18n } = await getServerTranslations();

@@ -129,11 +129,11 @@ export const TagPopover: React.FC<TagPopoverProps> = ({
         className="relative flex items-center rounded-md border border-input bg-transparent pr-3"
         ref={triggerContainerRef}
       >
-        {React.cloneElement(children as React.ReactElement<any>, {
+        {/* TODO fix this, uncomment it {React.cloneElement(children as React.ReactElement<any>, {
           onFocus: handleInputFocus,
           onBlur: handleInputBlur,
           ref: inputRef,
-        })}
+        })} */}
         <PopoverTrigger asChild>
           <Button
             ref={triggerRef}

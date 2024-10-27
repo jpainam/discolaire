@@ -4,9 +4,9 @@ import type { ImperativePanelHandle } from "react-resizable-panels";
 import React, { useRef } from "react";
 
 export const AdminPanelContext = React.createContext<{
-  leftPanelRef: React.RefObject<ImperativePanelHandle>;
-  middlePanelRef: React.RefObject<ImperativePanelHandle>;
-  rightPanelRef: React.RefObject<ImperativePanelHandle>;
+  leftPanelRef: React.RefObject<ImperativePanelHandle | null>;
+  middlePanelRef: React.RefObject<ImperativePanelHandle | null>;
+  rightPanelRef: React.RefObject<ImperativePanelHandle | null>;
 } | null>(null);
 
 const AdminPanelContextProvider = ({

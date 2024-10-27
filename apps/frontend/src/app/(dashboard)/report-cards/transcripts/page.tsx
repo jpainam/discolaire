@@ -10,9 +10,7 @@ interface TranscriptPageProps {
 export default async function Page(props: TranscriptPageProps) {
   const searchParams = await props.searchParams;
 
-  const {
-    studentId
-  } = searchParams;
+  const { studentId } = searchParams;
 
   return (
     <div className="flex flex-col">

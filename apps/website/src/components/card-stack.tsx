@@ -45,6 +45,7 @@ export const CardStack = ({
   }, [items]);
 
   const startFlipping = () => {
+    // eslint-disable-next-line react-compiler/react-compiler
     interval = setInterval(() => {
       setCards((prevCards: Card[]) => {
         const newArray = [...prevCards]; // create a copy of the array

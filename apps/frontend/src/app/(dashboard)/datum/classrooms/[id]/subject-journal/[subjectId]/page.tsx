@@ -7,16 +7,12 @@ import { SubjectJournalEditor } from "./SubjectJournalEditor";
 import { SubjectJournalHeader } from "./SubjectJournalHeader";
 import { SubjectJournalList } from "./SubjectJournalList";
 
-export default async function Page(
-  props: {
-    params: Promise<{ subjectId: string }>;
-  }
-) {
+export default async function Page(props: {
+  params: Promise<{ subjectId: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    subjectId
-  } = params;
+  const { subjectId } = params;
 
   const subject = await api.subject.get({ id: Number(subjectId) });
   if (!subject) {

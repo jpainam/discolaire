@@ -49,12 +49,15 @@ export const StickyScroll = ({
     "var(--black)",
     "var(--neutral-900)",
   ];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const linearGradients = [
-    "linear-gradient(to bottom right, var(--cyan-500), var(--emerald-500))",
-    "linear-gradient(to bottom right, var(--pink-500), var(--indigo-500))",
-    "linear-gradient(to bottom right, var(--orange-500), var(--yellow-500))",
-  ];
+
+  const linearGradients = React.useMemo(
+    () => [
+      "linear-gradient(to bottom right, var(--cyan-500), var(--emerald-500))",
+      "linear-gradient(to bottom right, var(--pink-500), var(--indigo-500))",
+      "linear-gradient(to bottom right, var(--orange-500), var(--yellow-500))",
+    ],
+    [],
+  );
 
   const [backgroundGradient, setBackgroundGradient] = useState(
     linearGradients[0],

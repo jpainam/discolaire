@@ -66,8 +66,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     setTimeout(() => {
       void SplashScreen.hideAsync();
     }, 500);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialized]);
+  }, [initialized, session]);
 
   return (
     <AuthContext.Provider

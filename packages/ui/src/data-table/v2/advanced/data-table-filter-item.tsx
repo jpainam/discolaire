@@ -106,9 +106,15 @@ export function DataTableFilterItem<TData>({
       });
       router.push(`${pathname}?${newSearchParams}`);
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedOption, debounceValue, selectedOperator]);
+  }, [
+    selectedOption,
+    debounceValue,
+    selectedOperator,
+    createQueryString,
+    filterValues,
+    router,
+    pathname,
+  ]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

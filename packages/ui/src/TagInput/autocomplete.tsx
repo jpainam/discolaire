@@ -154,11 +154,11 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({
           className="relative flex h-full items-center rounded-md border border-input bg-transparent pr-3"
           ref={triggerContainerRef}
         >
-          {React.cloneElement(children as React.ReactElement<any>, {
+          {/* TODO fix this: temporary commented {React.cloneElement(children as React.ReactElement<any>, {
             onFocus: handleInputFocus,
             onBlur: handleInputBlur,
             ref: inputRef,
-          })}
+          })} */}
           <PopoverTrigger asChild ref={triggerRef}>
             <Button
               variant="ghost"

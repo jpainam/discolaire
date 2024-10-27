@@ -99,7 +99,7 @@ export function PolicyTable({
   const policies = policiesQuery.data;
 
   return (
-    (<div className="m-2 rounded-lg border">
+    <div className="m-2 rounded-lg border">
       <Table>
         <TableHeader>
           <TableRow className="bg-muted/50">
@@ -241,6 +241,6 @@ export function PolicyTable({
           })}
         </TableBody>
       </Table>
-    </div>)
+    </div>
   );
 }

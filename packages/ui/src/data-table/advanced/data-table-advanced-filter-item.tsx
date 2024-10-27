@@ -101,8 +101,14 @@ export function DataTableAdvancedFilterItem<TData>({
         },
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debounceValue, filterVariety, selectedOption.value]);
+  }, [
+    createQueryString,
+    debounceValue,
+    filterVariety,
+    pathname,
+    router,
+    selectedOption.value,
+  ]);
   const { t } = useLocale();
   return (
     <Popover open={open} onOpenChange={setOpen}>

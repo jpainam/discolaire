@@ -4,8 +4,9 @@ import { AppSidebar } from "~/components/administration/app-sidebar";
 import { SidebarLayout } from "~/components/administration/sidebar";
 
 export default async function Layout({ children }: PropsWithChildren) {
-  const { cookies } = await /* @next-codemod-error The APIs under 'next/headers' are async now, need to be manually awaited. */
-  import("next/headers");
+  const { cookies } =
+    await /* @next-codemod-error The APIs under 'next/headers' are async now, need to be manually awaited. */
+    import("next/headers");
   return (
     <SidebarLayout
       defaultOpen={(await cookies()).get("sidebar:state")?.value === "true"}

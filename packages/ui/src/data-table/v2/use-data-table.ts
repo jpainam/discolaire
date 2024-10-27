@@ -228,9 +228,7 @@ export function useDataTable<TData, TValue>({
         scroll: false,
       },
     );
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageIndex, pageSize, sorting]);
+  }, [createQueryString, pageIndex, pageSize, pathname, router, sorting]);
 
   // Handle server-side filtering
   const debouncedSearchableColumnFilters = JSON.parse(
@@ -249,6 +247,33 @@ export function useDataTable<TData, TValue>({
   });
 
   const [mounted, setMounted] = React.useState(false);
+  const table = useReactTable({
+    data,
+    columns,
+    pageCount: pageCount,
+    state: {
+      pagination,
+      sorting,
+      columnVisibility,
+      rowSelection,
+      columnFilters,
+    },
+    enableRowSelection: true,
+    onRowSelectionChange: setRowSelection,
+    onPaginationChange: setPagination,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+    manualPagination: true,
+    manualSorting: true,
+    manualFiltering: true,
+  });
 
   React.useEffect(() => {
     // Opt out when advanced filter is enabled, because it contains additional params
@@ -299,42 +324,19 @@ export function useDataTable<TData, TValue>({
     router.push(`${pathname}?${createQueryString(newParamsObject)}`);
 
     table.setPageIndex(0);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    JSON.stringify(debouncedSearchableColumnFilters),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    JSON.stringify(filterableColumnFilters),
+    createQueryString,
+    debouncedSearchableColumnFilters,
+    enableAdvancedFilter,
+    filterableColumnFilters,
+    filterableColumns,
+    mounted,
+    pathname,
+    router,
+    searchParams,
+    searchableColumns,
+    table,
   ]);
-
-  const table = useReactTable({
-    data,
-    columns,
-    pageCount: pageCount,
-    state: {
-      pagination,
-      sorting,
-      columnVisibility,
-      rowSelection,
-      columnFilters,
-    },
-    enableRowSelection: true,
-    onRowSelectionChange: setRowSelection,
-    onPaginationChange: setPagination,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
-    manualPagination: true,
-    manualSorting: true,
-    manualFiltering: true,
-  });
 
   return { table };
 }

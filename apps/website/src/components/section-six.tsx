@@ -1,11 +1,7 @@
-import React from "react";
-
-import { Vortex } from "~/components/ui/vortex";
-
 export function SectionSix() {
   return (
     <div className="mx-auto h-[30rem] w-[calc(100%-4rem)] overflow-hidden rounded-md">
-      <Vortex
+      {/* <Vortex
         backgroundColor="black"
         className="flex h-full w-full flex-col items-center justify-center px-2 py-4 md:px-10"
       >
@@ -22,7 +18,7 @@ export function SectionSix() {
           </button>
           <button className="px-4 py-2 text-white">Watch trailer</button>
         </div>
-      </Vortex>
+      </Vortex> */}
     </div>
   );
 }

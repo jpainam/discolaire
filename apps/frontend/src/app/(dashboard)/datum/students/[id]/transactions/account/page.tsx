@@ -94,6 +94,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             );
           }
 
+          // eslint-disable-next-line react-compiler/react-compiler
           currentMonth = itemMonth;
           previousDate = item.transactionDate;
 

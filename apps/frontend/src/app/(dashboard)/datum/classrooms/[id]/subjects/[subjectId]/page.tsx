@@ -7,17 +7,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { SubjectDetailsHeader } from "~/components/classrooms/subjects/SubjectDetailsHeader";
 import { api } from "~/trpc/server";
 
-export default async function Page(
-  props: {
-    params: Promise<{ id: string; subjectId: string }>;
-  }
-) {
+export default async function Page(props: {
+  params: Promise<{ id: string; subjectId: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    id,
-    subjectId
-  } = params;
+  const { id, subjectId } = params;
 
   const subject = await api.subject.get({ id: Number(subjectId) });
   if (!subject) {

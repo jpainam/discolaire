@@ -1,6 +1,7 @@
 "use client";
 
 import type React from "react";
+import { useCallback } from "react";
 import { atom, useAtomValue, useSetAtom } from "jotai";
 
 export type SheetPlacements = "left" | "right" | "top" | "bottom";
@@ -27,38 +28,41 @@ export function useSheet() {
   const state = useAtomValue(sheetAtom);
   const setState = useSetAtom(sheetAtom);
 
-  const openSheet = ({
-    view,
-    placement,
-    className,
-    title,
-    description,
-  }: {
-    view: React.ReactNode;
-    placement?: SheetPlacements;
-    className?: string;
-    description?: React.ReactNode;
-    title?: React.ReactNode;
-  }) => {
-    setState({
-      ...state,
-      isOpen: true,
+  const openSheet = useCallback(
+    ({
       view,
-      title,
-      description,
       placement,
       className,
-    });
-  };
+      title,
+      description,
+    }: {
+      view: React.ReactNode;
+      placement?: SheetPlacements;
+      className?: string;
+      description?: React.ReactNode;
+      title?: React.ReactNode;
+    }) => {
+      setState({
+        ...state,
+        isOpen: true,
+        view,
+        title,
+        description,
+        placement,
+        className,
+      });
+    },
+    [],
+  );
 
-  const closeSheet = () => {
+  const closeSheet = useCallback(() => {
     setState({
       ...state,
       isOpen: false,
       title: null,
       description: null,
     });
-  };
+  }, []);
 
   return {
     ...state,

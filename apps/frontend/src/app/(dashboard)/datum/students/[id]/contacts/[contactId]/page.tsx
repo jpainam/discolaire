@@ -25,17 +25,12 @@ import { routes } from "~/configs/routes";
 import { api } from "~/trpc/server";
 import { getFullName } from "~/utils/full-name";
 
-export default async function Page(
-  props: {
-    params: Promise<{ id: string; contactId: string }>;
-  }
-) {
+export default async function Page(props: {
+  params: Promise<{ id: string; contactId: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    id,
-    contactId
-  } = params;
+  const { id, contactId } = params;
 
   const studentContact = await api.studentContact.get({
     studentId: id,

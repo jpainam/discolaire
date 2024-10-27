@@ -11,16 +11,10 @@ import { IdCardHeader } from "~/components/students/idcard/IdCardHeader";
 import { api } from "~/trpc/server";
 import { getFullName } from "~/utils/full-name";
 
-export default async function Page(
-  props: {
-    params: Promise<{ id: string }>;
-  }
-) {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
 
-  const {
-    id
-  } = params;
+  const { id } = params;
 
   const { t, i18n } = await getServerTranslations();
   const student = await api.student.get(id);

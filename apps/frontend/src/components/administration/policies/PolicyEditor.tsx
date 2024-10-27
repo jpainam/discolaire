@@ -13,7 +13,7 @@ export const PolicyEditor = ({
   defaultValue?: string;
 }) => {
   const { theme } = useTheme();
-  const editorRef = useRef();
+  const editorRef = useRef(null);
 
   const parent = useRef<HTMLDivElement | null>(null);
 

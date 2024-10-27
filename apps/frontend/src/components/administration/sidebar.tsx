@@ -38,6 +38,7 @@ const SidebarLayout = React.forwardRef<
 
   const onOpenChange = React.useCallback((open: boolean) => {
     setOpen(open);
+    // eslint-disable-next-line react-compiler/react-compiler
     document.cookie = `${SIDEBAR_STATE_COOKIE}=${open}; path=/; max-age=${
       60 * 60 * 24 * 7
     }`;

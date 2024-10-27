@@ -7,9 +7,7 @@ import { ContactStudentTable } from "~/components/contacts/ContactStudentTable";
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
 
-  const {
-    id
-  } = params;
+  const { id } = params;
 
   // const contact = await api.contact.get(id);
 

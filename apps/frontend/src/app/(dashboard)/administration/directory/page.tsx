@@ -5,9 +5,11 @@ import { PageHeader } from "../PageHeader";
 import DirectoryHeader from "./DirectoryHeader";
 import { DirectoryTable } from "./DirectoryTable";
 
-export default async function Page(props: { searchParams: Promise<{ q: string }> }) {
-  c;
-  const directories = await api.directory.all({ q: q });
+export default async function Page(props: {
+  searchParams: Promise<{ q: string }>;
+}) {
+  const searchParams = await props.searchParams;
+  const directories = await api.directory.all({ q: searchParams.q });
 
   const { t } = await getServerTranslations();
   return (

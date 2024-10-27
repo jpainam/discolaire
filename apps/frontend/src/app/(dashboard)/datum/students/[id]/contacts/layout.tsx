@@ -6,17 +6,13 @@ import { StudentContactTable } from "~/components/students/contacts/StudentConta
 
 //import { checkPermissions } from "~/server/permission";
 
-export default async function Layout(
-  props: {
-    children: React.ReactNode;
-    params: Promise<{ id: string }>;
-  }
-) {
+export default async function Layout(props: {
+  children: React.ReactNode;
+  params: Promise<{ id: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    children
-  } = props;
+  const { children } = props;
 
   // const canReadStudentContact = await checkPermissions(
   //   PermissionAction.READ,

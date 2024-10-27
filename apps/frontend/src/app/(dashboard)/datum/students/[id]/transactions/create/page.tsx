@@ -8,31 +8,22 @@ import { Step1 } from "~/components/students/transactions/create/step1";
 import { Step2 } from "~/components/students/transactions/create/step2";
 import { api } from "~/trpc/server";
 
-export default async function Page(
-  props: {
-    searchParams: Promise<{
-      amount: string;
-      description: string;
-      transactionType: string;
-      paymentMethod: string;
-    }>;
-    params: Promise<{ id: string }>;
-  }
-) {
+export default async function Page(props: {
+  searchParams: Promise<{
+    amount: string;
+    description: string;
+    transactionType: string;
+    paymentMethod: string;
+  }>;
+  params: Promise<{ id: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    id
-  } = params;
+  const { id } = params;
 
   const searchParams = await props.searchParams;
 
-  const {
-    amount,
-    description,
-    transactionType,
-    paymentMethod
-  } = searchParams;
+  const { amount, description, transactionType, paymentMethod } = searchParams;
 
   const { t } = await getServerTranslations();
   const studentContacts = await api.student.contacts(id);

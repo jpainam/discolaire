@@ -2,16 +2,10 @@ import { StudentEnrollmentHeader } from "~/components/students/enrollments/Stude
 import { StudentEnrollmentTable } from "~/components/students/enrollments/StudentEnrollmentTable";
 import { api } from "~/trpc/server";
 
-export default async function Page(
-  props: {
-    params: Promise<{ id: string }>;
-  }
-) {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
 
-  const {
-    id
-  } = params;
+  const { id } = params;
 
   const classroom = await api.student.classroom({ studentId: id });
   const enrollments = await api.student.enrollments(id);

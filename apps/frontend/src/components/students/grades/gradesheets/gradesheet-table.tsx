@@ -66,6 +66,6 @@ export function GradeSheetTable({ studentId }: { studentId: string }) {
     //   searchPlaceholder={t("search_for_an_option")}
     //   columns={columns}
     // />
-    (<div></div>)
+    <div></div>
   );
 }

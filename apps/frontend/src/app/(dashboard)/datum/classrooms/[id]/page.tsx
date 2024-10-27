@@ -5,16 +5,10 @@ import { ClassroomDetails } from "~/components/classrooms/ClassroomDetails";
 import { EnrollmentDataTable } from "~/components/classrooms/enrollments/EnrollmentDataTable";
 import { EnrollmentHeader } from "~/components/classrooms/enrollments/EnrollmentHeader";
 
-export default async function Page(
-  props: {
-    params: Promise<{ id: string }>;
-  }
-) {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
 
-  const {
-    id
-  } = params;
+  const { id } = params;
 
   const canReadEnrollment = await checkPermissions(
     PermissionAction.READ,
