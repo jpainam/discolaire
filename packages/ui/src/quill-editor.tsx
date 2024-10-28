@@ -1,9 +1,9 @@
 import type { ReactQuillProps } from "react-quill";
-import ReactQuill from "react-quill";
+import ReactQuill from "react-quill-new";
 
 import { cn } from ".";
 
-import "react-quill/dist/quill.snow.css";
+import "react-quill-new/dist/quill.snow.css";
 
 interface QuillEditorProps extends ReactQuillProps {
   error?: string;
@@ -70,12 +70,13 @@ export default function QuillEditor({
       <ReactQuill
         modules={quillModules}
         // formats={quillFormats}
+        theme="snow"
         className={cn(
           "react-quill",
           toolbarPosition === "bottom" && "react-quill-toolbar-bottom relative",
           className,
         )}
-        {...props}
+        //{...props}
       />
       {error && <div className={cn("text-md", errorClassName)}>{error}</div>}
     </div>
