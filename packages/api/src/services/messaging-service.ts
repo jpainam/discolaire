@@ -39,6 +39,10 @@ export const messagingService = {
         body: bodyContent,
         headers: headersList,
       });
+      if (!response.ok) {
+        console.error(response.statusText);
+        throw new Error(response.statusText);
+      }
 
       const data = await response.text();
       return data;

@@ -11,7 +11,7 @@ import {
   Text,
 } from "@react-email/components";
 
-import { EmailFooter } from "./Footer";
+//import { EmailFooter } from "./Footer";
 
 export function ResetPassword({
   username,
@@ -57,7 +57,6 @@ export function ResetPassword({
             This link will expire in 24 hours. If you need assistance, please
             contact our support team.
           </Text>
-          <EmailFooter />
         </Container>
       </Body>
     </Html>

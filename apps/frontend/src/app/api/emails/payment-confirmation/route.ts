@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import { render } from "@react-email/render";
 
 import { auth } from "@repo/auth";
-import { SendInvite } from "@repo/transactional/emails/SendInvite";
+import { PaymentConfirmationEmail } from "@repo/transactional";
 
 import { api } from "~/trpc/server";
 
@@ -20,16 +20,17 @@ export async function GET(req: NextRequest) {
     const user = await api.user.get(id);
     if (user?.email) {
       const emailHtml = render(
-        SendInvite({
-          username: user.username,
-          invitedByUsername: "Admin",
-          invitedByEmail: "support@discolaire.com",
-          schoolName: "Portal Scoalire",
-          inviteLink: `https://discolaire.com/invite/${id}?email=${user.email}`,
+        PaymentConfirmationEmail({
+          studentName: user.username,
+          parentEmail: user.email,
+          paymentAmount: 100,
+          remainingBalance: 0,
+          paymentRecorder: "Admin",
+          paymentStatus: "Success",
         }),
       );
       await api.messaging.sendEmail({
-        subject: "Invitation to join Discolaire",
+        subject: "Signalement de fausse note",
         to: user.email,
         body: emailHtml,
       });
