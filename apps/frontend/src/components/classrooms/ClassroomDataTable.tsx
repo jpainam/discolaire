@@ -67,7 +67,7 @@ export function ClassroomDataTable() {
       table={table}
       floatingBar={<ClassroomDataTableActions table={table} />}
     >
-      <DataTableToolbar searchPlaceholder={t("search")} table={table} />
+      <DataTableToolbar table={table} />
     </DataTable>
   );
 }

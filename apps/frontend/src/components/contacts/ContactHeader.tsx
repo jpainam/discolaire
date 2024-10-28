@@ -53,7 +53,7 @@ export function ContactHeader() {
       {/* <ContactSelector
         defaultValue={params.id}
         className="w-full md:w-[400px]"
-        searchPlaceholder={t("search_for_an_option")}
+       
         placeholder={t("select_an_option")}
         onChange={(val) => {
           val && router.push(routes.contacts.details(val));

@@ -70,7 +70,7 @@ export function FeeDataTable() {
 
   return (
     <DataTable className="px-2" table={table}>
-      <DataTableToolbar searchPlaceholder={t("search")} table={table}>
+      <DataTableToolbar table={table}>
         <FeeDataTableActions table={table} />
       </DataTableToolbar>
     </DataTable>

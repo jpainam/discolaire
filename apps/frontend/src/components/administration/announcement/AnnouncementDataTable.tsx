@@ -24,7 +24,7 @@ export function AnnouncementDataTable() {
 
   return (
     <DataTable className="w-full p-1" table={table}>
-      <DataTableToolbar searchPlaceholder={t("search")} table={table}>
+      <DataTableToolbar table={table}>
         <NoticeboardDataTableActions table={table} />
       </DataTableToolbar>
     </DataTable>

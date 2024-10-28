@@ -51,7 +51,7 @@ export function RequiredFeeDataTable() {
   }
   return (
     <DataTable className="px-2" table={table}>
-      <DataTableToolbar searchPlaceholder={t("search")} table={table}>
+      <DataTableToolbar table={table}>
         <TransactionDataTableActions table={table} />
       </DataTableToolbar>
     </DataTable>

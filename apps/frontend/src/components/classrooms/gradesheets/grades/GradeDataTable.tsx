@@ -30,7 +30,6 @@ export function GradeDataTable({ gradeSheetId }: { gradeSheetId: number }) {
   return (
     <DataTable className="px-2" table={table}>
       <DataTableToolbar
-        searchPlaceholder={t("search")}
         table={table}
         //filterFields={filterFields}
       >
