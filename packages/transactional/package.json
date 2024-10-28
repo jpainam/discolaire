@@ -9,7 +9,8 @@
       "types": "./dist/emails/*.d.ts",
       "default": "./emails/*.tsx"
     },
-    ".": "./index.ts"
+    ".": "./index.ts",
+    "./fake-grade-report": "./emails/FakeGradeReportEmail.tsx"
   },
   "workspaces": [
     ".react-email"

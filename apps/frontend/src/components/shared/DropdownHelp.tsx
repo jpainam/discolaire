@@ -17,6 +17,7 @@ import YoutubeIcon from "~/components/icons/youtube";
 
 export function DropdownHelp() {
   const { t } = useLocale();
+  const webinarLink = "https://cal.com/jpainam/discolaire-webinar";
   return (
     <DropdownMenuSub>
       <DropdownMenuSubTrigger>
@@ -34,7 +35,11 @@ export function DropdownHelp() {
             <span>{t("watch_a_video")}</span>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              window.open(webinarLink, "_blank");
+            }}
+          >
             <CalendarIcon className="mr-2 h-4 w-4" />
             <span>{t("join_a_webinar")}</span>
           </DropdownMenuItem>

@@ -420,10 +420,12 @@ export function FloatingPanelCloseButton({
 
 interface FloatingPanelSubmitButtonProps {
   className?: string;
+  label?: string | React.ReactNode;
 }
 
 export function FloatingPanelSubmitButton({
   className,
+  label,
 }: FloatingPanelSubmitButtonProps) {
   return (
     <motion.button
@@ -436,7 +438,7 @@ export function FloatingPanelSubmitButton({
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
     >
-      Submit Note
+      {label ?? "Submit"}
     </motion.button>
   );
 }

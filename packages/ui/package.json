@@ -22,6 +22,7 @@
     "./quill-editor": "./src/quill-editor.tsx",
     "./switch": "./src/switch.tsx",
     "./sidebar": "./src/sidebar.tsx",
+    "./floating-panel": "./src/floating-panel.tsx",
     "./phone-input": "./src/phone-input.tsx",
     "./resizable": "./src/resizable.tsx",
     "./big-calendar": "./src/big-calendar.ts",

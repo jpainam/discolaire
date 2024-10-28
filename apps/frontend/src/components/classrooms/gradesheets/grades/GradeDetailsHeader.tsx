@@ -30,6 +30,8 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { routes } from "~/configs/routes";
 import { api } from "~/trpc/react";
+import { getAppreciations } from "~/utils/get-appreciation";
+import { ReportFalseGrade } from "./ReportFalseGrade";
 
 type GradeSheetGetGradeProcedureOutput = NonNullable<
   RouterOutputs["gradeSheet"]["grades"]
@@ -178,12 +180,15 @@ export function GradeDetailsHeader({
               <TableCell className="border">
                 {((grades10 * 100) / len).toFixed(2)}%
               </TableCell>
-              <TableCell className="border">Passable</TableCell>
+              <TableCell className="border">
+                {getAppreciations(grades10)}
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </div>
       <div className="flex border-t bg-muted/50 px-2 py-1">
+        <ReportFalseGrade />
         <div className="ml-auto flex flex-row items-center gap-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
