@@ -3,7 +3,6 @@
 import * as React from "react";
 import Link from "next/link";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { useFormStatus } from "react-dom";
 
 import { useLocale } from "@repo/hooks/use-locale";
 import { Button } from "@repo/ui/button";
@@ -19,7 +18,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [state, submitAction, isPending] = React.useActionState(authenticate, {
     error: "",
   });
-  console.log(isPending);
 
   const { t } = useLocale();
   return (
@@ -51,7 +49,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           {state.error && (
             <div className="text-sm text-red-500">{t(state.error)}</div>
           )}
-          <SubmitButton />
+          <Button disabled={isPending}>
+            {isPending && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+            {t("signin_with_email")}
+          </Button>
           <Link
             href="/auth/password/forgot"
             className="ml-auto text-sm text-primary hover:underline"
@@ -61,16 +62,5 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         </div>
       </form>
     </div>
-  );
-}
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  const { t } = useLocale();
-  return (
-    <Button disabled={pending}>
-      {pending && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
-      {t("signin_with_email")}
-    </Button>
   );
 }
