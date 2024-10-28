@@ -1,8 +1,16 @@
-export default function Page() {
+"use client";
+
+import { AssignmentSummary } from "./AssignmentSummary";
+import { AssignmentTable } from "./AssignmentTable";
+
+export default function Dashboard() {
   return (
-    <div>
-      Same as assignment in classroom. but allows you to choose more that one
-      classrooms with the : Add to classes: MultiSelect
+    <div className="py-2">
+      {/* Summary Cards */}
+      <AssignmentSummary />
+
+      {/* Assignments Table */}
+      <AssignmentTable />
     </div>
   );
 }
