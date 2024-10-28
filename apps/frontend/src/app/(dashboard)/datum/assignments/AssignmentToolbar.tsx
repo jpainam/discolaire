@@ -19,7 +19,7 @@ export function AssignmentToolbar() {
   const { t } = useLocale();
   const { openModal } = useModal();
   return (
-    <header className="flex items-center justify-between border-b bg-muted/50 px-4 py-2">
+    <header className="flex items-center justify-between border-b bg-muted/50 px-4 py-1">
       <Label>{t("assignments")}</Label>
       <div className="flex flex-row items-center gap-2">
         <Button
