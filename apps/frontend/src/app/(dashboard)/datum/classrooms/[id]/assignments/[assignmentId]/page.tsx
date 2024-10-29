@@ -47,7 +47,7 @@ export default async function Page(props: {
           </div>
           <div className="flex flex-col items-end justify-end gap-2">
             <Badge variant="default" className="text-xs">
-              {assignment.dueDate?.toLocaleDateString(i18n.language, {
+              {assignment.dueDate.toLocaleDateString(i18n.language, {
                 year: "numeric",
                 month: "short",
                 day: "numeric",

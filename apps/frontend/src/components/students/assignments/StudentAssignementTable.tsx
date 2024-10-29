@@ -65,12 +65,12 @@ export function StudentAssignmentTable({
             </TableRow>
           )}
           {items.map((item) => {
-            const hasPassed = item.dueDate && item.dueDate < new Date();
-            const current = item.dueDate && isSameDay(item.dueDate, new Date());
+            const hasPassed = item.dueDate < new Date();
+            const current = isSameDay(item.dueDate, new Date());
             return (
               <TableRow key={item.id}>
                 <TableCell className="py-0">
-                  {item.dueDate && fullDateFormatter.format(item.dueDate)}
+                  {fullDateFormatter.format(item.dueDate)}
                 </TableCell>
                 <TableCell className="py-0">{item.title}</TableCell>
                 <TableCell className="py-0">

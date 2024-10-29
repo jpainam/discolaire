@@ -115,7 +115,7 @@ export function fetchAssignmentTableColumns({
       ),
       cell: ({ row }) => {
         const createdAt = row.original.createdAt;
-        return <div>{createdAt ? dateFormatter.format(createdAt) : ""}</div>;
+        return <div>{dateFormatter.format(createdAt)}</div>;
       },
     },
     {
