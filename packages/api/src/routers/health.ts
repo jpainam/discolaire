@@ -63,8 +63,12 @@ export const healthRouter = createTRPCRouter({
         userId: z.string().min(1),
       }),
     )
-    .query(() => {
-      return [];
+    .query(({ ctx, input }) => {
+      return ctx.db.healthVisit.findMany({
+        where: {
+          userId: input.userId,
+        },
+      });
     }),
   deleteVisit: protectedProcedure
     .input(z.string().min(1))

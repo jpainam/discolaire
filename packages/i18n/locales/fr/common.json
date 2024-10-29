@@ -534,6 +534,8 @@
   "oldest": "Min.age",
   "or_continue_with": "Ou continuer avec",
   "order": "Ordre",
+  "no_user_attached_to_the_student": "Aucun utilisateur attaché à cet élève",
+  "no_health_documents_found": "Aucun document de santé trouvé",
   "otherInformation": "Autres informations",
   "other_information": "Autres informations",
   "others": "Autres",

@@ -6,6 +6,8 @@
   "Failed": "Fallido",
   "PENDING": "Pendiente",
   "new_visit": "Nueva visita",
+  "no_user_attached_to_the_student": "No hay usuario adjunto al estudiante",
+  "no_health_documents_found": "No se encontraron documentos de salud",
   "Periods": "Períodos",
   "pending_submissions": "Envíos pendientes",
   "number_from_last_week": "{{n}} de la semana pasada",
