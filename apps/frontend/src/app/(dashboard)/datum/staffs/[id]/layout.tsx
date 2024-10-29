@@ -1,12 +1,6 @@
 import React from "react";
 import { notFound } from "next/navigation";
-import {
-  BookOpenCheck,
-  CalendarDays,
-  CircleDollarSign,
-  Folders,
-  History,
-} from "lucide-react";
+import { BookOpenCheck, CalendarDays, Folders, History } from "lucide-react";
 
 import { checkPermissions } from "@repo/api/permission";
 import { getServerTranslations } from "@repo/i18n/server";
@@ -68,11 +62,11 @@ export default async function Layout(props: {
       icon: <CalendarDays className="h-4 w-4" />,
     },
 
-    {
-      name: t("payroll"),
-      href: routes.staffs.payroll(id),
-      icon: <CircleDollarSign className="h-4 w-4" />,
-    },
+    // {
+    //   name: t("payroll"),
+    //   href: routes.staffs.payroll(id),
+    //   icon: <CircleDollarSign className="h-4 w-4" />,
+    // },
     {
       name: t("documents"),
       href: routes.staffs.documents(id),
