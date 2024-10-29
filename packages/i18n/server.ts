@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import type { i18n } from "i18next";
+import type { i18n, TFunction } from "i18next";
 import { cache } from "react";
 import { cookies as getCookies, headers as getHeaders } from "next/headers";
 import acceptLanguage from "accept-language";
@@ -53,7 +53,7 @@ export const getServerTranslations: (
   ns?: any,
   options?: { keyPrefix?: string },
 ) => Promise<{
-  t: (key: string) => string;
+  t: TFunction<string, unknown>;
   i18n: i18n;
 }> = cache(async (ns: any = "common", options: { keyPrefix?: string } = {}) => {
   const language = await detectLanguage();
