@@ -1,11 +1,15 @@
 import type { NextRequest } from "next/server";
 import { render } from "@react-email/render";
+import { z } from "zod";
 
 import { auth } from "@repo/auth";
 import { SendInvite } from "@repo/transactional/emails/SendInvite";
 
 import { api } from "~/trpc/server";
 
+const paramsSchema = z.object({
+  id: z.string().min(1),
+});
 export async function GET(req: NextRequest) {
   try {
     const session = await auth();
@@ -13,10 +17,16 @@ export async function GET(req: NextRequest) {
       return new Response("Not authenticated", { status: 401 });
     }
     const requestUrl = new URL(req.url);
-    const id = requestUrl.searchParams.get("id");
-    if (!id) {
-      return new Response("Invalid request", { status: 400 });
+    const obj: Record<string, string> = {};
+
+    for (const [key, value] of requestUrl.searchParams.entries()) {
+      obj[key] = value;
     }
+    const result = paramsSchema.safeParse(obj);
+    if (!result.success) {
+      return new Response("Invalid parameters", { status: 400 });
+    }
+    const { id } = result.data;
     const user = await api.user.get(id);
     if (user?.email) {
       const emailHtml = render(
