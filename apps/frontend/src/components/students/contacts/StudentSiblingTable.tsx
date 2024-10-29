@@ -34,13 +34,9 @@ export async function StudentSiblingTable({
     <Card className="mb-4">
       <CardHeader className="flex flex-row items-center justify-center space-y-0 border-b bg-muted/50 px-2 py-1">
         <CardTitle className="text-md group flex items-center py-0">
-          {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            t("studentsLinkedTo", {
-              name: `${contact.prefix} ${getFullName(contact)}`,
-            })
-          }
+          {t("studentsLinkedTo", {
+            name: `${contact.prefix} ${getFullName(contact)}`,
+          })}
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">

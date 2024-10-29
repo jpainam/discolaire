@@ -18,6 +18,7 @@ import {
 import { ArrowRight } from "lucide-react";
 
 import { env } from "../env";
+import { EmailFooter } from "./Footer";
 
 interface SendInviteUserEmailProps {
   username?: string;
@@ -127,6 +128,7 @@ export const SendInvite = ({
               you are concerned about your account's safety, please reply to
               this email to get in touch with us.
             </Text>
+            <EmailFooter />
           </Container>
         </Body>
       </Tailwind>
