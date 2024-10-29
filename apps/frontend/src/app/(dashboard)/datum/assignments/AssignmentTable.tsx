@@ -1,9 +1,22 @@
 "use client";
 
 import { format } from "date-fns";
-import { Pencil, Trash2, Users } from "lucide-react";
+import { Eye, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
+import { useLocale } from "@repo/hooks/use-locale";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
+import { useConfirm } from "@repo/ui/confirm-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/dropdown-menu";
+import { EmptyState } from "@repo/ui/EmptyState";
+import { Skeleton } from "@repo/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -13,67 +26,111 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
-const initialAssignments = [
-  {
-    id: 1,
-    title: "Math Quiz",
-    type: "Quiz",
-    dueDate: new Date(2024, 10, 15),
-    submitted: 15,
-    total: 30,
-  },
-  {
-    id: 2,
-    title: "History Essay",
-    type: "Homework",
-    dueDate: new Date(2024, 10, 20),
-    submitted: 25,
-    total: 30,
-  },
-  {
-    id: 3,
-    title: "Science Project",
-    type: "Assignment",
-    dueDate: new Date(2024, 11, 1),
-    submitted: 10,
-    total: 30,
-  },
-];
+import { useCheckPermissions } from "~/hooks/use-permissions";
+import { api } from "~/trpc/react";
+
 export function AssignmentTable() {
-  const assignments = initialAssignments;
+  const assignmentsQuery = api.assignment.getLatest.useQuery({ pageSize: 10 });
+  const confirm = useConfirm();
+  const { t } = useLocale();
+  const canDelete = useCheckPermissions(PermissionAction.DELETE, "assignment");
+  const utils = api.useUtils();
+  const deleteAssignmentMutation = api.assignment.delete.useMutation({
+    onSettled: async () => {
+      await utils.assignment.invalidate();
+    },
+    onSuccess: () => {
+      toast.success(t("deleted_successfully"), { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
+  const assignments = assignmentsQuery.data ?? [];
   return (
     <div className="overflow-hidden border-y">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Title</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead>Due Date</TableHead>
-            <TableHead>Submitted</TableHead>
+            <TableHead>{t("title")}</TableHead>
+            <TableHead>{t("category")}</TableHead>
+            <TableHead>{t("due_date")}</TableHead>
+            <TableHead>{t("subject")}</TableHead>
+            <TableHead>{t("teacher")}</TableHead>
             <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
+          {assignmentsQuery.isPending && (
+            <TableRow>
+              <TableCell colSpan={6} className="text-center">
+                <div className="grid grid-cols-5 gap-2 py-2">
+                  {Array.from({ length: 25 }).map((_, index) => (
+                    <Skeleton key={index} className="h-8" />
+                  ))}
+                </div>
+              </TableCell>
+            </TableRow>
+          )}
+          {!assignmentsQuery.isPending && assignments.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={6}>
+                <EmptyState className="py-8" />
+              </TableCell>
+            </TableRow>
+          )}
           {assignments.map((assignment) => (
             <TableRow key={assignment.id}>
               <TableCell className="font-medium">{assignment.title}</TableCell>
-              <TableCell>{assignment.type}</TableCell>
+              <TableCell>{assignment.category.name}</TableCell>
               <TableCell>{format(assignment.dueDate, "PPP")}</TableCell>
-              <TableCell>
-                {assignment.submitted}/{assignment.total}
-              </TableCell>
-              <TableCell>
-                <div className="flex justify-end space-x-2">
-                  <Button variant="ghost" size="icon">
-                    <Pencil className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="icon">
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="icon">
-                    <Users className="h-4 w-4" />
-                  </Button>
-                </div>
+              <TableCell>{assignment.subject.course.name}</TableCell>
+              <TableCell>{assignment.subject.teacher?.lastName}</TableCell>
+              <TableCell className="text-right">
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <Button variant={"outline"} size={"icon"}>
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem>
+                      <Eye className="mr-2 h-4 w-4" />
+                      {t("details")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Pencil className="mr-2 h-4 w-4" />
+                      {t("edit")}
+                    </DropdownMenuItem>
+                    {canDelete && (
+                      <>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                          onSelect={async () => {
+                            const isConfirmed = await confirm({
+                              title: t("delete"),
+                              description: t("delete_confirmation"),
+                              icon: (
+                                <Trash2 className="h-6 w-6 text-destructive" />
+                              ),
+                              alertDialogTitle: {
+                                className: "flex items-center gap-1",
+                              },
+                            });
+                            if (isConfirmed) {
+                              toast.loading(t("deleting"), { id: 0 });
+                              deleteAssignmentMutation.mutate(assignment.id);
+                            }
+                          }}
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          {t("delete")}
+                        </DropdownMenuItem>
+                      </>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </TableCell>
             </TableRow>
           ))}

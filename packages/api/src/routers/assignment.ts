@@ -116,4 +116,23 @@ export const assignmentRouter = createTRPCRouter({
         },
       });
     }),
+  getLatest: protectedProcedure
+    .input(z.object({ pageSize: z.coerce.number().default(10) }))
+    .query(({ ctx, input }) => {
+      return ctx.db.assignment.findMany({
+        include: {
+          category: true,
+          subject: {
+            include: {
+              teacher: true,
+              course: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: input.pageSize,
+      });
+    }),
 });

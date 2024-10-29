@@ -372,8 +372,8 @@ model Assignment {
     termId      Int
     term        Term      @relation(fields: [termId], references: [id], onDelete: Cascade)
     post        Boolean?  @default(false)
-    dueDate     DateTime? @default(now()) @db.Timestamp(6)
-    createdAt   DateTime? @default(now()) @db.Timestamp(6)
+    dueDate     DateTime  @default(now()) @db.Timestamp(6)
+    createdAt   DateTime  @default(now()) @db.Timestamp(6)
     updatedAt   DateTime  @updatedAt
     createdById String?
     createdBy   User?     @relation(fields: [createdById], references: [id])
