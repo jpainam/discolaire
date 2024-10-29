@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import {
   BookOpenCheck,
   CalendarDays,
-  DollarSign,
+  CircleDollarSign,
   Folders,
   History,
 } from "lucide-react";
@@ -71,7 +71,7 @@ export default async function Layout(props: {
     {
       name: t("payroll"),
       href: routes.staffs.payroll(id),
-      icon: <DollarSign className="h-4 w-4" />,
+      icon: <CircleDollarSign className="h-4 w-4" />,
     },
     {
       name: t("documents"),
