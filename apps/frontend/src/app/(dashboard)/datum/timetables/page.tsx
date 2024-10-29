@@ -1,3 +1,4 @@
+import { getServerTranslations } from "@repo/i18n/server";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,7 +7,11 @@ import {
 } from "@repo/ui/breadcrumb";
 import { Separator } from "@repo/ui/separator";
 
-export default function Page() {
+import { Timetable } from "./Timetable";
+
+export default async function Page() {
+  const d = new Date();
+  const { i18n } = await getServerTranslations();
   return (
     <>
       <header className="sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4">
@@ -14,17 +19,18 @@ export default function Page() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbPage>October 2024</BreadcrumbPage>
+              <BreadcrumbPage className="capitalize">
+                {d.toLocaleDateString(i18n.language, {
+                  month: "long",
+                  year: "numeric",
+                })}
+              </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
       </header>
-      <div className="flex flex-1 flex-col gap-4 p-4">
-        <div className="grid auto-rows-min gap-4 md:grid-cols-5">
-          {Array.from({ length: 20 }).map((_, i) => (
-            <div key={i} className="aspect-square rounded-xl bg-muted/50" />
-          ))}
-        </div>
+      <div className="gap- flex flex-1 flex-col">
+        <Timetable />
       </div>
     </>
   );

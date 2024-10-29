@@ -26,6 +26,9 @@ export const timetableRouter = createTRPCRouter({
       },
     });
   }),
+  all2: protectedProcedure.query(() => {
+    return [];
+  }),
   classroom: protectedProcedure
     .input(z.object({ classroomId: z.string().min(1) }))
     .query(({ ctx, input }) => {
