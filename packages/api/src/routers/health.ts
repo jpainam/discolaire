@@ -9,7 +9,7 @@ const healthVisitSchema = z.object({
   examination: z.string().optional(),
   assessment: z.string().optional(),
   plan: z.string().optional(),
-  studentId: z.string().min(1),
+  userId: z.string().min(1),
   attachments: z.array(z.string()).default([]),
 });
 
@@ -22,7 +22,7 @@ export const healthRouter = createTRPCRouter({
           date: input.date,
           complaint: input.complaint,
           signs: input.signs,
-          studentId: input.studentId,
+          userId: input.userId,
           createdById: ctx.session.user.id,
           examination: input.examination,
           assessment: input.assessment,
@@ -34,13 +34,13 @@ export const healthRouter = createTRPCRouter({
   visits: protectedProcedure
     .input(
       z.object({
-        studentId: z.string().min(1),
+        userId: z.string().min(1),
       }),
     )
     .query(({ ctx, input }) => {
       return ctx.db.healthVisit.findMany({
         where: {
-          studentId: input.studentId,
+          userId: input.userId,
         },
       });
     }),
@@ -57,6 +57,15 @@ export const healthRouter = createTRPCRouter({
       "HEADACHES",
     ];
   }),
+  documents: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string().min(1),
+      }),
+    )
+    .query(() => {
+      return [];
+    }),
   deleteVisit: protectedProcedure
     .input(z.string().min(1))
     .mutation(async ({ ctx, input }) => {

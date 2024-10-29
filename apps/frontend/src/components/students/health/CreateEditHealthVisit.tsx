@@ -53,8 +53,10 @@ const createEditVisitSchema = z.object({
 
 export function CreateEditHealthVisit({
   healthVisit,
+  userId,
 }: {
   healthVisit?: RouterOutputs["health"]["visits"][number];
+  userId: string;
 }) {
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
@@ -124,7 +126,7 @@ export function CreateEditHealthVisit({
   const onSubmit = (data: z.infer<typeof createEditVisitSchema>) => {
     const values = {
       ...data,
-      studentId: params.id,
+      userId: userId,
     };
     toast.loading(t("creating"), { id: 0 });
     createVisitMutation.mutate(values);

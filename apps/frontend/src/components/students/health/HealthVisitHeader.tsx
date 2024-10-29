@@ -28,7 +28,7 @@ export function HealthVisitHeader() {
           size={"sm"}
         >
           <Stethoscope className="mr-2 h-4 w-4" />
-          {t("New visit")}
+          {t("new_visit")}
         </Button>
       </div>
     </div>

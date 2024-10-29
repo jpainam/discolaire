@@ -1,6 +1,5 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { Eye, MailIcon, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -32,9 +31,15 @@ import { api } from "~/trpc/react";
 import { CreateEditHealthVisit } from "./CreateEditHealthVisit";
 import { HealthVisitDetails } from "./HealthVisitDetails";
 
-export function HealthVisitTable({ className }: { className?: string }) {
+export function HealthVisitTable({
+  className,
+  userId,
+}: {
+  className?: string;
+  userId: string;
+}) {
   const { t, i18n } = useLocale();
-  const params = useParams<{ id: string }>();
+
   const { openSheet } = useSheet();
   const { openModal } = useModal();
   const utils = api.useUtils();
@@ -48,14 +53,14 @@ export function HealthVisitTable({ className }: { className?: string }) {
     onSettled: () => utils.health.invalidate(),
   });
   const confirm = useConfirm();
-  //const router = useRouter();
+
   const dateFormat = Intl.DateTimeFormat(i18n.language, {
     month: "short",
     day: "numeric",
     year: "numeric",
   });
 
-  const visitsQuery = api.health.visits.useQuery({ studentId: params.id });
+  const visitsQuery = api.health.visits.useQuery({ userId: userId });
 
   return (
     <div className={cn("rounded-lg border", className)}>
@@ -127,7 +132,7 @@ export function HealthVisitTable({ className }: { className?: string }) {
                           onClick={() => {
                             openSheet({
                               className: "w-[700px]",
-                              view: <CreateEditHealthVisit />,
+                              view: <CreateEditHealthVisit userId={userId} />,
                             });
                           }}
                         >
