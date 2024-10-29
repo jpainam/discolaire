@@ -185,4 +185,25 @@ export const staffRouter = {
       })),
     ];
   }),
+  teachings: protectedProcedure
+    .input(z.string().min(1))
+    .query(({ ctx, input }) => {
+      return ctx.db.subject.findMany({
+        orderBy: {
+          classroomId: "asc",
+        },
+        where: {
+          teacherId: input,
+          classroom: {
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
+        },
+        include: {
+          subjectGroup: true,
+          course: true,
+          classroom: true,
+        },
+      });
+    }),
 } satisfies TRPCRouterRecord;

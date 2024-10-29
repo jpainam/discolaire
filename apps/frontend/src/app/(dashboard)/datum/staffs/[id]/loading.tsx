@@ -1,14 +1,11 @@
-import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
+import { Skeleton } from "@repo/ui/skeleton";
 
 export default function Loading() {
   return (
-    <div className="container p-0">
-      <DataTableSkeleton
-        rowCount={15}
-        columnCount={8}
-        withPagination={false}
-        showViewOptions={false}
-      />
+    <div className="grid w-full grid-cols-3 gap-2 p-2">
+      {Array.from({ length: 15 }).map((_, index) => (
+        <Skeleton key={index} className="h-[150px] w-full" />
+      ))}
     </div>
   );
 }

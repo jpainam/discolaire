@@ -1,6 +1,12 @@
 import React from "react";
 import { notFound } from "next/navigation";
-import { CalendarDays, DollarSign, Folders, History } from "lucide-react";
+import {
+  BookOpenCheck,
+  CalendarDays,
+  DollarSign,
+  Folders,
+  History,
+} from "lucide-react";
 
 import { checkPermissions } from "@repo/api/permission";
 import { getServerTranslations } from "@repo/i18n/server";
@@ -50,6 +56,11 @@ export default async function Layout(props: {
       name: t("timeline"),
       href: routes.staffs.details(id),
       icon: <History className="h-4 w-4" />,
+    },
+    {
+      name: t("teachings"),
+      href: routes.staffs.teachings(id),
+      icon: <BookOpenCheck className="h-4 w-4" />,
     },
     {
       name: t("timetables"),

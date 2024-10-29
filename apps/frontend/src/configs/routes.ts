@@ -21,6 +21,7 @@ export const routes = {
     documents: (id: string) => `/datum/staffs/${id}/documents`,
     timetables: (id: string) => `/datum/staffs/${id}/timetables`,
     details: (id: string) => `/datum/staffs/${id}`,
+    teachings: (id: string) => `/datum/staffs/${id}/teachings`,
   },
   report_cards: {
     index: "/report-cards",
