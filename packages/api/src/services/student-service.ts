@@ -158,8 +158,19 @@ export const studentService = {
         );
         return students;
       },
-      { maxWait: 5000, timeout: 20000 },
+      { maxWait: 5000, timeout: 50000 },
     );
+  },
+  registrationNumberExists: async (
+    registrationNumber: string,
+    studentId?: string,
+  ) => {
+    const student = await db.student.findFirst({
+      where: {
+        registrationNumber: registrationNumber,
+      },
+    });
+    return student ? !studentId || student.id !== studentId : false;
   },
   generateRegistrationNumber: async ({
     schoolId,
@@ -186,12 +197,15 @@ export const studentService = {
         },
       },
       orderBy: {
-        createdAt: "desc",
+        registrationNumber: "desc",
       },
     });
+    console.log(latestStudent);
     if (latestStudent?.registrationNumber) {
       const nextRegistration =
-        Number(latestStudent.registrationNumber.slice(-4)) + 1;
+        (isNaN(Number(latestStudent.registrationNumber.slice(-4)))
+          ? Number(latestStudent.registrationNumber.slice(-3))
+          : Number(latestStudent.registrationNumber.slice(-4))) + 1;
       return `${startWidth}${nextRegistration.toString().padStart(4, "0")}`;
     }
     const school = await db.school.findUnique({

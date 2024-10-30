@@ -32,6 +32,7 @@ const whereClause = (q: string): Prisma.StudentFindManyArgs => {
   };
 };
 const createUpdateSchema = z.object({
+  registrationNumber: z.string().optional(),
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   dateOfBirth: z.coerce.date(),
@@ -115,11 +116,22 @@ export const studentRouter = createTRPCRouter({
   create: protectedProcedure
     .input(createUpdateSchema)
     .mutation(async ({ ctx, input }) => {
-      const registrationNumber =
-        await studentService.generateRegistrationNumber({
-          schoolId: ctx.schoolId,
-          schoolYearId: ctx.schoolYearId,
-        });
+      const registrationNumber = input.registrationNumber
+        ? input.registrationNumber
+        : await studentService.generateRegistrationNumber({
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          });
+      console.log(
+        ">>>>>>> this is the registration number",
+        registrationNumber,
+      );
+      if (await studentService.registrationNumberExists(registrationNumber)) {
+        // throw new TRPCError({
+        //   code: "BAD_REQUEST",
+        //   message: "Registration number already exists",
+        // });
+      }
       const student = await ctx.db.student.create({
         data: {
           registrationNumber: registrationNumber,
@@ -193,9 +205,22 @@ export const studentRouter = createTRPCRouter({
         `${input.firstName} ${input.lastName}`,
         ctx.session.user.id,
       );
+      if (
+        input.registrationNumber &&
+        (await studentService.registrationNumberExists(
+          input.registrationNumber,
+          input.id,
+        ))
+      ) {
+        // throw new TRPCError({
+        //   code: "BAD_REQUEST",
+        //   message: "Registration number already exists",
+        // });
+      }
       return ctx.db.student.update({
         where: { id: input.id },
         data: {
+          registrationNumber: input.registrationNumber,
           firstName: input.firstName,
           lastName: input.lastName,
           dateOfBirth: input.dateOfBirth,

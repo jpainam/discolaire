@@ -1,6 +1,7 @@
 "use client";
 
 import type { z } from "zod";
+import { SaveIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { StudentStatus } from "@repo/db";
@@ -23,6 +24,7 @@ export function CreateStudent() {
   const form = useForm({
     schema: createUpdateStudentSchema,
     defaultValues: {
+      registrationNumber: "",
       firstName: "",
       lastName: "",
       dateOfBirth: new Date(),
@@ -71,13 +73,14 @@ export function CreateStudent() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-row items-center justify-end gap-4 border-b bg-muted/50 px-3 py-2">
+        <div className="flex flex-row items-center justify-end gap-4 border-b bg-muted/50 px-3 py-1">
           <Button
             isLoading={createStudentMutation.isPending}
             size={"sm"}
             disabled={!form.formState.isDirty}
             type="submit"
           >
+            <SaveIcon className="mr-2 h-4 w-4" />
             {t("submit")}
           </Button>
           <Button
@@ -88,6 +91,7 @@ export function CreateStudent() {
             type="button"
             variant={"outline"}
           >
+            <XIcon className="mr-2 h-4 w-4" />
             {t("cancel")}
           </Button>
         </div>

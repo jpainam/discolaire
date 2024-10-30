@@ -1,6 +1,7 @@
 "use client";
 
 import type { z } from "zod";
+import { SaveIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -25,6 +26,7 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
     schema: createUpdateStudentSchema,
     defaultValues: {
       id: student.id,
+      registrationNumber: student.registrationNumber ?? "",
       firstName: student.firstName ?? "",
       lastName: student.lastName ?? "",
       dateOfBirth: student.dateOfBirth ?? new Date(),
@@ -80,6 +82,7 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
             disabled={!form.formState.isDirty}
             type="submit"
           >
+            <SaveIcon className="mr-2 h-4 w-4" />
             {t("submit")}
           </Button>
           <Button
@@ -90,6 +93,7 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
             type="button"
             variant={"outline"}
           >
+            <XIcon className="mr-2 h-4 w-4" />
             {t("cancel")}
           </Button>
         </div>

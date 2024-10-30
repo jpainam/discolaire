@@ -9,6 +9,7 @@ export const unused = z.string().describe(
 
 export const createUpdateStudentSchema = z.object({
   id: z.string().optional(),
+  registrationNumber: z.string().optional(),
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   religionId: z.string().min(1),

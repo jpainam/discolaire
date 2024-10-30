@@ -39,7 +39,7 @@ export function CreateUpdateDenom() {
         </CardTitle>
         {/* <CardDescription></CardDescription> */}
       </CardHeader>
-      <CardContent className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <CardContent className="grid grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2">
         <div className="flex flex-col gap-1">
           <FormField
             control={form.control}

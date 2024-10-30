@@ -3,9 +3,11 @@ import { notFound, redirect } from "next/navigation";
 import {
   BookMarkedIcon,
   Globe,
+  LocateFixedIcon,
   Mail,
   MapPin,
   MapPinHouse,
+  NavigationIcon,
   NotebookIcon,
   Phone,
   UserIcon,
@@ -77,8 +79,16 @@ export default async function Page(props: {
               value={school.ministry}
               icon={<NotebookIcon className="h-4 w-4" />}
             />
-            <InfoItem label={t("department")} value={school.department} />
-            <InfoItem label={t("region")} value={school.region} />
+            <InfoItem
+              label={t("department")}
+              value={school.department}
+              icon={<NavigationIcon className="h-4 w-4" />}
+            />
+            <InfoItem
+              label={t("region")}
+              value={school.region}
+              icon={<LocateFixedIcon className="h-4 w-4" />}
+            />
             <InfoItem
               label={t("city")}
               value={school.city}

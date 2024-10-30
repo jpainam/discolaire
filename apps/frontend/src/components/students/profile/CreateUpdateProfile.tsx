@@ -26,7 +26,7 @@ export function CreateUpdateProfile() {
         </CardTitle>
         {/* <CardDescription></CardDescription> */}
       </CardHeader>
-      <CardContent className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <CardContent className="grid grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2">
         <InputField
           name="lastName"
           placeholder={t("lastName")}
@@ -57,8 +57,14 @@ export function CreateUpdateProfile() {
         <InputField
           className="gap-2"
           name="residence"
-          placeholder="Résidence"
+          placeholder={t("residence")}
           label="Résidence"
+        />
+        <InputField
+          className="gap-2"
+          name="registrationNumber"
+          placeholder={t("registrationNumber")}
+          label={t("registrationNumber")}
         />
       </CardContent>
     </Card>

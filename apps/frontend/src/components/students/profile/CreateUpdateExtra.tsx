@@ -54,7 +54,7 @@ export function CreateUpdateExtra() {
         </CardTitle>
         {/* <CardDescription></CardDescription> */}
       </CardHeader>
-      <CardContent className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <CardContent className="grid grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2">
         {sportsQuery.isPending || clubsQuery.isPending ? (
           <>
             {Array.from({ length: 4 }).map((_, index) => (

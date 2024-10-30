@@ -32,7 +32,7 @@ export function CreateUpdateAddress() {
         </CardTitle>
         {/* <CardDescription></CardDescription> */}
       </CardHeader>
-      <CardContent className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <CardContent className="grid grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2">
         <InputField name="email" placeholder="Email" label="Email" />
         <FormField
           control={form.control}
