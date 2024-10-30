@@ -22,6 +22,7 @@ import { api } from "~/trpc/react";
 const formSchema = z.object({
   name: z.string().min(1),
   code: z.string().min(1),
+  registrationPrefix: z.string().min(1),
 });
 
 export default function Page() {
@@ -44,6 +45,7 @@ export default function Page() {
     defaultValues: {
       name: "",
       code: "",
+      registrationPrefix: "",
     },
   });
 
@@ -63,6 +65,20 @@ export default function Page() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>{t("code")}</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="registrationPrefix"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("registrationPrefix")}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>

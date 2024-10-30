@@ -724,6 +724,7 @@ model School {
     isActive           Boolean          @default(true)
     address            String?
     defaultCountryId   String?
+    registrationPrefix String           @default("1")
     applyRequiredFee   ApplyRequiredFee @default(NO)
     includeRequiredFee Boolean?         @default(false)
     contacts           Contact[]

@@ -1,6 +1,15 @@
 import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
-import { Globe, Mail, MapPin, Phone } from "lucide-react";
+import {
+  BookMarkedIcon,
+  Globe,
+  Mail,
+  MapPin,
+  MapPinHouse,
+  NotebookIcon,
+  Phone,
+  UserIcon,
+} from "lucide-react";
 
 import { auth } from "@repo/auth";
 import { getServerTranslations } from "@repo/i18n/server";
@@ -58,12 +67,28 @@ export default async function Page(props: {
         </CardHeader>
         <CardContent className="p-2">
           <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-            <InfoItem label={t("authorization")} value={school.authorization} />
-            <InfoItem label={t("ministry")} value={school.ministry} />
+            <InfoItem
+              label={t("authorization")}
+              value={school.authorization}
+              icon={<BookMarkedIcon className="h-4 w-4" />}
+            />
+            <InfoItem
+              label={t("ministry")}
+              value={school.ministry}
+              icon={<NotebookIcon className="h-4 w-4" />}
+            />
             <InfoItem label={t("department")} value={school.department} />
             <InfoItem label={t("region")} value={school.region} />
-            <InfoItem label={t("city")} value={school.city} />
-            <InfoItem label={t("headmaster")} value={school.headmaster} />
+            <InfoItem
+              label={t("city")}
+              value={school.city}
+              icon={<MapPinHouse className="h-4 w-4" />}
+            />
+            <InfoItem
+              label={t("headmaster")}
+              value={school.headmaster}
+              icon={<UserIcon className="h-4 w-4" />}
+            />
             <InfoItem
               label={t("phoneNumber")}
               value={school.phoneNumber1}
@@ -85,7 +110,7 @@ export default async function Page(props: {
               icon={<Globe className="h-4 w-4" />}
             />
             <InfoItem
-              label={t("location")}
+              label={t("address")}
               value={`${school.city ?? ""}, ${school.region ?? ""}`}
               icon={<MapPin className="h-4 w-4" />}
             />

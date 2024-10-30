@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import type { Prisma } from "@repo/db";
@@ -47,14 +48,18 @@ export const schoolRouter = createTRPCRouter({
 
   delete: protectedProcedure
     .input(z.union([z.string().min(1), z.array(z.string().min(1))]))
-    .mutation(async ({ ctx, input }) => {
-      return ctx.db.school.deleteMany({
-        where: {
-          id: {
-            in: Array.isArray(input) ? input : [input],
-          },
-        },
+    .mutation(() => {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "You are not allowed to delete a school",
       });
+      // return ctx.db.school.deleteMany({
+      //   where: {
+      //     id: {
+      //       in: Array.isArray(input) ? input : [input],
+      //     },
+      //   },
+      // });
     }),
   update: protectedProcedure
     .input(createSchoolSchema.extend({ id: z.string().min(1) }))
@@ -79,12 +84,18 @@ export const schoolRouter = createTRPCRouter({
       });
     }),
   create: protectedProcedure
-    .input(z.object({ name: z.string().min(1), code: z.string().min(1) }))
+    .input(
+      z.object({
+        name: z.string().min(1),
+        code: z.string().min(1),
+        registrationPrefix: z.string().min(1),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       return ctx.db.school.create({
         data: {
           ...input,
-          currency: "FCFA",
+          currency: "CFA",
         },
       });
     }),

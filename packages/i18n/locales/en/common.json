@@ -10,6 +10,7 @@
   "number_from_last_week": " {{n}} from last week",
   "Running": "Running",
   "new_visit": "New Visit",
+  "registrationPrefix": "Registration prefix",
   "no_user_attached_to_the_student": "No user attached to the student",
   "no_health_documents_found": "No health documents found",
   "no_teachings_found": "No teachings found",

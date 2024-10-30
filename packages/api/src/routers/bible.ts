@@ -44,7 +44,7 @@ export const bibleRouter = createTRPCRouter({
         createdAt: "asc",
       },
     });
-    let startMatric = 2512000;
+    let startMatric = 2512001;
     for (const student of students) {
       await ctx.db.student.update({
         where: {

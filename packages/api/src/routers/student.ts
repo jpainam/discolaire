@@ -115,8 +115,14 @@ export const studentRouter = createTRPCRouter({
   create: protectedProcedure
     .input(createUpdateSchema)
     .mutation(async ({ ctx, input }) => {
+      const registrationNumber =
+        await studentService.generateRegistrationNumber({
+          schoolId: ctx.schoolId,
+          schoolYearId: ctx.schoolYearId,
+        });
       const student = await ctx.db.student.create({
         data: {
+          registrationNumber: registrationNumber,
           firstName: input.firstName,
           lastName: input.lastName,
           dateOfBirth: input.dateOfBirth,

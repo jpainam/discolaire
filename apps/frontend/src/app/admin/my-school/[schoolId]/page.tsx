@@ -85,7 +85,7 @@ export default async function Page(props: {
               icon={<Globe className="h-4 w-4" />}
             />
             <InfoItem
-              label={t("location")}
+              label={t("address")}
               value={`${school.city ?? ""}, ${school.region ?? ""}`}
               icon={<MapPin className="h-4 w-4" />}
             />

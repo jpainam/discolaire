@@ -119,6 +119,7 @@
   "cancel": "Annuler",
   "cancelled": "Annulé",
   "card": "Carte de crédit/débit",
+  "registrationPrefix": "Prefix matricule",
   "cardNumber": "Numéro de carte",
   "cash": "Cash / En espèces",
   "category": "Catégorie",

@@ -161,4 +161,47 @@ export const studentService = {
       { maxWait: 5000, timeout: 20000 },
     );
   },
+  generateRegistrationNumber: async ({
+    schoolId,
+    schoolYearId,
+  }: {
+    schoolId: string;
+    schoolYearId: string;
+  }) => {
+    const schoolYear = await db.schoolYear.findUnique({
+      where: {
+        id: schoolYearId,
+      },
+    });
+    if (!schoolYear) {
+      throw new Error("School year not found");
+    }
+    const startWidth = schoolYear.name.slice(2, 4);
+    const latestStudent = await db.student.findFirst({
+      where: {
+        schoolId: schoolId,
+        registrationNumber: {
+          startsWith: startWidth,
+          mode: "insensitive",
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    if (latestStudent?.registrationNumber) {
+      const nextRegistration =
+        Number(latestStudent.registrationNumber.slice(-4)) + 1;
+      return `${startWidth}${nextRegistration.toString().padStart(4, "0")}`;
+    }
+    const school = await db.school.findUnique({
+      where: {
+        id: schoolId,
+      },
+    });
+    if (!school) {
+      throw new Error("School not found");
+    }
+    return `${startWidth}${school.registrationPrefix}2001`;
+  },
 };
