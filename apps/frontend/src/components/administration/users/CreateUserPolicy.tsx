@@ -19,7 +19,7 @@ import {
 import { Input } from "@repo/ui/input";
 
 import { api } from "~/trpc/react";
-import { PolicyEditor } from "./PolicyEditor";
+import { PolicyEditor } from "../policies/PolicyEditor";
 
 const createEditPolicySchema = z.object({
   name: z.string().min(1),
@@ -30,9 +30,9 @@ const parsedContentSchema = z.object({
   effect: z.enum(["Allow", "Deny"]),
   actions: z.array(z.string()),
   resources: z.array(z.string()),
-  condition: z.record(z.string(), z.any()).optional(),
+  condition: z.any().optional(),
 });
-export function CreateEditPolicy({ policy }: { policy?: Policy }) {
+export function CreateUserPolicy({ policy }: { policy?: Policy }) {
   const { t } = useLocale();
   const { closeModal } = useModal();
   const form = useForm<z.infer<typeof createEditPolicySchema>>({
@@ -44,7 +44,7 @@ export function CreateEditPolicy({ policy }: { policy?: Policy }) {
         effect: policy?.effect ?? "Allow",
         resources: policy?.resources ?? ["*"],
         actions: policy?.actions ?? ["write:*", "read:*"],
-        condition: policy?.condition ?? {},
+        conditions: policy?.condition ?? {},
       }),
     },
   });
@@ -87,7 +87,6 @@ export function CreateEditPolicy({ policy }: { policy?: Policy }) {
       resources: parsedContent.resources,
       condition: parsedContent.condition,
     };
-    console.log("values", values);
     if (policy) {
       toast.loading(t("updating"), { id: 0 });
       updatePolicyMutation.mutate({ id: policy.id, ...values });

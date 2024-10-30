@@ -2,7 +2,6 @@ import { z } from "zod";
 
 import { doPermissionsCheck, PermissionAction } from "@repo/lib/permission";
 
-import { checkPermissions } from "../permission";
 import { classroomService } from "../services/classroom-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -22,14 +21,12 @@ export const classroomRouter = createTRPCRouter({
       schoolYearId: ctx.schoolYearId,
       schoolId: ctx.session.user.schoolId,
     });
-    if (await checkPermissions(PermissionAction.READ, "classroom:list")) {
-      return classrooms;
-    }
     return classrooms.filter((cl) => {
       return doPermissionsCheck(
         ctx.permissions,
         PermissionAction.READ,
         "classroom:list",
+        ctx.schoolId,
         {
           id: cl.id,
         },

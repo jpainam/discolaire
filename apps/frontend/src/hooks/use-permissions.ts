@@ -57,8 +57,8 @@ export function useCheckPermissions(
     allPermissions,
     action,
     resource,
-    data,
     user.schoolId,
+    data,
   );
 }
 // Not Used now. Moved to Header. to load permissions on login

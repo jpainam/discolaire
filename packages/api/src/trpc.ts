@@ -148,7 +148,7 @@ export const protectedProcedure = t.procedure
       ctx: {
         // infers the `session` as non-nullable
         session: { ...ctx.session, user: ctx.session.user },
-        permissions: permissions ?? [],
+        permissions: permissions,
         schoolId: ctx.session.user.schoolId,
         schoolYearId: ctx.schoolYearId,
       },

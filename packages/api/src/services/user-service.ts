@@ -9,6 +9,11 @@ export const userService = {
     const userWithRolesAndPolicies = await db.user.findUnique({
       where: { id: userId },
       include: {
+        policies: {
+          include: {
+            policy: true,
+          },
+        },
         roles: {
           include: {
             role: {
@@ -26,7 +31,7 @@ export const userService = {
     });
 
     // Extract and format policies from the nested structure
-    const policies = userWithRolesAndPolicies?.roles.flatMap((userRole) =>
+    const rolePolicies = userWithRolesAndPolicies?.roles.flatMap((userRole) =>
       userRole.role.policies.map((rolePolicy) => ({
         actions: rolePolicy.policy.actions,
         effect: rolePolicy.policy.effect,
@@ -35,8 +40,19 @@ export const userService = {
         schoolId: user?.schoolId ?? "UNKNOWN",
       })),
     );
+    const userPolicies = userWithRolesAndPolicies?.policies.map(
+      (userPolicy) => {
+        return {
+          actions: userPolicy.policy.actions,
+          effect: userPolicy.policy.effect,
+          resources: userPolicy.policy.resources,
+          condition: userPolicy.policy.condition,
+          schoolId: user?.schoolId ?? "UNKNOWN",
+        };
+      },
+    );
 
-    return policies;
+    return [...(rolePolicies ?? []), ...(userPolicies ?? [])];
   },
 
   updateProfile: async (

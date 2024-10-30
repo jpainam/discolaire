@@ -1,10 +1,11 @@
 "use client";
 
 import { useAtom } from "jotai";
-import { LinkIcon, SquarePlus } from "lucide-react";
+import { AxeIcon, LinkIcon, SquarePlus } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { useDebouncedCallback } from "use-debounce";
 
+import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
@@ -31,12 +32,14 @@ import {
 import { attachPolicyAtom } from "~/atoms/permission-atom";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
+import { CreateUserPolicy } from "./CreateUserPolicy";
 
 export function AttachPolicyTable() {
   const { t } = useLocale();
   const policiesQuery = api.permission.policies.useQuery();
   const [attachPolicyValue, setAttachPolicyValue] = useAtom(attachPolicyAtom);
   const { fullDateFormatter } = useDateFormat();
+  const { openModal } = useModal();
   const [filter, setFilter] = useQueryState("filter");
   const [_, setSearchText] = useQueryState("q");
 
@@ -55,7 +58,7 @@ export function AttachPolicyTable() {
   }
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row items-center gap-4">
+      <div className="flex flex-row items-center gap-4 px-2">
         <Input
           className="max-w-96"
           onChange={(e) => debounced(e.target.value)}
@@ -72,7 +75,20 @@ export function AttachPolicyTable() {
             <SelectItem value="system">{t("system")}</SelectItem>
           </SelectContent>
         </Select>
-        <div className="ml-auto">
+        <div className="ml-auto flex flex-row items-center gap-2">
+          <Button
+            onClick={() => {
+              openModal({
+                className: "w-[500px]",
+                title: t("create"),
+                view: <CreateUserPolicy />,
+              });
+            }}
+            variant={"secondary"}
+          >
+            <AxeIcon className="mr-2 h-4 w-4" />
+            {t("create_policy")}
+          </Button>
           <Button>
             <LinkIcon className="mr-2 h-4 w-4" />
             {t("attach")}

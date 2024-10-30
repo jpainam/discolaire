@@ -27,7 +27,7 @@ export async function checkPermissions(
     allPermissions,
     action,
     resource,
-    data,
     user.schoolId,
+    data,
   );
 }

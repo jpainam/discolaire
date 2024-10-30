@@ -65,8 +65,8 @@ export function doPermissionsCheck(
   permissions: Permission[] | undefined,
   action: string,
   resource: string,
+  schoolId: string,
   data?: object,
-  schoolId?: string,
 ) {
   if (!permissions || !Array.isArray(permissions)) {
     return false;
@@ -88,7 +88,10 @@ export function doPermissionsCheck(
     return false;
   }
   return allPermissions.some((per: Permission) => {
-    if (per.condition == null || per.condition == undefined) {
+    if (!per.condition) {
+      return true;
+    }
+    if (!data) {
       return true;
     }
     const condition = per.condition as jsonLogic.RulesLogic;

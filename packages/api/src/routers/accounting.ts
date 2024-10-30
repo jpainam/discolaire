@@ -10,9 +10,6 @@ const createFinanceGroupSchema = z.object({
 export const accountingRouter = createTRPCRouter({
   groups: protectedProcedure.query(({ ctx }) => {
     return ctx.db.accountingGroup.findMany({
-      include: {
-        createdBy: true,
-      },
       where: {
         schoolYearId: ctx.schoolYearId,
       },
