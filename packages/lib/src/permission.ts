@@ -88,12 +88,10 @@ export function doPermissionsCheck(
     return false;
   }
   return allPermissions.some((per: Permission) => {
-    if (!per.condition) {
+    if (!data || !per.condition) {
       return true;
     }
-    if (!data) {
-      return true;
-    }
+
     const condition = per.condition as jsonLogic.RulesLogic;
     return jsonLogic.apply(condition, { resource_name: resource, ...data });
   });

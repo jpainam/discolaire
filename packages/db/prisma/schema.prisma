@@ -91,7 +91,7 @@ model Policy {
     isActive    Boolean?     @default(true)
     createdAt   DateTime     @default(now()) @db.Timestamp(6)
     updatedAt   DateTime     @updatedAt
-    createdBy   String?
+    createdById String?
     updatedBy   String?
     condition   Json?
     roles       RolePolicy[]

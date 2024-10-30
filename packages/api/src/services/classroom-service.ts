@@ -281,4 +281,46 @@ export const classroomService = {
 
     return withIsRepeating;
   },
+  addPermission: async ({
+    userId,
+    resources,
+    classroomId,
+    schoolId,
+    byId,
+  }: {
+    userId: string;
+    resources: string[];
+    byId: string;
+    schoolId: string;
+    classroomId: string;
+  }) => {
+    const policyName = `${userId}-classroom-${classroomId}`;
+
+    const existingPolicy = await db.policy.findFirst({
+      where: { name: policyName },
+    });
+
+    if (existingPolicy) {
+      return existingPolicy;
+    }
+    return db.policy.create({
+      data: {
+        name: policyName,
+        actions: ["read:Read"],
+        effect: "Allow",
+        createdById: byId,
+        resources: resources,
+        condition: {
+          in: JSON.stringify([{ var: "id" }, [classroomId]]),
+        },
+        schoolId: schoolId,
+        users: {
+          create: {
+            userId: userId,
+            createdById: byId,
+          },
+        },
+      },
+    });
+  },
 };

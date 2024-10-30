@@ -1,8 +1,11 @@
 import { notFound } from "next/navigation";
 import { ActivityIcon, BookIcon, VideoIcon } from "lucide-react";
 
+import { checkPermissions } from "@repo/api/permission";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import { NoPermission } from "@repo/ui/no-permission";
 
 import { SubjectDetailsHeader } from "~/components/classrooms/subjects/SubjectDetailsHeader";
 import { api } from "~/trpc/server";
@@ -13,6 +16,12 @@ export default async function Page(props: {
   const params = await props.params;
 
   const { id, subjectId } = params;
+  const canRead = await checkPermissions(PermissionAction.READ, "subject", {
+    id: Number(subjectId),
+  });
+  if (!canRead) {
+    return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
+  }
 
   const subject = await api.subject.get({ id: Number(subjectId) });
   if (!subject) {
