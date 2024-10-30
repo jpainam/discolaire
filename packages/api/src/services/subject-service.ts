@@ -29,7 +29,7 @@ export const subjectService = {
         createdById: byId,
         resources: resources,
         condition: {
-          in: JSON.stringify([{ var: "id" }, [subjectId]]),
+          in: [{ var: "id" }, [subjectId]],
         },
         schoolId: schoolId,
         users: {

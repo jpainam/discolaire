@@ -6,6 +6,7 @@ import { NoPermission } from "@repo/ui/no-permission";
 
 import { ClassroomHeader } from "~/components/classrooms/ClassroomHeader";
 import { ClassroomSidebar } from "~/components/classrooms/ClassroomSidebar";
+import { api } from "~/trpc/server";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -16,7 +17,9 @@ export default async function Layout(props: {
   const { id } = params;
 
   const { children } = props;
-
+  const permissions = await api.user.permissions();
+  console.log(permissions);
+  console.log(id);
   const canReadStudent = await checkPermissions(
     PermissionAction.READ,
     "classroom:details",

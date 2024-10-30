@@ -129,8 +129,8 @@ model UserPolicy {
     userId      String
     policyId    String
     createdById String?
-    policy      Policy  @relation(fields: [policyId], references: [id])
-    user        User    @relation(fields: [userId], references: [id])
+    policy      Policy  @relation(fields: [policyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    user        User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
     @@id([userId, policyId])
 }
@@ -1089,6 +1089,7 @@ model User {
     password          String
     createdAt         DateTime         @default(now())
     updatedAt         DateTime         @updatedAt
+    profile           UserProfile      @default(STUDENT)
     Contact           Contact[]
     photos            Photo[]
     reportQueues      ReportQueue[]
@@ -1184,6 +1185,14 @@ model Sport {
     students StudentSport[]
     school   School         @relation(fields: [schoolId], references: [id])
     schoolId String
+}
+
+enum UserProfile {
+    STUDENT
+    TEACHER
+    STAFF
+    CONTACT
+    ADMIN
 }
 
 enum StatusEnum {

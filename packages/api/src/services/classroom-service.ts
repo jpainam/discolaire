@@ -311,7 +311,7 @@ export const classroomService = {
         createdById: byId,
         resources: resources,
         condition: {
-          in: JSON.stringify([{ var: "id" }, [classroomId]]),
+          in: [{ var: "id" }, [classroomId]],
         },
         schoolId: schoolId,
         users: {
