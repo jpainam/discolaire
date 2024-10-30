@@ -94,9 +94,7 @@ export default async function Page() {
                   <TableCell className="py-0">
                     {dateFormatter.format(new Date(group.createdAt))}
                   </TableCell>
-                  <TableCell className="py-0">
-                    {group.createdBy?.name}
-                  </TableCell>
+                  <TableCell className="py-0">{group.createdById}</TableCell>
                   <TableCell className="py-0 text-right">
                     {(canCreateGroups || canDeleteGroups) && (
                       <GroupTableAction
