@@ -37,7 +37,7 @@ export async function Header() {
         {user && <TopRightMenu user={user} className="py-1" />}
       </div>
       <div className="hidden w-full items-center bg-primary px-2 py-2 text-primary-foreground dark:border-t dark:bg-background dark:text-secondary-foreground md:flex">
-        <MainNav permissions={permissions ?? []} />
+        <MainNav permissions={permissions} />
         <SchoolYearSwitcher defaultValue={schoolYear} />
         <ServiceSwitcher />
         <LanguageSwitcher />
