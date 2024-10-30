@@ -69,7 +69,7 @@ export const policyRouter = createTRPCRouter({
       return ctx.db.policy.create({
         data: {
           ...input,
-          createdBy: ctx.session.user.id,
+          createdById: ctx.session.user.id,
           schoolId: ctx.schoolId,
         },
       });
