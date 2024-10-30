@@ -28,6 +28,7 @@ export const subjectService = {
         effect: "Allow",
         createdById: byId,
         resources: resources,
+        category: "user",
         condition: {
           in: [{ var: "id" }, [subjectId]],
         },

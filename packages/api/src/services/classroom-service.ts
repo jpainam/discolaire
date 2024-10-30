@@ -309,6 +309,7 @@ export const classroomService = {
         actions: ["read:Read"],
         effect: "Allow",
         createdById: byId,
+        category: "user",
         resources: resources,
         condition: {
           in: [{ var: "id" }, [classroomId]],

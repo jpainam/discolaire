@@ -12,12 +12,18 @@ const createUpdateSchema = z.object({
 });
 export const policyRouter = createTRPCRouter({
   all: protectedProcedure
-    .input(z.object({ q: z.string().optional().default("") }))
+    .input(
+      z.object({
+        q: z.string().optional().default(""),
+        category: z.enum(["system", "user"]).optional().default("system"),
+      }),
+    )
     .query(({ ctx, input }) => {
       const qq = `%${input.q}%`;
       return ctx.db.policy.findMany({
         where: {
           schoolId: ctx.schoolId,
+          category: input.category,
           OR: [
             {
               name: { contains: qq, mode: "insensitive" },

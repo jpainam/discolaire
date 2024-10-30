@@ -51,7 +51,7 @@ export function PolicyTable({
   const [q] = useQueryState("q", {
     defaultValue: "",
   });
-  const policiesQuery = api.policy.all.useQuery({ q });
+  const policiesQuery = api.policy.all.useQuery({ q, category: "system" });
   const { t } = useLocale();
   const utils = api.useUtils();
   const { openModal } = useModal();

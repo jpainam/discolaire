@@ -5,9 +5,11 @@ import { ChevronRight } from "lucide-react";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
 
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { sidebarIcons } from "../sidebar-icons";
 import { EnrollStudentModal } from "./EnrollStudentModal";
 
@@ -20,13 +22,17 @@ export function StudentEnrollmentHeader({
   const { openModal } = useModal();
   const params = useParams<{ id: string }>();
   const Icon = sidebarIcons.enrollments;
+  const canEnroll = useCheckPermissions(
+    PermissionAction.CREATE,
+    "classroom:enrollment",
+  );
 
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary px-2 py-1">
       {Icon && <Icon className="h-6 w-6" />}
       <Label className="py-2.5">{t("enrollments")}</Label>
       <div className="ml-auto flex flex-row items-center gap-2">
-        {!isEnrolled && (
+        {!isEnrolled && canEnroll && (
           <Button
             onClick={() => {
               openModal({

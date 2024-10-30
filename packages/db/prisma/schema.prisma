@@ -88,6 +88,7 @@ model Policy {
     actions     String[]
     resources   String[]
     description String?
+    category    String       @default("system")
     isActive    Boolean?     @default(true)
     createdAt   DateTime     @default(now()) @db.Timestamp(6)
     updatedAt   DateTime     @updatedAt

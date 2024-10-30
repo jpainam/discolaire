@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -20,6 +21,7 @@ import { Skeleton } from "@repo/ui/skeleton";
 import { printClassroomStudent } from "~/actions/reporting";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { getAge } from "~/utils/student-utils";
@@ -33,6 +35,14 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
   const classroomQuery = api.classroom.get.useQuery(classroomId);
   const classroom = classroomQuery.data;
   const utils = api.useUtils();
+
+  const canEnroll = useCheckPermissions(
+    PermissionAction.CREATE,
+    "classroom:enrollment",
+    {
+      id: classroomId,
+    },
+  );
 
   const students = classroomStudentsQuery.data ?? [];
   const male = students.filter((student) => student.gender == "male").length;
@@ -110,26 +120,28 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
         </span>
       </FlatBadge>
       <div className="ml-auto flex flex-row items-center gap-2">
-        <Button
-          variant="default"
-          size="sm"
-          disabled={false}
-          onClick={() => {
-            openModal({
-              title: (
-                <div className="px-4 pt-4">{t("enroll_new_students")}</div>
-              ),
-              className: "w-[600px] p-0",
-              description: (
-                <p className="px-4">{t("enroll_new_students_description")}</p>
-              ),
-              view: <EnrollStudent classroomId={classroomId} />,
-            });
-          }}
-        >
-          <Plus className="mr-2 size-4" aria-hidden="true" />
-          {t("enroll")}
-        </Button>
+        {canEnroll && (
+          <Button
+            variant="default"
+            size="sm"
+            disabled={false}
+            onClick={() => {
+              openModal({
+                title: (
+                  <div className="px-4 pt-4">{t("enroll_new_students")}</div>
+                ),
+                className: "w-[600px] p-0",
+                description: (
+                  <p className="px-4">{t("enroll_new_students_description")}</p>
+                ),
+                view: <EnrollStudent classroomId={classroomId} />,
+              });
+            }}
+          >
+            <Plus className="mr-2 size-4" aria-hidden="true" />
+            {t("enroll")}
+          </Button>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant={"outline"} size={"icon"}>
