@@ -881,9 +881,12 @@ importers:
 
   packages/reports:
     dependencies:
+      '@alexandernanberg/react-pdf-renderer':
+        specifier: 4.0.0-canary-3
+        version: 4.0.0-canary-3
       '@react-pdf/renderer':
         specifier: ^4.0.0
-        version: 4.0.0(react@19.0.0-rc-cae764ce-20241025)
+        version: 4.0.0
       '@repo/api':
         specifier: workspace:*
         version: link:../api
@@ -1302,6 +1305,11 @@ importers:
   tooling/typescript: {}
 
 packages:
+
+  '@alexandernanberg/react-pdf-renderer@4.0.0-canary-3':
+    resolution: {integrity: sha512-Mqs8hBovTrr7ObNqFfqIFrmrryyAXOQ4qo4waS1OWgOgfajrYcGnU3V3hdnbgZw4fnRoJOzSIoq87/8XxdJm5A==}
+    peerDependencies:
+      react: ^19.0.0
 
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
@@ -12502,6 +12510,21 @@ packages:
 
 snapshots:
 
+  '@alexandernanberg/react-pdf-renderer@4.0.0-canary-3':
+    dependencies:
+      '@babel/runtime': 7.26.0
+      '@react-pdf/font': 3.0.0
+      '@react-pdf/layout': 4.0.0
+      '@react-pdf/pdfkit': 4.0.0
+      '@react-pdf/primitives': 4.0.0
+      '@react-pdf/render': 4.0.0
+      '@react-pdf/types': 2.7.0
+      events: 3.3.0
+      queue: 6.0.2
+      scheduler: 0.25.0-rc-cae764ce-20241025
+    transitivePeerDependencies:
+      - encoding
+
   '@alloc/quick-lru@5.2.0': {}
 
   '@ampproject/remapping@2.3.0':
@@ -17087,7 +17110,7 @@ snapshots:
       parse-svg-path: 0.1.2
       svg-arc-to-cubic-bezier: 3.2.0
 
-  '@react-pdf/renderer@4.0.0(react@19.0.0-rc-cae764ce-20241025)':
+  '@react-pdf/renderer@4.0.0':
     dependencies:
       '@babel/runtime': 7.26.0
       '@react-pdf/font': 3.0.0
@@ -17100,7 +17123,6 @@ snapshots:
       object-assign: 4.1.1
       prop-types: 15.8.1
       queue: 6.0.2
-      react: 19.0.0-rc-cae764ce-20241025
       scheduler: 0.17.0
     transitivePeerDependencies:
       - encoding

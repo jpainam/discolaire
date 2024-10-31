@@ -1,4 +1,11 @@
-import { Document, Font, Image, Page, Text, View } from "@react-pdf/renderer";
+import {
+  Document,
+  Font,
+  Image,
+  Page,
+  Text,
+  View,
+} from "@alexandernanberg/react-pdf-renderer";
 import QRCodeUtil from "qrcode";
 
 import type { RouterOutputs } from "@repo/api";
