@@ -1,4 +1,4 @@
-import { Image, View } from "@alexandernanberg/react-pdf-renderer";
+import { Image, View } from "@react-pdf/renderer";
 
 interface QRCodeProps {
   data: string;
