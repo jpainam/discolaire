@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 
 import { useLocale } from "@repo/hooks/use-locale";
+import { useModal } from "@repo/hooks/use-modal";
 import { useRouter } from "@repo/hooks/use-router";
 import { Button } from "@repo/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
@@ -23,6 +24,7 @@ import FlatBadge from "@repo/ui/FlatBadge";
 import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";
 import EyeIcon from "../icons/eye";
+import { CreateEditLesson } from "./timetables/CreateEditLesson";
 
 export default function TopTimetable() {
   const currentDate = new Date();
@@ -92,6 +94,7 @@ export default function TopTimetable() {
   };
   const router = useRouter();
   const params = useParams<{ id: string }>();
+  const { openModal } = useModal();
 
   return (
     <Card className="m-2">
@@ -181,7 +184,16 @@ export default function TopTimetable() {
             {t("view_timetable")}
           </Button>
           <div className="ml-auto flex gap-2">
-            <Button size={"sm"}>
+            <Button
+              onClick={() => {
+                openModal({
+                  title: t("create_timetable"),
+                  className: "w-[550px]",
+                  view: <CreateEditLesson />,
+                });
+              }}
+              size={"sm"}
+            >
               <PlusIcon className="mr-2 h-4 w-4" />
               {t("create_timetable")}
             </Button>
