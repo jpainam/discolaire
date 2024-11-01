@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { getServerTranslations } from "@repo/i18n/server";
 
+import { routes } from "~/configs/routes";
 import { ModeToggle } from "~/layouts/mode-toggle";
 import { api } from "~/trpc/server";
 import { UserAuthForm } from "./user-auth-form";
@@ -65,6 +66,12 @@ export default async function Page() {
               </p>
             </div>
             <UserAuthForm />
+            <div className="mt-4 text-center text-sm">
+              {t("dont_have_an_account")}{" "}
+              <Link href={routes.auth.signup} className="underline">
+                {t("sign_up")}
+              </Link>
+            </div>
             <p className="px-8 text-center text-sm text-muted-foreground">
               {t("by_clicking_text")}{" "}
               <Link
