@@ -117,6 +117,7 @@ export const routes = {
   classrooms: {
     index: "/datum/classrooms",
     fees: (id: string) => `/datum/classrooms/${id}/fees`,
+    timetables: (id: string) => `/datum/classrooms/${id}/timetables`,
     assignments: {
       index: (id: string) => `/datum/classrooms/${id}/assignments`,
       create: (id: string) => `/datum/classrooms/${id}/assignments/create`,

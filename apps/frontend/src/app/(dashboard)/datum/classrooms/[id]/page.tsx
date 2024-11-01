@@ -4,6 +4,7 @@ import { PermissionAction } from "@repo/lib/permission";
 import { ClassroomDetails } from "~/components/classrooms/ClassroomDetails";
 import { EnrollmentDataTable } from "~/components/classrooms/enrollments/EnrollmentDataTable";
 import { EnrollmentHeader } from "~/components/classrooms/enrollments/EnrollmentHeader";
+import TopTimetable from "~/components/classrooms/TopTimetable";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -24,6 +25,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         <div>
           <CreditDebitPie />
         </div> */}
+      <TopTimetable />
 
       <EnrollmentHeader classroomId={id} />
       {/* <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-2 p-2 ">
