@@ -24,6 +24,7 @@ declare module "next-auth" {
       avatar: string;
       username: string;
       schoolId: string;
+      profile: string;
     } & DefaultSession["user"];
   }
 }
@@ -134,6 +135,7 @@ export const validateToken = async (
             name: user.name,
             username: user.username,
             schoolId: user.schoolId,
+            profile: user.profile,
             avatar: user.avatar ?? "",
           },
           expires: addDays(new Date(), 30).toISOString(),

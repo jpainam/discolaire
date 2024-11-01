@@ -232,7 +232,7 @@ model Classroom {
     section           Section?       @relation(fields: [sectionId], references: [id])
     enrollments       Enrollment[]
     fees              Fee[]
-    Subject           Subject[]
+    subjects          Subject[]
     assignments       Assignment[]
     studentId         String?
     reportCards       ReportCard[]
@@ -1094,7 +1094,7 @@ model User {
     password          String
     createdAt         DateTime         @default(now())
     updatedAt         DateTime         @updatedAt
-    profile           UserProfile      @default(STUDENT)
+    profile           String           @default("student")
     Contact           Contact[]
     photos            Photo[]
     reportQueues      ReportQueue[]
@@ -1191,14 +1191,6 @@ model Sport {
     students StudentSport[]
     school   School         @relation(fields: [schoolId], references: [id])
     schoolId String
-}
-
-enum UserProfile {
-    STUDENT
-    TEACHER
-    STAFF
-    CONTACT
-    ADMIN
 }
 
 enum StatusEnum {

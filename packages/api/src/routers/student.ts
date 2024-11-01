@@ -124,11 +124,8 @@ export const studentRouter = createTRPCRouter({
             schoolId: ctx.schoolId,
             schoolYearId: ctx.schoolYearId,
           });
-      console.log(
-        ">>>>>>> this is the registration number",
-        registrationNumber,
-      );
       if (await studentService.registrationNumberExists(registrationNumber)) {
+        console.warn("Registration number already exists", registrationNumber);
         // throw new TRPCError({
         //   code: "BAD_REQUEST",
         //   message: "Registration number already exists",
@@ -184,6 +181,7 @@ export const studentRouter = createTRPCRouter({
         username: uuidv4(),
         password: await encryptPassword("password"),
         schoolId: ctx.schoolId,
+        profile: "student",
         name: `${student.firstName} ${student.lastName}`,
       };
       const user = await ctx.db.user.create({

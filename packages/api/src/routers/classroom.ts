@@ -1,8 +1,12 @@
 import { z } from "zod";
 
-import { doPermissionsCheck, PermissionAction } from "@repo/lib/permission";
+import { PermissionAction } from "@repo/lib/permission";
 
+import { checkPermissions } from "../permission";
 import { classroomService } from "../services/classroom-service";
+import { contactService } from "../services/contact-service";
+import { staffService } from "../services/staff-service";
+import { studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -21,17 +25,50 @@ export const classroomRouter = createTRPCRouter({
       schoolYearId: ctx.schoolYearId,
       schoolId: ctx.session.user.schoolId,
     });
-    return classrooms.filter((cl) => {
-      return doPermissionsCheck(
-        ctx.permissions,
-        PermissionAction.READ,
-        "classroom:list",
-        ctx.schoolId,
-        {
-          id: cl.id,
-        },
+    // Has access to all classrooms
+    if (await checkPermissions(PermissionAction.READ, "classroom:list")) {
+      return classrooms;
+    }
+    // Has access to classrooms where he teachers
+    if (ctx.session.user.profile === "staff") {
+      const shortedClassrooms = await staffService.getClassrooms(
+        ctx.session.user.id,
+        ctx.schoolYearId,
       );
-    });
+      return classrooms.filter((cl) =>
+        shortedClassrooms.some((sc) => sc.id === cl.id),
+      );
+    }
+    // Has access to classrooms where he is a parent
+    if (ctx.session.user.profile === "contact") {
+      const shortedClassrooms = await contactService.getClassrooms(
+        ctx.session.user.id,
+        ctx.schoolYearId,
+      );
+      return classrooms.filter((cl) =>
+        shortedClassrooms.some((sc) => sc.id === cl.id),
+      );
+    }
+    // Has access to his classroom
+    if (ctx.session.user.profile === "student") {
+      const shortedClassroom = await studentService.getClassroomByUserId(
+        ctx.session.user.id,
+        ctx.schoolYearId,
+      );
+      return classrooms.filter((cl) => cl.id === shortedClassroom?.id);
+    }
+    return [];
+    // return classrooms.filter((cl) => {
+    //   return doPermissionsCheck(
+    //     ctx.permissions,
+    //     PermissionAction.READ,
+    //     "classroom:list",
+    //     ctx.schoolId,
+    //     {
+    //       id: cl.id,
+    //     },
+    //   );
+    // });
   }),
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))

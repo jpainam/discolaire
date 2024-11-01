@@ -125,6 +125,7 @@ export const staffRouter = {
         username: uuidv4(),
         password: await encryptPassword("password"),
         schoolId: ctx.schoolId,
+        profile: "staff",
         name: `${staff.firstName} ${staff.lastName}`,
       };
       const user = await ctx.db.user.create({

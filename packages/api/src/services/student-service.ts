@@ -3,6 +3,27 @@ import { db } from "@repo/db";
 import { userService } from "./user-service";
 
 export const studentService = {
+  getClassroomByUserId: async (userId: string, schoolYearId: string) => {
+    const student = await db.student.findFirst({
+      where: {
+        userId: userId,
+      },
+    });
+    if (!student) {
+      return null;
+    }
+    return db.classroom.findFirst({
+      where: {
+        schoolId: student.schoolId,
+        enrollments: {
+          some: {
+            studentId: student.id,
+            schoolYearId: schoolYearId,
+          },
+        },
+      },
+    });
+  },
   getClassroom: (studentId: string, schoolYearId: string) => {
     return db.classroom.findFirst({
       where: {

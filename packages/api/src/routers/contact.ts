@@ -219,6 +219,7 @@ export const contactRouter = createTRPCRouter({
         username: uuidv4(),
         password: await encryptPassword("password"),
         schoolId: ctx.schoolId,
+        profile: "contact",
         name: `${contact.firstName} ${contact.lastName}`,
       };
       const user = await ctx.db.user.create({
