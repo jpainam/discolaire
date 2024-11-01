@@ -27,6 +27,7 @@ import { journalRouter } from "./routers/journal";
 import { lessonRouter } from "./routers/lesson";
 import { menuRouter } from "./routers/menu";
 import { messagingRouter } from "./routers/messaging";
+import { passwordResetRouter } from "./routers/passwordReset";
 import { permissionRouter } from "./routers/permission";
 import { policyRouter } from "./routers/policy";
 import { postRouter } from "./routers/post";
@@ -77,6 +78,7 @@ export const appRouter = createTRPCRouter({
   term: termRouter,
   document: documentRouter,
   school: schoolRouter,
+  passwordReset: passwordResetRouter,
   studentContact: studentContactRouter,
   calendarEvent: calendarEventRouter,
   studentAccount: studentAccountRouter,

@@ -6,6 +6,7 @@ import { KeyRound } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+import { useLocale } from "@repo/hooks/use-locale";
 import { useRouter } from "@repo/hooks/use-router";
 import { Alert, AlertDescription, AlertTitle } from "@repo/ui/alert";
 import { Button } from "@repo/ui/button";
@@ -27,21 +28,10 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 
-const formSchema = z
-  .object({
-    password: z
-      .string()
-      .min(8, "Password must be at least 8 characters")
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
-      ),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
+const formSchema = z.object({
+  password: z.string().min(1),
+  confirmPassword: z.string().min(1),
+});
 
 export default function ResetPassword() {
   const [isLoading, setIsLoading] = useState(false);
@@ -65,22 +55,23 @@ export default function ResetPassword() {
     console.log(values);
   }
   const router = useRouter();
+  const { t } = useLocale();
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-secondary">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Reset Password</CardTitle>
-          <CardDescription>Enter your new password</CardDescription>
+          <CardTitle>{t("reset_password")}</CardTitle>
+          <CardDescription>{t("enter_your_new_password")}</CardDescription>
         </CardHeader>
         <CardContent>
           {isSuccess ? (
             <Alert>
               <KeyRound className="h-4 w-4" />
-              <AlertTitle>Password Reset Successful</AlertTitle>
+
+              <AlertTitle>{t("password_reset_successful")}</AlertTitle>
               <AlertDescription>
-                Your password has been successfully reset. You can now log in
-                with your new password.
+                {t("password_reset_successful_description")}
               </AlertDescription>
             </Alert>
           ) : (
@@ -94,11 +85,11 @@ export default function ResetPassword() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>New Password</FormLabel>
+                      <FormLabel>{t("new_password")}</FormLabel>
                       <FormControl>
                         <Input
                           type="password"
-                          placeholder="Enter your new password"
+                          placeholder={t("enter_your_new_password")}
                           {...field}
                         />
                       </FormControl>
@@ -111,11 +102,11 @@ export default function ResetPassword() {
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Confirm New Password</FormLabel>
+                      <FormLabel>{t("confirm_new_password")}</FormLabel>
                       <FormControl>
                         <Input
                           type="password"
-                          placeholder="Confirm your new password"
+                          placeholder={t("confirm_your_new_password")}
                           {...field}
                         />
                       </FormControl>
@@ -124,7 +115,7 @@ export default function ResetPassword() {
                   )}
                 />
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Resetting..." : "Reset Password"}
+                  {isLoading ? t("resetting") : t("reset_password")}
                 </Button>
               </form>
             </Form>
@@ -136,7 +127,7 @@ export default function ResetPassword() {
             className="text-sm text-muted-foreground"
             onClick={() => router.push("/auth/login")}
           >
-            Back to Login
+            {t("back_to_login")}
           </Button>
         </CardFooter>
       </Card>

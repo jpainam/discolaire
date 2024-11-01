@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { Loader, Mail } from "lucide-react";
+import { toast } from "sonner";
 import * as z from "zod";
 
+import { useLocale } from "@repo/hooks/use-locale";
 import { useRouter } from "@repo/hooks/use-router";
 import { Alert, AlertDescription, AlertTitle } from "@repo/ui/alert";
 import { Button } from "@repo/ui/button";
@@ -24,51 +24,67 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  useForm,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 
 const formSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.string().email(),
 });
 
-export default function ForgotPassword() {
+export default function Paage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm({
+    schema: formSchema,
     defaultValues: {
       email: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsLoading(false);
-    setIsSuccess(true);
-    // In a real application, you would call your API here
-    console.log(values);
+    fetch("/api/emails/password/reset", {
+      method: "POST",
+      body: JSON.stringify(values),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(() => {
+        toast.success(t("reset_link_sent_successfully"));
+        setIsSuccess(true);
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error(err.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
+  const { t } = useLocale();
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-secondary">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Forgot Password</CardTitle>
+          <CardTitle>{t("forgot_password")}</CardTitle>
           <CardDescription>
-            Enter your email to reset your password
+            {t("enter_your_email_to_reset_your_password")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           {isSuccess ? (
             <Alert>
-              <Mail className="h-4 w-4" />
-              <AlertTitle>Check your email</AlertTitle>
+              <Mail className="h-4 w-4 text-green-900 dark:text-green-300" />
+              <AlertTitle className="font-bold text-green-900 dark:text-green-300">
+                {t("check_your_email")}
+              </AlertTitle>
               <AlertDescription>
-                We've sent you a password reset link. Please check your inbox.
+                {t("we_have_sent_you_an_email_with_reset_instructions")}
               </AlertDescription>
             </Alert>
           ) : (
@@ -82,7 +98,7 @@ export default function ForgotPassword() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>{t("email")}</FormLabel>
                       <FormControl>
                         <Input placeholder="Enter your email" {...field} />
                       </FormControl>
@@ -91,7 +107,14 @@ export default function ForgotPassword() {
                   )}
                 />
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Sending..." : "Send Reset Link"}
+                  {isLoading ? (
+                    <>
+                      <Loader className="mr-2 h-4 w-4 animate-spin" />
+                      {t("sending")}
+                    </>
+                  ) : (
+                    t("send_reset_link")
+                  )}
                 </Button>
               </form>
             </Form>
@@ -103,7 +126,7 @@ export default function ForgotPassword() {
             className="text-sm text-muted-foreground"
             onClick={() => router.push("/auth/login")}
           >
-            Back to Login
+            {t("back_to_login")}
           </Button>
         </CardFooter>
       </Card>

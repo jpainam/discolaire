@@ -3,10 +3,25 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 
 import { encryptPassword } from "../encrypt";
+import { ratelimiter } from "../rateLimit";
 import { userService } from "../services/user-service";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const userRouter = createTRPCRouter({
+  getByEmail: publicProcedure
+    .use(ratelimiter({ limit: 5, namespace: "getByEmail.password" }))
+    .input(
+      z.object({
+        email: z.string().email(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.user.findFirst({
+        where: {
+          email: input.email,
+        },
+      });
+    }),
   updatePassword: protectedProcedure
     .input(z.object({ userId: z.string(), password: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
