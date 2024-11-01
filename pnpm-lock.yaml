@@ -57,6 +57,11 @@ catalogs:
       specifier: rc
       version: 19.0.0-rc-603e6108-20241029
 
+patchedDependencies:
+  '@react-pdf/renderer@4.0.0':
+    hash: 2thl77jzkivick7xb34gmqw3bi
+    path: patches/@react-pdf__renderer@4.0.0.patch
+
 importers:
 
   .:
@@ -886,7 +891,7 @@ importers:
         version: 4.0.0-canary-3
       '@react-pdf/renderer':
         specifier: ^4.0.0
-        version: 4.0.0
+        version: 4.0.0(patch_hash=2thl77jzkivick7xb34gmqw3bi)
       '@repo/api':
         specifier: workspace:*
         version: link:../api
@@ -1081,6 +1086,9 @@ importers:
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
+      framer-motion:
+        specifier: ^12.0.0-alpha.1
+        version: 12.0.0-alpha.1(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-603e6108-20241029))(react@19.0.0-rc-603e6108-20241029)
       i18n-iso-countries:
         specifier: ^7.12.0
         version: 7.12.0
@@ -17110,7 +17118,7 @@ snapshots:
       parse-svg-path: 0.1.2
       svg-arc-to-cubic-bezier: 3.2.0
 
-  '@react-pdf/renderer@4.0.0':
+  '@react-pdf/renderer@4.0.0(patch_hash=2thl77jzkivick7xb34gmqw3bi)':
     dependencies:
       '@babel/runtime': 7.26.0
       '@react-pdf/font': 3.0.0
@@ -20804,6 +20812,13 @@ snapshots:
     optionalDependencies:
       react: 19.0.0-rc-603e6108-20241029
       react-dom: 19.0.0-rc-603e6108-20241029(react@19.0.0-rc-603e6108-20241029)
+
+  framer-motion@12.0.0-alpha.1(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-603e6108-20241029))(react@19.0.0-rc-603e6108-20241029):
+    dependencies:
+      tslib: 2.6.3
+    optionalDependencies:
+      react: 19.0.0-rc-603e6108-20241029
+      react-dom: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-603e6108-20241029)
 
   framework-utils@1.1.0: {}
 

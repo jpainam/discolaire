@@ -523,12 +523,14 @@ model Student {
     religionId         String?
     isBaptized         Boolean          @default(false)
     isRepeating        Boolean          @default(false)
+    isNew              Boolean          @default(false)
     phoneNumber        String?
     parentDivorced     Boolean          @default(false)
     dateOfEntry        DateTime?        @db.Date
     dateOfExit         DateTime?        @db.Date
     dateOfWithdraw     DateTime?        @db.Date
     observation        String?
+    sunPlusNo          String?
     countryId          String?
     userId             String?
     tags               Json?
@@ -725,6 +727,7 @@ model School {
     address            String?
     defaultCountryId   String?
     registrationPrefix String           @default("1")
+    requestSunPlusNo   Boolean?         @default(true)
     applyRequiredFee   ApplyRequiredFee @default(NO)
     includeRequiredFee Boolean?         @default(false)
     contacts           Contact[]

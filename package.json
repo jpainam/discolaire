@@ -36,5 +36,10 @@
   "prisma": {
     "schema": "packages/db/prisma/schema.prisma",
     "seed": "tsx packages/db/src/seed.ts"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@react-pdf/renderer@4.0.0": "patches/@react-pdf__renderer@4.0.0.patch"
+    }
   }
 }

@@ -73,20 +73,50 @@ export function CreateUpdateDenom() {
             )}
           />
         </div>
-        <FormField
-          control={form.control}
-          name="status"
-          render={({ field }) => (
-            <FormItem className="space-y-0">
-              <FormLabel>{t("status")}</FormLabel>
-              <FormControl>
-                <StudentStatusSelector defaultValue={field.value} {...field} />
-              </FormControl>
+        <div className="flex flex-col gap-1">
+          <FormField
+            control={form.control}
+            name="isRepeating"
+            render={({ field }) => (
+              <FormItem className="space-y-0">
+                <FormLabel>{t("is_repeating")}</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={t("select_an_option")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="yes">{t("yes")}</SelectItem>
+                      <SelectItem value="no">{t("no")}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="isNew"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>{t("is_new")} ?</FormLabel>
+                </div>
+              </FormItem>
+            )}
+          />
+        </div>
 
         {!form.getValues("id") && (
           <FormField
@@ -106,23 +136,12 @@ export function CreateUpdateDenom() {
         )}
         <FormField
           control={form.control}
-          name="isRepeating"
+          name="status"
           render={({ field }) => (
             <FormItem className="space-y-0">
-              <FormLabel>{t("is_repeating")}</FormLabel>
+              <FormLabel>{t("status")}</FormLabel>
               <FormControl>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder={t("select_an_option")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="yes">{t("yes")}</SelectItem>
-                    <SelectItem value="no">{t("no")}</SelectItem>
-                  </SelectContent>
-                </Select>
+                <StudentStatusSelector defaultValue={field.value} {...field} />
               </FormControl>
 
               <FormMessage />

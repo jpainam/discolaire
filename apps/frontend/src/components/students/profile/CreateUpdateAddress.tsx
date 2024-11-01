@@ -18,21 +18,30 @@ import { CountryPicker } from "~/components/shared/CountryPicker";
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";
 import { FormerSchoolSelector } from "~/components/shared/selects/FormerSchoolSelector";
+import { useSchool } from "~/contexts/SchoolContext";
 
 export function CreateUpdateAddress() {
   const { t } = useLocale();
   const form = useFormContext();
+  const { school } = useSchool();
 
   return (
     <Card className="rounded-md">
       <CardHeader className="border-b bg-muted/50 py-2.5">
         <CardTitle className="flex items-center gap-1 text-sm">
           <PiCalendarDotsDuotone className="h-4 w-4" />
-          {t("date")}/{t("address")}
+          {t("date")}/{t("information")}
         </CardTitle>
         {/* <CardDescription></CardDescription> */}
       </CardHeader>
       <CardContent className="grid grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2">
+        {school.requestSunPlusNo && (
+          <InputField
+            name="sunPlusNo"
+            placeholder={t("sun_plus_no")}
+            label={t("sun_plus_no")}
+          />
+        )}
         <InputField name="email" placeholder="Email" label="Email" />
         <FormField
           control={form.control}

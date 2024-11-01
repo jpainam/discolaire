@@ -81,6 +81,9 @@
     "ui-add": "pnpm dlx shadcn@latest add && prettier src --write --list-different"
   },
   "prettier": "@repo/prettier-config",
+  "overrides": {
+    "react-is": "19.0.0-rc-603e6108-20241029"
+  },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",
     "@dnd-kit/sortable": "^8.0.0",
@@ -125,6 +128,7 @@
     "class-variance-authority": "^0.7.0",
     "cmdk": "1.0.0",
     "date-fns": "^4.1.0",
+    "framer-motion": "^12.0.0-alpha.1",
     "i18n-iso-countries": "^7.12.0",
     "lucide-react": "^0.453.0",
     "next-themes": "^0.3.0",

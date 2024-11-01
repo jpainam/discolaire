@@ -57,8 +57,8 @@ export function CreateUpdateProfile() {
         <InputField
           className="gap-2"
           name="residence"
-          placeholder={t("residence")}
-          label="Résidence"
+          placeholder={t("address")}
+          label={t("address")}
         />
         <InputField
           className="gap-2"

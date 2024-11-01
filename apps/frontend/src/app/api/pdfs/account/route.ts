@@ -9,7 +9,7 @@ export const preferredRegion = ["fra1", "sfo1", "iad1"];
 export const dynamic = "force-dynamic";
 
 const searchSchema = z.object({
-  preview: z.boolean().default(true),
+  preview: z.coerce.boolean().default(true),
   size: z.union([z.literal("letter"), z.literal("a4")]).default("letter"),
   id: z.string().min(1),
 });

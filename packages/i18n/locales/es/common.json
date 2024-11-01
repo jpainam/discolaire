@@ -13,6 +13,8 @@
   "create_policy": "Crear política",
   "Periods": "Períodos",
   "registrationPrefix": "Registro prefix",
+  "is_new": "Es nuevo",
+  "sun_plus_no": "SUN PLUS N°",
   "pending_submissions": "Envíos pendientes",
   "number_from_last_week": "{{n}} de la semana pasada",
   "upcoming_due_date": "Fecha de vencimiento próxima",
