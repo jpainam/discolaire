@@ -47,7 +47,7 @@ export function StudentDataTable() {
   });
 
   if (studentsQuery.isPending) {
-    return <DataTableSkeleton rowCount={15} columnCount={8} />;
+    return <DataTableSkeleton rowCount={10} className="px-4" columnCount={6} />;
   }
   if (studentsQuery.error) {
     toast(studentsQuery.error.message);

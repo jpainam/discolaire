@@ -60,10 +60,11 @@ export function ClassroomDataTable() {
   });
 
   if (classroomsQuery.isPending) {
-    return <DataTableSkeleton rowCount={15} columnCount={8} />;
+    return <DataTableSkeleton className="px-4" rowCount={10} columnCount={6} />;
   }
   return (
     <DataTable
+      className="px-2"
       table={table}
       floatingBar={<ClassroomDataTableActions table={table} />}
     >
