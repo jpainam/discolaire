@@ -51,6 +51,7 @@ export function PolicyTable({
   const [q] = useQueryState("q", {
     defaultValue: "",
   });
+
   const policiesQuery = api.policy.all.useQuery({ q, category: "system" });
   const { t } = useLocale();
   const utils = api.useUtils();
@@ -99,7 +100,7 @@ export function PolicyTable({
   const policies = policiesQuery.data;
 
   return (
-    <div className="m-2 rounded-lg border">
+    <div className="mx-2 rounded-lg border">
       <Table>
         <TableHeader>
           <TableRow className="bg-muted/50">
