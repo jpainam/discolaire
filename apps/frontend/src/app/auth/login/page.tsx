@@ -61,9 +61,9 @@ export default async function Page() {
               <h1 className="text-2xl font-semibold tracking-tight">
                 {t("welcome_back")}
               </h1>
-              <p className="text-sm text-muted-foreground">
+              {/* <p className="text-sm text-muted-foreground">
                 {t("enter_email_below_to_sign_in")}
-              </p>
+              </p> */}
             </div>
             <UserAuthForm />
             <div className="mt-4 text-center text-sm">
@@ -72,23 +72,21 @@ export default async function Page() {
                 {t("sign_up")}
               </Link>
             </div>
-            <p className="px-8 text-center text-sm text-muted-foreground">
-              {t("by_clicking_text")}{" "}
+            <div className="grid flex-row justify-between py-8 text-sm text-muted-foreground md:flex">
+              {/* {t("by_clicking_text")}{" "} */}
               <Link
                 href="/terms"
                 className="underline underline-offset-4 hover:text-primary"
               >
                 {t("terms_of_service")}
-              </Link>{" "}
-              {t("and")}{" "}
+              </Link>
               <Link
                 href="/privacy"
                 className="underline underline-offset-4 hover:text-primary"
               >
                 {t("privacy_policy")}
               </Link>
-              .
-            </p>
+            </div>
           </div>
         </div>
       </div>
