@@ -1,24 +1,20 @@
-import { useAtomValue, useSetAtom } from "jotai";
-import { atomWithStorage } from "jotai/utils";
 import { useSession } from "next-auth/react";
 
 import type { Permission } from "@repo/lib/permission";
 import { doPermissionsCheck } from "@repo/lib/permission";
 
-import { api } from "~/trpc/react";
+import { useSchool } from "~/contexts/SchoolContext";
 
-export const permissionAtom = atomWithStorage<Permission[]>("permissions", []);
-
-const useIsLoggedIn = () => {
-  const session = useSession();
-  const user = session.data?.user;
-  return user !== undefined;
-};
+// const useIsLoggedIn = () => {
+//   const session = useSession();
+//   const user = session.data?.user;
+//   return user !== undefined;
+// };
 
 export function useGetPermissions(permissionsOverride?: Permission[]) {
   //const permissionsResult = api.user.permissions.useQuery();
   // Assuming permissionAtom is loaded the Header.tsx file
-  const permissionsResult = useAtomValue(permissionAtom);
+  const { permissions: permissionsResult } = useSchool();
 
   const permissions = permissionsOverride ?? permissionsResult;
 
@@ -49,7 +45,11 @@ export function useCheckPermissions(
   const user = session.data?.user;
   //const isLoggedIn = useIsLoggedIn();
 
-  const { permissions: allPermissions } = useGetPermissions(permissions);
+  const { permissions: permissionsResult } = useSchool();
+
+  const allPermissions = permissions ?? permissionsResult;
+
+  //const { permissions: allPermissions } = useGetPermissions(permissions);
 
   if (!user) return false;
 
@@ -61,13 +61,13 @@ export function useCheckPermissions(
     data,
   );
 }
-// Not Used now. Moved to Header. to load permissions on login
-export function usePermissionsLoaded() {
-  const isLoggedIn = useIsLoggedIn();
-  const permissionsQuery = api.user.permissions.useQuery();
-  const setPermissionsAtom = useSetAtom(permissionAtom);
-  if (!permissionsQuery.isPending) {
-    setPermissionsAtom(permissionsQuery.data ?? []);
-  }
-  return isLoggedIn && permissionsQuery.isFetched;
-}
+
+// export function usePermissionsLoaded() {
+//   const isLoggedIn = useIsLoggedIn();
+//   const permissionsQuery = api.user.permissions.useQuery();
+//   const setPermissionsAtom = useSetAtom(permissionAtom);
+//   if (!permissionsQuery.isPending) {
+//     setPermissionsAtom(permissionsQuery.data ?? []);
+//   }
+//   return isLoggedIn && permissionsQuery.isFetched;
+// }

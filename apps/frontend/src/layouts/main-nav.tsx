@@ -1,17 +1,13 @@
 "use client";
 
 import path from "path";
-import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSetAtom } from "jotai";
 
-import type { Permission } from "@repo/lib/permission";
 import { useLocale } from "@repo/i18n";
 
 import { Icons } from "~/components/icons";
 import { siteConfig } from "~/configs/site";
-import { permissionAtom } from "~/hooks/use-permissions";
 import { cn } from "~/lib/utils";
 
 interface MenuItem {
@@ -21,20 +17,7 @@ interface MenuItem {
   actives?: string[];
 }
 
-export function MainNav({
-  className,
-  permissions,
-}: {
-  className?: string;
-  permissions: Permission[];
-}) {
-  const setPermissionsAtom = useSetAtom(permissionAtom);
-
-  useEffect(() => {
-    // TODO - Current hack to set permission locally for useCheckPermissions
-    setPermissionsAtom(permissions);
-  }, [permissions, setPermissionsAtom]);
-
+export function MainNav({ className }: { className?: string }) {
   const { t } = useLocale();
   const mainNavItems: MenuItem[] = [
     { label: t("home"), href: "/", actives: ["/"] },

@@ -34,8 +34,9 @@ export default async function Layout({
   if (!school) {
     throw new Error("School not found");
   }
+  const permissions = await api.user.permissions();
   return (
-    <SchoolContextProvider school={school}>
+    <SchoolContextProvider school={school} permissions={permissions}>
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>

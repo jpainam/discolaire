@@ -14,10 +14,8 @@ import { ServiceSwitcher } from "./ServiceSwitcher";
 import { TopRightMenu } from "./top-right-menu";
 
 export async function Header() {
-  //const defaultSchoolYear = await api.schoolYear.getDefault();
-  //const schoolYear = (await getSchoolYearFromCookie()) ?? defaultSchoolYear?.id;
   const schoolYear = (await cookies()).get("schoolYear")?.value;
-  const permissions = await api.user.permissions();
+
   const session = await auth();
   if (!session) {
     redirect("/auth/login");
@@ -37,7 +35,7 @@ export async function Header() {
         {user && <TopRightMenu user={user} className="py-1" />}
       </div>
       <div className="hidden w-full items-center bg-primary px-2 py-2 text-primary-foreground dark:border-t dark:bg-background dark:text-secondary-foreground md:flex">
-        <MainNav permissions={permissions} />
+        <MainNav />
         <SchoolYearSwitcher defaultValue={schoolYear} />
         <ServiceSwitcher />
         <LanguageSwitcher />
