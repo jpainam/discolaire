@@ -71,7 +71,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/canvas-confetti": "^1.6.4",
     "@types/lodash": "^4.17.12",
-    "@types/node": "^20.17.1",
+    "@types/node": "^22.8.6",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
     "dotenv-cli": "^7.4.2",
