@@ -22,16 +22,16 @@
   "prettier": "@repo/prettier-config",
   "devDependencies": {
     "@repo/prettier-config": "workspace:*",
-    "@turbo/gen": "2.1.2",
+    "@turbo/gen": "2.2.3",
     "husky": "^9.1.6",
     "prettier": "catalog:",
-    "turbo": "2.1.2",
+    "turbo": "2.2.3",
     "typescript": "catalog:"
   },
-  "packageManager": "pnpm@9.12.2",
+  "packageManager": "pnpm@9.12.3",
   "engines": {
     "node": ">=22.11.0",
-    "pnpm": "^9.12.2"
+    "pnpm": "^9.12.3"
   },
   "prisma": {
     "schema": "packages/db/prisma/schema.prisma",
