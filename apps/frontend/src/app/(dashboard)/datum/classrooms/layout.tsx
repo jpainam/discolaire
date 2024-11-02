@@ -2,7 +2,6 @@ import React from "react";
 
 import { checkPermissions } from "@repo/api/permission";
 import { PermissionAction } from "@repo/lib/permission";
-import { NoPermission } from "@repo/ui/no-permission";
 
 export default async function Layout({
   children,
@@ -14,7 +13,8 @@ export default async function Layout({
     "classroom:list",
   );
   if (!canReadClassroom) {
-    return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
+    console.warn("No permission");
+    //return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
   }
   return <>{children}</>;
 }
