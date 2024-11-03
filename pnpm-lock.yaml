@@ -113,8 +113,8 @@ importers:
         specifier: ^1.13.0
         version: 1.13.0
       nitropack:
-        specifier: ^2.10.1
-        version: 2.10.1(@planetscale/database@1.19.0)(@upstash/redis@1.34.3)(typescript@5.5.4)(webpack-sources@3.2.3)
+        specifier: ^2.10.2
+        version: 2.10.2(@planetscale/database@1.19.0)(@upstash/redis@1.34.3)(typescript@5.5.4)(webpack-sources@3.2.3)
       prettier:
         specifier: 'catalog:'
         version: 3.3.3
@@ -1075,8 +1075,8 @@ importers:
         specifier: ^5.59.17
         version: 5.59.17
       '@tanstack/react-query':
-        specifier: ^5.59.17
-        version: 5.59.17(react@19.0.0-rc-7c8e5e7a-20241101)
+        specifier: ^5.59.19
+        version: 5.59.19(react@19.0.0-rc-7c8e5e7a-20241101)
       '@tanstack/react-table':
         specifier: ^8.20.5
         version: 8.20.5(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-7c8e5e7a-20241101))(react@19.0.0-rc-7c8e5e7a-20241101)
@@ -1117,8 +1117,8 @@ importers:
         specifier: 9.2.1
         version: 9.2.1(react@19.0.0-rc-7c8e5e7a-20241101)
       react-dropzone:
-        specifier: ^14.3.2
-        version: 14.3.2(react@19.0.0-rc-7c8e5e7a-20241101)
+        specifier: ^14.3.3
+        version: 14.3.3(react@19.0.0-rc-7c8e5e7a-20241101)
       react-easy-sort:
         specifier: ^1.6.0
         version: 1.6.0(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-7c8e5e7a-20241101))(react@19.0.0-rc-7c8e5e7a-20241101)
@@ -1169,8 +1169,8 @@ importers:
         specifier: ^5.59.7
         version: 5.59.7(eslint@9.13.0(jiti@2.4.0))(typescript@5.5.4)
       '@tanstack/react-query-devtools':
-        specifier: ^5.59.17
-        version: 5.59.17(@tanstack/react-query@5.59.17(react@19.0.0-rc-7c8e5e7a-20241101))(react@19.0.0-rc-7c8e5e7a-20241101)
+        specifier: ^5.59.19
+        version: 5.59.19(@tanstack/react-query@5.59.19(react@19.0.0-rc-7c8e5e7a-20241101))(react@19.0.0-rc-7c8e5e7a-20241101)
       '@types/react':
         specifier: catalog:react19
         version: types-react@19.0.0-rc.1
@@ -5270,13 +5270,13 @@ packages:
   '@tanstack/query-core@5.59.17':
     resolution: {integrity: sha512-jWdDiif8kaqnRGHNXAa9CnudtxY5v9DUxXhodgqX2Rwzj+1UwStDHEbBd9IA5C7VYAaJ2s+BxFR6PUBs8ERorA==}
 
-  '@tanstack/query-devtools@5.58.0':
-    resolution: {integrity: sha512-iFdQEFXaYYxqgrv63ots+65FGI+tNp5ZS5PdMU1DWisxk3fez5HG3FyVlbUva+RdYS5hSLbxZ9aw3yEs97GNTw==}
+  '@tanstack/query-devtools@5.59.19':
+    resolution: {integrity: sha512-Gw+3zsADpqiYgx/6MMr9bP1+x2LR8vOuGjo5Un/89qwwP3z7WAHPWFagLFDYkLq68NX7ekUpW/EOYlUMugMXGA==}
 
-  '@tanstack/react-query-devtools@5.59.17':
-    resolution: {integrity: sha512-P5lRlPmSKXQZ+pzVFPMCrwKPyRtUk/yggtuceB435JPLiaP7UGoO6JQfSsaXHnVC9+LzRMYJjIEq6zm+1HteeQ==}
+  '@tanstack/react-query-devtools@5.59.19':
+    resolution: {integrity: sha512-mYFWTHLtJr2HdyYPZPzzvQ2ksCsSL6L04fCtusPFD3waskXrtmvWvyuDIGeEGdVAYS0Urwxw/0sYvcTVQZH+zQ==}
     peerDependencies:
-      '@tanstack/react-query': ^5.59.17
+      '@tanstack/react-query': ^5.59.19
       react: ^18 || ^19
 
   '@tanstack/react-query@5.59.16':
@@ -5284,8 +5284,8 @@ packages:
     peerDependencies:
       react: ^18 || ^19
 
-  '@tanstack/react-query@5.59.17':
-    resolution: {integrity: sha512-2taBKHT3LrRmS9ttUOmtaekVOXlZ5JXzNhL9Kmi6BSBdfIAZwEinMXZ8hffVuDpFoRCWlBaGcNkhP/zXgzq5ow==}
+  '@tanstack/react-query@5.59.19':
+    resolution: {integrity: sha512-xLRfyFyQOFcLltKCds0LijfC6/HQJrrTTnZB8ciyn74LIkVAm++vZJ6eUVG20RmJtdP8REdy7vSOYW4M3//XLA==}
     peerDependencies:
       react: ^18 || ^19
 
@@ -9546,8 +9546,8 @@ packages:
   nice-try@1.0.5:
     resolution: {integrity: sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==}
 
-  nitropack@2.10.1:
-    resolution: {integrity: sha512-q8w/9W9KLKTlFx0wBALecCRlJHT8n93rVilm2LY9/oOuMUeDGJdG2G3xUuJqRnF/Q217kDHJRSIZGJTUIydnCA==}
+  nitropack@2.10.2:
+    resolution: {integrity: sha512-DxmaAcT33CpeBGU6ppVfT9g1nbjxxkwa4ZEkMwFrbsvTrShAQ7mZf3bTkdAB18iZmthlSovBpY8ecE1FbNvtQw==}
     engines: {node: ^16.11.0 || >=17.0.0}
     hasBin: true
     peerDependencies:
@@ -10402,8 +10402,8 @@ packages:
     peerDependencies:
       react: 19.0.0-rc-cae764ce-20241025
 
-  react-dropzone@14.3.2:
-    resolution: {integrity: sha512-SMfxMjU/lHm6iXHqpRTnYXSbngC08yz51W3NlqS+cBhXpR+orZacLuxO5MJ0gcF+9vV5/K91uniiTCzkmRgriA==}
+  react-dropzone@14.3.3:
+    resolution: {integrity: sha512-38yaWovqDqZdtn7LKTE5lFdqc57hYbPdS/oIxyhmaTP/yzC0yztPxnNy+poxew5HKF44gzGCNcNDBYjqlCXr6g==}
     engines: {node: '>= 10.13'}
     peerDependencies:
       react: '>= 16.8 || 18.0.0'
@@ -17546,12 +17546,12 @@ snapshots:
 
   '@tanstack/query-core@5.59.17': {}
 
-  '@tanstack/query-devtools@5.58.0': {}
+  '@tanstack/query-devtools@5.59.19': {}
 
-  '@tanstack/react-query-devtools@5.59.17(@tanstack/react-query@5.59.17(react@19.0.0-rc-7c8e5e7a-20241101))(react@19.0.0-rc-7c8e5e7a-20241101)':
+  '@tanstack/react-query-devtools@5.59.19(@tanstack/react-query@5.59.19(react@19.0.0-rc-7c8e5e7a-20241101))(react@19.0.0-rc-7c8e5e7a-20241101)':
     dependencies:
-      '@tanstack/query-devtools': 5.58.0
-      '@tanstack/react-query': 5.59.17(react@19.0.0-rc-7c8e5e7a-20241101)
+      '@tanstack/query-devtools': 5.59.19
+      '@tanstack/react-query': 5.59.19(react@19.0.0-rc-7c8e5e7a-20241101)
       react: 19.0.0-rc-7c8e5e7a-20241101
 
   '@tanstack/react-query@5.59.16(react@18.3.1)':
@@ -17564,7 +17564,7 @@ snapshots:
       '@tanstack/query-core': 5.59.16
       react: 19.0.0-rc-7c8e5e7a-20241101
 
-  '@tanstack/react-query@5.59.17(react@19.0.0-rc-7c8e5e7a-20241101)':
+  '@tanstack/react-query@5.59.19(react@19.0.0-rc-7c8e5e7a-20241101)':
     dependencies:
       '@tanstack/query-core': 5.59.17
       react: 19.0.0-rc-7c8e5e7a-20241101
@@ -22609,7 +22609,7 @@ snapshots:
 
   nice-try@1.0.5: {}
 
-  nitropack@2.10.1(@planetscale/database@1.19.0)(@upstash/redis@1.34.3)(typescript@5.5.4)(webpack-sources@3.2.3):
+  nitropack@2.10.2(@planetscale/database@1.19.0)(@upstash/redis@1.34.3)(typescript@5.5.4)(webpack-sources@3.2.3):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.3.4
       '@netlify/functions': 2.8.2
@@ -23657,7 +23657,7 @@ snapshots:
       react: 19.0.0-rc-cae764ce-20241025
       scheduler: 0.25.0-rc-cae764ce-20241025
 
-  react-dropzone@14.3.2(react@19.0.0-rc-7c8e5e7a-20241101):
+  react-dropzone@14.3.3(react@19.0.0-rc-7c8e5e7a-20241101):
     dependencies:
       attr-accept: 2.2.4
       file-selector: 2.1.0
