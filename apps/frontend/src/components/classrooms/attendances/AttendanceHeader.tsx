@@ -54,8 +54,8 @@ export function AttendanceHeader() {
   const { createQueryString } = useCreateQueryString();
 
   return (
-    <div className="flex flex-row items-center gap-4 border-b bg-muted px-2 py-1 text-muted-foreground">
-      <Label className="min-w-[150px] max-w-[150px]">
+    <div className="grid flex-row items-center gap-4 border-b bg-muted px-2 py-1 md:flex">
+      <Label className="hidden min-w-[150px] max-w-[150px] md:block">
         {t("attendance_type")}
       </Label>
       <Select
@@ -88,7 +88,9 @@ export function AttendanceHeader() {
       </Select>
       {type == "hourly" && (
         <>
-          <Label className="w-[150px]">{t("attendance_date")}</Label>
+          <Label className="hidden w-[150px] md:block">
+            {t("attendance_date")}
+          </Label>
           <DatePicker
             onChange={(d) => {
               router.push(
@@ -105,7 +107,7 @@ export function AttendanceHeader() {
       {type == "weekly" && <></>}
       {type == "periodic" && (
         <>
-          <Label>{t("term")}</Label>{" "}
+          <Label className="hidden md:block">{t("term")}</Label>{" "}
           <TermSelector
             className="w-[300px]"
             onChange={(val) => {

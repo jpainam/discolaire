@@ -1,3 +1,6 @@
+import { AttendanceStatistics } from "~/components/classrooms/attendances/AttendanceStatistics";
+import { RecentAttendance } from "~/components/classrooms/attendances/RecentAttendance";
+
 export default async function Page(props: {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ type?: string; date?: Date }>;
@@ -9,10 +12,15 @@ export default async function Page(props: {
   const params = await props.params;
 
   const { id } = params;
+  console.log(id, type, date);
 
   return (
-    <div className="mb-2 flex flex-1 flex-col">
-      {id} - {type} - {JSON.stringify(date)}
+    <div className="grid w-full lg:grid-cols-3">
+      <div className="">
+        <AttendanceStatistics />
+      </div>
+      <RecentAttendance className="" />
+      <div className="">Notification sent</div>
     </div>
   );
 }
