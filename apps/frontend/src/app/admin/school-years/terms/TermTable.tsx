@@ -89,7 +89,7 @@ export function TermTable() {
                 <TableCell className="py-0">{term.schoolYearId}</TableCell>
                 <TableCell className="py-0 text-right">
                   <DropdownMenu>
-                    <DropdownMenuTrigger>
+                    <DropdownMenuTrigger asChild>
                       <Button variant={"ghost"} size={"icon"}>
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>

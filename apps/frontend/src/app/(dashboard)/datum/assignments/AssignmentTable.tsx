@@ -88,7 +88,7 @@ export function AssignmentTable() {
               <TableCell>{assignment.subject.teacher?.lastName}</TableCell>
               <TableCell className="text-right">
                 <DropdownMenu>
-                  <DropdownMenuTrigger>
+                  <DropdownMenuTrigger asChild>
                     <Button variant={"outline"} size={"icon"}>
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>

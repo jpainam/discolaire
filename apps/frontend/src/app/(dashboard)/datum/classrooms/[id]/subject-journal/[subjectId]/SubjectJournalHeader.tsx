@@ -45,7 +45,7 @@ export function SubjectJournalHeader({
       <div className="font-bold">{subject.name}</div>
       <div>
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>
             <Button variant={"outline"} size={"icon"}>
               <MoreVertical className="h-4 w-4" />
             </Button>

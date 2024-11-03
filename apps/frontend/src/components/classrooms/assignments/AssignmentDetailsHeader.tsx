@@ -46,7 +46,7 @@ export function AssignmentDetailsHeader({
   });
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>
         <Button variant={"outline"} size={"icon"}>
           <MoreVertical className="h-4 w-4" />
         </Button>

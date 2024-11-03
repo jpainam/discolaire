@@ -1,0 +1,53 @@
+model Absence {
+    id          Int      @id @default(autoincrement())
+    date        DateTime
+    value       Int
+    termId      Int
+    studentId   String
+    classroomId String
+    type        String   @default("daily") // daily, hourly, periodically, weekly, monthly
+    createdAt   DateTime @default(now())
+}
+
+model Lateness {
+    id          Int      @id @default(autoincrement())
+    studentId   String
+    date        DateTime
+    termId      Int
+    duration    Int
+    classroomId String
+    createdAt   DateTime @default(now())
+    createdById String
+}
+
+model LatenessJustification {
+    id          Int      @id @default(autoincrement())
+    latenessId  Int
+    reason      String
+    content     String?
+    createdAt   DateTime @default(now())
+    createdById String
+}
+
+model Chatter {
+    id              Int      @id @default(autoincrement())
+    studentId       Int
+    date            DateTime
+    incidentDetails String?
+}
+
+model Consigne {
+    id        Int      @id @default(autoincrement())
+    studentId Int
+    date      DateTime
+    task      String
+    duration  Int? // duration of consigne, if applicable
+}
+
+model Exclusion {
+    id        Int      @id @default(autoincrement())
+    studentId Int
+    startDate DateTime
+    endDate   DateTime
+    reason    String
+}

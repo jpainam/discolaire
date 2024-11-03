@@ -24,6 +24,7 @@ import { gradeSheetRouter } from "./routers/gradeSheet";
 import { healthRouter } from "./routers/health";
 import { invitationRouter } from "./routers/invitation";
 import { journalRouter } from "./routers/journal";
+import { latenessRouter } from "./routers/lateness";
 import { lessonRouter } from "./routers/lesson";
 import { menuRouter } from "./routers/menu";
 import { messagingRouter } from "./routers/messaging";
@@ -109,6 +110,7 @@ export const appRouter = createTRPCRouter({
   invitation: invitationRouter,
   subjectJournal: subjectJournalRouter,
   lesson: lessonRouter,
+  lateness: latenessRouter,
 });
 
 // export type definition of API

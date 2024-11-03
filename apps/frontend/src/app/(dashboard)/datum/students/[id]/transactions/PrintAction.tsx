@@ -20,7 +20,7 @@ export function PrintAction() {
   const { t } = useLocale();
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>
         <Button size={"icon"} variant={"outline"}>
           <MoreVertical className="h-4 w-4" />
         </Button>
