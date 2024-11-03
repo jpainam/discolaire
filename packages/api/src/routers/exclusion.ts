@@ -4,11 +4,11 @@ import { z } from "zod";
 import { studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
-export const latenessRouter = createTRPCRouter({
+export const exclusionRouter = createTRPCRouter({
   all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.lateness.findMany({
+    return ctx.db.exclusion.findMany({
       orderBy: {
-        date: "desc",
+        startDate: "desc",
       },
       where: {
         term: {
@@ -22,9 +22,10 @@ export const latenessRouter = createTRPCRouter({
     .input(
       z.object({
         termId: z.coerce.number(),
-        date: z.coerce.date().default(() => new Date()),
-        duration: z.coerce.number(),
+        startDate: z.coerce.date().default(() => new Date()),
+        endDate: z.coerce.date().default(() => new Date()),
         studentId: z.string().min(1),
+        reason: z.string().min(1),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -38,14 +39,15 @@ export const latenessRouter = createTRPCRouter({
           message: "Student not registered in any classroom",
         });
       }
-      return ctx.db.lateness.create({
+      return ctx.db.exclusion.create({
         data: {
           termId: input.termId,
           studentId: input.studentId,
           classroomId: classroom.id,
-          date: input.date,
+          reason: input.reason,
+          startDate: input.startDate,
+          endDate: input.endDate,
           createdById: ctx.session.user.id,
-          duration: input.duration,
         },
       });
     }),
@@ -54,24 +56,26 @@ export const latenessRouter = createTRPCRouter({
       z.object({
         id: z.coerce.number(),
         termId: z.coerce.number(),
-        duration: z.coerce.number(),
+        startDate: z.coerce.date(),
+        endDate: z.coerce.date(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.lateness.update({
+      return ctx.db.exclusion.update({
         where: {
           id: input.id,
         },
         data: {
           termId: input.termId,
-          duration: input.duration,
+          startDate: input.startDate,
+          endDate: input.endDate,
         },
       });
     }),
   delete: protectedProcedure
-    .input(z.coerce.number())
-    .mutation(({ ctx, input }) => {
-      return ctx.db.lateness.delete({
+    .input(z.number())
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.exclusion.delete({
         where: {
           id: input,
         },

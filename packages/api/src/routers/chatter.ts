@@ -4,9 +4,9 @@ import { z } from "zod";
 import { studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
-export const latenessRouter = createTRPCRouter({
+export const chatterRouter = createTRPCRouter({
   all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.lateness.findMany({
+    return ctx.db.chatter.findMany({
       orderBy: {
         date: "desc",
       },
@@ -23,7 +23,7 @@ export const latenessRouter = createTRPCRouter({
       z.object({
         termId: z.coerce.number(),
         date: z.coerce.date().default(() => new Date()),
-        duration: z.coerce.number(),
+        value: z.coerce.number(),
         studentId: z.string().min(1),
       }),
     )
@@ -38,14 +38,14 @@ export const latenessRouter = createTRPCRouter({
           message: "Student not registered in any classroom",
         });
       }
-      return ctx.db.lateness.create({
+      return ctx.db.chatter.create({
         data: {
           termId: input.termId,
           studentId: input.studentId,
           classroomId: classroom.id,
           date: input.date,
           createdById: ctx.session.user.id,
-          duration: input.duration,
+          value: input.value,
         },
       });
     }),
@@ -54,24 +54,24 @@ export const latenessRouter = createTRPCRouter({
       z.object({
         id: z.coerce.number(),
         termId: z.coerce.number(),
-        duration: z.coerce.number(),
+        value: z.coerce.number(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.lateness.update({
+      return ctx.db.chatter.update({
         where: {
           id: input.id,
         },
         data: {
           termId: input.termId,
-          duration: input.duration,
+          value: input.value,
         },
       });
     }),
   delete: protectedProcedure
-    .input(z.coerce.number())
-    .mutation(({ ctx, input }) => {
-      return ctx.db.lateness.delete({
+    .input(z.number())
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.chatter.delete({
         where: {
           id: input,
         },

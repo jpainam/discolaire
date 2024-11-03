@@ -1,3 +1,4 @@
+import { absenceRouter } from "./routers/absence";
 import { accountingRouter } from "./routers/accounting";
 import { announcementRouter } from "./routers/announcement";
 import { appreciationRouter } from "./routers/appreciation";
@@ -6,16 +7,19 @@ import { attendanceRouter } from "./routers/attendance";
 import { authRouter } from "./routers/auth";
 import { bibleRouter } from "./routers/bible";
 import { calendarEventRouter } from "./routers/calendarEvent";
+import { chatterRouter } from "./routers/chatter";
 import { classroomRouter } from "./routers/classroom";
 import { classroomCycleRouter } from "./routers/classroomCycle";
 import { classroomLevelRouter } from "./routers/classroomLevel";
 import { classroomSectionRouter } from "./routers/classroomSection";
+import { consigneRouter } from "./routers/consigne";
 import { contactRouter } from "./routers/contact";
 import { courseRouter } from "./routers/course";
 import { degreeRouter } from "./routers/degree";
 import { directoryRouter } from "./routers/directory";
 import { documentRouter } from "./routers/document";
 import { enrollmentRouter } from "./routers/enrollment";
+import { exclusionRouter } from "./routers/exclusion";
 import { feeRouter } from "./routers/fee";
 import { feedbackRouter } from "./routers/feedback";
 import { formerShoolRouter } from "./routers/formerSchool";
@@ -79,6 +83,7 @@ export const appRouter = createTRPCRouter({
   term: termRouter,
   document: documentRouter,
   school: schoolRouter,
+  consigne: consigneRouter,
   passwordReset: passwordResetRouter,
   studentContact: studentContactRouter,
   calendarEvent: calendarEventRouter,
@@ -92,6 +97,7 @@ export const appRouter = createTRPCRouter({
   gradeSheet: gradeSheetRouter,
   health: healthRouter,
   role: roleRouter,
+  exclusion: exclusionRouter,
   enrollment: enrollmentRouter,
   appreciation: appreciationRouter,
   reportCard: reportCardRouter,
@@ -111,6 +117,8 @@ export const appRouter = createTRPCRouter({
   subjectJournal: subjectJournalRouter,
   lesson: lessonRouter,
   lateness: latenessRouter,
+  absence: absenceRouter,
+  chatter: chatterRouter,
 });
 
 // export type definition of API

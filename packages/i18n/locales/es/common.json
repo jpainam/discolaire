@@ -14,6 +14,8 @@
   "justified": "Justificado",
   "hours": "Horas",
   "minutes": "Minutos",
+  "number_of_absence": "Número de ausencias",
+  "number_of_chatter": "Número de mensajes",
   "PENDING": "Pendiente",
   "send_reset_link": "Enviar enlace de restablecimiento",
   "print_timetable": "Imprimir horario",

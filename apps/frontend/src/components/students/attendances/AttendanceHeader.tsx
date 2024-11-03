@@ -5,6 +5,7 @@ import {
   ChevronDown,
   DiameterIcon,
   MoreVertical,
+  NewspaperIcon,
   ShapesIcon,
   ShieldAlertIcon,
   Trash2,
@@ -24,6 +25,10 @@ import { Label } from "@repo/ui/label";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
+import { CreateEditAbsence } from "./absence/CreateEditAbsence";
+import { CreateEditChatter } from "./chatter/CreateEditChatter";
+import { CreateEditConsigne } from "./consigne/CreateEditConsigne";
+import { CreateEditExclusion } from "./exclusion/CreateEditExclusion";
 import { CreateEditLateness } from "./lateness/CreateEditLateness";
 
 export function AttendanceHeader() {
@@ -48,7 +53,15 @@ export function AttendanceHeader() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                openModal({
+                  title: `${t("add")} - ${t("absence")}`,
+                  className: "w-[400px]",
+                  view: <CreateEditAbsence />,
+                });
+              }}
+            >
               <BaselineIcon className="mr-2 h-4 w-4" />
               {t("absence")}
             </DropdownMenuItem>
@@ -64,11 +77,39 @@ export function AttendanceHeader() {
               <DiameterIcon className="mr-2 h-4 w-4" />
               {t("lateness")}
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                openModal({
+                  title: `${t("add")} - ${t("chatter")}`,
+                  className: "w-[400px]",
+                  view: <CreateEditChatter />,
+                });
+              }}
+            >
+              <NewspaperIcon className="mr-2 h-4 w-4" />
+              {t("chatter")}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                openModal({
+                  title: `${t("add")} - ${t("consigne")}`,
+                  className: "w-[400px]",
+                  view: <CreateEditConsigne />,
+                });
+              }}
+            >
               <ShapesIcon className="mr-2 h-4 w-4" />
               {t("consigne")}
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                openModal({
+                  title: `${t("add")} - ${t("exclusion")}`,
+                  className: "w-[400px]",
+                  view: <CreateEditExclusion />,
+                });
+              }}
+            >
               <ShieldAlertIcon className="mr-2 h-4 w-4" />
               {t("exclusion")}
             </DropdownMenuItem>

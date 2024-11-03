@@ -102,6 +102,8 @@
   "attendance_records": "Attendance Records",
   "attendances": "Attendances",
   "value": "Value",
+  "number_of_absence": "Number of absence",
+  "number_of_chatter": "Number of chatter",
   "justified": "Justified",
   "hours": "Hours",
   "minutes": "Minutes",

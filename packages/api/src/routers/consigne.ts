@@ -4,9 +4,9 @@ import { z } from "zod";
 import { studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
-export const latenessRouter = createTRPCRouter({
+export const consigneRouter = createTRPCRouter({
   all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.lateness.findMany({
+    return ctx.db.consigne.findMany({
       orderBy: {
         date: "desc",
       },
@@ -23,8 +23,9 @@ export const latenessRouter = createTRPCRouter({
       z.object({
         termId: z.coerce.number(),
         date: z.coerce.date().default(() => new Date()),
-        duration: z.coerce.number(),
         studentId: z.string().min(1),
+        task: z.string().min(1),
+        duration: z.number().default(1),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -38,11 +39,12 @@ export const latenessRouter = createTRPCRouter({
           message: "Student not registered in any classroom",
         });
       }
-      return ctx.db.lateness.create({
+      return ctx.db.consigne.create({
         data: {
           termId: input.termId,
           studentId: input.studentId,
           classroomId: classroom.id,
+          task: input.task,
           date: input.date,
           createdById: ctx.session.user.id,
           duration: input.duration,
@@ -54,24 +56,28 @@ export const latenessRouter = createTRPCRouter({
       z.object({
         id: z.coerce.number(),
         termId: z.coerce.number(),
-        duration: z.coerce.number(),
+        date: z.coerce.date(),
+        task: z.string().min(1),
+        duration: z.number().default(1),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.lateness.update({
+      return ctx.db.consigne.update({
         where: {
           id: input.id,
         },
         data: {
           termId: input.termId,
+          date: input.date,
+          task: input.task,
           duration: input.duration,
         },
       });
     }),
   delete: protectedProcedure
-    .input(z.coerce.number())
-    .mutation(({ ctx, input }) => {
-      return ctx.db.lateness.delete({
+    .input(z.number())
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.consigne.delete({
         where: {
           id: input,
         },

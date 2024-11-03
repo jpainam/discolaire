@@ -3,10 +3,12 @@ model Absence {
     date        DateTime
     value       Int
     termId      Int
+    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
     studentId   String
     classroomId String
     type        String   @default("daily") // daily, hourly, periodically, weekly, monthly
     createdAt   DateTime @default(now())
+    createdById String
 }
 
 model Lateness {
@@ -18,6 +20,7 @@ model Lateness {
     classroomId String
     createdAt   DateTime @default(now())
     createdById String
+    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
 }
 
 model LatenessJustification {
@@ -30,24 +33,39 @@ model LatenessJustification {
 }
 
 model Chatter {
-    id              Int      @id @default(autoincrement())
-    studentId       Int
-    date            DateTime
-    incidentDetails String?
+    id          Int      @id @default(autoincrement())
+    date        DateTime
+    value       Int
+    termId      Int
+    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
+    studentId   String
+    classroomId String
+    type        String   @default("daily") // daily, hourly, periodically, weekly, monthly
+    createdAt   DateTime @default(now())
+    createdById String
 }
 
 model Consigne {
-    id        Int      @id @default(autoincrement())
-    studentId Int
-    date      DateTime
-    task      String
-    duration  Int? // duration of consigne, if applicable
+    id          Int      @id @default(autoincrement())
+    studentId   String
+    termId      Int
+    classroomId String
+    date        DateTime
+    task        String
+    duration    Int
+    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
+    createdById String
 }
 
 model Exclusion {
-    id        Int      @id @default(autoincrement())
-    studentId Int
-    startDate DateTime
-    endDate   DateTime
-    reason    String
+    id          Int      @id @default(autoincrement())
+    studentId   String
+    termId      Int
+    startDate   DateTime
+    endDate     DateTime
+    reason      String
+    createdAt   DateTime @default(now())
+    createdById String
+    classroomId String
+    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
 }

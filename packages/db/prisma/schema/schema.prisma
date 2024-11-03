@@ -416,6 +416,11 @@ model Term {
     Assignment   Assignment[]
     School       School       @relation(fields: [schoolId], references: [id])
     schoolId     String
+    absences     Absence[]
+    latenesses   Lateness[]
+    exclusions   Exclusion[]
+    consignes    Consigne[]
+    chatters     Chatter[]
 }
 
 model Enrollment {
