@@ -105,7 +105,7 @@ export function AttendanceHeader() {
               onClick={() => {
                 openModal({
                   title: `${t("add")} - ${t("exclusion")}`,
-                  className: "w-[400px]",
+                  className: "w-[600px]",
                   view: <CreateEditExclusion />,
                 });
               }}

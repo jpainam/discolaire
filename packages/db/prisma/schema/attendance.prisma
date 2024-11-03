@@ -1,35 +1,52 @@
 model Absence {
+    id            Int                   @id @default(autoincrement())
+    date          DateTime
+    value         Int
+    termId        Int
+    term          Term                  @relation(fields: [termId], references: [id], onDelete: Cascade)
+    studentId     String
+    classroomId   String
+    type          String                @default("daily") // daily, hourly, periodically, weekly, monthly
+    createdAt     DateTime              @default(now())
+    createdById   String
+    justification AbsenceJustification?
+}
+
+model AbsenceJustification {
     id          Int      @id @default(autoincrement())
-    date        DateTime
-    value       Int
-    termId      Int
-    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
-    studentId   String
-    classroomId String
-    type        String   @default("daily") // daily, hourly, periodically, weekly, monthly
-    createdAt   DateTime @default(now())
+    absenceId   Int      @unique
+    absence     Absence  @relation(fields: [absenceId], references: [id], onDelete: Cascade)
+    attachments String[]
     createdById String
+    reason      String
+    comment     String?
+    status      String   @default("pending") // pending, accepted, rejected
+    approvedBy  String?
+    createdAt   DateTime @default(now())
 }
 
 model Lateness {
-    id          Int      @id @default(autoincrement())
-    studentId   String
-    date        DateTime
-    termId      Int
-    duration    Int
-    classroomId String
-    createdAt   DateTime @default(now())
-    createdById String
-    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
+    id            Int                    @id @default(autoincrement())
+    studentId     String
+    date          DateTime
+    termId        Int
+    duration      Int
+    classroomId   String
+    createdAt     DateTime               @default(now())
+    createdById   String
+    term          Term                   @relation(fields: [termId], references: [id], onDelete: Cascade)
+    justification LatenessJustification?
 }
 
 model LatenessJustification {
     id          Int      @id @default(autoincrement())
-    latenessId  Int
-    reason      String
-    content     String?
-    createdAt   DateTime @default(now())
+    latenessId  Int      @unique
+    absence     Lateness @relation(fields: [latenessId], references: [id], onDelete: Cascade)
+    attachments String[]
     createdById String
+    status      String   @default("pending") // pending, accepted, rejected
+    approvedBy  String?
+    createdAt   DateTime @default(now())
 }
 
 model Chatter {

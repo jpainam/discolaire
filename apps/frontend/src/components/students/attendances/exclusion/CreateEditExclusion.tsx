@@ -105,7 +105,7 @@ export function CreateEditExclusion({
             name="startDate"
             render={({ field }) => (
               <FormItem className="space-y-0">
-                <FormLabel>{t("start_date")}</FormLabel>
+                <FormLabel>{t("from")}</FormLabel>
                 <FormControl>
                   <DatePicker {...field} />
                 </FormControl>
@@ -118,7 +118,7 @@ export function CreateEditExclusion({
             name="endDate"
             render={({ field }) => (
               <FormItem className="space-y-0">
-                <FormLabel>{t("end_date")}</FormLabel>
+                <FormLabel>{t("to")}</FormLabel>
                 <FormControl>
                   <DatePicker {...field} />
                 </FormControl>

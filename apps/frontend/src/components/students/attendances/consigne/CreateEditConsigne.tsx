@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/select";
+import { Textarea } from "@repo/ui/textarea";
 
 import { DatePicker } from "~/components/shared/date-picker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
@@ -174,6 +175,19 @@ export function CreateEditConsigne({
             )}
           />
         </div>
+        <FormField
+          control={form.control}
+          name="task"
+          render={({ field }) => (
+            <FormItem className="space-y-0">
+              <FormLabel>{t("task")}</FormLabel>
+              <FormControl>
+                <Textarea {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <div className="grid grid-cols-2 gap-2">
           <Button
             onClick={() => {

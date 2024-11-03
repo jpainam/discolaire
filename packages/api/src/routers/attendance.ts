@@ -86,6 +86,78 @@ export const attendanceRouter = createTRPCRouter({
         data: data,
       });
     }),
+  classroom: protectedProcedure
+    .input(
+      z.object({
+        classroomId: z.string().min(1),
+        termId: z.coerce.number(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const absences = await ctx.db.absence.findMany({
+        where: {
+          classroomId: input.classroomId,
+          termId: input.termId,
+        },
+      });
+      const lateness = await ctx.db.lateness.findMany({
+        where: {
+          classroomId: input.classroomId,
+          termId: input.termId,
+        },
+      });
+      let duration = lateness.reduce((acc, curr) => acc + curr.duration, 0);
+      let hours = Math.floor(duration / 60);
+      let remainingMinutes = duration % 60;
+      const latenessvalue = `${String(hours).padStart(2, "0")}:${String(remainingMinutes).padStart(2, "0")}`;
+
+      const consignes = await ctx.db.consigne.findMany({
+        where: {
+          classroomId: input.classroomId,
+          termId: input.termId,
+        },
+      });
+      duration = consignes.reduce((acc, curr) => acc + curr.duration, 0);
+      hours = Math.floor(duration / 60);
+      remainingMinutes = duration % 60;
+      const consignesvalue = `${String(hours).padStart(2, "0")}:${String(remainingMinutes).padStart(2, "0")}`;
+
+      const exclusion = await ctx.db.exclusion.count({
+        where: {
+          classroomId: input.classroomId,
+          termId: input.termId,
+        },
+      });
+      const chatters = await ctx.db.chatter.findMany({
+        where: {
+          classroomId: input.classroomId,
+          termId: input.termId,
+        },
+      });
+
+      return {
+        absence: {
+          value: absences.reduce((acc, curr) => acc + curr.value, 0),
+          justified: 0,
+        },
+        lateness: {
+          value: latenessvalue,
+          justified: 0,
+        },
+        consigne: {
+          value: consignesvalue,
+          justified: 0,
+        },
+        exclusion: {
+          value: exclusion,
+          justified: 0,
+        },
+        chatter: {
+          value: chatters.reduce((acc, curr) => acc + curr.value, 0),
+          justified: 0,
+        },
+      };
+    }),
 });
 
 function testAttendanceFormat(attend: {
