@@ -25,6 +25,7 @@ import { Label } from "@repo/ui/label";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { CreateEditAbsence } from "./absence/CreateEditAbsence";
 import { CreateEditChatter } from "./chatter/CreateEditChatter";
 import { CreateEditConsigne } from "./consigne/CreateEditConsigne";
@@ -37,9 +38,19 @@ export function AttendanceHeader() {
 
   return (
     <div className="flex flex-row items-center gap-4 border-y bg-muted/50 px-4 py-1">
-      <Label className="hidden md:block">{t("attendance_records")}</Label>
+      <Label className="hidden w-[250px] md:block">
+        {t("attendance_records")}
+      </Label>
       {/* <FlatBadge>Total justified records: 2 out of 5</FlatBadge> */}
+      <Label className="hidden md:block">{t("terms")}</Label>
+      <TermSelector
+        className="md:w-[300px]"
+        onChange={(val) => {
+          console.log(val);
+        }}
+      />
       <div className="ml-auto flex flex-row items-center gap-4">
+        <Button variant={"outline"}>{t("prevent")}</Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button>

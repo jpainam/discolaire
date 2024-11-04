@@ -2,6 +2,7 @@ import { Contact, FileStack, NotepadTextDashed, Users } from "lucide-react";
 
 import { getServerTranslations } from "@repo/i18n/server";
 
+import { AttendanceHeader } from "~/components/students/attendances/AttendanceHeader";
 import { TabLink } from "~/components/users/tab-link";
 import { routes } from "~/configs/routes";
 
@@ -55,6 +56,7 @@ export default async function Layout(props: {
           );
         })}
       </div>
+      <AttendanceHeader />
 
       <div className="flex-1">{children}</div>
     </div>

@@ -18,6 +18,32 @@ export const absenceRouter = createTRPCRouter({
       },
     });
   }),
+  deleteJustification: protectedProcedure
+    .input(z.number())
+    .mutation(({ ctx, input }) => {
+      return ctx.db.absenceJustification.delete({
+        where: {
+          id: input,
+        },
+      });
+    }),
+  updateStatus: protectedProcedure
+    .input(
+      z.object({
+        id: z.coerce.number(),
+        status: z.enum(["approved", "rejected", "pending"]),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.absenceJustification.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          status: input.status,
+        },
+      });
+    }),
   create: protectedProcedure
     .input(
       z.object({
@@ -74,6 +100,48 @@ export const absenceRouter = createTRPCRouter({
       return ctx.db.absence.delete({
         where: {
           id: input,
+        },
+      });
+    }),
+  studentJustifications: protectedProcedure
+    .input(
+      z.object({
+        studentId: z.string().min(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.absence.findMany({
+        where: {
+          studentId: input.studentId,
+          term: {
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
+        },
+        include: {
+          justification: true,
+          term: true,
+        },
+      });
+    }),
+  classroomJustifications: protectedProcedure
+    .input(
+      z.object({
+        classroomId: z.string().min(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.absence.findMany({
+        where: {
+          classroomId: input.classroomId,
+          term: {
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
+        },
+        include: {
+          justification: true,
+          term: true,
         },
       });
     }),

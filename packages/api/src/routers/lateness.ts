@@ -77,4 +77,46 @@ export const latenessRouter = createTRPCRouter({
         },
       });
     }),
+  studentJustifications: protectedProcedure
+    .input(
+      z.object({
+        studentId: z.string().min(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.lateness.findMany({
+        where: {
+          studentId: input.studentId,
+          term: {
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
+        },
+        include: {
+          justification: true,
+          term: true,
+        },
+      });
+    }),
+  classroomJustifications: protectedProcedure
+    .input(
+      z.object({
+        classroomId: z.string().min(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.lateness.findMany({
+        where: {
+          classroomId: input.classroomId,
+          term: {
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
+        },
+        include: {
+          justification: true,
+          term: true,
+        },
+      });
+    }),
 });
