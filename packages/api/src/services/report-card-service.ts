@@ -129,7 +129,6 @@ export const reportCardService = {
         grades: true,
       },
     });
-    console.log(gradeSheets);
     const gradeSheetMap: Record<
       string,
       {

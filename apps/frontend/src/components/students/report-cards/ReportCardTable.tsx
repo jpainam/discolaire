@@ -1,13 +1,11 @@
-"use client";
-
-import { Fragment, useEffect, useState } from "react";
+import { Fragment } from "react";
 import Link from "next/link";
 import { sortBy, sum } from "lodash";
 
 import type { RouterOutputs } from "@repo/api";
 import type { FlatBadgeVariant } from "@repo/ui/FlatBadge";
 //import { StudentReportCard } from "~/types/report-card";
-import { useLocale } from "@repo/i18n";
+import { getServerTranslations } from "@repo/i18n/server";
 import FlatBadge from "@repo/ui/FlatBadge";
 import {
   Table,
@@ -23,40 +21,12 @@ import { cn } from "~/lib/utils";
 import { getAppreciations } from "~/utils/get-appreciation";
 
 type ReportCardType = RouterOutputs["reportCard"]["getStudent"][number];
-export function ReportCardTable({
-  reportCard,
+export async function ReportCardTable({
+  groups,
 }: {
-  reportCard: ReportCardType[];
+  groups: Record<number, ReportCardType[]>;
 }) {
-  const { t } = useLocale();
-  const [groups, setGroups] = useState<Record<number, ReportCardType[]>>({});
-  const [totalCoeff, setTotalCoeff] = useState<number>(0);
-  const [totalPoints, setTotalPoints] = useState<number>(0);
-  const [totalAvg, setTotalAvg] = useState<number>(0);
-
-  useEffect(() => {
-    const ggs: Record<number, ReportCardType[]> = {};
-    let coeff = 0;
-    reportCard.forEach((card) => {
-      coeff += card.isAbsent ? 0 : card.coefficient;
-      const groupId = card.subjectGroupId;
-      if (!groupId) return;
-      if (!ggs[groupId]) {
-        ggs[groupId] = [];
-      }
-      ggs[groupId].push(card);
-    });
-    setGroups(ggs);
-    setTotalCoeff(coeff);
-    const ttPoints = sum(
-      reportCard.map((c) => (c.isAbsent ? 0 : c.avg * c.coefficient)),
-    );
-    setTotalPoints(ttPoints);
-    const ttavg =
-      sum(reportCard.map((c) => (c.isAbsent ? 0 : c.avg * c.coefficient))) /
-      (coeff || 1e9);
-    setTotalAvg(ttavg);
-  }, [reportCard]);
+  const { t } = await getServerTranslations();
 
   const rowClassName = "border text-center py-0 text-sm";
 
@@ -84,7 +54,7 @@ export function ReportCardTable({
           if (!card) return null;
           const group = card.subjectGroup;
           if (!group) return null;
-          console.log("cards", cards);
+
           return (
             <Fragment key={`fragment-${groupId}`}>
               <ReportCardGroup
@@ -103,14 +73,14 @@ export function ReportCardTable({
                 <TableCell className={cn(rowClassName)}>
                   {sum(cards.map((c) => c.coefficient))}
                 </TableCell>
-                <TableCell className="text-center" colSpan={3}>
+                <TableCell className="text-center text-sm" colSpan={3}>
                   {t("points")}:{" "}
                   {sum(cards.map((c) => (c.avg || 0) * c.coefficient)).toFixed(
                     1,
                   )}{" "}
                   / {sum(cards.map((c) => 20 * c.coefficient)).toFixed(1)}
                 </TableCell>
-                <TableCell colSpan={2}>
+                <TableCell className="text-sm" colSpan={2}>
                   {t("average")} :
                   {(
                     sum(cards.map((c) => c.avg * c.coefficient)) /
@@ -121,7 +91,7 @@ export function ReportCardTable({
             </Fragment>
           );
         })}
-        <TableRow className="font-semibold">
+        {/* <TableRow className="text-sm font-semibold">
           <TableCell></TableCell>
           <TableCell className={cn(rowClassName, "text-left uppercase")}>
             {t("total")}
@@ -129,24 +99,10 @@ export function ReportCardTable({
           <TableCell className="border"></TableCell>
           <TableCell className="border text-center">{totalCoeff}</TableCell>
           <TableCell colSpan={3} className={cn(rowClassName)}>
-            {t("points")}: {totalPoints.toFixed(2)} /{" "}
-            {sum(reportCard.map((c) => 20 * c.coefficient)).toFixed(2)}
+            {t("points")}: {points.toFixed(2)} / {totalPoints}
           </TableCell>
           <TableCell colSpan={2}></TableCell>
-        </TableRow>
-        <TableRow className="font-semibold">
-          <TableCell></TableCell>
-          <TableCell className={cn(rowClassName, "text-left uppercase")}>
-            {t("average")}
-          </TableCell>
-          <TableCell className={cn(rowClassName)} colSpan={2}>
-            {(totalPoints / (totalCoeff || 1e9)).toFixed(2)}
-          </TableCell>
-          <TableCell className={cn(rowClassName)} colSpan={3}>
-            {t("rank")}: -
-          </TableCell>
-          <TableCell colSpan={2}>{getAppreciations(totalAvg)}</TableCell>
-        </TableRow>
+        </TableRow> */}
       </TableBody>
     </Table>
   );

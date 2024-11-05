@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { MoreVertical } from "lucide-react";
+import { MailIcon, MoreVertical } from "lucide-react";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
@@ -46,12 +46,16 @@ export function ReportCardHeader() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem>
-              <XMLIcon className="mr-2 h-4 w-4" />
-              {t("export")}
+              <MailIcon className="mr-2 h-4 w-4" />
+              {t("notify_parents")}
             </DropdownMenuItem>
             <DropdownMenuItem>
               <PDFIcon className="mr-2 h-4 w-4" />
-              {t("print")}
+              {t("pdf_export")}
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <XMLIcon className="mr-2 h-4 w-4" />
+              {t("xml_export")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
