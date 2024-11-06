@@ -27,14 +27,15 @@ export async function ReportCard({ searchParams }: ReportCardProps) {
     return (
       <ReportCardTable
         reportCard={reportCard.map((report) => {
+          console.log(report);
           return {
-            min: report.minClassroomGrade,
-            max: report.maxClassroomGrade,
-            avg: report.avgClassroomGrade,
+            min: 0,
+            max: 0,
+            avg: 0,
             subject: {
-              teacher: report.subject.teacher?.lastName ?? "",
-              teacherId: report.subject.teacherId ?? "",
-              name: report.subject.course.name,
+              teacher: "Dupont",
+              teacherId: "teacher_id",
+              name: "Maths",
             },
           };
         })}

@@ -47,7 +47,7 @@ export async function ReportCardTable({
               <TableCell className="py-0">{card.registrationNumber}</TableCell>
               <TableCell className="py-0">
                 <Link
-                  className="font-bold text-blue-600 hover:underline"
+                  className="text-blue-600 underline"
                   href={routes.students.details(card.id)}
                 >
                   {getFullName(card)}

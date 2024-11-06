@@ -59,7 +59,7 @@ export const reportCardRouter = createTRPCRouter({
         termId: z.coerce.number(),
       }),
     )
-    .query(({}) => {
+    .query(() => {
       return [];
     }),
   deleteRemark: protectedProcedure
