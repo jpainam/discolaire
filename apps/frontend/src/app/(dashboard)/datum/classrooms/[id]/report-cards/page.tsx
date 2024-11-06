@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 import { getServerTranslations } from "@repo/i18n/server";
 import { EmptyState } from "@repo/ui/EmptyState";
 import FlatBadge from "@repo/ui/FlatBadge";
@@ -49,7 +47,10 @@ export default async function Page(props: {
         </FlatBadge>
       </div>
       <Separator />
-      <ReportCardTable result={_.sortBy(result, "avg").reverse()} />
+      <ReportCardTable
+        term={Number(term)}
+        result={result.sort((a, b) => a.rank - b.rank)}
+      />
     </div>
   );
 }
