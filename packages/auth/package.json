@@ -19,7 +19,7 @@
   },
   "prettier": "@repo/prettier-config",
   "dependencies": {
-    "@auth/core": "0.37.2",
+    "@auth/core": "0.37.3",
     "@repo/db": "workspace:*",
     "@t3-oss/env-nextjs": "^0.11.1",
     "bcryptjs": "^2.4.3",

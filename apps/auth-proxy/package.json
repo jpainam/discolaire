@@ -11,17 +11,17 @@
   },
   "prettier": "@repo/prettier-config",
   "dependencies": {
-    "@auth/core": "0.37.2"
+    "@auth/core": "0.37.3"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
-    "@types/node": "^22.8.7",
+    "@types/node": "^22.9.0",
     "eslint": "catalog:",
     "h3": "^1.13.0",
-    "nitropack": "^2.10.2",
+    "nitropack": "^2.10.3",
     "prettier": "catalog:",
     "typescript": "catalog:"
   }
