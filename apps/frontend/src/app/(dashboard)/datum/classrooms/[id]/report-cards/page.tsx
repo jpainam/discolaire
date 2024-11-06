@@ -40,7 +40,7 @@ export default async function Page(props: {
           {t("success_rate")} : {(summary.successRate * 100).toFixed(2)}%
         </FlatBadge>
         <FlatBadge variant={"indigo"}>
-          {t("effectif")} : {result.length}%
+          {t("effectif")} : {result.length}
         </FlatBadge>
         <FlatBadge variant={"gray"}>
           {t("appreciation")} : {getAppreciations(summary.avg)}
