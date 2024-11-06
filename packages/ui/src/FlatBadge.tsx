@@ -6,7 +6,7 @@ import { cn } from "./utils";
 
 //border border-red-500 bg-red-100 dark:bg-red-900/20 text-red-600 text-xs rounded-full px-2 py-0.5 mt-4
 const flatBadgeVariants = cva(
-  "inline-flex items-center rounded-full rounded-md border px-2 py-1 text-xs",
+  "inline-flex items-center rounded-md border px-2 py-1 text-xs",
   {
     variants: {
       variant: {

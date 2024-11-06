@@ -1,5 +1,6 @@
 "use client";
 
+import type { Country } from "react-phone-number-input";
 import { PiCalendarDotsDuotone } from "react-icons/pi";
 
 import { useLocale } from "@repo/i18n";
@@ -47,10 +48,14 @@ export function CreateUpdateAddress() {
           control={form.control}
           name="phoneNumber"
           render={({ field }) => (
-            <FormItem className="mt-2 flex flex-col items-start space-y-0">
-              <FormLabel className="text-left">{t("phoneNumber")}</FormLabel>
+            <FormItem className="flex flex-col items-start">
+              <FormLabel>{t("phoneNumber")}</FormLabel>
               <FormControl className="w-full">
-                <PhoneInput placeholder="Enter a phone number" {...field} />
+                <PhoneInput
+                  placeholder="Placeholder"
+                  {...field}
+                  defaultCountry={school.defaultCountryId as Country}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

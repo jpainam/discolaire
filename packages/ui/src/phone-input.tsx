@@ -5,7 +5,6 @@ import * as RPNInput from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
 
 import type { InputProps } from "./input";
-import { cn } from ".";
 import { Button } from "./button";
 import {
   Command,
@@ -18,6 +17,7 @@ import {
 import { Input } from "./input";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { ScrollArea } from "./scroll-area";
+import { cn } from "./utils";
 
 type PhoneInputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -37,6 +37,7 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
           flagComponent={FlagComponent}
           countrySelectComponent={CountrySelect}
           inputComponent={InputComponent}
+          smartCaret={false}
           /**
            * Handles the onChange event.
            *
@@ -46,7 +47,9 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
            *
            * @param {E164Number | undefined} value - The entered value
            */
-          onChange={(value) => onChange?.(value ?? ("" as RPNInput.Value))}
+          onChange={(value) =>
+            onChange?.(value ? value : ("CM" as RPNInput.Value))
+          }
           {...props}
         />
       );
@@ -110,9 +113,9 @@ const CountrySelect = ({
       </PopoverTrigger>
       <PopoverContent className="w-[300px] p-0">
         <Command>
+          <CommandInput placeholder="Search country..." />
           <CommandList>
             <ScrollArea className="h-72">
-              <CommandInput placeholder="Search country..." />
               <CommandEmpty>No country found.</CommandEmpty>
               <CommandGroup>
                 {options
@@ -127,13 +130,12 @@ const CountrySelect = ({
                         country={option.value}
                         countryName={option.label}
                       />
-
                       <span className="flex-1 text-sm">{option.label}</span>
-                      {
+                      {option.value && (
                         <span className="text-sm text-foreground/50">
                           {`+${RPNInput.getCountryCallingCode(option.value)}`}
                         </span>
-                      }
+                      )}
                       <CheckIcon
                         className={cn(
                           "ml-auto h-4 w-4",

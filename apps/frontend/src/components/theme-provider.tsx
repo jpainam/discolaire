@@ -2,10 +2,11 @@
 
 import "~/styles/themes.css";
 
-import type { ThemeProviderProps } from "next-themes/dist/types";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 import { TooltipProvider } from "@repo/ui/tooltip";
+
+type ThemeProviderProps = React.ComponentProps<typeof NextThemesProvider>;
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   //const [theme] = useTheme();
