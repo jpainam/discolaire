@@ -8,6 +8,7 @@ import { useLocale } from "@repo/hooks/use-locale";
 import { Button } from "@repo/ui/button";
 import { Input } from "@repo/ui/input";
 import { Label } from "@repo/ui/label";
+import { PasswordInput } from "@repo/ui/password-input";
 
 import { cn } from "~/lib/utils";
 import { authenticate } from "./signin";
@@ -37,7 +38,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
           <div className={className}>
             <Label htmlFor="password">{t("password")}</Label>
-            <Input
+
+            <PasswordInput
               required
               current-password="true"
               type="password"

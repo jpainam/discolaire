@@ -46,6 +46,7 @@
     "./dialog": "./src/dialog.tsx",
     "./alert-dialog": "./src/alert-dialog.tsx",
     "./popover": "./src/popover.tsx",
+    "./password-input": "./src/password-input.tsx",
     "./accordion": "./src/accordion.tsx",
     "./carousel": "./src/carousel.tsx",
     "./multiple-selector": "./src/multiple-selector.tsx",
