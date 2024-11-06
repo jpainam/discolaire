@@ -1,5 +1,3 @@
-import type { Grade } from "@prisma/client";
-import { TRPCError } from "@trpc/server";
 import _ from "lodash";
 
 import { db } from "@repo/db";
@@ -7,6 +5,56 @@ import { db } from "@repo/db";
 import { classroomService } from "./classroom-service";
 import { calculateFinalGrade, getRank } from "./utils-service";
 
+async function getGrades(classroomId: string, termId: number) {
+  const gradeSheets = await db.gradeSheet.findMany({
+    where: {
+      termId,
+      subject: {
+        classroomId,
+      },
+    },
+    include: {
+      grades: true,
+    },
+  });
+  const gradeSheetMap = _.groupBy(gradeSheets, "subjectId");
+
+  const subjectIds = Object.keys(gradeSheetMap);
+  let subjects = await classroomService.getSubjects(classroomId);
+  subjects = subjects.filter((s) => subjectIds.includes(s.id.toString()));
+  return _.flatMap(subjects, (subject) => {
+    const sheets = gradeSheetMap[subject.id] ?? [];
+    const studentGrades = _.flatten(
+      sheets.map((sheet) =>
+        sheet.grades.map((grade) => ({ ...grade, weight: sheet.weight })),
+      ),
+    );
+
+    const studentMapGrades = _.groupBy(studentGrades, "studentId");
+    const weights = sheets.map((sheet) => sheet.weight);
+
+    return Object.entries(studentMapGrades)
+      .map(([studentId, grades]) => {
+        const isAbsent = grades.every((grade) => grade.isAbsent);
+        return {
+          ...subject,
+          studentId,
+          subjectId: subject.id,
+          isAbsent,
+          grade: isAbsent
+            ? null
+            : calculateFinalGrade(
+                grades.map((g) => ({
+                  isAbsent: g.isAbsent ?? false,
+                  grade: g.grade,
+                })),
+                weights,
+              ),
+        };
+      })
+      .filter((g) => !g.isAbsent && g.grade != null);
+  });
+}
 export const reportCardService = {
   getGrades: async (classroomId: string, termId: number) => {
     return db.grade.findMany({
@@ -26,221 +74,102 @@ export const reportCardService = {
       },
     });
   },
-  getClassroomSummary: async (classroomId: string, termId: number) => {
-    /*const grades = await db.grade.findMany({
-      where: {
-        gradeSheet: {
-          termId: termId,
-          subject: {
-            classroomId: classroomId,
-          },
-        },
-      },
-      select: {
-        grade: true,
-        gradeSheetId: true,
-        studentId: true,
-        gradeSheet: true,
-      },
-    });*/
-    console.log(termId);
-    const subjects = await classroomService.getSubjects(classroomId);
-    /*const gradesPerSubject: Record<string, number[]> = {};
-    grades.forEach((rc) => {
-      if (!gradesPerSubject[rc.gradeSheet.subjectId]) {
-        gradesPerSubject[rc.gradeSheet.subjectId] = [];
-      }
-      gradesPerSubject[rc.gradeSheet.subjectId].push(rc.average);
-    });
+  getStudent: async (
+    classroomId: string,
+    studentId: string,
+    termId: number,
+  ) => {
+    const allGrades = await getGrades(classroomId, termId);
+    const summaries = computeAveragesAndRank(allGrades);
+    const studentGrades = allGrades.filter((g) => g.studentId === studentId);
+    const subjectIds = new Set(studentGrades.map((g) => g.subjectId));
+    let subjects = await classroomService.getSubjects(classroomId);
+    subjects = subjects.filter((s) => subjectIds.has(s.id));
 
-    const result = Object.keys(gradesPerSubject).map((subjectId) => {
-      return {
-        subject: subjects.find((s) => s.id === Number(subjectId)) ?? null,
-        avgClassroomGrade: mean(gradesPerSubject[subjectId]),
-        maxClassroomGrade: Math.max(...gradesPerSubject[subjectId]),
-        minClassroomGrade: Math.min(...gradesPerSubject[subjectId]),
-      };
-    });
-    return sortBy(result, (r) => r.subject?.order);*/
-    return subjects.map((subject) => {
-      return {
-        subject: subject,
-        avgClassroomGrade: 0,
-        maxClassroomGrade: 0,
-        minClassroomGrade: 0,
-      };
-    });
-  },
-  getStudentSummary: async (classroomId: string, termId: number) => {
-    console.log(termId);
-    const students = await classroomService.getStudents(classroomId);
-    return students.map((student) => {
-      return {
-        student: {
-          id: student.id,
-          avatar: student.avatar,
-          registrationNumber: student.registrationNumber,
-          firstName: student.firstName,
-          lastName: student.lastName,
-        },
-        rank: 0,
-        average: 0,
-        absences: 0,
-        lates: 0,
-      };
-    });
-  },
-  getStudent: async (studentId: string, termId: number) => {
-    const term = await db.term.findUnique({
-      where: {
-        id: termId,
-      },
-    });
-    if (!term) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Term not found",
-      });
-    }
-    const classroom = await db.classroom.findFirst({
-      where: {
-        enrollments: {
-          some: {
-            studentId: studentId,
-            schoolYearId: term.schoolYearId,
-          },
-        },
-      },
-    });
-    if (!classroom) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Student is not registered in any classroom",
-      });
-    }
-    const gradeSheets = await db.gradeSheet.findMany({
-      where: {
-        termId: termId,
-        subject: {
-          classroomId: classroom.id,
-        },
-      },
-      include: {
-        grades: true,
-      },
-    });
-    const gradeSheetMap: Record<
-      string,
-      {
-        id: number;
-        weight: number;
-        scale: number;
-        subjectId: number;
-        grades: Grade[];
-      }[]
-    > = {};
-
-    gradeSheets.forEach((sheet) => {
-      if (!gradeSheetMap[sheet.subjectId]) {
-        gradeSheetMap[sheet.subjectId] = [];
-      }
-
-      gradeSheetMap[sheet.subjectId]?.push({
-        id: sheet.id,
-        weight: sheet.weight,
-        scale: sheet.scale,
-        subjectId: sheet.subjectId,
-        grades: sheet.grades,
-      });
-    });
-
-    const subjectIds = Object.keys(gradeSheetMap);
-
-    let subjects = await db.subject.findMany({
-      include: {
-        course: true,
-        subjectGroup: true,
-        teacher: true,
-      },
-      where: {
-        classroomId: classroom.id,
-      },
-    });
-    subjects = subjects.filter((s) => subjectIds.includes(s.id.toString()));
     const result = subjects.map((subject) => {
-      const sheets = gradeSheetMap[subject.id] ?? [];
-      const studentMapGrades: Record<string, Grade[]> = {};
-      const weights: number[] = [];
-      sheets.forEach((sheet) => {
-        if (sheet.grades.length > 0) {
-          weights.push(sheet.weight);
-        }
-        sheet.grades.forEach((grade) => {
-          if (!studentMapGrades[grade.studentId]) {
-            studentMapGrades[grade.studentId] = [];
-          }
-          studentMapGrades[grade.studentId]?.push(grade);
-        });
-      });
-      const studentGrades = Object.keys(studentMapGrades).map((studentId) => {
-        const isAbsent = studentMapGrades[studentId]?.every(
-          (grade) => grade.isAbsent,
-        );
-        const _grades = studentMapGrades[studentId]
-          ? studentMapGrades[studentId]
-          : [];
-        return {
-          studentId,
-          isAbsent: isAbsent,
-          grade: isAbsent
-            ? null
-            : calculateFinalGrade(
-                _grades.map((g) => {
-                  return {
-                    isAbsent: g.isAbsent ?? false,
-                    grade: g.grade,
-                  };
-                }),
-                weights,
-              ),
-        };
-      });
-      const currentStudentGrade = studentGrades.find(
-        (stg) => stg.studentId === studentId,
+      const currentGrade = studentGrades.find(
+        (stg) => stg.subjectId === subject.id,
       );
-      const allgrades = studentGrades.filter(
-        (stg) => !stg.isAbsent && stg.grade != null,
-      );
-      const rank =
-        currentStudentGrade?.grade != null
-          ? getRank(
-              allgrades.map((stg) => stg.grade) as number[],
-              currentStudentGrade.grade,
-            )
-          : -1;
+      const subjectGrades = allGrades.filter((g) => g.subjectId === subject.id);
+      const gradesArray = subjectGrades.map((stg) => stg.grade ?? 0);
 
       return {
         ...subject,
-
-        avg: currentStudentGrade?.grade ?? 0,
-        isAbsent: currentStudentGrade?.isAbsent ?? false,
-        rank: rank,
-        num_grades: allgrades.length,
+        avg: currentGrade?.grade ?? 0,
+        isAbsent: currentGrade?.isAbsent ?? false,
+        rank:
+          currentGrade?.grade != null
+            ? getRank(gradesArray, currentGrade.grade)
+            : -1,
+        num_grades: subjectGrades.length,
         classroom: {
-          max: allgrades.length
-            ? Math.max(...allgrades.map((g) => g.grade ?? 0))
-            : 0,
-          min: allgrades.length
-            ? Math.min(...allgrades.map((g) => g.grade ?? 0))
-            : 0,
-
-          avg: allgrades.length
-            ? _.mean(allgrades.map((g) => g.grade ?? 0))
-            : 0,
+          max: Math.max(...gradesArray),
+          min: Math.min(...gradesArray),
+          avg: _.mean(gradesArray),
         },
       };
     });
+    return {
+      result,
+      summary: {
+        max: Math.max(...summaries.map((s) => s.totalAverage)),
+        min: Math.min(...summaries.map((s) => s.totalAverage)),
+        avg: _.mean(summaries.map((s) => s.totalAverage)),
+        successRate:
+          summaries.filter((s) => s.totalAverage >= 10).length /
+          (summaries.length || 1e9),
+        rank: summaries.find((s) => s.studentId === studentId)?.rank ?? -1,
+      },
+    };
+  },
 
-    return result;
+  getClassroom: async (classroomId: string, termId: number) => {
+    const allGrades = await getGrades(classroomId, termId);
+    const summaries = computeAveragesAndRank(allGrades);
+    const students = await classroomService.getStudents(classroomId);
+    return {
+      summary: {
+        max: Math.max(...summaries.map((s) => s.totalAverage)),
+        min: Math.min(...summaries.map((s) => s.totalAverage)),
+        avg: _.mean(summaries.map((s) => s.totalAverage)),
+        successRate:
+          summaries.filter((s) => s.totalAverage >= 10).length /
+          (summaries.length || 1e9),
+      },
+      result: students.map((student) => {
+        const summary = summaries.find((s) => s.studentId === student.id);
+        return {
+          ...student,
+          rank: summary?.rank ?? -1,
+          avg: summary?.totalAverage,
+        };
+      }),
+    };
   },
 };
+
+function computeAveragesAndRank(
+  allGrades: Awaited<ReturnType<typeof getGrades>>,
+) {
+  const studentGradesMap = _.groupBy(allGrades, "studentId");
+  const studentAverages = Object.entries(studentGradesMap).map(
+    ([studentId, grades]) => {
+      const totalCoeff = grades.reduce(
+        (sum, grade) => sum + (grade.isAbsent ? 0 : grade.coefficient),
+        0,
+      );
+      const totalPoint = grades.reduce(
+        (sum, grade) =>
+          sum + (grade.isAbsent ? 0 : (grade.grade ?? 0) * grade.coefficient),
+        0,
+      );
+      const totalAverage = totalCoeff ? totalPoint / totalCoeff : 0;
+      return { studentId, totalAverage };
+    },
+  );
+  const rankedStudents = _.orderBy(studentAverages, ["totalAverage"], ["desc"]);
+  return rankedStudents.map((student, index) => ({
+    ...student,
+    rank: index + 1,
+  }));
+}

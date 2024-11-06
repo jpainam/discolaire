@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDownIcon, PrinterIcon } from "lucide-react";
+import { parseAsInteger, useQueryState } from "nuqs";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useRouter } from "@repo/hooks/use-router";
@@ -22,6 +23,7 @@ import { sidebarIcons } from "../sidebar-icons";
 export function ReportCardHeader() {
   const { t } = useLocale();
   const { createQueryString } = useCreateQueryString();
+  const [termId] = useQueryState("term", parseAsInteger);
   const router = useRouter();
   const Icon = sidebarIcons.report_cards;
   return (
@@ -30,6 +32,7 @@ export function ReportCardHeader() {
       <Label className="hidden md:block">{t("term")}</Label>
       <TermSelector
         className="md:w-[350px]"
+        defaultValue={termId?.toString()}
         onChange={(val) => {
           router.push(`?` + createQueryString({ term: val }));
         }}

@@ -29,7 +29,7 @@ export async function ReportCardDiscipline({ id }: { id: string }) {
             <TableCell className={cn(rowClassName)}>
               {t("total_absences")}
             </TableCell>
-            <TableCell className="w-[60px]"></TableCell>
+            <TableCell className="min-w-[60px]"></TableCell>
           </TableRow>
           <TableRow>
             <TableCell className={cn(rowClassName)}>{t("justified")}</TableCell>

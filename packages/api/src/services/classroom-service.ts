@@ -191,13 +191,7 @@ export const classroomService = {
       include: {
         course: true,
         subjectGroup: true,
-        teacher: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-          },
-        },
+        teacher: true,
       },
     });
   },

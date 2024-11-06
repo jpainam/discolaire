@@ -13,7 +13,8 @@ import { ReportCardSummary } from "~/components/students/report-cards/ReportCard
 import { ReportCardTable } from "~/components/students/report-cards/ReportCardTable";
 import { api } from "~/trpc/server";
 
-type ReportCardType = RouterOutputs["reportCard"]["getStudent"][number];
+type ReportCardType =
+  RouterOutputs["reportCard"]["getStudent"]["result"][number];
 
 export default async function Page(props: {
   params: Promise<{ id: string }>;
@@ -31,7 +32,7 @@ export default async function Page(props: {
   if (!term) {
     return <EmptyState className="my-8" title={t("select_terms")} />;
   }
-  const reportCard = await api.reportCard.getStudent({
+  const { result: reportCard, summary } = await api.reportCard.getStudent({
     studentId: id,
     termId: Number(term),
   });
@@ -66,8 +67,13 @@ export default async function Page(props: {
       <div className="flex flex-row items-start gap-2 p-2">
         <ReportCardMention id={id} />
         <ReportCardDiscipline id={id} />
-        <ReportCardPerformance id={id} />
-        <ReportCardSummary id={id} rank={2} average={average} />
+        <ReportCardPerformance
+          successRate={summary.successRate}
+          max={summary.max}
+          min={summary.min}
+          avg={summary.avg}
+        />
+        <ReportCardSummary id={id} rank={summary.rank} average={average} />
       </div>
       <ReportCardSignature />
     </div>

@@ -6,6 +6,13 @@ import { studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const reportCardRouter = createTRPCRouter({
+  getClassroom: protectedProcedure
+    .input(
+      z.object({ termId: z.coerce.number(), classroomId: z.string().min(1) }),
+    )
+    .query(({ input }) => {
+      return reportCardService.getClassroom(input.classroomId, input.termId);
+    }),
   getStudent: protectedProcedure
     .input(
       z.object({
@@ -14,19 +21,8 @@ export const reportCardRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const student = await ctx.db.student.findUnique({
-        where: {
-          id: input.studentId,
-        },
-      });
-      if (!student || student.schoolId !== ctx.schoolId) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Student not found",
-        });
-      }
       const classroom = await studentService.getClassroom(
-        student.id,
+        input.studentId,
         ctx.schoolYearId,
       );
       if (!classroom) {
@@ -35,12 +31,11 @@ export const reportCardRouter = createTRPCRouter({
           message: "Student is not registered in any classroom",
         });
       }
-      // return getReportCardTerm({
-      //   studentId: input.studentId,
-      //   termId: input.termId,
-      //   classroomId: classroom.id,
-      // });
-      return reportCardService.getStudent(input.studentId, input.termId);
+      return reportCardService.getStudent(
+        classroom.id,
+        input.studentId,
+        input.termId,
+      );
     }),
   getRemarks: protectedProcedure
     .input(
@@ -64,11 +59,8 @@ export const reportCardRouter = createTRPCRouter({
         termId: z.coerce.number(),
       }),
     )
-    .query(({ input }) => {
-      return reportCardService.getClassroomSummary(
-        input.classroomId,
-        input.termId,
-      );
+    .query(({}) => {
+      return [];
     }),
   deleteRemark: protectedProcedure
     .input(

@@ -20,7 +20,8 @@ import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";
 import { getAppreciations } from "~/utils/get-appreciation";
 
-type ReportCardType = RouterOutputs["reportCard"]["getStudent"][number];
+type ReportCardType =
+  RouterOutputs["reportCard"]["getStudent"]["result"][number];
 export async function ReportCardTable({
   groups,
 }: {
@@ -122,7 +123,9 @@ function ReportCardGroup({
       {cards.map((card, index) => {
         return (
           <TableRow className="text-xs" key={`card-${groupId}-${index}`}>
-            <TableCell>{index + 1}</TableCell>
+            <TableCell>
+              {index + 1}-{card.id}
+            </TableCell>
             <TableCell className={cn(rowClassName, "text-left")}>
               <div className="flex flex-col">
                 <span className="font-semibold">{card.course.reportName}</span>

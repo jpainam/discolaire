@@ -9,9 +9,19 @@ import {
 } from "@repo/ui/table";
 
 import { cn } from "~/lib/utils";
+import { getAppreciations } from "~/utils/get-appreciation";
 
-export async function ReportCardPerformance({ id }: { id: string }) {
-  console.log(id);
+export async function ReportCardPerformance({
+  max,
+  min,
+  avg,
+  successRate,
+}: {
+  max: number;
+  min: number;
+  successRate: number;
+  avg: number;
+}) {
   const { t } = await getServerTranslations();
   const rowClassName = "border-r text-sm";
   return (
@@ -27,25 +37,25 @@ export async function ReportCardPerformance({ id }: { id: string }) {
         <TableBody>
           <TableRow>
             <TableCell className={cn(rowClassName)}>{t("Moy.Max")}</TableCell>
-            <TableCell className="w-[60px]"></TableCell>
+            <TableCell className="min-w-[60px]">{max.toFixed(2)}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell className={cn(rowClassName)}>{t("Moy.Min")}</TableCell>
-            <TableCell></TableCell>
+            <TableCell>{min.toFixed(2)}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell className={cn(rowClassName)}>{t("Moy.Class")}</TableCell>
-            <TableCell></TableCell>
+            <TableCell>{avg.toFixed(2)}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell className={cn(rowClassName)}>
               {t("success_rate")}
             </TableCell>
-            <TableCell></TableCell>
+            <TableCell>{(successRate * 100).toFixed(2)}%</TableCell>
           </TableRow>
           <TableRow>
             <TableCell className={cn(rowClassName)}>{t("mention")}</TableCell>
-            <TableCell></TableCell>
+            <TableCell>{getAppreciations(avg)}</TableCell>
           </TableRow>
         </TableBody>
       </Table>
