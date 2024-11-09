@@ -38,9 +38,11 @@ export default function RootLayout() {
               <ActionSheetProvider>
                 <NavThemeProvider value={NAV_THEME[colorScheme]}>
                   <Stack
-                    screenOptions={{
-                      animation: "ios", // for android
-                    }}
+                    screenOptions={
+                      {
+                        //animation: "ios", // for android
+                      }
+                    }
                   >
                     <Stack.Screen name="index" />
                     <Stack.Screen
