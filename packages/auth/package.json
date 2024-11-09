@@ -24,7 +24,7 @@
     "@t3-oss/env-nextjs": "^0.11.1",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
-    "next": "^15.0.2",
+    "next": "^15.0.3",
     "next-auth": "5.0.0-beta.25",
     "react": "catalog:react19",
     "react-dom": "catalog:react19",
