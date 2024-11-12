@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import { Loader } from "lucide-react";
 
-import { useLocale } from "@repo/hooks/use-locale";
-import { useRouter } from "@repo/hooks/use-router";
+import { useLocale } from "@repo/i18n";
 
 import { env } from "~/env";
+import { useRouter } from "~/hooks/use-router";
 
 export default function Error({
   error,

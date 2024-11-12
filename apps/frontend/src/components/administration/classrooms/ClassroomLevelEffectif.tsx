@@ -10,7 +10,7 @@ import {
 } from "recharts";
 
 import type { ChartConfig } from "@repo/ui/chart";
-import { useLocale } from "@repo/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
 import {
   Card,
   CardContent,

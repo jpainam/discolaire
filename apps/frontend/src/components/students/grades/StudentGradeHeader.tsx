@@ -7,7 +7,6 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -25,6 +24,7 @@ import { printStudentGrade } from "~/actions/reporting";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";

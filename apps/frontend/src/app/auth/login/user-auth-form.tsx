@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { ReloadIcon } from "@radix-ui/react-icons";
 
-import { useLocale } from "@repo/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Input } from "@repo/ui/input";
 import { Label } from "@repo/ui/label";

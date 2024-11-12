@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import { useDebounce } from "use-debounce";
 
 import { useModal } from "@repo/hooks/use-modal";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
@@ -31,6 +30,7 @@ import {
 } from "@repo/ui/table";
 
 import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { AddUserToRole } from "./AddUserToRole";
 

@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { useAtom } from "jotai";
 
 import type { RouterOutputs } from "@repo/api";
-import { useLocale } from "@repo/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
 import {
   Card,
   CardContent,

@@ -3,8 +3,8 @@
 import { MoreVertical, Plus } from "lucide-react";
 import { toast } from "sonner";
 
-import { useLocale } from "@repo/hooks/use-locale";
 import { useSheet } from "@repo/hooks/use-sheet";
+import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import {

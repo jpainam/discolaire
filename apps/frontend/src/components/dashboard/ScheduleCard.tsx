@@ -1,6 +1,6 @@
 "use client";
 
-import { useLocale } from "@repo/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
 import { Separator } from "@repo/ui/separator";
 
 import { cn } from "~/lib/utils";

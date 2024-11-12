@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { PiChurchDuotone } from "react-icons/pi";
 
-import { useLocale } from "@repo/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
 import { Separator } from "@repo/ui/separator";
 import { Skeleton } from "@repo/ui/skeleton";
 

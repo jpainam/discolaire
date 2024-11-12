@@ -8,7 +8,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Badge } from "@repo/ui/badge";
 import { Button } from "@repo/ui/button";
@@ -32,6 +31,7 @@ import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { AssignmentCategorySelector } from "~/components/shared/selects/AssignmentCategorySelector";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
 const QuillEditor = dynamic(() => import("@repo/ui/quill-editor"), {

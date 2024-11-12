@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -35,6 +34,7 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { DatePicker } from "~/components/shared/date-picker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 
 export function AttendanceHeader() {
   const { t } = useLocale();

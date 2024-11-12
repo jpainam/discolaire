@@ -3,7 +3,6 @@
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";
@@ -15,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
 export function SchoolTableAction({ schoolId }: { schoolId: string }) {

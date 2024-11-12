@@ -5,10 +5,9 @@ import { Trash2, UploadIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { useLocale } from "@repo/hooks/use-locale";
 import { useModal } from "@repo/hooks/use-modal";
-import { useRouter } from "@repo/hooks/use-router";
 import { useUpload } from "@repo/hooks/use-upload";
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   Form,
@@ -24,6 +23,7 @@ import { Textarea } from "@repo/ui/textarea";
 import { FileUploader } from "@repo/ui/uploads/file-uploader";
 
 import { useSchool } from "~/contexts/SchoolContext";
+import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 

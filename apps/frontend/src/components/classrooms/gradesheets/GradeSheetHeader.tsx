@@ -4,7 +4,6 @@ import { useParams } from "next/navigation";
 import { MoreVertical, PlusIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -20,6 +19,7 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 
 export function GradeSheetHeader() {
   const params = useParams<{ id: string }>();

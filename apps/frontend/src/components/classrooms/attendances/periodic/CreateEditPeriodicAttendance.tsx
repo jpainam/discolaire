@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Form, useForm, useFormContext } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
@@ -22,6 +21,7 @@ import {
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { PeriodicAttendanceHeader } from "./PeriodicAttendanceHeader";

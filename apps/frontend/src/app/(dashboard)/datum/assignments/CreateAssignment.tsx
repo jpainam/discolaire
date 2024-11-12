@@ -3,14 +3,14 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { useLocale } from "@repo/hooks/use-locale";
 import { useModal } from "@repo/hooks/use-modal";
-import { useRouter } from "@repo/hooks/use-router";
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
 
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 
 export function CreateAssignment() {
   const { closeModal } = useModal();

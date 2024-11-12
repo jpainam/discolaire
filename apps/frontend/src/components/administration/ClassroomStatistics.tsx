@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { School } from "lucide-react";
 
-import { useLocale } from "@repo/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
 import { Card, CardContent } from "@repo/ui/card";
 import { Skeleton } from "@repo/ui/skeleton";
 

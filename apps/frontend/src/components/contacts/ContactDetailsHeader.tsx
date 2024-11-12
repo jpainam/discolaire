@@ -14,7 +14,6 @@ import {
 import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
-import { useRouter } from "@repo/hooks/use-router";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
@@ -32,6 +31,7 @@ import { Skeleton } from "@repo/ui/skeleton";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useRouter } from "~/hooks/use-router";
 import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";
 import { DropdownHelp } from "../shared/DropdownHelp";

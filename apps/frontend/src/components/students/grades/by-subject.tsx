@@ -5,7 +5,6 @@ import { useParams } from "next/navigation";
 
 import type { RouterOutputs } from "@repo/api";
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
-import { useRouter } from "@repo/hooks/use-router";
 import {
   Accordion,
   AccordionContent,
@@ -16,6 +15,7 @@ import FlatBadge from "@repo/ui/FlatBadge";
 import { Separator } from "@repo/ui/separator";
 
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { useDateFormat } from "~/utils/date-format";
 
 interface BySubjectProps {

@@ -1,7 +1,7 @@
 "use client";
 
 import type { RouterOutputs } from "@repo/api";
-import { useLocale } from "@repo/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
 import {
   Table,
   TableBody,

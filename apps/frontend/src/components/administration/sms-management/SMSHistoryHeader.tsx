@@ -3,13 +3,13 @@
 import { subDays } from "date-fns";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
 
 import { DateRangePicker } from "~/components/shared/DateRangePicker";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 
 export function SMSHistoryHeader() {
   const d = new Date();

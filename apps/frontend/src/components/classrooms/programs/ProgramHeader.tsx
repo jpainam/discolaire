@@ -5,7 +5,6 @@ import { useParams, usePathname } from "next/navigation";
 import { MoreVertical, Pencil } from "lucide-react";
 import { toast } from "sonner";
 
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
@@ -22,6 +21,7 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useRouter } from "~/hooks/use-router";
 import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 

@@ -5,7 +5,6 @@ import { FaUserPlus } from "react-icons/fa";
 import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";
@@ -17,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { CreateEditFinanceGroup } from "./CreateEditFinanceGroup";
 

@@ -3,7 +3,6 @@
 import { Computer, LogOut, Settings, User } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Button } from "@repo/ui/button";
@@ -19,6 +18,7 @@ import {
 
 import { signinout } from "~/app/auth/login/signin";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { MobileActionButtions } from "~/layouts/mobile-nav";
 
 export function UserNav({

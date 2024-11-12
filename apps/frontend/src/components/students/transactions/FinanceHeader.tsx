@@ -3,7 +3,6 @@
 import { useParams } from "next/navigation";
 import { CircleDollarSignIcon, MoreVertical, Plus } from "lucide-react";
 
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -18,6 +17,7 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
 export default function FinanceHeader() {

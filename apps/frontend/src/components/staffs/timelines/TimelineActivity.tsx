@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Edit, PlusCircle, Trash2 } from "lucide-react";
 
-import { useLocale } from "@repo/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { ScrollArea } from "@repo/ui/scroll-area";
 

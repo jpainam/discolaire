@@ -6,7 +6,6 @@ import { useSearchParams } from "next/navigation";
 import { ChevronDown, Printer } from "lucide-react";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -19,6 +18,7 @@ import { Label } from "@repo/ui/label";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
+import { useRouter } from "~/hooks/use-router";
 import { DateRangePicker } from "../../shared/DateRangePicker";
 import { AnnouncementSummary } from "./AnnouncementSummary";
 

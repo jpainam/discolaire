@@ -6,7 +6,6 @@ import { useParams, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Checkbox } from "@repo/ui/checkbox";
 import {
@@ -30,6 +29,7 @@ import {
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { CreateGradeSheetHeader } from "./CreateGradeSheetHeader";

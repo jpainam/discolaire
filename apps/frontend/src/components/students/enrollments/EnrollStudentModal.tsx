@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { useModal } from "@repo/hooks/use-modal";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -19,6 +18,7 @@ import {
 
 import { InputField } from "~/components/shared/forms/input-field";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
 const enrollFormSchema = z.object({

@@ -4,7 +4,6 @@ import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";
@@ -27,6 +26,7 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { CreateEditCourse } from "./CreateEditCourse";
 

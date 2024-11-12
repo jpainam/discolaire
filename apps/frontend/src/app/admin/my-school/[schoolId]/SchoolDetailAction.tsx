@@ -2,9 +2,10 @@
 
 import { Pencil } from "lucide-react";
 
-import { useLocale } from "@repo/hooks/use-locale";
-import { useRouter } from "@repo/hooks/use-router";
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+
+import { useRouter } from "~/hooks/use-router";
 
 export function SchoolDetailAction({ schoolId }: { schoolId: string }) {
   const router = useRouter();

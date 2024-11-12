@@ -3,7 +3,6 @@
 import { toast } from "sonner";
 import * as z from "zod";
 
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -17,6 +16,7 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
 const formSchema = z.object({

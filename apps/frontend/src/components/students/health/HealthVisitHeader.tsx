@@ -4,12 +4,12 @@ import { useParams } from "next/navigation";
 import { Stethoscope } from "lucide-react";
 
 //import { CreateEditHealthVisit } from "./CreateEditHealthVisit";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
 
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 
 export function HealthVisitHeader() {
   const { t } = useLocale();

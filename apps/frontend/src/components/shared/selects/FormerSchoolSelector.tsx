@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { useModal } from "@repo/hooks/use-modal";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -21,6 +20,7 @@ import { Input } from "@repo/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { Skeleton } from "@repo/ui/skeleton";
 
+import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import VirtualizedCommand from "./VirtualizedCommand";

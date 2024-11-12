@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { ChevronDownIcon, MoreVertical, PlusIcon } from "lucide-react";
 
-import { useRouter } from "@repo/hooks/use-router";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -16,6 +15,7 @@ import { Label } from "@repo/ui/label";
 import { Separator } from "@repo/ui/separator";
 
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { ContactSearch } from "./ContactSearch";

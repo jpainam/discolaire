@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { Eye, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { useLocale } from "@repo/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";

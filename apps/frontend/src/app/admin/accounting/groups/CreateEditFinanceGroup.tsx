@@ -4,7 +4,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { useModal } from "@repo/hooks/use-modal";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -19,6 +18,7 @@ import {
 import { Input } from "@repo/ui/input";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
 
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
 const createFinanceGroupSchema = z.object({

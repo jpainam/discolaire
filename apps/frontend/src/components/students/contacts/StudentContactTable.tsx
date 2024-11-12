@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Eye, FileHeart, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
@@ -34,6 +33,7 @@ import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvi
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";

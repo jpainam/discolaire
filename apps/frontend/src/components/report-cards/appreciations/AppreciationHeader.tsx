@@ -5,7 +5,6 @@ import { ChevronDown, PrinterIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -24,6 +23,7 @@ import { ClassroomStudentSelector } from "~/components/shared/selects/ClassroomS
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { AppreciationCategoryList } from "./AppreciationCategoryList";

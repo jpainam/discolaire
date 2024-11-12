@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { useRouter } from "@repo/hooks/use-router";
 import { useUpload } from "@repo/hooks/use-upload";
 import { useLocale } from "@repo/i18n";
 import {
@@ -35,6 +34,7 @@ import { FileUploader } from "@repo/ui/uploads/file-uploader";
 import { DatePicker } from "~/components/shared/date-picker";
 import { routes } from "~/configs/routes";
 import { useSchool } from "~/contexts/SchoolContext";
+import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";

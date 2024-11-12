@@ -3,8 +3,7 @@
 import * as React from "react";
 import { ChevronsUpDown, Plus } from "lucide-react";
 
-import { useLocale } from "@repo/hooks/use-locale";
-import { useRouter } from "@repo/hooks/use-router";
+import { useLocale } from "@repo/i18n";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,6 +19,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@repo/ui/sidebar";
+
+import { useRouter } from "~/hooks/use-router";
 
 export function TeamSwitcher({
   teams,

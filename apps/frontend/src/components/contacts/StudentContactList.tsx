@@ -5,7 +5,6 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -26,6 +25,7 @@ import { ScrollArea } from "@repo/ui/scroll-area";
 import { Separator } from "@repo/ui/separator";
 import { Skeleton } from "@repo/ui/skeleton";
 
+import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { generateStringColor } from "~/utils/colors";

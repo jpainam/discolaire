@@ -2,7 +2,7 @@
 
 import { BugIcon } from "lucide-react";
 
-import { useLocale } from "@repo/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
 import {
   FloatingPanelBody,
   FloatingPanelCloseButton,

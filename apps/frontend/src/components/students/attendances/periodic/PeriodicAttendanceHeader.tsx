@@ -6,7 +6,6 @@ import { toast } from "sonner";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useModal } from "@repo/hooks/use-modal";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -21,6 +20,7 @@ import { Label } from "@repo/ui/label";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { useRouter } from "~/hooks/use-router";
 import { CreateEditPeriodicAttendance } from "./CreateEditPeriodicAttendance";
 
 export function PeriodicAttendanceHeader() {

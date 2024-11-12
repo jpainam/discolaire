@@ -1,6 +1,6 @@
 "use client";
 
-import { useLocale } from "@repo/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
 import { EmptyState } from "@repo/ui/EmptyState";
 import {
   Table,

@@ -5,7 +5,6 @@ import { ChevronDown, MailIcon, Printer } from "lucide-react";
 import { useQueryState } from "nuqs";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -18,6 +17,7 @@ import {
 import { Label } from "@repo/ui/label";
 
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
 import { ClassroomSelector } from "../shared/selects/ClassroomSelector";

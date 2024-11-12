@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { ChevronDownIcon, MoreVertical, PlusIcon } from "lucide-react";
 
-import { useLocale } from "@repo/hooks/use-locale";
-import { useRouter } from "@repo/hooks/use-router";
+import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import {
@@ -22,6 +21,7 @@ import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { StudentSearch } from "~/components/students/StudentSearch";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 
 export function StudentPageHeader() {

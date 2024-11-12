@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import FlatBadge from "@repo/ui/FlatBadge";
@@ -20,6 +19,7 @@ import {
 import { Label } from "@repo/ui/label";
 import { Skeleton } from "@repo/ui/skeleton";
 
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { html_content } from "./editor-content";
 

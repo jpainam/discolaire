@@ -6,7 +6,6 @@ import { useParams } from "next/navigation";
 import { MailOpen, MoreVertical } from "lucide-react";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -21,6 +20,7 @@ import { Label } from "@repo/ui/label";
 
 import { DateRangePicker } from "~/components/shared/DateRangePicker";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function NotificationHeader() {

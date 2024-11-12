@@ -5,8 +5,7 @@ import { Loader, Mail } from "lucide-react";
 import { toast } from "sonner";
 import * as z from "zod";
 
-import { useLocale } from "@repo/hooks/use-locale";
-import { useRouter } from "@repo/hooks/use-router";
+import { useLocale } from "@repo/i18n";
 import { Alert, AlertDescription, AlertTitle } from "@repo/ui/alert";
 import { Button } from "@repo/ui/button";
 import {
@@ -27,6 +26,8 @@ import {
   useForm,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
+
+import { useRouter } from "~/hooks/use-router";
 
 const formSchema = z.object({
   email: z.string().email(),

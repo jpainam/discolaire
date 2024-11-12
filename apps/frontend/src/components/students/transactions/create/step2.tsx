@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { TransactionAcknowledgment } from "@repo/transactional/emails/TransactionAcknowledgment";
 import { Button } from "@repo/ui/button";
@@ -23,6 +22,7 @@ import {
 } from "@repo/ui/form";
 
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import Step2Details from "./step2details";
 

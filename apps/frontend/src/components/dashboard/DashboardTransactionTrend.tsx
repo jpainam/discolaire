@@ -6,7 +6,6 @@ import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import type { ChartConfig } from "@repo/ui/chart";
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import {
   Card,
@@ -32,6 +31,7 @@ import {
 } from "@repo/ui/select";
 import { Skeleton } from "@repo/ui/skeleton";
 
+import { useRouter } from "~/hooks/use-router";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";

@@ -6,7 +6,6 @@ import { Eye } from "lucide-react";
 import { parseAsInteger, useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { EmptyState } from "@repo/ui/EmptyState";
@@ -21,6 +20,7 @@ import {
 } from "@repo/ui/table";
 
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { useDateFormat } from "~/utils/date-format";
 
 type StudentAssignment = RouterOutputs["classroom"]["assignments"][number];

@@ -2,9 +2,9 @@
 
 import { useParams } from "next/navigation";
 
-import { useRouter } from "@repo/hooks/use-router";
 import { Skeleton } from "@repo/ui/skeleton";
 
+import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
-import { useLocale } from "@repo/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
 import { ScrollArea, ScrollBar } from "@repo/ui/scroll-area";
 
 import { cn } from "~/lib/utils";

@@ -4,7 +4,6 @@ import { useSearchParams } from "next/navigation";
 import { MoreVertical, Plus } from "lucide-react";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -19,6 +18,7 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { JournalSelector } from "~/components/shared/selects/JounalSelector";
+import { useRouter } from "~/hooks/use-router";
 
 export function FeeHeader() {
   const { t } = useLocale();

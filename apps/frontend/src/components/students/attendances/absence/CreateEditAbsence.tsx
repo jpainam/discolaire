@@ -5,8 +5,8 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { useLocale } from "@repo/hooks/use-locale";
 import { useModal } from "@repo/hooks/use-modal";
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
   Form,

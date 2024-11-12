@@ -2,8 +2,8 @@
 
 import { FolderOpen, UploadCloudIcon } from "lucide-react";
 
-import { useLocale } from "@repo/hooks/use-locale";
 import { useModal } from "@repo/hooks/use-modal";
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Label } from "@repo/ui/label";
 

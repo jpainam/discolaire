@@ -3,7 +3,6 @@ import { z } from "zod";
 
 import type { Option } from "@repo/ui/multiple-selector";
 import { useModal } from "@repo/hooks/use-modal";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -18,6 +17,7 @@ import {
 import { Input } from "@repo/ui/input";
 import MultipleSelector from "@repo/ui/multiple-selector";
 
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
 const createEditUserSchema = z.object({

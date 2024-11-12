@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { parseAsInteger, useQueryState } from "nuqs";
 
-import { useLocale } from "@repo/hooks/use-locale";
+import { useLocale } from "@repo/i18n";
 import { Badge } from "@repo/ui/badge";
 import { Button } from "@repo/ui/button";
 import { Skeleton } from "@repo/ui/skeleton";

@@ -5,13 +5,13 @@ import { SaveIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { StudentStatus } from "@repo/db";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Form, useForm } from "@repo/ui/form";
 import { createUpdateStudentSchema } from "@repo/validators";
 
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { CreateUpdateAddress } from "./CreateUpdateAddress";
 import { CreateUpdateDenom } from "./CreateUpdateDenom";

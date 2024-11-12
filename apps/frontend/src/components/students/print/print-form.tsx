@@ -3,12 +3,12 @@
 import { z } from "zod";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
-import { useRouter } from "@repo/hooks/use-router";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Form, useForm } from "@repo/ui/form";
 
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import PrintSelector from "./print-selector";
 import PrintTypeRadio from "./print-type-radio";
 

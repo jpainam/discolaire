@@ -15,7 +15,6 @@ import {
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useRouter } from "@repo/hooks/use-router";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
@@ -34,6 +33,7 @@ import FlatBadge from "@repo/ui/FlatBadge";
 
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { CreateEditClassroom } from "./CreateEditClassroom";

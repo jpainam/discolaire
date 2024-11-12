@@ -17,9 +17,8 @@ import {
 } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
-import { useLocale } from "@repo/hooks/use-locale";
 import { useModal } from "@repo/hooks/use-modal";
-import { useRouter } from "@repo/hooks/use-router";
+import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import {
@@ -33,6 +32,7 @@ import FlatBadge from "@repo/ui/FlatBadge";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import EyeIcon from "../icons/eye";
