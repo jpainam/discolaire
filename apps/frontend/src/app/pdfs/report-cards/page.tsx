@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { sum } from "lodash";
+import { Loader2 } from "lucide-react";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
@@ -24,22 +26,31 @@ type ReportCardType =
 
 const searchParamsSchema = z.object({
   studentId: z.string().min(1),
-  term: z.coerce.number(),
+  termId: z.coerce.number(),
 });
 export default function Page() {
   const { school } = useSchool();
   const searchParams = useSearchParams();
   const studentId = searchParams.get("studentId");
-  const term = searchParams.get("term");
+  const termId = searchParams.get("termId");
   const result = searchParamsSchema.parse({
     studentId,
-    term,
+    termId,
   });
 
   const dataQuery = api.reportCard.getStudent.useQuery({
     studentId: result.studentId,
-    termId: result.term,
+    termId: result.termId,
   });
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return <Loader2 className="animate-spin" />;
+  }
   if (dataQuery.isPending) {
     return <div>Loading...</div>;
   }

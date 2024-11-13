@@ -32,7 +32,7 @@ export async function ReportCardTable({
   const rowClassName = "border text-center py-0 text-sm";
 
   return (
-    <Table className="my-4 border-y text-sm">
+    <Table className="my-4 border-y border-r text-sm">
       <TableHeader>
         <TableRow>
           <TableHead className="w-[15px]"></TableHead>
@@ -123,9 +123,7 @@ function ReportCardGroup({
       {cards.map((card, index) => {
         return (
           <TableRow className="text-xs" key={`card-${groupId}-${index}`}>
-            <TableCell>
-              {index + 1}-{card.id}
-            </TableCell>
+            <TableCell>{index + 1}</TableCell>
             <TableCell className={cn(rowClassName, "text-left")}>
               <div className="flex flex-col">
                 <span className="font-semibold">{card.course.reportName}</span>

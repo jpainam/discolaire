@@ -1,9 +1,10 @@
-import { Text, View } from "@alexandernanberg/react-pdf-renderer";
+import { Text } from "@alexandernanberg/react-pdf-renderer";
 import { sortBy, sum } from "lodash";
 
 import type { RouterOutputs } from "@repo/api";
 
 import { ReportCardHeader } from "../headers/ReportCardHeader";
+import { Table, TableCell, TableHeader, TableRow } from "../table";
 
 type ReportCardType =
   RouterOutputs["reportCard"]["getStudent"]["result"][number];
@@ -15,15 +16,24 @@ export function IPBW({
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
 }) {
   return (
-    <View
-      style={{
-        flexDirection: "column",
-        gap: 2,
-        alignItems: "flex-start",
-      }}
-    >
+    <>
       <ReportCardHeader school={school} />
-      <View style={{ flexDirection: "column" }}>
+      <Table
+        weightings={[0.4, 0.06, 0.06, 0.06, 0.06, 0.1, 0.1, 0.1]}
+        tdStyle={{
+          paddingVertical: "1px",
+          paddingHorizontal: "2px",
+        }}
+      >
+        <TableHeader style={{ backgroundColor: "#CCC", fontWeight: "bold" }}>
+          <TableCell>Matieres</TableCell>
+          <TableCell>Note</TableCell>
+          <TableCell>Coef.</TableCell>
+          <TableCell>Total</TableCell>
+          <TableCell>Rang</TableCell>
+          <TableCell>Min/Max</TableCell>
+          <TableCell>Appreciation</TableCell>
+        </TableHeader>
         {Object.keys(groups).map((groupId: string) => {
           let cards = groups[Number(groupId)];
           if (!cards || cards.length == 0) return null;
@@ -34,81 +44,108 @@ export function IPBW({
           if (!group) return null;
 
           return (
-            <View key={`fragment-${groupId}`}>
-              <ReportCardGroup
-                groupId={Number(groupId)}
-                key={`card-${groupId}`}
-                cards={cards}
-              />
-              <View
-                style={{
-                  flexDirection: "row",
-                  border: 1,
-                  borderColor: "black",
-                }}
-                key={`recap-${groupId}`}
-              >
-                <Text>{group.name}</Text>
-                <Text>{sum(cards.map((c) => c.coefficient))}</Text>
-                <Text>
-                  Point:{" "}
-                  {sum(cards.map((c) => (c.avg || 0) * c.coefficient)).toFixed(
-                    1,
-                  )}{" "}
-                  / {sum(cards.map((c) => 20 * c.coefficient)).toFixed(1)}
-                </Text>
-                <Text>
-                  Moyenne :
-                  {(
-                    sum(cards.map((c) => c.avg * c.coefficient)) /
-                    sum(cards.map((c) => c.coefficient))
-                  ).toFixed(2)}
-                </Text>
-              </View>
-            </View>
+            <ReportCardGroup
+              groupId={Number(groupId)}
+              key={`card-${groupId}`}
+              cards={cards}
+              group={{ name: group.name }}
+            />
           );
         })}
-      </View>
-    </View>
+      </Table>
+    </>
   );
 }
 
 function ReportCardGroup({
   cards,
   groupId,
+  group,
 }: {
   groupId: number;
+  group: { name: string };
   cards: ReportCardType[];
 }) {
   return (
     <>
       {cards.map((card, index) => {
         return (
-          <View
-            style={{ flexDirection: "row", border: 1 }}
-            key={`card-${groupId}-${index}`}
-          >
-            <View style={{ flexDirection: "column" }}>
-              <Text>{card.course.name}</Text>
-              <Text>
+          <TableRow key={`card-${groupId}-${index}`}>
+            <TableCell
+              style={{
+                flexDirection: "column",
+                display: "flex",
+                alignItems: "flex-start",
+              }}
+            >
+              <Text style={{ fontWeight: "semibold" }}>{card.course.name}</Text>
+              <Text style={{ paddingLeft: "8px" }}>
                 {card.teacher?.prefix} {card.teacher?.lastName}
               </Text>
-            </View>
+            </TableCell>
 
-            <Text>{!card.isAbsent && card.avg}</Text>
-            <Text>{!card.isAbsent && card.coefficient}</Text>
-            <Text>
+            <TableCell
+              style={{
+                justifyContent: "center",
+              }}
+            >
+              {!card.isAbsent && card.avg}
+            </TableCell>
+            <TableCell
+              style={{
+                justifyContent: "center",
+              }}
+            >
+              {!card.isAbsent && card.coefficient}
+            </TableCell>
+            <TableCell
+              style={{
+                justifyContent: "center",
+              }}
+            >
               {!card.isAbsent && (card.avg * card.coefficient).toFixed(2)}
-            </Text>
-            <Text>{!card.isAbsent && card.rank}</Text>
-            <Text>{card.classroom.avg.toFixed(2)}</Text>
-            <Text>
+            </TableCell>
+            <TableCell
+              style={{
+                justifyContent: "center",
+              }}
+            >
+              {!card.isAbsent && card.rank}
+            </TableCell>
+            <TableCell
+              style={{
+                justifyContent: "center",
+              }}
+            >
+              {card.classroom.avg.toFixed(2)}
+            </TableCell>
+            <TableCell
+              style={{
+                justifyContent: "center",
+              }}
+            >
               {card.classroom.min.toFixed(2)} / {card.classroom.max.toFixed(2)}
-            </Text>
-            <Text>Moyen</Text>
-          </View>
+            </TableCell>
+            <TableCell>Moyen</TableCell>
+          </TableRow>
         );
       })}
+      <TableRow>
+        <TableCell>{group.name}</TableCell>
+        <TableCell>{sum(cards.map((c) => c.coefficient))}</TableCell>
+        <TableCell>
+          Point:{" "}
+          {sum(cards.map((c) => (c.avg || 0) * c.coefficient)).toFixed(1)} /{" "}
+          {sum(cards.map((c) => 20 * c.coefficient)).toFixed(1)}
+        </TableCell>
+        <TableCell>
+          Moyenne :
+          {(
+            sum(cards.map((c) => c.avg * c.coefficient)) /
+            sum(cards.map((c) => c.coefficient))
+          ).toFixed(2)}
+        </TableCell>
+      </TableRow>
     </>
   );
 }

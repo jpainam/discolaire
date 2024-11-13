@@ -19,6 +19,7 @@
   "dependencies": {
     "@alexandernanberg/react-pdf-renderer": "4.0.0-canary-4",
     "@react-pdf/renderer": "^4.0.0",
+    "@react-pdf/stylesheet": "^5.0.0",
     "@repo/api": "workspace:*",
     "date-fns": "^4.1.0",
     "jose": "^5.9.6",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { MailIcon, MoreVertical } from "lucide-react";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
@@ -24,6 +24,7 @@ export function ReportCardHeader() {
   const { t } = useLocale();
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
+  const params = useParams<{ id: string }>();
   const searchParams = useSearchParams();
   const Icon = sidebarIcons.report_cards;
   return (
@@ -49,7 +50,14 @@ export function ReportCardHeader() {
               <MailIcon className="mr-2 h-4 w-4" />
               {t("notify_parents")}
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                window.open(
+                  `/pdfs/report-cards?studentId=${params.id}&termId=${searchParams.get("term")}`,
+                  "_blank",
+                );
+              }}
+            >
               <PDFIcon className="mr-2 h-4 w-4" />
               {t("pdf_export")}
             </DropdownMenuItem>
