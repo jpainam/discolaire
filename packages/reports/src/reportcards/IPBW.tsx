@@ -6,6 +6,7 @@ import type { RouterOutputs } from "@repo/api";
 import { ReportCardHeader } from "../headers/ReportCardHeader";
 import { Table, TableCell, TableHeader, TableRow } from "../table";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
+import { IPBWSummary } from "./IPBWSummary";
 
 type ReportCardType =
   RouterOutputs["reportCard"]["getStudent"]["result"][number];
@@ -50,6 +51,32 @@ export function IPBW({
           );
         })}
       </Table>
+      <IPBWSummary />
+      <Table
+        style={{
+          marginTop: 10,
+        }}
+        tdStyle={{
+          justifyContent: "center",
+          paddingHorizontal: "4px",
+          fontSize: 10,
+        }}
+      >
+        <TableHeader>
+          <TableCell>Parents</TableCell>
+          <TableCell>Prof. Principal</TableCell>
+          <TableCell>Directeur</TableCell>
+        </TableHeader>
+        <TableRow>
+          <TableCell
+            style={{
+              paddingVertical: 45,
+            }}
+          ></TableCell>
+          <TableCell></TableCell>
+          <TableCell></TableCell>
+        </TableRow>
+      </Table>
     </View>
   );
 }
@@ -72,6 +99,8 @@ function ReportCardGroup({
               style={{
                 flexDirection: "column",
                 display: "flex",
+                gap: 0,
+                paddingTop: -2,
                 alignItems: "flex-start",
               }}
             >
@@ -136,12 +165,12 @@ function ReportCardGroup({
       })}
 
       <TableRow
-        style={{ backgroundColor: "#D7D7D7", fontSize: 9, fontWeight: "bold" }}
+        style={{ backgroundColor: "#D7D7D7", fontSize: 8, fontWeight: "bold" }}
       >
         <TableCell
           style={{
             paddingHorizontal: "4px",
-            paddingVertical: "4px",
+            paddingVertical: "2px",
             borderRight: 0,
           }}
           weighting={0.49}
@@ -195,7 +224,7 @@ export function ReportTableHeader() {
         backgroundColor: "#CCC",
         //color: "#fff",
         fontWeight: "bold",
-        fontSize: 9,
+        fontSize: 8,
       }}
     >
       <TableCell

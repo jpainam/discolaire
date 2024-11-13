@@ -108,7 +108,7 @@ export default function Page() {
             style={{
               paddingVertical: 20,
               paddingHorizontal: 40,
-              fontSize: 8,
+              fontSize: 7,
               backgroundColor: "#fff",
               color: "#000",
               fontFamily: "Geist",
