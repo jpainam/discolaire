@@ -8,10 +8,26 @@ import { Loader2 } from "lucide-react";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { Document, IPBW, Page as Report } from "@repo/reports";
+import { Document, Font, IPBW, Page as Report } from "@repo/reports";
 
 import { useSchool } from "~/contexts/SchoolContext";
 import { api } from "~/trpc/react";
+
+const CDN_URL = "https://discolaire-public.s3.eu-central-1.amazonaws.com";
+
+Font.register({
+  family: "Geist",
+  fonts: [
+    {
+      src: `${CDN_URL}/fonts/Geist/Geist-Regular.ttf`,
+      fontWeight: 400,
+    },
+    {
+      src: `${CDN_URL}/fonts/Geist/Geist-Bold.ttf`,
+      fontWeight: 500,
+    },
+  ],
+});
 
 const PDFViewer = dynamic(
   () => import("@repo/reports").then((mod) => mod.PDFViewer),
@@ -93,6 +109,9 @@ export default function Page() {
               paddingVertical: 20,
               paddingHorizontal: 40,
               fontSize: 8,
+              backgroundColor: "#fff",
+              color: "#000",
+              fontFamily: "Geist",
             }}
           >
             <IPBW school={school} groups={groups} student={student} />

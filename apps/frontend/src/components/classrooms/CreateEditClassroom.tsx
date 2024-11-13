@@ -63,7 +63,7 @@ export function CreateEditClassroom({
       cycleId: classroom?.cycleId?.toString() ?? "",
       reportName: classroom?.reportName ?? "",
       sectionId: classroom?.sectionId?.toString() ?? "",
-      levelId: classroom?.levelId?.toString() ?? "",
+      levelId: classroom?.levelId.toString() ?? "",
       seniorAdvisorId: classroom?.seniorAdvisorId ?? "",
       headTeacherId: classroom?.headTeacherId ?? "",
     },

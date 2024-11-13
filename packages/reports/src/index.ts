@@ -2,6 +2,7 @@
 
 export {
   Document,
+  Font,
   PDFViewer,
   Page,
   Text,

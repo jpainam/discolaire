@@ -26,7 +26,7 @@ export function IPBW({
       <Table
         weightings={[0.4, 0.06, 0.06, 0.06, 0.06, 0.06, 0.1, 0.2]}
         tdStyle={{
-          paddingVertical: "1px",
+          //paddingVertical: "0px",
           paddingHorizontal: "2px",
         }}
       >
@@ -125,7 +125,8 @@ function ReportCardGroup({
             </TableCell>
             <TableCell
               style={{
-                justifyContent: "center",
+                textTransform: "uppercase",
+                //justifyContent: "center",
               }}
             >
               Moyen
@@ -133,27 +134,49 @@ function ReportCardGroup({
           </TableRow>
         );
       })}
+
       <TableRow
         style={{ backgroundColor: "#D7D7D7", fontSize: 9, fontWeight: "bold" }}
       >
         <TableCell
           style={{
-            paddingHorizontal: "5px",
+            paddingHorizontal: "4px",
             paddingVertical: "4px",
+            borderRight: 0,
           }}
-          weighting={0.46}
+          weighting={0.49}
         >
           {group.name}
         </TableCell>
-        <TableCell weighting={0.06}>
+        <TableCell
+          style={{
+            justifyContent: "center",
+            borderLeft: 0,
+            borderRight: 0,
+          }}
+          weighting={0.06}
+        >
           {sum(cards.map((c) => c.coefficient))}
         </TableCell>
-        <TableCell weighting={0.34}>
+        <TableCell
+          style={{
+            justifyContent: "center",
+            borderLeft: 0,
+            borderRight: 0,
+          }}
+          weighting={0.34}
+        >
           Point:{" "}
           {sum(cards.map((c) => (c.avg || 0) * c.coefficient)).toFixed(1)} /
           {sum(cards.map((c) => 20 * c.coefficient)).toFixed(1)}
         </TableCell>
-        <TableCell weighting={0.2}>
+        <TableCell
+          style={{
+            justifyContent: "center",
+            borderLeft: 0,
+          }}
+          weighting={0.2}
+        >
           Moyenne :
           {(
             sum(cards.map((c) => c.avg * c.coefficient)) /

@@ -12,17 +12,17 @@ import type { RouterOutputs } from "@repo/api";
 
 import { LineItems } from "./LineItems";
 
-const CDN_URL = "https://cdn.midday.ai";
+const CDN_URL = "https://discolaire-public.s3.eu-central-1.amazonaws.com";
 
 Font.register({
-  family: "GeistMono",
+  family: "Geist",
   fonts: [
     {
-      src: `${CDN_URL}/fonts/GeistMono/ttf/GeistMono-Regular.ttf`,
+      src: `${CDN_URL}/fonts/Geist/Geist-Regular.ttf`,
       fontWeight: 400,
     },
     {
-      src: `${CDN_URL}/fonts/GeistMono/ttf/GeistMono-Medium.ttf`,
+      src: `${CDN_URL}/fonts/Geist/Geist-Medium.ttf`,
       fontWeight: 500,
     },
   ],
