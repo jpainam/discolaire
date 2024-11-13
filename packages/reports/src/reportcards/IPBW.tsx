@@ -196,7 +196,7 @@ function ReportCardGroup({
           weighting={0.34}
         >
           Point:{" "}
-          {sum(cards.map((c) => (c.avg || 0) * c.coefficient)).toFixed(1)} /
+          {sum(cards.map((c) => (c.avg || 0) * c.coefficient)).toFixed(1)}/
           {sum(cards.map((c) => 20 * c.coefficient)).toFixed(1)}
         </TableCell>
         <TableCell
