@@ -19,21 +19,13 @@ export function IPBW({
     <>
       <ReportCardHeader school={school} />
       <Table
-        weightings={[0.4, 0.06, 0.06, 0.06, 0.06, 0.1, 0.1, 0.1]}
+        weightings={[0.4, 0.06, 0.06, 0.06, 0.06, 0.06, 0.1, 0.2]}
         tdStyle={{
           paddingVertical: "1px",
           paddingHorizontal: "2px",
         }}
       >
-        <TableHeader style={{ backgroundColor: "#CCC", fontWeight: "bold" }}>
-          <TableCell>Matieres</TableCell>
-          <TableCell>Note</TableCell>
-          <TableCell>Coef.</TableCell>
-          <TableCell>Total</TableCell>
-          <TableCell>Rang</TableCell>
-          <TableCell>Min/Max</TableCell>
-          <TableCell>Appreciation</TableCell>
-        </TableHeader>
+        <ReportTableHeader />
         {Object.keys(groups).map((groupId: string) => {
           let cards = groups[Number(groupId)];
           if (!cards || cards.length == 0) return null;
@@ -78,7 +70,7 @@ function ReportCardGroup({
                 alignItems: "flex-start",
               }}
             >
-              <Text style={{ fontWeight: "semibold" }}>{card.course.name}</Text>
+              <Text style={{ fontWeight: "bold" }}>{card.course.name}</Text>
               <Text style={{ paddingLeft: "8px" }}>
                 {card.teacher?.prefix} {card.teacher?.lastName}
               </Text>
@@ -124,21 +116,39 @@ function ReportCardGroup({
                 justifyContent: "center",
               }}
             >
-              {card.classroom.min.toFixed(2)} / {card.classroom.max.toFixed(2)}
+              {card.classroom.min.toFixed(2)}/{card.classroom.max.toFixed(2)}
             </TableCell>
-            <TableCell>Moyen</TableCell>
+            <TableCell
+              style={{
+                justifyContent: "center",
+              }}
+            >
+              Moyen
+            </TableCell>
           </TableRow>
         );
       })}
-      <TableRow>
-        <TableCell>{group.name}</TableCell>
-        <TableCell>{sum(cards.map((c) => c.coefficient))}</TableCell>
-        <TableCell>
+      <TableRow
+        style={{ backgroundColor: "#D7D7D7", fontSize: 9, fontWeight: "bold" }}
+      >
+        <TableCell
+          style={{
+            paddingHorizontal: "5px",
+            paddingVertical: "4px",
+          }}
+          weighting={0.46}
+        >
+          {group.name}
+        </TableCell>
+        <TableCell weighting={0.06}>
+          {sum(cards.map((c) => c.coefficient))}
+        </TableCell>
+        <TableCell weighting={0.3}>
           Point:{" "}
-          {sum(cards.map((c) => (c.avg || 0) * c.coefficient)).toFixed(1)} /{" "}
+          {sum(cards.map((c) => (c.avg || 0) * c.coefficient)).toFixed(1)} /
           {sum(cards.map((c) => 20 * c.coefficient)).toFixed(1)}
         </TableCell>
-        <TableCell>
+        <TableCell weighting={0.214}>
           Moyenne :
           {(
             sum(cards.map((c) => c.avg * c.coefficient)) /
@@ -147,5 +157,84 @@ function ReportCardGroup({
         </TableCell>
       </TableRow>
     </>
+  );
+}
+
+export function ReportTableHeader() {
+  return (
+    <TableHeader
+      style={{
+        backgroundColor: "#CCC",
+        //color: "#fff",
+        fontWeight: "bold",
+        fontSize: 9,
+      }}
+    >
+      <TableCell
+        style={{
+          paddingHorizontal: "2px",
+          paddingVertical: "4px",
+          fontWeight: "bold",
+        }}
+      >
+        Matieres
+      </TableCell>
+      <TableCell
+        style={{
+          justifyContent: "center",
+          padding: "2px",
+        }}
+      >
+        Note
+      </TableCell>
+      <TableCell
+        style={{
+          justifyContent: "center",
+          padding: "2px",
+        }}
+      >
+        Coef.
+      </TableCell>
+      <TableCell
+        style={{
+          justifyContent: "center",
+          padding: "2px",
+        }}
+      >
+        Total
+      </TableCell>
+      <TableCell
+        style={{
+          justifyContent: "center",
+          padding: "2px",
+        }}
+      >
+        Rang
+      </TableCell>
+      <TableCell
+        style={{
+          justifyContent: "center",
+          padding: "2px",
+        }}
+      >
+        Moy.C
+      </TableCell>
+      <TableCell
+        style={{
+          justifyContent: "center",
+          padding: "2px",
+        }}
+      >
+        Min/Max
+      </TableCell>
+      <TableCell
+        style={{
+          justifyContent: "center",
+          padding: "2px",
+        }}
+      >
+        Appreciation
+      </TableCell>
+    </TableHeader>
   );
 }

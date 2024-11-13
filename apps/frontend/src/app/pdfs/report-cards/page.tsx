@@ -87,9 +87,9 @@ export default function Page() {
           <Report
             size={"A4"}
             style={{
-              padding: 40,
-              fontSize: 9,
-              paddingTop: 32,
+              paddingVertical: 20,
+              paddingHorizontal: 40,
+              fontSize: 8,
             }}
           >
             <IPBW school={school} groups={groups} />

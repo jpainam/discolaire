@@ -16,7 +16,13 @@ export function ReportCardHeader({
         alignItems: "flex-start",
       }}
     >
-      <View style={{ flexDirection: "column" }}>
+      <View
+        style={{
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <Text>MINESEC/DRES</Text>
         <Text>DEDES-MAF</Text>
         <Text style={{ fontWeight: "bold" }}>{school.name}</Text>
@@ -28,12 +34,18 @@ export function ReportCardHeader({
         <Image
           src={school.logo}
           style={{
-            width: 78,
+            width: 125,
             height: 78,
           }}
         />
       )}
-      <View style={{ flexDirection: "column" }}>
+      <View
+        style={{
+          flexDirection: "column",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
         <Text>Republic of Cameroon</Text>
         <Text>Peace - Work - Fatherland</Text>
         <Text>********************</Text>
