@@ -1,5 +1,6 @@
 import { db } from "@repo/db";
 
+import { classroomService } from "./classroom-service";
 import { userService } from "./user-service";
 
 export const studentService = {
@@ -24,8 +25,8 @@ export const studentService = {
       },
     });
   },
-  getClassroom: (studentId: string, schoolYearId: string) => {
-    return db.classroom.findFirst({
+  getClassroom: async (studentId: string, schoolYearId: string) => {
+    const classroom = await db.classroom.findFirst({
       where: {
         enrollments: {
           some: {
@@ -35,6 +36,10 @@ export const studentService = {
         },
       },
     });
+    if (!classroom) {
+      return null;
+    }
+    return classroomService.get(classroom.id, classroom.schoolId);
   },
   addClubs: async (studentId: string, clubs: string[]) => {
     const studentClubs = clubs.map((clubId) => {

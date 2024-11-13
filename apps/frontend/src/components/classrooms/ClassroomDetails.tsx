@@ -74,7 +74,7 @@ export async function ClassroomDetails({
             {t("level")}
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-            {classroom.level?.name}
+            {classroom.level.name}
           </span>
         </li>
         <li className="flex items-center justify-between">

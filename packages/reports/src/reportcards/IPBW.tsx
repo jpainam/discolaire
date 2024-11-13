@@ -1,23 +1,28 @@
-import { Text } from "@alexandernanberg/react-pdf-renderer";
+import { Text, View } from "@alexandernanberg/react-pdf-renderer";
 import { sortBy, sum } from "lodash";
 
 import type { RouterOutputs } from "@repo/api";
 
 import { ReportCardHeader } from "../headers/ReportCardHeader";
 import { Table, TableCell, TableHeader, TableRow } from "../table";
+import { IPBWStudentInfo } from "./IPBWStudentInfo";
 
 type ReportCardType =
   RouterOutputs["reportCard"]["getStudent"]["result"][number];
 export function IPBW({
   school,
+  student,
   groups,
 }: {
   groups: Record<number, ReportCardType[]>;
+  student: RouterOutputs["student"]["get"];
+
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
 }) {
   return (
-    <>
+    <View style={{ flexDirection: "column" }}>
       <ReportCardHeader school={school} />
+      <IPBWStudentInfo student={student} />
       <Table
         weightings={[0.4, 0.06, 0.06, 0.06, 0.06, 0.06, 0.1, 0.2]}
         tdStyle={{
@@ -45,7 +50,7 @@ export function IPBW({
           );
         })}
       </Table>
-    </>
+    </View>
   );
 }
 
@@ -143,12 +148,12 @@ function ReportCardGroup({
         <TableCell weighting={0.06}>
           {sum(cards.map((c) => c.coefficient))}
         </TableCell>
-        <TableCell weighting={0.3}>
+        <TableCell weighting={0.34}>
           Point:{" "}
           {sum(cards.map((c) => (c.avg || 0) * c.coefficient)).toFixed(1)} /
           {sum(cards.map((c) => 20 * c.coefficient)).toFixed(1)}
         </TableCell>
-        <TableCell weighting={0.214}>
+        <TableCell weighting={0.2}>
           Moyenne :
           {(
             sum(cards.map((c) => c.avg * c.coefficient)) /

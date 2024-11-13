@@ -42,6 +42,7 @@ export default function Page() {
     studentId: result.studentId,
     termId: result.termId,
   });
+  const studentQuery = api.student.get.useQuery(result.studentId);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -51,7 +52,7 @@ export default function Page() {
   if (!isClient) {
     return <Loader2 className="animate-spin" />;
   }
-  if (dataQuery.isPending) {
+  if (dataQuery.isPending || studentQuery.isPending) {
     return <div>Loading...</div>;
   }
 
@@ -80,6 +81,8 @@ export default function Page() {
 
   const average = points / (totalCoeff || 1e9);
   console.log(average);
+  const student = studentQuery.data;
+  if (!student) return null;
   return (
     <div>
       <PDFViewer className="h-svh w-full">
@@ -92,7 +95,7 @@ export default function Page() {
               fontSize: 8,
             }}
           >
-            <IPBW school={school} groups={groups} />
+            <IPBW school={school} groups={groups} student={student} />
           </Report>
         </Document>
       </PDFViewer>

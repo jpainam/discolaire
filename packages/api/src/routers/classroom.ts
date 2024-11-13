@@ -82,26 +82,7 @@ export const classroomRouter = createTRPCRouter({
       });
     }),
   get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    const classroom = await ctx.db.classroom.findUnique({
-      where: {
-        id: input,
-      },
-      include: {
-        level: true,
-        cycle: true,
-        section: true,
-        classroomLeader: true,
-        headTeacher: true,
-        seniorAdvisor: true,
-      },
-    });
-    const count = await classroomService.getCount(input);
-    return {
-      ...classroom,
-      femaleCount: count.female,
-      maleCount: count.male,
-      size: count.size,
-    };
+    return classroomService.get(input, ctx.schoolId);
   }),
   students: protectedProcedure
     .input(z.string().min(1))
