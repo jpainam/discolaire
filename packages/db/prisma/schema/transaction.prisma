@@ -1,0 +1,7 @@
+model TransactionSummarySchedule {
+    id       Int    @id @default(autoincrement())
+    staffId  String
+    staff    Staff  @relation(fields: [staffId], references: [id], onDelete: Cascade)
+    timezone String
+    cron     String
+}

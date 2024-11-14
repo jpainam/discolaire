@@ -23,6 +23,7 @@
     "@repo/db": "workspace:*",
     "@repo/hooks": "workspace:*",
     "@repo/i18n": "workspace:*",
+    "@repo/jobs": "workspace:*",
     "@repo/lib": "workspace:*",
     "@repo/reports": "workspace:*",
     "@repo/transactional": "workspace:*",

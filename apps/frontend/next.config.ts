@@ -11,6 +11,7 @@ const config = {
     "@repo/hooks",
     "@repo/i18n",
     "@repo/lib",
+    "@repo/jobs",
     "@repo/reports",
     "@repo/transactional",
     "@repo/ui",

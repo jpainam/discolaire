@@ -1,14 +1,14 @@
 {
-    "anglais": "English",
-    "transactions.preview": "Preview",
-    "transactions.title1": "Vous avez",
-    "transactions": "Transactions",
-    "date": "Date",
-    "amount": "Amount",
-    "footer.slogan": "Une gestion scolaire simplifiée",
-    "transactions.view": "Voir les transactions",
-    "description": "Description",
-    "transactions.title2": "{{count}} nouvelles transactions",
-    "transactions.title3": "Bonjour/Bonsoir {{firstName}}",
-    "transactions.description": "Veuillez trouver ci-dessous le résumé des transactions financières effectuées ce {{date}} pour {{schoolName}}"
+  "anglais": "English",
+  "transactions.preview": "Preview",
+  "transactions.title1": "Vous avez",
+  "transactions": "Transactions",
+  "date": "Date",
+  "amount": "Amount",
+  "footer.slogan": "Une gestion scolaire simplifiée",
+  "transactions.view": "Voir les transactions",
+  "description": "Description",
+  "transactions.title2": "{{count}} nouvelles transactions",
+  "transactions.title3": "Bonjour/Bonsoir {{firstName}}",
+  "transactions.description": "Veuillez trouver ci-dessous le résumé des transactions financières effectuées ce {{date}} pour {{schoolName}}"
 }

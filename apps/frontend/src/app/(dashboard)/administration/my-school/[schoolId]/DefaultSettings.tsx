@@ -37,11 +37,14 @@ const defaultSettingsSchema = z.object({
   includeRequiredFee: z.boolean(),
   numberOfReceipts: z.coerce.number().min(1),
   currency: z.string().min(1).default("FCFA"),
+  timezone: z.string().min(1).default("UTC"),
 });
 export function DefaultSettings({
   school,
+  timezones,
 }: {
   school: NonNullable<RouterOutputs["school"]["get"]>;
+  timezones: string[];
 }) {
   const { t } = useLocale();
   const params = useParams<{ schoolId: string }>();
@@ -54,6 +57,7 @@ export function DefaultSettings({
       includeRequiredFee: school.includeRequiredFee ?? false,
       numberOfReceipts: school.numberOfReceipts ?? 1,
       currency: school.currency,
+      timezone: school.timezone,
     },
   });
   const router = useRouter();
@@ -88,6 +92,31 @@ export function DefaultSettings({
                 <FormLabel>{t("default_country")}</FormLabel>
                 <FormControl>
                   <CountryPicker placeholder={t("country")} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="timezone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("timezones")}</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={t("timezones")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {timezones.map((timezone) => (
+                        <SelectItem value={timezone}>{timezone}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -113,6 +113,10 @@ export function AppSidebar() {
             icon: BoxesIcon,
             description: "The most powerful model for complex computations.",
           },
+          {
+            title: t("settings"),
+            url: "/administration/accounting/settings",
+          },
         ],
       },
       {

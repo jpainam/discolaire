@@ -15,6 +15,7 @@ import {
 
 import { auth } from "@repo/auth";
 import { getServerTranslations } from "@repo/i18n/server";
+import { schedules } from "@repo/jobs";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { NoPermission } from "@repo/ui/no-permission";
@@ -46,6 +47,7 @@ export default async function Page(props: {
   ) {
     return <NoPermission />;
   }
+  const { timezones } = await schedules.timezones();
   const { t } = await getServerTranslations();
   return (
     <div className="flex flex-col gap-2 p-2 text-sm">
@@ -140,7 +142,7 @@ export default async function Page(props: {
           <CardTitle>{t("default_settings")}</CardTitle>
         </CardHeader>
         <CardContent className="p-4">
-          <DefaultSettings school={school} />
+          <DefaultSettings school={school} timezones={timezones} />
         </CardContent>
       </Card>
     </div>

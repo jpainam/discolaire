@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server";
-import { subDays } from "date-fns";
+import { subDays, subMonths } from "date-fns";
 import { z } from "zod";
 
 import { transactionService } from "../services/transaction-service";
@@ -28,7 +28,7 @@ export const transactionRouter = createTRPCRouter({
   all: protectedProcedure
     .input(
       z.object({
-        from: z.coerce.date().optional().default(subDays(new Date(), 7)),
+        from: z.coerce.date().optional().default(subMonths(new Date(), 3)),
         to: z.coerce.date().optional().default(new Date()),
         status: z.string().optional(),
       }),

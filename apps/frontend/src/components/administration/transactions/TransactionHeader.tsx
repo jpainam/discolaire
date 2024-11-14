@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { format, subMonths } from "date-fns";
 import { MoreVertical } from "lucide-react";
-import { useQueryState } from "nuqs";
 
+import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import {
@@ -12,90 +13,60 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
-import FlatBadge from "@repo/ui/FlatBadge";
+import { Input } from "@repo/ui/input";
 import { Label } from "@repo/ui/label";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
-import { DateRangePicker } from "~/components/shared/DateRangePicker";
 import { TransactionStatusSelector } from "~/components/shared/selects/TransactionStatusSelector";
-import { api } from "~/trpc/react";
-import { useMoneyFormat } from "../../../utils/money-format";
+import { useRouter } from "~/hooks/use-router";
 import { SidebarTrigger } from "../sidebar";
 
 export function TransactionHeader() {
-  const [status, setStatus] = useQueryState("status");
-  const [from, setFrom] = useQueryState("from");
-  const [to, setTo] = useQueryState("to");
+  const searchParams = useSearchParams();
+  const from = searchParams.get("from");
+  const to = searchParams.get("to");
   const { t } = useLocale();
-  const [totals, setTotals] = useState(0);
-  const [validated, setValidated] = useState(0);
-  const [cancelled, setCancelled] = useState(0);
 
-  const transactionsQuery = api.transaction.all.useQuery({
-    status: status ?? undefined,
-    from: from ? new Date(from) : undefined,
-    to: to ? new Date(to) : undefined,
-  });
-
-  useEffect(() => {
-    if (!transactionsQuery.data) return;
-    const transactions = transactionsQuery.data;
-    setTotals(transactions.reduce((acc, curr) => acc + curr.amount, 0));
-    setValidated(
-      transactions.reduce(
-        (acc, curr) => acc + (curr.status == "VALIDATED" ? curr.amount : 0),
-        0,
-      ),
-    );
-    setCancelled(
-      transactions.reduce(
-        (acc, curr) => acc + (curr.status == "CANCELLED" ? curr.amount : 0),
-        0,
-      ),
-    );
-  }, [from, to, transactionsQuery.data]);
-  const { moneyFormatter } = useMoneyFormat();
+  const router = useRouter();
+  const { createQueryString } = useCreateQueryString();
 
   return (
-    <div className="flex flex-row items-center gap-2 p-2">
+    <div className="flex flex-row items-center gap-2 px-2 pt-4">
       <SidebarTrigger />
-      <Label> {t("date")}</Label>
-      <DateRangePicker
-        from={from ? new Date(from) : undefined}
-        to={to ? new Date(to) : undefined}
-        onChange={(val) => {
-          if (val) {
-            const dateRange = val;
-            void setFrom(dateRange.from?.toISOString() ?? null);
-            void setTo(dateRange.to?.toISOString() ?? null);
+
+      <div className="flex flex-col gap-1">
+        <Label className="hidden md:block"> {t("from")}</Label>
+        <Input
+          type="date"
+          defaultValue={
+            from ? from : format(subMonths(new Date(), 3), "yyyy-MM-dd")
           }
-        }}
-      />
-      <Label>{t("status")}</Label>
-      <TransactionStatusSelector
-        onChange={(val) => {
-          void setStatus(val);
-        }}
-      />
+          onChange={(val) => {
+            router.push(`?${createQueryString({ from: val.target.value })}`);
+          }}
+        />
+      </div>
+      <div className="flex flex-col gap-1">
+        <Label className="hidden md:block">{t("to")}</Label>
+        <Input
+          type="date"
+          defaultValue={to ? to : format(new Date(), "yyyy-MM-dd")}
+          min={from ? from : format(subMonths(new Date(), 3), "yyyy-MM-dd")}
+          onChange={(val) => {
+            router.push(`?${createQueryString({ to: val.target.value })}`);
+          }}
+        />
+      </div>
+      <div className="flex flex-col gap-1">
+        <Label>{t("status")}</Label>
+        <TransactionStatusSelector
+          onChange={(val) => {
+            router.push(`?${createQueryString({ status: val })}`);
+          }}
+        />
+      </div>
 
-      {/* {from ||
-        (to && (
-          <Label>
-            {from && fullDateFormatter.format(new Date(from))} -{" "}
-            {to && fullDateFormatter.format(new Date(to))}
-          </Label>
-        ))} */}
-
-      <FlatBadge variant={"indigo"}>
-        {t("totals")} : {moneyFormatter.format(totals)}
-      </FlatBadge>
-      <FlatBadge variant={"green"}>
-        {t("validated")} : {moneyFormatter.format(validated)}
-      </FlatBadge>
-      <FlatBadge variant={"red"}>
-        {t("cancelled")} : {moneyFormatter.format(cancelled)}
-      </FlatBadge>
       <div className="ml-auto">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
