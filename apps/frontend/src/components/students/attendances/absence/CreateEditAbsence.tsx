@@ -135,6 +135,7 @@ export function CreateEditAbsence({
             }}
             variant={"outline"}
             size={"sm"}
+            type={"button"}
           >
             {t("cancel")}
           </Button>

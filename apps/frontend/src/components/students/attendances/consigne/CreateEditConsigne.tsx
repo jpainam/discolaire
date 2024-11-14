@@ -195,6 +195,7 @@ export function CreateEditConsigne({
             }}
             variant={"outline"}
             size={"sm"}
+            type={"button"}
           >
             {t("cancel")}
           </Button>

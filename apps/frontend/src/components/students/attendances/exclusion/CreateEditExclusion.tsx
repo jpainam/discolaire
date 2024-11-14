@@ -148,6 +148,7 @@ export function CreateEditExclusion({
             }}
             variant={"outline"}
             size={"sm"}
+            type={"button"}
           >
             {t("cancel")}
           </Button>

@@ -178,6 +178,7 @@ export function CreateEditLateness({
             }}
             variant={"outline"}
             size={"sm"}
+            type={"button"}
           >
             {t("cancel")}
           </Button>

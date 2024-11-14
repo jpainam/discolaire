@@ -135,6 +135,7 @@ export function CreateEditChatter({
             }}
             variant={"outline"}
             size={"sm"}
+            type={"button"}
           >
             {t("cancel")}
           </Button>

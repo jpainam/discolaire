@@ -18,6 +18,31 @@ export const latenessRouter = createTRPCRouter({
       },
     });
   }),
+  byStudent: protectedProcedure
+    .input(
+      z.object({
+        studentId: z.string().min(1),
+        termId: z.coerce.number().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.lateness.findMany({
+        orderBy: {
+          date: "desc",
+        },
+        include: {
+          justification: true,
+        },
+        where: {
+          studentId: input.studentId,
+          term: {
+            ...(input.termId && { id: input.termId }),
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
+        },
+      });
+    }),
   create: protectedProcedure
     .input(
       z.object({

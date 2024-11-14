@@ -18,6 +18,28 @@ export const chatterRouter = createTRPCRouter({
       },
     });
   }),
+  byStudent: protectedProcedure
+    .input(
+      z.object({
+        studentId: z.string().min(1),
+        termId: z.number().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.chatter.findMany({
+        orderBy: {
+          date: "desc",
+        },
+        where: {
+          studentId: input.studentId,
+          term: {
+            ...(input.termId && { id: input.termId }),
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
+        },
+      });
+    }),
   create: protectedProcedure
     .input(
       z.object({
