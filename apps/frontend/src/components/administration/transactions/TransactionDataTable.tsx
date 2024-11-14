@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
+import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
 
 import { api } from "~/trpc/react";
@@ -49,6 +50,10 @@ export function TransactionDataTable() {
       transactionsCountQuery.error?.message ?? transactionsQuery.error?.message,
     );
     return;
+  }
+
+  if (transactionsQuery.isPending) {
+    return <DataTableSkeleton rowCount={10} columnCount={6} />;
   }
 
   return (
