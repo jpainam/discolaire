@@ -1,5 +1,6 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { subMonths } from "date-fns";
+import { fromZonedTime } from "date-fns-tz";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
@@ -117,6 +118,9 @@ export const staffRouter = {
       const staff = await ctx.db.staff.create({
         data: {
           ...input,
+          dateOfBirth: input.dateOfBirth
+            ? fromZonedTime(input.dateOfBirth, "UTC")
+            : undefined,
           schoolId: ctx.schoolId,
         },
       });
@@ -150,7 +154,12 @@ export const staffRouter = {
         where: {
           id: id,
         },
-        data: data,
+        data: {
+          ...data,
+          dateOfBirth: data.dateOfBirth
+            ? fromZonedTime(data.dateOfBirth, "UTC")
+            : undefined,
+        },
       });
     }),
   count: protectedProcedure

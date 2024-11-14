@@ -1,6 +1,7 @@
 "use client";
 
 import type { z } from "zod";
+import { toZonedTime } from "date-fns-tz";
 import { SaveIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
 
@@ -29,7 +30,9 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
       registrationNumber: student.registrationNumber ?? "",
       firstName: student.firstName ?? "",
       lastName: student.lastName ?? "",
-      dateOfBirth: student.dateOfBirth ?? new Date(),
+      dateOfBirth: student.dateOfBirth
+        ? toZonedTime(student.dateOfBirth, "UTC")
+        : new Date(),
       placeOfBirth: student.placeOfBirth ?? "",
       gender: student.gender ?? "male",
       residence: student.residence ?? "",
@@ -39,8 +42,12 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
       isNew: student.isNew,
       sunPlusNo: student.sunPlusNo ?? "",
       countryId: student.countryId ?? "",
-      dateOfExit: student.dateOfExit ?? undefined,
-      dateOfEntry: student.dateOfEntry ?? new Date(),
+      dateOfExit: student.dateOfExit
+        ? toZonedTime(student.dateOfExit, "UTC")
+        : undefined,
+      dateOfEntry: student.dateOfEntry
+        ? toZonedTime(student.dateOfEntry, "UTC")
+        : new Date(),
       formerSchoolId: student.formerSchoolId ?? "",
       observation: student.observation ?? "",
       religionId: student.religionId ?? "",

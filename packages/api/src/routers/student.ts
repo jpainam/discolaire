@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { subMonths } from "date-fns";
+import { fromZonedTime } from "date-fns-tz";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
@@ -136,7 +137,7 @@ export const studentRouter = createTRPCRouter({
           registrationNumber: registrationNumber,
           firstName: input.firstName,
           lastName: input.lastName,
-          dateOfBirth: input.dateOfBirth,
+          dateOfBirth: fromZonedTime(input.dateOfBirth, "UTC"),
           placeOfBirth: input.placeOfBirth,
           gender: input.gender,
           email: input.email,
@@ -149,8 +150,12 @@ export const studentRouter = createTRPCRouter({
           countryId: input.countryId,
           isBaptized: input.isBaptized,
           religionId: input.religionId,
-          dateOfEntry: input.dateOfEntry,
-          dateOfExit: input.dateOfEntry,
+          dateOfEntry: input.dateOfEntry
+            ? fromZonedTime(input.dateOfEntry, "UTC")
+            : undefined,
+          dateOfExit: input.dateOfExit
+            ? fromZonedTime(input.dateOfExit, "UTC")
+            : undefined,
           tags: input.tags,
           observation: input.observation,
           status: input.status,
@@ -225,7 +230,7 @@ export const studentRouter = createTRPCRouter({
           registrationNumber: input.registrationNumber,
           firstName: input.firstName,
           lastName: input.lastName,
-          dateOfBirth: input.dateOfBirth,
+          dateOfBirth: fromZonedTime(input.dateOfBirth, "UTC"),
           placeOfBirth: input.placeOfBirth,
           gender: input.gender,
           email: input.email,
@@ -238,8 +243,12 @@ export const studentRouter = createTRPCRouter({
           countryId: input.countryId,
           isBaptized: input.isBaptized,
           religionId: input.religionId,
-          dateOfEntry: input.dateOfEntry,
-          dateOfExit: input.dateOfEntry,
+          dateOfEntry: input.dateOfEntry
+            ? fromZonedTime(input.dateOfEntry, "UTC")
+            : undefined,
+          dateOfExit: input.dateOfExit
+            ? fromZonedTime(input.dateOfExit, "UTC")
+            : undefined,
           tags: input.tags,
           observation: input.observation,
           status: input.status,

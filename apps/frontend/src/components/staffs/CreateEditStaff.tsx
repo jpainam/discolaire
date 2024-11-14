@@ -1,6 +1,7 @@
 "use client";
 
 import { subMonths } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -85,7 +86,9 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
       sendAgendaFrequency: staff?.sendAgendaFrequency ?? "",
       dateOfLastAdvancement: staff?.dateOfLastAdvancement ?? new Date(),
       isTeacher: staff?.isTeacher ? "yes" : "no",
-      dateOfBirth: staff?.dateOfBirth ?? subMonths(new Date(), 100),
+      dateOfBirth: staff?.dateOfBirth
+        ? toZonedTime(staff.dateOfBirth, "UTC")
+        : subMonths(new Date(), 100),
     },
   });
   const { t } = useLocale();
