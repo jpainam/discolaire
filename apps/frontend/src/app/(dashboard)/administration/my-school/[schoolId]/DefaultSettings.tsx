@@ -79,7 +79,7 @@ export function DefaultSettings({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
           <FormField
             control={form.control}
             name="defaultCountryId"

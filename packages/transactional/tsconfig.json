@@ -4,6 +4,6 @@
     "strict": true,
     "jsx": "react-jsx"
   },
-  "include": ["*.ts", "src", "emails"],
+  "include": ["*.ts", "src", "emails", "components"],
   "exclude": ["node_modules", "build", "dist"]
 }

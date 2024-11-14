@@ -30,7 +30,7 @@ export async function StaffProfile({ staffId }: { staffId: string }) {
             avatar={staff.avatar}
             pos={getFullName(staff).length}
           />
-          <StaffProfileHeader />
+          <StaffProfileHeader staff={staff} />
         </CardHeader>
         <CardContent className="p-2 text-sm">
           <div className="grid gap-2">
@@ -43,6 +43,26 @@ export async function StaffProfile({ staffId }: { staffId: string }) {
               <li className="flex items-center justify-between">
                 <span className="text-muted-foreground">{t("firstName")}</span>
                 <span>{getFullName(staff)}</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span className="text-muted-foreground">{t("email")}</span>
+                <span>{staff.email}</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span className="text-muted-foreground">
+                  {t("phoneNumber")} 1
+                </span>
+                <span>
+                  <a href="tel:">{staff.phoneNumber1}</a>
+                </span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span className="text-muted-foreground">
+                  {t("phoneNumber")} 2{" "}
+                </span>
+                <span>
+                  <a href="tel:">{staff.phoneNumber2}</a>
+                </span>
               </li>
             </ul>
             <Separator className="my-2" />
@@ -74,31 +94,18 @@ export async function StaffProfile({ staffId }: { staffId: string }) {
           <div className="grid gap-2">
             <div className="font-semibold">{t("otherInformation")}</div>
             <dl className="grid gap-2">
-              <div className="flex items-center justify-between">
+              {/* <div className="flex items-center justify-between">
                 <dt className="text-muted-foreground">{t("email")}</dt>
                 <dd>
                   {staff.dateOfBirth && dateFormatter.format(staff.dateOfBirth)}
                 </dd>
-              </div>
+              </div> */}
               <div className="flex items-center justify-between">
                 <dt className="text-muted-foreground">{t("dateOfHire")}</dt>
                 <dd>
                   {staff.dateOfHire &&
                     dateFormatter.format(new Date(staff.dateOfHire))}
                   {!staff.dateOfHire && "N/A"}
-                </dd>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <dt className="text-muted-foreground">{t("phoneNumber")} 1</dt>
-                <dd>
-                  <a href="tel:">{staff.phoneNumber1}</a>
-                </dd>
-              </div>
-              <div className="flex items-center justify-between">
-                <dt className="text-muted-foreground">{t("phoneNumber")} 2 </dt>
-                <dd>
-                  <a href="tel:">{staff.phoneNumber2}</a>
                 </dd>
               </div>
             </dl>

@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
@@ -34,7 +35,11 @@ import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { CreateEditStaff } from "../CreateEditStaff";
 
-export function StaffProfileHeader() {
+export function StaffProfileHeader({
+  staff,
+}: {
+  staff: NonNullable<RouterOutputs["staff"]["get"]>;
+}) {
   const confirm = useConfirm();
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
@@ -52,8 +57,8 @@ export function StaffProfileHeader() {
       toast.error(error.message, { id: 0 });
     },
   });
-  const staffQuery = api.staff.get.useQuery(params.id);
-  const staff = staffQuery.data;
+  // const staffQuery = api.staff.get.useQuery(params.id);
+  // const staff = staffQuery.data;
   const { openModal } = useModal();
   const { openSheet } = useSheet();
   return (
@@ -69,7 +74,6 @@ export function StaffProfileHeader() {
           <DropdownMenuContent align="end">
             <DropdownMenuItem
               onSelect={() => {
-                if (!staff) return;
                 openSheet({
                   view: <CreateEditStaff staff={staff} />,
                   title: t("edit_staff"),
@@ -82,7 +86,7 @@ export function StaffProfileHeader() {
               {t("edit")}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            {staff && !staff.userId && (
+            {!staff.userId && (
               <DropdownMenuItem
                 onSelect={() => {
                   openModal({
@@ -96,7 +100,7 @@ export function StaffProfileHeader() {
                 {t("attach_user")}
               </DropdownMenuItem>
             )}
-            {staff?.userId && (
+            {staff.userId && (
               <DropdownMenuItem
                 onSelect={() => {
                   if (!staff.userId) return;
@@ -119,7 +123,7 @@ export function StaffProfileHeader() {
                 {t("change_password")}
               </DropdownMenuItem>
             )}
-            <DropdownInvitation />
+            <DropdownInvitation email={staff.email} />
             <DropdownHelp />
             <DropdownMenuSeparator />
             <DropdownMenuItem
