@@ -24,7 +24,7 @@ export function TransactionDataTable() {
     from: from ?? undefined,
     to: to ?? undefined,
   });
-  const transactionsCountQuery = api.transaction.count.useQuery();
+  //const transactionsCountQuery = api.transaction.count.useQuery();
 
   const { t } = useLocale();
 
@@ -41,14 +41,11 @@ export function TransactionDataTable() {
   const { table } = useDataTable({
     data: transactionsQuery.data ?? [],
     columns: columns,
-    rowCount:
-      transactionsCountQuery.data ?? transactionsQuery.data?.length ?? 0,
+    rowCount: transactionsQuery.data?.length ?? 0,
   });
 
-  if (transactionsQuery.isError || transactionsCountQuery.isError) {
-    toast.error(
-      transactionsCountQuery.error?.message ?? transactionsQuery.error?.message,
-    );
+  if (transactionsQuery.isError) {
+    toast.error(transactionsQuery.error.message);
     return;
   }
 
