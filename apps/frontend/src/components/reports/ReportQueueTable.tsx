@@ -78,7 +78,7 @@ export function ReportQueueTable({ reports }: { reports: ReportQueue[] }) {
                         ? "yellow"
                         : rep.status == "COMPLETED"
                           ? "green"
-                          : rep.status == "CANCELLED"
+                          : rep.status == "CANCELED"
                             ? "purple"
                             : "red"
                     }
@@ -87,7 +87,7 @@ export function ReportQueueTable({ reports }: { reports: ReportQueue[] }) {
                       <ReloadIcon className="h-4 w-4 animate-spin" />
                     )}
                     {rep.status == "COMPLETED" && <Check className="h-4 w-4" />}
-                    {rep.status == "CANCELLED" && <Ban className="h-4 w-4" />}
+                    {rep.status == "CANCELED" && <Ban className="h-4 w-4" />}
                     {rep.status == "FAILED" && <CircleX className="h-4 w-4" />}
                     <span className="ml-2">{t(rep.status as string)}</span>
                   </FlatBadge>

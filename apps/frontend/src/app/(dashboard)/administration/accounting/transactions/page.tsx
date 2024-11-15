@@ -12,7 +12,11 @@ export default async function Page(props: {
   const { t, i18n } = await getServerTranslations();
   //const school = await api.school.getSchool();
   const transactions = await api.transaction.all({
-    status: searchParams.status ?? undefined,
+    status: searchParams.status as
+      | "PENDING"
+      | "CANCELED"
+      | "VALIDATED"
+      | undefined,
     from: searchParams.from ? new Date(searchParams.from) : undefined,
     to: searchParams.to ? new Date(searchParams.to) : undefined,
   });
@@ -29,8 +33,8 @@ export default async function Page(props: {
     (acc, curr) => acc + (curr.status == "VALIDATED" ? curr.amount : 0),
     0,
   );
-  const cancelled = transactions.reduce(
-    (acc, curr) => acc + (curr.status == "CANCELLED" ? curr.amount : 0),
+  const canceled = transactions.reduce(
+    (acc, curr) => acc + (curr.status == "CANCELED" ? curr.amount : 0),
     0,
   );
   const pending = transactions.reduce(
@@ -51,7 +55,7 @@ export default async function Page(props: {
           {t("pending")} : {moneyFormatter.format(pending)}
         </FlatBadge>
         <FlatBadge variant={"red"}>
-          {t("cancelled")} : {moneyFormatter.format(cancelled)}
+          {t("canceled")} : {moneyFormatter.format(canceled)}
         </FlatBadge>
       </div>
       <TransactionDataTable />

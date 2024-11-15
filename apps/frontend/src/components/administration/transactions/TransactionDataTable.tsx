@@ -20,7 +20,7 @@ export function TransactionDataTable() {
   const [to] = useQueryState("to", parseAsIsoDateTime);
 
   const transactionsQuery = api.transaction.all.useQuery({
-    status: status ?? undefined,
+    status: status as "PENDING" | "VALIDATED" | "CANCELED" | undefined,
     from: from ?? undefined,
     to: to ?? undefined,
   });

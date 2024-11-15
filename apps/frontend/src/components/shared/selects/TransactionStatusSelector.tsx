@@ -49,10 +49,10 @@ export function TransactionStatusSelector({
               {t("pending")}
             </div>
           </SelectItem>
-          <SelectItem value="CANCELLED">
+          <SelectItem value="CANCELED">
             <div className="flex flex-row items-center gap-1 text-red-600">
               <AlarmClockMinus className="h-4 w-4" />
-              {t("cancelled")}
+              {t("canceled")}
             </div>
           </SelectItem>
         </SelectGroup>

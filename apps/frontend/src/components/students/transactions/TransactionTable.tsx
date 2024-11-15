@@ -141,9 +141,7 @@ export function TransactionTable() {
                 })}
               </TableCell>
               <TableCell>
-                {transaction.status && (
-                  <TransactionStatus status={transaction.status} />
-                )}
+                <TransactionStatus status={transaction.status} />
               </TableCell>
               <TableCell className="text-right">
                 <DropdownMenu>
@@ -160,16 +158,16 @@ export function TransactionTable() {
                       </DropdownMenuSubTrigger>
                       <DropdownMenuSubContent>
                         <DropdownMenuRadioGroup
-                          value={transaction.status ?? "PENDING"}
+                          value={transaction.status}
                           onValueChange={(value) => {
                             if (
-                              ["PENDING", "CANCELLED", "VALIDATED"].includes(
+                              ["PENDING", "CANCELED", "VALIDATED"].includes(
                                 value,
                               )
                             ) {
                               const v = value as
                                 | "PENDING"
-                                | "CANCELLED"
+                                | "CANCELED"
                                 | "VALIDATED";
                               toast.loading(t("updating"), { id: 0 });
                               updateTransactionMutation.mutate({
@@ -194,7 +192,7 @@ export function TransactionTable() {
                             </FlatBadge>
                           </DropdownMenuRadioItem>
                           <DropdownMenuRadioItem
-                            value={"CANCELLED"}
+                            value={"CANCELED"}
                             className="capitalize"
                           >
                             <FlatBadge variant={"red"}>
@@ -258,7 +256,7 @@ export function TransactionStatus({ status }: { status: string }) {
   let variant = "gray";
   if (status === "VALIDATED") {
     variant = "green";
-  } else if (status === "CANCELLED") {
+  } else if (status === "CANCELED") {
     variant = "red";
   } else if (status === "PENDING") {
     variant = "yellow";
@@ -266,7 +264,7 @@ export function TransactionStatus({ status }: { status: string }) {
 
   return (
     <FlatBadge className="gap-2" variant={variant as FlatBadgeVariant}>
-      {status === "CANCELLED" ? (
+      {status === "CANCELED" ? (
         <CrossCircledIcon
           className="size-4 text-muted-foreground"
           aria-hidden="true"

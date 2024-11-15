@@ -89,13 +89,12 @@ export function TransactionDetails({
           variant={
             transactionQuery.data.status == "VALIDATED"
               ? "green"
-              : transactionQuery.data.status == "CANCELLED"
+              : transactionQuery.data.status == "CANCELED"
                 ? "red"
                 : "yellow"
           }
         >
-          {transactionQuery.data.status &&
-            t(transactionQuery.data.status.toLowerCase())}
+          {t(transactionQuery.data.status.toLowerCase())}
         </FlatBadge>
       </div>
       <div className="flex flex-row items-center gap-1">

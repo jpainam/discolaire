@@ -7,7 +7,7 @@ export const reportQueueSchema = z.object({
   signedUrl: z.string().nullish(),
   //content: z.record(z.string(), z.any()).nullish(),
   content: z.any().nullish(),
-  status: z.enum(["PENDING", "COMPLETED", "CANCELLED", "FAILED"]).nullish(),
+  status: z.enum(["PENDING", "COMPLETED", "CANCELED", "FAILED"]).nullish(),
   expectedDate: z.coerce.date().nullish(),
   createdAt: z.coerce.date().nullish(),
   startedAt: z.coerce.date().nullish(),

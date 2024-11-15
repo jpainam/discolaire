@@ -1,6 +1,6 @@
 {
   "Avg.C": "Moy.C",
-  "CANCELLED": "Annulée",
+  "CANCELED": "Annulée",
   "COMPLETED": "Terminée",
   "Canceled": "Annulée",
   "Completed": "Terminée",
@@ -142,7 +142,7 @@
   "calendar": "Calendrier",
   "canPickupStudent": "Peut récupérer l'élève",
   "cancel": "Annuler",
-  "cancelled": "Annulé",
+  "canceled": "Annulé",
   "card": "Carte de crédit/débit",
   "registrationPrefix": "Prefix matricule",
   "cardNumber": "Numéro de carte",

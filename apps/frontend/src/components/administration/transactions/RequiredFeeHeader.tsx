@@ -30,7 +30,7 @@ export function RequiredFeeHeader() {
   const { createQueryString } = useCreateQueryString();
   const [totals, setTotals] = useState(0);
   const [validated, setValidated] = useState(0);
-  const [cancelled, setCancelled] = useState(0);
+  const [canceled, setCancelled] = useState(0);
   return (
     <div className="grid flex-row items-center gap-2 p-2 md:flex">
       <Label className="hidden md:flex">{t("type")}</Label>
@@ -54,7 +54,7 @@ export function RequiredFeeHeader() {
         {t("validated")} : {moneyFormatter.format(validated)}
       </FlatBadge>
       <FlatBadge variant={"red"}>
-        {t("cancelled")} : {moneyFormatter.format(cancelled)}
+        {t("canceled")} : {moneyFormatter.format(canceled)}
       </FlatBadge>
       <div className="ml-auto">
         <DropdownMenu>

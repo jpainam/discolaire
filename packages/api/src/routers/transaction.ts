@@ -10,7 +10,10 @@ const createUpdateSchema = z.object({
   studentId: z.string(),
   description: z.string().optional(),
   method: z.string().optional().default("CASH"),
-  status: z.string().optional().default("PENDING"),
+  status: z
+    .enum(["PENDING", "CANCELED", "VALIDATED"])
+    .optional()
+    .default("PENDING"),
   transactionType: z.string().optional().default("CREDIT"),
   observation: z.string().optional(),
 });
@@ -30,7 +33,7 @@ export const transactionRouter = createTRPCRouter({
       z.object({
         from: z.coerce.date().optional().default(subMonths(new Date(), 3)),
         to: z.coerce.date().optional().default(new Date()),
-        status: z.string().optional(),
+        status: z.enum(["PENDING", "CANCELED", "VALIDATED"]).optional(),
       }),
     )
     .query(({ ctx, input }) => {
@@ -60,7 +63,7 @@ export const transactionRouter = createTRPCRouter({
     .input(
       z.object({
         transactionId: z.number(),
-        status: z.enum(["PENDING", "VALIDATED", "CANCELLED"]),
+        status: z.enum(["PENDING", "VALIDATED", "CANCELED"]),
       }),
     )
     .mutation(async ({ ctx, input }) => {

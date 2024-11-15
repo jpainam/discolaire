@@ -117,7 +117,7 @@ export const fetchTransactionColumns = ({
       ),
       cell: ({ row }) => {
         const status = row.original.status;
-        return <>{status ? <TransactionStatus status={status} /> : <></>}</>;
+        return <TransactionStatus status={status} />;
       },
     }),
     columnHelper.accessor("amount", {
@@ -192,10 +192,10 @@ function ActionCell({
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
             <DropdownMenuRadioGroup
-              value={transaction.status ?? "PENDING"}
+              value={transaction.status}
               onValueChange={(value) => {
-                if (["PENDING", "CANCELLED", "VALIDATED"].includes(value)) {
-                  const v = value as "PENDING" | "CANCELLED" | "VALIDATED";
+                if (["PENDING", "CANCELED", "VALIDATED"].includes(value)) {
+                  const v = value as "PENDING" | "CANCELED" | "VALIDATED";
                   toast.loading(t("updating"), { id: 0 });
                   updateTransactionMutation.mutate({
                     transactionId: transaction.id,
@@ -215,7 +215,7 @@ function ActionCell({
                   {t("validate")}
                 </FlatBadge>
               </DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value={"CANCELLED"} className="capitalize">
+              <DropdownMenuRadioItem value={"CANCELED"} className="capitalize">
                 <FlatBadge variant={"red"}>
                   <CrossCircledIcon
                     className="mr-2 size-4 text-muted-foreground"

@@ -20,7 +20,7 @@ export function RequiredFeeDataTable() {
   const from = searchParams.get("from");
   const to = searchParams.get("to");
   const transactionsQuery = api.transaction.all.useQuery({
-    status: status ?? undefined,
+    status: status as "PENDING" | "VALIDATED" | "CANCELED" | undefined,
     from: from ? new Date(from) : undefined,
     to: to ? new Date(to) : undefined,
   });

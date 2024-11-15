@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { TransactionStatus } from "@repo/db";
 import { PermissionAction } from "@repo/lib/permission";
 
 import { checkPermissions } from "../permission";
@@ -154,7 +155,7 @@ export const classroomRouter = createTRPCRouter({
           transactions: {
             where: {
               schoolYearId: ctx.schoolYearId,
-              status: "COMPLETED",
+              status: TransactionStatus.VALIDATED,
             },
           },
           student: true,
@@ -163,12 +164,7 @@ export const classroomRouter = createTRPCRouter({
 
       return result.map((account) => {
         const balance = account.transactions.reduce((acc, transaction) => {
-          // if (transaction.status !== "COMPLETED") {
-          //   return 0;
-          // }
-          return transaction.transactionType === "CREDIT"
-            ? acc + transaction.amount
-            : acc - transaction.amount;
+          return acc + transaction.amount;
         }, 0);
         return {
           ...account,

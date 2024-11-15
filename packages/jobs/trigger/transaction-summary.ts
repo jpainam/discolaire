@@ -1,9 +1,18 @@
 import { render } from "@react-email/render";
-import { schedules } from "@trigger.dev/sdk/v3";
+import { logger, schedules } from "@trigger.dev/sdk/v3";
 import parser from "cron-parser";
 
 import { db } from "@repo/db";
 import TransactionsSummary from "@repo/transactional/emails/TransactionsSummary";
+
+import { env } from "../env";
+
+const headersList = {
+  Authorization: `Bearer ${env.MESSAGING_SECRET_KEY}`,
+  "Content-Type": "application/json",
+};
+
+const baseUrl = env.NEXT_PUBLIC_BASE_URL;
 
 export const transactionSummary = schedules.task({
   id: "transaction-summary",
@@ -45,6 +54,10 @@ export const transactionSummary = schedules.task({
       },
     });
 
+    if (staff.email != null) {
+      throw new Error("Staff email is required");
+    }
+
     const emailHtml = render(
       TransactionsSummary({
         locale: "fr",
@@ -55,8 +68,8 @@ export const transactionSummary = schedules.task({
         },
         transactions: transactions.map((transaction) => {
           return {
-            id: transaction.id.toString(),
-            description: transaction.description,
+            id: transaction.id,
+            description: transaction.description ?? "",
             name: transaction.account.name ?? "",
             date: transaction.createdAt.toISOString(),
             amount: transaction.amount,
@@ -67,5 +80,23 @@ export const transactionSummary = schedules.task({
         fullName: staff.lastName + " " + staff.firstName,
       }),
     );
+    const bodyContent = JSON.stringify({
+      html: emailHtml,
+      subject: "Transactions Summary",
+      from: "DisScolaire <no-reply@discolaire.com>",
+      to: staff.email,
+    });
+    logger.info(`Sending email to ${staff.email}`);
+    const response = await fetch(`${baseUrl}/api/v1/emails`, {
+      method: "POST",
+      body: bodyContent,
+      headers: headersList,
+    });
+    if (!response.ok) {
+      console.error(response.statusText);
+      throw new Error(response.statusText);
+    }
+    const data = await response.text();
+    logger.info(data);
   },
 });

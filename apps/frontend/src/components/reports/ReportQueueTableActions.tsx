@@ -52,10 +52,10 @@ export function ReportQueueTableActions({ report }: { report: ReportQueue }) {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              // toast.promise(updateReportQueueStatus(report.id, "CANCELLED"), {
+              // toast.promise(updateReportQueueStatus(report.id, "CANCELED"), {
               //   loading: t("cancelling"),
               //   success: () => {
-              //     return t("cancelled");
+              //     return t("canceled");
               //   },
               //   error: (error) => {
               //     return getErrorMessage(error);
