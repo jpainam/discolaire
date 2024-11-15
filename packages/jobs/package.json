@@ -26,14 +26,14 @@
     "@repo/lib": "workspace:*",
     "@repo/reports": "workspace:*",
     "@repo/transactional": "workspace:*",
-    "@trigger.dev/sdk": "^3.1.2",
+    "@trigger.dev/sdk": "3.2.0",
     "cron-parser": "^4.9.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
-    "@trigger.dev/build": "^3.1.2",
+    "@trigger.dev/build": "3.2.0",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"

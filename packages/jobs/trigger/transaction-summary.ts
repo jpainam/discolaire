@@ -5,14 +5,14 @@ import { subMonths } from "date-fns";
 import { db } from "@repo/db";
 import TransactionsSummary from "@repo/transactional/emails/TransactionsSummary";
 
-import { env } from "../env";
+//import { env } from "../env";
 
 const headersList = {
-  Authorization: `Bearer ${env.MESSAGING_SECRET_KEY}`,
+  Authorization: `Bearer ${process.env.MESSAGING_SECRET_KEY}`,
   "Content-Type": "application/json",
 };
 
-const messagingBaseUrl = env.MESSAGING_SERVICE_URL;
+const messagingBaseUrl = process.env.MESSAGING_SERVICE_URL;
 
 export const transactionSummary = schedules.task({
   id: "transaction-summary",

@@ -1,11 +1,14 @@
 "use client";
 
+import { useState } from "react";
+import { SaveIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
+import { Button } from "@repo/ui/button";
 import {
   Form,
   FormControl,
@@ -26,6 +29,7 @@ import {
 import { StaffSelector } from "~/components/shared/selects/StaffSelector";
 import { useSchool } from "~/contexts/SchoolContext";
 import { api } from "~/trpc/react";
+import { cronValues } from "./cron-values";
 
 const addStaffScheduleSchema = z.object({
   cron: z.string().min(1),
@@ -35,40 +39,59 @@ const addStaffScheduleSchema = z.object({
 export function AddStaffSchedule({
   timezones,
   staffs,
+  scheduleJob,
 }: {
   timezones: string[];
+  scheduleJob?: RouterOutputs["scheduleJob"]["all"][number];
   staffs: RouterOutputs["staff"]["all"];
 }) {
   const { closeModal } = useModal();
+  const { school } = useSchool();
   const form = useForm({
     schema: addStaffScheduleSchema,
+    defaultValues: {
+      cron: scheduleJob?.cron ?? "0 18 * * *",
+      staffId: scheduleJob
+        ? staffs.find((staff) => staff.id === scheduleJob.userId)?.id
+        : "",
+      timezone: scheduleJob?.timezone ?? school.timezone,
+    },
   });
-  const createScheduleJob = api.scheduleJob.create.useMutation();
+  const utils = api.useUtils();
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSubmit = (data: z.infer<typeof addStaffScheduleSchema>) => {
+    setIsLoading(true);
     const userId = staffs.find((staff) => staff.id === data.staffId)?.userId;
     if (!userId) {
-      toast.error("Staff not link to a user");
+      toast.error("Staff is not link to a user");
       return;
     }
     const values = {
       userId: userId,
       cron: data.cron,
+      type: "transaction-summary",
       timezone: data.timezone,
     };
-    void fetch("/api/trigger/transaction-summary", {
+
+    void fetch("/api/trigger/schedules", {
       method: "POST",
       body: JSON.stringify(values),
-    }).then(async (response) => {
-      const json = (await response.json()) as { id: string };
-      createScheduleJob.mutate({
-        ...values,
-        triggerDevId: json.id,
-        type: "transaction-summary",
+    })
+      .then(() => {
+        toast.success(t("schedule_created_successfully"));
+        void utils.scheduleJob.invalidate();
+        closeModal();
+      })
+      .catch((e) => {
+        toast.error(e);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
-      closeModal();
-    });
   };
-  const { school } = useSchool();
+
   const { t } = useLocale();
 
   return (
@@ -78,7 +101,7 @@ export function AddStaffSchedule({
           control={form.control}
           name="staffId"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="space-y-0">
               <FormLabel>{t("staff")}</FormLabel>
               <FormControl>
                 <StaffSelector onChange={(val) => field.onChange(val)} />
@@ -91,7 +114,7 @@ export function AddStaffSchedule({
           control={form.control}
           name="timezone"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="space-y-0">
               <FormLabel>{t("timezones")}</FormLabel>
               <FormControl>
                 <Select
@@ -102,9 +125,14 @@ export function AddStaffSchedule({
                     <SelectValue placeholder={t("timezones")} />
                   </SelectTrigger>
                   <SelectContent>
-                    {timezones.map((timezone) => {
+                    {timezones.map((timezone, index) => {
                       return (
-                        <SelectItem value={timezone}>{timezone}</SelectItem>
+                        <SelectItem
+                          key={`${timezone}-${index}`}
+                          value={timezone}
+                        >
+                          {timezone}
+                        </SelectItem>
                       );
                     })}
                   </SelectContent>
@@ -118,20 +146,25 @@ export function AddStaffSchedule({
           control={form.control}
           name="cron"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="space-y-0">
               <FormLabel>{t("frequence")}</FormLabel>
               <FormControl>
                 <Select
                   onValueChange={(val) => field.onChange(val)}
-                  defaultValue={school.timezone}
+                  defaultValue={"0 18 * * *"}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder={t("frequence")} />
                   </SelectTrigger>
                   <SelectContent>
-                    {timezones.map((timezone) => {
+                    {cronValues.map((cron, index) => {
                       return (
-                        <SelectItem value={timezone}>{timezone}</SelectItem>
+                        <SelectItem
+                          key={`${cron.value}-${index}`}
+                          value={cron.value}
+                        >
+                          {t(cron.name)}
+                        </SelectItem>
                       );
                     })}
                   </SelectContent>
@@ -141,6 +174,22 @@ export function AddStaffSchedule({
             </FormItem>
           )}
         />
+        <div className="flex items-center justify-end gap-4">
+          <Button
+            type="button"
+            variant={"secondary"}
+            onClick={() => {
+              closeModal();
+            }}
+          >
+            <XIcon className="mr-2 h-4 w-4" />
+            {t("cancel")}
+          </Button>
+          <Button isLoading={isLoading} type="submit">
+            <SaveIcon className="mr-2 h-4 w-4" />
+            {t("submit")}
+          </Button>
+        </div>
       </form>
     </Form>
   );

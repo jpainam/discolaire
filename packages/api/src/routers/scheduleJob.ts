@@ -5,6 +5,9 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 export const scheduleJobRouter = createTRPCRouter({
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.scheduleJob.findMany({
+      include: {
+        user: true,
+      },
       where: {
         user: {
           schoolId: ctx.schoolId,
@@ -12,6 +15,34 @@ export const scheduleJobRouter = createTRPCRouter({
       },
     });
   }),
+  byType: protectedProcedure
+    .input(
+      z.object({
+        type: z.string().min(1),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.scheduleJob.findMany({
+        include: {
+          user: true,
+        },
+        where: {
+          user: {
+            schoolId: ctx.schoolId,
+          },
+          type: input.type,
+        },
+      });
+    }),
+  delete: protectedProcedure
+    .input(z.coerce.number())
+    .mutation(({ ctx, input }) => {
+      return ctx.db.scheduleJob.delete({
+        where: {
+          id: input,
+        },
+      });
+    }),
   create: protectedProcedure
     .input(
       z.object({
