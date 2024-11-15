@@ -12,10 +12,11 @@
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "dev": "tsc",
     "format": "prettier --check . --ignore-path ../../.gitignore",
-    "jobs": "npx trigger.dev@latest dev",
-    "jobs:deploy": "npx trigger.dev@latest deploy",
+    "jobs": "pnpm with-env npx trigger.dev@latest dev",
+    "jobs:deploy": "pnpm with-env npx trigger.dev@latest deploy",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "with-env": "dotenv -e ../../.env --"
   },
   "prettier": "@repo/prettier-config",
   "dependencies": {

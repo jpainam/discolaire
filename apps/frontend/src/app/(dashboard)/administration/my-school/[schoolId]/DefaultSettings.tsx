@@ -36,7 +36,7 @@ const defaultSettingsSchema = z.object({
   applyRequiredFee: z.enum(["YES", "PASSIVE", "NO"]),
   includeRequiredFee: z.boolean(),
   numberOfReceipts: z.coerce.number().min(1),
-  currency: z.string().min(1).default("FCFA"),
+  currency: z.string().min(1).default("CFA"),
   timezone: z.string().min(1).default("UTC"),
 });
 export function DefaultSettings({

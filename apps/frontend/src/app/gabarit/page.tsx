@@ -140,10 +140,10 @@ export default function Page() {
               logiciel, incluant toutes les corrections de bogues et mises à
               jour nécessaires. - Les modifications demandées par l'école, sans
               frais supplémentaires. **Modalités de paiement** Le montant total
-              de **500 000 FCFA** sera payé en une seule tranche par l'école à
-              la signature de cet agrément. Le paiement sera effectué par
-              virement bancaire sur le compte du Fournisseur ou par tout autre
-              mode convenu entre les parties. **Durée de l'agrément** L'agrément
+              de **500 000 CFA** sera payé en une seule tranche par l'école à la
+              signature de cet agrément. Le paiement sera effectué par virement
+              bancaire sur le compte du Fournisseur ou par tout autre mode
+              convenu entre les parties. **Durée de l'agrément** L'agrément
               prend effet à la date de signature pour une durée d'un an. À
               l'issue de cette période, un nouvel agrément devra être signé pour
               prolonger l'utilisation du logiciel. **Responsabilités des

@@ -62,10 +62,10 @@ export function PaymentConfirmationEmail({
                 Détails du paiement :
               </Text>
               <Text style={{ fontSize: "14px", margin: "5px 0" }}>
-                Montant payé : <strong>{paymentAmount} FCFA</strong>
+                Montant payé : <strong>{paymentAmount} CFA</strong>
               </Text>
               <Text style={{ fontSize: "14px", margin: "5px 0" }}>
-                Montant restant : <strong>{remainingBalance} FCFA</strong>
+                Montant restant : <strong>{remainingBalance} CFA</strong>
               </Text>
               <Text style={{ fontSize: "14px", margin: "5px 0" }}>
                 Parent notifié : <strong>{parentEmail}</strong>

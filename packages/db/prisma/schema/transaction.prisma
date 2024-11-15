@@ -24,12 +24,14 @@ model Transaction {
     schoolYear      SchoolYear        @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
 }
 
-model TransactionSummarySchedule {
-    id       Int    @id @default(autoincrement())
-    staffId  String
-    staff    Staff  @relation(fields: [staffId], references: [id], onDelete: Cascade)
-    timezone String
-    cron     String
+model ScheduleJob {
+    id           Int    @id @default(autoincrement())
+    userId       String
+    timezone     String
+    cron         String
+    type         String
+    triggerDevId String
+    user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum TransactionStatus {

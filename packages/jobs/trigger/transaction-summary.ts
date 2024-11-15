@@ -1,6 +1,6 @@
 import { render } from "@react-email/render";
 import { logger, schedules } from "@trigger.dev/sdk/v3";
-import parser from "cron-parser";
+import { subMonths } from "date-fns";
 
 import { db } from "@repo/db";
 import TransactionsSummary from "@repo/transactional/emails/TransactionsSummary";
@@ -12,7 +12,7 @@ const headersList = {
   "Content-Type": "application/json",
 };
 
-const baseUrl = env.NEXT_PUBLIC_BASE_URL;
+const messagingBaseUrl = env.MESSAGING_SERVICE_URL;
 
 export const transactionSummary = schedules.task({
   id: "transaction-summary",
@@ -25,17 +25,18 @@ export const transactionSummary = schedules.task({
     if (!staff) {
       throw new Error("Staff not found");
     }
+    logger.info(`Found staff$`, staff);
     const school = await db.school.findUniqueOrThrow({
       where: { id: staff.schoolId },
     });
 
-    const scheduledTask = await db.transactionSummarySchedule.findFirstOrThrow({
-      where: {
-        staffId,
-      },
-    });
-    const interval = parser.parseExpression(scheduledTask.cron);
-    const startDate = interval.prev().toDate();
+    // const scheduledTask = await db.transactionSummarySchedule.findFirstOrThrow({
+    //   where: {
+    //     staffId,
+    //   },
+    // });
+    //const interval = parser.parseExpression(scheduledTask.cron);
+    const startDate = subMonths(new Date(), 3); //interval.prev().toDate();
     const endDate = new Date();
     const transactions = await db.transaction.findMany({
       include: {
@@ -53,8 +54,9 @@ export const transactionSummary = schedules.task({
         },
       },
     });
+    logger.info(`Found ${transactions.length} transactions`);
 
-    if (staff.email != null) {
+    if (!staff.email) {
       throw new Error("Staff email is required");
     }
 
@@ -87,13 +89,13 @@ export const transactionSummary = schedules.task({
       to: staff.email,
     });
     logger.info(`Sending email to ${staff.email}`);
-    const response = await fetch(`${baseUrl}/api/v1/emails`, {
+
+    const response = await fetch(`${messagingBaseUrl}/api/v1/emails`, {
       method: "POST",
       body: bodyContent,
       headers: headersList,
     });
     if (!response.ok) {
-      console.error(response.statusText);
       throw new Error(response.statusText);
     }
     const data = await response.text();
