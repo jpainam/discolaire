@@ -596,32 +596,6 @@ model RequiredFeeTransaction {
     @@id([studentId, feeId])
 }
 
-model Transaction {
-    id              Int            @id @default(autoincrement())
-    transactionRef  String?
-    method          String         @default("CASH")
-    amount          Float
-    description     String?
-    transactionType String?        @default("CREDIT")
-    createdAt       DateTime       @default(now()) @db.Timestamp(6)
-    updatedAt       DateTime       @updatedAt
-    createdById     String?
-    receivedById    String?
-    receivedAt      DateTime?      @db.Timestamp(6)
-    isPrinted       Boolean?       @default(false)
-    printedAt       DateTime?      @db.Timestamp(6)
-    printedById     String?
-    updatedBy       String?
-    observation     String?
-    deletedAt       DateTime?      @db.Timestamp(6)
-    deletedBy       String?
-    status          String?        @default("PENDING")
-    schoolYearId    String
-    accountId       Int
-    account         StudentAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
-    schoolYear      SchoolYear     @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
-}
-
 model Journal {
     id          Int     @id @default(autoincrement())
     name        String

@@ -20,13 +20,14 @@ import { geti18n } from "../locales";
 import { cn, getAppUrl, getAssetUrl } from "../utils";
 
 interface Transaction {
-  id: string;
+  id: number;
   date: string;
   amount: number;
   name: string;
+  description: string;
   currency: string;
   category?: string;
-  status: "PENDING" | "VALIDATED";
+  status: string;
 }
 
 interface School {
@@ -51,37 +52,41 @@ interface Props {
 
 const defaultTransactions = [
   {
-    id: "1",
+    id: 1,
     date: new Date().toISOString(),
     amount: -1000,
-    currency: "USD",
+    currency: "CFA",
     name: "Spotify",
-    status: "PENDING" as const,
+    description: "Spotify Premium",
+    status: "PENDING",
   },
   {
-    id: "2",
+    id: 2,
     date: new Date().toISOString(),
     amount: 1000,
-    currency: "USD",
+    currency: "CFA",
+    description: "Salary",
     name: "H23504959",
     category: "income",
-    status: "PENDING" as const,
+    status: "PENDING",
   },
   {
-    id: "3",
+    id: 3,
     date: new Date().toISOString(),
     amount: -1000,
-    currency: "USD",
+    currency: "CFA",
+    description: "Webflow Subscription",
     name: "Webflow",
-    status: "PENDING" as const,
+    status: "PENDING",
   },
   {
-    id: "4",
+    id: 4,
     date: new Date().toISOString(),
     amount: -1000,
-    currency: "USD",
+    currency: "CFA",
+    description: "Netflix Subscription",
     name: "Netflix",
-    status: "VALIDATED" as const,
+    status: "VALIDATED",
   },
 ];
 
