@@ -57,7 +57,7 @@ export function TransactionToolbar() {
   ];
 
   return (
-    <div className="mb-2 flex flex-col">
+    <div className="mb-2 flex flex-col px-2">
       <ul className="flex flex-row items-center justify-start gap-4 pt-2">
         {menus.map((menu, index) => {
           const isActive = pathname === menu.href;

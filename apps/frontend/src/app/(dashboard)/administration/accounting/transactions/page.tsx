@@ -12,11 +12,7 @@ export default async function Page(props: {
   const { t, i18n } = await getServerTranslations();
   //const school = await api.school.getSchool();
   const transactions = await api.transaction.all({
-    status: searchParams.status as
-      | "PENDING"
-      | "CANCELED"
-      | "VALIDATED"
-      | undefined,
+    status: searchParams.status,
     from: searchParams.from ? new Date(searchParams.from) : undefined,
     to: searchParams.to ? new Date(searchParams.to) : undefined,
   });

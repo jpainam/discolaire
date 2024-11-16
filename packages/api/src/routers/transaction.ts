@@ -2,6 +2,8 @@ import { TRPCError } from "@trpc/server";
 import { subDays, subMonths } from "date-fns";
 import { z } from "zod";
 
+import type { TransactionStatus } from "@repo/db";
+
 import { transactionService } from "../services/transaction-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -33,10 +35,13 @@ export const transactionRouter = createTRPCRouter({
       z.object({
         from: z.coerce.date().optional().default(subMonths(new Date(), 3)),
         to: z.coerce.date().optional().default(new Date()),
-        status: z.enum(["PENDING", "CANCELED", "VALIDATED"]).optional(),
+        status: z.string().optional(),
       }),
     )
     .query(({ ctx, input }) => {
+      const status = input.status
+        ? (input.status as TransactionStatus)
+        : undefined;
       return ctx.db.transaction.findMany({
         include: {
           account: true,
@@ -51,7 +56,7 @@ export const transactionRouter = createTRPCRouter({
                 lte: input.to,
               },
             },
-            ...(input.status ? [{ status: { equals: input.status } }] : [{}]),
+            ...(status ? [{ status: { equals: status } }] : [{}]),
           ],
         },
         orderBy: {
