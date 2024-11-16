@@ -39,3 +39,12 @@ enum TransactionStatus {
     CANCELED
     VALIDATED
 }
+
+model ScheduleTask {
+    id      Int       @id @default(autoincrement())
+    name    String
+    cron    String
+    lastRun DateTime?
+    status  String    @default("pending")
+    data    Json?
+}

@@ -27,7 +27,9 @@
     "@repo/reports": "workspace:*",
     "@repo/transactional": "workspace:*",
     "@trigger.dev/sdk": "3.2.0",
-    "cron-parser": "^4.9.0"
+    "bullmq": "^5.26.2",
+    "cron-parser": "^4.9.0",
+    "ioredis": "^5.4.1"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

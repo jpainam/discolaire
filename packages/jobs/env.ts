@@ -5,6 +5,7 @@ export const env = createEnv({
   server: {
     MESSAGING_SECRET_KEY: z.string(),
     MESSAGING_SERVICE_URL: z.string(),
+    REDIS_URL: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_BASE_URL: z.string().min(1).url(),
@@ -12,6 +13,7 @@ export const env = createEnv({
   runtimeEnv: {
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     MESSAGING_SECRET_KEY: process.env.MESSAGING_SECRET_KEY,
+    REDIS_URL: process.env.REDIS_URL,
     MESSAGING_SERVICE_URL: process.env.MESSAGING_SERVICE_URL,
   },
   //experimental__runtimeEnv: {},
