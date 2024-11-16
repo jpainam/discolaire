@@ -52,6 +52,75 @@ export function IPBW({
         })}
       </Table>
       <IPBWSummary />
+      <View style={{ flexDirection: "row", gap: 4, paddingTop: 5 }}>
+        <View style={{ flex: 0.6, flexDirection: "row", gap: 4 }}>
+          <Table
+            style={{ paddingTop: "4px" }}
+            tdStyle={{
+              justifyContent: "center",
+              paddingHorizontal: "4px",
+              //fontSize: 10,
+            }}
+          >
+            <TableHeader>
+              <TableCell
+                style={{
+                  backgroundColor: "#D7D7D7",
+                  fontWeight: "bold",
+                  textTransform: "uppercase",
+                }}
+              >
+                Parents
+              </TableCell>
+              <TableCell
+                style={{
+                  backgroundColor: "#D7D7D7",
+                  fontWeight: "bold",
+                  textTransform: "uppercase",
+                }}
+              >
+                Prof. Principal
+              </TableCell>
+            </TableHeader>
+            <TableRow>
+              <TableCell
+                style={{
+                  paddingVertical: 30,
+                }}
+              ></TableCell>
+              <TableCell></TableCell>
+            </TableRow>
+          </Table>
+        </View>
+        <View style={{ flex: 0.4 }}>
+          <Table
+            style={{ paddingTop: "4px" }}
+            tdStyle={{
+              justifyContent: "center",
+              paddingHorizontal: "4px",
+            }}
+          >
+            <TableHeader>
+              <TableCell
+                style={{
+                  backgroundColor: "#D7D7D7",
+                  fontWeight: "bold",
+                  textTransform: "uppercase",
+                }}
+              >
+                Directeur
+              </TableCell>
+            </TableHeader>
+            <TableRow>
+              <TableCell
+                style={{
+                  paddingVertical: 30,
+                }}
+              ></TableCell>
+            </TableRow>
+          </Table>
+        </View>
+      </View>
     </View>
   );
 }

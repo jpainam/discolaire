@@ -31,13 +31,24 @@ export function IPBWStudentInfo({
       {student.avatar ? (
         <Image
           style={{
-            width: 100,
-            height: 100,
+            width: 90,
+            height: 90,
           }}
           src={student.avatar}
         />
       ) : (
-        <View style={{ width: 100, height: 100, border: "1px solid gray" }} />
+        <View
+          style={{
+            width: 90,
+            fontWeight: "bold",
+            height: 90,
+            border: "1px solid gray",
+            justifyContent: "center",
+            textAlign: "center",
+          }}
+        >
+          <Text style={{ fontSize: 10 }}>PHOTO</Text>
+        </View>
       )}
       <View style={{ flexDirection: "column", flex: 1 }}>
         <Text
@@ -83,7 +94,7 @@ export function IPBWStudentInfo({
             />
           </View>
         </View>
-        <View
+        {/* <View
           style={{
             flexDirection: "row",
             justifyContent: "center",
@@ -98,7 +109,7 @@ export function IPBWStudentInfo({
               " " +
               classroom?.headTeacher?.firstName}
           </Text>
-        </View>
+        </View> */}
       </View>
     </View>
   );
