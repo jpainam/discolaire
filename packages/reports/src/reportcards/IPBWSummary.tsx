@@ -4,78 +4,164 @@ import { Table, TableCell, TableHeader, TableRow } from "../table";
 
 export function IPBWSummary() {
   return (
-    <View style={{ flexDirection: "row", gap: 4, paddingTop: 10 }}>
+    <View style={{ flexDirection: "row", gap: 4, paddingTop: 5 }}>
       <Table
+        weightings={[0.6, 0.4]}
         tdStyle={{
-          paddingVertical: "2px",
           paddingHorizontal: "2px",
         }}
-        weightings={[0.8, 0.2]}
+        style={{ border: 0 }}
       >
-        <TableHeader>
-          <TableCell
-            style={{
-              borderRight: 0,
-              width: "10px",
-            }}
-          >
-            Mention
+        <TableRow>
+          <TableCell>
+            <Table
+              tdStyle={{
+                paddingVertical: "2px",
+                paddingHorizontal: "2px",
+              }}
+              style={{ marginRight: "4px" }}
+              weightings={[0.8, 0.2]}
+            >
+              <TableHeader>
+                <TableCell
+                  style={{
+                    borderRight: 0,
+                    width: "10px",
+                  }}
+                >
+                  Travail
+                </TableCell>
+                <TableCell style={{ borderLeft: 0 }}></TableCell>
+              </TableHeader>
+              <SummaryItem name="Felicitations" />
+              <SummaryItem name="Encouragements" />
+              <SummaryItem name="Tableau d'honneur" />
+              <SummaryItem name="Avertissement" />
+              <SummaryItem name="Blâme" />
+            </Table>
+
+            <Table
+              tdStyle={{
+                paddingVertical: "2px",
+                paddingHorizontal: "2px",
+              }}
+              style={{ marginRight: "4px" }}
+              weightings={[0.8, 0.2]}
+            >
+              <TableHeader>
+                <TableCell
+                  style={{
+                    borderRight: 0,
+                  }}
+                >
+                  Discipline
+                </TableCell>
+                <TableCell style={{ borderLeft: 0 }}></TableCell>
+              </TableHeader>
+              <SummaryItem name="Total absences" value={10} />
+              <SummaryItem name="Justifiees" value={6} />
+              <SummaryItem name="Non justifiees" value={4} />
+              <SummaryItem name="Retards" value={"15h"} />
+              <SummaryItem name="Consigne" value={3} />
+            </Table>
+            <Table
+              tdStyle={{
+                paddingVertical: "2px",
+                paddingHorizontal: "2px",
+              }}
+              weightings={[0.8, 0.2]}
+            >
+              <TableHeader>
+                <TableCell
+                  style={{
+                    borderRight: 0,
+                  }}
+                >
+                  Performance
+                </TableCell>
+                <TableCell style={{ borderLeft: 0 }}></TableCell>
+              </TableHeader>
+              <SummaryItem name="Moy.Max" />
+              <SummaryItem name="Moy.Min" />
+              <SummaryItem name="Moy.Cl" />
+              <SummaryItem name="Taux de reussite" />
+              <SummaryItem name="Mention" />
+            </Table>
           </TableCell>
-          <TableCell style={{ borderLeft: 0 }}></TableCell>
-        </TableHeader>
-        <SummaryItem name="Felicitations" />
-        <SummaryItem name="Encouragements" />
-        <SummaryItem name="Tableau d'honneur" />
-        <SummaryItem name="Avertissement" />
-        <SummaryItem name="Blâme" />
-      </Table>
-      <Table
-        tdStyle={{
-          paddingVertical: "2px",
-          paddingHorizontal: "2px",
-        }}
-        weightings={[0.8, 0.2]}
-      >
-        <TableHeader>
-          <TableCell
-            style={{
-              borderRight: 0,
-            }}
-          >
-            Discipline
+          <TableCell>
+            <SummaryResult />
           </TableCell>
-          <TableCell style={{ borderLeft: 0 }}></TableCell>
-        </TableHeader>
-        <SummaryItem name="Total absences" value={10} />
-        <SummaryItem name="Justifiees" value={6} />
-        <SummaryItem name="Non justifiees" value={4} />
-        <SummaryItem name="Retards" value={"15h"} />
-        <SummaryItem name="Consigne" value={3} />
-      </Table>
-      <Table
-        tdStyle={{
-          paddingVertical: "2px",
-          paddingHorizontal: "2px",
-        }}
-        weightings={[0.8, 0.2]}
-      >
-        <TableHeader>
-          <TableCell
-            style={{
-              borderRight: 0,
-            }}
-          >
-            Performance
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            <Table
+              style={{ paddingTop: "4px" }}
+              tdStyle={{
+                justifyContent: "center",
+                paddingHorizontal: "4px",
+                //fontSize: 10,
+              }}
+            >
+              <TableHeader>
+                <TableCell
+                  style={{
+                    backgroundColor: "#D7D7D7",
+                    fontWeight: "bold",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Parents
+                </TableCell>
+                <TableCell
+                  style={{
+                    backgroundColor: "#D7D7D7",
+                    fontWeight: "bold",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Prof. Principal
+                </TableCell>
+              </TableHeader>
+              <TableRow>
+                <TableCell
+                  style={{
+                    paddingVertical: 30,
+                  }}
+                ></TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </Table>
           </TableCell>
-          <TableCell style={{ borderLeft: 0 }}></TableCell>
-        </TableHeader>
-        <SummaryItem name="Moy.Max" />
-        <SummaryItem name="Moy.Min" />
-        <SummaryItem name="Moy.Cl" />
-        <SummaryItem name="Taux de reussite" />
-        <SummaryItem name="Mention" />
+          <TableCell>
+            <Table
+              style={{ paddingTop: "4px" }}
+              tdStyle={{
+                justifyContent: "center",
+                paddingHorizontal: "4px",
+              }}
+            >
+              <TableHeader>
+                <TableCell
+                  style={{
+                    backgroundColor: "#D7D7D7",
+                    fontWeight: "bold",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Directeur
+                </TableCell>
+              </TableHeader>
+              <TableRow>
+                <TableCell
+                  style={{
+                    paddingVertical: 30,
+                  }}
+                ></TableCell>
+              </TableRow>
+            </Table>
+          </TableCell>
+        </TableRow>
       </Table>
-      <SummaryResult />
     </View>
   );
 }

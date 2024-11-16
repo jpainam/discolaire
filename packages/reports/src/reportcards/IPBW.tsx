@@ -52,31 +52,6 @@ export function IPBW({
         })}
       </Table>
       <IPBWSummary />
-      <Table
-        style={{
-          marginTop: 10,
-        }}
-        tdStyle={{
-          justifyContent: "center",
-          paddingHorizontal: "4px",
-          fontSize: 10,
-        }}
-      >
-        <TableHeader>
-          <TableCell>Parents</TableCell>
-          <TableCell>Prof. Principal</TableCell>
-          <TableCell>Directeur</TableCell>
-        </TableHeader>
-        <TableRow>
-          <TableCell
-            style={{
-              paddingVertical: 45,
-            }}
-          ></TableCell>
-          <TableCell></TableCell>
-          <TableCell></TableCell>
-        </TableRow>
-      </Table>
     </View>
   );
 }
@@ -100,7 +75,7 @@ function ReportCardGroup({
                 flexDirection: "column",
                 display: "flex",
                 gap: 0,
-                paddingTop: -2,
+                //paddingTop: -2,
                 alignItems: "flex-start",
               }}
             >
@@ -170,7 +145,7 @@ function ReportCardGroup({
         <TableCell
           style={{
             paddingHorizontal: "4px",
-            paddingVertical: "2px",
+            paddingVertical: "1px",
             borderRight: 0,
           }}
           weighting={0.49}

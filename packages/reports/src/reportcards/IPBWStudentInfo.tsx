@@ -28,7 +28,7 @@ export function IPBWStudentInfo({
         paddingVertical: "4px",
       }}
     >
-      {student.avatar && (
+      {student.avatar ? (
         <Image
           style={{
             width: 100,
@@ -36,6 +36,8 @@ export function IPBWStudentInfo({
           }}
           src={student.avatar}
         />
+      ) : (
+        <View style={{ width: 100, height: 100, border: "1px solid gray" }} />
       )}
       <View style={{ flexDirection: "column", flex: 1 }}>
         <Text
