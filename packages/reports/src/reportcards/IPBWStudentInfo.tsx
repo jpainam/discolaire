@@ -34,7 +34,12 @@ export function IPBWStudentInfo({
             width: 90,
             height: 90,
           }}
-          src={student.avatar}
+          src={{
+            uri: student.avatar,
+            method: "GET",
+            headers: { "Cache-Control": "no-cache" },
+            body: "",
+          }}
         />
       ) : (
         <View
