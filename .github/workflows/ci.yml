@@ -32,7 +32,7 @@ jobs:
         run: cp .env.example .env
 
       - name: Lint
-        run: pnpm lint && pnpm lint:ws
+        run: pnpm lint --fix && pnpm lint:ws --fix
 
   format:
     runs-on: ubuntu-latest
@@ -43,7 +43,7 @@ jobs:
         uses: ./tooling/github/setup
 
       - name: Format
-        run: pnpm format
+        run: pnpm format --write
 
   typecheck:
     runs-on: ubuntu-latest
