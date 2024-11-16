@@ -20,8 +20,8 @@
   },
   "prettier": "@repo/prettier-config",
   "dependencies": {
-    "@alexandernanberg/react-pdf-renderer": "4.0.0-canary-4",
-    "@react-pdf/renderer": "^4.0.0",
+    "@alexandernanberg/react-pdf-renderer": "4.0.0-canary-5",
+    "@react-pdf/renderer": "^4.0.2",
     "@react-pdf/stylesheet": "^5.0.0",
     "@repo/api": "workspace:*",
     "date-fns": "^4.1.0",

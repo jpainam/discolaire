@@ -11,7 +11,7 @@
   },
   "prettier": "@repo/prettier-config",
   "dependencies": {
-    "@auth/core": "0.37.3"
+    "@auth/core": "0.37.4"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
