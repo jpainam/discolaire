@@ -7,7 +7,7 @@ export {
   Page,
   Text,
   renderToStream,
-} from "@alexandernanberg/react-pdf-renderer";
+} from "@react-pdf/renderer";
 export * from "./reportcards/CSAB";
 export * from "./statements/AccountStatement";
 //export { ReactPDFRenderer };

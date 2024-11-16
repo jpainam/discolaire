@@ -1,3 +1,5 @@
+"use client";
+
 import type { Style } from "@react-pdf/types";
 import React, { useMemo } from "react";
 import { View } from "@react-pdf/renderer";

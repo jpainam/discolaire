@@ -5,9 +5,6 @@ import { AcccountStatement, renderToStream } from "@repo/reports";
 
 import { api } from "~/trpc/server";
 
-export const preferredRegion = ["fra1", "sfo1", "iad1"];
-export const dynamic = "force-dynamic";
-
 const searchSchema = z.object({
   preview: z.coerce.boolean().default(true),
   size: z.union([z.literal("letter"), z.literal("a4")]).default("letter"),

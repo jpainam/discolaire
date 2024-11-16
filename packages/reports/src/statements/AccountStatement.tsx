@@ -12,17 +12,32 @@ import type { RouterOutputs } from "@repo/api";
 
 import { LineItems } from "./LineItems";
 
-const CDN_URL = "https://discolaire-public.s3.eu-central-1.amazonaws.com";
+// const CDN_URL = "https://discolaire-public.s3.eu-central-1.amazonaws.com";
+
+// Font.register({
+//   family: "GeistMono",
+//   fonts: [
+//     {
+//       src: `${CDN_URL}/fonts/GeistMono/GeistMono-Regular.ttf`,
+//       fontWeight: 400,
+//     },
+//     {
+//       src: `${CDN_URL}/fonts/GeistMono/GeistMono-Medium.ttf`,
+//       fontWeight: 500,
+//     },
+//   ],
+// });
+const CDN_URL = "https://cdn.midday.ai";
 
 Font.register({
-  family: "Geist",
+  family: "GeistMono",
   fonts: [
     {
-      src: `${CDN_URL}/fonts/Geist/Geist-Regular.ttf`,
+      src: `${CDN_URL}/fonts/GeistMono/ttf/GeistMono-Regular.ttf`,
       fontWeight: 400,
     },
     {
-      src: `${CDN_URL}/fonts/Geist/Geist-Medium.ttf`,
+      src: `${CDN_URL}/fonts/GeistMono/ttf/GeistMono-Medium.ttf`,
       fontWeight: 500,
     },
   ],
@@ -87,7 +102,7 @@ export async function AcccountStatement({
         style={{
           padding: 20,
           backgroundColor: "#fff",
-          fontFamily: "GeistMono",
+          fontFamily: "Helvetica",
           color: "#000",
         }}
       >
