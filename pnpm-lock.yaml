@@ -949,8 +949,8 @@ importers:
         specifier: 4.0.0-canary-5
         version: 4.0.0-canary-5(react@19.0.0-rc-cae764ce-20241025)
       '@react-pdf/renderer':
-        specifier: ^4.1.0
-        version: 4.1.0(react@19.0.0-rc-cae764ce-20241025)
+        specifier: ^4.1.1
+        version: 4.1.1(react@19.0.0-rc-cae764ce-20241025)
       '@react-pdf/stylesheet':
         specifier: ^5.0.0
         version: 5.0.0
@@ -4851,14 +4851,14 @@ packages:
   '@react-pdf/primitives@4.0.0':
     resolution: {integrity: sha512-yp4E0rDL03NaUp/CnDBz3HQNfH2Mzdlgku57yhTMGNzetwB0NJusXcjYg5XsTGIXnR7Tv80JKI4O4ajj+oaLeQ==}
 
-  '@react-pdf/reconciler@1.1.0':
-    resolution: {integrity: sha512-vRl1m28HiaaD6IIE1JuT1ma4ARpwRyInZH/cYDMr4Ikb+N7B4XUGAPzKhWlzEHqnJ5vv8qOTZFEspytQrDaIAQ==}
+  '@react-pdf/reconciler@1.1.1':
+    resolution: {integrity: sha512-SZK3GQ4o4IYW30OPdyjxzdoIL6zDDEc7t1idJJPnRcY+CF+5z7vejymyAAIlF6dIRUI0ZtMCUNqsUwxKau/TUA==}
 
   '@react-pdf/render@4.0.0':
     resolution: {integrity: sha512-gvrw4HM9RocuDLd+19cvP2xaSs3h4OgYn2N6VDXzj6LYQnoHBAazRV9qMpGi8FuNlQ3Va+s82R1ynXYMr0FXIg==}
 
-  '@react-pdf/renderer@4.1.0':
-    resolution: {integrity: sha512-CV82Gwk5eXBurygAW2lfQrZIT/Nev02pwmxFTiX8JH6tIudOPSrsk0EGDeuNLzkDcsIlBJJxwwZNoDuqO8r0GA==}
+  '@react-pdf/renderer@4.1.1':
+    resolution: {integrity: sha512-xwP4mGug/fJ7GQUup0tgZVVJAt7jJqfLr0Ji5NGs7FiY6xwL2S37AQ9DwStJf6EwXeEvz8MV4PomBzMF/W/fmw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
@@ -17310,7 +17310,7 @@ snapshots:
 
   '@react-pdf/primitives@4.0.0': {}
 
-  '@react-pdf/reconciler@1.1.0': {}
+  '@react-pdf/reconciler@1.1.1': {}
 
   '@react-pdf/render@4.0.0':
     dependencies:
@@ -17325,14 +17325,14 @@ snapshots:
       parse-svg-path: 0.1.2
       svg-arc-to-cubic-bezier: 3.2.0
 
-  '@react-pdf/renderer@4.1.0(react@19.0.0-rc-cae764ce-20241025)':
+  '@react-pdf/renderer@4.1.1(react@19.0.0-rc-cae764ce-20241025)':
     dependencies:
       '@babel/runtime': 7.26.0
       '@react-pdf/font': 3.0.0
       '@react-pdf/layout': 4.1.0
       '@react-pdf/pdfkit': 4.0.0
       '@react-pdf/primitives': 4.0.0
-      '@react-pdf/reconciler': 1.1.0
+      '@react-pdf/reconciler': 1.1.1
       '@react-pdf/render': 4.0.0
       '@react-pdf/types': 2.7.0
       events: 3.3.0
