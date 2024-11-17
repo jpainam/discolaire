@@ -48,3 +48,12 @@ model ScheduleTask {
     status  String    @default("pending")
     data    Json?
 }
+
+model GradeAppreciation {
+    id           Int    @id @default(autoincrement())
+    minGrade     Float
+    maxGrade     Float
+    appreciation String
+    schoolId     String
+    schoolYearId String
+}

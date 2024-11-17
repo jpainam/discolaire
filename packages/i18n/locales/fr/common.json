@@ -815,6 +815,8 @@
   "frequence": "Fréquence",
   "destinations": "Destinations",
   "schedule_created_successfully": "Programmation créée avec succès",
+  "grade_options": "Paramètre notes",
+  "add_appreciation": "Ajouter une appréciation",
   "sendAgenda": "Envoyer l'agenda",
   "send_email": "Envoyer un e-mail",
   "send_feedback": "Envoyer votre suggestion",

@@ -36,6 +36,7 @@ export function GradeSheetDataTable({
   });
   return (
     <DataTable
+      className="px-2"
       table={table}
       floatingBar={<GradeSheetDataTableActions table={table} />}
     >

@@ -159,6 +159,10 @@ export function AppSidebar() {
         icon: Settings,
         items: [
           {
+            title: t("grade_options"),
+            url: "/administration/settings/grade-options",
+          },
+          {
             title: t("religions"),
             url: "/administration/settings/religions",
           },

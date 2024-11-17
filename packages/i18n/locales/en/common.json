@@ -15,6 +15,8 @@
   "frequence": "Frequence",
   "destinations": "Destinations",
   "schedule_created_successfully": "Schedule created successfully",
+  "grade_options": "Grade Options",
+  "add_appreciation": "Add Appreciation",
   "PENDING": "Pending",
   "Periods": "periods",
   "number_from_last_week": " {{n}} from last week",
