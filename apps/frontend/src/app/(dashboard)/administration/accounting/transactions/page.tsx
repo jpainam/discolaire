@@ -39,8 +39,8 @@ export default async function Page(props: {
   );
 
   return (
-    <div className="flex flex-col px-2">
-      <div className="grid flex-row items-center gap-4 pt-2 md:flex">
+    <div className="flex flex-col">
+      <div className="grid flex-row items-center gap-4 md:flex">
         <FlatBadge variant={"indigo"}>
           {t("totals")} : {moneyFormatter.format(totals)}
         </FlatBadge>

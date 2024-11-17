@@ -32,37 +32,35 @@ export function TransactionHeader() {
 
   return (
     <div className="flex flex-row items-center gap-2">
-      <div className="flex flex-col gap-1">
-        <Label className="hidden md:block"> {t("from")}</Label>
-        <Input
-          type="date"
-          defaultValue={
-            from ? from : format(subMonths(new Date(), 3), "yyyy-MM-dd")
-          }
-          onChange={(val) => {
-            router.push(`?${createQueryString({ from: val.target.value })}`);
-          }}
-        />
-      </div>
-      <div className="flex flex-col gap-1">
-        <Label className="hidden md:block">{t("to")}</Label>
-        <Input
-          type="date"
-          defaultValue={to ? to : format(new Date(), "yyyy-MM-dd")}
-          min={from ? from : format(subMonths(new Date(), 3), "yyyy-MM-dd")}
-          onChange={(val) => {
-            router.push(`?${createQueryString({ to: val.target.value })}`);
-          }}
-        />
-      </div>
-      <div className="flex flex-col gap-1">
-        <Label>{t("status")}</Label>
-        <TransactionStatusSelector
-          onChange={(val) => {
-            router.push(`?${createQueryString({ status: val })}`);
-          }}
-        />
-      </div>
+      <Label className="hidden md:block"> {t("from")}</Label>
+      <Input
+        type="date"
+        className="w-48"
+        defaultValue={
+          from ? from : format(subMonths(new Date(), 3), "yyyy-MM-dd")
+        }
+        onChange={(val) => {
+          router.push(`?${createQueryString({ from: val.target.value })}`);
+        }}
+      />
+
+      <Label className="hidden md:block">{t("to")}</Label>
+      <Input
+        type="date"
+        className="w-48"
+        defaultValue={to ? to : format(new Date(), "yyyy-MM-dd")}
+        min={from ? from : format(subMonths(new Date(), 3), "yyyy-MM-dd")}
+        onChange={(val) => {
+          router.push(`?${createQueryString({ to: val.target.value })}`);
+        }}
+      />
+
+      <Label>{t("status")}</Label>
+      <TransactionStatusSelector
+        onChange={(val) => {
+          router.push(`?${createQueryString({ status: val })}`);
+        }}
+      />
 
       <div className="ml-auto">
         <DropdownMenu>
