@@ -1,8 +1,14 @@
 "use client";
 
 import type { LucideIcon } from "lucide-react";
-import { Folder, Forward, MoreHorizontal, Trash2 } from "lucide-react";
+import {
+  FileClockIcon,
+  GalleryHorizontalEnd,
+  MoreHorizontal,
+  Trash2,
+} from "lucide-react";
 
+import { useLocale } from "@repo/i18n";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,17 +36,17 @@ export function NavProjects({
   }[];
 }) {
   const { isMobile } = useSidebar();
-
+  const { t } = useLocale();
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Projects</SidebarGroupLabel>
+      <SidebarGroupLabel>{t("communications")}</SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
               <a href={item.url}>
                 <item.icon />
-                <span>{item.name}</span>
+                <span>{t(item.name)}</span>
               </a>
             </SidebarMenuButton>
             <DropdownMenu>
@@ -56,12 +62,12 @@ export function NavProjects({
                 align={isMobile ? "end" : "start"}
               >
                 <DropdownMenuItem>
-                  <Folder className="text-muted-foreground" />
-                  <span>View Project</span>
+                  <GalleryHorizontalEnd className="text-muted-foreground" />
+                  <span>{t("templates")}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Forward className="text-muted-foreground" />
-                  <span>Share Project</span>
+                  <FileClockIcon className="text-muted-foreground" />
+                  <span>{t("history")}</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
