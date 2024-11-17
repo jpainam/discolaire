@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { MoreVertical, PlusIcon } from "lucide-react";
+import { MoreVertical, PlusIcon, SettingsIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 
 import { useLocale } from "@repo/i18n";
@@ -49,6 +49,10 @@ export function GradeSheetHeader() {
         }}
         classroomId={params.id}
       />
+      <Button size={"sm"} variant={"ghost"}>
+        <SettingsIcon className="mr-1 h-4 w-4" />
+        {t("manage_appreciation")}
+      </Button>
       <div className="ml-auto flex flex-row items-center gap-2">
         <Button
           onClick={() => {

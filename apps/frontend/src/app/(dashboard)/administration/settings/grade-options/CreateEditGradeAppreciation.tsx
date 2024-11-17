@@ -1,6 +1,5 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { SaveIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
