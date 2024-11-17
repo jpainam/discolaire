@@ -20,7 +20,6 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TransactionStatusSelector } from "~/components/shared/selects/TransactionStatusSelector";
 import { useRouter } from "~/hooks/use-router";
-import { SidebarTrigger } from "../sidebar";
 
 export function TransactionHeader() {
   const searchParams = useSearchParams();
@@ -32,9 +31,7 @@ export function TransactionHeader() {
   const { createQueryString } = useCreateQueryString();
 
   return (
-    <div className="flex flex-row items-center gap-2 px-2 pt-4">
-      <SidebarTrigger />
-
+    <div className="flex flex-row items-center gap-2">
       <div className="flex flex-col gap-1">
         <Label className="hidden md:block"> {t("from")}</Label>
         <Input

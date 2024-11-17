@@ -1,7 +1,6 @@
 import { Label } from "@repo/ui/label";
 import { Separator } from "@repo/ui/separator";
-
-import { SidebarTrigger } from "~/components/administration/sidebar";
+import { SidebarTrigger } from "@repo/ui/sidebar";
 
 export function PageHeader({
   title,

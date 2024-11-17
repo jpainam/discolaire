@@ -2,19 +2,14 @@
 
 import {
   Atom,
-  BookUserIcon,
-  BoxesIcon,
   CalendarDays,
   CircleDollarSign,
   Eclipse,
   Frame,
-  HandCoinsIcon,
   LifeBuoy,
   Map,
   PieChart,
   Rabbit,
-  ReceiptIcon,
-  School,
   SchoolIcon,
   Send,
   Settings,
@@ -22,23 +17,18 @@ import {
 } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
-
-import { NavMain } from "./nav-main";
-import { NavProjects } from "./nav-projects";
-import { NavSecondary } from "./nav-secondary";
-import { NavUser } from "./nav-user";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarHeader,
-  SidebarItem,
-  SidebarLabel,
-} from "./sidebar";
-import { StorageCard } from "./storage-card";
-import { TeamSwitcher } from "./team-switcher";
+  SidebarRail,
+} from "@repo/ui/sidebar";
 
-export function AppSidebar() {
+import { NavMain } from "./nav-main";
+import { NavProjects } from "./nav-projects";
+import { NavUser } from "./nav-user";
+
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { t } = useLocale();
   const data = {
     teams: [
@@ -73,20 +63,14 @@ export function AppSidebar() {
           {
             title: t("courses"),
             url: "/administration/courses",
-            icon: Users,
-            description: "All your courses",
           },
           {
             title: t("classroom_settings"),
             url: "/administration/classrooms",
-            icon: School,
-            description: "Classroom settings",
           },
           {
             title: t("directory"),
             url: "/administration/directory",
-            icon: BookUserIcon,
-            description: "All your directory",
           },
         ],
       },
@@ -98,20 +82,14 @@ export function AppSidebar() {
           {
             title: "Frais",
             url: "/administration/accounting/fees",
-            icon: ReceiptIcon,
-            description: "Our fastest model for general use cases.",
           },
           {
             title: "Transactions",
             url: "/administration/accounting/transactions",
-            icon: HandCoinsIcon,
-            description: "Performance and speed for efficiency.",
           },
           {
             title: "Groupes",
             url: "/administration/accounting/groups",
-            icon: BoxesIcon,
-            description: "The most powerful model for complex computations.",
           },
           {
             title: t("settings"),
@@ -215,64 +193,20 @@ export function AppSidebar() {
         icon: Map,
       },
     ],
-    searchResults: [
-      {
-        title: "Routing Fundamentals",
-        teaser:
-          "The skeleton of every application is routing. This page will introduce you to the fundamental concepts of routing for the web and how to handle routing in Next.js.",
-        url: "#",
-      },
-      {
-        title: "Layouts and Templates",
-        teaser:
-          "The special files layout.js and template.js allow you to create UI that is shared between routes. This page will guide you through how and when to use these special files.",
-        url: "#",
-      },
-      {
-        title: "Data Fetching, Caching, and Revalidating",
-        teaser:
-          "Data fetching is a core part of any application. This page goes through how you can fetch, cache, and revalidate data in React and Next.js.",
-        url: "#",
-      },
-      {
-        title: "Server and Client Composition Patterns",
-        teaser:
-          "When building React applications, you will need to consider what parts of your application should be rendered on the server or the client. ",
-        url: "#",
-      },
-      {
-        title: "Server Actions and Mutations",
-        teaser:
-          "Server Actions are asynchronous functions that are executed on the server. They can be used in Server and Client Components to handle form submissions and data mutations in Next.js applications.",
-        url: "#",
-      },
-    ],
   };
   return (
-    <Sidebar>
-      <SidebarHeader>
+    <Sidebar collapsible="icon" {...props}>
+      {/* <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
-      </SidebarHeader>
+      </SidebarHeader> */}
       <SidebarContent>
-        <SidebarItem>
-          <SidebarLabel>{t("establishment")}</SidebarLabel>
-          <NavMain items={data.navMain} searchResults={data.searchResults} />
-        </SidebarItem>
-        <SidebarItem>
-          <SidebarLabel>Projects</SidebarLabel>
-          <NavProjects projects={data.projects} />
-        </SidebarItem>
-        <SidebarItem className="mt-auto">
-          <SidebarLabel>Help</SidebarLabel>
-          <NavSecondary items={data.navSecondary} />
-        </SidebarItem>
-        <SidebarItem>
-          <StorageCard />
-        </SidebarItem>
+        <NavMain items={data.navMain} />
+        <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
       </SidebarFooter>
+      <SidebarRail />
     </Sidebar>
   );
 }

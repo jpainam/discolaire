@@ -23,7 +23,7 @@ export async function Header() {
   const user = await api.user.get(session.user.id);
 
   return (
-    <header className="fixed top-0 z-40 flex w-full flex-col items-center border-b border-primary bg-background dark:border-muted-foreground/20 dark:bg-background">
+    <header className="fixed top-0 z-40 flex w-full flex-col items-center border-b border-primary bg-white dark:border-muted-foreground/20 dark:bg-background dark:bg-black">
       <div
         className={
           "ml-auto flex w-full flex-row items-center gap-2 px-2 text-sm text-secondary-foreground md:w-auto"

@@ -1,6 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { GeistMono } from "geist/font/mono";
-import { GeistSans } from "geist/font/sans";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { I18nProvider } from "@repo/i18n/i18n-context";
@@ -10,6 +8,8 @@ import { cn } from "~/lib/utils";
 import { TRPCReactProvider } from "~/trpc/react";
 
 import "~/styles/globals.css";
+
+import localFont from "next/font/local";
 
 //import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
@@ -22,6 +22,17 @@ import { ThemeProvider } from "~/components/theme-provider";
 import { env } from "~/env";
 import AuthProvider from "~/providers/auth-provider";
 import ConfirmDialogProvider from "~/providers/confirm-dialog-provider";
+
+const geistSans = localFont({
+  src: "./fonts/GeistVF.woff",
+  variable: "--font-geist-sans",
+  weight: "100 900",
+});
+const geistMono = localFont({
+  src: "./fonts/GeistMonoVF.woff",
+  variable: "--font-geist-mono",
+  weight: "100 900",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -69,9 +80,9 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
         </head>
         <body
           className={cn(
+            geistSans.variable,
+            geistMono.variable,
             "min-h-screen bg-background font-sans text-foreground antialiased",
-            GeistSans.variable,
-            GeistMono.variable,
           )}
         >
           <NuqsAdapter>

@@ -1,18 +1,18 @@
-import React from "react";
+import type { PropsWithChildren } from "react";
+
+import { SidebarInset, SidebarProvider } from "@repo/ui/sidebar";
 
 import { AppSidebar } from "~/components/administration/app-sidebar";
-import { SidebarLayout } from "~/components/administration/sidebar";
+import { AdministrationPageHeader } from "./AdministrationPageHeader";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: PropsWithChildren) {
   return (
-    <SidebarLayout
-      //defaultOpen={(await cookies()).get("sidebar:state")?.value === "true"}
-      defaultOpen={true}
-    >
-      <AppSidebar />
-      <main className="flex-colp-2 flex-1 flex-col pt-[90px] transition-all duration-300 ease-in-out">
-        {children}
-      </main>
-    </SidebarLayout>
+    <SidebarProvider>
+      <AppSidebar className="pt-[95px]" />
+      <SidebarInset className="pt-[90px]">
+        <AdministrationPageHeader />
+        <div className="flex flex-1 flex-col gap-4 px-4">{children}</div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
