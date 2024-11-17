@@ -286,4 +286,22 @@ export const userRouter = createTRPCRouter({
         },
       });
     }),
+  loginActivities: protectedProcedure
+    .input(z.object({ userIds: z.array(z.string()) }))
+    .query(async ({ ctx, input }) => {
+      return ctx.db.loginActivity.findMany({
+        take: 10,
+        where: {
+          userId: {
+            in: input.userIds,
+          },
+        },
+        include: {
+          user: true,
+        },
+        orderBy: {
+          loginDate: "desc",
+        },
+      });
+    }),
 });

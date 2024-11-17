@@ -1105,6 +1105,7 @@ model User {
     subjectJournals   SubjectJournal[] @relation("createdBy")
     passwordResets    PasswordReset?
     scheduleJobs      ScheduleJob[]
+    loginActivities   LoginActivity[]
 }
 
 model VerificationToken {

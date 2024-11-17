@@ -66,3 +66,14 @@ model ClassroomGradeAppreciation {
 
     @@id([classroomId, gradeAppreciationId])
 }
+
+model LoginActivity {
+    id         Int       @id @default(autoincrement())
+    userId     String
+    ipAddress  String
+    device     String
+    loginDate  DateTime
+    logoutDate DateTime?
+    createdAt  DateTime  @default(now()) @db.Timestamp(6)
+    user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
