@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { SaveIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -22,8 +23,8 @@ import { Input } from "@repo/ui/input";
 import { api } from "~/trpc/react";
 
 const createEditAppreciationSchema = z.object({
-  min: z.coerce.number().int().min(0),
-  max: z.coerce.number().int().min(0),
+  min: z.coerce.number().min(0),
+  max: z.coerce.number().min(0),
   appreciation: z.string().min(1),
 });
 export function CreateEditGradeAppreciation({
@@ -145,7 +146,13 @@ export function CreateEditGradeAppreciation({
             <XIcon className="mr-2 size-4" />
             {t("cancel")}
           </Button>
-          <Button type="submit" size={"sm"}>
+          <Button
+            isLoading={
+              createAppreciation.isPending || updateAppreciation.isPending
+            }
+            type="submit"
+            size={"sm"}
+          >
             <SaveIcon className="mr-2 size-4" />
             {t("submit")}
           </Button>

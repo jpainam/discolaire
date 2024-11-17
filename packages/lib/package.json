@@ -9,6 +9,7 @@
       "types": "./dist/index.d.ts",
       "default": "./src/index.ts"
     },
+    "./appreciation": "./src/appreciation.ts",
     "./*": {
       "types": "./dist/*.d.ts",
       "default": "./src/*.ts"

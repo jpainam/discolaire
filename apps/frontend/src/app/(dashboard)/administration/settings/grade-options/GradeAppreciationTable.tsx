@@ -104,10 +104,12 @@ export function GradeAppreciationTable() {
             {gradeAppreciationsQuery.data?.map((gradeOption, index) => {
               return (
                 <TableRow key={`gradeOption-${index}`}>
-                  <TableCell>{gradeOption.minGrade}</TableCell>
-                  <TableCell>{gradeOption.maxGrade}</TableCell>
-                  <TableCell>{gradeOption.appreciation}</TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="py-0">{gradeOption.minGrade}</TableCell>
+                  <TableCell className="py-0">{gradeOption.maxGrade}</TableCell>
+                  <TableCell className="py-0">
+                    {gradeOption.appreciation}
+                  </TableCell>
+                  <TableCell className="py-0 text-right">
                     <div className="flex flex-row items-center justify-end gap-2">
                       <Button
                         onClick={() => {

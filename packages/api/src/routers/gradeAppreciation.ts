@@ -38,6 +38,28 @@ export const gradeAppreciationRouter = createTRPCRouter({
         },
       });
     }),
+  classroom: protectedProcedure
+    .input(
+      z.object({
+        classroomId: z.string().min(1),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.gradeAppreciation.findMany({
+        orderBy: {
+          minGrade: "asc",
+        },
+        where: {
+          schoolId: ctx.schoolId,
+          schoolYearId: ctx.schoolYearId,
+          classroomAppreciations: {
+            some: {
+              classroomId: input.classroomId,
+            },
+          },
+        },
+      });
+    }),
   create: protectedProcedure
     .input(
       z.object({

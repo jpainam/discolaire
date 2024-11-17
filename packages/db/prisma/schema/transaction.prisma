@@ -50,10 +50,19 @@ model ScheduleTask {
 }
 
 model GradeAppreciation {
-    id           Int    @id @default(autoincrement())
-    minGrade     Float
-    maxGrade     Float
-    appreciation String
-    schoolId     String
-    schoolYearId String
+    id                     Int                          @id @default(autoincrement())
+    minGrade               Float
+    maxGrade               Float
+    appreciation           String
+    schoolId               String
+    schoolYearId           String
+    classroomAppreciations ClassroomGradeAppreciation[]
+}
+
+model ClassroomGradeAppreciation {
+    classroomId         String
+    gradeAppreciationId Int
+    appreciation        GradeAppreciation @relation(fields: [gradeAppreciationId], references: [id])
+
+    @@id([classroomId, gradeAppreciationId])
 }
