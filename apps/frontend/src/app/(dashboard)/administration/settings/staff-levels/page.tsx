@@ -1,5 +1,6 @@
 import { getServerTranslations } from "@repo/i18n/server";
 import { EmptyState } from "@repo/ui/EmptyState";
+import { Label } from "@repo/ui/label";
 import {
   Table,
   TableBody,
@@ -10,7 +11,6 @@ import {
 } from "@repo/ui/table";
 
 import { api } from "~/trpc/server";
-import { PageHeader } from "../../PageHeader";
 import { StaffLevelAction } from "./StaffLevelAction";
 import { StaffLevelTableAction } from "./StaffLevelTableAction";
 
@@ -20,9 +20,10 @@ export default async function Page() {
 
   return (
     <div className="flex flex-col gap-2">
-      <PageHeader title={`${t("settings")} - ${t("staff_level")}`}>
+      <div className="flex flex-row items-center justify-between">
+        <Label>{`${t("settings")} - ${t("staff_level")}`}</Label>
         <StaffLevelAction />
-      </PageHeader>
+      </div>
       <div className="mx-2 rounded-lg border">
         <Table>
           <TableHeader>

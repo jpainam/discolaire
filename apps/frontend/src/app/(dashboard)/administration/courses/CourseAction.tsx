@@ -22,7 +22,7 @@ export function CourseAction() {
   const { t } = useLocale();
   const { openModal } = useModal();
   return (
-    <>
+    <div className="flex flex-row items-center gap-4">
       <Button
         onClick={() => {
           openModal({
@@ -57,6 +57,6 @@ export function CourseAction() {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </>
+    </div>
   );
 }

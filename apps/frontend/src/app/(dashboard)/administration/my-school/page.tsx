@@ -30,7 +30,7 @@ export default async function Page() {
   const { t } = await getServerTranslations();
 
   return (
-    <div className="m-2 rounded-lg border">
+    <div className="rounded-lg border">
       <Table>
         <TableHeader>
           <TableRow className="bg-muted/50">

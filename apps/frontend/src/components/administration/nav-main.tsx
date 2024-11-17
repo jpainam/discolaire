@@ -1,6 +1,7 @@
 "use client";
 
 import type { LucideIcon } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
@@ -35,6 +36,7 @@ export function NavMain({
   }[];
 }) {
   const { t } = useLocale();
+  const pathname = usePathname();
   return (
     <SidebarGroup>
       <SidebarGroupLabel>{t("establishment")}</SidebarGroupLabel>
@@ -43,7 +45,10 @@ export function NavMain({
           <Collapsible
             key={item.title}
             asChild
-            defaultOpen={item.isActive}
+            defaultOpen={
+              item.isActive ??
+              item.items?.some((subItem) => subItem.url === pathname)
+            }
             className="group/collapsible"
           >
             <SidebarMenuItem>

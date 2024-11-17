@@ -3,9 +3,9 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@repo/auth";
 import { getServerTranslations } from "@repo/i18n/server";
+import { Label } from "@repo/ui/label";
 
 import { env } from "~/env";
-import { PageHeader } from "../PageHeader";
 import { CreateSchoolAction } from "./CreateSchoolAction";
 
 export default async function Layout({ children }: PropsWithChildren) {
@@ -17,10 +17,11 @@ export default async function Layout({ children }: PropsWithChildren) {
   const user = session.user;
 
   return (
-    <div className="flex flex-col">
-      <PageHeader title={t("my_school")}>
+    <div className="flex flex-col gap-2">
+      <div className="flex flex-row items-center justify-between">
+        <Label>{t("my_school")}</Label>
         {user.username == env.SUPER_ADMIN_USERNAME && <CreateSchoolAction />}
-      </PageHeader>
+      </div>
       {children}
     </div>
   );

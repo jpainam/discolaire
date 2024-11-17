@@ -1,17 +1,18 @@
 import type { PropsWithChildren } from "react";
 
 import { getServerTranslations } from "@repo/i18n/server";
+import { Label } from "@repo/ui/label";
 
-import { PageHeader } from "../PageHeader";
 import { ClassroomTabMenu } from "./ClassroomTabMenu";
 
 export default async function Layout({ children }: PropsWithChildren) {
   const { t } = await getServerTranslations();
   return (
     <div className="flex flex-col">
-      <PageHeader title={t("classroom_settings")}>
+      <div className="flex flex-row items-center justify-between">
+        <Label>{t("classroom_settings")}</Label>
         <ClassroomTabMenu />
-      </PageHeader>
+      </div>
       {children}
     </div>
   );

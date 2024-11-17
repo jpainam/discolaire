@@ -1,6 +1,6 @@
 import { getServerTranslations } from "@repo/i18n/server";
+import { Label } from "@repo/ui/label";
 
-import { PageHeader } from "../../PageHeader";
 import { SchoolAction } from "./SchoolAction";
 import { SchoolDataTable } from "./SchoolDataTable";
 
@@ -8,12 +8,12 @@ export default async function Page() {
   const { t } = await getServerTranslations();
   return (
     <div className="flex flex-col gap-2">
-      <PageHeader title={`${t("settings")} - ${t("former_schools")}`}>
+      <div className="flex flex-row items-center justify-center">
+        <Label>{`${t("settings")} - ${t("former_schools")}`}</Label>
         <SchoolAction />
-      </PageHeader>
-      <div className="p-2">
-        <SchoolDataTable />
       </div>
+
+      <SchoolDataTable />
     </div>
   );
 }

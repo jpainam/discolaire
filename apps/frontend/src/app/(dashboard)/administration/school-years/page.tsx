@@ -1,16 +1,17 @@
 import { getServerTranslations } from "@repo/i18n/server";
+import { Label } from "@repo/ui/label";
 
 import { SchoolYearHeader } from "~/components/schoolyears/SchoolYearHeader";
 import { SchoolYearTable } from "~/components/schoolyears/SchoolYearTable";
-import { PageHeader } from "../PageHeader";
 
 export default async function Page() {
   const { t } = await getServerTranslations();
   return (
     <div className="p4 flex flex-col gap-2">
-      <PageHeader title={t("schoolYear")}>
+      <div className="flex flex-row items-center justify-center">
+        <Label>{t("schoolYear")}</Label>
         <SchoolYearHeader />
-      </PageHeader>
+      </div>
 
       <SchoolYearTable />
     </div>

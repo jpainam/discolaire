@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
 
 import { getServerTranslations } from "@repo/i18n/server";
+import { Label } from "@repo/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
 
 import { api } from "~/trpc/server";
-import { PageHeader } from "../../../PageHeader";
 import { PolicyDataTable } from "./PolicyDataTable";
 import { UserDataTable } from "./UserDataTable";
 
@@ -23,7 +23,7 @@ export default async function Page(props: {
   }
   return (
     <div className="flex flex-col gap-2">
-      <PageHeader title={`${t("role")} - ${role.name}`} />
+      <Label>{`${t("role")} - ${role.name}`}</Label>
 
       <Tabs defaultValue="users" className="px-2">
         <TabsList>

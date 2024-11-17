@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { getServerTranslations } from "@repo/i18n/server";
+import { Label } from "@repo/ui/label";
 import {
   Table,
   TableBody,
@@ -11,7 +12,6 @@ import {
 } from "@repo/ui/table";
 
 import { api } from "~/trpc/server";
-import { PageHeader } from "../../PageHeader";
 import { CreateRoleButton } from "./CreateRoleButton";
 import { EditDeleteAction } from "./EditDeleteAction";
 
@@ -25,9 +25,10 @@ export default async function Page() {
   });
   return (
     <div className="flex flex-col gap-2">
-      <PageHeader title={t("roles")}>
+      <div className="flex flex-row items-center justify-between">
+        <Label>{t("roles")}</Label>
         <CreateRoleButton />
-      </PageHeader>
+      </div>
 
       <div className="mx-2 rounded-md border">
         <Table>

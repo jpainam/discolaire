@@ -1,6 +1,6 @@
 import { getServerTranslations } from "@repo/i18n/server";
+import { Label } from "@repo/ui/label";
 
-import { PageHeader } from "../../PageHeader";
 import { ReligionAction } from "./ReligionAction";
 import { ReligionTable } from "./ReligionTable";
 
@@ -9,9 +9,10 @@ export default async function Page() {
 
   return (
     <div className="flex flex-col gap-2">
-      <PageHeader title={`${t("settings")} - ${t("religions")}`}>
+      <div className="flex flex-row items-center justify-between">
+        <Label>{`${t("settings")} - ${t("religions")}`}</Label>
         <ReligionAction />
-      </PageHeader>
+      </div>
       <ReligionTable />
     </div>
   );

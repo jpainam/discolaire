@@ -19,7 +19,7 @@ export function SportTable() {
   const sports = sportsQuery.data ?? [];
   const { t } = useLocale();
   return (
-    <div className="mx-2 rounded-lg border">
+    <div className="rounded-lg border">
       <Table>
         <TableHeader>
           <TableRow className="bg-muted/50">

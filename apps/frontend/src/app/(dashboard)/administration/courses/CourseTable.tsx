@@ -48,7 +48,7 @@ export function CourseTable() {
     },
   });
   return (
-    <div className="mx-2 rounded-lg border">
+    <div className="rounded-lg border">
       <Table>
         <TableHeader>
           <TableRow className="bg-muted/50">

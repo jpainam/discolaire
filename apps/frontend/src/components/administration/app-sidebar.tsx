@@ -30,6 +30,7 @@ import { NavUser } from "./nav-user";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { t } = useLocale();
+
   const data = {
     teams: [
       {
@@ -58,8 +59,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         title: t("my_school"),
         url: "/administration/my-school",
         icon: SchoolIcon,
-        isActive: true,
+
         items: [
+          {
+            title: t("my_school"),
+            url: "/administration/my-school",
+          },
           {
             title: t("courses"),
             url: "/administration/courses",
@@ -78,6 +83,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         title: "Finances",
         url: "#",
         icon: CircleDollarSign,
+        //isActive: true,
         items: [
           {
             title: "Frais",

@@ -1,6 +1,6 @@
 import { getServerTranslations } from "@repo/i18n/server";
+import { Label } from "@repo/ui/label";
 
-import { PageHeader } from "../../PageHeader";
 import { TermHeader } from "./TermHeader";
 import { TermTable } from "./TermTable";
 
@@ -8,9 +8,10 @@ export default async function Page() {
   const { t } = await getServerTranslations();
   return (
     <div className="flex flex-col gap-2">
-      <PageHeader title={t("terms")}>
+      <div className="flex flex-row items-center justify-center">
+        <Label>{t("terms")}</Label>
         <TermHeader />
-      </PageHeader>
+      </div>
       <TermTable />
     </div>
   );

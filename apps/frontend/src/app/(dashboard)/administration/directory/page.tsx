@@ -1,7 +1,7 @@
 import { getServerTranslations } from "@repo/i18n/server";
+import { Label } from "@repo/ui/label";
 
 import { api } from "~/trpc/server";
-import { PageHeader } from "../PageHeader";
 import DirectoryHeader from "./DirectoryHeader";
 import { DirectoryTable } from "./DirectoryTable";
 
@@ -14,9 +14,10 @@ export default async function Page(props: {
   const { t } = await getServerTranslations();
   return (
     <div className="flex flex-col gap-2">
-      <PageHeader title={t("directory")}>
+      <div className="flex flex-row items-center justify-between">
+        <Label>{t("directory")}</Label>
         <DirectoryHeader />
-      </PageHeader>
+      </div>
       <DirectoryTable directories={directories} />
     </div>
   );
