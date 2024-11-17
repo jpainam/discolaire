@@ -1,12 +1,15 @@
 "use client";
 
 import { Pencil, PlusIcon, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
-import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import { useConfirm } from "@repo/ui/confirm-dialog";
+import { EmptyState } from "@repo/ui/EmptyState";
+import { Skeleton } from "@repo/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -16,16 +19,28 @@ import {
   TableRow,
 } from "@repo/ui/table";
 
+import { api } from "~/trpc/react";
 import { CreateEditGradeAppreciation } from "./CreateEditGradeAppreciation";
 
-export function GradeAppreciationTable({
-  classrooms,
-}: {
-  classrooms: RouterOutputs["classroom"]["all"];
-}) {
+export function GradeAppreciationTable() {
   const { openModal } = useModal();
-
+  const gradeAppreciationsQuery = api.gradeAppreciation.all.useQuery();
+  const utils = api.useUtils();
   const { t } = useLocale();
+  const deleteAppreciation = api.gradeAppreciation.delete.useMutation({
+    onSettled: () => {
+      void utils.gradeAppreciation.invalidate();
+      toast.success(t("deleted_successfully"), { id: 0 });
+    },
+    onSuccess: () => {
+      toast.success(t("deleted_successfully"), { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
+  const confirm = useConfirm();
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center border-b bg-muted/50 px-2 pb-1 pt-0">
@@ -36,7 +51,7 @@ export function GradeAppreciationTable({
               openModal({
                 className: "w-[500px]",
                 title: t("add_appreciation"),
-                view: <CreateEditGradeAppreciation classrooms={classrooms} />,
+                view: <CreateEditGradeAppreciation />,
               });
             }}
             size={"sm"}
@@ -54,26 +69,90 @@ export function GradeAppreciationTable({
               <TableHead>{t("min_grade")}</TableHead>
               <TableHead>{t("max_grade")}</TableHead>
               <TableHead>{t("appreciation")}</TableHead>
-              <TableHead>{t("classrooms")}</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell>Paid</TableCell>
-              <TableCell>Credit Card</TableCell>
-              <TableCell className="text-right">
-                <div className="flex flex-row items-center justify-end gap-2">
-                  <Button size={"icon"} variant={"ghost"}>
-                    <Pencil className="h-4 w-4" />
-                  </Button>
-                  <Button size={"icon"} variant={"ghost"}>
-                    <Trash2 className="h-4 w-4 text-destructive" />
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
+            {gradeAppreciationsQuery.isPending && (
+              <>
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      <Skeleton className="h-8" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-8" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-8" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-8" />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </>
+            )}
+            {!gradeAppreciationsQuery.isPending &&
+              gradeAppreciationsQuery.data?.length == 0 && (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center">
+                    <EmptyState title={t("no_data")} className="py-8" />
+                  </TableCell>
+                </TableRow>
+              )}
+            {gradeAppreciationsQuery.data?.map((gradeOption, index) => {
+              return (
+                <TableRow key={`gradeOption-${index}`}>
+                  <TableCell>{gradeOption.minGrade}</TableCell>
+                  <TableCell>{gradeOption.maxGrade}</TableCell>
+                  <TableCell>{gradeOption.appreciation}</TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex flex-row items-center justify-end gap-2">
+                      <Button
+                        onClick={() => {
+                          openModal({
+                            className: "w-[500px]",
+                            title: t("add_appreciation"),
+                            view: (
+                              <CreateEditGradeAppreciation
+                                gradeAppreciation={gradeOption}
+                              />
+                            ),
+                          });
+                        }}
+                        size={"icon"}
+                        variant={"ghost"}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        onClick={async () => {
+                          const isConfirm = await confirm({
+                            title: t("delete"),
+                            description: t("delete_confirmation"),
+                            icon: (
+                              <Trash2 className="h-6 w-6 text-destructive" />
+                            ),
+                            alertDialogTitle: {
+                              className: "flex items-center gap-2",
+                            },
+                          });
+                          if (isConfirm) {
+                            toast.loading(t("deleting"), { id: 0 });
+                            deleteAppreciation.mutate(gradeOption.id);
+                          }
+                        }}
+                        size={"icon"}
+                        variant={"ghost"}
+                      >
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </CardContent>

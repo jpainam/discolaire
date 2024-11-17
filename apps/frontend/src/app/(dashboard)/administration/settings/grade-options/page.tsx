@@ -1,11 +1,9 @@
-import { api } from "~/trpc/server";
 import { GradeAppreciationTable } from "./GradeAppreciationTable";
 
-export default async function Page() {
-  const classrooms = await api.classroom.all();
+export default function Page() {
   return (
-    <div className="grid gap-2 p-2 lg:grid-cols-2">
-      <GradeAppreciationTable classrooms={classrooms} />
+    <div className="grid gap-2 lg:grid-cols-2">
+      <GradeAppreciationTable />
     </div>
   );
 }

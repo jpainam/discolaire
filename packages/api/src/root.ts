@@ -24,6 +24,7 @@ import { feeRouter } from "./routers/fee";
 import { feedbackRouter } from "./routers/feedback";
 import { formerShoolRouter } from "./routers/formerSchool";
 import { gradeRouter } from "./routers/grade";
+import { gradeAppreciationRouter } from "./routers/gradeAppreciation";
 import { gradeSheetRouter } from "./routers/gradeSheet";
 import { healthRouter } from "./routers/health";
 import { invitationRouter } from "./routers/invitation";
@@ -74,6 +75,7 @@ export const appRouter = createTRPCRouter({
   fee: feeRouter,
   degree: degreeRouter,
   course: courseRouter,
+  gradeAppreciation: gradeAppreciationRouter,
   classroomCycle: classroomCycleRouter,
   classroomLevel: classroomLevelRouter,
   classroomSection: classroomSectionRouter,
