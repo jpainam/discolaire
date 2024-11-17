@@ -1,16 +1,10 @@
-import { getServerTranslations } from "@repo/i18n/server";
-import { Label } from "@repo/ui/label";
-
 import { CourseAction } from "./CourseAction";
 import { CourseTable } from "./CourseTable";
 
-export default async function Page() {
-  const { t } = await getServerTranslations();
-
+export default function Page() {
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex flex-row items-center justify-between">
-        <Label>{t("courses")}</Label>
+      <div className="ml-auto">
         <CourseAction />
       </div>
       <CourseTable />

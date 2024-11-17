@@ -16,6 +16,36 @@ export const pageHeaderBreadcrumbs: Record<
       url: "/administration/my-school",
     },
   ],
+  "/administration/courses": [
+    {
+      title: "my_school",
+      url: "/administration/my-school",
+    },
+    {
+      title: "courses",
+      url: "/administration/courses",
+    },
+  ],
+  "/administration/classrooms": [
+    {
+      title: "my_school",
+      url: "/administration/my-school",
+    },
+    {
+      title: "classroom_settings",
+      url: "/administration/classrooms",
+    },
+  ],
+  "/administration/accounting/transactions": [
+    {
+      title: "finances",
+      url: "/administration/accounting",
+    },
+    {
+      title: "transactions",
+      url: "/administration/accounting/transactions",
+    },
+  ],
 };
 export const adminMenu = {
   navMain: [
