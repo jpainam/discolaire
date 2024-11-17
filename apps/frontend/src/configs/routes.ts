@@ -170,15 +170,15 @@ export const routes = {
       /subjects/${id}`,
     },
     sms_management: {
-      details: (id: number) => `/administration/sms-management/${id}`,
-      history: "/administration/sms-management",
-      templates: "/administration/sms-management/templates",
-      to_parents: "/administration/sms-management/to-parents",
-      to_staffs: "/administration/sms-management/to-staffs",
+      details: (id: number) => `/administration/sms-emails/${id}`,
+      history: "/administration/sms-emails",
+      templates: "/administration/sms-emails/templates",
+      to_parents: "/administration/sms-emails/to-parents",
+      to_staffs: "/administration/sms-emails/to-staffs",
     },
     grade_management: {
-      index: "/administration/grade-management",
-      appreciations: "/administration/grade-management/appreciations",
+      index: "/administration/grade-options",
+      appreciations: "/administration/grade-options/appreciations",
     },
     index: "/administration",
     students: {
