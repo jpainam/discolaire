@@ -2,7 +2,8 @@ import { Contact, FileStack, NotepadTextDashed, Users } from "lucide-react";
 
 import { getServerTranslations } from "@repo/i18n/server";
 
-import { TabLink } from "~/components/users/tab-link";
+import type { TabMenuOption } from "~/components/shared/TabMenu";
+import { TabMenu } from "~/components/shared/TabMenu";
 import { routes } from "~/configs/routes";
 
 interface UserLink {
@@ -16,7 +17,7 @@ export default async function Layout({
   children: React.ReactNode;
 }) {
   const { t } = await getServerTranslations();
-  const userLinks: UserLink[] = [
+  const userLinks: TabMenuOption[] = [
     {
       name: t("sms_management.history"),
       href: routes.administration.sms_management.history,
@@ -38,12 +39,13 @@ export default async function Layout({
       icon: <Users className="h-4 w-4" />,
     },
   ];
+
   return (
     <div className="flex flex-col">
       <div className="m-2 flex max-w-fit items-center rounded-full bg-gray-100">
         {userLinks.map((link: UserLink, _index) => {
           return (
-            <TabLink
+            <TabMenu
               key={link.href}
               href={link.href}
               icon={link.icon}

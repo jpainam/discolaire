@@ -1,6 +1,5 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { CircleGauge, LayoutPanelTop, Recycle } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
@@ -11,7 +10,7 @@ import { routes } from "~/configs/routes";
 
 export function ClassroomTabMenu() {
   const { t } = useLocale();
-  const pathname = usePathname();
+  //const pathname = usePathname();
 
   const menuTabs: TabMenuOption[] = [
     {
@@ -38,7 +37,7 @@ export function ClassroomTabMenu() {
         return (
           <TabMenu
             key={link.href}
-            isActive={pathname === link.href}
+            //isActive={pathname === link.href}
             href={link.href}
             icon={link.icon}
             title={link.name}

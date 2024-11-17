@@ -1,6 +1,5 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import {
   ArrowLeftRight,
   Euro,
@@ -19,7 +18,7 @@ import { routes } from "~/configs/routes";
 export function TransactionToolbar() {
   const { t } = useLocale();
   //const { createQueryString } = useCreateQueryString();
-  const pathname = usePathname();
+  //const pathname = usePathname();
 
   const menuTabs: TabMenuOption[] = [
     {
@@ -60,7 +59,7 @@ export function TransactionToolbar() {
         return (
           <TabMenu
             key={link.href}
-            isActive={pathname === link.href}
+            //isActive={pathname === link.href}
             href={link.href}
             icon={link.icon}
             title={link.name}

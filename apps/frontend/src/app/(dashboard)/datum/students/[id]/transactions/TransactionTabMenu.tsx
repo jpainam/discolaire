@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import { CircleGauge, PlusIcon, Recycle } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
@@ -11,7 +11,6 @@ import { routes } from "~/configs/routes";
 
 export function TransactionTabMenu() {
   const { t } = useLocale();
-  const pathname = usePathname();
   const params = useParams<{ id: string }>();
 
   const menuTabs: TabMenuOption[] = [
@@ -38,7 +37,7 @@ export function TransactionTabMenu() {
         return (
           <TabMenu
             key={link.href}
-            isActive={pathname === link.href}
+            //isActive={pathname === link.href}
             href={link.href}
             icon={link.icon}
             title={link.name}

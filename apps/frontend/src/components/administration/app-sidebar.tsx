@@ -37,7 +37,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     projects: [
       {
         name: "sms_and_emails",
-        url: "#",
+        url: "/administration/sms-emails",
         icon: Frame,
       },
       {

@@ -46,6 +46,16 @@ export const pageHeaderBreadcrumbs: Record<
       url: "/administration/accounting/transactions",
     },
   ],
+  "/administration/sms_emails": [
+    {
+      title: "communications",
+      url: "/administration/sms-emails",
+    },
+    {
+      title: "sms_and_emails",
+      url: "/administration/sms-emails",
+    },
+  ],
 };
 export const adminMenu = {
   navMain: [
