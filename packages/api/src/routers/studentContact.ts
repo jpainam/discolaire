@@ -49,6 +49,9 @@ export const studentContactRouter = createTRPCRouter({
     }),
   relationships: protectedProcedure.query(({ ctx }) => {
     return ctx.db.relationship.findMany({
+      where: {
+        schoolId: ctx.schoolId,
+      },
       orderBy: {
         id: "asc",
       },
@@ -129,6 +132,46 @@ export const studentContactRouter = createTRPCRouter({
           },
         },
         data: input.data,
+      });
+    }),
+  createRelationship: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().min(1),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.relationship.create({
+        data: {
+          name: input.name,
+          schoolId: ctx.schoolId,
+        },
+      });
+    }),
+  updateRelationship: protectedProcedure
+    .input(
+      z.object({
+        id: z.coerce.number(),
+        name: z.string().min(1),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.relationship.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name,
+        },
+      });
+    }),
+  deleteRelationship: protectedProcedure
+    .input(z.coerce.number())
+    .mutation(({ ctx, input }) => {
+      return ctx.db.relationship.delete({
+        where: {
+          id: input,
+        },
       });
     }),
 });

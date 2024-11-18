@@ -443,6 +443,8 @@ model Enrollment {
 model Relationship {
     id             Int              @id @default(autoincrement())
     name           String
+    schoolId       String
+    school         School           @relation(fields: [schoolId], references: [id], onDelete: Cascade)
     StudentContact StudentContact[]
 }
 
@@ -732,6 +734,7 @@ model School {
     terms              Term[]
     documents          Document[]
     degrees            Degree[]
+    relationships      Relationship[]
 }
 
 model FormerSchool {
