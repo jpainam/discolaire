@@ -147,6 +147,10 @@ export const adminMenu = {
       icon: Settings,
       items: [
         {
+          title: "configurations_page",
+          url: "/administration/settings",
+        },
+        {
           title: "grade_options",
           url: "/administration/settings/grade-options",
         },

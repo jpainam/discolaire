@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from "@repo/ui/card";
 import { useConfirm } from "@repo/ui/confirm-dialog";
+import { Skeleton } from "@repo/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -73,9 +74,20 @@ export function StudentContactRelationship() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((relationship) => {
+            {relationshipsQuery.isPending && (
+              <TableRow>
+                <TableCell colSpan={2}>
+                  <div className="grid grid-cols-2 gap-2 py-2">
+                    {Array.from({ length: 10 }).map((_, index) => (
+                      <Skeleton key={index} className="h-8" />
+                    ))}
+                  </div>
+                </TableCell>
+              </TableRow>
+            )}
+            {data.map((relationship, index) => {
               return (
-                <TableRow>
+                <TableRow key={`${relationship.id}-${index}`}>
                   <TableCell className="py-0">{relationship.name}</TableCell>
                   <TableCell className="py-0 text-right">
                     <div className="flex flex-row items-center justify-end gap-1">
