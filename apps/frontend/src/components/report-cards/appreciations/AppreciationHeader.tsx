@@ -69,7 +69,10 @@ export function AppreciationHeader() {
         type="single"
       >
         {options.map((option) => (
-          <ToggleGroupItem value={option.value}>
+          <ToggleGroupItem
+            className="rounded-sm data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+            value={option.value}
+          >
             {option.iconLeft} {option.label}
           </ToggleGroupItem>
         ))}

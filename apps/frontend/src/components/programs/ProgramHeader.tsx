@@ -30,8 +30,18 @@ export function ProgramHeader() {
         }}
         type="single"
       >
-        <ToggleGroupItem value="1">{t("chronological_view")}</ToggleGroupItem>
-        <ToggleGroupItem value="2">{t("weekly_view")}</ToggleGroupItem>
+        <ToggleGroupItem
+          className="rounded-sm data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+          value="1"
+        >
+          {t("chronological_view")}
+        </ToggleGroupItem>
+        <ToggleGroupItem
+          className="rounded-sm data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+          value="2"
+        >
+          {t("weekly_view")}
+        </ToggleGroupItem>
       </ToggleGroup>
 
       <Label>{t("since")}</Label>

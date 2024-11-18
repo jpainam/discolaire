@@ -26,7 +26,6 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
-import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 
@@ -40,7 +39,7 @@ export function StudentGradeHeader({
   const { t } = useLocale();
   // const searchParams = useSearchParams();
   const [term] = useQueryState("term", parseAsInteger);
-  const [view, setView] = useQueryState("view", {
+  const [_, setView] = useQueryState("view", {
     defaultValue: "by_chronological_order",
   });
   const studentGradesQuery = api.student.grades.useQuery({
@@ -95,7 +94,11 @@ export function StudentGradeHeader({
   const utils = api.useUtils();
 
   if (classroomMinMaxMoyGrades.isPending) {
-    return <Skeleton className="h-8 w-full" />;
+    return (
+      <div className="border-b py-2">
+        <Skeleton className="h-8 w-full" />
+      </div>
+    );
   }
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary px-2 py-1 text-secondary-foreground">
@@ -136,15 +139,13 @@ export function StudentGradeHeader({
         >
           <ToggleGroupItem
             value="by_chronological_order"
-            className={cn(
-              view == "by_chronological_order" ? "bg-blue-500" : "",
-            )}
+            className="rounded-sm data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
             aria-label="Toggle by_chronological_order"
           >
             <ListIcon className="h-4 w-4" />
           </ToggleGroupItem>
           <ToggleGroupItem
-            className={cn(view == "by_subject" ? "bg-blue-500" : "")}
+            className="rounded-sm data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
             value="by_subject"
             aria-label="Toggle by_subject"
           >
