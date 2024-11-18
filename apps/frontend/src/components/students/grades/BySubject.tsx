@@ -40,7 +40,8 @@ export function BySubject({ grades, minMaxMoy }: BySubjectProps) {
         if (!computeSums[subjectId]) {
           computeSums[subjectId] = 0;
         }
-        computeSums[subjectId] += grade.grade * Number(grade.gradeSheet.weight);
+        computeSums[subjectId] +=
+          grade.grade * (Number(grade.gradeSheet.weight) / 100.0);
       }
     });
     setSubjectSums(computeSums);

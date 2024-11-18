@@ -14,8 +14,8 @@ import { ScrollArea } from "@repo/ui/scroll-area";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { api } from "~/trpc/react";
-import { ByChronologicalOrder } from "./by-chronological-order";
-import { BySubject } from "./by-subject";
+import { ByChronologicalOrder } from "./ByChronologicalOrder";
+import { BySubject } from "./BySubject";
 
 interface StudentGradeProps {
   classroomId: string;

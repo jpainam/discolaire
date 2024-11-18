@@ -13,7 +13,7 @@ import {
 import { getServerTranslations } from "@repo/i18n/server";
 import { Separator } from "@repo/ui/separator";
 
-import { GradeSheetStats } from "./grade-sheet-stats";
+import { GradeSheetStats } from "./GradeSheetStats";
 
 interface GradeSheetPageProps {
   params: Promise<{ id: string; gradeId: number }>;
