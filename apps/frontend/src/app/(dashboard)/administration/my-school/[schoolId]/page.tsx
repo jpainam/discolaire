@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import {
   BookMarkedIcon,
   Globe,
@@ -38,9 +38,7 @@ export default async function Page(props: {
   }
 
   const school = await api.school.get(schoolId);
-  if (!school) {
-    notFound();
-  }
+
   if (
     school.id !== session.user.schoolId &&
     session.user.username !== env.SUPER_ADMIN_USERNAME

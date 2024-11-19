@@ -19,7 +19,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const { t, i18n } = await getServerTranslations();
   const student = await api.student.get(id);
   const school = await api.school.get(student.schoolId);
-  if (!school || student.schoolId !== school.id) {
+  if (student.schoolId !== school.id) {
     notFound();
   }
 

@@ -234,14 +234,12 @@ export const studentService = {
           : Number(latestStudent.registrationNumber.slice(-4))) + 1;
       return `${startWidth}${nextRegistration.toString().padStart(4, "0")}`;
     }
-    const school = await db.school.findUnique({
+    const school = await db.school.findUniqueOrThrow({
       where: {
         id: schoolId,
       },
     });
-    if (!school) {
-      throw new Error("School not found");
-    }
+
     return `${startWidth}${school.registrationPrefix}2001`;
   },
 };

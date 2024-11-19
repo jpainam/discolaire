@@ -11,5 +11,7 @@ export {
 export * from "./reportcards/CSAB";
 export * from "./statements/AccountStatement";
 //export { ReactPDFRenderer };
+export * from "./classroom/ClassroomStudentList";
 export * from "./headers/ReportCardHeader";
 export * from "./reportcards/IPBW";
+export * from "./statements/IPBWReceipt";

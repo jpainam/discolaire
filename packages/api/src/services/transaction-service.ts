@@ -70,15 +70,11 @@ export const transactionService = {
         })
       : null;
 
-    const school = await db.school.findUnique({
+    const school = await db.school.findUniqueOrThrow({
       where: {
         id: student.schoolId,
       },
     });
-
-    if (!school) {
-      throw new Error("School not found");
-    }
 
     const studentContact = await db.studentContact.findMany({
       include: {

@@ -22,10 +22,8 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const { id } = params;
 
   const { t, i18n } = await getServerTranslations();
-  const school = await api.school.getSchool();
-  if (!school) {
-    throw new Error("School not found");
-  }
+  //const school = await api.school.getSchool();
+
   const account = await api.studentAccount.getByStudentId(id);
   if (!account) {
     throw new Error("Account not found");

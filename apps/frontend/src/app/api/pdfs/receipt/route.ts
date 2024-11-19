@@ -1,46 +1,66 @@
 import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
-import puppeteer from "puppeteer";
+import { z } from "zod";
 
-export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  console.log(searchParams);
+import { IPBWReceipt, renderToStream } from "@repo/reports";
+
+import { api } from "~/trpc/server";
+
+const searchSchema = z.object({
+  preview: z.coerce.boolean().default(true),
+  size: z.union([z.literal("letter"), z.literal("a4")]).default("letter"),
+  id: z.coerce.number(),
+});
+export async function GET(req: NextRequest) {
   try {
-    // Launch a Puppeteer browser instance
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"], // Use these args if deploying in a restricted environment like Vercel or Lambda
-    });
+    const requestUrl = new URL(req.url);
 
-    const page = await browser.newPage();
+    const obj: Record<string, string> = {};
 
-    // Use the id to navigate to a dynamic URL, or generate the content dynamically
-    // Replace the URL below with your own route or dynamic content URL
-    //const url = `http://localhost:3000/pdf-content/${id}`;
-    const url =
-      "http://localhost:3000/datum/students/fb9efa0b-1164-41d2-b9b0-3fca67acdb63/transactions/7447";
-    await page.goto(url, { waitUntil: "networkidle0" });
+    for (const [key, value] of requestUrl.searchParams.entries()) {
+      obj[key] = value;
+    }
 
-    // Generate PDF from the page content
-    const pdfBuffer = await page.pdf({
-      format: "A4",
-      printBackground: true,
-    });
+    const result = searchSchema.safeParse(obj);
+    if (!result.success) {
+      const error = result.error.issues.map((e) => e.message).join(", ");
+      return new Response(error, { status: 400 });
+    }
+    const { id, size, preview } = result.data;
 
-    // Close the browser
-    await browser.close();
+    const transaction = await api.transaction.get(id);
+    if (!transaction) {
+      return new Response("Transaction not found", { status: 404 });
+    }
+    const school = await api.school.getSchool();
+    const student = await api.student.get(transaction.account.studentId);
+    const contacts = await api.student.contacts(transaction.account.studentId);
 
-    return new NextResponse(pdfBuffer, {
-      headers: {
-        "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename=receipt-generated.pdf`,
-      },
-    });
-  } catch (error) {
-    console.error("Error generating PDF:", error);
-    return NextResponse.json(
-      { message: "Failed to generate PDF" },
-      { status: 500 },
+    const stream = await renderToStream(
+      IPBWReceipt({
+        transaction: transaction,
+        contacts: contacts,
+        student: student,
+        school: school,
+        size: size,
+      }),
     );
+
+    // @ts-expect-error TODO: fix this
+    const blob = await new Response(stream).blob();
+
+    const headers: Record<string, string> = {
+      "Content-Type": "application/pdf",
+      "Cache-Control": "no-store, max-age=0",
+    };
+
+    if (!preview) {
+      headers["Content-Disposition"] =
+        `attachment; filename="Receipt-${student.lastName}-${student.firstName}.pdf"`;
+    }
+
+    return new Response(blob, { headers });
+  } catch (error) {
+    console.error(error);
+    return new Response(String(error), { status: 500 });
   }
 }

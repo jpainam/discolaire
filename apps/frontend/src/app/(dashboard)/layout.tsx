@@ -17,9 +17,7 @@ export default async function Layout({
     redirect("/auth/login");
   }
   const school = await api.school.get(session.user.schoolId);
-  if (!school) {
-    throw new Error("School not found");
-  }
+
   const permissions = await api.user.permissions();
   return (
     <SchoolContextProvider school={school} permissions={permissions}>

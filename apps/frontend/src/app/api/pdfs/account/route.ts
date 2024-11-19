@@ -29,9 +29,6 @@ export async function GET(req: NextRequest) {
 
     const student = await api.student.get(id);
     const school = await api.school.getSchool();
-    if (!school) {
-      return new Response("No school found", { status: 400 });
-    }
 
     const data = await api.studentAccount.getStatements({ studentId: id });
 

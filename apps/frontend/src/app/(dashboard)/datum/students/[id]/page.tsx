@@ -13,7 +13,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const school = await api.school.getSchool();
   const student = await api.student.get(params.id);
-  if (!school || student.schoolId !== school.id) {
+  if (student.schoolId !== school.id) {
     notFound();
   }
   const canReadStudent = await checkPermissions(

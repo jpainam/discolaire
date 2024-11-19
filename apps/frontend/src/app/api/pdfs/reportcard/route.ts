@@ -3,8 +3,6 @@ import type { NextRequest } from "next/server";
 import { auth } from "@repo/auth";
 import { CSABReportCard, renderToStream } from "@repo/reports";
 
-import { api } from "~/trpc/server";
-
 export const preferredRegion = ["fra1", "sfo1", "iad1"];
 export const dynamic = "force-dynamic";
 
@@ -21,10 +19,7 @@ export async function GET(req: NextRequest) {
     return new Response("Not authenticated", { status: 401 });
   }
 
-  const school = await api.school.getSchool();
-  if (!school) {
-    return new Response("No school found", { status: 400 });
-  }
+  //const school = await api.school.getSchool();
 
   const stream = await renderToStream(CSABReportCard({ size: size }));
 

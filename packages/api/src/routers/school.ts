@@ -32,14 +32,14 @@ export const schoolRouter = createTRPCRouter({
     });
   }),
   getSchool: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db.school.findUnique({
+    return ctx.db.school.findUniqueOrThrow({
       where: {
         id: ctx.schoolId,
       },
     });
   }),
   get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    return ctx.db.school.findUnique({
+    return ctx.db.school.findUniqueOrThrow({
       where: {
         id: input,
       },

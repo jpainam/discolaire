@@ -29,10 +29,8 @@ export default async function Page(props: {
   const studentContacts = await api.student.contacts(id);
   const classroom = await api.student.classroom({ studentId: id });
   const isStep2 = amount && description && transactionType && paymentMethod;
-  const school = await api.school.getSchool();
-  if (!school) {
-    throw new Error("School not found");
-  }
+  //const school = await api.school.getSchool();
+
   return (
     <div className="flex w-full flex-col gap-2">
       <div className="flex items-center border-b bg-secondary px-2 py-2 text-secondary-foreground">
