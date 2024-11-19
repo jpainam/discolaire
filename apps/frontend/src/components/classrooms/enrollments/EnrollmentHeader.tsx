@@ -1,7 +1,6 @@
 "use client";
 
 import { MoreVertical, Plus } from "lucide-react";
-import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
@@ -18,11 +17,9 @@ import { Label } from "@repo/ui/label";
 import { Separator } from "@repo/ui/separator";
 import { Skeleton } from "@repo/ui/skeleton";
 
-import { printClassroomStudent } from "~/actions/reporting";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { useCheckPermissions } from "~/hooks/use-permissions";
-import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { getAge } from "~/utils/student-utils";
 import { EnrollStudent } from "./EnrollStudent";
@@ -34,7 +31,6 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
   const classroomStudentsQuery = api.classroom.students.useQuery(classroomId);
   const classroomQuery = api.classroom.get.useQuery(classroomId);
   const classroom = classroomQuery.data;
-  const utils = api.useUtils();
 
   const canEnroll = useCheckPermissions(
     PermissionAction.CREATE,
@@ -152,19 +148,10 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
             <DropdownMenuItem
               disabled={classroomQuery.isPending}
               onSelect={() => {
-                toast.loading(t("printing"), { id: 0 });
-                void printClassroomStudent(
-                  classroomId,
-                  `${t("student_list")} ${classroom.name} - ${t("students")}`,
-                  "excel",
-                )
-                  .then(() => {
-                    void utils.reporting.invalidate();
-                    toast.success(t("printing_job_submitted"), { id: 0 });
-                  })
-                  .catch((e) => {
-                    toast.error(getErrorMessage(e), { id: 0 });
-                  });
+                window.open(
+                  `/api/pdfs/classroom/students?id=${classroomId}&preview=true&size=a4&format=csv`,
+                  "_blank",
+                );
               }}
             >
               <XMLIcon className="mr-2 h-4 w-4" />
@@ -172,19 +159,10 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={() => {
-                toast.loading(t("printing"), { id: 0 });
-                void printClassroomStudent(
-                  classroomId,
-                  `${t("student_list")} ${classroom.name} - ${t("students")}`,
-                  "excel",
-                )
-                  .then(() => {
-                    void utils.reporting.invalidate();
-                    toast.success(t("printing_job_submitted"), { id: 0 });
-                  })
-                  .catch((e) => {
-                    toast.error(getErrorMessage(e), { id: 0 });
-                  });
+                window.open(
+                  `/api/pdfs/classroom/students?id=${classroomId}&preview=true&size=a4&format=pdf`,
+                  "_blank",
+                );
               }}
             >
               <PDFIcon className="mr-2 h-4 w-4" />
