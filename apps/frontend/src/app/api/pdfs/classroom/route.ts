@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
     const school = await api.school.getSchool();
 
     const stream = await renderToStream(
-      await ClassroomStudentList({
+      ClassroomStudentList({
         students: students,
         school: school,
         size: "a4",

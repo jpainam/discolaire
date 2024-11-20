@@ -117,7 +117,7 @@ async function toPdf({
   size?: "a4" | "letter";
 }) {
   const stream = await renderToStream(
-    await ClassroomStudentList({
+    ClassroomStudentList({
       students: students,
       school: school,
       size: size,
