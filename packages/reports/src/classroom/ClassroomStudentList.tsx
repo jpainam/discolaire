@@ -1,9 +1,10 @@
 import { Document, Image, Page, Text, View } from "@react-pdf/renderer";
 
 import type { RouterOutputs } from "@repo/api";
-import { getServerTranslations } from "@repo/i18n/server";
 
-export async function ClassroomStudentList({
+//import { getServerTranslations } from "@repo/i18n/server";
+
+export function ClassroomStudentList({
   school,
   students,
   size = "a4",
@@ -15,7 +16,7 @@ export async function ClassroomStudentList({
   students: RouterOutputs["classroom"]["students"];
 }) {
   const w = [0.1, 0.3, 0.3, 0.2, 0.1];
-  const { t, i18n } = await getServerTranslations();
+  //const { t, i18n } = await getServerTranslations();
   return (
     <Document>
       <Page
@@ -61,16 +62,16 @@ export async function ClassroomStudentList({
         </View>
         <View style={{ flexDirection: "row" }}>
           <View style={{ flex: w[0] }}>
-            <Text>{t("No")}</Text>
+            <Text>{"No"}</Text>
           </View>
           <View style={{ flex: w[1] }}>
-            <Text>{t("lastName")}</Text>
+            <Text>{"lastName"}</Text>
           </View>
           <View style={{ flex: w[2] }}>
-            <Text>{t("firstName")}</Text>
+            <Text>{"firstName"}</Text>
           </View>
           <View style={{ flex: w[3] }}>
-            <Text>{t("dateOfBirth")}</Text>
+            <Text>{"dateOfBirth"}</Text>
           </View>
         </View>
         {students.map((student, index) => {
@@ -95,7 +96,7 @@ export async function ClassroomStudentList({
               </View>
               <View style={{ flex: w[3] }}>
                 <Text>
-                  {student.dateOfBirth?.toLocaleDateString(i18n.language, {
+                  {student.dateOfBirth?.toLocaleDateString("fr", {
                     year: "numeric",
                     month: "2-digit",
                     day: "2-digit",

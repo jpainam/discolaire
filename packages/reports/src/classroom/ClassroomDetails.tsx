@@ -1,16 +1,17 @@
 import { Document, Page, Text, View } from "@react-pdf/renderer";
 
 import type { RouterOutputs } from "@repo/api";
-import { getServerTranslations } from "@repo/i18n/server";
 
-export async function ClassroomDetails({
+//import { getServerTranslations } from "@repo/i18n/server";
+
+export function ClassroomDetails({
   school,
   classroom,
 }: {
   school: RouterOutputs["school"]["getSchool"];
   classroom: RouterOutputs["classroom"]["get"];
 }) {
-  const { t } = await getServerTranslations();
+  //const { t } = await getServerTranslations();
   return (
     <Document>
       <Page
@@ -29,7 +30,7 @@ export async function ClassroomDetails({
           }}
         >
           <View style={{ flexDirection: "row" }}>
-            <Text>{t("name")}</Text>
+            <Text>{"name"}</Text>
             <Text>{classroom.name}</Text>
             <Text>{school.name}</Text>
           </View>
