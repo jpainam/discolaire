@@ -6,7 +6,7 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "react-server": "./src/index.rsc.ts",
       "default": "./src/index.ts"
     }
   },
