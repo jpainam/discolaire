@@ -3,7 +3,8 @@
 import type { Style } from "@react-pdf/types";
 import React, { useMemo } from "react";
 import { View } from "@react-pdf/renderer";
-import { flatten } from "@react-pdf/stylesheet";
+
+import { flatten } from "../utils";
 
 export interface TableProps
   extends Omit<React.ComponentProps<typeof View>, "children"> {
@@ -37,7 +38,6 @@ export default function Table({
   ...rest
 }: TableProps) {
   const tableStyle = useMemo(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     const style = flatten([
       {
         borderColor: "#000000",
