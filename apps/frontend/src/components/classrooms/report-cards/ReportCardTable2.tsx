@@ -34,8 +34,6 @@ export async function ReportCardTable({
 }) {
   const { t } = await getServerTranslations();
   const subjects = await api.classroom.subjects(classroomId);
-  console.log(result.length);
-  console.log(term);
   const studentGrades: Record<string, StudentGradeReport[]> = _.groupBy(
     grades,
     (g) => g.studentId,
