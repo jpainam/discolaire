@@ -1,6 +1,7 @@
 "use client";
 
-import { ChevronDownIcon, PrinterIcon } from "lucide-react";
+import { useParams } from "next/navigation";
+import { MoreVertical } from "lucide-react";
 import { parseAsInteger, useQueryState } from "nuqs";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
@@ -25,6 +26,7 @@ export function ReportCardHeader() {
   const { createQueryString } = useCreateQueryString();
   const [termId] = useQueryState("term", parseAsInteger);
   const router = useRouter();
+  const params = useParams<{ id: string }>();
   const Icon = sidebarIcons.report_cards;
   return (
     <div className="grid flex-row items-center gap-4 border-b bg-muted/40 px-2 py-1 md:flex">
@@ -40,24 +42,25 @@ export function ReportCardHeader() {
       <div className="flex flex-row items-center gap-2 md:ml-auto">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              size={"sm"}
-              className="flex w-fit flex-row gap-1"
-            >
-              <PrinterIcon className="h-4 w-4" />
-              {t("print")}
-              <ChevronDownIcon className="h-4 w-4" />
+            <Button variant={"outline"} size={"icon"}>
+              <MoreVertical className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onSelect={() => {
+                window.open(
+                  `/api/pdfs/report-cards?classroomId=${params.id}&termId=${termId}`,
+                  "_blank",
+                );
+              }}
+            >
               <PDFIcon className="mr-2 h-4 w-4" />
-              {t("report_cards")}
+              {t("pdf_export")}
             </DropdownMenuItem>
             <DropdownMenuItem>
               <XMLIcon className="mr-2 h-4 w-4" />
-              {t("report_cards")}
+              {t("xml_export")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

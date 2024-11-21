@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { ChevronDown, MailIcon, Printer } from "lucide-react";
+import { MailIcon, MoreVertical } from "lucide-react";
 import { useQueryState } from "nuqs";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
@@ -75,19 +75,17 @@ export function ReportCardHeader() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant={"outline"} className="flex flex-row gap-1">
-              <Printer className="h-4 w-4" />
-              {t("print")}
-              <ChevronDown className="h-4 w-4" />
+              <MoreVertical className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem>
               <PDFIcon className="mr-2 h-4 w-4" />
-              {t("report_cards")}
+              {t("pdf_export")}
             </DropdownMenuItem>
             <DropdownMenuItem>
               <XMLIcon className="mr-2 h-4 w-4" />
-              {t("report_cards")}
+              {t("xml_export")}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
