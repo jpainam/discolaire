@@ -58,7 +58,7 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
   const subjectGroupsQuery = api.subjectGroup.all.useQuery();
   const subjectCreateMutation = api.subject.create.useMutation({
     onSettled: async () => {
-      await utils.classroom.subjects.invalidate({ id: params.id });
+      await utils.classroom.subjects.invalidate(params.id);
     },
     onSuccess: () => {
       toast.success(t("created_successfully"), { id: 0 });
@@ -71,7 +71,7 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
   });
   const subjectUpdateMutation = api.subject.update.useMutation({
     onSettled: async () => {
-      await utils.classroom.subjects.invalidate({ id: params.id });
+      await utils.classroom.subjects.invalidate(params.id);
     },
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });

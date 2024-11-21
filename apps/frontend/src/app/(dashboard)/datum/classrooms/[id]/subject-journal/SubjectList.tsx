@@ -9,7 +9,7 @@ import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
 export function SubjectList({ classroomId }: { classroomId: string }) {
-  const subjectsQuery = api.classroom.subjects.useQuery({ id: classroomId });
+  const subjectsQuery = api.classroom.subjects.useQuery(classroomId);
   const router = useRouter();
   const params = useParams<{ subjectId: string }>();
   if (subjectsQuery.isPending) {

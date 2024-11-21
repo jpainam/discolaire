@@ -5,7 +5,7 @@ import { db } from "@repo/db";
 import { classroomService } from "./classroom-service";
 import { calculateFinalGrade, getRank } from "./utils-service";
 
-async function getGrades(classroomId: string, termId: number) {
+export async function getGrades(classroomId: string, termId: number) {
   const gradeSheets = await db.gradeSheet.findMany({
     where: {
       termId,

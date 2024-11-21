@@ -77,6 +77,10 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
       >
         <head>
           <meta name="google" content="notranslate" />
+          {/* <script
+            src="https://unpkg.com/react-scan/dist/auto.global.js"
+            async
+          ></script> */}
         </head>
         <body
           className={cn(

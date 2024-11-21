@@ -3,7 +3,7 @@ import _ from "lodash";
 import { db } from "@repo/db";
 
 async function get(classroomId: string, schoolId: string) {
-  const classroom = await db.classroom.findUnique({
+  const classroom = await db.classroom.findUniqueOrThrow({
     where: {
       id: classroomId,
       schoolId: schoolId,
@@ -18,9 +18,6 @@ async function get(classroomId: string, schoolId: string) {
       seniorAdvisor: true,
     },
   });
-  if (!classroom) {
-    throw new Error("Classroom not found");
-  }
   const count = await getCount(classroomId);
   return {
     ...classroom,

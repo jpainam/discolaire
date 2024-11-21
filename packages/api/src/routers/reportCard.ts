@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { reportCardService } from "../services/report-card-service";
+import { getGrades, reportCardService } from "../services/report-card-service";
 import { studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -12,6 +12,16 @@ export const reportCardRouter = createTRPCRouter({
     )
     .query(({ input }) => {
       return reportCardService.getClassroom(input.classroomId, input.termId);
+    }),
+  getGrades: protectedProcedure
+    .input(
+      z.object({
+        classroomId: z.string().min(1),
+        termId: z.coerce.number(),
+      }),
+    )
+    .query(({ input }) => {
+      return getGrades(input.classroomId, input.termId);
     }),
   getStudent: protectedProcedure
     .input(

@@ -3,7 +3,7 @@ import { EmptyState } from "@repo/ui/EmptyState";
 import FlatBadge from "@repo/ui/FlatBadge";
 import { Separator } from "@repo/ui/separator";
 
-import { ReportCardTable } from "~/components/classrooms/report-cards/ReportCardTable";
+import { ReportCardTable } from "~/components/classrooms/report-cards/ReportCardTable2";
 import { api } from "~/trpc/server";
 import { getAppreciations } from "~/utils/get-appreciation";
 
@@ -19,6 +19,10 @@ export default async function Page(props: {
   if (!term) {
     return <EmptyState className="my-8" />;
   }
+  const grades = await api.reportCard.getGrades({
+    classroomId: params.id,
+    termId: Number(term),
+  });
   const { result, summary } = await api.reportCard.getClassroom({
     termId: Number(term),
     classroomId: params.id,
@@ -47,9 +51,12 @@ export default async function Page(props: {
         </FlatBadge>
       </div>
       <Separator />
+
       <ReportCardTable
         term={Number(term)}
         result={result.sort((a, b) => a.rank - b.rank)}
+        classroomId={params.id}
+        grades={grades}
       />
     </div>
   );

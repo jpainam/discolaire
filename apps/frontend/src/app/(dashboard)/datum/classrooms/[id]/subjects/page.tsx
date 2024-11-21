@@ -21,7 +21,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   if (!canReadClassroomSubject) {
     return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
   }
-  const subjects = await api.classroom.subjects({ id });
+  const subjects = await api.classroom.subjects(id);
   return (
     <div className="flex w-full flex-col">
       <SubjectHeader subjects={subjects} />

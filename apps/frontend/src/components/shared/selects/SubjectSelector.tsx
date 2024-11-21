@@ -46,9 +46,7 @@ export function SubjectSelector({
   const [value, setValue] = React.useState(defaultValue);
   const [items, setItems] = React.useState<Option[]>([]);
   const { t } = useLocale();
-  const subjectsQuery = api.classroom.subjects.useQuery({
-    id: classroomId,
-  });
+  const subjectsQuery = api.classroom.subjects.useQuery(classroomId);
 
   const subjects = subjectsQuery.data;
   React.useEffect(() => {

@@ -11,7 +11,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const { id } = params;
 
   const { t } = await getServerTranslations();
-  const subjects = await api.classroom.subjects({ id: id });
+  const subjects = await api.classroom.subjects(id);
   const subject = subjects.length > 0 ? subjects[0] : null;
   if (subject) {
     redirect(`/datum/classrooms/${id}/subject-journal/${subject.id}`);

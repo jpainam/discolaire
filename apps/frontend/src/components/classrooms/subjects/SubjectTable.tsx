@@ -37,7 +37,7 @@ import { CreateEditSubject } from "./CreateEditSubject";
 export function SubjectTable({ classroomId }: { classroomId: string }) {
   const { t } = useLocale();
   const { openSheet } = useSheet();
-  const subjectsQuery = api.classroom.subjects.useQuery({ id: classroomId });
+  const subjectsQuery = api.classroom.subjects.useQuery(classroomId);
   const confirm = useConfirm();
   const canDeleteClassroomSubject = useCheckPermissions(
     PermissionAction.DELETE,
@@ -50,7 +50,7 @@ export function SubjectTable({ classroomId }: { classroomId: string }) {
   const router = useRouter();
   const utils = api.useUtils();
   const deleteSubjectMutation = api.subject.delete.useMutation({
-    onSettled: () => utils.classroom.subjects.invalidate(),
+    onSettled: () => utils.classroom.subjects.invalidate(classroomId),
     onSuccess: () => {
       router.refresh();
       toast.success(t("deleted_successfully"), { id: 0 });
