@@ -1,7 +1,9 @@
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
-import { CSABReportCard, renderToStream } from "@repo/reports";
+import { CSAB, renderToStream } from "@repo/reports";
+
+import { api } from "~/trpc/server";
 
 const searchSchema = z.object({
   studentId: z.string().optional(),
@@ -21,15 +23,16 @@ export async function GET(req: NextRequest) {
       const error = result.error.issues.map((e) => e.message).join(", ");
       return new Response(error, { status: 400 });
     }
-    const stream = await renderToStream(CSABReportCard({ size: "a4" }));
+    const school = await api.school.getSchool();
+    const stream = await renderToStream(CSAB({ size: "a4", school: school }));
 
     const headers: Record<string, string> = {
       "Content-Type": "application/pdf",
       "Cache-Control": "no-store, max-age=0",
     };
 
-    headers["Content-Disposition"] =
-      `attachment; filename="CSABReportCard.pdf"`;
+    //headers["Content-Disposition"] =
+    // `attachment; filename="CSABReportCard.pdf"`;
     // @ts-expect-error TODO: fix this
     return new Response(stream, { headers });
   } catch (error) {

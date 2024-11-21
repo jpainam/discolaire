@@ -1,47 +1,13 @@
 import { Document, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 
+import type { RouterOutputs } from "@repo/api";
+
 const styles = StyleSheet.create({
-  page: {
-    padding: 20,
-  },
-  header: {
-    fontSize: 18,
-    textAlign: "center",
-    marginBottom: 10,
-  },
-  row: {
-    flexDirection: "row",
-    borderBottomWidth: 1,
-    borderBottomColor: "#000",
-    //padding: 5,
-    alignItems: "center",
-  },
   cell: {
-    borderRightWidth: 1,
-    borderRightColor: "#000",
-    padding: 5,
-    textAlign: "center",
-  },
-  table: {
-    marginTop: 10,
-    fontSize: 10,
-  },
-  footer: {
-    marginTop: 20,
-    fontSize: 10,
-  },
-  footerSection: {
-    marginTop: 10,
-    flexDirection: "row",
-  },
-  footerCell: {
-    flex: 1,
-    padding: 5,
-    borderTopWidth: 1,
-    borderTopColor: "#000",
+    padding: 2,
+    border: "1px solid black",
   },
 });
-
 const subjects = [
   { name: "Dictée", notes: 10 },
   { name: "Questions", notes: 10 },
@@ -62,52 +28,86 @@ const subjects = [
 
 interface CSABReportCardProps {
   size?: "letter" | "a4";
+  school: RouterOutputs["school"]["getSchool"];
 }
-export function CSABReportCard({ size = "letter" }: CSABReportCardProps) {
+export function CSAB({ size = "letter", school }: CSABReportCardProps) {
+  const w = [0.2, 0.1, 0.1, 0.2, 0.1, 0.1];
   return (
     <Document>
-      <Page size={size.toUpperCase() as "LETTER" | "A4"} style={styles.page}>
-        <Text style={styles.header}>BULLETIN DE NOTES</Text>
+      <Page
+        size={size.toUpperCase() as "LETTER" | "A4"}
+        style={{
+          fontSize: 9,
+          padding: 20,
+          color: "#000",
+          backgroundColor: "#fff",
+          fontFamily: "Helvetica",
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 2,
+          }}
+        >
+          <View style={{ flexDirection: "column", alignItems: "center" }}>
+            <Text>{school.name}</Text>
+          </View>
+        </View>
+        <Text style={{ fontWeight: "bold" }}>BULLETIN DE NOTES</Text>
 
-        <View style={styles.table}>
-          <View style={styles.row}>
-            <Text style={[styles.cell, { flex: 2 }]}>MATIERES</Text>
-            <Text style={[styles.cell, { flex: 1 }]}>NOTES</Text>
+        <View style={{ flexDirection: "column", border: "1px solid black" }}>
+          <View>
+            <Text style={[styles.cell, { flex: w[0] }]}>Matieres</Text>
+            <Text style={{ borderLeft: "1px solid black" }}>NOTES</Text>
             <Text style={[styles.cell, { flex: 1 }]}>SUR</Text>
             <Text style={[styles.cell, { flex: 2 }]}>
               APPRECIATIONS DU MAITRE
             </Text>
           </View>
           {subjects.map((subject, index) => (
-            <View key={index} style={styles.row}>
-              <Text style={[styles.cell, { flex: 2 }]}>{subject.name}</Text>
-              <Text style={[styles.cell, { flex: 1 }]}>____</Text>
-              <Text style={[styles.cell, { flex: 1 }]}>{subject.notes}</Text>
-              <Text style={[styles.cell, { flex: 2 }]}></Text>
+            <View key={index} style={{ flexDirection: "row" }}>
+              <Text
+                style={[
+                  styles.cell,
+                  {
+                    flex: w[0],
+                    borderLeft: 0,
+                    borderBottom: 0,
+                    borderRight: 0,
+                  },
+                ]}
+              >
+                {subject.name}
+              </Text>
+              <Text style={[styles.cell, { flex: w[1], borderTop: 0 }]}></Text>
+              <Text
+                style={[
+                  styles.cell,
+                  { flex: w[2], borderLeft: 0, borderRight: 0 },
+                ]}
+              >
+                {subject.notes}
+              </Text>
+              <Text style={[styles.cell, { flex: w[3], borderTop: 0 }]}></Text>
             </View>
           ))}
         </View>
 
-        <View style={styles.footer}>
+        <View style={{ flexDirection: "row" }}>
           <Text>Total: ____ / Moyenne: ____ /10 Classement: ____</Text>
           <Text>Moyenne du 1er de la classe: ____ /10</Text>
           <Text>Moyenne du dernier de la classe: ____ /10</Text>
 
-          <View style={styles.footerSection}>
-            <Text style={styles.footerCell}>Nbre d'absences:</Text>
-            <Text style={styles.footerCell}>
-              Appréciations et signature des parents
-            </Text>
-            <Text style={styles.footerCell}>
-              Appréciations et signature du Maître
-            </Text>
-            <Text style={styles.footerCell}>
-              Observations et Visa du Directeur
-            </Text>
+          <View>
+            <Text>Nbre d'absences:</Text>
+            <Text>Appréciations et signature des parents</Text>
+            <Text>Appréciations et signature du Maître</Text>
+            <Text>Observations et Visa du Directeur</Text>
           </View>
 
-          <View style={styles.footerSection}>
-            <Text style={styles.footerCell}>Conduite:</Text>
+          <View>
+            <Text>Conduite:</Text>
           </View>
         </View>
       </Page>
