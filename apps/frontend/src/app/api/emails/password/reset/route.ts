@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (user.email) {
-      const emailHtml = render(
+      const emailHtml = await render(
         ResetPassword({
           username: user.username,
           resetLink: `${env.NEXT_PUBLIC_BASE_URL}/auth/password/reset/?code=${hashedCode}`,

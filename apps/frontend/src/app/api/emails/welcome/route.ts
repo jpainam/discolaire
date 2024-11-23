@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
     const { id } = result.data;
     const user = await api.user.get(id);
     if (user?.email) {
-      const emailHtml = render(
+      const emailHtml = await render(
         SendInvite({
           username: user.username,
           invitedByUsername: "Admin",

@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
   });
   // email email
   if (user.email) {
-    const emailHtml = render(PasswordResetSuccess());
+    const emailHtml = await render(PasswordResetSuccess());
     const { t } = await getServerTranslations();
     await api.messaging.sendEmail({
       subject: t("password_reset_successful"),

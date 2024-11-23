@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
     }
     const user = await api.user.get(id);
     if (user?.email) {
-      const emailHtml = render(
+      const emailHtml = await render(
         ResetPassword({
           username: user.username,
           resetLink: `https://discolaire.com/invite/${id}?email=${user.email}`,

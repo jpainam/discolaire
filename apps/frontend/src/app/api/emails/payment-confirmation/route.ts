@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
     }
     const user = await api.user.get(id);
     if (user?.email) {
-      const emailHtml = render(
+      const emailHtml = await render(
         PaymentConfirmationEmail({
           studentName: user.username,
           parentEmail: user.email,
