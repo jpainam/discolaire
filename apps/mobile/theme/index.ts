@@ -2,6 +2,24 @@ import type { Theme } from "@react-navigation/native";
 
 import { COLORS } from "./colors";
 
+const fonts = {
+  regular: {
+    fontFamily: "Helvetica Neue",
+    fontWeight: "400" as const,
+  },
+  medium: {
+    fontFamily: "Helvetica Neue",
+    fontWeight: "500" as const,
+  },
+  bold: {
+    fontFamily: "Helvetica Neue",
+    fontWeight: "600" as const,
+  },
+  heavy: {
+    fontFamily: "Helvetica Neue",
+    fontWeight: "700" as const,
+  },
+};
 const NAV_THEME: { light: Theme; dark: Theme } = {
   light: {
     dark: false,
@@ -13,6 +31,7 @@ const NAV_THEME: { light: Theme; dark: Theme } = {
       primary: COLORS.light.primary,
       text: COLORS.black,
     },
+    fonts: fonts,
   },
   dark: {
     dark: true,
@@ -24,6 +43,7 @@ const NAV_THEME: { light: Theme; dark: Theme } = {
       primary: COLORS.dark.primary,
       text: COLORS.white,
     },
+    fonts: fonts,
   },
 };
 
