@@ -805,8 +805,8 @@ importers:
         specifier: ^3.0.20
         version: 3.0.20
       i18next:
-        specifier: ^23.16.5
-        version: 23.16.5
+        specifier: ^24.0.0
+        version: 24.0.0(typescript@5.5.4)
       i18next-browser-languagedetector:
         specifier: ^8.0.0
         version: 8.0.0
@@ -815,7 +815,7 @@ importers:
         version: 1.2.1
       react-i18next:
         specifier: ^15.1.1
-        version: 15.1.1(i18next@23.16.5)(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025)
+        version: 15.1.1(i18next@24.0.0(typescript@5.5.4))(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025)
     devDependencies:
       '@repo/eslint-config':
         specifier: workspace:*
@@ -897,8 +897,8 @@ importers:
         specifier: ^2.4.3
         version: 2.4.3
       i18next:
-        specifier: ^23.16.5
-        version: 23.16.5
+        specifier: ^24.0.0
+        version: 24.0.0(typescript@5.5.4)
       jotai:
         specifier: ^2.10.2
         version: 2.10.2(@types/react@18.3.3)(react@19.0.0-rc-cae764ce-20241025)
@@ -907,7 +907,7 @@ importers:
         version: 2.0.5
       next-i18next:
         specifier: ^15.3.1
-        version: 15.3.1(i18next@23.16.5)(next@15.0.3(@opentelemetry/api@1.9.0)(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025))(react-i18next@15.1.1(i18next@23.16.5)(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025)
+        version: 15.3.1(i18next@24.0.0(typescript@5.5.4))(next@15.0.3(@opentelemetry/api@1.9.0)(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025))(react-i18next@15.1.1(i18next@24.0.0(typescript@5.5.4))(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025)
       next-nprogress-bar:
         specifier: ^2.3.15
         version: 2.3.15
@@ -8439,8 +8439,13 @@ packages:
   i18next-resources-to-backend@1.2.1:
     resolution: {integrity: sha512-okHbVA+HZ7n1/76MsfhPqDou0fptl2dAlhRDu2ideXloRRduzHsqDOznJBef+R3DFZnbvWoBW+KxJ7fnFjd6Yw==}
 
-  i18next@23.16.5:
-    resolution: {integrity: sha512-KTlhE3EP9x6pPTAW7dy0WKIhoCpfOGhRQlO+jttQLgzVaoOjWwBWramu7Pp0i+8wDNduuzXfe3kkVbzrKyrbTA==}
+  i18next@24.0.0:
+    resolution: {integrity: sha512-ORGCwMrXxpmB/AljFbGEe0UK/9Pz6umb9aZgLZ9qJGE+kjKhlnLj423WX2mt+N0MlEJ78pQXFMBmeMzrkLxriQ==}
+    peerDependencies:
+      typescript: ^5
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   iconv-lite@0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
@@ -21690,9 +21695,11 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.26.0
 
-  i18next@23.16.5:
+  i18next@24.0.0(typescript@5.5.4):
     dependencies:
       '@babel/runtime': 7.26.0
+    optionalDependencies:
+      typescript: 5.5.4
 
   iconv-lite@0.4.24:
     dependencies:
@@ -23187,17 +23194,17 @@ snapshots:
       next: 15.0.3(@opentelemetry/api@1.9.0)(react-dom@19.0.0-rc.1(react@19.0.0-rc.1))(react@19.0.0-rc.1)
       react: 19.0.0-rc.1
 
-  next-i18next@15.3.1(i18next@23.16.5)(next@15.0.3(@opentelemetry/api@1.9.0)(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025))(react-i18next@15.1.1(i18next@23.16.5)(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025):
+  next-i18next@15.3.1(i18next@24.0.0(typescript@5.5.4))(next@15.0.3(@opentelemetry/api@1.9.0)(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025))(react-i18next@15.1.1(i18next@24.0.0(typescript@5.5.4))(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025):
     dependencies:
       '@babel/runtime': 7.26.0
       '@types/hoist-non-react-statics': 3.3.5
       core-js: 3.38.0
       hoist-non-react-statics: 3.3.2
-      i18next: 23.16.5
+      i18next: 24.0.0(typescript@5.5.4)
       i18next-fs-backend: 2.3.2
       next: 15.0.3(@opentelemetry/api@1.9.0)(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025)
       react: 19.0.0-rc-cae764ce-20241025
-      react-i18next: 15.1.1(i18next@23.16.5)(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025)
+      react-i18next: 15.1.1(i18next@24.0.0(typescript@5.5.4))(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025)
 
   next-nprogress-bar@2.3.15:
     dependencies:
@@ -24428,11 +24435,11 @@ snapshots:
     dependencies:
       react: 19.0.0-rc.1
 
-  react-i18next@15.1.1(i18next@23.16.5)(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025):
+  react-i18next@15.1.1(i18next@24.0.0(typescript@5.5.4))(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025):
     dependencies:
       '@babel/runtime': 7.26.0
       html-parse-stringify: 3.0.1
-      i18next: 23.16.5
+      i18next: 24.0.0(typescript@5.5.4)
       react: 19.0.0-rc-cae764ce-20241025
     optionalDependencies:
       react-dom: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
