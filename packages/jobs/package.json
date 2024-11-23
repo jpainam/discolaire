@@ -26,8 +26,8 @@
     "@repo/lib": "workspace:*",
     "@repo/reports": "workspace:*",
     "@repo/transactional": "workspace:*",
-    "@trigger.dev/sdk": "3.2.0",
-    "bullmq": "^5.26.2",
+    "@trigger.dev/sdk": "3.2.1",
+    "bullmq": "^5.29.1",
     "cron-parser": "^4.9.0",
     "ioredis": "^5.4.1"
   },
@@ -35,7 +35,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
-    "@trigger.dev/build": "3.2.0",
+    "@trigger.dev/build": "3.2.1",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"

@@ -43,7 +43,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
-    "dotenv-cli": "^7.4.2",
+    "dotenv-cli": "^7.4.4",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "prisma": "^5.22.0",
