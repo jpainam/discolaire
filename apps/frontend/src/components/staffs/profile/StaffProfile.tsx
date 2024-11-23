@@ -1,5 +1,3 @@
-import { notFound } from "next/navigation";
-
 import { getServerTranslations } from "@repo/i18n/server";
 import { Card, CardContent, CardHeader } from "@repo/ui/card";
 import { Separator } from "@repo/ui/separator";
@@ -17,9 +15,6 @@ export async function StaffProfile({ staffId }: { staffId: string }) {
     dateStyle: "long",
     timeZone: "UTC",
   });
-  if (!staff) {
-    notFound();
-  }
 
   return (
     <div className="mx-2">

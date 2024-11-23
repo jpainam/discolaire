@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import { FileTextIcon } from "lucide-react";
 
 import { getServerTranslations } from "@repo/i18n/server";
@@ -23,9 +22,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const { id } = params;
 
   const staff = await api.staff.get(id);
-  if (!staff) {
-    notFound();
-  }
+
   const { t, i18n } = await getServerTranslations();
   if (!staff.userId) {
     return (

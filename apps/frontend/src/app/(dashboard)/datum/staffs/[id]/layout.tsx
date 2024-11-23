@@ -1,5 +1,4 @@
 import React from "react";
-import { notFound } from "next/navigation";
 import { BookOpenCheck, CalendarDays, Folders, History } from "lucide-react";
 
 import { checkPermissions } from "@repo/api/permission";
@@ -11,7 +10,6 @@ import { StaffProfile } from "~/components/staffs/profile/StaffProfile";
 import { StaffTabMenu } from "~/components/staffs/profile/StaffTabMenu";
 import { StaffDetailHeader } from "~/components/staffs/StaffDetailHeader";
 import { routes } from "~/configs/routes";
-import { api } from "~/trpc/server";
 
 interface UserLink {
   icon: React.ReactNode;
@@ -39,10 +37,7 @@ export default async function Layout(props: {
   if (!canReadStaff) {
     return <NoPermission className="my-8" isFullPage resourceText="" />;
   }
-  const staff = await api.staff.get(id);
-  if (!staff) {
-    notFound();
-  }
+
   const { t } = await getServerTranslations();
 
   const userLinks: UserLink[] = [

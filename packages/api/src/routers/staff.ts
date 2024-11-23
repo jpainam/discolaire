@@ -47,7 +47,7 @@ export const staffRouter = {
     });
   }),
   get: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
-    return ctx.db.staff.findUnique({
+    return ctx.db.staff.findUniqueOrThrow({
       where: {
         id: input,
       },
