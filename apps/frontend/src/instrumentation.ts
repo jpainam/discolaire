@@ -20,7 +20,7 @@ export async function register() {
       console.log(`Job completed for ${job.id}`);
     });
     worker.on("failed", (job, err) => {
-      console.error(`${job?.id} Worker failed ${err.message}`);
+      console.error(`${job?.id} ${err.message}`);
     });
     worker.on("stalled", (str) => {
       console.log(`Job stalled: ${str}`);

@@ -10,7 +10,7 @@ const jobQueue = new Queue(queueName, { connection });
 const queueEvents = new QueueEvents(queueName, { connection });
 
 queueEvents.on("failed", (job, _listener) => {
-  console.error(`Job ${job.jobId} Failed: ${job.failedReason}`);
+  console.error(`Job ${job.jobId} ${job.failedReason}`);
 });
 
 queueEvents.on("completed", (job) => {

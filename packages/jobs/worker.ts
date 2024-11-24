@@ -22,7 +22,6 @@ async function jobWorker(job: Job<any, any, string>) {
   }
 
   const { id, url, data, cron } = result.data;
-  console.log(`Processing job:`, result.data);
 
   try {
     // Mark the task as running
@@ -37,7 +36,7 @@ async function jobWorker(job: Job<any, any, string>) {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
+      throw new Error(response.statusText);
     }
     await db.scheduleTask.update({
       where: { id: id },
