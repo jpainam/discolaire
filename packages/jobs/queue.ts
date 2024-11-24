@@ -9,10 +9,8 @@ const jobQueue = new Queue(queueName, { connection });
 // Queue Events for Debugging
 const queueEvents = new QueueEvents(queueName, { connection });
 
-queueEvents.on("failed", (job, failedReason) => {
-  console.error(
-    `Job ${job.jobId} failed with reason: ${failedReason} ${job.failedReason}`,
-  );
+queueEvents.on("failed", (job, _listener) => {
+  console.error(`Job ${job.jobId} Failed: ${job.failedReason}`);
 });
 
 queueEvents.on("completed", (job) => {

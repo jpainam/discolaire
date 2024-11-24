@@ -1,7 +1,9 @@
+import type { NextRequest } from "next/server";
 import { render } from "@react-email/render";
 import { subMonths } from "date-fns";
 import { z } from "zod";
 
+import { auth } from "@repo/auth";
 import { parser } from "@repo/jobs";
 import { TransactionsSummary } from "@repo/transactional";
 
@@ -12,12 +14,25 @@ const schema = z.object({
   cron: z.string().min(1),
 });
 
+export async function GET(_req: NextRequest) {
+  const session = await auth();
+  if (!session) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+  return new Response("Method not allowed", { status: 405 });
+}
+
 export async function POST(req: Request) {
+  const session = await auth();
+  if (!session) {
+    return new Response("Unauthorized", { status: 401 });
+  }
   try {
+    console.log("Processing transaction summary email");
     const body = await req.json();
     const result = schema.safeParse(body);
     if (!result.success) {
-      const error = result.error.issues.map((e) => e.message).join(", ");
+      const error = result.error.errors.map((e) => e.message).join(", ");
       return new Response(error, { status: 400 });
     }
     const { staffId, cron } = result.data;
