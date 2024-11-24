@@ -1,15 +1,12 @@
 import type { NextRequest } from "next/server";
 import { render } from "@react-email/render";
-import { z } from "zod";
 
 import { auth } from "@repo/auth";
+import { getServerTranslations } from "@repo/i18n/server";
 import { WelcomeEmail } from "@repo/transactional";
 
 import { api } from "~/trpc/server";
 
-const paramsSchema = z.object({
-  id: z.string().min(1),
-});
 export async function GET(req: NextRequest) {
   try {
     const session = await auth();
@@ -17,30 +14,28 @@ export async function GET(req: NextRequest) {
       return new Response("Not authenticated", { status: 401 });
     }
     const requestUrl = new URL(req.url);
-    const obj: Record<string, string> = {};
+    const email = requestUrl.searchParams.get("email");
+    if (!email) {
+      return new Response("Invalid request", { status: 400 });
+    }
+    const { t, i18n } = await getServerTranslations();
 
-    for (const [key, value] of requestUrl.searchParams.entries()) {
-      obj[key] = value;
+    const user = await api.user.getByEmail({ email });
+    if (!user) {
+      return new Response("User not found", { status: 404 });
     }
-    const result = paramsSchema.safeParse(obj);
-    if (!result.success) {
-      return new Response("Invalid parameters", { status: 400 });
-    }
-    const { id } = result.data;
-    const user = await api.user.get(id);
-    if (user?.email) {
-      const emailHtml = await render(
-        WelcomeEmail({
-          fullName: "Jean-Paul Ainam",
-          locale: "fr",
-        }),
-      );
-      await api.messaging.sendEmail({
-        subject: "Welcome to Discolaire",
-        to: user.email,
-        body: emailHtml,
-      });
-    }
+    const emailHtml = await render(
+      WelcomeEmail({
+        fullName: user.name ?? "N/A",
+        locale: i18n.language,
+      }),
+    );
+    await api.messaging.sendEmail({
+      subject: t("welcome_to_discolaire"),
+      to: email,
+      body: emailHtml,
+    });
+
     return Response.json({ success: true }, { status: 200 });
   } catch (e) {
     console.error(e);
