@@ -233,6 +233,7 @@ export const contactRouter = createTRPCRouter({
           userId: user.id,
         },
       });
+      void fetch(`/api/emails/welcome?email=${input.email}`);
       return contact;
     }),
   update: protectedProcedure

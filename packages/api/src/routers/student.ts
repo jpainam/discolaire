@@ -166,6 +166,7 @@ export const studentRouter = createTRPCRouter({
       });
       void studentService.addClubs(student.id, input.clubs ?? []);
       void studentService.addSports(student.id, input.sports ?? []);
+
       void accountService.attachAccount(
         student.id,
         `${student.firstName} ${student.lastName}`,
@@ -200,6 +201,7 @@ export const studentRouter = createTRPCRouter({
           userId: user.id,
         },
       });
+      void fetch(`/api/emails/welcome?email=${input.email}`);
       return student;
     }),
   update: protectedProcedure
