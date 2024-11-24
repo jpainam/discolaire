@@ -29,11 +29,7 @@ import { AvatarState } from "~/components/AvatarState";
 import { api } from "~/trpc/react";
 import { AddStaffSchedule } from "./AddStaffSchedule";
 
-export function CanReceiveTransactionSummary({
-  timezones,
-}: {
-  timezones: string[];
-}) {
+export function CanReceiveTransactionSummary() {
   const { t } = useLocale();
   const { openModal } = useModal();
   const confirm = useConfirm();
@@ -69,9 +65,7 @@ export function CanReceiveTransactionSummary({
               openModal({
                 className: "w-[500px]",
                 title: t("destinations"),
-                view: (
-                  <AddStaffSchedule staffs={staffs} timezones={timezones} />
-                ),
+                view: <AddStaffSchedule staffs={staffs} />,
               });
             }}
             variant={"default"}

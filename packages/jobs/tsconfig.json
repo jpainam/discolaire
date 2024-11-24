@@ -1,6 +1,6 @@
 {
   "extends": "@repo/tsconfig/internal-package.json",
   "compilerOptions": {},
-  "include": ["*.ts", "trigger.config.ts", "trigger"],
+  "include": ["*.ts"],
   "exclude": ["node_modules"]
 }

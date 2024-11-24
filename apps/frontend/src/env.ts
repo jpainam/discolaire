@@ -7,6 +7,7 @@ import { env as authEnv } from "@repo/auth/env";
 export const env = createEnv({
   extends: [authEnv, vercel()],
   shared: {
+    NEXT_RUNTIME: z.enum(["nodejs", "browser"]).default("browser"),
     NODE_ENV: z
       .enum(["development", "production", "test"])
       .default("development"),
@@ -41,6 +42,7 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    NEXT_RUNTIME: process.env.NEXT_RUNTIME,
     SUPER_ADMIN_USERNAME: process.env.SUPER_ADMIN_USERNAME,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     RESEND_API_KEY: process.env.RESEND_API_KEY,

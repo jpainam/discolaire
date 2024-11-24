@@ -5,16 +5,17 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    ".": "./index.ts"
+    ".": "./index.ts",
+    "./queue": "./queue.ts",
+    "./worker": "./worker.ts"
   },
   "scripts": {
     "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "dev": "tsc",
     "format": "prettier --check . --ignore-path ../../.gitignore",
-    "jobs": "pnpm with-env npx trigger.dev@latest dev",
-    "jobs:deploy": "pnpm with-env npx trigger.dev@latest deploy",
     "lint": "eslint",
+    "start:worker": "ts-node worker.ts",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "with-env": "dotenv -e ../../.env --"
   },
@@ -26,7 +27,6 @@
     "@repo/lib": "workspace:*",
     "@repo/reports": "workspace:*",
     "@repo/transactional": "workspace:*",
-    "@trigger.dev/sdk": "3.2.1",
     "bullmq": "^5.29.1",
     "cron-parser": "^4.9.0",
     "ioredis": "^5.4.1"
@@ -35,9 +35,9 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
-    "@trigger.dev/build": "3.2.1",
     "eslint": "catalog:",
     "prettier": "catalog:",
+    "ts-node": "^10.9.2",
     "typescript": "catalog:"
   }
 }

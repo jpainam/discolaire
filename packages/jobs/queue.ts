@@ -1,7 +1,4 @@
-import { Queue, Worker } from "bullmq";
-import * as z from "zod";
-
-import { db } from "@repo/db";
+import { Queue, QueueEvents } from "bullmq";
 
 import { getRedis } from "./redis-client";
 
@@ -9,55 +6,24 @@ const connection = getRedis();
 const queueName = "job-queue";
 const jobQueue = new Queue(queueName, { connection });
 
-const dataSchema = z.object({
-  name: z.string().min(1),
-  data: z.any(),
-  id: z.number(),
+// Queue Events for Debugging
+const queueEvents = new QueueEvents(queueName, { connection });
+
+queueEvents.on("failed", (job, failedReason) => {
+  console.error(
+    `Job ${job.jobId} failed with reason: ${failedReason} ${job.failedReason}`,
+  );
 });
-new Worker(
-  queueName,
-  async (job) => {
-    const result = dataSchema.safeParse(job.data);
-    if (!result.success) {
-      console.error(`Invalid job data for job ${job.id}:`, result.error);
-      return;
-    }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { id, name, data } = result.data;
-    console.log("All the job data", job);
-    console.log(`Processing job: ${name} with data:`, data);
 
-    try {
-      // Mark the task as running
-      await db.scheduleTask.update({
-        where: { id: id },
-        data: { status: "running", lastRun: new Date() },
-      });
+queueEvents.on("completed", (job) => {
+  console.log(`Job ${job.jobId} completed successfully`);
+});
 
-      // Perform the task logic here
-      void fetch(`/api/jobs/${name}`, {
-        method: "POST",
-        body: JSON.stringify(data),
-      })
-        .then((res) => res.json())
-        .catch((error) =>
-          console.error(`Error processing job ${name}:`, error),
-        );
+jobQueue.on("error", (error) => {
+  console.error(`Queue error: ${error}`);
+});
 
-      // Mark the task as completed
-      await db.scheduleTask.update({
-        where: { id: id },
-        data: { status: "completed" },
-      });
-    } catch (error) {
-      console.error(`Error processing job ${name}:`, error);
-      await db.scheduleTask.update({
-        where: { id: id },
-        data: { status: "failed" },
-      });
-    }
-  },
-  { connection },
-);
-
-export { jobQueue };
+jobQueue.on("waiting", (job) => {
+  console.log(`Job ${job} added`);
+});
+export { jobQueue, queueName };

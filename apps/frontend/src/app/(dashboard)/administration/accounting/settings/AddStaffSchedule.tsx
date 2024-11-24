@@ -28,6 +28,7 @@ import {
 
 import { StaffSelector } from "~/components/shared/selects/StaffSelector";
 import { useSchool } from "~/contexts/SchoolContext";
+import { timezones } from "~/data/timezones";
 import { api } from "~/trpc/react";
 import { cronValues } from "./cron-values";
 
@@ -37,11 +38,9 @@ const addStaffScheduleSchema = z.object({
   timezone: z.string().min(1),
 });
 export function AddStaffSchedule({
-  timezones,
   staffs,
   scheduleJob,
 }: {
-  timezones: string[];
   scheduleJob?: RouterOutputs["scheduleJob"]["all"][number];
   staffs: RouterOutputs["staff"]["all"];
 }) {
@@ -128,10 +127,10 @@ export function AddStaffSchedule({
                     {timezones.map((timezone, index) => {
                       return (
                         <SelectItem
-                          key={`${timezone}-${index}`}
-                          value={timezone}
+                          key={`${timezone.name}-${index}`}
+                          value={timezone.utc}
                         >
-                          {timezone}
+                          {timezone.label}
                         </SelectItem>
                       );
                     })}

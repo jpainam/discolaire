@@ -17,9 +17,7 @@
     "lint:ws": "pnpm dlx sherif@latest",
     "prepare": "husky",
     "typecheck": "turbo run typecheck",
-    "ui-add": "turbo run ui-add",
-    "jobs": "turbo -F @repo/jobs jobs",
-    "jobs:deploy": "turbo -F @repo/jobs jobs:deploy"
+    "ui-add": "turbo run ui-add"
   },
   "prettier": "@repo/prettier-config",
   "devDependencies": {

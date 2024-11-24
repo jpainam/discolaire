@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { render } from "@react-email/render";
+import { subMonths } from "date-fns";
 import { z } from "zod";
 
 import { parser } from "@repo/jobs";
@@ -32,9 +33,10 @@ export async function POST(req: NextRequest) {
     const interval = parser.parseExpression(cron);
 
     const startDate = interval.prev().toDate();
+    console.info(`Fetching transactions from ${startDate.toISOString()}`);
     const endDate = new Date();
     const transactions = await api.transaction.all({
-      from: startDate,
+      from: subMonths(startDate, 3),
       to: endDate,
     });
     console.info(`Found ${transactions.length} transactions`);
