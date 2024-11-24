@@ -8,92 +8,89 @@ import {
   Link,
   Preview,
   Section,
+  Tailwind,
   Text,
 } from "@react-email/components";
 
-//import { EmailFooter } from "./Footer";
+import { Logo } from "../components/logo";
+import { geti18n } from "../locales";
+import { getAssetUrl } from "../utils";
 
-export function ResetPassword({
-  username,
-  resetLink,
+interface School {
+  logo?: string | null;
+  name: string;
+  id: string;
+}
+
+const assetUrl = getAssetUrl();
+const defaultSchool = {
+  logo: `${assetUrl}/images/logo-round.png`,
+  name: "Institut Polyvalent Wague",
+  id: "1",
+};
+
+export const ResetPassword = ({
+  username = "Dupont",
+  resetLink = "https://example.com/reset-password",
+  locale = "fr",
+  school = defaultSchool,
 }: {
   username: string;
   resetLink: string;
-}) {
+  school: School;
+  locale: string;
+}) => {
+  const { t } = geti18n({ locale });
   return (
     <Html>
-      <Head />
-      <Preview>Reset your password</Preview>
-      <Body style={main}>
-        <Container style={container}>
-          <Heading style={h1}>Password Reset Request</Heading>
-          <Text style={text}>Hello {username},</Text>
-          <Text style={text}>
-            We received a request to reset your password. If you didn't make
-            this request, you can safely ignore this email.
-          </Text>
-          <Section style={buttonContainer}>
-            <Button
-              style={{
-                ...button,
-                paddingLeft: 20,
-                paddingRight: 20,
-                paddingTop: 12,
-                paddingBottom: 12,
-              }}
-              href={resetLink}
-            >
-              Reset Your Password
-            </Button>
-          </Section>
-          <Text style={text}>
-            If the button doesn't work, copy and paste this link into your
-            browser:
-          </Text>
-          <Link href={resetLink} style={link}>
-            {resetLink}
-          </Link>
-          <Text style={text}>
-            This link will expire in 24 hours. If you need assistance, please
-            contact our support team.
-          </Text>
-        </Container>
-      </Body>
+      <Tailwind>
+        <Head />
+        <Preview>{t("reinitialize_password")}</Preview>
+        <Body className="mx-auto my-auto bg-[#fff] font-sans">
+          <Container
+            className="mx-auto my-[40px] max-w-[600px] border-transparent p-[20px] md:border-[#E8E7E1]"
+            style={{ borderStyle: "solid", borderWidth: 1 }}
+          >
+            <Logo logoUrl={school.logo} />
+            <Heading className="mx-0 my-[30px] p-0 text-center text-[21px] font-normal text-[#121212]">
+              {t("reinitialize_password")}
+            </Heading>
+            <Text className="text-[14px] leading-[24px] text-[#121212]">
+              Hello {username},
+              <br />
+              <br />
+              {t("reinitialize_password_text")}
+            </Text>
+
+            <Section className="mb-[32px] mt-[32px] text-center">
+              <Button
+                style={{
+                  ...button,
+                  paddingLeft: 20,
+                  paddingRight: 20,
+                  paddingTop: 12,
+                  paddingBottom: 12,
+                }}
+                href={resetLink}
+              >
+                {t("reinitialize")}
+              </Button>
+            </Section>
+            <Text style={text}>{t("renitialize_password_alt")}</Text>
+            <Link href={resetLink} style={link}>
+              {resetLink}
+            </Link>
+          </Container>
+        </Body>
+      </Tailwind>
     </Html>
   );
-}
-
-// Styles
-const main = {
-  backgroundColor: "#f6f9fc",
-  fontFamily:
-    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif',
-};
-
-const container = {
-  backgroundColor: "#ffffff",
-  margin: "0 auto",
-  padding: "20px 0 48px",
-  marginBottom: "64px",
-};
-
-const h1 = {
-  color: "#333",
-  fontSize: "24px",
-  fontWeight: "bold",
-  textAlign: "center" as const,
-  margin: "30px 0",
 };
 
 const text = {
   color: "#333",
   fontSize: "16px",
   lineHeight: "26px",
-};
-
-const buttonContainer = {
-  textAlign: "center" as const,
-  margin: "30px 0",
 };
 
 const button = {
@@ -110,3 +107,5 @@ const link = {
   color: "#007bff",
   textDecoration: "underline",
 };
+
+export default ResetPassword;

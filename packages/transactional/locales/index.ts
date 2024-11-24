@@ -6,7 +6,7 @@ export type SupportedLocale = "en" | "fr" | "es";
 type TranslationKeys = keyof typeof en;
 
 interface Options {
-  locale?: SupportedLocale;
+  locale?: string;
   fallbackLocale?: SupportedLocale;
 }
 
@@ -16,8 +16,9 @@ const LOCALES = {
   es,
 } as const;
 
-function translations(locale: SupportedLocale): typeof en {
-  return LOCALES[locale];
+function translations(locale: string): typeof en {
+  const l = locale as SupportedLocale;
+  return LOCALES[l];
 }
 
 export function geti18n(options: Options = {}) {

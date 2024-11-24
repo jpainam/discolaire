@@ -2,7 +2,6 @@ import {
   Body,
   Button,
   Container,
-  Font,
   Heading,
   Html,
   Link,
@@ -15,6 +14,7 @@ import { format } from "date-fns";
 
 import type { SupportedLocale } from "../locales";
 import { Footer } from "../components/footer";
+import { Head } from "../components/Head";
 import { Logo } from "../components/logo";
 import { geti18n } from "../locales";
 import { cn, getAppUrl, getAssetUrl } from "../utils";
@@ -111,29 +111,7 @@ export const TransactionsSummary = ({
   return (
     <Html>
       <Tailwind>
-        <head>
-          <Font
-            fontFamily="Geist"
-            fallbackFontFamily="Helvetica"
-            webFont={{
-              url: "https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/files/geist-sans-latin-400-normal.woff2",
-              format: "woff2",
-            }}
-            fontWeight={400}
-            fontStyle="normal"
-          />
-
-          <Font
-            fontFamily="Geist"
-            fallbackFontFamily="Helvetica"
-            webFont={{
-              url: "https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/files/geist-sans-latin-500-normal.woff2",
-              format: "woff2",
-            }}
-            fontWeight={500}
-            fontStyle="normal"
-          />
-        </head>
+        <Head />
         <Preview>{previewText}</Preview>
 
         <Body className="mx-auto my-auto bg-[#fff] font-sans">

@@ -37,14 +37,23 @@ export async function POST(req: NextRequest) {
       expiresAt: expiresAt,
     });
 
+    const school = await api.school.getSchool();
+    const { t, i18n } = await getServerTranslations();
+
     if (user.email) {
       const emailHtml = await render(
         ResetPassword({
+          school: {
+            id: school.id,
+            name: school.name,
+            logo: school.logo,
+          },
           username: user.username,
           resetLink: `${env.NEXT_PUBLIC_BASE_URL}/auth/password/reset/?code=${hashedCode}`,
+          locale: i18n.language,
         }),
       );
-      const { t } = await getServerTranslations();
+
       await api.messaging.sendEmail({
         subject: t("reset_password"),
         to: user.email,
