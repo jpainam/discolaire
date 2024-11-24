@@ -18,7 +18,6 @@ export async function POST(req: Request) {
     const result = schema.safeParse(body);
     if (!result.success) {
       const error = result.error.issues.map((e) => e.message).join(", ");
-
       return new Response(error, { status: 400 });
     }
     const { staffId, cron } = result.data;
@@ -65,11 +64,12 @@ export async function POST(req: Request) {
 
     console.info(`Sending email to ${staff.email}`);
 
-    return api.messaging.sendEmail({
+    const response = await api.messaging.sendEmail({
       body: emailHtml,
       to: staff.email,
       subject: "Transactions Summary",
     });
+    return new Response(JSON.stringify(response), { status: 200 });
   } catch (e) {
     console.error(e);
     throw e;
