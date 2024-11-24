@@ -44,6 +44,19 @@ const config = {
       },
     ],
   },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        child_process: false,
+        path: false,
+        net: false,
+        worker_threads: false,
+        crypto: false,
+        fs: false, // Add any other Node.js modules as necessary
+      };
+    }
+    return config;
+  },
 } satisfies NextConfig;
 
 export default config;

@@ -1,7 +1,9 @@
-import { env } from "./env";
+//import { env } from "./env";
 
+// https://github.com/orgs/vercel/discussions/5050
 export async function register() {
-  if (env.NEXT_RUNTIME === "nodejs") {
+  // eslint-disable-next-line no-restricted-properties
+  if (process.env.NEXT_RUNTIME === "nodejs") {
     const { initializeJobs } = await import("@repo/jobs");
     await initializeJobs().catch(console.error);
 
