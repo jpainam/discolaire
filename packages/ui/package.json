@@ -160,7 +160,7 @@
     "@repo/prettier-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
-    "@tanstack/eslint-plugin-query": "^5.60.1",
+    "@tanstack/eslint-plugin-query": "^5.61.2",
     "@tanstack/react-query-devtools": "^5.61.0",
     "@types/react": "catalog:react19",
     "@types/react-big-calendar": "^1.16.0",
