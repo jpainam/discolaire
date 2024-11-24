@@ -3,9 +3,9 @@ import {
   Button,
   Container,
   Heading,
+  Hr,
   Html,
   Img,
-  Link,
   Preview,
   Section,
   Tailwind,
@@ -16,7 +16,7 @@ import { Footer } from "../components/footer";
 import { Head } from "../components/Head";
 import { Logo } from "../components/logo";
 import { geti18n } from "../locales";
-import { getAppUrl } from "../utils";
+import { getAppUrl, getAssetUrl } from "../utils";
 
 interface Props {
   fullName: string;
@@ -24,20 +24,19 @@ interface Props {
 }
 
 const baseUrl = getAppUrl();
+const assetUrl = getAssetUrl();
 
 export const WelcomeEmail = ({
-  fullName = "Viktor Hofte",
+  fullName = "Jean-Paul Ainam",
   locale = "fr",
 }: Props) => {
   const { t } = geti18n({ locale });
-  const firstName = fullName.split(" ").at(0);
-  const text = `Hi ${firstName}, Welcome to Midday! I'm Pontus, one of the founders. It's really important to us that you have a great experience ramping up.`;
 
   return (
     <Html>
       <Tailwind>
         <Head />
-        <Preview>{text}</Preview>
+        <Preview>{t("welcome_text1")}</Preview>
 
         <Body className="mx-auto my-auto bg-[#fff] font-sans">
           <Container
@@ -46,55 +45,45 @@ export const WelcomeEmail = ({
           >
             <Logo />
             <Heading className="mx-0 my-[30px] p-0 text-center text-[21px] font-normal text-[#121212]">
-              Welcome to Midday
+              {t("welcome_to_discolaire")}
             </Heading>
 
             <br />
 
-            <span className="font-medium">Hi {firstName},</span>
-            <Text className="text-[#121212]">
-              Welcome to Midday! I'm Pontus, one of the founders.
-              <br />
-              <br />
-              We've been working on Midday for the past months, and during this
-              time, we've implemented the basic functionality to get started.
-              However, with your feedback, we can make the right decisions to
-              help run your business smarter.
-              <br />
-              <br />
-              During our beta phase, you may encounter some bugs, but we
-              genuinely want all your feedback.
-              <br />
-              <br />
-              Should you have any questions, please don't hesitate to reply
-              directly to this email or to{" "}
-              <Link
-                href="https://cal.com/pontus-midday/15min"
-                className="text-[#121212] underline"
-              >
-                schedule a call with me
-              </Link>
-              .
+            <span className="font-medium">Hi {fullName},</span>
+            <Text className="text-[#121212]">{t("welcome_text1")}</Text>
+            <Text className="text-[#121212]">{t("welcome_title1")}</Text>
+            <ul className="text-[#121212]">
+              <li>
+                <Text>{t("welcome_text2")}</Text>
+              </li>
+              <li>
+                <Text>{t("welcome_text3")}</Text>
+              </li>
+              <li>
+                <Text>{t("welcome_text4")}</Text>
+              </li>
+              <li>
+                <Text>{t("welcome_text5")}</Text>
+              </li>
+            </ul>
+            <Text>{t("welcome_text6")}</Text>
+
+            <Text>
+              <strong>{t("welcome_text7")}</strong>
+              {"  "}
+              {t("welcome_text8")}
             </Text>
-
-            <br />
-
+            <Hr />
+            <Text className="text-[#707070]">{t("welcome_text9")}</Text>
+            <Text>
+              <strong>Jean-Paul Ainam</strong>
+            </Text>
             <Img
-              src={`${baseUrl}/email/founders.jpeg`}
-              alt="Founders"
-              className="mx-auto my-0 block w-full"
-            />
-
-            <Text className="text-[#707070]">Best regards, founders</Text>
-
-            <Img
-              src={`${baseUrl}/email/signature.png`}
+              src={`${assetUrl}/images/signature.png`}
               alt="Signature"
-              className="h-[20px]w-full block"
+              className="block h-[20px]"
             />
-
-            <br />
-            <br />
 
             <Section className="mb-[32px] mt-[32px] text-center">
               <Button
@@ -107,7 +96,7 @@ export const WelcomeEmail = ({
                 }}
                 href={`${baseUrl}`}
               >
-                {t("reinitialize")}
+                {t("get_started")}
               </Button>
             </Section>
             <br />
@@ -121,7 +110,7 @@ export const WelcomeEmail = ({
 
 const button = {
   backgroundColor: "#007bff",
-  borderRadius: "4px",
+  borderRadius: "8px",
   color: "#fff",
   fontSize: "16px",
   textDecoration: "none",
