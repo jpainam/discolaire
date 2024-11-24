@@ -28,6 +28,7 @@ import { Switch } from "@repo/ui/switch";
 
 import { CountryPicker } from "~/components/shared/CountryPicker";
 import { routes } from "~/configs/routes";
+import { timezones } from "~/data/timezones";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
@@ -41,10 +42,8 @@ const defaultSettingsSchema = z.object({
 });
 export function DefaultSettings({
   school,
-  timezones,
 }: {
   school: NonNullable<RouterOutputs["school"]["get"]>;
-  timezones: string[];
 }) {
   const { t } = useLocale();
   const params = useParams<{ schoolId: string }>();
@@ -112,8 +111,13 @@ export function DefaultSettings({
                       <SelectValue placeholder={t("timezones")} />
                     </SelectTrigger>
                     <SelectContent>
-                      {timezones.map((timezone) => (
-                        <SelectItem value={timezone}>{timezone}</SelectItem>
+                      {timezones.map((timezone, index) => (
+                        <SelectItem
+                          key={`${timezone.utc}-${index}`}
+                          value={timezone.utc}
+                        >
+                          {timezone.label}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
