@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import type { Job } from "bullmq";
 import * as z from "zod";
 
@@ -5,8 +7,8 @@ import { db } from "@repo/db";
 
 const dataSchema = z.object({
   name: z.string().min(1),
-  data: z.unknown(),
-  url: z.string().url(),
+  data: z.any(),
+  url: z.string().min(1),
   id: z.number(),
 });
 
@@ -29,10 +31,11 @@ async function jobWorker(job: Job<any, any, string>) {
     });
 
     // Perform the task logic here
+    console.log(JSON.stringify(data));
     const response = await fetch(url, {
       method: "POST",
       body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" },
+      //headers: { "Content-Type": "application/json" },
     });
 
     if (!response.ok) {

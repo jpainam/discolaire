@@ -1,4 +1,3 @@
-import type { NextRequest } from "next/server";
 import { render } from "@react-email/render";
 import { subMonths } from "date-fns";
 import { z } from "zod";
@@ -13,7 +12,7 @@ const schema = z.object({
   cron: z.string().min(1),
 });
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const body = await req.json();
     const result = schema.safeParse(body);
