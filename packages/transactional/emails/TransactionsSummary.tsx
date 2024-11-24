@@ -116,7 +116,7 @@ export const TransactionsSummary = ({
 
         <Body className="mx-auto my-auto bg-[#fff] font-sans">
           <Container
-            className="mx-auto my-[40px] max-w-[600px] border-transparent p-[20px] md:border-[#E8E7E1]"
+            className="mx-auto mb-[40px] max-w-[600px] border-transparent px-[20px] md:border-[#E8E7E1]"
             style={{ borderStyle: "solid", borderWidth: 1 }}
           >
             <Logo logoUrl={school.logo} />

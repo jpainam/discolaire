@@ -1,11 +1,10 @@
 import { Hr, Img, Row, Section, Text } from "@react-email/components";
 
-import type { SupportedLocale } from "../locales";
 import { geti18n } from "../locales";
 import { getAssetUrl } from "../utils";
 
 const publicUrl = getAssetUrl();
-export const Footer = ({ locale }: { locale: SupportedLocale }) => {
+export const Footer = ({ locale }: { locale: string }) => {
   const { t } = geti18n({ locale });
   return (
     <Section className="w-full">

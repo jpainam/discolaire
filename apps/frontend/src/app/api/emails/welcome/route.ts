@@ -3,7 +3,7 @@ import { render } from "@react-email/render";
 import { z } from "zod";
 
 import { auth } from "@repo/auth";
-import { SendInvite } from "@repo/transactional/emails/SendInvite";
+import { WelcomeEmail } from "@repo/transactional";
 
 import { api } from "~/trpc/server";
 
@@ -30,16 +30,13 @@ export async function GET(req: NextRequest) {
     const user = await api.user.get(id);
     if (user?.email) {
       const emailHtml = await render(
-        SendInvite({
-          username: user.username,
-          invitedByUsername: "Admin",
-          invitedByEmail: "support@discolaire.com",
-          schoolName: "Portal Scoalire",
-          inviteLink: `https://discolaire.com/invite/${id}?email=${user.email}`,
+        WelcomeEmail({
+          fullName: "Jean-Paul Ainam",
+          locale: "fr",
         }),
       );
       await api.messaging.sendEmail({
-        subject: "Invitation to join Discolaire",
+        subject: "Welcome to Discolaire",
         to: user.email,
         body: emailHtml,
       });

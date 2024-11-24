@@ -1,19 +1,15 @@
 "use client";
 
-import { useCallback } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { render } from "@react-email/components";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
-import { SendInvite } from "@repo/transactional/emails/SendInvite";
 import { Button } from "@repo/ui/button";
 import { EmptyState } from "@repo/ui/EmptyState";
 import { Skeleton } from "@repo/ui/skeleton";
 
-import { env } from "~/env";
-import { getErrorMessage, showErrorToast } from "~/lib/handle-error";
+import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { SignUpContactIcon } from "./SignUpContactIcon";
 
@@ -21,53 +17,7 @@ export function SignUpContact() {
   const params = useParams<{ id: string }>();
   const { t } = useLocale();
   const studentContactsQuery = api.student.contacts.useQuery(params.id);
-  const sendEmailMutation = api.messaging.sendEmail.useMutation();
-  const createInvitationMutation = api.invitation.create.useMutation();
 
-  const sendInvite = useCallback(
-    async ({
-      email,
-      username,
-      invitationCode,
-    }: {
-      email: string;
-      invitationCode: string;
-      username: string;
-    }) => {
-      const invitationLink =
-        env.NEXT_PUBLIC_BASE_URL +
-        "/invite/" +
-        invitationCode +
-        "?email=" +
-        email;
-      const emailHtml = await render(
-        <SendInvite
-          username={username}
-          invitedByUsername="Admin"
-          invitedByEmail="support@discolaire.com"
-          schoolName="Portal Scoalire"
-          inviteLink={invitationLink}
-        />,
-      );
-      toast.promise(
-        sendEmailMutation.mutateAsync({
-          subject: "Invitation to join Discolaire",
-          to: email,
-          body: emailHtml,
-        }),
-        {
-          loading: t("sending..."),
-          success: () => {
-            return t("sent_successfully");
-          },
-          error: (error) => {
-            return getErrorMessage(error);
-          },
-        },
-      );
-    },
-    [sendEmailMutation, t],
-  );
   if (studentContactsQuery.isPending) {
     return (
       <div className="p-4">
@@ -115,8 +65,8 @@ export function SignUpContact() {
               </div>
 
               <Button
-                onClick={() => {
-                  void Promise.all(
+                onClick={async () => {
+                  const allPromise = Promise.all(
                     studentContactsQuery.data.map(async (std) => {
                       if (!std.contact.email) {
                         toast.error(
@@ -128,25 +78,18 @@ export function SignUpContact() {
                         );
                         return;
                       }
-                      createInvitationMutation.mutate(
+                      await fetch(
+                        `/api/emails/invite?email=${std.contact.email}`,
                         {
-                          email: std.contact.email,
+                          method: "GET",
                         },
-                        {
-                          onSuccess: (invitation) => {
-                            void sendInvite({
-                              email: invitation.email,
-                              invitationCode: invitation.token,
-                              username: invitation.name,
-                            });
-                          },
-                        },
-                      );
-
-                      await new Promise((resolve) => setTimeout(resolve, 2000));
+                      ).catch((error) => {
+                        toast.error(error.message, { id: 0 });
+                      });
                       return true;
                     }),
                   );
+                  await allPromise;
                 }}
                 variant={"default"}
                 className="w-fit"

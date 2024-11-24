@@ -6,7 +6,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const invitationRouter = createTRPCRouter({
   create: protectedProcedure
-    .input(z.object({ email: z.string() }))
+    .input(z.object({ email: z.string().email() }))
     .mutation(async ({ ctx, input }) => {
       const code = await getInvitationCode(input.email);
       const user = await ctx.db.user.findFirst({

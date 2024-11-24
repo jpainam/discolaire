@@ -16,6 +16,7 @@
   "next_assignment_due": "Prochain devoir à rendre",
   "PENDING": "En attente",
   "Running": "En cours",
+  "join": "Rejoindre {{school}}",
   "males": "Garçons",
   "females": "Filles",
   "please_select_a_classroom": "Veuillez sélectionner une classe",
