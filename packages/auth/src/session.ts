@@ -102,6 +102,7 @@ export async function auth() {
   const user = await getUser();
   const session = await getSession();
   if (!user || !session) return null;
+
   return {
     user,
     expires: session.expires,

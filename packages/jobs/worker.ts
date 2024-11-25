@@ -46,7 +46,7 @@ async function jobWorker(job: Job<any, any, string>) {
 
     const token = await generateToken({ id: user.id });
 
-    headers.set("Authorization", `Bearer ${token}`);
+    headers.set("Cookie", `session=${token}`);
 
     const response = await fetch(url, {
       method: "POST",
