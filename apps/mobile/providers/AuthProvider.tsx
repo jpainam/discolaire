@@ -40,12 +40,13 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     if (sessionQuery.data) {
       setSession(sessionQuery.data);
       const user = sessionQuery.data.user;
-      setUser({
-        name: user.name ?? undefined,
-        id: user.id,
-        avatar: user.avatar,
-        email: user.email ?? "",
-      });
+      if (user)
+        setUser({
+          name: user.name ?? undefined,
+          id: user.id,
+          avatar: user.avatar ?? "",
+          email: user.email ?? "",
+        });
     }
     setInitialized(true);
   }, [sessionQuery.data, sessionQuery.isPending]);

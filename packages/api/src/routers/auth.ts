@@ -4,7 +4,6 @@ import { z } from "zod";
 
 //import { invalidateSessionToken } from "@repo/auth";
 
-import { env } from "../../env";
 import { isPasswordMatch } from "../encrypt";
 import { ratelimiter } from "../rateLimit";
 import { protectedProcedure, publicProcedure } from "../trpc";
@@ -14,27 +13,7 @@ export const authRouter = {
   getSession: publicProcedure.query(({ ctx }) => {
     return ctx.session;
   }),
-  generateToken: publicProcedure
-    .input(
-      z.object({
-        xApiKey: z.string().min(1),
-      }),
-    )
-    .query(async ({ input, ctx }) => {
-      // DO NOT USE THIS ANYWHERE EXCEPT FOR JOBS/WORKERS
-      if (input.xApiKey !== env.DISCOLAIRE_API_KEY) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Invalid API Key",
-        });
-      }
-      const user = await ctx.db.user.findFirstOrThrow({
-        where: {
-          username: "admin",
-        },
-      });
-      return generateToken({ id: user.id });
-    }),
+
   getSecretMessage: protectedProcedure.query(() => {
     return "you can see this secret message!";
   }),
