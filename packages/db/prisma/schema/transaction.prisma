@@ -41,12 +41,14 @@ enum TransactionStatus {
 }
 
 model ScheduleTask {
-    id      Int       @id @default(autoincrement())
-    name    String
-    cron    String
-    lastRun DateTime?
-    status  String    @default("pending")
-    data    Json?
+    id           Int       @id @default(autoincrement())
+    name         String
+    cron         String
+    schoolYearId String
+    schoolId     String
+    lastRun      DateTime?
+    status       String    @default("pending")
+    data         Json?
 }
 
 model GradeAppreciation {

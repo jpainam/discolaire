@@ -15,9 +15,11 @@ export const env = createEnv({
     REPORTING_URL: z.string().min(1).url(),
     UNKEY_ROOT_KEY: z.string().optional(),
     AUTH_SECRET: z.string().min(1),
+    DISCOLAIRE_API_KEY: z.string().min(1),
   },
   client: { NEXT_PUBLIC_BASE_URL: z.string().min(1).url() },
   runtimeEnv: {
+    DISCOLAIRE_API_KEY: process.env.DISCOLAIRE_API_KEY,
     MESSAGING_SERVICE_URL: process.env.MESSAGING_SERVICE_URL,
     MESSAGING_SECRET_KEY: process.env.MESSAGING_SECRET_KEY,
     INVITATION_LINK_SECRET: process.env.INVITATION_LINK_SECRET,
