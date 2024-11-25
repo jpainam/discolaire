@@ -1,6 +1,3 @@
-import { redirect } from "next/navigation";
-
-import { auth } from "@repo/auth";
 import { getServerTranslations } from "@repo/i18n/server";
 
 import { DashboardClassroomSize } from "~/components/dashboard/DashboardClassroomSize";
@@ -11,22 +8,7 @@ import { ScheduleCard } from "~/components/dashboard/ScheduleCard";
 import { SchoolLife } from "~/components/dashboard/SchoolLife";
 
 export default async function Page() {
-  // const signedUrl = await fetch(
-  //   "http://localhost:3000/api/upload?key=avatars/011ece07-f378-47de-bbe5-d1cb8618dd8e"
-  // );
-  // console.log(signedUrl);
-  // const data = await signedUrl.json();
-  // const grades = await reportCardService.getGrades(
-  //   "2b030158-4304-4dba-a6be-b99c5c6c26b9",
-  //   43
-  // );
-  //const staff = await api.staff.all();
   const { t } = await getServerTranslations();
-
-  const session = await auth();
-  if (!session) {
-    redirect("/auth/login");
-  }
 
   return (
     <div className="grid grid-cols-1 gap-4 px-4 md:pt-[110px] 2xl:grid-cols-12">

@@ -22,6 +22,7 @@
   "prettier": "@repo/prettier-config",
   "dependencies": {
     "@repo/api": "workspace:*",
+    "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/i18n": "workspace:*",
     "@repo/lib": "workspace:*",

@@ -2,7 +2,7 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { invalidateSessionToken } from "@repo/auth";
+//import { invalidateSessionToken } from "@repo/auth";
 
 import { env } from "../../env";
 import { isPasswordMatch } from "../encrypt";
@@ -61,11 +61,11 @@ export const authRouter = {
       const token = generateToken({ id: user.id });
       return token;
     }),
-  signOut: protectedProcedure.mutation(async (opts) => {
+  signOut: protectedProcedure.mutation((opts) => {
     if (!opts.ctx.token) {
       return { success: false };
     }
-    await invalidateSessionToken(opts.ctx.token);
+    //await invalidateSessionToken(opts.ctx.token);
     return { success: true };
   }),
 } satisfies TRPCRouterRecord;

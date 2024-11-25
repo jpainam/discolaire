@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+//import { useSession } from "next-auth/react";
 //import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -25,6 +25,8 @@ import {
   SelectValue,
 } from "@repo/ui/select";
 import { Textarea } from "@repo/ui/textarea";
+
+import { useSession } from "~/providers/AuthProvider";
 
 //import { toast } from "~/registry/new-york/ui/use-toast";
 
@@ -87,7 +89,7 @@ export function ProfileForm() {
     // });
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data } = useSession();
+  const { user } = useSession();
   //const user = data?.user;
   //const { t } = useLocale();
 

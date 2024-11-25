@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { ReloadIcon } from "@radix-ui/react-icons";
 
 import { useLocale } from "@repo/i18n";
@@ -10,20 +11,23 @@ import { Input } from "@repo/ui/input";
 import { Label } from "@repo/ui/label";
 import { PasswordInput } from "@repo/ui/password-input";
 
+import { signIn } from "~/actions/signin";
 import { cn } from "~/lib/utils";
-import { authenticate } from "./signin";
 
 type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const [state, submitAction, isPending] = React.useActionState(authenticate, {
+  const [state, submitAction, isPending] = React.useActionState(signIn, {
     error: "",
   });
-
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
   const { t } = useLocale();
+
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <form action={submitAction}>
+        <input type="hidden" name="redirect" value={redirect ?? ""} />
         <div className="grid gap-2">
           <div className={className}>
             <Label htmlFor="username">{t("username")}</Label>

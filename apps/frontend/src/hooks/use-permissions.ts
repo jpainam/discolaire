@@ -1,9 +1,10 @@
-import { useSession } from "next-auth/react";
+//import { useSession } from "next-auth/react";
 
 import type { Permission } from "@repo/lib/permission";
 import { doPermissionsCheck } from "@repo/lib/permission";
 
 import { useSchool } from "~/contexts/SchoolContext";
+import { useSession } from "~/providers/AuthProvider";
 
 // const useIsLoggedIn = () => {
 //   const session = useSession();
@@ -42,7 +43,7 @@ export function useCheckPermissions(
   permissions?: Permission[],
 ) {
   const session = useSession();
-  const user = session.data?.user;
+  const user = session.user;
   //const isLoggedIn = useIsLoggedIn();
 
   const { permissions: permissionsResult } = useSchool();

@@ -44,8 +44,8 @@ async function jobWorker(job: Job<any, any, string>) {
     headers.set("x-trpc-source", "job-worker");
     headers.set("schoolYearId", schoolYearId);
 
-    const token = generateToken({ id: user.id });
-    console.log("token>>>>>>>>>>>>>", token);
+    const token = await generateToken({ id: user.id });
+
     headers.set("Authorization", `Bearer ${token}`);
 
     const response = await fetch(url, {

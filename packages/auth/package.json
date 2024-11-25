@@ -6,10 +6,10 @@
   "type": "module",
   "exports": {
     ".": {
-      "react-server": "./src/index.rsc.ts",
       "default": "./src/index.ts"
     },
-    "./env": "./env.ts"
+    "./env": "./env.ts",
+    "./session": "./src/session.ts"
   },
   "scripts": {
     "clean": "git clean -xdf .cache .turbo dist node_modules",

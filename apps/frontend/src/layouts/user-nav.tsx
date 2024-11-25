@@ -16,7 +16,8 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 
-import { signinout } from "~/app/auth/login/signin";
+//import { signinout } from "~/app/auth/login/signin";
+import { signOut } from "~/actions/signin";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { MobileActionButtions } from "~/layouts/mobile-nav";
@@ -85,7 +86,7 @@ export function UserNav({
           //   void signOut({ callbackUrl: "/", redirect: true });
           // }}
         >
-          <form action={signinout}>
+          <form action={signOut}>
             <button
               className="flex flex-row items-center justify-between"
               type="submit"

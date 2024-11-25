@@ -1,13 +1,10 @@
-import { addDays } from "date-fns";
-import jwt from "jsonwebtoken";
-
-import { env } from "./env";
+import { signToken } from "@repo/auth/session";
 
 export const generateToken = (user: { id: string }) => {
-  const payload = {
-    sub: user.id,
-    iat: new Date().getTime(),
-    exp: addDays(new Date(), 30).getTime(),
+  const expiresInOneDay = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  const session = {
+    user: { id: user.id },
+    expires: expiresInOneDay.toISOString(),
   };
-  return jwt.sign(payload, env.AUTH_SECRET);
+  return signToken(session);
 };

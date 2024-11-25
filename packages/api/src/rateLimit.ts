@@ -8,9 +8,9 @@ import { t } from "./trpc";
 
 export const ipIdentifier = (_ctx: TrpcContextType) => `ip:127.0.0.1`;
 export const accountIdentifier = (ctx: TrpcContextType) =>
-  `account:${ctx.session?.user.id}`;
+  `account:${ctx.session?.user?.id}`;
 export const schoolIdentifier = (ctx: TrpcContextType) =>
-  `org:${ctx.session?.user.schoolId}`;
+  `org:${ctx.session?.user?.schoolId}`;
 
 const cachedLimiters = new Map<string, Ratelimit | NoopRatelimit>();
 

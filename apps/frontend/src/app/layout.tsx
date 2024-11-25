@@ -13,14 +13,15 @@ import localFont from "next/font/local";
 
 //import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-import { auth } from "@repo/auth";
+//import { auth } from "@repo/auth";
+import { getUser } from "@repo/auth/session";
 import { detectLanguage } from "@repo/i18n/server";
 
 import { ProgressBar } from "~/components/next-progress";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { ThemeProvider } from "~/components/theme-provider";
 import { env } from "~/env";
-import AuthProvider from "~/providers/auth-provider";
+import { AuthProvider } from "~/providers/AuthProvider";
 import ConfirmDialogProvider from "~/providers/confirm-dialog-provider";
 
 const geistSans = localFont({
@@ -63,7 +64,8 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
-  const session = await auth();
+  //const session = await auth();
+  const userPromise = getUser();
 
   const lng = await detectLanguage();
   return (
@@ -98,7 +100,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
             >
               <ProgressBar />
               <TRPCReactProvider>
-                <AuthProvider session={session}>
+                <AuthProvider userPromise={userPromise}>
                   <ConfirmDialogProvider>
                     {props.children}
                   </ConfirmDialogProvider>
