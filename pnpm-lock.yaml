@@ -918,8 +918,8 @@ importers:
         specifier: ^17.5.1
         version: 17.5.1(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025)
       tailwind-merge:
-        specifier: ^2.5.4
-        version: 2.5.4
+        specifier: ^2.5.5
+        version: 2.5.5
       uploadthing:
         specifier: ^7.3.0
         version: 7.3.0(express@4.21.1)(h3@1.13.0)(next@15.0.3(@opentelemetry/api@1.9.0)(react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025))(react@19.0.0-rc-cae764ce-20241025))(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@22.9.3)(typescript@5.5.4)))
@@ -1179,8 +1179,8 @@ importers:
         specifier: ^1.16.0
         version: 1.16.0(react@19.0.0-rc.1)
       react-day-picker:
-        specifier: 9.3.2
-        version: 9.3.2(react@19.0.0-rc.1)
+        specifier: 9.4.0
+        version: 9.4.0(react@19.0.0-rc.1)
       react-dropzone:
         specifier: ^14.3.5
         version: 14.3.5(react@19.0.0-rc.1)
@@ -1215,8 +1215,8 @@ importers:
         specifier: 1.7.0
         version: 1.7.0(react@19.0.0-rc.1)
       tailwind-merge:
-        specifier: ^2.5.4
-        version: 2.5.4
+        specifier: ^2.5.5
+        version: 2.5.5
       vaul:
         specifier: ^1.1.1
         version: 1.1.1(@types/react-dom@18.3.1)(react@19.0.0-rc.1)(types-react@19.0.0-rc.1)
@@ -10137,8 +10137,8 @@ packages:
   react-css-styled@1.1.9:
     resolution: {integrity: sha512-M7fJZ3IWFaIHcZEkoFOnkjdiUFmwd8d+gTh2bpqMOcnxy/0Gsykw4dsL4QBiKsxcGow6tETUa4NAUcmJF+/nfw==}
 
-  react-day-picker@9.3.2:
-    resolution: {integrity: sha512-Rj2gPPVYKqZbSF8DxaLteHY+45zd6swf5yE3hmJ8m6VEqPI2ve9CuZsDvQ10tIt3ckRJ9hmLa5t0SsmLlXllhw==}
+  react-day-picker@9.4.0:
+    resolution: {integrity: sha512-M9WTTjIi/CWmkGk+3Uh6fKGzxCGjijUW+0M0cUhDe9BEw+uzpl/YUqC5eAur9EkaekFJFpnKHfIRmVZLMDPzyw==}
     engines: {node: '>=18'}
     peerDependencies:
       react: '>=16.8.0'
@@ -11220,8 +11220,8 @@ packages:
   tabbable@6.2.0:
     resolution: {integrity: sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew==}
 
-  tailwind-merge@2.5.4:
-    resolution: {integrity: sha512-0q8cfZHMu9nuYP/b5Shb7Y7Sh1B7Nnl5GqNr1U+n2p6+mybvRtayrQ+0042Z5byvTA8ihjlP8Odo8/VnHbZu4Q==}
+  tailwind-merge@2.5.5:
+    resolution: {integrity: sha512-0LXunzzAZzo0tEPxV3I297ffKZPlKDrjj7NXphC8V5ak9yHC5zRmxnOe2m/Rd/7ivsOMJe3JZ2JVocoDdQTRBA==}
 
   tailwindcss-animate@1.0.7:
     resolution: {integrity: sha512-bl6mpH3T7I3UFxuvDEXLxy/VuFxBk5bbzplh7tXI68mwMokNYd1t9qPBHlnyTwfa4JGC4zP516I1hYYtQ/vspA==}
@@ -22804,7 +22804,7 @@ snapshots:
       css-styled: 1.0.8
       framework-utils: 1.1.0
 
-  react-day-picker@9.3.2(react@19.0.0-rc.1):
+  react-day-picker@9.4.0(react@19.0.0-rc.1):
     dependencies:
       '@date-fns/tz': 1.2.0
       date-fns: 4.1.0
@@ -24108,7 +24108,7 @@ snapshots:
 
   tabbable@6.2.0: {}
 
-  tailwind-merge@2.5.4: {}
+  tailwind-merge@2.5.5: {}
 
   tailwindcss-animate@1.0.7(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@22.9.3)(typescript@5.5.4))):
     dependencies:
