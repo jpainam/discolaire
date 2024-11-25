@@ -1,5 +1,3 @@
-//import { useSession } from "next-auth/react";
-
 import type { Permission } from "@repo/lib/permission";
 import { doPermissionsCheck } from "@repo/lib/permission";
 
