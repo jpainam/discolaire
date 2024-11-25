@@ -68,6 +68,13 @@ export function ContactStudentTable({ id }: { id: string }) {
           </TableRow>
         </TableHeader>
         <TableBody>
+          {studentContacts.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={6} className="text-center">
+                <EmptyState className="my-8" />
+              </TableCell>
+            </TableRow>
+          )}
           {studentContacts.map((stc, index) => {
             const student = stc.student;
             return (

@@ -2,7 +2,7 @@ import { Img, Section } from "@react-email/components";
 
 export function Logo({ logoUrl }: { logoUrl?: string | null }) {
   return (
-    <Section className="mt-[32px]">
+    <Section>
       {logoUrl && (
         <Img
           src={`${logoUrl}`}

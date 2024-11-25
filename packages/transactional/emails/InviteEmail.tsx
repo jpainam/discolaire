@@ -56,11 +56,11 @@ export const InviteEmail = ({
 
         <Body className="mx-auto my-auto bg-[#fff] font-sans">
           <Container
-            className="mx-auto mb-[40px] max-w-[600px] border-transparent px-[20px] md:border-[#E8E7E1]"
+            className="mx-auto my-[40px] max-w-[600px] border-transparent p-[20px] md:border-[#E8E7E1]"
             style={{ borderStyle: "solid", borderWidth: 1 }}
           >
             <Logo logoUrl={school.logo} />
-            <Heading className="mx-0 my-[30px] p-0 text-center text-[24px] font-normal text-[#121212]">
+            <Heading className="mx-0 p-0 text-center text-[18px] font-normal text-[#121212]">
               {t("invite.title1")} <strong>{school.name}</strong>{" "}
               {t("invite.title2")} <strong>Discolaire</strong>
             </Heading>
@@ -111,7 +111,7 @@ export const InviteEmail = ({
 
 const button = {
   backgroundColor: "#007bff",
-  borderRadius: "4px",
+  borderRadius: "8px",
   color: "#fff",
   fontSize: "16px",
   textDecoration: "none",

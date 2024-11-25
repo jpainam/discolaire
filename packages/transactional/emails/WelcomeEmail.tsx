@@ -40,11 +40,11 @@ export const WelcomeEmail = ({
 
         <Body className="mx-auto my-auto bg-[#fff] font-sans">
           <Container
-            className="mx-auto mb-[40px] max-w-[600px] border-transparent px-[20px] md:border-[#E8E7E1]"
+            className="mx-auto my-[40px] max-w-[600px] border-transparent p-[20px] md:border-[#E8E7E1]"
             style={{ borderStyle: "solid", borderWidth: 1 }}
           >
-            <Logo />
-            <Heading className="mx-0 my-[30px] p-0 text-center text-[21px] font-normal text-[#121212]">
+            <Logo logoUrl={`${assetUrl}/images/logo-round.png`} />
+            <Heading className="mx-0 p-0 text-center text-[18px] font-normal text-[#121212]">
               {t("welcome_to_discolaire")}
             </Heading>
 

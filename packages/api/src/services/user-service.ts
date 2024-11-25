@@ -1,6 +1,38 @@
+import { headers } from "next/headers";
+
 import { db } from "@repo/db";
 
+import { env } from "../../env";
+
 export const userService = {
+  sendWelcomeEmail: async ({
+    userId,
+    email,
+  }: {
+    userId?: string;
+    email?: string;
+  }) => {
+    let toEmail = email;
+    if (userId) {
+      const user = await db.user.findUniqueOrThrow({
+        where: { id: userId },
+      });
+      if (user.email) toEmail = user.email;
+    }
+    if (!toEmail) return;
+    const headerList = await headers();
+    headerList.forEach((value, key) => {
+      console.log(`${key}: ${value}`);
+    });
+
+    void fetch(
+      `${env.NEXT_PUBLIC_BASE_URL}/api/emails/welcome?email=${toEmail}`,
+      {
+        method: "GET",
+        headers: await headers(),
+      },
+    );
+  },
   getPermissions: async (userId: string) => {
     const user = await db.user.findUnique({
       where: { id: userId },
