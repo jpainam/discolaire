@@ -16,6 +16,7 @@ import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";
 import {
@@ -30,6 +31,7 @@ import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
 import { CreateEditUser } from "~/components/users/CreateEditUser";
 import { routes } from "~/configs/routes";
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
@@ -45,6 +47,20 @@ export function StaffProfileHeader({
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const utils = api.useUtils();
+  const canDeleteStaff = useCheckPermissions(
+    PermissionAction.DELETE,
+    "staff:profile",
+    {
+      id: params.id,
+    },
+  );
+  const canEditStaff = useCheckPermissions(
+    PermissionAction.UPDATE,
+    "staff:profile",
+    {
+      id: params.id,
+    },
+  );
   const deleteStaffMutation = api.staff.delete.useMutation({
     onSettled: async () => {
       await utils.staff.invalidate();
@@ -72,20 +88,24 @@ export function StaffProfileHeader({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onSelect={() => {
-                openSheet({
-                  view: <CreateEditStaff staff={staff} />,
-                  title: t("edit_staff"),
-                  description: `${getFullName(staff)}`,
-                  className: "w-[750px]",
-                });
-              }}
-            >
-              <Pencil className="mr-2 h-4 w-4" />
-              {t("edit")}
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            {canEditStaff && (
+              <>
+                <DropdownMenuItem
+                  onSelect={() => {
+                    openSheet({
+                      view: <CreateEditStaff staff={staff} />,
+                      title: t("edit_staff"),
+                      description: `${getFullName(staff)}`,
+                      className: "w-[750px]",
+                    });
+                  }}
+                >
+                  <Pencil className="mr-2 h-4 w-4" />
+                  {t("edit")}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+              </>
+            )}
             {!staff.userId && (
               <DropdownMenuItem
                 onSelect={() => {
@@ -125,27 +145,31 @@ export function StaffProfileHeader({
             )}
             <DropdownInvitation email={staff.email} />
             <DropdownHelp />
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
-              onSelect={async () => {
-                const isConfirmed = await confirm({
-                  title: t("delete"),
-                  description: t("delete_confirmation"),
-                  icon: <Trash2 className="h-6 w-6 text-destructive" />,
-                  alertDialogTitle: {
-                    className: "flex items-center gap-1",
-                  },
-                });
-                if (isConfirmed) {
-                  toast.loading(t("deleting"), { id: 0 });
-                  deleteStaffMutation.mutate(params.id);
-                }
-              }}
-            >
-              <Trash2 className="mr-2 h-4 w-4" />
-              {t("delete")}
-            </DropdownMenuItem>
+            {canDeleteStaff && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                  onSelect={async () => {
+                    const isConfirmed = await confirm({
+                      title: t("delete"),
+                      description: t("delete_confirmation"),
+                      icon: <Trash2 className="h-6 w-6 text-destructive" />,
+                      alertDialogTitle: {
+                        className: "flex items-center gap-1",
+                      },
+                    });
+                    if (isConfirmed) {
+                      toast.loading(t("deleting"), { id: 0 });
+                      deleteStaffMutation.mutate(params.id);
+                    }
+                  }}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  {t("delete")}
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

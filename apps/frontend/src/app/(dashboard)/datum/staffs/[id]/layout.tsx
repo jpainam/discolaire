@@ -2,6 +2,7 @@ import React from "react";
 import { BookOpenCheck, CalendarDays, Folders, History } from "lucide-react";
 
 import { checkPermissions } from "@repo/api/permission";
+import { auth } from "@repo/auth";
 import { getServerTranslations } from "@repo/i18n/server";
 import { PermissionAction } from "@repo/lib/permission";
 import { NoPermission } from "@repo/ui/no-permission";
@@ -10,6 +11,7 @@ import { StaffProfile } from "~/components/staffs/profile/StaffProfile";
 import { StaffTabMenu } from "~/components/staffs/profile/StaffTabMenu";
 import { StaffDetailHeader } from "~/components/staffs/StaffDetailHeader";
 import { routes } from "~/configs/routes";
+import { api } from "~/trpc/server";
 
 interface UserLink {
   icon: React.ReactNode;
@@ -26,6 +28,9 @@ export default async function Layout(props: {
   const { id } = params;
 
   const { children } = props;
+  const session = await auth();
+  const staff = await api.staff.get(id);
+  const staffIsCurrentUser = session?.user.id === staff.userId;
 
   const canReadStaff = await checkPermissions(
     PermissionAction.READ,
@@ -34,7 +39,7 @@ export default async function Layout(props: {
       id: id,
     },
   );
-  if (!canReadStaff) {
+  if (!staffIsCurrentUser && !canReadStaff) {
     return <NoPermission className="my-8" isFullPage resourceText="" />;
   }
 
