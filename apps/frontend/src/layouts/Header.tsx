@@ -1,11 +1,7 @@
 //import { MobileNav } from "~/components/mobile-nav";
 
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
-import { auth } from "@repo/auth";
-
-import { api } from "~/trpc/server";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { MainNav } from "./main-nav";
 import { MobileNav } from "./mobile-nav";
@@ -15,12 +11,6 @@ import { TopRightMenu } from "./top-right-menu";
 
 export async function Header() {
   const schoolYear = (await cookies()).get("schoolYear")?.value;
-
-  const session = await auth();
-  if (!session) {
-    redirect("/auth/login");
-  }
-  const user = await api.user.get(session.user.id);
 
   return (
     <header className="fixed top-0 z-40 flex w-full flex-col items-center border-b border-primary bg-white dark:border-muted-foreground/20 dark:bg-background dark:bg-black">
@@ -32,7 +22,7 @@ export async function Header() {
         <div className="md:hidden">
           <MobileNav />
         </div>
-        {user && <TopRightMenu user={user} className="py-1" />}
+        <TopRightMenu className="py-1" />
       </div>
       <div className="hidden w-full items-center bg-primary px-2 py-2 text-primary-foreground dark:border-t dark:bg-background dark:text-secondary-foreground md:flex">
         <MainNav />

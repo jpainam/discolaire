@@ -5,9 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { useLocale } from "@repo/i18n";
+import { PermissionAction } from "@repo/lib/permission";
 
 import { Icons } from "~/components/icons";
 import { siteConfig } from "~/configs/site";
+import { useCheckPermissions } from "~/hooks/use-permissions";
 import { cn } from "~/lib/utils";
 
 interface MenuItem {
@@ -28,11 +30,18 @@ export function MainNav({ className }: { className?: string }) {
     { label: t("programs"), href: "/programs" },
     { label: t("report_cards"), href: "/report-cards" },
     { label: t("reportings"), href: "/reports" },
-    {
+  ];
+
+  const canSeeAdminMenu = useCheckPermissions(
+    PermissionAction.READ,
+    "menu:administration",
+  );
+  if (canSeeAdminMenu) {
+    mainNavItems.push({
       label: t("administration"),
       href: "/administration",
-    },
-  ];
+    });
+  }
   const pathname = usePathname();
   const pathName = path.basename(pathname);
   return (

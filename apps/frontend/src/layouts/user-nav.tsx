@@ -2,7 +2,6 @@
 
 import { Computer, LogOut, Settings, User } from "lucide-react";
 
-import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Button } from "@repo/ui/button";
@@ -21,33 +20,30 @@ import { signOut } from "~/actions/signin";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { MobileActionButtions } from "~/layouts/mobile-nav";
+import { useSession } from "~/providers/AuthProvider";
 
-export function UserNav({
-  className,
-  user,
-}: {
-  className?: string;
-  user: NonNullable<RouterOutputs["user"]["get"]>;
-}) {
+export function UserNav({ className }: { className?: string }) {
   const { t } = useLocale();
   const router = useRouter();
+  const session = useSession();
+  const user = session.user;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className={className}>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={user.avatar ?? undefined} alt={"AV"} />
-            <AvatarFallback className="uppercase">{`${user.name?.charAt(0)}${user.name?.charAt(1)}`}</AvatarFallback>
+            <AvatarImage src={user?.avatar ?? undefined} alt={"AV"} />
+            <AvatarFallback className="uppercase">{`${user?.name?.charAt(0)}${user?.name?.charAt(1)}`}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[250px] rounded-xl" align="end">
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user.name}</p>
+            <p className="text-sm font-medium leading-none">{user?.name}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              {user.email}
+              {user?.email}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -55,7 +51,7 @@ export function UserNav({
         <DropdownMenuGroup>
           <DropdownMenuItem
             onClick={() => {
-              router.push(routes.users.details(user.id));
+              if (user?.id) router.push(routes.users.details(user.id));
             }}
           >
             <User className="mr-2 h-4 w-4" />
@@ -63,7 +59,7 @@ export function UserNav({
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              router.push(routes.users.settings(user.id));
+              if (user?.id) router.push(routes.users.settings(user.id));
             }}
           >
             <Settings className="mr-2 h-4 w-4" />
@@ -71,7 +67,7 @@ export function UserNav({
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              router.push(routes.users.logs(user.id));
+              if (user?.id) router.push(routes.users.logs(user.id));
             }}
           >
             <Computer className="mr-2 h-4 w-4" />
