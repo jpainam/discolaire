@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
     const classroom = await api.classroom.get(id);
     const school = await api.school.getSchool();
     if (format === "csv") {
-      const { blob, headers } = toExcel({ students, preview, classroom });
+      const { blob, headers } = await toExcel({ students, classroom });
       return new Response(blob, { headers });
     } else {
       const { blob, headers } = await toPdf({
@@ -53,28 +53,37 @@ export async function GET(req: NextRequest) {
   }
 }
 
-function toExcel({
+async function toExcel({
   students,
-  preview,
   classroom,
 }: {
   students: RouterOutputs["classroom"]["students"];
-  preview: boolean;
   classroom: RouterOutputs["classroom"]["get"];
 }) {
+  const { t, i18n } = await getServerTranslations();
+  const dateFormat = Intl.DateTimeFormat(i18n.language, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    timeZone: "UTC",
+  });
   const rows = students.map((student) => {
     return {
+      registrationNumber: student.registrationNumber,
       "First Name": student.firstName,
       "Last Name": student.lastName,
+      Gender: t(`${student.gender}`),
+      isRepeating: student.isRepeating ? t("yes") : t("no"),
+      Religion: student.religion?.name,
+      formerSchool: student.formerSchool?.name,
+      Residence: student.residence,
       Email: student.email,
       Phone: student.phoneNumber,
       Address: student.residence,
-      "Date of Birth": student.dateOfBirth?.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        timeZone: "UTC",
-      }),
+      "Date of Birth":
+        student.dateOfBirth && dateFormat.format(student.dateOfBirth),
+      dateOfEntry:
+        student.dateOfEntry && dateFormat.format(student.dateOfEntry),
     };
   });
   const worksheet = XLSX.utils.json_to_sheet(rows);
@@ -93,9 +102,8 @@ function toExcel({
     "Cache-Control": "no-store, max-age=0",
   };
   const filename = `${classroom.name}-students-${crypto.randomUUID()}.xlsx`;
-  if (!preview) {
-    headers["Content-Disposition"] = `attachment; filename="${filename}"`;
-  }
+  headers["Content-Disposition"] = `attachment; filename="${filename}"`;
+
   return { blob, headers };
 }
 
