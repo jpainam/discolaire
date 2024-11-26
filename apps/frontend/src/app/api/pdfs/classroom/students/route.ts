@@ -1,4 +1,5 @@
 import type { NextRequest } from "next/server";
+import * as XLSX from "@e965/xlsx";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
@@ -34,7 +35,7 @@ export async function GET(req: NextRequest) {
     const classroom = await api.classroom.get(id);
     const school = await api.school.getSchool();
     if (format === "csv") {
-      const { blob, headers } = await toCSV({ students, preview });
+      const { blob, headers } = toExcel({ students, preview, classroom });
       return new Response(blob, { headers });
     } else {
       const { blob, headers } = await toPdf({
@@ -52,6 +53,53 @@ export async function GET(req: NextRequest) {
   }
 }
 
+function toExcel({
+  students,
+  preview,
+  classroom,
+}: {
+  students: RouterOutputs["classroom"]["students"];
+  preview: boolean;
+  classroom: RouterOutputs["classroom"]["get"];
+}) {
+  const rows = students.map((student) => {
+    return {
+      "First Name": student.firstName,
+      "Last Name": student.lastName,
+      Email: student.email,
+      Phone: student.phoneNumber,
+      Address: student.residence,
+      "Date of Birth": student.dateOfBirth?.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        timeZone: "UTC",
+      }),
+    };
+  });
+  const worksheet = XLSX.utils.json_to_sheet(rows);
+  const workbook = XLSX.utils.book_new();
+  const sheetName = classroom.name.replace(/[/\\?*[\]:]/g, "_");
+  XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+
+  const u8 = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
+
+  const blob = new Blob([u8], {
+    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8;",
+  });
+  const headers: Record<string, string> = {
+    "Content-Type":
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "Cache-Control": "no-store, max-age=0",
+  };
+  const filename = `${classroom.name}-students-${crypto.randomUUID()}.xlsx`;
+  if (!preview) {
+    headers["Content-Disposition"] = `attachment; filename="${filename}"`;
+  }
+  return { blob, headers };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function toCSV({
   students,
   preview,

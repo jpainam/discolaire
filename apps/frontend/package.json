@@ -15,6 +15,7 @@
   },
   "prettier": "@repo/prettier-config",
   "dependencies": {
+    "@e965/xlsx": "^0.20.3",
     "@floating-ui/react": "^0.26.28",
     "@hookform/resolvers": "^3.9.1",
     "@monaco-editor/react": "^4.6.0",
