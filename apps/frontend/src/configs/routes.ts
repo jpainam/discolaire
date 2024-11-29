@@ -135,6 +135,13 @@ export const routes = {
     attendances: {
       index: (id: string) => `/datum/classrooms/${id}/attendances`,
       periodic: (id: string) => `/datum/classrooms/${id}/attendances/periodic`,
+      absences: (id: string) => `/datum/classrooms/${id}/attendances/absences`,
+      chatters: (id: string) => `/datum/classrooms/${id}/attendances/chatters`,
+      consignes: (id: string) =>
+        `/datum/classrooms/${id}/attendances/consignes`,
+      exclusions: (id: string) =>
+        `/datum/classrooms/${id}/attendances/exclusions`,
+      lateness: (id: string) => `/datum/classrooms/${id}/attendances/lateness`,
       weekly: (id: string) => `/datum/classrooms/${id}/attendances/weekly`,
       hourly: (id: string) => `/datum/classrooms/${id}/attendances/hourly`,
       digital: (id: string) => `/datum/classrooms/${id}/attendances/digital`,
