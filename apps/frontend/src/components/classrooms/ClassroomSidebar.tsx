@@ -67,7 +67,7 @@ export function ClassroomSidebar({ className }: { className?: string }) {
             key={item.name + "-" + index}
             href={params.id ? (item.href ?? "") : "#"}
             className={cn(
-              "my-1 flex items-center justify-between rounded-md p-2 font-medium capitalize",
+              "my-1 flex items-center justify-between rounded-md p-2 font-medium",
               isActive
                 ? "before:top-2/5 bg-primary text-primary-foreground"
                 : "transition-colors duration-200 hover:bg-gray-100 hover:text-gray-900",

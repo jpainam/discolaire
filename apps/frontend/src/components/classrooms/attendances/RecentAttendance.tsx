@@ -1,9 +1,27 @@
 "use client";
 
 import { format } from "date-fns";
-import { AlertCircle, Clock, MessageSquare } from "lucide-react";
+import {
+  AlertCircle,
+  Clock,
+  Columns4,
+  Eye,
+  MailCheckIcon,
+  MessageSquare,
+  MoreVerticalIcon,
+  Trash2,
+} from "lucide-react";
 
+import { useLocale } from "@repo/i18n";
 import { Badge } from "@repo/ui/badge";
+import { Button } from "@repo/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/dropdown-menu";
 
 import { AvatarState } from "~/components/AvatarState";
 import { cn } from "~/lib/utils";
@@ -61,6 +79,7 @@ const attendanceIssues: AttendanceIssue[] = [
 ];
 
 export function RecentAttendance({ className }: { className?: string }) {
+  const { t } = useLocale();
   return (
     <div className={cn("py-2", className)}>
       <div className="space-y-4">
@@ -96,6 +115,35 @@ export function RecentAttendance({ className }: { className?: string }) {
               <p className="text-xs text-muted-foreground">
                 {format(issue.date, "PPP")}
               </p>
+            </div>
+
+            <div className="ml-auto">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant={"ghost"} size={"icon"}>
+                    <MoreVerticalIcon className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem>
+                    <Eye className="mr-2 h-4 w-4" />
+                    {t("details")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Columns4 className="mr-2 h-4 w-4" />
+                    {t("justify")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <MailCheckIcon className="mr-2 h-4 w-4" />
+                    {t("notify")}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="text-destructive focus:bg-[#FF666618] focus:text-destructive">
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    {t("delete")}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         ))}

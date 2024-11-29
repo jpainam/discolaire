@@ -1,4 +1,3 @@
-import { AttendanceStatistics } from "~/components/classrooms/attendances/AttendanceStatistics";
 import { RecentAttendance } from "~/components/classrooms/attendances/RecentAttendance";
 
 export default async function Page(props: {
@@ -15,12 +14,10 @@ export default async function Page(props: {
   console.log(id, type, date);
 
   return (
-    <div className="grid w-full lg:grid-cols-3">
-      <div className="">
-        <AttendanceStatistics />
-      </div>
+    <div className="grid w-full gap-4 p-2 md:grid-cols-2 lg:grid-cols-3">
       <RecentAttendance className="" />
-      <div className="">Notification sent</div>
+      <RecentAttendance className="" />
+      <RecentAttendance className="" />
     </div>
   );
 }
