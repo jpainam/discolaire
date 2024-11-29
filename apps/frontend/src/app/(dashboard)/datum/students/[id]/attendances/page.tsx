@@ -1,19 +1,19 @@
+import type { LucideIcon } from "lucide-react";
 import {
   BaselineIcon,
   Check,
-  Clock,
+  ClockIcon,
   DiameterIcon,
+  FileStack,
   NewspaperIcon,
   ShapesIcon,
   ShieldAlertIcon,
-  UserX,
 } from "lucide-react";
 
 import { getServerTranslations } from "@repo/i18n/server";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { EmptyState } from "@repo/ui/EmptyState";
-import { Separator } from "@repo/ui/separator";
 
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/server";
@@ -110,40 +110,70 @@ export default async function Page(props: {
     return <EmptyState className="py-8" title={t("no_attendance_recorded")} />;
   }
 
+  const groups: {
+    title: string;
+    justified: string;
+    total: string;
+    icon: LucideIcon;
+  }[] = [
+    {
+      title: t("my_absences"),
+      justified: "0",
+      total: "20",
+      icon: BaselineIcon,
+    },
+    { title: t("my_lates"), justified: "25h00", total: "26h", icon: ClockIcon },
+    {
+      title: t("my_exclusions"),
+      justified: "0",
+      total: "2",
+      icon: ShieldAlertIcon,
+    },
+    {
+      title: t("my_chatters"),
+      justified: "0",
+      total: "2",
+      icon: NewspaperIcon,
+    },
+    { title: t("my_consignes"), justified: "0", total: "2", icon: ShapesIcon },
+  ];
+
   console.log(items);
   return (
     <div className="grid gap-4 md:grid-cols-[300px_1fr]">
-      <div className="h-screen space-y-4 divide-x border-r">
-        <div className="flex items-center gap-2 p-2">
-          <Clock className="h-5 w-5" />
+      <div className="h-screen divide-x border-r">
+        <div className="flex cursor-pointer items-center gap-2 border-b px-2 py-2 hover:bg-muted hover:text-muted-foreground">
+          <FileStack className="h-4 w-4" />
           <div className="flex flex-col">
-            <span className="text-md font-semibold">{t("all_absences")}</span>
-            <span className="text-sm text-muted-foreground">
+            <span className="text-sm font-semibold">
+              {" "}
+              {t("all_my_attendances")}
+            </span>
+            <span className="text-xs text-muted-foreground">
               {t("justified")}
             </span>
           </div>
-          <span className="ml-auto font-bold">20</span>
-        </div>
-        <Separator />
-        <div className="flex items-center gap-2">
-          <UserX className="h-5 w-5" />
-          <div>
-            <h2 className="font-semibold">Absences aux cours</h2>
-            <p className="text-sm">25h00 de cours manquées</p>
-          </div>
-          <span className="ml-auto font-bold">2</span>
+          <span className="ml-auto text-xs font-bold">20</span>
         </div>
 
-        <Separator />
-
-        <div className="flex items-center gap-2">
-          <Clock className="h-5 w-5" />
-          <div>
-            <h2 className="font-semibold">Retards</h2>
-            <p className="text-sm">Non justifié(s) : 1</p>
-          </div>
-          <span className="ml-auto font-bold">2</span>
-        </div>
+        {groups.map((group) => {
+          const Icon = group.icon;
+          return (
+            <div
+              className="flex cursor-pointer items-center gap-2 border-b px-2 py-2 hover:bg-muted hover:text-muted-foreground"
+              key={group.title}
+            >
+              <Icon className="h-4 w-4" />
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold">{group.title}</span>
+                <span className="text-xs text-muted-foreground">
+                  {t("justified")}
+                </span>
+              </div>
+              <span className="ml-auto text-xs font-bold">20</span>
+            </div>
+          );
+        })}
       </div>
 
       <div className="space-y-4">

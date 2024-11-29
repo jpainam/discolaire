@@ -37,7 +37,7 @@ export function AttendanceHeader() {
   const { openModal } = useModal();
 
   return (
-    <div className="flex flex-row items-center gap-4 border-y bg-muted/50 px-4 py-1">
+    <div className="flex flex-row items-center gap-4 border-b bg-muted/50 px-4 py-1">
       <Label className="hidden w-[250px] md:block">
         {t("attendance_records")}
       </Label>
