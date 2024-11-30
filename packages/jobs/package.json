@@ -28,7 +28,7 @@
     "@repo/lib": "workspace:*",
     "@repo/reports": "workspace:*",
     "@repo/transactional": "workspace:*",
-    "bullmq": "^5.29.1",
+    "bullmq": "^5.30.0",
     "cron-parser": "^4.9.0",
     "date-fns": "^4.1.0",
     "ioredis": "^5.4.1",
