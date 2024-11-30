@@ -65,7 +65,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@prisma/nextjs-monorepo-workaround-plugin": "^5.22.0",
+    "@prisma/nextjs-monorepo-workaround-plugin": "^6.0.0",
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
