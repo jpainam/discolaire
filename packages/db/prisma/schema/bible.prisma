@@ -1,0 +1,13 @@
+model BibleText {
+    id       Int     @id @default(autoincrement())
+    book     String // The book name (e.g., "Genesis")
+    chapter  Int // The chapter number
+    verse    Int // The verse number
+    text     String // The text of the verse
+    language String // The language code (e.g., "en" for English, "fr" for French)
+    version  String? // Optional, the version of the Bible (e.g., "KJV", "NIV")
+
+    @@unique([book, chapter, verse, language, version])
+    @@index([language])
+    @@index([book, chapter])
+}
