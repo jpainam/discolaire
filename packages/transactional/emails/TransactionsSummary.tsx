@@ -189,11 +189,11 @@ export const TransactionsSummary = ({
                         )}
                       >
                         <div className="flex items-center space-x-2">
-                          <Text className="m-0 mt-1 line-clamp-1 p-0 pb-1 text-xs">
-                            {transaction.name.split(" ")[0]}
+                          <Text className="line-clamp-1 text-xs">
+                            {transaction.name}
                           </Text>
 
-                          <div className="flex h-[22px] items-center space-x-1 border px-2 py-1 text-xs text-[#878787]">
+                          <div className="flex items-center space-x-1 border px-2 py-1 text-xs text-[#878787]">
                             {transaction.deleted ? (
                               <span className="rounded-md bg-red-300 px-2 text-red-950">
                                 {t("deleted")}
