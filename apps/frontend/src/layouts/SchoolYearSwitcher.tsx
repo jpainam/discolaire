@@ -2,6 +2,7 @@
 
 import { useTransition } from "react";
 
+import { setSchoolYearSession } from "@repo/auth/session";
 import { useLocale } from "@repo/i18n";
 //import { useConfig } from "@repo/hooks/use-config";
 //import { Style, styles } from "~/registry/styles";
@@ -13,7 +14,6 @@ import {
   SelectValue,
 } from "@repo/ui/select";
 
-import { createSchoolYearCookie } from "~/actions/schoolYear";
 import { api } from "~/trpc/react";
 
 interface SchoolYearSwitcherProps {
@@ -24,10 +24,6 @@ export function SchoolYearSwitcher({ defaultValue }: SchoolYearSwitcherProps) {
   const schoolYearsQuery = api.schoolYear.all.useQuery();
   const [isUpdatePending, startUpdateTransition] = useTransition();
 
-  // useEffect(() => {
-  //   void (defaultValue && createSchoolYearCookie(defaultValue));
-  // }, [defaultValue]);
-
   const { t } = useLocale();
   if (isUpdatePending) {
     //toast.loading(t("updating"));
@@ -36,8 +32,8 @@ export function SchoolYearSwitcher({ defaultValue }: SchoolYearSwitcherProps) {
     <Select
       defaultValue={defaultValue}
       onValueChange={(val) => {
-        startUpdateTransition(() => {
-          return createSchoolYearCookie(val);
+        startUpdateTransition(async () => {
+          await setSchoolYearSession(val);
         });
       }}
     >

@@ -16,9 +16,9 @@ export async function register() {
       connection: jobQueue.opts.connection,
     });
 
-    worker.on("completed", (job) => {
-      console.log(`Job completed for ${job.id}`);
-    });
+    // worker.on("completed", (job) => {
+    //   console.log(`Job completed for ${job.id}`);
+    // });
     worker.on("failed", (job, err) => {
       console.error(`${job?.id} ${err.message}`);
     });

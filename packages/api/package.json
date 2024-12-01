@@ -9,6 +9,7 @@
       "types": "./dist/index.d.ts",
       "default": "./src/index.ts"
     },
+    "./services": "./src/services/index.ts",
     "./permission": {
       "types": "./dist/permission.d.ts",
       "default": "./src/permission.ts"

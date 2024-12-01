@@ -3,11 +3,11 @@ import { render } from "@react-email/render";
 import { subMonths } from "date-fns";
 import { z } from "zod";
 
+import { messagingService } from "@repo/api/services";
 import { auth } from "@repo/auth";
+import { db } from "@repo/db";
 import { parser } from "@repo/jobs";
 import { TransactionsSummary } from "@repo/transactional";
-
-import { api } from "~/trpc/server";
 
 const schema = z.object({
   staffId: z.string().min(1),
@@ -37,26 +37,53 @@ export async function POST(req: Request) {
     }
     const { staffId, cron } = result.data;
 
-    const staff = await api.staff.get(staffId);
+    const staff = await db.staff.findUniqueOrThrow({
+      where: {
+        id: staffId,
+      },
+    });
     if (!staff.email) {
       throw new Error("Staff email is required");
     }
 
-    const school = await api.school.get(staff.schoolId);
+    const school = await db.school.findUniqueOrThrow({
+      where: {
+        id: staff.schoolId,
+      },
+    });
     const interval = parser.parseExpression(cron);
 
+    const schoolYearId = req.headers.get("schoolYearId");
+    if (!schoolYearId) {
+      throw new Error("School year id is required");
+    }
+
     const startDate = interval.prev().toDate();
-    console.info(`Fetching transactions from ${startDate.toISOString()}`);
+
     const endDate = new Date();
-    const transactions = await api.transaction.all({
-      from: subMonths(startDate, 3),
-      to: endDate,
+    const transactions = await db.transaction.findMany({
+      include: {
+        account: true,
+      },
+      where: {
+        AND: [
+          { schoolYearId: schoolYearId },
+          {
+            createdAt: {
+              gte: subMonths(startDate, 3),
+              lte: endDate,
+            },
+          },
+        ],
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
-    console.info(`Found ${transactions.length} transactions`);
 
     const emailHtml = await render(
       TransactionsSummary({
-        locale: "fr",
+        locale: school.defaultLocale,
         school: {
           name: school.name,
           id: school.id,
@@ -71,18 +98,19 @@ export async function POST(req: Request) {
             amount: transaction.amount,
             status: transaction.status,
             currency: school.currency,
+            deleted: transaction.deletedAt != null,
           };
         }),
         fullName: staff.lastName + " " + staff.firstName,
       }),
     );
 
-    console.info(`Sending email to ${staff.email}`);
-
-    const response = await api.messaging.sendEmail({
+    const response = await messagingService.sendEmail({
       body: emailHtml,
-      to: staff.email,
+      receipt: false,
+      schedule: "now",
       subject: "Transactions Summary",
+      to: staff.email,
     });
     return new Response(JSON.stringify(response), { status: 200 });
   } catch (e) {

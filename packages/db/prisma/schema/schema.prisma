@@ -695,6 +695,7 @@ model School {
     ministry           String?
     department         String?
     region             String?
+    defaultLocale      String           @default("fr")
     city               String?
     headmaster         String?
     phoneNumber1       String?

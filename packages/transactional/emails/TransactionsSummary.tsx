@@ -12,7 +12,6 @@ import {
 } from "@react-email/components";
 import { format } from "date-fns";
 
-import type { SupportedLocale } from "../locales";
 import { Footer } from "../components/footer";
 import { Head } from "../components/Head";
 import { Logo } from "../components/logo";
@@ -24,6 +23,7 @@ interface Transaction {
   date: string;
   amount: number;
   name: string;
+  deleted: boolean;
   description: string;
   currency: string;
   category?: string;
@@ -46,7 +46,7 @@ const defaultSchool = {
 interface Props {
   fullName: string;
   transactions: Transaction[];
-  locale: SupportedLocale;
+  locale: string;
   school: School;
 }
 
@@ -55,6 +55,7 @@ const defaultTransactions = [
     id: 1,
     date: new Date().toISOString(),
     amount: -1000,
+    deleted: true,
     currency: "CFA",
     name: "Spotify",
     description: "Spotify Premium",
@@ -68,12 +69,14 @@ const defaultTransactions = [
     description: "Salary",
     name: "H23504959",
     category: "income",
+    deleted: false,
     status: "PENDING",
   },
   {
     id: 3,
     date: new Date().toISOString(),
     amount: -1000,
+    deleted: false,
     currency: "CFA",
     description: "Webflow Subscription",
     name: "Webflow",
@@ -84,6 +87,7 @@ const defaultTransactions = [
     date: new Date().toISOString(),
     amount: -1000,
     currency: "CFA",
+    deleted: true,
     description: "Netflix Subscription",
     name: "Netflix",
     status: "VALIDATED",
@@ -171,7 +175,7 @@ export const TransactionsSummary = ({
                     className="h-[45px] border-0 border-b-[1px] border-solid border-[#E8E7E1]"
                   >
                     <td align="left">
-                      <Text className="m-0 mt-1 p-0 pb-1 text-[14px]">
+                      <Text className="m-0 mt-1 p-0 pb-1 text-xs">
                         {format(new Date(transaction.date), "MMM d")}
                       </Text>
                     </td>
@@ -185,22 +189,33 @@ export const TransactionsSummary = ({
                         )}
                       >
                         <div className="flex items-center space-x-2">
-                          <Text className="m-0 mt-1 line-clamp-1 p-0 pb-1 text-[14px]">
-                            {transaction.name}
+                          <Text className="m-0 mt-1 line-clamp-1 p-0 pb-1 text-xs">
+                            {transaction.name.split(" ")[0]}
                           </Text>
 
-                          {transaction.status === "PENDING" && (
-                            <div className="flex h-[22px] items-center space-x-1 border px-2 py-1 text-xs text-[#878787]">
-                              <span>Pending</span>
-                            </div>
-                          )}
+                          <div className="flex h-[22px] items-center space-x-1 border px-2 py-1 text-xs text-[#878787]">
+                            {transaction.deleted ? (
+                              <span className="rounded-md bg-red-300 px-2 text-red-950">
+                                {t("deleted")}
+                              </span>
+                            ) : (
+                              <span>
+                                {t(
+                                  transaction.status as
+                                    | "PENDING"
+                                    | "CANCELED"
+                                    | "VALIDATED",
+                                )}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </Link>
                     </td>
                     <td align="left">
                       <Text
                         className={cn(
-                          "m-0 mt-1 p-0 pb-1 text-[14px] text-[#121212]",
+                          "m-0 mt-1 p-0 pb-1 text-xs text-[#121212]",
                           transaction.category === "income" &&
                             "!text-[#00C969]",
                         )}
@@ -208,6 +223,8 @@ export const TransactionsSummary = ({
                         {Intl.NumberFormat(locale, {
                           style: "currency",
                           currency: transaction.currency,
+                          maximumFractionDigits: 0,
+                          minimumFractionDigits: 0,
                         }).format(transaction.amount)}
                       </Text>
                     </td>
