@@ -1,8 +1,9 @@
 "use client";
 
 import { useTransition } from "react";
+import { toast } from "sonner";
 
-import { setSchoolYearSession } from "@repo/auth/session";
+//import { setSchoolYearSession } from "@repo/auth/session";
 import { useLocale } from "@repo/i18n";
 //import { useConfig } from "@repo/hooks/use-config";
 //import { Style, styles } from "~/registry/styles";
@@ -31,9 +32,10 @@ export function SchoolYearSwitcher({ defaultValue }: SchoolYearSwitcherProps) {
   return (
     <Select
       defaultValue={defaultValue}
-      onValueChange={(val) => {
+      onValueChange={(_val) => {
+        toast.warning("Not implemented yet");
         startUpdateTransition(async () => {
-          await setSchoolYearSession(val);
+          //await setSchoolYearSession(val);
         });
       }}
     >

@@ -519,4 +519,28 @@ export const studentRouter = createTRPCRouter({
         },
       });
     }),
+
+  addPhoto: protectedProcedure
+    .input(
+      z.object({
+        url: z.string().min(1),
+        id: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const student = await ctx.db.student.findFirstOrThrow({
+        where: {
+          id: input.id,
+        },
+      });
+      const photos = [...student.photos, input.url];
+      return ctx.db.student.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          photos: photos,
+        },
+      });
+    }),
 });

@@ -1,16 +1,15 @@
 import Image from "next/image";
 
-import type { Photo } from "~/types/photo";
 import { cn } from "~/lib/utils";
 
 interface AlbumArtworkProps extends React.HTMLAttributes<HTMLDivElement> {
-  photo: Photo;
+  photo: string;
   aspectRatio?: "portrait" | "square";
   width?: number;
   height?: number;
 }
 
-export function PhotoCard({
+export function StudentPhotoCard({
   photo,
   aspectRatio = "portrait",
   width,
@@ -22,8 +21,8 @@ export function PhotoCard({
     <div className={cn("space-y-3", className)} {...props}>
       <div className="overflow-hidden rounded-md">
         <Image
-          src={photo.cover}
-          alt={photo.name}
+          src={photo}
+          alt={"Photo"}
           width={width}
           height={height}
           className={cn(
@@ -33,10 +32,10 @@ export function PhotoCard({
         />
       </div>
 
-      <div className="space-y-1 text-sm">
+      {/* <div className="space-y-1 text-sm">
         <h3 className="font-medium leading-none">{photo.name}</h3>
         <p className="text-xs text-muted-foreground">{photo.artist}</p>
-      </div>
+      </div> */}
     </div>
   );
 }

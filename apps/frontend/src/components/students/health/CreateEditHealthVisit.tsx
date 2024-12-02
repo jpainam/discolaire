@@ -86,7 +86,7 @@ export function CreateEditHealthVisit({
       const urls = uploadedFiles
         .map((file) => file.data?.id)
         .filter((url) => url !== undefined);
-      console.log("The attachments", urls);
+      //console.log("The attachments", urls);
       form.setValue("attachments", urls);
     }
   }, [form, uploadedFiles]);

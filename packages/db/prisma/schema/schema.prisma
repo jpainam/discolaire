@@ -525,6 +525,7 @@ model Student {
     dateOfBirth        DateTime?        @db.Date
     bloodType          String?
     placeOfBirth       String?
+    photos             String[]         @default([])
     residence          String?
     status             StudentStatus    @default(ACTIVE)
     gender             String?
