@@ -22,7 +22,7 @@
     "@expo/react-native-action-sheet": "^4.1.0",
     "@expo/vector-icons": "^14.0.4",
     "@gorhom/bottom-sheet": "^5.0.6",
-    "@react-navigation/material-top-tabs": "^7.0.14",
+    "@react-navigation/material-top-tabs": "^7.0.17",
     "@rn-primitives/avatar": "^1.1.0",
     "@rn-primitives/slot": "^1.1.0",
     "@roninoss/icons": "^0.0.4",
