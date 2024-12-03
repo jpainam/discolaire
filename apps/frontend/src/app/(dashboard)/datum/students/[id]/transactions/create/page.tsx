@@ -42,14 +42,16 @@ export default async function Page(props: {
       ) : (
         <>
           {isStep2 ? (
-            <Step2
-              amount={Number(amount)}
-              paymentMethod={paymentMethod}
-              transactionType={transactionType}
-              description={description}
-              classroomId={classroom.id}
-              contacts={studentContacts}
-            />
+            <>
+              <Step2
+                amount={Number(amount)}
+                paymentMethod={paymentMethod}
+                transactionType={transactionType}
+                description={description}
+                classroomId={classroom.id}
+                contacts={studentContacts}
+              />
+            </>
           ) : (
             <Step1 />
           )}

@@ -1,14 +1,12 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { render } from "@react-email/components";
 import { ArrowLeft, Save } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
-import { TransactionAcknowledgment } from "@repo/transactional/emails/TransactionAcknowledgment";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import {
@@ -51,30 +49,15 @@ export function Step2({
   const params = useParams<{ id: string }>();
 
   const studentId = params.id;
-  const sendNotification = api.messaging.sendEmail.useMutation({
-    onSuccess: () => {
-      toast.success(t("email_sent_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+
   const utils = api.useUtils();
   const createTransactionMutation = api.transaction.create.useMutation({
     onSettled: async () => {
       await utils.student.transactions.invalidate(studentId);
     },
-    onSuccess: async (result) => {
+    onSuccess: (transaction) => {
       toast.success(t("created_successfully"), { id: 0 });
-      const emailHtml = await render(
-        <TransactionAcknowledgment transactionId={result.id} />,
-      );
-      void sendNotification.mutate({
-        subject: "Transaction Acknowledgment",
-        to: ["jpainam@gmail.com"],
-        body: emailHtml,
-      });
-      router.push(routes.students.transactions.details(params.id, result.id));
+      routes.students.transactions.details(params.id, transaction.id);
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });

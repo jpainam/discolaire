@@ -9,13 +9,13 @@ import {
   Text,
 } from "@react-email/components";
 
-export function PaymentConfirmationEmail({
-  studentName,
-  parentEmail,
-  paymentAmount,
-  remainingBalance,
-  paymentRecorder,
-  paymentStatus,
+export function TransactionConfirmationEmail({
+  studentName = "Doe John",
+  parentEmail = "example@gmail.com",
+  paymentAmount = 50000,
+  remainingBalance = 100000,
+  paymentRecorder = "Dupont Pierre",
+  paymentStatus = "Success",
 }: {
   studentName: string;
   parentEmail: string;
@@ -99,3 +99,5 @@ export function PaymentConfirmationEmail({
     </Html>
   );
 }
+
+export default TransactionConfirmationEmail;
