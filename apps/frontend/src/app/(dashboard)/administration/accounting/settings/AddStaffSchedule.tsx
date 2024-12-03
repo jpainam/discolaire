@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { SaveIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -27,68 +26,71 @@ import {
 } from "@repo/ui/select";
 
 import { StaffSelector } from "~/components/shared/selects/StaffSelector";
-import { useSchool } from "~/contexts/SchoolContext";
-import { timezones } from "~/data/timezones";
 import { api } from "~/trpc/react";
 import { cronValues } from "./cron-values";
 
 const addStaffScheduleSchema = z.object({
   cron: z.string().min(1),
   staffId: z.string().min(1),
-  timezone: z.string().min(1),
 });
 export function AddStaffSchedule({
-  staffs,
-  scheduleJob,
+  scheduleTask,
+  staffId,
 }: {
-  scheduleJob?: RouterOutputs["scheduleJob"]["all"][number];
-  staffs: RouterOutputs["staff"]["all"];
+  staffId?: string;
+  scheduleTask?: RouterOutputs["scheduleTask"]["all"][number];
 }) {
   const { closeModal } = useModal();
-  const { school } = useSchool();
   const form = useForm({
     schema: addStaffScheduleSchema,
     defaultValues: {
-      cron: scheduleJob?.cron ?? "0 18 * * *",
-      staffId: scheduleJob
-        ? staffs.find((staff) => staff.id === scheduleJob.userId)?.id
-        : "",
-      timezone: scheduleJob?.timezone ?? school.timezone,
+      cron: scheduleTask?.cron ?? "0 18 * * *",
+      staffId: staffId ?? "",
     },
   });
+
+  const createScheduleTask = api.scheduleTask.create.useMutation({
+    onSettled: () => {
+      void utils.scheduleTask.invalidate();
+    },
+    onSuccess: () => {
+      toast.success(t("created_successfully"), { id: 0 });
+      closeModal();
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+  const updateScheduleTask = api.scheduleTask.update.useMutation({
+    onSettled: () => {
+      void utils.scheduleTask.invalidate();
+    },
+    onSuccess: () => {
+      toast.success(t("updated_successfully"), { id: 0 });
+      closeModal();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
+
   const utils = api.useUtils();
 
-  const [isLoading, setIsLoading] = useState(false);
-
   const handleSubmit = (data: z.infer<typeof addStaffScheduleSchema>) => {
-    setIsLoading(true);
-    const userId = staffs.find((staff) => staff.id === data.staffId)?.userId;
-    if (!userId) {
-      toast.error("Staff is not link to a user");
-      return;
-    }
     const values = {
-      userId: userId,
       cron: data.cron,
-      type: "transaction-summary",
-      timezone: data.timezone,
+      data: {
+        staffId: data.staffId,
+      },
+      name: "transaction-summary",
     };
-
-    void fetch("/api/trigger/schedules", {
-      method: "POST",
-      body: JSON.stringify(values),
-    })
-      .then(() => {
-        toast.success(t("schedule_created_successfully"));
-        void utils.scheduleJob.invalidate();
-        closeModal();
-      })
-      .catch((e) => {
-        toast.error(e);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    if (scheduleTask) {
+      toast.loading(t("updating"), { id: 0 });
+      updateScheduleTask.mutate({ ...values, id: scheduleTask.id });
+    } else {
+      toast.loading(t("creating"), { id: 0 });
+      createScheduleTask.mutate(values);
+    }
   };
 
   const { t } = useLocale();
@@ -109,38 +111,7 @@ export function AddStaffSchedule({
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="timezone"
-          render={({ field }) => (
-            <FormItem className="space-y-0">
-              <FormLabel>{t("timezones")}</FormLabel>
-              <FormControl>
-                <Select
-                  onValueChange={(val) => field.onChange(val)}
-                  defaultValue={school.timezone}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder={t("timezones")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {timezones.map((timezone, index) => {
-                      return (
-                        <SelectItem
-                          key={`${timezone.name}-${index}`}
-                          value={timezone.utc}
-                        >
-                          {timezone.label}
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
         <FormField
           control={form.control}
           name="cron"
@@ -176,7 +147,7 @@ export function AddStaffSchedule({
         <div className="flex items-center justify-end gap-4">
           <Button
             type="button"
-            variant={"secondary"}
+            variant={"outline"}
             onClick={() => {
               closeModal();
             }}
@@ -184,7 +155,12 @@ export function AddStaffSchedule({
             <XIcon className="mr-2 h-4 w-4" />
             {t("cancel")}
           </Button>
-          <Button isLoading={isLoading} type="submit">
+          <Button
+            isLoading={
+              createScheduleTask.isPending || updateScheduleTask.isPending
+            }
+            type="submit"
+          >
             <SaveIcon className="mr-2 h-4 w-4" />
             {t("submit")}
           </Button>

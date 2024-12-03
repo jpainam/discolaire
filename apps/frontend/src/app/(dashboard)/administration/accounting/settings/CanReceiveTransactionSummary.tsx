@@ -2,7 +2,9 @@
 
 import { Pencil, PlusIcon, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import { z } from "zod";
 
+import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
@@ -29,17 +31,32 @@ import { AvatarState } from "~/components/AvatarState";
 import { api } from "~/trpc/react";
 import { AddStaffSchedule } from "./AddStaffSchedule";
 
-export function CanReceiveTransactionSummary() {
+export function CanReceiveTransactionSummary({
+  staffs,
+}: {
+  staffs: RouterOutputs["staff"]["all"];
+}) {
   const { t } = useLocale();
   const { openModal } = useModal();
   const confirm = useConfirm();
   const utils = api.useUtils();
 
   const staffQuery = api.staff.all.useQuery();
-  const scheduleJobsQuery = api.scheduleJob.byType.useQuery({
-    type: "transaction-summary",
+  const deleteScheduleTask = api.scheduleTask.delete.useMutation({
+    onSuccess: () => {
+      toast.success(t("deleted_successfully"), { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+    onSettled: () => {
+      void utils.scheduleTask.invalidate();
+    },
   });
-  if (staffQuery.isPending || scheduleJobsQuery.isPending) {
+  const scheduleTasksQuery = api.scheduleTask.byName.useQuery({
+    name: "transaction-summary",
+  });
+  if (staffQuery.isPending || scheduleTasksQuery.isPending) {
     return (
       <div className="flex flex-col gap-2 rounded-md border p-1">
         <Skeleton className="h-8 w-full" />
@@ -47,8 +64,12 @@ export function CanReceiveTransactionSummary() {
       </div>
     );
   }
-  const staffs = staffQuery.data ?? [];
-  const schedules = scheduleJobsQuery.data ?? [];
+
+  const parsedTask = z.object({
+    staffId: z.string().min(1),
+  });
+
+  const schedules = scheduleTasksQuery.data ?? [];
 
   return (
     <Card className="text-sm">
@@ -65,7 +86,7 @@ export function CanReceiveTransactionSummary() {
               openModal({
                 className: "w-[500px]",
                 title: t("destinations"),
-                view: <AddStaffSchedule staffs={staffs} />,
+                view: <AddStaffSchedule />,
               });
             }}
             variant={"default"}
@@ -94,17 +115,39 @@ export function CanReceiveTransactionSummary() {
                 </TableCell>
               </TableRow>
             )}
-            {schedules.map((sch) => {
+            {schedules.map((sch, index) => {
+              const parsed = parsedTask.safeParse(sch.data);
+              if (!parsed.success) return null;
+              const staff = staffs.find((s) => s.id === parsed.data.staffId);
+              if (!staff) return null;
               return (
-                <TableRow>
+                <TableRow key={index}>
                   <TableCell>
-                    <AvatarState avatar={sch.user.avatar} />
+                    <AvatarState avatar={staff.avatar} />
                   </TableCell>
-                  <TableCell>{sch.user.name}</TableCell>
+                  <TableCell>
+                    {staff.prefix}
+                    {staff.lastName} {staff.firstName}{" "}
+                  </TableCell>
                   <TableCell>{sch.cron}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex flex-row items-center gap-2">
-                      <Button variant={"ghost"} size={"icon"}>
+                      <Button
+                        onClick={() => {
+                          openModal({
+                            className: "w-[500px]",
+                            title: t("destinations"),
+                            view: (
+                              <AddStaffSchedule
+                                scheduleTask={sch}
+                                staffId={staff.id}
+                              />
+                            ),
+                          });
+                        }}
+                        variant={"ghost"}
+                        size={"icon"}
+                      >
                         <Pencil className="h-4 w-4" />
                       </Button>
                       <Button
@@ -121,21 +164,7 @@ export function CanReceiveTransactionSummary() {
                           });
                           if (isConfirmed) {
                             toast.loading(t("deleting"), { id: 0 });
-                            fetch(`/api/trigger/schedules/${sch.id}`, {
-                              method: "DELETE",
-                            })
-                              .then(() => {
-                                toast.success(t("deleted_successfully"), {
-                                  id: 0,
-                                });
-                                void utils.scheduleJob.invalidate();
-                              })
-                              .catch((e) => {
-                                toast.error(e, { id: 0 });
-                              })
-                              .finally(() => {
-                                toast.dismiss(0);
-                              });
+                            deleteScheduleTask.mutate(sch.id);
                           }
                         }}
                         variant={"ghost"}

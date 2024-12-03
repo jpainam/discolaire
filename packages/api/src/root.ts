@@ -44,6 +44,7 @@ import { reportCardRouter } from "./routers/reportCard";
 import { reportingRouter } from "./routers/reporting";
 import { roleRouter } from "./routers/role";
 import { scheduleJobRouter } from "./routers/scheduleJob";
+import { scheduleTaskRouter } from "./routers/scheduleTask";
 import { schoolRouter } from "./routers/school";
 import { schoolYearRouter } from "./routers/schoolYear";
 import { settingRouter } from "./routers/setting";
@@ -83,6 +84,7 @@ export const appRouter = createTRPCRouter({
   user: userRouter,
   bible: bibleRouter,
   student: studentRouter,
+  scheduleTask: scheduleTaskRouter,
   assignment: assignmentRouter,
   term: termRouter,
   document: documentRouter,

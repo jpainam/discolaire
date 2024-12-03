@@ -1,4 +1,5 @@
 import parser from "cron-parser";
+import { fromZonedTime } from "date-fns-tz";
 
 import { db } from "@repo/db";
 
@@ -30,9 +31,18 @@ export async function initializeJobs() {
     }
     const name = task.name as TaskNameType;
     const url = TASK_NAME_URL_MAP[name];
+    const school = await db.school.findUniqueOrThrow({
+      where: {
+        id: task.schoolId,
+      },
+    });
+
+    const localTime = fromZonedTime("18:00", school.timezone);
+    const cron = task.cron.replace("18", localTime.getUTCHours().toString());
+
     await jobQueue.upsertJobScheduler(
       `${task.id}-${task.name}`,
-      { pattern: task.cron },
+      { pattern: cron },
       {
         name: task.name,
         data: {

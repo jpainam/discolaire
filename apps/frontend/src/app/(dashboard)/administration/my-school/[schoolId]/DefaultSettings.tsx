@@ -114,7 +114,7 @@ export function DefaultSettings({
                       {timezones.map((timezone, index) => (
                         <SelectItem
                           key={`${timezone.utc}-${index}`}
-                          value={timezone.utc}
+                          value={timezone.tzCode}
                         >
                           {timezone.label}
                         </SelectItem>
