@@ -47,16 +47,19 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
       observation: "",
     },
   });
+  console.log(studentId);
   const { unstable_onUpload: onUpload } = useUpload();
   const [files, setFiles] = React.useState<File[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useLocale();
   const onSubmit = async (values: z.infer<typeof preventSchema>) => {
+    console.log(values);
     setIsLoading(true);
     const uploadPromises = files.map((file) => {
       return onUpload(file);
     });
     const uploadState = await Promise.all(uploadPromises);
+    console.log(uploadState);
   };
   return (
     <Form {...form}>
@@ -102,7 +105,7 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
               <FormControl>
                 <AttendanceReasonSelector
                   onChange={(val) => {
-                    console.log(val);
+                    field.onChange(val);
                   }}
                 />
               </FormControl>
