@@ -38,10 +38,18 @@ export async function middleware(request: NextRequest) {
       if (newUrl.includes("localhost")) {
         newUrl = env.NEXT_PUBLIC_BASE_URL;
       }
-      return NextResponse.redirect(new URL(`/auth/login?redirect=${newUrl}`));
+      return NextResponse.redirect(
+        new URL(
+          `/auth/login?redirect=${newUrl}`,
+          new URL(env.NEXT_PUBLIC_BASE_URL),
+        ),
+      );
     } else {
       return NextResponse.redirect(
-        new URL(`/auth/login?redirect=${request.url}`),
+        new URL(
+          `/auth/login?redirect=${request.url}`,
+          new URL(env.NEXT_PUBLIC_BASE_URL),
+        ),
       );
     }
   }
