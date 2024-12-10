@@ -72,9 +72,9 @@ export function SignUpContact() {
                         toast.error(
                           t("email_not_found") +
                             " " +
-                            std.contact.firstName +
+                            std.contact.lastName +
                             " " +
-                            std.contact.lastName,
+                            std.contact.firstName,
                         );
                         return;
                       }

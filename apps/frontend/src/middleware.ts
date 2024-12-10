@@ -4,6 +4,8 @@ import { NextResponse } from "next/server";
 
 import { signToken, verifyToken } from "@repo/auth/session";
 
+import { env } from "./env";
+
 // Read more: https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
 export const config = {
   matcher: [
@@ -30,9 +32,21 @@ export async function middleware(request: NextRequest) {
   );
 
   if (isProtectedRoute && !sessionCookie) {
-    return NextResponse.redirect(
-      new URL(`/auth/login?redirect=${request.url}`, request.url),
-    );
+    // Temporary fix due to https://github.com/vercel/next.js/issues/54450
+    if (env.NODE_ENV === "production") {
+      console.log("Previous URL:", request.url);
+      const newUrl = request.url
+        .replace("http://", "https://")
+        .replace("3000", "")
+        .replace("7000", "")
+        .replace("localhost:", env.NEXT_PUBLIC_BASE_URL);
+      console.log("New URL:", newUrl);
+      return NextResponse.redirect(new URL(`/auth/login?redirect=${newUrl}`));
+    } else {
+      return NextResponse.redirect(
+        new URL(`/auth/login?redirect=${request.url}`),
+      );
+    }
   }
 
   const res = NextResponse.next();
