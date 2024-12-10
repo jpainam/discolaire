@@ -23,6 +23,17 @@ export const attendanceRouter = createTRPCRouter({
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.cycle.findMany();
   }),
+  reasons: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.attendanceReason.findMany({
+      orderBy: {
+        name: "asc",
+      },
+      where: {
+        schoolId: ctx.schoolId,
+        schoolYearId: ctx.schoolYearId,
+      },
+    });
+  }),
   deletePeriodic: protectedProcedure
     .input(
       z.object({

@@ -23,6 +23,7 @@ import {
 } from "@repo/ui/dropdown-menu";
 import { Label } from "@repo/ui/label";
 
+import { PreventAbsence } from "~/components/attendances/PreventAbsence";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
@@ -32,7 +33,7 @@ import { CreateEditConsigne } from "./consigne/CreateEditConsigne";
 import { CreateEditExclusion } from "./exclusion/CreateEditExclusion";
 import { CreateEditLateness } from "./lateness/CreateEditLateness";
 
-export function AttendanceHeader() {
+export function AttendanceHeader({ studentId }: { studentId: string }) {
   const { t } = useLocale();
   const { openModal } = useModal();
 
@@ -49,11 +50,36 @@ export function AttendanceHeader() {
           console.log(val);
         }}
       />
-      <div className="ml-auto flex flex-row items-center gap-4">
-        <Button variant={"outline"}>{t("prevent")}</Button>
+      <div className="ml-auto flex flex-row items-center gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button>
+            <Button size={"sm"} variant={"outline"}>
+              {t("prevent")}
+              <ChevronDown
+                className="-me-1 ms-2 opacity-60"
+                size={16}
+                strokeWidth={2}
+                aria-hidden="true"
+              />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onSelect={() => {
+                openModal({
+                  className: "w-[400px]",
+                  title: t("prevent_an_absence"),
+                  view: <PreventAbsence studentId={studentId} />,
+                });
+              }}
+            >
+              {t("prevent_an_absence")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button size={"sm"}>
               {t("add")}
               <ChevronDown
                 className="-me-1 ms-2 opacity-60"

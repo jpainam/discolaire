@@ -15,6 +15,7 @@ import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
 import { EmptyState } from "@repo/ui/EmptyState";
 
+import { PreventedAttendance } from "~/components/students/attendances/PreventedAttendance";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/server";
 
@@ -140,7 +141,7 @@ export default async function Page(props: {
 
   console.log(items);
   return (
-    <div className="grid gap-4 md:grid-cols-[300px_1fr]">
+    <div className="grid gap-4 md:grid-cols-[300px_1fr_200px]">
       <div className="h-screen divide-x border-r">
         <div className="flex cursor-pointer items-center gap-2 border-b px-2 py-2 hover:bg-muted hover:text-muted-foreground">
           <FileStack className="h-4 w-4" />
@@ -235,6 +236,7 @@ export default async function Page(props: {
           </div>
         </div>
       </div>
+      <PreventedAttendance />
     </div>
   );
 }
