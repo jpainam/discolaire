@@ -76,7 +76,9 @@ export async function middleware(request: NextRequest) {
       console.error("Error updating session:", error);
       res.cookies.delete("session");
       if (isProtectedRoute) {
-        return NextResponse.redirect(new URL("/auth/login", request.url));
+        return NextResponse.redirect(
+          new URL("/auth/login", new URL(env.NEXT_PUBLIC_BASE_URL)),
+        );
       }
     }
   }
