@@ -34,6 +34,63 @@ export const attendanceRouter = createTRPCRouter({
       },
     });
   }),
+  delete: protectedProcedure
+    .input(
+      z.array(
+        z.object({
+          id: z.coerce.number(),
+          type: z.enum([
+            "absence",
+            "lateness",
+            "consigne",
+            "exclusion",
+            "chatter",
+          ]),
+        }),
+      ),
+    )
+    .mutation(({ ctx, input }) => {
+      return input.map(async (attend) => {
+        switch (attend.type) {
+          case "absence":
+            await ctx.db.absence.delete({
+              where: {
+                id: attend.id,
+              },
+            });
+            break;
+          case "lateness":
+            await ctx.db.lateness.delete({
+              where: {
+                id: attend.id,
+              },
+            });
+            break;
+          case "consigne":
+            await ctx.db.consigne.delete({
+              where: {
+                id: attend.id,
+              },
+            });
+            break;
+          case "exclusion":
+            await ctx.db.exclusion.delete({
+              where: {
+                id: attend.id,
+              },
+            });
+            break;
+          case "chatter":
+            await ctx.db.chatter.delete({
+              where: {
+                id: attend.id,
+              },
+            });
+            break;
+        }
+        return true;
+      });
+    }),
   deletePeriodic: protectedProcedure
     .input(
       z.object({
@@ -42,12 +99,38 @@ export const attendanceRouter = createTRPCRouter({
       }),
     )
     .mutation(({ ctx, input }) => {
-      return ctx.db.attendance.deleteMany({
-        where: {
-          termId: input.termId,
-          classroomId: input.classroomId,
-        },
-      });
+      return Promise.all([
+        ctx.db.absence.deleteMany({
+          where: {
+            classroomId: input.classroomId,
+            termId: input.termId,
+          },
+        }),
+        ctx.db.lateness.deleteMany({
+          where: {
+            classroomId: input.classroomId,
+            termId: input.termId,
+          },
+        }),
+        ctx.db.consigne.deleteMany({
+          where: {
+            classroomId: input.classroomId,
+            termId: input.termId,
+          },
+        }),
+        ctx.db.exclusion.deleteMany({
+          where: {
+            classroomId: input.classroomId,
+            termId: input.termId,
+          },
+        }),
+        ctx.db.chatter.deleteMany({
+          where: {
+            classroomId: input.classroomId,
+            termId: input.termId,
+          },
+        }),
+      ]);
     }),
   createPeriodic: protectedProcedure
     .input(createPeriodicAttendance)

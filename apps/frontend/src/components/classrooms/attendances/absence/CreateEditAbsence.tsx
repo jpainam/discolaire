@@ -80,21 +80,38 @@ export function CreateEditAbsence({
       return;
     }
     toast.loading(t("adding"), { id: 0 });
-    console.log(data);
-    // const values = {
-    //   termId: termId,
-    //   classroomId: classroomId,
-    //   students: data.students
-    //     .map((student) => {
-    //       return {
-    //         id: student.id,
-    //         absence: student.absence,
-    //         justify: student.justify,
-    //       };
-    //     })
-    //     .filter((student) => student.absence),
-    // };
-    //createAbsence.mutate(values);
+    let hasError = false;
+    for (const student of data.students) {
+      if (!student.absence || !student.justify) {
+        continue;
+      }
+      if (student.absence < student.justify) {
+        const std = students.find((s) => s.id === student.id);
+        toast.error(
+          t("absence_cannot_be_less_than_justify_for", {
+            name: getFullName(std),
+          }),
+        );
+        hasError = true;
+        break;
+      }
+    }
+    if (!hasError) {
+      const absences = data.students
+        .map((student) => {
+          return {
+            id: student.id,
+            absence: student.absence ?? 0,
+            justify: student.justify ?? 0,
+          };
+        })
+        .filter((student) => student.absence > 0);
+      createAbsence.mutate({
+        termId: termId,
+        classroomId: classroomId,
+        students: absences,
+      });
+    }
   };
   return (
     <Form {...form}>

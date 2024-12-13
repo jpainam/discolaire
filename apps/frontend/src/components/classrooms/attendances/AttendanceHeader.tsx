@@ -4,19 +4,24 @@ import { useParams, useSearchParams } from "next/navigation";
 import {
   BaselineIcon,
   ChevronDown,
+  ChevronsUpDown,
   DiameterIcon,
   NewspaperIcon,
   ShapesIcon,
   ShieldAlertIcon,
+  Trash2,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import { useConfirm } from "@repo/ui/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import { Input } from "@repo/ui/input";
@@ -32,19 +37,23 @@ import {
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
+import { api } from "~/trpc/react";
 
 export function AttendanceHeader() {
   const { t } = useLocale();
   //const [query, setQuery] = useState<Record<string, any>>({});
   const searchParams = useSearchParams();
   const params = useParams<{ id: string }>();
-
-  // const items: { label: string; value: string; icon?: LucideIcon }[] = [
-  //   { label: t("hourly_attendance"), value: "hourly", icon: AlarmClock },
-  //   { label: t("weekly_attendance"), value: "weekly", icon: CalendarClock },
-  //   { label: t("periodic_attendance"), value: "periodic", icon: CalendarDays },
-  //   { label: t("digital_attendance"), value: "digital", icon: Laptop2 },
-  // ];
+  const confirm = useConfirm();
+  const deletePeriodictAttendance = api.attendance.deletePeriodic.useMutation({
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+    onSuccess: () => {
+      toast.success(t("deleted_successfully"), { id: 0 });
+      router.refresh();
+    },
+  });
 
   const router = useRouter();
   const { createQueryString } = useCreateQueryString();
@@ -99,7 +108,45 @@ export function AttendanceHeader() {
         }}
       />
 
-      <div className="ml-auto">
+      <div className="ml-auto flex flex-row items-center gap-2">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button size={"sm"} variant={"outline"}>
+              {t("bulk_actions")} <ChevronsUpDown className="ml-1 h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>{t("pdf_export")}</DropdownMenuItem>
+            <DropdownMenuItem>{t("xml_export")}</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              disabled={!termId}
+              onSelect={async () => {
+                const isConfirmed = await confirm({
+                  title: t("delete"),
+                  description: t("delete_confirmation"),
+                  icon: <Trash2 className="h-6 w-6 text-destructive" />,
+                  alertDialogTitle: {
+                    className: "flex items-center gap-2",
+                  },
+                });
+                if (isConfirmed) {
+                  toast.loading(t("deleting"), { id: 0 });
+                  if (!termId) {
+                    return;
+                  }
+                  deletePeriodictAttendance.mutate({
+                    classroomId: params.id,
+                    termId: Number(termId),
+                  });
+                }
+              }}
+              className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+            >
+              {t("delete_periodic_attendance")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button disabled={!termId} size={"sm"}>

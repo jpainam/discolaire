@@ -7,7 +7,6 @@ import { EmptyState } from "@repo/ui/EmptyState";
 
 import { AvatarState } from "~/components/AvatarState";
 import { AttendanceAction } from "~/components/classrooms/attendances/AttendanceAction";
-import { cn } from "~/lib/utils";
 import { api } from "~/trpc/server";
 
 export default async function Page(props: {
@@ -66,59 +65,55 @@ export default async function Page(props: {
   }
 
   return (
-    <div className="grid w-full gap-4 p-2 md:grid-cols-2 lg:grid-cols-3">
-      <div className={cn("py-2")}>
-        <div className="space-y-4">
-          {attendances.map((attendance, index) => (
-            <div
-              key={`attendance-${index}`}
-              className="flex items-start space-x-4 border-b"
-            >
-              <AvatarState />
+    <div className="grid w-full gap-2 p-2 md:grid-cols-2 lg:grid-cols-3">
+      {attendances.map((attendance, index) => (
+        <div
+          key={`attendance-${index}`}
+          className="flex items-start space-x-4 rounded-sm border p-2"
+        >
+          <AvatarState />
 
-              <div className="flex-1 space-y-1">
-                <div className="flex items-center gap-2">
-                  <p className="text-sm leading-none">{attendance.name}</p>
-                  <Badge
-                    variant={
-                      attendance.type === "absence"
-                        ? "destructive"
-                        : attendance.type === "lateness"
-                          ? "secondary"
-                          : "default"
-                    }
-                  >
-                    {attendance.type === "absence" && (
-                      <AlertCircle className="mr-1 h-3 w-3" />
-                    )}
-                    {attendance.type === "lateness" && (
-                      <Clock className="mr-1 h-3 w-3" />
-                    )}
-                    {attendance.type === "chatter" && (
-                      <MessageSquare className="mr-1 h-3 w-3" />
-                    )}
-                    {attendance.type.charAt(0).toUpperCase() +
-                      attendance.type.slice(1)}
-                  </Badge>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  {t(attendance.type)} - {attendance.description}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {format(attendance.date, "PPP")}
-                </p>
-              </div>
-
-              <div className="ml-auto">
-                <AttendanceAction
-                  type={attendance.type}
-                  attendanceId={attendance.id}
-                />
-              </div>
+          <div className="flex-1 space-y-1">
+            <div className="flex items-center gap-2">
+              <p className="text-sm leading-none">{attendance.name}</p>
+              <Badge
+                variant={
+                  attendance.type === "absence"
+                    ? "destructive"
+                    : attendance.type === "lateness"
+                      ? "secondary"
+                      : "default"
+                }
+              >
+                {attendance.type === "absence" && (
+                  <AlertCircle className="mr-1 h-3 w-3" />
+                )}
+                {attendance.type === "lateness" && (
+                  <Clock className="mr-1 h-3 w-3" />
+                )}
+                {attendance.type === "chatter" && (
+                  <MessageSquare className="mr-1 h-3 w-3" />
+                )}
+                {attendance.type.charAt(0).toUpperCase() +
+                  attendance.type.slice(1)}
+              </Badge>
             </div>
-          ))}
+            <p className="text-sm text-muted-foreground">
+              {t(attendance.type)} - {attendance.description}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {format(attendance.date, "PPP")}
+            </p>
+          </div>
+
+          <div className="ml-auto">
+            <AttendanceAction
+              type={attendance.type}
+              attendanceId={attendance.id}
+            />
+          </div>
         </div>
-      </div>
+      ))}
     </div>
   );
 }
