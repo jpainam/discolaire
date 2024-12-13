@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import {
   BaselineIcon,
   ChevronDown,
@@ -33,18 +34,24 @@ import { CreateEditConsigne } from "./consigne/CreateEditConsigne";
 import { CreateEditExclusion } from "./exclusion/CreateEditExclusion";
 import { CreateEditLateness } from "./lateness/CreateEditLateness";
 
-export function AttendanceHeader({ studentId }: { studentId: string }) {
+export function StudentAttendanceHeader({
+  studentId,
+  classroomId,
+}: {
+  studentId: string;
+  classroomId: string;
+}) {
   const { t } = useLocale();
   const { openModal } = useModal();
+  const searchParams = useSearchParams();
 
   return (
-    <div className="flex flex-row items-center gap-4 border-b bg-muted/50 px-4 py-1">
-      <Label className="hidden w-[250px] md:block">
-        {t("attendance_records")}
-      </Label>
+    <div className="flex flex-row items-center gap-2 border-b bg-muted/50 px-4 py-1">
+      <Label className="hidden md:block">{t("attendances")}</Label>
       {/* <FlatBadge>Total justified records: 2 out of 5</FlatBadge> */}
       <Label className="hidden md:block">{t("terms")}</Label>
       <TermSelector
+        defaultValue={searchParams.get("term")}
         className="md:w-[300px]"
         onChange={(val) => {
           console.log(val);
@@ -95,7 +102,7 @@ export function AttendanceHeader({ studentId }: { studentId: string }) {
                 openModal({
                   title: `${t("add")} - ${t("absence")}`,
                   className: "w-[400px]",
-                  view: <CreateEditAbsence />,
+                  view: <CreateEditAbsence classroomId={classroomId} />,
                 });
               }}
             >

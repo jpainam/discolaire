@@ -1,7 +1,5 @@
-import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const absenceRouter = createTRPCRouter({
@@ -9,6 +7,10 @@ export const absenceRouter = createTRPCRouter({
     return ctx.db.absence.findMany({
       orderBy: {
         date: "desc",
+      },
+      include: {
+        justification: true,
+        student: true,
       },
       where: {
         term: {
@@ -137,32 +139,36 @@ export const absenceRouter = createTRPCRouter({
     .input(
       z.object({
         termId: z.coerce.number(),
+        classroomId: z.string().min(1),
         date: z.coerce.date().default(() => new Date()),
         value: z.coerce.number(),
+        justify: z.coerce.number().optional(),
         studentId: z.string().min(1),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const classroom = await studentService.getClassroom(
-        input.studentId,
-        ctx.schoolYearId,
-      );
-      if (!classroom) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Student not registered in any classroom",
-        });
-      }
-      return ctx.db.absence.create({
+      const absence = await ctx.db.absence.create({
         data: {
           termId: input.termId,
           studentId: input.studentId,
-          classroomId: classroom.id,
+          classroomId: input.classroomId,
           date: input.date,
           createdById: ctx.session.user.id,
           value: input.value,
         },
       });
+      if (input.justify) {
+        await ctx.db.absenceJustification.create({
+          data: {
+            absenceId: absence.id,
+            status: "approved",
+            value: input.justify,
+            approvedBy: ctx.session.user.id,
+            createdById: ctx.session.user.id,
+          },
+        });
+      }
+      return absence;
     }),
   update: protectedProcedure
     .input(
@@ -170,10 +176,11 @@ export const absenceRouter = createTRPCRouter({
         id: z.coerce.number(),
         termId: z.coerce.number(),
         value: z.coerce.number(),
+        justify: z.coerce.number().default(0),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.absence.update({
+      const absence = await ctx.db.absence.update({
         where: {
           id: input.id,
         },
@@ -182,6 +189,18 @@ export const absenceRouter = createTRPCRouter({
           value: input.value,
         },
       });
+      if (input.justify) {
+        await ctx.db.absenceJustification.create({
+          data: {
+            absenceId: absence.id,
+            status: "approved",
+            value: input.justify,
+            approvedBy: ctx.session.user.id,
+            createdById: ctx.session.user.id,
+          },
+        });
+      }
+      return absence;
     }),
   delete: protectedProcedure
     .input(z.number())

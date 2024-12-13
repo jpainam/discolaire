@@ -32,16 +32,8 @@ export function AttendanceAction({
 }) {
   const { t } = useLocale();
   const confirm = useConfirm();
-  const utils = api.useUtils();
   const router = useRouter();
   const deleteAttendance = api.attendance.delete.useMutation({
-    onSettled: () => {
-      utils.absence.invalidate();
-      utils.lateness.invalidate();
-      utils.chatter.invalidate();
-      utils.consigne.invalidate();
-      utils.exclusion.invalidate();
-    },
     onSuccess: () => {
       toast.success(t("deleted_successfully"), { id: 0 });
       router.refresh();

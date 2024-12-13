@@ -108,7 +108,7 @@ export default async function Page(props: {
     .sort((a, b) => a.date.getTime() - b.date.getTime());
 
   if (!items.length) {
-    return <EmptyState className="py-8" title={t("no_attendance_recorded")} />;
+    return <EmptyState className="py-8" title={t("no_attendances_recorded")} />;
   }
 
   const groups: {

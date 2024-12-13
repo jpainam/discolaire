@@ -27,17 +27,21 @@ const schema = z.object({
   termId: z.string().min(1),
   date: z.coerce.date().default(() => new Date()),
   value: z.coerce.number().default(1),
+  justify: z.coerce.number().default(0),
 });
 export function CreateEditAbsence({
   absence,
+  classroomId,
 }: {
   absence?: RouterOutputs["absence"]["all"][number];
+  classroomId: string;
 }) {
   const form = useForm({
     schema: schema,
     defaultValues: {
       date: absence?.date ?? new Date(),
       value: absence?.value ?? 1,
+      justify: absence?.justification?.value ?? 0,
     },
   });
   const utils = api.useUtils();
@@ -47,6 +51,7 @@ export function CreateEditAbsence({
     },
     onSuccess: () => {
       toast.success(t("created_successfully"), { id: 0 });
+      closeModal();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -58,6 +63,7 @@ export function CreateEditAbsence({
     },
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
+      closeModal();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -70,6 +76,7 @@ export function CreateEditAbsence({
     const values = {
       studentId: params.id,
       value: data.value,
+      justify: data.justify,
       termId: parseInt(data.termId),
     };
     if (absence) {
@@ -77,12 +84,12 @@ export function CreateEditAbsence({
       updateAbsenceMutation.mutate({ ...values, id: absence.id });
     } else {
       toast.loading(t("creating"), { id: 0 });
-      createAbsenceMutation.mutate(values);
+      createAbsenceMutation.mutate({ ...values, classroomId: classroomId });
     }
   };
   return (
     <Form {...form}>
-      <form className="grid gap-4" onSubmit={form.handleSubmit(handleSubmit)}>
+      <form className="grid gap-2" onSubmit={form.handleSubmit(handleSubmit)}>
         <FormField
           control={form.control}
           name="termId"
@@ -109,26 +116,47 @@ export function CreateEditAbsence({
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="value"
-          render={({ field }) => (
-            <FormItem className="space-y-0">
-              <FormLabel>{t("number")}</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  placeholder={t("number_of_absence")}
-                  {...field}
-                  defaultValue={absence?.value.toString()}
-                />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <div className="grid grid-cols-2 gap-2">
+          <FormField
+            control={form.control}
+            name="value"
+            render={({ field }) => (
+              <FormItem className="space-y-0">
+                <FormLabel>{t("absences")}</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder={t("absences")}
+                    {...field}
+                    defaultValue={absence?.value.toString()}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="justify"
+            render={({ field }) => (
+              <FormItem className="space-y-0">
+                <FormLabel>{t("justified")}</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder={t("justified")}
+                    {...field}
+                    defaultValue={absence?.value.toString()}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="mt-2 grid grid-cols-2 gap-2">
           <Button
             onClick={() => {
               closeModal();
@@ -139,7 +167,13 @@ export function CreateEditAbsence({
           >
             {t("cancel")}
           </Button>
-          <Button size={"sm"} type={"submit"}>
+          <Button
+            isLoading={
+              createAbsenceMutation.isPending || updateAbsenceMutation.isPending
+            }
+            size={"sm"}
+            type={"submit"}
+          >
             {t("submit")}
           </Button>
         </div>
