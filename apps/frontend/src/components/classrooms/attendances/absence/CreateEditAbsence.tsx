@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { BaselineIcon, SaveIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -30,8 +31,8 @@ const attendanceSchema = z.object({
   students: z.array(
     z.object({
       id: z.string().min(1),
-      absence: z.string().optional(),
-      justify: z.string().optional(),
+      absence: z.coerce.number().nullish(),
+      justify: z.coerce.number().nullable(),
     }),
   ),
 });
@@ -52,8 +53,8 @@ export function CreateEditAbsence({
     defaultValues: {
       students: students.map((student) => ({
         id: student.id,
-        absence: "",
-        justify: "",
+        absence: null,
+        justify: null,
       })),
     },
   });
@@ -79,17 +80,32 @@ export function CreateEditAbsence({
       return;
     }
     toast.loading(t("adding"), { id: 0 });
-    const values = {
-      termId: termId,
-      classroomId: classroomId,
-      students: data.students,
-    };
-    createAbsence.mutate(values);
+    console.log(data);
+    // const values = {
+    //   termId: termId,
+    //   classroomId: classroomId,
+    //   students: data.students
+    //     .map((student) => {
+    //       return {
+    //         id: student.id,
+    //         absence: student.absence,
+    //         justify: student.justify,
+    //       };
+    //     })
+    //     .filter((student) => student.absence),
+    // };
+    //createAbsence.mutate(values);
   };
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div>
+        <div className="flex flex-row items-center justify-between gap-2 py-1">
+          <div className="flex flex-row items-center gap-2">
+            <BaselineIcon className="h-4 w-4" />
+            <Label className="font-semibold">
+              {t("create")} - {t("absence")}
+            </Label>
+          </div>
           <div className="flex flex-row items-center gap-1">
             <Checkbox defaultChecked id="notifyParents" />{" "}
             <Label htmlFor="notifyParents">{t("notify_parents")}</Label>
@@ -97,8 +113,26 @@ export function CreateEditAbsence({
             <Checkbox defaultChecked id="notifyStudents" />
             <Label htmlFor="notifyStudents">{t("notify_students")}</Label>
           </div>
-          <div className="ml-auto">
-            <Button variant={"default"}>{t("submit")}</Button>
+          <div className="flex flex-row items-center gap-2">
+            <Button
+              onClick={() => {
+                router.push(routes.classrooms.attendances.index(classroomId));
+              }}
+              size={"sm"}
+              type="button"
+              variant={"outline"}
+            >
+              <XIcon className="mr-1 h-4 w-4" />
+              {t("cancel")}
+            </Button>
+            <Button
+              isLoading={createAbsence.isPending}
+              size={"sm"}
+              variant={"default"}
+            >
+              <SaveIcon className="mr-1 h-4 w-4" />
+              {t("submit")}
+            </Button>
           </div>
         </div>
         <div className="rounded-lg border">
@@ -112,7 +146,7 @@ export function CreateEditAbsence({
                 <TableHead>{t("fullName")}</TableHead>
                 <TableHead></TableHead>
                 <TableHead>{t("absence")}</TableHead>
-                <TableHead>{t("justify")}</TableHead>
+                <TableHead>{t("justified")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -143,11 +177,13 @@ export function CreateEditAbsence({
                       <Input
                         {...form.register(`students.${index}.absence`)}
                         className="h-8 w-[100px]"
+                        type="number"
                       />
                     </TableCell>
                     <TableCell className="py-0">
                       <Input
                         className="h-8 w-[100px]"
+                        type="number"
                         {...form.register(`students.${index}.justify`)}
                       />
                     </TableCell>

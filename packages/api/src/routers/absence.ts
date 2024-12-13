@@ -100,32 +100,38 @@ export const absenceRouter = createTRPCRouter({
         students: z.array(
           z.object({
             id: z.string().min(1),
-            absence: z.string().optional(),
+            absence: z.coerce.number().optional(),
+            justify: z.coerce.number().optional(),
           }),
         ),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const data = input.students
-        .map((student) => {
-          const parsedValue = student.absence ? parseInt(student.absence) : NaN;
-          return parsedValue && !isNaN(parsedValue)
-            ? {
-                termId: input.termId,
-                studentId: student.id,
-                classroomId: input.classroomId,
-                date: new Date(),
-                createdById: ctx.session.user.id,
-                value: parsedValue,
-              }
-            : null;
-        })
-        .filter(
-          (absence): absence is NonNullable<typeof absence> => absence !== null,
-        );
-      return ctx.db.absence.createMany({
-        data: data,
-      });
+      for (const student of input.students) {
+        if (!student.absence) {
+          continue;
+        }
+        const absence = await ctx.db.absence.create({
+          data: {
+            termId: input.termId,
+            studentId: student.id,
+            classroomId: input.classroomId,
+            date: new Date(),
+            createdById: ctx.session.user.id,
+            value: student.absence,
+          },
+        });
+        if (student.justify)
+          await ctx.db.absenceJustification.create({
+            data: {
+              absenceId: absence.id,
+              status: "approved",
+              value: student.justify,
+              approvedBy: ctx.session.user.id,
+              createdById: ctx.session.user.id,
+            },
+          });
+      }
     }),
   create: protectedProcedure
     .input(

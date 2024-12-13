@@ -19,6 +19,7 @@ model AbsenceJustification {
     absence     Absence  @relation(fields: [absenceId], references: [id], onDelete: Cascade)
     attachments String[]
     createdById String
+    value       Int
     reason      String?
     comment     String?
     status      String   @default("pending") // pending, approved, rejected

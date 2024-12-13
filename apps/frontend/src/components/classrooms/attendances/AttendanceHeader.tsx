@@ -55,6 +55,7 @@ export function AttendanceHeader() {
       <Label className="hidden md:block">{t("periods")}</Label>
       <TermSelector
         className="md:w-[300px]"
+        defaultValue={termId}
         onChange={(val) => {
           router.push(
             routes.classrooms.attendances.index(params.id) +
@@ -65,6 +66,7 @@ export function AttendanceHeader() {
       />
       <Label>{t("type")}</Label>
       <Select
+        defaultValue={searchParams.get("type") ?? undefined}
         onValueChange={(val) => {
           router.push(
             routes.classrooms.attendances.index(params.id) +
