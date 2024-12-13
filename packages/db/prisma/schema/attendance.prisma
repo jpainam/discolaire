@@ -7,6 +7,7 @@ model Absence {
     studentId     String
     student       Student               @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     classroomId   String
+    classroom     Classroom             @relation(fields: [classroomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     type          String                @default("daily") // daily, hourly, periodically, weekly, monthly
     createdAt     DateTime              @default(now())
     createdById   String
@@ -35,6 +36,7 @@ model Lateness {
     termId        Int
     duration      Int
     classroomId   String
+    classroom     Classroom              @relation(fields: [classroomId], references: [id], onDelete: Cascade)
     createdAt     DateTime               @default(now())
     createdById   String
     term          Term                   @relation(fields: [termId], references: [id], onDelete: Cascade)
@@ -54,41 +56,44 @@ model LatenessJustification {
 }
 
 model Chatter {
-    id          Int      @id @default(autoincrement())
+    id          Int       @id @default(autoincrement())
     date        DateTime
     value       Int
     termId      Int
-    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
+    term        Term      @relation(fields: [termId], references: [id], onDelete: Cascade)
     studentId   String
     classroomId String
-    type        String   @default("daily") // daily, hourly, periodically, weekly, monthly
-    createdAt   DateTime @default(now())
+    classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+    type        String    @default("daily") // daily, hourly, periodically, weekly, monthly
+    createdAt   DateTime  @default(now())
     createdById String
 }
 
 model Consigne {
-    id          Int      @id @default(autoincrement())
+    id          Int       @id @default(autoincrement())
     studentId   String
     termId      Int
     classroomId String
+    classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
     date        DateTime
     task        String
     duration    Int
-    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
+    term        Term      @relation(fields: [termId], references: [id], onDelete: Cascade)
     createdById String
 }
 
 model Exclusion {
-    id          Int      @id @default(autoincrement())
+    id          Int       @id @default(autoincrement())
     studentId   String
     termId      Int
     startDate   DateTime
     endDate     DateTime
     reason      String
-    createdAt   DateTime @default(now())
+    createdAt   DateTime  @default(now())
     createdById String
     classroomId String
-    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
+    classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+    term        Term      @relation(fields: [termId], references: [id], onDelete: Cascade)
 }
 
 model AttendanceReason {

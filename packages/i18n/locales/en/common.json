@@ -151,6 +151,7 @@
   "non_justified": "Non Justified",
   "late": "Late",
   "performance": "Performance",
+  "show_events_that_require_action": "Only events that require action",
   "attendance_justification": "Attendance Justification",
   "attendance_justifications": "Attendance Justifications",
   "attendance_list": "Attendance list",

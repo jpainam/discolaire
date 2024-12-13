@@ -18,6 +18,28 @@ export const chatterRouter = createTRPCRouter({
       },
     });
   }),
+  studentSummary: protectedProcedure
+    .input(
+      z.object({
+        studentId: z.string().min(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const chatters = await ctx.db.chatter.findMany({
+        where: {
+          studentId: input.studentId,
+          classroom: {
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
+        },
+      });
+      return {
+        value: chatters.reduce((acc, curr) => acc + curr.value, 0),
+        total: chatters.length,
+        justified: 0,
+      };
+    }),
   byStudent: protectedProcedure
     .input(
       z.object({

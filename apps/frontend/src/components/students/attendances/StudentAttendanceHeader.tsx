@@ -39,7 +39,7 @@ export function StudentAttendanceHeader({
   classroomId,
 }: {
   studentId: string;
-  classroomId: string;
+  classroomId?: string;
 }) {
   const { t } = useLocale();
   const { openModal } = useModal();
@@ -98,7 +98,9 @@ export function StudentAttendanceHeader({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
+              disabled={!classroomId}
               onClick={() => {
+                if (!classroomId) return;
                 openModal({
                   title: `${t("add")} - ${t("absence")}`,
                   className: "w-[400px]",

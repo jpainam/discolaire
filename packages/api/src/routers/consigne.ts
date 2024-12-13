@@ -18,6 +18,32 @@ export const consigneRouter = createTRPCRouter({
       },
     });
   }),
+  studentSummary: protectedProcedure
+    .input(
+      z.object({
+        studentId: z.string().min(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const consignes = await ctx.db.consigne.findMany({
+        where: {
+          classroom: {
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
+          studentId: input.studentId,
+        },
+      });
+      const duration = consignes.reduce((acc, curr) => acc + curr.duration, 0);
+      const hours = Math.floor(duration / 60);
+      const remainingMinutes = duration % 60;
+      const consignesvalue = `${String(hours).padStart(2, "0")}:${String(remainingMinutes).padStart(2, "0")}`;
+      return {
+        value: consignesvalue,
+        total: consignes.length,
+        justified: 0,
+      };
+    }),
   byStudent: protectedProcedure
     .input(
       z.object({

@@ -18,6 +18,28 @@ export const exclusionRouter = createTRPCRouter({
       },
     });
   }),
+  studentSummary: protectedProcedure
+    .input(
+      z.object({
+        studentId: z.string().min(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const exclusion = await ctx.db.exclusion.findMany({
+        where: {
+          classroom: {
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
+          studentId: input.studentId,
+        },
+      });
+      return {
+        value: exclusion.length,
+        total: exclusion.length,
+        justified: 0,
+      };
+    }),
   byStudent: protectedProcedure
     .input(
       z.object({

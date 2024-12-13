@@ -240,6 +240,11 @@ model Classroom {
     Attendance        Attendance[]
     school            School         @relation(fields: [schoolId], references: [id])
     schoolId          String
+    absences          Absence[]
+    chatters          Chatter[]
+    exclusions        Exclusion[]
+    consignes         Consigne[]
+    lates             Lateness[]
 }
 
 model SubjectJournal {

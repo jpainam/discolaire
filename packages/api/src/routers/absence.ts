@@ -20,6 +20,34 @@ export const absenceRouter = createTRPCRouter({
       },
     });
   }),
+  studentSummary: protectedProcedure
+    .input(
+      z.object({
+        studentId: z.string().min(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const absences = await ctx.db.absence.findMany({
+        include: {
+          justification: true,
+        },
+        where: {
+          studentId: input.studentId,
+          classroom: {
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
+        },
+      });
+      const justifications = absences.filter(
+        (absence) => absence.justification,
+      );
+      return {
+        total: absences.reduce((acc, curr) => acc + curr.value, 0),
+        value: absences.reduce((acc, curr) => acc + curr.value, 0),
+        justified: justifications.reduce((acc, curr) => acc + curr.value, 0),
+      };
+    }),
   byClassroom: protectedProcedure
     .input(
       z.object({

@@ -95,6 +95,7 @@
   "attachments": "Pièces jointes",
   "attendance": "Assiduité",
   "absences": "Absences",
+  "show_events_that_require_action": "Uniquement les évènements qui nécessitent une action",
   "attendance_date": "Date de présence",
   "attendance_justification": "Justification des absences",
   "attendance_justifications": "Justification des asbsences",

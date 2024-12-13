@@ -18,6 +18,43 @@ export const latenessRouter = createTRPCRouter({
       },
     });
   }),
+  studentSummary: protectedProcedure
+    .input(
+      z.object({
+        studentId: z.string().min(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const lateness = await ctx.db.lateness.findMany({
+        include: {
+          justification: true,
+        },
+        where: {
+          studentId: input.studentId,
+          classroom: {
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
+        },
+      });
+      const duration = lateness.reduce((acc, curr) => acc + curr.duration, 0);
+      const hours = Math.floor(duration / 60);
+      const remainingMinutes = duration % 60;
+      const latenessvalue = `${String(hours).padStart(2, "0")}:${String(remainingMinutes).padStart(2, "0")}`;
+      const justifications = lateness.filter((l) => l.justification);
+      const justificationDuration = justifications.reduce(
+        (acc, curr) => acc + curr.duration,
+        0,
+      );
+      const justifiedHours = Math.floor(justificationDuration / 60);
+      const justifiedMinutes = justificationDuration % 60;
+      const justifiedValue = `${String(justifiedHours).padStart(2, "0")}:${String(justifiedMinutes).padStart(2, "0")}`;
+      return {
+        value: latenessvalue,
+        total: lateness.length,
+        justified: justifiedValue,
+      };
+    }),
   byClassroom: protectedProcedure
     .input(
       z.object({
