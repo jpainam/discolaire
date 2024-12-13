@@ -48,6 +48,7 @@ export function AttendanceHeader() {
 
   const router = useRouter();
   const { createQueryString } = useCreateQueryString();
+  const termId = searchParams.get("term");
 
   return (
     <div className="grid flex-row items-center gap-4 border-b bg-muted px-2 py-1 md:flex">
@@ -99,7 +100,7 @@ export function AttendanceHeader() {
       <div className="ml-auto">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size={"sm"}>
+            <Button disabled={!termId} size={"sm"}>
               {t("add")}
               <ChevronDown
                 className="-me-1 ms-2 opacity-60"

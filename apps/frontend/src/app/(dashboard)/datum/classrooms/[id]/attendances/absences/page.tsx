@@ -1,5 +1,4 @@
-import { CreateEditPeridicAttendance } from "~/components/classrooms/attendances/periodic/CreateEditPeriodicAttendance";
-import { PeriodicAttendanceTable } from "~/components/classrooms/attendances/periodic/PeriodicAttendanceTable";
+import { CreateEditAbsence } from "~/components/classrooms/attendances/absence/CreateEditAbsence";
 import { api } from "~/trpc/server";
 
 export default async function Page(props: {
@@ -9,14 +8,16 @@ export default async function Page(props: {
   const params = await props.params;
   const searchParams = await props.searchParams;
   const students = await api.classroom.students(params.id);
+  const termId = Number(searchParams.term);
+  const classroomId = params.id;
 
   return (
     <div className="flex flex-col gap-2 px-2 py-1">
-      {!searchParams.term ? (
-        <PeriodicAttendanceTable />
-      ) : (
-        <CreateEditPeridicAttendance students={students} />
-      )}
+      <CreateEditAbsence
+        termId={termId}
+        classroomId={classroomId}
+        students={students}
+      />
     </div>
   );
 }

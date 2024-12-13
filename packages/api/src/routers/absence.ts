@@ -35,13 +35,7 @@ export const absenceRouter = createTRPCRouter({
           student: true,
         },
         where: {
-          student: {
-            enrollments: {
-              some: {
-                classroomId: input.classroomId,
-              },
-            },
-          },
+          classroomId: input.classroomId,
           term: {
             ...(input.termId && { id: input.termId }),
             schoolId: ctx.schoolId,
@@ -96,6 +90,41 @@ export const absenceRouter = createTRPCRouter({
         data: {
           status: input.status,
         },
+      });
+    }),
+  createClassroom: protectedProcedure
+    .input(
+      z.object({
+        termId: z.coerce.number(),
+        classroomId: z.string().min(1),
+        students: z.array(
+          z.object({
+            id: z.string().min(1),
+            absence: z.string().optional(),
+          }),
+        ),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const data = input.students
+        .map((student) => {
+          const parsedValue = student.absence ? parseInt(student.absence) : NaN;
+          return parsedValue && !isNaN(parsedValue)
+            ? {
+                termId: input.termId,
+                studentId: student.id,
+                classroomId: input.classroomId,
+                date: new Date(),
+                createdById: ctx.session.user.id,
+                value: parsedValue,
+              }
+            : null;
+        })
+        .filter(
+          (absence): absence is NonNullable<typeof absence> => absence !== null,
+        );
+      return ctx.db.absence.createMany({
+        data: data,
       });
     }),
   create: protectedProcedure
