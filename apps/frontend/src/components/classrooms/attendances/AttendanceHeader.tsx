@@ -19,7 +19,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
+import { Input } from "@repo/ui/input";
 import { Label } from "@repo/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/select";
 
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { routes } from "~/configs/routes";
@@ -43,9 +51,7 @@ export function AttendanceHeader() {
 
   return (
     <div className="grid flex-row items-center gap-4 border-b bg-muted px-2 py-1 md:flex">
-      <Label className="hidden min-w-[150px] max-w-[150px] md:block">
-        {t("periods")}
-      </Label>
+      <Label className="hidden md:block">{t("periods")}</Label>
       <TermSelector
         className="md:w-[300px]"
         onChange={(val) => {
@@ -53,6 +59,39 @@ export function AttendanceHeader() {
             routes.classrooms.attendances.index(params.id) +
               "?" +
               createQueryString({ term: val }),
+          );
+        }}
+      />
+      <Label>{t("type")}</Label>
+      <Select
+        onValueChange={(val) => {
+          router.push(
+            routes.classrooms.attendances.index(params.id) +
+              "?" +
+              createQueryString({ type: val }),
+          );
+        }}
+      >
+        <SelectTrigger className="md:w-[200px]">
+          <SelectValue placeholder={t("all_types")} />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="absence">{t("absence")}</SelectItem>
+          <SelectItem value="late">{t("late")}</SelectItem>
+          <SelectItem value="chatter">{t("chatter")}</SelectItem>
+          <SelectItem value="consigne">{t("consigne")}</SelectItem>
+          <SelectItem value="exclusion">{t("exclusion")}</SelectItem>
+        </SelectContent>
+      </Select>
+      <Label>{t("date")}</Label>
+      <Input
+        type="date"
+        className="md:w-[200px]"
+        onChange={(e) => {
+          router.push(
+            routes.classrooms.attendances.index(params.id) +
+              "?" +
+              createQueryString({ date: e.target.value }),
           );
         }}
       />

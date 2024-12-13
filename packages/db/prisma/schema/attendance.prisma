@@ -3,8 +3,9 @@ model Absence {
     date          DateTime
     value         Int
     termId        Int
-    term          Term                  @relation(fields: [termId], references: [id], onDelete: Cascade)
+    term          Term                  @relation(fields: [termId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     studentId     String
+    student       Student               @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     classroomId   String
     type          String                @default("daily") // daily, hourly, periodically, weekly, monthly
     createdAt     DateTime              @default(now())
@@ -18,7 +19,7 @@ model AbsenceJustification {
     absence     Absence  @relation(fields: [absenceId], references: [id], onDelete: Cascade)
     attachments String[]
     createdById String
-    reason      String
+    reason      String?
     comment     String?
     status      String   @default("pending") // pending, approved, rejected
     approvedBy  String?
@@ -28,6 +29,7 @@ model AbsenceJustification {
 model Lateness {
     id            Int                    @id @default(autoincrement())
     studentId     String
+    student       Student                @relation(fields: [studentId], references: [id], onDelete: Cascade)
     date          DateTime
     termId        Int
     duration      Int
@@ -46,6 +48,7 @@ model LatenessJustification {
     createdById String
     status      String   @default("pending") // pending, accepted, rejected
     approvedBy  String?
+    reason      String?
     createdAt   DateTime @default(now())
 }
 

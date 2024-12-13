@@ -568,6 +568,8 @@ model Student {
     preventedAbsences  PreventedAbsence[]
     school             School             @relation(fields: [schoolId], references: [id])
     schoolId           String
+    absences           Absence[]
+    latenesses         Lateness[]
 }
 
 model StudentSibling {
