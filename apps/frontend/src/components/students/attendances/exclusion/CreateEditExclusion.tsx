@@ -47,6 +47,7 @@ export function CreateEditExclusion({
     },
     onSuccess: () => {
       toast.success(t("created_successfully"), { id: 0 });
+      closeModal();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -58,6 +59,7 @@ export function CreateEditExclusion({
     },
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
+      closeModal();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -152,7 +154,14 @@ export function CreateEditExclusion({
           >
             {t("cancel")}
           </Button>
-          <Button size={"sm"} type={"submit"}>
+          <Button
+            isLoading={
+              createExclusionMutation.isPending ||
+              updateExclusionMutation.isPending
+            }
+            size={"sm"}
+            type={"submit"}
+          >
             {t("submit")}
           </Button>
         </div>

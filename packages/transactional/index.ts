@@ -1,3 +1,4 @@
+export * from "./emails/AttendanceEmail";
 export * from "./emails/FakeGradeReportEmail";
 export * from "./emails/InviteEmail";
 export * from "./emails/PasswordResetSuccess";

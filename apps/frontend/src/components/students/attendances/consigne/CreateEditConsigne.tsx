@@ -60,6 +60,7 @@ export function CreateEditConsigne({
     },
     onSuccess: () => {
       toast.success(t("created_successfully"), { id: 0 });
+      closeModal();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -71,6 +72,7 @@ export function CreateEditConsigne({
     },
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
+      closeModal();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -199,7 +201,14 @@ export function CreateEditConsigne({
           >
             {t("cancel")}
           </Button>
-          <Button size={"sm"} type={"submit"}>
+          <Button
+            isLoading={
+              createConsigneMutation.isPending ||
+              updateConsigneMutation.isPending
+            }
+            size={"sm"}
+            type={"submit"}
+          >
             {t("submit")}
           </Button>
         </div>

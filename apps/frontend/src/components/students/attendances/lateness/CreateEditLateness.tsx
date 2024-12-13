@@ -57,6 +57,7 @@ export function CreateEditLateness({
     },
     onSuccess: () => {
       toast.success(t("created_successfully"), { id: 0 });
+      closeModal();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -68,6 +69,7 @@ export function CreateEditLateness({
     },
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
+      closeModal();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -182,7 +184,14 @@ export function CreateEditLateness({
           >
             {t("cancel")}
           </Button>
-          <Button size={"sm"} type={"submit"}>
+          <Button
+            isLoading={
+              createLatenessMutation.isPending ||
+              updateLatenessMutation.isPending
+            }
+            size={"sm"}
+            type={"submit"}
+          >
             {t("submit")}
           </Button>
         </div>

@@ -47,6 +47,7 @@ export function CreateEditChatter({
     },
     onSuccess: () => {
       toast.success(t("created_successfully"), { id: 0 });
+      closeModal();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -58,6 +59,7 @@ export function CreateEditChatter({
     },
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
+      closeModal();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -139,7 +141,13 @@ export function CreateEditChatter({
           >
             {t("cancel")}
           </Button>
-          <Button size={"sm"} type={"submit"}>
+          <Button
+            isLoading={
+              createChatterMutation.isPending || updateChatterMutation.isPending
+            }
+            size={"sm"}
+            type={"submit"}
+          >
             {t("submit")}
           </Button>
         </div>

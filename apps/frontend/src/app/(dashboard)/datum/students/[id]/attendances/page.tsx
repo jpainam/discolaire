@@ -179,7 +179,7 @@ export default async function Page(props: {
                 </div>
               </div>
             </div>
-            <StudentAttendanceAction />
+            <StudentAttendanceAction type={item.type} id={item.id} />
           </div>
         );
       })}
