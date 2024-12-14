@@ -46,12 +46,13 @@ model Lateness {
 model LatenessJustification {
     id          Int      @id @default(autoincrement())
     latenessId  Int      @unique
-    absence     Lateness @relation(fields: [latenessId], references: [id], onDelete: Cascade)
+    late        Lateness @relation(fields: [latenessId], references: [id], onDelete: Cascade)
     attachments String[]
     createdById String
     status      String   @default("pending") // pending, accepted, rejected
     approvedBy  String?
     reason      String?
+    duration    Int
     createdAt   DateTime @default(now())
 }
 
@@ -62,6 +63,7 @@ model Chatter {
     termId      Int
     term        Term      @relation(fields: [termId], references: [id], onDelete: Cascade)
     studentId   String
+    student     Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
     classroomId String
     classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
     type        String    @default("daily") // daily, hourly, periodically, weekly, monthly
@@ -72,6 +74,7 @@ model Chatter {
 model Consigne {
     id          Int       @id @default(autoincrement())
     studentId   String
+    student     Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
     termId      Int
     classroomId String
     classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
@@ -85,6 +88,7 @@ model Consigne {
 model Exclusion {
     id          Int       @id @default(autoincrement())
     studentId   String
+    student     Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
     termId      Int
     startDate   DateTime
     endDate     DateTime

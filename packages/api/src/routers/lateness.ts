@@ -72,13 +72,7 @@ export const latenessRouter = createTRPCRouter({
           student: true,
         },
         where: {
-          student: {
-            enrollments: {
-              some: {
-                classroomId: input.classroomId,
-              },
-            },
-          },
+          classroomId: input.classroomId,
           term: {
             ...(input.termId && { id: input.termId }),
             schoolId: ctx.schoolId,
@@ -86,6 +80,49 @@ export const latenessRouter = createTRPCRouter({
           },
         },
       });
+    }),
+  createClassroom: protectedProcedure
+    .input(
+      z.object({
+        termId: z.coerce.number(),
+        classroomId: z.string().min(1),
+        students: z.array(
+          z.object({
+            id: z.string().min(1),
+            late: z.string().optional(),
+            justify: z.string().optional(),
+          }),
+        ),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      for (const student of input.students) {
+        if (!student.late) {
+          continue;
+        }
+        // convert student.late and student.justify into duration
+
+        const late = await ctx.db.lateness.create({
+          data: {
+            termId: input.termId,
+            studentId: student.id,
+            classroomId: input.classroomId,
+            date: new Date(),
+            createdById: ctx.session.user.id,
+            duration: 0,
+          },
+        });
+        if (student.justify)
+          await ctx.db.latenessJustification.create({
+            data: {
+              latenessId: late.id,
+              status: "approved",
+              duration: 0, // student.justify
+              approvedBy: ctx.session.user.id,
+              createdById: ctx.session.user.id,
+            },
+          });
+      }
     }),
   byStudent: protectedProcedure
     .input(

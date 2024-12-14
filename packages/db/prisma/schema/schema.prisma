@@ -575,6 +575,9 @@ model Student {
     schoolId           String
     absences           Absence[]
     latenesses         Lateness[]
+    consignes          Consigne[]
+    chatters           Chatter[]
+    exclusions         Exclusion[]
 }
 
 model StudentSibling {

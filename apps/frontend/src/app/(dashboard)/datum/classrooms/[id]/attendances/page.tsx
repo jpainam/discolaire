@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { sortBy } from "lodash";
 import { AlertCircle, Clock, MessageSquare } from "lucide-react";
 
 import { getServerTranslations } from "@repo/i18n/server";
@@ -21,23 +22,21 @@ export default async function Page(props: {
   const params = await props.params;
   const { t } = await getServerTranslations();
 
-  const { id } = params;
-  const [absences, lates] = await Promise.all([
-    api.absence.byClassroom({
-      classroomId: id,
-      termId: isNaN(Number(term)) ? undefined : Number(term),
-    }),
-    api.lateness.byClassroom({
-      classroomId: id,
-      termId: isNaN(Number(term)) ? undefined : Number(term),
-    }),
+  const { id: classroomId } = params;
+  const termId = isNaN(Number(term)) ? undefined : Number(term);
+  const [absences, lates, consignes, chatters, exclusions] = await Promise.all([
+    api.absence.byClassroom({ classroomId, termId }),
+    api.lateness.byClassroom({ classroomId, termId }),
+    api.consigne.byClassroom({ classroomId, termId }),
+    api.chatter.byClassroom({ classroomId, termId }),
+    api.exclusion.byClassroom({ classroomId, termId }),
   ]);
   const attendances: {
     id: number;
     name: string;
     studentId: string;
     type: "absence" | "lateness" | "chatter" | "consigne" | "exclusion";
-    justification: string;
+    justification?: string;
     description: string;
     date: Date;
   }[] = [
@@ -59,14 +58,40 @@ export default async function Page(props: {
       description: late.duration.toString(),
       date: late.date,
     })),
+    ...consignes.map((consigne) => ({
+      id: consigne.id,
+      name: consigne.student.lastName + " " + consigne.student.firstName,
+      studentId: consigne.studentId,
+      type: "consigne" as const,
+      description: consigne.duration.toString(),
+      date: consigne.date,
+    })),
+    ...chatters.map((chatter) => ({
+      id: chatter.id,
+      name: chatter.student.lastName + " " + chatter.student.firstName,
+      studentId: chatter.studentId,
+      type: "chatter" as const,
+      description: chatter.value.toString(),
+      date: chatter.date,
+    })),
+    ...exclusions.map((excl) => ({
+      id: excl.id,
+      name: excl.student.lastName + " " + excl.student.firstName,
+      studentId: excl.studentId,
+      type: "exclusion" as const,
+      description: excl.reason,
+      date: excl.startDate,
+    })),
   ];
+  const sortedAttendances = sortBy(attendances, "date");
+
   if (!attendances.length) {
     return <EmptyState className="my-8" title={t("no_attendances_recorded")} />;
   }
 
   return (
     <div className="grid w-full gap-2 p-2 md:grid-cols-2 lg:grid-cols-3">
-      {attendances.map((attendance, index) => (
+      {sortedAttendances.map((attendance, index) => (
         <div
           key={`attendance-${index}`}
           className="flex items-start space-x-4 rounded-sm border p-2"
