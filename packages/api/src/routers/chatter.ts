@@ -5,6 +5,13 @@ import { studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const chatterRouter = createTRPCRouter({
+  get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
+    return ctx.db.chatter.findUniqueOrThrow({
+      where: {
+        id: input,
+      },
+    });
+  }),
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.chatter.findMany({
       orderBy: {

@@ -5,6 +5,17 @@ import { studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const latenessRouter = createTRPCRouter({
+  get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
+    return ctx.db.lateness.findUniqueOrThrow({
+      include: {
+        student: true,
+        justification: true,
+      },
+      where: {
+        id: input,
+      },
+    });
+  }),
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.lateness.findMany({
       orderBy: {
@@ -18,6 +29,25 @@ export const latenessRouter = createTRPCRouter({
       },
     });
   }),
+  justify: protectedProcedure
+    .input(
+      z.object({
+        latenessId: z.coerce.number(),
+        reason: z.string().min(1),
+        comment: z.string().optional(),
+        duration: z.coerce.number(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.latenessJustification.create({
+        data: {
+          reason: input.reason,
+          latenessId: input.latenessId,
+          createdById: ctx.session.user.id,
+          duration: input.duration,
+        },
+      });
+    }),
   studentSummary: protectedProcedure
     .input(
       z.object({
@@ -137,6 +167,7 @@ export const latenessRouter = createTRPCRouter({
           date: "desc",
         },
         include: {
+          student: true,
           justification: true,
         },
         where: {

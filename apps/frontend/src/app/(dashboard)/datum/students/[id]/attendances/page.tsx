@@ -7,6 +7,7 @@ import {
   ShieldAlertIcon,
 } from "lucide-react";
 
+import type { RouterOutputs } from "@repo/api";
 import { getServerTranslations } from "@repo/i18n/server";
 import { Badge } from "@repo/ui/badge";
 import { Checkbox } from "@repo/ui/checkbox";
@@ -16,6 +17,12 @@ import { Label } from "@repo/ui/label";
 import { StudentAttendanceAction } from "~/components/students/attendances/StudentAttendanceAction";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/server";
+
+type AbsenceType = RouterOutputs["absence"]["get"];
+type ChatterType = RouterOutputs["chatter"]["get"];
+type ConsigneType = RouterOutputs["consigne"]["get"];
+type LatenessType = RouterOutputs["lateness"]["get"];
+type ExclusionType = RouterOutputs["exclusion"]["get"];
 
 export default async function Page(props: {
   params: Promise<{ id: string }>;
@@ -69,6 +76,12 @@ export default async function Page(props: {
     justified?: string;
     justificationId?: number;
     endDate?: Date;
+    attendance:
+      | AbsenceType
+      | ChatterType
+      | ConsigneType
+      | LatenessType
+      | ExclusionType;
   }[] = [
     absences.map((absence) => ({
       type: "absence" as const,
@@ -78,6 +91,7 @@ export default async function Page(props: {
       total: absence.value.toString(),
       justified: absence.justification?.value.toString(),
       justificationId: absence.justification?.id,
+      attendance: absence,
     })),
     chatters.map((chatter) => ({
       type: "chatter" as const,
@@ -85,12 +99,14 @@ export default async function Page(props: {
       date: chatter.date,
       total: chatter.value.toString(),
       id: chatter.id,
+      attendance: chatter,
     })),
     consignes.map((consigne) => ({
       type: "consigne" as const,
       date: consigne.date,
       title: consigne.task,
       id: consigne.id,
+      attendance: consigne,
     })),
     lateness.map((lateness) => ({
       type: "lateness" as const,
@@ -98,6 +114,7 @@ export default async function Page(props: {
       title: lateness.duration.toString(),
       id: lateness.id,
       justificationId: lateness.justification?.id,
+      attendance: lateness,
     })),
     exclusions.map((exclusion) => ({
       type: "exclusion" as const,
@@ -105,6 +122,7 @@ export default async function Page(props: {
       endDate: exclusion.endDate,
       title: exclusion.reason,
       id: exclusion.id,
+      attendance: exclusion,
     })),
   ]
     .flat()
@@ -179,7 +197,11 @@ export default async function Page(props: {
                 </div>
               </div>
             </div>
-            <StudentAttendanceAction type={item.type} id={item.id} />
+            <StudentAttendanceAction
+              attendance={item.attendance}
+              type={item.type}
+              id={item.id}
+            />
           </div>
         );
       })}

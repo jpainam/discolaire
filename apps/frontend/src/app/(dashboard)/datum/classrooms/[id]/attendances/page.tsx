@@ -1,5 +1,4 @@
 import { format } from "date-fns";
-import { sortBy } from "lodash";
 import { AlertCircle, Clock, MessageSquare } from "lucide-react";
 
 import { getServerTranslations } from "@repo/i18n/server";
@@ -82,8 +81,7 @@ export default async function Page(props: {
       description: excl.reason,
       date: excl.startDate,
     })),
-  ];
-  const sortedAttendances = sortBy(attendances, "date");
+  ].sort((a, b) => a.date.getTime() - b.date.getTime());
 
   if (!attendances.length) {
     return <EmptyState className="my-8" title={t("no_attendances_recorded")} />;
@@ -91,7 +89,7 @@ export default async function Page(props: {
 
   return (
     <div className="grid w-full gap-2 p-2 md:grid-cols-2 lg:grid-cols-3">
-      {sortedAttendances.map((attendance, index) => (
+      {attendances.map((attendance, index) => (
         <div
           key={`attendance-${index}`}
           className="flex items-start space-x-4 rounded-sm border p-2"

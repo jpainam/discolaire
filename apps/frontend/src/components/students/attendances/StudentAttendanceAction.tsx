@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { Columns4Icon, MailIcon, MoreVertical, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
+import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { useConfirm } from "@repo/ui/confirm-dialog";
@@ -15,14 +17,28 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 
+import { JustifyLateness } from "~/components/attendances/JustifyLateness";
 import { api } from "~/trpc/react";
+
+type AbsenceType = RouterOutputs["absence"]["get"];
+type ChatterType = RouterOutputs["chatter"]["get"];
+type ConsigneType = RouterOutputs["consigne"]["get"];
+type LatenessType = RouterOutputs["lateness"]["get"];
+type ExclusionType = RouterOutputs["exclusion"]["get"];
 
 export function StudentAttendanceAction({
   type,
   id,
+  attendance,
 }: {
   type: "absence" | "chatter" | "consigne" | "lateness" | "exclusion";
   id: number;
+  attendance:
+    | AbsenceType
+    | ChatterType
+    | ConsigneType
+    | LatenessType
+    | ExclusionType;
 }) {
   const { t } = useLocale();
   const router = useRouter();
@@ -36,6 +52,7 @@ export function StudentAttendanceAction({
     },
   });
   const confirm = useConfirm();
+  const { openModal } = useModal();
 
   return (
     <DropdownMenu>
@@ -45,7 +62,18 @@ export function StudentAttendanceAction({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem>
+        <DropdownMenuItem
+          onSelect={() => {
+            if (type == "lateness") {
+              const lateness = attendance as LatenessType;
+              openModal({
+                className: "w-[400px]",
+                title: t("justify_lateness"),
+                view: <JustifyLateness lateness={lateness} />,
+              });
+            }
+          }}
+        >
           <Columns4Icon className="mr-2 h-4 w-4" />
           {t("justify")}
         </DropdownMenuItem>

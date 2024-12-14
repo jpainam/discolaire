@@ -3,6 +3,16 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const absenceRouter = createTRPCRouter({
+  get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
+    return ctx.db.absence.findUniqueOrThrow({
+      include: {
+        justification: true,
+      },
+      where: {
+        id: input,
+      },
+    });
+  }),
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.absence.findMany({
       orderBy: {

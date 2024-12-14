@@ -10,7 +10,7 @@ import {
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
-export function AttendanceReasonSelector({
+export function JustificationReasonSelector({
   onChange,
   defaultValue,
   className,

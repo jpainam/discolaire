@@ -27,7 +27,7 @@ import { Input } from "@repo/ui/input";
 import { Textarea } from "@repo/ui/textarea";
 import { FileUploader } from "@repo/ui/uploads/file-uploader";
 
-import { AttendanceReasonSelector } from "./AttendanceReasonSelector";
+import { JustificationReasonSelector } from "./JustificationReasonSelector";
 
 const preventSchema = z.object({
   from: z.string().datetime(),
@@ -103,7 +103,7 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
             <FormItem className="space-y-0">
               <FormLabel>{t("reason")}</FormLabel>
               <FormControl>
-                <AttendanceReasonSelector
+                <JustificationReasonSelector
                   onChange={(val) => {
                     field.onChange(val);
                   }}
