@@ -291,4 +291,28 @@ export const absenceRouter = createTRPCRouter({
         },
       });
     }),
+  createPreventAbsence: protectedProcedure
+    .input(
+      z.object({
+        from: z.coerce.date(),
+        to: z.coerce.date(),
+        reason: z.string().min(1),
+        studentId: z.string().min(1),
+        attachments: z.array(z.string()).optional(),
+        comment: z.string().optional(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.preventedAbsence.create({
+        data: {
+          from: input.from,
+          createdById: ctx.session.user.id,
+          to: input.to,
+          studentId: input.studentId,
+          reason: input.reason,
+          attachments: input.attachments,
+          comment: input.comment,
+        },
+      });
+    }),
 });

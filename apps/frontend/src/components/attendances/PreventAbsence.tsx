@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Paperclip } from "lucide-react";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { useModal } from "@repo/hooks/use-modal";
@@ -27,12 +28,12 @@ import { Input } from "@repo/ui/input";
 import { Textarea } from "@repo/ui/textarea";
 import { FileUploader } from "@repo/ui/uploads/file-uploader";
 
-import { JustificationReasonSelector } from "./JustificationReasonSelector";
+import { api } from "~/trpc/react";
 
 const preventSchema = z.object({
   from: z.string().datetime(),
   to: z.string().datetime(),
-  reason: z.coerce.number(),
+  reason: z.string().min(1),
   attachment: z.string().optional().default(""),
   observation: z.string().optional().default(""),
 });
@@ -47,19 +48,44 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
       observation: "",
     },
   });
-  console.log(studentId);
+
   const { unstable_onUpload: onUpload } = useUpload();
   const [files, setFiles] = React.useState<File[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const utils = api.useUtils();
+  const createPreventedAbsence = api.absence.createPreventAbsence.useMutation({
+    onSettled: () => {
+      void utils.absence.invalidate();
+      setIsLoading(false);
+    },
+    onSuccess: () => {
+      toast.success(t("created_successfully"), { id: 0 });
+      closeModal();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
+
   const { t } = useLocale();
-  const onSubmit = async (values: z.infer<typeof preventSchema>) => {
-    console.log(values);
+  const onSubmit = async (data: z.infer<typeof preventSchema>) => {
     setIsLoading(true);
     const uploadPromises = files.map((file) => {
       return onUpload(file);
     });
     const uploadState = await Promise.all(uploadPromises);
-    console.log(uploadState);
+    const attachments = uploadState
+      .map((state) => state.data?.id)
+      .filter((v) => v != undefined);
+    const values = {
+      attachments: attachments,
+      studentId: studentId,
+      comment: data.observation,
+      reason: data.reason,
+      from: new Date(data.from),
+      to: new Date(data.to),
+    };
+    createPreventedAbsence.mutate(values);
   };
   return (
     <Form {...form}>
@@ -103,11 +129,7 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
             <FormItem className="space-y-0">
               <FormLabel>{t("reason")}</FormLabel>
               <FormControl>
-                <JustificationReasonSelector
-                  onChange={(val) => {
-                    field.onChange(val);
-                  }}
-                />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -166,7 +188,11 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
           >
             {t("cancel")}
           </Button>
-          <Button size={"sm"} isLoading={isLoading} type="submit">
+          <Button
+            size={"sm"}
+            isLoading={isLoading || createPreventedAbsence.isPending}
+            type="submit"
+          >
             {t("submit")}
           </Button>
         </div>

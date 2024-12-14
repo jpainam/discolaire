@@ -111,69 +111,61 @@ export const useUpload = () => {
   };
 
   const unstable_onUpload = async (
-    inputs: File | File[],
+    input: File,
     metadata?: { destination: string; bucket?: string; key?: string },
-  ): Promise<UploadState[]> => {
-    const files = Array.isArray(inputs) ? inputs : [inputs];
-    const uploadStates: UploadState[] = [];
+  ): Promise<UploadState> => {
+    const file = input;
 
-    await Promise.all(
-      files.map(async (file, index) => {
-        console.log(`Uploading file ${index}`, file.name);
-        const response = await fetch(env.NEXT_PUBLIC_BASE_URL + "/api/upload", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            filename: file.name,
-            destination: metadata?.destination,
-            bucket: metadata?.bucket,
-            key: metadata?.key,
-            contentType: file.type,
-          }),
-        });
-        if (!response.ok) {
-          throw new Error(`Failed to upload file ${await response.json()}`);
-        }
-        const {
-          url,
-          fields,
-        }: {
-          url: string;
-          fields: Record<string, string>;
-        } = (await response.json()) as {
-          url: string;
-          fields: Record<string, string>;
-        };
-        const formData = new FormData();
-        Object.entries(fields).forEach(([key, value]) => {
-          formData.append(key, value);
-        });
-        formData.append("file", file);
-
-        const uploadResponse = await fetch(url, {
-          method: "POST",
-          body: formData,
-        });
-        if (!uploadResponse.ok) {
-          throw new Error(
-            `Failed to upload file ${await uploadResponse.json()}`,
-          );
-        }
-        const uploadedData = {
-          id: fields.key ?? "",
-          url,
-        };
-        uploadStates.push({
-          file,
-          isPending: false,
-          data: uploadedData,
-          error: null,
-        });
+    console.log(`Uploading file`, file.name);
+    const response = await fetch(env.NEXT_PUBLIC_BASE_URL + "/api/upload", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        filename: file.name,
+        destination: metadata?.destination,
+        bucket: metadata?.bucket,
+        key: metadata?.key,
+        contentType: file.type,
       }),
-    );
-    return uploadStates;
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to upload file ${await response.json()}`);
+    }
+    const {
+      url,
+      fields,
+    }: {
+      url: string;
+      fields: Record<string, string>;
+    } = (await response.json()) as {
+      url: string;
+      fields: Record<string, string>;
+    };
+    const formData = new FormData();
+    Object.entries(fields).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    formData.append("file", file);
+
+    const uploadResponse = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+    if (!uploadResponse.ok) {
+      throw new Error(`Failed to upload file ${await uploadResponse.json()}`);
+    }
+    const uploadedData = {
+      id: fields.key ?? "",
+      url,
+    };
+    return {
+      file,
+      isPending: false,
+      data: uploadedData,
+      error: null,
+    };
   };
 
   return {

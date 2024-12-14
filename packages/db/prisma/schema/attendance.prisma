@@ -100,25 +100,18 @@ model Exclusion {
     term        Term      @relation(fields: [termId], references: [id], onDelete: Cascade)
 }
 
-model AttendanceReason {
-    id                Int                @id @default(autoincrement())
-    name              String
-    schoolId          String
-    schoolYearId      String
-    preventedAbsences PreventedAbsence[]
-}
-
 model PreventedAbsence {
-    id           Int              @id @default(autoincrement())
+    id           Int       @id @default(autoincrement())
     studentId    String
     from         DateTime
     to           DateTime
-    reasonId     Int
-    reason       AttendanceReason @relation(fields: [reasonId], references: [id], onDelete: Cascade)
-    student      Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
-    createdAt    DateTime         @default(now())
+    attachments  String[]
+    reason       String
+    comment      String?
+    student      Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+    createdAt    DateTime  @default(now())
     createdById  String
-    status       String           @default("pending") // pending, accepted, rejected
+    status       String    @default("pending") // pending, accepted, rejected
     approvedById String?
     approvedAt   DateTime?
 }

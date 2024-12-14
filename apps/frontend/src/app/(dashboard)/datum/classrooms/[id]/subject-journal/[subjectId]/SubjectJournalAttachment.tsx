@@ -60,8 +60,8 @@ export function SubjectJournalAttachment() {
             {
               loading: t("uploading"),
               success: (result) => {
-                const uploadedFile = result[0];
-                if (!uploadedFile?.data) {
+                const uploadedFile = result;
+                if (!uploadedFile.data) {
                   toast.error("No file uploaded");
                   return;
                 }

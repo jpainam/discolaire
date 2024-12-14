@@ -15,10 +15,10 @@ import {
   FormMessage,
   useForm,
 } from "@repo/ui/form";
+import { Input } from "@repo/ui/input";
 import { Textarea } from "@repo/ui/textarea";
 
 import { api } from "~/trpc/react";
-import { JustificationReasonSelector } from "./JustificationReasonSelector";
 
 const justifySchema = z.object({
   reason: z.string().min(1),
@@ -78,7 +78,7 @@ export function JustifyLateness({
             <FormItem>
               <FormLabel></FormLabel>
               <FormControl>
-                <JustificationReasonSelector {...field} />
+                <Input {...field} />
               </FormControl>
 
               <FormMessage />
