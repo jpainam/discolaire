@@ -1,17 +1,15 @@
 import {
   Body,
   Container,
-  Head,
   Heading,
   Html,
   Preview,
-  Section,
   Tailwind,
   Text,
 } from "@react-email/components";
 
+import { Head } from "../components/Head";
 import { Logo } from "../components/logo";
-import { geti18n } from "../locales";
 import { getAssetUrl } from "../utils";
 
 interface School {
@@ -26,45 +24,49 @@ const defaultSchool = {
   name: "Institut Polyvalent Wague",
   id: "1",
 };
-
-export const AttendanceEmail = ({
-  parentName = "Dupont",
-  studentName = "Doe John",
-  title = "Absence",
-  locale = "fr",
-  school = defaultSchool,
-}: {
-  parentName: string;
-  studentName: string;
+interface Props {
   title: string;
+  studentName: string;
+  date: string;
   school: School;
-  locale: string;
-}) => {
-  const { t } = geti18n({ locale });
+}
+
+export const AbsenceEmail = ({
+  title = "Absence de Dupont Pierre",
+
+  date = "Ven, 2 juin",
+  school = defaultSchool,
+  studentName = "Dupont Pierre",
+}: Props) => {
   return (
     <Html>
       <Tailwind>
         <Head />
-        <Preview>{t("attendance")}</Preview>
+        <Preview>{title}</Preview>
+
         <Body className="mx-auto my-auto bg-[#fff] font-sans">
           <Container
             className="mx-auto my-[40px] max-w-[600px] border-transparent p-[20px] md:border-[#E8E7E1]"
             style={{ borderStyle: "solid", borderWidth: 1 }}
           >
-            <Logo logoUrl={school.logo} />
+            <Logo logoUrl={`${assetUrl}/images/logo-round.png`} />
             <Heading className="mx-0 p-0 text-center text-[18px] font-normal text-[#121212]">
-              {t("attendance")}
+              Madame/Monsieur
             </Heading>
-            <Text className="text-[14px] leading-[24px] text-[#121212]">
-              Hello {parentName},
-              <br />
-              <br />
-              Votre eleve, du nom de {studentName} a ete absent aujourd'hui.
-            </Text>
 
-            <Section className="mb-[32px] mt-[32px] text-center">
-              {title}
-            </Section>
+            <br />
+
+            <span className="font-medium">Madame/Monsieur</span>
+            <Text className="text-[#121212]">
+              Nous vous informons que votre enfant, {studentName}, est absent(e)
+              aujourdh'hui, {date}. Merci de bien vouloir nous tenir informé de
+              la raison de cette absence.
+            </Text>
+            <Text className="text-[#121212]">
+              Cordialement, <br />
+              La direction <br />
+              {school.name}
+            </Text>
           </Container>
         </Body>
       </Tailwind>
@@ -72,4 +74,4 @@ export const AttendanceEmail = ({
   );
 };
 
-export default AttendanceEmail;
+export default AbsenceEmail;

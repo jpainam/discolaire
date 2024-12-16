@@ -1,12 +1,25 @@
 import { render } from "@react-email/render";
+import i18next from "i18next";
 import { z } from "zod";
 
 import { auth } from "@repo/auth";
 import { db } from "@repo/db";
 import { getServerTranslations } from "@repo/i18n/server";
-import { AttendanceEmail } from "@repo/transactional";
+import {
+  AbsenceEmail,
+  ChatterEmail,
+  ConsigneEmail,
+  ExclusionEmail,
+  LatenessEmail,
+} from "@repo/transactional";
 
 import { api } from "~/trpc/server";
+
+const dateFormat = Intl.DateTimeFormat(i18next.language, {
+  month: "short",
+  weekday: "short",
+  day: "numeric",
+});
 
 const schema = z.object({
   id: z.coerce.number(),
@@ -19,33 +32,38 @@ export async function POST(req: Request) {
     if (!session) {
       return new Response("Not authenticated", { status: 401 });
     }
-    const body = await req.json();
-    const result = schema.safeParse(body);
+    const reqBody = await req.json();
+    const result = schema.safeParse(reqBody);
     if (!result.success) {
       const error = result.error.errors.map((e) => e.message).join(", ");
       return new Response(error, { status: 400 });
     }
     const { id, type } = result.data;
+    let emailData: { title: string; body: string; studentId: string } | null =
+      null;
 
     switch (type) {
       case "absence":
-        await sendAbsenceEmail(id);
+        emailData = await getAbsenceEmail(id);
         break;
       case "chatter":
-        await sendChatterEmail(id);
+        emailData = await getChatterEmail(id);
         break;
       case "consigne":
-        await sendConsigneEmail(id);
+        emailData = await getConsigneEmail(id);
         break;
       case "lateness":
-        await sendLatenessEmail(id);
+        emailData = await getLatenessEmail(id);
         break;
       case "exclusion":
-        await sendExclusionEmail(id);
+        emailData = await getExclusionEmail(id);
         break;
       default:
         return new Response("Invalid type", { status: 400 });
     }
+
+    const { title, body, studentId } = emailData;
+    await completeSend(title, body, studentId);
     return new Response("OK", { status: 200 });
   } catch (e) {
     console.error(e);
@@ -53,34 +71,48 @@ export async function POST(req: Request) {
   }
 }
 
-async function completeSend({
-  studentId,
-  title,
-}: {
-  studentId: string;
-  title: string;
-}) {
+async function completeSend(title: string, body: string, studentId: string) {
+  const studentContacts = await api.student.contacts(studentId);
+  if (studentContacts.length === 0) {
+    return new Response("Student has no contact", { status: 404 });
+  }
+
+  const contactEmails = studentContacts
+    .map((c) => c.contact.email)
+    .filter((v) => v != null);
+  await api.messaging.sendEmail({
+    subject: title,
+    to: contactEmails,
+    body: body,
+  });
+}
+
+async function getStudentAndSchool(studentId: string) {
   const student = await db.student.findUniqueOrThrow({
     where: {
       id: studentId,
     },
   });
-  const studentContacts = await api.student.contacts(student.id);
-  if (studentContacts.length === 0) {
-    return new Response("Student has no contact", { status: 404 });
-  }
-
   const school = await db.school.findUniqueOrThrow({
     where: {
       id: student.schoolId,
     },
   });
-  const { i18n } = await getServerTranslations();
-  const emailBody = await render(
-    AttendanceEmail({
-      studentName: student.lastName ?? "",
-      parentName: "",
-      locale: i18n.language,
+  return { student, school };
+}
+async function getAbsenceEmail(id: number) {
+  const absence = await db.absence.findUniqueOrThrow({
+    where: {
+      id,
+    },
+  });
+  const { t } = await getServerTranslations();
+  const { student, school } = await getStudentAndSchool(absence.studentId);
+  const title = t("email_absence_title", { name: student.lastName });
+  const body = await render(
+    AbsenceEmail({
+      studentName: student.lastName ?? student.firstName ?? "",
+      date: dateFormat.format(absence.date),
       school: {
         id: school.id,
         logo: school.logo,
@@ -89,72 +121,103 @@ async function completeSend({
       title: title,
     }),
   );
-  console.log(emailBody);
-  await api.messaging.sendEmail({
-    subject: title,
-    to: studentContacts.map((c) => c.contact.email).filter((v) => v !== null),
-    body: emailBody,
-  });
-}
-async function sendAbsenceEmail(id: number) {
-  const absence = await db.absence.findUniqueOrThrow({
-    where: {
-      id,
-    },
-  });
-  await completeSend({
-    title: "Absence",
-    studentId: absence.studentId,
-  });
+  return { title, body, studentId: student.id };
 }
 
-async function sendChatterEmail(id: number) {
+async function getChatterEmail(id: number) {
   const chatter = await db.chatter.findUniqueOrThrow({
     where: {
       id,
     },
   });
-  await completeSend({
-    title: "Chatter",
-
-    studentId: chatter.studentId,
-  });
+  const { t } = await getServerTranslations();
+  const { student, school } = await getStudentAndSchool(chatter.studentId);
+  const title = t("email_chatter_title", { name: student.lastName });
+  const body = await render(
+    ChatterEmail({
+      title: title,
+      studentName: student.lastName ?? student.firstName ?? "",
+      school: {
+        id: school.id,
+        logo: school.logo,
+        name: school.name,
+      },
+    }),
+  );
+  return { title, body, studentId: student.id };
 }
-async function sendConsigneEmail(id: number) {
+async function getConsigneEmail(id: number) {
   const consigne = await db.consigne.findUniqueOrThrow({
     where: {
       id,
     },
   });
-  await completeSend({
-    title: "Consigne",
-
-    studentId: consigne.studentId,
-  });
+  const { t } = await getServerTranslations();
+  const { student, school } = await getStudentAndSchool(consigne.studentId);
+  const title = t("email_consigne_title", { name: student.lastName });
+  const body = await render(
+    ConsigneEmail({
+      title: title,
+      date: dateFormat.format(consigne.date),
+      motif: consigne.task,
+      studentName: student.lastName ?? student.firstName ?? "",
+      school: {
+        id: school.id,
+        logo: school.logo,
+        name: school.name,
+      },
+    }),
+  );
+  return { title, body, studentId: student.id };
 }
-
-async function sendLatenessEmail(id: number) {
+async function getLatenessEmail(id: number) {
   const lateness = await db.lateness.findUniqueOrThrow({
     where: {
       id,
     },
   });
-  await completeSend({
-    title: "Lateness",
 
-    studentId: lateness.studentId,
-  });
+  const { t } = await getServerTranslations();
+  const { student, school } = await getStudentAndSchool(lateness.studentId);
+  const title = t("email_title_lateness", { name: student.lastName });
+  const body = await render(
+    LatenessEmail({
+      title: title,
+      date: dateFormat.format(lateness.date),
+      studentName: student.lastName ?? student.firstName ?? "",
+      school: {
+        id: school.id,
+        logo: school.logo,
+        name: school.name,
+      },
+    }),
+  );
+  return { title, body, studentId: student.id };
 }
 
-async function sendExclusionEmail(id: number) {
+async function getExclusionEmail(id: number) {
   const exclusion = await db.exclusion.findUniqueOrThrow({
     where: {
       id,
     },
   });
-  await completeSend({
-    title: "Exclusion",
 
-    studentId: exclusion.studentId,
-  });
+  const { t } = await getServerTranslations();
+  const { student, school } = await getStudentAndSchool(exclusion.studentId);
+  const title = t("email_title_exclusion", { name: student.lastName });
+  const body = await render(
+    ExclusionEmail({
+      title: title,
+      motif: exclusion.reason,
+      startDate: dateFormat.format(exclusion.startDate),
+      endDate: dateFormat.format(exclusion.endDate),
+      studentName: student.lastName ?? student.firstName ?? "",
+      school: {
+        id: school.id,
+        logo: school.logo,
+        name: school.name,
+      },
+    }),
+  );
+  return { title, body, studentId: student.id };
 }
