@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { parseAsIsoDateTime, useQueryState } from "nuqs";
+import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
 
@@ -12,7 +13,6 @@ import SalesIcon from "~/components/icons/sales";
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import { routes } from "~/configs/routes";
 import { CURRENCY } from "~/lib/constants";
-import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
 export function TransactionTotals() {
@@ -35,7 +35,7 @@ export function TransactionTotals() {
     );
   }
   if (transactionsStats.isError) {
-    showErrorToast(transactionsStats.error);
+    toast.error(transactionsStats.error.message);
     return;
   }
   const stats = transactionsStats.data;

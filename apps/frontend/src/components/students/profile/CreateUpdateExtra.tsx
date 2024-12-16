@@ -1,6 +1,6 @@
 "use client";
 
-import { LuActivitySquare } from "react-icons/lu";
+import { ActivitySquare } from "lucide-react";
 import { toast } from "sonner";
 
 import type { Option } from "@repo/ui/multiple-selector";
@@ -49,7 +49,7 @@ export function CreateUpdateExtra() {
     <Card className="rounded-md">
       <CardHeader className="border-b bg-muted/50 py-2.5">
         <CardTitle className="flex items-center gap-1 text-sm">
-          <LuActivitySquare className="h-4 w-4" />
+          <ActivitySquare className="h-4 w-4" />
           {t("extra_activities")}
         </CardTitle>
         {/* <CardDescription></CardDescription> */}

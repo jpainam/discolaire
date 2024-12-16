@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { toast } from "sonner";
 
 import type { ChartConfig } from "@repo/ui/chart";
 import { useLocale } from "@repo/i18n";
@@ -16,7 +17,6 @@ import {
 import { EmptyState } from "@repo/ui/EmptyState";
 import { Skeleton } from "@repo/ui/skeleton";
 
-import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
 export function RequiredFeeTransactionTrend() {
@@ -44,7 +44,7 @@ export function RequiredFeeTransactionTrend() {
     );
   }
   if (transactionsTrendQuery.isError) {
-    showErrorToast(transactionsTrendQuery.error);
+    toast.error(transactionsTrendQuery.error.message);
     return;
   }
   if (transactionsTrendQuery.data.length === 0) {

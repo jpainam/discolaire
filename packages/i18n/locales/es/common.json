@@ -14,6 +14,7 @@
   "my_chatters": "Mis charlas",
   "all_my_attendances": "Todas mis asistencias",
   "delete_periodic_attendance": "Eliminar asistencia periódica",
+  "justify_lateness": "Justificar tardanza",
   "absence_cannot_be_less_than_justify_for": "La ausencia no puede ser menor que la justificación para {{name}}",
   "transaction_confirmation": "Confirmación de transacción",
   "add_a_comment": "Agregar un comentario",

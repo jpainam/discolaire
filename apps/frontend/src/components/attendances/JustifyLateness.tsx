@@ -76,11 +76,10 @@ export function JustifyLateness({
           name="reason"
           render={({ field }) => (
             <FormItem>
-              <FormLabel></FormLabel>
+              <FormLabel>{t("reason")}?</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
@@ -90,7 +89,7 @@ export function JustifyLateness({
           name="comment"
           render={({ field }) => (
             <FormItem>
-              <FormLabel></FormLabel>
+              <FormLabel>{t("comment")}</FormLabel>
               <FormControl>
                 <Textarea {...field} />
               </FormControl>

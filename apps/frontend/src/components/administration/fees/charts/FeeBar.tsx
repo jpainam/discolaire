@@ -1,6 +1,7 @@
 "use client";
 
 import { Bar, BarChart, LabelList, XAxis, YAxis } from "recharts";
+import { toast } from "sonner";
 
 import type { ChartConfig } from "@repo/ui/chart";
 import { useLocale } from "@repo/i18n";
@@ -12,7 +13,6 @@ import {
 } from "@repo/ui/chart";
 import { Skeleton } from "@repo/ui/skeleton";
 
-import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
 export function FeeBar() {
@@ -32,7 +32,7 @@ export function FeeBar() {
     return <Skeleton className="h-[200px] w-[350px] p-2" />;
   }
   if (feesMonthlyQuery.isError) {
-    showErrorToast(feesMonthlyQuery.error);
+    toast.error(feesMonthlyQuery.error.message);
     return;
   }
 

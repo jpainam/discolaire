@@ -1,8 +1,9 @@
 "use client";
 
+import { toast } from "sonner";
+
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
@@ -15,7 +16,7 @@ export function GradeAppreciationList() {
     return null;
   }
   if (appreciationCategoriesQuery.isError) {
-    showErrorToast(appreciationCategoriesQuery.error);
+    toast.error(appreciationCategoriesQuery.error.message);
     return;
   }
   return (

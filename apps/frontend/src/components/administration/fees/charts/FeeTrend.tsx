@@ -1,6 +1,7 @@
 "use client";
 
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { toast } from "sonner";
 
 import type { ChartConfig } from "@repo/ui/chart";
 import { useLocale } from "@repo/i18n";
@@ -13,7 +14,6 @@ import {
 import { EmptyState } from "@repo/ui/EmptyState";
 import { Skeleton } from "@repo/ui/skeleton";
 
-import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
 export function FeeTrend() {
@@ -33,7 +33,7 @@ export function FeeTrend() {
     return <Skeleton className="h-[100px] w-full" />;
   }
   if (feesTrendQuery.isError) {
-    showErrorToast(feesTrendQuery.error);
+    toast.error(feesTrendQuery.error.message);
     return;
   }
   if (!feesTrendQuery.data.length) {

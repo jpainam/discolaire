@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
@@ -9,7 +10,6 @@ import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
 
-import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { FeeDataTableActions } from "./FeeDataTableActions";
 import { fetchFeesColumns } from "./FeeDataTableColumns";
@@ -64,7 +64,7 @@ export function FeeDataTable() {
     );
   }
   if (feesQuery.isError) {
-    showErrorToast(feesQuery.error);
+    toast.error(feesQuery.error.message);
     return;
   }
 

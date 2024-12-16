@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo } from "react";
 import _ from "lodash";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import type { ChartConfig } from "@repo/ui/chart";
@@ -21,7 +22,6 @@ import {
 } from "@repo/ui/chart";
 import { Skeleton } from "@repo/ui/skeleton";
 
-import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
 type TransactionQuotaProcedureOutput = NonNullable<
@@ -75,9 +75,9 @@ export function TransactionClassrooms() {
     );
   }
   if (transactionsQuotaQuery.isError) {
-    showErrorToast(transactionsQuotaQuery.error);
+    toast.error(transactionsQuotaQuery.error.message);
+    return;
   }
-  if (!transactionsQuotaQuery.data) return null;
 
   return (
     <div className="grid w-full items-end gap-8 p-2 md:grid-cols-2">

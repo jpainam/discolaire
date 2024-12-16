@@ -24,7 +24,6 @@ import FlatBadge from "@repo/ui/FlatBadge";
 import { Label } from "@repo/ui/label";
 import { Separator } from "@repo/ui/separator";
 
-import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
 import { getFullName } from "~/utils/full-name";
@@ -52,7 +51,7 @@ export function TransactionDetails({
     notFound();
   }
   if (transactionQuery.isError) {
-    showErrorToast(transactionQuery.error);
+    toast.error(transactionQuery.error.message);
     return;
   }
   const transaction = transactionQuery.data;
