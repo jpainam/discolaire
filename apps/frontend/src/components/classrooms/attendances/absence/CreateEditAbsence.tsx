@@ -9,7 +9,15 @@ import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
 import { Checkbox } from "@repo/ui/checkbox";
-import { Form, useForm } from "@repo/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useForm,
+} from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { Label } from "@repo/ui/label";
 import {
@@ -35,6 +43,8 @@ const attendanceSchema = z.object({
       justify: z.coerce.number().nullable(),
     }),
   ),
+  notifyParents: z.boolean().default(true),
+  notifyStudents: z.boolean().default(true),
 });
 
 export function CreateEditAbsence({
@@ -106,11 +116,33 @@ export function CreateEditAbsence({
           };
         })
         .filter((student) => student.absence > 0);
-      createAbsence.mutate({
-        termId: termId,
-        classroomId: classroomId,
-        students: absences,
-      });
+      createAbsence.mutate(
+        {
+          termId: termId,
+          classroomId: classroomId,
+          students: absences,
+        },
+        {
+          onSuccess: (_absences) => {
+            // if (data.notifyParents) {
+            //   fetch("/api/emails/attendance", {
+            //     method: "POST",
+            //     body: JSON.stringify({ id: att.id, type: "absence" }),
+            //   })
+            //     .then((res) => {
+            //       if (res.ok) {
+            //         toast.success(t("sent_successfully"), { id: 0 });
+            //       } else {
+            //         toast.error(t("error_sending"), { id: 0 });
+            //       }
+            //     })
+            //     .catch((error) => {
+            //       toast.error(error.message, { id: 0 });
+            //     });
+            // }
+          },
+        },
+      );
     }
   };
   return (
@@ -124,11 +156,42 @@ export function CreateEditAbsence({
             </Label>
           </div>
           <div className="flex flex-row items-center gap-1">
-            <Checkbox defaultChecked id="notifyParents" />{" "}
-            <Label htmlFor="notifyParents">{t("notify_parents")}</Label>
-            <span className="mr-2" />{" "}
-            <Checkbox defaultChecked id="notifyStudents" />
-            <Label htmlFor="notifyStudents">{t("notify_students")}</Label>
+            <FormField
+              control={form.control}
+              name="notifyParents"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center gap-2 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      defaultChecked
+                      id="notifyParents"
+                      onCheckedChange={(val) => field.onChange(val)}
+                    />
+                  </FormControl>
+                  <FormLabel>{t("notify_parents")}</FormLabel>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="notifyStudents"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center gap-2 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      defaultChecked
+                      id="notifyStudents"
+                      onCheckedChange={(val) => field.onChange(val)}
+                    />
+                  </FormControl>
+                  <FormLabel>{t("notify_students")}</FormLabel>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
           <div className="flex flex-row items-center gap-2">
             <Button

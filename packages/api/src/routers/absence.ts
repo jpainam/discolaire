@@ -147,6 +147,7 @@ export const absenceRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const absences = [];
       for (const student of input.students) {
         if (!student.absence) {
           continue;
@@ -161,6 +162,7 @@ export const absenceRouter = createTRPCRouter({
             value: student.absence,
           },
         });
+        absences.push(absence);
         if (student.justify)
           await ctx.db.absenceJustification.create({
             data: {
@@ -172,6 +174,7 @@ export const absenceRouter = createTRPCRouter({
             },
           });
       }
+      return absences;
     }),
   create: protectedProcedure
     .input(

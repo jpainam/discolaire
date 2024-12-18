@@ -8,6 +8,7 @@ import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/button";
+import { Checkbox } from "@repo/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -28,6 +29,7 @@ const schema = z.object({
   date: z.coerce.date().default(() => new Date()),
   value: z.coerce.number().default(1),
   justify: z.coerce.number().default(0),
+  notify: z.boolean().default(true),
 });
 export function CreateEditAbsence({
   absence,
@@ -42,6 +44,7 @@ export function CreateEditAbsence({
       date: absence?.date ?? new Date(),
       value: absence?.value ?? 1,
       justify: absence?.justification?.value ?? 0,
+      notify: true,
     },
   });
   const utils = api.useUtils();
@@ -84,7 +87,29 @@ export function CreateEditAbsence({
       updateAbsenceMutation.mutate({ ...values, id: absence.id });
     } else {
       toast.loading(t("creating"), { id: 0 });
-      createAbsenceMutation.mutate({ ...values, classroomId: classroomId });
+      createAbsenceMutation.mutate(
+        { ...values, classroomId: classroomId },
+        {
+          onSuccess: (att) => {
+            if (data.notify) {
+              fetch("/api/emails/attendance", {
+                method: "POST",
+                body: JSON.stringify({ id: att.id, type: "absence" }),
+              })
+                .then((res) => {
+                  if (res.ok) {
+                    toast.success(t("sent_successfully"), { id: 0 });
+                  } else {
+                    toast.error(t("error_sending"), { id: 0 });
+                  }
+                })
+                .catch((error) => {
+                  toast.error(error.message, { id: 0 });
+                });
+            }
+          },
+        },
+      );
     }
   };
   return (
@@ -156,6 +181,19 @@ export function CreateEditAbsence({
             )}
           />
         </div>
+        <FormField
+          control={form.control}
+          name="notify"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center gap-2 space-y-0">
+              <FormControl>
+                <Checkbox onCheckedChange={(v) => field.onChange(v)} />
+              </FormControl>
+              <FormLabel>{t("notify_parents")}?</FormLabel>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <div className="mt-2 grid grid-cols-2 gap-2">
           <Button
             onClick={() => {
