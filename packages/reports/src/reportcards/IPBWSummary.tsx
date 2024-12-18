@@ -2,66 +2,73 @@ import { View } from "@react-pdf/renderer";
 
 import { Table, TableCell, TableHeader, TableRow } from "../table";
 
+const w = [0.8, 0.2];
 export function IPBWSummary() {
   return (
     <View style={{ flexDirection: "row", gap: 4, paddingTop: 5 }}>
       <View style={{ flex: 0.6, flexDirection: "row", gap: 4 }}>
         <Table
-          tdStyle={{
+          weightings={w}
+          style={{
             paddingVertical: "2px",
             paddingHorizontal: "2px",
           }}
-          style={{ marginRight: "4px" }}
-          weightings={[0.8, 0.2]}
         >
           <TableHeader>
             <TableCell
+              w={w[0]}
               style={{
                 borderRight: 0,
+                marginRight: "4px",
                 width: "10px",
               }}
             >
               Travail
             </TableCell>
-            <TableCell style={{ borderLeft: 0 }}></TableCell>
+            <TableCell
+              w={w[0]}
+              style={{ borderLeft: 0, marginRight: "4px" }}
+            ></TableCell>
           </TableHeader>
-          <SummaryItem name="Felicitations" />
-          <SummaryItem name="Encouragements" />
-          <SummaryItem name="Tableau d'honneur" />
-          <SummaryItem name="Avertissement" />
-          <SummaryItem name="Blâme" />
+          <SummaryItem w={w} name="Felicitations" />
+          <SummaryItem w={w} name="Encouragements" />
+          <SummaryItem w={w} name="Tableau d'honneur" />
+          <SummaryItem w={w} name="Avertissement" />
+          <SummaryItem w={w} name="Blâme" />
         </Table>
 
         <Table
-          tdStyle={{
+          weightings={w}
+          style={{
             paddingVertical: "2px",
             paddingHorizontal: "2px",
           }}
-          style={{ marginRight: "4px" }}
-          weightings={[0.8, 0.2]}
         >
           <TableHeader>
             <TableCell
               style={{
                 borderRight: 0,
+                marginRight: "4px",
               }}
             >
               Discipline
             </TableCell>
-            <TableCell style={{ borderLeft: 0 }}></TableCell>
+            <TableCell
+              style={{ borderLeft: 0, marginRight: "4px" }}
+            ></TableCell>
           </TableHeader>
-          <SummaryItem name="Total absences" value={10} />
-          <SummaryItem name="Justifiees" value={6} />
-          <SummaryItem name="Non justifiees" value={4} />
-          <SummaryItem name="Retards" value={"15h"} />
-          <SummaryItem name="Consigne" value={3} />
+          <SummaryItem w={w} name="Total absences" value={10} />
+          <SummaryItem w={w} name="Justifiees" value={6} />
+          <SummaryItem w={w} name="Non justifiees" value={4} />
+          <SummaryItem w={w} name="Retards" value={"15h"} />
+          <SummaryItem w={w} name="Consigne" value={3} />
         </Table>
         <Table
-          tdStyle={{
+          weightings={w}
+          style={{
             paddingVertical: "2px",
             paddingHorizontal: "2px",
           }}
-          weightings={[0.8, 0.2]}
         >
           <TableHeader>
             <TableCell
@@ -71,13 +78,15 @@ export function IPBWSummary() {
             >
               Performance
             </TableCell>
-            <TableCell style={{ borderLeft: 0 }}></TableCell>
+            <TableCell
+              style={{ borderLeft: 0, marginRight: "4px" }}
+            ></TableCell>
           </TableHeader>
-          <SummaryItem name="Moy.Max" />
-          <SummaryItem name="Moy.Min" />
-          <SummaryItem name="Moy.Cl" />
-          <SummaryItem name="Taux de reussite" />
-          <SummaryItem name="Mention" />
+          <SummaryItem w={w} name="Moy.Max" />
+          <SummaryItem w={w} name="Moy.Min" />
+          <SummaryItem w={w} name="Moy.Cl" />
+          <SummaryItem w={w} name="Taux de reussite" />
+          <SummaryItem w={w} name="Mention" />
         </Table>
       </View>
       <View style={{ flex: 0.4 }}>
@@ -90,16 +99,22 @@ export function IPBWSummary() {
 function SummaryItem({
   name,
   value,
+  w,
 }: {
   name: string;
+  w: number[];
   value?: React.ReactNode;
 }) {
   return (
     <TableRow>
-      <TableCell>{name}</TableCell>
+      <TableCell w={w[0]} style={{ marginRight: "4px" }}>
+        {name}
+      </TableCell>
       <TableCell
+        w={w[1]}
         style={{
           justifyContent: "center",
+          marginRight: "4px",
         }}
       >
         {value}
@@ -111,7 +126,8 @@ function SummaryItem({
 function SummaryResult() {
   return (
     <Table
-      tdStyle={{
+      weightings={w}
+      style={{
         paddingHorizontal: "2px",
         paddingVertical: "2px",
       }}

@@ -26,7 +26,7 @@ export function IPBW({
       <IPBWStudentInfo student={student} />
       <Table
         weightings={[0.4, 0.06, 0.06, 0.06, 0.06, 0.06, 0.1, 0.2]}
-        tdStyle={{
+        style={{
           //paddingVertical: "0px",
           paddingHorizontal: "2px",
         }}
@@ -54,20 +54,15 @@ export function IPBW({
       <IPBWSummary />
       <View style={{ flexDirection: "row", gap: 4, paddingTop: 5 }}>
         <View style={{ flex: 0.6, flexDirection: "row", gap: 4 }}>
-          <Table
-            style={{ paddingTop: "4px" }}
-            tdStyle={{
-              justifyContent: "center",
-              paddingHorizontal: "4px",
-              //fontSize: 10,
-            }}
-          >
+          <Table style={{ paddingTop: "4px" }}>
             <TableHeader>
               <TableCell
                 style={{
                   backgroundColor: "#D7D7D7",
                   fontWeight: "bold",
                   textTransform: "uppercase",
+                  justifyContent: "center",
+                  paddingHorizontal: "4px",
                 }}
               >
                 Parents
@@ -75,6 +70,8 @@ export function IPBW({
               <TableCell
                 style={{
                   backgroundColor: "#D7D7D7",
+                  justifyContent: "center",
+                  paddingHorizontal: "4px",
                   fontWeight: "bold",
                   textTransform: "uppercase",
                 }}
@@ -93,17 +90,13 @@ export function IPBW({
           </Table>
         </View>
         <View style={{ flex: 0.4 }}>
-          <Table
-            style={{ paddingTop: "4px" }}
-            tdStyle={{
-              justifyContent: "center",
-              paddingHorizontal: "4px",
-            }}
-          >
+          <Table style={{ paddingTop: "4px" }}>
             <TableHeader>
               <TableCell
                 style={{
                   backgroundColor: "#D7D7D7",
+                  justifyContent: "center",
+                  paddingHorizontal: "4px",
                   fontWeight: "bold",
                   textTransform: "uppercase",
                 }}
@@ -115,6 +108,8 @@ export function IPBW({
               <TableCell
                 style={{
                   paddingVertical: 30,
+                  justifyContent: "center",
+                  paddingHorizontal: "4px",
                 }}
               ></TableCell>
             </TableRow>
@@ -217,7 +212,7 @@ function ReportCardGroup({
             paddingVertical: "1px",
             borderRight: 0,
           }}
-          weighting={0.49}
+          w={0.49}
         >
           {group.name}
         </TableCell>
@@ -227,7 +222,7 @@ function ReportCardGroup({
             borderLeft: 0,
             borderRight: 0,
           }}
-          weighting={0.06}
+          w={0.06}
         >
           {sum(cards.map((c) => c.coefficient))}
         </TableCell>
@@ -237,7 +232,7 @@ function ReportCardGroup({
             borderLeft: 0,
             borderRight: 0,
           }}
-          weighting={0.34}
+          w={0.34}
         >
           Point:{" "}
           {sum(cards.map((c) => (c.avg || 0) * c.coefficient)).toFixed(1)}/
@@ -248,7 +243,7 @@ function ReportCardGroup({
             justifyContent: "center",
             borderLeft: 0,
           }}
-          weighting={0.2}
+          w={0.2}
         >
           Moyenne :
           {(
