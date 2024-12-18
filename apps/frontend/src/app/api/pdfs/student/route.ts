@@ -4,7 +4,7 @@ import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { getServerTranslations } from "@repo/i18n/server";
-import { ClassroomList, renderToStream } from "@repo/reports";
+import { renderToStream, StudentList } from "@repo/reports";
 
 import { getSheetName } from "~/lib/utils";
 import { api } from "~/trpc/server";
@@ -39,16 +39,16 @@ export async function GET(req: NextRequest) {
 
     const { size, preview, format } = result.data;
 
-    const classrooms = await api.classroom.all();
+    const students = await api.student.all({ per_page: 10_000 });
 
     const school = await api.school.getSchool();
     if (format === "csv") {
-      const { blob, headers } = await toExcel({ classrooms });
+      const { blob, headers } = await toExcel({ students });
       return new Response(blob, { headers });
     } else {
       const stream = await renderToStream(
-        ClassroomList({
-          classrooms: classrooms,
+        StudentList({
+          students: students,
           school: school,
           size: size,
         }),
@@ -75,29 +75,40 @@ export async function GET(req: NextRequest) {
 }
 
 async function toExcel({
-  classrooms,
+  students,
 }: {
-  classrooms: RouterOutputs["classroom"]["all"];
+  students: RouterOutputs["student"]["all"];
 }) {
-  const { t } = await getServerTranslations();
-  const rows = classrooms.map((cl) => {
+  const { t, i18n } = await getServerTranslations();
+  const dateFormat = Intl.DateTimeFormat(i18n.language, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    timeZone: "UTC",
+  });
+  const rows = students.map((student) => {
     return {
-      name: cl.name,
-      reportName: cl.reportName,
-      section: cl.section?.name,
-      level: cl.level.name,
-      size: cl.size,
-      maxSize: cl.maxSize,
-      headTeacher: cl.headTeacher?.lastName,
-      seniorAdvisor: cl.seniorAdvisor?.lastName,
-      femaleCount: cl.femaleCount,
-      maleCount: cl.maleCount,
-      classroomLeader: cl.classroomLeader?.lastName,
+      registrationNumber: student.registrationNumber,
+      "First Name": student.firstName,
+      "Last Name": student.lastName,
+      Gender: t(`${student.gender}`),
+      isRepeating: student.isRepeating ? t("yes") : t("no"),
+      classroom: student.classroom?.name,
+      religion: student.religion?.name,
+      formerSchool: student.formerSchool?.name,
+      Residence: student.residence,
+      Email: student.email,
+      Phone: student.phoneNumber,
+      Address: student.residence,
+      "Date of Birth":
+        student.dateOfBirth && dateFormat.format(student.dateOfBirth),
+      dateOfEntry:
+        student.dateOfEntry && dateFormat.format(student.dateOfEntry),
     };
   });
   const worksheet = XLSX.utils.json_to_sheet(rows);
   const workbook = XLSX.utils.book_new();
-  const sheetName = getSheetName(t("classroom"));
+  const sheetName = getSheetName(t("students"));
   XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
 
   const u8 = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });

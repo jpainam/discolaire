@@ -3,10 +3,10 @@
 export {
   Document,
   Font,
-  PDFViewer,
   Page,
-  Text,
+  PDFViewer,
   renderToStream,
+  Text,
 } from "@react-pdf/renderer";
 export * from "./reportcards/CSAB";
 export * from "./statements/AccountStatement";
@@ -16,3 +16,6 @@ export * from "./classroom/ClassroomStudentList";
 export * from "./headers/ReportCardHeader";
 export * from "./reportcards/IPBW";
 export * from "./statements/IPBWReceipt";
+
+export * from "./classroom/ClassroomList";
+export * from "./students/StudentList";

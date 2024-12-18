@@ -19,6 +19,7 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { StudentSearch } from "~/components/students/StudentSearch";
+import { endpointReports } from "~/configs/endpoints";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
@@ -75,11 +76,25 @@ export function StudentPageHeader() {
           <DropdownMenuContent align="end">
             <DropdownHelp />
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                window.open(
+                  `${endpointReports.student_list}?format=pdf`,
+                  "_blank",
+                );
+              }}
+            >
               <PDFIcon className="mr-2 h-4 w-4" />
               {t("pdf_export")}
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                window.open(
+                  `${endpointReports.student_list}?format=csv`,
+                  "_blank",
+                );
+              }}
+            >
               <XMLIcon className="mr-2 h-4 w-4" />
               {t("xml_export")}
             </DropdownMenuItem>

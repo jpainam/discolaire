@@ -67,3 +67,7 @@ export function composeEventHandlers<E>(
     }
   };
 }
+
+export function getSheetName(sheetName: string) {
+  return sheetName.replace(/[/\\?*[\]:]/g, "_");
+}

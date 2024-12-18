@@ -95,6 +95,7 @@ export const studentRouter = createTRPCRouter({
         },
         include: {
           formerSchool: true,
+          religion: true,
           country: true,
         },
       });

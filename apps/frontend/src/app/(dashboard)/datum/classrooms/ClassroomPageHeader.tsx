@@ -1,7 +1,6 @@
 "use client";
 
 import { MoreVertical, Plus } from "lucide-react";
-import { toast } from "sonner";
 
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
@@ -16,19 +15,16 @@ import {
 } from "@repo/ui/dropdown-menu";
 import { Label } from "@repo/ui/label";
 
-import { printClassroom } from "~/actions/reporting";
 import { CreateEditClassroom } from "~/components/classrooms/CreateEditClassroom";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { endpointReports } from "~/configs/endpoints";
 import { useCheckPermissions } from "~/hooks/use-permissions";
-import { getErrorMessage } from "~/lib/handle-error";
-import { api } from "~/trpc/react";
 
 export function ClassroomPageHeader() {
   const { t } = useLocale();
   const { openSheet } = useSheet();
-  const utils = api.useUtils();
 
   const canCreateClassroom = useCheckPermissions(
     PermissionAction.CREATE,
@@ -67,15 +63,10 @@ export function ClassroomPageHeader() {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onSelect={() => {
-                toast.loading(t("printing"), { id: 0 });
-                void printClassroom(t("classroom_list"), "excel")
-                  .then(() => {
-                    toast.success(t("printing_job_submitted"), { id: 0 });
-                    void utils.reporting.invalidate();
-                  })
-                  .catch((e) => {
-                    toast.error(getErrorMessage(e), { id: 0 });
-                  });
+                window.open(
+                  `${endpointReports.classroom_list}?format=pdf`,
+                  "_blank",
+                );
               }}
             >
               <PDFIcon className="mr-2 h-4 w-4" />
@@ -83,15 +74,10 @@ export function ClassroomPageHeader() {
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={() => {
-                toast.loading(t("printing"), { id: 0 });
-                void printClassroom(t("classroom_list"), "excel")
-                  .then(() => {
-                    toast.success(t("printing_job_submitted"), { id: 0 });
-                    void utils.reporting.invalidate();
-                  })
-                  .catch((e) => {
-                    toast.error(getErrorMessage(e), { id: 0 });
-                  });
+                window.open(
+                  `${endpointReports.classroom_list}?format=csv`,
+                  "_blank",
+                );
               }}
             >
               <XMLIcon className="mr-2 h-4 w-4" />
