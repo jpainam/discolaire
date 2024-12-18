@@ -80,14 +80,14 @@ export const studentRouter = createTRPCRouter({
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       const [column, order] = (input.sort?.split(".")?.filter(Boolean) ?? [
         "lastName",
-        "desc",
+        "asc",
       ]) as [keyof Student | undefined, "asc" | "desc" | undefined];
 
       const data = await ctx.db.student.findMany({
         skip: offset,
         take: input.per_page,
         orderBy: {
-          [column ?? "lastName"]: order ?? "desc",
+          [column ?? "lastName"]: order ?? "asc",
         },
         where: {
           schoolId: ctx.schoolId,
