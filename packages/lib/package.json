@@ -26,14 +26,14 @@
   "prettier": "@repo/prettier-config",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "i18next": "^24.0.2",
-    "jotai": "^2.10.3",
+    "i18next": "^24.1.2",
+    "jotai": "^2.10.4",
     "json-logic-js": "^2.0.5",
-    "next-i18next": "^15.4.0",
-    "next-nprogress-bar": "^2.3.15",
-    "react-use": "^17.5.1",
+    "next-i18next": "^15.4.1",
+    "next-nprogress-bar": "^2.4.2",
+    "react-use": "^17.6.0",
     "tailwind-merge": "^2.5.5",
-    "uploadthing": "^7.3.0"
+    "uploadthing": "^7.4.1"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
