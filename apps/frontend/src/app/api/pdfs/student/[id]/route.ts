@@ -24,14 +24,14 @@ const searchSchema = z.object({
 });
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const session = await auth();
   if (!session) {
     return new Response("Unauthorized", { status: 403 });
   }
+  const id = (await params).id;
 
-  const id = params.id;
   if (!id) {
     return new Response("Wrong input", { status: 500 });
   }

@@ -9,6 +9,8 @@ import {
 
 import type { RouterOutputs } from "@repo/api";
 
+import { IPBWHeader } from "../headers/IPBW";
+
 export function StudentPage({
   student,
   school,
@@ -20,6 +22,7 @@ export function StudentPage({
   return (
     <Document>
       <Page size="A4" style={styles.page}>
+        <IPBWHeader school={school} />
         <View style={styles.header}>
           <Text>Student Details</Text>
         </View>
@@ -103,7 +106,8 @@ export function StudentPage({
 
 const styles = StyleSheet.create({
   page: {
-    padding: 30,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
   },
   header: {
     fontSize: 24,
