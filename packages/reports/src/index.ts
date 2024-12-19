@@ -19,3 +19,4 @@ export * from "./statements/IPBWReceipt";
 
 export * from "./classroom/ClassroomList";
 export * from "./students/StudentList";
+export * from "./students/StudentPage";

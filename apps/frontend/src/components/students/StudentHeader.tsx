@@ -44,6 +44,7 @@ import { Separator } from "@repo/ui/separator";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { SimpleTooltip } from "~/components/simple-tooltip";
+import { endpointReports } from "~/configs/endpoints";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
@@ -226,7 +227,10 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                   aria-label="print"
                   variant="ghost"
                   onClick={() => {
-                    router.push(routes.students.print(params.id));
+                    window.open(
+                      `${endpointReports.student_page(params.id)}?format=pdf`,
+                      "_blank",
+                    );
                   }}
                 >
                   <Printer className="h-4 w-4" />
