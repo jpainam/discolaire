@@ -18,7 +18,6 @@ export function StudentPage({
   student: RouterOutputs["student"]["get"];
   school: RouterOutputs["school"]["getSchool"];
 }) {
-  console.log(school);
   return (
     <Document>
       <Page size="A4" style={styles.page}>
