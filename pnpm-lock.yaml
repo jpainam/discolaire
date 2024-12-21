@@ -817,8 +817,8 @@ importers:
         specifier: workspace:*
         version: link:../transactional
       bullmq:
-        specifier: ^5.34.3
-        version: 5.34.3
+        specifier: ^5.34.4
+        version: 5.34.4
       cron-parser:
         specifier: ^4.9.0
         version: 4.9.0
@@ -5683,8 +5683,8 @@ packages:
   builtins@1.0.3:
     resolution: {integrity: sha512-uYBjakWipfaO/bXI7E8rq6kpwHRZK5cNYrUv2OzZSI/FvmdMyXJ2tG9dKcjEC5YHmHpUAwsargWIZNWdxb/bnQ==}
 
-  bullmq@5.34.3:
-    resolution: {integrity: sha512-S8/V11w7p6jYAGvv+00skLza/4inTOupWPe0uCD8mZSUiYKzvmW4/YEB+KVjZI2CC2oD3KJ3t7/KkUd31MxMig==}
+  bullmq@5.34.4:
+    resolution: {integrity: sha512-FPTN5eqsYO5/Blm6vh/bVJ0eADrVLjTBDjMkPCqZN3xx/5GqHov9NwxM6A6M3m6n2Vg+gNAoN98t7bTij5/UEA==}
 
   busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
@@ -16835,7 +16835,7 @@ snapshots:
 
   builtins@1.0.3: {}
 
-  bullmq@5.34.3:
+  bullmq@5.34.4:
     dependencies:
       cron-parser: 4.9.0
       ioredis: 5.4.2
