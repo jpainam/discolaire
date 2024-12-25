@@ -14,6 +14,7 @@
     "./toast": "./src/toast.tsx",
     "./signature-input": "./src/signature-input.tsx",
     "./tooltip": "./src/tooltip.tsx",
+    "./async-select": "./src/async-select.tsx",
     "./textarea": "./src/textarea.tsx",
     "./select": "./src/select.tsx",
     "./radio": "./src/radio.tsx",

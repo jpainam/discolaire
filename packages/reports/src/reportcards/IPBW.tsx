@@ -8,6 +8,7 @@ import { Table, TableCell, TableHeader, TableRow } from "../table";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWSummary } from "./IPBWSummary";
 
+const W = [0.4, 0.06, 0.06, 0.06, 0.06, 0.06, 0.1, 0.2];
 type ReportCardType =
   RouterOutputs["reportCard"]["getStudent"]["result"][number];
 export function IPBW({
@@ -26,10 +27,12 @@ export function IPBW({
       <IPBWStudentInfo student={student} />
       <Table
         weightings={[0.4, 0.06, 0.06, 0.06, 0.06, 0.06, 0.1, 0.2]}
-        style={{
-          //paddingVertical: "0px",
-          paddingHorizontal: "2px",
-        }}
+        style={
+          {
+            //paddingVertical: "0px",
+            //paddingHorizontal: "2px",
+          }
+        }
       >
         <ReportTableHeader />
         {Object.keys(groups).map((groupId: string) => {
@@ -133,30 +136,44 @@ function ReportCardGroup({
     <>
       {cards.map((card, index) => {
         return (
-          <TableRow key={`card-${groupId}-${index}`}>
+          <TableRow
+            style={{ borderBottom: "1px solid black" }}
+            key={`card-${groupId}-${index}`}
+          >
             <TableCell
+              w={W[0]}
               style={{
                 flexDirection: "column",
                 display: "flex",
-                gap: 0,
-                //paddingTop: -2,
+                borderRight: "1px solid black",
+                gap: 1,
                 alignItems: "flex-start",
               }}
             >
-              <Text style={{ fontWeight: "bold" }}>{card.course.name}</Text>
+              <Text
+                style={{ fontWeight: "bold", overflow: "hidden", maxLines: 1 }}
+              >
+                {card.course.name}
+              </Text>
               <Text style={{ paddingLeft: "8px" }}>
                 {card.teacher?.prefix} {card.teacher?.lastName}
               </Text>
             </TableCell>
 
             <TableCell
+              w={W[1]}
               style={{
                 justifyContent: "center",
+                flexDirection: "column",
+                display: "flex",
+                paddingVertical: 4,
+                gap: 1,
               }}
             >
-              {!card.isAbsent && card.avg}
+              <Text> {!card.isAbsent && card.avg}</Text>
             </TableCell>
             <TableCell
+              w={W[2]}
               style={{
                 justifyContent: "center",
               }}
@@ -164,11 +181,15 @@ function ReportCardGroup({
               {!card.isAbsent && card.coefficient}
             </TableCell>
             <TableCell
+              w={W[3]}
               style={{
                 justifyContent: "center",
               }}
             >
-              {!card.isAbsent && (card.avg * card.coefficient).toFixed(2)}
+              <Text>
+                {" "}
+                {!card.isAbsent && (card.avg * card.coefficient).toFixed(2)}
+              </Text>
             </TableCell>
             <TableCell
               style={{
@@ -204,7 +225,12 @@ function ReportCardGroup({
       })}
 
       <TableRow
-        style={{ backgroundColor: "#D7D7D7", fontSize: 8, fontWeight: "bold" }}
+        style={{
+          backgroundColor: "#D7D7D7",
+          fontSize: 8,
+          fontWeight: "bold",
+          borderBottom: "1px solid black",
+        }}
       >
         <TableCell
           style={{
@@ -260,30 +286,31 @@ export function ReportTableHeader() {
   return (
     <TableHeader
       style={{
-        backgroundColor: "#CCC",
-        //color: "#fff",
+        backgroundColor: "#000",
+        color: "#fff",
+        borderBottom: "1px solid black",
         fontWeight: "bold",
         fontSize: 8,
       }}
     >
       <TableCell
+        w={W[0]}
         style={{
-          paddingHorizontal: "2px",
-          paddingVertical: "4px",
-          fontWeight: "bold",
+          padding: 2,
         }}
       >
         Matieres
       </TableCell>
       <TableCell
+        w={W[1]}
         style={{
-          justifyContent: "center",
-          padding: "2px",
+          padding: 2,
         }}
       >
         Note
       </TableCell>
       <TableCell
+        w={W[2]}
         style={{
           justifyContent: "center",
           padding: "2px",
@@ -292,6 +319,7 @@ export function ReportTableHeader() {
         Coef.
       </TableCell>
       <TableCell
+        w={W[3]}
         style={{
           justifyContent: "center",
           padding: "2px",
@@ -300,6 +328,7 @@ export function ReportTableHeader() {
         Total
       </TableCell>
       <TableCell
+        w={W[4]}
         style={{
           justifyContent: "center",
           padding: "2px",
@@ -308,6 +337,7 @@ export function ReportTableHeader() {
         Rang
       </TableCell>
       <TableCell
+        w={W[5]}
         style={{
           justifyContent: "center",
           padding: "2px",
@@ -316,6 +346,7 @@ export function ReportTableHeader() {
         Moy.C
       </TableCell>
       <TableCell
+        w={W[6]}
         style={{
           justifyContent: "center",
           padding: "2px",
@@ -324,6 +355,7 @@ export function ReportTableHeader() {
         Min/Max
       </TableCell>
       <TableCell
+        w={W[7]}
         style={{
           justifyContent: "center",
           padding: "2px",

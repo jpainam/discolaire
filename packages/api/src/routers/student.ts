@@ -117,6 +117,30 @@ export const studentRouter = createTRPCRouter({
       );
       return students;
     }),
+  search: protectedProcedure
+    .input(
+      z.object({
+        query: z.string(),
+        take: z.number().optional().default(100),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.student.findMany({
+        take: input.take,
+        orderBy: {
+          lastName: "asc",
+        },
+        where: {
+          schoolId: ctx.schoolId,
+          ...whereClause(input.query).where,
+        },
+        include: {
+          formerSchool: true,
+          religion: true,
+          country: true,
+        },
+      });
+    }),
   create: protectedProcedure
     .input(createUpdateSchema)
     .mutation(async ({ ctx, input }) => {

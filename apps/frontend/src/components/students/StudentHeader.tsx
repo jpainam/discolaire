@@ -1,12 +1,10 @@
 "use client";
 
 import type * as RPNInput from "react-phone-number-input";
-import React from "react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import {
   BellRing,
-  ChevronDownIcon,
   KeyRound,
   MessageCircleMore,
   MoreVertical,
@@ -50,13 +48,12 @@ import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
-import { getFullName } from "../../utils/full-name";
 import { CountryComponent } from "../shared/CountryPicker";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
+import { StudentSelector } from "../shared/selects/StudentSelector";
 import { CreateEditUser } from "../users/CreateEditUser";
 import { SquaredAvatar } from "./SquaredAvatar";
-import { StudentSearch } from "./StudentSearch";
 
 interface StudentHeaderProps {
   className?: string;
@@ -125,7 +122,7 @@ export function StudentHeader({ className }: StudentHeaderProps) {
       id: params.id,
     },
   );
-  const [open, setOpen] = React.useState(false);
+  //const [open, setOpen] = React.useState(false);
 
   return (
     <header className={cn(className)}>
@@ -135,24 +132,30 @@ export function StudentHeader({ className }: StudentHeaderProps) {
           {studentQuery.isPending ? (
             <Skeleton className="w-full 2xl:w-[500px]" />
           ) : (
-            <Button
-              variant="outline"
-              className={cn(
-                "flex w-full justify-between bg-background text-sm font-semibold shadow-none 2xl:w-[500px]",
-              )}
-              onClick={() => setOpen(true)}
-            >
-              <span>{getFullName(student)}</span>
-              <ChevronDownIcon className="ml-2 h-4 w-4" />
-            </Button>
+            <StudentSelector
+              placeholder={student?.lastName + " " + student?.firstName}
+              onChange={(val) => {
+                navigateToStudent(val);
+              }}
+            />
+            // <Button
+            //   variant="outline"
+            //   className={cn(
+            //     "flex w-full justify-between bg-background text-sm font-semibold shadow-none 2xl:w-[500px]",
+            //   )}
+            //   onClick={() => setOpen(true)}
+            // >
+            //   <span>{getFullName(student)}</span>
+            //   <ChevronDownIcon className="ml-2 h-4 w-4" />
+            // </Button>
           )}
-          <StudentSearch
+          {/* <StudentSearch
             onChange={(val) => {
               navigateToStudent(val);
             }}
             open={open}
             setOpen={setOpen}
-          />
+          /> */}
 
           {studentQuery.isPending && (
             <>

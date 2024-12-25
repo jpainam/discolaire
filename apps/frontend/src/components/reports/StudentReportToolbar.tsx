@@ -29,7 +29,7 @@ export function StudentReportToolbar() {
       <Label>{t("students")}</Label>
       <StudentSelector
         className="w-[500px]"
-        onChange={(studentId) => {
+        onChange={(studentId: string) => {
           if (studentId) {
             router.push(
               `${routes.reports.students}/?${createQueryString({ id: studentId })}`,

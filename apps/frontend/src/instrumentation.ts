@@ -1,9 +1,12 @@
+/* eslint-disable no-restricted-properties */
 //import { env } from "./env";
 
 // https://github.com/orgs/vercel/discussions/5050
 export async function register() {
-  // eslint-disable-next-line no-restricted-properties
-  if (process.env.NEXT_RUNTIME === "nodejs") {
+  if (
+    process.env.NEXT_RUNTIME === "nodejs" &&
+    process.env.NODE_ENV == "production"
+  ) {
     const { initializeJobs } = await import("@repo/jobs");
     await initializeJobs().catch(console.error);
 

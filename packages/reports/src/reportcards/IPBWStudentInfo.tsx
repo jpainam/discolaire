@@ -25,6 +25,7 @@ export function IPBWStudentInfo({
         flexDirection: "row",
         gap: 2,
         alignItems: "flex-start",
+
         paddingVertical: "4px",
       }}
     >
@@ -70,6 +71,8 @@ export function IPBWStudentInfo({
             flexDirection: "row",
             justifyContent: "space-between",
             paddingTop: "10px",
+            border: "1px solid black",
+            paddingHorizontal: 2,
             fontSize: 9,
           }}
         >

@@ -16,9 +16,8 @@ export const metadata: Metadata = {
 export default async function Page() {
   const { t } = await getServerTranslations();
 
-  const randomVerse = await api.bible.random();
-  const verse = randomVerse.verses.length > 0 ? randomVerse.verses[0] : null;
-  const book = `${verse?.book_name} ${verse?.chapter}:${verse?.verse}`;
+  const { verse, book } = await api.bible.random();
+
   return (
     <>
       <div className="container relative h-[100vh] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
@@ -47,11 +46,9 @@ export default async function Page() {
           <div className="relative z-20 mt-auto rounded-md bg-secondary/40">
             <blockquote className="space-y-2">
               <p className="text-lg tracking-tighter">
-                {verse?.text ?? t("signin_quote")}
+                {verse ?? t("signin_quote")}
               </p>
-              <footer className="text-sm">
-                {verse ? book : "Ellen G. White"}
-              </footer>
+              <footer className="text-sm">{book ?? "Ellen G. White"}</footer>
             </blockquote>
           </div>
         </div>

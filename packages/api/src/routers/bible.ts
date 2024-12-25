@@ -23,16 +23,24 @@ const bibleVerseSchema = z.object({
 
 export const bibleRouter = createTRPCRouter({
   random: publicProcedure.query(async () => {
-    const response = await fetch("https://bible-api.com/?random=verse");
-    const result = await response.json();
-    const parsed = bibleVerseSchema.safeParse(result);
-    if (!parsed.success) {
-      throw new TRPCError({
-        code: "INTERNAL_SERVER_ERROR",
-        message: "Failed to fetch random verse",
-      });
+    try {
+      const response = await fetch("https://bible-api.com/?random=verse");
+      const result = await response.json();
+      const parsed = bibleVerseSchema.safeParse(result);
+      if (!parsed.success) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to fetch random verse",
+        });
+      }
+      const { data } = parsed;
+      const verse = data.verses.length > 0 ? data.verses[0] : null;
+      const book = `${verse?.book_name} ${verse?.chapter}:${verse?.verse}`;
+      return { verse: verse?.text, book };
+    } catch (e) {
+      console.error(e);
+      return { verse: null, book: null };
     }
-    return parsed.data;
   }),
   updateMatricule: publicProcedure.mutation(async ({ ctx }) => {
     const students = await ctx.db.student.findMany({
