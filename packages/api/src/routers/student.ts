@@ -568,4 +568,24 @@ export const studentRouter = createTRPCRouter({
         },
       });
     }),
+
+  getPrimaryContact: protectedProcedure
+    .input(z.string().min(1))
+    .query(async ({ ctx, input }) => {
+      const contacts = await ctx.db.studentContact.findMany({
+        include: {
+          contact: true,
+          relationship: true,
+        },
+        where: {
+          studentId: input,
+        },
+      });
+
+      const contact = contacts.filter((c) => c.primaryContact);
+      if (contact.length > 0) {
+        return contact[0];
+      }
+      return contacts.length > 0 ? contacts[0] : null;
+    }),
 });

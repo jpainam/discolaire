@@ -1,12 +1,29 @@
-import { Text, View } from "@alexandernanberg/react-pdf-renderer";
+import { Document, Font, Page, Text, View } from "@react-pdf/renderer";
 import { sortBy, sum } from "lodash";
 
 import type { RouterOutputs } from "@repo/api";
 
 import { ReportCardHeader } from "../headers/ReportCardHeader";
 import { Table, TableCell, TableHeader, TableRow } from "../table";
+import { getCdnUrl } from "../utils";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWSummary } from "./IPBWSummary";
+
+const CDN_URL = getCdnUrl();
+
+Font.register({
+  family: "Geist",
+  fonts: [
+    {
+      src: `${CDN_URL}/fonts/Geist/Geist-Regular.ttf`,
+      fontWeight: 400,
+    },
+    {
+      src: `${CDN_URL}/fonts/Geist/Geist-Bold.ttf`,
+      fontWeight: 500,
+    },
+  ],
+});
 
 const W = [0.4, 0.06, 0.06, 0.06, 0.06, 0.06, 0.1, 0.2];
 type ReportCardType =
@@ -15,111 +32,162 @@ export function IPBW({
   school,
   student,
   groups,
+  contact,
+  schoolYear,
 }: {
   groups: Record<number, ReportCardType[]>;
   student: RouterOutputs["student"]["get"];
-
+  schoolYear: RouterOutputs["schoolYear"]["get"];
+  contact: RouterOutputs["student"]["getPrimaryContact"];
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
 }) {
   return (
-    <View style={{ flexDirection: "column" }}>
-      <ReportCardHeader school={school} />
-      <IPBWStudentInfo student={student} />
-      <Table
-        weightings={[0.4, 0.06, 0.06, 0.06, 0.06, 0.06, 0.1, 0.2]}
-        style={
-          {
-            //paddingVertical: "0px",
-            //paddingHorizontal: "2px",
-          }
-        }
+    <Document>
+      <Page
+        size={"A4"}
+        style={{
+          paddingVertical: 20,
+          paddingHorizontal: 40,
+          fontSize: 7,
+          backgroundColor: "#fff",
+          color: "#000",
+          fontFamily: "Geist",
+        }}
       >
-        <ReportTableHeader />
-        {Object.keys(groups).map((groupId: string) => {
-          let cards = groups[Number(groupId)];
-          if (!cards || cards.length == 0) return null;
-          cards = sortBy(cards, "order").filter((c) => !c.isAbsent);
-          const card = cards[0];
-          if (!card) return null;
-          const group = card.subjectGroup;
-          if (!group) return null;
+        <View style={{ flexDirection: "column" }}>
+          <ReportCardHeader school={school} />
+          <View
+            style={{
+              flexDirection: "column",
+              display: "flex",
+            }}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                alignSelf: "center",
+                fontSize: 10,
+              }}
+            >
+              BULLETIN SCOLAIRE DU PREMIER TRIMESTRE
+            </Text>
+            <Text
+              style={{
+                alignSelf: "center",
+                fontSize: 9,
+              }}
+            >
+              Année scolaire {schoolYear.name}
+            </Text>
+          </View>
+          <IPBWStudentInfo student={student} contact={contact} />
+          <Table
+            weightings={[0.4, 0.06, 0.06, 0.06, 0.06, 0.06, 0.1, 0.2]}
+            style={
+              {
+                //paddingVertical: "0px",
+                //paddingHorizontal: "2px",
+              }
+            }
+          >
+            <ReportTableHeader />
+            {Object.keys(groups).map((groupId: string) => {
+              let cards = groups[Number(groupId)];
+              if (!cards || cards.length == 0) return null;
+              cards = sortBy(cards, "order").filter((c) => !c.isAbsent);
+              const card = cards[0];
+              if (!card) return null;
+              const group = card.subjectGroup;
+              if (!group) return null;
 
-          return (
-            <ReportCardGroup
-              groupId={Number(groupId)}
-              key={`card-${groupId}`}
-              cards={cards}
-              group={{ name: group.name }}
-            />
-          );
-        })}
-      </Table>
-      <IPBWSummary />
-      <View style={{ flexDirection: "row", gap: 4, paddingTop: 5 }}>
-        <View style={{ flex: 0.6, flexDirection: "row", gap: 4 }}>
-          <Table style={{ paddingTop: "4px" }}>
-            <TableHeader>
-              <TableCell
-                style={{
-                  backgroundColor: "#D7D7D7",
-                  fontWeight: "bold",
-                  textTransform: "uppercase",
-                  justifyContent: "center",
-                  paddingHorizontal: "4px",
-                }}
-              >
-                Parents
-              </TableCell>
-              <TableCell
-                style={{
-                  backgroundColor: "#D7D7D7",
-                  justifyContent: "center",
-                  paddingHorizontal: "4px",
-                  fontWeight: "bold",
-                  textTransform: "uppercase",
-                }}
-              >
-                Prof. Principal
-              </TableCell>
-            </TableHeader>
+              return (
+                <ReportCardGroup
+                  groupId={Number(groupId)}
+                  key={`card-${groupId}`}
+                  cards={cards}
+                  group={{ name: group.name }}
+                />
+              );
+            })}
             <TableRow>
-              <TableCell
-                style={{
-                  paddingVertical: 30,
-                }}
-              ></TableCell>
+              <TableCell w={W[0]}>
+                <Text>w</Text>
+              </TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
           </Table>
+          <IPBWSummary />
+          <View style={{ flexDirection: "row", gap: 4, paddingTop: 5 }}>
+            <View style={{ flex: 0.6, flexDirection: "row", gap: 4 }}>
+              <Table style={{ paddingTop: "4px" }}>
+                <TableHeader>
+                  <TableCell
+                    style={{
+                      backgroundColor: "#D7D7D7",
+                      fontWeight: "bold",
+                      textTransform: "uppercase",
+                      justifyContent: "center",
+                      paddingHorizontal: "4px",
+                    }}
+                  >
+                    Parents
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      backgroundColor: "#D7D7D7",
+                      justifyContent: "center",
+                      paddingHorizontal: "4px",
+                      fontWeight: "bold",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    <Text>Prof. Principal</Text>
+                  </TableCell>
+                </TableHeader>
+                <TableRow>
+                  <TableCell
+                    style={{
+                      paddingVertical: 30,
+                    }}
+                  ></TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
+              </Table>
+            </View>
+            <View style={{ flex: 0.4 }}>
+              <Table style={{ paddingTop: "4px" }}>
+                <TableHeader>
+                  <TableCell
+                    style={{
+                      backgroundColor: "#D7D7D7",
+                      justifyContent: "center",
+                      paddingHorizontal: "4px",
+                      fontWeight: "bold",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Directeur
+                  </TableCell>
+                </TableHeader>
+                <TableRow>
+                  <TableCell
+                    style={{
+                      paddingVertical: 30,
+                      justifyContent: "center",
+                      paddingHorizontal: "4px",
+                    }}
+                  ></TableCell>
+                </TableRow>
+              </Table>
+            </View>
+          </View>
         </View>
-        <View style={{ flex: 0.4 }}>
-          <Table style={{ paddingTop: "4px" }}>
-            <TableHeader>
-              <TableCell
-                style={{
-                  backgroundColor: "#D7D7D7",
-                  justifyContent: "center",
-                  paddingHorizontal: "4px",
-                  fontWeight: "bold",
-                  textTransform: "uppercase",
-                }}
-              >
-                Directeur
-              </TableCell>
-            </TableHeader>
-            <TableRow>
-              <TableCell
-                style={{
-                  paddingVertical: 30,
-                  justifyContent: "center",
-                  paddingHorizontal: "4px",
-                }}
-              ></TableCell>
-            </TableRow>
-          </Table>
-        </View>
-      </View>
-    </View>
+      </Page>
+    </Document>
   );
 }
 
@@ -146,7 +214,7 @@ function ReportCardGroup({
                 flexDirection: "column",
                 display: "flex",
                 borderRight: "1px solid black",
-                gap: 1,
+                paddingHorizontal: 2,
                 alignItems: "flex-start",
               }}
             >
@@ -163,11 +231,7 @@ function ReportCardGroup({
             <TableCell
               w={W[1]}
               style={{
-                justifyContent: "center",
-                flexDirection: "column",
-                display: "flex",
-                paddingVertical: 4,
-                gap: 1,
+                borderRight: "1px solid black",
               }}
             >
               <Text> {!card.isAbsent && card.avg}</Text>
@@ -175,50 +239,54 @@ function ReportCardGroup({
             <TableCell
               w={W[2]}
               style={{
-                justifyContent: "center",
+                borderRight: "1px solid black",
               }}
             >
-              {!card.isAbsent && card.coefficient}
+              <Text> {!card.isAbsent && card.coefficient}</Text>
             </TableCell>
             <TableCell
               w={W[3]}
               style={{
-                justifyContent: "center",
+                borderRight: "1px solid black",
               }}
             >
               <Text>
-                {" "}
                 {!card.isAbsent && (card.avg * card.coefficient).toFixed(2)}
               </Text>
             </TableCell>
             <TableCell
+              w={W[4]}
               style={{
-                justifyContent: "center",
+                borderRight: "1px solid black",
               }}
             >
-              {!card.isAbsent && card.rank}
+              <Text>{!card.isAbsent && card.rank}</Text>
             </TableCell>
             <TableCell
+              w={W[5]}
               style={{
-                justifyContent: "center",
+                borderRight: "1px solid black",
               }}
             >
-              {card.classroom.avg.toFixed(2)}
+              <Text>{card.classroom.avg.toFixed(2)}</Text>
             </TableCell>
             <TableCell
+              w={W[6]}
               style={{
-                justifyContent: "center",
+                borderRight: "1px solid black",
               }}
             >
-              {card.classroom.min.toFixed(2)}/{card.classroom.max.toFixed(2)}
+              <Text>
+                {card.classroom.min.toFixed(2)}/{card.classroom.max.toFixed(2)}
+              </Text>
             </TableCell>
             <TableCell
+              w={W[7]}
               style={{
                 textTransform: "uppercase",
-                //justifyContent: "center",
               }}
             >
-              Moyen
+              <Text> Moyen</Text>
             </TableCell>
           </TableRow>
         );
@@ -236,11 +304,12 @@ function ReportCardGroup({
           style={{
             paddingHorizontal: "4px",
             paddingVertical: "1px",
+            alignItems: "flex-start",
             borderRight: 0,
           }}
           w={0.49}
         >
-          {group.name}
+          <Text>{group.name}</Text>
         </TableCell>
         <TableCell
           style={{
@@ -250,7 +319,7 @@ function ReportCardGroup({
           }}
           w={0.06}
         >
-          {sum(cards.map((c) => c.coefficient))}
+          <Text>{sum(cards.map((c) => c.coefficient))}</Text>
         </TableCell>
         <TableCell
           style={{
@@ -260,9 +329,11 @@ function ReportCardGroup({
           }}
           w={0.34}
         >
-          Point:{" "}
-          {sum(cards.map((c) => (c.avg || 0) * c.coefficient)).toFixed(1)}/
-          {sum(cards.map((c) => 20 * c.coefficient)).toFixed(1)}
+          <Text>
+            Point:{" "}
+            {sum(cards.map((c) => (c.avg || 0) * c.coefficient)).toFixed(1)}/
+            {sum(cards.map((c) => 20 * c.coefficient)).toFixed(1)}
+          </Text>
         </TableCell>
         <TableCell
           style={{
@@ -271,11 +342,13 @@ function ReportCardGroup({
           }}
           w={0.2}
         >
-          Moyenne :
-          {(
-            sum(cards.map((c) => c.avg * c.coefficient)) /
-            sum(cards.map((c) => c.coefficient))
-          ).toFixed(2)}
+          <Text>
+            Moyenne :
+            {(
+              sum(cards.map((c) => c.avg * c.coefficient)) /
+              sum(cards.map((c) => c.coefficient))
+            ).toFixed(2)}
+          </Text>
         </TableCell>
       </TableRow>
     </>
@@ -299,7 +372,7 @@ export function ReportTableHeader() {
           padding: 2,
         }}
       >
-        Matieres
+        <Text>Matieres</Text>
       </TableCell>
       <TableCell
         w={W[1]}
@@ -307,7 +380,7 @@ export function ReportTableHeader() {
           padding: 2,
         }}
       >
-        Note
+        <Text>Note</Text>
       </TableCell>
       <TableCell
         w={W[2]}
@@ -316,7 +389,7 @@ export function ReportTableHeader() {
           padding: "2px",
         }}
       >
-        Coef.
+        <Text> Coef.</Text>
       </TableCell>
       <TableCell
         w={W[3]}
@@ -325,7 +398,7 @@ export function ReportTableHeader() {
           padding: "2px",
         }}
       >
-        Total
+        <Text> Total</Text>
       </TableCell>
       <TableCell
         w={W[4]}
@@ -334,7 +407,7 @@ export function ReportTableHeader() {
           padding: "2px",
         }}
       >
-        Rang
+        <Text> Rang</Text>
       </TableCell>
       <TableCell
         w={W[5]}
@@ -343,7 +416,7 @@ export function ReportTableHeader() {
           padding: "2px",
         }}
       >
-        Moy.C
+        <Text> Moy.C</Text>
       </TableCell>
       <TableCell
         w={W[6]}
@@ -352,7 +425,7 @@ export function ReportTableHeader() {
           padding: "2px",
         }}
       >
-        Min/Max
+        <Text> Min/Max</Text>
       </TableCell>
       <TableCell
         w={W[7]}
@@ -361,7 +434,7 @@ export function ReportTableHeader() {
           padding: "2px",
         }}
       >
-        Appreciation
+        <Text> Appreciation</Text>
       </TableCell>
     </TableHeader>
   );

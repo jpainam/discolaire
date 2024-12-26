@@ -1,6 +1,6 @@
 import type { Style } from "@react-pdf/types";
 import React from "react";
-import { Text, View } from "@react-pdf/renderer";
+import { View } from "@react-pdf/renderer";
 
 export interface TableCellProps
   extends Omit<React.ComponentProps<typeof View>, "children"> {
@@ -24,17 +24,15 @@ export default function TableCell({
 }: TableCellProps) {
   return (
     <View
-      wrap={true}
       {...rest}
       style={{
-        ...style,
         flex: w ?? 0,
-        display: "flex",
-        flexDirection: "row",
+        justifyContent: "center",
         alignItems: "center",
+        ...style,
       }}
     >
-      <Text>{children}</Text>
+      {children}
     </View>
   );
 }

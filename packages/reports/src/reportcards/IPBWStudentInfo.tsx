@@ -4,10 +4,14 @@ import i18next from "i18next";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { Table, TableCell, TableRow } from "../table";
+
 export function IPBWStudentInfo({
   student,
+  contact,
 }: {
   student: RouterOutputs["student"]["get"];
+  contact: RouterOutputs["student"]["getPrimaryContact"];
 }) {
   const classroom = student.classroom;
 
@@ -25,15 +29,14 @@ export function IPBWStudentInfo({
         flexDirection: "row",
         gap: 2,
         alignItems: "flex-start",
-
         paddingVertical: "4px",
       }}
     >
       {student.avatar ? (
         <Image
           style={{
-            width: 90,
-            height: 90,
+            width: 70,
+            height: "100%",
           }}
           src={{
             uri: student.avatar,
@@ -45,9 +48,9 @@ export function IPBWStudentInfo({
       ) : (
         <View
           style={{
-            width: 90,
+            width: 70,
             fontWeight: "bold",
-            height: 90,
+            height: "100%",
             border: "1px solid gray",
             justifyContent: "center",
             textAlign: "center",
@@ -56,86 +59,129 @@ export function IPBWStudentInfo({
           <Text style={{ fontSize: 10 }}>PHOTO</Text>
         </View>
       )}
-      <View style={{ flexDirection: "column", flex: 1 }}>
-        <Text
+      <Table
+        style={{
+          fontSize: 8,
+        }}
+      >
+        <TableRow
           style={{
-            fontWeight: "bold",
-            alignSelf: "center",
-            fontSize: 10,
+            borderBottom: "1px solid black",
           }}
         >
-          BULLETIN DE NOTES DU PREMIER TRIMESTRE
-        </Text>
-        <View
+          <InfoItem
+            w={0.8}
+            label={"Nom et Prénoms"}
+            value={student.lastName + " " + student.firstName}
+          />
+          <InfoItem
+            w={0.2}
+            label={"Classe"}
+            value={student.classroom?.name ?? ""}
+            lastColumn={true}
+          />
+        </TableRow>
+        <TableRow
           style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            paddingTop: "10px",
-            border: "1px solid black",
-            paddingHorizontal: 2,
-            fontSize: 9,
+            borderBottom: "1px solid black",
           }}
         >
-          <View style={{ flexDirection: "column" }}>
-            <InfoItem
-              name="Nom et Prénom"
-              value={student.lastName + " " + student.firstName}
-            />
-            <InfoItem name="Matricule" value={student.registrationNumber} />
-            <InfoItem name="Née le" value={naiss} />
-            <InfoItem name="Sexe" value={student.gender} />
-          </View>
-          <View style={{ flexDirection: "column" }}>
-            <InfoItem style={{ color: "#fff" }} name="" value={""} />
-            <InfoItem name="Classe" value={student.classroom?.name} />
-            <InfoItem
-              name="Effectif"
-              value={classroom?.size.toString() ?? ""}
-            />
-            <InfoItem
-              name="Redoublant"
-              value={student.isRepeating ? "OUI" : "NON"}
-            />
-            <InfoItem
-              name="Annee Scolaire"
-              value={classroom?.schoolYear.name}
-            />
-          </View>
-        </View>
-        {/* <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            gap: 10,
-            paddingTop: "2px",
-          }}
-        >
-          <Text style={{ fontWeight: "bold" }}>Enseignant Principal</Text>
-          <Text>
-            {classroom?.headTeacher?.prefix}{" "}
-            {classroom?.headTeacher?.lastName +
-              " " +
-              classroom?.headTeacher?.firstName}
-          </Text>
-        </View> */}
-      </View>
+          <InfoItem
+            w={0.7}
+            label={"Date et lieu de naissance"}
+            value={naiss?.toString() ?? ""}
+          />
+          <InfoItem
+            w={0.15}
+            label={"Genre"}
+            value={student.gender == "female" ? "F" : "M"}
+          />
+          <InfoItem
+            w={0.15}
+            label={"Effectif"}
+            value={classroom?.size.toString() ?? ""}
+            lastColumn={true}
+          />
+        </TableRow>
+        <TableRow style={{}}>
+          <InfoItem
+            style={{ borderBottom: "1px solid black" }}
+            w={0.4}
+            label={"Identifiant Unique"}
+            value="HIWJU34"
+          />
+          <InfoItem
+            w={0.2}
+            label={"Redoublant"}
+            style={{
+              borderBottom: "1px solid black",
+            }}
+            value={student.isRepeating ? "OUI" : "NON"}
+          />
+
+          <InfoItem
+            lastColumn={true}
+            w={0.4}
+            label={"Professeur Principal"}
+            value={""}
+          />
+        </TableRow>
+        <TableRow>
+          <InfoItem
+            w={0.605}
+            label={"Parents / Tuteurs"}
+            value={contact?.contact.lastName ?? ""}
+          />
+          <TableCell
+            w={0.3999}
+            style={{
+              alignItems: "flex-start",
+              paddingLeft: 4,
+            }}
+          >
+            <Text>
+              {classroom?.headTeacher?.prefix}{" "}
+              {classroom?.headTeacher?.lastName}
+            </Text>
+          </TableCell>
+        </TableRow>
+      </Table>
     </View>
   );
 }
 
 function InfoItem({
-  name,
+  label,
   value,
+  w,
+  lastColumn = false,
   style,
 }: {
-  name: string;
-  value?: string | null;
+  label: string;
+  value: string;
   style?: Style;
+  w: number;
+  lastColumn?: boolean;
 }) {
   return (
-    <View style={[{ flexDirection: "row" }, ...(style ? [style] : [])]}>
-      <Text style={{ fontWeight: "bold", width: "80px" }}>{name}: </Text>
+    <TableCell
+      style={{
+        alignItems: "flex-start",
+        justifyContent: "flex-start",
+        padding: 4,
+        flexDirection: "row",
+        display: "flex",
+        gap: 2,
+        borderRight: lastColumn ? "" : "1px solid black",
+        ...style,
+      }}
+      w={w}
+    >
+      <Text style={{ fontWeight: "bold" }}>
+        {label}
+        {value ? ":" : ""}
+      </Text>{" "}
       <Text>{value}</Text>
-    </View>
+    </TableCell>
   );
 }

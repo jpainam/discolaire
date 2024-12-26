@@ -17,3 +17,10 @@ export function flatten({ values }: { values: any }) {
   }, {});
   return mergeStyles;
 }
+
+export function getCdnUrl() {
+  if (process.env.NODE_ENV == "production") {
+    return "https://discolaire-public.s3.eu-central-1.amazonaws.com";
+  }
+  return "http://localhost:3000";
+}

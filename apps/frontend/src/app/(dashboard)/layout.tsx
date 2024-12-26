@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { auth } from "@repo/auth";
@@ -17,10 +18,19 @@ export default async function Layout({
     redirect("/auth/login");
   }
   const school = await api.school.get(session.user.schoolId);
+  const schoolYearId = (await cookies()).get("schoolYear")?.value;
+  if (!schoolYearId) {
+    throw new Error("No school year selected");
+  }
 
+  const schoolYear = await api.schoolYear.get(schoolYearId);
   const permissions = await api.user.permissions();
   return (
-    <SchoolContextProvider school={school} permissions={permissions}>
+    <SchoolContextProvider
+      schoolYear={schoolYear}
+      school={school}
+      permissions={permissions}
+    >
       {/* <NoticeBanner /> */}
       <Header />
       <main className="min-h-screen flex-1">{children}</main>

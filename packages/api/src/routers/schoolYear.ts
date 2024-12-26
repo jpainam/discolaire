@@ -86,7 +86,7 @@ export const schoolYearRouter = createTRPCRouter({
       });
     }),
   get: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    return ctx.db.schoolYear.findUnique({
+    return ctx.db.schoolYear.findUniqueOrThrow({
       where: {
         id: input,
       },
