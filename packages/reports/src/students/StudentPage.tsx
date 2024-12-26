@@ -9,7 +9,7 @@ import {
 
 import type { RouterOutputs } from "@repo/api";
 
-import { IPBWHeader } from "../headers/IPBW";
+import { IPBWHeader } from "../headers/IPBWHeader";
 
 export function StudentPage({
   student,

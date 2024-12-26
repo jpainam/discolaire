@@ -1,29 +1,14 @@
-import { Document, Font, Page, Text, View } from "@react-pdf/renderer";
+import { Document, Page, Text, View } from "@react-pdf/renderer";
 import { sortBy, sum } from "lodash";
+
+import "../fonts";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { ReportCardHeader } from "../headers/ReportCardHeader";
+import { IPBWHeader } from "../headers/IPBWHeader";
 import { Table, TableCell, TableHeader, TableRow } from "../table";
-import { getCdnUrl } from "../utils";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWSummary } from "./IPBWSummary";
-
-const CDN_URL = getCdnUrl();
-
-Font.register({
-  family: "Geist",
-  fonts: [
-    {
-      src: `${CDN_URL}/fonts/Geist/Geist-Regular.ttf`,
-      fontWeight: 400,
-    },
-    {
-      src: `${CDN_URL}/fonts/Geist/Geist-Bold.ttf`,
-      fontWeight: 500,
-    },
-  ],
-});
 
 const W = [0.4, 0.06, 0.06, 0.06, 0.06, 0.06, 0.1, 0.2];
 type ReportCardType =
@@ -51,11 +36,11 @@ export function IPBW({
           fontSize: 7,
           backgroundColor: "#fff",
           color: "#000",
-          fontFamily: "Geist",
+          fontFamily: "Roboto",
         }}
       >
         <View style={{ flexDirection: "column" }}>
-          <ReportCardHeader school={school} />
+          <IPBWHeader school={school} />
           <View
             style={{
               flexDirection: "column",
