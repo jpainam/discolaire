@@ -4,13 +4,22 @@ import { PiAddressBookTabsDuotone } from "react-icons/pi";
 
 import { useLocale } from "@repo/i18n";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useFormContext,
+} from "@repo/ui/form";
+import { Input } from "@repo/ui/input";
 
-import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";
 import { SelectField } from "~/components/shared/forms/SelectField";
 
 export function CreateUpdateProfile() {
   const { t } = useLocale();
+  const form = useFormContext();
 
   const genders = [
     { label: t("male"), value: "male" },
@@ -37,12 +46,25 @@ export function CreateUpdateProfile() {
           placeholder={t("firstName")}
           label={t("firstName")}
         />
+        <FormField
+          control={form.control}
+          name="dateOfBirth"
+          render={({ field }) => (
+            <FormItem className="space-y-0">
+              <FormLabel>{t("dateOfBirth")}</FormLabel>
+              <FormControl>
+                <Input type="date" placeholder={t("placeOfBirth")} {...field} />
+              </FormControl>
 
-        <DatePickerField
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* <DatePickerField
           placeholder={t("dateOfBirth")}
           name="dateOfBirth"
           label={t("dateOfBirth")}
-        />
+        /> */}
         <InputField
           name="placeOfBirth"
           placeholder={t("placeOfBirth")}

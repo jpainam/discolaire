@@ -9,6 +9,7 @@ import { IPBWHeader } from "../headers/IPBWHeader";
 import { Table, TableCell, TableHeader, TableRow } from "../table";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWSummary } from "./IPBWSummary";
+import { IPBWTableHeader } from "./IPBWTableHeader";
 
 const W = [0.4, 0.06, 0.06, 0.06, 0.06, 0.06, 0.1, 0.2];
 type ReportCardType =
@@ -67,7 +68,7 @@ export function IPBW({
           </View>
           <IPBWStudentInfo student={student} contact={contact} />
           <Table
-            weightings={[0.4, 0.06, 0.06, 0.06, 0.06, 0.06, 0.1, 0.2]}
+            //weightings={[0.4, 0.06, 0.06, 0.06, 0.06, 0.06, 0.1, 0.2]}
             style={
               {
                 //paddingVertical: "0px",
@@ -75,7 +76,7 @@ export function IPBW({
               }
             }
           >
-            <ReportTableHeader />
+            <IPBWTableHeader W={W} />
             {Object.keys(groups).map((groupId: string) => {
               let cards = groups[Number(groupId)];
               if (!cards || cards.length == 0) return null;
@@ -337,90 +338,5 @@ function ReportCardGroup({
         </TableCell>
       </TableRow>
     </>
-  );
-}
-
-export function ReportTableHeader() {
-  return (
-    <TableHeader
-      style={{
-        backgroundColor: "#000",
-        color: "#fff",
-        borderBottom: "1px solid black",
-        fontWeight: "bold",
-        fontSize: 8,
-      }}
-    >
-      <TableCell
-        w={W[0]}
-        style={{
-          padding: 2,
-        }}
-      >
-        <Text>Matieres</Text>
-      </TableCell>
-      <TableCell
-        w={W[1]}
-        style={{
-          padding: 2,
-        }}
-      >
-        <Text>Note</Text>
-      </TableCell>
-      <TableCell
-        w={W[2]}
-        style={{
-          justifyContent: "center",
-          padding: "2px",
-        }}
-      >
-        <Text> Coef.</Text>
-      </TableCell>
-      <TableCell
-        w={W[3]}
-        style={{
-          justifyContent: "center",
-          padding: "2px",
-        }}
-      >
-        <Text> Total</Text>
-      </TableCell>
-      <TableCell
-        w={W[4]}
-        style={{
-          justifyContent: "center",
-          padding: "2px",
-        }}
-      >
-        <Text> Rang</Text>
-      </TableCell>
-      <TableCell
-        w={W[5]}
-        style={{
-          justifyContent: "center",
-          padding: "2px",
-        }}
-      >
-        <Text> Moy.C</Text>
-      </TableCell>
-      <TableCell
-        w={W[6]}
-        style={{
-          justifyContent: "center",
-          padding: "2px",
-        }}
-      >
-        <Text> Min/Max</Text>
-      </TableCell>
-      <TableCell
-        w={W[7]}
-        style={{
-          justifyContent: "center",
-          padding: "2px",
-        }}
-      >
-        <Text> Appreciation</Text>
-      </TableCell>
-    </TableHeader>
   );
 }

@@ -914,6 +914,9 @@ importers:
       '@alexandernanberg/react-pdf-renderer':
         specifier: 4.0.0-canary-5
         version: 4.0.0-canary-5(react@19.0.0-rc-cae764ce-20241025)
+      '@react-pdf/fns':
+        specifier: ^3.0.0
+        version: 3.0.0
       '@react-pdf/renderer':
         specifier: ^4.1.5
         version: 4.1.5(react@19.0.0-rc-cae764ce-20241025)
@@ -1268,7 +1271,7 @@ importers:
         version: 7.37.2(eslint@9.13.0(jiti@2.4.2))
       eslint-plugin-react-compiler:
         specifier: beta
-        version: 19.0.0-beta-201e55d-20241215(eslint@9.13.0(jiti@2.4.2))
+        version: 19.0.0-beta-b2e8e9c-20241220(eslint@9.13.0(jiti@2.4.2))
       eslint-plugin-react-hooks:
         specifier: ^5.1.0
         version: 5.1.0(eslint@9.13.0(jiti@2.4.2))
@@ -6600,8 +6603,8 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9
 
-  eslint-plugin-react-compiler@19.0.0-beta-201e55d-20241215:
-    resolution: {integrity: sha512-KTOMW6Z4Eg2r5BPT/BncbwPswfuVH9KPPDVszOTQFXGNlxhExL8IZoSE3blYxk4e0wFDbCcAwe4UlTauQ8lIww==}
+  eslint-plugin-react-compiler@19.0.0-beta-b2e8e9c-20241220:
+    resolution: {integrity: sha512-STVaOQyivSBv0un6/ujYOPntKcCaD0qXIG8siBEs9QcWmQ7q3J3ozuAE86SlSc7ElIZgPoL9HoSN3EONS47nqQ==}
     engines: {node: ^14.17.0 || ^16.0.0 || >= 18.0.0}
     peerDependencies:
       eslint: '>=7'
@@ -17864,7 +17867,7 @@ snapshots:
       safe-regex-test: 1.0.3
       string.prototype.includes: 2.0.1
 
-  eslint-plugin-react-compiler@19.0.0-beta-201e55d-20241215(eslint@9.13.0(jiti@2.4.2)):
+  eslint-plugin-react-compiler@19.0.0-beta-b2e8e9c-20241220(eslint@9.13.0(jiti@2.4.2)):
     dependencies:
       '@babel/core': 7.26.0
       '@babel/parser': 7.26.1

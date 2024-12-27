@@ -30,9 +30,7 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
       registrationNumber: student.registrationNumber ?? "",
       firstName: student.firstName ?? "",
       lastName: student.lastName ?? "",
-      dateOfBirth: student.dateOfBirth
-        ? toZonedTime(student.dateOfBirth, "UTC")
-        : new Date(),
+      dateOfBirth: student.dateOfBirth ? student.dateOfBirth : new Date(),
       placeOfBirth: student.placeOfBirth ?? "",
       gender: student.gender ?? "male",
       residence: student.residence ?? "",
