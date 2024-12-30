@@ -21,7 +21,7 @@ export function TabMenu({
   icon?: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const isActive = pathname === href;
+  const isActive = pathname.includes(href);
   return (
     <Link href={href} className="relative z-10">
       <div

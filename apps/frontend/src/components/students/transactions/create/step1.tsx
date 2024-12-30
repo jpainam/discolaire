@@ -97,7 +97,7 @@ export function Step1() {
   const items: { label: string; value: string }[] = [
     { label: "credit", value: "CREDIT" },
     { label: "debit", value: "DEBIT" },
-    { label: "discount", value: "REFUND" },
+    { label: "discount", value: "DISCOUNT" },
   ];
 
   return (
