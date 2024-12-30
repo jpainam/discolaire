@@ -27,6 +27,7 @@ interface DatePickerProps {
   label: string;
   placeholder?: string;
   className?: string;
+  timeZone?: string;
   labelClassName?: string;
   inputClassName?: string;
   disabled?: boolean;
@@ -37,6 +38,7 @@ export function DatePickerField({
   label,
   placeholder,
   className,
+  timeZone,
   labelClassName,
   inputClassName,
   disabled = false,
@@ -80,6 +82,7 @@ export function DatePickerField({
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
+                  timeZone={timeZone}
                   mode="single"
                   disabled={disabled}
                   selected={field.value}

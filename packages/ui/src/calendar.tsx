@@ -12,12 +12,14 @@ export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 function Calendar({
   className,
   classNames,
+  timeZone,
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
   return (
     <DayPicker
       hideNavigation
+      timeZone={timeZone}
       captionLayout="dropdown"
       showOutsideDays={showOutsideDays}
       className={cn("p-3", className)}
