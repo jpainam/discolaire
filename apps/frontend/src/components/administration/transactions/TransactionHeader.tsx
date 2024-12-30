@@ -18,6 +18,7 @@ import { Label } from "@repo/ui/label";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
+import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { TransactionStatusSelector } from "~/components/shared/selects/TransactionStatusSelector";
 import { useRouter } from "~/hooks/use-router";
 
@@ -31,7 +32,14 @@ export function TransactionHeader() {
   const { createQueryString } = useCreateQueryString();
 
   return (
-    <div className="flex flex-row items-center gap-2">
+    <div className="grid flex-row items-center gap-2 md:flex">
+      <Label className="hidden md:block">{t("classroom")}</Label>
+      <ClassroomSelector
+        className="w-[250px]"
+        onChange={(val) => {
+          router.push(`?${createQueryString({ classroom: val })}`);
+        }}
+      />
       <Label className="hidden md:block"> {t("from")}</Label>
       <Input
         type="date"

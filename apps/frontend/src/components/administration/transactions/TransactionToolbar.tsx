@@ -9,6 +9,7 @@ import {
   Trash2,
 } from "lucide-react";
 
+import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
 
 import type { TabMenuOption } from "~/components/shared/TabMenu";
@@ -17,7 +18,7 @@ import { routes } from "~/configs/routes";
 
 export function TransactionToolbar() {
   const { t } = useLocale();
-  //const { createQueryString } = useCreateQueryString();
+  const { createQueryString } = useCreateQueryString();
   //const pathname = usePathname();
 
   const menuTabs: TabMenuOption[] = [
@@ -29,27 +30,40 @@ export function TransactionToolbar() {
     {
       icon: <Sigma className="h-4 w-4" />,
       name: t("totals"),
-      href: routes.administration.transactions + "/totals",
+      href:
+        routes.administration.transactions + "/totals?" + createQueryString({}),
     },
     {
       icon: <Euro className="h-4 w-4" />,
       name: t("required_fees"),
-      href: routes.administration.transactions + "/required",
+      href:
+        routes.administration.transactions +
+        "/required?" +
+        createQueryString({}),
     },
     {
       icon: <Percent className="h-4 w-4" />,
       name: t("discounts"),
-      href: routes.administration.transactions + "/discounts",
+      href:
+        routes.administration.transactions +
+        "/discounts?" +
+        createQueryString({}),
     },
     {
       icon: <Trash2 className="h-4 w-4" />,
       name: t("deleted"),
-      href: routes.administration.transactions + "/deleted",
+      href:
+        routes.administration.transactions +
+        "/deleted?" +
+        createQueryString({}),
     },
     {
       icon: <HandCoins className="h-4 w-4" />,
       name: t("moratoriums"),
-      href: routes.administration.transactions + "/moratoriums",
+      href:
+        routes.administration.transactions +
+        "/moratoriums?" +
+        createQueryString({}),
     },
   ];
 

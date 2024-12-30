@@ -61,11 +61,11 @@ export function DataTableToolbar<TData>({
           {filterableColumns.length > 0 &&
             filterableColumns.map(
               (column) =>
-                table.getColumn(column.value ? String(column.value) : "") && (
+                table.getColumn(column.value && String(column.value)) && (
                   <DataTableFacetedFilter
                     key={String(column.value)}
                     column={table.getColumn(
-                      column.value ? String(column.value) : "",
+                      column.value && String(column.value),
                     )}
                     title={column.label}
                     options={column.options ?? []}

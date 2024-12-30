@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import type { TransactionStatus } from "@repo/db";
 
+import { classroomService } from "../services/classroom-service";
 import { transactionService } from "../services/transaction-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -36,12 +37,18 @@ export const transactionRouter = createTRPCRouter({
         from: z.coerce.date().optional().default(subMonths(new Date(), 3)),
         to: z.coerce.date().optional().default(new Date()),
         status: z.string().optional(),
+        classroom: z.string().optional(),
       }),
     )
-    .query(({ ctx, input }) => {
+    .query(async ({ ctx, input }) => {
       const status = input.status
         ? (input.status as TransactionStatus)
         : undefined;
+
+      const students = input.classroom
+        ? await classroomService.getStudents(input.classroom)
+        : [];
+      const studentIds: string[] = students.map((stud) => stud.id);
       return ctx.db.transaction.findMany({
         include: {
           account: true,
@@ -57,6 +64,17 @@ export const transactionRouter = createTRPCRouter({
               },
             },
             ...(status ? [{ status: { equals: status } }] : [{}]),
+            ...(input.classroom
+              ? [
+                  {
+                    account: {
+                      studentId: {
+                        in: studentIds,
+                      },
+                    },
+                  },
+                ]
+              : [{}]),
           ],
         },
         orderBy: {

@@ -21,7 +21,7 @@ export function StudentDataTable() {
   const [per_page] = useQueryState("per_page", parseAsInteger);
   const [sort] = useQueryState("sort", parseAsString);
   const [lastName] = useQueryState("lastName", parseAsString);
-  api.staff.all.useQuery();
+
   const studentsCountQuery = api.student.count.useQuery({
     q: lastName ?? undefined,
   });

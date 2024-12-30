@@ -231,6 +231,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
     //   enableSorting: true,
     // },
     {
+      id: "dateOfBirth",
       accessorKey: "dateOfBirth",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("dateOfBirth")} />
@@ -269,6 +270,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
     //   },
     // },
     {
+      id: "residence",
       accessorKey: "residence",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("residence")} />
@@ -284,6 +286,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
     //   enableSorting: true,
     // }),
     {
+      id: "country",
       accessorKey: "country",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("country")} />

@@ -6,7 +6,12 @@ import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/server";
 
 export default async function Page(props: {
-  searchParams: Promise<{ from?: string; to?: string; status?: string }>;
+  searchParams: Promise<{
+    from?: string;
+    to?: string;
+    status?: string;
+    classroom?: string;
+  }>;
 }) {
   const searchParams = await props.searchParams;
   const { t, i18n } = await getServerTranslations();
@@ -15,6 +20,7 @@ export default async function Page(props: {
     status: searchParams.status,
     from: searchParams.from ? new Date(searchParams.from) : undefined,
     to: searchParams.to ? new Date(searchParams.to) : undefined,
+    classroom: searchParams.classroom,
   });
 
   const moneyFormatter = new Intl.NumberFormat(i18n.language, {

@@ -18,11 +18,13 @@ export function TransactionDataTable() {
   const [status] = useQueryState("status");
   const [from] = useQueryState("from", parseAsIsoDateTime);
   const [to] = useQueryState("to", parseAsIsoDateTime);
+  const [classroom] = useQueryState("classroom");
 
   const transactionsQuery = api.transaction.all.useQuery({
     status: status ?? undefined,
     from: from ?? undefined,
     to: to ?? undefined,
+    classroom: classroom ?? undefined,
   });
   //const transactionsCountQuery = api.transaction.count.useQuery();
 

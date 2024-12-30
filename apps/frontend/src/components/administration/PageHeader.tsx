@@ -29,25 +29,34 @@ export function PageHeader() {
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="mr-2 h-4" />
         <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink href={"/administration"}>
+          <BreadcrumbList key="breadcrumb-list-admin">
+            <BreadcrumbItem key={"dashboard-key"} className="hidden md:block">
+              <BreadcrumbLink
+                key={"breadcrumb-list-link"}
+                href={"/administration"}
+              >
                 {t("dashboard")}
               </BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator className="hidden md:block" />
+            <BreadcrumbSeparator
+              key={"breadcrumb-list-separator"}
+              className="hidden md:block"
+            />
             {breadcrumbs.map((breadcrumb, index) => (
               <>
                 <BreadcrumbItem
                   className="hidden md:block"
-                  key={breadcrumb.title}
+                  key={`${breadcrumb.title}-${index}`}
                 >
                   <BreadcrumbLink href={breadcrumb.url ?? "#"}>
                     {t(breadcrumb.title)}
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 {index != breadcrumbs.length - 1 && (
-                  <BreadcrumbSeparator className="hidden md:block" />
+                  <BreadcrumbSeparator
+                    key={`breadcrumb-list-separator-${index}`}
+                    className="hidden md:block"
+                  />
                 )}
               </>
             ))}
