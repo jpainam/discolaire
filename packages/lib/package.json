@@ -33,7 +33,7 @@
     "next-nprogress-bar": "^2.4.3",
     "react-use": "^17.6.0",
     "tailwind-merge": "^2.6.0",
-    "uploadthing": "^7.4.1"
+    "uploadthing": "^7.4.4"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
