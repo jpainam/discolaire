@@ -19,17 +19,17 @@ interface DatePickerProps {
   disabled?: boolean;
   toYear?: number;
   formatStr?: string;
-  onChange?: (date: Date) => void;
+  onChange?: (date: Date | undefined) => void;
   defaultValue?: Date;
 }
 export function DatePicker({
   placeholder,
   className,
   formatStr = "PPP",
-  toYear = 2050,
+  //toYear = 2050,
   onChange,
   disabled = false,
-  fromYear = 1930,
+  //fromYear = 1930,
   defaultValue,
 }: DatePickerProps) {
   const { i18n, t } = useLocale();
@@ -49,19 +49,18 @@ export function DatePicker({
           variant={"outline"}
           disabled={disabled}
           className={cn(
-            "w-full text-left font-normal",
+            "w-full justify-start text-left font-normal",
             className,
             !value && "text-muted-foreground",
           )}
         >
+          <CalendarIcon className="mr-2 h-4 w-4" />
           {value ? (
             format(value, formatStr, { locale: currentLocale })
-          ) : defaultValue ? (
-            format(defaultValue, formatStr, { locale: currentLocale })
           ) : (
             <span>{placeholder ?? t("pick_a_date")}</span>
           )}
-          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+          {/* <CalendarIcon className="ml-auto h-4 w-4 opacity-50" /> */}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
@@ -70,7 +69,7 @@ export function DatePicker({
           disabled={disabled}
           selected={value}
           onSelect={(date) => {
-            if (date) onChange?.(date);
+            onChange?.(date);
             setOpen(false);
             setValue(date);
           }}
@@ -78,8 +77,8 @@ export function DatePicker({
                   date > new Date() || date < new Date("1900-01-01")
                 }*/
 
-          startMonth={new Date(fromYear, 0)}
-          endMonth={new Date(toYear, 11)}
+          //startMonth={new Date(fromYear, 0)}
+          ///endMonth={new Date(toYear, 11)}
           locale={currentLocale}
           autoFocus
         />
