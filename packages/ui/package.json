@@ -6,6 +6,7 @@
   "type": "module",
   "exports": {
     "./button": "./src/button.tsx",
+    "./Button": "./src/Button/index.tsx",
     "./dropdown-menu": "./src/dropdown-menu.tsx",
     "./form": "./src/form.tsx",
     "./input": "./src/input.tsx",
