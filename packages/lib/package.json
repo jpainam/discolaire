@@ -26,7 +26,7 @@
   "prettier": "@repo/prettier-config",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "i18next": "^24.2.0",
+    "i18next": "^24.2.1",
     "jotai": "^2.11.0",
     "json-logic-js": "^2.0.5",
     "next-i18next": "^15.4.1",
