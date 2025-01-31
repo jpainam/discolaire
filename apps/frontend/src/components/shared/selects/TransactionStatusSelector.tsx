@@ -31,9 +31,7 @@ export function TransactionStatusSelector({
       }}
     >
       <SelectTrigger className={cn("w-[280px]", className)}>
-        <SelectValue
-          placeholder={placeholder ? placeholder : t("select_an_option")}
-        />
+        <SelectValue placeholder={placeholder ?? t("select_an_option")} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>

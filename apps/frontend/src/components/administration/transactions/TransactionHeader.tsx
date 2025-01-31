@@ -44,9 +44,7 @@ export function TransactionHeader() {
       <Input
         type="date"
         className="w-48"
-        defaultValue={
-          from ? from : format(subMonths(new Date(), 3), "yyyy-MM-dd")
-        }
+        defaultValue={from ?? format(subMonths(new Date(), 3), "yyyy-MM-dd")}
         onChange={(val) => {
           router.push(`?${createQueryString({ from: val.target.value })}`);
         }}
@@ -56,8 +54,8 @@ export function TransactionHeader() {
       <Input
         type="date"
         className="w-48"
-        defaultValue={to ? to : format(new Date(), "yyyy-MM-dd")}
-        min={from ? from : format(subMonths(new Date(), 3), "yyyy-MM-dd")}
+        defaultValue={to ?? format(new Date(), "yyyy-MM-dd")}
+        min={from ?? format(subMonths(new Date(), 3), "yyyy-MM-dd")}
         onChange={(val) => {
           router.push(`?${createQueryString({ to: val.target.value })}`);
         }}

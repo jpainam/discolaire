@@ -22,7 +22,7 @@ export function SubmitButton({ label }: SubmitButtonProps) {
       type="submit"
     >
       {isSubmitting && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}{" "}
-      {label ? label : t("submit")}
+      {label ?? t("submit")}
     </Button>
   );
 }

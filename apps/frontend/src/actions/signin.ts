@@ -60,7 +60,7 @@ export async function signIn(
   }
   await Promise.all([setSession(user), setSchoolYearSession(schoolYear.id)]);
   const redirectTo = formData.get("redirect") as string | null;
-  redirect(redirectTo === "" || redirectTo === null ? "/" : redirectTo);
+  redirect(redirectTo ?? "/");
 }
 
 export async function signOut() {

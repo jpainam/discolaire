@@ -216,9 +216,7 @@ export function ClassroomStudentSelector({
             label: option.label,
             avatar: option.avatar,
           }))}
-          placeholder={
-            searchPlaceholder ? searchPlaceholder : t("search_for_an_option")
-          }
+          placeholder={searchPlaceholder ?? t("search_for_an_option")}
           selectedOption={selectedOption.value}
           onSelectOption={(currentValue) => {
             onChange?.(

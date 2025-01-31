@@ -33,7 +33,7 @@ export function EmptyCard({
         <CardTitle>{title}</CardTitle>
         {description ? <CardDescription>{description}</CardDescription> : null}
       </div>
-      {action ? action : null}
+      {action ?? null}
     </Card>
   );
 }

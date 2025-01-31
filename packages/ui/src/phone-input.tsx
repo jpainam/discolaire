@@ -47,9 +47,7 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
            *
            * @param {E164Number | undefined} value - The entered value
            */
-          onChange={(value) =>
-            onChange?.(value ? value : ("CM" as RPNInput.Value))
-          }
+          onChange={(value) => onChange?.(value ?? ("CM" as RPNInput.Value))}
           {...props}
         />
       );

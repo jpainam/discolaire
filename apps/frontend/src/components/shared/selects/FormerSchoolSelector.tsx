@@ -93,9 +93,7 @@ export function FormerSchoolSelector({
           {selectedOption.value
             ? options.find((option) => option.value === selectedOption.value)
                 ?.label
-            : placeholder
-              ? placeholder
-              : t("select_an_option")}{" "}
+            : (placeholder ?? t("select_an_option"))}{" "}
           {""}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 justify-end opacity-50" />
         </Button>
@@ -123,7 +121,7 @@ export function FormerSchoolSelector({
             label: option.label,
             avatar: option.avatar,
           }))}
-          placeholder={searchPlaceholder ? searchPlaceholder : t("search")}
+          placeholder={searchPlaceholder ?? t("search")}
           selectedOption={selectedOption.value}
           onSelectOption={(currentValue) => {
             onChange?.(

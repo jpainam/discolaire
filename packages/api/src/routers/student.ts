@@ -144,12 +144,12 @@ export const studentRouter = createTRPCRouter({
   create: protectedProcedure
     .input(createUpdateSchema)
     .mutation(async ({ ctx, input }) => {
-      const registrationNumber = input.registrationNumber
-        ? input.registrationNumber
-        : await studentService.generateRegistrationNumber({
-            schoolId: ctx.schoolId,
-            schoolYearId: ctx.schoolYearId,
-          });
+      const registrationNumber =
+        input.registrationNumber ??
+        (await studentService.generateRegistrationNumber({
+          schoolId: ctx.schoolId,
+          schoolYearId: ctx.schoolYearId,
+        }));
       if (await studentService.registrationNumberExists(registrationNumber)) {
         console.warn("Registration number already exists", registrationNumber);
         // throw new TRPCError({

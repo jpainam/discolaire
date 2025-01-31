@@ -93,9 +93,7 @@ export function SubjectSelector({
         >
           {value
             ? items.find((it) => it.value === value)?.label
-            : placeholder
-              ? placeholder
-              : t("select_an_option")}
+            : (placeholder ?? t("select_an_option"))}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -103,9 +101,7 @@ export function SubjectSelector({
         <Command>
           <CommandInput
             onValueChange={handleSearch}
-            placeholder={
-              searchPlaceholder ? searchPlaceholder : t("search_for_an_option")
-            }
+            placeholder={searchPlaceholder ?? t("search_for_an_option")}
           />
           <CommandList>
             <CommandEmpty>{t("select_an_option")}</CommandEmpty>

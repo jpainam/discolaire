@@ -134,7 +134,7 @@ export function StudentContactTable({
                 </TableCell>
                 <TableCell className="py-0">{relationship?.name}</TableCell>
                 <TableCell className="py-0 text-right">
-                  {contact.email ? contact.email : "N/A"}
+                  {contact.email ?? "N/A"}
                 </TableCell>
                 <TableCell className="py-0 text-right">
                   {contact.phoneNumber1}{" "}

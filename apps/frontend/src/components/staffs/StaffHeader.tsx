@@ -56,7 +56,7 @@ export function StaffHeader() {
       <GenderFilter />
 
       <StaffLevelSelector
-        defaultValue={level ? level : undefined}
+        defaultValue={level ?? undefined}
         onChange={(val) => setLevel(val ?? null)}
       />
 

@@ -43,7 +43,7 @@ export function StaffDataTable({ visibles }: StaffDataTableProps) {
     ];
     const { columns } = fetchStaffColumns({
       t: t,
-      columns: visibles ? visibles : defaultVisibles,
+      columns: visibles ?? defaultVisibles,
     });
     return columns;
   }, [t, visibles]);

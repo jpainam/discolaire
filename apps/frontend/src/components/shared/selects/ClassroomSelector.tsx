@@ -93,11 +93,7 @@ export function ClassroomSelector({
             }}
           >
             <CommandInput
-              placeholder={
-                searchPlaceholder
-                  ? searchPlaceholder
-                  : t("search_for_an_option")
-              }
+              placeholder={searchPlaceholder ?? t("search_for_an_option")}
             />
             <CommandList>
               <CommandEmpty>{t("select_an_option")}</CommandEmpty>

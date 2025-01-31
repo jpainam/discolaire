@@ -43,9 +43,7 @@ export function CountryPicker({
   defaultValue,
 }: CountryPickerFieldProps) {
   const countries = useMemo(() => getCountries(), []);
-  const [value, setValue] = React.useState(
-    defaultValue ? defaultValue : undefined,
-  );
+  const [value, setValue] = React.useState(defaultValue ?? undefined);
   const [open, setOpen] = React.useState(false);
   const schoolQuery = api.school.getSchool.useQuery();
   useEffect(() => {
@@ -147,9 +145,7 @@ const CountryComponent = ({
       <span className="flex h-4 w-6 overflow-hidden rounded-sm bg-foreground/20">
         {Flag && <Flag title={countryName ?? ""} />}
       </span>
-      <span>
-        {countryName ? countryName : country ? countryNames[country] : ""}
-      </span>
+      <span>{countryName ?? (country ? countryNames[country] : "")}</span>
     </div>
   );
 };
