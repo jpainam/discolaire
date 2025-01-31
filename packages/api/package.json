@@ -36,7 +36,7 @@
     "@repo/db": "workspace:*",
     "@repo/lib": "workspace:*",
     "@repo/validators": "workspace:*",
-    "@t3-oss/env-nextjs": "^0.11.1",
+    "@t3-oss/env-nextjs": "^0.12.0",
     "@trpc/server": "catalog:",
     "@unkey/ratelimit": "^0.5.1",
     "date-fns-tz": "^3.2.0",
