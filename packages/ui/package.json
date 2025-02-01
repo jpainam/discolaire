@@ -153,7 +153,7 @@
     "react-textarea-autosize": "^8.5.7",
     "react-use-measure": "^2.1.7",
     "recharts": "^2.15.1",
-    "sonner": "1.7.3",
+    "sonner": "1.7.4",
     "tailwind-merge": "^2.6.0",
     "vaul": "^1.1.2"
   },
