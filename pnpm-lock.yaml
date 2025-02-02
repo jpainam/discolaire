@@ -817,8 +817,8 @@ importers:
         specifier: workspace:*
         version: link:../transactional
       bullmq:
-        specifier: ^5.39.1
-        version: 5.39.1
+        specifier: ^5.39.2
+        version: 5.39.2
       cron-parser:
         specifier: ^4.9.0
         version: 4.9.0
@@ -5642,8 +5642,8 @@ packages:
     resolution: {integrity: sha512-4T53u4PdgsXqKaIctwF8ifXlRTTmEPJ8iEPWFdGZvcf7sbwYo6FKFEX9eNNAnzFZ7EzJAQ3CJeOtCRA4rDp7Pw==}
     engines: {node: '>=6.14.2'}
 
-  bullmq@5.39.1:
-    resolution: {integrity: sha512-z6ovgX3mMly0L9F3dStCuiMQOk3bqiwqgr83mbjRlX5yGRcStwP9kZsrO0a5VrjPuU0oUgwmWXv37jcSbGaERQ==}
+  bullmq@5.39.2:
+    resolution: {integrity: sha512-Em1expjeVUyGZ0e+rhxImIU8nJauVcXfbvvr68WRO6FCQxggeC6wcC3u74QLHsrLt5+elzDA3HiCoblzD9Q91w==}
 
   busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
@@ -16121,7 +16121,7 @@ snapshots:
 
   '@types/react-dom@18.3.1':
     dependencies:
-      '@types/react': 18.3.18
+      '@types/react': 19.0.8
     optional: true
 
   '@types/react@18.3.18':
@@ -16880,7 +16880,7 @@ snapshots:
       node-gyp-build: 4.8.1
     optional: true
 
-  bullmq@5.39.1:
+  bullmq@5.39.2:
     dependencies:
       cron-parser: 4.9.0
       ioredis: 5.4.2
