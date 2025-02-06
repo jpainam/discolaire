@@ -1,4 +1,13 @@
 import { getServerTranslations } from "@repo/i18n/server";
+import { Button } from "@repo/ui/button";
+import { Input } from "@repo/ui/input";
+import { Label } from "@repo/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@repo/ui/tooltip";
 
 import { DashboardClassroomSize } from "~/components/dashboard/DashboardClassroomSize";
 import { DashboardTransactionTrend } from "~/components/dashboard/DashboardTransactionTrend";
@@ -14,6 +23,22 @@ export default async function Page() {
     <div className="grid grid-cols-1 gap-4 px-4 md:pt-[110px] 2xl:grid-cols-12">
       <div className="col-span-full text-lg font-bold md:text-2xl">
         {t("dashboard")}
+      </div>
+      <TooltipProvider delayDuration={0}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="outline" size="sm">
+              W/ arrow
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent className="dark px-2 py-1 text-xs" showArrow={true}>
+            This tooltip has an arrow
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      <div className="space-y-2">
+        <Label htmlFor={"aa"}>Simple input</Label>
+        <Input id={"aa"} placeholder="Email" type="email" />
       </div>
       <QuickStatistics />
       {/* <SearchBlock className="col-span-full md:col-span-6" /> */}
