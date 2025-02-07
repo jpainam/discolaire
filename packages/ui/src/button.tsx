@@ -70,6 +70,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             className={cn("h-4 w-4 animate-spin", children ? "mr-2" : "")}
           />
         )}
+        {children}
       </Comp>
     );
   },
