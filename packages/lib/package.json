@@ -29,7 +29,7 @@
     "i18next": "^24.2.2",
     "jotai": "^2.11.3",
     "json-logic-js": "^2.0.5",
-    "next-i18next": "^15.4.1",
+    "next-i18next": "^15.4.2",
     "next-nprogress-bar": "^2.4.4",
     "react-use": "^17.6.0",
     "tailwind-merge": "^3.0.1",

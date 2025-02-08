@@ -21,9 +21,9 @@
   "prettier": "@repo/prettier-config",
   "dependencies": {
     "@alexandernanberg/react-pdf-renderer": "4.0.0-canary-5",
-    "@react-pdf/fns": "^3.0.0",
-    "@react-pdf/renderer": "^4.1.6",
-    "@react-pdf/stylesheet": "^5.2.0",
+    "@react-pdf/fns": "^3.1.0",
+    "@react-pdf/renderer": "^4.2.1",
+    "@react-pdf/stylesheet": "^5.2.2",
     "@repo/api": "workspace:*",
     "@repo/i18n": "workspace:*",
     "date-fns": "^4.1.0",
