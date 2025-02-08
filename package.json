@@ -28,10 +28,10 @@
     "turbo": "2.4.0",
     "typescript": "catalog:"
   },
-  "packageManager": "pnpm@9.15.5",
+  "packageManager": "pnpm@10.2.1",
   "engines": {
     "node": ">=22.13.1",
-    "pnpm": "^9.15.5"
+    "pnpm": "^10.2.1"
   },
   "prisma": {
     "schema": "packages/db/prisma/schema",
