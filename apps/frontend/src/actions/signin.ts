@@ -59,8 +59,11 @@ export async function signIn(
     };
   }
   await Promise.all([setSession(user), setSchoolYearSession(schoolYear.id)]);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const redirectTo = formData.get("redirect") as string | null;
-  redirect(redirectTo ?? "/");
+  //redirect(redirectTo ?? "/");
+  redirect("/");
 }
 
 export async function signOut() {
