@@ -646,8 +646,8 @@ importers:
         specifier: ^0.12.0
         version: 0.12.0(typescript@5.7.3)(zod@3.24.1)
       bcryptjs:
-        specifier: ^2.4.3
-        version: 2.4.3
+        specifier: ^3.0.0
+        version: 3.0.0
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.2
@@ -698,8 +698,8 @@ importers:
         specifier: ^6.3.1
         version: 6.3.1(prisma@6.3.1(typescript@5.7.3))(typescript@5.7.3)
       bcryptjs:
-        specifier: ^2.4.3
-        version: 2.4.3
+        specifier: ^3.0.0
+        version: 3.0.0
       fs:
         specifier: 0.0.1-security
         version: 0.0.1-security
@@ -860,8 +860,8 @@ importers:
   packages/lib:
     dependencies:
       bcryptjs:
-        specifier: ^2.4.3
-        version: 2.4.3
+        specifier: ^3.0.0
+        version: 3.0.0
       i18next:
         specifier: ^24.2.2
         version: 24.2.2(typescript@5.7.3)
@@ -1271,7 +1271,7 @@ importers:
         version: 7.37.4(eslint@9.20.0(jiti@2.4.2))
       eslint-plugin-react-compiler:
         specifier: beta
-        version: 19.0.0-beta-714736e-20250131(eslint@9.20.0(jiti@2.4.2))
+        version: 19.0.0-beta-30d8a17-20250209(eslint@9.20.0(jiti@2.4.2))
       eslint-plugin-react-hooks:
         specifier: ^5.1.0
         version: 5.1.0(eslint@9.20.0(jiti@2.4.2))
@@ -5604,8 +5604,9 @@ packages:
     resolution: {integrity: sha512-AGBHOG5hPYZ5Xl9KXzU5iKq9516yEmvCKDg3ecP5kX2aB6UqTeXZxk2ELnDgDm6BQSMlLt9rDB4LoSMx0rYwww==}
     engines: {node: '>= 10.0.0'}
 
-  bcryptjs@2.4.3:
-    resolution: {integrity: sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==}
+  bcryptjs@3.0.0:
+    resolution: {integrity: sha512-Q2vVGpGC7B7m9wggpcA5lq4OYR5OS1nrXoUpnH9MmogXU8HpxzKg63uxtCrLebY5v/y3o0r7JcGCpR/vTGGn7A==}
+    hasBin: true
 
   better-opn@3.0.2:
     resolution: {integrity: sha512-aVNobHnJqLiUelTaHat9DZ1qM2w0C0Eym4LPI/3JxOnSokGVdsl1T1kN7TFvsEAD8G47A6VKQ0TVHqbBnYMJlQ==}
@@ -6671,8 +6672,8 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9
 
-  eslint-plugin-react-compiler@19.0.0-beta-714736e-20250131:
-    resolution: {integrity: sha512-iTPUaHzvBejGqicSwZLCDBgWBxLzU1Dvqjs31loNoOPRnsey5dcOupaZajECKVvXmB1wcbIWNp6/VR5+dM9d6w==}
+  eslint-plugin-react-compiler@19.0.0-beta-30d8a17-20250209:
+    resolution: {integrity: sha512-D2wohyvsW27KSQV8IhyjL9UhYKs4f7Y8WPIuNOeiYylOaredvb2vW/AAE2m36BWLsn3Q9xRYz1UZj2AXR15w/g==}
     engines: {node: ^14.17.0 || ^16.0.0 || >= 18.0.0}
     peerDependencies:
       eslint: '>=7'
@@ -16942,7 +16943,7 @@ snapshots:
       - encoding
       - supports-color
 
-  bcryptjs@2.4.3: {}
+  bcryptjs@3.0.0: {}
 
   better-opn@3.0.2:
     dependencies:
@@ -18198,7 +18199,7 @@ snapshots:
       safe-regex-test: 1.0.3
       string.prototype.includes: 2.0.1
 
-  eslint-plugin-react-compiler@19.0.0-beta-714736e-20250131(eslint@9.20.0(jiti@2.4.2)):
+  eslint-plugin-react-compiler@19.0.0-beta-30d8a17-20250209(eslint@9.20.0(jiti@2.4.2)):
     dependencies:
       '@babel/core': 7.26.8
       '@babel/parser': 7.26.1
