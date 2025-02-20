@@ -2,9 +2,9 @@ import type { Column } from "@tanstack/react-table";
 import * as React from "react";
 import { CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons";
 
-import { cn } from "..";
-import { Badge } from "../badge";
 import { Button } from "../button";
+import { cn } from "../components";
+import { Badge } from "../components/badge";
 import {
   Command,
   CommandEmpty,
@@ -13,9 +13,9 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "../command";
-import { Popover, PopoverContent, PopoverTrigger } from "../popover";
-import { Separator } from "../separator";
+} from "../components/command";
+import { Popover, PopoverContent, PopoverTrigger } from "../components/popover";
+import { Separator } from "../components/separator";
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;

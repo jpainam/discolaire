@@ -10,7 +10,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { PiDotsSixVerticalBold } from "react-icons/pi";
 
-import { cn } from "../utils";
+import { cn } from "../lib/utils";
 
 interface Props {
   id: UniqueIdentifier;

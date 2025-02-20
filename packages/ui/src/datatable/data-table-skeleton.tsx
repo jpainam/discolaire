@@ -1,5 +1,5 @@
-import { cn } from "..";
-import { Skeleton } from "../skeleton";
+import { cn } from "../components";
+import { Skeleton } from "../components/skeleton";
 import {
   Table,
   TableBody,
@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../table";
+} from "../components/table";
 
 interface DataTableSkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   /**

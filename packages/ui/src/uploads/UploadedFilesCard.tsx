@@ -6,8 +6,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../card";
-import { ScrollArea, ScrollBar } from "../scroll-area";
+} from "../components/card";
+import { ScrollArea, ScrollBar } from "../components/scroll-area";
 import { EmptyCard } from "./EmptyCard";
 
 interface UploadedFile {

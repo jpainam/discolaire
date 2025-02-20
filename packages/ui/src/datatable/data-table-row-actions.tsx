@@ -14,7 +14,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "../dropdown-menu";
+} from "../components/dropdown-menu";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
