@@ -6,16 +6,16 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Checkbox } from "@repo/ui/checkbox";
+import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-} from "@repo/ui/form";
-import { Separator } from "@repo/ui/separator";
+} from "@repo/ui/components/form";
+import { Separator } from "@repo/ui/components/separator";
 
 import { SelectField } from "~/components/shared/forms/SelectField";
 

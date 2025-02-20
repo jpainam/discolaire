@@ -7,7 +7,7 @@ import { z } from "zod";
 import type { RouterOutputs } from "@repo/api";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Form,
   FormControl,
@@ -17,10 +17,10 @@ import {
   FormLabel,
   FormMessage,
   useForm,
-} from "@repo/ui/form";
-import { Input } from "@repo/ui/input";
-import { Separator } from "@repo/ui/separator";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
+import { Separator } from "@repo/ui/components/separator";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { CourseSelector } from "~/components/shared/selects/CourseSelector";
 import { StaffSelector } from "~/components/shared/selects/StaffSelector";

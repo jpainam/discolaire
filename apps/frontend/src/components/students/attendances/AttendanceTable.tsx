@@ -4,16 +4,16 @@ import { Eye, MailIcon, MoreHorizontal, RatioIcon, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { useConfirm } from "@repo/ui/confirm-dialog";
+import { Button } from "@repo/ui/components/button";
+import { useConfirm } from "@repo/ui/components/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import FlatBadge from "@repo/ui/FlatBadge";
+} from "@repo/ui/components/dropdown-menu";
+import FlatBadge from "@repo/ui/components/FlatBadge";
 import {
   Table,
   TableBody,
@@ -21,7 +21,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 export default function AttendanceTable() {
   const { t } = useLocale();

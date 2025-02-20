@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
 import { useLocale } from "@repo/i18n";
-import { SortableList } from "@repo/ui/dnd/dnd-sortable-list";
-import { Skeleton } from "@repo/ui/skeleton";
+import { SortableList } from "@repo/ui/components/dnd/dnd-sortable-list";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";

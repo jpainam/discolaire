@@ -4,7 +4,7 @@ import { CircleHelp, Mail } from "lucide-react";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 
 import { SimpleTooltip } from "~/components/simple-tooltip";
 import { ModeToggle } from "~/layouts/mode-toggle";

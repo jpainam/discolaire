@@ -13,11 +13,15 @@ import {
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { EmptyState } from "@repo/ui/EmptyState";
-import FlatBadge from "@repo/ui/FlatBadge";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
-import { ScrollArea } from "@repo/ui/scroll-area";
+import { Button } from "@repo/ui/components/button";
+import { EmptyState } from "@repo/ui/components/EmptyState";
+import FlatBadge from "@repo/ui/components/FlatBadge";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
 
 import { deleteFileFromAws, downloadFileFromAws } from "~/actions/upload";
 import PDFIcon from "~/components/icons/pdf-solid";

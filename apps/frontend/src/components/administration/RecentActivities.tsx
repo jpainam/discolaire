@@ -1,13 +1,17 @@
 import { GraduationCap } from "lucide-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@repo/ui/components/avatar";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/card";
+} from "@repo/ui/components/card";
 
 export function RecentActivities() {
   return (

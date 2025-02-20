@@ -3,7 +3,7 @@
 import { TrendingUp } from "lucide-react";
 import { LabelList, RadialBar, RadialBarChart } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/chart";
+import type { ChartConfig } from "@repo/ui/components/chart";
 import {
   Card,
   CardContent,
@@ -11,12 +11,12 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/card";
+} from "@repo/ui/components/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/chart";
+} from "@repo/ui/components/chart";
 
 const chartData = [
   { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },

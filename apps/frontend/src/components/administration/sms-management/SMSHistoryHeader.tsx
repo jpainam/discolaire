@@ -4,8 +4,8 @@ import { subDays } from "date-fns";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Label } from "@repo/ui/label";
+import { Button } from "@repo/ui/components/button";
+import { Label } from "@repo/ui/components/label";
 
 import { DateRangePicker } from "~/components/shared/DateRangePicker";
 import { routes } from "~/configs/routes";

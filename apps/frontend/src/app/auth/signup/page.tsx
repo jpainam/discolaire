@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Card,
   CardContent,
@@ -14,7 +14,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/card";
+} from "@repo/ui/components/card";
 import {
   Form,
   FormControl,
@@ -23,8 +23,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/form";
-import { Input } from "@repo/ui/input";
+} from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
 
 import { useRouter } from "~/hooks/use-router";
 

@@ -7,9 +7,9 @@ import { parseAsInteger, useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { EmptyState } from "@repo/ui/EmptyState";
-import FlatBadge from "@repo/ui/FlatBadge";
+import { Button } from "@repo/ui/components/button";
+import { EmptyState } from "@repo/ui/components/EmptyState";
+import FlatBadge from "@repo/ui/components/FlatBadge";
 import {
   Table,
   TableBody,
@@ -17,7 +17,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";

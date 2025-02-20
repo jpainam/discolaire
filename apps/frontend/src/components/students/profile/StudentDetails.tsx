@@ -20,8 +20,8 @@ import {
 import { PiChurchDuotone } from "react-icons/pi";
 
 import { useLocale } from "@repo/i18n";
-import { Separator } from "@repo/ui/separator";
-import { Skeleton } from "@repo/ui/skeleton";
+import { Separator } from "@repo/ui/components/separator";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import House from "~/components/lucide/House";
 import { routes } from "~/configs/routes";

@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Checkbox } from "@repo/ui/checkbox";
-import FlatBadge from "@repo/ui/FlatBadge";
-import { Skeleton } from "@repo/ui/skeleton";
+import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import FlatBadge from "@repo/ui/components/FlatBadge";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
   TableBody,
@@ -15,7 +15,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { api } from "~/trpc/react";
 

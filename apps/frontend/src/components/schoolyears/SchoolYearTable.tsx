@@ -13,17 +13,17 @@ import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { useConfirm } from "@repo/ui/confirm-dialog";
+import { Button } from "@repo/ui/components/button";
+import { useConfirm } from "@repo/ui/components/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import FlatBadge from "@repo/ui/FlatBadge";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/dropdown-menu";
+import FlatBadge from "@repo/ui/components/FlatBadge";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
   TableBody,
@@ -31,7 +31,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";

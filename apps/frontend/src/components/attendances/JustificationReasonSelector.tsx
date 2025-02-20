@@ -5,7 +5,7 @@
 //   SelectItem,
 //   SelectTrigger,
 //   SelectValue,
-// } from "@repo/ui/select";
+// } from "@repo/ui/components/select";
 
 // import { cn } from "~/lib/utils";
 // import { api } from "~/trpc/react";

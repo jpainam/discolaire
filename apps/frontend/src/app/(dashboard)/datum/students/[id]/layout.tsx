@@ -2,10 +2,15 @@ import React, { Suspense } from "react";
 
 import { checkPermissions } from "@repo/api/permission";
 import { PermissionAction } from "@repo/lib/permission";
-import { Card, CardContent, CardFooter, CardHeader } from "@repo/ui/card";
-import { NoPermission } from "@repo/ui/no-permission";
-import { Separator } from "@repo/ui/separator";
-import { Skeleton } from "@repo/ui/skeleton";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@repo/ui/components/card";
+import { NoPermission } from "@repo/ui/components/no-permission";
+import { Separator } from "@repo/ui/components/separator";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { StudentFooter } from "~/components/students/StudentFooter";
 import { StudentHeader } from "~/components/students/StudentHeader";

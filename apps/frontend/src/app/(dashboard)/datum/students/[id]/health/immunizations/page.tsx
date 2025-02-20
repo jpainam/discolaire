@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@repo/ui/card";
+import { Card, CardContent } from "@repo/ui/components/card";
 import {
   Table,
   TableBody,
@@ -6,7 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import {
   immunizations,

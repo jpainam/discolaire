@@ -7,15 +7,15 @@ import { useRouter } from "next/navigation";
 import { AlignLeftIcon } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-} from "@repo/ui/dropdown-menu";
-import { ScrollArea } from "@repo/ui/scroll-area";
-import { Sheet, SheetContent, SheetTrigger } from "@repo/ui/sheet";
+} from "@repo/ui/components/dropdown-menu";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
+import { Sheet, SheetContent, SheetTrigger } from "@repo/ui/components/sheet";
 
 import { Icons } from "~/components/icons";
 import { siteConfig } from "~/configs/site";

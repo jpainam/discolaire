@@ -10,15 +10,19 @@ import {
 } from "@radix-ui/react-icons";
 import { SelectTrigger } from "@radix-ui/react-select";
 
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-} from "@repo/ui/select";
-import { Separator } from "@repo/ui/separator";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
+} from "@repo/ui/components/select";
+import { Separator } from "@repo/ui/components/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@repo/ui/components/tooltip";
 
 import type { SMSHistory } from "~/types/sms";
 import { Kbd } from "~/components/kbd";

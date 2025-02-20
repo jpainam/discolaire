@@ -1,7 +1,7 @@
 //import { StudentReportCard } from "~/types/report-card";
 
 import { getServerTranslations } from "@repo/i18n/server";
-import { Separator } from "@repo/ui/separator";
+import { Separator } from "@repo/ui/components/separator";
 
 import { api } from "~/trpc/server";
 import { getAppreciations } from "~/utils/get-appreciation";

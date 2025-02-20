@@ -5,17 +5,17 @@ import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { useConfirm } from "@repo/ui/confirm-dialog";
-import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
+import { Button } from "@repo/ui/components/button";
+import { useConfirm } from "@repo/ui/components/confirm-dialog";
+import { DataTableSkeleton } from "@repo/ui/components/datatable/data-table-skeleton";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import { EmptyState } from "@repo/ui/EmptyState";
+} from "@repo/ui/components/dropdown-menu";
+import { EmptyState } from "@repo/ui/components/EmptyState";
 import {
   Table,
   TableBody,
@@ -23,7 +23,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";

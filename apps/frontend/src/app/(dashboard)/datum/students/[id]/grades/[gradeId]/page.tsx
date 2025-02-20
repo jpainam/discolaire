@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 import { getServerTranslations } from "@repo/i18n/server";
-import { Separator } from "@repo/ui/separator";
+import { Separator } from "@repo/ui/components/separator";
 
 import { GradeSheetStats } from "./GradeSheetStats";
 

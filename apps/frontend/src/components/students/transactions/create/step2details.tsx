@@ -6,16 +6,16 @@ import { parseAsFloat, useQueryState } from "nuqs";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/card";
-import { Checkbox } from "@repo/ui/checkbox";
-import FlatBadge from "@repo/ui/FlatBadge";
+} from "@repo/ui/components/card";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import FlatBadge from "@repo/ui/components/FlatBadge";
 import {
   FormControl,
   FormField,
@@ -23,9 +23,9 @@ import {
   FormLabel,
   FormMessage,
   useFormContext,
-} from "@repo/ui/form";
-import { Separator } from "@repo/ui/separator";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/form";
+import { Separator } from "@repo/ui/components/separator";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/react";

@@ -1,7 +1,7 @@
 import { checkPermissions } from "@repo/api/permission";
 import { getServerTranslations } from "@repo/i18n/server";
 import { PermissionAction } from "@repo/lib/permission";
-import { Label } from "@repo/ui/label";
+import { Label } from "@repo/ui/components/label";
 
 import { PolicyHeader } from "~/components/administration/policies/PolicyHeader";
 import { NavBar } from "./NavBar";

@@ -7,7 +7,7 @@ import { FaHandHoldingUsd } from "react-icons/fa";
 import { PiGridFour, PiListBullets } from "react-icons/pi";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,10 +18,10 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import { Input } from "@repo/ui/input";
-import { Label } from "@repo/ui/label";
-import { ToggleGroup, ToggleGroupItem } from "@repo/ui/toggle-group";
+} from "@repo/ui/components/dropdown-menu";
+import { Input } from "@repo/ui/components/input";
+import { Label } from "@repo/ui/components/label";
+import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import PDFIcon from "~/components/icons/pdf-solid";

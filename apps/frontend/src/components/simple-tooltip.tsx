@@ -1,4 +1,8 @@
-import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@repo/ui/components/tooltip";
 
 export function SimpleTooltip({
   children,

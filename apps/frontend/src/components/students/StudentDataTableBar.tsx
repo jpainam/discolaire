@@ -11,15 +11,19 @@ import {
 import { SelectTrigger } from "@radix-ui/react-select";
 
 import type { Student } from "@repo/db";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-} from "@repo/ui/select";
-import { Separator } from "@repo/ui/separator";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
+} from "@repo/ui/components/select";
+import { Separator } from "@repo/ui/components/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@repo/ui/components/tooltip";
 
 import { Kbd } from "~/components/kbd";
 import { exportTableToCSV } from "~/lib/export";

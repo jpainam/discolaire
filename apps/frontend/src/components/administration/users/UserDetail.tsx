@@ -11,12 +11,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { useLocale } from "@repo/i18n";
-import { AvatarFallback, AvatarImage } from "@repo/ui/avatar";
-import { Button } from "@repo/ui/button";
-import { Form } from "@repo/ui/form";
-import { Label } from "@repo/ui/label";
-import { Switch } from "@repo/ui/switch";
-import { Textarea } from "@repo/ui/textarea";
+import { AvatarFallback, AvatarImage } from "@repo/ui/components/avatar";
+import { Button } from "@repo/ui/components/button";
+import { Form } from "@repo/ui/components/form";
+import { Label } from "@repo/ui/components/label";
+import { Switch } from "@repo/ui/components/switch";
+import { Textarea } from "@repo/ui/components/textarea";
 
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";

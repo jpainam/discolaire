@@ -7,14 +7,14 @@ import { useModal } from "@repo/hooks/use-modal";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import { Label } from "@repo/ui/label";
+} from "@repo/ui/components/dropdown-menu";
+import { Label } from "@repo/ui/components/label";
 
 import CreateEditContact from "~/components/contacts/CreateEditContact";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";

@@ -1,7 +1,7 @@
-import { Checkbox } from "@repo/ui/checkbox";
-import { Label } from "@repo/ui/label";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
-import { Textarea } from "@repo/ui/textarea";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import { Label } from "@repo/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
+import { Textarea } from "@repo/ui/components/textarea";
 
 import type { SubHistoryType } from "./data";
 import { cn } from "~/lib/utils";

@@ -3,8 +3,8 @@
 import { useAtom } from "jotai";
 
 import { useLocale } from "@repo/i18n";
-import { Checkbox } from "@repo/ui/checkbox";
-import { Label } from "@repo/ui/label";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import { Label } from "@repo/ui/components/label";
 
 import type { Report } from "~/types/report";
 import { studentReportsAtom } from "~/atoms/report-atom";

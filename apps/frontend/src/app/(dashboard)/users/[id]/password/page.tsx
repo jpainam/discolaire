@@ -1,5 +1,5 @@
 import { getServerTranslations } from "@repo/i18n/server";
-import { Separator } from "@repo/ui/separator";
+import { Separator } from "@repo/ui/components/separator";
 
 import { ReinitializePasswordForm } from "~/components/users/password/reinitialize-password";
 

@@ -4,10 +4,10 @@ import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import type { Option } from "@repo/ui/multiple-selector";
+import type { Option } from "@repo/ui/components/multiple-selector";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Form,
   FormControl,
@@ -16,9 +16,9 @@ import {
   FormLabel,
   FormMessage,
   useForm,
-} from "@repo/ui/form";
-import { Input } from "@repo/ui/input";
-import MultipleSelector from "@repo/ui/multiple-selector";
+} from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
+import MultipleSelector from "@repo/ui/components/multiple-selector";
 
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { api } from "~/trpc/react";

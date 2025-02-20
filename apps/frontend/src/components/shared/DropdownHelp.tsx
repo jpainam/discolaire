@@ -10,7 +10,7 @@ import {
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-} from "@repo/ui/dropdown-menu";
+} from "@repo/ui/components/dropdown-menu";
 
 import CalendarIcon from "~/components/icons/calendar";
 import YoutubeIcon from "~/components/icons/youtube";

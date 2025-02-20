@@ -5,7 +5,7 @@ import { z } from "zod";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Command,
   CommandEmpty,
@@ -14,7 +14,7 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@repo/ui/command";
+} from "@repo/ui/components/command";
 import {
   Form,
   FormControl,
@@ -23,11 +23,15 @@ import {
   FormLabel,
   FormMessage,
   useForm,
-} from "@repo/ui/form";
-import { Input } from "@repo/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
-import { ScrollArea } from "@repo/ui/scroll-area";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";

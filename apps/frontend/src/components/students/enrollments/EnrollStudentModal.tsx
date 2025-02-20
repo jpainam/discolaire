@@ -7,14 +7,14 @@ import { z } from "zod";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from "@repo/ui/form";
+} from "@repo/ui/components/form";
 
 import { InputField } from "~/components/shared/forms/input-field";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";

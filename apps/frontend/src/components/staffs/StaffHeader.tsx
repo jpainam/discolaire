@@ -8,23 +8,23 @@ import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import { Label } from "@repo/ui/label";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
+} from "@repo/ui/components/dropdown-menu";
+import { Label } from "@repo/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
-import { Separator } from "@repo/ui/separator";
+} from "@repo/ui/components/select";
+import { Separator } from "@repo/ui/components/separator";
 
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";

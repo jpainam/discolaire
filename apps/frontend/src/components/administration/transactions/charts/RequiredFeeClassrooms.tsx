@@ -3,15 +3,15 @@
 
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/chart";
-import { Card, CardContent } from "@repo/ui/card";
+import type { ChartConfig } from "@repo/ui/components/chart";
+import { Card, CardContent } from "@repo/ui/components/card";
 import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/chart";
+} from "@repo/ui/components/chart";
 
 import rangeMap from "~/lib/range-map";
 

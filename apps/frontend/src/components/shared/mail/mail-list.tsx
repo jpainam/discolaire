@@ -1,8 +1,8 @@
 import type { ComponentProps } from "react";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 
-import { Badge } from "@repo/ui/badge";
-import { ScrollArea } from "@repo/ui/scroll-area";
+import { Badge } from "@repo/ui/components/badge";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
 
 import type { Mail } from "~/app/(dashboard)/mail/data";
 import { useMail } from "~/app/(dashboard)/mail/use-mail";

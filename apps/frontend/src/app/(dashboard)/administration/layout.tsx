@@ -2,8 +2,8 @@ import type { PropsWithChildren } from "react";
 
 import { checkPermissions } from "@repo/api/permission";
 import { PermissionAction } from "@repo/lib/permission";
-import { NoPermission } from "@repo/ui/no-permission";
-import { SidebarInset, SidebarProvider } from "@repo/ui/sidebar";
+import { NoPermission } from "@repo/ui/components/no-permission";
+import { SidebarInset, SidebarProvider } from "@repo/ui/components/sidebar";
 
 import { AppSidebar } from "~/components/administration/app-sidebar";
 import { PageHeader } from "~/components/administration/PageHeader";

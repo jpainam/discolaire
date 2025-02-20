@@ -2,7 +2,7 @@
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
-import { Label } from "@repo/ui/label";
+import { Label } from "@repo/ui/components/label";
 
 import { StudentSelector } from "~/components/shared/selects/StudentSelector";
 import { routes } from "~/configs/routes";

@@ -7,19 +7,19 @@ import { useDebouncedCallback } from "use-debounce";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Checkbox } from "@repo/ui/checkbox";
-import FlatBadge from "@repo/ui/FlatBadge";
-import { Input } from "@repo/ui/input";
-import { ScrollArea } from "@repo/ui/scroll-area";
+import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import FlatBadge from "@repo/ui/components/FlatBadge";
+import { Input } from "@repo/ui/components/input";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/select";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
   TableBody,
@@ -27,7 +27,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { attachPolicyAtom } from "~/atoms/permission-atom";
 import { api } from "~/trpc/react";

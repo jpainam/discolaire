@@ -5,18 +5,18 @@ import { useSearchParams } from "next/navigation";
 import _ from "lodash";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/chart";
+import type { ChartConfig } from "@repo/ui/components/chart";
 import { useLocale } from "@repo/i18n";
-import { Card, CardContent } from "@repo/ui/card";
+import { Card, CardContent } from "@repo/ui/components/card";
 import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/chart";
-import { EmptyState } from "@repo/ui/EmptyState";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/chart";
+import { EmptyState } from "@repo/ui/components/EmptyState";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";

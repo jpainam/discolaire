@@ -4,8 +4,8 @@ import { useState } from "react";
 import { School } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
-import { Card, CardContent } from "@repo/ui/card";
-import { Skeleton } from "@repo/ui/skeleton";
+import { Card, CardContent } from "@repo/ui/components/card";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";

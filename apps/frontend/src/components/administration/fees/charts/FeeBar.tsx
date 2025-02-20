@@ -3,15 +3,15 @@
 import { Bar, BarChart, LabelList, XAxis, YAxis } from "recharts";
 import { toast } from "sonner";
 
-import type { ChartConfig } from "@repo/ui/chart";
+import type { ChartConfig } from "@repo/ui/components/chart";
 import { useLocale } from "@repo/i18n";
-import { Card, CardContent } from "@repo/ui/card";
+import { Card, CardContent } from "@repo/ui/components/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/chart";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/chart";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { api } from "~/trpc/react";
 

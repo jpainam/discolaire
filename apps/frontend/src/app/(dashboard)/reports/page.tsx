@@ -1,5 +1,10 @@
 import { getServerTranslations } from "@repo/i18n/server";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@repo/ui/components/tabs";
 
 import { ReportQueueTable } from "~/components/reports/ReportQueueTable";
 

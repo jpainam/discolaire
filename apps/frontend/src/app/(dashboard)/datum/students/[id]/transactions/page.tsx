@@ -1,5 +1,5 @@
 import { getServerTranslations } from "@repo/i18n/server";
-import { EmptyState } from "@repo/ui/EmptyState";
+import { EmptyState } from "@repo/ui/components/EmptyState";
 
 //import FinanceHeader from "~/components/students/transactions/FinanceHeader";
 import { TransactionStats } from "~/components/students/transactions/transaction-stats";

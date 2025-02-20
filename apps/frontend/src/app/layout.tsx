@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { I18nProvider } from "@repo/i18n/i18n-context";
-import { Toaster } from "@repo/ui/sonner";
+import { Toaster } from "@repo/ui/components/sonner";
 
 import { cn } from "~/lib/utils";
 import { TRPCReactProvider } from "~/trpc/react";

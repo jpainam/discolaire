@@ -3,8 +3,11 @@
 import { useState } from "react";
 import moment from "moment";
 
-import type { RbcView } from "@repo/ui/big-calendar";
-import BigCalendar, { momentLocalizer, RbcViews } from "@repo/ui/big-calendar";
+import type { RbcView } from "@repo/ui/components/big-calendar";
+import BigCalendar, {
+  momentLocalizer,
+  RbcViews,
+} from "@repo/ui/components/big-calendar";
 
 //const DnDCalendar = withDragAndDrop(BigCalendar);
 

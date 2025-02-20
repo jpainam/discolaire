@@ -1,8 +1,13 @@
 import { getServerTranslations } from "@repo/i18n/server";
-import FlatBadge from "@repo/ui/FlatBadge";
-import { Label } from "@repo/ui/label";
-import { Separator } from "@repo/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
+import FlatBadge from "@repo/ui/components/FlatBadge";
+import { Label } from "@repo/ui/components/label";
+import { Separator } from "@repo/ui/components/separator";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@repo/ui/components/tabs";
 
 import { LoginInfoHeader } from "~/components/students/login-info/LoginInfoHeader";
 import { api } from "~/trpc/server";

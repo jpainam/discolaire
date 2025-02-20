@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-//import { toast } from "@repo/ui/use-toast";
+//import { toast } from "@repo/ui/components/use-toast";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { useFormContext } from "react-hook-form";
 
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Command,
   CommandEmpty,
@@ -13,16 +13,20 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@repo/ui/command";
+} from "@repo/ui/components/command";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/form";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
-import { ScrollArea } from "@repo/ui/scroll-area";
+} from "@repo/ui/components/form";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
 
 import { cn } from "~/lib/utils";
 

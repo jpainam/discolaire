@@ -4,7 +4,7 @@ import { toast } from "sonner";
 
 import { useUpload } from "@repo/hooks/use-upload";
 import { useLocale } from "@repo/i18n";
-import { FileUploader } from "@repo/ui/uploads/file-uploader";
+import { FileUploader } from "@repo/ui/components/uploads/file-uploader";
 
 import { useSchool } from "~/contexts/SchoolContext";
 import { getErrorMessage } from "~/lib/handle-error";

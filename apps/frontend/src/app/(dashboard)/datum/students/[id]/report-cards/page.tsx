@@ -2,8 +2,8 @@ import { sum } from "lodash";
 
 import type { RouterOutputs } from "@repo/api";
 import { getServerTranslations } from "@repo/i18n/server";
-import { EmptyState } from "@repo/ui/EmptyState";
-import { Separator } from "@repo/ui/separator";
+import { EmptyState } from "@repo/ui/components/EmptyState";
+import { Separator } from "@repo/ui/components/separator";
 
 import { ReportCardDiscipline } from "~/components/students/report-cards/ReportCardDiscipline";
 import { ReportCardMention } from "~/components/students/report-cards/ReportCardMention";

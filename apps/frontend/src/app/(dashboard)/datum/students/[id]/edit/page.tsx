@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import { checkPermissions } from "@repo/api/permission";
 import { PermissionAction } from "@repo/lib/permission";
-import { NoPermission } from "@repo/ui/no-permission";
+import { NoPermission } from "@repo/ui/components/no-permission";
 
 import { UpdateStudent } from "~/components/students/profile/UpdateStudent";
 import { api } from "~/trpc/server";

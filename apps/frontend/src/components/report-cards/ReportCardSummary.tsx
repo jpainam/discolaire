@@ -1,10 +1,15 @@
 "use client";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Label } from "@repo/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
-import { Textarea } from "@repo/ui/textarea";
+import { Button } from "@repo/ui/components/button";
+import { Label } from "@repo/ui/components/label";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@repo/ui/components/tabs";
+import { Textarea } from "@repo/ui/components/textarea";
 
 const ReportCardSummary = () => {
   const { t } = useLocale();

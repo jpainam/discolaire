@@ -13,7 +13,7 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@repo/ui/command";
+} from "@repo/ui/components/command";
 
 import { AvatarState } from "~/components/AvatarState";
 import { cn } from "~/lib/utils";

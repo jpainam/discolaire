@@ -1,7 +1,12 @@
 import { Folder, MoreVertical, Star } from "lucide-react";
 
-import { Button } from "@repo/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import { Button } from "@repo/ui/components/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
 
 interface FolderData {
   name: string;

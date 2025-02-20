@@ -11,9 +11,9 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@repo/ui/command";
-import { EmptyState } from "@repo/ui/EmptyState";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/command";
+import { EmptyState } from "@repo/ui/components/EmptyState";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 //import { DialogProps } from "@radix-ui/react-alert-dialog";
 import rangeMap from "~/lib/range-map";

@@ -10,9 +10,9 @@ import {
 import { parseAsInteger, useQueryState } from "nuqs";
 
 import { useLocale } from "@repo/i18n";
-import { Badge } from "@repo/ui/badge";
-import { Button } from "@repo/ui/button";
-import { Skeleton } from "@repo/ui/skeleton";
+import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { api } from "~/trpc/react";
 

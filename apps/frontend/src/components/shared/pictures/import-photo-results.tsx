@@ -1,4 +1,4 @@
-import { ScrollArea } from "@repo/ui/scroll-area";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
 
 import rangeMap from "~/lib/range-map";
 import { cn } from "~/lib/utils";

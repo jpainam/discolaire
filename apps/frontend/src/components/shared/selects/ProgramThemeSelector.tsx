@@ -4,17 +4,21 @@ import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@repo/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
-import { ScrollArea } from "@repo/ui/scroll-area";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";

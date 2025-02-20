@@ -5,8 +5,8 @@ import { EuroIcon, Printer } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Label } from "@repo/ui/label";
+import { Button } from "@repo/ui/components/button";
+import { Label } from "@repo/ui/components/label";
 
 import { printReceipt } from "~/actions/reporting";
 import { getErrorMessage } from "~/lib/handle-error";

@@ -7,8 +7,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/form";
-import { Input } from "@repo/ui/input";
+} from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
 
 export interface InputDescriptionProps {
   className?: string;

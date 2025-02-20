@@ -14,7 +14,7 @@ import {
   FloatingPanelSubmitButton,
   FloatingPanelTextarea,
   FloatingPanelTrigger,
-} from "@repo/ui/floating-panel";
+} from "@repo/ui/components/floating-panel";
 
 export function ReportFalseGrade() {
   const handleSubmit = (note: string) => {

@@ -6,7 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { PeriodicAttendanceTableActions } from "./PeriodicAttendanceTableActions";
 

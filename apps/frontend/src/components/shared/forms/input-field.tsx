@@ -8,8 +8,8 @@ import {
   FormLabel,
   FormMessage,
   useFormContext,
-} from "@repo/ui/form";
-import { Input } from "@repo/ui/input";
+} from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
 
 import { cn } from "~/lib/utils";
 

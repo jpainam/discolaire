@@ -1,13 +1,13 @@
 import { CheckCircle } from "lucide-react";
 
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/card";
+} from "@repo/ui/components/card";
 
 export default function Page() {
   return (

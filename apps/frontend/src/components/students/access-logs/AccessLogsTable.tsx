@@ -10,8 +10,8 @@ import {
 
 import type { RouterOutputs } from "@repo/api";
 import { getServerTranslations } from "@repo/i18n/server";
-import { DirectionAwareTabs } from "@repo/ui/direction-aware-tabs";
-import { EmptyState } from "@repo/ui/EmptyState";
+import { DirectionAwareTabs } from "@repo/ui/components/direction-aware-tabs";
+import { EmptyState } from "@repo/ui/components/EmptyState";
 import {
   Table,
   TableBody,
@@ -19,7 +19,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 type LoginActivityType = RouterOutputs["user"]["loginActivities"][number];
 export async function AccessLogsTable({

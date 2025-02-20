@@ -5,8 +5,8 @@ import * as z from "zod";
 
 import type { School } from "@repo/db";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Form, useForm } from "@repo/ui/form";
+import { Button } from "@repo/ui/components/button";
+import { Form, useForm } from "@repo/ui/components/form";
 
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";

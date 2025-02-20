@@ -4,7 +4,7 @@ import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-import { buttonVariants } from "@repo/ui/button";
+import { buttonVariants } from "@repo/ui/components/button";
 
 import { cn } from "~/lib/utils";
 

@@ -9,17 +9,17 @@ import { toast } from "sonner";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
-import { Button } from "@repo/ui/button";
-import { useConfirm } from "@repo/ui/confirm-dialog";
-import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
+import { Button } from "@repo/ui/components/button";
+import { useConfirm } from "@repo/ui/components/confirm-dialog";
+import { DataTableSkeleton } from "@repo/ui/components/datatable/data-table-skeleton";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import FlatBadge from "@repo/ui/FlatBadge";
+} from "@repo/ui/components/dropdown-menu";
+import FlatBadge from "@repo/ui/components/FlatBadge";
 import {
   Table,
   TableBody,
@@ -27,7 +27,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { CURRENCY } from "~/lib/constants";

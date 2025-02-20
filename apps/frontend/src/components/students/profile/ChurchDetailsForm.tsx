@@ -6,7 +6,7 @@ import { z } from "zod";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Form,
   FormControl,
@@ -14,9 +14,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/form";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
-import { Separator } from "@repo/ui/separator";
+} from "@repo/ui/components/form";
+import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
+import { Separator } from "@repo/ui/components/separator";
 
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";

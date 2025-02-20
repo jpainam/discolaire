@@ -3,21 +3,21 @@
 import { MoreVertical, PlusIcon } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
-import type { FlatBadgeVariant } from "@repo/ui/FlatBadge";
+import type { FlatBadgeVariant } from "@repo/ui/components/FlatBadge";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import FlatBadge from "@repo/ui/FlatBadge";
-import { Label } from "@repo/ui/label";
-import { Separator } from "@repo/ui/separator";
+} from "@repo/ui/components/dropdown-menu";
+import FlatBadge from "@repo/ui/components/FlatBadge";
+import { Label } from "@repo/ui/components/label";
+import { Separator } from "@repo/ui/components/separator";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";

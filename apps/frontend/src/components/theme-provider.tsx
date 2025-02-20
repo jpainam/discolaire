@@ -4,7 +4,7 @@ import "~/styles/themes.css";
 
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
-import { TooltipProvider } from "@repo/ui/tooltip";
+import { TooltipProvider } from "@repo/ui/components/tooltip";
 
 type ThemeProviderProps = React.ComponentProps<typeof NextThemesProvider>;
 

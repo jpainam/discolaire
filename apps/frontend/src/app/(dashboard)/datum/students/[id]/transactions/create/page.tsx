@@ -1,8 +1,8 @@
 import { CircleDollarSign } from "lucide-react";
 
 import { getServerTranslations } from "@repo/i18n/server";
-import { EmptyState } from "@repo/ui/EmptyState";
-import { Label } from "@repo/ui/label";
+import { EmptyState } from "@repo/ui/components/EmptyState";
+import { Label } from "@repo/ui/components/label";
 
 import { Step1 } from "~/components/students/transactions/create/step1";
 import { Step2 } from "~/components/students/transactions/create/step2";

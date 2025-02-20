@@ -5,8 +5,8 @@ import { z } from "zod";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Form, useForm } from "@repo/ui/form";
+import { Button } from "@repo/ui/components/button";
+import { Form, useForm } from "@repo/ui/components/form";
 
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
 import { InputField } from "~/components/shared/forms/input-field";

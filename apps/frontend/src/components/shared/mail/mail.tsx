@@ -15,15 +15,20 @@ import {
   Users2,
 } from "lucide-react";
 
-import { Input } from "@repo/ui/input";
+import { Input } from "@repo/ui/components/input";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "@repo/ui/resizable";
-import { Separator } from "@repo/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
-import { TooltipProvider } from "@repo/ui/tooltip";
+} from "@repo/ui/components/resizable";
+import { Separator } from "@repo/ui/components/separator";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@repo/ui/components/tabs";
+import { TooltipProvider } from "@repo/ui/components/tooltip";
 
 import type { Mail as MailType } from "~/app/(dashboard)/mail/data";
 import { useMail } from "~/app/(dashboard)/mail/use-mail";

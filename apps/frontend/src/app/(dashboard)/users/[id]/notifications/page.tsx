@@ -1,4 +1,4 @@
-import { Separator } from "@repo/ui/separator";
+import { Separator } from "@repo/ui/components/separator";
 
 import { NotificationsForm } from "~/components/users/notifications/notifications-form";
 

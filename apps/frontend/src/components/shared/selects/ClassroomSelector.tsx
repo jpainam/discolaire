@@ -5,7 +5,7 @@ import { Check, ChevronsUpDown } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/Button";
+import { Button } from "@repo/ui/components/Button";
 import {
   Command,
   CommandEmpty,
@@ -13,9 +13,13 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@repo/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";

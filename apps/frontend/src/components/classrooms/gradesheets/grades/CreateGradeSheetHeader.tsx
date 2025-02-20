@@ -5,15 +5,15 @@ import { useFormContext } from "react-hook-form";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/form";
-import { Input } from "@repo/ui/input";
+} from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
 
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
 import { InputField } from "~/components/shared/forms/input-field";

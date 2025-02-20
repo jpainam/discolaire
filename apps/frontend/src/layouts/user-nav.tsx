@@ -3,8 +3,12 @@
 import { Computer, LogOut, Settings, User } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
-import { Button } from "@repo/ui/button";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@repo/ui/components/avatar";
+import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +17,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
+} from "@repo/ui/components/dropdown-menu";
 
 //import { signinout } from "~/app/auth/login/signin";
 import { signOut } from "~/actions/signin";

@@ -1,6 +1,6 @@
 import { getServerTranslations } from "@repo/i18n/server";
-import { EmptyState } from "@repo/ui/EmptyState";
-import { Label } from "@repo/ui/label";
+import { EmptyState } from "@repo/ui/components/EmptyState";
+import { Label } from "@repo/ui/components/label";
 import {
   Table,
   TableBody,
@@ -8,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { api } from "~/trpc/server";
 import { StaffLevelAction } from "./StaffLevelAction";

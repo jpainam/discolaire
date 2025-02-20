@@ -3,7 +3,7 @@
 import { Pencil } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 
 import { useRouter } from "~/hooks/use-router";
 

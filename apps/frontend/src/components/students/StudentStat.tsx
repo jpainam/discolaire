@@ -10,8 +10,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import { Separator } from "@repo/ui/separator";
+} from "@repo/ui/components/dropdown-menu";
+import { Separator } from "@repo/ui/components/separator";
 
 import { cn } from "~/lib/utils";
 

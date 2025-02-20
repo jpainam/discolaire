@@ -5,14 +5,14 @@ import { ChevronDownIcon, MoreVertical, PlusIcon } from "lucide-react";
 
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import { Label } from "@repo/ui/label";
-import { Separator } from "@repo/ui/separator";
+} from "@repo/ui/components/dropdown-menu";
+import { Label } from "@repo/ui/components/label";
+import { Separator } from "@repo/ui/components/separator";
 
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";

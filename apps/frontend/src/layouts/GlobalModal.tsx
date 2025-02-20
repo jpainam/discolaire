@@ -10,7 +10,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@repo/ui/dialog";
+} from "@repo/ui/components/dialog";
 
 import { cn } from "~/lib/utils";
 

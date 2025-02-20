@@ -7,7 +7,7 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarRail,
-} from "@repo/ui/sidebar";
+} from "@repo/ui/components/sidebar";
 
 import { adminMenu } from "./menu";
 import { NavMain } from "./nav-main";

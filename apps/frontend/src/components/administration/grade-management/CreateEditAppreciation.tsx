@@ -7,7 +7,7 @@ import { z } from "zod";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Form,
   FormControl,
@@ -15,9 +15,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/form";
-import { Separator } from "@repo/ui/separator";
-import { Textarea } from "@repo/ui/textarea";
+} from "@repo/ui/components/form";
+import { Separator } from "@repo/ui/components/separator";
+import { Textarea } from "@repo/ui/components/textarea";
 
 import { InputField } from "~/components/shared/forms/input-field";
 import { getErrorMessage } from "~/lib/handle-error";

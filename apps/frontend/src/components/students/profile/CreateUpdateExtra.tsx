@@ -3,9 +3,14 @@
 import { ActivitySquare } from "lucide-react";
 import { toast } from "sonner";
 
-import type { Option } from "@repo/ui/multiple-selector";
+import type { Option } from "@repo/ui/components/multiple-selector";
 import { useLocale } from "@repo/i18n";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
 import {
   FormControl,
   FormField,
@@ -13,10 +18,10 @@ import {
   FormLabel,
   FormMessage,
   useFormContext,
-} from "@repo/ui/form";
-import MultipleSelector from "@repo/ui/multiple-selector";
-import { Skeleton } from "@repo/ui/skeleton";
-import { Textarea } from "@repo/ui/textarea";
+} from "@repo/ui/components/form";
+import MultipleSelector from "@repo/ui/components/multiple-selector";
+import { Skeleton } from "@repo/ui/components/skeleton";
+import { Textarea } from "@repo/ui/components/textarea";
 
 import { api } from "~/trpc/react";
 

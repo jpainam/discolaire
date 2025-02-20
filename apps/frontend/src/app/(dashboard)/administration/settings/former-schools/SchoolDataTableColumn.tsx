@@ -6,17 +6,17 @@ import { toast } from "sonner";
 import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Checkbox } from "@repo/ui/checkbox";
-import { useConfirm } from "@repo/ui/confirm-dialog";
-import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import { useConfirm } from "@repo/ui/components/confirm-dialog";
+import { DataTableColumnHeader } from "@repo/ui/components/datatable/data-table-column-header";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
+} from "@repo/ui/components/dropdown-menu";
 
 import { api } from "~/trpc/react";
 import { CreateEditSchool } from "./CreateEditSchool";

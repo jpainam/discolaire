@@ -7,8 +7,8 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Form, useForm } from "@repo/ui/form";
+import { Button } from "@repo/ui/components/button";
+import { Form, useForm } from "@repo/ui/components/form";
 import { createUpdateStudentSchema } from "@repo/validators";
 
 import { routes } from "~/configs/routes";

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { PiArrowLeftBold } from "react-icons/pi";
 
 import { getServerTranslations } from "@repo/i18n/server";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 
 export default async function PageNotFound() {
   const { t } = await getServerTranslations();

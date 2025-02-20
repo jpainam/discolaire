@@ -6,15 +6,15 @@ import { useParams } from "next/navigation";
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Label } from "@repo/ui/label";
+import { Button } from "@repo/ui/components/button";
+import { Label } from "@repo/ui/components/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
+} from "@repo/ui/components/select";
 
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";

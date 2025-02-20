@@ -6,8 +6,8 @@ import { useSearchParams } from "next/navigation";
 import { ChevronLeft, Loader, PlusCircle, Settings2Icon } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
-import { ScrollArea } from "@repo/ui/scroll-area";
-import { Separator } from "@repo/ui/separator";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
+import { Separator } from "@repo/ui/components/separator";
 
 import type { AppreciationCategory } from "~/types/appreciation";
 import { showErrorToast } from "~/lib/handle-error";

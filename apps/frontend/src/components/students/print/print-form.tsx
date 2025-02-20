@@ -4,8 +4,8 @@ import { z } from "zod";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Form, useForm } from "@repo/ui/form";
+import { Button } from "@repo/ui/components/button";
+import { Form, useForm } from "@repo/ui/components/form";
 
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";

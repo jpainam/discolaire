@@ -11,8 +11,8 @@ import {
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-} from "@repo/ui/dropdown-menu";
-import FlatBadge from "@repo/ui/FlatBadge";
+} from "@repo/ui/components/dropdown-menu";
+import FlatBadge from "@repo/ui/components/FlatBadge";
 
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import SendNotificationDialog from "./SendNotificationDialog";

@@ -4,16 +4,16 @@ import { MoreVertical, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { useConfirm } from "@repo/ui/confirm-dialog";
+import { Button } from "@repo/ui/components/button";
+import { useConfirm } from "@repo/ui/components/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import { Label } from "@repo/ui/label";
+} from "@repo/ui/components/dropdown-menu";
+import { Label } from "@repo/ui/components/label";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";

@@ -8,7 +8,7 @@ import { getCountries } from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
 import countryNames from "react-phone-number-input/locale/en.json";
 
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Command,
   CommandEmpty,
@@ -16,10 +16,14 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@repo/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
-import { ScrollArea } from "@repo/ui/scroll-area";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";

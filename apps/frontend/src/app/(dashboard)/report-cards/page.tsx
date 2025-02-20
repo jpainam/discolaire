@@ -1,4 +1,4 @@
-import { Separator } from "@repo/ui/separator";
+import { Separator } from "@repo/ui/components/separator";
 
 import { ReportCard } from "~/components/report-cards/ReportCard";
 import { ReportCardHeader } from "~/components/report-cards/ReportCardHeader";

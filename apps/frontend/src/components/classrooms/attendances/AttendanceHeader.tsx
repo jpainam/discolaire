@@ -15,24 +15,24 @@ import { toast } from "sonner";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { useConfirm } from "@repo/ui/confirm-dialog";
+import { Button } from "@repo/ui/components/button";
+import { useConfirm } from "@repo/ui/components/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import { Input } from "@repo/ui/input";
-import { Label } from "@repo/ui/label";
+} from "@repo/ui/components/dropdown-menu";
+import { Input } from "@repo/ui/components/input";
+import { Label } from "@repo/ui/components/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
+} from "@repo/ui/components/select";
 
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { routes } from "~/configs/routes";

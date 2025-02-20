@@ -1,5 +1,5 @@
 import { getServerTranslations } from "@repo/i18n/server";
-import { Label } from "@repo/ui/label";
+import { Label } from "@repo/ui/components/label";
 
 import { SchoolYearHeader } from "~/components/schoolyears/SchoolYearHeader";
 import { SchoolYearTable } from "~/components/schoolyears/SchoolYearTable";

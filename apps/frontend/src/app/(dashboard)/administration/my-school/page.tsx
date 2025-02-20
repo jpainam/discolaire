@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@repo/auth";
 import { getServerTranslations } from "@repo/i18n/server";
-import { EmptyState } from "@repo/ui/EmptyState";
+import { EmptyState } from "@repo/ui/components/EmptyState";
 import {
   Table,
   TableBody,
@@ -11,7 +11,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { env } from "~/env";
 import { api } from "~/trpc/server";

@@ -5,9 +5,9 @@ import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { EmptyState } from "@repo/ui/EmptyState";
-import { Skeleton } from "@repo/ui/skeleton";
+import { Button } from "@repo/ui/components/button";
+import { EmptyState } from "@repo/ui/components/EmptyState";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";

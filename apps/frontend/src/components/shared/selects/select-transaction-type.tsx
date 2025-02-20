@@ -1,12 +1,12 @@
 import { useLocale } from "@repo/i18n";
-import { Label } from "@repo/ui/label";
+import { Label } from "@repo/ui/components/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
+} from "@repo/ui/components/select";
 
 import { cn } from "~/lib/utils";
 

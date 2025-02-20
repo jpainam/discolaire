@@ -7,17 +7,17 @@ import { z } from "zod";
 import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/card";
-import { useConfirm } from "@repo/ui/confirm-dialog";
-import { EmptyState } from "@repo/ui/EmptyState";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/card";
+import { useConfirm } from "@repo/ui/components/confirm-dialog";
+import { EmptyState } from "@repo/ui/components/EmptyState";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
   TableBody,
@@ -25,7 +25,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { AvatarState } from "~/components/AvatarState";
 import { api } from "~/trpc/react";

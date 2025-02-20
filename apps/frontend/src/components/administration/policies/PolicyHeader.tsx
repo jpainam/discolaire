@@ -10,8 +10,8 @@ import { useDebounce } from "@repo/hooks/use-debounce";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
-import { Button } from "@repo/ui/button";
-import { Input } from "@repo/ui/input";
+import { Button } from "@repo/ui/components/button";
+import { Input } from "@repo/ui/components/input";
 
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { api } from "~/trpc/react";

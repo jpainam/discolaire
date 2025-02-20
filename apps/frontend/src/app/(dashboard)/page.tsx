@@ -1,13 +1,13 @@
 import { getServerTranslations } from "@repo/i18n/server";
-import { Button } from "@repo/ui/button";
-import { Input } from "@repo/ui/input";
-import { Label } from "@repo/ui/label";
+import { Button } from "@repo/ui/components/button";
+import { Input } from "@repo/ui/components/input";
+import { Label } from "@repo/ui/components/label";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@repo/ui/tooltip";
+} from "@repo/ui/components/tooltip";
 
 import { DashboardClassroomSize } from "~/components/dashboard/DashboardClassroomSize";
 import { DashboardTransactionTrend } from "~/components/dashboard/DashboardTransactionTrend";

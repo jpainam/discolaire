@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from "react";
 
 import { getServerTranslations } from "@repo/i18n/server";
-import { Label } from "@repo/ui/label";
+import { Label } from "@repo/ui/components/label";
 
 export default async function Layout({ children }: PropsWithChildren) {
   const { t } = await getServerTranslations();

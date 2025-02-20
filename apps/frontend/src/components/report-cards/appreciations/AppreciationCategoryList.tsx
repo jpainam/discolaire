@@ -5,9 +5,13 @@ import { motion } from "framer-motion";
 import { PlusCircle, Settings2Icon, WandSparkles } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
-import { Separator } from "@repo/ui/separator";
+import { Button } from "@repo/ui/components/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
+import { Separator } from "@repo/ui/components/separator";
 
 import type { AppreciationCategory } from "~/types/appreciation";
 import { AppreciationList } from "./AppreciationList";

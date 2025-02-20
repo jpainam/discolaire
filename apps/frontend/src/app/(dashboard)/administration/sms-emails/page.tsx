@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from "@repo/ui/card";
+import { Card, CardContent, CardHeader } from "@repo/ui/components/card";
 
 import { SMSHistoryDataTable } from "~/components/administration/sms-management/SMSHistoryDataTable";
 import { SMSHistoryHeader } from "~/components/administration/sms-management/SMSHistoryHeader";

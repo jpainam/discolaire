@@ -8,17 +8,17 @@ import { toast } from "sonner";
 import type { RouterOutputs } from "@repo/api";
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import FlatBadge from "@repo/ui/FlatBadge";
-import { Label } from "@repo/ui/label";
-import { Skeleton } from "@repo/ui/skeleton";
-import { ToggleGroup, ToggleGroupItem } from "@repo/ui/toggle-group";
+} from "@repo/ui/components/dropdown-menu";
+import FlatBadge from "@repo/ui/components/FlatBadge";
+import { Label } from "@repo/ui/components/label";
+import { Skeleton } from "@repo/ui/components/skeleton";
+import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 
 import { printStudentGrade } from "~/actions/reporting";
 import PDFIcon from "~/components/icons/pdf-solid";

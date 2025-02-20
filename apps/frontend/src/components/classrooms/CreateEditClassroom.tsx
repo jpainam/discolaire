@@ -9,15 +9,15 @@ import { z } from "zod";
 import type { RouterOutputs } from "@repo/api";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Form,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/form";
-import { Separator } from "@repo/ui/separator";
+} from "@repo/ui/components/form";
+import { Separator } from "@repo/ui/components/separator";
 
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";

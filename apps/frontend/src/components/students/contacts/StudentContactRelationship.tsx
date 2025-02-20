@@ -8,10 +8,15 @@ import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { Form } from "@repo/ui/form";
-import { Separator } from "@repo/ui/separator";
+import { Button } from "@repo/ui/components/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+import { Form } from "@repo/ui/components/form";
+import { Separator } from "@repo/ui/components/separator";
 
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
 import { getErrorMessage } from "~/lib/handle-error";

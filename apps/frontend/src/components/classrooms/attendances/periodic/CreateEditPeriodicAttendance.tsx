@@ -8,8 +8,8 @@ import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
-import { Form, useForm, useFormContext } from "@repo/ui/form";
-import { Input } from "@repo/ui/input";
+import { Form, useForm, useFormContext } from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
 import {
   Table,
   TableBody,
@@ -17,7 +17,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";

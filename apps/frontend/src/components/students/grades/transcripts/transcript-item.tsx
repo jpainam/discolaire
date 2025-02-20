@@ -6,7 +6,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@repo/ui/accordion";
+} from "@repo/ui/components/accordion";
 import {
   Table,
   TableBody,
@@ -14,7 +14,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import type { Assignment } from "./transcript-content";
 import { useDateFormat } from "~/utils/date-format";

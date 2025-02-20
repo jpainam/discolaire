@@ -6,8 +6,8 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import FlatBadge from "@repo/ui/FlatBadge";
+import { Button } from "@repo/ui/components/button";
+import FlatBadge from "@repo/ui/components/FlatBadge";
 import {
   Form,
   FormControl,
@@ -15,15 +15,15 @@ import {
   FormItem,
   FormMessage,
   useForm,
-} from "@repo/ui/form";
-import { Label } from "@repo/ui/label";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/form";
+import { Label } from "@repo/ui/components/label";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { html_content } from "./editor-content";
 
-const QuillEditor = dynamic(() => import("@repo/ui/quill-editor"), {
+const QuillEditor = dynamic(() => import("@repo/ui/components/quill-editor"), {
   ssr: false,
   loading: () => <Skeleton className="h-full w-48" />,
 });

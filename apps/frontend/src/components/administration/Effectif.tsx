@@ -1,6 +1,11 @@
 import { Activity, BookOpen, Calendar, Users } from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
 
 export function Effectif() {
   return (

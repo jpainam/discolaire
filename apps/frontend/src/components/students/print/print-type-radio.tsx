@@ -1,6 +1,6 @@
 "use client";
 
-//import { toast } from "@repo/ui/use-toast";
+//import { toast } from "@repo/ui/components/use-toast";
 import { useFormContext } from "react-hook-form";
 
 import {
@@ -9,8 +9,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/form";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
+} from "@repo/ui/components/form";
+import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
 
 export default function PrintTypeRadio() {
   const form = useFormContext();

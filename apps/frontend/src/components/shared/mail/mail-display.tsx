@@ -13,21 +13,33 @@ import {
   Trash2,
 } from "lucide-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
-import { Button } from "@repo/ui/button";
-import { Calendar } from "@repo/ui/calendar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@repo/ui/components/avatar";
+import { Button } from "@repo/ui/components/button";
+import { Calendar } from "@repo/ui/components/calendar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import { Label } from "@repo/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
-import { Separator } from "@repo/ui/separator";
-import { Switch } from "@repo/ui/switch";
-import { Textarea } from "@repo/ui/textarea";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
+} from "@repo/ui/components/dropdown-menu";
+import { Label } from "@repo/ui/components/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
+import { Separator } from "@repo/ui/components/separator";
+import { Switch } from "@repo/ui/components/switch";
+import { Textarea } from "@repo/ui/components/textarea";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@repo/ui/components/tooltip";
 
 import type { Mail } from "~/app/(dashboard)/mail/data";
 

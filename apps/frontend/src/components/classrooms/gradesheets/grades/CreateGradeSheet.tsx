@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { useLocale } from "@repo/i18n";
-import { Checkbox } from "@repo/ui/checkbox";
+import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   Form,
   FormControl,
@@ -15,9 +15,9 @@ import {
   FormItem,
   FormMessage,
   useForm,
-} from "@repo/ui/form";
-import { Input } from "@repo/ui/input";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
   TableBody,
@@ -25,7 +25,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";

@@ -1,4 +1,4 @@
-import { Separator } from "@repo/ui/separator";
+import { Separator } from "@repo/ui/components/separator";
 
 import { AssignmentCategoryHeader } from "./AssignmentCategoryHeader";
 import { AssignmentCategoryTable } from "./AssignmentCategoryTable";

@@ -1,4 +1,4 @@
-import { EmptyState } from "@repo/ui/EmptyState";
+import { EmptyState } from "@repo/ui/components/EmptyState";
 
 import { JustificationAbsence } from "~/components/students/attendances/justifications/JustificationAbsence";
 import { api } from "~/trpc/server";

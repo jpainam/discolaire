@@ -19,17 +19,22 @@ import {
 import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import { Button } from "@repo/ui/components/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@repo/ui/carousel";
-import FlatBadge from "@repo/ui/FlatBadge";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/carousel";
+import FlatBadge from "@repo/ui/components/FlatBadge";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";

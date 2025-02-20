@@ -4,7 +4,7 @@ import { useQueryState } from "nuqs";
 import { useDebouncedCallback } from "use-debounce";
 
 import { useLocale } from "@repo/i18n";
-import { Input } from "@repo/ui/input";
+import { Input } from "@repo/ui/components/input";
 
 export default function DirectoryHeader() {
   const { t } = useLocale();

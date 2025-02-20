@@ -4,7 +4,7 @@ import * as React from "react";
 import { useSearchParams } from "next/navigation";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/chart";
+import type { ChartConfig } from "@repo/ui/components/chart";
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
 import {
@@ -13,23 +13,23 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/card";
+} from "@repo/ui/components/card";
 import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/chart";
-import { EmptyState } from "@repo/ui/EmptyState";
+} from "@repo/ui/components/chart";
+import { EmptyState } from "@repo/ui/components/EmptyState";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/select";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { useRouter } from "~/hooks/use-router";
 import { showErrorToast } from "~/lib/handle-error";

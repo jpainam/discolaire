@@ -1,5 +1,5 @@
 import { getServerTranslations } from "@repo/i18n/server";
-import { EmptyState } from "@repo/ui/EmptyState";
+import { EmptyState } from "@repo/ui/components/EmptyState";
 
 import { api } from "~/trpc/server";
 

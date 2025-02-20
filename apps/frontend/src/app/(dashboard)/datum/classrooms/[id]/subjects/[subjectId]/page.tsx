@@ -3,9 +3,14 @@ import { ActivityIcon, BookIcon, VideoIcon } from "lucide-react";
 
 import { checkPermissions } from "@repo/api/permission";
 import { PermissionAction } from "@repo/lib/permission";
-import { Button } from "@repo/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { NoPermission } from "@repo/ui/no-permission";
+import { Button } from "@repo/ui/components/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+import { NoPermission } from "@repo/ui/components/no-permission";
 
 import { SubjectDetailsHeader } from "~/components/classrooms/subjects/SubjectDetailsHeader";
 import { api } from "~/trpc/server";

@@ -5,8 +5,8 @@ import { Stethoscope } from "lucide-react";
 
 //import { CreateEditHealthVisit } from "./CreateEditHealthVisit";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Label } from "@repo/ui/label";
+import { Button } from "@repo/ui/components/button";
+import { Label } from "@repo/ui/components/label";
 
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";

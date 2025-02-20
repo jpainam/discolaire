@@ -1,8 +1,8 @@
 "use client";
 
 import { useLocale } from "@repo/i18n";
-import { Separator } from "@repo/ui/separator";
-import { Skeleton } from "@repo/ui/skeleton";
+import { Separator } from "@repo/ui/components/separator";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { showErrorToast } from "~/lib/handle-error";
 import rangeMap from "~/lib/range-map";

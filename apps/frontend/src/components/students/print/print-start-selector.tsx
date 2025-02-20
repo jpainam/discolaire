@@ -3,23 +3,27 @@
 import { addDays, format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
-import { Button } from "@repo/ui/button";
-import { Calendar } from "@repo/ui/calendar";
+import { Button } from "@repo/ui/components/button";
+import { Calendar } from "@repo/ui/components/calendar";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   useFormContext,
-} from "@repo/ui/form";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+} from "@repo/ui/components/form";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
+} from "@repo/ui/components/select";
 
 import { cn } from "~/lib/utils";
 

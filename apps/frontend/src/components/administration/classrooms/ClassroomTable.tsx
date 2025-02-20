@@ -6,16 +6,16 @@ import { toast } from "sonner";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
-import { Button } from "@repo/ui/button";
-import { Checkbox } from "@repo/ui/checkbox";
-import { useConfirm } from "@repo/ui/confirm-dialog";
+import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import { useConfirm } from "@repo/ui/components/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
+} from "@repo/ui/components/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -23,7 +23,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { CreateEditClassroom } from "~/components/classrooms/CreateEditClassroom";
 import { useCheckPermissions } from "~/hooks/use-permissions";

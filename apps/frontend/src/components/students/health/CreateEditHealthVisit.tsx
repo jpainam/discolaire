@@ -13,9 +13,9 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@repo/ui/accordion";
-import { Button } from "@repo/ui/button";
-import { Checkbox } from "@repo/ui/checkbox";
+} from "@repo/ui/components/accordion";
+import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   Form,
   FormControl,
@@ -24,12 +24,12 @@ import {
   FormLabel,
   FormMessage,
   useForm,
-} from "@repo/ui/form";
-import { Input } from "@repo/ui/input";
-import { Label } from "@repo/ui/label";
-import { Skeleton } from "@repo/ui/skeleton";
-import { Textarea } from "@repo/ui/textarea";
-import { FileUploader } from "@repo/ui/uploads/file-uploader";
+} from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
+import { Label } from "@repo/ui/components/label";
+import { Skeleton } from "@repo/ui/components/skeleton";
+import { Textarea } from "@repo/ui/components/textarea";
+import { FileUploader } from "@repo/ui/components/uploads/file-uploader";
 
 import { DatePicker } from "~/components/shared/date-picker";
 import { routes } from "~/configs/routes";

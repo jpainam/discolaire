@@ -10,18 +10,18 @@ import { toast } from "sonner";
 import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Checkbox } from "@repo/ui/checkbox";
-import { useConfirm } from "@repo/ui/confirm-dialog";
-import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import { useConfirm } from "@repo/ui/components/confirm-dialog";
+import { DataTableColumnHeader } from "@repo/ui/components/datatable/data-table-column-header";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import FlatBadge from "@repo/ui/FlatBadge";
-import { Separator } from "@repo/ui/separator";
+} from "@repo/ui/components/dropdown-menu";
+import FlatBadge from "@repo/ui/components/FlatBadge";
+import { Separator } from "@repo/ui/components/separator";
 
 import { CreateEditFee } from "~/components/classrooms/fees/CreateEditFee";
 import { CURRENCY } from "~/lib/constants";

@@ -1,4 +1,4 @@
-import { ScrollArea } from "@repo/ui/scroll-area";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
 
 import { StudentPhotoCard } from "./StudentPhotoCard";
 

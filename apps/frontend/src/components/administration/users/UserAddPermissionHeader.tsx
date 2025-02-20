@@ -4,22 +4,22 @@ import { MoreHorizontal } from "lucide-react";
 import { useQueryState } from "nuqs";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/card";
+} from "@repo/ui/components/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import { Label } from "@repo/ui/label";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
+} from "@repo/ui/components/dropdown-menu";
+import { Label } from "@repo/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
 
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { cn } from "~/lib/utils";

@@ -3,8 +3,13 @@
 import { LiaDumbbellSolid } from "react-icons/lia";
 
 import { useLocale } from "@repo/i18n";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { Checkbox } from "@repo/ui/checkbox";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   FormControl,
   FormField,
@@ -12,14 +17,14 @@ import {
   FormLabel,
   FormMessage,
   useFormContext,
-} from "@repo/ui/form";
+} from "@repo/ui/components/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
+} from "@repo/ui/components/select";
 
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { ReligionSelector } from "~/components/shared/selects/ReligionSelector";

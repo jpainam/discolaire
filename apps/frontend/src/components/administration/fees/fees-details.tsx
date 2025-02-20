@@ -3,15 +3,19 @@ import { CopyPlus, Forward, MoreVertical, Reply } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import { Separator } from "@repo/ui/separator";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
+} from "@repo/ui/components/dropdown-menu";
+import { Separator } from "@repo/ui/components/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@repo/ui/components/tooltip";
 
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";

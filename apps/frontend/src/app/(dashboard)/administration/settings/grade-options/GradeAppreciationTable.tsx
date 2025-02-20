@@ -5,11 +5,16 @@ import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { useConfirm } from "@repo/ui/confirm-dialog";
-import { EmptyState } from "@repo/ui/EmptyState";
-import { Skeleton } from "@repo/ui/skeleton";
+import { Button } from "@repo/ui/components/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+import { useConfirm } from "@repo/ui/components/confirm-dialog";
+import { EmptyState } from "@repo/ui/components/EmptyState";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
   TableBody,
@@ -17,7 +22,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { api } from "~/trpc/react";
 import { CreateEditGradeAppreciation } from "./CreateEditGradeAppreciation";

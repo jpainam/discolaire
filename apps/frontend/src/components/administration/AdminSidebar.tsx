@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
-import { Separator } from "@repo/ui/separator";
+import { Separator } from "@repo/ui/components/separator";
 
 import { cn } from "~/lib/utils";
 import { AdminNav } from "./admin-nav";

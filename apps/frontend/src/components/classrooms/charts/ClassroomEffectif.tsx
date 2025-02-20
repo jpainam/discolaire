@@ -6,7 +6,7 @@ import { Loader, TrendingDown, TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import type { RouterOutputs } from "@repo/api";
-import type { ChartConfig } from "@repo/ui/chart";
+import type { ChartConfig } from "@repo/ui/components/chart";
 import { useLocale } from "@repo/i18n";
 import {
   Card,
@@ -14,14 +14,14 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-} from "@repo/ui/card";
+} from "@repo/ui/components/card";
 import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/chart";
+} from "@repo/ui/components/chart";
 
 type ClassroomAllProcedureOutput = NonNullable<
   RouterOutputs["classroom"]["all"]

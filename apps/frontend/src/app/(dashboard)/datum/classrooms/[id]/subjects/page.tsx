@@ -1,6 +1,6 @@
 import { checkPermissions } from "@repo/api/permission";
 import { PermissionAction } from "@repo/lib/permission";
-import { NoPermission } from "@repo/ui/no-permission";
+import { NoPermission } from "@repo/ui/components/no-permission";
 
 import { SubjectHeader } from "~/components/classrooms/subjects/SubjectHeader";
 import { SubjectTable } from "~/components/classrooms/subjects/SubjectTable";

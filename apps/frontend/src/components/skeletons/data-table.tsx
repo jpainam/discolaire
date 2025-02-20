@@ -1,4 +1,4 @@
-import { Skeleton } from "@repo/ui/skeleton";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import rangeMap from "~/lib/range-map";
 import { cn } from "~/lib/utils";

@@ -1,4 +1,4 @@
-import { Separator } from "@repo/ui/separator";
+import { Separator } from "@repo/ui/components/separator";
 
 import { SignUpContact } from "~/components/students/contacts/SignUpContact";
 import { StudentContactHeader } from "~/components/students/contacts/StudentContactHeader";

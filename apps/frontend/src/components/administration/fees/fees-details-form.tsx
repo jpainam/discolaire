@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Form,
   FormControl,
@@ -14,10 +14,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/form";
-import { Separator } from "@repo/ui/separator";
-import { Switch } from "@repo/ui/switch";
-import { Textarea } from "@repo/ui/textarea";
+} from "@repo/ui/components/form";
+import { Separator } from "@repo/ui/components/separator";
+import { Switch } from "@repo/ui/components/switch";
+import { Textarea } from "@repo/ui/components/textarea";
 
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";

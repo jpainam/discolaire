@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { buttonVariants } from "@repo/ui/button";
+import { buttonVariants } from "@repo/ui/components/button";
 
 import { cn } from "~/lib/utils";
 

@@ -1,13 +1,13 @@
 import { getServerTranslations } from "@repo/i18n/server";
-import { Button } from "@repo/ui/button";
-import { Label } from "@repo/ui/label";
+import { Button } from "@repo/ui/components/button";
+import { Label } from "@repo/ui/components/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
+} from "@repo/ui/components/select";
 
 export default async function ImportPhotosPage() {
   const { t } = await getServerTranslations();

@@ -1,4 +1,4 @@
-import { ScrollArea } from "@repo/ui/scroll-area";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
 import {
   Table,
   TableBody,
@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 export function CopyPermissionTable() {
   return (

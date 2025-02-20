@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Form,
   FormControl,
@@ -12,10 +12,10 @@ import {
   FormLabel,
   FormMessage,
   useForm,
-} from "@repo/ui/form";
-import { Label } from "@repo/ui/label";
-import { Skeleton } from "@repo/ui/skeleton";
-import { Textarea } from "@repo/ui/textarea";
+} from "@repo/ui/components/form";
+import { Label } from "@repo/ui/components/label";
+import { Skeleton } from "@repo/ui/components/skeleton";
+import { Textarea } from "@repo/ui/components/textarea";
 
 import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/react";

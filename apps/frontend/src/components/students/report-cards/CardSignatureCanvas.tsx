@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 
-import { SignatureInput } from "@repo/ui/signature-input";
+import { SignatureInput } from "@repo/ui/components/signature-input";
 
 export function CardSignatureCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);

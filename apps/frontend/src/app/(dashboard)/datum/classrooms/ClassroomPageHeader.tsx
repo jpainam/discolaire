@@ -5,15 +5,15 @@ import { MoreVertical, Plus } from "lucide-react";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import { Label } from "@repo/ui/label";
+} from "@repo/ui/components/dropdown-menu";
+import { Label } from "@repo/ui/components/label";
 
 import { CreateEditClassroom } from "~/components/classrooms/CreateEditClassroom";
 import PDFIcon from "~/components/icons/pdf-solid";

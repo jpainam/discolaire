@@ -3,7 +3,7 @@
 // import { CreatePostSchema } from "@repo/db/schema";
 import { z } from "zod";
 
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Form,
   FormControl,
@@ -11,8 +11,8 @@ import {
   FormItem,
   FormMessage,
   useForm,
-} from "@repo/ui/form";
-import { Input } from "@repo/ui/input";
+} from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
 
 const CreatePostSchema = z.object({
   title: z.string().min(1),

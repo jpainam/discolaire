@@ -5,7 +5,7 @@ import { z } from "zod";
 import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Form,
   FormControl,
@@ -14,9 +14,9 @@ import {
   FormLabel,
   FormMessage,
   useForm,
-} from "@repo/ui/form";
-import { Input } from "@repo/ui/input";
-import { Textarea } from "@repo/ui/textarea";
+} from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
+import { Textarea } from "@repo/ui/components/textarea";
 
 import { api } from "~/trpc/react";
 

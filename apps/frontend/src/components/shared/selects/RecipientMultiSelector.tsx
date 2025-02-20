@@ -5,14 +5,14 @@ import { Command as CommandPrimitive } from "cmdk";
 import { X } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
-import { Badge } from "@repo/ui/badge";
+import { Badge } from "@repo/ui/components/badge";
 import {
   Command,
   CommandGroup,
   CommandItem,
   CommandList,
-} from "@repo/ui/command";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/command";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";

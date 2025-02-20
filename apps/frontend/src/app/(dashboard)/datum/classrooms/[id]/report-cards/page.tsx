@@ -1,7 +1,7 @@
 import { getServerTranslations } from "@repo/i18n/server";
-import { EmptyState } from "@repo/ui/EmptyState";
-import FlatBadge from "@repo/ui/FlatBadge";
-import { Separator } from "@repo/ui/separator";
+import { EmptyState } from "@repo/ui/components/EmptyState";
+import FlatBadge from "@repo/ui/components/FlatBadge";
+import { Separator } from "@repo/ui/components/separator";
 
 import { ReportCardTable } from "~/components/classrooms/report-cards/ReportCardTable2";
 import { api } from "~/trpc/server";

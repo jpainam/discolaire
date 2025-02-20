@@ -9,9 +9,14 @@ import {
 } from "lucide-react";
 
 import { getServerTranslations } from "@repo/i18n/server";
-import { Badge } from "@repo/ui/badge";
-import { Card, CardContent, CardFooter, CardHeader } from "@repo/ui/card";
-import { Separator } from "@repo/ui/separator";
+import { Badge } from "@repo/ui/components/badge";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@repo/ui/components/card";
+import { Separator } from "@repo/ui/components/separator";
 
 import { AssignmentDetailsHeader } from "~/components/classrooms/assignments/AssignmentDetailsHeader";
 import { api } from "~/trpc/server";

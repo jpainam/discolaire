@@ -8,9 +8,9 @@ import { ArrowDownUp, AtSign, DollarSign, Phone, Users } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Card, CardContent } from "@repo/ui/card";
-import FlatBadge from "@repo/ui/FlatBadge";
+import { Button } from "@repo/ui/components/button";
+import { Card, CardContent } from "@repo/ui/components/card";
+import FlatBadge from "@repo/ui/components/FlatBadge";
 
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import { AvatarState } from "~/components/AvatarState";

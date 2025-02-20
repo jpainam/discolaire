@@ -5,8 +5,8 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@repo/ui/collapsible";
-import { Separator } from "@repo/ui/separator";
+} from "@repo/ui/components/collapsible";
+import { Separator } from "@repo/ui/components/separator";
 
 export function Calendars() {
   const calendars = [

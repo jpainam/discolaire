@@ -17,8 +17,8 @@
 // } from "react";
 // import confetti from "canvas-confetti";
 
-// import type { ButtonProps } from "@repo/ui/button";
-// import { Button } from "@repo/ui/button";
+// import type { ButtonProps } from "@repo/ui/components/button";
+// import { Button } from "@repo/ui/components/button";
 
 // interface Api {
 //   fire: (options?: ConfettiOptions) => void;

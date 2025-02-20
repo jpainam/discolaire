@@ -9,7 +9,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@repo/ui/tooltip";
+} from "@repo/ui/components/tooltip";
 
 import { useMediaQuery } from "~/hooks/use-media-query";
 

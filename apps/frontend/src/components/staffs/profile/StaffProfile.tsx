@@ -1,6 +1,6 @@
 import { getServerTranslations } from "@repo/i18n/server";
-import { Card, CardContent, CardHeader } from "@repo/ui/card";
-import { Separator } from "@repo/ui/separator";
+import { Card, CardContent, CardHeader } from "@repo/ui/components/card";
+import { Separator } from "@repo/ui/components/separator";
 
 import { AvatarState } from "~/components/AvatarState";
 import { api } from "~/trpc/server";

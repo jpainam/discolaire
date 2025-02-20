@@ -1,6 +1,6 @@
 import { getServerTranslations } from "@repo/i18n/server";
-import { EmptyState } from "@repo/ui/EmptyState";
-import { Separator } from "@repo/ui/separator";
+import { EmptyState } from "@repo/ui/components/EmptyState";
+import { Separator } from "@repo/ui/components/separator";
 
 import { StudentAssignmentTable } from "~/components/students/assignments/StudentAssignementTable";
 import { StudentAssignmentHeader } from "~/components/students/assignments/StudentAssignmentHeader";

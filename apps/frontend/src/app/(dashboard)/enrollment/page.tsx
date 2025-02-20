@@ -4,7 +4,7 @@ import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "@repo/ui/resizable";
+} from "@repo/ui/components/resizable";
 
 import { Shell } from "~/components/shell";
 

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { useLocale } from "@repo/i18n";
-import { useDataTable } from "@repo/ui/datatable";
+import { useDataTable } from "@repo/ui/components/datatable";
 
 import type { GradeSheetTableType } from "./gradesheet-columns";
 import { api } from "~/trpc/react";

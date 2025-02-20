@@ -1,4 +1,4 @@
-import { Separator } from "@repo/ui/separator";
+import { Separator } from "@repo/ui/components/separator";
 
 import { AnnouncementDataTable } from "~/components/administration/announcement/AnnouncementDataTable";
 import { AnnouncementHeader } from "~/components/administration/announcement/AnnouncementHeader";

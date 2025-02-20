@@ -5,8 +5,8 @@ import { addWeeks, endOfWeek, startOfWeek } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Separator } from "@repo/ui/separator";
+import { Button } from "@repo/ui/components/button";
+import { Separator } from "@repo/ui/components/separator";
 import {
   Table,
   TableBody,
@@ -14,7 +14,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 export function SchoolLife() {
   const data = [

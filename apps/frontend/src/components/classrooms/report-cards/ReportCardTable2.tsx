@@ -10,7 +10,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";

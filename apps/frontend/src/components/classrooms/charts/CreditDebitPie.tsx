@@ -2,14 +2,14 @@
 
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/chart";
+import type { ChartConfig } from "@repo/ui/components/chart";
 import { useLocale } from "@repo/i18n";
-import { Card, CardContent } from "@repo/ui/card";
+import { Card, CardContent } from "@repo/ui/components/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/chart";
+} from "@repo/ui/components/chart";
 
 const chartData = [
   { type: "credit", count: 275, fill: "var(--color-credit)" },

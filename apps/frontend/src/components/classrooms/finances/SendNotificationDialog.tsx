@@ -2,18 +2,18 @@ import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Checkbox } from "@repo/ui/checkbox";
-import { Input } from "@repo/ui/input";
-import { Label } from "@repo/ui/label";
+import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import { Input } from "@repo/ui/components/input";
+import { Label } from "@repo/ui/components/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
-import { Textarea } from "@repo/ui/textarea";
+} from "@repo/ui/components/select";
+import { Textarea } from "@repo/ui/components/textarea";
 
 import { DatePicker } from "~/components/shared/date-picker";
 import { getErrorMessage } from "~/lib/handle-error";

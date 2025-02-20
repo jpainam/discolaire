@@ -1,4 +1,9 @@
-import { Card, CardContent, CardFooter, CardHeader } from "@repo/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@repo/ui/components/card";
 
 import { StudentReportFooter } from "~/components/reports/StudentReportFooter";
 import { StudentLinkReports } from "~/components/reports/StudentReports";

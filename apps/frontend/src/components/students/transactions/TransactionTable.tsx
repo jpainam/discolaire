@@ -10,11 +10,11 @@ import {
 import { BookCopy, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import type { FlatBadgeVariant } from "@repo/ui/FlatBadge";
+import type { FlatBadgeVariant } from "@repo/ui/components/FlatBadge";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,10 +26,10 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import { EmptyState } from "@repo/ui/EmptyState";
-import FlatBadge from "@repo/ui/FlatBadge";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/dropdown-menu";
+import { EmptyState } from "@repo/ui/components/EmptyState";
+import FlatBadge from "@repo/ui/components/FlatBadge";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
   TableBody,
@@ -37,7 +37,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";

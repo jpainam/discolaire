@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
 
-import { Checkbox } from "@repo/ui/checkbox";
+import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   FormControl,
   FormDescription,
@@ -9,7 +9,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/form";
+} from "@repo/ui/components/form";
 
 import { cn } from "~/lib/utils";
 

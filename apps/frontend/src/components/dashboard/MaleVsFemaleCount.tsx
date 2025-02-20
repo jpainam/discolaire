@@ -9,9 +9,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/card";
-import { ChartContainer } from "@repo/ui/chart";
-import { Separator } from "@repo/ui/separator";
+} from "@repo/ui/components/card";
+import { ChartContainer } from "@repo/ui/components/chart";
+import { Separator } from "@repo/ui/components/separator";
 
 import { cn } from "~/lib/utils";
 

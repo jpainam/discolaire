@@ -1,5 +1,5 @@
 import { getServerTranslations } from "@repo/i18n/server";
-import FlatBadge from "@repo/ui/FlatBadge";
+import FlatBadge from "@repo/ui/components/FlatBadge";
 
 import { TransactionDataTable } from "~/components/administration/transactions/TransactionDataTable";
 import { CURRENCY } from "~/lib/constants";

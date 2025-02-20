@@ -10,7 +10,7 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@repo/ui/sheet";
+} from "@repo/ui/components/sheet";
 
 import { cn } from "~/lib/utils";
 

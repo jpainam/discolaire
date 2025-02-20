@@ -3,10 +3,10 @@ import Link from "next/link";
 import { sortBy, sum } from "lodash";
 
 import type { RouterOutputs } from "@repo/api";
-import type { FlatBadgeVariant } from "@repo/ui/FlatBadge";
+import type { FlatBadgeVariant } from "@repo/ui/components/FlatBadge";
 //import { StudentReportCard } from "~/types/report-card";
 import { getServerTranslations } from "@repo/i18n/server";
-import FlatBadge from "@repo/ui/FlatBadge";
+import FlatBadge from "@repo/ui/components/FlatBadge";
 import {
   Table,
   TableBody,
@@ -14,7 +14,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";

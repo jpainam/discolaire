@@ -4,8 +4,12 @@ import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-import { buttonVariants } from "@repo/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
+import { buttonVariants } from "@repo/ui/components/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@repo/ui/components/tooltip";
 
 import { cn } from "~/lib/utils";
 

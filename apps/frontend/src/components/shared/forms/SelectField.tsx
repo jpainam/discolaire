@@ -9,14 +9,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/form";
+} from "@repo/ui/components/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
+} from "@repo/ui/components/select";
 
 import { cn } from "~/lib/utils";
 

@@ -6,9 +6,9 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import i18next from "i18next";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/button";
-import { Checkbox } from "@repo/ui/checkbox";
-import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import { DataTableColumnHeader } from "@repo/ui/components/datatable/data-table-column-header";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,7 +20,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
+} from "@repo/ui/components/dropdown-menu";
 
 import { routes } from "~/configs/routes";
 

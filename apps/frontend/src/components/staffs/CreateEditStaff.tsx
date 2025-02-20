@@ -8,7 +8,7 @@ import { z } from "zod";
 import type { RouterOutputs } from "@repo/api";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Form,
   FormControl,
@@ -17,8 +17,8 @@ import {
   FormLabel,
   FormMessage,
   useForm,
-} from "@repo/ui/form";
-import { Textarea } from "@repo/ui/textarea";
+} from "@repo/ui/components/form";
+import { Textarea } from "@repo/ui/components/textarea";
 
 import { api } from "~/trpc/react";
 import { CountryPicker } from "../shared/CountryPicker";

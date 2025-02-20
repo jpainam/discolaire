@@ -5,7 +5,7 @@ import { checkPermissions } from "@repo/api/permission";
 import { auth } from "@repo/auth";
 import { getServerTranslations } from "@repo/i18n/server";
 import { PermissionAction } from "@repo/lib/permission";
-import { NoPermission } from "@repo/ui/no-permission";
+import { NoPermission } from "@repo/ui/components/no-permission";
 
 import { StaffProfile } from "~/components/staffs/profile/StaffProfile";
 import { StaffTabMenu } from "~/components/staffs/profile/StaffTabMenu";

@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from "react";
 
-import { Separator } from "@repo/ui/separator";
+import { Separator } from "@repo/ui/components/separator";
 
 import { AccessLogsHeader } from "~/components/students/access-logs/AccessLogsHeader";
 

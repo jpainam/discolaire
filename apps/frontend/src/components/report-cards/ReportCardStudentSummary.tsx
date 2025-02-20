@@ -1,6 +1,6 @@
 "use client";
 
-import { DirectionAwareTabs } from "@repo/ui/direction-aware-tabs";
+import { DirectionAwareTabs } from "@repo/ui/components/direction-aware-tabs";
 
 const ReportCardStudentSummary = () => {
   const tabs = [

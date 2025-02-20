@@ -9,17 +9,17 @@ import { z } from "zod";
 import type { RouterOutputs } from "@repo/api";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-} from "@repo/ui/form";
-import { Input } from "@repo/ui/input";
-import { Separator } from "@repo/ui/separator";
-import { Textarea } from "@repo/ui/textarea";
+} from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
+import { Separator } from "@repo/ui/components/separator";
+import { Textarea } from "@repo/ui/components/textarea";
 
 import { InputField } from "~/components/shared/forms/input-field";
 import PrefixSelector from "~/components/shared/forms/PrefixSelector";

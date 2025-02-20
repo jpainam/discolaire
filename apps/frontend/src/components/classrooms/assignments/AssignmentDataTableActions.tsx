@@ -8,8 +8,8 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { useConfirm } from "@repo/ui/confirm-dialog";
+import { Button } from "@repo/ui/components/button";
+import { useConfirm } from "@repo/ui/components/confirm-dialog";
 
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";

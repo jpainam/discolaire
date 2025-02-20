@@ -13,9 +13,13 @@ import { formatDateRange } from "little-date";
 import { ChevronDown } from "lucide-react";
 import { parseAsString, useQueryStates } from "nuqs";
 
-import { Button } from "@repo/ui/button";
-import { Calendar } from "@repo/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+import { Button } from "@repo/ui/components/button";
+import { Calendar } from "@repo/ui/components/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
 import {
   Select,
   SelectContent,
@@ -23,7 +27,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
+} from "@repo/ui/components/select";
 
 interface Props {
   defaultValue?: {

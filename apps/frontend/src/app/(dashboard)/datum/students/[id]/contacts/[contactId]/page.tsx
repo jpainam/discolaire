@@ -13,10 +13,10 @@ import {
 } from "lucide-react";
 
 import { getServerTranslations } from "@repo/i18n/server";
-import { Button } from "@repo/ui/button";
-import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
-import { Label } from "@repo/ui/label";
-import { Separator } from "@repo/ui/separator";
+import { Button } from "@repo/ui/components/button";
+import { DataTableSkeleton } from "@repo/ui/components/datatable/data-table-skeleton";
+import { Label } from "@repo/ui/components/label";
+import { Separator } from "@repo/ui/components/separator";
 
 import { AvatarState } from "~/components/AvatarState";
 import { StudentContactRelationship } from "~/components/students/contacts/StudentContactRelationship";

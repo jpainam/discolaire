@@ -1,4 +1,4 @@
-import { EmptyState } from "@repo/ui/EmptyState";
+import { EmptyState } from "@repo/ui/components/EmptyState";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;

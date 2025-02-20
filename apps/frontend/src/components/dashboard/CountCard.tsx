@@ -1,7 +1,12 @@
 import type { LucideIcon } from "lucide-react";
 
 import { getServerTranslations } from "@repo/i18n/server";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
 
 import { cn } from "~/lib/utils";
 

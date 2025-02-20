@@ -2,8 +2,8 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import { getServerTranslations } from "@repo/i18n/server";
-import { Avatar, AvatarImage } from "@repo/ui/avatar";
-import { Separator } from "@repo/ui/separator";
+import { Avatar, AvatarImage } from "@repo/ui/components/avatar";
+import { Separator } from "@repo/ui/components/separator";
 
 import { randomAvatar } from "~/components/raw-images";
 import { IdCardBarCode } from "~/components/students/idcard/id-barcode";

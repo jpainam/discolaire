@@ -21,11 +21,13 @@ import type {
   EventProps,
   Formats,
   RbcView,
-} from "@repo/ui/big-calendar";
+} from "@repo/ui/components/big-calendar";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import BigCalendar, { dateFnsLocalizer } from "@repo/ui/big-calendar";
-import { Skeleton } from "@repo/ui/skeleton";
+import BigCalendar, {
+  dateFnsLocalizer,
+} from "@repo/ui/components/big-calendar";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import rangeMap from "~/lib/range-map";

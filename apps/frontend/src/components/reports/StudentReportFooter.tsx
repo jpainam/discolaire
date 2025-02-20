@@ -3,7 +3,7 @@
 import { useAtom } from "jotai";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 
 import { studentReportsAtom } from "~/atoms/report-atom";
 

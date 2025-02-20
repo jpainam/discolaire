@@ -3,8 +3,8 @@ import { notFound, redirect } from "next/navigation";
 
 import { getServerTranslations } from "@repo/i18n/server";
 import { numberToWords } from "@repo/lib/toword";
-import FlatBadge from "@repo/ui/FlatBadge";
-import { Separator } from "@repo/ui/separator";
+import FlatBadge from "@repo/ui/components/FlatBadge";
+import { Separator } from "@repo/ui/components/separator";
 
 import { routes } from "~/configs/routes";
 import { CURRENCY } from "~/lib/constants";

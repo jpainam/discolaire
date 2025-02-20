@@ -6,7 +6,7 @@ import { useParams, usePathname } from "next/navigation";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
-import { Skeleton } from "@repo/ui/skeleton";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";

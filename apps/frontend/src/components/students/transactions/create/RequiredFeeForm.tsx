@@ -11,10 +11,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/card";
-import { Checkbox } from "@repo/ui/checkbox";
-import { Label } from "@repo/ui/label";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/card";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import { Label } from "@repo/ui/components/label";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/react";

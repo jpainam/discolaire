@@ -2,8 +2,8 @@
 
 import { Plus } from "lucide-react";
 
-import { Button } from "@repo/ui/button";
-import { Calendar } from "@repo/ui/calendar";
+import { Button } from "@repo/ui/components/button";
+import { Calendar } from "@repo/ui/components/calendar";
 
 import { Calendars } from "~/components/timetables/calendars";
 

@@ -10,8 +10,12 @@ import {
 
 import { auth } from "@repo/auth";
 import { getServerTranslations } from "@repo/i18n/server";
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
-import { Separator } from "@repo/ui/separator";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@repo/ui/components/avatar";
+import { Separator } from "@repo/ui/components/separator";
 
 import { randomAvatar } from "~/components/raw-images";
 import { CopyUserIdButton } from "~/components/users/copy-user-id-button";

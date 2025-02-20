@@ -5,8 +5,8 @@ import { useMemo } from "react";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
-import { DataTable, useDataTable } from "@repo/ui/datatable";
-import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
+import { DataTable, useDataTable } from "@repo/ui/components/datatable";
+import { DataTableToolbar } from "@repo/ui/components/datatable/data-table-toolbar";
 
 import { AssignmentDataTableActions } from "./AssignmentDataTableActions";
 import { fetchAssignmentTableColumns } from "./AssignmentDataTableColumns";

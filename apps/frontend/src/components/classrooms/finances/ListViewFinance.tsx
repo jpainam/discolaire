@@ -6,8 +6,8 @@ import { useAtom } from "jotai";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
-import { Checkbox } from "@repo/ui/checkbox";
-import FlatBadge from "@repo/ui/FlatBadge";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import FlatBadge from "@repo/ui/components/FlatBadge";
 import {
   Table,
   TableBody,
@@ -16,7 +16,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import { AvatarState } from "~/components/AvatarState";

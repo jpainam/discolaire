@@ -5,7 +5,7 @@ import { DownloadIcon, PlusIcon } from "@radix-ui/react-icons";
 import { Trash2 } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 
 import type { SMSHistory } from "~/types/sms";
 import { exportTableToCSV } from "~/lib/export";

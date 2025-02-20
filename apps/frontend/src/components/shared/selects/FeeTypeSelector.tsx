@@ -7,8 +7,8 @@
 //   SelectItem,
 //   SelectTrigger,
 //   SelectValue,
-// } from "@repo/ui/select";
-// import { Skeleton } from "@repo/ui/skeleton";
+// } from "@repo/ui/components/select";
+// import { Skeleton } from "@repo/ui/components/skeleton";
 
 // import { cn } from "~/lib/utils";
 // import { api } from "~/trpc/react";

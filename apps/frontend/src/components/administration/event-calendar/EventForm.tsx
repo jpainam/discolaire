@@ -10,7 +10,7 @@ import { z } from "zod";
 import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Form,
   FormControl,
@@ -18,8 +18,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/form";
-import { Label } from "@repo/ui/label";
+} from "@repo/ui/components/form";
+import { Label } from "@repo/ui/components/label";
 import {
   Select,
   SelectContent,
@@ -28,8 +28,8 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
-import { Textarea } from "@repo/ui/textarea";
+} from "@repo/ui/components/select";
+import { Textarea } from "@repo/ui/components/textarea";
 
 import { DateTimePicker } from "~/components/shared/date-time-picker";
 import { InputField } from "~/components/shared/forms/input-field";

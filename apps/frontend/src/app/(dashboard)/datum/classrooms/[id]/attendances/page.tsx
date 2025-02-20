@@ -2,8 +2,8 @@ import { format } from "date-fns";
 import { AlertCircle, Clock, MessageSquare } from "lucide-react";
 
 import { getServerTranslations } from "@repo/i18n/server";
-import { Badge } from "@repo/ui/badge";
-import { EmptyState } from "@repo/ui/EmptyState";
+import { Badge } from "@repo/ui/components/badge";
+import { EmptyState } from "@repo/ui/components/EmptyState";
 
 import { AvatarState } from "~/components/AvatarState";
 import { AttendanceAction } from "~/components/classrooms/attendances/AttendanceAction";

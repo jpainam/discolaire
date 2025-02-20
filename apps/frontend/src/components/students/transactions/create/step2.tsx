@@ -7,8 +7,8 @@ import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Checkbox } from "@repo/ui/checkbox";
+import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   Form,
   FormControl,
@@ -17,7 +17,7 @@ import {
   FormItem,
   FormLabel,
   useForm,
-} from "@repo/ui/form";
+} from "@repo/ui/components/form";
 
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";

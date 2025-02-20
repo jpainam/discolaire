@@ -4,7 +4,7 @@ import Link from "next/link";
 //import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Form,
   FormControl,
@@ -14,16 +14,16 @@ import {
   FormLabel,
   FormMessage,
   useForm,
-} from "@repo/ui/form";
-import { Input } from "@repo/ui/input";
+} from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
-import { Textarea } from "@repo/ui/textarea";
+} from "@repo/ui/components/select";
+import { Textarea } from "@repo/ui/components/textarea";
 
 import { useSession } from "~/providers/AuthProvider";
 

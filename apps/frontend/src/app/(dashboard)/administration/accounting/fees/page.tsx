@@ -1,4 +1,4 @@
-import { Separator } from "@repo/ui/separator";
+import { Separator } from "@repo/ui/components/separator";
 
 import { FeeBar } from "~/components/administration/fees/charts/FeeBar";
 import { FeeTrend } from "~/components/administration/fees/charts/FeeTrend";

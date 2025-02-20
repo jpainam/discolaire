@@ -1,4 +1,4 @@
-import { Separator } from "@repo/ui/separator";
+import { Separator } from "@repo/ui/components/separator";
 
 import { RequiredFeeClassrooms } from "~/components/administration/transactions/charts/RequiredFeeClassrooms";
 import { RequiredFeeTransactionTrend } from "~/components/administration/transactions/charts/RequiredFeeTransactionTrend";

@@ -1,8 +1,8 @@
 import { FileTextIcon } from "lucide-react";
 
 import { getServerTranslations } from "@repo/i18n/server";
-import { EmptyState } from "@repo/ui/EmptyState";
-import { Separator } from "@repo/ui/separator";
+import { EmptyState } from "@repo/ui/components/EmptyState";
+import { Separator } from "@repo/ui/components/separator";
 import {
   Table,
   TableBody,
@@ -10,7 +10,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { DocumentTableAction } from "~/components/shared/DocumentTableAction";
 import { api } from "~/trpc/server";

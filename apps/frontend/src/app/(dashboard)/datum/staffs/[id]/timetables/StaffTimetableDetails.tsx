@@ -5,7 +5,7 @@ import { BookOpenText, CalendarDays, Trash2, User2Icon } from "lucide-react";
 import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 
 export function StaffTimetableDetails({
   event,

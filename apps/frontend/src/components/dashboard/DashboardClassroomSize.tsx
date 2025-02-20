@@ -4,7 +4,7 @@
 import React, { useEffect, useMemo } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/chart";
+import type { ChartConfig } from "@repo/ui/components/chart";
 import { useLocale } from "@repo/i18n";
 import {
   Card,
@@ -12,13 +12,13 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/card";
+} from "@repo/ui/components/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/chart";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/chart";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";

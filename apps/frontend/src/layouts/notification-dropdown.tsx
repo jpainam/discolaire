@@ -7,10 +7,14 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { PiCheck } from "react-icons/pi";
 
-import { Badge } from "@repo/ui/badge";
-import { Checkbox } from "@repo/ui/checkbox";
-import { Label } from "@repo/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+import { Badge } from "@repo/ui/components/badge";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import { Label } from "@repo/ui/components/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
 
 import SimpleBar from "~/components/simplebar";
 import { notificationsData } from "~/data/notifications";

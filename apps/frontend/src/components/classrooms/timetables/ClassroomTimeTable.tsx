@@ -7,11 +7,18 @@ import { format, getDay, parse, startOfWeek } from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
 
 import type { RouterOutputs } from "@repo/api";
-import type { Culture, DateLocalizer, Formats } from "@repo/ui/big-calendar";
+import type {
+  Culture,
+  DateLocalizer,
+  Formats,
+} from "@repo/ui/components/big-calendar";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import BigCalendar, { dateFnsLocalizer, RbcViews } from "@repo/ui/big-calendar";
-import { Skeleton } from "@repo/ui/skeleton";
+import BigCalendar, {
+  dateFnsLocalizer,
+  RbcViews,
+} from "@repo/ui/components/big-calendar";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import rangeMap from "~/lib/range-map";

@@ -3,7 +3,12 @@
 import { PiAddressBookTabsDuotone } from "react-icons/pi";
 
 import { useLocale } from "@repo/i18n";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
 
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";

@@ -9,14 +9,14 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-} from "@repo/ui/breadcrumb";
-import { Button } from "@repo/ui/button";
+} from "@repo/ui/components/breadcrumb";
+import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
+} from "@repo/ui/components/dropdown-menu";
 
 import { routes } from "~/configs/routes";
 import { sidebarIcons } from "../sidebar-icons";

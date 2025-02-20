@@ -15,9 +15,14 @@ import {
 
 import { auth } from "@repo/auth";
 import { getServerTranslations } from "@repo/i18n/server";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import FlatBadge from "@repo/ui/FlatBadge";
-import { NoPermission } from "@repo/ui/no-permission";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+import FlatBadge from "@repo/ui/components/FlatBadge";
+import { NoPermission } from "@repo/ui/components/no-permission";
 
 import { env } from "~/env";
 import { api } from "~/trpc/server";

@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import type { School } from "@repo/db";
 import { useUpload } from "@repo/hooks/use-upload";
 import { useLocale } from "@repo/i18n";
-import { Checkbox } from "@repo/ui/checkbox";
+import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   FormControl,
   FormField,
@@ -15,9 +15,9 @@ import {
   FormLabel,
   FormMessage,
   useFormContext,
-} from "@repo/ui/form";
-import { Input } from "@repo/ui/input";
-import { FileUploader } from "@repo/ui/uploads/file-uploader";
+} from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
+import { FileUploader } from "@repo/ui/components/uploads/file-uploader";
 
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";

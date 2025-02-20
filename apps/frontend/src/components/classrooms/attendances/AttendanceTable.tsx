@@ -6,9 +6,9 @@ import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 import { useLocale } from "@repo/i18n";
-import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
-import { Form } from "@repo/ui/form";
-import { Input } from "@repo/ui/input";
+import { DataTableSkeleton } from "@repo/ui/components/datatable/data-table-skeleton";
+import { Form } from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
 import {
   Table,
   TableBody,
@@ -16,7 +16,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { AvatarState } from "~/components/AvatarState";
 import { showErrorToast } from "~/lib/handle-error";

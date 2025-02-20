@@ -5,24 +5,28 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
-import { Button } from "@repo/ui/button";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@repo/ui/components/avatar";
+import { Button } from "@repo/ui/components/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/card";
-import { useConfirm } from "@repo/ui/confirm-dialog";
+} from "@repo/ui/components/card";
+import { useConfirm } from "@repo/ui/components/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import FlatBadge from "@repo/ui/FlatBadge";
+} from "@repo/ui/components/dropdown-menu";
+import FlatBadge from "@repo/ui/components/FlatBadge";
 
 import { api } from "~/trpc/react";
 

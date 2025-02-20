@@ -1,11 +1,11 @@
 import { checkPermissions } from "@repo/api/permission";
 import { getServerTranslations } from "@repo/i18n/server";
 import { PermissionAction } from "@repo/lib/permission";
-import { EmptyState } from "@repo/ui/EmptyState";
-import FlatBadge from "@repo/ui/FlatBadge";
-import { Label } from "@repo/ui/label";
-import { NoPermission } from "@repo/ui/no-permission";
-import { Separator } from "@repo/ui/separator";
+import { EmptyState } from "@repo/ui/components/EmptyState";
+import FlatBadge from "@repo/ui/components/FlatBadge";
+import { Label } from "@repo/ui/components/label";
+import { NoPermission } from "@repo/ui/components/no-permission";
+import { Separator } from "@repo/ui/components/separator";
 import {
   Table,
   TableBody,
@@ -13,7 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/server";

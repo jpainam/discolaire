@@ -1,8 +1,13 @@
 import { notFound } from "next/navigation";
 
 import { getServerTranslations } from "@repo/i18n/server";
-import { Label } from "@repo/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
+import { Label } from "@repo/ui/components/label";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@repo/ui/components/tabs";
 
 import { api } from "~/trpc/server";
 import { PolicyDataTable } from "./PolicyDataTable";

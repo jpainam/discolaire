@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from "@repo/ui/card";
+import { Card, CardContent, CardHeader } from "@repo/ui/components/card";
 
 import { ContactDetails } from "~/components/contacts/ContactDetails";
 import { ContactDetailsHeader } from "~/components/contacts/ContactDetailsHeader";

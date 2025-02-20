@@ -5,9 +5,9 @@ import { toast } from "sonner";
 
 import { useDebounce } from "@repo/hooks/use-debounce";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Input } from "@repo/ui/input";
-import { Skeleton } from "@repo/ui/skeleton";
+import { Button } from "@repo/ui/components/button";
+import { Input } from "@repo/ui/components/input";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import { showErrorToast } from "~/lib/handle-error";

@@ -3,10 +3,10 @@
 import { useParams } from "next/navigation";
 
 import { useLocale } from "@repo/i18n";
-import { Accordion } from "@repo/ui/accordion";
-import { Checkbox } from "@repo/ui/checkbox";
-import { Label } from "@repo/ui/label";
-import { Skeleton } from "@repo/ui/skeleton";
+import { Accordion } from "@repo/ui/components/accordion";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import { Label } from "@repo/ui/components/label";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { ExportButton } from "~/components/shared/buttons/export-button";
 import { TermSelector } from "~/components/shared/selects/TermSelector";

@@ -6,9 +6,13 @@ import { enUS, es, fr } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Calendar } from "@repo/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+import { Button } from "@repo/ui/components/button";
+import { Calendar } from "@repo/ui/components/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
 
 import { cn } from "~/lib/utils";
 

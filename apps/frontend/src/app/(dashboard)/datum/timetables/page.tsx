@@ -4,8 +4,8 @@ import {
   BreadcrumbItem,
   BreadcrumbList,
   BreadcrumbPage,
-} from "@repo/ui/breadcrumb";
-import { Separator } from "@repo/ui/separator";
+} from "@repo/ui/components/breadcrumb";
+import { Separator } from "@repo/ui/components/separator";
 
 import { Timetable } from "./Timetable";
 

@@ -6,8 +6,8 @@ import { Forward, Reply } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Label } from "@repo/ui/label";
+import { Button } from "@repo/ui/components/button";
+import { Label } from "@repo/ui/components/label";
 
 import { routes } from "~/configs/routes";
 import { showErrorToast } from "~/lib/handle-error";

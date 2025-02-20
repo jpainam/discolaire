@@ -6,10 +6,10 @@ import { useSearchParams } from "next/navigation";
 import { ReloadIcon } from "@radix-ui/react-icons";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Input } from "@repo/ui/input";
-import { Label } from "@repo/ui/label";
-import { PasswordInput } from "@repo/ui/password-input";
+import { Button } from "@repo/ui/components/button";
+import { Input } from "@repo/ui/components/input";
+import { Label } from "@repo/ui/components/label";
+import { PasswordInput } from "@repo/ui/components/password-input";
 
 import { signIn } from "~/actions/signin";
 import { cn } from "~/lib/utils";

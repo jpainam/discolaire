@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 
-import type { FlatBadgeVariant } from "@repo/ui/FlatBadge";
+import type { FlatBadgeVariant } from "@repo/ui/components/FlatBadge";
 import { useLocale } from "@repo/i18n";
-import FlatBadge from "@repo/ui/FlatBadge";
+import FlatBadge from "@repo/ui/components/FlatBadge";
 import {
   Table,
   TableBody,
@@ -12,7 +12,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";

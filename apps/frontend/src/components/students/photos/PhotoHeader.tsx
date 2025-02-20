@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 import { useUpload } from "@repo/hooks/use-upload";
 import { useLocale } from "@repo/i18n";
-import { Label } from "@repo/ui/label";
+import { Label } from "@repo/ui/components/label";
 
 import { useSchool } from "~/contexts/SchoolContext";
 import { getErrorMessage } from "~/lib/handle-error";

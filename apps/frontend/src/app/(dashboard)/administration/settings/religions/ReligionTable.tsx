@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocale } from "@repo/i18n";
-import { EmptyState } from "@repo/ui/EmptyState";
+import { EmptyState } from "@repo/ui/components/EmptyState";
 import {
   Table,
   TableBody,
@@ -9,7 +9,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { api } from "~/trpc/react";
 import { ReligionTableAction } from "./ReligionTableAction";

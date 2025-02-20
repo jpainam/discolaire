@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 
 import { useLocale } from "@repo/i18n";
-import FlatBadge from "@repo/ui/FlatBadge";
-import { Label } from "@repo/ui/label";
+import FlatBadge from "@repo/ui/components/FlatBadge";
+import { Label } from "@repo/ui/components/label";
 
 import { api } from "~/trpc/react";
 

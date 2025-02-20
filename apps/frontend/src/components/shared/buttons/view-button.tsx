@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 
 import { cn } from "~/lib/utils";
 

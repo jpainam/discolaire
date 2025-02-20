@@ -11,7 +11,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@repo/ui/alert-dialog";
+} from "@repo/ui/components/alert-dialog";
 
 export default function GlobalAlert() {
   const { isOpen, title, description, closeAlert, onConfirm, onCancel } =

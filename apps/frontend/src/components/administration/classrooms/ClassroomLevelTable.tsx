@@ -9,8 +9,8 @@ import { useDebouncedCallback } from "use-debounce";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Checkbox } from "@repo/ui/checkbox";
+import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
 
 import { api } from "~/trpc/react";
 import { selectedClassroomLevelAtom } from "./_atom";

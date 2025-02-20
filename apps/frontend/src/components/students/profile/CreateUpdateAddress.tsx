@@ -4,7 +4,12 @@ import type { Country } from "react-phone-number-input";
 import { PiCalendarDotsDuotone } from "react-icons/pi";
 
 import { useLocale } from "@repo/i18n";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
 import {
   FormControl,
   FormField,
@@ -12,8 +17,8 @@ import {
   FormLabel,
   FormMessage,
   useFormContext,
-} from "@repo/ui/form";
-import { PhoneInput } from "@repo/ui/phone-input";
+} from "@repo/ui/components/form";
+import { PhoneInput } from "@repo/ui/components/phone-input";
 
 import { CountryPicker } from "~/components/shared/CountryPicker";
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";

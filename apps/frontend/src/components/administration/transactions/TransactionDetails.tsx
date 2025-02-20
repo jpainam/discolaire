@@ -19,10 +19,10 @@ import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import FlatBadge from "@repo/ui/FlatBadge";
-import { Label } from "@repo/ui/label";
-import { Separator } from "@repo/ui/separator";
+import { Button } from "@repo/ui/components/button";
+import FlatBadge from "@repo/ui/components/FlatBadge";
+import { Label } from "@repo/ui/components/label";
+import { Separator } from "@repo/ui/components/separator";
 
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";

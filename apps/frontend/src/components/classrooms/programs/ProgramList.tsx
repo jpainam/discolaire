@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 
-import { Skeleton } from "@repo/ui/skeleton";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";

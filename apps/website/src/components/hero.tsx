@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import Link from "next/link";
 
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 
 import { Donut } from "./donut";
 import { ErrorFallback } from "./error-fallback";

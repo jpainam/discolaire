@@ -2,8 +2,8 @@ import { notFound } from "next/navigation";
 
 import { checkPermissions } from "@repo/api/permission";
 import { PermissionAction } from "@repo/lib/permission";
-import { NoPermission } from "@repo/ui/no-permission";
-import { Separator } from "@repo/ui/separator";
+import { NoPermission } from "@repo/ui/components/no-permission";
+import { Separator } from "@repo/ui/components/separator";
 
 import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";
 import StudentDetails from "~/components/students/profile/StudentDetails";

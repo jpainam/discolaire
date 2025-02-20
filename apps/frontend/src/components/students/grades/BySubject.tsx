@@ -10,9 +10,9 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@repo/ui/accordion";
-import FlatBadge from "@repo/ui/FlatBadge";
-import { Separator } from "@repo/ui/separator";
+} from "@repo/ui/components/accordion";
+import FlatBadge from "@repo/ui/components/FlatBadge";
+import { Separator } from "@repo/ui/components/separator";
 
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";

@@ -8,10 +8,10 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { EmptyState } from "@repo/ui/EmptyState";
-import { ScrollArea } from "@repo/ui/scroll-area";
-import { Skeleton } from "@repo/ui/skeleton";
+import { Button } from "@repo/ui/components/button";
+import { EmptyState } from "@repo/ui/components/EmptyState";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { api } from "~/trpc/react";
 import { ByChronologicalOrder } from "./ByChronologicalOrder";

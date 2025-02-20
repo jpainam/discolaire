@@ -7,7 +7,7 @@ import { LaptopIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   CommandDialog,
   CommandEmpty,
@@ -16,8 +16,8 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@repo/ui/command";
-import { ScrollArea } from "@repo/ui/scroll-area";
+} from "@repo/ui/components/command";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
 
 import { cn } from "~/lib/utils";
 

@@ -3,14 +3,14 @@
 // import { LabelList, Pie, PieChart } from "recharts";
 
 // import type { Classroom } from "@repo/db";
-// import type { ChartConfig } from "@repo/ui/chart";
+// import type { ChartConfig } from "@repo/ui/components/chart";
 // import { useLocale } from "@repo/i18n";
-// import { Card, CardContent } from "@repo/ui/card";
+// import { Card, CardContent } from "@repo/ui/components/card";
 // import {
 //   ChartContainer,
 //   ChartTooltip,
 //   ChartTooltipContent,
-// } from "@repo/ui/chart";
+// } from "@repo/ui/components/chart";
 
 // export function GenderPie({ classroom }: { classroom: Classroom }) {
 //   const { t } = useLocale();

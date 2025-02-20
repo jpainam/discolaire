@@ -5,8 +5,8 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 import { Ban, Check, CircleX } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
-import FlatBadge from "@repo/ui/FlatBadge";
-import { Separator } from "@repo/ui/separator";
+import FlatBadge from "@repo/ui/components/FlatBadge";
+import { Separator } from "@repo/ui/components/separator";
 import {
   Table,
   TableBody,
@@ -14,7 +14,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import type { ReportQueue } from "~/types/report";
 import { useDateFormat } from "~/utils/date-format";

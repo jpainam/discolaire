@@ -13,8 +13,8 @@ import { z } from "zod";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Calendar } from "@repo/ui/calendar";
+import { Button } from "@repo/ui/components/button";
+import { Calendar } from "@repo/ui/components/calendar";
 import {
   Form,
   FormControl,
@@ -22,19 +22,23 @@ import {
   FormItem,
   FormMessage,
   useForm,
-} from "@repo/ui/form";
-import { Input } from "@repo/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+} from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
-import { Skeleton } from "@repo/ui/skeleton";
-import { Switch } from "@repo/ui/switch";
-import { Textarea } from "@repo/ui/textarea";
+} from "@repo/ui/components/select";
+import { Skeleton } from "@repo/ui/components/skeleton";
+import { Switch } from "@repo/ui/components/switch";
+import { Textarea } from "@repo/ui/components/textarea";
 
 import { api } from "~/trpc/react";
 import { SubjectJournalAttachment } from "./SubjectJournalAttachment";

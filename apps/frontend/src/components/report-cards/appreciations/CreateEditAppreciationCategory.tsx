@@ -3,8 +3,8 @@ import { XIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
-import { useConfirm } from "@repo/ui/confirm-dialog";
-import { Input } from "@repo/ui/input";
+import { useConfirm } from "@repo/ui/components/confirm-dialog";
+import { Input } from "@repo/ui/components/input";
 
 import type { AppreciationCategory } from "~/types/appreciation";
 import { getErrorMessage } from "~/lib/handle-error";

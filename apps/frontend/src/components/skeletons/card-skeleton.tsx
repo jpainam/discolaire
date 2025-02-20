@@ -1,5 +1,10 @@
-import { Card, CardContent, CardFooter, CardHeader } from "@repo/ui/card";
-import { Skeleton } from "@repo/ui/skeleton";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@repo/ui/components/card";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 export function CardSkeleton() {
   return (

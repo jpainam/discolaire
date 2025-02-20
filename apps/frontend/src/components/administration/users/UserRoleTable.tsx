@@ -7,9 +7,9 @@ import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
 import { useLocale } from "@repo/i18n";
-import { Checkbox } from "@repo/ui/checkbox";
-import { ScrollArea } from "@repo/ui/scroll-area";
-import { Skeleton } from "@repo/ui/skeleton";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
   TableBody,
@@ -17,7 +17,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";

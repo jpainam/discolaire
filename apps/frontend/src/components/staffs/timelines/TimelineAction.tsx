@@ -2,7 +2,7 @@
 
 import { Trash2 } from "lucide-react";
 
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 
 export function TimelineAction({ timelineId }: { timelineId: string }) {
   //const confirm = useConfirm();

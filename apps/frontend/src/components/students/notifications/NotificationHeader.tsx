@@ -7,16 +7,16 @@ import { MailOpen, MoreVertical } from "lucide-react";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import { Input } from "@repo/ui/input";
-import { Label } from "@repo/ui/label";
+} from "@repo/ui/components/dropdown-menu";
+import { Input } from "@repo/ui/components/input";
+import { Label } from "@repo/ui/components/label";
 
 import { DateRangePicker } from "~/components/shared/DateRangePicker";
 import { routes } from "~/configs/routes";

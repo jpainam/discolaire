@@ -6,8 +6,8 @@ import { toast } from "sonner";
 
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { useConfirm } from "@repo/ui/confirm-dialog";
-import { DropdownMenuItem } from "@repo/ui/dropdown-menu";
+import { useConfirm } from "@repo/ui/components/confirm-dialog";
+import { DropdownMenuItem } from "@repo/ui/components/dropdown-menu";
 
 import { env } from "~/env";
 import { api } from "~/trpc/react";

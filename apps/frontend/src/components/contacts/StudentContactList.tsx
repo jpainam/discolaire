@@ -6,24 +6,24 @@ import { toast } from "sonner";
 import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/card";
-import { useConfirm } from "@repo/ui/confirm-dialog";
-import { EmptyState } from "@repo/ui/EmptyState";
+} from "@repo/ui/components/card";
+import { useConfirm } from "@repo/ui/components/confirm-dialog";
+import { EmptyState } from "@repo/ui/components/EmptyState";
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
-} from "@repo/ui/pagination";
-import { ScrollArea } from "@repo/ui/scroll-area";
-import { Separator } from "@repo/ui/separator";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/pagination";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
+import { Separator } from "@repo/ui/components/separator";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";

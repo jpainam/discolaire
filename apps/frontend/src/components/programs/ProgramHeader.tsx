@@ -3,8 +3,8 @@
 import { parseAsString, useQueryState } from "nuqs";
 
 import { useLocale } from "@repo/i18n";
-import { Label } from "@repo/ui/label";
-import { ToggleGroup, ToggleGroupItem } from "@repo/ui/toggle-group";
+import { Label } from "@repo/ui/components/label";
+import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 
 import { DatePicker } from "../shared/date-picker";
 import { ProgramThemeSelector } from "../shared/selects/ProgramThemeSelector";

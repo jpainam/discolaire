@@ -2,8 +2,13 @@ import Link from "next/link";
 
 import type { RouterOutputs } from "@repo/api";
 import { getServerTranslations } from "@repo/i18n/server";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { EmptyState } from "@repo/ui/EmptyState";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+import { EmptyState } from "@repo/ui/components/EmptyState";
 import {
   Table,
   TableBody,
@@ -11,7 +16,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@repo/ui/components/table";
 
 import { routes } from "~/configs/routes";
 import { api } from "~/trpc/server";

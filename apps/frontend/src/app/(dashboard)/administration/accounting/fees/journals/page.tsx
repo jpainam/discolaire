@@ -1,4 +1,4 @@
-import { Separator } from "@repo/ui/separator";
+import { Separator } from "@repo/ui/components/separator";
 
 import { JournalHeader } from "~/components/administration/fees/JournalHeader";
 import { JournalTable } from "~/components/administration/fees/JournalTable";

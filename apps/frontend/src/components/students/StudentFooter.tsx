@@ -6,13 +6,13 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import type { Student } from "@repo/api";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
-} from "@repo/ui/pagination";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/pagination";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { api } from "~/trpc/react";
 

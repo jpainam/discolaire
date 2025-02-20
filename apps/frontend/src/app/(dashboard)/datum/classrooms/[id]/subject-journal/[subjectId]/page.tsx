@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { Separator } from "@repo/ui/separator";
+import { Separator } from "@repo/ui/components/separator";
 
 import { api } from "~/trpc/server";
 import { SubjectJournalEditor } from "./SubjectJournalEditor";

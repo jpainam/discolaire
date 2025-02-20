@@ -1,5 +1,5 @@
 import { getServerTranslations } from "@repo/i18n/server";
-import { EmptyState } from "@repo/ui/EmptyState";
+import { EmptyState } from "@repo/ui/components/EmptyState";
 
 import { HealthVisitHeader } from "~/components/students/health/HealthVisitHeader";
 import { HealthVisitTable } from "~/components/students/health/HealthVisitTable";

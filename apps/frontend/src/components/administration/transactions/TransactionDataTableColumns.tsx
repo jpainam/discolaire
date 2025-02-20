@@ -14,9 +14,9 @@ import type { RouterOutputs } from "@repo/api";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { PermissionAction } from "@repo/lib/permission";
-import { Button } from "@repo/ui/button";
-import { Checkbox } from "@repo/ui/checkbox";
-import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import { DataTableColumnHeader } from "@repo/ui/components/datatable/data-table-column-header";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,8 +28,8 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import FlatBadge from "@repo/ui/FlatBadge";
+} from "@repo/ui/components/dropdown-menu";
+import FlatBadge from "@repo/ui/components/FlatBadge";
 
 import { DeleteTransaction } from "~/components/students/transactions/DeleteTransaction";
 import { TransactionStatus } from "~/components/students/transactions/TransactionTable";

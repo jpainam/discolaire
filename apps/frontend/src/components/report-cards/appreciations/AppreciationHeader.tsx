@@ -6,7 +6,7 @@ import { useQueryState } from "nuqs";
 
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,9 +14,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
-import { Label } from "@repo/ui/label";
-import { ToggleGroup, ToggleGroupItem } from "@repo/ui/toggle-group";
+} from "@repo/ui/components/dropdown-menu";
+import { Label } from "@repo/ui/components/label";
+import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { ClassroomStudentSelector } from "~/components/shared/selects/ClassroomStudentSelector";

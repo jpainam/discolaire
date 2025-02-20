@@ -9,10 +9,10 @@ import {
 
 import type { RouterOutputs } from "@repo/api";
 import { getServerTranslations } from "@repo/i18n/server";
-import { Badge } from "@repo/ui/badge";
-import { Checkbox } from "@repo/ui/checkbox";
-import { EmptyState } from "@repo/ui/EmptyState";
-import { Label } from "@repo/ui/label";
+import { Badge } from "@repo/ui/components/badge";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import { EmptyState } from "@repo/ui/components/EmptyState";
+import { Label } from "@repo/ui/components/label";
 
 import { StudentAttendanceAction } from "~/components/students/attendances/StudentAttendanceAction";
 import { cn } from "~/lib/utils";

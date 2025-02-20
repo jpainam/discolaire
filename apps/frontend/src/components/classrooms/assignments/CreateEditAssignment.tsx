@@ -9,9 +9,9 @@ import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "@repo/i18n";
-import { Badge } from "@repo/ui/badge";
-import { Button } from "@repo/ui/button";
-import { Checkbox } from "@repo/ui/checkbox";
+import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   Form,
   FormControl,
@@ -20,11 +20,11 @@ import {
   FormLabel,
   FormMessage,
   useForm,
-} from "@repo/ui/form";
-import { Input } from "@repo/ui/input";
-import { Label } from "@repo/ui/label";
-import { Skeleton } from "@repo/ui/skeleton";
-import { FileUploader } from "@repo/ui/uploads/file-uploader";
+} from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
+import { Label } from "@repo/ui/components/label";
+import { Skeleton } from "@repo/ui/components/skeleton";
+import { FileUploader } from "@repo/ui/components/uploads/file-uploader";
 
 import { DateRangePicker } from "~/components/shared/DateRangePicker";
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
@@ -34,7 +34,7 @@ import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
-const QuillEditor = dynamic(() => import("@repo/ui/quill-editor"), {
+const QuillEditor = dynamic(() => import("@repo/ui/components/quill-editor"), {
   ssr: false,
   loading: () => <Skeleton className="min-h-[200px] w-full" />,
 });

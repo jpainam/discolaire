@@ -1,6 +1,11 @@
 import { getServerTranslations } from "@repo/i18n/server";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { Progress } from "@repo/ui/progress";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+import { Progress } from "@repo/ui/components/progress";
 
 import { cn } from "~/lib/utils";
 

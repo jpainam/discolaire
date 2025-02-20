@@ -9,8 +9,12 @@ import type { RouterOutputs } from "@repo/api";
 import { useDebounce } from "@repo/hooks/use-debounce";
 import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
-import { Button } from "@repo/ui/button";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@repo/ui/components/avatar";
+import { Button } from "@repo/ui/components/button";
 import {
   Command,
   CommandEmpty,
@@ -18,9 +22,9 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@repo/ui/command";
-import { ScrollArea } from "@repo/ui/scroll-area";
-import { Skeleton } from "@repo/ui/skeleton";
+} from "@repo/ui/components/command";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { randomAvatar } from "~/components/raw-images";
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";

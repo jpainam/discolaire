@@ -7,8 +7,8 @@ import { CalendarIcon } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
-import { Calendar } from "@repo/ui/calendar";
+import { Button } from "@repo/ui/components/button";
+import { Calendar } from "@repo/ui/components/calendar";
 import {
   FormControl,
   FormDescription,
@@ -16,8 +16,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/form";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+} from "@repo/ui/components/form";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
 
 import { cn } from "~/lib/utils";
 

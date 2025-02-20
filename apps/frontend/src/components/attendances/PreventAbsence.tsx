@@ -6,7 +6,7 @@ import { z } from "zod";
 import { useModal } from "@repo/hooks/use-modal";
 import { useUpload } from "@repo/hooks/use-upload";
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Dialog,
   DialogContent,
@@ -14,7 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@repo/ui/dialog";
+} from "@repo/ui/components/dialog";
 import {
   Form,
   FormControl,
@@ -23,10 +23,10 @@ import {
   FormLabel,
   FormMessage,
   useForm,
-} from "@repo/ui/form";
-import { Input } from "@repo/ui/input";
-import { Textarea } from "@repo/ui/textarea";
-import { FileUploader } from "@repo/ui/uploads/file-uploader";
+} from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
+import { Textarea } from "@repo/ui/components/textarea";
+import { FileUploader } from "@repo/ui/components/uploads/file-uploader";
 
 import { api } from "~/trpc/react";
 

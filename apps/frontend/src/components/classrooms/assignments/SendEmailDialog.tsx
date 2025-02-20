@@ -1,8 +1,8 @@
-import { Button } from "@repo/ui/button";
-import { Checkbox } from "@repo/ui/checkbox";
-import { Input } from "@repo/ui/input";
-import { Label } from "@repo/ui/label";
-import { Textarea } from "@repo/ui/textarea";
+import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import { Input } from "@repo/ui/components/input";
+import { Label } from "@repo/ui/components/label";
+import { Textarea } from "@repo/ui/components/textarea";
 
 export function SendEmailDialog() {
   return (

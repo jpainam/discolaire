@@ -1,4 +1,4 @@
-import { Separator } from "@repo/ui/separator";
+import { Separator } from "@repo/ui/components/separator";
 
 import { EventCalendar } from "~/components/administration/event-calendar/EventCalendar";
 import { EventCalendarHeader } from "~/components/administration/event-calendar/EventCalendarHeader";

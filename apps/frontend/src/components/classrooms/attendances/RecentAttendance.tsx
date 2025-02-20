@@ -13,15 +13,15 @@ import {
 } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
-import { Badge } from "@repo/ui/badge";
-import { Button } from "@repo/ui/button";
+import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
+} from "@repo/ui/components/dropdown-menu";
 
 import { AvatarState } from "~/components/AvatarState";
 import { cn } from "~/lib/utils";

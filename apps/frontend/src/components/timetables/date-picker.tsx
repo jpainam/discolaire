@@ -1,5 +1,5 @@
-import { Calendar } from "@repo/ui/calendar";
-import { SidebarGroup, SidebarGroupContent } from "@repo/ui/sidebar";
+import { Calendar } from "@repo/ui/components/calendar";
+import { SidebarGroup, SidebarGroupContent } from "@repo/ui/components/sidebar";
 
 export function DatePicker() {
   return (

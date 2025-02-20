@@ -1,4 +1,4 @@
-import { Skeleton } from "@repo/ui/skeleton";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 

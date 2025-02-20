@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocale } from "@repo/i18n";
-import { Label } from "@repo/ui/label";
+import { Label } from "@repo/ui/components/label";
 
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 
