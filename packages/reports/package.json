@@ -27,7 +27,7 @@
     "@repo/api": "workspace:*",
     "@repo/i18n": "workspace:*",
     "date-fns": "^4.1.0",
-    "jose": "^5.9.6",
+    "jose": "^6.0.3",
     "qrcode": "^1.5.4"
   },
   "devDependencies": {
