@@ -21,6 +21,14 @@
         "^lint"
       ]
     },
+    "typecheck": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        ".cache/tsbuildinfo.json"
+      ]
+    },
     "check-types": {
       "dependsOn": [
         "^check-types"

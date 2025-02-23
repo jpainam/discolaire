@@ -12,9 +12,9 @@
     "dev:next": "turbo watch dev -F @repo/frontend...",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "postinstall": "pnpm lint:ws && prisma generate",
-    "lint": "turbo lint",
+    "lint": "turbo run lint",
     "lint:ws": "pnpm dlx sherif@latest",
-    "typecheck": "turbo typecheck",
+    "typecheck": "turbo run typecheck",
     "prepare": "husky"
   },
   "devDependencies": {
