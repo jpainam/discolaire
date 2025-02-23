@@ -283,7 +283,7 @@ importers:
     dependencies:
       '@bacons/expo-router-top-tabs':
         specifier: ^1.0.0
-        version: 1.0.0(@react-navigation/native@7.0.14(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0))(expo-router@4.0.17(jclrczm6hunsrugm7w7726gybi))(react-native-reanimated@3.16.7(@babel/core@7.26.8)(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0))(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0)
+        version: 1.0.0(@react-navigation/native@7.0.14(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0))(expo-router@4.0.17(3e5c34c1130199a681f2f757f409f150))(react-native-reanimated@3.16.7(@babel/core@7.26.8)(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0))(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0)
       '@bacons/text-decoder':
         specifier: ^0.0.0
         version: 0.0.0(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))
@@ -343,7 +343,7 @@ importers:
         version: 4.0.8(expo@52.0.31(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@expo/metro-runtime@4.0.1(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0)))(bufferutil@4.0.8)(graphql@15.8.0)(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0))(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0)
       expo-router:
         specifier: ~4.0.17
-        version: 4.0.17(jclrczm6hunsrugm7w7726gybi)
+        version: 4.0.17(3e5c34c1130199a681f2f757f409f150)
       expo-secure-store:
         specifier: ^14.0.1
         version: 14.0.1(expo@52.0.31(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@expo/metro-runtime@4.0.1(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0)))(bufferutil@4.0.8)(graphql@15.8.0)(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0))
@@ -1289,8 +1289,8 @@ importers:
         specifier: workspace:*
         version: link:../typescript
       '@types/eslint__js':
-        specifier: 8.42.3
-        version: 8.42.3
+        specifier: 9.14.0
+        version: 9.14.0
       eslint:
         specifier: 'catalog:'
         version: 9.20.0(jiti@2.4.2)
@@ -4960,11 +4960,9 @@ packages:
   '@types/debug@4.1.12':
     resolution: {integrity: sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==}
 
-  '@types/eslint@9.6.1':
-    resolution: {integrity: sha512-FXx2pKgId/WyYo2jXw63kk7/+TY7u7AziEJxJAnSFzHlqTAS3Ync6SvgYAN/k4/PQpnnVuzoMuVnByKK2qp0ag==}
-
-  '@types/eslint__js@8.42.3':
-    resolution: {integrity: sha512-alfG737uhmPdnvkrLdZLcEKJ/B8s9Y4hrZ+YAdzUeoArBlSUERA2E87ROfOaS4jd/C45fzOoZzidLc1IPwLqOw==}
+  '@types/eslint__js@9.14.0':
+    resolution: {integrity: sha512-s0jepCjOJWB/GKcuba4jISaVpBudw3ClXJ3fUK4tugChUMQsp6kSwuA8Dcx6wFd/JsJqcY8n4rEpa5RTHs5ypA==}
+    deprecated: This is a stub types definition. @eslint/js provides its own type definitions, so you do not need this installed.
 
   '@types/estree-jsx@1.0.5':
     resolution: {integrity: sha512-52CcUVNFyfb1A2ALocQw/Dd1BQFNmSdkuC3BkZ6iqhdMfQz7JWOFRuJFloOzjk+6WijU56m9oKXFAXc7o3Towg==}
@@ -12970,12 +12968,12 @@ snapshots:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
 
-  '@bacons/expo-router-top-tabs@1.0.0(@react-navigation/native@7.0.14(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0))(expo-router@4.0.17(jclrczm6hunsrugm7w7726gybi))(react-native-reanimated@3.16.7(@babel/core@7.26.8)(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0))(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0)':
+  '@bacons/expo-router-top-tabs@1.0.0(@react-navigation/native@7.0.14(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0))(expo-router@4.0.17(3e5c34c1130199a681f2f757f409f150))(react-native-reanimated@3.16.7(@babel/core@7.26.8)(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0))(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0)':
     dependencies:
-      '@react-navigation/material-top-tabs': 6.3.0(7edrvfknnwndsv6cc52y5jppr4)
-      expo-router: 4.0.17(jclrczm6hunsrugm7w7726gybi)
+      '@react-navigation/material-top-tabs': 6.3.0(93362fe069832e13998fd45260319042)
+      expo-router: 4.0.17(3e5c34c1130199a681f2f757f409f150)
       react-native: 0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0)
-      react-native-collapsible-tab-view: 2.0.2(25kmk5jvjbe4kgjhmjcritrfmm)
+      react-native-collapsible-tab-view: 2.0.2(d216473421797be9794cbf4b767262ab)
       react-native-pager-view: 6.0.1(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0)
       react-native-reanimated: 3.16.7(@babel/core@7.26.8)(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0)
       react-native-tab-view: 3.5.2(react-native-pager-view@6.0.1(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0))(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0)
@@ -15048,7 +15046,7 @@ snapshots:
       react-native: 0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0)
       react-native-safe-area-context: 5.2.0(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0)
 
-  '@react-navigation/material-top-tabs@6.3.0(7edrvfknnwndsv6cc52y5jppr4)':
+  '@react-navigation/material-top-tabs@6.3.0(93362fe069832e13998fd45260319042)':
     dependencies:
       '@react-navigation/native': 7.0.14(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0)
       color: 4.2.3
@@ -16174,14 +16172,9 @@ snapshots:
     dependencies:
       '@types/ms': 0.7.34
 
-  '@types/eslint@9.6.1':
+  '@types/eslint__js@9.14.0':
     dependencies:
-      '@types/estree': 1.0.6
-      '@types/json-schema': 7.0.15
-
-  '@types/eslint__js@8.42.3':
-    dependencies:
-      '@types/eslint': 9.6.1
+      '@eslint/js': 9.20.0
 
   '@types/estree-jsx@1.0.5':
     dependencies:
@@ -18464,7 +18457,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  expo-router@4.0.17(jclrczm6hunsrugm7w7726gybi):
+  expo-router@4.0.17(3e5c34c1130199a681f2f757f409f150):
     dependencies:
       '@expo/metro-runtime': 4.0.1(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))
       '@expo/server': 0.5.1(typescript@5.7.3)
@@ -21814,9 +21807,9 @@ snapshots:
       react-css-styled: 1.1.9
       react-selecto: 1.26.3
 
-  react-native-collapsible-tab-view@2.0.2(25kmk5jvjbe4kgjhmjcritrfmm):
+  react-native-collapsible-tab-view@2.0.2(d216473421797be9794cbf4b767262ab):
     dependencies:
-      '@react-navigation/material-top-tabs': 6.3.0(7edrvfknnwndsv6cc52y5jppr4)
+      '@react-navigation/material-top-tabs': 6.3.0(93362fe069832e13998fd45260319042)
       '@react-navigation/native': 7.0.14(react-native@0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0))(react@19.0.0)
       react: 19.0.0
       react-native: 0.77.0(@babel/core@7.26.8)(@babel/preset-env@7.26.8(@babel/core@7.26.8))(@react-native-community/cli-server-api@14.1.0(bufferutil@4.0.8))(@types/react@19.0.8)(bufferutil@4.0.8)(react@19.0.0)
