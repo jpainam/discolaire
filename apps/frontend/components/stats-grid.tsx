@@ -1,5 +1,5 @@
-import { RiArrowRightUpLine, RiArrowRightDownLine } from "@remixicon/react";
-import { cn } from "@workspace/ui/lib/utils";
+import { RiArrowRightUpLine } from "@remixicon/react";
+import { cn } from "@repo/ui/lib/utils";
 
 interface StatsCardProps {
   title: string;
