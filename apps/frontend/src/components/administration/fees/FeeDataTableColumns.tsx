@@ -13,7 +13,6 @@ import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import { useConfirm } from "@repo/ui/components/confirm-dialog";
-import { DataTableColumnHeader } from "@repo/ui/components/datatable/data-table-column-header";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,6 +21,7 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import FlatBadge from "@repo/ui/components/FlatBadge";
 import { Separator } from "@repo/ui/components/separator";
+import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
 import { CreateEditFee } from "~/components/classrooms/fees/CreateEditFee";
 import { CURRENCY } from "~/lib/constants";

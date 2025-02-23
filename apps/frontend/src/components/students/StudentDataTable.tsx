@@ -5,10 +5,10 @@ import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
-import { DataTable, useDataTable } from "@repo/ui/components/datatable";
-import { DataTableSkeleton } from "@repo/ui/components/datatable/data-table-skeleton";
-import { DataTableToolbar } from "@repo/ui/components/datatable/data-table-toolbar";
 import { EmptyState } from "@repo/ui/components/EmptyState";
+import { DataTable, useDataTable } from "@repo/ui/datatable";
+import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
+import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
 
 import { api } from "~/trpc/react";
 import { StudentDataTableActions } from "./StudentDataTableActions";

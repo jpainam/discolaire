@@ -7,7 +7,6 @@ import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
 import { useConfirm } from "@repo/ui/components/confirm-dialog";
-import { DataTableSkeleton } from "@repo/ui/components/datatable/data-table-skeleton";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,6 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";

@@ -6,13 +6,13 @@ import { Eye, MoreVertical, Send, Trash2 } from "lucide-react";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
-import { DataTableColumnHeader } from "@repo/ui/components/datatable/data-table-column-header";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
 import type { SMSHistory } from "~/types/sms";
 import { routes } from "~/configs/routes";

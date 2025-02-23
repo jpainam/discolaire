@@ -3,9 +3,9 @@
 import React from "react";
 
 import { useLocale } from "@repo/i18n";
-import { DataTable, useDataTable } from "@repo/ui/components/datatable";
-import { DataTableSkeleton } from "@repo/ui/components/datatable/data-table-skeleton";
-import { DataTableToolbar } from "@repo/ui/components/datatable/data-table-toolbar";
+import { DataTable, useDataTable } from "@repo/ui/datatable";
+import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
+import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
 
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";

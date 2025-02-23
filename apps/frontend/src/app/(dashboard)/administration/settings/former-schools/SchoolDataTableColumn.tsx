@@ -9,7 +9,6 @@ import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import { useConfirm } from "@repo/ui/components/confirm-dialog";
-import { DataTableColumnHeader } from "@repo/ui/components/datatable/data-table-column-header";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
 import { api } from "~/trpc/react";
 import { CreateEditSchool } from "./CreateEditSchool";

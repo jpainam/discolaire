@@ -17,7 +17,6 @@ import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import { useConfirm } from "@repo/ui/components/confirm-dialog";
-import { DataTableSkeleton } from "@repo/ui/components/datatable/data-table-skeleton";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,6 +33,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 
 import { api } from "~/trpc/react";
 import { selectedPoliciesAtom } from "./_selected_policies_atom";

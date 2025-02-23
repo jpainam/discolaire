@@ -21,7 +21,6 @@ import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import { useConfirm } from "@repo/ui/components/confirm-dialog";
-import { DataTableColumnHeader } from "@repo/ui/components/datatable/data-table-column-header";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,6 +29,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import FlatBadge from "@repo/ui/components/FlatBadge";
+import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
