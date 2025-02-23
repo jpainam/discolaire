@@ -1,0 +1,81 @@
+model Transaction {
+    id              Int               @id @default(autoincrement())
+    transactionRef  String?
+    method          String            @default("CASH")
+    amount          Float
+    description     String?
+    transactionType String?           @default("CREDIT")
+    createdAt       DateTime          @default(now()) @db.Timestamp(6)
+    updatedAt       DateTime          @updatedAt
+    createdById     String?
+    receivedById    String?
+    receivedAt      DateTime?         @db.Timestamp(6)
+    isPrinted       Boolean?          @default(false)
+    printedAt       DateTime?         @db.Timestamp(6)
+    printedById     String?
+    updatedBy       String?
+    observation     String?
+    deletedAt       DateTime?         @db.Timestamp(6)
+    deletedBy       String?
+    status          TransactionStatus @default(PENDING)
+    schoolYearId    String
+    accountId       Int
+    account         StudentAccount    @relation(fields: [accountId], references: [id], onDelete: Cascade)
+    schoolYear      SchoolYear        @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+}
+
+model ScheduleJob {
+    id           Int    @id @default(autoincrement())
+    userId       String
+    timezone     String
+    cron         String
+    type         String
+    triggerDevId String
+    user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum TransactionStatus {
+    PENDING
+    CANCELED
+    VALIDATED
+}
+
+model ScheduleTask {
+    id           Int       @id @default(autoincrement())
+    name         String
+    cron         String
+    schoolYearId String
+    schoolId     String
+    lastRun      DateTime?
+    status       String    @default("pending")
+    data         Json?
+}
+
+model GradeAppreciation {
+    id                     Int                          @id @default(autoincrement())
+    minGrade               Float
+    maxGrade               Float
+    appreciation           String
+    schoolId               String
+    schoolYearId           String
+    classroomAppreciations ClassroomGradeAppreciation[]
+}
+
+model ClassroomGradeAppreciation {
+    classroomId         String
+    gradeAppreciationId Int
+    appreciation        GradeAppreciation @relation(fields: [gradeAppreciationId], references: [id])
+
+    @@id([classroomId, gradeAppreciationId])
+}
+
+model LoginActivity {
+    id         Int       @id @default(autoincrement())
+    userId     String
+    ipAddress  String
+    device     String
+    loginDate  DateTime
+    logoutDate DateTime?
+    createdAt  DateTime  @default(now()) @db.Timestamp(6)
+    user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
