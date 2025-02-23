@@ -5,7 +5,7 @@ import { Check } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
-import { Button } from "@repo/ui/components/Button";
+import { Button } from "@repo/ui/components/button";
 import {
   Command,
   CommandEmpty,
