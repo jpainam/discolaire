@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Eraser } from "lucide-react";
 
-import { Button } from "../button";
+import { Button } from "./button";
 
 interface SignatureInputProps {
   canvasRef: React.RefObject<HTMLCanvasElement>;

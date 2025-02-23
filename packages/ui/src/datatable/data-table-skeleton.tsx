@@ -1,4 +1,5 @@
-import { cn } from "../components";
+import { cn } from "@repo/ui/lib/utils";
+
 import { Skeleton } from "../components/skeleton";
 import {
   Table,

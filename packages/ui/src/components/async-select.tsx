@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { Check, ChevronsUpDown, Loader2, Search } from "lucide-react";
 
-import { Button } from "../button";
-import { cn } from "../lib/utils";
-import { useDebounce } from "../use-debounce";
+import { useDebounce } from "@repo/ui/hooks/use-debounce";
+import { cn } from "@repo/ui/lib/utils";
+
+import { Button } from "./button";
 import {
   Command,
   CommandEmpty,

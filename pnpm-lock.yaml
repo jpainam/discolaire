@@ -933,8 +933,8 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0
       jose:
-        specifier: ^5.9.6
-        version: 5.9.6
+        specifier: ^6.0.3
+        version: 6.0.3
       qrcode:
         specifier: ^1.5.4
         version: 1.5.4
@@ -1178,8 +1178,8 @@ importers:
         specifier: ^2.15.1
         version: 2.15.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       sonner:
-        specifier: 1.7.4
-        version: 1.7.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: 2.0.1
+        version: 2.0.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       tailwind-merge:
         specifier: ^3.0.1
         version: 3.0.1
@@ -1271,7 +1271,7 @@ importers:
         version: 7.37.4(eslint@9.20.0(jiti@2.4.2))
       eslint-plugin-react-compiler:
         specifier: beta
-        version: 19.0.0-beta-30d8a17-20250209(eslint@9.20.0(jiti@2.4.2))
+        version: 19.0.0-beta-21e868a-20250216(eslint@9.20.0(jiti@2.4.2))
       eslint-plugin-react-hooks:
         specifier: ^5.1.0
         version: 5.1.0(eslint@9.20.0(jiti@2.4.2))
@@ -6672,8 +6672,8 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9
 
-  eslint-plugin-react-compiler@19.0.0-beta-30d8a17-20250209:
-    resolution: {integrity: sha512-D2wohyvsW27KSQV8IhyjL9UhYKs4f7Y8WPIuNOeiYylOaredvb2vW/AAE2m36BWLsn3Q9xRYz1UZj2AXR15w/g==}
+  eslint-plugin-react-compiler@19.0.0-beta-21e868a-20250216:
+    resolution: {integrity: sha512-LstAv6tKgZylMmJniWxQL9TOY9kwRddLnvBsoTbRsgUDROL5bsg0k5XHMaNJLyX8cxh4iafQ/WxAw5shNUf3GQ==}
     engines: {node: ^14.17.0 || ^16.0.0 || >= 18.0.0}
     peerDependencies:
       eslint: '>=7'
@@ -7913,8 +7913,8 @@ packages:
   join-component@1.1.0:
     resolution: {integrity: sha512-bF7vcQxbODoGK1imE2P9GS9aw4zD0Sd+Hni68IMZLj7zRnquH7dXUmMw9hDI5S/Jzt7q+IyTXN0rSg2GI0IKhQ==}
 
-  jose@5.9.6:
-    resolution: {integrity: sha512-AMlnetc9+CV9asI19zHmrgS/WYsWUwCn2R7RzlbJWD7F9eWYUTGyBmU9o6PxngtLGOiDGPRu+Uc4fhKzbpteZQ==}
+  jose@6.0.3:
+    resolution: {integrity: sha512-7bOLhKorsp4NWBGpNJZPHy3CqN0JG5XKMKPtMN02EPMg3rcgbCEkJ27GCWHUOb3jHRqo1oJxfdMdAeQYX4cqSQ==}
 
   jotai@2.11.3:
     resolution: {integrity: sha512-B/PsewAQ0UOS5e2+TTWegUPQ3SCLPCjPY24LYUjfn2EorGlluTA2dFjVLgF1+xHLjK9Jit3y5mKHyMG3Xq/GZg==}
@@ -10274,8 +10274,8 @@ packages:
     resolution: {integrity: sha512-l5x7VUUWbjVFbafGLxPWkYsHIhEvmF85tbIeFZWc8ZPtoMyybuEhL7Jye/ooC4/d48FgOjSJXgsF/AJPYCW8Zw==}
     engines: {node: '>= 10.0.0', npm: '>= 3.0.0'}
 
-  sonner@1.7.4:
-    resolution: {integrity: sha512-DIS8z4PfJRbIyfVFDVnK9rO3eYDtse4Omcm6bt0oEr5/jtLgysmjuBl1frJ9E/EQZrFmKx2A8m/s5s9CRXIzhw==}
+  sonner@2.0.1:
+    resolution: {integrity: sha512-FRBphaehZ5tLdLcQ8g2WOIRE+Y7BCfWi5Zyd8bCvBjiW8TxxAyoWZIxS661Yz6TGPqFQ4VLzOF89WEYhfynSFQ==}
     peerDependencies:
       react: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
       react-dom: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
@@ -18199,7 +18199,7 @@ snapshots:
       safe-regex-test: 1.0.3
       string.prototype.includes: 2.0.1
 
-  eslint-plugin-react-compiler@19.0.0-beta-30d8a17-20250209(eslint@9.20.0(jiti@2.4.2)):
+  eslint-plugin-react-compiler@19.0.0-beta-21e868a-20250216(eslint@9.20.0(jiti@2.4.2)):
     dependencies:
       '@babel/core': 7.26.8
       '@babel/parser': 7.26.1
@@ -19738,7 +19738,7 @@ snapshots:
 
   join-component@1.1.0: {}
 
-  jose@5.9.6: {}
+  jose@6.0.3: {}
 
   jotai@2.11.3(@types/react@19.0.8)(react@19.0.0):
     optionalDependencies:
@@ -22669,7 +22669,7 @@ snapshots:
       ip-address: 9.0.5
       smart-buffer: 4.2.0
 
-  sonner@1.7.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  sonner@2.0.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)

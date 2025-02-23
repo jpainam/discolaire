@@ -1,7 +1,7 @@
 import type { ReactQuillProps } from "react-quill";
 import ReactQuill from "react-quill-new";
 
-import { cn } from ".";
+import { cn } from "@repo/ui/lib/utils";
 
 import "react-quill-new/dist/quill.snow.css";
 

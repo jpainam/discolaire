@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { AnimatePresence, motion, MotionConfig } from "framer-motion";
 import useMeasure from "react-use-measure";
 
-import { cn } from ".";
+import { cn } from "@repo/ui/lib/utils";
 
 interface Tab {
   id: number;

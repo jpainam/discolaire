@@ -8,7 +8,10 @@
     "./lib/*": "./src/lib/*.ts",
     "./components/*": "./src/components/*.tsx",
     "./hooks/*": "./src/hooks/*.ts",
-    "./FlatBadge": "./src/components/FlatBadge.tsx"
+    "./FlatBadge": "./src/components/FlatBadge.tsx",
+    "./datatable/*": "./src/datatable/*.tsx",
+    "./datatable/types": "./src/datatable/types.ts",
+    "./uploads/*": "./src/uploads/*.tsx"
   },
   "scripts": {
     "build": "tsc",
@@ -86,7 +89,7 @@
     "react-textarea-autosize": "^8.5.7",
     "react-use-measure": "^2.1.7",
     "recharts": "^2.15.1",
-    "sonner": "1.7.4",
+    "sonner": "2.0.1",
     "tailwind-merge": "^3.0.1",
     "vaul": "^1.1.2"
   },

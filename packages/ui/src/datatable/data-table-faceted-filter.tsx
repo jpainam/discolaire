@@ -2,8 +2,9 @@ import type { Column } from "@tanstack/react-table";
 import * as React from "react";
 import { CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons";
 
-import { Button } from "../button";
-import { cn } from "../components";
+import { Button } from "@repo/ui/components/button";
+import { cn } from "@repo/ui/lib/utils";
+
 import { Badge } from "../components/badge";
 import {
   Command,

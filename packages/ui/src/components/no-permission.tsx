@@ -4,8 +4,8 @@ import { Mail, ShieldAlert } from "lucide-react";
 
 import { useLocale } from "@repo/i18n";
 
-import { Button } from "../button";
 import { cn } from "../lib/utils";
+import { Button } from "./button";
 import {
   Card,
   CardContent,

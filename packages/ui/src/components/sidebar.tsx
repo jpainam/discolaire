@@ -6,9 +6,10 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 import { PanelLeft } from "lucide-react";
 
-import { Button } from "../button";
+import { useIsMobile } from "@repo/ui/hooks/use-mobile";
+
 import { cn } from "../lib/utils";
-import { useIsMobile } from "../use-mobile";
+import { Button } from "./button";
 import { Input } from "./input";
 import { Separator } from "./separator";
 import { Sheet, SheetContent } from "./sheet";

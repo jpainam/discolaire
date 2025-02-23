@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { toast } from "sonner";
 
-import { Button } from "../button";
+import { Button } from "./button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 
 function CopyButton({

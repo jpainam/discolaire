@@ -21,7 +21,8 @@ import {
 } from "@tanstack/react-table";
 import { parseAsInteger, useQueryState } from "nuqs";
 
-import { cn } from "../components";
+import { cn } from "@repo/ui/lib/utils";
+
 import {
   Table,
   TableBody,

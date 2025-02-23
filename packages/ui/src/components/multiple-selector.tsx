@@ -3,7 +3,8 @@ import { forwardRef, useEffect } from "react";
 import { Command as CommandPrimitive, useCommandState } from "cmdk";
 import { Check, ChevronDown, X } from "lucide-react";
 
-import { cn } from ".";
+import { cn } from "@repo/ui/lib/utils";
+
 import { Badge } from "./badge";
 import { Command, CommandGroup, CommandItem, CommandList } from "./command";
 

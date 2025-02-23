@@ -6,7 +6,8 @@ import {
   DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
 
-import { Button } from "../button";
+import { Button } from "@repo/ui/components/button";
+
 import {
   Select,
   SelectContent,

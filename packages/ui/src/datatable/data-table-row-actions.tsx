@@ -3,7 +3,8 @@
 import type { Row } from "@tanstack/react-table";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 
-import { Button } from "../button";
+import { Button } from "@repo/ui/components/button";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
