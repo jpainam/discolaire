@@ -26,7 +26,7 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Textarea } from "@repo/ui/components/textarea";
-import { FileUploader } from "@repo/ui/components/uploads/file-uploader";
+import { FileUploader } from "@repo/ui/uploads/file-uploader";
 
 import { api } from "~/trpc/react";
 

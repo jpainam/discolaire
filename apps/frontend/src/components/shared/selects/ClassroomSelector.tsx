@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check } from "lucide-react";
 import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
@@ -38,7 +38,7 @@ export function ClassroomSelector({
   searchPlaceholder,
   placeholder,
   className,
-  size = "tiny",
+  //size = "tiny",
   disabled = false,
   defaultValue,
   onChange,
@@ -64,17 +64,17 @@ export function ClassroomSelector({
       <Popover open={open} onOpenChange={setOpen} modal={false}>
         <PopoverTrigger asChild>
           <Button
-            size={size}
+            size={"sm"}
             disabled={disabled}
-            type="default"
+            //type="default"
             className={"w-full [&>span]:w-full"}
-            iconRight={
-              <ChevronsUpDown
-                className="text-foreground-muted"
-                strokeWidth={2}
-                size={14}
-              />
-            }
+            // iconRight={
+            //   <ChevronsUpDown
+            //     className="text-foreground-muted"
+            //     strokeWidth={2}
+            //     size={14}
+            //   />
+            // }
           >
             {data.find((it) => it.id === value)?.name ??
               placeholder ??

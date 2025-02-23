@@ -29,7 +29,7 @@ import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { Textarea } from "@repo/ui/components/textarea";
-import { FileUploader } from "@repo/ui/components/uploads/file-uploader";
+import { FileUploader } from "@repo/ui/uploads/file-uploader";
 
 import { DatePicker } from "~/components/shared/date-picker";
 import { routes } from "~/configs/routes";

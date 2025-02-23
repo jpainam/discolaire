@@ -24,7 +24,7 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { FileUploader } from "@repo/ui/components/uploads/file-uploader";
+import { FileUploader } from "@repo/ui/uploads/file-uploader";
 
 import { DateRangePicker } from "~/components/shared/DateRangePicker";
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";

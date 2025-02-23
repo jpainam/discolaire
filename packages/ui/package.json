@@ -10,8 +10,10 @@
     "./hooks/*": "./src/hooks/*.ts",
     "./FlatBadge": "./src/components/FlatBadge.tsx",
     "./datatable/*": "./src/datatable/*.tsx",
+    "./datatable": "./src/datatable/index.tsx",
     "./datatable/types": "./src/datatable/types.ts",
-    "./uploads/*": "./src/uploads/*.tsx"
+    "./uploads/*": "./src/uploads/*.tsx",
+    "./dnd/*": "./src/dnd/*.tsx"
   },
   "scripts": {
     "build": "tsc",

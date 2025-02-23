@@ -17,7 +17,7 @@ import {
   useFormContext,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { FileUploader } from "@repo/ui/components/uploads/file-uploader";
+import { FileUploader } from "@repo/ui/uploads/file-uploader";
 
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
