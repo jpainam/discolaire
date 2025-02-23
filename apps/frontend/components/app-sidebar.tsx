@@ -3,6 +3,17 @@ import * as React from "react";
 import { SearchForm } from "@/components/search-form";
 import { TeamSwitcher } from "@/components/team-switcher";
 import {
+  RiBardLine,
+  RiCodeSSlashLine,
+  RiLayoutLeftLine,
+  RiLeafLine,
+  RiLoginCircleLine,
+  RiLogoutBoxLine,
+  RiScanLine,
+  RiSettings3Line,
+  RiUserFollowLine,
+} from "@remixicon/react";
+import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -14,18 +25,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar";
-import {
-  RiScanLine,
-  RiBardLine,
-  RiUserFollowLine,
-  RiCodeSSlashLine,
-  RiLoginCircleLine,
-  RiLayoutLeftLine,
-  RiSettings3Line,
-  RiLeafLine,
-  RiLogoutBoxLine,
-} from "@remixicon/react";
+} from "@repo/ui/components/sidebar";
 
 // This is sample data.
 const data = {

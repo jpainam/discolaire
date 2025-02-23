@@ -1,55 +1,6 @@
 "use client";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-} from "@/components/ui/pagination";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Progress } from "@/components/ui/progress";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
   RiArrowDownSLine,
   RiArrowUpSLine,
   RiBardLine,
@@ -62,6 +13,55 @@ import {
   RiSearch2Line,
   RiVerifiedBadgeFill,
 } from "@remixicon/react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@repo/ui/components/alert-dialog";
+import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
+import { Input } from "@repo/ui/components/input";
+import { Label } from "@repo/ui/components/label";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+} from "@repo/ui/components/pagination";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
+import { Progress } from "@repo/ui/components/progress";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@repo/ui/components/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@repo/ui/components/tooltip";
 import { cn } from "@repo/ui/lib/utils";
 import {
   ColumnDef,
@@ -106,7 +106,7 @@ type Item = {
 const statusFilterFn: FilterFn<Item> = (
   row,
   columnId,
-  filterValue: string[],
+  filterValue: string[]
 ) => {
   if (!filterValue?.length) return true;
   const status = row.getValue(columnId) as string;
@@ -179,7 +179,7 @@ const getColumns = ({ data, setData }: GetColumnsProps): ColumnDef<Item>[] => [
             "gap-1 py-0.5 px-2 text-sm",
             row.original.status === "Inactive"
               ? "text-muted-foreground"
-              : "text-primary-foreground",
+              : "text-primary-foreground"
           )}
         >
           {row.original.status === "Active" && (
@@ -218,7 +218,7 @@ const getColumns = ({ data, setData }: GetColumnsProps): ColumnDef<Item>[] => [
           className={cn(
             row.original.verified
               ? "fill-emerald-600"
-              : "fill-muted-foreground/50",
+              : "fill-muted-foreground/50"
           )}
           aria-hidden="true"
         />
@@ -304,7 +304,7 @@ export default function ContactsTable() {
     async function fetchPosts() {
       try {
         const res = await fetch(
-          "https://res.cloudinary.com/dlzlfasou/raw/upload/users-02_mohkpe.json",
+          "https://res.cloudinary.com/dlzlfasou/raw/upload/users-02_mohkpe.json"
         );
         const data = await res.json();
         setData(data);
@@ -320,7 +320,7 @@ export default function ContactsTable() {
   const handleDeleteRows = () => {
     const selectedRows = table.getSelectedRowModel().rows;
     const updatedData = data.filter(
-      (item) => !selectedRows.some((row) => row.original.id === item.id),
+      (item) => !selectedRows.some((row) => row.original.id === item.id)
     );
     setData(updatedData);
     table.resetRowSelection();
@@ -399,7 +399,7 @@ export default function ContactsTable() {
               ref={inputRef}
               className={cn(
                 "peer min-w-60 ps-9 bg-background bg-gradient-to-br from-accent/60 to-accent",
-                Boolean(table.getColumn("name")?.getFilterValue()) && "pe-9",
+                Boolean(table.getColumn("name")?.getFilterValue()) && "pe-9"
               )}
               value={
                 (table.getColumn("name")?.getFilterValue() ?? "") as string
@@ -554,7 +554,7 @@ export default function ContactsTable() {
                       <div
                         className={cn(
                           header.column.getCanSort() &&
-                            "flex h-full cursor-pointer select-none items-center gap-2",
+                            "flex h-full cursor-pointer select-none items-center gap-2"
                         )}
                         onClick={header.column.getToggleSortingHandler()}
                         onKeyDown={(e) => {
@@ -571,7 +571,7 @@ export default function ContactsTable() {
                       >
                         {flexRender(
                           header.column.columnDef.header,
-                          header.getContext(),
+                          header.getContext()
                         )}
                         {{
                           asc: (
@@ -593,7 +593,7 @@ export default function ContactsTable() {
                     ) : (
                       flexRender(
                         header.column.columnDef.header,
-                        header.getContext(),
+                        header.getContext()
                       )
                     )}
                   </TableHead>

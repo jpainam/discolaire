@@ -1,8 +1,9 @@
 "use client";
 
-import * as React from "react";
 import Image from "next/image";
+import * as React from "react";
 
+import { RiAddLine, RiExpandUpDownLine } from "@remixicon/react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,14 +12,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@repo/ui/components/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
-} from "@/components/ui/sidebar";
-import { RiExpandUpDownLine, RiAddLine } from "@remixicon/react";
+} from "@repo/ui/components/sidebar";
 
 export function TeamSwitcher({
   teams,

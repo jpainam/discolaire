@@ -1,4 +1,9 @@
 import { AppSidebar } from "@/components/app-sidebar";
+import ContactsTable from "@/components/contacts-table";
+import FeedbackDialog from "@/components/feedback-dialog";
+import { StatsGrid } from "@/components/stats-grid";
+import UserDropdown from "@/components/user-dropdown";
+import { RiScanLine } from "@remixicon/react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,19 +11,14 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
+} from "@repo/ui/components/breadcrumb";
+import { Button } from "@repo/ui/components/button";
+import { Separator } from "@repo/ui/components/separator";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
-import UserDropdown from "@/components/user-dropdown";
-import FeedbackDialog from "@/components/feedback-dialog";
-import ContactsTable from "@/components/contacts-table";
-import { RiScanLine } from "@remixicon/react";
-import { StatsGrid } from "@/components/stats-grid";
+} from "@repo/ui/components/sidebar";
 
 export default function Page() {
   return (
