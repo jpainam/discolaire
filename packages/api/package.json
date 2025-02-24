@@ -27,8 +27,12 @@
         "@t3-oss/env-nextjs": "^0.12.0",
         "@trpc/server": "catalog:",
         "@unkey/ratelimit": "^0.5.5",
+        "date-fns": "^4.1.0",
         "date-fns-tz": "^3.2.0",
+        "json-logic-js": "^2.0.5",
         "jsonwebtoken": "^9.0.2",
+        "lodash": "^4.17.21",
+        "next": "^15.1.7",
         "superjson": "2.2.2",
         "uuid": "^11.0.5",
         "zod": "catalog:"
@@ -36,6 +40,8 @@
     "devDependencies": {
         "@repo/eslint-config": "workspace:*",
         "@repo/typescript-config": "workspace:*",
+        "@types/json-logic-js": "^2.0.8",
+        "@types/lodash": "^4.17.15",
         "@types/uuid": "^10.0.0",
         "typescript": "catalog:"
     }

@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 
 import { db } from "@repo/db";
 
-import { env } from "../../env";
+import { env } from "../env";
 
 export const userService = {
   sendWelcomeEmail: async ({
@@ -25,7 +25,7 @@ export const userService = {
       {
         method: "GET",
         headers: await headers(),
-      },
+      }
     );
   },
   getPermissions: async (userId: string) => {
@@ -65,7 +65,7 @@ export const userService = {
         resources: rolePolicy.policy.resources,
         condition: rolePolicy.policy.condition,
         schoolId: user?.schoolId ?? "UNKNOWN",
-      })),
+      }))
     );
     const userPolicies = userWithRolesAndPolicies?.policies.map(
       (userPolicy) => {
@@ -76,7 +76,7 @@ export const userService = {
           condition: userPolicy.policy.condition,
           schoolId: user?.schoolId ?? "UNKNOWN",
         };
-      },
+      }
     );
 
     return [...(rolePolicies ?? []), ...(userPolicies ?? [])];
@@ -86,7 +86,7 @@ export const userService = {
     userId: string,
     name: string,
     email: string | null,
-    avatar: string | null,
+    avatar: string | null
   ) => {
     return db.user.update({
       where: { id: userId },

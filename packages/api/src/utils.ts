@@ -1,8 +1,3 @@
-import { addDays } from "date-fns";
-import jwt from "jsonwebtoken";
-
-import { env } from "../env";
-
 export function generateStringColor(): string {
   const letters = "0123456789ABCDEF";
   let color = "#";
@@ -20,7 +15,7 @@ export function generateStringColor(): string {
  */
 export const exclude = <Type, Key extends keyof Type>(
   obj: Type,
-  keys: Key[],
+  keys: Key[]
 ): Omit<Type, Key> => {
   for (const key of keys) {
     delete obj[key];
@@ -28,11 +23,11 @@ export const exclude = <Type, Key extends keyof Type>(
   return obj;
 };
 
-export const generateToken = (user: { id: string }) => {
-  const payload = {
-    sub: user.id,
-    iat: new Date().getTime(),
-    exp: addDays(new Date(), 30).getTime(),
-  };
-  return jwt.sign(payload, env.AUTH_SECRET);
-};
+// export const generateToken = (user: { id: string }) => {
+//   const payload = {
+//     sub: user.id,
+//     iat: new Date().getTime(),
+//     exp: addDays(new Date(), 30).getTime(),
+//   };
+//   return jwt.sign(payload, env.AUTH_SECRET);
+// };

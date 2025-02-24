@@ -1,7 +1,5 @@
 "use client";
 
-import "~/styles/themes.css";
-
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 import { TooltipProvider } from "@repo/ui/components/tooltip";

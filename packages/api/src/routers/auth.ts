@@ -4,10 +4,10 @@ import { z } from "zod";
 
 //import { invalidateSessionToken } from "@repo/auth";
 
-import { isPasswordMatch } from "../encrypt";
+import { comparePasswords } from "@repo/auth/session";
 import { ratelimiter } from "../rateLimit";
 import { protectedProcedure, publicProcedure } from "../trpc";
-import { generateToken } from "../utils";
+//import { generateToken } from "../utils";
 
 export const authRouter = {
   getSession: publicProcedure.query(({ ctx }) => {
@@ -23,7 +23,7 @@ export const authRouter = {
       z.object({
         username: z.string().min(1),
         password: z.string().min(1),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.db.user.findFirst({
@@ -31,13 +31,15 @@ export const authRouter = {
           username: input.username,
         },
       });
-      if (!user || !(await isPasswordMatch(input.password, user.password))) {
+      if (!user || !(await comparePasswords(input.password, user.password))) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "Incorrect username or password",
         });
       }
-      const token = generateToken({ id: user.id });
+      //const token = generateToken({ id: user.id });
+      // TODO  generate a token conforms to @repo/auth
+      const token = crypto.randomUUID();
       return token;
     }),
   signOut: protectedProcedure.mutation((opts) => {

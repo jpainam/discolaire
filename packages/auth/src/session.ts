@@ -8,7 +8,7 @@ import { jwtVerify, SignJWT } from "jose";
 import type { User } from "@repo/db";
 import { db } from "@repo/db";
 
-import { env } from "../env";
+import { env } from "./env";
 
 const key = new TextEncoder().encode(env.AUTH_SECRET);
 const SALT_ROUNDS = 10;
@@ -19,7 +19,7 @@ export async function hashPassword(password: string) {
 
 export async function comparePasswords(
   plainTextPassword: string,
-  hashedPassword: string,
+  hashedPassword: string
 ) {
   return compare(plainTextPassword, hashedPassword);
 }

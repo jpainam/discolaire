@@ -2,7 +2,7 @@ import { subMonths } from "date-fns";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
-import { encryptPassword } from "../encrypt";
+import { hashPassword } from "@repo/auth/session";
 import { userService } from "../services/user-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -43,14 +43,14 @@ export const contactRouter = createTRPCRouter({
             },
           });
           await userService.deleteUsers(
-            contacts.map((c) => c.userId).filter((t) => t !== null),
+            contacts.map((c) => c.userId).filter((t) => t !== null)
           );
           return true;
         },
         {
           maxWait: 5000,
           timeout: 20000,
-        },
+        }
       );
     }),
   get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
@@ -75,7 +75,7 @@ export const contactRouter = createTRPCRouter({
         // page: z.coerce.number().optional().default(1),
         // sort: z.string().optional().default("lastName"),
         q: z.string().optional().default(""),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       //const offset = (input.page - 1) * input.per_page;
@@ -148,7 +148,7 @@ export const contactRouter = createTRPCRouter({
               classroom: classroom,
             },
           };
-        }),
+        })
       );
       return result;
     }),
@@ -217,7 +217,7 @@ export const contactRouter = createTRPCRouter({
       // create user
       const userData = {
         username: uuidv4(),
-        password: await encryptPassword("password"),
+        password: await hashPassword("password"),
         schoolId: ctx.schoolId,
         profile: "contact",
         name: `${contact.firstName} ${contact.lastName}`,
@@ -266,7 +266,7 @@ export const contactRouter = createTRPCRouter({
         page: z.number().optional().default(1),
         q: z.string().optional(),
         contactId: z.string(),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       const qq = `%${input.q}%`;

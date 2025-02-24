@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { TransactionStatus } from "@repo/db";
-import { PermissionAction } from "@repo/lib/permission";
+import { PermissionAction } from "../permission2";
 
 import { checkPermissions } from "../permission";
 import { classroomService } from "../services/classroom-service";
@@ -34,27 +34,27 @@ export const classroomRouter = createTRPCRouter({
     if (ctx.session.user.profile === "staff") {
       const shortedClassrooms = await staffService.getClassrooms(
         ctx.session.user.id,
-        ctx.schoolYearId,
+        ctx.schoolYearId
       );
       return classrooms.filter((cl) =>
-        shortedClassrooms.some((sc) => sc.id === cl.id),
+        shortedClassrooms.some((sc) => sc.id === cl.id)
       );
     }
     // Has access to classrooms where he is a parent
     if (ctx.session.user.profile === "contact") {
       const shortedClassrooms = await contactService.getClassrooms(
         ctx.session.user.id,
-        ctx.schoolYearId,
+        ctx.schoolYearId
       );
       return classrooms.filter((cl) =>
-        shortedClassrooms.some((sc) => sc.id === cl.id),
+        shortedClassrooms.some((sc) => sc.id === cl.id)
       );
     }
     // Has access to his classroom
     if (ctx.session.user.profile === "student") {
       const shortedClassroom = await studentService.getClassroomByUserId(
         ctx.session.user.id,
-        ctx.schoolYearId,
+        ctx.schoolYearId
       );
       return classrooms.filter((cl) => cl.id === shortedClassroom?.id);
     }

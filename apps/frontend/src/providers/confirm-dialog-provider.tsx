@@ -1,7 +1,7 @@
 "use client";
 
-import type { ConfirmOptions } from "@repo/ui/components/confirm-dialog";
-import { ConfirmDialogProvider as BaseConfirmDialogProvider } from "@repo/ui/components/confirm-dialog";
+import type { ConfirmOptions } from "~/providers/confirm-dialog";
+import { ConfirmDialogProvider as BaseConfirmDialogProvider } from "~/providers/confirm-dialog";
 
 interface Props {
   children: React.ReactNode;

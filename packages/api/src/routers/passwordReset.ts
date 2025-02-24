@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { encryptPassword } from "../encrypt";
+import { hashPassword } from "@repo/auth/session";
 import { ratelimiter } from "../rateLimit";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
@@ -13,7 +13,7 @@ export const passwordResetRouter = createTRPCRouter({
           id: input.userId,
         },
         data: {
-          password: await encryptPassword(input.password),
+          password: await hashPassword(input.password),
         },
       });
     }),
@@ -23,7 +23,7 @@ export const passwordResetRouter = createTRPCRouter({
         userId: z.string().min(1),
         resetCode: z.string().min(1),
         expiresAt: z.date(),
-      }),
+      })
     )
     .use(ratelimiter({ limit: 5, namespace: "reset.code.password" }))
     .mutation(({ input, ctx }) => {
@@ -41,7 +41,7 @@ export const passwordResetRouter = createTRPCRouter({
     .input(
       z.object({
         email: z.string().email(),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       return ctx.db.passwordReset.findFirst({

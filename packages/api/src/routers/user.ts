@@ -1,8 +1,8 @@
 import { TRPCError } from "@trpc/server";
-import bcrypt from "bcryptjs";
+
 import { z } from "zod";
 
-import { encryptPassword } from "../encrypt";
+import { comparePasswords, hashPassword } from "@repo/auth/session";
 import { ratelimiter } from "../rateLimit";
 import { userService } from "../services/user-service";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
@@ -13,7 +13,7 @@ export const userRouter = createTRPCRouter({
     .input(
       z.object({
         email: z.string().email(),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       return ctx.db.user.findFirst({
@@ -30,7 +30,7 @@ export const userRouter = createTRPCRouter({
           id: input.userId,
         },
         data: {
-          password: await encryptPassword(input.password),
+          password: await hashPassword(input.password),
         },
       });
     }),
@@ -40,7 +40,7 @@ export const userRouter = createTRPCRouter({
         pageSize: z.number().default(30),
         q: z.string().optional(),
         pageIndex: z.number().default(0),
-      }),
+      })
     )
     .query(({ ctx, input }) => {
       const offset = input.pageSize * input.pageIndex;
@@ -61,7 +61,7 @@ export const userRouter = createTRPCRouter({
     .input(
       z.object({
         q: z.string().optional(),
-      }),
+      })
     )
     .query(({ ctx }) => {
       //const qq = `%${input.q}%`;
@@ -81,7 +81,7 @@ export const userRouter = createTRPCRouter({
     .input(
       z.object({
         userId: z.string(),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       return ctx.db.userRole.findMany({
@@ -111,7 +111,7 @@ export const userRouter = createTRPCRouter({
         emailVerified: z.coerce.date().optional(),
         isActive: z.boolean().default(true),
         roleId: z.array(z.string().min(1)),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       const exists = await userService.validateUsername(input.username);
@@ -127,7 +127,7 @@ export const userRouter = createTRPCRouter({
           username: input.username,
           name: input.username,
           schoolId: ctx.schoolId,
-          password: await encryptPassword(input.password),
+          password: await hashPassword(input.password),
           emailVerified: input.emailVerified,
           isActive: input.isActive,
         },
@@ -143,7 +143,7 @@ export const userRouter = createTRPCRouter({
         password: z.string().min(1),
         isActive: z.boolean().default(true),
         roleId: z.array(z.string().min(1)),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       const existingUser = await ctx.db.user.findFirst({
@@ -166,7 +166,7 @@ export const userRouter = createTRPCRouter({
         },
         data: {
           username: input.username,
-          password: await encryptPassword(input.password),
+          password: await hashPassword(input.password),
           isActive: input.isActive,
         },
       });
@@ -181,7 +181,7 @@ export const userRouter = createTRPCRouter({
     .input(
       z.object({
         userId: z.string(),
-      }),
+      })
     )
     .mutation(() => {
       return [];
@@ -193,7 +193,7 @@ export const userRouter = createTRPCRouter({
         userId: z.string(),
         entityId: z.string(),
         type: z.enum(["staff", "contact", "student"]),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       let email: string | null;
@@ -256,7 +256,7 @@ export const userRouter = createTRPCRouter({
       z.object({
         oldPassword: z.string().min(1),
         newPassword: z.string().min(1),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.db.user.findUnique({
@@ -271,7 +271,7 @@ export const userRouter = createTRPCRouter({
         });
       }
 
-      if (!(await bcrypt.compare(input.oldPassword, user.password))) {
+      if (!(await comparePasswords(input.oldPassword, user.password))) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Old password is incorrect",
@@ -282,7 +282,7 @@ export const userRouter = createTRPCRouter({
           id: ctx.session.user.id,
         },
         data: {
-          password: await encryptPassword(input.newPassword),
+          password: await hashPassword(input.newPassword),
         },
       });
     }),

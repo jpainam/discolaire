@@ -4,7 +4,7 @@ import { fromZonedTime } from "date-fns-tz";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
-import { encryptPassword } from "../encrypt";
+import { hashPassword } from "@repo/auth/session";
 import { userService } from "../services/user-service";
 import { protectedProcedure } from "../trpc";
 
@@ -83,11 +83,11 @@ export const staffRouter = {
             },
           });
           await userService.deleteUsers(
-            staffs.map((c) => c.userId).filter((t) => t !== null),
+            staffs.map((c) => c.userId).filter((t) => t !== null)
           );
           return staffs;
         },
-        { maxWait: 5000, timeout: 20000 },
+        { maxWait: 5000, timeout: 20000 }
       );
     }),
   teachers: protectedProcedure.query(({ ctx }) => {
@@ -127,7 +127,7 @@ export const staffRouter = {
       // create user
       const userData = {
         username: uuidv4(),
-        password: await encryptPassword("password"),
+        password: await hashPassword("password"),
         schoolId: ctx.schoolId,
         profile: "staff",
         name: `${staff.firstName} ${staff.lastName}`,
@@ -169,7 +169,7 @@ export const staffRouter = {
         .object({
           q: z.string().optional(),
         })
-        .optional(),
+        .optional()
     )
     .query(async ({ ctx }) => {
       const staffs = await ctx.db.staff.findMany({

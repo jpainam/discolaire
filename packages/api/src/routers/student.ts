@@ -6,7 +6,7 @@ import { z } from "zod";
 
 import type { Prisma, Student } from "@repo/db";
 
-import { encryptPassword } from "../encrypt";
+import { hashPassword } from "@repo/auth/session";
 import { accountService } from "../services/account-service";
 import { studentService } from "../services/student-service";
 import { userService } from "../services/user-service";
@@ -72,7 +72,7 @@ export const studentRouter = createTRPCRouter({
         q: z.string().optional(),
         formerSchool: z.boolean().optional().default(true),
         country: z.boolean().optional().default(true),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       const offset = input.per_page * (input.page - 1);
@@ -106,14 +106,14 @@ export const studentRouter = createTRPCRouter({
             ...student,
             isRepeating: await studentService.isRepeating(
               student.id,
-              ctx.schoolYearId,
+              ctx.schoolYearId
             ),
             classroom: await studentService.getClassroom(
               student.id,
-              ctx.schoolYearId,
+              ctx.schoolYearId
             ),
           };
-        }),
+        })
       );
       return students;
     }),
@@ -122,7 +122,7 @@ export const studentRouter = createTRPCRouter({
       z.object({
         query: z.string(),
         take: z.number().optional().default(100),
-      }),
+      })
     )
     .query(({ ctx, input }) => {
       return ctx.db.student.findMany({
@@ -195,7 +195,7 @@ export const studentRouter = createTRPCRouter({
       void accountService.attachAccount(
         student.id,
         `${student.firstName} ${student.lastName}`,
-        ctx.session.user.id,
+        ctx.session.user.id
       );
       if (input.classroom) {
         await ctx.db.enrollment.create({
@@ -210,7 +210,7 @@ export const studentRouter = createTRPCRouter({
       // create user
       const userData = {
         username: uuidv4(),
-        password: await encryptPassword("password"),
+        password: await hashPassword("password"),
         schoolId: ctx.schoolId,
         profile: "student",
         name: `${student.firstName} ${student.lastName}`,
@@ -237,13 +237,13 @@ export const studentRouter = createTRPCRouter({
       void accountService.attachAccount(
         input.id,
         `${input.firstName} ${input.lastName}`,
-        ctx.session.user.id,
+        ctx.session.user.id
       );
       if (
         input.registrationNumber &&
         (await studentService.registrationNumberExists(
           input.registrationNumber,
-          input.id,
+          input.id
         ))
       ) {
         // throw new TRPCError({
@@ -290,7 +290,7 @@ export const studentRouter = createTRPCRouter({
         .object({
           q: z.string().optional(),
         })
-        .optional(),
+        .optional()
     )
     .query(async ({ ctx, input }) => {
       const students = await ctx.db.student.findMany({
@@ -347,7 +347,7 @@ export const studentRouter = createTRPCRouter({
 
   classroom: protectedProcedure
     .input(
-      z.object({ studentId: z.string(), schoolYearId: z.string().optional() }),
+      z.object({ studentId: z.string(), schoolYearId: z.string().optional() })
     )
     .query(({ ctx, input }) => {
       // return the current classroom
@@ -402,7 +402,7 @@ export const studentRouter = createTRPCRouter({
     }
     const classroom = await studentService.getClassroom(
       input,
-      ctx.schoolYearId,
+      ctx.schoolYearId
     );
     return {
       ...student,
@@ -451,7 +451,7 @@ export const studentRouter = createTRPCRouter({
         page: z.number().optional().default(1),
         q: z.string().optional(),
         studentId: z.string(),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       const qq = `%${input.q}%`;
@@ -522,7 +522,7 @@ export const studentRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const classroom = await studentService.getClassroom(
         input,
-        ctx.schoolYearId,
+        ctx.schoolYearId
       );
       if (!classroom) {
         throw new TRPCError({
@@ -550,7 +550,7 @@ export const studentRouter = createTRPCRouter({
       z.object({
         url: z.string().min(1),
         id: z.string().min(1),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       const student = await ctx.db.student.findFirstOrThrow({

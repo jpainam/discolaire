@@ -1,9 +1,10 @@
 import { z } from "zod";
 
-import { getInvitationCode } from "@repo/lib";
-
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
+const getInvitationCode = async (email: string) => {
+  return email + " " + crypto.randomUUID();
+};
 export const invitationRouter = createTRPCRouter({
   create: protectedProcedure
     .input(z.object({ email: z.string().email() }))

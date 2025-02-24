@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 
-import { env } from "../../env";
+import { env } from "../env";
 
 export async function submitReportJob(
   url: string,
   data: Record<string, unknown> & {
     id: number;
     userId: string;
-  } & object,
+  } & object
 ) {
   try {
     console.log("submitReportJob", url, data.id);
@@ -17,7 +17,7 @@ export async function submitReportJob(
         ...data,
         callback: `${env.NEXT_PUBLIC_BASE_URL}/api/reports`,
       },
-      (key, value) => (value === undefined ? null : value),
+      (key, value) => (value === undefined ? null : value)
     );
 
     const response = await fetch(fullUrl, {

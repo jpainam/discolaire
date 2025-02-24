@@ -6,7 +6,7 @@
     "type": "module",
     "exports": {
         ".": "./src/index.ts",
-        "./env": "./env.ts",
+        "./env": "./src/env.ts",
         "./session": "./src/session.ts"
     },
     "scripts": {
@@ -19,6 +19,7 @@
         "@repo/db": "workspace:*",
         "@t3-oss/env-nextjs": "^0.12.0",
         "bcryptjs": "^3.0.0",
+        "jose": "^6.0.6",
         "jsonwebtoken": "^9.0.2",
         "next": "catalog:",
         "react": "catalog:",
