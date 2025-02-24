@@ -63,13 +63,14 @@ import {
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
 import { cn } from "@repo/ui/lib/utils";
-import {
+import type {
   ColumnDef,
   ColumnFiltersState,
   FilterFn,
   PaginationState,
   SortingState,
-  VisibilityState,
+  VisibilityState} from "@tanstack/react-table";
+import {
   flexRender,
   getCoreRowModel,
   getFacetedUniqueValues,
@@ -88,7 +89,7 @@ import {
   useTransition,
 } from "react";
 
-type Item = {
+interface Item {
   id: string;
   image: string;
   name: string;
@@ -101,15 +102,15 @@ type Item = {
   };
   value: number;
   joinDate: string;
-};
+}
 
 const statusFilterFn: FilterFn<Item> = (
   row,
   columnId,
   filterValue: string[],
 ) => {
-  if (!filterValue?.length) return true;
-  const status = row.getValue(columnId) as string;
+  if (!filterValue.length) return true;
+  const status = row.getValue(columnId);
   return filterValue.includes(status);
 };
 
@@ -249,7 +250,7 @@ const getColumns = ({ data, setData }: GetColumnsProps): ColumnDef<Item>[] => [
     header: "Value",
     accessorKey: "value",
     cell: ({ row }) => {
-      const value = row.getValue("value") as number;
+      const value = row.getValue("value");
       return (
         <TooltipProvider delayDuration={0}>
           <Tooltip>
@@ -610,7 +611,7 @@ export default function ContactsTable() {
                 Loading...
               </TableCell>
             </TableRow>
-          ) : table.getRowModel().rows?.length ? (
+          ) : table.getRowModel().rows.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
