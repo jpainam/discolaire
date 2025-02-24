@@ -1,0 +1,35 @@
+{
+    "name": "@repo/auth",
+    "version": "0.1.0",
+    "private": true,
+    "license": "MIT",
+    "type": "module",
+    "exports": {
+        ".": "./src/index.ts",
+        "./env": "./env.ts",
+        "./session": "./src/session.ts"
+    },
+    "scripts": {
+        "clean": "git clean -xdf .cache .turbo dist node_modules",
+        "format": "prettier --check . --ignore-path ../../.gitignore",
+        "lint": "eslint",
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@repo/db": "workspace:*",
+        "@t3-oss/env-nextjs": "^0.12.0",
+        "bcryptjs": "^3.0.0",
+        "jsonwebtoken": "^9.0.2",
+        "next": "catalog:",
+        "react": "catalog:",
+        "react-dom": "catalog:",
+        "zod": "catalog:"
+    },
+    "devDependencies": {
+        "@repo/eslint-config": "workspace:*",
+        "@repo/typescript-config": "workspace:*",
+        "@types/bcryptjs": "^2.4.6",
+        "@types/jsonwebtoken": "^9.0.8",
+        "typescript": "catalog:"
+    }
+}
