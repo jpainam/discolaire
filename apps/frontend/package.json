@@ -4,10 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "next build",
-    "dev": "next dev --turbopack",
-    "lint": "next lint",
-    "start": "next start"
+    "build": "pnpm with-env next build",
+    "clean": "git clean -xdf .cache .next .turbo node_modules",
+    "dev": "pnpm with-env next dev --turbopack",
+    "lint": "eslint",
+    "start": "pnpm with-env next start",
+    "typecheck": "tsc --noEmit",
+    "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -87,6 +90,7 @@
     "@types/node": "catalog:",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
+    "dotenv-cli": "^8.0.0",
     "postcss": "^8.5.3",
     "tailwindcss": "^4.0.8",
     "typescript": "catalog:"

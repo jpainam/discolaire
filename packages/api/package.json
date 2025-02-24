@@ -42,6 +42,7 @@
         "@repo/typescript-config": "workspace:*",
         "@types/json-logic-js": "^2.0.8",
         "@types/lodash": "^4.17.15",
+        "@types/node": "catalog:",
         "@types/uuid": "^10.0.0",
         "typescript": "catalog:"
     }
