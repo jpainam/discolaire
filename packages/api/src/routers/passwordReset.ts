@@ -23,7 +23,7 @@ export const passwordResetRouter = createTRPCRouter({
         userId: z.string().min(1),
         resetCode: z.string().min(1),
         expiresAt: z.date(),
-      })
+      }),
     )
     .use(ratelimiter({ limit: 5, namespace: "reset.code.password" }))
     .mutation(({ input, ctx }) => {
@@ -41,7 +41,7 @@ export const passwordResetRouter = createTRPCRouter({
     .input(
       z.object({
         email: z.string().email(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       return ctx.db.passwordReset.findFirst({

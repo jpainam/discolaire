@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
-import { useSheet } from "@repo/hooks/use-sheet";
 import {
   Sheet,
   SheetContent,
@@ -11,6 +10,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@repo/ui/components/sheet";
+import { useSheet } from "~/hooks/use-sheet";
 
 import { cn } from "~/lib/utils";
 

@@ -68,7 +68,7 @@ export function doPermissionsCheck(
   action: string,
   resource: string,
   schoolId: string,
-  data?: object
+  data?: object,
 ) {
   if (!permissions || !Array.isArray(permissions)) {
     return false;
@@ -78,13 +78,13 @@ export function doPermissionsCheck(
     (permission) =>
       permission.schoolId === schoolId &&
       permission.actions.some((act) =>
-        action ? action.match(toRegexpString(act)) : null
+        action ? action.match(toRegexpString(act)) : null,
       ) &&
-      permission.resources.some((res) => resource.match(toRegexpString(res)))
+      permission.resources.some((res) => resource.match(toRegexpString(res))),
   );
   // If there is at least one deny permission, return false
   const hasDenyPermission = allPermissions.some(
-    (permission) => permission.effect === "Deny"
+    (permission) => permission.effect === "Deny",
   );
   if (hasDenyPermission) {
     return false;

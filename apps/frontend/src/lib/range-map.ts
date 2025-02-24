@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export default function rangeMap(n: number, fn: (i: number) => any) {
   const arr = [];

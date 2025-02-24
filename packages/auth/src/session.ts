@@ -19,7 +19,7 @@ export async function hashPassword(password: string) {
 
 export async function comparePasswords(
   plainTextPassword: string,
-  hashedPassword: string
+  hashedPassword: string,
 ) {
   return compare(plainTextPassword, hashedPassword);
 }

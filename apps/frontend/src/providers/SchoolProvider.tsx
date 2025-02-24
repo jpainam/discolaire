@@ -13,7 +13,7 @@ interface SchoolContextProps {
 }
 
 export const SchoolContext = createContext<SchoolContextProps | undefined>(
-  undefined
+  undefined,
 );
 
 //export const useSchool = () => useContext(SchoolContext);
@@ -22,7 +22,7 @@ export function useSchool() {
   const context = useContext(SchoolContext);
   if (!context) {
     throw new Error(
-      "useSchool must be used within a <SchoolContextProvider />"
+      "useSchool must be used within a <SchoolContextProvider />",
     );
   }
   return context;
@@ -40,7 +40,7 @@ export const SchoolContextProvider = ({
 }>) => {
   const contextValue = useMemo(
     () => ({ school, permissions, schoolYear }),
-    [school, permissions, schoolYear]
+    [school, permissions, schoolYear],
   );
   return (
     <SchoolContext.Provider value={contextValue}>

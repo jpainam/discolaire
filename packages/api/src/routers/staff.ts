@@ -83,11 +83,11 @@ export const staffRouter = {
             },
           });
           await userService.deleteUsers(
-            staffs.map((c) => c.userId).filter((t) => t !== null)
+            staffs.map((c) => c.userId).filter((t) => t !== null),
           );
           return staffs;
         },
-        { maxWait: 5000, timeout: 20000 }
+        { maxWait: 5000, timeout: 20000 },
       );
     }),
   teachers: protectedProcedure.query(({ ctx }) => {
@@ -169,7 +169,7 @@ export const staffRouter = {
         .object({
           q: z.string().optional(),
         })
-        .optional()
+        .optional(),
     )
     .query(async ({ ctx }) => {
       const staffs = await ctx.db.staff.findMany({

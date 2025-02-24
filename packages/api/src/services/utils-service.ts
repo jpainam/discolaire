@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import _ from "lodash";
 
 export function getRank(array: number[], target: number): number {

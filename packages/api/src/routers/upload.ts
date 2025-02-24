@@ -32,7 +32,7 @@ export const uploadRouter = createTRPCRouter({
     .input(
       z.object({
         destination: z.string(),
-      })
+      }),
     )
     .query(async ({ input }) => {
       const contentType = "application/json";

@@ -1,4 +1,6 @@
 import type { NextConfig } from "next";
+
+import "./src/env";
 const nextConfig: NextConfig = {
   transpilePackages: ["@repo/ui", "@repo/auth", "@repo/validators", "@repo/db"],
   images: {

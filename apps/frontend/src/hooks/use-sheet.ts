@@ -4,37 +4,43 @@ import { atom, useAtomValue, useSetAtom } from "jotai";
 import type React from "react";
 import { useCallback } from "react";
 
-interface ModalTypes {
+export type SheetPlacements = "left" | "right" | "top" | "bottom";
+
+interface SheetTypes {
   view: React.ReactNode;
+  isOpen: boolean;
   title?: React.ReactNode;
   description?: React.ReactNode;
-  isOpen: boolean;
+  placement?: SheetPlacements;
   className?: string;
 }
 
-const modalAtom = atom<ModalTypes>({
+const sheetAtom = atom<SheetTypes>({
   isOpen: false,
   view: null,
   title: null,
-  className: "",
   description: null,
+  placement: "right",
+  className: "w-[700px]",
 });
 
-export function useModal() {
-  const state = useAtomValue(modalAtom);
-  const setState = useSetAtom(modalAtom);
+export function useSheet() {
+  const state = useAtomValue(sheetAtom);
+  const setState = useSetAtom(sheetAtom);
 
-  const openModal = useCallback(
+  const openSheet = useCallback(
     ({
       view,
+      placement,
+      className,
       title,
       description,
-      className,
     }: {
       view: React.ReactNode;
-      title?: React.ReactNode;
-      description?: React.ReactNode;
+      placement?: SheetPlacements;
       className?: string;
+      description?: React.ReactNode;
+      title?: React.ReactNode;
     }) => {
       setState({
         ...state,
@@ -42,6 +48,7 @@ export function useModal() {
         view,
         title,
         description,
+        placement,
         className,
       });
     },
@@ -49,17 +56,19 @@ export function useModal() {
     [],
   );
 
-  const closeModal = useCallback(() => {
+  const closeSheet = useCallback(() => {
     setState({
       ...state,
       isOpen: false,
+      title: null,
+      description: null,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {
     ...state,
-    openModal,
-    closeModal,
+    openSheet,
+    closeSheet,
   };
 }

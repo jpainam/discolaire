@@ -23,7 +23,7 @@ export const authRouter = {
       z.object({
         username: z.string().min(1),
         password: z.string().min(1),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.db.user.findFirst({

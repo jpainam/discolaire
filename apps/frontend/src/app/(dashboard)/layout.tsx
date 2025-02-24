@@ -54,6 +54,9 @@ export default async function Layout({
               <NavHeader />
               <div className="ml-auto flex items-center gap-2">
                 <ModeToggle />
+                <ModeToggle />
+                <ModeToggle />
+                <ModeToggle />
               </div>
             </div>
           </header>

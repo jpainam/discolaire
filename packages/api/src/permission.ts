@@ -12,7 +12,7 @@ export async function checkPermissions(
   data?: object,
   // Pass the data variables if you want to avoid hooks in this
   // e.g If you want to use useCheckPermissions in a loop like organization settings
-  permissions?: Permission[]
+  permissions?: Permission[],
 ) {
   const session = await auth();
   const user = session?.user;
@@ -28,6 +28,6 @@ export async function checkPermissions(
     action,
     resource,
     user.schoolId,
-    data
+    data,
   );
 }
