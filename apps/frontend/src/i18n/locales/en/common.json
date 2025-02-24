@@ -271,7 +271,6 @@
   "continue": "Continue",
   "contract": "Contract",
   "copied": "Copied",
-  "copy_invitation_link_description": "Copy the invitation link to share with the individual",
   "copy_invite": "Copy invite",
   "copy_permissions": "Copy Permissions",
   "copy_permissions_description": "Copy all group memberships, attached managed policies, inline policies, and any existing permissions boundaries from an existing user.",

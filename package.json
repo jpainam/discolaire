@@ -36,5 +36,8 @@
   "prisma": {
     "schema": "packages/db/prisma/schema",
     "seed": "tsx packages/db/src/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.4.1"
   }
 }

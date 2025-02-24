@@ -31,6 +31,10 @@ catalogs:
 importers:
 
   .:
+    dependencies:
+      '@prisma/client':
+        specifier: ^6.4.1
+        version: 6.4.1(typescript@5.7.3)
     devDependencies:
       '@repo/eslint-config':
         specifier: workspace:*
@@ -411,7 +415,7 @@ importers:
   packages/db:
     dependencies:
       '@prisma/client':
-        specifier: ^6.3.1
+        specifier: ^6.4.1
         version: 6.4.1(typescript@5.7.3)
     devDependencies:
       '@repo/eslint-config':
