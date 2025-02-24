@@ -1,9 +1,8 @@
 "use client";
 
-import Image from "next/image";
+import { ChevronsUpDown, Plus } from "lucide-react";
 import * as React from "react";
 
-import { RiAddLine, RiExpandUpDownLine } from "@remixicon/react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +16,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@repo/ui/components/sidebar";
 
 export function TeamSwitcher({
@@ -24,12 +24,12 @@ export function TeamSwitcher({
 }: {
   teams: {
     name: string;
-    logo: string;
+    logo: React.ElementType;
+    plan: string;
   }[];
 }) {
-  const [activeTeam, setActiveTeam] = React.useState(teams[0] ?? null);
-
-  if (!teams.length) return null;
+  const { isMobile } = useSidebar();
+  const [activeTeam, setActiveTeam] = React.useState(teams[0]);
 
   return (
     <SidebarMenu>
@@ -38,37 +38,27 @@ export function TeamSwitcher({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground gap-3 [&>svg]:size-auto"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <div className="flex aspect-square size-8 items-center justify-center rounded-md overflow-hidden bg-sidebar-primary text-sidebar-primary-foreground">
-                {activeTeam && (
-                  <Image
-                    src={activeTeam.logo}
-                    width={36}
-                    height={36}
-                    alt={activeTeam.name}
-                  />
-                )}
+              <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                {activeTeam?.logo && <activeTeam.logo className="size-4" />}
               </div>
-              <div className="grid flex-1 text-left text-base leading-tight">
-                <span className="truncate font-medium">
-                  {activeTeam?.name ?? "Select a Team"}
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-semibold">
+                  {activeTeam?.name}
                 </span>
+                <span className="truncate text-xs">{activeTeam?.plan}</span>
               </div>
-              <RiExpandUpDownLine
-                className="ms-auto text-muted-foreground/60"
-                size={20}
-                aria-hidden="true"
-              />
+              <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-md"
+            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
             align="start"
-            side="bottom"
+            side={isMobile ? "bottom" : "right"}
             sideOffset={4}
           >
-            <DropdownMenuLabel className="uppercase text-muted-foreground/60 text-xs">
+            <DropdownMenuLabel className="text-muted-foreground text-xs">
               Teams
             </DropdownMenuLabel>
             {teams.map((team, index) => (
@@ -77,13 +67,8 @@ export function TeamSwitcher({
                 onClick={() => setActiveTeam(team)}
                 className="gap-2 p-2"
               >
-                <div className="flex size-6 items-center justify-center rounded-md overflow-hidden">
-                  <Image
-                    src={team.logo}
-                    width={36}
-                    height={36}
-                    alt={team.name}
-                  />
+                <div className="flex size-6 items-center justify-center rounded-xs border">
+                  <team.logo className="size-4 shrink-0" />
                 </div>
                 {team.name}
                 <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
@@ -91,8 +76,10 @@ export function TeamSwitcher({
             ))}
             <DropdownMenuSeparator />
             <DropdownMenuItem className="gap-2 p-2">
-              <RiAddLine className="opacity-60" size={16} aria-hidden="true" />
-              <div className="font-medium">Add team</div>
+              <div className="bg-background flex size-6 items-center justify-center rounded-md border">
+                <Plus className="size-4" />
+              </div>
+              <div className="text-muted-foreground font-medium">Add team</div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

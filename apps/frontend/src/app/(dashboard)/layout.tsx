@@ -1,118 +1,67 @@
-import type { Metadata, Viewport } from "next";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-import { Toaster } from "@repo/ui/components/sonner";
-import { I18nProvider } from "~/src/i18n/i18n-context";
+import { auth } from "@repo/auth";
+import { Separator } from "@repo/ui/components/separator";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@repo/ui/components/sidebar";
+import { AppSidebar } from "~/components/app-sidebar";
+import { ModeToggle } from "~/components/mode-toggle";
+import { NavHeader } from "~/components/nav-header";
 
-import { cn } from "~/src/lib/utils";
-import { TRPCReactProvider } from "~/src/trpc/react";
+import { SchoolContextProvider } from "~/providers/SchoolProvider";
 
-import "~/styles/globals.css";
+import GlobalModal from "~/layouts/GlobalModal";
+import GlobalSheet from "~/layouts/GlobalSheet";
+import { api } from "~/trpc/server";
 
-import localFont from "next/font/local";
-
-//import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
-//import { auth } from "@repo/auth";
-import { getUser } from "@repo/auth/session";
-import { detectLanguage } from "@repo/i18n/server";
-
-import { ProgressBar } from "~/components/next-progress";
-import { TailwindIndicator } from "~/components/tailwind-indicator";
-import { ThemeProvider } from "~/components/theme-provider";
-import { env } from "~/env";
-import { AuthProvider } from "~/providers/AuthProvider";
-import ConfirmDialogProvider from "~/providers/confirm-dialog-provider";
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
-
-export const metadata: Metadata = {
-  metadataBase: new URL(
-    env.VERCEL_ENV === "production"
-      ? "https://school.discolaire.com"
-      : "http://localhost:3000"
-  ),
-  title: "Gestion Scolaire",
-  description: "Gestion scolaire pour les écoles",
-  openGraph: {
-    title: "Gestion Scolaire",
-    description: "Gestion scolaire pour les écoles",
-    url: "https://discolaire.com",
-    siteName: "Digitalisation Scolaire",
-  },
-  twitter: {
-    card: "summary_large_image",
-    site: "@discolaire",
-    creator: "@discolaire",
-  },
-};
-
-export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-  ],
-};
-
-export default async function RootLayout(props: { children: React.ReactNode }) {
-  //const session = await auth();
-  const userPromise = getUser();
-
-  const lng = await detectLanguage();
+export default async function Layout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  const session = await auth();
+  if (!session) {
+    redirect("/auth/login");
+  }
+  const cookieStore = await cookies();
+  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
+  const school = await api.school.get(session.user.schoolId);
+  const schoolYearId = (await cookies()).get("schoolYear")?.value;
+  if (!schoolYearId) {
+    throw new Error("No school year selected");
+  }
+  const schoolYear = await api.schoolYear.get(schoolYearId);
+  const permissions = await api.user.permissions();
   return (
-    <I18nProvider language={lng}>
-      <html
-        // https://github.com/facebook/react/issues/11538#issuecomment-350110297
-        lang="en"
-        className="notranslate"
-        translate="no"
-        suppressHydrationWarning
+    <SidebarProvider defaultOpen={defaultOpen}>
+      <SchoolContextProvider
+        schoolYear={schoolYear}
+        school={school}
+        permissions={permissions}
       >
-        <head>
-          <meta name="google" content="notranslate" />
-          {/* <script
-            src="https://unpkg.com/react-scan/dist/auto.global.js"
-            async
-          ></script> */}
-        </head>
-        <body
-          className={cn(
-            geistSans.variable,
-            geistMono.variable,
-            "min-h-screen bg-background font-sans text-foreground antialiased"
-          )}
-        >
-          <NuqsAdapter>
-            <ThemeProvider
-              disableTransitionOnChange
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-            >
-              <ProgressBar />
-              <TRPCReactProvider>
-                <AuthProvider userPromise={userPromise}>
-                  <ConfirmDialogProvider>
-                    {props.children}
-                  </ConfirmDialogProvider>
-                  {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-                </AuthProvider>
-              </TRPCReactProvider>
-              <TailwindIndicator />
-              <Toaster richColors />
-            </ThemeProvider>
-          </NuqsAdapter>
-        </body>
-      </html>
-    </I18nProvider>
+        {/* <NoticeBanner /> */}
+        <AppSidebar />
+        <SidebarInset>
+          <header className="bg-background sticky inset-x-0 top-0 isolate z-10 flex shrink-0 items-center gap-2 border-b">
+            <div className="flex h-14 w-full items-center gap-2 px-4">
+              <SidebarTrigger className="-ml-1.5" />
+              <Separator
+                orientation="vertical"
+                className="mr-2 data-[orientation=vertical]:h-4"
+              />
+              <NavHeader />
+              <div className="ml-auto flex items-center gap-2">
+                <ModeToggle />
+              </div>
+            </div>
+          </header>
+          {children}
+        </SidebarInset>
+        <GlobalSheet />
+        <GlobalModal />
+      </SchoolContextProvider>
+    </SidebarProvider>
   );
 }

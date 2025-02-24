@@ -1,21 +1,21 @@
 import type { Metadata, Viewport } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
-import { I18nProvider } from "@/i18n/i18n-context";
 import { Toaster } from "@repo/ui/components/sonner";
+import { I18nProvider } from "~/i18n/i18n-context";
 
-import { cn } from "@repo/ui/lib/utils";
-import { TRPCReactProvider } from "~/src/trpc/react";
+import { cn } from "~/lib/utils";
+import { TRPCReactProvider } from "~/trpc/react";
 
-import "~/styles/globals.css";
+import "./globals.css";
 
 //import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 //import { auth } from "@repo/auth";
 import { getUser } from "@repo/auth/session";
-import { detectLanguage } from "@repo/i18n/server";
+import { detectLanguage } from "~/i18n/server";
 
-import { Analytics } from "@/components/analytics";
+import { Analytics } from "~/components/analytics";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import { ProgressBar } from "~/components/next-progress";
