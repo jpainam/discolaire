@@ -27,7 +27,7 @@ import {
 } from "@repo/ui/components/select";
 import { useLocale } from "~/i18n";
 
-import { useSchool } from "~/contexts/SchoolContext";
+import { useSchool } from "~/providers/SchoolProvider";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { requiredFeesAtom } from "./required-fees-atom";

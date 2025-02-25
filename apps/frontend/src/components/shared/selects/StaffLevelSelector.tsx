@@ -3,7 +3,6 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
 import {
   Command,
@@ -32,6 +31,7 @@ import {
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useModal } from "~/hooks/use-modal";
+import { useLocale } from "~/i18n";
 
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
@@ -80,12 +80,7 @@ export const StaffLevelSelector = ({
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent
-          className="p-0"
-          side="bottom"
-          align="start"
-          sameWidthAsTrigger={true}
-        >
+        <PopoverContent className="p-0" side="bottom" align="start">
           <Command>
             <CommandInput placeholder={t("search_for_an_option")} />
             <CommandList>

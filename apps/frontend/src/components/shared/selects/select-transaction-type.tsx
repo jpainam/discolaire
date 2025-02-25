@@ -1,4 +1,3 @@
-import { useLocale } from "@repo/i18n";
 import { Label } from "@repo/ui/components/label";
 import {
   Select,
@@ -7,6 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
+import { useLocale } from "~/i18n";
 
 import { cn } from "~/lib/utils";
 

@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Check, ChevronsUpDown, Plus } from "lucide-react";
+import { useEffect, useState } from "react";
 
-import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
 import {
   Command,
@@ -19,6 +18,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
+import { useLocale } from "~/i18n";
 
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
@@ -83,12 +83,7 @@ export const StaffSelector = ({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent
-        className="p-0"
-        side="bottom"
-        align="start"
-        sameWidthAsTrigger={true}
-      >
+      <PopoverContent className="p-0" side="bottom" align="start">
         <Command>
           <CommandInput
             placeholder={searchPlaceholder ?? t("search_for_an_option")}

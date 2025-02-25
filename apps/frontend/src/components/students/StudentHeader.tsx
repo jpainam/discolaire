@@ -24,8 +24,6 @@ import type * as RPNInput from "react-phone-number-input";
 import { toast } from "sonner";
 
 import { StudentStatus } from "@repo/db";
-import { useCreateQueryString } from "@repo/hooks/create-query-string";
-import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -37,8 +35,10 @@ import {
 import { Separator } from "@repo/ui/components/separator";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import FlatBadge from "~/components/FlatBadge";
+import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { SimpleTooltip } from "~/components/simple-tooltip";

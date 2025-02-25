@@ -2,8 +2,8 @@
 
 import { PlusIcon } from "lucide-react";
 
-import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
+import { useLocale } from "~/i18n";
 
 interface AddButtonProps {
   onClick?: () => void;

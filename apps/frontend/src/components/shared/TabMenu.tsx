@@ -1,10 +1,10 @@
 "use client";
 
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
 
-import { cn } from "~/lib/utils";
+import { cn } from "@repo/ui/lib/utils";
 
 export interface TabMenuOption {
   icon: React.ReactNode;
@@ -29,7 +29,7 @@ export function TabMenu({
           "flex flex-row items-center gap-2 rounded-full px-4 py-1.5 text-sm text-muted-foreground transition-all",
           isActive
             ? "bg-primary text-primary-foreground"
-            : "hover:text-secondary-foreground",
+            : "hover:text-secondary-foreground"
         )}
       >
         {icon} {title}

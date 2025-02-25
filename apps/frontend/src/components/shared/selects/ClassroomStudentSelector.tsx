@@ -1,11 +1,10 @@
 "use client";
 
-import * as React from "react";
-import { useEffect, useState } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Check, ChevronsUpDown } from "lucide-react";
+import * as React from "react";
+import { useEffect, useState } from "react";
 
-import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
 import {
   Command,
@@ -21,6 +20,7 @@ import {
   PopoverTrigger,
 } from "@repo/ui/components/popover";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { useLocale } from "~/i18n";
 
 import { AvatarState } from "~/components/AvatarState";
 import { cn } from "~/lib/utils";
@@ -66,8 +66,8 @@ const VirtualizedCommand = ({
   const handleSearch = (search: string) => {
     setFilteredOptions(
       options.filter((option) =>
-        option.label.toLowerCase().includes(search.toLowerCase()),
-      ),
+        option.label.toLowerCase().includes(search.toLowerCase())
+      )
     );
   };
 
@@ -131,7 +131,7 @@ const VirtualizedCommand = ({
                       selectedOption ===
                         filteredOptions[virtualOption.index]?.value
                         ? "opacity-100"
-                        : "opacity-0",
+                        : "opacity-0"
                     )}
                   />
                 </CommandItem>
@@ -178,7 +178,7 @@ export function ClassroomStudentSelector({
     if (classroomStudentsQuery.data) {
       if (defaultValue) {
         const dValue = classroomStudentsQuery.data.find(
-          (item) => item.id === defaultValue,
+          (item) => item.id === defaultValue
         );
         if (dValue)
           setSelectedOption({ label: getFullName(dValue), value: dValue.id });
@@ -188,7 +188,7 @@ export function ClassroomStudentSelector({
           label: getFullName(student),
           value: student.id,
           avatar: student.avatar ?? undefined,
-        })),
+        }))
       );
     }
   }, [defaultValue, classroomStudentsQuery.data]);
@@ -212,7 +212,7 @@ export function ClassroomStudentSelector({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 justify-end opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0" sameWidthAsTrigger={true}>
+      <PopoverContent className="p-0">
         <VirtualizedCommand
           height={height}
           options={options.map((option) => ({
@@ -224,7 +224,7 @@ export function ClassroomStudentSelector({
           selectedOption={selectedOption.value}
           onSelectOption={(currentValue) => {
             onChange?.(
-              currentValue === selectedOption.value ? null : currentValue,
+              currentValue === selectedOption.value ? null : currentValue
             );
             setSelectedOption({
               value: currentValue === selectedOption.value ? "" : currentValue,

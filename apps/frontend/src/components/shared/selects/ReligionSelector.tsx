@@ -3,7 +3,6 @@
 import { Loader } from "lucide-react";
 import { toast } from "sonner";
 
-import { useLocale } from "@repo/i18n";
 import {
   Select,
   SelectContent,
@@ -11,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
+import { useLocale } from "~/i18n";
 
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";

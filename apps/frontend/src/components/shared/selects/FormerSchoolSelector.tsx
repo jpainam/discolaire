@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
 import {
   Form,
@@ -23,6 +22,7 @@ import {
 } from "@repo/ui/components/popover";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useModal } from "~/hooks/use-modal";
+import { useLocale } from "~/i18n";
 
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
@@ -102,7 +102,7 @@ export function FormerSchoolSelector({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 justify-end opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0" sameWidthAsTrigger={true}>
+      <PopoverContent className="p-0">
         <VirtualizedCommand
           height={height}
           renderOption={({ option, isSelected }) => {

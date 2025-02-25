@@ -5,8 +5,7 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { useUpload } from "@repo/hooks/use-upload";
-import { useLocale } from "@repo/i18n";
+import { useUpload } from "~/hooks/use-upload";
 import { Button } from "@repo/ui/components/button";
 import {
   Form,
@@ -19,10 +18,11 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Textarea } from "@repo/ui/components/textarea";
-import { FileUploader } from "@repo/ui/uploads/file-uploader";
+import { FileUploader } from "~/uploads/file-uploader";
 import { useModal } from "~/hooks/use-modal";
+import { useLocale } from "~/i18n";
 
-import { useSchool } from "~/contexts/SchoolContext";
+import { useSchool } from "~/providers/SchoolProvider";
 import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";

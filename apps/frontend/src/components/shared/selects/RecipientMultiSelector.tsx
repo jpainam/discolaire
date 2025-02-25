@@ -1,10 +1,9 @@
 "use client";
 
-import * as React from "react";
 import { Command as CommandPrimitive } from "cmdk";
 import { X } from "lucide-react";
+import * as React from "react";
 
-import { useLocale } from "@repo/i18n";
 import { Badge } from "@repo/ui/components/badge";
 import {
   Command,
@@ -13,6 +12,7 @@ import {
   CommandList,
 } from "@repo/ui/components/command";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { useLocale } from "~/i18n";
 
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
@@ -57,7 +57,7 @@ export function RecipientMultiSelector({
         }
       }
     },
-    [],
+    []
   );
 
   const recipientsQuery = api.recipient.groups.useQuery();
@@ -66,7 +66,7 @@ export function RecipientMultiSelector({
     if (!recipientsQuery.data) return;
     const recipients = recipientsQuery.data;
     const _selectables = recipients.filter(
-      (recipient) => !selected.includes(recipient.id),
+      (recipient) => !selected.includes(recipient.id)
     );
     setSelectables(_selectables.map((recipient) => recipient.id));
   }, [recipientsQuery.data, selected]);
@@ -118,7 +118,7 @@ export function RecipientMultiSelector({
             placeholder={t("select_recipients")}
             className={cn(
               "ml-2 flex-1 bg-transparent outline-none placeholder:text-muted-foreground",
-              className,
+              className
             )}
           />
         </div>

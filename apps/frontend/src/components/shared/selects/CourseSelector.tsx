@@ -1,9 +1,8 @@
 "use client";
 
-import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
+import * as React from "react";
 
-import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
 import {
   Command,
@@ -19,6 +18,7 @@ import {
   PopoverTrigger,
 } from "@repo/ui/components/popover";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { useLocale } from "~/i18n";
 
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
@@ -72,10 +72,7 @@ export function CourseSelector({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent
-        className={cn("p-0", contentClassName)}
-        sameWidthAsTrigger={true}
-      >
+      <PopoverContent className={cn("p-0", contentClassName)}>
         <Command
           filter={(value, search) => {
             const item = data.find((it) => it.id === value);
@@ -105,7 +102,7 @@ export function CourseSelector({
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === item.id ? "opacity-100" : "opacity-0",
+                      value === item.id ? "opacity-100" : "opacity-0"
                     )}
                   />
                   <div className="flex flex-row items-center space-x-1">

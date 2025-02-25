@@ -1,10 +1,9 @@
 "use client";
 
-import * as React from "react";
 import { Check } from "lucide-react";
+import * as React from "react";
 import { toast } from "sonner";
 
-import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
 import {
   Command,
@@ -20,6 +19,7 @@ import {
   PopoverTrigger,
 } from "@repo/ui/components/popover";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { useLocale } from "~/i18n";
 
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
@@ -81,12 +81,7 @@ export function ClassroomSelector({
               t("select_an_option")}
           </Button>
         </PopoverTrigger>
-        <PopoverContent
-          className="p-0"
-          side="bottom"
-          align="start"
-          sameWidthAsTrigger={true}
-        >
+        <PopoverContent className="p-0" side="bottom" align="start">
           <Command
             filter={(value, search) => {
               const item = data.find((it) => it.id === value);

@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { format } from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
+import { useState } from "react";
 
-import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
 import { Calendar } from "@repo/ui/components/calendar";
 import {
@@ -13,6 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
+import { useLocale } from "~/i18n";
 
 import { cn } from "~/lib/utils";
 
@@ -39,7 +39,7 @@ export function DatePicker({
   const { i18n, t } = useLocale();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<Date | undefined>(
-    defaultValue ?? undefined,
+    defaultValue ?? undefined
   );
   const currentLocale = i18n.language.includes("en")
     ? enUS
@@ -55,7 +55,7 @@ export function DatePicker({
           className={cn(
             "w-full justify-start text-left font-normal",
             className,
-            !value && "text-muted-foreground",
+            !value && "text-muted-foreground"
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />

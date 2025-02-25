@@ -1,10 +1,9 @@
 "use client";
 
-import * as React from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Check, PlusIcon } from "lucide-react";
+import * as React from "react";
 
-import { useLocale } from "@repo/i18n";
 import {
   Command,
   CommandEmpty,
@@ -14,6 +13,7 @@ import {
   CommandList,
   CommandSeparator,
 } from "@repo/ui/components/command";
+import { useLocale } from "~/i18n";
 
 import { AvatarState } from "~/components/AvatarState";
 import { cn } from "~/lib/utils";
@@ -67,8 +67,8 @@ const VirtualizedCommand = ({
   const handleSearch = (search: string) => {
     setFilteredOptions(
       options.filter((option) =>
-        option.label.toLowerCase().includes(search.toLowerCase()),
-      ),
+        option.label.toLowerCase().includes(search.toLowerCase())
+      )
     );
   };
 
@@ -141,7 +141,7 @@ const VirtualizedCommand = ({
                           selectedOption ===
                             filteredOptions[virtualOption.index]?.value
                             ? "opacity-100"
-                            : "opacity-0",
+                            : "opacity-0"
                         )}
                       />
                     </>

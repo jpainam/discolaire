@@ -1,9 +1,8 @@
 "use client";
 
-import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
+import * as React from "react";
 
-import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
 import {
   Command,
@@ -19,6 +18,7 @@ import {
 } from "@repo/ui/components/popover";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { useLocale } from "~/i18n";
 
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
@@ -87,7 +87,7 @@ export function ProgramThemeSelector({
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      Number(value) === d.id ? "opacity-100" : "opacity-0",
+                      Number(value) === d.id ? "opacity-100" : "opacity-0"
                     )}
                   />
                   <div className="flex flex-col">

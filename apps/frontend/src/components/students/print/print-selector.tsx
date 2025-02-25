@@ -133,7 +133,7 @@ export default function PrintSelector({ className }: { className?: string }) {
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent
-                  //sameWidthAsTrigger={true}
+                  //
                   className="w-full p-0"
                 >
                   <Command>

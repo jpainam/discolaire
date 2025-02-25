@@ -7,7 +7,7 @@ import { FileUploader } from "@repo/ui/uploads/file-uploader";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
-import { useSchool } from "~/contexts/SchoolContext";
+import { useSchool } from "~/providers/SchoolProvider";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 

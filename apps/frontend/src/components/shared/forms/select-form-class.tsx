@@ -1,6 +1,5 @@
 import { useFormContext } from "react-hook-form";
 
-import { useLocale } from "@repo/i18n";
 import {
   FormControl,
   FormField,
@@ -15,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
+import { useLocale } from "~/i18n";
 
 import { cn } from "~/lib/utils";
 

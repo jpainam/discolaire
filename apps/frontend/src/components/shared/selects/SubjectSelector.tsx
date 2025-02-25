@@ -1,9 +1,8 @@
 "use client";
 
-import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
+import * as React from "react";
 
-import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
 import {
   Command,
@@ -19,6 +18,7 @@ import {
   PopoverTrigger,
 } from "@repo/ui/components/popover";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { useLocale } from "~/i18n";
 
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
@@ -62,20 +62,20 @@ export function SubjectSelector({
       subjects?.map((it) => ({
         label: it.course.name,
         value: it.id.toString(),
-      })) ?? [],
+      })) ?? []
     );
   }, [subjects]);
 
   const handleSearch = (search: string) => {
     if (!subjects) return;
     const filteredItems = subjects.filter((it) =>
-      it.course.name.toLowerCase().includes(search.toLowerCase()),
+      it.course.name.toLowerCase().includes(search.toLowerCase())
     );
     setItems(
       filteredItems.map((it) => ({
         label: it.course.name,
         value: it.id.toString(),
-      })),
+      }))
     );
   };
   if (subjectsQuery.isPending) {
@@ -101,7 +101,7 @@ export function SubjectSelector({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[300px] p-0" sameWidthAsTrigger={true}>
+      <PopoverContent className="w-[300px] p-0">
         <Command>
           <CommandInput
             onValueChange={handleSearch}
@@ -124,7 +124,7 @@ export function SubjectSelector({
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === item.value ? "opacity-100" : "opacity-0",
+                      value === item.value ? "opacity-100" : "opacity-0"
                     )}
                   />
                   {item.label}

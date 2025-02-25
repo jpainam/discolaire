@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import type { ChangeEventHandler } from "react";
-import { useState } from "react";
 import { format, setHours, setMinutes } from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
+import type { ChangeEventHandler } from "react";
+import { useState } from "react";
 
-import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
 import { Calendar } from "@repo/ui/components/calendar";
 import { Input } from "@repo/ui/components/input";
@@ -16,6 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
+import { useLocale } from "~/i18n";
 
 import { cn } from "~/lib/utils";
 
@@ -42,7 +42,7 @@ export function DateTimePicker({
   const [timeValue, setTimeValue] = useState<string>("00:00");
 
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    defaultValue ?? undefined,
+    defaultValue ?? undefined
   );
 
   const handleTimeChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -54,7 +54,7 @@ export function DateTimePicker({
     const [hours, minutes] = time.split(":").map((str) => parseInt(str, 10));
     const newSelectedDate = setHours(
       setMinutes(selectedDate, minutes ?? 0),
-      hours ?? 0,
+      hours ?? 0
     );
     setSelectedDate(newSelectedDate);
     if (onChange) {
@@ -76,7 +76,7 @@ export function DateTimePicker({
       date.getMonth(),
       date.getDate(),
       hours,
-      minutes,
+      minutes
     );
 
     setSelectedDate(newDate);
@@ -99,7 +99,7 @@ export function DateTimePicker({
           className={cn(
             "w-full text-left font-normal",
             className,
-            !selectedDate && "text-muted-foreground",
+            !selectedDate && "text-muted-foreground"
           )}
         >
           {selectedDate ? (

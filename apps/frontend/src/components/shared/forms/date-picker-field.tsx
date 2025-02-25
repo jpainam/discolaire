@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { format } from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
+import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
-import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
 import { Calendar } from "@repo/ui/components/calendar";
 import {
@@ -22,6 +21,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
+import { useLocale } from "~/i18n";
 
 import { cn } from "~/lib/utils";
 
@@ -72,7 +72,7 @@ export function DatePickerField({
                     className={cn(
                       "w-full text-left font-normal",
                       inputClassName,
-                      !field.value && "text-muted-foreground",
+                      !field.value && "text-muted-foreground"
                     )}
                   >
                     {field.value ? (

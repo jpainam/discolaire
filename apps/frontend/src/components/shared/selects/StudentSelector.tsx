@@ -4,8 +4,8 @@
 import { useState } from "react";
 
 import type { Student } from "@repo/db";
-import { useLocale } from "@repo/i18n";
 import { AsyncSelect } from "@repo/ui/components/async-select";
+import { useLocale } from "~/i18n";
 
 import { AvatarState } from "~/components/AvatarState";
 import { cn } from "~/lib/utils";
@@ -87,7 +87,7 @@ export function StudentSelector({
 // import { useVirtualizer } from "@tanstack/react-virtual";
 // import { Check, ChevronsUpDown } from "lucide-react";
 
-// import { useLocale } from "@repo/i18n";
+// import { useLocale } from "~/i18n";
 // import { Button } from "@repo/ui/components/button";
 // import {
 //   Command,
@@ -291,7 +291,7 @@ export function StudentSelector({
 //           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 justify-end opacity-50" />
 //         </Button>
 //       </PopoverTrigger>
-//       <PopoverContent className="p-0" sameWidthAsTrigger={true}>
+//       <PopoverContent className="p-0" >
 //         <VirtualizedCommand
 //           height={height}
 //           options={options.map((option) => ({

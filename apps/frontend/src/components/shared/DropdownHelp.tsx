@@ -2,7 +2,6 @@
 
 import { HelpCircleIcon, LibraryBig } from "lucide-react";
 
-import { useLocale } from "@repo/i18n";
 import {
   DropdownMenuItem,
   DropdownMenuPortal,
@@ -11,6 +10,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from "@repo/ui/components/dropdown-menu";
+import { useLocale } from "~/i18n";
 
 import CalendarIcon from "~/components/icons/calendar";
 import YoutubeIcon from "~/components/icons/youtube";

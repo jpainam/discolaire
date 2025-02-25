@@ -17,10 +17,10 @@ import {
   FormMessage,
   useFormContext,
 } from "@repo/ui/components/form";
-import type { Option } from "@repo/ui/components/multiple-selector";
-import MultipleSelector from "@repo/ui/components/multiple-selector";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { Textarea } from "@repo/ui/components/textarea";
+import type { Option } from "~/components/students/multiple-selector";
+import MultipleSelector from "~/components/students/multiple-selector";
 import { useLocale } from "~/i18n";
 
 import { api } from "~/trpc/react";

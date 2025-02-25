@@ -1,8 +1,7 @@
+import { ChevronsUpDown } from "lucide-react";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { ChevronsUpDown } from "lucide-react";
 
-import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
 import {
   Popover,
@@ -10,6 +9,7 @@ import {
   PopoverTrigger,
 } from "@repo/ui/components/popover";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { useLocale } from "~/i18n";
 
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
@@ -64,7 +64,7 @@ export function ContactSelector({
           label: getFullName(contact),
           value: contact.id,
           avatar: contact.avatar ?? undefined,
-        })),
+        }))
       );
     }
   }, [defaultValue, contacts]);
@@ -89,7 +89,7 @@ export function ContactSelector({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 justify-end opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0" sameWidthAsTrigger={true}>
+      <PopoverContent className="p-0">
         <VirtualizedCommand
           height={height}
           options={options.map((option) => ({
@@ -101,7 +101,7 @@ export function ContactSelector({
           selectedOption={selectedOption.value}
           onSelectOption={(currentValue) => {
             onChange?.(
-              currentValue === selectedOption.value ? null : currentValue,
+              currentValue === selectedOption.value ? null : currentValue
             );
             setSelectedOption({
               value: currentValue === selectedOption.value ? "" : currentValue,

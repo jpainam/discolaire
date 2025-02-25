@@ -1,12 +1,11 @@
 "use client";
 
-import type { DateRange } from "react-day-picker";
-import * as React from "react";
 import { addDays, format } from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
 import { Calendar as CalendarIcon } from "lucide-react";
+import * as React from "react";
+import type { DateRange } from "react-day-picker";
 
-import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
 import { Calendar } from "@repo/ui/components/calendar";
 import {
@@ -14,6 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
+import { useLocale } from "~/i18n";
 
 import { cn } from "~/lib/utils";
 
@@ -63,7 +63,7 @@ export function DateRangePicker({
           className={cn(
             "w-[300px] justify-start text-left font-normal",
             !date && "text-muted-foreground",
-            className,
+            className
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />

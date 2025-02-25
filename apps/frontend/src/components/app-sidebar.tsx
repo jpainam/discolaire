@@ -22,7 +22,7 @@ import {
 
 import { usePathname } from "next/navigation";
 import { MainSidebar } from "~/sidebars/main-sidebar";
-import { StudentSidebar } from "~/sidebars/student-sidebar";
+import { StudentSidebar } from "~/components/students/StudentSidebar";
 import { TeamSwitcher } from "./team-switcher";
 
 // This is sample data.

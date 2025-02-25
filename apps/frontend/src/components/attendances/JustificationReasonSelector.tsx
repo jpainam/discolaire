@@ -1,4 +1,4 @@
-// import { useLocale } from "@repo/i18n";
+// import { useLocale } from "~/i18n";
 // import {
 //   Select,
 //   SelectContent,

@@ -23,7 +23,7 @@ import { Separator } from "@repo/ui/components/separator";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
-import House from "~/components/lucide/House";
+import House from "~/components/icons/house";
 import { routes } from "~/configs/routes";
 import { api } from "~/trpc/react";
 

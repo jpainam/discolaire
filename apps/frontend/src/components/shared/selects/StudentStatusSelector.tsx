@@ -1,7 +1,6 @@
 "use client";
 
 import { StudentStatus } from "@repo/db";
-import { useLocale } from "@repo/i18n";
 import {
   Select,
   SelectContent,
@@ -9,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
+import { useLocale } from "~/i18n";
 
 import { cn } from "~/lib/utils";
 
