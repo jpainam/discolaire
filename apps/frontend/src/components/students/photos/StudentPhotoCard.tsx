@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { cn } from "~/lib/utils";
+import { cn } from "@repo/ui/lib/utils";
 
 interface AlbumArtworkProps extends React.HTMLAttributes<HTMLDivElement> {
   photo: string;
@@ -27,7 +27,7 @@ export function StudentPhotoCard({
           height={height}
           className={cn(
             "h-auto w-auto object-cover transition-all hover:scale-105",
-            aspectRatio === "portrait" ? "aspect-[3/4]" : "aspect-square",
+            aspectRatio === "portrait" ? "aspect-[3/4]" : "aspect-square"
           )}
         />
       </div>

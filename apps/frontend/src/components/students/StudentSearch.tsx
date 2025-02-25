@@ -3,7 +3,6 @@
 import type { DialogProps } from "@radix-ui/react-dialog";
 import * as React from "react";
 
-import { useDebounce } from "@repo/hooks/use-debounce";
 import {
   CommandDialog,
   CommandEmpty,
@@ -13,6 +12,7 @@ import {
 } from "@repo/ui/components/command";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { EmptyState } from "~/components/EmptyState";
+import { useDebounce } from "~/hooks/use-debounce";
 import { useLocale } from "~/i18n";
 
 //import { DialogProps } from "@radix-ui/react-alert-dialog";

@@ -17,14 +17,14 @@ import {
   FormMessage,
   useFormContext,
 } from "@repo/ui/components/form";
-import { PhoneInput } from "@repo/ui/components/phone-input";
+import { PhoneInput } from "~/components/phone-input";
 import { useLocale } from "~/i18n";
 
 import { CountryPicker } from "~/components/shared/CountryPicker";
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";
 import { FormerSchoolSelector } from "~/components/shared/selects/FormerSchoolSelector";
-import { useSchool } from "~/contexts/SchoolContext";
+import { useSchool } from "~/providers/SchoolProvider";
 
 export function CreateUpdateAddress() {
   const { t } = useLocale();

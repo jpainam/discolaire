@@ -4,12 +4,12 @@ import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
-import { useUpload } from "@repo/hooks/use-upload";
 import { Label } from "@repo/ui/components/label";
+import { useUpload } from "~/hooks/use-upload";
 import { useLocale } from "~/i18n";
 
-import { useSchool } from "~/contexts/SchoolContext";
 import { getErrorMessage } from "~/lib/handle-error";
+import { useSchool } from "~/providers/SchoolProvider";
 import { api } from "~/trpc/react";
 import { sidebarIcons } from "../sidebar-icons";
 

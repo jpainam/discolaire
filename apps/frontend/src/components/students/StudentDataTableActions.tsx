@@ -6,7 +6,6 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -16,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { useCheckPermissions } from "~/hooks/use-permissions";

@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 
-import { useCreateQueryString } from "@repo/hooks/create-query-string";
+import { useCreateQueryString } from "~/hooks/create-query-string";
 import { Button } from "@repo/ui/components/button";
 import { Form, useForm } from "@repo/ui/components/form";
 import { useLocale } from "~/i18n";

@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 import type { DateRange } from "react-day-picker";
 
-import { useCreateQueryString } from "@repo/hooks/create-query-string";
+import { useCreateQueryString } from "~/hooks/create-query-string";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,

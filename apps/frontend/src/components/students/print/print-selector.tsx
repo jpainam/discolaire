@@ -120,12 +120,12 @@ export default function PrintSelector({ className }: { className?: string }) {
                       role="combobox"
                       className={cn(
                         "w-full flex-1 justify-between",
-                        !field.value && "text-muted-foreground",
+                        !field.value && "text-muted-foreground"
                       )}
                     >
                       {field.value
                         ? studentPrintOptions.find(
-                            (print) => print.value === field.value,
+                            (print) => print.value === field.value
                           )?.label
                         : "Choisir le document à imprimer"}
                       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -133,7 +133,7 @@ export default function PrintSelector({ className }: { className?: string }) {
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent
-                  sameWidthAsTrigger={true}
+                  //sameWidthAsTrigger={true}
                   className="w-full p-0"
                 >
                   <Command>
@@ -156,7 +156,7 @@ export default function PrintSelector({ className }: { className?: string }) {
                                   "mr-2 h-4 w-4",
                                   print.value === field.value
                                     ? "opacity-100"
-                                    : "opacity-0",
+                                    : "opacity-0"
                                 )}
                               />
                               {print.label}
