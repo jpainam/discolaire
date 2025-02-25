@@ -7,7 +7,7 @@ import { PermissionAction } from "~/permissions";
 export default async function Layout({ children }: PropsWithChildren) {
   const canSeeAdminMenu = await checkPermissions(
     PermissionAction.READ,
-    "menu:administration"
+    "menu:administration",
   );
   if (!canSeeAdminMenu) {
     return <NoPermission className="md:mt-[120px]" />;
