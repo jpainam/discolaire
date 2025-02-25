@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { render } from "@react-email/render";
 import { z } from "zod";
@@ -40,7 +38,7 @@ export async function POST(req: Request) {
     const student = await api.student.get(studentId);
 
     const studentContacts = await api.student.contacts(
-      transaction.account.studentId
+      transaction.account.studentId,
     );
     if (studentContacts.length === 0) {
       return new Response("Student has no contact", { status: 404 });
@@ -63,7 +61,7 @@ export async function POST(req: Request) {
           remainingBalance: remaining,
           paymentRecorder: createdBy,
           paymentStatus: t(status),
-        })
+        }),
       );
       await api.messaging.sendEmail({
         subject: t("transaction_confirmation"),

@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import parser from "cron-parser";
 import { fromZonedTime } from "date-fns-tz";
 
@@ -57,7 +54,7 @@ export async function initializeJobs() {
           attempts: 5,
           removeOnFail: 10,
         },
-      }
+      },
     );
   }
 

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { render } from "@react-email/render";
 import type { NextRequest } from "next/server";
 
@@ -37,7 +35,7 @@ export async function GET(req: NextRequest) {
             name: school.name,
             logo: school.logo,
           },
-        })
+        }),
       );
       await api.messaging.sendEmail({
         subject: t("join", { school: school.name }),

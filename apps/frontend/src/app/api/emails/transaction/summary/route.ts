@@ -9,6 +9,7 @@ import { auth } from "@repo/auth";
 import { db } from "@repo/db";
 //import { parser } from "@repo/jobs";
 import { TransactionsSummary } from "@repo/transactional";
+import { parser } from "~/jobs";
 
 const schema = z.object({
   staffId: z.string().min(1),
@@ -103,7 +104,7 @@ export async function POST(req: Request) {
           };
         }),
         fullName: staff.lastName + " " + staff.firstName,
-      })
+      }),
     );
 
     const response = await messagingService.sendEmail({

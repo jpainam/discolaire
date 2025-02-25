@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import * as XLSX from "@e965/xlsx";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
@@ -51,7 +52,7 @@ export async function GET(req: NextRequest) {
           classrooms: classrooms,
           school: school,
           size: size,
-        })
+        }),
       );
 
       //const blob = await new Response(stream).blob();

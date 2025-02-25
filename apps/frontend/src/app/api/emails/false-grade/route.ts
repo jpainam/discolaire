@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import type { NextRequest } from "next/server";
 import { render } from "@react-email/render";
 
@@ -31,7 +29,7 @@ export async function GET(req: NextRequest) {
             date: "2022-01-01",
           },
           reportComment: "This is a fake  grade report",
-        })
+        }),
       );
       await api.messaging.sendEmail({
         subject: "Signalement de fausse note",

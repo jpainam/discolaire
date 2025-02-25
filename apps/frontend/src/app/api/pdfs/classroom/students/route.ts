@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import * as XLSX from "@e965/xlsx";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
@@ -144,7 +145,7 @@ async function toCSV({
             ? `"${cellValue.replace(/"/g, '""')}"`
             : cellValue;
         })
-        .join(",")
+        .join(","),
     ),
   ].join("\n");
   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
@@ -178,7 +179,7 @@ async function toPdf({
       school: school,
       size: size,
       classroom: classroom,
-    })
+    }),
   );
 
   //const blob = await new Response(stream).blob();

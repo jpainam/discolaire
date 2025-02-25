@@ -24,7 +24,7 @@ export async function POST(request: Request) {
   if (typeof destination !== "string" || destination.length === 0) {
     return Response.json(
       { error: "Invalid dest " + destination },
-      { status: 400 }
+      { status: 400 },
     );
   }
   const fileKey = key ? `${destination}/${key}` : `${destination}/${uuidv4()}`;
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
 
 export async function GET(
   request: NextRequest,
-  props: { params: Promise<{ key: string }> }
+  props: { params: Promise<{ key: string }> },
 ) {
   const params = await props.params;
   const searchParams = request.nextUrl.searchParams;
@@ -71,7 +71,7 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  props: { params: Promise<{ key: string }> }
+  props: { params: Promise<{ key: string }> },
 ) {
   const params = await props.params;
   const searchParams = request.nextUrl.searchParams;

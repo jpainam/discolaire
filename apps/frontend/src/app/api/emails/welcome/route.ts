@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
       WelcomeEmail({
         fullName: user.name ?? "N/A",
         locale: i18n.language,
-      })
+      }),
     );
     await api.messaging.sendEmail({
       subject: t("welcome_to_discolaire"),

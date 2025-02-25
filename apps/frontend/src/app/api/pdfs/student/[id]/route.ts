@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import * as XLSX from "@e965/xlsx";
 import type { NextRequest } from "next/server";
@@ -28,7 +25,7 @@ const searchSchema = z.object({
 });
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const session = await auth();
   if (!session) {
@@ -69,7 +66,7 @@ export async function GET(
       StudentPage({
         student: student,
         school: school,
-      })
+      }),
     );
 
     //const blob = await new Response(stream).blob();

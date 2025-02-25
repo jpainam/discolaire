@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { render } from "@react-email/render";
 // TODO - Remove this import and use the `bcrypt` package from the `@repo/auth` package
@@ -56,7 +53,7 @@ export async function POST(req: NextRequest) {
           username: user.username,
           resetLink: `${env.NEXT_PUBLIC_BASE_URL}/auth/password/reset/?code=${hashedCode}`,
           locale: i18n.language,
-        })
+        }),
       );
 
       await api.messaging.sendEmail({

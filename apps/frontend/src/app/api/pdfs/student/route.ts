@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import * as XLSX from "@e965/xlsx";
 import type { NextRequest } from "next/server";
@@ -55,7 +52,7 @@ export async function GET(req: NextRequest) {
           students: students,
           school: school,
           size: size,
-        })
+        }),
       );
 
       //const blob = await new Response(stream).blob();
