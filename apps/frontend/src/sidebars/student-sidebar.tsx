@@ -26,6 +26,7 @@ import {
   User,
   Users,
 } from "lucide-react";
+import Link from "next/link";
 
 import { useParams } from "next/navigation";
 import { useLocale } from "~/i18n";
@@ -147,10 +148,10 @@ export function StudentSidebar() {
           {data.academic.map((item) => (
             <SidebarMenuItem key={item.name}>
               <SidebarMenuButton asChild tooltip={t(item.name)}>
-                <a href={item.url}>
+                <Link href={item.url}>
                   <item.icon />
                   <span>{t(item.name)}</span>
-                </a>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}

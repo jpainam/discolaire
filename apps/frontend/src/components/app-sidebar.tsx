@@ -13,20 +13,15 @@ import * as React from "react";
 import { Label } from "@repo/ui/components/label";
 import {
   Sidebar,
-  SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarInput,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarRail,
 } from "@repo/ui/components/sidebar";
 
 import { usePathname } from "next/navigation";
-import { useLocale } from "~/i18n";
+import { MainSidebar } from "~/sidebars/main-sidebar";
 import { StudentSidebar } from "~/sidebars/student-sidebar";
 import { TeamSwitcher } from "./team-switcher";
 
@@ -81,14 +76,15 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
-  const isHome = pathname === "/";
-  const isStudent = pathname.startsWith("/students/");
-  const { t } = useLocale();
+  const isHome = pathname === "/" || pathname.split("/").length === 2;
+  const isStudent =
+    pathname.startsWith("/students/") && pathname.split("/").length > 2;
 
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
+        <hr className="border-t border-border mx-2 -mt-px" />
         <SidebarGroup className="py-0 group-data-[collapsible=icon]:hidden">
           <SidebarGroupContent>
             <form className="relative">
@@ -106,23 +102,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarGroup>
       </SidebarHeader>
       {isHome && (
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel>Home</SidebarGroupLabel>
-            <SidebarMenu>
-              {data.components.map((item) => (
-                <SidebarMenuItem key={item.name}>
-                  <SidebarMenuButton asChild tooltip={item.name}>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{t(item.name)}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroup>
-        </SidebarContent>
+        <MainSidebar />
+        // <SidebarContent>
+        //   <SidebarGroup>
+        //     <SidebarGroupLabel>Home</SidebarGroupLabel>
+        //     <SidebarMenu>
+        //       {data.components.map((item) => (
+        //         <SidebarMenuItem key={item.name}>
+        //           <SidebarMenuButton asChild tooltip={item.name}>
+        //             <a href={item.url}>
+        //               <item.icon />
+        //               <span>{t(item.name)}</span>
+        //             </a>
+        //           </SidebarMenuButton>
+        //         </SidebarMenuItem>
+        //       ))}
+        //     </SidebarMenu>
+        //   </SidebarGroup>
+        // </SidebarContent>
       )}
       {isStudent && <StudentSidebar />}
       {/* <SidebarFooter>
