@@ -1,0 +1,78 @@
+"use client";
+
+import type { DialogProps } from "@radix-ui/react-dialog";
+import * as React from "react";
+
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@repo/ui/components/command";
+import { Skeleton } from "@repo/ui/components/skeleton";
+import { EmptyState } from "~/components/EmptyState";
+import { useDebounce } from "~/hooks/use-debounce";
+import { useLocale } from "~/i18n";
+
+//import { DialogProps } from "@radix-ui/react-alert-dialog";
+import rangeMap from "~/lib/range-map";
+import { api } from "~/trpc/react";
+import { getFullName } from "~/utils/full-name";
+
+type StudentSelectorProps = DialogProps & {
+  className?: string;
+  defaultValue?: string;
+  onChange?: (value: string) => void;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+export function ContactSearch({ ...props }: StudentSelectorProps) {
+  const [searchText, setSearchText] = React.useState("");
+
+  const debounceValue = useDebounce(searchText, 500);
+  const contactsQuery = api.contact.all.useQuery({
+    q: debounceValue,
+  });
+
+  const { t } = useLocale();
+
+  const runCommand = React.useCallback(
+    (studentId: string) => {
+      props.setOpen(false);
+      props.onChange?.(studentId);
+    },
+    [props]
+  );
+
+  return (
+    <>
+      <CommandDialog open={props.open} onOpenChange={props.setOpen}>
+        <CommandInput
+          onValueChange={setSearchText}
+          placeholder={t("search_for_an_option")}
+        />
+        <CommandList className="h-[400px]">
+          <CommandEmpty>
+            <EmptyState />
+          </CommandEmpty>
+          {contactsQuery.isPending && (
+            <CommandItem className="flex flex-col items-center justify-center gap-2">
+              {rangeMap(10, (index) => (
+                <Skeleton className="h-8 w-full" key={index} />
+              ))}
+            </CommandItem>
+          )}
+          {contactsQuery.data?.map((contact) => (
+            <CommandItem
+              className="flex cursor-pointer items-center px-2 py-1"
+              key={contact.id}
+              onSelect={() => runCommand(contact.id)}
+            >
+              {getFullName(contact)}
+            </CommandItem>
+          ))}
+        </CommandList>
+      </CommandDialog>
+    </>
+  );
+}
