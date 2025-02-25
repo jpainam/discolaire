@@ -2,27 +2,18 @@
 
 import {
   AudioWaveform,
-  BookOpen,
-  Bot,
-  ChevronRightIcon,
   Command,
   GalleryVerticalEnd,
   Search,
-  Settings2,
-  SquareTerminal,
+  Users,
+  Warehouse,
 } from "lucide-react";
 import * as React from "react";
 
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@repo/ui/components/collapsible";
 import { Label } from "@repo/ui/components/label";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -31,13 +22,12 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
   SidebarRail,
 } from "@repo/ui/components/sidebar";
 
-import { NavUser } from "./nav-user";
+import { usePathname } from "next/navigation";
+import { useLocale } from "~/i18n";
+import { StudentSidebar } from "~/sidebars/student-sidebar";
 import { TeamSwitcher } from "./team-switcher";
 
 // This is sample data.
@@ -64,106 +54,37 @@ const data = {
       plan: "Free",
     },
   ],
-  navMain: [
-    {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
+
   components: [
     {
-      name: "avatar",
-      icon: Settings2,
+      name: "students",
+      url: "/students",
+      icon: Users,
     },
     {
-      name: "badge",
-      icon: BookOpen,
+      name: "classrooms",
+      url: "/classrooms",
+      icon: Warehouse,
+    },
+    {
+      name: "contacts",
+      url: "/contacts",
+      icon: Users,
+    },
+    {
+      name: "staffs",
+      url: "/staffs",
+      icon: Users,
     },
   ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+  const isStudent = pathname.startsWith("/students/");
+  const { t } = useLocale();
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -184,77 +105,30 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Platform</SidebarGroupLabel>
-          <SidebarMenu>
-            {data.components.map((item) => (
-              <SidebarMenuItem key={item.name}>
-                <SidebarMenuButton asChild tooltip={item.name}>
-                  <a href={`/#${item.name}`}>
-                    <item.icon />
-                    <span>{getComponentName(item.name)}</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-            {data.navMain.map((item) => (
-              <Collapsible
-                key={item.title}
-                asChild
-                defaultOpen={item.isActive}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton tooltip={item.title}>
+      {isHome && (
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Home</SidebarGroupLabel>
+            <SidebarMenu>
+              {data.components.map((item) => (
+                <SidebarMenuItem key={item.name}>
+                  <SidebarMenuButton asChild tooltip={item.name}>
+                    <a href={item.url}>
                       <item.icon />
-                      <span>{item.title}</span>
-                      <ChevronRightIcon className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <SidebarMenuSub>
-                      {item.items.map((subItem) => (
-                        <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton asChild>
-                            <a href={subItem.url}>
-                              <span>{subItem.title}</span>
-                            </a>
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      ))}
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
+                      <span>{t(item.name)}</span>
+                    </a>
+                  </SidebarMenuButton>
                 </SidebarMenuItem>
-              </Collapsible>
-            ))}
-          </SidebarMenu>
-        </SidebarGroup>
-        <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-          <SidebarGroupLabel>Components</SidebarGroupLabel>
-          <SidebarMenu>
-            {data.components.map((item) => (
-              <SidebarMenuItem key={item.name}>
-                <SidebarMenuButton asChild>
-                  <a href={`/#${item.name}`}>
-                    <span>{getComponentName(item.name)}</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter>
+              ))}
+            </SidebarMenu>
+          </SidebarGroup>
+        </SidebarContent>
+      )}
+      {isStudent && <StudentSidebar />}
+      {/* <SidebarFooter>
         <NavUser user={data.user} />
-      </SidebarFooter>
+      </SidebarFooter> */}
       <SidebarRail />
     </Sidebar>
   );
-}
-
-function getComponentName(name: string) {
-  // convert kebab-case to title case
-  return name.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 }
