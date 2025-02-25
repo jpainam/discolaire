@@ -2,7 +2,7 @@ import { Document, Image, Page, Text, View } from "@react-pdf/renderer";
 
 import type { RouterOutputs } from "@repo/api";
 
-//import { getServerTranslations } from "@repo/i18n/server";
+//import { getServerTranslations } from "~/i18n/server";
 
 export function ClassroomList({
   school,
