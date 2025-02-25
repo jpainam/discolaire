@@ -1,8 +1,7 @@
-import { notFound } from "next/navigation";
 import { ActivityIcon, BookIcon, VideoIcon } from "lucide-react";
+import { notFound } from "next/navigation";
 
 import { checkPermissions } from "@repo/api/permission";
-import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -10,7 +9,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import { NoPermission } from "@repo/ui/components/no-permission";
+import { NoPermission } from "~/components/no-permission";
+import { PermissionAction } from "~/permissions";
 
 import { SubjectDetailsHeader } from "~/components/classrooms/subjects/SubjectDetailsHeader";
 import { api } from "~/trpc/server";

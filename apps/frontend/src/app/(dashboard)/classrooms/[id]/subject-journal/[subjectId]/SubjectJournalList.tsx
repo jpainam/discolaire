@@ -21,7 +21,7 @@ export function SubjectJournalList({ subjectId }: { subjectId: number }) {
   const [pageSize] = useQueryState("pageSize", parseAsInteger.withDefault(10));
   const [pageIndex, setPageIndex] = useQueryState(
     "pageIndex",
-    parseAsInteger.withDefault(0)
+    parseAsInteger.withDefault(0),
   );
   const paginate = (pageNumber: number) => setPageIndex(pageNumber);
   const subjectJournalsQuery = api.subjectJournal.bySubject.useQuery({

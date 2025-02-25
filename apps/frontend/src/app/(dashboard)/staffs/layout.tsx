@@ -7,7 +7,7 @@ import { PermissionAction } from "~/permissions";
 export default async function Layout({ children }: PropsWithChildren) {
   const canReadStaff = await checkPermissions(
     PermissionAction.READ,
-    "staff:list"
+    "staff:list",
   );
   if (!canReadStaff) {
     return <NoPermission className="my-8" isFullPage resourceText="" />;

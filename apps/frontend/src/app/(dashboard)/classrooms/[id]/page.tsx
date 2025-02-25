@@ -1,5 +1,5 @@
 import { checkPermissions } from "@repo/api/permission";
-import { PermissionAction } from "@repo/lib/permission";
+import { PermissionAction } from "~/permissions";
 
 import { ClassroomDetails } from "~/components/classrooms/ClassroomDetails";
 import { EnrollmentDataTable } from "~/components/classrooms/enrollments/EnrollmentDataTable";

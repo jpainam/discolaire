@@ -3,8 +3,8 @@
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
-import { useCreateQueryString } from "@repo/hooks/create-query-string";
-import { useModal } from "@repo/hooks/use-modal";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useModal } from "~/hooks/use-modal";
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
 import {

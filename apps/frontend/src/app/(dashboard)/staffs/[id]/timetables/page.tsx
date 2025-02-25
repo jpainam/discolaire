@@ -35,7 +35,7 @@ export default function Page() {
   const params = useParams<{ id: string }>();
   const [_currentDate, _] = useQueryState(
     "date",
-    parseAsIsoDateTime.withDefault(new Date())
+    parseAsIsoDateTime.withDefault(new Date()),
   );
   const calendarEventsQuery = api.lesson.byClassroom.useQuery({
     classroomId: params.id,
@@ -85,7 +85,7 @@ export default function Page() {
         view: <StaffTimetableDetails event={event} />,
       });
     },
-    [openModal, t]
+    [openModal, t],
   );
 
   const { _views, _scrollToTime, formats } = useMemo(
@@ -102,18 +102,18 @@ export default function Page() {
         weekdayFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer
+          localizer?: DateLocalizer,
         ) => localizer?.format(date, "EEE", culture),
         dayFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) =>
           localizer?.format(date, "EEE M/d", culture),
         timeGutterFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer
+          localizer?: DateLocalizer,
         ) => localizer?.format(date, "HH:mm", culture),
       } as Formats,
     }),
-    []
+    [],
   );
 
   const handleViewChange = (view: RbcView) => {

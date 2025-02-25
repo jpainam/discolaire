@@ -2,8 +2,7 @@
 
 import { MoreVertical, Plus } from "lucide-react";
 
-import { useSheet } from "@repo/hooks/use-sheet";
-import { PermissionAction } from "@repo/lib/permission";
+import { useSheet } from "~/hooks/use-sheet";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -14,6 +13,7 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
 import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
 
 import { CreateEditClassroom } from "~/components/classrooms/CreateEditClassroom";
 import PDFIcon from "~/components/icons/pdf-solid";
@@ -28,7 +28,7 @@ export function ClassroomPageHeader() {
 
   const canCreateClassroom = useCheckPermissions(
     PermissionAction.CREATE,
-    "classroom:details"
+    "classroom:details",
   );
 
   return (
@@ -65,7 +65,7 @@ export function ClassroomPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.classroom_list}?format=pdf`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >
@@ -76,7 +76,7 @@ export function ClassroomPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.classroom_list}?format=csv`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >

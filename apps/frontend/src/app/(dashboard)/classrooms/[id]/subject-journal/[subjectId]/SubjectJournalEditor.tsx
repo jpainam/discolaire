@@ -11,7 +11,7 @@ import {
 import { useState } from "react";
 import { z } from "zod";
 
-import { useModal } from "@repo/hooks/use-modal";
+import { useModal } from "~/hooks/use-modal";
 import { Button } from "@repo/ui/components/button";
 import { Calendar } from "@repo/ui/components/calendar";
 import {

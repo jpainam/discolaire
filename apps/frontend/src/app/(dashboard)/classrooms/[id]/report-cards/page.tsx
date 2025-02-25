@@ -1,6 +1,6 @@
-import { EmptyState } from "@repo/ui/components/EmptyState";
-import FlatBadge from "@repo/ui/components/FlatBadge";
+import FlatBadge from "~/components/FlatBadge";
 import { Separator } from "@repo/ui/components/separator";
+import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 
 import { ReportCardTable } from "~/components/classrooms/report-cards/ReportCardTable2";

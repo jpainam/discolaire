@@ -2,12 +2,12 @@
 
 import { toast } from "sonner";
 
-import { useUpload } from "@repo/hooks/use-upload";
-import { FileUploader } from "@repo/ui/uploads/file-uploader";
+import { useUpload } from "~/hooks/use-upload";
 import { useLocale } from "~/i18n";
+import { FileUploader } from "~/uploads/file-uploader";
 
-import { useSchool } from "~/contexts/SchoolContext";
 import { getErrorMessage } from "~/lib/handle-error";
+import { useSchool } from "~/providers/SchoolProvider";
 
 export function SubjectJournalAttachment() {
   const { t } = useLocale();
@@ -75,7 +75,7 @@ export function SubjectJournalAttachment() {
               error: (err) => {
                 return getErrorMessage(err);
               },
-            }
+            },
           );
         }}
         //progresses={progresses}

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { EmptyState } from "@repo/ui/components/EmptyState";
+import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 
 import { api } from "~/trpc/server";

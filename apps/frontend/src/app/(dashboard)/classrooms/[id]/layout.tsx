@@ -1,7 +1,7 @@
 import React from "react";
 
 import { checkPermissions } from "@repo/api/permission";
-import { PermissionAction } from "@repo/lib/permission";
+import { PermissionAction } from "~/permissions";
 
 import { ClassroomHeader } from "~/components/classrooms/ClassroomHeader";
 import { ClassroomSidebar } from "~/components/classrooms/ClassroomSidebar";
