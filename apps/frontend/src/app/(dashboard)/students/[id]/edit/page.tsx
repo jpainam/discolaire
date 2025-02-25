@@ -16,7 +16,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const canEditStudent = await checkPermissions(
     PermissionAction.UPDATE,
     "student:profile",
-    { id }
+    { id },
   );
   if (!canEditStudent) {
     return <NoPermission className="my-8" />;

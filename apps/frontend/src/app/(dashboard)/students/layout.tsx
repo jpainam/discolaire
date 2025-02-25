@@ -11,7 +11,7 @@ export default async function Layout({
 }) {
   const canListStudent = await checkPermissions(
     PermissionAction.READ,
-    "student:list"
+    "student:list",
   );
   if (!canListStudent) {
     return <NoPermission isFullPage resourceText="" className="my-8" />;

@@ -21,7 +21,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     "student:profile",
     {
       id: student.id,
-    }
+    },
   );
   if (!canReadStudent) {
     return <NoPermission className="my-8" />;
@@ -31,7 +31,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     "student:contact",
     {
       id: params.id,
-    }
+    },
   );
   return (
     <div className="grid py-2 text-sm">

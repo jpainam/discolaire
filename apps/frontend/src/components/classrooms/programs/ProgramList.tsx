@@ -31,15 +31,13 @@ export function ProgramList({ classroomId }: { classroomId: string }) {
           <li
             key={index}
             onClick={() => {
-              router.push(
-                `/datum/classrooms/${classroomId}/programs/${subject.id}`,
-              );
+              router.push(`/classrooms/${classroomId}/programs/${subject.id}`);
             }}
             className={cn(
               `flex cursor-pointer flex-row items-center gap-2 border-b p-2 hover:bg-secondary`,
               subject.id === Number(params.subjectId)
                 ? "bg-secondary font-bold text-secondary-foreground"
-                : "text-secondary-foreground/80 hover:bg-secondary/10",
+                : "text-secondary-foreground/80 hover:bg-secondary/10"
             )}
           >
             <div

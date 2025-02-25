@@ -7,7 +7,7 @@ import { CreateStudent } from "~/components/students/profile/CreateStudent";
 export default async function Page() {
   const canCreateStudent = await checkPermissions(
     PermissionAction.CREATE,
-    "student:profile"
+    "student:profile",
   );
   if (!canCreateStudent) {
     return <NoPermission className="my-8" />;

@@ -58,7 +58,7 @@ export const NoPermission = ({
       <div
         className={cn(
           "flex h-full w-full items-center justify-center",
-          className
+          className,
         )}
       >
         <NoPermissionMessage />

@@ -53,7 +53,7 @@ export default async function Page(props: {
     groups[groupId].push(card);
   });
   const points = sum(
-    reportCard.map((c) => (c.isAbsent ? 0 : c.avg * c.coefficient))
+    reportCard.map((c) => (c.isAbsent ? 0 : c.avg * c.coefficient)),
   );
 
   //const totalPoints = sum(reportCard.map((c) => 20 * c.coefficient));
