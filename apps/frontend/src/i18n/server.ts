@@ -18,8 +18,8 @@ const initServerI18next = async (language: any, ns: any): Promise<i18n> => {
     .use(initReactI18next)
     .use(
       resourcesToBackend(
-        (language: any, ns: any) => import(`./locales/${language}/${ns}.json`)
-      )
+        (language: any, ns: any) => import(`./locales/${language}/${ns}.json`),
+      ),
     )
     .init(getOptions(language as string, ns as string));
   return i18nInstance;
@@ -52,7 +52,7 @@ export async function detectLanguage() {
 
 export const getServerTranslations: (
   ns?: any,
-  options?: { keyPrefix?: string }
+  options?: { keyPrefix?: string },
 ) => Promise<{
   t: TFunction<string, unknown>;
   i18n: i18n;
@@ -64,7 +64,7 @@ export const getServerTranslations: (
       language,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       Array.isArray(ns) ? ns[0] : ns,
-      options.keyPrefix
+      options.keyPrefix,
     ),
     i18n: i18nextInstance,
   };

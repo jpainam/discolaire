@@ -57,7 +57,7 @@ export function RecipientMultiSelector({
         }
       }
     },
-    []
+    [],
   );
 
   const recipientsQuery = api.recipient.groups.useQuery();
@@ -66,7 +66,7 @@ export function RecipientMultiSelector({
     if (!recipientsQuery.data) return;
     const recipients = recipientsQuery.data;
     const _selectables = recipients.filter(
-      (recipient) => !selected.includes(recipient.id)
+      (recipient) => !selected.includes(recipient.id),
     );
     setSelectables(_selectables.map((recipient) => recipient.id));
   }, [recipientsQuery.data, selected]);
@@ -118,7 +118,7 @@ export function RecipientMultiSelector({
             placeholder={t("select_recipients")}
             className={cn(
               "ml-2 flex-1 bg-transparent outline-none placeholder:text-muted-foreground",
-              className
+              className,
             )}
           />
         </div>

@@ -31,7 +31,7 @@ export function PhotoHeader() {
         error: (err) => {
           return getErrorMessage(err);
         },
-      }
+      },
     );
   };
   const params = useParams<{ id: string }>();

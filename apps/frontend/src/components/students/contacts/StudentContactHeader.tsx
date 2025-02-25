@@ -15,7 +15,8 @@ import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 
-import CreateEditContact from "~/components/contacts/CreateEditContact";
+// TODO uncomment this
+//import CreateEditContact from "~/components/contacts/CreateEditContact";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { SimpleTooltip } from "~/components/simple-tooltip";
 import { useCheckPermissions } from "~/hooks/use-permissions";
@@ -31,7 +32,7 @@ export function StudentContactHeader() {
     "student:contact",
     {
       id: params.id,
-    }
+    },
   );
 
   const Icon = sidebarIcons.contacts;
@@ -79,7 +80,8 @@ export function StudentContactHeader() {
                       // description: (
                       //   <p className="px-4">{getFullName(contactQuery.data)}</p>
                       // ),
-                      view: <CreateEditContact />,
+                      view: <div>create editcontact</div>,
+                      // view: <CreateEditContact />,
                     });
                   }}
                 >

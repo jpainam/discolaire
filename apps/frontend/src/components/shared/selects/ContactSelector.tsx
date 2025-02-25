@@ -64,7 +64,7 @@ export function ContactSelector({
           label: getFullName(contact),
           value: contact.id,
           avatar: contact.avatar ?? undefined,
-        }))
+        })),
       );
     }
   }, [defaultValue, contacts]);
@@ -101,7 +101,7 @@ export function ContactSelector({
           selectedOption={selectedOption.value}
           onSelectOption={(currentValue) => {
             onChange?.(
-              currentValue === selectedOption.value ? null : currentValue
+              currentValue === selectedOption.value ? null : currentValue,
             );
             setSelectedOption({
               value: currentValue === selectedOption.value ? "" : currentValue,

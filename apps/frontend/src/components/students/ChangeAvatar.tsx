@@ -2,13 +2,13 @@
 
 import { toast } from "sonner";
 
-import { useUpload } from "@repo/hooks/use-upload";
-import { FileUploader } from "@repo/ui/uploads/file-uploader";
 import { useModal } from "~/hooks/use-modal";
+import { useUpload } from "~/hooks/use-upload";
 import { useLocale } from "~/i18n";
+import { FileUploader } from "~/uploads/file-uploader";
 
-import { useSchool } from "~/providers/SchoolProvider";
 import { getErrorMessage } from "~/lib/handle-error";
+import { useSchool } from "~/providers/SchoolProvider";
 import { api } from "~/trpc/react";
 
 export function ChangeAvatar({ studentId }: { studentId: string }) {
@@ -77,7 +77,7 @@ export function ChangeAvatar({ studentId }: { studentId: string }) {
               error: (err) => {
                 return getErrorMessage(err);
               },
-            }
+            },
           );
         }}
         //progresses={progresses}

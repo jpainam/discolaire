@@ -65,7 +65,7 @@ export function DocumentTableAction({
           onSelect={() => {
             toast.promise(downloadFileFromAws(url), {
               success: (signedUrl) => {
-                window.open(signedUrl, "_blank");
+                window.open(signedUrl as string, "_blank");
                 return t("downloaded");
               },
               loading: t("downloading"),

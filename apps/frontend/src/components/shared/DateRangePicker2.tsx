@@ -1,6 +1,5 @@
 "use client";
 
-import type { DateRange } from "react-day-picker";
 import {
   formatISO,
   startOfMonth,
@@ -9,6 +8,8 @@ import {
   subMonths,
   subWeeks,
 } from "date-fns";
+import type { DateRange } from "react-day-picker";
+// TODO Remove little-date
 import { formatDateRange } from "little-date";
 import { ChevronDown } from "lucide-react";
 import { parseAsString, useQueryStates } from "nuqs";

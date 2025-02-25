@@ -87,7 +87,7 @@ export function ProgramThemeSelector({
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      Number(value) === d.id ? "opacity-100" : "opacity-0"
+                      Number(value) === d.id ? "opacity-100" : "opacity-0",
                     )}
                   />
                   <div className="flex flex-col">

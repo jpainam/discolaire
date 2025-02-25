@@ -49,7 +49,7 @@ export function HealthHeader() {
                   "flex items-center py-2 text-sm",
                   isActive
                     ? "border-b border-b-primary"
-                    : "text-muted-foreground"
+                    : "text-muted-foreground",
                 )}
                 href={menu.href + "?" + createQueryString({})}
               >

@@ -31,7 +31,7 @@ export const useUpload = () => {
 
   const onUpload = async (
     inputs: File | File[],
-    metadata?: { destination: string; bucket?: string }
+    metadata?: { destination: string; bucket?: string },
   ) => {
     const files = Array.isArray(inputs) ? inputs : [inputs];
     const initialUploads = files.map((file) => ({
@@ -63,7 +63,7 @@ export const useUpload = () => {
                 bucket: metadata?.bucket,
                 contentType: file.type,
               }),
-            }
+            },
           );
           if (response.ok) {
             const {
@@ -105,7 +105,7 @@ export const useUpload = () => {
         } finally {
           updateFileState(index, { isPending: false });
         }
-      })
+      }),
     );
 
     setIsPending(false);
@@ -113,7 +113,7 @@ export const useUpload = () => {
 
   const unstable_onUpload = async (
     input: File,
-    metadata?: { destination: string; bucket?: string; key?: string }
+    metadata?: { destination: string; bucket?: string; key?: string },
   ): Promise<UploadState> => {
     const file = input;
 

@@ -107,7 +107,7 @@ export function CreateEditHealthVisit({
         error: (err) => {
           return getErrorMessage(err);
         },
-      }
+      },
     );
   };
 

@@ -4,7 +4,7 @@
 import { useState } from "react";
 
 import type { Student } from "@repo/db";
-import { AsyncSelect } from "@repo/ui/components/async-select";
+import { AsyncSelect } from "~/components/async-select";
 import { useLocale } from "~/i18n";
 
 import { AvatarState } from "~/components/AvatarState";

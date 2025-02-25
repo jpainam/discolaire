@@ -67,8 +67,8 @@ const VirtualizedCommand = ({
   const handleSearch = (search: string) => {
     setFilteredOptions(
       options.filter((option) =>
-        option.label.toLowerCase().includes(search.toLowerCase())
-      )
+        option.label.toLowerCase().includes(search.toLowerCase()),
+      ),
     );
   };
 
@@ -141,7 +141,7 @@ const VirtualizedCommand = ({
                           selectedOption ===
                             filteredOptions[virtualOption.index]?.value
                             ? "opacity-100"
-                            : "opacity-0"
+                            : "opacity-0",
                         )}
                       />
                     </>

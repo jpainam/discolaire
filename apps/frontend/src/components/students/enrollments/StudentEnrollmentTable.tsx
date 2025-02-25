@@ -79,13 +79,13 @@ export function StudentEnrollmentTable({
         <TableBody>
           {enrollments.map((c) => {
             const createdAt = fullDateFormatter.format(
-              c.createdAt ?? new Date()
+              c.createdAt ?? new Date(),
             );
             const enrollmentStartDate = fullDateFormatter.format(
-              c.schoolYear?.enrollmentStartDate ?? new Date()
+              c.schoolYear?.enrollmentStartDate ?? new Date(),
             );
             const enrolmmentEndDate = fullDateFormatter.format(
-              c.schoolYear?.enrollmentEndDate ?? new Date()
+              c.schoolYear?.enrollmentEndDate ?? new Date(),
             );
 
             return (

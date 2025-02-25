@@ -38,7 +38,7 @@ export function useCheckPermissions(
   data?: object,
   // Pass the data variables if you want to avoid hooks in this
   // e.g If you want to use useCheckPermissions in a loop like organization settings
-  permissions?: Permission[]
+  permissions?: Permission[],
 ) {
   const session = useSession();
   const user = session.user;
@@ -57,7 +57,7 @@ export function useCheckPermissions(
     action,
     resource,
     user.schoolId,
-    data
+    data,
   );
 }
 

@@ -22,7 +22,7 @@ export function useCreateQueryString() {
 
       return newSearchParams.toString();
     },
-    [searchParams]
+    [searchParams],
   );
 
   return { createQueryString };

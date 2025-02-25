@@ -24,7 +24,7 @@ export function StudentEnrollmentHeader({
   const Icon = sidebarIcons.enrollments;
   const canEnroll = useCheckPermissions(
     PermissionAction.CREATE,
-    "classroom:enrollment"
+    "classroom:enrollment",
   );
 
   return (

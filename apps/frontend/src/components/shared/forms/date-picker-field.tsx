@@ -72,7 +72,7 @@ export function DatePickerField({
                     className={cn(
                       "w-full text-left font-normal",
                       inputClassName,
-                      !field.value && "text-muted-foreground"
+                      !field.value && "text-muted-foreground",
                     )}
                   >
                     {field.value ? (

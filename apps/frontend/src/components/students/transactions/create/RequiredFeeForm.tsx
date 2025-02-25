@@ -25,7 +25,7 @@ type RequiredFee = RouterOutputs["student"]["unpaidRequiredFees"][number];
 export function RequiredFeeForm() {
   const params = useParams<{ id: string }>();
   const unpaidRequiredFeeQuery = api.student.unpaidRequiredFees.useQuery(
-    params.id
+    params.id,
   );
   const [requiredFees, setRequiredFees] = useAtom(requiredFeesAtom);
 
@@ -34,7 +34,7 @@ export function RequiredFeeForm() {
     setRequiredFees((prev) =>
       prev.includes(fee.id)
         ? prev.filter((i) => i !== fee.id)
-        : [...prev, fee.id]
+        : [...prev, fee.id],
     );
   };
 

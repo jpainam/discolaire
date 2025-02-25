@@ -71,7 +71,7 @@ export function EmptyState({
     <div
       className={cn(
         "flex flex-col items-center justify-center gap-2",
-        className
+        className,
       )}
     >
       {title && (

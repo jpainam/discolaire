@@ -52,7 +52,7 @@ import { CountryComponent } from "../shared/CountryPicker";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { StudentSelector } from "../shared/selects/StudentSelector";
-import { CreateEditUser } from "../users/CreateEditUser";
+//import { CreateEditUser } from "../users/CreateEditUser";
 import { SquaredAvatar } from "./SquaredAvatar";
 
 interface StudentHeaderProps {
@@ -113,14 +113,14 @@ export function StudentHeader({ className }: StudentHeaderProps) {
     "student:profile",
     {
       id: params.id,
-    }
+    },
   );
   const canEditStudent = useCheckPermissions(
     PermissionAction.UPDATE,
     "student:profile",
     {
       id: params.id,
-    }
+    },
   );
   //const [open, setOpen] = React.useState(false);
 
@@ -232,7 +232,7 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                   onClick={() => {
                     window.open(
                       `${endpointReports.student_page(params.id)}?format=pdf`,
-                      "_blank"
+                      "_blank",
                     );
                   }}
                 >
@@ -277,10 +277,11 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                           className: "w-[500px]",
                           title: t("attach_user"),
                           view: (
-                            <CreateEditUser
-                              entityId={params.id}
-                              type="student"
-                            />
+                            <div>{params.id}</div>
+                            // <CreateEditUser
+                            //   entityId={params.id}
+                            //   type="student"
+                            // />
                           ),
                         });
                       }}
@@ -297,13 +298,14 @@ export function StudentHeader({ className }: StudentHeaderProps) {
                           className: "w-[500px]",
                           title: t("change_password"),
                           view: (
-                            <CreateEditUser
-                              userId={student.userId}
-                              type="student"
-                              roleIds={student.user?.roles.map((r) => r.roleId)}
-                              entityId={params.id}
-                              username={student.user?.username}
-                            />
+                            <div>{student.userId}</div>
+                            // <CreateEditUser
+                            //   userId={student.userId}
+                            //   type="student"
+                            //   roleIds={student.user?.roles.map((r) => r.roleId)}
+                            //   entityId={params.id}
+                            //   username={student.user?.username}
+                            // />
                           ),
                         });
                       }}

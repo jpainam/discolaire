@@ -22,7 +22,7 @@ export function EmptyCard({
     <Card
       className={cn(
         "flex w-full flex-col items-center justify-center space-y-6 bg-transparent p-16",
-        className
+        className,
       )}
       {...props}
     >
