@@ -1,0 +1,140 @@
+import { sumBy } from "lodash";
+import {
+  BookUser,
+  CircleDollarSign,
+  CircleGauge,
+  CircleUser,
+  Hash,
+  Newspaper,
+  Recycle,
+  SquareLibrary,
+  SquareUser,
+  TableProperties,
+} from "lucide-react";
+
+import { getServerTranslations } from "~/i18n/server";
+
+import { CURRENCY } from "~/lib/constants";
+import { api } from "~/trpc/server";
+
+export async function ClassroomDetails({
+  classroomId,
+}: {
+  classroomId: string;
+}) {
+  const { t, i18n } = await getServerTranslations();
+  const fees = await api.classroom.fees(classroomId);
+  const classroom = await api.classroom.get(classroomId);
+  return (
+    <div className="grid w-full gap-2 divide-x md:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid gap-3 p-2 text-sm">
+        <li className="flex items-center justify-between">
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <TableProperties className="h-4 w-4" />
+            {t("name")}
+          </div>
+          <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+            {classroom.name}
+          </span>
+        </li>
+        <li className="flex items-center justify-between">
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <Newspaper className="h-4 w-4" />
+            <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+              {t("reportName")}
+            </span>
+          </div>
+          <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+            {classroom.reportName}
+          </span>
+        </li>
+        <li className="flex items-center justify-between">
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <SquareLibrary className="h-4 w-4" />
+            {t("section")}
+          </div>
+          <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+            {classroom.section?.name}
+          </span>
+        </li>
+        <li className="flex items-center justify-between">
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <CircleDollarSign className="h-4 w-4" />
+            {t("fees")}
+          </div>
+          <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+            {sumBy(fees, "amount").toLocaleString(i18n.language)} {CURRENCY}
+          </span>
+        </li>
+      </ul>
+      <ul className="grid gap-3 p-2 text-sm">
+        <li className="flex items-center justify-between">
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <CircleGauge className="h-4 w-4" />
+            {t("level")}
+          </div>
+          <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+            {classroom.level.name}
+          </span>
+        </li>
+        <li className="flex items-center justify-between">
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <Recycle className="h-4 w-4" />
+            {t("cycle")}
+          </div>
+          <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+            {classroom.cycle?.name}
+          </span>
+        </li>
+        <li className="flex items-center justify-between">
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <SquareUser className="h-4 w-4" />
+            <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+              {t("senior_advisor")}
+            </span>
+          </div>
+          <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+            {classroom.seniorAdvisor?.lastName}
+          </span>
+        </li>
+        <li className="flex items-center justify-between">
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <BookUser className="h-4 w-4" />
+            {t("classroom_leader")}
+          </div>
+          <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+            {classroom.classroomLeader?.lastName}
+          </span>
+        </li>
+      </ul>
+      <ul className="grid gap-3 p-2 text-sm">
+        <li className="flex items-center justify-between">
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <Hash className="h-4 w-4" />
+            {t("max_size")}
+          </div>
+          <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+            {classroom.maxSize}
+          </span>
+        </li>
+        <li className="flex items-center justify-between">
+          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+            <CircleUser className="h-4 w-4" />
+            {t("head_teacher")}
+          </div>
+          <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+            {classroom.headTeacher?.lastName}
+          </span>
+        </li>
+        <li className="flex items-center justify-between">
+          <span className="text-muted-foreground"></span>
+          <span className="opacity-0">.</span>
+        </li>
+        <li className="flex items-center justify-between">
+          <span className="text-muted-foreground"></span>
+          <span className="opacity-0">.</span>
+        </li>
+      </ul>
+    </div>
+  );
+}

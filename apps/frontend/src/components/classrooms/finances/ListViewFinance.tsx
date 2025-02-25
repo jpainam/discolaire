@@ -1,0 +1,134 @@
+"use client";
+
+import { useAtom } from "jotai";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+
+import type { RouterOutputs } from "@repo/api";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@repo/ui/components/table";
+import FlatBadge from "~/components/FlatBadge";
+import { useLocale } from "~/i18n";
+
+import { selectedStudentIdsAtom } from "~/atoms/transactions";
+import { AvatarState } from "~/components/AvatarState";
+import { routes } from "~/configs/routes";
+import { CURRENCY } from "~/lib/constants";
+import { getFullName } from "~/utils/full-name";
+
+type StudentAccountWithBalance = NonNullable<
+  RouterOutputs["classroom"]["studentsBalance"]
+>;
+
+export function ListViewFinance({
+  students,
+  amountDue,
+}: {
+  students: StudentAccountWithBalance;
+  amountDue: number;
+}) {
+  const { t, i18n } = useLocale();
+  const [selectedStudents, setSelectedStudents] = useAtom(
+    selectedStudentIdsAtom
+  );
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type");
+
+  const total = students.reduce(
+    (acc, stud) => acc + (stud.balance - amountDue),
+    0
+  );
+  return (
+    <div className="m-2 rounded-lg border">
+      <Table>
+        <TableHeader>
+          <TableRow className="bg-muted/50">
+            <TableHead>
+              <Checkbox
+                onCheckedChange={(checked) => {
+                  setSelectedStudents((_stds) =>
+                    checked ? students.map((stud) => stud.student.id) : []
+                  );
+                }}
+              />
+            </TableHead>
+            <TableHead></TableHead>
+            <TableHead>{t("registrationNumber")}</TableHead>
+            <TableHead>{t("fullName")}</TableHead>
+            <TableHead>{t("balance")}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {students.map((stud) => {
+            const remaining = stud.balance - amountDue;
+            if (type == "credit" && remaining < 0) {
+              return null;
+            }
+            if (type == "debit" && remaining > 0) {
+              return null;
+            }
+            return (
+              <TableRow key={stud.id}>
+                <TableCell className="py-0">
+                  <Checkbox
+                    onCheckedChange={(checked) => {
+                      setSelectedStudents((students) =>
+                        checked
+                          ? [...students, stud.student.id]
+                          : students.filter((id) => id !== stud.student.id)
+                      );
+                    }}
+                    checked={selectedStudents.includes(stud.student.id)}
+                  />
+                </TableCell>
+                <TableCell className="py-0">
+                  <AvatarState
+                    pos={getFullName(stud.student).length}
+                    avatar={stud.student.avatar}
+                  />
+                </TableCell>
+                <TableCell className="py-0">
+                  {stud.student.registrationNumber}
+                </TableCell>
+                <TableCell className="py-0">
+                  <Link
+                    className="hover:text-blue-600 hover:underline"
+                    href={routes.students.details(stud.student.id)}
+                  >
+                    {getFullName(stud.student)}
+                  </Link>
+                </TableCell>
+                <TableCell className="py-0">
+                  <FlatBadge variant={remaining < 0 ? "red" : "green"}>
+                    {remaining} {CURRENCY}
+                  </FlatBadge>
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={3}>{t("total")}</TableCell>
+            <TableCell className="text-right">
+              {total.toLocaleString(i18n.language, {
+                style: "currency",
+                currency: CURRENCY,
+                maximumFractionDigits: 0,
+                minimumFractionDigits: 0,
+              })}
+            </TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table>
+    </div>
+  );
+}
