@@ -47,7 +47,7 @@ export function AnnouncementHeader() {
           createQueryString({
             from: range.from.toISOString(),
             to: range.to.toISOString(),
-          })
+          }),
       );
     } else {
       router.push(
@@ -55,7 +55,7 @@ export function AnnouncementHeader() {
           createQueryString({
             from: undefined,
             to: undefined,
-          })
+          }),
       );
     }
   };

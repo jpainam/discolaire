@@ -29,11 +29,11 @@ export function PolicyHeader() {
 
   const canCreatePolicy = useCheckPermissions(
     PermissionAction.CREATE,
-    "policy"
+    "policy",
   );
   const canDeletePolicy = useCheckPermissions(
     PermissionAction.DELETE,
-    "policy"
+    "policy",
   );
   const deletePolicyMutation = api.policy.delete.useMutation({
     onSettled: () => utils.policy.invalidate(),

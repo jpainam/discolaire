@@ -47,11 +47,11 @@ export default function ClassroomTable() {
   });
   const canDeleteClassroom = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom"
+    "classroom",
   );
   const canEditClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
-    "classroom"
+    "classroom",
   );
   const confirm = useConfirm();
   return (

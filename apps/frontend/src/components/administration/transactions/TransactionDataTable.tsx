@@ -37,7 +37,7 @@ export function TransactionDataTable() {
         t: t,
         moneyFormatter: moneyFormatter,
       }),
-    [moneyFormatter, t]
+    [moneyFormatter, t],
   );
 
   const { table } = useDataTable({

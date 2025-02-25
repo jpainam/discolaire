@@ -53,7 +53,7 @@ export function FeesDetailsForm({ fee }: { fee?: Fee }) {
   });
 
   const onSubmit: SubmitHandler<EditFeeFormValues> = (
-    data: EditFeeFormValues
+    data: EditFeeFormValues,
   ) => {
     console.log(data);
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions

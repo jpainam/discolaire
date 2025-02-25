@@ -34,7 +34,7 @@ export function RequiredFeeDataTable() {
         t: t,
         moneyFormatter: moneyFormatter,
       }),
-    [moneyFormatter, t]
+    [moneyFormatter, t],
   );
 
   const { table } = useDataTable({

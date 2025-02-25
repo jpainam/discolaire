@@ -30,7 +30,7 @@ export function SMSHistoryHeader() {
         onClick={() => {
           router.push(
             // eslint-disable-next-line @typescript-eslint/no-base-to-string, @typescript-eslint/restrict-template-expressions
-            `${routes.administration.sms_management}/?${createQueryString({})}`
+            `${routes.administration.sms_management}/?${createQueryString({})}`,
           );
         }}
         size={"sm"}

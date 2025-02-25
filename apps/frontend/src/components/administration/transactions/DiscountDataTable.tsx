@@ -37,7 +37,7 @@ export function DiscountDataTable() {
         t: t,
         moneyFormatter: moneyFormatter,
       }),
-    [moneyFormatter, t]
+    [moneyFormatter, t],
   );
   const transactions =
     transactionsQuery.data?.filter((t) => t.transactionType == "DISCOUNT") ??

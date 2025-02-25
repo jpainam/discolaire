@@ -28,7 +28,7 @@ export function UserDataTable() {
   const { fullDateFormatter } = useDateFormat();
   const columns = useMemo(
     () => getUserColumns({ t: t, fullDateFormatter: fullDateFormatter }),
-    [fullDateFormatter, t]
+    [fullDateFormatter, t],
   );
 
   const { table } = useDataTable({

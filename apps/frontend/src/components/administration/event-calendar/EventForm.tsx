@@ -163,7 +163,7 @@ export default function EventForm({
             void utils.calendarEvent.all.invalidate();
             return t("updated_successfully");
           },
-        }
+        },
       );
     } else {
       toast.promise(createCalendarEventMutation.mutateAsync(newEvent), {
@@ -210,7 +210,7 @@ export default function EventForm({
             onValueChange={(val) =>
               setValue(
                 "calendarType",
-                val as "School Year" | "Teaching" | "Holidays"
+                val as "School Year" | "Teaching" | "Holidays",
               )
             }
           >
@@ -300,7 +300,7 @@ export default function EventForm({
               onValueChange={(val) =>
                 setValue(
                   "repeat",
-                  val as "None" | "Daily" | "Weekly" | "Monthly" | "Yearly"
+                  val as "None" | "Daily" | "Weekly" | "Monthly" | "Yearly",
                 )
               }
             >
@@ -398,7 +398,7 @@ export default function EventForm({
               "@xl:w-auto w-full",
               isUpdateEvent
                 ? "bg-red-600 text-white hover:border-none hover:bg-red-700 hover:text-white hover:ring-0"
-                : "dark:hover:border-gray-400"
+                : "dark:hover:border-gray-400",
             )}
             onClick={() => (isUpdateEvent ? deleteEvent() : closeModal())}
           >

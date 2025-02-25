@@ -44,7 +44,6 @@ export const PolicyEditor = ({
         defaultValue={defaultValue ?? ""}
         //language="json"
         defaultLanguage="json"
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         onChange={(v) => onChange?.(v)}
         //value={defaultValue ?? ""}
         options={{

@@ -114,7 +114,7 @@ function AddPermissionRadioItem({
       className={cn(
         "flex cursor-pointer flex-row gap-2 rounded-sm border p-4",
         isChecked &&
-          "border border-blue-500 bg-secondary text-secondary-foreground"
+          "border border-blue-500 bg-secondary text-secondary-foreground",
       )}
     >
       <RadioGroupItem checked={isChecked} value={id} id={id} />

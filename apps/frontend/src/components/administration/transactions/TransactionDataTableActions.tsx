@@ -36,7 +36,7 @@ export function TransactionDataTableActions({
 
   const canDeleteTransaction = useCheckPermissions(
     PermissionAction.DELETE,
-    "transaction"
+    "transaction",
   );
   const { openModal } = useModal();
 

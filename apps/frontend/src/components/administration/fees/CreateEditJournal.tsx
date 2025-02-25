@@ -56,7 +56,7 @@ export function CreateEditJournal({ journal }: { journal?: Journal }) {
           error: (error) => {
             return getErrorMessage(error);
           },
-        }
+        },
       );
     }
   };

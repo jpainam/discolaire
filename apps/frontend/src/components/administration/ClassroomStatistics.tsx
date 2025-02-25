@@ -12,7 +12,7 @@ import { api } from "~/trpc/react";
 
 export function ClassroomStatistics({ className }: { className?: string }) {
   const [selectedClassroom, setSelectedClassroom] = useState<string | null>(
-    null
+    null,
   );
   const classroomsQuery = api.classroom.all.useQuery();
 
