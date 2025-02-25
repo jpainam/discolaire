@@ -1,0 +1,41 @@
+{
+  "name": "@repo/reports",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts",
+      "types": "./dist/types.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "prettier": "@repo/prettier-config",
+  "dependencies": {
+    "@alexandernanberg/react-pdf-renderer": "4.0.0-canary-5",
+    "@react-pdf/fns": "^3.1.0",
+    "@react-pdf/renderer": "^4.2.1",
+    "@react-pdf/stylesheet": "^5.2.2",
+    "@repo/api": "workspace:*",
+    "date-fns": "^4.1.0",
+    "jose": "^6.0.6",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/prettier-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/qrcode": "^1.5.5",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
+  }
+}

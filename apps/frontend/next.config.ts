@@ -1,16 +1,23 @@
 import type { NextConfig } from "next";
 
 import "./src/env";
-const nextConfig: NextConfig = {
-  reactStrictMode: true,
+
+const config = {
   /** Enables hot reloading for local packages without a build step */
   transpilePackages: [
     "@repo/api",
-    "@repo/ui",
     "@repo/auth",
-    "@repo/validators",
     "@repo/db",
+    "@repo/reports",
+    "@repo/transactional",
+    "@repo/ui",
+    "@repo/validators",
   ],
+
+  /** We already do linting and typechecking as separate tasks in CI */
+  eslint: { ignoreDuringBuilds: true },
+  typescript: { ignoreBuildErrors: true },
+
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "github.com" },
@@ -26,16 +33,21 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "discolaire-public.s3.eu-central-1.amazonaws.com",
       },
-      {
-        protocol: "https",
-        hostname: "res.cloudinary.com",
-      },
     ],
   },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        child_process: false,
+        path: false,
+        net: false,
+        worker_threads: false,
+        crypto: false,
+        fs: false, // Add any other Node.js modules as necessary
+      };
+    }
+    return config;
+  },
+} satisfies NextConfig;
 
-  /** We already do linting and typechecking as separate tasks in CI */
-  eslint: { ignoreDuringBuilds: true },
-  typescript: { ignoreBuildErrors: true },
-};
-
-export default nextConfig;
+export default config;

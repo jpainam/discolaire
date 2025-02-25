@@ -13,8 +13,10 @@ export default async function Layout({
     PermissionAction.READ,
     "student:list",
   );
+
   if (!canListStudent) {
     return <NoPermission isFullPage resourceText="" className="my-8" />;
   }
+
   return <>{children}</>;
 }

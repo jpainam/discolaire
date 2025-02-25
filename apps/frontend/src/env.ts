@@ -20,6 +20,7 @@ export const env = createEnv({
     AWS_S3_REGION: z.string().min(2),
     AWS_S3_BUCKET_NAME: z.string().min(2),
     AWS_S3_SECRET_ACCESS_KEY: z.string().min(1),
+    REDIS_URL: z.string().min(1),
     SUPER_ADMIN_USERNAME: z.string().min(1),
     RESEND_API_KEY: z.string().min(1),
 
@@ -44,6 +45,7 @@ export const env = createEnv({
     SUPER_ADMIN_USERNAME: process.env.SUPER_ADMIN_USERNAME,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
+    REDIS_URL: process.env.REDIS_URL,
     NEXT_PUBLIC_PROSPECT_SERVICE_URL:
       process.env.NEXT_PUBLIC_PROSPECT_SERVICE_URL,
     NEXT_PUBLIC_LIBRARY_SERVICE_URL:
