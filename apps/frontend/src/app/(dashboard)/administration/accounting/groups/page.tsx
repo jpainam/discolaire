@@ -23,22 +23,22 @@ import { GroupTableAction } from "./GroupTableAction";
 export default async function Page() {
   const canReadFinnaceGroup = await checkPermissions(
     PermissionAction.READ,
-    "accounting:group"
+    "accounting:group",
   );
   if (!canReadFinnaceGroup) {
     return <NoPermission />;
   }
   const canCreateGroups = await checkPermissions(
     PermissionAction.CREATE,
-    "accounting:group"
+    "accounting:group",
   );
   const canEditGroup = await checkPermissions(
     PermissionAction.UPDATE,
-    "accounting:group"
+    "accounting:group",
   );
   const canDeleteGroups = await checkPermissions(
     PermissionAction.DELETE,
-    "accounting:group"
+    "accounting:group",
   );
 
   const { t, i18n } = await getServerTranslations();

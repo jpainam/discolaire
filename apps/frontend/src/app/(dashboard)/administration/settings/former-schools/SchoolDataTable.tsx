@@ -19,7 +19,7 @@ export function SchoolDataTable() {
   const { fullDateFormatter } = useDateFormat();
   const columns = useMemo(
     () => getSchoolColumns({ t, fullDateFormatter }),
-    [fullDateFormatter, t]
+    [fullDateFormatter, t],
   );
 
   const { table } = useDataTable({

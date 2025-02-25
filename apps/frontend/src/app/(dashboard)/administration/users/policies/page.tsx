@@ -6,11 +6,11 @@ import { PolicyTable } from "~/components/administration/policies/PolicyTable";
 export default async function Page() {
   const canDeletePolicy = await checkPermissions(
     PermissionAction.DELETE,
-    "policy"
+    "policy",
   );
   const canEditPolicy = await checkPermissions(
     PermissionAction.UPDATE,
-    "policy"
+    "policy",
   );
 
   return <PolicyTable canDelete={canDeletePolicy} canEdit={canEditPolicy} />;

@@ -56,7 +56,7 @@ export function NavBar({ className }: { className?: string }) {
                 searchParams.get("cat") == item.key ||
                   (index === 0 && pathname === "/administration/users/policies")
                   ? "bg-muted font-medium text-primary"
-                  : "text-muted-foreground"
+                  : "text-muted-foreground",
               )}
             >
               {item.name}

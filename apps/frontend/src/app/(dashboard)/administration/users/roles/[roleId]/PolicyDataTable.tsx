@@ -98,7 +98,7 @@ export function PolicyDataTable({ roleId }: { roleId: string }) {
                         setSelectedPolicies((prev) =>
                           checked
                             ? [...prev, policy.id]
-                            : prev.filter((id) => id !== policy.id)
+                            : prev.filter((id) => id !== policy.id),
                         );
                       }}
                     />

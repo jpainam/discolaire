@@ -98,15 +98,15 @@ export function AddUserToRole({ roleId }: { roleId: string }) {
                       if (selectedUserIds.map((w) => w.id).includes(user.id)) {
                         return setSelectedUserIds(
                           selectedUserIds.filter(
-                            (selectedUser) => selectedUser.id !== user.id
-                          )
+                            (selectedUser) => selectedUser.id !== user.id,
+                          ),
                         );
                       }
 
                       return setSelectedUserIds(
                         [...selectedUserIds, user].map((u) => {
                           return { id: u.id, avatar: u.avatar ?? undefined };
-                        })
+                        }),
                       );
                     }}
                   >
