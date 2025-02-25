@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { useModal } from "@repo/hooks/use-modal";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import {
@@ -18,10 +17,12 @@ import {
   useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { DatePicker } from "~/components/shared/date-picker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
 const schema = z.object({
@@ -104,7 +105,7 @@ export function CreateEditAbsence({
                   }
                 })
                 .catch((error) => {
-                  toast.error(error.message, { id: 0 });
+                  toast.error(getErrorMessage(error), { id: 0 });
                 });
             }
           },

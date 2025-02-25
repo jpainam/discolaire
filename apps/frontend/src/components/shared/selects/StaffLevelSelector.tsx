@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { Check, ChevronsUpDown, Plus } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -32,6 +31,7 @@ import {
 } from "@repo/ui/components/popover";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { useModal } from "~/hooks/use-modal";
 
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";

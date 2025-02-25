@@ -3,9 +3,9 @@
 
 import { useForm } from "react-hook-form";
 
-import { useModal } from "@repo/hooks/use-modal";
 import { Button } from "@repo/ui/components/button";
 import { Form } from "@repo/ui/components/form";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { InputField } from "~/components/shared/forms/input-field";

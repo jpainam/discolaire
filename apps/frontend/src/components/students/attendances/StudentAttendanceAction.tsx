@@ -5,9 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useModal } from "@repo/hooks/use-modal";
 import { Button } from "@repo/ui/components/button";
-import { useConfirm } from "@repo/ui/components/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,7 +13,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
+import { useConfirm } from "~/providers/confirm-dialog";
 
 import { JustifyLateness } from "~/components/attendances/JustifyLateness";
 import { api } from "~/trpc/react";

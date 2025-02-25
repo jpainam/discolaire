@@ -4,7 +4,6 @@ import { Eye, MailIcon, MoreHorizontal, RatioIcon, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
-import { useConfirm } from "@repo/ui/components/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,6 +21,7 @@ import {
 } from "@repo/ui/components/table";
 import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
+import { useConfirm } from "~/providers/confirm-dialog";
 
 export default function AttendanceTable() {
   const { t } = useLocale();

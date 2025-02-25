@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { useModal } from "@repo/hooks/use-modal";
 import { Button } from "@repo/ui/components/button";
 import {
   Form,
@@ -23,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { DatePicker } from "~/components/shared/date-picker";

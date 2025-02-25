@@ -3,7 +3,6 @@
 import { MoreVertical, PlusIcon, UserPlus, UserSearch } from "lucide-react";
 import { useParams } from "next/navigation";
 
-import { useModal } from "@repo/hooks/use-modal";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/components/button";
@@ -14,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import CreateEditContact from "~/components/contacts/CreateEditContact";

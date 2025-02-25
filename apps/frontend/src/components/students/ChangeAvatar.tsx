@@ -2,9 +2,9 @@
 
 import { toast } from "sonner";
 
-import { useModal } from "@repo/hooks/use-modal";
 import { useUpload } from "@repo/hooks/use-upload";
 import { FileUploader } from "@repo/ui/uploads/file-uploader";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { useSchool } from "~/contexts/SchoolContext";

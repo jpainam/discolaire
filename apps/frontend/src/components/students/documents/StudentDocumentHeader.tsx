@@ -2,9 +2,9 @@
 
 import { FolderOpen, UploadCloudIcon } from "lucide-react";
 
-import { useModal } from "@repo/hooks/use-modal";
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { CreateEditDocument } from "~/components/shared/CreateEditDocument";

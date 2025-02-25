@@ -5,7 +5,6 @@ import { toast } from "sonner";
 
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
-import { useConfirm } from "@repo/ui/components/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+import { useConfirm } from "~/providers/confirm-dialog";
 
 import { deleteFileFromAws, downloadFileFromAws } from "~/actions/upload";
 import { useRouter } from "~/hooks/use-router";

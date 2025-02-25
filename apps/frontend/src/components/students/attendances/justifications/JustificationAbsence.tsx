@@ -17,7 +17,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import { useConfirm } from "@repo/ui/components/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,6 +26,7 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
+import { useConfirm } from "~/providers/confirm-dialog";
 
 import { api } from "~/trpc/react";
 

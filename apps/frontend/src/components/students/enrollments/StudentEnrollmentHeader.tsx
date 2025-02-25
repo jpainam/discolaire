@@ -3,10 +3,10 @@
 import { ChevronRight } from "lucide-react";
 import { useParams } from "next/navigation";
 
-import { useModal } from "@repo/hooks/use-modal";
 import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { useCheckPermissions } from "~/hooks/use-permissions";

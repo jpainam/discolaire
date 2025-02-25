@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { useModal } from "@repo/hooks/use-modal";
 import { Button } from "@repo/ui/components/button";
 import {
   Form,
@@ -14,6 +13,7 @@ import {
   FormItem,
   FormMessage,
 } from "@repo/ui/components/form";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { InputField } from "~/components/shared/forms/input-field";

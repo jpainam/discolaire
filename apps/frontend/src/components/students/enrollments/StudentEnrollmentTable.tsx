@@ -7,7 +7,6 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
-import { useConfirm } from "@repo/ui/components/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,6 +24,7 @@ import {
 import { EmptyState } from "~/components/EmptyState";
 import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
+import { useConfirm } from "~/providers/confirm-dialog";
 
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";

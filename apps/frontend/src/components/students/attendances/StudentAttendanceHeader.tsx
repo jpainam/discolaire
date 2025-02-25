@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
-import { useModal } from "@repo/hooks/use-modal";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -22,6 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { PreventAbsence } from "~/components/attendances/PreventAbsence";

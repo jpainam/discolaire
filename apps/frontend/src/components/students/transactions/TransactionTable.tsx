@@ -10,7 +10,6 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
-import { useModal } from "@repo/hooks/use-modal";
 import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -37,6 +36,7 @@ import {
 import { EmptyState } from "~/components/EmptyState";
 import type { FlatBadgeVariant } from "~/components/FlatBadge";
 import FlatBadge from "~/components/FlatBadge";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { routes } from "~/configs/routes";

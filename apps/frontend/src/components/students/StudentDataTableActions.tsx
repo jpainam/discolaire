@@ -8,7 +8,6 @@ import { toast } from "sonner";
 import type { RouterOutputs } from "@repo/api";
 import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/components/button";
-import { useConfirm } from "@repo/ui/components/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { useLocale } from "~/i18n";
+import { useConfirm } from "~/providers/confirm-dialog";
 
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { api } from "~/trpc/react";

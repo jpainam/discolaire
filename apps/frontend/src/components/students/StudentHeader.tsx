@@ -25,10 +25,8 @@ import { toast } from "sonner";
 
 import { StudentStatus } from "@repo/db";
 import { useCreateQueryString } from "@repo/hooks/create-query-string";
-import { useModal } from "@repo/hooks/use-modal";
 import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/components/button";
-import { useConfirm } from "@repo/ui/components/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,7 +37,9 @@ import {
 import { Separator } from "@repo/ui/components/separator";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import FlatBadge from "~/components/FlatBadge";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
+import { useConfirm } from "~/providers/confirm-dialog";
 
 import { SimpleTooltip } from "~/components/simple-tooltip";
 import { endpointReports } from "~/configs/endpoints";

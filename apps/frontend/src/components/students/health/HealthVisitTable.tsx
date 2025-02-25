@@ -3,10 +3,8 @@
 import { Eye, MailIcon, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { useModal } from "@repo/hooks/use-modal";
 import { useSheet } from "@repo/hooks/use-sheet";
 import { Button } from "@repo/ui/components/button";
-import { useConfirm } from "@repo/ui/components/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,7 +22,9 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 import { EmptyState } from "~/components/EmptyState";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
+import { useConfirm } from "~/providers/confirm-dialog";
 
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";

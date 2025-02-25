@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import { CopyIcon, Mail, SendIcon } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 
-import { useModal } from "@repo/hooks/use-modal";
 import { useLocale } from "@repo/i18n";
-import { useConfirm } from "@repo/ui/components/confirm-dialog";
 import { DropdownMenuItem } from "@repo/ui/components/dropdown-menu";
+import { useModal } from "~/hooks/use-modal";
+import { useConfirm } from "~/providers/confirm-dialog";
 
 import { env } from "~/env";
 import { api } from "~/trpc/react";

@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
 import { Trash2, UploadIcon, XIcon } from "lucide-react";
+import { useEffect } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { useModal } from "@repo/hooks/use-modal";
 import { useUpload } from "@repo/hooks/use-upload";
 import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
@@ -21,6 +20,7 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { Textarea } from "@repo/ui/components/textarea";
 import { FileUploader } from "@repo/ui/uploads/file-uploader";
+import { useModal } from "~/hooks/use-modal";
 
 import { useSchool } from "~/contexts/SchoolContext";
 import { useRouter } from "~/hooks/use-router";
@@ -133,7 +133,7 @@ export function CreateEditDocument({
         error: (err) => {
           return getErrorMessage(err);
         },
-      },
+      }
     );
   };
   return (

@@ -14,7 +14,6 @@ import { toast } from "sonner";
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
-import { useConfirm } from "@repo/ui/components/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,6 +24,7 @@ import {
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
+import { useConfirm } from "~/providers/confirm-dialog";
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";

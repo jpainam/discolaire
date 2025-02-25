@@ -7,7 +7,6 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { useDebounce } from "@repo/hooks/use-debounce";
-import { useModal } from "@repo/hooks/use-modal";
 import {
   Avatar,
   AvatarFallback,
@@ -24,6 +23,7 @@ import {
 } from "@repo/ui/components/command";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { randomAvatar } from "~/components/raw-images";

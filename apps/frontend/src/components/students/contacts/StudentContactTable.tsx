@@ -6,7 +6,6 @@ import { toast } from "sonner";
 
 import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/components/button";
-import { useConfirm } from "@repo/ui/components/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,6 +30,7 @@ import {
 import { EmptyState } from "~/components/EmptyState";
 import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
+import { useConfirm } from "~/providers/confirm-dialog";
 
 import { AvatarState } from "~/components/AvatarState";
 import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";

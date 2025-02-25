@@ -1,7 +1,6 @@
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { useModal } from "@repo/hooks/use-modal";
 import { Button } from "@repo/ui/components/button";
 import {
   Form,
@@ -15,6 +14,7 @@ import {
 import { Label } from "@repo/ui/components/label";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { Textarea } from "@repo/ui/components/textarea";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { CURRENCY } from "~/lib/constants";
