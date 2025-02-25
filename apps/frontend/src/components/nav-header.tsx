@@ -82,10 +82,10 @@ export function NavHeader() {
         <NavigationMenuItem>
           <NavigationMenuLink
             asChild
-            data-active={pathname.startsWith("/administrations")}
+            data-active={pathname.startsWith("/administration")}
           >
             <Link
-              href="/administrations"
+              href="/administration"
               className="flex flex-row items-center gap-1"
             >
               <RiUserSettingsLine />

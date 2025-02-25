@@ -2,7 +2,6 @@
 
 import type { LucideIcon } from "lucide-react";
 import { ChevronRight } from "lucide-react";
-import { usePathname } from "next/navigation";
 
 import {
   Collapsible,
@@ -19,6 +18,8 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@repo/ui/components/sidebar";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useLocale } from "~/i18n";
 
 export function NavMain({
@@ -47,7 +48,7 @@ export function NavMain({
             asChild
             defaultOpen={
               item.isActive ??
-              item.items?.some((subItem) => subItem.url === pathname)
+              item.items?.some((subItem) => pathname.startsWith(subItem.url))
             }
             className="group/collapsible"
           >
@@ -55,7 +56,7 @@ export function NavMain({
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton tooltip={t(item.title)}>
                   {item.icon && <item.icon />}
-                  <span>{t(item.title)}</span>
+                  <span>{item.title}</span>
                   <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                 </SidebarMenuButton>
               </CollapsibleTrigger>
@@ -64,9 +65,9 @@ export function NavMain({
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>
-                        <a href={subItem.url}>
+                        <Link href={subItem.url}>
                           <span>{t(subItem.title)}</span>
-                        </a>
+                        </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   ))}
