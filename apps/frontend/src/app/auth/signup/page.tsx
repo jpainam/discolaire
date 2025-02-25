@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { useLocale } from "@repo/i18n";
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -25,6 +24,7 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { useLocale } from "~/i18n";
 
 import { useRouter } from "~/hooks/use-router";
 

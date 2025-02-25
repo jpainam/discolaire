@@ -154,9 +154,11 @@ const data = {
   components: [
     {
       name: "avatar",
+      icon: Settings2,
     },
     {
       name: "badge",
+      icon: BookOpen,
     },
   ],
 };
@@ -186,6 +188,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarGroup>
           <SidebarGroupLabel>Platform</SidebarGroupLabel>
           <SidebarMenu>
+            {data.components.map((item) => (
+              <SidebarMenuItem key={item.name}>
+                <SidebarMenuButton asChild tooltip={item.name}>
+                  <a href={`/#${item.name}`}>
+                    {item.icon && <item.icon />}
+                    <span>{getComponentName(item.name)}</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
             {data.navMain.map((item) => (
               <Collapsible
                 key={item.title}

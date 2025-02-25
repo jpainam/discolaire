@@ -11,9 +11,11 @@ import {
 import { AppSidebar } from "~/components/app-sidebar";
 import { ModeToggle } from "~/components/mode-toggle";
 import { NavHeader } from "~/components/nav-header";
+import { UserNav } from "~/components/user-nav";
 
 import { SchoolContextProvider } from "~/providers/SchoolProvider";
 
+import UserDropdown from "~/components/user-dropdown";
 import GlobalModal from "~/layouts/GlobalModal";
 import GlobalSheet from "~/layouts/GlobalSheet";
 import { api } from "~/trpc/server";
@@ -56,7 +58,8 @@ export default async function Layout({
                 <ModeToggle />
                 <ModeToggle />
                 <ModeToggle />
-                <ModeToggle />
+                <UserNav />
+                <UserDropdown />
               </div>
             </div>
           </header>
