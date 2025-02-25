@@ -90,6 +90,7 @@ export function DropdownInvitation({ email }: { email?: string | null }) {
                 closeModal();
               })
               .catch((error) => {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
                 toast.error(error.message, { id: 0 });
               })
               .finally(() => {

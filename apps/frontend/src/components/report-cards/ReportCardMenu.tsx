@@ -28,7 +28,7 @@ export function ReportCardMenu() {
             className={cn(
               isActive
                 ? "border-b-2 border-blue-500 bg-secondary text-secondary-foreground"
-                : ""
+                : "",
             )}
             href={item.href}
           >

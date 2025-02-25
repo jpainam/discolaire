@@ -76,6 +76,7 @@ export function DatePickerField({
                     )}
                   >
                     {field.value ? (
+                      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                       format(field.value, "PPP")
                     ) : (
                       <span>{placeholder ?? "Pick a date"}</span>
@@ -89,6 +90,7 @@ export function DatePickerField({
                   timeZone={timeZone}
                   mode="single"
                   disabled={disabled}
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                   selected={field.value}
                   onSelect={(date) => {
                     field.onChange(date);

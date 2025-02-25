@@ -42,7 +42,7 @@ export function StaffHeader() {
 
   const canCreateStaff = useCheckPermissions(
     PermissionAction.CREATE,
-    "staff:profile"
+    "staff:profile",
   );
 
   const jobTitles = jobTitlesQuery.data ?? [];
@@ -114,7 +114,7 @@ function FilterJobTitle({ jobTitles }: { jobTitles: string[] }) {
         defaultValue={jobTitle ?? "*"}
         onValueChange={(v) => {
           router.push(
-            `${routes.staffs.index}/?${createQueryString({ jobTitle: v })}`
+            `${routes.staffs.index}/?${createQueryString({ jobTitle: v })}`,
           );
         }}
       >

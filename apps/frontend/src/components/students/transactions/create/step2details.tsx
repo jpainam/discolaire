@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { sumBy } from "lodash";
 import { Copy, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 import { useParams } from "next/navigation";
@@ -176,7 +179,9 @@ export default function Step2Details({ classroomId }: { classroomId: string }) {
                         >
                           <FormControl>
                             <Checkbox
-                              checked={field.value?.includes(item.contactId)}
+                              checked={
+                                field.value?.includes(item.contactId) ?? false
+                              }
                               onCheckedChange={(checked) => {
                                 return checked
                                   ? field.onChange([

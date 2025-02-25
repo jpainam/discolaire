@@ -28,7 +28,7 @@ export function ClassroomSidebar({ className }: { className?: string }) {
           href: item.href ?? undefined,
         };
       }),
-      params.id as string
+      params.id as string,
     );
     setItems(m);
   }, [menusQuery.data, params.id]);
@@ -45,7 +45,7 @@ export function ClassroomSidebar({ className }: { className?: string }) {
     <aside
       className={cn(
         "fixed top-0 hidden h-screen flex-col overflow-y-auto px-1 pt-[130px] text-sm md:flex md:w-[220px]",
-        className
+        className,
       )}
     >
       {menusQuery.isPending && (
@@ -70,7 +70,7 @@ export function ClassroomSidebar({ className }: { className?: string }) {
               "my-1 flex items-center justify-between rounded-md p-2 font-medium",
               isActive
                 ? "before:top-2/5 bg-primary text-primary-foreground"
-                : "transition-colors duration-200 hover:bg-gray-100 hover:text-gray-900"
+                : "transition-colors duration-200 hover:bg-gray-100 hover:text-gray-900",
             )}
           >
             <div className="flex items-center truncate">

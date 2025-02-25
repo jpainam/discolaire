@@ -47,6 +47,7 @@ export function SelectClass({
               field.onChange(value);
               onChange?.(value);
             }}
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             defaultValue={defaultValue ?? field.value}
           >
             <FormControl>

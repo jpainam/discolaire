@@ -41,7 +41,7 @@ export function ContactSearch({ ...props }: StudentSelectorProps) {
       props.setOpen(false);
       props.onChange?.(studentId);
     },
-    [props]
+    [props],
   );
 
   return (

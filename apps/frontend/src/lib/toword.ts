@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 export function numberToWords(num: number, language = "en") {
   if (num === 0) {
@@ -11,6 +12,7 @@ export function numberToWords(num: number, language = "en") {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const data: Record<string, any> = {
     en: {
       belowTwenty: [

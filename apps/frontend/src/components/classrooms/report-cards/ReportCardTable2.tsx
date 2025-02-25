@@ -36,7 +36,7 @@ export async function ReportCardTable({
   const subjects = await api.classroom.subjects(classroomId);
   const studentGrades: Record<string, StudentGradeReport[]> = _.groupBy(
     grades,
-    (g) => g.studentId
+    (g) => g.studentId,
   );
 
   return (
@@ -143,7 +143,7 @@ export async function ReportCardTable({
                         ? "!bg-red-50"
                         : g < 15
                           ? "!bg-yellow-50"
-                          : "!bg-green-50"
+                          : "!bg-green-50",
                     )}
                   >
                     {grade?.grade?.toFixed(2) ?? "-"}

@@ -41,6 +41,7 @@ export function DocumentTableAction({
         await deleteFileFromAws(url);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
         toast.error(error?.message, { id: 0 });
       }
     },
@@ -65,7 +66,7 @@ export function DocumentTableAction({
           onSelect={() => {
             toast.promise(downloadFileFromAws(url), {
               success: (signedUrl) => {
-                window.open(signedUrl as string, "_blank");
+                window.open(signedUrl, "_blank");
                 return t("downloaded");
               },
               loading: t("downloading"),

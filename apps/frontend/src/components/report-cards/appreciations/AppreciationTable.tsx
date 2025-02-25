@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -38,7 +42,7 @@ export function AppreciationTable({ reports }: { reports: any[] }) {
   const classroomId = searchParams.get("classroom");
 
   const [remarksMap, setRemarkMaps] = useState<Record<string, ReportCardType>>(
-    {}
+    {},
   );
   const termId = Number(searchParams.get("term"));
   const remarksQuery = api.reportCard.getRemarks.useQuery({
@@ -99,7 +103,7 @@ export function AppreciationTable({ reports }: { reports: any[] }) {
                 rowClassName,
                 "group/report",
                 selected.includes(report.student.id) &&
-                  "bg-secondary text-secondary-foreground"
+                  "bg-secondary text-secondary-foreground",
               )}
               key={report.student.id}
             >
@@ -113,7 +117,7 @@ export function AppreciationTable({ reports }: { reports: any[] }) {
                       setSelected([...selected, report.student.id]);
                     } else {
                       setSelected(
-                        selected.filter((id) => id !== report.student.id)
+                        selected.filter((id) => id !== report.student.id),
                       );
                     }
                   }}

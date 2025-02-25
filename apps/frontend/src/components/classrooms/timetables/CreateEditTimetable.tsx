@@ -291,7 +291,7 @@ export function CreateEditTimetable({
 
 const getUniqueWeekdaysBetweenDates = (
   startDate: Date,
-  endDate: Date
+  endDate: Date,
 ): string[] => {
   const dayNames = [
     "sunday",

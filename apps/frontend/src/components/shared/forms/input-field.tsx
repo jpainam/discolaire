@@ -53,6 +53,7 @@ export function InputField({
               disabled={disabled}
               placeholder={placeholder}
               {...field}
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
               value={field.value ?? ""}
             />
           </FormControl>

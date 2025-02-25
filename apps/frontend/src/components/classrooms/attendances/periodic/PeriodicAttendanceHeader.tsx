@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
 import { Check, X } from "lucide-react";
@@ -38,7 +41,7 @@ export function PeriodicAttendanceHeader() {
                     exclusion: "",
                     chatter: "",
                   };
-                }
+                },
               ),
           });
         }}
@@ -67,7 +70,7 @@ export function PeriodicAttendanceHeader() {
                     ...student,
                     absence: "1",
                   };
-                }
+                },
               ),
           });
         }}

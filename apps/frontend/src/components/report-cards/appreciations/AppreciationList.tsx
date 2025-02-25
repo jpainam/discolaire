@@ -15,13 +15,13 @@ import type { AppreciationCategory } from "~/types/appreciation";
 import { CreateEditAppreciation } from "./CreateEditAppreciation";
 
 export function AppreciationList({
-  setSelectedCategory,
+  setSelectedCategoryAction,
   studentId,
   category,
 }: {
   category: AppreciationCategory;
   studentId: string;
-  setSelectedCategory: (category: AppreciationCategory | null) => void;
+  setSelectedCategoryAction: (category: AppreciationCategory | null) => void;
 }) {
   const [openIdItem, setOpenIdItem] = useState<number | null>(null);
   const [addClicked, setAddClicked] = useState<boolean>(false);
@@ -48,7 +48,7 @@ export function AppreciationList({
       <div
         className="flex w-full cursor-pointer flex-row items-center rounded-md p-2 hover:text-secondary-foreground"
         onClick={() => {
-          setSelectedCategory(null);
+          setSelectedCategoryAction(null);
         }}
       >
         <ChevronLeft className="mr-2 h-4 w-4" />
@@ -68,6 +68,7 @@ export function AppreciationList({
                       setOpenIdItem(null);
                     }}
                     category={category}
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     appreciation={appreciation as any}
                   />
                 ) : (

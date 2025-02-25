@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 "use client";
 
 import { Columns4Icon, MailIcon, MoreVertical, Trash2 } from "lucide-react";
@@ -92,6 +93,7 @@ export function StudentAttendanceAction({
                 }
               })
               .catch((error) => {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 toast.error(error.message, { id: 0 });
               });
           }}

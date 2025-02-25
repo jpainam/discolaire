@@ -231,7 +231,7 @@ export function getColumns({
                         error: (error) => {
                           return getErrorMessage(error);
                         },
-                      }
+                      },
                     );
                   }
                 }}

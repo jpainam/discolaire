@@ -48,14 +48,14 @@ export function ClassroomHeader() {
     "classroom:details",
     {
       id: params.id,
-    }
+    },
   );
   const canUpdateClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
     "classroom:details",
     {
       id: params.id,
-    }
+    },
   );
   const deleteClassroomMutation = api.classroom.delete.useMutation({
     onSuccess: () => {

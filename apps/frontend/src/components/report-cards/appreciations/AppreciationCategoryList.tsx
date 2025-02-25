@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 "use client";
 
 import { motion } from "framer-motion";
@@ -113,7 +116,7 @@ export function AppreciationCategoryList({
         ) : (
           <AppreciationList
             studentId={studentId}
-            setSelectedCategory={setSelectedCategory}
+            setSelectedCategoryAction={setSelectedCategory}
             category={selectedCategory}
           />
         )}

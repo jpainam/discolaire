@@ -54,6 +54,7 @@ export function SelectField({
           <Select
             disabled={disabled}
             onValueChange={field.onChange}
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             defaultValue={field.value}
           >
             <FormControl>

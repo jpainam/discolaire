@@ -4,7 +4,7 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@repo/ui//components/avatar";
+} from "@repo/ui/components/avatar";
 import { cn } from "~/lib/utils";
 import { avatars, randomAvatar } from "./raw-images";
 

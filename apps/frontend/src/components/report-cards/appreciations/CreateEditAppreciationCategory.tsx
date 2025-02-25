@@ -71,7 +71,7 @@ export function CreateEditAppreciationCategory({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  }
+                  },
                 );
               }
             }}
@@ -100,7 +100,7 @@ export function CreateEditAppreciationCategory({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  }
+                  },
                 );
               } else {
                 toast.promise(
@@ -117,7 +117,7 @@ export function CreateEditAppreciationCategory({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  }
+                  },
                 );
               }
             }}

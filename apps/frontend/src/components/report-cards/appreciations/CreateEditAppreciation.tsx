@@ -71,7 +71,7 @@ export function CreateEditAppreciation({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  }
+                  },
                 );
               }
             }}
@@ -105,7 +105,7 @@ export function CreateEditAppreciation({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  }
+                  },
                 );
               } else {
                 if (!value) {
@@ -131,7 +131,7 @@ export function CreateEditAppreciation({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  }
+                  },
                 );
               }
             }}

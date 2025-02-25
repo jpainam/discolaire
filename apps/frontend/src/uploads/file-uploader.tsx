@@ -99,16 +99,16 @@ export function FileUploader(props: FileUploaderProps) {
     onValueChange,
     onUpload,
     progresses,
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
     accept = {
       "application/pdf": [],
       "image/*": [],
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
         [],
     },
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
     maxSize = 1024 * 1024 * 2,
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
     maxFileCount = 1,
     multiple = false,
     disabled = false,

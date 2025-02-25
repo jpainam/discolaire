@@ -26,6 +26,7 @@ const EditableAppreciation = ({
   };
 
   const handleChange = (event: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     setText(event.target.value);
   };
 
@@ -38,6 +39,7 @@ const EditableAppreciation = ({
 
   useEffect(() => {
     if (isEditing) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       inputRef.current?.focus();
     }
   }, [isEditing]);

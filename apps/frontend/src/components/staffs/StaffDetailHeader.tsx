@@ -31,7 +31,7 @@ export function StaffDetailHeader() {
     if (!params.id || !staffsQuery.data) return;
     const staffs = staffsQuery.data;
     const currentStaffIdx = staffsQuery.data.findIndex(
-      (s) => s.id === params.id
+      (s) => s.id === params.id,
     );
     setPrevStaff(staffs[currentStaffIdx - 1] ?? null);
     setNextStaff(staffs[currentStaffIdx + 1] ?? null);

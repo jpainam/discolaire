@@ -15,6 +15,7 @@ interface QuillEditorProps extends ReactQuillProps {
 }
 
 export default function QuillEditor({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   id,
   label,
   error,
@@ -22,6 +23,7 @@ export default function QuillEditor({
   labelClassName,
   errorClassName,
   toolbarPosition = "top",
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ...props
 }: QuillEditorProps) {
   const quillModules = {
@@ -74,7 +76,7 @@ export default function QuillEditor({
         className={cn(
           "react-quill",
           toolbarPosition === "bottom" && "react-quill-toolbar-bottom relative",
-          className
+          className,
         )}
         //{...props}
       />
