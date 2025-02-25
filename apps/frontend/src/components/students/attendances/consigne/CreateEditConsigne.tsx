@@ -1,0 +1,218 @@
+"use client";
+
+import { useParams } from "next/navigation";
+import { toast } from "sonner";
+import { z } from "zod";
+
+import type { RouterOutputs } from "@repo/api";
+import { useModal } from "@repo/hooks/use-modal";
+import { Button } from "@repo/ui/components/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useForm,
+} from "@repo/ui/components/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/components/select";
+import { Textarea } from "@repo/ui/components/textarea";
+import { useLocale } from "~/i18n";
+
+import { DatePicker } from "~/components/shared/date-picker";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { api } from "~/trpc/react";
+
+const schema = z.object({
+  termId: z.string().min(1),
+  date: z.coerce.date().default(() => new Date()),
+  hours: z.string().min(1),
+  minutes: z.string().min(1),
+  task: z.string().min(1),
+});
+export function CreateEditConsigne({
+  consigne,
+}: {
+  consigne?: RouterOutputs["consigne"]["all"][number];
+}) {
+  const form = useForm({
+    schema: schema,
+    defaultValues: {
+      date: consigne?.date ?? new Date(),
+      hours: consigne?.duration
+        ? Math.floor(consigne.duration / 60).toString()
+        : "0",
+      minutes: consigne?.duration ? (consigne.duration % 60).toString() : "0",
+      task: consigne?.task ?? "",
+    },
+  });
+  const utils = api.useUtils();
+  const createConsigneMutation = api.consigne.create.useMutation({
+    onSettled: () => {
+      void utils.attendance.invalidate();
+    },
+    onSuccess: () => {
+      toast.success(t("created_successfully"), { id: 0 });
+      closeModal();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
+  const updateConsigneMutation = api.consigne.update.useMutation({
+    onSettled: () => {
+      void utils.attendance.invalidate();
+    },
+    onSuccess: () => {
+      toast.success(t("updated_successfully"), { id: 0 });
+      closeModal();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+  });
+  const { t } = useLocale();
+  const params = useParams<{ id: string }>();
+  const { closeModal } = useModal();
+  const handleSubmit = (data: z.infer<typeof schema>) => {
+    const values = {
+      studentId: params.id,
+      duration: parseInt(data.hours) * 60 + parseInt(data.minutes),
+      termId: parseInt(data.termId),
+      date: data.date,
+      task: data.task,
+    };
+    if (consigne) {
+      toast.loading(t("updating"), { id: 0 });
+      updateConsigneMutation.mutate({ ...values, id: consigne.id });
+    } else {
+      toast.loading(t("creating"), { id: 0 });
+      createConsigneMutation.mutate(values);
+    }
+  };
+  return (
+    <Form {...form}>
+      <form className="grid gap-4" onSubmit={form.handleSubmit(handleSubmit)}>
+        <FormField
+          control={form.control}
+          name="termId"
+          render={({ field }) => (
+            <FormItem className="space-y-0">
+              <FormLabel>{t("terms")}</FormLabel>
+              <FormControl>
+                <TermSelector {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => (
+            <FormItem className="space-y-0">
+              <FormLabel>{t("date")}</FormLabel>
+              <FormControl>
+                <DatePicker {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="grid grid-cols-2 gap-2">
+          <FormField
+            control={form.control}
+            name="hours"
+            render={({ field }) => (
+              <FormItem className="space-y-0">
+                <FormLabel>{t("hours")}</FormLabel>
+                <FormControl>
+                  <Select defaultValue={"0"} onValueChange={field.onChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t("hours")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Array.from({ length: 23 }, (_, i) => (
+                        <SelectItem key={i} value={i.toString()}>
+                          {i.toString().padStart(2, "0")}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="minutes"
+            render={({ field }) => (
+              <FormItem className="space-y-0">
+                <FormLabel>{t("minutes")}</FormLabel>
+                <FormControl>
+                  <Select defaultValue={"0"} onValueChange={field.onChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t("hours")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Array.from({ length: 60 }, (_, i) => (
+                        <SelectItem key={i} value={i.toString()}>
+                          {i.toString().padStart(2, "0")}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <FormField
+          control={form.control}
+          name="task"
+          render={({ field }) => (
+            <FormItem className="space-y-0">
+              <FormLabel>{t("task")}</FormLabel>
+              <FormControl>
+                <Textarea {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="grid grid-cols-2 gap-2">
+          <Button
+            onClick={() => {
+              closeModal();
+            }}
+            variant={"outline"}
+            size={"sm"}
+            type={"button"}
+          >
+            {t("cancel")}
+          </Button>
+          <Button
+            isLoading={
+              createConsigneMutation.isPending ||
+              updateConsigneMutation.isPending
+            }
+            size={"sm"}
+            type={"submit"}
+          >
+            {t("submit")}
+          </Button>
+        </div>
+      </form>
+    </Form>
+  );
+}

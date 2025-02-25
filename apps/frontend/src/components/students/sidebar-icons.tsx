@@ -1,0 +1,38 @@
+import type { LucideIcon } from "lucide-react";
+import {
+  Ambulance,
+  ArrowRightLeft,
+  BellRing,
+  BookText,
+  CircleDollarSign,
+  CreditCard,
+  FileText,
+  Image,
+  KeySquare,
+  LineChart,
+  Logs,
+  Mail,
+  NotebookPen,
+  NotepadTextDashed,
+  User,
+  Users,
+} from "lucide-react";
+
+export const sidebarIcons: Record<string, LucideIcon> = {
+  profile: User,
+  contacts: Users,
+  transactions: CircleDollarSign,
+  grades: NotepadTextDashed,
+  report_cards: BookText,
+  photos: Image,
+  enrollments: ArrowRightLeft,
+  id_card: CreditCard,
+  assignments: NotebookPen,
+  login_info: KeySquare,
+  attendances: LineChart,
+  mail: Mail,
+  health: Ambulance,
+  notifications: BellRing,
+  documents: FileText,
+  access_logs: Logs,
+};
