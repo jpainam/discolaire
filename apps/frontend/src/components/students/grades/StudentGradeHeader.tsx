@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -18,6 +17,7 @@ import { Label } from "@repo/ui/components/label";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 import FlatBadge from "~/components/FlatBadge";
+import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
 import { printStudentGrade } from "~/actions/reporting";

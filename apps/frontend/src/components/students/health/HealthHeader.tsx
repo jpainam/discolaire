@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
-import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import { Separator } from "@repo/ui/components/separator";
+import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
 import { routes } from "~/configs/routes";

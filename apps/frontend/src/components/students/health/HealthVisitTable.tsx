@@ -3,7 +3,7 @@
 import { Eye, MailIcon, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { useSheet } from "@repo/hooks/use-sheet";
+import { useSheet } from "~/hooks/use-sheet";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,

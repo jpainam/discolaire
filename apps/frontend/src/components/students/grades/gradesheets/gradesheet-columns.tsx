@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { ColumnDef, Table } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
 import { createColumnHelper } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import { z } from "zod";
 
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";

@@ -3,11 +3,11 @@
 import { ChevronRight } from "lucide-react";
 import { useParams } from "next/navigation";
 
-import { PermissionAction } from "@repo/lib/permission";
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
 
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { sidebarIcons } from "../sidebar-icons";

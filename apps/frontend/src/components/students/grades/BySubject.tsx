@@ -4,7 +4,6 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import type { RouterOutputs } from "@repo/api";
-import { useCreateQueryString } from "@repo/hooks/create-query-string";
 import {
   Accordion,
   AccordionContent,
@@ -13,6 +12,7 @@ import {
 } from "@repo/ui/components/accordion";
 import { Separator } from "@repo/ui/components/separator";
 import FlatBadge from "~/components/FlatBadge";
+import { useCreateQueryString } from "~/hooks/create-query-string";
 
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";

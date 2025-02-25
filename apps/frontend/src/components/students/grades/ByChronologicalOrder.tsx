@@ -3,7 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 
 import type { RouterOutputs } from "@repo/api";
-import { useCreateQueryString } from "@repo/hooks/create-query-string";
+import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
 import { routes } from "~/configs/routes";

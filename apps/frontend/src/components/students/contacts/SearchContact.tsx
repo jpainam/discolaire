@@ -3,10 +3,10 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { useDebounce } from "@repo/hooks/use-debounce";
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { useDebounce } from "~/hooks/use-debounce";
 import { useLocale } from "~/i18n";
 
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";

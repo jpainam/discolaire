@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { useUpload } from "@repo/hooks/use-upload";
 import {
   Accordion,
   AccordionContent,
@@ -28,14 +27,15 @@ import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { Textarea } from "@repo/ui/components/textarea";
-import { FileUploader } from "@repo/ui/uploads/file-uploader";
+import { useUpload } from "~/hooks/use-upload";
 import { useLocale } from "~/i18n";
+import { FileUploader } from "~/uploads/file-uploader";
 
 import { DatePicker } from "~/components/shared/date-picker";
 import { routes } from "~/configs/routes";
-import { useSchool } from "~/contexts/SchoolContext";
 import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
+import { useSchool } from "~/providers/SchoolProvider";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 
