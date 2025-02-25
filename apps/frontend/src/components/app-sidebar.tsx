@@ -24,6 +24,7 @@ import { usePathname } from "next/navigation";
 import { StudentSidebar } from "~/components/students/StudentSidebar";
 import { MainSidebar } from "~/sidebars/main-sidebar";
 import { AdminSidebar } from "./administration/admin-sidebar";
+import { ClassroomSidebar } from "./classrooms/ClassroomSidebar";
 import { TeamSwitcher } from "./team-switcher";
 
 // This is sample data.
@@ -82,6 +83,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     pathname.startsWith("/students/") && pathname.split("/").length > 2;
 
   const isAdmin = pathname.startsWith("/administration/");
+  const isClassroom =
+    pathname.startsWith("/classrooms/") && pathname.split("/").length > 2;
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -104,6 +107,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarHeader>
+      {isClassroom && <ClassroomSidebar />}
       {isHome && (
         <MainSidebar />
         // <SidebarContent>

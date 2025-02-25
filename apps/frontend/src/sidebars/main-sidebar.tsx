@@ -1,124 +1,89 @@
-import {
-  RiCodeSSlashLine,
-  RiGroup3Line,
-  RiHome9Line,
-  RiLayoutLeftLine,
-  RiLeafLine,
-  RiLoginCircleLine,
-  RiUserSettingsLine,
-} from "@remixicon/react";
+"use client";
+
+import { RiAdminLine } from "@remixicon/react";
 import {
   SidebarContent,
   SidebarGroup,
-  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@repo/ui/components/sidebar";
-import { House } from "lucide-react";
-import Link from "next/link";
+import { FolderOpen, House, HouseWifiIcon, Users } from "lucide-react";
 import { useLocale } from "~/i18n";
 
-// This is sample data.
-
 export function MainSidebar() {
+  const data = [
+    {
+      name: "home",
+      url: `/`,
+      icon: House,
+    },
+    {
+      name: "students",
+      url: `/students`,
+      icon: Users,
+    },
+
+    {
+      name: "classrooms",
+      url: `/classrooms`,
+      icon: HouseWifiIcon,
+    },
+    {
+      name: "contacts",
+      url: `/contacts`,
+      icon: Users,
+    },
+    {
+      name: "staffs",
+      url: `/staffs`,
+      icon: FolderOpen,
+    },
+
+    {
+      name: "administration",
+      url: `/administration`,
+      icon: RiAdminLine,
+    },
+  ];
+
   const { t } = useLocale();
-  const data = {
-    navMain: [
-      {
-        title: "Sections",
-        url: "#",
-        items: [
-          {
-            title: t("home"),
-            url: "/",
-            icon: House,
-          },
-          {
-            title: t("students"),
-            url: "/students",
-            icon: RiGroup3Line,
-          },
-          {
-            title: t("classrooms"),
-            url: "#",
-            icon: RiHome9Line,
-            isActive: true,
-          },
-          {
-            title: t("contacts"),
-            url: "#",
-            icon: RiCodeSSlashLine,
-          },
-          {
-            title: t("staffs"),
-            url: "#",
-            icon: RiLoginCircleLine,
-          },
-          {
-            title: "Layouts",
-            url: "#",
-            icon: RiLayoutLeftLine,
-          },
-          {
-            title: "Reports",
-            url: "#",
-            icon: RiLeafLine,
-          },
-        ],
-      },
-      {
-        title: t("others"),
-        url: "#",
-        items: [
-          {
-            title: t("administration"),
-            url: "/administrations",
-            icon: RiUserSettingsLine,
-          },
-          {
-            title: "Help Center",
-            url: "#",
-            icon: RiLeafLine,
-          },
-        ],
-      },
-    ],
-  };
   return (
     <SidebarContent>
-      {/* We create a SidebarGroup for each parent. */}
-      {data.navMain.map((item) => (
-        <SidebarGroup key={item.title}>
-          <SidebarGroupLabel className="uppercase text-muted-foreground/60">
-            {item.title}
-          </SidebarGroupLabel>
-          <SidebarGroupContent className="px-2">
-            <SidebarMenu>
-              {item.items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    className="group/menu-button font-medium gap-3 h-9 rounded-md bg-gradient-to-r hover:bg-transparent hover:from-sidebar-accent hover:to-sidebar-accent/40 data-[active=true]:from-primary/20 data-[active=true]:to-primary/5 [&>svg]:size-auto"
-                    isActive={item.isActive}
-                  >
-                    <Link href={item.url}>
-                      <item.icon
-                        className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
-                        size={22}
-                        aria-hidden="true"
-                      />
-
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      ))}
+      <SidebarGroup>
+        <SidebarGroupLabel className="uppercase">
+          {t("information")}
+        </SidebarGroupLabel>
+        <SidebarMenu>
+          {data.map((item) => (
+            <SidebarMenuItem key={item.name}>
+              <SidebarMenuButton asChild tooltip={t(item.name)}>
+                <a href={item.url}>
+                  <item.icon />
+                  <span>{t(item.name)}</span>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarGroup>
+      {/* <SidebarGroup>
+        <SidebarGroupLabel>{t("academics")}</SidebarGroupLabel>
+        <SidebarMenu>
+          {data.academics.map((item) => (
+            <SidebarMenuItem key={item.name}>
+              <SidebarMenuButton asChild tooltip={t(item.name)}>
+                <Link href={item.url}>
+                  <item.icon />
+                  <span>{t(item.name)}</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarGroup>
+      */}
     </SidebarContent>
   );
 }

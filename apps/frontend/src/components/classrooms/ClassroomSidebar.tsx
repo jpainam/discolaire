@@ -1,95 +1,161 @@
 "use client";
 
-import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-
-import { Skeleton } from "@repo/ui/components/skeleton";
+import {
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@repo/ui/components/sidebar";
+import {
+  BookOpenText,
+  BookText,
+  CalendarDays,
+  Captions,
+  Contact,
+  FolderOpen,
+  HandCoins,
+  NotebookPen,
+  NotepadTextDashed,
+  Printer,
+  Proportions,
+  Receipt,
+  TableProperties,
+  Users,
+} from "lucide-react";
+import { useParams } from "next/navigation";
 import { useLocale } from "~/i18n";
 
-import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
-import { sidebarIcons } from "./sidebar-icons";
+export function ClassroomSidebar() {
+  const params = useParams<{ id: string }>();
+  const data = {
+    information: [
+      {
+        name: "details",
+        url: `/classrooms/${params.id}`,
+        icon: TableProperties,
+      },
+      {
+        name: "enrollments",
+        url: `/classrooms/${params.id}/enrollments`,
+        icon: Users,
+      },
 
-export function ClassroomSidebar({ className }: { className?: string }) {
-  const pathname = usePathname();
-  const params = useParams();
-  const menusQuery = api.menu.byCategory.useQuery({ category: "classroom" });
+      {
+        name: "fees",
+        url: `/classrooms/${params.id}/fees`,
+        icon: Receipt,
+      },
+      {
+        name: "financial_situation",
+        url: `/classrooms/${params.id}/financial_situation`,
+        icon: HandCoins,
+      },
+      {
+        name: "documents",
+        url: `/classrooms/${params.id}/documents`,
+        icon: FolderOpen,
+      },
 
-  const [items, setItems] = useState<{ name: string; href?: string }[]>([]);
+      {
+        name: "assignments",
+        url: `/classrooms/${params.id}/assignments`,
+        icon: NotebookPen,
+      },
+      {
+        name: "gradesheets",
+        url: `/classrooms/${params.id}/gradesheets`,
+        icon: BookOpenText,
+      },
 
-  useEffect(() => {
-    if (!menusQuery.data) return;
-    const m = getMenu(
-      menusQuery.data.map((item) => {
-        return {
-          name: item.name,
-          href: item.href ?? undefined,
-        };
-      }),
-      params.id as string,
-    );
-    setItems(m);
-  }, [menusQuery.data, params.id]);
+      {
+        name: "print",
+        url: `/classrooms/${params.id}/print`,
+        icon: Printer,
+      },
+
+      {
+        name: "subjects",
+        url: `/classrooms/${params.id}/subjects`,
+        icon: Captions,
+      },
+      {
+        name: "programs",
+        url: `/classrooms/${params.id}/programs`,
+        icon: BookText,
+      },
+      {
+        name: "attendances",
+        url: `/classrooms/${params.id}/attendances`,
+        icon: Contact,
+      },
+      {
+        name: "report_cards",
+        url: `/classrooms/${params.id}/report_cards`,
+        icon: Proportions,
+      },
+      {
+        name: "timetables",
+        url: `/classrooms/${params.id}/timetables`,
+        icon: CalendarDays,
+      },
+      {
+        name: "subject_journal",
+        url: `/classrooms/${params.id}/subject_journal`,
+        icon: NotepadTextDashed,
+      },
+    ],
+  };
 
   const { t } = useLocale();
-
-  if (menusQuery.isError) {
-    toast.error(menusQuery.error.message);
-    return;
-  }
-
-  ////fixed h-screen top-16 overflow-y-auto
   return (
-    <aside
-      className={cn(
-        "fixed top-0 hidden h-screen flex-col overflow-y-auto px-1 pt-[130px] text-sm md:flex md:w-[220px]",
-        className,
-      )}
-    >
-      {menusQuery.isPending && (
-        <div className="grid gap-2 p-2">
-          {Array.from({ length: 32 }).map((_, index) => (
-            <Skeleton key={index} className="h-8 w-full" />
+    <SidebarContent>
+      <SidebarGroup>
+        <SidebarGroupLabel>{t("information")}</SidebarGroupLabel>
+        <SidebarMenu>
+          {data.information.map((item) => (
+            <SidebarMenuItem key={item.name}>
+              <SidebarMenuButton asChild tooltip={t(item.name)}>
+                <a href={item.url}>
+                  <item.icon />
+                  <span>{t(item.name)}</span>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
           ))}
-        </div>
-      )}
-      {items.map((item, index) => {
-        let isActive = item.href ? pathname.includes(item.href) : false;
-        if (item.name === "details" && pathname.split("/").pop() != params.id) {
-          isActive = false;
-        }
-        const Icon = sidebarIcons[item.name];
-
-        return (
-          <Link
-            key={item.name + "-" + index}
-            href={params.id ? (item.href ?? "") : "#"}
-            className={cn(
-              "my-1 flex items-center justify-between rounded-md p-2 font-medium",
-              isActive
-                ? "before:top-2/5 bg-primary text-primary-foreground"
-                : "transition-colors duration-200 hover:bg-gray-100 hover:text-gray-900",
-            )}
-          >
-            <div className="flex items-center truncate">
-              {Icon && <Icon className="me-2 h-5 w-5 stroke-1" />}
-              <span className="truncate">{t(item.name)}</span>
-            </div>
-          </Link>
-        );
-      })}
-    </aside>
+        </SidebarMenu>
+      </SidebarGroup>
+      {/* <SidebarGroup>
+        <SidebarGroupLabel>{t("academics")}</SidebarGroupLabel>
+        <SidebarMenu>
+          {data.academics.map((item) => (
+            <SidebarMenuItem key={item.name}>
+              <SidebarMenuButton asChild tooltip={t(item.name)}>
+                <Link href={item.url}>
+                  <item.icon />
+                  <span>{t(item.name)}</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarGroup>
+      <SidebarGroup>
+        <SidebarGroupLabel>{t("others")}</SidebarGroupLabel>
+        <SidebarMenu>
+          {data.finances.map((item) => (
+            <SidebarMenuItem key={item.name}>
+              <SidebarMenuButton asChild tooltip={t(item.name)}>
+                <a href={item.url}>
+                  <item.icon />
+                  <span>{t(item.name)}</span>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarGroup> */}
+    </SidebarContent>
   );
-}
-
-function getMenu(data: { name: string; href?: string }[], id: string) {
-  // replace :id by the actual id in all href
-  return data.map((menu) => {
-    return {
-      ...menu,
-      href: menu.href?.replace(":id", id),
-    };
-  });
 }
