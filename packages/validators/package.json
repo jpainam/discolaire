@@ -23,6 +23,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "catalog:",
+    "prettier": "catalog:",
     "typescript": "catalog:"
   }
 }

@@ -15,6 +15,7 @@
         "lint": "eslint",
         "typecheck": "tsc --noEmit"
     },
+    "prettier": "@repo/prettier-config",
     "dependencies": {
         "@repo/db": "workspace:*",
         "@t3-oss/env-nextjs": "^0.12.0",
@@ -28,9 +29,11 @@
     },
     "devDependencies": {
         "@repo/eslint-config": "workspace:*",
+        "@repo/prettier-config": "workspace:*",
         "@repo/typescript-config": "workspace:*",
         "@types/bcryptjs": "^2.4.6",
         "@types/jsonwebtoken": "^9.0.8",
+        "prettier": "catalog:",
         "typescript": "catalog:"
     }
 }
