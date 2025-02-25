@@ -1,11 +1,13 @@
 {
   "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "src",
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
     "module": "ES2022",
-    "moduleResolution": "Bundler",
-    "noEmit": true
+    "noEmit": true,
+    "outDir": "dist",
+    "moduleResolution": "bundler",
+    "rootDir": "src"
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

@@ -25,6 +25,7 @@ export const bibleRouter = createTRPCRouter({
   random: publicProcedure.query(async () => {
     try {
       const response = await fetch("https://bible-api.com/?random=verse");
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const result = await response.json();
       const parsed = bibleVerseSchema.safeParse(result);
       if (!parsed.success) {

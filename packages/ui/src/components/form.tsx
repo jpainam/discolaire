@@ -1,15 +1,16 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import type * as LabelPrimitive from "@radix-ui/react-label";
-import { Slot } from "@radix-ui/react-slot";
-import * as React from "react";
 import type {
   ControllerProps,
   FieldPath,
   FieldValues,
   UseFormProps,
 } from "react-hook-form";
+import type { ZodType, ZodTypeDef } from "zod";
+import * as React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Slot } from "@radix-ui/react-slot";
 import {
   useForm as __useForm,
   Controller,
@@ -17,7 +18,6 @@ import {
   useFormContext,
   useFormState,
 } from "react-hook-form";
-import type { ZodType, ZodTypeDef } from "zod";
 
 import { Label } from "@repo/ui/components/label";
 import { cn } from "@repo/ui/lib/utils";
@@ -72,6 +72,7 @@ const useFormField = () => {
   const formState = useFormState({ name: fieldContext.name });
   const fieldState = getFieldState(fieldContext.name, formState);
 
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!fieldContext) {
     throw new Error("useFormField should be used within <FormField>");
   }

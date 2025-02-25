@@ -2,14 +2,14 @@ import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
-const getInvitationCode = async (email: string) => {
+const getInvitationCode = (email: string) => {
   return email + " " + crypto.randomUUID();
 };
 export const invitationRouter = createTRPCRouter({
   create: protectedProcedure
     .input(z.object({ email: z.string().email() }))
     .mutation(async ({ ctx, input }) => {
-      const code = await getInvitationCode(input.email);
+      const code = getInvitationCode(input.email);
       const user = await ctx.db.user.findFirst({
         where: { email: input.email },
       });

@@ -21,7 +21,7 @@ const initServerI18next = async (language: any, ns: any): Promise<i18n> => {
         (language: any, ns: any) => import(`./locales/${language}/${ns}.json`),
       ),
     )
-    .init(getOptions(language, ns));
+    .init(getOptions(language as string, ns as string));
   return i18nInstance;
 };
 

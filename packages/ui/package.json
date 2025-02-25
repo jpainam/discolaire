@@ -11,9 +11,11 @@
     "./hooks/*": "./src/hooks/*.ts"
   },
   "scripts": {
+    "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
+  "prettier": "@repo/prettier-config",
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accessible-icon": "^1.1.1",
@@ -60,6 +62,7 @@
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
+    "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@turbo/gen": "^2.4.2",
     "@types/node": "catalog:",

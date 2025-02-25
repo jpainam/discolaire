@@ -28,6 +28,7 @@ import { Input } from "@repo/ui/components/input";
 import { useLocale } from "~/i18n";
 
 import { useRouter } from "~/hooks/use-router";
+import { getErrorMessage } from "~/lib/handle-error";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -60,7 +61,7 @@ export default function Paage() {
       })
       .catch((err) => {
         console.error(err);
-        toast.error(err.message);
+        toast.error(getErrorMessage(err));
       })
       .finally(() => {
         setIsLoading(false);

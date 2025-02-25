@@ -1,33 +1,35 @@
 {
-    "name": "@repo/db",
-    "version": "0.1.0",
-    "private": true,
-    "license": "MIT",
-    "type": "module",
-    "exports": {
-        ".": "./src/index.ts"
-    },
-    "scripts": {
-        "build": "tsc",
-        "clean": "git clean -xdf .cache .turbo dist node_modules",
-        "dev": "tsc",
-        "format": "prettier --check . --ignore-path ../../.gitignore",
-        "lint": "eslint",
-        "push": "pnpm with-env prisma db push",
-        "studio": "pnpm with-env prisma studio",
-        "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-        "with-env": "dotenv -e ../../.env --"
-    },
-    "dependencies": {
-        "@prisma/client": "^6.4.1"
-    },
-    "devDependencies": {
-        "@repo/eslint-config": "workspace:*",
-        "@repo/typescript-config": "workspace:*",
-        "@types/node": "catalog:",
-        "dotenv-cli": "^8.0.0",
-        "prettier": "catalog:",
-        "prisma": "^6.3.1",
-        "typescript": "catalog:"
-    }
+  "name": "@repo/db",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint",
+    "push": "pnpm with-env prisma db push",
+    "studio": "pnpm with-env prisma studio",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "with-env": "dotenv -e ../../.env --"
+  },
+  "prettier": "@repo/prettier-config",
+  "dependencies": {
+    "@prisma/client": "^6.4.1"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/prettier-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "catalog:",
+    "dotenv-cli": "^8.0.0",
+    "prettier": "catalog:",
+    "prisma": "^6.3.1",
+    "typescript": "catalog:"
+  }
 }

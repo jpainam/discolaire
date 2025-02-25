@@ -1,50 +1,52 @@
 {
-    "name": "@repo/api",
-    "version": "0.1.0",
-    "private": true,
-    "license": "MIT",
-    "type": "module",
-    "exports": {
-        ".": "./src/index.ts",
-        "./services": "./src/services/index.ts",
-        "./permission": "./src/permission.ts"
-    },
-    "scripts": {
-        "build": "tsc",
-        "clean": "git clean -xdf .cache .turbo dist node_modules",
-        "dev": "tsc",
-        "format": "prettier --check . --ignore-path ../../.gitignore",
-        "lint": "eslint",
-        "typecheck": "tsc --noEmit --emitDeclarationOnly false"
-    },
-    "dependencies": {
-        "@aws-sdk/client-s3": "^3.744.0",
-        "@aws-sdk/s3-presigned-post": "^3.744.0",
-        "@aws-sdk/s3-request-presigner": "^3.744.0",
-        "@repo/auth": "workspace:*",
-        "@repo/db": "workspace:*",
-        "@repo/validators": "workspace:*",
-        "@t3-oss/env-nextjs": "^0.12.0",
-        "@trpc/server": "catalog:",
-        "@unkey/ratelimit": "^0.5.5",
-        "date-fns": "^4.1.0",
-        "date-fns-tz": "^3.2.0",
-        "json-logic-js": "^2.0.5",
-        "jsonwebtoken": "^9.0.2",
-        "lodash": "^4.17.21",
-        "next": "^15.1.7",
-        "superjson": "2.2.2",
-        "uuid": "^11.0.5",
-        "zod": "catalog:"
-    },
-    "devDependencies": {
-        "@repo/eslint-config": "workspace:*",
-        "@repo/typescript-config": "workspace:*",
-        "@types/json-logic-js": "^2.0.8",
-        "@types/lodash": "^4.17.15",
-        "@types/node": "catalog:",
-        "@types/uuid": "^10.0.0",
-        "prettier": "catalog:",
-        "typescript": "catalog:"
-    }
+  "name": "@repo/api",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./services": "./src/services/index.ts",
+    "./permission": "./src/permission.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "prettier": "@repo/prettier-config",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.744.0",
+    "@aws-sdk/s3-presigned-post": "^3.744.0",
+    "@aws-sdk/s3-request-presigner": "^3.744.0",
+    "@repo/auth": "workspace:*",
+    "@repo/db": "workspace:*",
+    "@repo/validators": "workspace:*",
+    "@t3-oss/env-nextjs": "^0.12.0",
+    "@trpc/server": "catalog:",
+    "@unkey/ratelimit": "^0.5.5",
+    "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
+    "json-logic-js": "^2.0.5",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "next": "^15.1.7",
+    "superjson": "2.2.2",
+    "uuid": "^11.0.5",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/prettier-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/json-logic-js": "^2.0.8",
+    "@types/lodash": "^4.17.15",
+    "@types/node": "catalog:",
+    "@types/uuid": "^10.0.0",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
+  }
 }

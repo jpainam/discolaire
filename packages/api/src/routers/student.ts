@@ -5,8 +5,8 @@ import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
 import type { Prisma, Student } from "@repo/db";
-
 import { hashPassword } from "@repo/auth/session";
+
 import { accountService } from "../services/account-service";
 import { studentService } from "../services/student-service";
 import { userService } from "../services/user-service";
@@ -77,6 +77,7 @@ export const studentRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const offset = input.per_page * (input.page - 1);
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       const [column, order] = (input.sort.split(".").filter(Boolean) ?? [
         "lastName",
         "asc",

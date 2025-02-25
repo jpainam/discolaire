@@ -1,9 +1,9 @@
 // https://github.com/supabase/shared-types/blob/master/src/constants.ts
 
 import { auth } from "@repo/auth";
+
 import type { Permission } from "./permission2";
 import { doPermissionsCheck } from "./permission2";
-
 import { userService } from "./services/user-service";
 
 export async function checkPermissions(

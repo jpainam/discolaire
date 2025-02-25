@@ -1,8 +1,8 @@
 import { TRPCError } from "@trpc/server";
-
 import { z } from "zod";
 
 import { comparePasswords, hashPassword } from "@repo/auth/session";
+
 import { ratelimiter } from "../rateLimit";
 import { userService } from "../services/user-service";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";

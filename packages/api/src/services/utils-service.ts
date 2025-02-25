@@ -18,9 +18,11 @@ export function calculateFinalGrade(
   weights: number[],
 ): number {
   const presentGrades = grades.filter(
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     (grade) => !grade.isAbsent && grade.grade !== null,
   );
   const presentWeights = weights.filter(
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     (_, i) => !grades[i]?.isAbsent && grades[i]?.grade !== null,
   );
 

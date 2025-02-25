@@ -1,6 +1,6 @@
 {
   "name": "@repo/eslint-config",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -9,7 +9,10 @@
     "./react-internal": "./react-internal.js"
   },
   "devDependencies": {
+    "@eslint/compat": "^1.2.6",
     "@next/eslint-plugin-next": "^15.1.0",
+    "@repo/prettier-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@typescript-eslint/eslint-plugin": "^8.15.0",
     "@typescript-eslint/parser": "^8.15.0",
     "eslint": "^9.15.0",
@@ -20,6 +23,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-turbo": "^2.3.0",
     "globals": "^15.12.0",
+    "prettier": "catalog:",
     "typescript": "catalog:",
     "typescript-eslint": "^8.15.0"
   }

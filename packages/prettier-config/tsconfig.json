@@ -4,7 +4,8 @@
     "outDir": "dist",
     "module": "ES2022",
     "noEmit": true,
-    "moduleResolution": "bundler",
+    "allowJs": true,
+    "moduleResolution": "bundler"
   },
   "include": ["."],
   "exclude": ["node_modules", "dist"]

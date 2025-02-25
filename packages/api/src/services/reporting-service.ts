@@ -15,6 +15,7 @@ export async function submitReportJob(
         ...data,
         callback: `${env.NEXT_PUBLIC_BASE_URL}/api/reports`,
       },
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       (key, value) => (value === undefined ? null : value),
     );
 
