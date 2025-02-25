@@ -78,13 +78,13 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
-  const isHome = pathname === "/" || pathname.split("/").length === 2;
+  const isHome = pathname === "/";
   const isStudent =
-    pathname.startsWith("/students/") && pathname.split("/").length > 2;
+    pathname.startsWith("/students") && pathname.split("/").length > 2;
 
-  const isAdmin = pathname.startsWith("/administration/");
+  const isAdmin = pathname.startsWith("/administration");
   const isClassroom =
-    pathname.startsWith("/classrooms/") && pathname.split("/").length > 2;
+    pathname.startsWith("/classrooms") && pathname.split("/").length > 2;
 
   return (
     <Sidebar collapsible="icon" {...props}>

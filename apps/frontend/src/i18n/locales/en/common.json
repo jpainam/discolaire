@@ -18,6 +18,7 @@
   "once_every_month": "Once every month",
   "FAILED": "Failed",
   "Failed": "Failed",
+  "academics": "Academics",
   "administrations": "Administrations",
   "delete_periodic_attendance": "Delete Periodic Attendance",
   "absence_cannot_be_less_than_justify_for": "Absence cannot be less than justify for {{name}}",
