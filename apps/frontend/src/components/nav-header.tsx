@@ -4,36 +4,93 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import {
+  RiContactsLine,
+  RiHome9Line,
+  RiIdCardLine,
+  RiUserSettingsLine,
+} from "@remixicon/react";
+import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
 } from "@repo/ui/components/navigation-menu";
+import { Home, Users2 } from "lucide-react";
+import { useLocale } from "~/i18n";
 
 export function NavHeader() {
   const pathname = usePathname();
-
+  const { t } = useLocale();
   return (
     <NavigationMenu>
       <NavigationMenuList className="gap-2 *:data-[slot=navigation-menu-item]:h-7 **:data-[slot=navigation-menu-link]:py-1 **:data-[slot=navigation-menu-link]:font-medium">
         <NavigationMenuItem>
           <NavigationMenuLink asChild data-active={pathname === "/"}>
-            <Link href="/">Home</Link>
+            <Link href="/" className="flex flex-row items-center gap-1">
+              <Home />
+              <span>{t("home")}</span>
+            </Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuLink asChild data-active={pathname === "/charts"}>
-            <Link href="/charts">Charts</Link>
+          <NavigationMenuLink
+            asChild
+            data-active={pathname.startsWith("/students")}
+          >
+            <Link href="/students" className="flex flex-row items-center gap-1">
+              <RiIdCardLine />
+              <span>{t("students")}</span>
+            </Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuLink asChild data-active={pathname === "/forms"}>
-            <Link href="/forms">Forms</Link>
+          <NavigationMenuLink
+            asChild
+            data-active={pathname.startsWith("/classrooms")}
+          >
+            <Link
+              href="/classrooms"
+              className="flex flex-row items-center gap-1"
+            >
+              <RiHome9Line />
+              <span>{t("classrooms")}</span>
+            </Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuLink asChild data-active={pathname === "/login"}>
-            <Link href="/login">Login</Link>
+          <NavigationMenuLink
+            asChild
+            data-active={pathname.startsWith("/staffs")}
+          >
+            <Link href="/staffs" className="flex flex-row items-center gap-1">
+              <Users2 />
+              <span>{t("staffs")}</span>
+            </Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink
+            asChild
+            data-active={pathname.startsWith("/contacts")}
+          >
+            <Link href="/contacts" className="flex flex-row items-center gap-1">
+              <RiContactsLine />
+              <span>{t("contacts")}</span>
+            </Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink
+            asChild
+            data-active={pathname.startsWith("/administrations")}
+          >
+            <Link
+              href="/administrations"
+              className="flex flex-row items-center gap-1"
+            >
+              <RiUserSettingsLine />
+              <span>{t("administration")}</span>
+            </Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>

@@ -15,10 +15,11 @@ import { UserNav } from "~/components/user-nav";
 
 import { SchoolContextProvider } from "~/providers/SchoolProvider";
 
-import UserDropdown from "~/components/user-dropdown";
+import { SchoolYearSwitcher } from "~/components/SchoolYearSwitcher";
 import GlobalModal from "~/layouts/GlobalModal";
 import GlobalSheet from "~/layouts/GlobalSheet";
 import { api } from "~/trpc/server";
+import { LanguageSwitcher } from "~/components/LanguageSwitcher";
 
 export default async function Layout({
   children,
@@ -30,7 +31,7 @@ export default async function Layout({
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
   const school = await api.school.get(session.user.schoolId);
-  const schoolYearId = (await cookies()).get("schoolYear")?.value;
+  const schoolYearId = cookieStore.get("schoolYear")?.value;
   if (!schoolYearId) {
     throw new Error("No school year selected");
   }
@@ -55,11 +56,10 @@ export default async function Layout({
               />
               <NavHeader />
               <div className="ml-auto flex items-center gap-2">
+                <SchoolYearSwitcher defaultValue={schoolYear.id} />
                 <ModeToggle />
-                <ModeToggle />
-                <ModeToggle />
+                <LanguageSwitcher />
                 <UserNav />
-                <UserDropdown />
               </div>
             </div>
           </header>

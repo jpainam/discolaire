@@ -23,14 +23,14 @@ export default async function Layout(props: {
     "student:profile",
     {
       id: id,
-    },
+    }
   );
   if (!canReadStudent) {
     return <NoPermission isFullPage={true} className="mt-8" resourceText="" />;
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-4">
+    <div className="flex flex-1 flex-col">
       <StudentHeader />
 
       {/* <CardContent className="flex h-[calc(100vh-20rem)] flex-1 w-full p-0"> */}
