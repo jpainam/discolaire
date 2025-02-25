@@ -14,7 +14,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const subjects = await api.classroom.subjects(id);
   const subject = subjects.length > 0 ? subjects[0] : null;
   if (subject) {
-    redirect(`/datum/classrooms/${id}/programs/${subject.id}`);
+    redirect(`/classrooms/${id}/programs/${subject.id}`);
   }
   return (
     <EmptyState
