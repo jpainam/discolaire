@@ -46,7 +46,6 @@ import { endpointReports } from "~/configs/endpoints";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
-import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { CountryComponent } from "../shared/CountryPicker";
 import { DropdownHelp } from "../shared/DropdownHelp";
@@ -55,11 +54,7 @@ import { StudentSelector } from "../shared/selects/StudentSelector";
 //import { CreateEditUser } from "../users/CreateEditUser";
 import { SquaredAvatar } from "./SquaredAvatar";
 
-interface StudentHeaderProps {
-  className?: string;
-}
-
-export function StudentHeader({ className }: StudentHeaderProps) {
+export function StudentHeader() {
   const router = useRouter();
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
@@ -113,43 +108,42 @@ export function StudentHeader({ className }: StudentHeaderProps) {
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   const canEditStudent = useCheckPermissions(
     PermissionAction.UPDATE,
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   //const [open, setOpen] = React.useState(false);
 
   return (
-    <header className={cn(className)}>
-      <div className="flex w-full gap-1">
-        <SquaredAvatar student={student} />
-        <div className="flex w-full flex-col gap-1">
-          {studentQuery.isPending ? (
-            <Skeleton className="w-full 2xl:w-[500px]" />
-          ) : (
-            <StudentSelector
-              placeholder={student?.lastName + " " + student?.firstName}
-              onChange={(val) => {
-                navigateToStudent(val);
-              }}
-            />
-            // <Button
-            //   variant="outline"
-            //   className={cn(
-            //     "flex w-full justify-between bg-background text-sm font-semibold shadow-none 2xl:w-[500px]",
-            //   )}
-            //   onClick={() => setOpen(true)}
-            // >
-            //   <span>{getFullName(student)}</span>
-            //   <ChevronDownIcon className="ml-2 h-4 w-4" />
-            // </Button>
-          )}
-          {/* <StudentSearch
+    <div className="flex bg-muted/50 p-2 w-full gap-1">
+      <SquaredAvatar student={student} />
+      <div className="flex w-full flex-col gap-1">
+        {studentQuery.isPending ? (
+          <Skeleton className="w-full 2xl:w-[500px]" />
+        ) : (
+          <StudentSelector
+            placeholder={student?.lastName + " " + student?.firstName}
+            onChange={(val) => {
+              navigateToStudent(val);
+            }}
+          />
+          // <Button
+          //   variant="outline"
+          //   className={cn(
+          //     "flex w-full justify-between bg-background text-sm font-semibold shadow-none 2xl:w-[500px]",
+          //   )}
+          //   onClick={() => setOpen(true)}
+          // >
+          //   <span>{getFullName(student)}</span>
+          //   <ChevronDownIcon className="ml-2 h-4 w-4" />
+          // </Button>
+        )}
+        {/* <StudentSearch
             onChange={(val) => {
               navigateToStudent(val);
             }}
@@ -157,283 +151,280 @@ export function StudentHeader({ className }: StudentHeaderProps) {
             setOpen={setOpen}
           /> */}
 
-          {studentQuery.isPending && (
-            <>
-              <Skeleton className="h-8 w-full lg:w-[25%]" />
-              <Skeleton className="h-8 w-full lg:w-[35%]" />
-              <Skeleton className="h-8 w-full lg:w-[45%]" />
-            </>
-          )}
-          {!studentQuery.isPending && (
-            <div className="flex flex-row items-center gap-1">
-              <FlatBadge
-                variant={
-                  student?.status == StudentStatus.ACTIVE ? "green" : "red"
-                }
-              >
-                {t(`${student?.status}`)}
-              </FlatBadge>
+        {studentQuery.isPending && (
+          <>
+            <Skeleton className="h-8 w-full lg:w-[25%]" />
+            <Skeleton className="h-8 w-full lg:w-[35%]" />
+            <Skeleton className="h-8 w-full lg:w-[45%]" />
+          </>
+        )}
+        {!studentQuery.isPending && (
+          <div className="flex flex-row items-center gap-1">
+            <FlatBadge
+              variant={
+                student?.status == StudentStatus.ACTIVE ? "green" : "red"
+              }
+            >
+              {t(`${student?.status}`)}
+            </FlatBadge>
 
-              {canEditStudent && (
-                <>
-                  <Separator orientation="vertical" className="h-4" />
-                  <Button
-                    disabled={!canEditStudent}
-                    size={"icon"}
-                    onClick={() => {
-                      if (!student) return;
-                      router.push(routes.students.edit(student.id));
-                    }}
-                    aria-label={t("edit")}
-                    variant="ghost"
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </Button>
-                </>
-              )}
-              <Separator orientation="vertical" className="h-4" />
-              <SimpleTooltip content="Notification reçus">
-                <Button size={"icon"} aria-label="Notification" variant="ghost">
-                  <BellRing className="h-4 w-4" />
-                </Button>
-              </SimpleTooltip>
-              <Separator orientation="vertical" className="h-4" />
-              <SimpleTooltip content="Dialoguer">
+            {canEditStudent && (
+              <>
+                <Separator orientation="vertical" className="h-4" />
                 <Button
+                  disabled={!canEditStudent}
                   size={"icon"}
-                  aria-label="Notification"
-                  variant="ghost"
                   onClick={() => {
-                    router.push(`${routes.students.notifications(params.id)}`);
+                    if (!student) return;
+                    router.push(routes.students.edit(student.id));
                   }}
+                  aria-label={t("edit")}
+                  variant="ghost"
                 >
-                  <MessageCircleMore className="h-4 w-4" />
+                  <Pencil className="h-4 w-4" />
                 </Button>
-              </SimpleTooltip>
-              <Separator orientation="vertical" className="h-4" />
-              <SimpleTooltip content="Contacts et Responsables">
+              </>
+            )}
+            <Separator orientation="vertical" className="h-4" />
+            <SimpleTooltip content="Notification reçus">
+              <Button size={"icon"} aria-label="Notification" variant="ghost">
+                <BellRing className="h-4 w-4" />
+              </Button>
+            </SimpleTooltip>
+            <Separator orientation="vertical" className="h-4" />
+            <SimpleTooltip content="Dialoguer">
+              <Button
+                size={"icon"}
+                aria-label="Notification"
+                variant="ghost"
+                onClick={() => {
+                  router.push(`${routes.students.notifications(params.id)}`);
+                }}
+              >
+                <MessageCircleMore className="h-4 w-4" />
+              </Button>
+            </SimpleTooltip>
+            <Separator orientation="vertical" className="h-4" />
+            <SimpleTooltip content="Contacts et Responsables">
+              <Button
+                size={"icon"}
+                aria-label="Contacts"
+                variant="ghost"
+                onClick={() => {
+                  router.push(routes.students.contacts(params.id));
+                }}
+              >
+                <Users className="h-4 w-4" />
+              </Button>
+            </SimpleTooltip>
+            <Separator orientation="vertical" className="h-4" />
+            <SimpleTooltip content="Impressions">
+              <Button
+                size={"icon"}
+                aria-label="print"
+                variant="ghost"
+                onClick={() => {
+                  window.open(
+                    `${endpointReports.student_page(params.id)}?format=pdf`,
+                    "_blank"
+                  );
+                }}
+              >
+                <Printer className="h-4 w-4" />
+              </Button>
+            </SimpleTooltip>
+            <Separator orientation="vertical" className="h-4" />
+            <SimpleTooltip content={t("add")}>
+              <Button
+                size={"icon"}
+                aria-label="add"
+                variant="ghost"
+                onClick={() => {
+                  router.push(routes.students.create);
+                }}
+              >
+                <PlusIcon className="h-4 w-4" />
+              </Button>
+            </SimpleTooltip>
+            <Separator orientation="vertical" className="h-4" />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
                 <Button
                   size={"icon"}
-                  aria-label="Contacts"
                   variant="ghost"
                   onClick={() => {
                     router.push(routes.students.contacts(params.id));
                   }}
                 >
-                  <Users className="h-4 w-4" />
+                  <MoreVertical className="h-4 w-4" />
                 </Button>
-              </SimpleTooltip>
-              <Separator orientation="vertical" className="h-4" />
-              <SimpleTooltip content="Impressions">
-                <Button
-                  size={"icon"}
-                  aria-label="print"
-                  variant="ghost"
-                  onClick={() => {
-                    window.open(
-                      `${endpointReports.student_page(params.id)}?format=pdf`,
-                      "_blank",
-                    );
-                  }}
-                >
-                  <Printer className="h-4 w-4" />
-                </Button>
-              </SimpleTooltip>
-              <Separator orientation="vertical" className="h-4" />
-              <SimpleTooltip content={t("add")}>
-                <Button
-                  size={"icon"}
-                  aria-label="add"
-                  variant="ghost"
-                  onClick={() => {
-                    router.push(routes.students.create);
-                  }}
-                >
-                  <PlusIcon className="h-4 w-4" />
-                </Button>
-              </SimpleTooltip>
-              <Separator orientation="vertical" className="h-4" />
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    size={"icon"}
-                    variant="ghost"
-                    onClick={() => {
-                      router.push(routes.students.contacts(params.id));
-                    }}
-                  >
-                    <MoreVertical className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownInvitation email={student?.email} />
-                  <DropdownMenuSeparator />
-                  <DropdownHelp />
-                  <DropdownMenuSeparator />
-                  {student && !student.userId && (
-                    <DropdownMenuItem
-                      onSelect={() => {
-                        openModal({
-                          className: "w-[500px]",
-                          title: t("attach_user"),
-                          view: (
-                            <div>{params.id}</div>
-                            // <CreateEditUser
-                            //   entityId={params.id}
-                            //   type="student"
-                            // />
-                          ),
-                        });
-                      }}
-                    >
-                      <UserPlus2 className="mr-2 h-4 w-4" />
-                      {t("attach_user")}
-                    </DropdownMenuItem>
-                  )}
-                  {student?.userId && (
-                    <DropdownMenuItem
-                      onSelect={() => {
-                        if (!student.userId) return;
-                        openModal({
-                          className: "w-[500px]",
-                          title: t("change_password"),
-                          view: (
-                            <div>{student.userId}</div>
-                            // <CreateEditUser
-                            //   userId={student.userId}
-                            //   type="student"
-                            //   roleIds={student.user?.roles.map((r) => r.roleId)}
-                            //   entityId={params.id}
-                            //   username={student.user?.username}
-                            // />
-                          ),
-                        });
-                      }}
-                    >
-                      <KeyRound className="mr-2 h-4 w-4" />
-                      {t("change_password")}
-                    </DropdownMenuItem>
-                  )}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownInvitation email={student?.email} />
+                <DropdownMenuSeparator />
+                <DropdownHelp />
+                <DropdownMenuSeparator />
+                {student && !student.userId && (
                   <DropdownMenuItem
                     onSelect={() => {
-                      if (!student) return;
-                      toast.loading(t("updating"), { id: 0 });
-                      disableStudentMutation.mutate({
-                        id: student.id,
-                        isActive: !student.isActive,
+                      openModal({
+                        className: "w-[500px]",
+                        title: t("attach_user"),
+                        view: (
+                          <div>{params.id}</div>
+                          // <CreateEditUser
+                          //   entityId={params.id}
+                          //   type="student"
+                          // />
+                        ),
                       });
                     }}
                   >
-                    <ShieldBan className="mr-2 h-4 w-4" />
-                    {student?.isActive ? t("disable") : t("enable")}
+                    <UserPlus2 className="mr-2 h-4 w-4" />
+                    {t("attach_user")}
                   </DropdownMenuItem>
-                  {canEditStudent && student && (
-                    <DropdownMenuItem
-                      onSelect={() => {
-                        router.push(routes.students.edit(student.id));
-                      }}
-                    >
-                      <PencilIcon className="mr-2 h-4 w-4" />
-                      {t("edit")}
-                    </DropdownMenuItem>
-                  )}
-                  {canDeleteStudent && student && (
-                    <>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        onSelect={async () => {
-                          const isConfirm = await confirm({
-                            title: t("delete"),
-                            description: t("delete_confirmation"),
-                            icon: (
-                              <Trash2 className="h-4 w-4 text-destructive" />
-                            ),
-                            alertDialogTitle: {
-                              className: "flex items-center gap-2",
-                            },
-                          });
-                          if (isConfirm) {
-                            toast.loading(t("deleting"), { id: 0 });
-                            deleteStudentMutation.mutate(student.id);
-                          }
-                        }}
-                        disabled={!canDeleteStudent}
-                        className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        {t("delete")}
-                      </DropdownMenuItem>
-                    </>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          )}
-          {!studentQuery.isPending && (
-            <div className="grid grid-cols-2 flex-row items-center gap-4 text-sm font-semibold md:flex">
-              {student?.registrationNumber && (
-                <div className="flex flex-row items-center gap-2 rounded dark:bg-secondary">
-                  <NotebookTabs className="h-4 w-4 text-foreground" />
-                  <span> {student.registrationNumber}</span>
-                </div>
-              )}
-              {student?.classroom && (
-                <div className="flex flex-row items-center gap-2 rounded dark:bg-secondary">
-                  <SquareEqual className="h-4 w-4 text-foreground" />
-                  <Link
-                    href={routes.classrooms.details(student.classroom.id)}
-                    className="line-clamp-1 text-blue-700 hover:underline"
+                )}
+                {student?.userId && (
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      if (!student.userId) return;
+                      openModal({
+                        className: "w-[500px]",
+                        title: t("change_password"),
+                        view: (
+                          <div>{student.userId}</div>
+                          // <CreateEditUser
+                          //   userId={student.userId}
+                          //   type="student"
+                          //   roleIds={student.user?.roles.map((r) => r.roleId)}
+                          //   entityId={params.id}
+                          //   username={student.user?.username}
+                          // />
+                        ),
+                      });
+                    }}
                   >
-                    {student.classroom.name}
-                  </Link>
-                </div>
-              )}
+                    <KeyRound className="mr-2 h-4 w-4" />
+                    {t("change_password")}
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuItem
+                  onSelect={() => {
+                    if (!student) return;
+                    toast.loading(t("updating"), { id: 0 });
+                    disableStudentMutation.mutate({
+                      id: student.id,
+                      isActive: !student.isActive,
+                    });
+                  }}
+                >
+                  <ShieldBan className="mr-2 h-4 w-4" />
+                  {student?.isActive ? t("disable") : t("enable")}
+                </DropdownMenuItem>
+                {canEditStudent && student && (
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      router.push(routes.students.edit(student.id));
+                    }}
+                  >
+                    <PencilIcon className="mr-2 h-4 w-4" />
+                    {t("edit")}
+                  </DropdownMenuItem>
+                )}
+                {canDeleteStudent && student && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onSelect={async () => {
+                        const isConfirm = await confirm({
+                          title: t("delete"),
+                          description: t("delete_confirmation"),
+                          icon: <Trash2 className="h-4 w-4 text-destructive" />,
+                          alertDialogTitle: {
+                            className: "flex items-center gap-2",
+                          },
+                        });
+                        if (isConfirm) {
+                          toast.loading(t("deleting"), { id: 0 });
+                          deleteStudentMutation.mutate(student.id);
+                        }
+                      }}
+                      disabled={!canDeleteStudent}
+                      className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      {t("delete")}
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        )}
+        {!studentQuery.isPending && (
+          <div className="grid grid-cols-2 flex-row items-center gap-4 text-sm font-semibold md:flex">
+            {student?.registrationNumber && (
+              <div className="flex flex-row items-center gap-2 rounded dark:bg-secondary">
+                <NotebookTabs className="h-4 w-4 text-foreground" />
+                <span> {student.registrationNumber}</span>
+              </div>
+            )}
+            {student?.classroom && (
+              <div className="flex flex-row items-center gap-2 rounded dark:bg-secondary">
+                <SquareEqual className="h-4 w-4 text-foreground" />
+                <Link
+                  href={routes.classrooms.details(student.classroom.id)}
+                  className="line-clamp-1 text-blue-700 hover:underline"
+                >
+                  {student.classroom.name}
+                </Link>
+              </div>
+            )}
 
-              {student?.phoneNumber && (
-                <div className="flex flex-row items-center gap-2 rounded dark:bg-secondary">
-                  <Phone className="h-4 w-4 text-foreground" />
-                  <span> {student.phoneNumber}</span>
-                </div>
-              )}
-              {/* {student?.email && (
+            {student?.phoneNumber && (
+              <div className="flex flex-row items-center gap-2 rounded dark:bg-secondary">
+                <Phone className="h-4 w-4 text-foreground" />
+                <span> {student.phoneNumber}</span>
+              </div>
+            )}
+            {/* {student?.email && (
                   <div className="flex p-1  bg-muted/50 text-xs rounded-sm text-muted-foreground flex-row gap-2 items-center">
                     <Mail className="text-foreground h-4 w-4" />
                     <span> {student?.email}</span>
                   </div>
                 )} */}
 
-              {student && student.isRepeating && (
-                <FlatBadge variant={"red"}>{t("is_repeating")}</FlatBadge>
+            {student && student.isRepeating && (
+              <FlatBadge variant={"red"}>{t("is_repeating")}</FlatBadge>
+            )}
+            <FlatBadge
+              variant={student?.gender == "female" ? "pink" : "blue"}
+              className="flex flex-row items-center gap-1"
+            >
+              {student?.gender == "male" ? (
+                <PiGenderMaleThin className="h-4 w-4" />
+              ) : (
+                <PiGenderFemaleThin className="h-4 w-4" />
               )}
-              <FlatBadge
-                variant={student?.gender == "female" ? "pink" : "blue"}
-                className="flex flex-row items-center gap-1"
-              >
-                {student?.gender == "male" ? (
-                  <PiGenderMaleThin className="h-4 w-4" />
-                ) : (
-                  <PiGenderFemaleThin className="h-4 w-4" />
-                )}
-                {t(student?.gender ?? "male")}
-              </FlatBadge>
+              {t(student?.gender ?? "male")}
+            </FlatBadge>
 
-              {student?.countryId && (
-                <CountryComponent
-                  className="text-sm"
-                  country={student.countryId as RPNInput.Country}
-                />
-              )}
-              {/* {student?.dateOfBirth &&
+            {student?.countryId && (
+              <CountryComponent
+                className="text-sm"
+                country={student.countryId as RPNInput.Country}
+              />
+            )}
+            {/* {student?.dateOfBirth &&
                   isAnniversary(student.dateOfBirth) == false && (
                     <div className="flex items-center flex-row gap-1">
                       <Cake className="w-5 h-5" />
                       Birthday
                     </div>
                   )} */}
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
-    </header>
+    </div>
   );
 }
