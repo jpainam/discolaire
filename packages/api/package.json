@@ -5,7 +5,10 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    },
     "./services": "./src/services/index.ts",
     "./permission": "./src/permission.ts"
   },
@@ -44,8 +47,8 @@
     "@repo/typescript-config": "workspace:*",
     "@types/json-logic-js": "^2.0.8",
     "@types/lodash": "^4.17.15",
-    "@types/node": "catalog:",
     "@types/uuid": "^10.0.0",
+    "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"
   }

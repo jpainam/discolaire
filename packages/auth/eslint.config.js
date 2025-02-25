@@ -1,4 +1,10 @@
-import { config } from "@repo/eslint-config/base";
+import baseConfig, { restrictEnvAccess } from "@repo/eslint-config/base";
 
-/** @type {import("eslint").Linter.Config} */
-export default config;
+/** @type {import('typescript-eslint').Config} */
+export default [
+  {
+    ignores: [],
+  },
+  ...baseConfig,
+  ...restrictEnvAccess,
+];

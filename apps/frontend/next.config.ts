@@ -2,7 +2,15 @@ import type { NextConfig } from "next";
 
 import "./src/env";
 const nextConfig: NextConfig = {
-  transpilePackages: ["@repo/ui", "@repo/auth", "@repo/validators", "@repo/db"],
+  reactStrictMode: true,
+  /** Enables hot reloading for local packages without a build step */
+  transpilePackages: [
+    "@repo/api",
+    "@repo/ui",
+    "@repo/auth",
+    "@repo/validators",
+    "@repo/db",
+  ],
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "github.com" },
@@ -24,6 +32,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+
+  /** We already do linting and typechecking as separate tasks in CI */
+  eslint: { ignoreDuringBuilds: true },
+  typescript: { ignoreBuildErrors: true },
 };
 
 export default nextConfig;

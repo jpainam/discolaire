@@ -80,10 +80,10 @@ export function SearchContact({ onBack }: { onBack: () => void }) {
                         onError: (error) => {
                           showErrorToast(error);
                         },
-                      },
+                      }
                     );
                   }}
-                  className="cursor-pointer overflow-hidden py-1 text-sm text-muted-foreground hover:text-blue-600 hover:text-primary hover:underline"
+                  className="cursor-pointer overflow-hidden py-1 text-sm text-muted-foreground hover:text-blue-600  hover:underline"
                 >
                   {getFullName(contact)}
                 </li>
