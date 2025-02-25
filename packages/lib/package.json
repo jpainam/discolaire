@@ -25,15 +25,15 @@
   },
   "prettier": "@repo/prettier-config",
   "dependencies": {
-    "bcryptjs": "^3.0.0",
+    "bcryptjs": "^3.0.2",
     "i18next": "^24.2.2",
-    "jotai": "^2.11.3",
+    "jotai": "^2.12.1",
     "json-logic-js": "^2.0.5",
     "next-i18next": "^15.4.2",
-    "next-nprogress-bar": "^2.4.4",
+    "next-nprogress-bar": "^2.4.7",
     "react-use": "^17.6.0",
-    "tailwind-merge": "^3.0.1",
-    "uploadthing": "^7.4.4"
+    "tailwind-merge": "^3.0.2",
+    "uploadthing": "^7.5.2"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

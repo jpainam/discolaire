@@ -29,9 +29,9 @@
   },
   "prettier": "@repo/prettier-config",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.744.0",
-    "@aws-sdk/s3-presigned-post": "^3.744.0",
-    "@aws-sdk/s3-request-presigner": "^3.744.0",
+    "@aws-sdk/client-s3": "^3.750.0",
+    "@aws-sdk/s3-presigned-post": "^3.750.0",
+    "@aws-sdk/s3-request-presigner": "^3.750.0",
     "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/lib": "workspace:*",
@@ -42,7 +42,7 @@
     "date-fns-tz": "^3.2.0",
     "jsonwebtoken": "^9.0.2",
     "superjson": "2.2.2",
-    "uuid": "^11.0.5",
+    "uuid": "^11.1.0",
     "zod": "catalog:"
   },
   "devDependencies": {

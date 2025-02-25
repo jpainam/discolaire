@@ -31,21 +31,21 @@
   },
   "prettier": "@repo/prettier-config",
   "dependencies": {
-    "@faker-js/faker": "^9.4.0",
-    "@prisma/client": "^6.3.1",
-    "bcryptjs": "^3.0.0",
+    "@faker-js/faker": "^9.5.0",
+    "@prisma/client": "^6.4.1",
+    "bcryptjs": "^3.0.2",
     "fs": "0.0.1-security",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@prisma/nextjs-monorepo-workaround-plugin": "^6.3.1",
+    "@prisma/nextjs-monorepo-workaround-plugin": "^6.4.1",
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
     "dotenv-cli": "^8.0.0",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "prisma": "^6.3.1",
+    "prisma": "^6.4.1",
     "typescript": "catalog:"
   }
 }

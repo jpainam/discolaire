@@ -22,20 +22,20 @@
   "prettier": "@repo/prettier-config",
   "devDependencies": {
     "@repo/prettier-config": "workspace:*",
-    "@turbo/gen": "2.4.0",
+    "@turbo/gen": "2.4.3",
     "husky": "^9.1.7",
     "prettier": "catalog:",
-    "turbo": "2.4.0",
+    "turbo": "2.4.3",
     "typescript": "catalog:"
   },
-  "packageManager": "pnpm@10.2.1",
+  "packageManager": "pnpm@10.5.0",
   "pnpm": {
     "onlyBuiltDependencies": [
       "bcrypt"
     ]
   },
   "engines": {
-    "node": ">=22.13.1"
+    "node": ">=22.14.0"
   },
   "prisma": {
     "schema": "packages/db/prisma/schema",
