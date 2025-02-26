@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
 import {
@@ -109,7 +113,7 @@ interface Item {
 const statusFilterFn: FilterFn<Item> = (
   row,
   columnId,
-  filterValue: string[]
+  filterValue: string[],
 ) => {
   if (!filterValue.length) return true;
   const status = String(row.getValue(columnId));
@@ -182,7 +186,7 @@ const getColumns = ({ data, setData }: GetColumnsProps): ColumnDef<Item>[] => [
             "gap-1 py-0.5 px-2 text-sm",
             row.original.status === "Inactive"
               ? "text-muted-foreground"
-              : "text-primary-foreground"
+              : "text-primary-foreground",
           )}
         >
           {row.original.status === "Active" && (
@@ -221,7 +225,7 @@ const getColumns = ({ data, setData }: GetColumnsProps): ColumnDef<Item>[] => [
           className={cn(
             row.original.verified
               ? "fill-emerald-600"
-              : "fill-muted-foreground/50"
+              : "fill-muted-foreground/50",
           )}
           aria-hidden="true"
         />
@@ -307,7 +311,7 @@ export default function ContactsTable() {
     async function fetchPosts() {
       try {
         const res = await fetch(
-          "https://res.cloudinary.com/dlzlfasou/raw/upload/users-02_mohkpe.json"
+          "https://res.cloudinary.com/dlzlfasou/raw/upload/users-02_mohkpe.json",
         );
         const data = await res.json();
         setData(data);
@@ -317,13 +321,13 @@ export default function ContactsTable() {
         setIsLoading(false);
       }
     }
-    fetchPosts();
+    void fetchPosts();
   }, []);
 
   const handleDeleteRows = () => {
     const selectedRows = table.getSelectedRowModel().rows;
     const updatedData = data.filter(
-      (item) => !selectedRows.some((row) => row.original.id === item.id)
+      (item) => !selectedRows.some((row) => row.original.id === item.id),
     );
     setData(updatedData);
     table.resetRowSelection();
@@ -402,7 +406,7 @@ export default function ContactsTable() {
               ref={inputRef}
               className={cn(
                 "peer min-w-60 ps-9 bg-background bg-gradient-to-br from-accent/60 to-accent",
-                Boolean(table.getColumn("name")?.getFilterValue()) && "pe-9"
+                Boolean(table.getColumn("name")?.getFilterValue()) && "pe-9",
               )}
               value={
                 (table.getColumn("name")?.getFilterValue() ?? "") as string
@@ -557,7 +561,7 @@ export default function ContactsTable() {
                       <div
                         className={cn(
                           header.column.getCanSort() &&
-                            "flex h-full cursor-pointer select-none items-center gap-2"
+                            "flex h-full cursor-pointer select-none items-center gap-2",
                         )}
                         onClick={header.column.getToggleSortingHandler()}
                         onKeyDown={(e) => {
@@ -574,7 +578,7 @@ export default function ContactsTable() {
                       >
                         {flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                         {{
                           asc: (
@@ -596,7 +600,7 @@ export default function ContactsTable() {
                     ) : (
                       flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )
                     )}
                   </TableHead>
