@@ -3,7 +3,6 @@
 import { Eye, MailIcon, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { useSheet } from "~/hooks/use-sheet";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -23,6 +22,7 @@ import {
 } from "@repo/ui/components/table";
 import { EmptyState } from "~/components/EmptyState";
 import { useModal } from "~/hooks/use-modal";
+import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
@@ -157,9 +157,10 @@ export function HealthVisitTable({
                               deleteHealthVisit.mutate(visit.id);
                             }
                           }}
-                          className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                          variant="destructive"
+                          className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                         >
-                          <Trash2 className="mr-2 h-4 w-4" />
+                          <Trash2 />
                           {t("delete")}
                         </DropdownMenuItem>
                       </DropdownMenuContent>

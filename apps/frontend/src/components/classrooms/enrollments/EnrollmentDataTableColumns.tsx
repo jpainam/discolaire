@@ -205,7 +205,7 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
   const router = useRouter();
   const canDeleteEnrollment = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:enrollment",
+    "classroom:enrollment"
   );
   const utils = api.useUtils();
   const unenrollStudentsMutation =
@@ -242,7 +242,8 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 disabled={!canDeleteEnrollment}
-                className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                variant="destructive"
+                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                 onSelect={async () => {
                   const isConfirmed = await confirm({
                     title: t("unenroll") + " " + student.lastName,
@@ -257,7 +258,7 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
                   }
                 }}
               >
-                <Trash2 className="mr-2 h-4 w-4" /> {t("unenroll")}
+                <Trash2 /> {t("unenroll")}
               </DropdownMenuItem>
             </>
           )}

@@ -81,7 +81,8 @@ export function DocumentTableAction({
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+          variant="destructive"
+          className="dark:data-[variant=destructive]:focus:bg-destructive/10"
           onSelect={async () => {
             const isConfirm = await confirm({
               title: t("delete"),
@@ -97,7 +98,7 @@ export function DocumentTableAction({
             }
           }}
         >
-          <Trash2 className="mr-2 h-4 w-4" />
+          <Trash2 />
           {t("delete")}
         </DropdownMenuItem>
       </DropdownMenuContent>

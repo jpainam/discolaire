@@ -11,9 +11,7 @@ import {
 import { FaLock, FaUnlockAlt, FaUsers } from "react-icons/fa";
 import { toast } from "sonner";
 
-import { useModal } from "~/hooks/use-modal";
 import { Button } from "@repo/ui/components/button";
-import { useConfirm } from "~/providers/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,7 +19,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import FlatBadge from "~/components/FlatBadge";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
@@ -31,7 +28,10 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import FlatBadge from "~/components/FlatBadge";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
+import { useConfirm } from "~/providers/confirm-dialog";
 
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
@@ -172,7 +172,7 @@ export function SchoolYearTable() {
                         }}
                         className="text-destructive"
                       >
-                        <Trash2 className="mr-2 h-4 w-4" />
+                        <Trash2 />
                         {t("Delete")}
                       </DropdownMenuItem>
                     </DropdownMenuContent>

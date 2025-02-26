@@ -141,7 +141,7 @@ function ActionsCell({ row }: { row: Row<SMSHistory> }) {
               // actions.onDelete && actions.onDelete(row.original);
             }}
           >
-            <Trash2 className="mr-2 h-4 w-4" />
+            <Trash2 />
             {t("delete")}
           </DropdownMenuItem>
         </DropdownMenuContent>

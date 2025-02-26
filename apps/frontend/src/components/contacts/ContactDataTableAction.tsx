@@ -79,7 +79,8 @@ export function ContactDataTableAction({ table }: { table: Table<Contact> }) {
                 deleteUsersMutation.mutate(selectedIds);
               }
             }}
-            className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+            variant="destructive"
+            className="dark:data-[variant=destructive]:focus:bg-destructive/10"
           >
             {t("delete")}
           </DropdownMenuItem>

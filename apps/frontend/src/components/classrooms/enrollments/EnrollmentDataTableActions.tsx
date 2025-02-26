@@ -41,7 +41,7 @@ export function EnrollmentDataTableActions({
   const rows = table.getFilteredSelectedRowModel().rows;
   const canUnEnrollStudent = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:enrollment",
+    "classroom:enrollment"
   );
   const selectedIds = table
     .getFilteredSelectedRowModel()
@@ -119,7 +119,8 @@ export function EnrollmentDataTableActions({
                     });
                   }
                 }}
-                className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                variant="destructive"
+                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
               >
                 {t("delete")}
               </DropdownMenuItem>

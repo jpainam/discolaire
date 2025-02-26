@@ -36,7 +36,7 @@ export function TransactionDataTableActions({
 
   const canDeleteTransaction = useCheckPermissions(
     PermissionAction.DELETE,
-    "transaction",
+    "transaction"
   );
   const { openModal } = useModal();
 
@@ -86,7 +86,8 @@ export function TransactionDataTableActions({
                     });
                   }
                 }}
-                className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                variant="destructive"
+                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
               >
                 {t("delete")}
               </DropdownMenuItem>

@@ -108,14 +108,14 @@ export function StudentHeader() {
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   const canEditStudent = useCheckPermissions(
     PermissionAction.UPDATE,
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   //const [open, setOpen] = React.useState(false);
 
@@ -226,7 +226,7 @@ export function StudentHeader() {
                 onClick={() => {
                   window.open(
                     `${endpointReports.student_page(params.id)}?format=pdf`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >
@@ -345,9 +345,10 @@ export function StudentHeader() {
                         }
                       }}
                       disabled={!canDeleteStudent}
-                      className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                      variant="destructive"
+                      className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                     >
-                      <Trash2 className="mr-2 h-4 w-4" />
+                      <Trash2 />
                       {t("delete")}
                     </DropdownMenuItem>
                   </>

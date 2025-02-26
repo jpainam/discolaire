@@ -35,7 +35,7 @@ export function StudentDataTableActions({
   const utils = api.useUtils();
   const canDeleteStudent = useCheckPermissions(
     PermissionAction.DELETE,
-    "student:profile",
+    "student:profile"
   );
   const deleteStudentMutation = api.student.delete.useMutation({
     onSettled: () => utils.student.invalidate(),
@@ -91,13 +91,14 @@ export function StudentDataTableActions({
 
                   if (isConfirmed) {
                     const selectedStudentIds = rows.map(
-                      (row) => row.original.id,
+                      (row) => row.original.id
                     );
                     toast.loading("deleting", { id: 0 });
                     deleteStudentMutation.mutate(selectedStudentIds);
                   }
                 }}
-                className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                variant="destructive"
+                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
               >
                 {t("delete")}
               </DropdownMenuItem>

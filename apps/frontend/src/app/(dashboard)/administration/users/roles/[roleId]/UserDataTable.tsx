@@ -40,11 +40,11 @@ export function UserDataTable({ roleId }: { roleId: string }) {
   });
   const canAddRoleToUser = useCheckPermissions(
     PermissionAction.CREATE,
-    "user:role",
+    "user:role"
   );
   const canRemoveRoleFromUser = useCheckPermissions(
     PermissionAction.DELETE,
-    "user:role",
+    "user:role"
   );
   const confirm = useConfirm();
   const [debounceValue] = useDebounce(query, 300);
@@ -121,7 +121,7 @@ export function UserDataTable({ roleId }: { roleId: string }) {
                         <DropdownMenuItem
                           onSelect={() => {
                             router.push(
-                              `/administration/users/${userRole.userId}`,
+                              `/administration/users/${userRole.userId}`
                             );
                           }}
                         >
@@ -132,7 +132,8 @@ export function UserDataTable({ roleId }: { roleId: string }) {
                           <>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
-                              className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                              variant="destructive"
+                              className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                               onSelect={async () => {
                                 const isConfirmed = await confirm({
                                   title: t("delete"),
@@ -147,7 +148,7 @@ export function UserDataTable({ roleId }: { roleId: string }) {
                                 }
                               }}
                             >
-                              <Trash2 className="mr-2 h-4 w-4" />
+                              <Trash2 />
                               {t("remove")}
                             </DropdownMenuItem>
                           </>

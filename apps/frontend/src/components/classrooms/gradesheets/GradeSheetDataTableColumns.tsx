@@ -166,7 +166,7 @@ export function fetchGradeSheetColumns({
           <div
             className={cn(
               "font-bold",
-              numIsAbsent == 0 ? "text-green-500" : "text-destructive",
+              numIsAbsent == 0 ? "text-green-500" : "text-destructive"
             )}
           >
             {numIsAbsent}
@@ -283,8 +283,8 @@ function ActionCells({
               router.push(
                 routes.classrooms.gradesheets.details(
                   classroomId,
-                  gradesheet.id,
-                ),
+                  gradesheet.id
+                )
               );
             }}
           >
@@ -294,7 +294,7 @@ function ActionCells({
           <DropdownMenuItem
             onSelect={() => {
               router.push(
-                routes.classrooms.gradesheets.edit(classroomId, gradesheet.id),
+                routes.classrooms.gradesheets.edit(classroomId, gradesheet.id)
               );
             }}
           >
@@ -304,7 +304,8 @@ function ActionCells({
           <DropdownMenuSeparator />
           <DropdownMenuItem
             disabled={deleteGradeSheetMutation.isPending}
-            className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
+            variant="destructive"
+            className="dark:data-[variant=destructive]:focus:bg-destructive/10"
             onSelect={async () => {
               const isConfirmed = await confirm({
                 title: t("delete"),

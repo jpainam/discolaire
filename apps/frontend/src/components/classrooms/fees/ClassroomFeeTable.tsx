@@ -45,14 +45,14 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
     "classroom:fee",
     {
       id: classroomId,
-    },
+    }
   );
   const canUpdateClassroomFee = useCheckPermissions(
     PermissionAction.UPDATE,
     "classroom:fee",
     {
       id: classroomId,
-    },
+    }
   );
   const utils = api.useUtils();
   const disableFeeMutation = api.fee.disable.useMutation({
@@ -184,7 +184,8 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
                                 {fee.isActive ? t("disable") : t("enable")}
                               </DropdownMenuItem>
                               <DropdownMenuItem
-                                className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                                variant="destructive"
+                                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                                 onSelect={async () => {
                                   const isConfirmed = await confirm({
                                     title: t("delete"),
@@ -196,7 +197,7 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
                                   }
                                 }}
                               >
-                                <Trash2 className="mr-2 h-4 w-4" />
+                                <Trash2 />
                                 {t("delete")}
                               </DropdownMenuItem>
                             </>

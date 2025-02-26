@@ -138,8 +138,11 @@ export function RecentAttendance({ className }: { className?: string }) {
                     {t("notify")}
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="text-destructive focus:bg-[#FF666618] focus:text-destructive">
-                    <Trash2 className="mr-2 h-4 w-4" />
+                  <DropdownMenuItem
+                    variant="destructive"
+                    className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+                  >
+                    <Trash2 />
                     {t("delete")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>

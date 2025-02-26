@@ -59,12 +59,12 @@ export function GradeDetailsHeader({
 
   const males10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "male",
+      (grade) => grade.grade >= 10 && grade.student.gender == "male"
     ).length / len;
 
   const females10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "female",
+      (grade) => grade.grade >= 10 && grade.student.gender == "female"
     ).length / len;
 
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
@@ -227,7 +227,8 @@ export function GradeDetailsHeader({
                     deleteGradeSheetMutation.mutate(gradesheet.id);
                   }
                 }}
-                className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                variant="destructive"
+                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
               >
                 <Trash2 className="mr-2 size-4" />
                 {t("delete")}

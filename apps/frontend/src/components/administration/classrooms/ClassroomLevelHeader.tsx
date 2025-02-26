@@ -27,7 +27,7 @@ export function ClassroomLevelHeader() {
   const { t } = useLocale();
   const { openModal } = useModal();
   const [selectedLevels, setSelectedLevels] = useAtom(
-    selectedClassroomLevelAtom,
+    selectedClassroomLevelAtom
   );
 
   // const canAddLevel = useCheckPermissions(
@@ -84,7 +84,7 @@ export function ClassroomLevelHeader() {
             }}
             variant={"destructive"}
           >
-            <Trash2 className="mr-2 h-4 w-4" />
+            <Trash2 />
             <span className="mr-2">{t("delete")}</span>({selectedLevels.length})
           </Button>
         )}

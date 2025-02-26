@@ -41,11 +41,11 @@ export function SubjectTable({ classroomId }: { classroomId: string }) {
   const confirm = useConfirm();
   const canDeleteClassroomSubject = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:subject",
+    "classroom:subject"
   );
   const canEditClassroomSubject = useCheckPermissions(
     PermissionAction.UPDATE,
-    "classroom:subject",
+    "classroom:subject"
   );
   const router = useRouter();
   const utils = api.useUtils();
@@ -173,7 +173,7 @@ export function SubjectTable({ classroomId }: { classroomId: string }) {
                             }}
                             className="text-destructive"
                           >
-                            <Trash2 className="mr-2 h-4 w-4" />
+                            <Trash2 />
                             {t("delete")}
                           </DropdownMenuItem>
                         </>

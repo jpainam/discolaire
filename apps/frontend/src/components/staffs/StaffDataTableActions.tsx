@@ -33,7 +33,7 @@ export function StaffDataTableActions({
 
   const canDeleteStaff = useCheckPermissions(
     PermissionAction.DELETE,
-    "staff:profile",
+    "staff:profile"
   );
   const utils = api.useUtils();
   const deleteStaffMutation = api.staff.delete.useMutation({
@@ -96,7 +96,8 @@ export function StaffDataTableActions({
                     });
                   }
                 }}
-                className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                variant="destructive"
+                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
               >
                 {t("delete")}
               </DropdownMenuItem>

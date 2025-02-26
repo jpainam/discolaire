@@ -178,8 +178,11 @@ export function StudentAttendanceHeader({
               {t("xml_export")}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive focus:bg-[#FF666618] focus:text-destructive">
-              <Trash2 className="mr-2 h-4 w-4" />
+            <DropdownMenuItem
+              variant="destructive"
+              className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+            >
+              <Trash2 />
               {t("clear_all")}
             </DropdownMenuItem>
           </DropdownMenuContent>

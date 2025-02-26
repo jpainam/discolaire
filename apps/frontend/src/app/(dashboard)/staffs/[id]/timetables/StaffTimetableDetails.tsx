@@ -3,8 +3,8 @@
 import { BookOpenText, CalendarDays, Trash2, User2Icon } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
-import { useModal } from "~/hooks/use-modal";
 import { Button } from "@repo/ui/components/button";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 export function StaffTimetableDetails({
@@ -58,7 +58,7 @@ export function StaffTimetableDetails({
           closeModal();
         }}
       >
-        <Trash2 className="mr-2 h-4 w-4" />
+        <Trash2 />
         {t("close")}
       </Button>
     </div>

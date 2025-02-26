@@ -100,7 +100,8 @@ export function UserNav() {
 
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
+          variant="destructive"
+          className="dark:data-[variant=destructive]:focus:bg-destructive/10"
           // onClick={() => {
           //   void signOut({ callbackUrl: "/", redirect: true });
           // }}
@@ -110,7 +111,7 @@ export function UserNav() {
               className="flex flex-row items-center justify-between"
               type="submit"
             >
-              <LogOut className="mr-2 h-4 w-4 text-destructive focus:bg-[#FF666618] focus:text-destructive" />
+              <LogOut className="text-destructive focus:text-destructive mr-2 h-4 w-4 dark:data-[variant=destructive]:focus:bg-destructive/10" />
               <span>{t("logout")}</span>
             </button>
           </form>

@@ -47,11 +47,11 @@ export default function ClassroomTable() {
   });
   const canDeleteClassroom = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom",
+    "classroom"
   );
   const canEditClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
-    "classroom",
+    "classroom"
   );
   const confirm = useConfirm();
   return (
@@ -141,7 +141,7 @@ export default function ClassroomTable() {
                             }}
                             className="bg-destructive text-destructive-foreground"
                           >
-                            <Trash2 className="mr-2 h-4 w-4" />
+                            <Trash2 />
                             {t("delete")}
                           </DropdownMenuItem>
                         </>

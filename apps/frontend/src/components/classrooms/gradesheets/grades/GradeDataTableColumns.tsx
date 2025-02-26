@@ -230,7 +230,8 @@ function ActionCells({
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
+            variant="destructive"
+            className="dark:data-[variant=destructive]:focus:bg-destructive/10"
             onSelect={async () => {
               const isConfirmed = await confirm({
                 title: t("delete"),
@@ -251,7 +252,7 @@ function ActionCells({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  },
+                  }
                 );
               }
             }}

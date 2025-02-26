@@ -79,13 +79,13 @@ export function StudentEnrollmentTable({
         <TableBody>
           {enrollments.map((c) => {
             const createdAt = fullDateFormatter.format(
-              c.createdAt ?? new Date(),
+              c.createdAt ?? new Date()
             );
             const enrollmentStartDate = fullDateFormatter.format(
-              c.schoolYear?.enrollmentStartDate ?? new Date(),
+              c.schoolYear?.enrollmentStartDate ?? new Date()
             );
             const enrolmmentEndDate = fullDateFormatter.format(
-              c.schoolYear?.enrollmentEndDate ?? new Date(),
+              c.schoolYear?.enrollmentEndDate ?? new Date()
             );
 
             return (
@@ -124,7 +124,8 @@ export function StudentEnrollmentTable({
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem
-                        className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                        variant="destructive"
+                        className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                         onSelect={async () => {
                           const isConfirmed = await confirm({
                             title: t("delete"),
@@ -142,7 +143,7 @@ export function StudentEnrollmentTable({
                           }
                         }}
                       >
-                        <Trash2 className="mr-2 h-4 w-4" />
+                        <Trash2 />
                         {t("unenroll")}
                       </DropdownMenuItem>
                     </DropdownMenuContent>

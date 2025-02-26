@@ -48,14 +48,14 @@ export function ClassroomHeader() {
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const canUpdateClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const deleteClassroomMutation = api.classroom.delete.useMutation({
     onSuccess: () => {
@@ -203,7 +203,8 @@ export function ClassroomHeader() {
               <>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                  variant="destructive"
+                  className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                   onSelect={async () => {
                     const isConfirmed = await confirm({
                       title: t("delete"),
@@ -215,7 +216,7 @@ export function ClassroomHeader() {
                     }
                   }}
                 >
-                  <Trash2 className="mr-2 h-4 w-4" /> {t("delete")}
+                  <Trash2 /> {t("delete")}
                 </DropdownMenuItem>
               </>
             )}

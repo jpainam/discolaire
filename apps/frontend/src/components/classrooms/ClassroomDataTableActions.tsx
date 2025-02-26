@@ -35,7 +35,7 @@ export function ClassroomDataTableActions({
   const { t } = useLocale();
   const canDeleteClassroom = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:details",
+    "classroom:details"
   );
   const classroomDeleteMutation = api.classroom.delete.useMutation({
     onSettled: () => utils.classroom.invalidate(),
@@ -95,7 +95,8 @@ export function ClassroomDataTableActions({
                     classroomDeleteMutation.mutate(selectedIds);
                   }
                 }}
-                className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                variant="destructive"
+                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
               >
                 {t("delete")}
               </DropdownMenuItem>

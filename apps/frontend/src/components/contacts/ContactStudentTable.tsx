@@ -120,7 +120,7 @@ export function ContactStudentTable({ id }: { id: string }) {
                         onSelect={() => {
                           if (!student.id) return;
                           router.push(
-                            `${routes.students.contacts(student.id)}/${id}`,
+                            `${routes.students.contacts(student.id)}/${id}`
                           );
                         }}
                       >
@@ -133,7 +133,8 @@ export function ContactStudentTable({ id }: { id: string }) {
                       <DropdownHelp />
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
-                        className="cursor-pointer text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                        variant="destructive"
+                        className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                         onSelect={async () => {
                           if (!student.id) return;
 
@@ -156,12 +157,12 @@ export function ContactStudentTable({ id }: { id: string }) {
                                 error: (error) => {
                                   return getErrorMessage(error);
                                 },
-                              },
+                              }
                             );
                           }
                         }}
                       >
-                        <Trash2 className="mr-2 h-4 w-4" />
+                        <Trash2 />
                         {t("delete")}
                       </DropdownMenuItem>
                     </DropdownMenuContent>

@@ -51,7 +51,7 @@ export function NoticeboardDataTableActions({
             if (isConfirmed) {
               toast.promise(
                 deleteAnnouncementMutation.mutateAsync(
-                  selectedNotices.map((cl) => cl.id),
+                  selectedNotices.map((cl) => cl.id)
                 ),
                 {
                   loading: t("deleting"),
@@ -63,12 +63,12 @@ export function NoticeboardDataTableActions({
                     console.error(error);
                     return getErrorMessage(error);
                   },
-                },
+                }
               );
             }
           }}
         >
-          <Trash2 className="mr-2 h-4 w-4" />
+          <Trash2 />
           {t("delete")} ({table.getFilteredSelectedRowModel().rows.length})
         </Button>
       ) : null}
