@@ -28,11 +28,11 @@ export function GradeAppreciationList() {
               router.push(
                 routes.administration.grade_management.appreciations +
                   "/" +
-                  appr.id
+                  appr.id,
               );
             }}
             className={cn(
-              "cursor-pointer border-b p-2 hover:bg-muted/50"
+              "cursor-pointer border-b p-2 hover:bg-muted/50",
               // params.appreciationId == appr.id
               //   ? "bg-muted text-muted-foreground"
               //   : ""

@@ -54,7 +54,7 @@ export function ReportCardHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/report-cards/ipbw/?studentId=${params.id}&termId=${searchParams.get("term")}`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >

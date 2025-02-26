@@ -107,7 +107,7 @@ export function CreateGradeSheetHeader({
               router.push(
                 routes.classrooms.gradesheets.index(params.id) +
                   "?" +
-                  createQueryString({})
+                  createQueryString({}),
               );
             }}
           >

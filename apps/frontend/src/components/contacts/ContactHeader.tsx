@@ -34,7 +34,7 @@ export function ContactHeader() {
       <Button
         variant="outline"
         className={cn(
-          "flex w-full justify-between bg-background text-sm font-semibold shadow-none 2xl:w-[500px]"
+          "flex w-full justify-between bg-background text-sm font-semibold shadow-none 2xl:w-[500px]",
         )}
         onClick={() => setOpen(true)}
       >

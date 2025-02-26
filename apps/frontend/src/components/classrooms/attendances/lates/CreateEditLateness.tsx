@@ -33,7 +33,7 @@ const attendanceSchema = z.object({
       id: z.string().min(1),
       late: z.string().optional(),
       justify: z.string().optional(),
-    })
+    }),
   ),
 });
 
@@ -67,7 +67,7 @@ export function CreateEditLateness({
     onSuccess: () => {
       toast.success(t("added_successfully"), { id: 0 });
       router.push(
-        `${routes.classrooms.attendances.index(classroomId)}?type=lateness&term=${termId}`
+        `${routes.classrooms.attendances.index(classroomId)}?type=lateness&term=${termId}`,
       );
     },
     onError: (error) => {
@@ -91,7 +91,7 @@ export function CreateEditLateness({
         toast.error(
           t("late_or_justification_malformed", {
             name: getFullName(std),
-          })
+          }),
         );
         hasError = true;
         break;

@@ -86,7 +86,7 @@ export function AppreciationHeader() {
           router.push(
             routes.report_cards.appreciations +
               "/?" +
-              createQueryString({ classroom: val })
+              createQueryString({ classroom: val }),
           );
         }}
       />
