@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { render } from "@react-email/render";
-import bcrypt from "bcrypt";
 import { redirect } from "next/navigation";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
@@ -8,6 +7,7 @@ import { z } from "zod";
 import PasswordResetSuccess from "@repo/transactional/emails/PasswordResetSuccess";
 import { getServerTranslations } from "~/i18n/server";
 
+import { comparePasswords } from "@repo/auth/session";
 import { api } from "~/trpc/server";
 
 const schema = z.object({
@@ -27,7 +27,10 @@ export async function POST(req: NextRequest) {
     email,
   });
 
-  if (!resetRequest || !(await bcrypt.compare(code, resetRequest.resetCode))) {
+  if (
+    !resetRequest ||
+    !(await comparePasswords(code, resetRequest.resetCode))
+  ) {
     return new Response("Invalid reset code", { status: 400 });
   }
   const user = await api.passwordReset.reset({

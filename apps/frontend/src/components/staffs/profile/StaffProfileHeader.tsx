@@ -29,8 +29,8 @@ import { useConfirm } from "~/providers/confirm-dialog";
 
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
-// TODO uncomment this after adding users/
-//import { CreateEditUser } from "~/components/users/CreateEditUser";
+
+import { CreateEditUser } from "~/components/users/CreateEditUser";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
@@ -53,14 +53,14 @@ export function StaffProfileHeader({
     "staff:profile",
     {
       id: params.id,
-    },
+    }
   );
   const canEditStaff = useCheckPermissions(
     PermissionAction.UPDATE,
     "staff:profile",
     {
       id: params.id,
-    },
+    }
   );
   const deleteStaffMutation = api.staff.delete.useMutation({
     onSettled: async () => {
@@ -113,8 +113,7 @@ export function StaffProfileHeader({
                   openModal({
                     className: "w-[500px]",
                     title: t("attach_user"),
-                    view: <div>{params.id}</div>,
-                    // view: <CreateEditUser entityId={params.id} type="staff" />,
+                    view: <CreateEditUser entityId={params.id} type="staff" />,
                   });
                 }}
               >
@@ -130,14 +129,13 @@ export function StaffProfileHeader({
                     className: "w-[500px]",
                     title: t("change_password"),
                     view: (
-                      <div> </div>
-                      // <CreateEditUser
-                      //   userId={staff.userId}
-                      //   type="staff"
-                      //   roleIds={staff.user?.roles.map((r) => r.roleId)}
-                      //   entityId={params.id}
-                      //   username={staff.user?.username}
-                      // />
+                      <CreateEditUser
+                        userId={staff.userId}
+                        type="staff"
+                        roleIds={staff.user?.roles.map((r) => r.roleId)}
+                        entityId={params.id}
+                        username={staff.user?.username}
+                      />
                     ),
                   });
                 }}

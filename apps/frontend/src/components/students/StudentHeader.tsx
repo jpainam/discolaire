@@ -51,7 +51,7 @@ import { CountryComponent } from "../shared/CountryPicker";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { StudentSelector } from "../shared/selects/StudentSelector";
-//import { CreateEditUser } from "../users/CreateEditUser";
+import { CreateEditUser } from "../users/CreateEditUser";
 import { SquaredAvatar } from "./SquaredAvatar";
 
 export function StudentHeader() {
@@ -108,14 +108,14 @@ export function StudentHeader() {
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   const canEditStudent = useCheckPermissions(
     PermissionAction.UPDATE,
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   //const [open, setOpen] = React.useState(false);
 
@@ -226,7 +226,7 @@ export function StudentHeader() {
                 onClick={() => {
                   window.open(
                     `${endpointReports.student_page(params.id)}?format=pdf`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >
@@ -271,11 +271,7 @@ export function StudentHeader() {
                         className: "w-[500px]",
                         title: t("attach_user"),
                         view: (
-                          <div>{params.id}</div>
-                          // <CreateEditUser
-                          //   entityId={params.id}
-                          //   type="student"
-                          // />
+                          <CreateEditUser entityId={params.id} type="student" />
                         ),
                       });
                     }}
@@ -292,14 +288,13 @@ export function StudentHeader() {
                         className: "w-[500px]",
                         title: t("change_password"),
                         view: (
-                          <div>{student.userId}</div>
-                          // <CreateEditUser
-                          //   userId={student.userId}
-                          //   type="student"
-                          //   roleIds={student.user?.roles.map((r) => r.roleId)}
-                          //   entityId={params.id}
-                          //   username={student.user?.username}
-                          // />
+                          <CreateEditUser
+                            userId={student.userId}
+                            type="student"
+                            roleIds={student.user?.roles.map((r) => r.roleId)}
+                            entityId={params.id}
+                            username={student.user?.username}
+                          />
                         ),
                       });
                     }}

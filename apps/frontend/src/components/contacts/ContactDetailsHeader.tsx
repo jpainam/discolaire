@@ -36,8 +36,7 @@ import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
-// TODO uncomment this
-//import { CreateEditUser } from "../users/CreateEditUser";
+import { CreateEditUser } from "../users/CreateEditUser";
 import CreateEditContact from "./CreateEditContact";
 import { LinkStudent } from "./LinkStudent";
 
@@ -61,7 +60,7 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
     "contact:profile",
     {
       id: contactId,
-    },
+    }
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();
@@ -117,8 +116,7 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
                       className: "w-[500px]",
                       title: t("attach_user"),
                       view: (
-                        <div>{contact.id}</div>
-                        // <CreateEditUser entityId={contact.id} type="contact" />
+                        <CreateEditUser entityId={contact.id} type="contact" />
                       ),
                     });
                   }}
@@ -135,14 +133,13 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
                       className: "w-[500px]",
                       title: t("change_password"),
                       view: (
-                        <div>content</div>
-                        // <CreateEditUser
-                        //   userId={contact.userId}
-                        //   type="contact"
-                        //   roleIds={contact.user?.roles.map((r) => r.roleId)}
-                        //   entityId={contact.id}
-                        //   username={contact.user?.username}
-                        // />
+                        <CreateEditUser
+                          userId={contact.userId}
+                          type="contact"
+                          roleIds={contact.user?.roles.map((r) => r.roleId)}
+                          entityId={contact.id}
+                          username={contact.user?.username}
+                        />
                       ),
                     });
                   }}

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { render } from "@react-email/render";
-// TODO - Remove this import and use the `bcrypt` package from the `@repo/auth` package
-import bcrypt from "bcrypt";
+
 import crypto from "crypto";
 import { addMinutes } from "date-fns";
 import type { NextRequest } from "next/server";
@@ -10,6 +9,7 @@ import { z } from "zod";
 import { ResetPassword } from "@repo/transactional";
 import { getServerTranslations } from "~/i18n/server";
 
+import { hashPassword } from "@repo/auth/session";
 import { env } from "~/env";
 import { api } from "~/trpc/server";
 
@@ -29,8 +29,10 @@ export async function POST(req: NextRequest) {
     if (!user) {
       return new Response("User not found", { status: 404 });
     }
+
     const secretCode = crypto.randomBytes(32).toString("hex");
-    const hashedCode = await bcrypt.hash(secretCode, 12);
+    const hashedCode = await hashPassword(secretCode);
+
     const expiresAt = addMinutes(new Date(), 15); // Set expiration time to 15 minutes
 
     await api.passwordReset.createResetCode({
@@ -53,7 +55,7 @@ export async function POST(req: NextRequest) {
           username: user.username,
           resetLink: `${env.NEXT_PUBLIC_BASE_URL}/auth/password/reset/?code=${hashedCode}`,
           locale: i18n.language,
-        }),
+        })
       );
 
       await api.messaging.sendEmail({
