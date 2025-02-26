@@ -26,9 +26,9 @@ import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
+import { useRouter } from "next/navigation";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
-import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
@@ -42,7 +42,7 @@ export function StaffHeader() {
 
   const canCreateStaff = useCheckPermissions(
     PermissionAction.CREATE,
-    "staff:profile",
+    "staff:profile"
   );
 
   const jobTitles = jobTitlesQuery.data ?? [];
@@ -114,7 +114,7 @@ function FilterJobTitle({ jobTitles }: { jobTitles: string[] }) {
         defaultValue={jobTitle ?? "*"}
         onValueChange={(v) => {
           router.push(
-            `${routes.staffs.index}/?${createQueryString({ jobTitle: v })}`,
+            `${routes.staffs.index}/?${createQueryString({ jobTitle: v })}`
           );
         }}
       >

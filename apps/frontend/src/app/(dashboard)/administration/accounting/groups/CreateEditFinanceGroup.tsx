@@ -18,7 +18,7 @@ import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "~/hooks/use-router";
+import { useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
 
 const createFinanceGroupSchema = z.object({

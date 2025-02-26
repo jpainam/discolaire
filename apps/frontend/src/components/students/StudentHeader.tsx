@@ -41,11 +41,11 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useRouter } from "next/navigation";
 import { SimpleTooltip } from "~/components/simple-tooltip";
 import { endpointReports } from "~/configs/endpoints";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
-import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { CountryComponent } from "../shared/CountryPicker";
 import { DropdownHelp } from "../shared/DropdownHelp";
@@ -108,14 +108,14 @@ export function StudentHeader() {
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   const canEditStudent = useCheckPermissions(
     PermissionAction.UPDATE,
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   //const [open, setOpen] = React.useState(false);
 
@@ -226,7 +226,7 @@ export function StudentHeader() {
                 onClick={() => {
                   window.open(
                     `${endpointReports.student_page(params.id)}?format=pdf`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >

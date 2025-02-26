@@ -3,7 +3,6 @@
 import { useParams } from "next/navigation";
 import { useFormContext } from "react-hook-form";
 
-import { useCreateQueryString } from "~/hooks/create-query-string";
 import { Button } from "@repo/ui/components/button";
 import {
   FormControl,
@@ -13,14 +12,15 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
+import { useRouter } from "next/navigation";
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
 import { InputField } from "~/components/shared/forms/input-field";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { routes } from "~/configs/routes";
-import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 
 export function CreateGradeSheetHeader({
@@ -107,7 +107,7 @@ export function CreateGradeSheetHeader({
               router.push(
                 routes.classrooms.gradesheets.index(params.id) +
                   "?" +
-                  createQueryString({}),
+                  createQueryString({})
               );
             }}
           >

@@ -17,7 +17,7 @@ import { Input } from "@repo/ui/components/input";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "~/hooks/use-router";
+import { useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
 
 const createStaffLevelSchema = z.object({

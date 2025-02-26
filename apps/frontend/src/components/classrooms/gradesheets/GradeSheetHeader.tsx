@@ -14,12 +14,12 @@ import {
 import { Label } from "@repo/ui/components/label";
 import { useLocale } from "~/i18n";
 
+import { useRouter } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { routes } from "~/configs/routes";
-import { useRouter } from "~/hooks/use-router";
 
 export function GradeSheetHeader() {
   const params = useParams<{ id: string }>();

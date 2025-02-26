@@ -5,7 +5,7 @@ import { PlusIcon } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "~/hooks/use-router";
+import { useRouter } from "next/navigation";
 
 export function CreateSchoolAction() {
   const { t } = useLocale();

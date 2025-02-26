@@ -16,8 +16,8 @@ import { Label } from "@repo/ui/components/label";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
+import { useRouter } from "next/navigation";
 import { routes } from "~/configs/routes";
-import { useRouter } from "~/hooks/use-router";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
 import { ClassroomSelector } from "../shared/selects/ClassroomSelector";
@@ -49,7 +49,7 @@ export function ReportCardHeader() {
         className="w-[300px]"
         onChange={(val) => {
           router.push(
-            routes.report_cards.index + "/?" + createQueryString({ term: val }),
+            routes.report_cards.index + "/?" + createQueryString({ term: val })
           );
         }}
       />
@@ -61,7 +61,7 @@ export function ReportCardHeader() {
               router.push(
                 routes.report_cards.index +
                   "/?" +
-                  createQueryString({ student: val }),
+                  createQueryString({ student: val })
               );
             }}
             defaultValue={searchParams.get("student") ?? undefined}

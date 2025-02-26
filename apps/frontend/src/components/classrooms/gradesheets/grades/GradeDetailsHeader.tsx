@@ -24,11 +24,11 @@ import {
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useRouter } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { routes } from "~/configs/routes";
-import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { getAppreciations } from "~/utils/get-appreciation";
 import { ReportFalseGrade } from "./ReportFalseGrade";
@@ -59,12 +59,12 @@ export function GradeDetailsHeader({
 
   const males10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "male",
+      (grade) => grade.grade >= 10 && grade.student.gender == "male"
     ).length / len;
 
   const females10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "female",
+      (grade) => grade.grade >= 10 && grade.student.gender == "female"
     ).length / len;
 
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {

@@ -16,9 +16,9 @@ import {
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useRouter } from "next/navigation";
 import { InputField } from "~/components/shared/forms/input-field";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
-import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
 const enrollFormSchema = z.object({

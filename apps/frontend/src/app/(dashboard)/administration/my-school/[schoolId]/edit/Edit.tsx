@@ -8,7 +8,7 @@ import { Button } from "@repo/ui/components/button";
 import { Form, useForm } from "@repo/ui/components/form";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "~/hooks/use-router";
+import { useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
 import { CreateEditSchoolForm } from "./CreateEditSchoolForm";
 

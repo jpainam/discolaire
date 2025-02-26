@@ -4,7 +4,6 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { useLocale } from "~/i18n";
 import { Button } from "@repo/ui/components/button";
 import {
   Form,
@@ -17,9 +16,10 @@ import {
   useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { useLocale } from "~/i18n";
 
+import { useRouter } from "next/navigation";
 import { routes } from "~/configs/routes";
-import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
 const passwordFormSchema = z.object({

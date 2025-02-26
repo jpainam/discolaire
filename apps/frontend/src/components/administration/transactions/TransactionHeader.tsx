@@ -16,11 +16,11 @@ import { Label } from "@repo/ui/components/label";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
+import { useRouter } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { TransactionStatusSelector } from "~/components/shared/selects/TransactionStatusSelector";
-import { useRouter } from "~/hooks/use-router";
 
 export function TransactionHeader() {
   const searchParams = useSearchParams();

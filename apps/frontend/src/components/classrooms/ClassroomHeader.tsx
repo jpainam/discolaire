@@ -5,8 +5,6 @@ import { useParams, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useSheet } from "~/hooks/use-sheet";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -21,13 +19,15 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useRouter } from "next/navigation";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
-import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
@@ -48,14 +48,14 @@ export function ClassroomHeader() {
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const canUpdateClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const deleteClassroomMutation = api.classroom.delete.useMutation({
     onSuccess: () => {

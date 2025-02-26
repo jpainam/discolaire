@@ -21,9 +21,9 @@ import { useLocale } from "~/i18n";
 //import { signinout } from "~/app/auth/login/signin";
 import { Button } from "@repo/ui/components/button";
 import { useSidebar } from "@repo/ui/components/sidebar";
+import { useRouter } from "next/navigation";
 import { signOut } from "~/actions/signin";
 import { routes } from "~/configs/routes";
-import { useRouter } from "~/hooks/use-router";
 import { useSession } from "~/providers/AuthProvider";
 
 export function UserNav() {

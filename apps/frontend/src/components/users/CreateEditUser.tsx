@@ -1,9 +1,6 @@
 import { toast } from "sonner";
 import { z } from "zod";
 
-import type { Option } from "~/components/students/multiple-selector";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { Button } from "@repo/ui/components/button";
 import {
   Form,
@@ -15,9 +12,12 @@ import {
   useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import type { Option } from "~/components/students/multiple-selector";
 import MultipleSelector from "~/components/students/multiple-selector";
+import { useModal } from "~/hooks/use-modal";
+import { useLocale } from "~/i18n";
 
-import { useRouter } from "~/hooks/use-router";
+import { useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
 
 const createEditUserSchema = z.object({

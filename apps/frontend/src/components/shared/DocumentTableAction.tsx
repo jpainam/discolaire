@@ -14,8 +14,8 @@ import {
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useRouter } from "next/navigation";
 import { deleteFileFromAws, downloadFileFromAws } from "~/actions/upload";
-import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 

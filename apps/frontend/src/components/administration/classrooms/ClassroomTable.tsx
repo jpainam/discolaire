@@ -25,9 +25,9 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useRouter } from "next/navigation";
 import { CreateEditClassroom } from "~/components/classrooms/CreateEditClassroom";
 import { useCheckPermissions } from "~/hooks/use-permissions";
-import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
 export default function ClassroomTable() {
@@ -47,11 +47,11 @@ export default function ClassroomTable() {
   });
   const canDeleteClassroom = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom",
+    "classroom"
   );
   const canEditClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
-    "classroom",
+    "classroom"
   );
   const confirm = useConfirm();
   return (

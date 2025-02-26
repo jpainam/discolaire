@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { useUpload } from "~/hooks/use-upload";
 import { Button } from "@repo/ui/components/button";
 import {
   Form,
@@ -18,13 +17,14 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Textarea } from "@repo/ui/components/textarea";
-import { FileUploader } from "~/uploads/file-uploader";
 import { useModal } from "~/hooks/use-modal";
+import { useUpload } from "~/hooks/use-upload";
 import { useLocale } from "~/i18n";
+import { FileUploader } from "~/uploads/file-uploader";
 
-import { useSchool } from "~/providers/SchoolProvider";
-import { useRouter } from "~/hooks/use-router";
+import { useRouter } from "next/navigation";
 import { getErrorMessage } from "~/lib/handle-error";
+import { useSchool } from "~/providers/SchoolProvider";
 import { api } from "~/trpc/react";
 
 const createEditDocumentSchema = z.object({
@@ -133,7 +133,7 @@ export function CreateEditDocument({
         error: (err) => {
           return getErrorMessage(err);
         },
-      },
+      }
     );
   };
   return (

@@ -15,10 +15,11 @@ import "./globals.css";
 import { getUser } from "@repo/auth/session";
 import { detectLanguage } from "~/i18n/server";
 
-import { Analytics } from "~/components/analytics";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
-import { ProgressBar } from "~/components/next-progress";
+import { Analytics } from "~/components/analytics";
+
+import ProgressBarProvider from "~/components/next-progress";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { ThemeProvider } from "~/components/theme-provider";
 import { env } from "~/env";
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     env.VERCEL_ENV === "production"
       ? "https://school.discolaire.com"
-      : "http://localhost:3000",
+      : "http://localhost:3000"
   ),
   title: "Gestion Scolaire",
   description: "Gestion scolaire pour les écoles",
@@ -81,7 +82,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
           className={cn(
             "bg-background overscroll-none font-sans antialiased",
             fontSans.variable,
-            fontMono.variable,
+            fontMono.variable
           )}
         >
           <NuqsAdapter>
@@ -91,11 +92,10 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
               enableSystem
               disableTransitionOnChange
             >
-              <ProgressBar />
               <TRPCReactProvider>
                 <AuthProvider userPromise={userPromise}>
                   <ConfirmDialogProvider>
-                    {props.children}
+                    <ProgressBarProvider>{props.children}</ProgressBarProvider>
                   </ConfirmDialogProvider>
                   {/* <ReactQueryDevtools initialIsOpen={false} /> */}
                 </AuthProvider>

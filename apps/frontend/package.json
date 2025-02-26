@@ -13,6 +13,7 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
+    "@bprogress/next": "^3.0.10",
     "@e965/xlsx": "^0.20.3",
     "@hookform/resolvers": "^3.10.0",
     "@monaco-editor/react": "^4.7.0",

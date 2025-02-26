@@ -4,7 +4,6 @@ import { MoreVertical } from "lucide-react";
 import { useParams } from "next/navigation";
 import { parseAsInteger, useQueryState } from "nuqs";
 
-import { useCreateQueryString } from "~/hooks/create-query-string";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -13,12 +12,13 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
+import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
+import { useRouter } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
-import { useRouter } from "~/hooks/use-router";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function ReportCardHeader() {
@@ -51,7 +51,7 @@ export function ReportCardHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/report-cards?classroomId=${params.id}&termId=${termId}`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

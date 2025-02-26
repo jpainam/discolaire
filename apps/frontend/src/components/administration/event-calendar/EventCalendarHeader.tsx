@@ -24,9 +24,9 @@ import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useRouter } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
-import { useRouter } from "~/hooks/use-router";
 import EventForm from "./EventForm";
 
 export function EventCalendarHeader() {
@@ -38,8 +38,7 @@ export function EventCalendarHeader() {
 
   const handleFilterChange = (category: string) => {
     router.push(
-      "?" +
-        createQueryString({ category: category == "All" ? null : category }),
+      "?" + createQueryString({ category: category == "All" ? null : category })
     );
   };
 

@@ -23,15 +23,15 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { FileUploader } from "~/uploads/file-uploader";
 import { useLocale } from "~/i18n";
+import { FileUploader } from "~/uploads/file-uploader";
 
+import { useRouter } from "next/navigation";
 import { DateRangePicker } from "~/components/shared/DateRangePicker";
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { AssignmentCategorySelector } from "~/components/shared/selects/AssignmentCategorySelector";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { routes } from "~/configs/routes";
-import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
 const QuillEditor = dynamic(() => import("~/components/quill-editor"), {
@@ -425,8 +425,8 @@ export function CreateEditAssignment({
                                     ])
                                   : field.onChange(
                                       field.value?.filter(
-                                        (value) => value !== item.value,
-                                      ),
+                                        (value) => value !== item.value
+                                      )
                                     );
                               }}
                             />

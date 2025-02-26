@@ -14,11 +14,11 @@ import { Label } from "@repo/ui/components/label";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
+import { useRouter } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { JournalSelector } from "~/components/shared/selects/JounalSelector";
-import { useRouter } from "~/hooks/use-router";
 
 export function FeeHeader() {
   const { t } = useLocale();

@@ -16,7 +16,7 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "~/hooks/use-router";
+import { useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
 
 const formSchema = z.object({

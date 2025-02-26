@@ -19,8 +19,8 @@ import {
 } from "@repo/ui/components/form";
 import { useLocale } from "~/i18n";
 
+import { useRouter } from "next/navigation";
 import { routes } from "~/configs/routes";
-import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import Step2Details from "./step2details";
 

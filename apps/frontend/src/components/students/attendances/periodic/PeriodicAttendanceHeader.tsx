@@ -17,10 +17,10 @@ import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useRouter } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
-import { useRouter } from "~/hooks/use-router";
 import { CreateEditPeriodicAttendance } from "./CreateEditPeriodicAttendance";
 
 export function PeriodicAttendanceHeader() {

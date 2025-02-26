@@ -21,8 +21,8 @@ import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useRouter } from "next/navigation";
 import { routes } from "~/configs/routes";
-import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
@@ -166,7 +166,7 @@ export function fetchGradeSheetColumns({
           <div
             className={cn(
               "font-bold",
-              numIsAbsent == 0 ? "text-green-500" : "text-destructive",
+              numIsAbsent == 0 ? "text-green-500" : "text-destructive"
             )}
           >
             {numIsAbsent}
@@ -283,8 +283,8 @@ function ActionCells({
               router.push(
                 routes.classrooms.gradesheets.details(
                   classroomId,
-                  gradesheet.id,
-                ),
+                  gradesheet.id
+                )
               );
             }}
           >
@@ -294,7 +294,7 @@ function ActionCells({
           <DropdownMenuItem
             onSelect={() => {
               router.push(
-                routes.classrooms.gradesheets.edit(classroomId, gradesheet.id),
+                routes.classrooms.gradesheets.edit(classroomId, gradesheet.id)
               );
             }}
           >

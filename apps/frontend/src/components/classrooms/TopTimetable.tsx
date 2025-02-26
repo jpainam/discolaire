@@ -36,9 +36,9 @@ import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useRouter } from "next/navigation";
 import EyeIcon from "~/components/icons/eye";
 import { routes } from "~/configs/routes";
-import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { CreateEditLesson } from "./timetables/CreateEditLesson";
@@ -210,7 +210,7 @@ function TopTimetableCard({
           ? "bg-muted opacity-50"
           : isSameDay(period.start, today)
             ? "bg-red-600"
-            : "bg-card",
+            : "bg-card"
       )}
     >
       <div className="mb-2 flex items-start justify-between">

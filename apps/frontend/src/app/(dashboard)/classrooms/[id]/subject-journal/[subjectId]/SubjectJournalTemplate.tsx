@@ -3,8 +3,6 @@
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useModal } from "~/hooks/use-modal";
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
 import {
@@ -14,9 +12,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "~/hooks/use-router";
+import { useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
 
 export function SubjectJournalTemplate() {

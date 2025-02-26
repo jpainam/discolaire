@@ -25,7 +25,7 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useRouter } from "~/hooks/use-router";
+import { useRouter } from "next/navigation";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { generateStringColor } from "~/utils/colors";
@@ -117,7 +117,7 @@ export default function StudentContactList({
                       size="sm"
                       onClick={() => {
                         router.push(
-                          routes.students.details(studentcontact.studentId),
+                          routes.students.details(studentcontact.studentId)
                         );
                       }}
                       variant="outline"
@@ -197,7 +197,7 @@ export default function StudentContactList({
                                   error: (error) => {
                                     return getErrorMessage(error);
                                   },
-                                },
+                                }
                               );
                             }
                           }}
@@ -214,7 +214,7 @@ export default function StudentContactList({
                 </CardFooter>
               </Card>
             );
-          },
+          }
         )}
       </ScrollArea>
     </div>

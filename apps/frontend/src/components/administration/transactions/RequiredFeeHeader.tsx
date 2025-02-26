@@ -16,11 +16,11 @@ import FlatBadge from "~/components/FlatBadge";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
+import { useRouter } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { RequiredFeeSelector } from "~/components/shared/selects/RequiredFeeSelector";
-import { useRouter } from "~/hooks/use-router";
 import { useMoneyFormat } from "~/utils/money-format";
 
 export function RequiredFeeHeader() {

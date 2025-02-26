@@ -15,7 +15,6 @@ import Link from "next/link";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { useSheet } from "~/hooks/use-sheet";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import {
@@ -27,13 +26,14 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 import FlatBadge from "~/components/FlatBadge";
+import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useRouter } from "next/navigation";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
-import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { CreateEditClassroom } from "./CreateEditClassroom";
@@ -304,11 +304,11 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
   const utils = api.useUtils();
   const canDeleteClassroom = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:details",
+    "classroom:details"
   );
   const canUpdateClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
-    "classroom:details",
+    "classroom:details"
   );
   const classroomMutation = api.classroom.delete.useMutation({
     onSettled: () => utils.classroom.invalidate(),

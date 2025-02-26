@@ -27,8 +27,8 @@ import {
 } from "@repo/ui/components/select";
 import { useLocale } from "~/i18n";
 
+import { useRouter } from "next/navigation";
 import { useSchool } from "~/providers/SchoolProvider";
-import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { requiredFeesAtom } from "./required-fees-atom";
 import { RequiredFeeForm } from "./RequiredFeeForm";
@@ -91,7 +91,7 @@ export function Step1() {
             toast.error(t("required_fee_warning"));
           }
         },
-      },
+      }
     );
   }
   const items: { label: string; value: string }[] = [

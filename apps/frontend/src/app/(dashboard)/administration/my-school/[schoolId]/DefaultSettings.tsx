@@ -26,10 +26,10 @@ import {
 import { Switch } from "@repo/ui/components/switch";
 import { useLocale } from "~/i18n";
 
+import { useRouter } from "next/navigation";
 import { CountryPicker } from "~/components/shared/CountryPicker";
 import { routes } from "~/configs/routes";
 import { timezones } from "~/data/timezones";
-import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
 const defaultSettingsSchema = z.object({

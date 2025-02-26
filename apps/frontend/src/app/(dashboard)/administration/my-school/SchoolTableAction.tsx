@@ -14,7 +14,7 @@ import {
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useRouter } from "~/hooks/use-router";
+import { useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
 
 export function SchoolTableAction({ schoolId }: { schoolId: string }) {

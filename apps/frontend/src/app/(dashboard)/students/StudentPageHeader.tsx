@@ -15,6 +15,7 @@ import { Label } from "@repo/ui/components/label";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
+import { useRouter } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
@@ -22,7 +23,6 @@ import { StudentSearch } from "~/components/students/StudentSearch";
 import { endpointReports } from "~/configs/endpoints";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
-import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 
 export function StudentPageHeader() {
@@ -31,7 +31,7 @@ export function StudentPageHeader() {
   const [open, setOpen] = useState(false);
   const canCreateStudent = useCheckPermissions(
     PermissionAction.CREATE,
-    "student:profile",
+    "student:profile"
   );
 
   return (
@@ -40,7 +40,7 @@ export function StudentPageHeader() {
       <Button
         variant="outline"
         className={cn(
-          "flex w-full justify-between bg-background text-sm font-semibold shadow-none 2xl:w-[500px]",
+          "flex w-full justify-between bg-background text-sm font-semibold shadow-none 2xl:w-[500px]"
         )}
         onClick={() => setOpen(true)}
       >
@@ -80,7 +80,7 @@ export function StudentPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.student_list}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -91,7 +91,7 @@ export function StudentPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.student_list}?format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

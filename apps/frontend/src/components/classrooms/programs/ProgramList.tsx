@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { useRouter } from "~/hooks/use-router";
+import { useRouter } from "next/navigation";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
@@ -37,7 +37,7 @@ export function ProgramList({ classroomId }: { classroomId: string }) {
               `flex cursor-pointer flex-row items-center gap-2 border-b p-2 hover:bg-secondary`,
               subject.id === Number(params.subjectId)
                 ? "bg-secondary font-bold text-secondary-foreground"
-                : "text-secondary-foreground/80 hover:bg-secondary/10",
+                : "text-secondary-foreground/80 hover:bg-secondary/10"
             )}
           >
             <div
