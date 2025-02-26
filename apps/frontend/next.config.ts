@@ -27,6 +27,10 @@ const config = {
       },
       {
         protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+      {
+        protocol: "https",
         hostname: "cdn-public.discolaire.com",
       },
       {
