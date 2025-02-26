@@ -18,7 +18,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   const canReadEnrollment = await checkPermissions(
     PermissionAction.READ,
-    "classroom:enrollment"
+    "classroom:enrollment",
   );
 
   return (
