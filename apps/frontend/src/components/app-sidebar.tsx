@@ -4,22 +4,18 @@ import {
   AudioWaveform,
   Command,
   GalleryVerticalEnd,
-  Search,
   Users,
   Warehouse,
 } from "lucide-react";
 import * as React from "react";
 
-import { Label } from "@repo/ui/components/label";
 import {
   Sidebar,
-  SidebarGroup,
-  SidebarGroupContent,
   SidebarHeader,
-  SidebarInput,
   SidebarRail,
 } from "@repo/ui/components/sidebar";
 
+import { Separator } from "@repo/ui/components/separator";
 import { usePathname } from "next/navigation";
 import { StudentSidebar } from "~/components/students/StudentSidebar";
 import { MainSidebar } from "~/sidebars/main-sidebar";
@@ -95,8 +91,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
-        <hr className="border-t border-border mx-2 -mt-px" />
-        <SidebarGroup className="py-0 group-data-[collapsible=icon]:hidden">
+
+        <Separator />
+        {/* <SidebarGroup className="py-0 group-data-[collapsible=icon]:hidden">
           <SidebarGroupContent>
             <form className="relative">
               <Label htmlFor="search" className="sr-only">
@@ -110,7 +107,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <Search className="pointer-events-none absolute top-1/2 left-2 size-4 -translate-y-1/2 opacity-50 select-none" />
             </form>
           </SidebarGroupContent>
-        </SidebarGroup>
+        </SidebarGroup> */}
       </SidebarHeader>
       {isClassroom && <ClassroomSidebar />}
       {isHome && (

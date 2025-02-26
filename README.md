@@ -290,3 +290,6 @@ nvm alias default 8.10.0
 ```
 
 pn i --reporter append-only
+
+export PATH="/Library/PostgreSQL/16/bin:$PATH"
+pg_restore -d 'postgres://{user}:{password}@{hostname}:{port}/{database-name}' database_dump.dump

@@ -68,6 +68,8 @@
   },
   "globalEnv": [
     "POSTGRES_URL",
+    "POSTGRES_PRISMA_URL",
+    "POSTGRES_PRISMA_URL",
     "AUTH_REDIRECT_PROXY_URL",
     "AUTH_SECRET",
     "NEXT_PUBLIC_BASE_URL",

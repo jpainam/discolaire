@@ -15,11 +15,12 @@ import { UserNav } from "~/components/user-nav";
 
 import { SchoolContextProvider } from "~/providers/SchoolProvider";
 
+import { LanguageSwitcher } from "~/components/LanguageSwitcher";
 import { SchoolYearSwitcher } from "~/components/SchoolYearSwitcher";
+import { TopRightButtons } from "~/components/TopRightButtons";
 import GlobalModal from "~/layouts/GlobalModal";
 import GlobalSheet from "~/layouts/GlobalSheet";
 import { api } from "~/trpc/server";
-import { LanguageSwitcher } from "~/components/LanguageSwitcher";
 
 export default async function Layout({
   children,
@@ -57,6 +58,7 @@ export default async function Layout({
               <NavHeader />
               <div className="ml-auto flex items-center gap-2">
                 <SchoolYearSwitcher defaultValue={schoolYear.id} />
+                <TopRightButtons />
                 <ModeToggle />
                 <LanguageSwitcher />
                 <UserNav />
