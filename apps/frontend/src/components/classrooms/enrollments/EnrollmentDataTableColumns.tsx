@@ -54,7 +54,6 @@ export function fetchEnrollmentColumns({
           }
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
-          className="translate-y-0.5"
         />
       ),
       cell: ({ row }) => (
@@ -62,9 +61,9 @@ export function fetchEnrollmentColumns({
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
           aria-label="Select row"
-          className="translate-y-0.5"
         />
       ),
+      size: 28,
       enableSorting: false,
       enableHiding: false,
     },
@@ -205,7 +204,7 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
   const router = useRouter();
   const canDeleteEnrollment = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:enrollment",
+    "classroom:enrollment"
   );
   const utils = api.useUtils();
   const unenrollStudentsMutation =

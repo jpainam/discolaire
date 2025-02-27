@@ -8,7 +8,6 @@ import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
 import { useLocale } from "~/i18n";
 
 import { api } from "~/trpc/react";
-import { ClassroomDataTableActions } from "./ClassroomDataTableActions";
 import { getColumns } from "./ClassroomDataTableColumns";
 
 //type ClassroomProcedureOutput = RouterOutputs["classroom"]["all"][number];
@@ -63,12 +62,13 @@ export function ClassroomDataTable() {
     return <DataTableSkeleton className="px-4" rowCount={10} columnCount={6} />;
   }
   return (
-    <DataTable
-      className="px-2"
-      table={table}
-      floatingBar={<ClassroomDataTableActions table={table} />}
-    >
-      <DataTableToolbar table={table} />
-    </DataTable>
+    <div className="min-h-[100vh] flex-1 md:min-h-min px-4">
+      <DataTable
+        table={table}
+        //floatingBar={<ClassroomDataTableActions table={table} />}
+      >
+        <DataTableToolbar table={table} />
+      </DataTable>
+    </div>
   );
 }

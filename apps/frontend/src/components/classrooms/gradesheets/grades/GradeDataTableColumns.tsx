@@ -51,7 +51,6 @@ export function fetchGradeColumns({
           }
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
-          className="translate-y-0.5"
         />
       ),
       cell: ({ row }) => (
@@ -59,9 +58,9 @@ export function fetchGradeColumns({
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
           aria-label="Select row"
-          className="translate-y-0.5"
         />
       ),
+      size: 28,
       enableSorting: false,
       enableHiding: false,
     },
@@ -252,7 +251,7 @@ function ActionCells({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  },
+                  }
                 );
               }
             }}

@@ -56,7 +56,6 @@ export function getColumns({
           }
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
-          className="translate-y-0.5"
         />
       ),
       cell: ({ row }) => (
@@ -64,9 +63,9 @@ export function getColumns({
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
           aria-label="Select row"
-          className="translate-y-0.5"
         />
       ),
+      size: 28,
       enableSorting: false,
       enableHiding: false,
     },
@@ -289,9 +288,12 @@ export function getColumns({
     // },
     {
       id: "actions",
+      header: () => <span className="sr-only">Actions</span>,
       cell: function Cell({ row }) {
         return <ActionCells classroom={row.original} />;
       },
+      size: 60,
+      enableHiding: false,
     },
   ];
 }
@@ -304,11 +306,11 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
   const utils = api.useUtils();
   const canDeleteClassroom = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:details",
+    "classroom:details"
   );
   const canUpdateClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
-    "classroom:details",
+    "classroom:details"
   );
   const classroomMutation = api.classroom.delete.useMutation({
     onSettled: () => utils.classroom.invalidate(),

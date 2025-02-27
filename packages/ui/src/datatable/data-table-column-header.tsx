@@ -1,19 +1,6 @@
 import type { Column } from "@tanstack/react-table";
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  CaretSortIcon,
-  EyeNoneIcon,
-} from "@radix-ui/react-icons";
+import { RiArrowDownSLine, RiArrowUpSLine } from "@remixicon/react";
 
-import { Button } from "@repo/ui/components/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
 import { cn } from "@repo/ui/lib/utils";
 
 interface DataTableColumnHeaderProps<TData, TValue>
@@ -32,40 +19,38 @@ export function DataTableColumnHeader<TData, TValue>({
   }
 
   return (
-    <div className={cn("flex items-center space-x-2", className)}>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="data-[state=open]:bg-accent -ml-3 h-8 text-sm"
-          >
-            <span>{title}</span>
-            {column.getIsSorted() === "desc" ? (
-              <ArrowDownIcon className="ml-2 h-4 w-4" />
-            ) : column.getIsSorted() === "asc" ? (
-              <ArrowUpIcon className="ml-2 h-4 w-4" />
-            ) : (
-              <CaretSortIcon className="ml-2 h-4 w-4" />
-            )}
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
-          <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
-            <ArrowUpIcon className="text-muted-foreground/70 mr-2 h-3.5 w-3.5" />
-            Asc
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
-            <ArrowDownIcon className="text-muted-foreground/70 mr-2 h-3.5 w-3.5" />
-            Desc
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
-            <EyeNoneIcon className="text-muted-foreground/70 mr-2 h-3.5 w-3.5" />
-            Hide
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+    <div
+      className={cn(
+        "flex h-full cursor-pointer items-center gap-2 select-none",
+        className,
+      )}
+      onClick={column.getToggleSortingHandler()}
+      onKeyDown={(e) => {
+        // Enhanced keyboard handling for sorting
+        if (column.getCanSort() && (e.key === "Enter" || e.key === " ")) {
+          e.preventDefault();
+          column.getToggleSortingHandler()?.(e);
+        }
+      }}
+      tabIndex={column.getCanSort() ? 0 : undefined}
+    >
+      <span>{title}</span>
+      {{
+        asc: (
+          <RiArrowUpSLine
+            className="shrink-0 opacity-60"
+            size={16}
+            aria-hidden="true"
+          />
+        ),
+        desc: (
+          <RiArrowDownSLine
+            className="shrink-0 opacity-60"
+            size={16}
+            aria-hidden="true"
+          />
+        ),
+      }[column.getIsSorted() as string] ?? null}
     </div>
   );
 }

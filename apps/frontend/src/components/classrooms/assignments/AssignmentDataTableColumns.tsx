@@ -1,9 +1,9 @@
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
-import { useTransition } from "react";
-import Link from "next/link";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import i18next from "i18next";
+import Link from "next/link";
+import { useTransition } from "react";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -52,7 +52,6 @@ export function fetchAssignmentTableColumns({
             table.toggleAllPageRowsSelected(!!value);
           }}
           aria-label="Select all"
-          className="translate-y-[2px]"
         />
       ),
       cell: ({ row }) => (
@@ -62,9 +61,9 @@ export function fetchAssignmentTableColumns({
             row.toggleSelected(!!value);
           }}
           aria-label="Select row"
-          className="translate-y-[2px]"
         />
       ),
+      size: 28,
       enableSorting: false,
       enableHiding: false,
     },
@@ -90,7 +89,7 @@ export function fetchAssignmentTableColumns({
             className="truncate hover:text-blue-600 hover:underline"
             href={routes.classrooms.assignments.details(
               row.original.classroomId,
-              row.original.id,
+              row.original.id
             )}
           >
             {row.original.title}
@@ -202,7 +201,7 @@ function ActionsCell({
                   >
                     {label}
                   </DropdownMenuRadioItem>
-                ),
+                )
               )}
             </DropdownMenuRadioGroup>
           </DropdownMenuSubContent>

@@ -44,7 +44,6 @@ export function getUserColumns({
             table.toggleAllPageRowsSelected(!!value);
           }}
           aria-label="Select all"
-          className="translate-y-[2px]"
         />
       ),
       cell: ({ row }) => (
@@ -54,9 +53,9 @@ export function getUserColumns({
             row.toggleSelected(!!value);
           }}
           aria-label="Select row"
-          className="translate-y-[2px]"
         />
       ),
+      size: 28,
       enableSorting: false,
       enableHiding: false,
     },

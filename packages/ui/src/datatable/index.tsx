@@ -30,7 +30,6 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 import { DataTablePagination } from "@repo/ui/datatable/data-table-pagination";
-import { DataTableViewOptions } from "@repo/ui/datatable/data-table-view-options";
 import { cn } from "@repo/ui/lib/utils";
 
 interface UseDataTableProps<TData, TValue> {
@@ -137,80 +136,82 @@ interface DataTableProps<TData> extends React.HTMLAttributes<HTMLDivElement> {
    * @example floatingBar={<TasksTableFloatingBar table={table} />}
    */
   floatingBar?: React.ReactNode | null;
+  isLoading?: boolean;
 }
 export function DataTable<TData>({
   table,
-  floatingBar = null,
+  isLoading = false,
   children,
   className,
   ...props
 }: DataTableProps<TData>) {
   return (
-    <div
-      className={cn("w-full space-y-2.5 overflow-auto", className)}
-      {...props}
-    >
+    <div className={cn("space-y-4", className)} {...props}>
       {children}
-      <div className="rounded-lg border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow className="bg-muted/50" key={headerGroup.id}>
-                {headerGroup.headers.slice(0, -1).map((header) => {
-                  return (
-                    <TableHead key={header.id} colSpan={header.colSpan}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                  );
-                })}
-                <TableHead className="w-12">
-                  <DataTableViewOptions table={table} />
-                </TableHead>
-              </TableRow>
-            ))}
-          </TableHeader>
 
-          <TableBody>
-            {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row) => {
+      <Table className="table-fixed border-separate border-spacing-0 [&_tr:not(:last-child)_td]:border-b">
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow className="hover:bg-transparent" key={headerGroup.id}>
+              {headerGroup.headers.map((header) => {
                 return (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
+                  <TableHead
+                    style={{ width: `${header.getSize()}px` }}
+                    key={header.id}
+                    colSpan={header.colSpan}
+                    className="bg-sidebar border-border relative h-9 border-y select-none first:rounded-l-lg first:border-l last:rounded-r-lg last:border-r"
                   >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell className="py-0" key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
                         )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
+                  </TableHead>
                 );
-              })
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={table.getAllColumns().length + 1}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
+              })}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <tbody aria-hidden="true" className="table-row h-1"></tbody>
+        <TableBody>
+          {isLoading ? (
+            <TableRow className="hover:bg-transparent [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
+              <TableCell
+                colSpan={table.getAllColumns().length}
+                className="h-24 text-center"
+              >
+                Loading...
+              </TableCell>
+            </TableRow>
+          ) : table.getRowModel().rows.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
+                className="hover:bg-accent/50 h-px border-0 [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id} className="h-[inherit] last:py-0">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
               </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      <div className="flex flex-col gap-2.5 py-2">
-        <DataTablePagination table={table} />
-        {table.getFilteredSelectedRowModel().rows.length > 0 && floatingBar}
-      </div>
+            ))
+          ) : (
+            <TableRow className="hover:bg-transparent [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
+              <TableCell
+                colSpan={table.getAllColumns().length}
+                className="h-24 text-center"
+              >
+                No results.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+        <tbody aria-hidden="true" className="table-row h-1"></tbody>
+      </Table>
+      <DataTablePagination table={table} />
     </div>
   );
 }

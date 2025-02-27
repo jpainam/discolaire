@@ -41,7 +41,7 @@ export default async function Page(props: GradeSheetPageProps) {
     day: "numeric",
   });
   const fulldate = dateFormat.format(
-    searchParams.date ? new Date(searchParams.date) : new Date()
+    searchParams.date ? new Date(searchParams.date) : new Date(),
   );
   return (
     <div
