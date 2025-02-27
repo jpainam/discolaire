@@ -102,16 +102,16 @@ export function LessonDetails({
         onClick={() => {
           const startHours = String(event.startTime.getHours()).padStart(
             2,
-            "0"
+            "0",
           );
           const startMinutes = String(event.startTime.getMinutes()).padStart(
             2,
-            "0"
+            "0",
           );
           const endHours = String(event.endTime.getHours()).padStart(2, "0");
           const endMinutes = String(event.endTime.getMinutes()).padStart(
             2,
-            "0"
+            "0",
           );
 
           closeModal();

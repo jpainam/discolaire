@@ -35,7 +35,7 @@ export function ClassroomDataTableActions({
   const { t } = useLocale();
   const canDeleteClassroom = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:details"
+    "classroom:details",
   );
   const classroomDeleteMutation = api.classroom.delete.useMutation({
     onSettled: () => utils.classroom.invalidate(),

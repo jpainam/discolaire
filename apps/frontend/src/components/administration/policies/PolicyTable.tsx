@@ -71,7 +71,7 @@ export function PolicyTable({
     setSelectedPolicies((prev) =>
       prev.includes(id)
         ? prev.filter((policyId) => policyId !== id)
-        : [...prev, id]
+        : [...prev, id],
     );
   };
 
@@ -79,7 +79,7 @@ export function PolicyTable({
     setExpandedPolicies((prev) =>
       prev.includes(id)
         ? prev.filter((policyId) => policyId !== id)
-        : [...prev, id]
+        : [...prev, id],
     );
   };
 
