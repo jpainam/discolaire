@@ -101,7 +101,7 @@ export function StudentGradeHeader({
     );
   }
   return (
-    <div className="flex flex-row items-center gap-2 border-b bg-secondary px-2 py-1 text-secondary-foreground">
+    <div className="flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1 text-secondary-foreground">
       <Label>{t("term")}</Label>
       <TermSelector
         className="w-[300px]"
@@ -112,7 +112,7 @@ export function StudentGradeHeader({
             "?" +
               createQueryString({
                 term: val,
-              }),
+              })
           );
         }}
         defaultValue={term ? `${term}` : undefined}
@@ -177,7 +177,7 @@ export function StudentGradeHeader({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  },
+                  }
                 );
               }}
             >
@@ -201,7 +201,7 @@ export function StudentGradeHeader({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  },
+                  }
                 );
               }}
             >

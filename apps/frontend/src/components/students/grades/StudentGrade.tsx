@@ -44,7 +44,7 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
     let sortedGrades = [...studentGradesQuery.data];
     if (term) {
       sortedGrades = studentGradesQuery.data.filter(
-        (g) => g.gradeSheet.termId === Number(term),
+        (g) => g.gradeSheet.termId === Number(term)
       );
     }
     if (orderBy == "grade") {
@@ -53,7 +53,7 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
     } else {
       sortedGrades = _.sortBy(
         sortedGrades,
-        (grade) => grade.gradeSheet.subject.course.name,
+        (grade) => grade.gradeSheet.subject.course.name
       );
       sortedGrades.reverse();
     }
@@ -66,7 +66,7 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
   }
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row justify-between gap-4 border-b border-r bg-muted/50 py-1">
+      <div className="flex flex-row justify-between gap-4 border-b border-r bg-muted/50 py-1 px-4">
         <Button
           variant={"ghost"}
           onClick={() => {
@@ -95,7 +95,7 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
         </Button>
       </div>
       {classroomMoyMinMaxGrades.isPending && (
-        <div className="grid w-full grid-cols-2 gap-2 p-2">
+        <div className="grid w-full grid-cols-2 gap-2 py-2">
           {Array.from({ length: 20 }).map((_, index) => (
             <Skeleton key={index} className="h-8 w-full" />
           ))}

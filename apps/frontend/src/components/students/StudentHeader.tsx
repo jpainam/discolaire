@@ -108,19 +108,19 @@ export function StudentHeader() {
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   const canEditStudent = useCheckPermissions(
     PermissionAction.UPDATE,
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   //const [open, setOpen] = React.useState(false);
 
   return (
-    <div className="flex border-b bg-muted/50 p-2 w-full gap-1">
+    <div className="flex border-b bg-muted/50 py-2 px-4 w-full gap-1">
       <SquaredAvatar student={student} />
       <div className="flex w-full flex-col gap-1">
         {studentQuery.isPending ? (
@@ -226,7 +226,7 @@ export function StudentHeader() {
                 onClick={() => {
                   window.open(
                     `${endpointReports.student_page(params.id)}?format=pdf`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >

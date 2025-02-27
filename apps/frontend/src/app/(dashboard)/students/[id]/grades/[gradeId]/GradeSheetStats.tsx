@@ -22,7 +22,7 @@ export async function GradeSheetStats({
   const successRate = await api.gradeSheet.successRate(gradeSheetId);
 
   return (
-    <div className={cn("p-1", className)}>
+    <div className={cn("py-2 px-4", className)}>
       <Table className="items-center border-none">
         <TableHeader>
           <TableRow className="border">

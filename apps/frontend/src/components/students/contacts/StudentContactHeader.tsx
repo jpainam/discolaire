@@ -1,6 +1,6 @@
 "use client";
 
-import { MoreVertical, PlusIcon, UserPlus, UserSearch } from "lucide-react";
+import { PlusIcon, UserPlus, UserSearch } from "lucide-react";
 import { useParams } from "next/navigation";
 
 import { Button } from "@repo/ui/components/button";
@@ -17,7 +17,6 @@ import { useLocale } from "~/i18n";
 
 // TODO uncomment this
 //import CreateEditContact from "~/components/contacts/CreateEditContact";
-import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { SimpleTooltip } from "~/components/simple-tooltip";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { PermissionAction } from "~/permissions";
@@ -32,7 +31,7 @@ export function StudentContactHeader() {
     "student:contact",
     {
       id: params.id,
-    },
+    }
   );
 
   const Icon = sidebarIcons.contacts;
@@ -41,17 +40,18 @@ export function StudentContactHeader() {
   const { openSheet } = useSheet();
 
   return (
-    <div className="flex flex-row items-center gap-2 bg-secondary p-1 px-2">
+    <div className="flex flex-row items-center gap-2 bg-secondary p-4">
       {Icon && <Icon className="h-6 w-6" />}
       <Label>{t("contacts")}</Label>
 
-      <div className="ml-auto flex flex-row gap-2">
+      <div className="ml-auto flex flex-row items-center gap-2">
         {canAddContact && (
           <SimpleTooltip content={t("link_contacts")}>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button size={"icon"} variant={"outline"}>
+                <Button size={"sm"} variant={"default"}>
                   <PlusIcon className="h-4 w-4" />
+                  <span>{t("add")}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -93,16 +93,17 @@ export function StudentContactHeader() {
           </SimpleTooltip>
         )}
 
-        <DropdownMenu>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size={"icon"} variant={"outline"}>
+            <Button size={"sm"} variant={"secondary"}>
+              <span>Plus</span>
               <MoreVertical className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownHelp />
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
       </div>
     </div>
   );

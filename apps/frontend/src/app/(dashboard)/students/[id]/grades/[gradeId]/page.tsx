@@ -41,7 +41,7 @@ export default async function Page(props: GradeSheetPageProps) {
     day: "numeric",
   });
   const fulldate = dateFormat.format(
-    searchParams.date ? new Date(searchParams.date) : new Date(),
+    searchParams.date ? new Date(searchParams.date) : new Date()
   );
   return (
     <div
@@ -55,7 +55,7 @@ export default async function Page(props: GradeSheetPageProps) {
         <span className="font-bold"> {searchParams.reportName}</span>
         {/* <Button variant={"ghost"} className="opacity-0"></Button> */}
       </div>
-      <ul className="grid gap-3 px-1">
+      <ul className="grid gap-3 px-4">
         <li className="flex items-center justify-between">
           <span className="flex flex-row items-center gap-1 text-muted-foreground">
             <Captions className="h-4 w-4 stroke-1" /> {t("subject")}
@@ -78,7 +78,7 @@ export default async function Page(props: GradeSheetPageProps) {
         </li>
       </ul>
       <Separator className="my-2" />
-      <ul className="grid gap-3 px-1">
+      <ul className="grid gap-3 px-4">
         <li className="flex items-center justify-between">
           <span className="flex flex-row items-center gap-1 text-muted-foreground">
             <Dock className="h-4 w-4 stroke-1" />
@@ -102,7 +102,7 @@ export default async function Page(props: GradeSheetPageProps) {
         </li>
       </ul>
       <Separator className="my-2" />
-      <ul className="grid gap-3 px-1">
+      <ul className="grid gap-3 px-4">
         <li className="flex items-center justify-between">
           <span className="flex flex-row items-center gap-1 text-muted-foreground">
             <ClipboardList className="h-4 w-4 stroke-1" />
