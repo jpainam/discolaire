@@ -1,6 +1,6 @@
 import type { TRPCError } from "@trpc/server";
-import type { NextRequest } from "next/server";
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
+import type { NextRequest } from "next/server";
 
 import { appRouter, createTRPCContext } from "@repo/api";
 import { auth } from "@repo/auth";
@@ -78,7 +78,8 @@ const handler = async (req: NextRequest) => {
           headers: heads,
         }),
       onError({ error, path }) {
-        console.error(`>>> tRPC Error on '${path}'`, error);
+        console.error(`>>> tRPC Error on '${path}'`);
+        console.error(error);
         if (error.code == "UNAUTHORIZED") {
           return Response.redirect(new URL("/auth/login", req.url));
         }
