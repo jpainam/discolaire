@@ -79,7 +79,7 @@ const handler = async (req: NextRequest) => {
         }),
       onError({ error, path }) {
         console.error(`>>> tRPC Error on '${path}'`);
-        console.error(error);
+        console.error(error.stack);
         if (error.code == "UNAUTHORIZED") {
           return Response.redirect(new URL("/auth/login", req.url));
         }
@@ -89,7 +89,9 @@ const handler = async (req: NextRequest) => {
     setCorsHeaders(response);
     return response;
   } catch (e) {
-    console.error(">>> tRPC Error", e);
+    // TODO remove .stack to any console.error
+    // https://www.reddit.com/r/nextjs/comments/1gkxdqe/typeerror_the_payload_argument_must_be_of_type/
+    console.error(">>> tRPC Error", (e as Error).stack);
     const error = e as TRPCError;
     if (error.code == "UNAUTHORIZED") {
       return Response.redirect(new URL("/auth/login", req.url));
