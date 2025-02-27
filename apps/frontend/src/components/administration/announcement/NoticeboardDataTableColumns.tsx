@@ -255,7 +255,7 @@ function ActionCells({
                       return t("deleted_successfully");
                     },
                     error: (error) => getErrorMessage(error),
-                  }
+                  },
                 );
               }
             }}
