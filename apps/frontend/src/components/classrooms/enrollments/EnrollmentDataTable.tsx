@@ -5,7 +5,6 @@ import { toast } from "sonner";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
-import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
 import { useLocale } from "~/i18n";
 
 import { api } from "~/trpc/react";
@@ -38,11 +37,8 @@ export function EnrollmentDataTable({ classroomId }: { classroomId: string }) {
     return;
   }
   return (
-    <DataTable
-      table={table}
-      floatingBar={<EnrollmentDataTableActions table={table} />}
-    >
-      <DataTableToolbar table={table} />
+    <DataTable table={table}>
+      <EnrollmentDataTableActions table={table} />
     </DataTable>
   );
 }

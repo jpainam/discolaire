@@ -79,6 +79,9 @@ export function fetchStaffColumns({
           />
         );
       },
+      enableSorting: false,
+      enableHiding: false,
+      size: 32,
     },
 
     {

@@ -70,6 +70,9 @@ export function getUserColumns({
           avatar={row.original.avatar}
         />
       ),
+      enableSorting: false,
+      enableHiding: false,
+      size: 32,
     },
     {
       accessorKey: "username",

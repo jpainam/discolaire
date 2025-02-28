@@ -79,6 +79,9 @@ export function getColumns({
           />
         );
       },
+      enableSorting: false,
+      enableHiding: false,
+      size: 32,
     },
     {
       accessorKey: "prefix",
@@ -231,7 +234,7 @@ export function getColumns({
                         error: (error) => {
                           return getErrorMessage(error);
                         },
-                      },
+                      }
                     );
                   }
                 }}

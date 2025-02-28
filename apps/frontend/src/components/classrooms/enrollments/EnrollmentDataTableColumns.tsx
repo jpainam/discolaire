@@ -1,11 +1,3 @@
-import type { ColumnDef } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
-import i18next from "i18next";
-import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { toast } from "sonner";
-
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
@@ -17,11 +9,18 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+import type { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
+import i18next from "i18next";
+import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
+import { useParams } from "next/navigation";
+import { toast } from "sonner";
 import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { Badge } from "@repo/ui/components/badge";
 import { useRouter } from "next/navigation";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
@@ -68,22 +67,26 @@ export function fetchEnrollmentColumns({
       enableHiding: false,
     },
     {
-      id: "avatar",
-      enableHiding: false,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("")} />
+        <DataTableColumnHeader column={column} title={t("name")} />
       ),
-      enableSorting: false,
+      accessorKey: "lastName",
       cell: ({ row }) => {
         const student = row.original;
         return (
-          <AvatarState
-            pos={getFullName(student).length}
-            avatar={student.avatar}
-          />
+          <div className="flex items-center gap-3">
+            <AvatarState
+              pos={getFullName(student).length}
+              avatar={student.avatar}
+            />
+            <div className="font-medium">{getFullName(student)}</div>
+          </div>
         );
       },
+      size: 400,
+      enableHiding: false,
     },
+
     {
       accessorKey: "registrationNumber",
       header: ({ column }) => (
@@ -94,45 +97,15 @@ export function fetchEnrollmentColumns({
       ),
       cell: ({ row }) => {
         const student = row.original;
-        return <div>{student.registrationNumber}</div>;
-      },
-    },
-    {
-      accessorKey: "lastName",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("lastName")} />
-      ),
-      cell: ({ row }) => {
-        const student = row.original;
         return (
-          <Link
-            className="hover:text-blue-600 hover:underline"
-            href={routes.students.details(student.id)}
-          >
-            {student.lastName}
-          </Link>
+          <div className="text-muted-foreground">
+            {student.registrationNumber}
+          </div>
         );
-        // return <StudentCard name={student.lastName} />;
       },
+      size: 110,
     },
-    {
-      accessorKey: "firstName",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("firstName")} />
-      ),
-      cell: ({ row }) => {
-        const student = row.original;
-        return (
-          <Link
-            className="hover:text-blue-600 hover:underline"
-            href={routes.students.details(student.id)}
-          >
-            {student.firstName}
-          </Link>
-        );
-        // return <StudentCard name={student.firstName} />;
-      },
-    },
+
     {
       accessorKey: "dateOfBirth",
       header: ({ column }) => (
@@ -141,7 +114,7 @@ export function fetchEnrollmentColumns({
       cell: ({ row }) => {
         const student = row.original;
         return (
-          <div>
+          <div className="text-muted-foreground">
             {student.dateOfBirth && dateFormater.format(student.dateOfBirth)}
           </div>
         );
@@ -156,9 +129,9 @@ export function fetchEnrollmentColumns({
         const student = row.original;
         const v = student.isRepeating ? t("yes") : t("no");
         return (
-          <FlatBadge variant={student.isRepeating ? "red" : "gray"}>
+          <Badge variant={student.isRepeating ? "destructive" : "outline"}>
             {v}
-          </FlatBadge>
+          </Badge>
         );
       },
     },
@@ -179,15 +152,19 @@ export function fetchEnrollmentColumns({
         );
       },
     },
-    {
-      id: "phone",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("phone")} />
-      ),
-      cell: ({ row }) => {
-        return <div>{row.original.phoneNumber}</div>;
-      },
-    },
+    // {
+    //   id: "phone",
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title={t("phone")} />
+    //   ),
+    //   cell: ({ row }) => {
+    //     return (
+    //       <div className="text-muted-foreground">
+    //         {row.original.phoneNumber}
+    //       </div>
+    //     );
+    //   },
+    // },
     {
       id: "actions",
       cell: ({ row }) => {
@@ -204,7 +181,7 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
   const router = useRouter();
   const canDeleteEnrollment = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:enrollment",
+    "classroom:enrollment"
   );
   const utils = api.useUtils();
   const unenrollStudentsMutation =
