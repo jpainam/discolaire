@@ -50,7 +50,6 @@ export function FeeDataTable() {
     data: filteredFees,
     columns,
     rowCount: Math.ceil(filteredFees.length / 10),
-    defaultPageSize: 10,
   });
 
   if (feesQuery.isPending) {
