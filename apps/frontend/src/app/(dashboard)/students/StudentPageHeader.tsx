@@ -31,16 +31,17 @@ export function StudentPageHeader() {
   const [open, setOpen] = useState(false);
   const canCreateStudent = useCheckPermissions(
     PermissionAction.CREATE,
-    "student:profile",
+    "student:profile"
   );
 
   return (
-    <div className="flex flex-row items-center gap-2 border-b px-2 py-1">
+    <div className="flex flex-row items-center gap-2 border-b px-4 py-1">
       <Label>{t("students")}</Label>
       <Button
+        size={"sm"}
         variant="outline"
         className={cn(
-          "flex w-full justify-between bg-background text-sm font-semibold shadow-none 2xl:w-[500px]",
+          "flex w-full justify-between bg-background text-sm font-semibold shadow-none 2xl:w-[500px]"
         )}
         onClick={() => setOpen(true)}
       >
@@ -63,8 +64,8 @@ export function StudentPageHeader() {
               router.push(routes.students.create);
             }}
           >
-            <PlusIcon className="mr-2 h-4 w-4" />
-            {t("create")}
+            <PlusIcon />
+            {t("add")}
           </Button>
         )}
         <DropdownMenu>
@@ -80,7 +81,7 @@ export function StudentPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.student_list}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -91,7 +92,7 @@ export function StudentPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.student_list}?format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

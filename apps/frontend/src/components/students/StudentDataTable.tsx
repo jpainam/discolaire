@@ -49,7 +49,11 @@ export function StudentDataTable() {
   }
 
   return (
-    <DataTable isLoading={studentsQuery.isLoading} table={table}>
+    <DataTable
+      className="py-2 px-4"
+      isLoading={studentsQuery.isLoading}
+      table={table}
+    >
       <StudentDataTableActions table={table} />
       {/* <DataTableToolbar table={table}></DataTableToolbar> */}
     </DataTable>

@@ -65,7 +65,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
           aria-label="Select row"
         />
       ),
-      size: 28,
+      size: 25,
       enableSorting: false,
       enableHiding: false,
     },
@@ -85,7 +85,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
       },
       enableSorting: false,
       enableHiding: false,
-      size: 32,
+      size: 45,
     },
     {
       id: "lastName",
@@ -250,7 +250,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
             year: "numeric",
             month: "short",
             day: "numeric",
-          },
+          }
         );
         return (
           <SimpleTooltip

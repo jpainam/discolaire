@@ -11,7 +11,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { useLocale } from "~/i18n";
@@ -35,7 +34,7 @@ export function StudentDataTableActions({
   const utils = api.useUtils();
   const canDeleteStudent = useCheckPermissions(
     PermissionAction.DELETE,
-    "student:profile",
+    "student:profile"
   );
   const deleteStudentMutation = api.student.delete.useMutation({
     onSettled: () => utils.student.invalidate(),
@@ -62,50 +61,46 @@ export function StudentDataTableActions({
   }, [table]);
 
   return (
-    <div className="animate-fadeIn fixed inset-x-0 bottom-12 z-50 mx-auto flex h-[60px] max-w-xl items-center justify-between rounded-md border bg-background px-6 py-3 shadow">
-      <p className="text-sm font-semibold">
-        {rows.length} {t("selected")}
-      </p>
+    <>
+      {table.getSelectedRowModel().rows.length > 0 && canDeleteStudent && (
+        <Button
+          size={"sm"}
+          onClick={async () => {
+            const isConfirmed = await confirm({
+              title: t("delete"),
+              description: t("delete_confirmation"),
+              icon: <Trash2 className="h-6 w-6 text-destructive" />,
+              alertDialogTitle: {
+                className: "flex items-center gap-2",
+              },
+            });
+
+            if (isConfirmed) {
+              const selectedStudentIds = rows.map((row) => row.original.id);
+              toast.loading("deleting", { id: 0 });
+              deleteStudentMutation.mutate(selectedStudentIds);
+            }
+          }}
+          variant={"destructive"}
+        >
+          <Trash2 />
+          {t("delete")}
+          <span className="-me-1 ms-1 inline-flex h-5 max-h-full items-center rounded border border-border bg-background px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground/70">
+            {table.getSelectedRowModel().rows.length}
+          </span>
+        </Button>
+      )}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant={"outline"}>
+          <Button size={"sm"} variant={"outline"}>
             {t("bulk_actions")} <ChevronsUpDown className="ml-1 h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem>{t("pdf_export")}</DropdownMenuItem>
           <DropdownMenuItem>{t("xml_export")}</DropdownMenuItem>
-          {canDeleteStudent && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onSelect={async () => {
-                  const isConfirmed = await confirm({
-                    title: t("delete"),
-                    description: t("delete_confirmation"),
-                    icon: <Trash2 className="h-6 w-6 text-destructive" />,
-                    alertDialogTitle: {
-                      className: "flex items-center gap-2",
-                    },
-                  });
-
-                  if (isConfirmed) {
-                    const selectedStudentIds = rows.map(
-                      (row) => row.original.id,
-                    );
-                    toast.loading("deleting", { id: 0 });
-                    deleteStudentMutation.mutate(selectedStudentIds);
-                  }
-                }}
-                variant="destructive"
-                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-              >
-                {t("delete")}
-              </DropdownMenuItem>
-            </>
-          )}
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
+    </>
   );
 }
