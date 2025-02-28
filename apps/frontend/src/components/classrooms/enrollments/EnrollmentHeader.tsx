@@ -37,7 +37,7 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
     "classroom:enrollment",
     {
       id: classroomId,
-    }
+    },
   );
 
   const students = classroomStudentsQuery.data ?? [];
@@ -148,7 +148,7 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroomId}&preview=true&size=a4&format=csv`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >
@@ -159,7 +159,7 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroomId}&preview=true&size=a4&format=pdf`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >
