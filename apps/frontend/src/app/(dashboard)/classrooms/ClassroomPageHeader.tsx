@@ -2,7 +2,6 @@
 
 import { MoreVertical, Plus } from "lucide-react";
 
-import { useSheet } from "~/hooks/use-sheet";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -11,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { Label } from "@repo/ui/components/label";
+import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
@@ -28,14 +27,18 @@ export function ClassroomPageHeader() {
 
   const canCreateClassroom = useCheckPermissions(
     PermissionAction.CREATE,
-    "classroom:details",
+    "classroom:details"
   );
 
   return (
-    <div className="flex flex-row items-center gap-2 border-b px-2 pb-1">
-      <Label>{t("classrooms")}</Label>
-
-      <div className="ml-auto flex flex-row items-center gap-2">
+    <div className="flex items-center justify-between gap-3 px-4">
+      <div className="space-y-1">
+        <h1 className="text-2xl font-semibold">{t("classroom_list")}</h1>
+        <p className="text-sm text-muted-foreground">
+          {t("classroom_title_description")}
+        </p>
+      </div>
+      <div className="ml-auto flex flex-row items-center gap-3">
         {canCreateClassroom && (
           <Button
             size={"sm"}
@@ -65,7 +68,7 @@ export function ClassroomPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.classroom_list}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -76,7 +79,7 @@ export function ClassroomPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.classroom_list}?format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

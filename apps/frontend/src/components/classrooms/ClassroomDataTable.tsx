@@ -4,10 +4,10 @@ import * as React from "react";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
-import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
 import { useLocale } from "~/i18n";
 
 import { api } from "~/trpc/react";
+import { ClassroomDataTableActions } from "./ClassroomDataTableActions";
 import { getColumns } from "./ClassroomDataTableColumns";
 
 //type ClassroomProcedureOutput = RouterOutputs["classroom"]["all"][number];
@@ -65,9 +65,10 @@ export function ClassroomDataTable() {
     <div className="min-h-[100vh] flex-1 md:min-h-min px-4">
       <DataTable
         table={table}
-        //floatingBar={<ClassroomDataTableActions table={table} />}
+        //floatingBar={}
       >
-        <DataTableToolbar table={table} />
+        <ClassroomDataTableActions table={table} />
+        {/* <DataTableToolbar table={table} /> */}
       </DataTable>
     </div>
   );

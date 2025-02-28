@@ -9,17 +9,17 @@ import type {
   VisibilityState,
 } from "@tanstack/react-table";
 import * as React from "react";
+import { useId, useRef, useState } from "react";
+import { RiCloseCircleLine, RiSearch2Line } from "@remixicon/react";
 import {
   flexRender,
   getCoreRowModel,
-  getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { parseAsInteger, useQueryState } from "nuqs";
 
 import {
   Table,
@@ -32,92 +32,52 @@ import {
 import { DataTablePagination } from "@repo/ui/datatable/data-table-pagination";
 import { cn } from "@repo/ui/lib/utils";
 
+import { Input } from "../components/input";
+
 interface UseDataTableProps<TData, TValue> {
   data: TData[];
   columns: ColumnDef<TData, TValue>[];
-  defaultPageSize?: number;
+  pageSize?: number;
   rowCount?: number;
 }
 export function useDataTable<TData, TValue>({
   data,
   columns,
-  defaultPageSize,
-  rowCount,
+  pageSize = 30,
 }: UseDataTableProps<TData, TValue>) {
-  const [rowSelection, setRowSelection] = React.useState({});
+  //const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
-  const [sortBy, setSortBy] = useQueryState("sortBy");
-  const [sortDirection, setSortDirection] = useQueryState("sortDirection");
-  const [pageIndex, setPageIndex] = useQueryState(
-    "pageIndex",
-    parseAsInteger.withDefault(0),
-  );
-  const [pageSize, setPageSize] = useQueryState(
-    "pageSize",
-    parseAsInteger.withDefault(defaultPageSize ?? 30),
-  );
 
-  const [sorting, setSorting] = React.useState<SortingState>([
-    {
-      id: sortBy ?? "",
-      desc: sortDirection === "desc",
-    },
-  ]);
+  const [sorting, setSorting] = useState<SortingState>([]);
+
   const [pagination, setPagination] = React.useState<PaginationState>({
-    pageIndex,
-    pageSize,
+    pageIndex: 0,
+    pageSize: pageSize,
   });
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    // Prevent resetting the page on initial render
-    if (!mounted) {
-      setMounted(true);
-      return;
-    }
-    void setPageIndex(pagination.pageIndex);
-    void setPageSize(pagination.pageSize);
-    void setSortBy(sorting[0]?.id ?? null);
-    void setSortDirection(sorting[0]?.desc ? "desc" : "asc");
-  }, [
-    mounted,
-    pagination,
-    setPageIndex,
-    setPageSize,
-    setSortBy,
-    setSortDirection,
-    sortBy,
-    sortDirection,
-    sorting,
-  ]);
 
   const table = useReactTable({
     data,
     columns,
-    rowCount: rowCount ?? data.length,
-    state: {
-      pagination,
-      sorting,
-      columnVisibility,
-      rowSelection,
-      columnFilters,
-    },
-    enableRowSelection: true,
-    onRowSelectionChange: setRowSelection,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     onSortingChange: setSorting,
+    enableSortingRemoval: false,
+    getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: setPagination,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
-    getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
+    state: {
+      sorting,
+      pagination,
+      columnFilters,
+      columnVisibility,
+    },
   });
   return { table };
 }
@@ -145,9 +105,54 @@ export function DataTable<TData>({
   className,
   ...props
 }: DataTableProps<TData>) {
+  const id = useId();
+  const inputRef = useRef<HTMLInputElement>(null);
   return (
     <div className={cn("space-y-4", className)} {...props}>
-      {children}
+      {/* Actions */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        {/* Left side */}
+        <div className="flex items-center gap-3">
+          {/* Filter by name */}
+          <div className="relative">
+            <Input
+              id={`${id}-input`}
+              ref={inputRef}
+              className={cn(
+                //"peer bg-background/10 from-accent/60 to-accent min-w-60 bg-gradient-to-br ps-9",
+                "peer min-w-60 ps-9",
+                Boolean(table.getState().globalFilter) && "pe-9",
+              )}
+              value={(table.getState().globalFilter ?? "") as string}
+              onChange={(e) => {
+                //table.getColumn("name")?.setFilterValue(e.target.value);
+                table.setGlobalFilter(e.target.value);
+              }}
+              placeholder="Search..."
+              type="text"
+              aria-label="Search"
+            />
+            <div className="text-muted-foreground/60 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-2 peer-disabled:opacity-50">
+              <RiSearch2Line size={20} aria-hidden="true" />
+            </div>
+            {Boolean(table.getState().globalFilter) && (
+              <button
+                className="text-muted-foreground/60 hover:text-foreground focus-visible:outline-ring/70 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-lg outline-offset-2 transition-colors focus:z-10 focus-visible:outline-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+                aria-label="Clear filter"
+                onClick={() => {
+                  table.setGlobalFilter("");
+                  if (inputRef.current) {
+                    inputRef.current.focus();
+                  }
+                }}
+              >
+                <RiCloseCircleLine size={16} aria-hidden="true" />
+              </button>
+            )}
+          </div>
+        </div>
+        <div className="flex flex-row items-center gap-3">{children}</div>
+      </div>
 
       <Table className="table-fixed border-separate border-spacing-0 [&_tr:not(:last-child)_td]:border-b">
         <TableHeader>
