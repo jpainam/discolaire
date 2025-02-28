@@ -134,6 +134,9 @@ export const fetchTransactionColumns = ({
       cell: ({ row }: { row: Row<TransactionAllProcedureOutput> }) => (
         <ActionCell transaction={row.original} />
       ),
+      size: 60,
+      enableSorting: false,
+      enableHiding: false,
     },
   ] as ColumnDef<TransactionAllProcedureOutput, unknown>[];
 };
@@ -160,7 +163,7 @@ function ActionCell({
 
   const canDeleteTransaction = useCheckPermissions(
     PermissionAction.DELETE,
-    "transaction",
+    "transaction"
   );
 
   const { openModal } = useModal();

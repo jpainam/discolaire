@@ -23,7 +23,7 @@ export function CreateUpdateProfile() {
   ];
 
   return (
-    <Card className="rounded-md">
+    <Card className="rounded-md p-0 gap-0">
       <CardHeader className="border-b bg-muted/50 py-2.5">
         <CardTitle className="flex items-center gap-1 text-sm">
           <PiAddressBookTabsDuotone className="h-4 w-4" />
@@ -31,7 +31,7 @@ export function CreateUpdateProfile() {
         </CardTitle>
         {/* <CardDescription></CardDescription> */}
       </CardHeader>
-      <CardContent className="grid grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2">
+      <CardContent className="grid grid-cols-1 gap-x-4 gap-y-2 py-4 md:grid-cols-2">
         <InputField
           name="lastName"
           placeholder={t("lastName")}

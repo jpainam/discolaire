@@ -172,6 +172,9 @@ export function fetchGradeColumns({
       cell: ({ row }) => (
         <ActionCells classroomId={classroomId} grade={row.original} />
       ),
+      size: 60,
+      enableSorting: false,
+      enableHiding: false,
     },
   ];
 }
@@ -251,7 +254,7 @@ function ActionCells({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  },
+                  }
                 );
               }
             }}

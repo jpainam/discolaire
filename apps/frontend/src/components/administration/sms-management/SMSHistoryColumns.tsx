@@ -98,6 +98,9 @@ export function fetchSmsHistoryColumns({
     {
       id: "actions",
       cell: ({ row }) => <ActionsCell row={row} />,
+      size: 60,
+      enableSorting: false,
+      enableHiding: false,
     },
   ] as ColumnDef<SMSHistory, unknown>[];
   return columns;

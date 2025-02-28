@@ -89,7 +89,7 @@ export function fetchAssignmentTableColumns({
             className="truncate hover:text-blue-600 hover:underline"
             href={routes.classrooms.assignments.details(
               row.original.classroomId,
-              row.original.id,
+              row.original.id
             )}
           >
             {row.original.title}
@@ -146,6 +146,9 @@ export function fetchAssignmentTableColumns({
     {
       id: "actions",
       cell: ({ row }) => <ActionsCell assignment={row.original} />,
+      size: 60,
+      enableSorting: false,
+      enableHiding: false,
     },
   ];
 }
@@ -201,7 +204,7 @@ function ActionsCell({
                   >
                     {label}
                   </DropdownMenuRadioItem>
-                ),
+                )
               )}
             </DropdownMenuRadioGroup>
           </DropdownMenuSubContent>

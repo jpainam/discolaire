@@ -162,6 +162,9 @@ export function fetchFeesColumns({
     {
       id: "actions",
       cell: ({ row }) => <ActionCell fee={row.original} />,
+      size: 60,
+      enableSorting: false,
+      enableHiding: false,
     },
   ];
 }

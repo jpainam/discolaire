@@ -192,6 +192,9 @@ export function getColumns({
       cell: function Cell({ row }) {
         return <ActionCells noticeboard={row.original} />;
       },
+      size: 60,
+      enableSorting: false,
+      enableHiding: false,
     },
   ];
 }
@@ -255,7 +258,7 @@ function ActionCells({
                       return t("deleted_successfully");
                     },
                     error: (error) => getErrorMessage(error),
-                  },
+                  }
                 );
               }
             }}

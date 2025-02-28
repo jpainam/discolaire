@@ -171,6 +171,9 @@ export function fetchEnrollmentColumns({
         const student = row.original;
         return ActionCell({ student });
       },
+      size: 60,
+      enableSorting: false,
+      enableHiding: false,
     },
   ];
 }
@@ -181,7 +184,7 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
   const router = useRouter();
   const canDeleteEnrollment = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:enrollment",
+    "classroom:enrollment"
   );
   const utils = api.useUtils();
   const unenrollStudentsMutation =

@@ -77,6 +77,9 @@ export function getSchoolColumns({
       id: "actions",
 
       cell: ({ row }) => <ActionCell school={row.original} />,
+      size: 60,
+      enableSorting: false,
+      enableHiding: false,
     },
   ] as ColumnDef<FormerSchool, unknown>[];
 }

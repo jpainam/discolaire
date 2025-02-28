@@ -127,7 +127,9 @@ export function getUserColumns({
     },
     {
       id: "actions",
-
+      size: 60,
+      enableSorting: false,
+      enableHiding: false,
       cell: ({ row }) => <ActionCell user={row.original} />,
     },
   ] as ColumnDef<User, unknown>[];

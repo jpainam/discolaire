@@ -225,6 +225,9 @@ export function fetchStaffColumns({
     {
       id: "actions",
       cell: ({ row }) => <ActionsCell staff={row.original} />,
+      size: 60,
+      enableSorting: false,
+      enableHiding: false,
     },
   ] as ColumnDef<StaffProcedureOutput, unknown>[];
 

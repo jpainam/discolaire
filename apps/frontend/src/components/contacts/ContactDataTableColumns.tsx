@@ -91,6 +91,7 @@ export function getColumns({
       cell: ({ row }) => {
         return <div>{row.getValue("prefix")}</div>;
       },
+      size: 32,
     },
     {
       accessorKey: "lastName",
@@ -234,7 +235,7 @@ export function getColumns({
                         error: (error) => {
                           return getErrorMessage(error);
                         },
-                      },
+                      }
                     );
                   }
                 }}
@@ -246,6 +247,9 @@ export function getColumns({
           </DropdownMenu>
         );
       },
+      size: 60,
+      enableSorting: false,
+      enableHiding: false,
     },
   ];
 }

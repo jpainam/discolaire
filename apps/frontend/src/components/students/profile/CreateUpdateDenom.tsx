@@ -36,7 +36,7 @@ export function CreateUpdateDenom() {
   const form = useFormContext();
 
   return (
-    <Card className="rounded-md">
+    <Card className="rounded-md py-0">
       <CardHeader className="border-b bg-muted/50 py-2.5">
         <CardTitle className="flex items-center gap-1 text-sm">
           {/* <PiChurchDuotone className="h-4 w-4" /> */}
@@ -132,7 +132,7 @@ export function CreateUpdateDenom() {
               <FormItem className="space-y-0">
                 <FormLabel>{t("classroom")}</FormLabel>
                 <FormControl>
-                  <ClassroomSelector {...field} />
+                  <ClassroomSelector className="w-full" {...field} />
                 </FormControl>
 
                 <FormMessage />
