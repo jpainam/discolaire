@@ -3,10 +3,8 @@
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
-import i18next from "i18next";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import type * as RPNInput from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
 import { toast } from "sonner";
@@ -22,17 +20,20 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { Badge } from "@repo/ui/components/badge";
+import i18next from "i18next";
 import { useRouter } from "next/navigation";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
+import { getAge } from "~/utils/student-utils";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
+import { SimpleTooltip } from "../simple-tooltip";
 
 type StudentAllProcedureOutput = RouterOutputs["student"]["all"][number];
 
@@ -46,7 +47,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
   const allcolumns = [
     {
       id: "select",
-      accessorKey: "select",
+
       header: ({ table }) => (
         <Checkbox
           checked={
@@ -82,8 +83,10 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
           />
         );
       },
+      enableSorting: false,
+      enableHiding: false,
+      size: 32,
     },
-
     {
       id: "lastName",
       accessorKey: "lastName",
@@ -94,14 +97,14 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
         const student = row.original;
         return (
           <Link
-            className="hover:text-blue-600 hover:underline"
+            className="hover:text-blue-600 capitalize font-medium hover:underline"
             href={routes.students.details(student.id)}
           >
             {student.lastName}
           </Link>
         );
       },
-      enableSorting: true,
+      size: 250,
     },
     {
       id: "firstName",
@@ -114,13 +117,14 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
 
         return (
           <Link
-            className="hover:text-blue-600 hover:underline"
+            className="hover:text-blue-600  text-muted-foreground hover:underline"
             href={routes.students.details(student.id)}
           >
-            {student.firstName}
+            <span className="capitalize">{student.firstName}</span>
           </Link>
         );
       },
+      size: 250,
     },
     {
       id: "gender",
@@ -131,21 +135,22 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
       cell: ({ row }) => {
         const student = row.original;
         const gender = student.gender;
+        const sex = gender == "female" ? "F" : "M";
         return (
-          <FlatBadge
-            variant={student.gender == "female" ? "pink" : "blue"}
-            className="flex w-[85px] flex-row items-center gap-1"
-          >
-            {student.gender == "male" ? (
-              <PiGenderMaleThin className="h-4 w-4" />
-            ) : (
-              <PiGenderFemaleThin className="h-4 w-4" />
-            )}
-
-            {t(`${gender}`)}
-          </FlatBadge>
+          // <FlatBadge
+          //   variant={student.gender == "female" ? "pink" : "blue"}
+          //   className="flex w-[85px] flex-row items-center gap-1"
+          // >
+          // <div className="flex flex-row items-center gap-2">
+          //   {student.gender == "male" ? (
+          //     <PiGenderMaleThin className="h-4 w-4" />
+          //   ) : (
+          //     <PiGenderFemaleThin className="h-4 w-4" />
+          //   )}
+          <span className="text-muted-foreground">{t(`${sex}`)}</span>
         );
       },
+      size: 48,
       enableSorting: true,
       filterFn: (row, id, value) => {
         return value instanceof Array && value.includes(row.getValue(id));
@@ -166,9 +171,9 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
         return (
           <div className="flex items-center justify-center">
             {student.isRepeating ? (
-              <FlatBadge variant="red">{r}</FlatBadge>
+              <Badge variant="destructive">{r}</Badge>
             ) : (
-              <FlatBadge variant="green">{r}</FlatBadge>
+              <Badge variant="outline">{r}</Badge>
             )}
           </div>
         );
@@ -186,7 +191,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
         if (!classroom) return <div></div>;
         return (
           <Link
-            className="hover:text-blue-600 hover:underline"
+            className="hover:text-blue-600 text-muted-foreground hover:underline"
             href={routes.classrooms.details(classroom.id)}
           >
             {classroom.name}
@@ -230,22 +235,30 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
     //   enableSorting: true,
     // },
     {
-      id: "dateOfBirth",
+      id: "age",
       accessorKey: "dateOfBirth",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("dateOfBirth")} />
+        <DataTableColumnHeader column={column} title={t("age")} />
       ),
       cell: ({ row }) => {
         const dateOfBirth = row.original.dateOfBirth;
+        const age = getAge(dateOfBirth);
+        const date_of_birth = dateOfBirth?.toLocaleDateString(
+          i18next.language,
+          {
+            timeZone: "UTC",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          }
+        );
         return (
-          <div>
-            {dateOfBirth?.toLocaleDateString(i18next.language, {
-              timeZone: "UTC",
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            })}
-          </div>
+          <SimpleTooltip
+            content={date_of_birth ?? ""}
+            className="text-muted-foreground"
+          >
+            <span> {age} ans</span>
+          </SimpleTooltip>
         );
       },
     },
@@ -274,8 +287,11 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("residence")} />
       ),
-      cell: (info) => info.getValue(),
-      enableSorting: true,
+      cell: ({ row }) => {
+        return (
+          <div className="text-muted-foreground">{row.original.residence}</div>
+        );
+      },
     },
     // columnHelper.accessor("placeOfBirth", {
     //   header: ({ column }) => (
@@ -298,7 +314,9 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
             <span className="flex h-4 w-6 overflow-hidden rounded-sm bg-foreground/20">
               {Flag && <Flag title={row.original.country?.name ?? ""} />}
             </span>
-            <span className="flex">{row.original.country?.name}</span>
+            <span className="text-muted-foreground text-sm">
+              {row.original.country?.name}
+            </span>
           </div>
         );
       },
@@ -313,7 +331,11 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
     // },
     {
       id: "actions",
+      header: () => <span className="sr-only">Actions</span>,
       cell: ({ row }) => <ActionCells student={row.original} />,
+      size: 60,
+      enableSorting: false,
+      enableHiding: false,
     },
   ] as ColumnDef<StudentAllProcedureOutput, unknown>[];
 
