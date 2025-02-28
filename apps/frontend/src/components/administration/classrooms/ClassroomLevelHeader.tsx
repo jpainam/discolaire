@@ -27,7 +27,7 @@ export function ClassroomLevelHeader() {
   const { t } = useLocale();
   const { openModal } = useModal();
   const [selectedLevels, setSelectedLevels] = useAtom(
-    selectedClassroomLevelAtom,
+    selectedClassroomLevelAtom
   );
 
   // const canAddLevel = useCheckPermissions(
@@ -62,7 +62,7 @@ export function ClassroomLevelHeader() {
           size={"sm"}
           variant={"default"}
         >
-          <PlusIcon className="mr-2 h-4 w-4" />
+          <PlusIcon />
           {t("add")}
         </Button>
 

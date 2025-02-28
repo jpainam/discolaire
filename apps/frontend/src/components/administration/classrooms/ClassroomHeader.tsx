@@ -23,7 +23,7 @@ export function ClassroomHeader() {
         });
       }}
     >
-      <PlusIcon className="mr-2 h-4 w-4" />
+      <PlusIcon />
       {t("create")}
     </Button>
   );

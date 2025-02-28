@@ -28,7 +28,7 @@ export function GradeAppreciationHeader() {
           size="sm"
           variant="outline"
         >
-          <Plus className="mr-2 h-4 w-4" />
+          <Plus />
           <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
             {t("new")}
           </span>

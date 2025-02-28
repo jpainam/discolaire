@@ -55,7 +55,7 @@ export function AssignmentDataTableActions({ table }: ToolbarActionsProps) {
                   error: (err) => {
                     return getErrorMessage(err);
                   },
-                },
+                }
               );
             }
           }}
@@ -76,7 +76,7 @@ export function AssignmentDataTableActions({ table }: ToolbarActionsProps) {
         variant="outline"
         size={"sm"}
       >
-        <PlusIcon className="mr-2 h-4 w-4" />
+        <PlusIcon />
         {t("new")}
       </Button>
       <Button

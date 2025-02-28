@@ -700,6 +700,14 @@ model Country {
     students Student[]
 }
 
+model Permission {
+    id       String @id @default(cuid())
+    code     String
+    title    String
+    schoolId String
+    School   School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+}
+
 model School {
     id                 String           @id @default(cuid())
     code               String           @unique
@@ -738,6 +746,7 @@ model School {
     sports             Sport[]
     clubs              Club[]
     permissions        Policy[]
+    permission         Permission[]
     roles              Role[]
     subjectGroup       SubjectGroup[]
     courses            Course[]

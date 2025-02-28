@@ -49,7 +49,7 @@ export function FeeHeader() {
       <div className="ml-auto flex items-center gap-2">
         {searchParams.get("classroom") && (
           <Button variant={"default"}>
-            <Plus className="mr-2 h-4 w-4" />
+            <Plus />
             {t("add")}
           </Button>
         )}

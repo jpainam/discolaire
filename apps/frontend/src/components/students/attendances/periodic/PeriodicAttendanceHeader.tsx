@@ -55,7 +55,7 @@ export function PeriodicAttendanceHeader() {
           }}
           size={"sm"}
         >
-          <Plus className="mr-2 h-4 w-4" />
+          <Plus />
           {t("add")}
         </Button>
         <DropdownMenu>

@@ -27,7 +27,7 @@ export function SectionHeader() {
           variant={"default"}
           size={"sm"}
         >
-          <PlusIcon className="mr-2 h-4 w-4" />
+          <PlusIcon />
           {t("add")}
         </Button>
       </div>

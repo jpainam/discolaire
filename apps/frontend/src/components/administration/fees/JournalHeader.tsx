@@ -35,7 +35,7 @@ export function JournalHeader() {
             });
           }}
         >
-          <Plus className="mr-2 h-4 w-4" />
+          <Plus />
           {t("add")}
         </Button>
         <DropdownMenu>

@@ -38,8 +38,7 @@ export function EventCalendarHeader() {
 
   const handleFilterChange = (category: string) => {
     router.push(
-      "?" +
-        createQueryString({ category: category == "All" ? null : category }),
+      "?" + createQueryString({ category: category == "All" ? null : category })
     );
   };
 
@@ -75,7 +74,7 @@ export function EventCalendarHeader() {
             });
           }}
         >
-          <Plus className="mr-2 h-4 w-4" /> Create Event
+          <Plus /> Create Event
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

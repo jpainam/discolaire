@@ -3,7 +3,6 @@
 import { MoreVertical, PlusIcon } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
-import { useSheet } from "~/hooks/use-sheet";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -16,6 +15,7 @@ import { Label } from "@repo/ui/components/label";
 import { Separator } from "@repo/ui/components/separator";
 import type { FlatBadgeVariant } from "~/components/FlatBadge";
 import FlatBadge from "~/components/FlatBadge";
+import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
@@ -52,7 +52,7 @@ export function SubjectHeader({
   const { openSheet } = useSheet();
   const canAddClassroomSubject = useCheckPermissions(
     PermissionAction.CREATE,
-    "classroom:subject",
+    "classroom:subject"
   );
 
   const badgeVariants = [
@@ -105,7 +105,7 @@ export function SubjectHeader({
             }}
             variant={"default"}
           >
-            <PlusIcon className="mr-2 h-4 w-4" />
+            <PlusIcon />
             {t("add")}
           </Button>
         )}

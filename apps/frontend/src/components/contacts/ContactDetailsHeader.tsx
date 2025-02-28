@@ -60,7 +60,7 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
     "contact:profile",
     {
       id: contactId,
-    },
+    }
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();
@@ -208,7 +208,7 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
             }}
             size={"sm"}
           >
-            <PlusIcon className="mr-2 h-4 w-4" />
+            <PlusIcon />
             {t("link_students")}
           </Button>
         </div>
