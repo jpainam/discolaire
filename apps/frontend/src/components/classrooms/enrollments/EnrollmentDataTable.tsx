@@ -4,7 +4,6 @@ import { useMemo } from "react";
 import { toast } from "sonner";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
-import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 import { useLocale } from "~/i18n";
 
 import { api } from "~/trpc/react";
@@ -29,15 +28,12 @@ export function EnrollmentDataTable({ classroomId }: { classroomId: string }) {
     rowCount: students.length,
   });
 
-  if (classroomStudentsQuery.isPending) {
-    return <DataTableSkeleton rowCount={15} columnCount={7} />;
-  }
   if (classroomStudentsQuery.error) {
     toast.error(classroomStudentsQuery.error.message);
     return;
   }
   return (
-    <DataTable table={table}>
+    <DataTable isLoading={classroomStudentsQuery.isPending} table={table}>
       <EnrollmentDataTableActions table={table} />
     </DataTable>
   );

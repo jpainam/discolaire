@@ -15,7 +15,6 @@ import {
   SidebarRail,
 } from "@repo/ui/components/sidebar";
 
-import { Separator } from "@repo/ui/components/separator";
 import { usePathname } from "next/navigation";
 import { StudentSidebar } from "~/components/students/StudentSidebar";
 import { MainSidebar } from "~/sidebars/main-sidebar";
@@ -92,7 +91,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
 
-        <Separator />
         {/* <SidebarGroup className="py-0 group-data-[collapsible=icon]:hidden">
           <SidebarGroupContent>
             <form className="relative">

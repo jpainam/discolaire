@@ -18,11 +18,11 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   const canReadEnrollment = await checkPermissions(
     PermissionAction.READ,
-    "classroom:enrollment",
+    "classroom:enrollment"
   );
 
   return (
-    <div className="flex w-full flex-col">
+    <>
       <ClassroomDetails classroomId={id} />
       {/* <div>
           <GenderPie classroom={classroom} />
@@ -40,10 +40,10 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         <GenderPie classroom={classroom} />
       </div> */}
       {canReadEnrollment && (
-        <div className="px-2">
+        <div className="py-2 px-4">
           <EnrollmentDataTable classroomId={id} />
         </div>
       )}
-    </div>
+    </>
   );
 }

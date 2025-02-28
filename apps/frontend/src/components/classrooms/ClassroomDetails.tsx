@@ -26,7 +26,7 @@ export async function ClassroomDetails({
   const fees = await api.classroom.fees(classroomId);
   const classroom = await api.classroom.get(classroomId);
   return (
-    <div className="grid w-full gap-2 divide-x md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid w-full px-4 gap-4 divide-x md:grid-cols-2 lg:grid-cols-3">
       <ul className="grid gap-3 p-2 text-sm">
         <li className="flex items-center justify-between">
           <div className="flex flex-row items-center gap-1 text-muted-foreground">

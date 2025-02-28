@@ -1,6 +1,7 @@
 import React from "react";
 
 import { checkPermissions } from "@repo/api/permission";
+import { ClassroomHeader } from "~/components/classrooms/ClassroomHeader";
 import { PermissionAction } from "~/permissions";
 
 export default async function Layout({
@@ -10,11 +11,16 @@ export default async function Layout({
 }) {
   const canReadClassroom = await checkPermissions(
     PermissionAction.READ,
-    "classroom:list",
+    "classroom:list"
   );
   if (!canReadClassroom) {
     console.warn("No permission");
     //return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
   }
-  return <>{children}</>;
+  return (
+    <div className="flex flex-1  flex-col">
+      <ClassroomHeader />
+      {children}
+    </div>
+  );
 }

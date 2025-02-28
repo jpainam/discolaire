@@ -37,7 +37,7 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
     "classroom:enrollment",
     {
       id: classroomId,
-    },
+    }
   );
 
   const students = classroomStudentsQuery.data ?? [];
@@ -66,7 +66,7 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
   }
   if (!classroom) return null;
   return (
-    <div className="grid grid-cols-3 items-center gap-2 border-y bg-secondary px-2 py-1 text-secondary-foreground md:flex md:flex-row">
+    <div className="grid grid-cols-3 items-center gap-2 border-y bg-secondary px-4 py-1 text-secondary-foreground md:flex md:flex-row">
       <FlatBadge
         variant={"yellow"}
         className="flex flex-row items-center gap-2"
@@ -123,9 +123,7 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
             disabled={false}
             onClick={() => {
               openModal({
-                title: (
-                  <div className="px-4 pt-4">{t("enroll_new_students")}</div>
-                ),
+                title: <p className="px-4 pt-4">{t("enroll_new_students")}</p>,
                 className: "w-[600px] p-0",
                 description: (
                   <p className="px-4">{t("enroll_new_students_description")}</p>
@@ -134,7 +132,7 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
               });
             }}
           >
-            <Plus className="mr-2 size-4" aria-hidden="true" />
+            <Plus />
             {t("enroll")}
           </Button>
         )}
@@ -150,7 +148,7 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroomId}&preview=true&size=a4&format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -161,7 +159,7 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroomId}&preview=true&size=a4&format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

@@ -12,7 +12,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { useLocale } from "~/i18n";
@@ -38,10 +37,10 @@ export function EnrollmentDataTableActions({
   const params = useParams<{ id: string }>();
   const confirm = useConfirm();
   const utils = api.useUtils();
-  const rows = table.getFilteredSelectedRowModel().rows;
+  //const rows = table.getFilteredSelectedRowModel().rows;
   const canUnEnrollStudent = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:enrollment",
+    "classroom:enrollment"
   );
   const selectedIds = table
     .getFilteredSelectedRowModel()
@@ -71,10 +70,40 @@ export function EnrollmentDataTableActions({
   }, [table]);
 
   return (
-    <div className="animate-fadeIn fixed inset-x-0 bottom-12 z-50 mx-auto flex h-[60px] max-w-xl items-center justify-between rounded-md border bg-background px-6 py-3 shadow">
-      <p className="text-sm font-semibold">
-        {rows.length} {t("selected")}
-      </p>
+    <>
+      {table.getSelectedRowModel().rows.length > 0 && canUnEnrollStudent && (
+        <Button
+          variant="destructive"
+          onClick={async () => {
+            const isConfirmed = await confirm({
+              title: t("unenroll"),
+              description: t("delete_confirmation"),
+              icon: (
+                <Trash2
+                  className="size-4 text-destructive"
+                  aria-hidden="true"
+                />
+              ),
+              alertDialogTitle: {
+                className: "flex items-center gap-2",
+              },
+            });
+            if (isConfirmed) {
+              toast.loading(t("unenrolling"), { id: 0 });
+              unenrollStudentsMutation.mutate({
+                studentId: selectedIds,
+                classroomId: params.id,
+              });
+            }
+          }}
+        >
+          <Trash2 />
+          {t("delete")}
+          <span className="-me-1 ms-1 inline-flex h-5 max-h-full items-center rounded border border-border bg-background px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground/70">
+            {table.getSelectedRowModel().rows.length}
+          </span>
+        </Button>
+      )}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant={"outline"}>
@@ -93,41 +122,8 @@ export function EnrollmentDataTableActions({
             Export in csv
           </DropdownMenuItem>
           <DropdownMenuItem>Export in excel</DropdownMenuItem>
-          {canUnEnrollStudent && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onSelect={async () => {
-                  const isConfirmed = await confirm({
-                    title: t("unenroll"),
-                    description: t("delete_confirmation"),
-                    icon: (
-                      <Trash2
-                        className="size-4 text-destructive"
-                        aria-hidden="true"
-                      />
-                    ),
-                    alertDialogTitle: {
-                      className: "flex items-center gap-2",
-                    },
-                  });
-                  if (isConfirmed) {
-                    toast.loading(t("unenrolling"), { id: 0 });
-                    unenrollStudentsMutation.mutate({
-                      studentId: selectedIds,
-                      classroomId: params.id,
-                    });
-                  }
-                }}
-                variant="destructive"
-                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-              >
-                {t("delete")}
-              </DropdownMenuItem>
-            </>
-          )}
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
+    </>
   );
 }

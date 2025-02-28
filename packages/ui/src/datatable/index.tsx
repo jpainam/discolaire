@@ -108,7 +108,7 @@ export function DataTable<TData>({
   const id = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   return (
-    <div className={cn("space-y-4", className)} {...props}>
+    <div className={cn("space-y-2", className)} {...props}>
       {/* Actions */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         {/* Left side */}

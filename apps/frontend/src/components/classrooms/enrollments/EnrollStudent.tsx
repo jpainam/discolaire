@@ -5,7 +5,6 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
-import { useDebounce } from "~/hooks/use-debounce";
 import {
   Avatar,
   AvatarFallback,
@@ -22,6 +21,7 @@ import {
 } from "@repo/ui/components/command";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { useDebounce } from "~/hooks/use-debounce";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
@@ -81,15 +81,15 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
                     if (selectedIds.includes(stud.id)) {
                       return setSelectedIds(
                         selectedIds.filter(
-                          (selectedId) => selectedId !== stud.id,
-                        ),
+                          (selectedId) => selectedId !== stud.id
+                        )
                       );
                     }
 
                     return setSelectedIds(
                       unenrollStudentsQuery.data
                         .filter((u) => [...selectedIds, stud.id].includes(u.id))
-                        .map((u) => u.id),
+                        .map((u) => u.id)
                     );
                   }}
                 >
@@ -108,9 +108,9 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
                     <span className="text-xs font-medium leading-none">
                       {stud.lastName} {stud.firstName}
                     </span>
-                    <span className="text-xs text-muted-foreground">
+                    {/* <span className="text-xs text-muted-foreground">
                       {stud.email}
-                    </span>
+                    </span> */}
                   </div>
                   {selectedIds.includes(stud.id) ? (
                     <Check className="ml-auto flex h-5 w-5 text-primary" />
@@ -126,7 +126,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
           <div className="flex -space-x-2">
             {selectedIds.map((studId) => {
               const stud = unenrollStudentsQuery.data?.find(
-                (u) => u.id === studId,
+                (u) => u.id === studId
               );
               return (
                 <Avatar
@@ -172,7 +172,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
                 error: (error) => {
                   return getErrorMessage(error);
                 },
-              },
+              }
             );
           }}
         >

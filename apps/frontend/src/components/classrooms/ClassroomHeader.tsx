@@ -48,14 +48,14 @@ export function ClassroomHeader() {
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const canUpdateClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const deleteClassroomMutation = api.classroom.delete.useMutation({
     onSuccess: () => {
@@ -98,9 +98,9 @@ export function ClassroomHeader() {
   };
   const { openSheet } = useSheet();
   return (
-    <div className="grid w-full flex-row items-center gap-2 border-b px-2 py-1 md:flex">
+    <div className="grid w-full flex-row border-b items-center gap-2 px-4 py-1 md:flex">
       <ClassroomSelector
-        className="w-full md:w-[300px]"
+        className="w-full md:w-[400px]"
         defaultValue={params.id}
         onChange={(value) => {
           if (value) handleClassroomChange(value);

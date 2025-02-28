@@ -1,6 +1,6 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react";
 import * as React from "react";
 import { toast } from "sonner";
 
@@ -60,65 +60,59 @@ export function ClassroomSelector({
   const data = classroomsQuery.data;
 
   return (
-    <div className={className}>
-      <Popover open={open} onOpenChange={setOpen} modal={false}>
-        <PopoverTrigger asChild>
-          <Button
-            size={"sm"}
-            disabled={disabled}
-            //type="default"
-            className={"w-full [&>span]:w-full"}
-            // iconRight={
-            //   <ChevronsUpDown
-            //     className="text-foreground-muted"
-            //     strokeWidth={2}
-            //     size={14}
-            //   />
-            // }
-          >
-            {data.find((it) => it.id === value)?.name ??
-              placeholder ??
-              t("select_an_option")}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="p-0" side="bottom" align="start">
-          <Command
-            filter={(value, search) => {
-              const item = data.find((it) => it.id === value);
-              if (item?.name.toLowerCase().includes(search.toLowerCase())) {
-                return 1;
-              }
-              return 0;
-            }}
-          >
-            <CommandInput
-              placeholder={searchPlaceholder ?? t("search_for_an_option")}
-            />
-            <CommandList>
-              <CommandEmpty>{t("select_an_option")}</CommandEmpty>
-              <CommandGroup>
-                {classroomsQuery.data.map((item) => (
-                  <CommandItem
-                    key={item.id}
-                    className="flex w-full cursor-pointer items-center justify-between space-x-2"
-                    value={item.id}
-                    onSelect={(currentValue) => {
-                      onChange?.(currentValue == value ? null : currentValue);
-                      setValue(currentValue === value ? "" : currentValue);
-                      setOpen(false);
-                    }}
-                  >
-                    <span>{item.name}</span>
-                    {value === item.id && (
-                      <Check className="text-brand" strokeWidth={2} size={16} />
-                    )}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
-    </div>
+    <Popover open={open} onOpenChange={setOpen} modal={false}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          disabled={disabled}
+          aria-expanded={open}
+          className={cn("w-[400px] justify-between", className)}
+        >
+          {data.find((it) => it.id === value)?.name ??
+            placeholder ??
+            t("select_an_option")}{" "}
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 justify-end opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="p-0" side="bottom" align="start">
+        <Command
+          className="rounded-lg border shadow-md md:min-w-[450px]"
+          filter={(value, search) => {
+            const item = data.find((it) => it.id === value);
+            if (item?.name.toLowerCase().includes(search.toLowerCase())) {
+              return 1;
+            }
+            return 0;
+          }}
+        >
+          <CommandInput
+            placeholder={searchPlaceholder ?? t("search_for_an_option")}
+          />
+          <CommandList className="max-h-[300px] overflow-y-auto">
+            <CommandEmpty>{t("select_an_option")}</CommandEmpty>
+            <CommandGroup>
+              {classroomsQuery.data.map((item) => (
+                <CommandItem
+                  key={item.id}
+                  className="flex w-full cursor-pointer items-center justify-between space-x-2"
+                  value={item.id}
+                  onSelect={(currentValue) => {
+                    onChange?.(currentValue == value ? null : currentValue);
+                    setValue(currentValue === value ? "" : currentValue);
+                    setOpen(false);
+                  }}
+                >
+                  <span>{item.name}</span>
+                  {value === item.id && (
+                    <Check className="text-brand" strokeWidth={2} size={16} />
+                  )}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
 }
