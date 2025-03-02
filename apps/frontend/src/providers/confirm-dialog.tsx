@@ -28,7 +28,7 @@ export interface ConfirmOptions {
   icon?: React.ReactNode;
   customActions?: (
     onConfirm: () => void,
-    onCancel: () => void
+    onCancel: () => void,
   ) => React.ReactNode;
   confirmButton?: React.ComponentPropsWithRef<typeof AlertDialogAction>;
   cancelButton?: React.ComponentPropsWithRef<typeof AlertDialogCancel> | null;
@@ -47,7 +47,7 @@ export interface ConfirmContextType {
 }
 
 export const ConfirmContext = createContext<ConfirmContextType | undefined>(
-  undefined
+  undefined,
 );
 
 const baseDefaultOptions: ConfirmOptions = {
@@ -161,7 +161,7 @@ export const ConfirmDialogProvider: React.FC<{
       ...baseDefaultOptions,
       ...defaultOptions,
     }),
-    [defaultOptions]
+    [defaultOptions],
   );
 
   const confirm = useCallback(
@@ -172,7 +172,7 @@ export const ConfirmDialogProvider: React.FC<{
         resolverRef.current = resolve;
       });
     },
-    [mergedDefaultOptions]
+    [mergedDefaultOptions],
   );
 
   const handleConfirm = useCallback(() => {
@@ -202,7 +202,7 @@ export const ConfirmDialogProvider: React.FC<{
 };
 
 export const useConfirm = (): ((
-  options: ConfirmOptions
+  options: ConfirmOptions,
 ) => Promise<boolean>) => {
   const context = useContext(ConfirmContext);
   if (!context) {

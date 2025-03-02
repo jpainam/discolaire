@@ -32,14 +32,14 @@ export function SubjectList({ classroomId }: { classroomId: string }) {
             key={index}
             onClick={() => {
               router.push(
-                `/classrooms/${classroomId}/subject-journal/${subject.id}`,
+                `/classrooms/${classroomId}/subject_journal/${subject.id}`
               );
             }}
             className={cn(
               `flex cursor-pointer flex-row items-center gap-2 border-b p-2 hover:bg-secondary`,
               subject.id === Number(params.subjectId)
                 ? "bg-secondary font-bold text-secondary-foreground"
-                : "text-secondary-foreground/80 hover:bg-secondary/10",
+                : "text-secondary-foreground/80 hover:bg-secondary/10"
             )}
           >
             <div
