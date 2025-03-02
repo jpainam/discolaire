@@ -1,6 +1,5 @@
 "use client";
 
-import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
 import { useMemo } from "react";
 import { toast } from "sonner";
 
@@ -14,21 +13,7 @@ import { fetchStudentColumns } from "./StudentDataTableColumns";
 export function StudentDataTable() {
   const { t } = useLocale();
 
-  const [page] = useQueryState("page", parseAsInteger);
-  const [per_page] = useQueryState("per_page", parseAsInteger);
-  const [sort] = useQueryState("sort", parseAsString);
-  const [lastName] = useQueryState("lastName", parseAsString);
-
-  const studentsCountQuery = api.student.count.useQuery({
-    q: lastName ?? undefined,
-  });
-
-  const studentsQuery = api.student.all.useQuery({
-    page: page ?? undefined,
-    per_page: per_page ?? undefined,
-    sort: sort ?? undefined,
-    q: lastName ?? undefined,
-  });
+  const studentsQuery = api.student.all.useQuery({});
 
   const columns = useMemo(() => {
     const { columns } = fetchStudentColumns({
@@ -40,7 +25,6 @@ export function StudentDataTable() {
   const { table } = useDataTable({
     data: studentsQuery.data ?? [],
     columns: columns,
-    rowCount: studentsCountQuery.data?.total ?? 0,
   });
 
   if (studentsQuery.error) {

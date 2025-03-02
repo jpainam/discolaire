@@ -103,7 +103,13 @@ export const enrollmentRouter = createTRPCRouter({
         },
       });
     }),
-  count: protectedProcedure.query(async ({ ctx }) => {
-    return enrollmentService.getCount(ctx.schoolYearId);
-  }),
+  count: protectedProcedure
+    .input(
+      z.object({
+        schoolYearId: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return enrollmentService.getCount(input.schoolYearId ?? ctx.schoolYearId);
+    }),
 });
