@@ -16,7 +16,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     "classroom:subject",
     {
       id: id,
-    }
+    },
   );
   if (!canReadClassroomSubject) {
     return <NoPermission className="my-8" isFullPage={true} resourceText="" />;

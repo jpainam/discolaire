@@ -45,14 +45,14 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
     "classroom:fee",
     {
       id: classroomId,
-    }
+    },
   );
   const canUpdateClassroomFee = useCheckPermissions(
     PermissionAction.UPDATE,
     "classroom:fee",
     {
       id: classroomId,
-    }
+    },
   );
   const utils = api.useUtils();
   const disableFeeMutation = api.fee.disable.useMutation({
