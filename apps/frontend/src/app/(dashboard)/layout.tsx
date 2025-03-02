@@ -10,7 +10,6 @@ import {
 } from "@repo/ui/components/sidebar";
 import { AppSidebar } from "~/components/app-sidebar";
 import { ModeToggle } from "~/components/mode-toggle";
-import { NavHeader } from "~/components/nav-header";
 import { UserNav } from "~/components/user-nav";
 
 import { SchoolContextProvider } from "~/providers/SchoolProvider";
@@ -39,7 +38,14 @@ export default async function Layout({
   const schoolYear = await api.schoolYear.get(schoolYearId);
   const permissions = await api.user.permissions();
   return (
-    <SidebarProvider defaultOpen={defaultOpen}>
+    <SidebarProvider
+      style={{
+        // @ts-expect-error Ignore
+        "--sidebar-width": "14rem",
+        "--sidebar-width-mobile": "16rem",
+      }}
+      defaultOpen={defaultOpen}
+    >
       <SchoolContextProvider
         schoolYear={schoolYear}
         school={school}
@@ -55,7 +61,7 @@ export default async function Layout({
                 orientation="vertical"
                 className="mr-2 data-[orientation=vertical]:h-4"
               />
-              <NavHeader />
+              {/* <NavHeader /> */}
               <div className="ml-auto flex items-center gap-2">
                 <SchoolYearSwitcher defaultValue={schoolYear.id} />
                 <TopRightButtons />

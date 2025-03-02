@@ -2,7 +2,12 @@
 
 import { Frame, LifeBuoy, Map, PieChart, Send } from "lucide-react";
 
-import { SidebarContent } from "@repo/ui/components/sidebar";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarRail,
+} from "@repo/ui/components/sidebar";
 import {
   CalendarDays,
   CircleDollarSign,
@@ -10,10 +15,14 @@ import {
   Settings,
   Users,
 } from "lucide-react";
+import Image from "next/image";
+import { SearchForm } from "../search-form";
 import { NavMain } from "./nav-main";
 import { NavProjects } from "./nav-projects";
 
-export function AdminSidebar() {
+export function AdminSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
   const adminMenu = {
     navMain: [
       {
@@ -173,10 +182,32 @@ export function AdminSidebar() {
       },
     ],
   };
+
   return (
-    <SidebarContent>
-      <NavMain items={adminMenu.navMain} />
-      <NavProjects projects={data.projects} />
-    </SidebarContent>
+    <Sidebar collapsible="icon" {...props}>
+      <SidebarHeader>
+        <div className="flex items-center px-2  pt-0">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg ">
+            {/* <GalleryVerticalEnd className="h-4 w-4" /> */}
+            <Image
+              alt="logo"
+              src={"/images/logo.png"}
+              width={100}
+              height={100}
+            />
+          </div>
+
+          <div className="ml-2 text-lg font-semibold group-data-[collapsible=icon]:hidden">
+            Discolaire
+          </div>
+        </div>
+        <SearchForm />
+      </SidebarHeader>
+      <SidebarContent>
+        <NavMain items={adminMenu.navMain} />
+        <NavProjects projects={data.projects} />
+      </SidebarContent>
+      <SidebarRail />
+    </Sidebar>
   );
 }

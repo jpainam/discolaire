@@ -1,7 +1,7 @@
 "use client";
 
 import type { LucideIcon } from "lucide-react";
-import { ChevronRight } from "lucide-react";
+import { ArrowLeft, ChevronRight } from "lucide-react";
 
 import {
   Collapsible,
@@ -10,7 +10,6 @@ import {
 } from "@repo/ui/components/collapsible";
 import {
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -39,8 +38,22 @@ export function NavMain({
   const { t } = useLocale();
   const pathname = usePathname();
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel>{t("establishment")}</SidebarGroupLabel>
+    <SidebarGroup className="pt-0">
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild>
+            <a
+              href="/"
+              className="flex items-center gap-2 py-1 text-sm text-muted-foreground hover:text-foreground"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span className="group-data-[collapsible=icon]:hidden">
+                {t("back_to_home")}
+              </span>
+            </a>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible
@@ -56,7 +69,7 @@ export function NavMain({
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton tooltip={t(item.title)}>
                   {item.icon && <item.icon />}
-                  <span>{item.title}</span>
+                  <span>{t(item.title)}</span>
                   <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                 </SidebarMenuButton>
               </CollapsibleTrigger>

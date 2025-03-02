@@ -1,14 +1,17 @@
 "use client";
 
 import {
+  Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarRail,
 } from "@repo/ui/components/sidebar";
 import {
+  ArrowLeft,
   BookOpenText,
   BookText,
   CalendarDays,
@@ -24,10 +27,13 @@ import {
   TableProperties,
   Users,
 } from "lucide-react";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useLocale } from "~/i18n";
-
-export function ClassroomSidebar() {
+import { SearchForm } from "../search-form";
+export function ClassroomSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
   const params = useParams<{ id: string }>();
   const data = {
     information: [
@@ -110,23 +116,55 @@ export function ClassroomSidebar() {
 
   const { t } = useLocale();
   return (
-    <SidebarContent>
-      <SidebarGroup>
-        <SidebarGroupLabel>{t("information")}</SidebarGroupLabel>
-        <SidebarMenu>
-          {data.information.map((item) => (
-            <SidebarMenuItem key={item.name}>
-              <SidebarMenuButton asChild tooltip={t(item.name)}>
-                <a href={item.url}>
-                  <item.icon />
-                  <span>{t(item.name)}</span>
+    <Sidebar collapsible="icon" {...props}>
+      <SidebarHeader>
+        <div className="flex items-center px-2  pt-0">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg ">
+            {/* <GalleryVerticalEnd className="h-4 w-4" /> */}
+            <Image
+              alt="logo"
+              src={"/images/logo.png"}
+              width={100}
+              height={100}
+            />
+          </div>
+
+          <div className="ml-2 text-lg font-semibold group-data-[collapsible=icon]:hidden">
+            Discolaire
+          </div>
+        </div>
+        <SearchForm />
+      </SidebarHeader>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild tooltip={t("back_to_home")}>
+                <a href={"/"}>
+                  <ArrowLeft />
+                  <span>{t("back_to_home")}</span>
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarGroup>
-      {/* <SidebarGroup>
+          </SidebarMenu>
+        </SidebarGroup>
+
+        <SidebarGroup className="pt-0">
+          {/* <SidebarGroupLabel>{t("information")}</SidebarGroupLabel> */}
+          <SidebarMenu>
+            {data.information.map((item) => (
+              <SidebarMenuItem key={item.name}>
+                <SidebarMenuButton asChild tooltip={t(item.name)}>
+                  <a href={item.url}>
+                    <item.icon />
+                    <span>{t(item.name)}</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+        {/* <SidebarGroup>
         <SidebarGroupLabel>{t("academics")}</SidebarGroupLabel>
         <SidebarMenu>
           {data.academics.map((item) => (
@@ -156,6 +194,8 @@ export function ClassroomSidebar() {
           ))}
         </SidebarMenu>
       </SidebarGroup> */}
-    </SidebarContent>
+      </SidebarContent>
+      <SidebarRail />
+    </Sidebar>
   );
 }

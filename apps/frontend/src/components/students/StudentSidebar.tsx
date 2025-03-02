@@ -1,22 +1,25 @@
 "use client";
 
 import {
+  Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarRail,
 } from "@repo/ui/components/sidebar";
 import {
   Ambulance,
+  ArrowLeft,
   ArrowRightLeft,
   BellRing,
   BookText,
   CircleDollarSign,
   CreditCard,
   FileText,
-  Image,
+  ImageIcon,
   KeySquare,
   LineChart,
   Logs,
@@ -26,12 +29,14 @@ import {
   User,
   Users,
 } from "lucide-react";
-import Link from "next/link";
 
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useLocale } from "~/i18n";
-
-export function StudentSidebar() {
+import { SearchForm } from "../search-form";
+export function StudentSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
   const params = useParams<{ id: string }>();
   const data = {
     information: [
@@ -52,11 +57,10 @@ export function StudentSidebar() {
       },
       {
         name: "photos",
-        icon: Image,
+        icon: ImageIcon,
         url: `/students/${params.id}/photos`,
       },
-    ],
-    academic: [
+
       {
         name: "grades",
         icon: NotepadTextDashed,
@@ -89,8 +93,7 @@ export function StudentSidebar() {
         icon: CircleDollarSign,
         url: `/students/${params.id}/transactions`,
       },
-    ],
-    others: [
+
       {
         name: "login_info",
         icon: KeySquare,
@@ -126,52 +129,86 @@ export function StudentSidebar() {
   };
   const { t } = useLocale();
   return (
-    <SidebarContent>
-      <SidebarGroup>
-        <SidebarGroupLabel>{t("information")}</SidebarGroupLabel>
-        <SidebarMenu>
-          {data.information.map((item) => (
-            <SidebarMenuItem key={item.name}>
-              <SidebarMenuButton asChild tooltip={t(item.name)}>
-                <a href={item.url}>
-                  <item.icon />
-                  <span>{t(item.name)}</span>
+    <Sidebar collapsible="icon" {...props}>
+      <SidebarHeader>
+        <div className="flex items-center px-2  pt-0">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg ">
+            {/* <GalleryVerticalEnd className="h-4 w-4" /> */}
+            <Image
+              alt="logo"
+              src={"/images/logo.png"}
+              width={100}
+              height={100}
+            />
+          </div>
+
+          <div className="ml-2 text-lg font-semibold group-data-[collapsible=icon]:hidden">
+            Discolaire
+          </div>
+        </div>
+        <SearchForm />
+      </SidebarHeader>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild tooltip={t("back_to_home")}>
+                <a href={"/"}>
+                  <ArrowLeft />
+                  <span>{t("back_to_home")}</span>
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarGroup>
-      <SidebarGroup>
-        <SidebarGroupLabel>{t("academics")}</SidebarGroupLabel>
-        <SidebarMenu>
-          {data.academic.map((item) => (
-            <SidebarMenuItem key={item.name}>
-              <SidebarMenuButton asChild tooltip={t(item.name)}>
-                <Link href={item.url}>
-                  <item.icon />
-                  <span>{t(item.name)}</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarGroup>
-      <SidebarGroup>
-        <SidebarGroupLabel>{t("others")}</SidebarGroupLabel>
-        <SidebarMenu>
-          {data.others.map((item) => (
-            <SidebarMenuItem key={item.name}>
-              <SidebarMenuButton asChild tooltip={t(item.name)}>
-                <a href={item.url}>
-                  <item.icon />
-                  <span>{t(item.name)}</span>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarGroup>
-    </SidebarContent>
+          </SidebarMenu>
+        </SidebarGroup>
+
+        <SidebarGroup className="pt-0">
+          {/* <SidebarGroupLabel>{t("information")}</SidebarGroupLabel> */}
+          <SidebarMenu>
+            {data.information.map((item) => (
+              <SidebarMenuItem key={item.name}>
+                <SidebarMenuButton asChild tooltip={t(item.name)}>
+                  <a href={item.url}>
+                    <item.icon />
+                    <span>{t(item.name)}</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+        {/* <SidebarGroup>
+          <SidebarGroupLabel>{t("academics")}</SidebarGroupLabel>
+          <SidebarMenu>
+            {data.academic.map((item) => (
+              <SidebarMenuItem key={item.name}>
+                <SidebarMenuButton asChild tooltip={t(item.name)}>
+                  <Link href={item.url}>
+                    <item.icon />
+                    <span>{t(item.name)}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>{t("others")}</SidebarGroupLabel>
+          <SidebarMenu>
+            {data.others.map((item) => (
+              <SidebarMenuItem key={item.name}>
+                <SidebarMenuButton asChild tooltip={t(item.name)}>
+                  <a href={item.url}>
+                    <item.icon />
+                    <span>{t(item.name)}</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup> */}
+      </SidebarContent>
+      <SidebarRail />
+    </Sidebar>
   );
 }
