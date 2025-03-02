@@ -1,6 +1,6 @@
 "use client";
 
-import { Frame, LifeBuoy, Map, PieChart, Send } from "lucide-react";
+import { Frame, LifeBuoy, Send } from "lucide-react";
 
 import {
   Sidebar,
@@ -169,16 +169,6 @@ export function AdminSidebar({
         name: "sms_and_emails",
         url: "/administration/sms-emails",
         icon: Frame,
-      },
-      {
-        name: "Sales & Marketing",
-        url: "#",
-        icon: PieChart,
-      },
-      {
-        name: "Travel",
-        url: "#",
-        icon: Map,
       },
     ],
   };

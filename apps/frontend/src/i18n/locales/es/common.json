@@ -10,6 +10,7 @@
   "age": "Edad",
   "create_permission": "Crear permiso",
   "create_group": "Crear grupo",
+  "personal_information_description": "Ver y actualizar la información personal del usuario",
   "show": "Mostrar",
   "back_to_home": "Volver a inicio",
   "classroom_title_description": "Gestión de clases. Crear, modificar y eliminar clases.",
