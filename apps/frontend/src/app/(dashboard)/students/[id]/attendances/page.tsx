@@ -148,7 +148,7 @@ export default async function Page(props: {
   }
 
   return (
-    <div className="grid auto-rows-min gap-2 md:grid-cols-2">
+    <div className="grid auto-rows-min gap-2 md:grid-cols-2 px-4">
       <div className="col-span-2 flex items-center gap-2 pt-2">
         <Checkbox
           id="actions"
@@ -170,7 +170,7 @@ export default async function Page(props: {
             <Icon
               className={cn(
                 "h-6 w-6",
-                !item.justificationId ? "text-destructive" : "text-green-700",
+                !item.justificationId ? "text-destructive" : "text-green-700"
               )}
             />
             <div className="flex-1 items-start justify-start">

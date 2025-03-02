@@ -44,8 +44,8 @@ export default async function Layout(props: {
         classroomId={classroom?.id}
         studentId={params.id}
       />
-      <div className="grid gap-4  md:grid-cols-[275px_1fr]">
-        <div className="h-screen border-r ">
+      <div className="grid  md:grid-cols-[275px_1fr]">
+        <div className="border-r ">
           <div className="flex cursor-pointer items-center gap-2 border-b px-2 py-2 hover:bg-muted hover:text-muted-foreground">
             <FileStack className="h-4 w-4" />
             <div className="flex flex-col">
