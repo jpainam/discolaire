@@ -1,6 +1,6 @@
 "use client";
-import type { RouterOutputs } from "@repo/api";
 import { Checkbox } from "@repo/ui/components/checkbox";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
   TableBody,
@@ -10,57 +10,13 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 import { useLocale } from "~/i18n";
+import { api } from "~/trpc/react";
 
-const items = [
-  {
-    id: "1",
-    name: "Eleve",
-    email: "alex.t@company.com",
-    location: "San Francisco, US",
-    status: "Active",
-    balance: "$1,250.00",
-  },
-  {
-    id: "2",
-    name: "Classrooms",
-    email: "sarah.c@company.com",
-    location: "Singapore",
-    status: "Active",
-    balance: "$600.00",
-  },
-  {
-    id: "3",
-    name: "Contact",
-    email: "j.wilson@company.com",
-    location: "London, UK",
-    status: "Inactive",
-    balance: "$650.00",
-  },
-  {
-    id: "4",
-    name: "",
-    email: "m.garcia@company.com",
-    location: "Madrid, Spain",
-    status: "Active",
-    balance: "$0.00",
-  },
-  {
-    id: "5",
-    name: "David Kim",
-    email: "d.kim@company.com",
-    location: "Seoul, KR",
-    status: "Active",
-    balance: "-$1,000.00",
-  },
-];
-
-export function PermissionTable({
-  user,
-}: {
-  user: RouterOutputs["user"]["get"];
-}) {
+export function PermissionTable() {
   const { t } = useLocale();
-  console.log(user);
+
+  const permissionQuery = api.permission.all.useQuery();
+
   return (
     <div className="bg-background overflow-hidden rounded-md border">
       <Table>
@@ -74,9 +30,21 @@ export function PermissionTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {items.map((item) => (
+          {permissionQuery.isPending && (
+            <TableRow>
+              <TableCell colSpan={5}>
+                <div className="grid grid-cols-5 gap-2">
+                  {Array.from({ length: 30 }).map((_, i) => (
+                    <Skeleton key={i} className="h-8" />
+                  ))}
+                </div>
+              </TableCell>
+            </TableRow>
+          )}
+
+          {permissionQuery.data?.map((item) => (
             <TableRow key={item.id}>
-              <TableCell className="font-medium">{item.name}</TableCell>
+              <TableCell className="font-medium">{item.title}</TableCell>
               <TableCell>
                 <Checkbox />
               </TableCell>

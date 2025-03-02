@@ -8,6 +8,7 @@
   "user": "Usuario",
   "justify": "Justificar",
   "age": "Edad",
+  "create_permission": "Crear permiso",
   "show": "Mostrar",
   "back_to_home": "Volver a inicio",
   "classroom_title_description": "Gestión de clases. Crear, modificar y eliminar clases.",
