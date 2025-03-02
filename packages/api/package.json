@@ -22,9 +22,9 @@
   },
   "prettier": "@repo/prettier-config",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.744.0",
-    "@aws-sdk/s3-presigned-post": "^3.744.0",
-    "@aws-sdk/s3-request-presigner": "^3.744.0",
+    "@aws-sdk/client-s3": "^3.758.0",
+    "@aws-sdk/s3-presigned-post": "^3.758.0",
+    "@aws-sdk/s3-request-presigner": "^3.758.0",
     "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/validators": "workspace:*",
@@ -36,9 +36,9 @@
     "json-logic-js": "^2.0.5",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
-    "next": "^15.1.7",
+    "next": "^15.2.0",
     "superjson": "2.2.2",
-    "uuid": "^11.0.5",
+    "uuid": "^11.1.0",
     "zod": "catalog:"
   },
   "devDependencies": {
@@ -46,7 +46,7 @@
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/json-logic-js": "^2.0.8",
-    "@types/lodash": "^4.17.15",
+    "@types/lodash": "^4.17.16",
     "@types/uuid": "^10.0.0",
     "eslint": "catalog:",
     "prettier": "catalog:",
