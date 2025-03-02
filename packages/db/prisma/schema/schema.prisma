@@ -713,6 +713,7 @@ model Permission {
     code    String
     title   String
     groupId String
+    type    PermissionType  @default(READ)
     group   PermissionGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
 }
 
@@ -1221,6 +1222,13 @@ enum StudentStatus {
     INACTIVE
     GRADUATED
     EXPELLED
+}
+
+enum PermissionType {
+    CREATE
+    READ
+    UPDATE
+    DELETE
 }
 
 model PasswordReset {

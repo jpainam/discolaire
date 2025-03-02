@@ -20,7 +20,7 @@ import { api } from "~/trpc/react";
 const permissionSchema = z.object({
   name: z.string().min(1),
 });
-export function CreateEditPermission({
+export function CreateEditPermissionGroup({
   permissionGroup,
 }: {
   permissionGroup?: RouterOutputs["permission"]["groups"][number];
@@ -104,7 +104,11 @@ export function CreateEditPermission({
           >
             {t("cancel")}
           </Button>
-          <Button type="submit" className="w-fit">
+          <Button
+            isLoading={updatePermission.isPending || createPermission.isPending}
+            type="submit"
+            className="w-fit"
+          >
             {t("submit")}
           </Button>
         </div>

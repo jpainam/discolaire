@@ -6,6 +6,7 @@ import { KeySquare, PlusIcon } from "lucide-react";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { CreateEditPermission } from "./CreateEditPermission";
+import { CreateEditPermissionGroup } from "./CreateEditPermissionGroup";
 
 export function PermissionAction() {
   const { t } = useLocale();
@@ -16,7 +17,20 @@ export function PermissionAction() {
         <KeySquare />
         <Label>{t("permissions")}</Label>
       </div>
-      <div className="ml-auto">
+      <div className="ml-auto flex flex-row items-center gap-2">
+        <Button
+          variant={"outline"}
+          onClick={() => {
+            openModal({
+              className: "w-96",
+              view: <CreateEditPermissionGroup />,
+              title: t("create_group"),
+            });
+          }}
+        >
+          <PlusIcon />
+          {t("create_group")}
+        </Button>
         <Button
           onClick={() => {
             openModal({

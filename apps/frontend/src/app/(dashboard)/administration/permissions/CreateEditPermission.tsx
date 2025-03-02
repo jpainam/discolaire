@@ -12,6 +12,14 @@ import {
   useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/components/select";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useModal } from "~/hooks/use-modal";
@@ -20,6 +28,7 @@ import { api } from "~/trpc/react";
 const permissionSchema = z.object({
   title: z.string().min(1),
   code: z.string().min(1),
+  groupId: z.string().min(1),
 });
 export function CreateEditPermission({
   permission,
@@ -59,13 +68,16 @@ export function CreateEditPermission({
       toast.error(error.message, { id: 0 });
     },
   });
-  const { t } = useLocale();
+
+  const permissionGroups = api.permission.groups.useQuery();
+
   const handleSubmit = (data: z.infer<typeof permissionSchema>) => {
     if (permission) {
       toast.loading(t("updating"), { id: 0 });
       void updatePermission.mutate({
         id: permission.id,
         title: data.title,
+        groupId: data.groupId,
         code: data.code,
       });
     } else {
@@ -73,15 +85,48 @@ export function CreateEditPermission({
       void createPermission.mutate({
         title: data.title,
         code: data.code,
+        groupId: data.groupId,
       });
     }
   };
+  const { t } = useLocale();
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
         className="flex flex-col gap-4"
       >
+        <FormField
+          control={form.control}
+          name="groupId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel></FormLabel>
+              <FormControl>
+                <Select onValueChange={(val) => field.onChange(val)}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder={t("group")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {permissionGroups.isPending && (
+                      <SelectItem value={"---"}>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      </SelectItem>
+                    )}
+
+                    {permissionGroups.data?.map((group) => (
+                      <SelectItem key={group.id} value={group.id}>
+                        {group.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="title"
@@ -121,7 +166,11 @@ export function CreateEditPermission({
           >
             {t("cancel")}
           </Button>
-          <Button type="submit" className="w-fit">
+          <Button
+            isLoading={updatePermission.isPending || createPermission.isPending}
+            type="submit"
+            className="w-fit"
+          >
             {t("submit")}
           </Button>
         </div>
