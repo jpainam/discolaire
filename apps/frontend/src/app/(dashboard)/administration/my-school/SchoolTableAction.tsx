@@ -47,7 +47,7 @@ export function SchoolTableAction({ schoolId }: { schoolId: string }) {
             router.push("/administration/my-school/" + schoolId + "/edit");
           }}
         >
-          <Pencil className="mr-2 h-4 w-4" />
+          <Pencil />
           {t("edit")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />

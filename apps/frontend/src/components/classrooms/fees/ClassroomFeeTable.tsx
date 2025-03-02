@@ -38,21 +38,21 @@ import { CreateEditFee } from "./CreateEditFee";
 export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
   const feesQuery = api.classroom.fees.useQuery(classroomId);
   const { t, i18n } = useLocale();
-  const rowClassName = "border";
+
   const { fullDateFormatter } = useDateFormat();
   const canDeleteClassroomFee = useCheckPermissions(
     PermissionAction.DELETE,
     "classroom:fee",
     {
       id: classroomId,
-    },
+    }
   );
   const canUpdateClassroomFee = useCheckPermissions(
     PermissionAction.UPDATE,
     "classroom:fee",
     {
       id: classroomId,
-    },
+    }
   );
   const utils = api.useUtils();
   const disableFeeMutation = api.fee.disable.useMutation({
@@ -94,138 +94,142 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
   }
   const fees = feesQuery.data;
   return (
-    <div className="m-2 rounded-lg border">
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-muted/50">
-            <TableHead>{t("description")}</TableHead>
-            <TableHead>{t("amount")}</TableHead>
-            <TableHead>{t("due_date")}</TableHead>
-            <TableHead>{t("status")}</TableHead>
-            <TableHead>{t("is_active")} ?</TableHead>
-            <TableHead>{t("required_fees")} ?</TableHead>
-            <TableHead></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {fees?.map((fee) => {
-            return (
-              <TableRow key={fee.id} className={rowClassName}>
-                <TableCell className="">{fee.description}</TableCell>
-                <TableCell className="">
-                  {fee.amount.toLocaleString(i18n.language, {
-                    currency: CURRENCY,
-                    maximumFractionDigits: 0,
-                    minimumFractionDigits: 0,
-                  })}{" "}
-                  {CURRENCY}
-                </TableCell>
-                <TableCell className="">
-                  {fullDateFormatter.format(fee.dueDate)}
-                </TableCell>
-                <TableCell className="">
-                  {fee.dueDate < subDays(new Date(), 1) ? (
-                    <FlatBadge variant={"green"}>{t("applied")}</FlatBadge>
-                  ) : fee.dueDate > addDays(new Date(), 7) ? (
-                    <FlatBadge variant={"purple"}>{t("upcoming")}</FlatBadge>
-                  ) : (
-                    <FlatBadge variant={"yellow"}>{t("current")}</FlatBadge>
-                  )}
-                </TableCell>
-                <TableCell className="">
-                  {fee.isActive ? (
-                    <FlatBadge variant={"green"}>{t("active")}</FlatBadge>
-                  ) : (
-                    <FlatBadge variant={"red"}>{t("inactive")}</FlatBadge>
-                  )}
-                </TableCell>
-                <TableCell className="">
-                  <FlatBadge variant={fee.isRequired ? "red" : "green"}>
-                    {fee.isRequired ? t("yes") : t("no")}
-                  </FlatBadge>
-                </TableCell>
-                <TableCell className="">
-                  {canUpdateClassroomFee || canDeleteClassroomFee ? (
-                    <div className="flex flex-row items-center justify-end gap-0">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant={"ghost"} size={"icon"}>
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          {canUpdateClassroomFee && (
-                            <DropdownMenuItem
-                              onSelect={() => {
-                                openModal({
-                                  title: t("edit"),
-                                  className: "w-[500px]",
-                                  view: <CreateEditFee fee={fee} />,
-                                });
-                              }}
-                            >
-                              <Pencil className="mr-2 h-4 w-4" />
-                              {t("edit")}
-                            </DropdownMenuItem>
-                          )}
-                          {canDeleteClassroomFee && (
-                            <>
-                              <DropdownMenuSeparator />
+    <div className="px-4">
+      <div className="bg-background overflow-hidden rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow className="hover:bg-transparent">
+              <TableHead>{t("description")}</TableHead>
+              <TableHead>{t("amount")}</TableHead>
+              <TableHead>{t("due_date")}</TableHead>
+              <TableHead>{t("status")}</TableHead>
+              <TableHead>{t("is_active")} ?</TableHead>
+              <TableHead>{t("required_fees")} ?</TableHead>
+              <TableHead></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {fees?.map((fee) => {
+              return (
+                <TableRow key={fee.id}>
+                  <TableCell className="">{fee.description}</TableCell>
+                  <TableCell className="">
+                    {fee.amount.toLocaleString(i18n.language, {
+                      currency: CURRENCY,
+                      maximumFractionDigits: 0,
+                      minimumFractionDigits: 0,
+                    })}{" "}
+                    {CURRENCY}
+                  </TableCell>
+                  <TableCell className="">
+                    {fullDateFormatter.format(fee.dueDate)}
+                  </TableCell>
+                  <TableCell className="">
+                    {fee.dueDate < subDays(new Date(), 1) ? (
+                      <FlatBadge variant={"green"}>{t("applied")}</FlatBadge>
+                    ) : fee.dueDate > addDays(new Date(), 7) ? (
+                      <FlatBadge variant={"purple"}>{t("upcoming")}</FlatBadge>
+                    ) : (
+                      <FlatBadge variant={"yellow"}>{t("current")}</FlatBadge>
+                    )}
+                  </TableCell>
+                  <TableCell className="">
+                    {fee.isActive ? (
+                      <FlatBadge variant={"green"}>{t("active")}</FlatBadge>
+                    ) : (
+                      <FlatBadge variant={"red"}>{t("inactive")}</FlatBadge>
+                    )}
+                  </TableCell>
+                  <TableCell className="">
+                    <FlatBadge variant={fee.isRequired ? "red" : "green"}>
+                      {fee.isRequired ? t("yes") : t("no")}
+                    </FlatBadge>
+                  </TableCell>
+                  <TableCell className="">
+                    {canUpdateClassroomFee || canDeleteClassroomFee ? (
+                      <div className="flex flex-row items-center justify-end gap-0">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant={"ghost"} size={"icon"}>
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            {canUpdateClassroomFee && (
                               <DropdownMenuItem
                                 onSelect={() => {
-                                  toast.loading(t("updating"), { id: 0 });
-                                  disableFeeMutation.mutate({
-                                    id: fee.id,
-                                    isActive: !fee.isActive,
+                                  openModal({
+                                    title: t("edit"),
+                                    className: "w-[500px]",
+                                    view: <CreateEditFee fee={fee} />,
                                   });
                                 }}
                               >
-                                <ShieldOff className="mr-2 h-4 w-4" />
-                                {fee.isActive ? t("disable") : t("enable")}
+                                <Pencil />
+                                {t("edit")}
                               </DropdownMenuItem>
-                              <DropdownMenuItem
-                                variant="destructive"
-                                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-                                onSelect={async () => {
-                                  const isConfirmed = await confirm({
-                                    title: t("delete"),
-                                    description: t("delete_confirmation"),
-                                  });
-                                  if (isConfirmed) {
-                                    toast.loading(t("deleting"), { id: 0 });
-                                    deleteFeeMutation.mutate(fee.id);
-                                  }
-                                }}
-                              >
-                                <Trash2 />
-                                {t("delete")}
-                              </DropdownMenuItem>
-                            </>
-                          )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  ) : (
-                    <></>
-                  )}
-                </TableCell>
-              </TableRow>
-            );
-          })}
-          <TableRow className={rowClassName}>
-            <TableCell className="font-bold uppercase">{t("total")}</TableCell>
-            <TableCell className="font-bold">
-              {sumBy(fees, (f) => f.amount).toLocaleString(i18n.language, {
-                currency: CURRENCY,
-                maximumFractionDigits: 0,
-                minimumFractionDigits: 0,
-              })}{" "}
-              {CURRENCY}
-            </TableCell>
-            <TableCell colSpan={5}></TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+                            )}
+                            {canDeleteClassroomFee && (
+                              <>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  onSelect={() => {
+                                    toast.loading(t("updating"), { id: 0 });
+                                    disableFeeMutation.mutate({
+                                      id: fee.id,
+                                      isActive: !fee.isActive,
+                                    });
+                                  }}
+                                >
+                                  <ShieldOff />
+                                  {fee.isActive ? t("disable") : t("enable")}
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  variant="destructive"
+                                  className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+                                  onSelect={async () => {
+                                    const isConfirmed = await confirm({
+                                      title: t("delete"),
+                                      description: t("delete_confirmation"),
+                                    });
+                                    if (isConfirmed) {
+                                      toast.loading(t("deleting"), { id: 0 });
+                                      deleteFeeMutation.mutate(fee.id);
+                                    }
+                                  }}
+                                >
+                                  <Trash2 />
+                                  {t("delete")}
+                                </DropdownMenuItem>
+                              </>
+                            )}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+            <TableRow>
+              <TableCell className="font-bold uppercase">
+                {t("total")}
+              </TableCell>
+              <TableCell className="font-bold">
+                {sumBy(fees, (f) => f.amount).toLocaleString(i18n.language, {
+                  currency: CURRENCY,
+                  maximumFractionDigits: 0,
+                  minimumFractionDigits: 0,
+                })}{" "}
+                {CURRENCY}
+              </TableCell>
+              <TableCell colSpan={5}></TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

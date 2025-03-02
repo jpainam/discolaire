@@ -30,14 +30,14 @@ export function ClassroomFeeHeader() {
     "classroom:fee",
     {
       id: params.id,
-    },
+    }
   );
   const Icon = sidebarIcons.fees;
   return (
-    <div className="flex flex-row items-center gap-2 border-b bg-secondary px-2 py-1 text-secondary-foreground">
+    <div className="flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1 text-secondary-foreground">
       {Icon && <Icon className="h-6 w-6" />}
       <Label>{t("fees")}</Label>
-      <div className="ml-auto flex flex-row gap-2">
+      <div className="ml-auto flex flex-row gap-2 items-center">
         {canCreateClassroomFee && (
           <Button
             onClick={() => {
@@ -47,10 +47,10 @@ export function ClassroomFeeHeader() {
                 view: <CreateEditFee />,
               });
             }}
-            variant={"outline"}
-            size={"icon"}
+            size={"sm"}
           >
-            <Plus className="h-4 w-4" />
+            <Plus />
+            {t("add")}
           </Button>
         )}
         <DropdownMenu>

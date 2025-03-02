@@ -1,15 +1,28 @@
-import ContactsTable from "~/components/datatable/data-table";
+import { DashboardClassroomSize } from "~/components/dashboard/DashboardClassroomSize";
+import { DashboardTransactionTrend } from "~/components/dashboard/DashboardTransactionTrend";
+import { EducationalRessource } from "~/components/dashboard/EducationalRessource";
+import { QuickStatistics } from "~/components/dashboard/QuickStatistics";
+import { ScheduleCard } from "~/components/dashboard/ScheduleCard";
+import { SchoolLife } from "~/components/dashboard/SchoolLife";
 
 export default function Page() {
   return (
-    <div className="flex flex-1 flex-col gap-4 p-4">
-      {/* {Array.from({ length: 24 }).map((_, index) => (
-        <div
-          key={index}
-          className="aspect-video h-12 w-full rounded-lg bg-muted/50"
-        />
-      ))} */}
-      <ContactsTable />
+    <div className="grid grid-cols-2 gap-4 p-4">
+      <QuickStatistics className="col-span-full" />
+      {/* <SearchBlock className="col-span-full md:col-span-6" /> */}
+      <SchoolLife />
+      <ScheduleCard />
+      <EducationalRessource />
+      {/* <Suspense>
+        <EffectiveStat className="col-span-full" />
+      </Suspense> */}
+      {/*<ContactCard className="col-span-4" /> */}
+
+      {/* <Suspense>
+        <TransactionStat className="col-span-full" />
+      </Suspense> */}
+      <DashboardClassroomSize className="col-span-full hidden md:block" />
+      <DashboardTransactionTrend className="col-span-full hidden md:block" />
     </div>
   );
 }

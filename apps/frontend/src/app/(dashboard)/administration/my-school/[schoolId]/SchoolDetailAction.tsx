@@ -19,7 +19,7 @@ export function SchoolDetailAction({ schoolId }: { schoolId: string }) {
         variant={"outline"}
         size={"sm"}
       >
-        <Pencil className="mr-2 h-4 w-4" />
+        <Pencil />
         {t("edit")}
       </Button>
     </div>

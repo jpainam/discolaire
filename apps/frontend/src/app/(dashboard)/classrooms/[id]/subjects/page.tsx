@@ -16,14 +16,14 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     "classroom:subject",
     {
       id: id,
-    },
+    }
   );
   if (!canReadClassroomSubject) {
     return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
   }
   const subjects = await api.classroom.subjects(id);
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full gap-2 flex-col">
       <SubjectHeader subjects={subjects} />
 
       <SubjectTable classroomId={id} />

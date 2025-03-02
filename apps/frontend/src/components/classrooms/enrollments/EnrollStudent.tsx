@@ -81,15 +81,15 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
                     if (selectedIds.includes(stud.id)) {
                       return setSelectedIds(
                         selectedIds.filter(
-                          (selectedId) => selectedId !== stud.id,
-                        ),
+                          (selectedId) => selectedId !== stud.id
+                        )
                       );
                     }
 
                     return setSelectedIds(
                       unenrollStudentsQuery.data
                         .filter((u) => [...selectedIds, stud.id].includes(u.id))
-                        .map((u) => u.id),
+                        .map((u) => u.id)
                     );
                   }}
                 >
@@ -106,7 +106,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
                   </Avatar>
                   <div className="ml-2">
                     <span className="text-xs font-medium leading-none">
-                      {stud.lastName} {stud.firstName}
+                      {getFullName(stud)}
                     </span>
                     {/* <span className="text-xs text-muted-foreground">
                       {stud.email}
@@ -126,7 +126,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
           <div className="flex -space-x-2">
             {selectedIds.map((studId) => {
               const stud = unenrollStudentsQuery.data?.find(
-                (u) => u.id === studId,
+                (u) => u.id === studId
               );
               return (
                 <Avatar
@@ -172,7 +172,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
                 error: (error) => {
                   return getErrorMessage(error);
                 },
-              },
+              }
             );
           }}
         >

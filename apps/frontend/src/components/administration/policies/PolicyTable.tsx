@@ -71,7 +71,7 @@ export function PolicyTable({
     setSelectedPolicies((prev) =>
       prev.includes(id)
         ? prev.filter((policyId) => policyId !== id)
-        : [...prev, id],
+        : [...prev, id]
     );
   };
 
@@ -79,7 +79,7 @@ export function PolicyTable({
     setExpandedPolicies((prev) =>
       prev.includes(id)
         ? prev.filter((policyId) => policyId !== id)
-        : [...prev, id],
+        : [...prev, id]
     );
   };
 
@@ -192,7 +192,7 @@ export function PolicyTable({
                                   });
                                 }}
                               >
-                                <Pencil className="mr-2 h-4 w-4" /> {t("edit")}
+                                <Pencil /> {t("edit")}
                               </DropdownMenuItem>
                             )}
                             {canDelete && (

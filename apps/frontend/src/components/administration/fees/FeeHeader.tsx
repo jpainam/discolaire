@@ -27,7 +27,7 @@ export function FeeHeader() {
   const { createQueryString } = useCreateQueryString();
 
   return (
-    <div className="flex flex-row items-center gap-2 p-2">
+    <div className="flex flex-row items-center gap-2 px-4 py-1">
       <Label>{t("classrooms")}</Label>
 
       <ClassroomSelector

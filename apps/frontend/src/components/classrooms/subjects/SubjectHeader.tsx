@@ -52,7 +52,7 @@ export function SubjectHeader({
   const { openSheet } = useSheet();
   const canAddClassroomSubject = useCheckPermissions(
     PermissionAction.CREATE,
-    "classroom:subject",
+    "classroom:subject"
   );
 
   const badgeVariants = [
@@ -64,7 +64,7 @@ export function SubjectHeader({
   ] as FlatBadgeVariant[];
 
   return (
-    <div className="grid w-full grid-cols-1 flex-row items-center gap-2 border-b bg-muted px-2 py-1 text-secondary-foreground md:flex">
+    <div className="grid w-full grid-cols-1 flex-row items-center gap-2 border-b bg-muted px-4 py-1 text-secondary-foreground md:flex">
       {Icon && <Icon className="hidden h-6 w-6 md:block" />}
       <Label className="hidden md:block">{t("subjects")}</Label>
       <div className="grid grid-cols-3 flex-row items-center gap-2 md:flex">

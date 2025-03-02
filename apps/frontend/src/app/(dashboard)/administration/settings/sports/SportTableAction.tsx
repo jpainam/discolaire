@@ -59,7 +59,7 @@ export function SportTableAction({
             });
           }}
         >
-          <Pencil className="mr-2 h-4 w-4" />
+          <Pencil />
           {t("edit")}
         </DropdownMenuItem>
 

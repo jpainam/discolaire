@@ -5,16 +5,18 @@ import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 
 import { StaffDataTable } from "~/components/staffs/StaffDataTable";
 import { StaffEffectif } from "~/components/staffs/StaffEffectif";
+import { StaffHeader } from "~/components/staffs/StaffHeader";
 
 export default function Page() {
   return (
-    <div className="flex flex-col px-2">
-      <div className="flex flex-row items-center justify-between">
+    <div className="flex flex-col">
+      <div className="flex flex-row items-center justify-between px-4">
         <StaffEffectif />
+        <StaffHeader />
       </div>
 
       <Separator />
-      <div className="mt-2 flex-1">
+      <div className="mt-2 flex-1 px-4">
         {/* <StaffGrid staffs={staffs} /> */}
         <Suspense
           key={"staff-data-table-suspense"}

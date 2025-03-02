@@ -53,14 +53,14 @@ export function StaffProfileHeader({
     "staff:profile",
     {
       id: params.id,
-    },
+    }
   );
   const canEditStaff = useCheckPermissions(
     PermissionAction.UPDATE,
     "staff:profile",
     {
       id: params.id,
-    },
+    }
   );
   const deleteStaffMutation = api.staff.delete.useMutation({
     onSettled: async () => {
@@ -101,7 +101,7 @@ export function StaffProfileHeader({
                     });
                   }}
                 >
-                  <Pencil className="mr-2 h-4 w-4" />
+                  <Pencil />
                   {t("edit")}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />

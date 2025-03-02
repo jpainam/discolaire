@@ -293,6 +293,9 @@ importers:
       react-big-calendar:
         specifier: ^1.18.0
         version: 1.18.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      react-countup:
+        specifier: ^6.5.3
+        version: 6.5.3(react@19.0.0)
       react-day-picker:
         specifier: ^9.5.1
         version: 9.5.1(react@19.0.0)
@@ -3707,6 +3710,9 @@ packages:
   country-flag-icons@1.5.18:
     resolution: {integrity: sha512-z+Uzesi8u8IdkViqqbzzbkf3+a7WJpcET5B7sPwTg7GXqPYpVEgNlZ/FC3l8KO4mEf+mNkmzKLppKTN4PlCJEQ==}
 
+  countup.js@2.8.0:
+    resolution: {integrity: sha512-f7xEhX0awl4NOElHulrl4XRfKoNH3rB+qfNSZZyjSZhaAoUk6elvhH+MNxMmlmuUJ2/QNTWPSA7U4mNtIAKljQ==}
+
   create-require@1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
 
@@ -5608,6 +5614,11 @@ packages:
     peerDependencies:
       react: ^16.14.0 || ^17 || ^18 || ^19
       react-dom: ^16.14.0 || ^17 || ^18 || ^19
+
+  react-countup@6.5.3:
+    resolution: {integrity: sha512-udnqVQitxC7QWADSPDOxVWULkLvKUWrDapn5i53HE4DPRVgs+Y5rr4bo25qEl8jSh+0l2cToJgGMx+clxPM3+w==}
+    peerDependencies:
+      react: '>= 16.3.0'
 
   react-day-picker@9.5.1:
     resolution: {integrity: sha512-PxuK8inYLlYgM2zZUVBPsaBM5jI40suPeG+naKyx7kpyF032RRlEAUEjkpW9/poTASh/vyWAOVqjGuGw+47isw==}
@@ -9659,6 +9670,8 @@ snapshots:
 
   country-flag-icons@1.5.18: {}
 
+  countup.js@2.8.0: {}
+
   create-require@1.1.1: {}
 
   cron-parser@4.9.0:
@@ -11795,6 +11808,11 @@ snapshots:
       react-dom: 19.0.0(react@19.0.0)
       react-overlays: 5.2.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       uncontrollable: 7.2.1(react@19.0.0)
+
+  react-countup@6.5.3(react@19.0.0):
+    dependencies:
+      countup.js: 2.8.0
+      react: 19.0.0
 
   react-day-picker@9.5.1(react@19.0.0):
     dependencies:

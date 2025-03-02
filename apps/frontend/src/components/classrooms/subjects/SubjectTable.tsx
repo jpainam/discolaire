@@ -41,11 +41,11 @@ export function SubjectTable({ classroomId }: { classroomId: string }) {
   const confirm = useConfirm();
   const canDeleteClassroomSubject = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:subject",
+    "classroom:subject"
   );
   const canEditClassroomSubject = useCheckPermissions(
     PermissionAction.UPDATE,
-    "classroom:subject",
+    "classroom:subject"
   );
   const router = useRouter();
   const utils = api.useUtils();
@@ -61,131 +61,143 @@ export function SubjectTable({ classroomId }: { classroomId: string }) {
   });
   const subjects = subjectsQuery.data ?? [];
   return (
-    <div className="m-2 rounded-lg border">
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-muted/50">
-            <TableHead>{t("course")}</TableHead>
-            <TableHead>{t("teacher")}</TableHead>
-            <TableHead>{t("coefficient")}</TableHead>
-            <TableHead>{t("group")}</TableHead>
-            <TableHead>{t("order")}</TableHead>
-            <TableHead className="text-right"></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {!subjectsQuery.isPending && subjects.length == 0 && (
-            <TableRow>
-              <TableCell colSpan={6} className="text-center">
-                <EmptyState />
-              </TableCell>
+    <div className="px-4">
+      <div className="bg-background overflow-hidden rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/50">
+              <TableHead>{t("course")}</TableHead>
+              <TableHead>{t("teacher")}</TableHead>
+              <TableHead>{t("coefficient")}</TableHead>
+              <TableHead>{t("group")}</TableHead>
+              <TableHead>{t("order")}</TableHead>
+              <TableHead className="text-right"></TableHead>
             </TableRow>
-          )}
-          {subjectsQuery.isPending && (
-            <TableRow>
-              <TableCell colSpan={6} className="text-center">
-                <div className="grid w-full grid-cols-6 gap-2">
-                  {Array.from({ length: 30 }).map((_, index) => (
-                    <Skeleton key={`subject-table-${index}`} className="h-8" />
-                  ))}
-                </div>
-              </TableCell>
-            </TableRow>
-          )}
-          {subjects.map((subject, index) => (
-            <TableRow key={`subject-${index}`}>
-              <TableCell>
-                <Link
-                  href={
-                    routes.classrooms.subjects(`${subject.classroomId}`) +
-                    `/${subject.id}`
-                  }
-                  className="flex flex-row items-center space-x-1 hover:text-blue-600 hover:underline"
-                >
-                  <div
-                    className="flex h-4 w-4 rounded-full"
-                    style={{
-                      backgroundColor: subject.course.color,
-                    }}
-                  ></div>
-                  <div>
-                    {subject.course.shortName.toUpperCase()} -{" "}
-                    {subject.course.name}
+          </TableHeader>
+          <TableBody>
+            {!subjectsQuery.isPending && subjects.length == 0 && (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center">
+                  <EmptyState />
+                </TableCell>
+              </TableRow>
+            )}
+            {subjectsQuery.isPending && (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center">
+                  <div className="grid w-full grid-cols-6 gap-2">
+                    {Array.from({ length: 30 }).map((_, index) => (
+                      <Skeleton
+                        key={`subject-table-${index}`}
+                        className="h-8"
+                      />
+                    ))}
                   </div>
-                </Link>
-              </TableCell>
-              <TableCell>
-                <Link
-                  className="hover:text-blue-600 hover:underline"
-                  href={routes.staffs.details(subject.teacher?.id ?? "#")}
-                >
-                  {subject.teacher?.lastName} {subject.teacher?.firstName}
-                </Link>
-              </TableCell>
-              <TableCell>{subject.coefficient}</TableCell>
-              <TableCell>{subject.subjectGroup?.name}</TableCell>
-              <TableCell>{subject.order}</TableCell>
-              <TableCell className="py-0 text-right">
-                {(canEditClassroomSubject || canDeleteClassroomSubject) && (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant={"ghost"} size={"icon"}>
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      {canEditClassroomSubject && (
-                        <DropdownMenuItem
-                          onSelect={() => {
-                            openSheet({
-                              title: (
-                                <p className="px-2">
-                                  {t("edit")}-{t("subject")}
-                                </p>
-                              ),
-                              view: <CreateEditSubject subject={subject} />,
-                            });
-                          }}
-                        >
-                          <Pencil className="mr-2 h-4 w-4" />
-                          {t("edit")}
-                        </DropdownMenuItem>
-                      )}
-                      {canDeleteClassroomSubject && (
-                        <>
-                          <DropdownMenuSeparator />
+                </TableCell>
+              </TableRow>
+            )}
+            {subjects.map((subject, index) => (
+              <TableRow key={`subject-${index}`}>
+                <TableCell>
+                  <Link
+                    href={
+                      routes.classrooms.subjects(`${subject.classroomId}`) +
+                      `/${subject.id}`
+                    }
+                    className="flex flex-row items-center space-x-1 hover:text-blue-600 hover:underline"
+                  >
+                    <div
+                      className="flex h-4 w-4 rounded-full"
+                      style={{
+                        backgroundColor: subject.course.color,
+                      }}
+                    ></div>
+                    <div>
+                      {subject.course.shortName.toUpperCase()} -{" "}
+                      {subject.course.name}
+                    </div>
+                  </Link>
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  <Link
+                    className="hover:text-blue-600 hover:underline"
+                    href={routes.staffs.details(subject.teacher?.id ?? "#")}
+                  >
+                    {subject.teacher?.lastName} {subject.teacher?.firstName}
+                  </Link>
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {subject.coefficient}
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {subject.subjectGroup?.name}
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {subject.order}
+                </TableCell>
+                <TableCell className="py-0 text-right">
+                  {(canEditClassroomSubject || canDeleteClassroomSubject) && (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant={"ghost"} size={"icon"}>
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        {canEditClassroomSubject && (
                           <DropdownMenuItem
-                            onSelect={async () => {
-                              const isConfirmed = await confirm({
-                                title: t("delete"),
-                                description: t("delete_confirmation"),
-                                icon: (
-                                  <Trash2 className="h-4 w-4 text-destructive" />
+                            onSelect={() => {
+                              openSheet({
+                                title: (
+                                  <p className="px-2">
+                                    {t("edit")}-{t("subject")}
+                                  </p>
                                 ),
-                                alertDialogTitle: {
-                                  className: "flex items-center gap-2",
-                                },
+                                view: <CreateEditSubject subject={subject} />,
                               });
-                              if (isConfirmed) {
-                                toast.loading(t("deleting"), { id: 0 });
-                                deleteSubjectMutation.mutate(subject.id);
-                              }
                             }}
-                            className="text-destructive"
                           >
-                            <Trash2 />
-                            {t("delete")}
+                            <Pencil />
+                            {t("edit")}
                           </DropdownMenuItem>
-                        </>
-                      )}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                        )}
+                        {canDeleteClassroomSubject && (
+                          <>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              onSelect={async () => {
+                                const isConfirmed = await confirm({
+                                  title: t("delete"),
+                                  description: t("delete_confirmation"),
+                                  icon: (
+                                    <Trash2 className="h-4 w-4 text-destructive" />
+                                  ),
+                                  alertDialogTitle: {
+                                    className: "flex items-center gap-2",
+                                  },
+                                });
+                                if (isConfirmed) {
+                                  toast.loading(t("deleting"), { id: 0 });
+                                  deleteSubjectMutation.mutate(subject.id);
+                                }
+                              }}
+                              variant="destructive"
+                              className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+                            >
+                              <Trash2 />
+                              {t("delete")}
+                            </DropdownMenuItem>
+                          </>
+                        )}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

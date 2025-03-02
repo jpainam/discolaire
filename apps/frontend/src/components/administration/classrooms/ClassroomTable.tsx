@@ -47,11 +47,11 @@ export default function ClassroomTable() {
   });
   const canDeleteClassroom = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom",
+    "classroom"
   );
   const canEditClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
-    "classroom",
+    "classroom"
   );
   const confirm = useConfirm();
   return (
@@ -115,7 +115,7 @@ export default function ClassroomTable() {
                             });
                           }}
                         >
-                          <Pencil className="mr-2 h-4 w-4" />
+                          <Pencil />
                           {t("edit")}
                         </DropdownMenuItem>
                       )}

@@ -24,7 +24,7 @@ export function StaffHeader() {
 
   const canCreateStaff = useCheckPermissions(
     PermissionAction.CREATE,
-    "staff:profile"
+    "staff:profile",
   );
 
   //const jobTitles = jobTitlesQuery.data ?? [];
@@ -33,41 +33,39 @@ export function StaffHeader() {
 
   const { openSheet } = useSheet();
   return (
-    <div className="flex flex-row items-center gap-4 py-2">
-      <div className="ml-auto flex flex-row gap-2">
-        {canCreateStaff && (
-          <Button
-            onClick={() => {
-              openSheet({
-                title: t("create_staff"),
-                className: "w-[750px]",
-                view: <CreateEditStaff />,
-              });
-            }}
-            size="icon"
-            variant="outline"
-          >
-            <Plus className="h-4 w-4" />
+    <div className="flex flex-row items-center gap-2 py-1">
+      {canCreateStaff && (
+        <Button
+          onClick={() => {
+            openSheet({
+              title: t("create_staff"),
+              className: "w-[750px]",
+              view: <CreateEditStaff />,
+            });
+          }}
+          size="sm"
+        >
+          <Plus />
+          {t("add")}
+        </Button>
+      )}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button size="icon" variant="outline">
+            <MoreVertical className="h-4 w-4" />
           </Button>
-        )}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button size="icon" variant="outline">
-              <MoreVertical className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>
-              <PDFIcon className="mr-2 h-4 w-4" />
-              {t("pdf_export")}
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <XMLIcon className="mr-2 h-4 w-4" />
-              {t("xml_export")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem>
+            <PDFIcon className="mr-2 h-4 w-4" />
+            {t("pdf_export")}
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <XMLIcon className="mr-2 h-4 w-4" />
+            {t("xml_export")}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }
