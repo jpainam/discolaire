@@ -10,6 +10,7 @@
   "justify": "Justificar",
   "age": "Edad",
   "vs_last_year": "vs el año pasado",
+  "error_sending": "Error al enviar",
   "create_permission": "Crear permiso",
   "create_group": "Crear grupo",
   "personal_information_description": "Ver y actualizar la información personal del usuario",

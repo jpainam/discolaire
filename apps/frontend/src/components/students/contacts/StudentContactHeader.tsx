@@ -31,7 +31,7 @@ export function StudentContactHeader() {
     "student:contact",
     {
       id: params.id,
-    },
+    }
   );
 
   const Icon = sidebarIcons.contacts;
@@ -40,7 +40,7 @@ export function StudentContactHeader() {
   const { openSheet } = useSheet();
 
   return (
-    <div className="flex flex-row items-center gap-2 bg-secondary p-4">
+    <div className="flex flex-row items-center gap-2 bg-secondary px-4 py-1">
       {Icon && <Icon className="h-6 w-6" />}
       <Label>{t("contacts")}</Label>
 
@@ -50,7 +50,7 @@ export function StudentContactHeader() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button size={"sm"} variant={"default"}>
-                  <PlusIcon className="h-4 w-4" />
+                  <PlusIcon />
                   <span>{t("add")}</span>
                 </Button>
               </DropdownMenuTrigger>

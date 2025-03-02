@@ -31,7 +31,7 @@ import {
 } from "lucide-react";
 
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useLocale } from "~/i18n";
 import { SearchForm } from "../search-form";
 export function StudentSidebar({
@@ -128,6 +128,7 @@ export function StudentSidebar({
     ],
   };
   const { t } = useLocale();
+  const pathname = usePathname();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -167,7 +168,11 @@ export function StudentSidebar({
           <SidebarMenu>
             {data.information.map((item) => (
               <SidebarMenuItem key={item.name}>
-                <SidebarMenuButton asChild tooltip={t(item.name)}>
+                <SidebarMenuButton
+                  asChild
+                  tooltip={t(item.name)}
+                  isActive={pathname === item.url}
+                >
                   <a href={item.url}>
                     <item.icon />
                     <span>{t(item.name)}</span>

@@ -48,6 +48,7 @@ export function StudentAttendanceHeader({
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-muted/50 px-4 py-1">
       <Label className="hidden md:block">{t("attendances")}</Label>
+      <div className="w-[15px] hidden md:block"></div>
       {/* <FlatBadge>Total justified records: 2 out of 5</FlatBadge> */}
       <Label className="hidden md:block">{t("terms")}</Label>
       <TermSelector
@@ -108,7 +109,7 @@ export function StudentAttendanceHeader({
                 });
               }}
             >
-              <BaselineIcon className="mr-2 h-4 w-4" />
+              <BaselineIcon />
               {t("absence")}
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -120,7 +121,7 @@ export function StudentAttendanceHeader({
                 });
               }}
             >
-              <DiameterIcon className="mr-2 h-4 w-4" />
+              <DiameterIcon />
               {t("lateness")}
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -132,7 +133,7 @@ export function StudentAttendanceHeader({
                 });
               }}
             >
-              <NewspaperIcon className="mr-2 h-4 w-4" />
+              <NewspaperIcon />
               {t("chatter")}
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -144,7 +145,7 @@ export function StudentAttendanceHeader({
                 });
               }}
             >
-              <ShapesIcon className="mr-2 h-4 w-4" />
+              <ShapesIcon />
               {t("consigne")}
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -156,7 +157,7 @@ export function StudentAttendanceHeader({
                 });
               }}
             >
-              <ShieldAlertIcon className="mr-2 h-4 w-4" />
+              <ShieldAlertIcon />
               {t("exclusion")}
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -170,11 +171,11 @@ export function StudentAttendanceHeader({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem>
-              <PDFIcon className="mr-2 h-4 w-4" />
+              <PDFIcon />
               {t("pdf_export")}
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <XMLIcon className="mr-2 h-4 w-4" />
+              <XMLIcon />
               {t("xml_export")}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
