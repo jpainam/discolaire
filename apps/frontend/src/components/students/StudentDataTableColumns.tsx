@@ -24,6 +24,7 @@ import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { Badge } from "@repo/ui/components/badge";
+import { decode } from "entities";
 import i18next from "i18next";
 import { useRouter } from "next/navigation";
 import { AvatarState } from "~/components/AvatarState";
@@ -100,7 +101,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
             className="hover:text-blue-600 capitalize font-medium hover:underline"
             href={routes.students.details(student.id)}
           >
-            {student.lastName}
+            {decode(student.lastName ?? "")}
           </Link>
         );
       },
@@ -120,7 +121,9 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
             className="hover:text-blue-600  text-muted-foreground hover:underline"
             href={routes.students.details(student.id)}
           >
-            <span className="capitalize">{student.firstName}</span>
+            <span className="capitalize">
+              {decode(student.firstName ?? "")}
+            </span>
           </Link>
         );
       },
@@ -250,7 +253,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
             year: "numeric",
             month: "short",
             day: "numeric",
-          },
+          }
         );
         return (
           <SimpleTooltip

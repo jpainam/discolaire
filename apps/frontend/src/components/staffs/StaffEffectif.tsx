@@ -1,16 +1,13 @@
-"use client";
-
-import { useLocale } from "~/i18n";
-
+import { getServerTranslations } from "~/i18n/server";
 import { api } from "~/trpc/react";
 
-export function StaffEffectif() {
-  const staffsQuery = api.staff.all.useQuery();
+export async function StaffEffectif() {
+  const staffsQuery = await api.staff.all();
   const staffs = staffsQuery.data ?? [];
   const females = staffs.filter((staff) => staff.gender == "female").length;
   const total = staffs.length;
   const males = total - females;
-  const { t } = useLocale();
+  const { t } = await getServerTranslations();
   const COLORS = ["#6741D9", "#E0C6FD", "#FFBC75", "#FF7272"];
   return (
     <div className="flex flex-row items-center gap-4 text-sm">

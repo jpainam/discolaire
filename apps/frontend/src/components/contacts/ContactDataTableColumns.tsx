@@ -23,6 +23,7 @@ import FlatBadge from "~/components/FlatBadge";
 import { useSheet } from "~/hooks/use-sheet";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { decode } from "entities";
 import { routes } from "~/configs/routes";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
@@ -105,7 +106,7 @@ export function getColumns({
             className="hover:text-blue-600 hover:underline"
             href={routes.contacts.details(v.id)}
           >
-            {v.lastName}
+            {v.lastName && decode(v.lastName)}
           </Link>
         );
       },
@@ -122,7 +123,7 @@ export function getColumns({
             className="hover:text-blue-600 hover:underline"
             href={routes.contacts.details(v.id)}
           >
-            {v.firstName}
+            {v.firstName && decode(v.firstName)}
           </Link>
         );
       },
@@ -235,7 +236,7 @@ export function getColumns({
                         error: (error) => {
                           return getErrorMessage(error);
                         },
-                      },
+                      }
                     );
                   }
                 }}

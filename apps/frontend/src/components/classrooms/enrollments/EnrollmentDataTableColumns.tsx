@@ -10,6 +10,7 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 import type { ColumnDef } from "@tanstack/react-table";
+
 import type { TFunction } from "i18next";
 import i18next from "i18next";
 import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
@@ -184,7 +185,7 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
   const router = useRouter();
   const canDeleteEnrollment = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:enrollment",
+    "classroom:enrollment"
   );
   const utils = api.useUtils();
   const unenrollStudentsMutation =

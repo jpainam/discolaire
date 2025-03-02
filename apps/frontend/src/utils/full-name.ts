@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { decode } from "entities";
 type Person = {
   firstName?: string | null;
   lastName?: string | null;
@@ -20,7 +21,7 @@ export function getFullName(pperson?: any): string {
   if ("firstName" in person && person.firstName) {
     fullName += " " + person.firstName;
   }
-  return fullName;
+  return decode(fullName);
 }
 
 /**
@@ -35,5 +36,5 @@ export function getNameParts(person: Person, part: number) {
   if (tabs.length > part) {
     return tabs[part - 1];
   }
-  return v;
+  return decode(v);
 }

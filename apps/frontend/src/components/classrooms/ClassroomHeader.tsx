@@ -48,14 +48,14 @@ export function ClassroomHeader() {
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const canUpdateClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const deleteClassroomMutation = api.classroom.delete.useMutation({
     onSuccess: () => {
@@ -67,7 +67,7 @@ export function ClassroomHeader() {
   });
 
   const classroomsQuery = api.classroom.all.useQuery();
-  const classroomQuery = api.classroom.get.useQuery(params.id);
+  //const classroomQuery = api.classroom.get.useQuery(params.id);
   const confirm = useConfirm();
 
   useEffect(() => {
@@ -107,7 +107,7 @@ export function ClassroomHeader() {
         }}
       />
       <div className="flex items-center gap-2 md:ml-auto">
-        {classroomQuery.data && canUpdateClassroom && (
+        {params.id && canUpdateClassroom && (
           <>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -115,16 +115,14 @@ export function ClassroomHeader() {
                   //disabled={!prevClassroom}
                   variant="outline"
                   onClick={() => {
+                    const classroom = classroomsQuery.data?.find(
+                      (c) => c.id === params.id
+                    );
+                    if (!classroom) return;
                     openSheet({
                       className: "w-[700px]",
-                      title: (
-                        <div className="p-2">
-                          {t("edit")} {classroomQuery.data.name}
-                        </div>
-                      ),
-                      view: (
-                        <CreateEditClassroom classroom={classroomQuery.data} />
-                      ),
+                      title: <div className="p-2">{t("edit")}</div>,
+                      view: <CreateEditClassroom classroom={classroom} />,
                     });
                   }}
                   size="icon"
