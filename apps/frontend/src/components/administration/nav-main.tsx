@@ -42,7 +42,7 @@ export function NavMain({
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton asChild>
-            <a
+            <Link
               href="/"
               className="flex items-center gap-2 py-1 text-sm text-muted-foreground hover:text-foreground"
             >
@@ -50,7 +50,7 @@ export function NavMain({
               <span className="group-data-[collapsible=icon]:hidden">
                 {t("back_to_home")}
               </span>
-            </a>
+            </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>
