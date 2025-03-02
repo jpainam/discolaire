@@ -29,7 +29,7 @@ export function ReportCardHeader() {
   const params = useParams<{ id: string }>();
   const Icon = sidebarIcons.report_cards;
   return (
-    <div className="grid flex-row items-center gap-4 border-b bg-muted/40 px-2 py-1 md:flex">
+    <div className="grid flex-row items-center gap-4 border-b bg-muted/40 px-4 py-1 md:flex">
       {Icon && <Icon className="hidden h-6 w-6 md:block" />}
       <Label className="hidden md:block">{t("term")}</Label>
       <TermSelector
@@ -51,7 +51,7 @@ export function ReportCardHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/report-cards?classroomId=${params.id}&termId=${termId}`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

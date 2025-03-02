@@ -170,7 +170,7 @@ export default async function Page(props: {
             <Icon
               className={cn(
                 "h-6 w-6",
-                !item.justificationId ? "text-destructive" : "text-green-700"
+                !item.justificationId ? "text-destructive" : "text-green-700",
               )}
             />
             <div className="flex-1 items-start justify-start">

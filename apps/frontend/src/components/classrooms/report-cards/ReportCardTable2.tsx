@@ -1,6 +1,3 @@
-import _ from "lodash";
-import Link from "next/link";
-
 import type { RouterOutputs } from "@repo/api";
 import {
   Table,
@@ -10,6 +7,13 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@repo/ui/components/tooltip";
+import _ from "lodash";
+import Link from "next/link";
 import { getServerTranslations } from "~/i18n/server";
 
 import { AvatarState } from "~/components/AvatarState";
@@ -36,13 +40,15 @@ export async function ReportCardTable({
   const subjects = await api.classroom.subjects(classroomId);
   const studentGrades: Record<string, StudentGradeReport[]> = _.groupBy(
     grades,
-    (g) => g.studentId,
+    (g) => g.studentId
   );
 
   return (
-    <Table className="text-xs">
-      <TableHeader>
-        {/* <TableRow>
+    <div className="px-4">
+      <div className="bg-background overflow-hidden rounded-md border">
+        <Table className="text-xs">
+          <TableHeader>
+            {/* <TableRow>
             <TableHead colSpan={5}></TableHead>
             {subjects.map((subject, index) => {
               return (
@@ -56,24 +62,31 @@ export async function ReportCardTable({
               );
             })}
           </TableRow> */}
-        <TableRow>
-          <TableHead className="border border-t-0 text-center" colSpan={3}>
-            {t("fullName")}
-          </TableHead>
-          <TableHead className="">{t("avg")}</TableHead>
-          <TableHead className="border border-t-0">{t("rank")}</TableHead>
-          {subjects.map((subject, index) => {
-            return (
-              <TableHead
-                className="border border-t-0 text-center"
-                // colSpan={2}
-                key={`${index}${subject.id}`}
-              >
-                {subject.course.reportName.slice(0, 4)}
+            <TableRow className="hover:bg-transparent">
+              <TableHead className=" text-center" colSpan={3}>
+                {t("fullName")}
               </TableHead>
-            );
-          })}
-          {/* {Array.from({ length: subjects.length }).map((_, index) => {
+              <TableHead>{t("avg")}</TableHead>
+              <TableHead>{t("rank")}</TableHead>
+              {subjects.map((subject, index) => {
+                return (
+                  <TableHead
+                    className="text-center"
+                    // colSpan={2}
+                    key={`${index}${subject.id}`}
+                  >
+                    <Tooltip>
+                      <TooltipTrigger>
+                        {subject.course.reportName.slice(0, 4)}
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{subject.course.reportName}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TableHead>
+                );
+              })}
+              {/* {Array.from({ length: subjects.length }).map((_, index) => {
               return (
                 <Fragment key={`report${index}`}>
                   <TableHead className="border">
@@ -93,67 +106,73 @@ export async function ReportCardTable({
                 </Fragment>
               );
             })} */}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {result.map((student, index) => {
-          if (student.rank < 0) return null;
-          const rank =
-            index == 0 || result[index - 1]?.avg != student.avg
-              ? student.rank.toString()
-              : result[index - 1]?.rank.toString() + " ex";
-
-          const grades = studentGrades[student.id] ?? [];
-          return (
-            <TableRow className="bg-transparent" key={student.id}>
-              <TableCell className="w-[10px] py-0">
-                <AvatarState
-                  className="h-8 w-8"
-                  avatar={student.avatar}
-                  pos={index}
-                />
-              </TableCell>
-              <TableCell className="border py-0">
-                <Link
-                  className="text-blue-700 underline"
-                  href={
-                    routes.students.details(student.id) +
-                    `/report-cards?term=${term}`
-                  }
-                >
-                  {student.lastName}
-                </Link>
-              </TableCell>
-              <TableCell className="border py-0 text-center">
-                {student.gender == "female" ? "F" : "M"}
-              </TableCell>
-              <TableCell className="border py-0 text-center">
-                {student.avg?.toFixed(2)}
-              </TableCell>
-              <TableCell className="border py-0 text-center">{rank}</TableCell>
-              {subjects.map((subject, index) => {
-                const grade = grades.find((g) => g.subjectId === subject.id);
-                const g = grade?.grade ?? 0;
-                return (
-                  <TableCell
-                    key={`grade-${index}${subject.id}`}
-                    className={cn(
-                      "border py-0 text-center",
-                      g < 10
-                        ? "!bg-red-50"
-                        : g < 15
-                          ? "!bg-yellow-50"
-                          : "!bg-green-50",
-                    )}
-                  >
-                    {grade?.grade?.toFixed(2) ?? "-"}
-                  </TableCell>
-                );
-              })}
             </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+          </TableHeader>
+          <TableBody>
+            {result.map((student, index) => {
+              if (student.rank < 0) return null;
+              const rank =
+                index == 0 || result[index - 1]?.avg != student.avg
+                  ? student.rank.toString()
+                  : result[index - 1]?.rank.toString() + " ex";
+
+              const grades = studentGrades[student.id] ?? [];
+              return (
+                <TableRow className="bg-transparent" key={student.id}>
+                  <TableCell className="w-[10px] py-0">
+                    <AvatarState
+                      className="h-8 w-8"
+                      avatar={student.avatar}
+                      pos={index}
+                    />
+                  </TableCell>
+                  <TableCell className=" py-0">
+                    <Link
+                      className="text-blue-700 underline"
+                      href={
+                        routes.students.details(student.id) +
+                        `/report-cards?term=${term}`
+                      }
+                    >
+                      {student.lastName}
+                    </Link>
+                  </TableCell>
+                  <TableCell className="border py-0 text-center">
+                    {student.gender == "female" ? "F" : "M"}
+                  </TableCell>
+                  <TableCell className="border py-0 text-center">
+                    {student.avg?.toFixed(2)}
+                  </TableCell>
+                  <TableCell className="border py-0 text-center">
+                    {rank}
+                  </TableCell>
+                  {subjects.map((subject, index) => {
+                    const grade = grades.find(
+                      (g) => g.subjectId === subject.id
+                    );
+                    const g = grade?.grade ?? 0;
+                    return (
+                      <TableCell
+                        key={`grade-${index}${subject.id}`}
+                        className={cn(
+                          "border-l py-0 text-center",
+                          g < 10
+                            ? "!bg-red-50 dark:!bg-red-800"
+                            : g < 15
+                              ? "!bg-yellow-50 dark:!bg-yellow-800"
+                              : "!bg-green-50 dark:!bg-green-800"
+                        )}
+                      >
+                        {grade?.grade?.toFixed(2) ?? "-"}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
   );
 }

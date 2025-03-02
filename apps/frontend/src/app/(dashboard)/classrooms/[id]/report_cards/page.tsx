@@ -1,6 +1,6 @@
-import FlatBadge from "~/components/FlatBadge";
 import { Separator } from "@repo/ui/components/separator";
 import { EmptyState } from "~/components/EmptyState";
+import FlatBadge from "~/components/FlatBadge";
 import { getServerTranslations } from "~/i18n/server";
 
 import { ReportCardTable } from "~/components/classrooms/report-cards/ReportCardTable2";
@@ -29,8 +29,8 @@ export default async function Page(props: {
   });
   const { t } = await getServerTranslations();
   return (
-    <div className="flex w-full flex-col text-sm">
-      <div className="grid flex-row items-center gap-4 px-2 py-1 md:flex">
+    <div className="flex w-full flex-col gap-2 text-sm">
+      <div className="grid flex-row items-center gap-4 px-2 md:flex">
         <FlatBadge variant={"green"}>
           {t("Moy.Max")} :{summary.max.toFixed(2)}
         </FlatBadge>

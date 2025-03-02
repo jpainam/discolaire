@@ -158,7 +158,7 @@ export function ClassroomSidebar({
                 <SidebarMenuButton
                   asChild
                   tooltip={t(item.name)}
-                  isActive={pathname == item.url}
+                  isActive={pathname === item.url}
                 >
                   <a href={item.url}>
                     <item.icon />

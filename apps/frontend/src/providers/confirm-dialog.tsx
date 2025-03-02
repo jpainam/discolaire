@@ -8,6 +8,7 @@ import React, {
   useState,
 } from "react";
 
+import type { AlertDialogOverlay } from "@repo/ui/components/alert-dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,8 +17,6 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogOverlay,
-  AlertDialogPortal,
   AlertDialogTitle,
 } from "@repo/ui/components/alert-dialog";
 
@@ -29,7 +28,7 @@ export interface ConfirmOptions {
   icon?: React.ReactNode;
   customActions?: (
     onConfirm: () => void,
-    onCancel: () => void,
+    onCancel: () => void
   ) => React.ReactNode;
   confirmButton?: React.ComponentPropsWithRef<typeof AlertDialogAction>;
   cancelButton?: React.ComponentPropsWithRef<typeof AlertDialogCancel> | null;
@@ -48,7 +47,7 @@ export interface ConfirmContextType {
 }
 
 export const ConfirmContext = createContext<ConfirmContextType | undefined>(
-  undefined,
+  undefined
 );
 
 const baseDefaultOptions: ConfirmOptions = {
@@ -79,7 +78,7 @@ const ConfirmDialogContent: React.FC<{
     cancelText,
     icon,
     customActions,
-    alertDialogOverlay,
+    //alertDialogOverlay,
     alertDialogContent,
     alertDialogHeader,
     alertDialogTitle,
@@ -88,44 +87,44 @@ const ConfirmDialogContent: React.FC<{
   } = config;
 
   return (
-    <AlertDialogPortal>
-      <AlertDialogOverlay {...alertDialogOverlay} />
-      <AlertDialogContent {...alertDialogContent}>
-        <AlertDialogHeader {...alertDialogHeader}>
-          {(title ?? icon) && (
-            <AlertDialogTitle {...alertDialogTitle}>
-              {icon}
-              {title}
-            </AlertDialogTitle>
-          )}
-          {description && (
-            <AlertDialogDescription {...alertDialogDescription}>
-              {description}
-            </AlertDialogDescription>
-          )}
-        </AlertDialogHeader>
-        <AlertDialogFooter {...alertDialogFooter}>
-          {customActions ? (
-            customActions(onConfirm, onCancel)
-          ) : (
-            <>
-              {cancelButton !== null && (
-                <AlertDialogCancel onClick={onCancel} {...cancelButton}>
-                  {cancelText}
-                </AlertDialogCancel>
-              )}
-              <AlertDialogAction
-                onClick={onConfirm}
-                className="bg-destructive text-destructive-foreground hover:bg-destructive/80"
-                {...confirmButton}
-              >
-                {confirmText}
-              </AlertDialogAction>
-            </>
-          )}
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialogPortal>
+    // <AlertDialogPortal>
+    //   <AlertDialogOverlay {...alertDialogOverlay} />
+    <AlertDialogContent {...alertDialogContent}>
+      <AlertDialogHeader {...alertDialogHeader}>
+        {(title ?? icon) && (
+          <AlertDialogTitle {...alertDialogTitle}>
+            {icon}
+            {title}
+          </AlertDialogTitle>
+        )}
+        {description && (
+          <AlertDialogDescription {...alertDialogDescription}>
+            {description}
+          </AlertDialogDescription>
+        )}
+      </AlertDialogHeader>
+      <AlertDialogFooter {...alertDialogFooter}>
+        {customActions ? (
+          customActions(onConfirm, onCancel)
+        ) : (
+          <>
+            {cancelButton !== null && (
+              <AlertDialogCancel onClick={onCancel} {...cancelButton}>
+                {cancelText}
+              </AlertDialogCancel>
+            )}
+            <AlertDialogAction
+              onClick={onConfirm}
+              className="bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40"
+              {...confirmButton}
+            >
+              {confirmText}
+            </AlertDialogAction>
+          </>
+        )}
+      </AlertDialogFooter>
+    </AlertDialogContent>
+    // </AlertDialogPortal>
   );
 });
 
@@ -162,7 +161,7 @@ export const ConfirmDialogProvider: React.FC<{
       ...baseDefaultOptions,
       ...defaultOptions,
     }),
-    [defaultOptions],
+    [defaultOptions]
   );
 
   const confirm = useCallback(
@@ -173,7 +172,7 @@ export const ConfirmDialogProvider: React.FC<{
         resolverRef.current = resolve;
       });
     },
-    [mergedDefaultOptions],
+    [mergedDefaultOptions]
   );
 
   const handleConfirm = useCallback(() => {
@@ -203,7 +202,7 @@ export const ConfirmDialogProvider: React.FC<{
 };
 
 export const useConfirm = (): ((
-  options: ConfirmOptions,
+  options: ConfirmOptions
 ) => Promise<boolean>) => {
   const context = useContext(ConfirmContext);
   if (!context) {
