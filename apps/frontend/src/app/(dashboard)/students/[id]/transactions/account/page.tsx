@@ -56,7 +56,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   let previousDate: Date | null = null;
 
   return (
-    <div className="px-4">
+    <div className="px-4 mt-2">
       <div className="bg-background overflow-hidden rounded-md border">
         <Table className="text-xs font-mono">
           <TableHeader>
@@ -111,7 +111,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                             ? routes.classrooms.fees(`${item.id}`)
                             : routes.students.transactions.details(
                                 id,
-                                Number(item.id),
+                                Number(item.id)
                               )
                         }
                         className="text-blue-700 hover:underline"

@@ -57,7 +57,9 @@ export function Step2({
     },
     onSuccess: (transaction) => {
       toast.success(t("created_successfully"), { id: 0 });
-      routes.students.transactions.details(params.id, transaction.id);
+      router.push(
+        routes.students.transactions.details(params.id, transaction.id)
+      );
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -154,15 +156,16 @@ export function Step2({
             type="button"
             variant="outline"
           >
-            <ArrowLeft className="mr-2 h-4 w-4" />
+            <ArrowLeft />
             {t("prev")}
           </Button>
           <Button
             isLoading={createTransactionMutation.isPending}
+            disabled={createTransactionMutation.isPending}
             type="submit"
             size="sm"
           >
-            <Save className="mr-2 h-4 w-4" /> {t("submit")}
+            <Save /> {t("submit")}
           </Button>
         </div>
       </form>
