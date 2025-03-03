@@ -78,7 +78,7 @@ export function DatePicker({
           className={cn(
             "w-full justify-start text-left font-normal",
             className,
-            !date && "text-muted-foreground"
+            !date && "text-muted-foreground",
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
@@ -177,7 +177,7 @@ function MonthGrid({
     if (isYearView && currentYearRef.current && scrollAreaRef.current) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const viewport = scrollAreaRef.current.querySelector(
-        "[data-radix-scroll-area-viewport]"
+        "[data-radix-scroll-area-viewport]",
       )!;
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (viewport) {

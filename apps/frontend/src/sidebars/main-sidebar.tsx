@@ -1,10 +1,11 @@
 "use client";
 
-import { RiAdminLine } from "@remixicon/react";
+import { RiAdminLine, RiLeafLine, RiSettings3Line } from "@remixicon/react";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
+  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
@@ -14,6 +15,8 @@ import {
 } from "@repo/ui/components/sidebar";
 import { FolderOpen, House, HouseWifiIcon, Users } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useLocale } from "~/i18n";
 export function MainSidebar({
   ...props
@@ -53,7 +56,21 @@ export function MainSidebar({
     },
   ];
 
+  const others = [
+    {
+      name: "settings",
+      url: `/settings`,
+      icon: RiSettings3Line,
+    },
+    {
+      name: "help_center",
+      url: `/help_center`,
+      icon: RiLeafLine,
+    },
+  ];
+
   const { t } = useLocale();
+  const pathname = usePathname();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -75,21 +92,60 @@ export function MainSidebar({
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="uppercase">
+          <SidebarGroupLabel className="uppercase text-muted-foreground/60">
             {t("information")}
           </SidebarGroupLabel>
-          <SidebarMenu>
-            {data.map((item) => (
-              <SidebarMenuItem key={item.name}>
-                <SidebarMenuButton asChild tooltip={t(item.name)}>
-                  <a href={item.url}>
-                    <item.icon />
-                    <span>{t(item.name)}</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {data.map((item) => (
+                <SidebarMenuItem key={item.name}>
+                  <SidebarMenuButton
+                    className="group/menu-button font-medium gap-3 h-9 rounded-md bg-gradient-to-r hover:bg-transparent hover:from-sidebar-accent hover:to-sidebar-accent/40 data-[active=true]:from-primary/20 data-[active=true]:to-primary/5 [&>svg]:size-auto"
+                    asChild
+                    tooltip={t(item.name)}
+                    isActive={pathname === item.url}
+                  >
+                    <Link href={item.url}>
+                      <item.icon
+                        className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
+                        size={22}
+                        aria-hidden="true"
+                      />
+                      <span>{t(item.name)}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel className="uppercase text-muted-foreground/60">
+            {t("others")}
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {others.map((item) => (
+                <SidebarMenuItem key={item.name}>
+                  <SidebarMenuButton
+                    className="group/menu-button font-medium gap-3 h-9 rounded-md bg-gradient-to-r hover:bg-transparent hover:from-sidebar-accent hover:to-sidebar-accent/40 data-[active=true]:from-primary/20 data-[active=true]:to-primary/5 [&>svg]:size-auto"
+                    asChild
+                    tooltip={t(item.name)}
+                    isActive={pathname === item.url}
+                  >
+                    <Link href={item.url}>
+                      <item.icon
+                        className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
+                        size={22}
+                        aria-hidden="true"
+                      />
+                      <span>{t(item.name)}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
       <SidebarRail />
