@@ -4,7 +4,6 @@ import { EducationalRessource } from "~/components/dashboard/EducationalRessourc
 import { QuickStatistics } from "~/components/dashboard/QuickStatistics";
 import { ScheduleCard } from "~/components/dashboard/ScheduleCard";
 import { SchoolLife } from "~/components/dashboard/SchoolLife";
-import ContactsTable from "~/components/datatable/data-table";
 
 export default function Page() {
   return (
@@ -14,7 +13,7 @@ export default function Page() {
       <SchoolLife />
       <ScheduleCard />
       <EducationalRessource />
-      <ContactsTable />
+
       {/* <Suspense>
         <EffectiveStat className="col-span-full" />
       </Suspense> */}

@@ -1,7 +1,6 @@
 "use client";
 
 import { Input } from "@repo/ui/components/input";
-import { Separator } from "@repo/ui/components/separator";
 import { useState } from "react";
 import { useLocale } from "~/i18n";
 
@@ -64,41 +63,19 @@ export function ScheduleCard({ className }: { className?: string }) {
   const [today, setToday] = useState(new Date());
 
   return (
-    <div className={cn("rounded-lg border", className)}>
-      <div className="px-4 pt-2 text-center text-lg font-bold">
-        {t("timetable")}
+    <div className={cn("w-full rounded-lg border overflow-hidden", className)}>
+      <div className="p-3.5 flex items-center border-b justify-between">
+        <h2 className="text-xl font-semibold">{t("timetable")}</h2>
+        <div className="flex items-center gap-2">
+          <Input
+            type="date"
+            value={today.toISOString().split("T")[0]}
+            onChange={(e) => {
+              setToday(new Date(e.target.value));
+            }}
+          />
+        </div>
       </div>
-      <div className="mb-4 flex flex-row items-center justify-between px-4">
-        {/* <Button
-          onClick={() => {
-            setToday(addWeeks(today, -1));
-          }}
-          variant={"default"}
-          size={"icon"}
-        >
-          <ChevronLeft className="h-6 w-6" />
-        </Button> */}
-        <Input
-          type="date"
-          value={today.toISOString().split("T")[0]}
-          onChange={(e) => {
-            setToday(new Date(e.target.value));
-          }}
-          //formatStr="d MMM"
-          //className="h-8 w-[175px]"
-          //defaultValue={today}
-        />
-        {/* <Button
-          onClick={() => {
-            setToday(addWeeks(today, 1));
-          }}
-          variant={"default"}
-          size={"icon"}
-        >
-          <ChevronRight className="h-6 w-6" />
-        </Button> */}
-      </div>
-      <Separator />
 
       <div className="flex flex-col gap-4 py-2">
         {scheduleData.map((item, index) => {

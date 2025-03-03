@@ -1,11 +1,15 @@
 "use client";
 
-import { Frame, LifeBuoy, Send } from "lucide-react";
+import { BrickWall, Frame, LifeBuoy, Send } from "lucide-react";
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarGroup,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarRail,
 } from "@repo/ui/components/sidebar";
 import {
@@ -15,6 +19,9 @@ import {
   Settings,
   Users,
 } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useLocale } from "~/i18n";
 import { SidebarLogo } from "../sidebar-logo";
 import { NavMain } from "./nav-main";
 import { NavProjects } from "./nav-projects";
@@ -171,6 +178,16 @@ export function AdminSidebar({
       },
     ],
   };
+  const others = [
+    {
+      name: "school_life",
+      url: "/administration/attendances",
+      icon: BrickWall,
+      //icon: CalendarArrowUp,
+    },
+  ];
+  const pathname = usePathname();
+  const { t } = useLocale();
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -179,6 +196,24 @@ export function AdminSidebar({
       </SidebarHeader>
       <SidebarContent className="-mt-2">
         <NavMain items={adminMenu.navMain} />
+        <SidebarGroup className="pt-0">
+          <SidebarMenu>
+            {others.map((item) => (
+              <SidebarMenuItem key={item.name}>
+                <SidebarMenuButton
+                  asChild
+                  tooltip={t(item.name)}
+                  isActive={pathname === item.url}
+                >
+                  <Link href={item.url}>
+                    <item.icon />
+                    <span>{t(item.name)}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarRail />
