@@ -165,7 +165,7 @@ export function fetchGradeSheetColumns({
           <div
             className={cn(
               "font-bold",
-              numIsAbsent == 0 ? "text-green-500" : "text-destructive"
+              numIsAbsent == 0 ? "text-green-500" : "text-destructive",
             )}
           >
             {numIsAbsent}
@@ -285,8 +285,8 @@ function ActionCells({
               router.push(
                 routes.classrooms.gradesheets.details(
                   classroomId,
-                  gradesheet.id
-                )
+                  gradesheet.id,
+                ),
               );
             }}
           >
@@ -296,7 +296,7 @@ function ActionCells({
           <DropdownMenuItem
             onSelect={() => {
               router.push(
-                routes.classrooms.gradesheets.edit(classroomId, gradesheet.id)
+                routes.classrooms.gradesheets.edit(classroomId, gradesheet.id),
               );
             }}
           >

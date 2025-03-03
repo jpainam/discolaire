@@ -34,7 +34,7 @@ export function StudentDataTableActions({
   const utils = api.useUtils();
   const canDeleteStudent = useCheckPermissions(
     PermissionAction.DELETE,
-    "student:profile"
+    "student:profile",
   );
   const deleteStudentMutation = api.student.delete.useMutation({
     onSettled: () => utils.student.invalidate(),

@@ -96,7 +96,7 @@ export function PermissionTable() {
                         setPermissionIds((prev) =>
                           checked
                             ? [...prev, permsByType.READ?.id ?? ""]
-                            : prev.filter((id) => id !== permsByType.READ?.id)
+                            : prev.filter((id) => id !== permsByType.READ?.id),
                         );
                       }
                     }}
@@ -114,7 +114,9 @@ export function PermissionTable() {
                         setPermissionIds((prev) =>
                           checked
                             ? [...prev, permsByType.CREATE?.id ?? ""]
-                            : prev.filter((id) => id !== permsByType.CREATE?.id)
+                            : prev.filter(
+                                (id) => id !== permsByType.CREATE?.id,
+                              ),
                         );
                       }
                     }}
@@ -132,7 +134,9 @@ export function PermissionTable() {
                         setPermissionIds((prev) =>
                           checked
                             ? [...prev, permsByType.UPDATE?.id ?? ""]
-                            : prev.filter((id) => id !== permsByType.UPDATE?.id)
+                            : prev.filter(
+                                (id) => id !== permsByType.UPDATE?.id,
+                              ),
                         );
                       }
                     }}
@@ -150,7 +154,9 @@ export function PermissionTable() {
                         setPermissionIds((prev) =>
                           checked
                             ? [...prev, permsByType.DELETE?.id ?? ""]
-                            : prev.filter((id) => id !== permsByType.DELETE?.id)
+                            : prev.filter(
+                                (id) => id !== permsByType.DELETE?.id,
+                              ),
                         );
                       }
                     }}
