@@ -7,7 +7,7 @@ import { StudentPageHeader } from "./StudentPageHeader";
 export default async function Page() {
   const { t } = await getServerTranslations();
   const effectif = await api.enrollment.count({});
-  const students = await api.student.all({});
+  const students = await api.student.lastAccessed({ limit: 10 });
   // count repeating students
   const repeating = students.filter((student) => student.isRepeating);
 

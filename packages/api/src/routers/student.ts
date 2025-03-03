@@ -63,6 +63,44 @@ const createUpdateSchema = z.object({
   classroom: z.string().optional(),
 });
 export const studentRouter = createTRPCRouter({
+  lastAccessed: protectedProcedure
+    .input(
+      z.object({
+        limit: z.number().optional().default(10),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const data = await ctx.db.student.findMany({
+        take: input.limit,
+        orderBy: {
+          lastAccessed: "desc",
+        },
+        include: {
+          formerSchool: true,
+          religion: true,
+          country: true,
+        },
+        where: {
+          schoolId: ctx.schoolId,
+        },
+      });
+      const students = await Promise.all(
+        data.map(async (student) => {
+          return {
+            ...student,
+            isRepeating: await studentService.isRepeating(
+              student.id,
+              ctx.schoolYearId,
+            ),
+            classroom: await studentService.getClassroom(
+              student.id,
+              ctx.schoolYearId,
+            ),
+          };
+        }),
+      );
+      return students;
+    }),
   all: protectedProcedure
     .input(
       z.object({
@@ -358,6 +396,14 @@ export const studentRouter = createTRPCRouter({
     }),
 
   get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    void ctx.db.student.update({
+      where: {
+        id: input,
+      },
+      data: {
+        lastAccessed: new Date(),
+      },
+    });
     const student = await ctx.db.student.findUnique({
       where: {
         id: input,
