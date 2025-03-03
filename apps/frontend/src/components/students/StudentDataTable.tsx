@@ -1,19 +1,20 @@
 "use client";
 
 import { useMemo } from "react";
-import { toast } from "sonner";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { useLocale } from "~/i18n";
 
-import { api } from "~/trpc/react";
+import type { RouterOutputs } from "@repo/api";
 import { StudentDataTableActions } from "./StudentDataTableActions";
 import { fetchStudentColumns } from "./StudentDataTableColumns";
 
-export function StudentDataTable() {
+export function StudentDataTable({
+  students,
+}: {
+  students: RouterOutputs["student"]["lastAccessed"];
+}) {
   const { t } = useLocale();
-
-  const studentsQuery = api.student.all.useQuery({});
 
   const columns = useMemo(() => {
     const { columns } = fetchStudentColumns({
@@ -23,21 +24,12 @@ export function StudentDataTable() {
   }, [t]);
 
   const { table } = useDataTable({
-    data: studentsQuery.data ?? [],
+    data: students,
     columns: columns,
   });
 
-  if (studentsQuery.error) {
-    toast(studentsQuery.error.message);
-    return;
-  }
-
   return (
-    <DataTable
-      className="py-2 px-4"
-      isLoading={studentsQuery.isLoading}
-      table={table}
-    >
+    <DataTable className="py-2 px-4" table={table}>
       <StudentDataTableActions table={table} />
       {/* <DataTableToolbar table={table}></DataTableToolbar> */}
     </DataTable>
