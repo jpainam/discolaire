@@ -60,7 +60,7 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
     "contact:profile",
     {
       id: contactId,
-    },
+    }
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();
@@ -158,7 +158,7 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
                       const isConfirmed = await confirm({
                         title: t("delete"),
                         description: t("delete_confirmation"),
-                        icon: <Trash2 className="h-6 w-6 text-destructive" />,
+                        icon: <Trash2 className="text-destructive" />,
                         alertDialogTitle: {
                           className: "flex items-center gap-1",
                         },

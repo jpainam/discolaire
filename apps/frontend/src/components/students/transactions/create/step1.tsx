@@ -91,7 +91,7 @@ export function Step1() {
             toast.error(t("required_fee_warning"));
           }
         },
-      },
+      }
     );
   }
   const items: { label: string; value: string }[] = [
@@ -195,7 +195,7 @@ export function Step1() {
                 type="submit"
               >
                 {t("next")}
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <ArrowRight />
               </Button>
             </div>
           </div>

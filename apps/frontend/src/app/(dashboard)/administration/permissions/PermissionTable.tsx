@@ -96,7 +96,7 @@ export function PermissionTable() {
                         setPermissionIds((prev) =>
                           checked
                             ? [...prev, permsByType.READ?.id ?? ""]
-                            : prev.filter((id) => id !== permsByType.READ?.id),
+                            : prev.filter((id) => id !== permsByType.READ?.id)
                         );
                       }
                     }}
@@ -114,9 +114,7 @@ export function PermissionTable() {
                         setPermissionIds((prev) =>
                           checked
                             ? [...prev, permsByType.CREATE?.id ?? ""]
-                            : prev.filter(
-                                (id) => id !== permsByType.CREATE?.id,
-                              ),
+                            : prev.filter((id) => id !== permsByType.CREATE?.id)
                         );
                       }
                     }}
@@ -134,9 +132,7 @@ export function PermissionTable() {
                         setPermissionIds((prev) =>
                           checked
                             ? [...prev, permsByType.UPDATE?.id ?? ""]
-                            : prev.filter(
-                                (id) => id !== permsByType.UPDATE?.id,
-                              ),
+                            : prev.filter((id) => id !== permsByType.UPDATE?.id)
                         );
                       }
                     }}
@@ -154,9 +150,7 @@ export function PermissionTable() {
                         setPermissionIds((prev) =>
                           checked
                             ? [...prev, permsByType.DELETE?.id ?? ""]
-                            : prev.filter(
-                                (id) => id !== permsByType.DELETE?.id,
-                              ),
+                            : prev.filter((id) => id !== permsByType.DELETE?.id)
                         );
                       }
                     }}
@@ -182,9 +176,7 @@ export function PermissionTable() {
                           const isConfirmed = await confirm({
                             title: t("delete"),
                             description: t("delete_confirmation"),
-                            icon: (
-                              <Trash2 className="h-6 w-6 text-destructive" />
-                            ),
+                            icon: <Trash2 className="text-destructive" />,
                             alertDialogTitle: {
                               className: "flex items-center gap-1",
                             },

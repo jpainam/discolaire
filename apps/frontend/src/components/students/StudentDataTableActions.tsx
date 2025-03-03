@@ -34,7 +34,7 @@ export function StudentDataTableActions({
   const utils = api.useUtils();
   const canDeleteStudent = useCheckPermissions(
     PermissionAction.DELETE,
-    "student:profile",
+    "student:profile"
   );
   const deleteStudentMutation = api.student.delete.useMutation({
     onSettled: () => utils.student.invalidate(),
@@ -69,7 +69,7 @@ export function StudentDataTableActions({
             const isConfirmed = await confirm({
               title: t("delete"),
               description: t("delete_confirmation"),
-              icon: <Trash2 className="h-6 w-6 text-destructive" />,
+              icon: <Trash2 className="text-destructive" />,
               alertDialogTitle: {
                 className: "flex items-center gap-2",
               },

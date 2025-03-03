@@ -53,14 +53,14 @@ export function StaffProfileHeader({
     "staff:profile",
     {
       id: params.id,
-    },
+    }
   );
   const canEditStaff = useCheckPermissions(
     PermissionAction.UPDATE,
     "staff:profile",
     {
       id: params.id,
-    },
+    }
   );
   const deleteStaffMutation = api.staff.delete.useMutation({
     onSettled: async () => {
@@ -156,7 +156,7 @@ export function StaffProfileHeader({
                     const isConfirmed = await confirm({
                       title: t("delete"),
                       description: t("delete_confirmation"),
-                      icon: <Trash2 className="h-6 w-6 text-destructive" />,
+                      icon: <Trash2 className="text-destructive" />,
                       alertDialogTitle: {
                         className: "flex items-center gap-1",
                       },

@@ -165,7 +165,7 @@ export function fetchGradeSheetColumns({
           <div
             className={cn(
               "font-bold",
-              numIsAbsent == 0 ? "text-green-500" : "text-destructive",
+              numIsAbsent == 0 ? "text-green-500" : "text-destructive"
             )}
           >
             {numIsAbsent}
@@ -285,8 +285,8 @@ function ActionCells({
               router.push(
                 routes.classrooms.gradesheets.details(
                   classroomId,
-                  gradesheet.id,
-                ),
+                  gradesheet.id
+                )
               );
             }}
           >
@@ -296,7 +296,7 @@ function ActionCells({
           <DropdownMenuItem
             onSelect={() => {
               router.push(
-                routes.classrooms.gradesheets.edit(classroomId, gradesheet.id),
+                routes.classrooms.gradesheets.edit(classroomId, gradesheet.id)
               );
             }}
           >
@@ -312,7 +312,7 @@ function ActionCells({
               const isConfirmed = await confirm({
                 title: t("delete"),
                 description: t("delete_confirmation"),
-                icon: <Trash2 className="h-6 w-6 text-destructive" />,
+                icon: <Trash2 className="text-destructive" />,
                 alertDialogTitle: {
                   className: "flex items-center gap-2",
                 },

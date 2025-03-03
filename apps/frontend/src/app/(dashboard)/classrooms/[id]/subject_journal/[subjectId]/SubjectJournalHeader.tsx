@@ -66,7 +66,7 @@ export function SubjectJournalHeader({
                 const isConfirmed = await confirm({
                   title: t("clear_all"),
                   description: t("delete_description"),
-                  icon: <Trash2 className="h-6 w-6 text-destructive" />,
+                  icon: <Trash2 className="text-destructive" />,
                   alertDialogTitle: {
                     className: "flex items-center gap-2",
                   },

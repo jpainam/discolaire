@@ -69,7 +69,7 @@ export function AttendanceHeader() {
           router.push(
             routes.classrooms.attendances.index(params.id) +
               "?" +
-              createQueryString({ term: val }),
+              createQueryString({ term: val })
           );
         }}
       />
@@ -80,7 +80,7 @@ export function AttendanceHeader() {
           router.push(
             routes.classrooms.attendances.index(params.id) +
               "?" +
-              createQueryString({ type: val }),
+              createQueryString({ type: val })
           );
         }}
       >
@@ -103,7 +103,7 @@ export function AttendanceHeader() {
           router.push(
             routes.classrooms.attendances.index(params.id) +
               "?" +
-              createQueryString({ date: e.target.value }),
+              createQueryString({ date: e.target.value })
           );
         }}
       />
@@ -125,7 +125,7 @@ export function AttendanceHeader() {
                 const isConfirmed = await confirm({
                   title: t("delete"),
                   description: t("delete_confirmation"),
-                  icon: <Trash2 className="h-6 w-6 text-destructive" />,
+                  icon: <Trash2 className="text-destructive" />,
                   alertDialogTitle: {
                     className: "flex items-center gap-2",
                   },
@@ -166,7 +166,7 @@ export function AttendanceHeader() {
                 router.push(
                   routes.classrooms.attendances.absences(params.id) +
                     "?" +
-                    createQueryString({ term: searchParams.get("term") }),
+                    createQueryString({ term: searchParams.get("term") })
                 );
               }}
             >
@@ -178,7 +178,7 @@ export function AttendanceHeader() {
                 router.push(
                   routes.classrooms.attendances.lateness(params.id) +
                     "?" +
-                    createQueryString({ term: searchParams.get("term") }),
+                    createQueryString({ term: searchParams.get("term") })
                 );
               }}
             >
@@ -190,7 +190,7 @@ export function AttendanceHeader() {
                 router.push(
                   routes.classrooms.attendances.chatters(params.id) +
                     "?" +
-                    createQueryString({ term: searchParams.get("term") }),
+                    createQueryString({ term: searchParams.get("term") })
                 );
               }}
             >
@@ -202,7 +202,7 @@ export function AttendanceHeader() {
                 router.push(
                   routes.classrooms.attendances.consignes(params.id) +
                     "?" +
-                    createQueryString({ term: searchParams.get("term") }),
+                    createQueryString({ term: searchParams.get("term") })
                 );
               }}
             >
@@ -214,7 +214,7 @@ export function AttendanceHeader() {
                 router.push(
                   routes.classrooms.attendances.exclusions(params.id) +
                     "?" +
-                    createQueryString({ term: searchParams.get("term") }),
+                    createQueryString({ term: searchParams.get("term") })
                 );
               }}
             >
