@@ -16,7 +16,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const { t } = await getServerTranslations();
 
   return (
-    <div className="flex w-full flex-col gap-0">
+    <div className="flex w-full flex-col gap-2">
       {/* <FinanceHeader />
       <Separator /> */}
 

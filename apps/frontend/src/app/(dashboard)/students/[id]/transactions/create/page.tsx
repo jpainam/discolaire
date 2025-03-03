@@ -33,7 +33,7 @@ export default async function Page(props: {
 
   return (
     <div className="flex w-full flex-col gap-2">
-      <div className="flex items-center border-b bg-secondary px-2 py-2 text-secondary-foreground">
+      <div className="flex items-center border-y bg-secondary px-2 py-2 text-secondary-foreground">
         <CircleDollarSign className="mr-2 h-4 w-4" />
         <Label className="py-1.5"> {t("make_payment")}</Label>
       </div>

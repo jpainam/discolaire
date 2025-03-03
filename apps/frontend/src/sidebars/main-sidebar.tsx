@@ -28,13 +28,13 @@ export function MainSidebar({
       icon: House,
     },
     {
-      name: "students",
+      name: "student_management",
       url: `/students`,
       icon: Users,
     },
 
     {
-      name: "classrooms",
+      name: "classroom_management",
       url: `/classrooms`,
       icon: HouseWifiIcon,
     },
@@ -100,7 +100,7 @@ export function MainSidebar({
               {data.map((item) => (
                 <SidebarMenuItem key={item.name}>
                   <SidebarMenuButton
-                    className="group/menu-button font-medium gap-3 h-9 rounded-md bg-gradient-to-r hover:bg-transparent hover:from-sidebar-accent hover:to-sidebar-accent/40 data-[active=true]:from-primary/20 data-[active=true]:to-primary/5 [&>svg]:size-auto"
+                    className="group/menu-button font-medium gap-2 h-9 rounded-md bg-gradient-to-r hover:bg-transparent hover:from-sidebar-accent hover:to-sidebar-accent/40 data-[active=true]:from-primary/20 data-[active=true]:to-primary/5 "
                     asChild
                     tooltip={t(item.name)}
                     isActive={pathname === item.url}
@@ -128,7 +128,7 @@ export function MainSidebar({
               {others.map((item) => (
                 <SidebarMenuItem key={item.name}>
                   <SidebarMenuButton
-                    className="group/menu-button font-medium gap-3 h-9 rounded-md bg-gradient-to-r hover:bg-transparent hover:from-sidebar-accent hover:to-sidebar-accent/40 data-[active=true]:from-primary/20 data-[active=true]:to-primary/5 [&>svg]:size-auto"
+                    className="group/menu-button font-medium gap-3 h-9 rounded-md bg-gradient-to-r hover:bg-transparent hover:from-sidebar-accent hover:to-sidebar-accent/40 data-[active=true]:from-primary/20 data-[active=true]:to-primary/5"
                     asChild
                     tooltip={t(item.name)}
                     isActive={pathname === item.url}

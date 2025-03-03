@@ -48,14 +48,14 @@ export function ClassroomHeader() {
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const canUpdateClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const deleteClassroomMutation = api.classroom.delete.useMutation({
     onSuccess: () => {
@@ -116,7 +116,7 @@ export function ClassroomHeader() {
                   variant="outline"
                   onClick={() => {
                     const classroom = classroomsQuery.data?.find(
-                      (c) => c.id === params.id,
+                      (c) => c.id === params.id
                     );
                     if (!classroom) return;
                     openSheet({
@@ -127,7 +127,7 @@ export function ClassroomHeader() {
                   }}
                   size="icon"
                 >
-                  <Pencil className="h-4 w-4" />
+                  <Pencil />
                   <span className="sr-only">{t("create")}</span>
                 </Button>
               </TooltipTrigger>

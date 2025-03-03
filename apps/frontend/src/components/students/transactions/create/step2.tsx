@@ -114,7 +114,7 @@ export function Step2({
                 </FormControl>
                 <div className="space-y-1 leading-none">
                   <FormLabel>{t("amount_received")} ?</FormLabel>
-                  <FormDescription>
+                  <FormDescription className="text-xs">
                     {t("amount_received_confirmation")}
                   </FormDescription>
                 </div>
@@ -137,7 +137,7 @@ export function Step2({
                   <FormLabel htmlFor="paymentCorrectness">
                     {t("payment_details")}
                   </FormLabel>
-                  <FormDescription>
+                  <FormDescription className="text-xs">
                     {t("amount_details_confirmation")}
                   </FormDescription>
                 </div>

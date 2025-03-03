@@ -32,7 +32,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   const dateFormat = Intl.DateTimeFormat(i18n.language, {
     month: "short",
-    year: "numeric",
+    year: "2-digit",
     day: "numeric",
   });
 
@@ -56,111 +56,121 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   let previousDate: Date | null = null;
 
   return (
-    <Table className="border-b font-mono text-xs">
-      <TableHeader>
-        <TableRow className="bg-muted/50">
-          <TableHead>{t("transaction_date")}</TableHead>
-          <TableHead>{t("transactionRef")}</TableHead>
-          <TableHead>{t("reference")}</TableHead>
-          <TableHead>{t("description")}</TableHead>
-          <TableHead>{t("debit")}</TableHead>
-          <TableHead>{t("credit")}</TableHead>
-          <TableHead>{t("balance")}</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {statements.map((item, index: number) => {
-          const amount = item.amount.toLocaleString(i18n.language, {
-            maximumFractionDigits: 0,
-            minimumFractionDigits: 0,
-          });
+    <div className="px-4">
+      <div className="bg-background overflow-hidden rounded-md border">
+        <Table className="text-xs font-mono">
+          <TableHeader>
+            <TableRow className="bg-muted/50">
+              <TableHead className="w-[100px]">{t("date")}</TableHead>
+              <TableHead>{t("transactionRef")}</TableHead>
+              <TableHead>{t("reference")}</TableHead>
+              <TableHead>{t("description")}</TableHead>
+              <TableHead>{t("debit")}</TableHead>
+              <TableHead>{t("credit")}</TableHead>
+              <TableHead>{t("balance")}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {statements.map((item, index: number) => {
+              const amount = item.amount.toLocaleString(i18n.language, {
+                maximumFractionDigits: 0,
+                minimumFractionDigits: 0,
+              });
 
-          const itemMonth = item.transactionDate.getMonth();
+              const itemMonth = item.transactionDate.getMonth();
 
-          let subtotal = null;
-          if (
-            currentMonth !== null &&
-            currentMonth !== itemMonth &&
-            previousDate
-          ) {
-            subtotal = (
-              <SubTotal
-                key={`subtotal-${currentMonth}`}
-                totalperiod={totalPeriodPerMonths[currentMonth] ?? 0}
-                previousDate={previousDate}
-              />
-            );
-          }
+              let subtotal = null;
+              if (
+                currentMonth !== null &&
+                currentMonth !== itemMonth &&
+                previousDate
+              ) {
+                subtotal = (
+                  <SubTotal
+                    key={`subtotal-${currentMonth}`}
+                    totalperiod={totalPeriodPerMonths[currentMonth] ?? 0}
+                    previousDate={previousDate}
+                  />
+                );
+              }
 
-          currentMonth = itemMonth;
-          previousDate = item.transactionDate;
+              currentMonth = itemMonth;
+              previousDate = item.transactionDate;
 
-          return (
-            <Fragment key={`${item.transactionRef}-${index}`}>
-              {subtotal}
-              <TableRow>
-                <TableCell>{dateFormat.format(item.transactionDate)}</TableCell>
-                <TableCell>
-                  <Link
-                    href={
-                      item.operation == "fee"
-                        ? routes.classrooms.fees(`${item.id}`)
-                        : routes.students.transactions.details(
-                            id,
-                            Number(item.id),
-                          )
-                    }
-                    className="text-blue-700 hover:underline"
-                  >
-                    {item.transactionRef}
-                  </Link>
-                </TableCell>
-                <TableCell>
-                  <div className="flex flex-row items-center gap-2">
-                    {item.operation == "fee" ? (
-                      <LiaFileInvoiceDollarSolid className="h-4 w-4" />
-                    ) : (
-                      <TbTransactionDollar className="h-4 w-4" />
-                    )}
-                    {t(item.reference.toLowerCase())} / {item.classroom}
-                  </div>
-                </TableCell>
-                <TableCell>{item.description}</TableCell>
-                <TableCell>{item.type == "DEBIT" ? amount : ""}</TableCell>
-                <TableCell>{item.type !== "DEBIT" ? amount : ""}</TableCell>
-                <TableCell>
-                  {Math.abs(balance).toLocaleString(i18n.language, {
-                    maximumFractionDigits: 0,
-                    minimumFractionDigits: 0,
-                  })}
-                  {balance > 0 ? " cr" : ""}
-                </TableCell>
-              </TableRow>
-            </Fragment>
-          );
-        })}
-        {/* Add final subtotal if there are any statements */}
+              return (
+                <Fragment key={`${item.transactionRef}-${index}`}>
+                  {subtotal}
+                  <TableRow>
+                    <TableCell className="text-muted-foreground">
+                      {dateFormat.format(item.transactionDate)}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      <Link
+                        href={
+                          item.operation == "fee"
+                            ? routes.classrooms.fees(`${item.id}`)
+                            : routes.students.transactions.details(
+                                id,
+                                Number(item.id)
+                              )
+                        }
+                        className="text-blue-700 hover:underline"
+                      >
+                        {item.transactionRef}
+                      </Link>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      <div className="flex flex-row items-center gap-2">
+                        {item.operation == "fee" ? (
+                          <LiaFileInvoiceDollarSolid className="h-4 w-4" />
+                        ) : (
+                          <TbTransactionDollar className="h-4 w-4" />
+                        )}
+                        {t(item.reference.toLowerCase())} / {item.classroom}
+                      </div>
+                    </TableCell>
+                    <TableCell>{item.description}</TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {item.type == "DEBIT" ? amount : ""}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {item.type !== "DEBIT" ? amount : ""}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {Math.abs(balance).toLocaleString(i18n.language, {
+                        maximumFractionDigits: 0,
+                        minimumFractionDigits: 0,
+                      })}
+                      {balance > 0 ? " cr" : ""}
+                    </TableCell>
+                  </TableRow>
+                </Fragment>
+              );
+            })}
+            {/* Add final subtotal if there are any statements */}
 
-        {/* {statements.length > 0 && previousDate && (
+            {/* {statements.length > 0 && previousDate && (
           <SubTotal
             key="final-subtotal"
             totalperiod={totalperiod}
             previousDate={previousDate}
           />
         )} */}
-        <TableRow className="font-bold">
-          <TableCell colSpan={2}>{account.name}</TableCell>
-          <TableCell colSpan={4}>{t("total_for_account")}</TableCell>
-          <TableCell>
-            {Math.abs(balance).toLocaleString(i18n.language, {
-              maximumFractionDigits: 0,
-              minimumFractionDigits: 0,
-            })}
-            {balance > 0 ? " cr" : ""}
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
+            <TableRow className="font-bold">
+              <TableCell colSpan={2}>{account.name}</TableCell>
+              <TableCell colSpan={4}>{t("total_for_account")}</TableCell>
+              <TableCell>
+                {Math.abs(balance).toLocaleString(i18n.language, {
+                  maximumFractionDigits: 0,
+                  minimumFractionDigits: 0,
+                })}
+                {balance > 0 ? " cr" : ""}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+    </div>
   );
 }
 

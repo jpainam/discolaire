@@ -174,7 +174,11 @@ export function StudentSidebar({
                   isActive={pathname === item.url}
                 >
                   <a href={item.url}>
-                    <item.icon />
+                    <item.icon
+                      className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
+                      size={22}
+                      aria-hidden="true"
+                    />
                     <span>{t(item.name)}</span>
                   </a>
                 </SidebarMenuButton>

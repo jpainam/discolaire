@@ -27,7 +27,7 @@ export function ClassroomPageHeader() {
 
   const canCreateClassroom = useCheckPermissions(
     PermissionAction.CREATE,
-    "classroom:details",
+    "classroom:details"
   );
 
   return (
@@ -51,8 +51,8 @@ export function ClassroomPageHeader() {
               });
             }}
           >
-            <Plus className="mr-2 size-4" aria-hidden="true" />
-            {t("new")}
+            <Plus aria-hidden="true" />
+            {t("add")}
           </Button>
         )}
         <DropdownMenu>
@@ -68,7 +68,7 @@ export function ClassroomPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.classroom_list}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -79,7 +79,7 @@ export function ClassroomPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.classroom_list}?format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

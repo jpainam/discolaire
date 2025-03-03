@@ -68,7 +68,7 @@ export default function Step2Details({ classroomId }: { classroomId: string }) {
     toast.error(
       studentQuery.error?.message ??
         studentContactsQuery.error?.message ??
-        transactions.error?.message,
+        transactions.error?.message
     );
   }
   if (
@@ -87,8 +87,8 @@ export default function Step2Details({ classroomId }: { classroomId: string }) {
     );
   }
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between bg-muted/50 px-4 py-0">
+    <Card className="p-0 shadow-sm rounded-md">
+      <CardHeader className="flex border-b flex-row items-center justify-between bg-muted/50 px-4 py-0">
         <div className="grid gap-0.5">
           <CardTitle className="group flex items-center gap-2 text-lg">
             REF. -
@@ -191,8 +191,8 @@ export default function Step2Details({ classroomId }: { classroomId: string }) {
                                   : field.onChange(
                                       field.value?.filter(
                                         (value: string) =>
-                                          value !== item.contactId,
-                                      ),
+                                          value !== item.contactId
+                                      )
                                     );
                               }}
                             />

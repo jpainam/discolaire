@@ -54,7 +54,7 @@ export function TransactionTable() {
   const utils = api.useUtils();
   const canDeleteTransaction = useCheckPermissions(
     PermissionAction.DELETE,
-    "transaction",
+    "transaction"
   );
 
   const updateTransactionMutation = api.transaction.updateStatus.useMutation({
@@ -72,183 +72,197 @@ export function TransactionTable() {
   });
   const { openModal } = useModal();
   return (
-    <Table className="border-y">
-      <TableHeader>
-        <TableRow className="bg-muted/50">
-          <TableHead>{t("transactionRef")}</TableHead>
-          <TableHead>{t("transactionType")}</TableHead>
-          <TableHead>{t("createdAt")}</TableHead>
-          <TableHead>{t("description")}</TableHead>
-          <TableHead>{t("amount")}</TableHead>
-          <TableHead>{t("status")}</TableHead>
-          <TableHead className="text-right"></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {transactionsQuery.data?.length === 0 && (
-          <TableRow>
-            <TableCell colSpan={7} className="text-center">
-              <EmptyState className="my-8" />
-            </TableCell>
-          </TableRow>
-        )}
-        {transactionsQuery.isPending && (
-          <TableRow>
-            <TableCell colSpan={7}>
-              <div className="grid grid-cols-5 gap-2">
-                {Array.from({ length: 30 }).map((_, i) => (
-                  <Skeleton key={i} className="h-8 w-full" />
-                ))}
-              </div>
-            </TableCell>
-          </TableRow>
-        )}
-        {transactionsQuery.data?.map((transaction) => {
-          return (
-            <TableRow key={transaction.id}>
-              <TableCell>
-                <Link
-                  className="hover:text-blue-600 hover:underline"
-                  href={routes.students.transactions.details(
-                    params.id,
-                    transaction.id,
-                  )}
-                >
-                  {transaction.transactionRef}
-                </Link>
-              </TableCell>
-              <TableCell>{transaction.transactionType}</TableCell>
-              <TableCell>
-                {fullDateFormatter.format(transaction.createdAt)}
-              </TableCell>
-              <TableCell>
-                <Link
-                  className="hover:text-blue-600 hover:underline"
-                  href={routes.students.transactions.details(
-                    params.id,
-                    transaction.id,
-                  )}
-                >
-                  {transaction.description}
-                </Link>
-              </TableCell>
-              <TableCell>
-                {transaction.amount.toLocaleString(i18n.language, {
-                  style: "currency",
-                  currency: CURRENCY,
-                  maximumFractionDigits: 0,
-                  minimumFractionDigits: 0,
-                })}
-              </TableCell>
-              <TableCell>
-                <TransactionStatus status={transaction.status} />
-              </TableCell>
-              <TableCell className="text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button aria-label="Open menu" variant="ghost" size={"sm"}>
-                      <MoreHorizontal className="size-4" aria-hidden="true" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuSub>
-                      <DropdownMenuSubTrigger>
-                        <BookCopy className="mr-2 h-4 w-4" />
-                        {t("status")}
-                      </DropdownMenuSubTrigger>
-                      <DropdownMenuSubContent>
-                        <DropdownMenuRadioGroup
-                          value={transaction.status}
-                          onValueChange={(value) => {
-                            if (
-                              ["PENDING", "CANCELED", "VALIDATED"].includes(
-                                value,
-                              )
-                            ) {
-                              const v = value as
-                                | "PENDING"
-                                | "CANCELED"
-                                | "VALIDATED";
-                              toast.loading(t("updating"), { id: 0 });
-                              updateTransactionMutation.mutate({
-                                transactionId: transaction.id,
-                                status: v,
-                              });
-                            } else {
-                              toast.error(t("invalid_status"), { id: 0 });
-                            }
-                          }}
-                        >
-                          <DropdownMenuRadioItem
-                            value={"VALIDATED"}
-                            className="capitalize"
-                          >
-                            <FlatBadge variant={"green"}>
-                              <CheckCircledIcon
-                                className="mr-2 size-4 text-muted-foreground"
-                                aria-hidden="true"
-                              />
-                              {t("validate")}
-                            </FlatBadge>
-                          </DropdownMenuRadioItem>
-                          <DropdownMenuRadioItem
-                            value={"CANCELED"}
-                            className="capitalize"
-                          >
-                            <FlatBadge variant={"red"}>
-                              <CrossCircledIcon
-                                className="mr-2 size-4 text-muted-foreground"
-                                aria-hidden="true"
-                              />
-                              {t("cancel")}
-                            </FlatBadge>
-                          </DropdownMenuRadioItem>
-                          <DropdownMenuRadioItem
-                            value={"PENDING"}
-                            className="capitalize"
-                          >
-                            <FlatBadge variant={"yellow"}>
-                              <StopwatchIcon
-                                className="mr-2 size-4 text-muted-foreground"
-                                aria-hidden="true"
-                              />
-                              {t("pending")}
-                            </FlatBadge>
-                          </DropdownMenuRadioItem>
-                        </DropdownMenuRadioGroup>
-                      </DropdownMenuSubContent>
-                    </DropdownMenuSub>
-                    {canDeleteTransaction && (
-                      <>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          variant="destructive"
-                          className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-                          onSelect={() => {
-                            openModal({
-                              title: t("delete"),
-                              className: "w-[400px]",
-                              view: (
-                                <DeleteTransaction
-                                  transactionId={transaction.id}
-                                />
-                              ),
-                            });
-                          }}
-                        >
-                          <Trash2 className="mr-2 size-4" aria-hidden="true" />
-                          {t("delete")}
-                        </DropdownMenuItem>
-                      </>
-                    )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
+    <div className="px-4">
+      <div className="bg-background overflow-hidden rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/50">
+              <TableHead>{t("transactionRef")}</TableHead>
+              <TableHead>{t("transactionType")}</TableHead>
+              <TableHead>{t("createdAt")}</TableHead>
+              <TableHead>{t("description")}</TableHead>
+              <TableHead>{t("amount")}</TableHead>
+              <TableHead>{t("status")}</TableHead>
+              <TableHead className="text-right"></TableHead>
             </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+          </TableHeader>
+          <TableBody>
+            {transactionsQuery.data?.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={7} className="text-center">
+                  <EmptyState className="my-8" />
+                </TableCell>
+              </TableRow>
+            )}
+            {transactionsQuery.isPending && (
+              <TableRow>
+                <TableCell colSpan={7}>
+                  <div className="grid grid-cols-5 gap-2">
+                    {Array.from({ length: 30 }).map((_, i) => (
+                      <Skeleton key={i} className="h-8 w-full" />
+                    ))}
+                  </div>
+                </TableCell>
+              </TableRow>
+            )}
+            {transactionsQuery.data?.map((transaction) => {
+              return (
+                <TableRow key={transaction.id}>
+                  <TableCell>
+                    <Link
+                      className="hover:text-blue-600 hover:underline"
+                      href={routes.students.transactions.details(
+                        params.id,
+                        transaction.id
+                      )}
+                    >
+                      {transaction.transactionRef}
+                    </Link>
+                  </TableCell>
+                  <TableCell>{transaction.transactionType}</TableCell>
+                  <TableCell>
+                    {fullDateFormatter.format(transaction.createdAt)}
+                  </TableCell>
+                  <TableCell>
+                    <Link
+                      className="hover:text-blue-600 hover:underline"
+                      href={routes.students.transactions.details(
+                        params.id,
+                        transaction.id
+                      )}
+                    >
+                      {transaction.description}
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    {transaction.amount.toLocaleString(i18n.language, {
+                      style: "currency",
+                      currency: CURRENCY,
+                      maximumFractionDigits: 0,
+                      minimumFractionDigits: 0,
+                    })}
+                  </TableCell>
+                  <TableCell>
+                    <TransactionStatus status={transaction.status} />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          aria-label="Open menu"
+                          variant="ghost"
+                          size={"sm"}
+                        >
+                          <MoreHorizontal
+                            className="size-4"
+                            aria-hidden="true"
+                          />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuSub>
+                          <DropdownMenuSubTrigger>
+                            <BookCopy className="mr-2 h-4 w-4" />
+                            {t("status")}
+                          </DropdownMenuSubTrigger>
+                          <DropdownMenuSubContent>
+                            <DropdownMenuRadioGroup
+                              value={transaction.status}
+                              onValueChange={(value) => {
+                                if (
+                                  ["PENDING", "CANCELED", "VALIDATED"].includes(
+                                    value
+                                  )
+                                ) {
+                                  const v = value as
+                                    | "PENDING"
+                                    | "CANCELED"
+                                    | "VALIDATED";
+                                  toast.loading(t("updating"), { id: 0 });
+                                  updateTransactionMutation.mutate({
+                                    transactionId: transaction.id,
+                                    status: v,
+                                  });
+                                } else {
+                                  toast.error(t("invalid_status"), { id: 0 });
+                                }
+                              }}
+                            >
+                              <DropdownMenuRadioItem
+                                value={"VALIDATED"}
+                                className="capitalize"
+                              >
+                                <FlatBadge variant={"green"}>
+                                  <CheckCircledIcon
+                                    className="mr-2 size-4 text-muted-foreground"
+                                    aria-hidden="true"
+                                  />
+                                  {t("validate")}
+                                </FlatBadge>
+                              </DropdownMenuRadioItem>
+                              <DropdownMenuRadioItem
+                                value={"CANCELED"}
+                                className="capitalize"
+                              >
+                                <FlatBadge variant={"red"}>
+                                  <CrossCircledIcon
+                                    className="mr-2 size-4 text-muted-foreground"
+                                    aria-hidden="true"
+                                  />
+                                  {t("cancel")}
+                                </FlatBadge>
+                              </DropdownMenuRadioItem>
+                              <DropdownMenuRadioItem
+                                value={"PENDING"}
+                                className="capitalize"
+                              >
+                                <FlatBadge variant={"yellow"}>
+                                  <StopwatchIcon
+                                    className="mr-2 size-4 text-muted-foreground"
+                                    aria-hidden="true"
+                                  />
+                                  {t("pending")}
+                                </FlatBadge>
+                              </DropdownMenuRadioItem>
+                            </DropdownMenuRadioGroup>
+                          </DropdownMenuSubContent>
+                        </DropdownMenuSub>
+                        {canDeleteTransaction && (
+                          <>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              variant="destructive"
+                              className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+                              onSelect={() => {
+                                openModal({
+                                  title: t("delete"),
+                                  className: "w-[400px]",
+                                  view: (
+                                    <DeleteTransaction
+                                      transactionId={transaction.id}
+                                    />
+                                  ),
+                                });
+                              }}
+                            >
+                              <Trash2
+                                className="mr-2 size-4"
+                                aria-hidden="true"
+                              />
+                              {t("delete")}
+                            </DropdownMenuItem>
+                          </>
+                        )}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
   );
 }
 

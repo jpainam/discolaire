@@ -24,8 +24,8 @@ export default async function Layout(props: {
   }
 
   return (
-    <div className="flex flex-col">
-      <div className="flex flex-row items-center justify-between border-b py-1 pr-2">
+    <div className="flex gap-2 flex-col">
+      <div className="flex flex-row items-center justify-between border-b py-1 px-4">
         <TransactionTabMenu />
         <PrintAction />
       </div>
