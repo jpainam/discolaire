@@ -24,7 +24,7 @@ export function StaffHeader() {
 
   const canCreateStaff = useCheckPermissions(
     PermissionAction.CREATE,
-    "staff:profile"
+    "staff:profile",
   );
 
   //const jobTitles = jobTitlesQuery.data ?? [];

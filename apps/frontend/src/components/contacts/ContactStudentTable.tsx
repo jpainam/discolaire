@@ -120,7 +120,7 @@ export function ContactStudentTable({ id }: { id: string }) {
                         onSelect={() => {
                           if (!student.id) return;
                           router.push(
-                            `${routes.students.contacts(student.id)}/${id}`
+                            `${routes.students.contacts(student.id)}/${id}`,
                           );
                         }}
                       >
@@ -157,7 +157,7 @@ export function ContactStudentTable({ id }: { id: string }) {
                                 error: (error) => {
                                   return getErrorMessage(error);
                                 },
-                              }
+                              },
                             );
                           }
                         }}

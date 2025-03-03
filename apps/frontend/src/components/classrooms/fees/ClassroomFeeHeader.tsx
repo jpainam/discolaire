@@ -30,7 +30,7 @@ export function ClassroomFeeHeader() {
     "classroom:fee",
     {
       id: params.id,
-    }
+    },
   );
   const Icon = sidebarIcons.fees;
   return (

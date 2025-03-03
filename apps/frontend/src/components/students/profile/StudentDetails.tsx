@@ -55,7 +55,7 @@ export default function StudentDetails() {
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-y-3 px-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-y-3 px-4 xl:grid-cols-4">
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <SquareUserRound className="h-4 w-4 stroke-1" /> {t("lastName")}
         </span>
@@ -91,7 +91,7 @@ export default function StudentDetails() {
         </span>
       </div>
       <Separator className="my-2 w-full" />
-      <div className="grid grid-cols-2 gap-y-3 px-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-y-3 px-4 xl:grid-cols-4">
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <House className="h-4 w-4 stroke-1" />
           {t("residence")}
@@ -129,7 +129,7 @@ export default function StudentDetails() {
         <span>{student.userId ?? "N/A"}</span>
       </div>
       <Separator className="my-2 w-full" />
-      <div className="grid grid-cols-2 gap-y-3 px-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-y-3 px-4 xl:grid-cols-4">
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <School className="h-4 w-4 stroke-1" />
           {t("formerSchool")}
@@ -149,7 +149,7 @@ export default function StudentDetails() {
       </div>
 
       <Separator className="my-2 w-full" />
-      <div className="grid w-full justify-between px-2 md:flex">
+      <div className="grid w-full justify-between px-4 md:flex">
         {/*<ul className="grid w-[350px] gap-3">
           <li className="flex items-center justify-between">
             <span className="flex flex-row items-center gap-1 text-muted-foreground">
@@ -205,7 +205,7 @@ export default function StudentDetails() {
         </ul>
       </div>
       <Separator className="my-2 w-full" />
-      <div className="flex w-full flex-col items-start px-2">
+      <div className="flex w-full flex-col items-start px-4">
         <span className="font-semibold">{t("observation")}</span>
         <span>{student.observation ?? "N/A"}</span>
       </div>

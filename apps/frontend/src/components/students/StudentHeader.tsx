@@ -108,14 +108,14 @@ export function StudentHeader() {
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   const canEditStudent = useCheckPermissions(
     PermissionAction.UPDATE,
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   //const [open, setOpen] = React.useState(false);
 
@@ -226,7 +226,7 @@ export function StudentHeader() {
                 onClick={() => {
                   window.open(
                     `${endpointReports.student_page(params.id)}?format=pdf`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >
@@ -276,7 +276,7 @@ export function StudentHeader() {
                       });
                     }}
                   >
-                    <UserPlus2 className="mr-2 h-4 w-4" />
+                    <UserPlus2 />
                     {t("attach_user")}
                   </DropdownMenuItem>
                 )}
@@ -299,7 +299,7 @@ export function StudentHeader() {
                       });
                     }}
                   >
-                    <KeyRound className="mr-2 h-4 w-4" />
+                    <KeyRound />
                     {t("change_password")}
                   </DropdownMenuItem>
                 )}
@@ -313,7 +313,7 @@ export function StudentHeader() {
                     });
                   }}
                 >
-                  <ShieldBan className="mr-2 h-4 w-4" />
+                  <ShieldBan />
                   {student?.isActive ? t("disable") : t("enable")}
                 </DropdownMenuItem>
                 {canEditStudent && student && (
@@ -322,7 +322,7 @@ export function StudentHeader() {
                       router.push(routes.students.edit(student.id));
                     }}
                   >
-                    <PencilIcon className="mr-2 h-4 w-4" />
+                    <PencilIcon />
                     {t("edit")}
                   </DropdownMenuItem>
                 )}

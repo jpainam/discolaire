@@ -42,13 +42,7 @@ import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 
-export function StudentContactTable({
-  studentId,
-  className,
-}: {
-  studentId: string;
-  className?: string;
-}) {
+export function StudentContactTable({ studentId }: { studentId: string }) {
   const studentContactsQuery = api.student.contacts.useQuery(studentId);
   const { t } = useLocale();
   const confirm = useConfirm();
@@ -89,150 +83,155 @@ export function StudentContactTable({
 
   const studentContacts = studentContactsQuery.data ?? [];
   return (
-    <div className={cn("m-2 rounded-lg border", className)}>
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-muted/50">
-            <TableHead>{t("fullName")}</TableHead>
-            <TableHead>{t("relationship")}</TableHead>
-            <TableHead>{t("email")}</TableHead>
-            <TableHead>{t("phone")}</TableHead>
-            <TableHead>{t("status")}</TableHead>
-            <TableHead></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {studentContactsQuery.isPending && (
-            <TableRow>
-              <TableCell colSpan={6}>
-                <div className="grid grid-cols-6 gap-2">
-                  {Array.from({ length: 12 }).map((_, index) => (
-                    <Skeleton key={index} className="h-8" />
-                  ))}
-                </div>
-              </TableCell>
+    <div className="px-4">
+      <div className="bg-background overflow-hidden rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/50">
+              <TableHead>{t("fullName")}</TableHead>
+              <TableHead>{t("relationship")}</TableHead>
+              <TableHead>{t("email")}</TableHead>
+              <TableHead>{t("phone")}</TableHead>
+              <TableHead>{t("status")}</TableHead>
+              <TableHead></TableHead>
             </TableRow>
-          )}
-          {!studentContactsQuery.isPending && studentContacts.length === 0 && (
-            <TableRow>
-              <TableCell colSpan={6}>
-                <EmptyState />
-              </TableCell>
-            </TableRow>
-          )}
-          {studentContacts.map((c, index) => {
-            const contact = c.contact;
-            const relationship = c.relationship;
-            return (
-              <TableRow key={`${contact.id}-${index}`}>
-                <TableCell className="flex items-center justify-start gap-1 py-0">
-                  <AvatarState pos={index} avatar={contact.avatar} />
-                  <Link
-                    href={`${routes.students.contacts(c.studentId)}/${contact.id}`}
-                    className={cn(
-                      "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline"
-                    )}
-                  >
-                    {getFullName(contact)}
-                  </Link>
-                </TableCell>
-                <TableCell className="py-0">{relationship?.name}</TableCell>
-                <TableCell className="py-0 text-right">
-                  {contact.email ?? "N/A"}
-                </TableCell>
-                <TableCell className="py-0 text-right">
-                  {contact.phoneNumber1}{" "}
-                </TableCell>
-                <TableCell className="py-0">
-                  {contact.userId ? (
-                    <FlatBadge variant={"green"}>{t("invited")}</FlatBadge>
-                  ) : (
-                    <FlatBadge variant={"red"}>{t("not_invited")}</FlatBadge>
-                  )}
-                </TableCell>
-                <TableCell className="py-0">
-                  <div className="flex items-center justify-end gap-2">
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button variant={"ghost"} size={"icon"}>
-                          <FileHeart className="h-4 w-4" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent align="end">
-                        <RelationshipSelector
-                          defaultValue={
-                            c.relationshipId?.toString() ?? undefined
-                          }
-                          onChange={(v) => {
-                            toast.loading(t("updating"), { id: 0 });
-                            updateStudentContactMutation.mutate({
-                              studentId: c.studentId,
-                              contactId: c.contactId,
-                              data: {
-                                relationshipId: Number(v),
-                              },
-                            });
-                          }}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant={"ghost"} size={"icon"}>
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem
-                          onSelect={() => {
-                            router.push(
-                              `${routes.students.contacts(c.studentId)}/${c.contactId}`
-                            );
-                          }}
-                        >
-                          <Eye /> {t("details")}
-                        </DropdownMenuItem>
-                        <DropdownInvitation email={c.contact.email} />
-                        {canDeleteStudentContact && (
-                          <>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              variant="destructive"
-                              className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-                              onSelect={async () => {
-                                const isConfirmed = await confirm({
-                                  title: t("delete"),
-                                  icon: <Trash2 className="text-destructive" />,
-                                  alertDialogTitle: {
-                                    className: "flex items-center gap-2",
-                                  },
-                                  description: t("delete_confirmation", {
-                                    name: getFullName(contact),
-                                  }),
-                                });
-                                if (isConfirmed) {
-                                  toast.loading(t("deleting"), { id: 0 });
-                                  deleteStudentContactMutation.mutate({
-                                    studentId: c.studentId,
-                                    contactId: c.contactId,
-                                  });
-                                }
-                              }}
-                            >
-                              <Trash2 />
-                              {t("delete")}
-                            </DropdownMenuItem>
-                          </>
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+          </TableHeader>
+          <TableBody>
+            {studentContactsQuery.isPending && (
+              <TableRow>
+                <TableCell colSpan={6}>
+                  <div className="grid grid-cols-6 gap-2">
+                    {Array.from({ length: 12 }).map((_, index) => (
+                      <Skeleton key={index} className="h-8" />
+                    ))}
                   </div>
                 </TableCell>
               </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+            )}
+            {!studentContactsQuery.isPending &&
+              studentContacts.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={6}>
+                    <EmptyState />
+                  </TableCell>
+                </TableRow>
+              )}
+            {studentContacts.map((c, index) => {
+              const contact = c.contact;
+              const relationship = c.relationship;
+              return (
+                <TableRow key={`${contact.id}-${index}`}>
+                  <TableCell className="flex items-center justify-start gap-1 py-0">
+                    <AvatarState pos={index} avatar={contact.avatar} />
+                    <Link
+                      href={`${routes.students.contacts(c.studentId)}/${contact.id}`}
+                      className={cn(
+                        "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline"
+                      )}
+                    >
+                      {getFullName(contact)}
+                    </Link>
+                  </TableCell>
+                  <TableCell className="py-0">{relationship?.name}</TableCell>
+                  <TableCell className="py-0 text-right">
+                    {contact.email ?? "N/A"}
+                  </TableCell>
+                  <TableCell className="py-0 text-right">
+                    {contact.phoneNumber1}{" "}
+                  </TableCell>
+                  <TableCell className="py-0">
+                    {contact.userId ? (
+                      <FlatBadge variant={"green"}>{t("invited")}</FlatBadge>
+                    ) : (
+                      <FlatBadge variant={"red"}>{t("not_invited")}</FlatBadge>
+                    )}
+                  </TableCell>
+                  <TableCell className="py-0">
+                    <div className="flex items-center justify-end gap-2">
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button variant={"ghost"} size={"icon"}>
+                            <FileHeart className="h-4 w-4" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent align="end">
+                          <RelationshipSelector
+                            defaultValue={
+                              c.relationshipId?.toString() ?? undefined
+                            }
+                            onChange={(v) => {
+                              toast.loading(t("updating"), { id: 0 });
+                              updateStudentContactMutation.mutate({
+                                studentId: c.studentId,
+                                contactId: c.contactId,
+                                data: {
+                                  relationshipId: Number(v),
+                                },
+                              });
+                            }}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant={"ghost"} size={"icon"}>
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onSelect={() => {
+                              router.push(
+                                `${routes.students.contacts(c.studentId)}/${c.contactId}`
+                              );
+                            }}
+                          >
+                            <Eye /> {t("details")}
+                          </DropdownMenuItem>
+                          <DropdownInvitation email={c.contact.email} />
+                          {canDeleteStudentContact && (
+                            <>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                variant="destructive"
+                                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+                                onSelect={async () => {
+                                  const isConfirmed = await confirm({
+                                    title: t("delete"),
+                                    icon: (
+                                      <Trash2 className="text-destructive" />
+                                    ),
+                                    alertDialogTitle: {
+                                      className: "flex items-center gap-2",
+                                    },
+                                    description: t("delete_confirmation", {
+                                      name: getFullName(contact),
+                                    }),
+                                  });
+                                  if (isConfirmed) {
+                                    toast.loading(t("deleting"), { id: 0 });
+                                    deleteStudentContactMutation.mutate({
+                                      studentId: c.studentId,
+                                      contactId: c.contactId,
+                                    });
+                                  }
+                                }}
+                              >
+                                <Trash2 />
+                                {t("delete")}
+                              </DropdownMenuItem>
+                            </>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
