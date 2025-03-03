@@ -66,8 +66,8 @@ importers:
   apps/frontend:
     dependencies:
       '@bprogress/next':
-        specifier: ^3.2.2
-        version: 3.2.2(next@15.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: ^3.2.4
+        version: 3.2.4(next@15.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@e965/xlsx':
         specifier: ^0.20.3
         version: 0.20.3
@@ -1168,15 +1168,15 @@ packages:
   '@bprogress/core@1.2.3':
     resolution: {integrity: sha512-RMdZtsbXB2IeygoyUo+eYXCyvnAB82JzmJgZXnS1B38hTnwzcveyiifLYa6VQvqaUkLNGns5tCCJFv+Qld5r4A==}
 
-  '@bprogress/next@3.2.2':
-    resolution: {integrity: sha512-5jfgEBhF5DOYshV80kcQlo59NsbeAl/pwX3+Wg6/drGN3sxm6PuzcTUgsmNGksyf/p7L+/mm67hn6w2FMz/Zkg==}
+  '@bprogress/next@3.2.4':
+    resolution: {integrity: sha512-s3ScGO/OVedphwwvwRpILRg5kWjjQG3M42TeJZOyD/QPSqzyCO+5WEjvjjdtT2qHafDBeq351e446vbcLq6vYw==}
     peerDependencies:
       next: '>=13.0.0'
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
 
-  '@bprogress/react@1.1.6':
-    resolution: {integrity: sha512-ExmCyK/B3FN0YUn7CmsCzIe+CdD6kkHu9sJFg5mN/KHyiddsPJa42utDugQQ60FI2ovCeqUnGKQJxbmizCD4Qw==}
+  '@bprogress/react@1.1.8':
+    resolution: {integrity: sha512-D2JOO45IWCnVxvIkCpNx2Qmrn7QtX3UIIaybOF763fezeD2YMDdk9zWx9Q6k+3XbJRbTo01n0coDDgBBNqDSaA==}
     peerDependencies:
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
@@ -7100,15 +7100,15 @@ snapshots:
 
   '@bprogress/core@1.2.3': {}
 
-  '@bprogress/next@3.2.2(next@15.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+  '@bprogress/next@3.2.4(next@15.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
       '@bprogress/core': 1.2.3
-      '@bprogress/react': 1.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@bprogress/react': 1.1.8(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       next: 15.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
-  '@bprogress/react@1.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+  '@bprogress/react@1.1.8(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
       '@bprogress/core': 1.2.3
       react: 19.0.0
