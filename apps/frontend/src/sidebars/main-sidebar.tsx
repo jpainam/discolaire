@@ -1,6 +1,12 @@
 "use client";
 
-import { RiAdminLine, RiLeafLine, RiSettings3Line } from "@remixicon/react";
+import {
+  RiAdminLine,
+  RiLeafLine,
+  RiScanLine,
+  RiSettings3Line,
+  RiUserFollowLine,
+} from "@remixicon/react";
 import {
   Sidebar,
   SidebarContent,
@@ -13,7 +19,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@repo/ui/components/sidebar";
-import { FolderOpen, House, HouseWifiIcon, Users } from "lucide-react";
+import { FolderOpen, HouseIcon, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -23,25 +29,25 @@ export function MainSidebar({
 }: React.ComponentProps<typeof Sidebar>) {
   const data = [
     {
-      name: "home",
+      name: "dashboard",
       url: `/`,
-      icon: House,
+      icon: RiScanLine,
     },
     {
-      name: "student_management",
+      name: "students",
       url: `/students`,
       icon: Users,
     },
 
     {
-      name: "classroom_management",
+      name: "classrooms",
       url: `/classrooms`,
-      icon: HouseWifiIcon,
+      icon: HouseIcon,
     },
     {
       name: "contacts",
       url: `/contacts`,
-      icon: Users,
+      icon: RiUserFollowLine,
     },
     {
       name: "staffs",

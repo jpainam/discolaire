@@ -164,7 +164,7 @@ function ActionCell({ user }: { user: User }) {
               router.push(`/administration/users/${user.id}`);
             }}
           >
-            <Eye className="mr-2 h-4 w-4" />
+            <Eye />
             {t("details")}
           </DropdownMenuItem>
           {canDeleteUser && (

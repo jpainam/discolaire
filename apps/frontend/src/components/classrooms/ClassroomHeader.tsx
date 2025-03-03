@@ -48,14 +48,14 @@ export function ClassroomHeader() {
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const canUpdateClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const deleteClassroomMutation = api.classroom.delete.useMutation({
     onSuccess: () => {
@@ -116,7 +116,7 @@ export function ClassroomHeader() {
                   variant="outline"
                   onClick={() => {
                     const classroom = classroomsQuery.data?.find(
-                      (c) => c.id === params.id,
+                      (c) => c.id === params.id
                     );
                     if (!classroom) return;
                     openSheet({
@@ -189,11 +189,11 @@ export function ClassroomHeader() {
             <DropdownMenuSeparator />
 
             <DropdownMenuItem>
-              <PDFIcon className="mr-2 h-4 w-4" />
+              <PDFIcon />
               <span>{t("pdf_export")}</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <XMLIcon className="mr-2 h-4 w-4" />
+              <XMLIcon />
               <span>{t("xml_export")}</span>
             </DropdownMenuItem>
 

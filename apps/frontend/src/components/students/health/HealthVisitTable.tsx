@@ -121,7 +121,7 @@ export function HealthVisitTable({
                             });
                           }}
                         >
-                          <Eye className="mr-2 h-4 w-4" />
+                          <Eye />
                           {t("Details")}
                         </DropdownMenuItem>
                         <DropdownMenuItem>

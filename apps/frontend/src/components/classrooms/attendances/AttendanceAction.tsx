@@ -56,7 +56,7 @@ export function AttendanceAction({
             console.log("Viewing details of attendance", attendanceId);
           }}
         >
-          <Eye className="mr-2 h-4 w-4" />
+          <Eye />
           {t("details")}
         </DropdownMenuItem>
         <DropdownMenuItem

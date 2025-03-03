@@ -49,7 +49,7 @@ export function ReportCardHeader() {
         className="w-[300px]"
         onChange={(val) => {
           router.push(
-            routes.report_cards.index + "/?" + createQueryString({ term: val }),
+            routes.report_cards.index + "/?" + createQueryString({ term: val })
           );
         }}
       />
@@ -61,7 +61,7 @@ export function ReportCardHeader() {
               router.push(
                 routes.report_cards.index +
                   "/?" +
-                  createQueryString({ student: val }),
+                  createQueryString({ student: val })
               );
             }}
             defaultValue={searchParams.get("student") ?? undefined}
@@ -80,11 +80,11 @@ export function ReportCardHeader() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem>
-              <PDFIcon className="mr-2 h-4 w-4" />
+              <PDFIcon />
               {t("pdf_export")}
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <XMLIcon className="mr-2 h-4 w-4" />
+              <XMLIcon />
               {t("xml_export")}
             </DropdownMenuItem>
             <DropdownMenuSeparator />

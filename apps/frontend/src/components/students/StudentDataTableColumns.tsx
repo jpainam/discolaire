@@ -253,7 +253,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
             year: "numeric",
             month: "short",
             day: "numeric",
-          },
+          }
         );
         return (
           <SimpleTooltip
@@ -382,7 +382,7 @@ function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
               router.push(routes.students.details(student.id));
             }}
           >
-            <Eye className="mr-2 h-4 w-4" /> {t("details")}
+            <Eye /> {t("details")}
           </DropdownMenuItem>
           <DropdownMenuItem
             className="cursor-pointer"

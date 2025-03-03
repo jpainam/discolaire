@@ -31,7 +31,7 @@ export function StudentPageHeader() {
   const [open, setOpen] = useState(false);
   const canCreateStudent = useCheckPermissions(
     PermissionAction.CREATE,
-    "student:profile",
+    "student:profile"
   );
 
   return (
@@ -41,7 +41,7 @@ export function StudentPageHeader() {
         size={"sm"}
         variant="outline"
         className={cn(
-          "flex w-full justify-between bg-background text-sm font-semibold shadow-none 2xl:w-[500px]",
+          "flex w-full justify-between bg-background text-sm font-semibold shadow-none 2xl:w-[500px]"
         )}
         onClick={() => setOpen(true)}
       >
@@ -58,7 +58,6 @@ export function StudentPageHeader() {
       <div className="ml-auto flex flex-row items-center gap-2">
         {canCreateStudent && (
           <Button
-            variant={"default"}
             size={"sm"}
             onClick={() => {
               router.push(routes.students.create);
@@ -71,7 +70,7 @@ export function StudentPageHeader() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant={"outline"} size={"icon"}>
-              <MoreVertical className="h-4 w-4" />
+              <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -81,22 +80,22 @@ export function StudentPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.student_list}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
-              <PDFIcon className="mr-2 h-4 w-4" />
+              <PDFIcon />
               {t("pdf_export")}
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={() => {
                 window.open(
                   `${endpointReports.student_list}?format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
-              <XMLIcon className="mr-2 h-4 w-4" />
+              <XMLIcon />
               {t("xml_export")}
             </DropdownMenuItem>
           </DropdownMenuContent>

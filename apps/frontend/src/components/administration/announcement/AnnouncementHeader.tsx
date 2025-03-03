@@ -47,7 +47,7 @@ export function AnnouncementHeader() {
           createQueryString({
             from: range.from.toISOString(),
             to: range.to.toISOString(),
-          }),
+          })
       );
     } else {
       router.push(
@@ -55,7 +55,7 @@ export function AnnouncementHeader() {
           createQueryString({
             from: undefined,
             to: undefined,
-          }),
+          })
       );
     }
   };
@@ -85,11 +85,11 @@ export function AnnouncementHeader() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem className="text-xs">
-              <XMLIcon className="mr-2 h-4 w-4" />
+              <XMLIcon />
               {t("pdf_export")}
             </DropdownMenuItem>
             <DropdownMenuItem className="text-xs">
-              <PDFIcon className="mr-2 h-4 w-4" />
+              <PDFIcon />
               {t("xml_export")}
             </DropdownMenuItem>
           </DropdownMenuContent>

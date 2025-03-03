@@ -27,11 +27,11 @@ export function DropdownHelp() {
       <DropdownMenuPortal>
         <DropdownMenuSubContent>
           <DropdownMenuItem>
-            <LibraryBig className="mr-2 h-4 w-4" />
+            <LibraryBig />
             <span>{t("how_to_get_started")}</span>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <YoutubeIcon className="mr-2 h-4 w-4" />
+            <YoutubeIcon />
             <span>{t("watch_a_video")}</span>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -40,7 +40,7 @@ export function DropdownHelp() {
               window.open(webinarLink, "_blank");
             }}
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
+            <CalendarIcon />
             <span>{t("join_a_webinar")}</span>
           </DropdownMenuItem>
         </DropdownMenuSubContent>

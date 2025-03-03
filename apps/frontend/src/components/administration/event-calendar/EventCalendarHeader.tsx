@@ -38,8 +38,7 @@ export function EventCalendarHeader() {
 
   const handleFilterChange = (category: string) => {
     router.push(
-      "?" +
-        createQueryString({ category: category == "All" ? null : category }),
+      "?" + createQueryString({ category: category == "All" ? null : category })
     );
   };
 
@@ -91,11 +90,11 @@ export function EventCalendarHeader() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem className="text-xs">
-              <PDFIcon className="mr-2 h-4 w-4" />
+              <PDFIcon />
               Export the calendar
             </DropdownMenuItem>
             <DropdownMenuItem className="text-xs">
-              <XMLIcon className="mr-2 h-4 w-4" />
+              <XMLIcon />
               Export the calendar
             </DropdownMenuItem>
             <DropdownMenuItem className="text-xs">

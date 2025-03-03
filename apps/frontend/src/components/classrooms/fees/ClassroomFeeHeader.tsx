@@ -30,7 +30,7 @@ export function ClassroomFeeHeader() {
     "classroom:fee",
     {
       id: params.id,
-    },
+    }
   );
   const Icon = sidebarIcons.fees;
   return (
@@ -65,11 +65,11 @@ export function ClassroomFeeHeader() {
                 console.log("PDF");
               }}
             >
-              <PDFIcon className="mr-2 h-4 w-4" />
+              <PDFIcon />
               {t("pdf_export")}
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <XMLIcon className="mr-2 h-4 w-4" />
+              <XMLIcon />
               {t("xml_export")}
             </DropdownMenuItem>
           </DropdownMenuContent>

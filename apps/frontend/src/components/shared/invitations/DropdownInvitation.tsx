@@ -55,7 +55,7 @@ export function DropdownInvitation({ email }: { email?: string | null }) {
           createInvitationMutation.mutate({ email });
         }}
       >
-        <CopyIcon className="mr-2 h-4 w-4" />
+        <CopyIcon />
         {t("copy_invite")}
       </DropdownMenuItem>
       <DropdownMenuItem
@@ -99,8 +99,7 @@ export function DropdownInvitation({ email }: { email?: string | null }) {
           }
         }}
       >
-        <SendIcon className="mr-2 h-4 w-4" />
-        {}
+        <SendIcon />
         {t("send_invite")}
       </DropdownMenuItem>
     </>

@@ -84,7 +84,7 @@ export function StudentContactTable({
     "student:contact",
     {
       id: studentId,
-    },
+    }
   );
 
   const studentContacts = studentContactsQuery.data ?? [];
@@ -130,7 +130,7 @@ export function StudentContactTable({
                   <Link
                     href={`${routes.students.contacts(c.studentId)}/${contact.id}`}
                     className={cn(
-                      "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline",
+                      "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline"
                     )}
                   >
                     {getFullName(contact)}
@@ -186,11 +186,11 @@ export function StudentContactTable({
                         <DropdownMenuItem
                           onSelect={() => {
                             router.push(
-                              `${routes.students.contacts(c.studentId)}/${c.contactId}`,
+                              `${routes.students.contacts(c.studentId)}/${c.contactId}`
                             );
                           }}
                         >
-                          <Eye className="mr-2 h-4 w-4" /> {t("details")}
+                          <Eye /> {t("details")}
                         </DropdownMenuItem>
                         <DropdownInvitation email={c.contact.email} />
                         {canDeleteStudentContact && (

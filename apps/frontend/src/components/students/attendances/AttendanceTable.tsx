@@ -64,7 +64,7 @@ export default function AttendanceTable() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem>
-                      <Eye className="mr-2 h-4 w-4" />
+                      <Eye />
                       {t("details")}
                     </DropdownMenuItem>
                     <DropdownMenuItem>

@@ -163,7 +163,7 @@ function ActionCell({
 
   const canDeleteTransaction = useCheckPermissions(
     PermissionAction.DELETE,
-    "transaction",
+    "transaction"
   );
 
   const { openModal } = useModal();
@@ -184,7 +184,7 @@ function ActionCell({
             });
           }}
         >
-          <Eye className="mr-2 h-4 w-4" />
+          <Eye />
           {t("details")}
         </DropdownMenuItem>
         <DropdownMenuSub>

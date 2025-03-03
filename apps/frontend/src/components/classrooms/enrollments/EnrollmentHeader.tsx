@@ -37,7 +37,7 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
     "classroom:enrollment",
     {
       id: classroomId,
-    },
+    }
   );
 
   const students = classroomStudentsQuery.data ?? [];
@@ -148,22 +148,22 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroomId}&preview=true&size=a4&format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
-              <XMLIcon className="mr-2 h-4 w-4" />
+              <XMLIcon />
               {t("xml_export")}
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroomId}&preview=true&size=a4&format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
-              <PDFIcon className="mr-2 h-4 w-4" />
+              <PDFIcon />
               {t("pdf_export")}
             </DropdownMenuItem>
           </DropdownMenuContent>

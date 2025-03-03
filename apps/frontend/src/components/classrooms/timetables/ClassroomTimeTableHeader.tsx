@@ -68,11 +68,11 @@ export function ClassroomTimeTableHeader() {
           <DropdownMenuContent align="end">
             <DropdownHelp />
             <DropdownMenuItem>
-              <PDFIcon className="mr-2 h-4 w-4" />
+              <PDFIcon />
               {t("pdf_export")}
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <XMLIcon className="mr-2 h-4 w-4" />
+              <XMLIcon />
               {t("xml_export")}
             </DropdownMenuItem>
             <DropdownMenuSeparator />

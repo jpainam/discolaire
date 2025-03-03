@@ -127,7 +127,7 @@ function ActionsCell({ row }: { row: Row<SMSHistory> }) {
               // actions.onView && actions.onView(row.original);
             }}
           >
-            <Eye className="mr-2 h-4 w-4" /> {t("details")}
+            <Eye /> {t("details")}
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {

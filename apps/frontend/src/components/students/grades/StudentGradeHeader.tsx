@@ -112,7 +112,7 @@ export function StudentGradeHeader({
             "?" +
               createQueryString({
                 term: val,
-              }),
+              })
           );
         }}
         defaultValue={term ? `${term}` : undefined}
@@ -177,11 +177,11 @@ export function StudentGradeHeader({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  },
+                  }
                 );
               }}
             >
-              <PDFIcon className="mr-2 h-4 w-4" /> {t("pdf_export")}
+              <PDFIcon /> {t("pdf_export")}
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={() => {
@@ -201,11 +201,11 @@ export function StudentGradeHeader({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  },
+                  }
                 );
               }}
             >
-              <XMLIcon className="mr-2 h-4 w-4" /> {t("xml_export")}
+              <XMLIcon /> {t("xml_export")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

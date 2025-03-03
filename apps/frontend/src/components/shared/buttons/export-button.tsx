@@ -39,13 +39,13 @@ export function ExportButton({
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-[150px]" align="end">
           <DropdownMenuItem onClick={onPdfClick}>
-            <PDFIcon className="mr-2 h-4 w-4" />
+            <PDFIcon />
             <span>PDF</span>
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={onExcelClick}>
-            <XMLIcon className="mr-2 h-4 w-4" />
+            <XMLIcon />
             <span>Excel</span>
             <DropdownMenuShortcut>⇧⌘E</DropdownMenuShortcut>
           </DropdownMenuItem>

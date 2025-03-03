@@ -61,11 +61,11 @@ export function FeeHeader() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem>
-              <PDFIcon className="mr-2 h-4 w-4" />
+              <PDFIcon />
               {t("export")}
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <XMLIcon className="mr-2 h-4 w-4" />
+              <XMLIcon />
               {t("export")}
             </DropdownMenuItem>
           </DropdownMenuContent>

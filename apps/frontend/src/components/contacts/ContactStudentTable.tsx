@@ -120,11 +120,11 @@ export function ContactStudentTable({ id }: { id: string }) {
                         onSelect={() => {
                           if (!student.id) return;
                           router.push(
-                            `${routes.students.contacts(student.id)}/${id}`,
+                            `${routes.students.contacts(student.id)}/${id}`
                           );
                         }}
                       >
-                        <Eye className="mr-2 h-4 w-4" />
+                        <Eye />
                         {t("details")}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
@@ -157,7 +157,7 @@ export function ContactStudentTable({ id }: { id: string }) {
                                 error: (error) => {
                                   return getErrorMessage(error);
                                 },
-                              },
+                              }
                             );
                           }
                         }}
