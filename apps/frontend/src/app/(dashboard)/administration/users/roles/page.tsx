@@ -11,6 +11,7 @@ import {
 } from "@repo/ui/components/table";
 import { getServerTranslations } from "~/i18n/server";
 
+import { ExternalLinkIcon } from "lucide-react";
 import { api } from "~/trpc/server";
 import { CreateRoleButton } from "./CreateRoleButton";
 import { EditDeleteAction } from "./EditDeleteAction";
@@ -24,16 +25,16 @@ export default async function Page() {
     year: "numeric",
   });
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 p-4">
       <div className="flex flex-row items-center justify-between">
         <Label>{t("roles")}</Label>
         <CreateRoleButton />
       </div>
 
-      <div className="mx-2 rounded-md border">
+      <div className="bg-background overflow-hidden rounded-md border">
         <Table>
-          <TableHeader className="bg-muted/50">
-            <TableRow>
+          <TableHeader>
+            <TableRow className="bg-muted/50">
               <TableHead>
                 {t("roles")} - {t("name")}
               </TableHead>
@@ -49,12 +50,26 @@ export default async function Page() {
               return (
                 <TableRow key={role.id}>
                   <TableCell>
-                    <Link href={`./roles/${role.id}`}>{role.name}</Link>
+                    <Link
+                      className="text-blue-500 flex items-center underline flex-row gap-1"
+                      href={`./roles/${role.id}`}
+                    >
+                      {role.name}
+                      <ExternalLinkIcon className="w-4 h-4" />
+                    </Link>
                   </TableCell>
-                  <TableCell>{role.description}</TableCell>
-                  <TableCell>{role.users}</TableCell>
-                  <TableCell>{role.policies}</TableCell>
-                  <TableCell>{dateFormatter.format(role.createdAt)}</TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {role.description}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {role.users}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {role.policies}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {dateFormatter.format(role.createdAt)}
+                  </TableCell>
                   <TableCell className="text-right">
                     <EditDeleteAction
                       id={role.id}
