@@ -2,11 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
-
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -20,10 +15,13 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { Separator } from "@repo/ui/components/separator";
 import { Textarea } from "@repo/ui/components/textarea";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 
-import { DatePicker } from "~/components/shared/date-picker";
 import { RecipientMultiSelector } from "~/components/shared/selects/RecipientMultiSelector";
 import { getErrorMessage } from "~/lib/handle-error";
 import { SelectField } from "../../shared/forms/SelectField";
@@ -72,7 +70,7 @@ export function CreateEditAnnouncement({
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) =>
-      console.log(value, name, type),
+      console.log(value, name, type)
     );
     return () => subscription.unsubscribe();
   }, [watch]);
@@ -104,7 +102,7 @@ export function CreateEditAnnouncement({
           error: (error) => {
             return getErrorMessage(error);
           },
-        },
+        }
       );
     } else {
       toast.promise(
@@ -119,7 +117,7 @@ export function CreateEditAnnouncement({
           error: (error) => {
             return getErrorMessage(error);
           },
-        },
+        }
       );
     }
   }
@@ -169,7 +167,10 @@ export function CreateEditAnnouncement({
                 <FormItem>
                   <FormLabel>{t("from")}</FormLabel>
                   <FormControl>
-                    <DatePicker {...field} className="mt-1" />
+                    <Input
+                      type="date"
+                      onChange={(e) => field.onChange(new Date(e.target.value))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -182,7 +183,12 @@ export function CreateEditAnnouncement({
                 <FormItem>
                   <FormLabel>{t("to")}</FormLabel>
                   <FormControl>
-                    <DatePicker {...field} className="mt-1" />
+                    <Input
+                      type="date"
+                      onChange={(e) => field.onChange(new Date(e.target.value))}
+                      defaultValue={field.value?.toISOString().split("T")[0]}
+                      className="mt-1"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

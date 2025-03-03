@@ -1,10 +1,11 @@
 "use client";
 
+import { Input } from "@repo/ui/components/input";
 import { Separator } from "@repo/ui/components/separator";
+import { useState } from "react";
 import { useLocale } from "~/i18n";
 
 import { cn } from "~/lib/utils";
-import { DatePicker } from "../shared/date-picker";
 
 interface ScheduleItem {
   startTime: string;
@@ -60,8 +61,8 @@ const scheduleData: ScheduleItem[] = [
 
 export function ScheduleCard({ className }: { className?: string }) {
   const { t } = useLocale();
-  //const [today, setToday] = useState(new Date());
-  const today = new Date();
+  const [today, setToday] = useState(new Date());
+
   return (
     <div className={cn("rounded-lg border", className)}>
       <div className="px-4 pt-2 text-center text-lg font-bold">
@@ -77,10 +78,15 @@ export function ScheduleCard({ className }: { className?: string }) {
         >
           <ChevronLeft className="h-6 w-6" />
         </Button> */}
-        <DatePicker
+        <Input
+          type="date"
+          value={today.toISOString().split("T")[0]}
+          onChange={(e) => {
+            setToday(new Date(e.target.value));
+          }}
           //formatStr="d MMM"
           //className="h-8 w-[175px]"
-          defaultValue={today}
+          //defaultValue={today}
         />
         {/* <Button
           onClick={() => {
