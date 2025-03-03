@@ -30,8 +30,8 @@ export function GradeSheetHeader() {
   const router = useRouter();
 
   return (
-    <div className="grid flex-row items-center gap-2 bg-muted/40 px-2 py-1 md:flex md:border-b">
-      <Label className="hidden w-[70px] md:flex">{t("term")}</Label>
+    <div className="grid flex-row items-center gap-4 bg-muted/40 px-4 py-1 md:flex md:border-b">
+      <Label className="hidden md:flex">{t("term")}</Label>
       <TermSelector
         showAllOption={true}
         defaultValue={term ?? undefined}
@@ -40,9 +40,9 @@ export function GradeSheetHeader() {
         }}
         className="w-[300px]"
       />
-      <Label className="hidden w-[75px] md:flex">{t("subject")}</Label>
+      <Label className="hidden  md:flex">{t("subject")}</Label>
       <SubjectSelector
-        className="md:w-[350px]"
+        className="md:w-[300px]"
         defaultValue={subject ?? undefined}
         onChange={(val) => {
           void setSubject(val ?? null);

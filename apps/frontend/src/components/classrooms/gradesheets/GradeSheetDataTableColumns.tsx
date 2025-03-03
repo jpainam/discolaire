@@ -38,9 +38,9 @@ export function fetchGradeSheetColumns({
   classroomId: string;
 }): ColumnDef<ClassroomGradeSheetProcedureOutput, unknown>[] {
   const startDateFormatter = Intl.DateTimeFormat(i18next.language, {
-    month: "numeric",
-    day: "numeric",
-    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    year: "2-digit",
   });
   // const endDateFormatter = Intl.DateTimeFormat(i18next.language, {
   //   year: "numeric",
@@ -77,15 +77,16 @@ export function fetchGradeSheetColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("date")} />
       ),
+      size: 100,
+      enableSorting: false,
+      enableHiding: false,
       cell: ({ row }) => {
         const createdAt = row.original.createdAt;
-        //const endDate = row.original.endDate;
+
         return (
-          <div>
+          <span className="text-muted-foreground">
             {startDateFormatter.format(createdAt)}
-            {/* -{" "}
-            {endDate && endDateFormatter.format(new Date(endDate))} */}
-          </div>
+          </span>
         );
       },
     },
@@ -114,7 +115,11 @@ export function fetchGradeSheetColumns({
       ),
       cell: ({ row }) => {
         const subject = row.original.subject;
-        return <div>{subject.course.reportName}</div>;
+        return (
+          <span className="text-muted-foreground">
+            {subject.course.reportName}
+          </span>
+        );
       },
     },
     {
@@ -139,9 +144,12 @@ export function fetchGradeSheetColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("coeff")} />
       ),
+      size: 50,
       cell: ({ row }) => {
         const subject = row.original.subject;
-        return <div>{subject.coefficient}</div>;
+        return (
+          <div className="text-muted-foreground">{subject.coefficient}</div>
+        );
       },
     },
     {
@@ -149,9 +157,10 @@ export function fetchGradeSheetColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("graded")} />
       ),
+      size: 60,
       cell: ({ row }) => {
         const numGrades = row.original.num_grades || 0;
-        return <div>{numGrades}</div>;
+        return <div className="text-muted-foreground">{numGrades}</div>;
       },
     },
     {
@@ -159,15 +168,11 @@ export function fetchGradeSheetColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("absent")} />
       ),
+      size: 60,
       cell: ({ row }) => {
         const numIsAbsent = row.original.num_is_absent || 0;
         return (
-          <div
-            className={cn(
-              "font-bold",
-              numIsAbsent == 0 ? "text-green-500" : "text-destructive",
-            )}
-          >
+          <div className={cn(numIsAbsent == 0 ? "" : "text-destructive")}>
             {numIsAbsent}
           </div>
         );
@@ -178,6 +183,7 @@ export function fetchGradeSheetColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("avg")} />
       ),
+      size: 60,
       cell: ({ row }) => {
         const avg = row.original.avg || 0;
         return (
@@ -192,6 +198,7 @@ export function fetchGradeSheetColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("min")} />
       ),
+      size: 60,
       cell: ({ row }) => {
         const min = isFinite(row.original.min) ? row.original.min : 0;
         return (
@@ -206,6 +213,7 @@ export function fetchGradeSheetColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("max")} />
       ),
+      size: 60,
       cell: ({ row }) => {
         const max = isFinite(row.original.max) ? row.original.max : 0;
         return (
@@ -220,6 +228,7 @@ export function fetchGradeSheetColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("weight")} />
       ),
+      size: 60,
       cell: ({ row }) => {
         const weight = row.original.weight;
         return <div>{weight || 0} %</div>;
@@ -285,8 +294,8 @@ function ActionCells({
               router.push(
                 routes.classrooms.gradesheets.details(
                   classroomId,
-                  gradesheet.id,
-                ),
+                  gradesheet.id
+                )
               );
             }}
           >
@@ -296,7 +305,7 @@ function ActionCells({
           <DropdownMenuItem
             onSelect={() => {
               router.push(
-                routes.classrooms.gradesheets.edit(classroomId, gradesheet.id),
+                routes.classrooms.gradesheets.edit(classroomId, gradesheet.id)
               );
             }}
           >

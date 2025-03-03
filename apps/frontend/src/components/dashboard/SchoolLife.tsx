@@ -128,7 +128,7 @@ export function SchoolLife({ className }: { className?: string }) {
     .map((date) =>
       format(date, "EEE d", {
         locale: i18n.language == "fr" ? fr : i18n.language == "es" ? es : enUS,
-      })
+      }),
     );
 
   return (

@@ -1,5 +1,3 @@
-import { DashboardClassroomSize } from "~/components/dashboard/DashboardClassroomSize";
-import { DashboardTransactionTrend } from "~/components/dashboard/DashboardTransactionTrend";
 import { EducationalRessource } from "~/components/dashboard/EducationalRessource";
 import { QuickStatistics } from "~/components/dashboard/QuickStatistics";
 import { ScheduleCard } from "~/components/dashboard/ScheduleCard";
@@ -22,8 +20,8 @@ export default function Page() {
       {/* <Suspense>
         <TransactionStat className="col-span-full" />
       </Suspense> */}
-      <DashboardClassroomSize className="col-span-full hidden md:block" />
-      <DashboardTransactionTrend className="col-span-full hidden md:block" />
+      {/* <DashboardClassroomSize className="col-span-full hidden md:block" />
+      <DashboardTransactionTrend className="col-span-full hidden md:block" /> */}
     </div>
   );
 }

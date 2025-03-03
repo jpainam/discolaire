@@ -34,16 +34,11 @@ export function FinanceHeader() {
   //const { createQueryString } = useCreateQueryString();
   const [type, setType] = useQueryState("type");
   const [search, setSearch] = useQueryState("query");
-  const options = [
-    { label: t("all"), value: "all", icon: WalletIcon },
-    { label: t("debit"), value: "debit", icon: CreditCardIcon },
-    { label: t("credit"), value: "credit", icon: FaHandHoldingUsd },
-  ];
 
   const selectedStudents = useAtomValue(selectedStudentIdsAtom);
   const Icon = sidebarIcons.financial_situation;
   return (
-    <div className="flex flex-row items-center gap-2 border-b bg-secondary px-2 py-1 text-secondary-foreground">
+    <div className="flex flex-row items-center gap-2 border-b  px-4 py-1 ">
       {Icon && <Icon className="h-6 w-6" />}
       <Label>{t("financial_situation")}</Label>
       <Input
@@ -53,27 +48,25 @@ export function FinanceHeader() {
         placeholder={t("search")}
       />
       <ToggleGroup
-        className="rounded-md border border-primary"
-        size={"sm"}
-        defaultValue={type ?? "all"}
+        type="single"
+        size="sm"
         onValueChange={(val) => {
           void setType(val == "all" ? null : val);
         }}
-        type="single"
+        value="debit"
+        variant={"default"}
+        defaultValue={type ?? "all"}
+        className="*:data-[slot=toggle-group-item]:px-3 rounded-sm"
       >
-        {options.map((option) => {
-          const Icon = option.icon;
-          return (
-            <ToggleGroupItem
-              className="rounded-sm data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
-              key={option.value}
-              value={option.value}
-            >
-              <Icon className="mr-2 h-3 w-3" />
-              {option.label}
-            </ToggleGroupItem>
-          );
-        })}
+        <ToggleGroupItem value="all" aria-label="All">
+          <WalletIcon /> {t("all")}
+        </ToggleGroupItem>
+        <ToggleGroupItem value="debit" aria-label="Debit">
+          <CreditCardIcon /> {t("debit")}
+        </ToggleGroupItem>
+        <ToggleGroupItem value="credit" aria-label="Credit">
+          <FaHandHoldingUsd /> {t("credit")}
+        </ToggleGroupItem>
       </ToggleGroup>
 
       <div className="ml-auto flex items-center gap-1">
@@ -162,7 +155,7 @@ function ChangeFinanceView() {
     >
       {options.map((option) => (
         <ToggleGroupItem
-          className="font-bold data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+          //className="font-bold data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
           key={option.value}
           value={option.value}
         >

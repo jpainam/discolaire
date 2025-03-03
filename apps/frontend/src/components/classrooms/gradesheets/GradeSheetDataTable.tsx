@@ -5,7 +5,6 @@ import { useMemo } from "react";
 
 import type { RouterOutputs } from "@repo/api";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
-import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
 import { useLocale } from "~/i18n";
 
 import { GradeSheetDataTableActions } from "./GradeSheetDataTableActions";
@@ -35,12 +34,10 @@ export function GradeSheetDataTable({
     rowCount: gradesheets.length,
   });
   return (
-    <DataTable
-      className="px-2"
-      table={table}
-      floatingBar={<GradeSheetDataTableActions table={table} />}
-    >
-      <DataTableToolbar table={table} />
-    </DataTable>
+    <div className="w-full px-4">
+      <DataTable table={table}>
+        <GradeSheetDataTableActions table={table} />
+      </DataTable>
+    </div>
   );
 }

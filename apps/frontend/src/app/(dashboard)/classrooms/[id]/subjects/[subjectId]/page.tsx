@@ -24,7 +24,7 @@ export default async function Page(props: {
   const canRead = await checkPermissions(PermissionAction.READ, "subject", {
     id: Number(subjectId),
   });
-  if (!canRead) {
+  if (canRead) {
     return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
   }
 

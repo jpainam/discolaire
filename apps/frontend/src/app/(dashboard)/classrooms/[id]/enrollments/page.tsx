@@ -11,13 +11,13 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   const canReadClassroom = await checkPermissions(
     PermissionAction.READ,
-    "classroom:enrollment",
+    "classroom:enrollment"
   );
   if (!canReadClassroom) {
     return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
   }
   return (
-    <div className="flex flex-col px-2">
+    <div className="flex flex-col p-4">
       <EnrollmentDataTable classroomId={id} />
     </div>
   );
