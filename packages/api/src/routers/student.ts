@@ -395,66 +395,68 @@ export const studentRouter = createTRPCRouter({
       return studentService.getClassroom(input.studentId, ctx.schoolYearId);
     }),
 
-  get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    void ctx.db.student.update({
-      where: {
-        id: input,
-      },
-      data: {
-        lastAccessed: new Date(),
-      },
-    });
-    const student = await ctx.db.student.findUnique({
-      where: {
-        id: input,
-      },
-      include: {
-        formerSchool: true,
-        sports: {
-          include: {
-            sport: true,
-          },
+  get: protectedProcedure
+    .input(z.string().min(1))
+    .query(async ({ ctx, input }) => {
+      void ctx.db.student.update({
+        where: {
+          id: input,
         },
-        clubs: {
-          include: {
-            club: true,
-          },
+        data: {
+          lastAccessed: new Date(),
         },
-        country: true,
-        religion: true,
-        studentContacts: {
-          include: {
-            contact: true,
-            relationship: true,
-          },
-        },
-        enrollments: {
-          include: {
-            classroom: true,
-          },
-        },
-        user: {
-          include: {
-            roles: true,
-          },
-        },
-      },
-    });
-    if (!student) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Student not found",
       });
-    }
-    const classroom = await studentService.getClassroom(
-      input,
-      ctx.schoolYearId,
-    );
-    return {
-      ...student,
-      classroom: classroom,
-    };
-  }),
+      const student = await ctx.db.student.findUnique({
+        where: {
+          id: input,
+        },
+        include: {
+          formerSchool: true,
+          sports: {
+            include: {
+              sport: true,
+            },
+          },
+          clubs: {
+            include: {
+              club: true,
+            },
+          },
+          country: true,
+          religion: true,
+          studentContacts: {
+            include: {
+              contact: true,
+              relationship: true,
+            },
+          },
+          enrollments: {
+            include: {
+              classroom: true,
+            },
+          },
+          user: {
+            include: {
+              roles: true,
+            },
+          },
+        },
+      });
+      if (!student) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Student not found",
+        });
+      }
+      const classroom = await studentService.getClassroom(
+        input,
+        ctx.schoolYearId,
+      );
+      return {
+        ...student,
+        classroom: classroom,
+      };
+    }),
   selector: protectedProcedure.query(({ ctx }) => {
     return ctx.db.student.findMany({
       where: {

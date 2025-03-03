@@ -125,7 +125,7 @@ export function ClassroomSidebar({
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={t("back_to_home")}>
-                <a href={"/"}>
+                <a href={"/classrooms"}>
                   <ArrowLeft
                     className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
                     size={22}

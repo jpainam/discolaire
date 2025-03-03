@@ -138,7 +138,7 @@ export function StudentSidebar({
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={t("back_to_home")}>
-                <a href={"/"}>
+                <a href={"/students"}>
                   <ArrowLeft />
                   <span>{t("back_to_home")}</span>
                 </a>
