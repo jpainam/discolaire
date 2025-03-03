@@ -111,7 +111,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                             ? routes.classrooms.fees(`${item.id}`)
                             : routes.students.transactions.details(
                                 id,
-                                Number(item.id)
+                                Number(item.id),
                               )
                         }
                         className="text-blue-700 hover:underline"

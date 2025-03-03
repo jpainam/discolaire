@@ -68,7 +68,7 @@ export default function Step2Details({ classroomId }: { classroomId: string }) {
     toast.error(
       studentQuery.error?.message ??
         studentContactsQuery.error?.message ??
-        transactions.error?.message
+        transactions.error?.message,
     );
   }
   if (
@@ -191,8 +191,8 @@ export default function Step2Details({ classroomId }: { classroomId: string }) {
                                   : field.onChange(
                                       field.value?.filter(
                                         (value: string) =>
-                                          value !== item.contactId
-                                      )
+                                          value !== item.contactId,
+                                      ),
                                     );
                               }}
                             />

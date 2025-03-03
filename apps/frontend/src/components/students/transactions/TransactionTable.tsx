@@ -54,7 +54,7 @@ export function TransactionTable() {
   const utils = api.useUtils();
   const canDeleteTransaction = useCheckPermissions(
     PermissionAction.DELETE,
-    "transaction"
+    "transaction",
   );
 
   const updateTransactionMutation = api.transaction.updateStatus.useMutation({
@@ -113,7 +113,7 @@ export function TransactionTable() {
                       className="hover:text-blue-600 hover:underline"
                       href={routes.students.transactions.details(
                         params.id,
-                        transaction.id
+                        transaction.id,
                       )}
                     >
                       {transaction.transactionRef}
@@ -128,7 +128,7 @@ export function TransactionTable() {
                       className="hover:text-blue-600 hover:underline"
                       href={routes.students.transactions.details(
                         params.id,
-                        transaction.id
+                        transaction.id,
                       )}
                     >
                       {transaction.description}
@@ -171,7 +171,7 @@ export function TransactionTable() {
                               onValueChange={(value) => {
                                 if (
                                   ["PENDING", "CANCELED", "VALIDATED"].includes(
-                                    value
+                                    value,
                                   )
                                 ) {
                                   const v = value as
