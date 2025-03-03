@@ -253,7 +253,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
             year: "numeric",
             month: "short",
             day: "numeric",
-          },
+          }
         );
         return (
           <SimpleTooltip
@@ -360,7 +360,7 @@ function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
   const confirm = useConfirm();
   const utils = api.useUtils();
   const deleteStudentMutation = api.student.delete.useMutation({
-    onSettled: () => utils.student.all.invalidate(),
+    onSettled: () => utils.student.invalidate(),
   });
 
   return (

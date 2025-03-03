@@ -293,3 +293,9 @@ pn i --reporter append-only
 
 export PATH="/Library/PostgreSQL/16/bin:$PATH"
 pg_restore -d 'postgres://{user}:{password}@{hostname}:{port}/{database-name}' database_dump.dump
+
+datasource db {
+provider = "postgresql"
+url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}

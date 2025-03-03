@@ -9,7 +9,7 @@ import { useLocale } from "~/i18n";
 
 import { AvatarState } from "~/components/AvatarState";
 import { cn } from "~/lib/utils";
-import { searchStudent } from "./action";
+import { searchStudent } from "../../../actions/student";
 
 export function StudentSelector({
   onChange,

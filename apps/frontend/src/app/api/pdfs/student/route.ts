@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
 
     const { size, preview, format } = result.data;
 
-    const students = await api.student.all({ per_page: 10_000 });
+    const students = await api.student.all();
 
     const school = await api.school.getSchool();
     if (format === "csv") {
@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
           students: students,
           school: school,
           size: size,
-        }),
+        })
       );
 
       //const blob = await new Response(stream).blob();

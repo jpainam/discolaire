@@ -30,8 +30,8 @@ export function StudentSearch({ ...props }: StudentSelectorProps) {
   const [searchText, setSearchText] = React.useState("");
 
   const debounceValue = useDebounce(searchText, 500);
-  const studentsQuery = api.student.all.useQuery({
-    q: debounceValue,
+  const studentsQuery = api.student.search.useQuery({
+    query: debounceValue,
   });
 
   const { t } = useLocale();
@@ -41,7 +41,7 @@ export function StudentSearch({ ...props }: StudentSelectorProps) {
       props.setOpen(false);
       props.onChange?.(studentId);
     },
-    [props],
+    [props]
   );
 
   return (

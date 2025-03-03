@@ -20,7 +20,6 @@ export function StudentFooter() {
   const { t, i18n } = useLocale();
   const params = useParams<{ id: string }>();
   const studentQuery = api.student.get.useQuery(params.id);
-  //const studentsQuery = api.student.all.useQuery();
 
   const [prevStudent, _setPrevStudent] = useState<Student | null>(null);
   const [nextStudent, _setNextStudent] = useState<Student | null>(null);

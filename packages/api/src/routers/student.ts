@@ -4,7 +4,7 @@ import { fromZonedTime } from "date-fns-tz";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
-import type { Prisma, Student } from "@repo/db";
+import type { Prisma } from "@repo/db";
 import { hashPassword } from "@repo/auth/session";
 
 import { accountService } from "../services/account-service";
@@ -101,35 +101,54 @@ export const studentRouter = createTRPCRouter({
       );
       return students;
     }),
-  all: protectedProcedure
+  all: protectedProcedure.query(async ({ ctx }) => {
+    const data = await ctx.db.student.findMany({
+      orderBy: {
+        lastName: "asc",
+      },
+      where: {
+        schoolId: ctx.schoolId,
+      },
+      include: {
+        formerSchool: true,
+        religion: true,
+        country: true,
+      },
+    });
+
+    const students = await Promise.all(
+      data.map(async (student) => {
+        return {
+          ...student,
+          isRepeating: await studentService.isRepeating(
+            student.id,
+            ctx.schoolYearId,
+          ),
+          classroom: await studentService.getClassroom(
+            student.id,
+            ctx.schoolYearId,
+          ),
+        };
+      }),
+    );
+    return students;
+  }),
+  search: protectedProcedure
     .input(
       z.object({
-        page: z.coerce.number().optional().default(1),
-        per_page: z.coerce.number().optional().default(30),
-        sort: z.string().optional().default("lastName"),
-        q: z.string().optional(),
-        formerSchool: z.boolean().optional().default(true),
-        country: z.boolean().optional().default(true),
+        limit: z.number().optional().default(30),
+        query: z.string().optional().default(""),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const offset = input.per_page * (input.page - 1);
-
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      const [column, order] = (input.sort.split(".").filter(Boolean) ?? [
-        "lastName",
-        "asc",
-      ]) as [keyof Student | undefined, "asc" | "desc" | undefined];
-
       const data = await ctx.db.student.findMany({
-        skip: offset,
-        take: input.per_page,
+        take: input.limit,
         orderBy: {
-          [column ?? "lastName"]: order ?? "asc",
+          lastName: "asc",
         },
         where: {
           schoolId: ctx.schoolId,
-          ...whereClause(input.q ?? "").where,
+          ...whereClause(input.query).where,
         },
         include: {
           formerSchool: true,
@@ -155,30 +174,7 @@ export const studentRouter = createTRPCRouter({
       );
       return students;
     }),
-  search: protectedProcedure
-    .input(
-      z.object({
-        query: z.string(),
-        take: z.number().optional().default(100),
-      }),
-    )
-    .query(({ ctx, input }) => {
-      return ctx.db.student.findMany({
-        take: input.take,
-        orderBy: {
-          lastName: "asc",
-        },
-        where: {
-          schoolId: ctx.schoolId,
-          ...whereClause(input.query).where,
-        },
-        include: {
-          formerSchool: true,
-          religion: true,
-          country: true,
-        },
-      });
-    }),
+
   create: protectedProcedure
     .input(createUpdateSchema)
     .mutation(async ({ ctx, input }) => {
