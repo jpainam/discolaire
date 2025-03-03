@@ -53,7 +53,7 @@ export function FinanceHeader() {
         onValueChange={(val) => {
           void setType(val == "all" ? null : val);
         }}
-        value="debit"
+        value={type ?? "all"}
         variant={"default"}
         defaultValue={type ?? "all"}
         className="*:data-[slot=toggle-group-item]:px-3 rounded-sm"
