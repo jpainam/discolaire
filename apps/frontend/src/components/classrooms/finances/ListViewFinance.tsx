@@ -15,9 +15,10 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 
+import { Badge } from "@repo/ui/components/badge";
+import i18next from "i18next";
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
@@ -37,98 +38,110 @@ export function ListViewFinance({
 }) {
   const { t, i18n } = useLocale();
   const [selectedStudents, setSelectedStudents] = useAtom(
-    selectedStudentIdsAtom,
+    selectedStudentIdsAtom
   );
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
 
   const total = students.reduce(
     (acc, stud) => acc + (stud.balance - amountDue),
-    0,
+    0
   );
   return (
-    <div className="m-2 rounded-lg border">
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-muted/50">
-            <TableHead>
-              <Checkbox
-                onCheckedChange={(checked) => {
-                  setSelectedStudents((_stds) =>
-                    checked ? students.map((stud) => stud.student.id) : [],
-                  );
-                }}
-              />
-            </TableHead>
-            <TableHead></TableHead>
-            <TableHead>{t("registrationNumber")}</TableHead>
-            <TableHead>{t("fullName")}</TableHead>
-            <TableHead>{t("balance")}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {students.map((stud) => {
-            const remaining = stud.balance - amountDue;
-            if (type == "credit" && remaining < 0) {
-              return null;
-            }
-            if (type == "debit" && remaining > 0) {
-              return null;
-            }
-            return (
-              <TableRow key={stud.id}>
-                <TableCell className="py-0">
-                  <Checkbox
-                    onCheckedChange={(checked) => {
-                      setSelectedStudents((students) =>
-                        checked
-                          ? [...students, stud.student.id]
-                          : students.filter((id) => id !== stud.student.id),
-                      );
-                    }}
-                    checked={selectedStudents.includes(stud.student.id)}
-                  />
-                </TableCell>
-                <TableCell className="py-0">
-                  <AvatarState
-                    pos={getFullName(stud.student).length}
-                    avatar={stud.student.avatar}
-                  />
-                </TableCell>
-                <TableCell className="py-0">
-                  {stud.student.registrationNumber}
-                </TableCell>
-                <TableCell className="py-0">
-                  <Link
-                    className="hover:text-blue-600 hover:underline"
-                    href={routes.students.details(stud.student.id)}
-                  >
-                    {getFullName(stud.student)}
-                  </Link>
-                </TableCell>
-                <TableCell className="py-0">
-                  <FlatBadge variant={remaining < 0 ? "red" : "green"}>
-                    {remaining} {CURRENCY}
-                  </FlatBadge>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={3}>{t("total")}</TableCell>
-            <TableCell className="text-right">
-              {total.toLocaleString(i18n.language, {
-                style: "currency",
-                currency: CURRENCY,
-                maximumFractionDigits: 0,
-                minimumFractionDigits: 0,
-              })}
-            </TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table>
+    <div className="px-4">
+      <div className="bg-background overflow-hidden rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/50">
+              <TableHead className="w-[40px]">
+                <Checkbox
+                  onCheckedChange={(checked) => {
+                    setSelectedStudents((_stds) =>
+                      checked ? students.map((stud) => stud.student.id) : []
+                    );
+                  }}
+                />
+              </TableHead>
+              <TableHead className="w-[50px]"></TableHead>
+              <TableHead className="w-[96px]">
+                {t("registrationNumber")}
+              </TableHead>
+              <TableHead>{t("fullName")}</TableHead>
+              <TableHead>{t("balance")}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {students.map((stud) => {
+              const remaining = stud.balance - amountDue;
+              if (type == "credit" && remaining < 0) {
+                return null;
+              }
+              if (type == "debit" && remaining > 0) {
+                return null;
+              }
+              return (
+                <TableRow key={stud.id}>
+                  <TableCell>
+                    <Checkbox
+                      onCheckedChange={(checked) => {
+                        setSelectedStudents((students) =>
+                          checked
+                            ? [...students, stud.student.id]
+                            : students.filter((id) => id !== stud.student.id)
+                        );
+                      }}
+                      checked={selectedStudents.includes(stud.student.id)}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <AvatarState
+                      pos={getFullName(stud.student).length}
+                      avatar={stud.student.avatar}
+                    />
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {stud.student.registrationNumber}
+                  </TableCell>
+                  <TableCell className="py-0">
+                    <Link
+                      className="hover:text-blue-600 hover:underline"
+                      href={routes.students.details(stud.student.id)}
+                    >
+                      {getFullName(stud.student)}
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={remaining < 0 ? "outline" : "default"}
+                      className={remaining < 0 ? "text-destructive" : ""}
+                    >
+                      {remaining.toLocaleString(i18next.language, {
+                        currency: CURRENCY,
+                        maximumFractionDigits: 0,
+                        minimumFractionDigits: 0,
+                      })}{" "}
+                      {CURRENCY}
+                    </Badge>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell colSpan={4}>{t("total")}</TableCell>
+              <TableCell className="text-right">
+                {total.toLocaleString(i18n.language, {
+                  style: "currency",
+                  currency: CURRENCY,
+                  maximumFractionDigits: 0,
+                  minimumFractionDigits: 0,
+                })}
+              </TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </div>
     </div>
   );
 }

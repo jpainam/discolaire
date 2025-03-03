@@ -53,8 +53,7 @@ export function FinanceHeader() {
         onValueChange={(val) => {
           void setType(val == "all" ? null : val);
         }}
-        value={type ?? "all"}
-        variant={"default"}
+        variant={"outline"}
         defaultValue={type ?? "all"}
         className="*:data-[slot=toggle-group-item]:px-3 rounded-sm"
       >
@@ -151,14 +150,12 @@ function ChangeFinanceView() {
       onValueChange={(val) => {
         void setView(val);
       }}
+      className="*:data-[slot=toggle-group-item]:px-3 rounded-sm"
+      variant={"outline"}
       type="single"
     >
       {options.map((option) => (
-        <ToggleGroupItem
-          //className="font-bold data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
-          key={option.value}
-          value={option.value}
-        >
+        <ToggleGroupItem key={option.value} value={option.value}>
           {option.label}
         </ToggleGroupItem>
       ))}

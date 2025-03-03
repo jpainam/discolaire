@@ -30,7 +30,7 @@ export function AssignmentHeader() {
   const Icon = sidebarIcons.assignments;
   return (
     <div className="flex w-full flex-col">
-      <div className="flex flex-row items-center gap-2 border-b bg-secondary px-2 py-1 text-secondary-foreground">
+      <div className="flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1 text-secondary-foreground">
         {Icon && <Icon className="h-6 w-6" />}
         <Label>{t("assignments")}</Label>
         <Label className="ml-10">{t("date")}</Label>

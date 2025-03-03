@@ -9,16 +9,17 @@ import { useCallback } from "react";
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
-import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 
+import { Badge } from "@repo/ui/components/badge";
+import i18next from "i18next";
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import { AvatarState } from "~/components/AvatarState";
 import { SimpleTooltip } from "~/components/simple-tooltip";
 import { routes } from "~/configs/routes";
+import { CURRENCY } from "~/lib/constants";
 import { cn } from "~/lib/utils";
 import { getFullName } from "~/utils/full-name";
-import { useMoneyFormat } from "~/utils/money-format";
 
 type StudentAccountWithBalance = NonNullable<
   RouterOutputs["classroom"]["studentsBalance"]
@@ -32,7 +33,7 @@ export function GridViewFinanceCard({
   studentBalance: StudentAccountWithBalance;
 }) {
   const [selectedStudents, setSelectedStudents] = useAtom(
-    selectedStudentIdsAtom,
+    selectedStudentIdsAtom
   );
 
   const student = studentBalance.student;
@@ -42,14 +43,14 @@ export function GridViewFinanceCard({
     setSelectedStudents((students) =>
       students.includes(student.id)
         ? students.filter((id) => id !== student.id)
-        : [...students, student.id],
+        : [...students, student.id]
     );
   }, [setSelectedStudents, student.id]);
 
   const { t } = useLocale();
   const remaining = balance - amountDue;
   const searchParams = useSearchParams();
-  const { moneyFormatter } = useMoneyFormat();
+
   if (searchParams.get("type") == "credit" && remaining < 0) {
     return null;
   }
@@ -60,7 +61,7 @@ export function GridViewFinanceCard({
     <Card
       className={cn(
         "rounded-sm p-2 shadow-none hover:bg-muted hover:shadow-md",
-        selectedStudents.includes(student.id) && "border-green-600 bg-muted",
+        selectedStudents.includes(student.id) && "border-green-600 bg-muted"
       )}
     >
       <CardContent className="flex flex-row items-start p-0">
@@ -89,31 +90,31 @@ export function GridViewFinanceCard({
           <div className="flex flex-row gap-1">
             <SimpleTooltip content={t("financial_situation")}>
               <Link href={routes.students.transactions.index(student.id)}>
-                <Button variant={"outline"} className="h-6 w-6" size={"icon"}>
-                  <DollarSign className="h-3 w-3" />
+                <Button variant={"ghost"} className="h-6 w-6" size={"icon"}>
+                  <DollarSign />
                 </Button>
               </Link>
             </SimpleTooltip>
             <SimpleTooltip content={student.phoneNumber ?? "@phone"}>
-              <Button variant={"outline"} size={"icon"} className="h-6 w-6">
-                <Phone className="h-3 w-3" />
+              <Button variant={"ghost"} size={"icon"} className="h-6 w-6">
+                <Phone />
               </Button>
             </SimpleTooltip>
             <SimpleTooltip content={student.email ?? "@email"}>
-              <Button variant={"outline"} size={"icon"} className="h-6 w-6">
-                <AtSign className="h-3 w-3" />
+              <Button variant={"ghost"} size={"icon"} className="h-6 w-6">
+                <AtSign />
               </Button>
             </SimpleTooltip>
             <SimpleTooltip content={t("contacts")}>
               <Button
-                variant={"outline"}
+                variant={"ghost"}
                 size={"icon"}
                 className="h-6 w-6"
                 onClick={() => {
                   console.log(routes.students.contacts(student.id));
                 }}
               >
-                <Users className="h-3 w-3" />
+                <Users />
               </Button>
             </SimpleTooltip>
           </div>
@@ -127,12 +128,23 @@ export function GridViewFinanceCard({
           <span>
             <ArrowDownUp className="h-3 w-3" />
           </span>
-          <FlatBadge
+          <Badge
+            variant={remaining < 0 ? "outline" : "default"}
+            className={remaining < 0 ? "text-destructive" : ""}
+          >
+            {remaining.toLocaleString(i18next.language, {
+              currency: CURRENCY,
+              maximumFractionDigits: 0,
+              minimumFractionDigits: 0,
+            })}{" "}
+            {CURRENCY}
+          </Badge>
+          {/* <FlatBadge
             className="flex w-28 items-center justify-center text-xs"
             variant={remaining < 0 ? "red" : remaining > 0 ? "green" : "indigo"}
           >
             {moneyFormatter.format(remaining)}
-          </FlatBadge>
+          </FlatBadge> */}
         </div>
       </CardContent>
     </Card>
