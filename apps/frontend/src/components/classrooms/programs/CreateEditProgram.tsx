@@ -19,7 +19,7 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { html_content } from "./editor-content";
 

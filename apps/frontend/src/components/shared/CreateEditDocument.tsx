@@ -22,7 +22,7 @@ import { useUpload } from "~/hooks/use-upload";
 import { useLocale } from "~/i18n";
 import { FileUploader } from "~/uploads/file-uploader";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { useSchool } from "~/providers/SchoolProvider";
 import { api } from "~/trpc/react";
@@ -133,7 +133,7 @@ export function CreateEditDocument({
         error: (err) => {
           return getErrorMessage(err);
         },
-      },
+      }
     );
   };
   return (

@@ -30,10 +30,10 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
 
-import { useRouter } from "next/navigation";
 import { CreateEditUser } from "~/components/users/CreateEditUser";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { CreateEditStaff } from "../CreateEditStaff";
@@ -53,14 +53,14 @@ export function StaffProfileHeader({
     "staff:profile",
     {
       id: params.id,
-    },
+    }
   );
   const canEditStaff = useCheckPermissions(
     PermissionAction.UPDATE,
     "staff:profile",
     {
       id: params.id,
-    },
+    }
   );
   const deleteStaffMutation = api.staff.delete.useMutation({
     onSettled: async () => {

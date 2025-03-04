@@ -22,10 +22,10 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { Badge } from "@repo/ui/components/badge";
-import { useRouter } from "next/navigation";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 
@@ -185,7 +185,7 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
   const router = useRouter();
   const canDeleteEnrollment = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:enrollment",
+    "classroom:enrollment"
   );
   const utils = api.useUtils();
   const unenrollStudentsMutation =

@@ -10,8 +10,8 @@ import { Form, useForm } from "@repo/ui/components/form";
 import { createUpdateStudentSchema } from "@repo/validators";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { CreateUpdateAddress } from "./CreateUpdateAddress";
 import { CreateUpdateDenom } from "./CreateUpdateDenom";

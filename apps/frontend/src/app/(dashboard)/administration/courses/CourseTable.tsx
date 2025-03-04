@@ -26,7 +26,7 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { CreateEditCourse } from "./CreateEditCourse";
 

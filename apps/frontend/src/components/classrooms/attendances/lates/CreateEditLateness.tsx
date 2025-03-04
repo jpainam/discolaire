@@ -21,9 +21,9 @@ import {
 } from "@repo/ui/components/table";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 
@@ -33,7 +33,7 @@ const attendanceSchema = z.object({
       id: z.string().min(1),
       late: z.string().optional(),
       justify: z.string().optional(),
-    }),
+    })
   ),
 });
 
@@ -67,7 +67,7 @@ export function CreateEditLateness({
     onSuccess: () => {
       toast.success(t("added_successfully"), { id: 0 });
       router.push(
-        `${routes.classrooms.attendances.index(classroomId)}?type=lateness&term=${termId}`,
+        `${routes.classrooms.attendances.index(classroomId)}?type=lateness&term=${termId}`
       );
     },
     onError: (error) => {
@@ -91,7 +91,7 @@ export function CreateEditLateness({
         toast.error(
           t("late_or_justification_malformed", {
             name: getFullName(std),
-          }),
+          })
         );
         hasError = true;
         break;

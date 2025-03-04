@@ -7,8 +7,8 @@ import {
   MoreVerticalIcon,
   Trash2,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useRouter } from "~/hooks/use-router";
 
 import { Button } from "@repo/ui/components/button";
 import {

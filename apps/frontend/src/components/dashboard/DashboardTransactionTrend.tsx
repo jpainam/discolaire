@@ -31,7 +31,7 @@ import { EmptyState } from "~/components/EmptyState";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "~/hooks/use-router";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
@@ -146,7 +146,7 @@ export function DashboardTransactionTrend({
                   "?" +
                     createQueryString({
                       timeRange: val == "All" ? undefined : val,
-                    }),
+                    })
                 );
               }}
             >

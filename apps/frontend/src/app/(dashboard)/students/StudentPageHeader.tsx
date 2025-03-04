@@ -15,7 +15,6 @@ import { Label } from "@repo/ui/components/label";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
-import { useRouter } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
@@ -23,6 +22,7 @@ import { StudentSearchCombobox } from "~/components/students/StudentSearchCombob
 import { endpointReports } from "~/configs/endpoints";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 
@@ -32,7 +32,7 @@ export function StudentPageHeader() {
 
   const canCreateStudent = useCheckPermissions(
     PermissionAction.CREATE,
-    "student:profile",
+    "student:profile"
   );
 
   const [value, setValue] = useState("");
@@ -108,7 +108,7 @@ export function StudentPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.student_list}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -119,7 +119,7 @@ export function StudentPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.student_list}?format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

@@ -7,9 +7,9 @@ import { Label } from "@repo/ui/components/label";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
 import { DateRangePicker } from "~/components/shared/DateRangePicker";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 
 export function SMSHistoryHeader() {
   const d = new Date();
@@ -30,7 +30,7 @@ export function SMSHistoryHeader() {
         onClick={() => {
           router.push(
             // eslint-disable-next-line @typescript-eslint/no-base-to-string, @typescript-eslint/restrict-template-expressions
-            `${routes.administration.sms_management}/?${createQueryString({})}`,
+            `${routes.administration.sms_management}/?${createQueryString({})}`
           );
         }}
         size={"sm"}

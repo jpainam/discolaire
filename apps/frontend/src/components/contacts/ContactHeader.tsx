@@ -14,8 +14,8 @@ import { Separator } from "@repo/ui/components/separator";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { ContactSearch } from "./ContactSearch";
@@ -34,7 +34,7 @@ export function ContactHeader() {
       <Button
         variant="outline"
         className={cn(
-          "flex w-full justify-between bg-background text-sm font-semibold shadow-none 2xl:w-[500px]",
+          "flex w-full justify-between bg-background text-sm font-semibold shadow-none 2xl:w-[500px]"
         )}
         onClick={() => setOpen(true)}
       >

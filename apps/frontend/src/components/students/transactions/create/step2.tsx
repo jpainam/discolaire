@@ -19,8 +19,8 @@ import {
 } from "@repo/ui/components/form";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import Step2Details from "./step2details";
 
@@ -58,7 +58,7 @@ export function Step2({
     onSuccess: (transaction) => {
       toast.success(t("created_successfully"), { id: 0 });
       router.push(
-        routes.students.transactions.details(params.id, transaction.id),
+        routes.students.transactions.details(params.id, transaction.id)
       );
     },
     onError: (error) => {

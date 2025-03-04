@@ -11,8 +11,8 @@ import { Button } from "@repo/ui/components/button";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useRouter } from "next/navigation";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { exportTableToCSV } from "~/lib/export";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
@@ -55,7 +55,7 @@ export function AssignmentDataTableActions({ table }: ToolbarActionsProps) {
                   error: (err) => {
                     return getErrorMessage(err);
                   },
-                },
+                }
               );
             }
           }}

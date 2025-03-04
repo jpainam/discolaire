@@ -5,7 +5,7 @@ import { Pencil } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "~/hooks/use-router";
 
 export function SchoolDetailAction({ schoolId }: { schoolId: string }) {
   const router = useRouter();

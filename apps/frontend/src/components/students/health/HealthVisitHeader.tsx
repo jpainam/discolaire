@@ -8,8 +8,8 @@ import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 
 export function HealthVisitHeader() {
   const { t } = useLocale();

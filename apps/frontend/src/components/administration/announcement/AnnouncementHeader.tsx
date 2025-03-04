@@ -17,9 +17,9 @@ import { Label } from "@repo/ui/components/label";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
+import { useRouter } from "~/hooks/use-router";
 import { DateRangePicker } from "../../shared/DateRangePicker";
 import { AnnouncementSummary } from "./AnnouncementSummary";
 
@@ -47,7 +47,7 @@ export function AnnouncementHeader() {
           createQueryString({
             from: range.from.toISOString(),
             to: range.to.toISOString(),
-          }),
+          })
       );
     } else {
       router.push(
@@ -55,7 +55,7 @@ export function AnnouncementHeader() {
           createQueryString({
             from: undefined,
             to: undefined,
-          }),
+          })
       );
     }
   };

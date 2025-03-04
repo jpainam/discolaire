@@ -17,11 +17,11 @@ import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
-import { useRouter } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useRouter } from "~/hooks/use-router";
 import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
@@ -38,7 +38,7 @@ export function ProgramHeader() {
     "subject:program",
     {
       subjectId: Number(params.subjectId),
-    },
+    }
   );
   useEffect(() => {
     if (subject) {
@@ -87,7 +87,7 @@ export function ProgramHeader() {
               router.push(
                 routes.classrooms.programs(params.id) +
                   `/${subject?.id}` +
-                  "/create-or-edit",
+                  "/create-or-edit"
               );
             }}
             size={"icon"}

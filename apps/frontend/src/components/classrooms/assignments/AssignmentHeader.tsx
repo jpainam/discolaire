@@ -14,12 +14,12 @@ import {
 import { Label } from "@repo/ui/components/label";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DateRangePicker } from "~/components/shared/DateRangePicker2";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function AssignmentHeader() {

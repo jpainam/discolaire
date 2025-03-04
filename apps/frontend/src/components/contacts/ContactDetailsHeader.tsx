@@ -28,10 +28,10 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useRouter } from "next/navigation";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useRouter } from "~/hooks/use-router";
 import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";
 import { DropdownHelp } from "../shared/DropdownHelp";
@@ -60,7 +60,7 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
     "contact:profile",
     {
       id: contactId,
-    },
+    }
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();

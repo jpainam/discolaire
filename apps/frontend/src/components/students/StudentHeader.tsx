@@ -43,12 +43,12 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import type { RouterOutputs } from "@repo/api";
 import { decode } from "entities";
 import { useSetAtom } from "jotai";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { SimpleTooltip } from "~/components/simple-tooltip";
 import { endpointReports } from "~/configs/endpoints";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { api } from "~/trpc/react";
 import { CountryComponent } from "../shared/CountryPicker";
@@ -129,14 +129,14 @@ export function StudentHeader({
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   const canEditStudent = useCheckPermissions(
     PermissionAction.UPDATE,
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   //const [open, setOpen] = React.useState(false);
 
@@ -230,7 +230,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `${endpointReports.student_page(params.id)}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

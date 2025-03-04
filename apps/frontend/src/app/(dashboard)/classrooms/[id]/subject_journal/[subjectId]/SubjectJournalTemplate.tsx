@@ -16,7 +16,7 @@ import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
 export function SubjectJournalTemplate() {

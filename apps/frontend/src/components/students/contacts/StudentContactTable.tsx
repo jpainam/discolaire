@@ -32,12 +32,12 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useRouter } from "next/navigation";
 import { AvatarState } from "~/components/AvatarState";
 import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
@@ -78,7 +78,7 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
     "student:contact",
     {
       id: studentId,
-    },
+    }
   );
 
   const studentContacts = studentContactsQuery.data ?? [];
@@ -126,7 +126,7 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
                     <Link
                       href={`${routes.students.contacts(c.studentId)}/${contact.id}`}
                       className={cn(
-                        "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline",
+                        "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline"
                       )}
                     >
                       {getFullName(contact)}
@@ -182,7 +182,7 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
                           <DropdownMenuItem
                             onSelect={() => {
                               router.push(
-                                `${routes.students.contacts(c.studentId)}/${c.contactId}`,
+                                `${routes.students.contacts(c.studentId)}/${c.contactId}`
                               );
                             }}
                           >

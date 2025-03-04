@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Loader } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { useLocale } from "~/i18n";
 
 import { env } from "~/env";
-import { useRouter } from "next/navigation";
+import { useRouter } from "~/hooks/use-router";
 
 export default function Error({
   error,

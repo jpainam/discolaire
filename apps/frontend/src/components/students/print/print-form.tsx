@@ -7,8 +7,8 @@ import { Form, useForm } from "@repo/ui/components/form";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import PrintSelector from "./print-selector";
 import PrintTypeRadio from "./print-type-radio";
 

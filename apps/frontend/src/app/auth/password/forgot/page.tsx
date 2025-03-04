@@ -27,7 +27,7 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 
 const formSchema = z.object({

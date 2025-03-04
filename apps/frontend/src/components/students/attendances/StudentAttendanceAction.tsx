@@ -2,8 +2,8 @@
 "use client";
 
 import { Columns4Icon, MailIcon, MoreVertical, Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useRouter } from "~/hooks/use-router";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";

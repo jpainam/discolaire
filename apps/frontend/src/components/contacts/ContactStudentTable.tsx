@@ -25,9 +25,9 @@ import { EmptyState } from "~/components/EmptyState";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useRouter } from "next/navigation";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { DropdownHelp } from "../shared/DropdownHelp";
@@ -120,7 +120,7 @@ export function ContactStudentTable({ id }: { id: string }) {
                         onSelect={() => {
                           if (!student.id) return;
                           router.push(
-                            `${routes.students.contacts(student.id)}/${id}`,
+                            `${routes.students.contacts(student.id)}/${id}`
                           );
                         }}
                       >
@@ -157,7 +157,7 @@ export function ContactStudentTable({ id }: { id: string }) {
                                 error: (error) => {
                                   return getErrorMessage(error);
                                 },
-                              },
+                              }
                             );
                           }
                         }}

@@ -18,9 +18,9 @@ import { Label } from "@repo/ui/components/label";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
 import { DateRangePicker } from "~/components/shared/DateRangePicker";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function NotificationHeader() {
@@ -50,7 +50,7 @@ export function NotificationHeader() {
           router.push(
             routes.students.notifications(params.id) +
               "?" +
-              createQueryString({ to, from }),
+              createQueryString({ to, from })
           );
         }}
       />

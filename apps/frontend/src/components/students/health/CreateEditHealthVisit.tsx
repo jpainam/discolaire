@@ -32,9 +32,9 @@ import { useUpload } from "~/hooks/use-upload";
 import { useLocale } from "~/i18n";
 import { FileUploader } from "~/uploads/file-uploader";
 
-import { useRouter } from "next/navigation";
 import { DatePicker } from "~/components/shared/date-picker";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { useSchool } from "~/providers/SchoolProvider";
 import { api } from "~/trpc/react";
@@ -108,7 +108,7 @@ export function CreateEditHealthVisit({
         error: (err) => {
           return getErrorMessage(err);
         },
-      },
+      }
     );
   };
 

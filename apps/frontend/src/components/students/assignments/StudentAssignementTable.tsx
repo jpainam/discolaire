@@ -19,8 +19,8 @@ import { EmptyState } from "~/components/EmptyState";
 import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { useDateFormat } from "~/utils/date-format";
 
 type StudentAssignment = RouterOutputs["classroom"]["assignments"][number];

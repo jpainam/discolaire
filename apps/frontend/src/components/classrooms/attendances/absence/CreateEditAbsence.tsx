@@ -29,9 +29,9 @@ import {
 } from "@repo/ui/components/table";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 
@@ -41,7 +41,7 @@ const attendanceSchema = z.object({
       id: z.string().min(1),
       absence: z.coerce.number().nullish(),
       justify: z.coerce.number().nullable(),
-    }),
+    })
   ),
   notifyParents: z.boolean().default(true),
   notifyStudents: z.boolean().default(true),
@@ -77,7 +77,7 @@ export function CreateEditAbsence({
     onSuccess: () => {
       toast.success(t("added_successfully"), { id: 0 });
       router.push(
-        `${routes.classrooms.attendances.index(classroomId)}?type=absence&term=${termId}`,
+        `${routes.classrooms.attendances.index(classroomId)}?type=absence&term=${termId}`
       );
     },
     onError: (error) => {
@@ -100,7 +100,7 @@ export function CreateEditAbsence({
         toast.error(
           t("absence_cannot_be_less_than_justify_for", {
             name: getFullName(std),
-          }),
+          })
         );
         hasError = true;
         break;
@@ -141,7 +141,7 @@ export function CreateEditAbsence({
             //     });
             // }
           },
-        },
+        }
       );
     }
   };

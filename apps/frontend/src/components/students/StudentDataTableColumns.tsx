@@ -26,9 +26,9 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { Badge } from "@repo/ui/components/badge";
 import { decode } from "entities";
 import i18next from "i18next";
-import { useRouter } from "next/navigation";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
@@ -253,7 +253,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
             year: "numeric",
             month: "short",
             day: "numeric",
-          },
+          }
         );
         return (
           <SimpleTooltip

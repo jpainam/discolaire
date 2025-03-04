@@ -26,8 +26,8 @@ import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useRouter } from "next/navigation";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
 
@@ -79,13 +79,13 @@ export function StudentEnrollmentTable({
         <TableBody>
           {enrollments.map((c) => {
             const createdAt = fullDateFormatter.format(
-              c.createdAt ?? new Date(),
+              c.createdAt ?? new Date()
             );
             const enrollmentStartDate = fullDateFormatter.format(
-              c.schoolYear?.enrollmentStartDate ?? new Date(),
+              c.schoolYear?.enrollmentStartDate ?? new Date()
             );
             const enrolmmentEndDate = fullDateFormatter.format(
-              c.schoolYear?.enrollmentEndDate ?? new Date(),
+              c.schoolYear?.enrollmentEndDate ?? new Date()
             );
 
             return (

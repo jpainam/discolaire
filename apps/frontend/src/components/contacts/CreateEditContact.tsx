@@ -21,10 +21,10 @@ import { Textarea } from "@repo/ui/components/textarea";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
 import { InputField } from "~/components/shared/forms/input-field";
 import PrefixSelector from "~/components/shared/forms/PrefixSelector";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
 const createEditContactSchema = z.object({

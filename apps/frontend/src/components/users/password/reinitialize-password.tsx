@@ -18,8 +18,8 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
 const passwordFormSchema = z.object({

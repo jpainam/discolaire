@@ -29,8 +29,8 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useRouter } from "next/navigation";
 import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { AddUserToRole } from "./AddUserToRole";
 
@@ -40,11 +40,11 @@ export function UserDataTable({ roleId }: { roleId: string }) {
   });
   const canAddRoleToUser = useCheckPermissions(
     PermissionAction.CREATE,
-    "user:role",
+    "user:role"
   );
   const canRemoveRoleFromUser = useCheckPermissions(
     PermissionAction.DELETE,
-    "user:role",
+    "user:role"
   );
   const confirm = useConfirm();
   const [debounceValue] = useDebounce(query, 300);
@@ -121,7 +121,7 @@ export function UserDataTable({ roleId }: { roleId: string }) {
                         <DropdownMenuItem
                           onSelect={() => {
                             router.push(
-                              `/administration/users/${userRole.userId}`,
+                              `/administration/users/${userRole.userId}`
                             );
                           }}
                         >

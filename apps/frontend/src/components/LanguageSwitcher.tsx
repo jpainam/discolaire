@@ -1,9 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type * as RPNInput from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
+import { useRouter } from "~/hooks/use-router";
 
 import { Button } from "@repo/ui/components/button";
 import {

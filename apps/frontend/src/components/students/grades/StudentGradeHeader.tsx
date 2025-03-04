@@ -20,11 +20,11 @@ import FlatBadge from "~/components/FlatBadge";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
 import { printStudentGrade } from "~/actions/reporting";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
@@ -112,7 +112,7 @@ export function StudentGradeHeader({
             "?" +
               createQueryString({
                 term: val,
-              }),
+              })
           );
         }}
         defaultValue={term ? `${term}` : undefined}
@@ -176,7 +176,7 @@ export function StudentGradeHeader({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  },
+                  }
                 );
               }}
             >
@@ -200,7 +200,7 @@ export function StudentGradeHeader({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  },
+                  }
                 );
               }}
             >

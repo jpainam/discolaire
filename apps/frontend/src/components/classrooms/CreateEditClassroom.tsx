@@ -19,7 +19,7 @@ import { Separator } from "@repo/ui/components/separator";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { InputField } from "../shared/forms/input-field";
 import { SelectField } from "../shared/forms/SelectField";

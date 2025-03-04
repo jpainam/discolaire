@@ -27,9 +27,9 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useRouter } from "next/navigation";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { CreateEditSubject } from "./CreateEditSubject";
 
@@ -41,11 +41,11 @@ export function SubjectTable({ classroomId }: { classroomId: string }) {
   const confirm = useConfirm();
   const canDeleteClassroomSubject = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:subject",
+    "classroom:subject"
   );
   const canEditClassroomSubject = useCheckPermissions(
     PermissionAction.UPDATE,
-    "classroom:subject",
+    "classroom:subject"
   );
   const router = useRouter();
   const utils = api.useUtils();

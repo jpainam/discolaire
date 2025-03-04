@@ -17,7 +17,7 @@ import MultipleSelector from "~/components/students/multiple-selector";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
 const createEditUserSchema = z.object({
