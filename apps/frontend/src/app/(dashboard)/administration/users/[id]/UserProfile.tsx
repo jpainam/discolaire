@@ -25,12 +25,14 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { t } from "i18next";
+import { toast } from "sonner";
 import { z } from "zod";
+import { api } from "~/trpc/react";
 
 const usernameSchema = z.object({
   username: z.string().min(3),
-  email: z.string().email(),
-  name: z.string().min(3),
+  email: z.string().optional(),
+  name: z.string().optional(),
 });
 export function UserProfile({
   user,
@@ -45,58 +47,61 @@ export function UserProfile({
       username: user.username,
     },
   });
+  const updateUser = api.user.update.useMutation({
+    onSuccess: () => {
+      toast.success(t("updated_successfully"), { id: 0 });
+    },
+    onError: (err) => {
+      toast.error(err.message, { id: 0 });
+    },
+  });
+  const handleSubmit = (data: z.infer<typeof usernameSchema>) => {
+    toast.loading(t("updating"), { id: 0 });
+    updateUser.mutate({
+      id: user.id,
+      username: data.username,
+      email: data.email,
+      name: data.name,
+    });
+  };
   return (
-    <Form {...form}>
-      <form>
-        <Card className="shadow-none border-0 mx-auto rounded-none">
-          <CardHeader>
-            <CardTitle>{t("personal_information")}</CardTitle>
-            <CardDescription>
-              {t("personal_information_description")}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="flex flex-col md:flex-row gap-6 items-start">
-              <div className="flex flex-col items-center space-y-2">
-                <Avatar className="h-24 w-24">
-                  <AvatarImage
-                    src={user.avatar ?? undefined}
-                    alt={user.name ?? ""}
-                  />
-                  <AvatarFallback>
-                    {user.name
-                      ?.split(" ")
-                      .map((n) => n[0])
-                      .join("")}
-                  </AvatarFallback>
-                </Avatar>
-                <Button variant="outline" size="sm">
-                  Change Avatar
-                </Button>
-              </div>
+    <div className="mx-auto max-w-3xl">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleSubmit)}>
+          <Card className="shadow-none border-0 mx-auto rounded-none">
+            <CardHeader>
+              <CardTitle>{t("personal_information")}</CardTitle>
+              <CardDescription>
+                {t("personal_information_description")}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="flex flex-col md:flex-row gap-6 items-start">
+                <div className="flex flex-col items-center space-y-2">
+                  <Avatar className="h-24 w-24">
+                    <AvatarImage
+                      src={user.avatar ?? undefined}
+                      alt={user.name ?? ""}
+                    />
+                    <AvatarFallback>
+                      {user.name
+                        ?.split(" ")
+                        .map((n) => n[0])
+                        .join("")}
+                    </AvatarFallback>
+                  </Avatar>
+                  <Button variant="outline" size="sm">
+                    Change Avatar
+                  </Button>
+                </div>
 
-              <div className="flex-1 space-y-4">
-                <FormField
-                  control={form.control}
-                  name="username"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("username")}</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex-1 space-y-4">
                   <FormField
                     control={form.control}
                     name="username"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("fullName")}</FormLabel>
+                        <FormLabel>{t("username")}</FormLabel>
                         <FormControl>
                           <Input {...field} />
                         </FormControl>
@@ -105,29 +110,47 @@ export function UserProfile({
                       </FormItem>
                     )}
                   />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("fullName")}</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
 
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t("email")}</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("email")}</FormLabel>
+                          <FormControl>
+                            <Input type="email" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          </CardContent>
-          <CardFooter className="flex justify-end">
-            <Button>{t("submit")}</Button>
-          </CardFooter>
-        </Card>
-      </form>
-    </Form>
+            </CardContent>
+            <CardFooter className="flex justify-end">
+              <Button size={"sm"} isLoading={updateUser.isPending}>
+                {t("submit")}
+              </Button>
+            </CardFooter>
+          </Card>
+        </form>
+      </Form>
+    </div>
   );
 }

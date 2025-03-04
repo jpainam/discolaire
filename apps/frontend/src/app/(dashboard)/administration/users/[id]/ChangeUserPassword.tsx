@@ -63,54 +63,68 @@ export function ChangeUserPassword({
     });
   };
   return (
-    <Card className="p-4 rounded-sm">
-      <CardHeader className="p-0">
-        <CardTitle>{t("reset_password")}</CardTitle>
-        <CardDescription>
-          {t("reset_password_description", { user: user.name })}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="p-0">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-4"
-          >
-            <FormField
-              control={form.control}
-              name="new_password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("new_password")}</FormLabel>
-                  <FormControl>
-                    <Input type="password" placeholder="password" {...field} />
-                  </FormControl>
+    <div className="mx-auto max-w-3xl">
+      <Card className="shadow-none border-0 mx-auto rounded-none">
+        <CardHeader className="p-0">
+          <CardTitle>{t("reset_password")}</CardTitle>
+          <CardDescription>
+            {t("reset_password_description", { user: user.name })}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-0">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="space-y-4"
+            >
+              <FormField
+                control={form.control}
+                name="new_password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("new_password")}</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="password"
+                        {...field}
+                      />
+                    </FormControl>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="confirm_password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("confirm_password")}</FormLabel>
-                  <FormControl>
-                    <Input type="password" placeholder="password" {...field} />
-                  </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="confirm_password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("confirm_password")}</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="password"
+                        {...field}
+                      />
+                    </FormControl>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <Button type="submit" className="w-fit">
-              {t("reset_password")}
-            </Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+              <Button
+                isLoading={updateUserPassword.isPending}
+                type="submit"
+                className="w-fit"
+              >
+                {t("reset_password")}
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

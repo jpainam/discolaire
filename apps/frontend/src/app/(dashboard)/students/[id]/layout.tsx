@@ -25,7 +25,7 @@ export default async function Layout(props: {
     "student:profile",
     {
       id: id,
-    }
+    },
   );
   if (!canReadStudent) {
     return <NoPermission isFullPage={true} className="mt-8" resourceText="" />;

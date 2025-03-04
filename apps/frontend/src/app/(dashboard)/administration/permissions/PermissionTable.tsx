@@ -81,7 +81,7 @@ export function PermissionTable() {
 
             {permissionGroupQuery.data?.map((item) => {
               const perms = permissions.filter(
-                (per) => per.groupId === item.id
+                (per) => per.groupId === item.id,
               );
               const permsByType = {
                 CREATE: perms.find((per) => per.type === PermissionType.CREATE),
@@ -104,7 +104,9 @@ export function PermissionTable() {
                           setPermissionIds((prev) =>
                             checked
                               ? [...prev, permsByType.READ?.id ?? ""]
-                              : prev.filter((id) => id !== permsByType.READ?.id)
+                              : prev.filter(
+                                  (id) => id !== permsByType.READ?.id,
+                                ),
                           );
                         }
                       }}
@@ -123,8 +125,8 @@ export function PermissionTable() {
                             checked
                               ? [...prev, permsByType.CREATE?.id ?? ""]
                               : prev.filter(
-                                  (id) => id !== permsByType.CREATE?.id
-                                )
+                                  (id) => id !== permsByType.CREATE?.id,
+                                ),
                           );
                         }
                       }}
@@ -143,8 +145,8 @@ export function PermissionTable() {
                             checked
                               ? [...prev, permsByType.UPDATE?.id ?? ""]
                               : prev.filter(
-                                  (id) => id !== permsByType.UPDATE?.id
-                                )
+                                  (id) => id !== permsByType.UPDATE?.id,
+                                ),
                           );
                         }
                       }}
@@ -163,8 +165,8 @@ export function PermissionTable() {
                             checked
                               ? [...prev, permsByType.DELETE?.id ?? ""]
                               : prev.filter(
-                                  (id) => id !== permsByType.DELETE?.id
-                                )
+                                  (id) => id !== permsByType.DELETE?.id,
+                                ),
                           );
                         }
                       }}

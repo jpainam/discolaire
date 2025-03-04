@@ -140,9 +140,11 @@ export const userRouter = createTRPCRouter({
       z.object({
         id: z.string().min(1),
         username: z.string().min(1),
-        password: z.string().min(1),
+        name: z.string().optional(),
+        password: z.string().optional(),
+        email: z.string().optional(),
         isActive: z.boolean().default(true),
-        roleId: z.array(z.string().min(1)),
+        roleId: z.array(z.string().min(1)).optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -166,11 +168,17 @@ export const userRouter = createTRPCRouter({
         },
         data: {
           username: input.username,
-          password: await hashPassword(input.password),
+          ...(input.name ? { name: input.name } : {}),
+          ...(input.email ? { email: input.email } : {}),
+          ...(input.password
+            ? { password: await hashPassword(input.password) }
+            : {}),
           isActive: input.isActive,
         },
       });
-      await userService.attachRoles(user.id, input.roleId);
+      if (input.roleId) {
+        await userService.attachRoles(user.id, input.roleId);
+      }
       return user;
     }),
   permissions: protectedProcedure.query(({ ctx }) => {

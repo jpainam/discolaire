@@ -129,14 +129,14 @@ export function StudentHeader({
     "student:profile",
     {
       id: params.id,
-    }
+    },
   );
   const canEditStudent = useCheckPermissions(
     PermissionAction.UPDATE,
     "student:profile",
     {
       id: params.id,
-    }
+    },
   );
   //const [open, setOpen] = React.useState(false);
 
@@ -215,7 +215,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `${endpointReports.student_page(params.id)}?format=pdf`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >
