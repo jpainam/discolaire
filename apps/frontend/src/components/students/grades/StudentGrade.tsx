@@ -47,7 +47,7 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
 
     if (term) {
       filteredGrades = studentGradesQuery.data.filter(
-        (g) => g.gradeSheet.termId === Number(term)
+        (g) => g.gradeSheet.termId === Number(term),
       );
     }
 
@@ -56,7 +56,7 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
         ? _.sortBy(filteredGrades, (grade) => grade.grade)
         : _.sortBy(
             filteredGrades,
-            (grade) => grade.gradeSheet.subject.course.name
+            (grade) => grade.gradeSheet.subject.course.name,
           );
 
     return sortOrder === "desc" ? sorted.reverse() : sorted;
@@ -71,7 +71,7 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
         setSortOrder("asc");
       }
     },
-    [orderBy, sortOrder, setOrderBy, setSortOrder]
+    [orderBy, sortOrder, setOrderBy, setSortOrder],
   );
 
   if (classroomMoyMinMaxGrades.isError) {
