@@ -1,89 +1,85 @@
 import { Text, View } from "@react-pdf/renderer";
+import { CheckIcon } from "lucide-react";
 
 export function IPBWSummary() {
   return (
-    <View style={{ flexDirection: "row", gap: 4, paddingTop: 5 }}>
-      <View style={{ flex: 0.6, flexDirection: "row", gap: 4 }}>
+    <View style={{ flexDirection: "row", marginTop: "4px", gap: 2 }}>
+      <View
+        style={{
+          width: "20%",
+          flexDirection: "column",
+          border: "1px solid black",
+          display: "flex",
+        }}
+      >
         <View
           style={{
-            paddingVertical: "2px",
+            borderBottom: "1px solid black",
             paddingHorizontal: "2px",
+            fontWeight: "bold",
+            paddingVertical: 1,
           }}
         >
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              fontWeight: "bold",
-            }}
-          >
-            <View
-              style={{
-                borderRight: 0,
-                marginRight: "4px",
-                width: "10px",
-              }}
-            >
-              <Text>Travail</Text>
-            </View>
-            <View style={{ borderLeft: 0, marginRight: "4px" }}></View>
-          </View>
-          <SummaryItem name="Felicitations" />
-          <SummaryItem name="Encouragements" />
-          <SummaryItem name="Viewau d'honneur" />
-          <SummaryItem name="Avertissement" />
-          <SummaryItem name="Blâme" />
+          <Text style={{ paddingLeft: 4 }}>Travail</Text>
         </View>
 
+        <SummaryItem name="Felicitations" value={<CheckIcon />} />
+        <SummaryItem name="Encouragements" value={10} />
+        <SummaryItem name="Viewau d'honneur" value={10} />
+        <SummaryItem name="Avertissement" />
+        <SummaryItem name="Blâme" value={10} lastRow={true} />
+      </View>
+
+      <View
+        style={{
+          width: "20%",
+          border: "1px solid black",
+          flexDirection: "column",
+          display: "flex",
+        }}
+      >
         <View
           style={{
-            paddingVertical: "2px",
+            borderBottom: "1px solid black",
             paddingHorizontal: "2px",
+            fontWeight: "bold",
+            paddingVertical: 1,
           }}
         >
-          <View>
-            <View
-              style={{
-                borderRight: 0,
-                marginRight: "4px",
-              }}
-            >
-              <Text> Discipline</Text>
-            </View>
-            <View style={{ borderLeft: 0, marginRight: "4px" }}></View>
-          </View>
-          <SummaryItem name="Total absences" value={10} />
-          <SummaryItem name="Justifiees" value={6} />
-          <SummaryItem name="Non justifiees" value={4} />
-          <SummaryItem name="Retards" value={"15h"} />
-          <SummaryItem name="Consigne" value={3} />
+          <Text style={{ paddingLeft: 4 }}>Discipline</Text>
         </View>
+
+        <SummaryItem name="Total absences" value={10} />
+        <SummaryItem name="Justifiees" value={6} />
+        <SummaryItem name="Non justifiees" value={4} />
+        <SummaryItem name="Retards" value={"15h"} />
+        <SummaryItem name="Consigne" lastRow={true} value={3} />
+      </View>
+      <View
+        style={{
+          width: "20%",
+          border: "1px solid black",
+          flexDirection: "column",
+          display: "flex",
+        }}
+      >
         <View
           style={{
-            paddingVertical: "2px",
+            borderBottom: "1px solid black",
             paddingHorizontal: "2px",
+            fontWeight: "bold",
+            paddingVertical: 1,
           }}
         >
-          <View>
-            <View
-              style={{
-                borderRight: 0,
-              }}
-            >
-              <Text>Performance</Text>
-            </View>
-            <View style={{ borderLeft: 0, marginRight: "4px" }}></View>
-          </View>
-          <SummaryItem name="Moy.Max" />
-          <SummaryItem name="Moy.Min" />
-          <SummaryItem name="Moy.Cl" />
-          <SummaryItem name="Taux de reussite" />
-          <SummaryItem name="Mention" />
+          <Text style={{ paddingLeft: 4 }}>Discipline</Text>
         </View>
+        <SummaryItem name="Moy.Max" value={10} />
+        <SummaryItem name="Moy.Min" value={10} />
+        <SummaryItem name="Moy.Cl" value={10} />
+        <SummaryItem name="Taux de reussite" value={10} />
+        <SummaryItem name="Mention" lastRow={true} value={10} />
       </View>
-      <View style={{ flex: 0.4 }}>
-        <SummaryResult />
-      </View>
+      <SummaryResult />
     </View>
   );
 }
@@ -91,20 +87,30 @@ export function IPBWSummary() {
 function SummaryItem({
   name,
   value,
+  lastRow = false,
 }: {
   name: string;
-
+  lastRow?: boolean;
   value?: React.ReactNode;
 }) {
   return (
-    <View>
-      <View style={{ marginRight: "4px" }}>
-        <Text>{name}</Text>
+    <View style={{ flexDirection: "row", display: "flex" }}>
+      <View
+        style={{
+          width: "75%",
+          paddingVertical: 2,
+          borderBottom: lastRow ? "" : "1px solid black",
+          borderRight: "1px solid black",
+        }}
+      >
+        <Text style={{ paddingLeft: 4 }}>{name}</Text>
       </View>
       <View
         style={{
           justifyContent: "center",
-          marginRight: "4px",
+          alignItems: "center",
+          width: "25%",
+          borderBottom: lastRow ? "" : "1px solid black",
         }}
       >
         <Text>{value}</Text>
@@ -117,25 +123,42 @@ function SummaryResult() {
   return (
     <View
       style={{
-        paddingHorizontal: "2px",
-        paddingVertical: "2px",
+        width: "40%",
+        border: "1px solid black",
+        flexDirection: "column",
+        display: "flex",
       }}
     >
-      <View style={{ backgroundColor: "#D7D7D7" }}>
-        <View
+      <View
+        style={{
+          backgroundColor: "#D7D7D7",
+          paddingVertical: 2,
+          borderBottom: "1px solid black",
+        }}
+      >
+        <Text
           style={{
-            fontWeight: "bold",
             textTransform: "uppercase",
+            paddingLeft: 4,
+            fontWeight: "bold",
           }}
         >
-          <Text> Resume des resultats</Text>
-        </View>
+          Resume des resultats
+        </Text>
       </View>
-      <View>
+      <View
+        style={{
+          flexDirection: "row",
+          display: "flex",
+          borderBottom: "1px solid black",
+        }}
+      >
         <View
           style={{
             textTransform: "uppercase",
-            borderRight: 0,
+            width: "50%",
+            paddingVertical: 2,
+            borderRight: "1px solid black",
             fontWeight: "bold",
           }}
         >
@@ -143,17 +166,28 @@ function SummaryResult() {
         </View>
         <View
           style={{
-            borderLeft: 0,
+            fontWeight: "bold",
+            width: "50%",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <Text> 10.62</Text>
         </View>
       </View>
-      <View>
+      <View
+        style={{
+          flexDirection: "row",
+          display: "flex",
+          borderBottom: "1px solid black",
+        }}
+      >
         <View
           style={{
             textTransform: "uppercase",
-            borderRight: 0,
+            borderRight: "1px solid black",
+            width: "50%",
+            paddingVertical: 2,
             fontWeight: "bold",
           }}
         >
@@ -161,36 +195,53 @@ function SummaryResult() {
         </View>
         <View
           style={{
-            borderLeft: 0,
+            fontWeight: "bold",
+            width: "50%",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <Text> 56 / 77</Text>
         </View>
       </View>
-      <View>
+      <View
+        style={{
+          flexDirection: "row",
+          display: "flex",
+          borderBottom: "1px solid black",
+        }}
+      >
         <View
           style={{
             textTransform: "uppercase",
-            borderRight: 0,
+            borderRight: "1px solid black",
+            width: "50%",
             fontWeight: "bold",
+            paddingVertical: 2,
           }}
         >
           <Text> Appreciation</Text>
         </View>
         <View
           style={{
-            borderLeft: 0,
             fontWeight: "bold",
+            width: "50%",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <Text> Moyen</Text>
         </View>
       </View>
-      <View>
+      <View
+        style={{
+          flexDirection: "row",
+          display: "flex",
+        }}
+      >
         <View
           style={{
             justifyContent: "center",
-            backgroundColor: "#D7D7D7",
             fontWeight: "bold",
             textTransform: "uppercase",
           }}
@@ -198,7 +249,12 @@ function SummaryResult() {
           <Text> Observation</Text>
         </View>
       </View>
-      <View>
+      <View
+        style={{
+          flexDirection: "row",
+          display: "flex",
+        }}
+      >
         <View
           style={{
             borderRight: 0,

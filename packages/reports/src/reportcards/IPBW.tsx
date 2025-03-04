@@ -6,6 +6,7 @@ import "../fonts";
 import type { RouterOutputs } from "@repo/api";
 
 import { IPBWHeader } from "../headers/IPBWHeader";
+import { IPBWSignature } from "./IPBWSignature";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWSummary } from "./IPBWSummary";
 import { IPBWTableHeader } from "./IPBWTableHeader";
@@ -97,90 +98,7 @@ export function IPBW({
             })}
           </View>
           <IPBWSummary />
-          <View style={{ flexDirection: "row", gap: 4, paddingTop: 5 }}>
-            <View style={{ flex: 0.6, flexDirection: "row", gap: 4 }}>
-              <View style={{ paddingTop: "4px" }}>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    fontWeight: "bold",
-                    textTransform: "uppercase",
-                    borderBottom: "1px solid black",
-                  }}
-                >
-                  <View
-                    style={{
-                      backgroundColor: "#D7D7D7",
-                      fontWeight: "bold",
-                      textTransform: "uppercase",
-                      justifyContent: "center",
-                      paddingHorizontal: "4px",
-                    }}
-                  >
-                    <Text> Parents</Text>
-                  </View>
-                  <View
-                    style={{
-                      backgroundColor: "#D7D7D7",
-                      justifyContent: "center",
-                      paddingHorizontal: "4px",
-                      fontWeight: "bold",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    <Text>Prof. Principal</Text>
-                  </View>
-                </View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    display: "flex",
-                  }}
-                >
-                  <View
-                    style={{
-                      paddingVertical: 30,
-                    }}
-                  ></View>
-                  <View></View>
-                </View>
-              </View>
-            </View>
-            <View style={{ flex: 0.4 }}>
-              <View style={{ paddingTop: "4px" }}>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    fontWeight: "bold",
-                  }}
-                >
-                  <View
-                    style={{
-                      backgroundColor: "#D7D7D7",
-                      justifyContent: "center",
-                      paddingHorizontal: "4px",
-                      fontWeight: "bold",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    <Text> Directeur</Text>
-                  </View>
-                </View>
-                <View>
-                  <View
-                    style={{
-                      paddingVertical: 30,
-                      justifyContent: "center",
-                      paddingHorizontal: "4px",
-                    }}
-                  ></View>
-                </View>
-              </View>
-            </View>
-          </View>
+          <IPBWSignature />
         </View>
       </Page>
     </Document>
