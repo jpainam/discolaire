@@ -112,7 +112,7 @@ export function StudentGradeHeader({
             "?" +
               createQueryString({
                 term: val,
-              })
+              }),
           );
         }}
         defaultValue={term ? `${term}` : undefined}
@@ -176,7 +176,7 @@ export function StudentGradeHeader({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  }
+                  },
                 );
               }}
             >
@@ -200,7 +200,7 @@ export function StudentGradeHeader({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  }
+                  },
                 );
               }}
             >

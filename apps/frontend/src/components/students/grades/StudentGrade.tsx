@@ -46,7 +46,7 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
     let sortedGrades = [...studentGradesQuery.data];
     if (term) {
       sortedGrades = studentGradesQuery.data.filter(
-        (g) => g.gradeSheet.termId === Number(term)
+        (g) => g.gradeSheet.termId === Number(term),
       );
     }
     if (orderBy == "grade") {
@@ -54,7 +54,7 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
     } else {
       sortedGrades = _.sortBy(
         sortedGrades,
-        (grade) => grade.gradeSheet.subject.course.name
+        (grade) => grade.gradeSheet.subject.course.name,
       );
     }
     if (sortOrder === "desc") {
