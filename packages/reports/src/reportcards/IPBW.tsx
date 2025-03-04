@@ -10,7 +10,7 @@ import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWSummary } from "./IPBWSummary";
 import { IPBWTableHeader } from "./IPBWTableHeader";
 
-const W = [0.4, 0.06, 0.06, 0.06, 0.06, 0.06, 0.1, 0.2];
+const W = ["40%", "6%", "6%", "6%", "6%", "6%", "10%", "10%"];
 type ReportCardType =
   RouterOutputs["reportCard"]["getStudent"]["result"][number];
 export function IPBW({
@@ -66,14 +66,17 @@ export function IPBW({
             </Text>
           </View>
           <IPBWStudentInfo student={student} contact={contact} />
+
           <View
             style={{
-              paddingVertical: "0px",
-              paddingHorizontal: "2px",
+              display: "flex",
+              padding: 0,
+              border: "1px solid black",
+              flexDirection: "column",
             }}
           >
             <IPBWTableHeader W={W} />
-            {Object.keys(groups).map((groupId: string) => {
+            {Object.keys(groups).map((groupId: string, index: number) => {
               let cards = groups[Number(groupId)];
               if (!cards || cards.length == 0) return null;
               cards = sortBy(cards, "order").filter((c) => !c.isAbsent);
@@ -87,6 +90,7 @@ export function IPBW({
                   groupId={Number(groupId)}
                   key={`card-${groupId}`}
                   cards={cards}
+                  lastRow={index === Object.keys(groups).length - 1}
                   group={{ name: group.name }}
                 />
               );
@@ -186,11 +190,13 @@ export function IPBW({
 function ReportCardGroup({
   cards,
   groupId,
+  lastRow = false,
   group,
 }: {
   groupId: number;
   group: { name: string };
   cards: ReportCardType[];
+  lastRow?: boolean;
 }) {
   return (
     <>
@@ -228,6 +234,8 @@ function ReportCardGroup({
               style={{
                 width: W[1],
                 borderRight: "1px solid black",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
               <Text> {!card.isAbsent && card.avg}</Text>
@@ -236,6 +244,8 @@ function ReportCardGroup({
               style={{
                 width: W[2],
                 borderRight: "1px solid black",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
               <Text> {!card.isAbsent && card.coefficient}</Text>
@@ -244,6 +254,8 @@ function ReportCardGroup({
               style={{
                 width: W[3],
                 borderRight: "1px solid black",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
               <Text>
@@ -254,6 +266,8 @@ function ReportCardGroup({
               style={{
                 width: W[4],
                 borderRight: "1px solid black",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
               <Text>{!card.isAbsent && card.rank}</Text>
@@ -261,6 +275,8 @@ function ReportCardGroup({
             <View
               style={{
                 width: W[5],
+                alignItems: "center",
+                justifyContent: "center",
                 borderRight: "1px solid black",
               }}
             >
@@ -269,6 +285,8 @@ function ReportCardGroup({
             <View
               style={{
                 width: W[6],
+                alignItems: "center",
+                justifyContent: "center",
                 borderRight: "1px solid black",
               }}
             >
@@ -280,6 +298,8 @@ function ReportCardGroup({
               style={{
                 width: W[7],
                 textTransform: "uppercase",
+                paddingLeft: 4,
+                justifyContent: "center",
               }}
             >
               <Text> Moyen</Text>
@@ -295,52 +315,55 @@ function ReportCardGroup({
           flexDirection: "row",
           display: "flex",
           fontWeight: "bold",
-          borderBottom: "1px solid black",
+          width: "100%",
+          borderBottom: lastRow ? "" : "1px solid black",
         }}
       >
         <View
           style={{
-            paddingHorizontal: "4px",
-            paddingVertical: "1px",
-            alignItems: "flex-start",
-            borderRight: 0,
-            width: 4,
+            width: "46%",
+            paddingVertical: 2,
+            borderRight: "1px solid black",
+
+            justifyContent: "center",
           }}
         >
-          <Text>{group.name}</Text>
+          <Text style={{ paddingLeft: 4 }}>{group.name}</Text>
         </View>
         <View
           style={{
+            width: "6%",
+            alignItems: "center",
             justifyContent: "center",
-            borderLeft: 0,
-            borderRight: 0,
-            width: 6,
+            borderRight: "1px solid black",
           }}
         >
           <Text>{sum(cards.map((c) => c.coefficient))}</Text>
         </View>
+
         <View
           style={{
             justifyContent: "center",
-            borderLeft: 0,
-            borderRight: 0,
-            width: 3,
+            width: "6%",
+            alignItems: "center",
+            borderRight: "1px solid black",
           }}
         >
           <Text>
-            Point:{" "}
-            {sum(cards.map((c) => (c.avg || 0) * c.coefficient)).toFixed(1)}/
-            {sum(cards.map((c) => 20 * c.coefficient)).toFixed(1)}
+            {sum(cards.map((c) => (c.avg || 0) * c.coefficient)).toFixed(1)}
+            {/* {sum(cards.map((c) => 20 * c.coefficient)).toFixed(1)} */}
           </Text>
         </View>
         <View
           style={{
             justifyContent: "center",
-            borderLeft: 0,
+            width: "22%",
+            alignItems: "center",
+            borderRight: "1px solid black",
           }}
         >
           <Text>
-            Moyenne :
+            MOY :
             {(
               sum(cards.map((c) => c.avg * c.coefficient)) /
               sum(cards.map((c) => c.coefficient))

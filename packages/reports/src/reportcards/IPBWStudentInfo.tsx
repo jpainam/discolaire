@@ -34,7 +34,7 @@ export function IPBWStudentInfo({
         <Image
           style={{
             width: 70,
-            height: "100%",
+            height: 60,
           }}
           src={{
             uri: student.avatar,
@@ -48,7 +48,7 @@ export function IPBWStudentInfo({
           style={{
             width: 70,
             fontWeight: "bold",
-            height: "100%",
+            height: 75,
             border: "1px solid gray",
             justifyContent: "center",
             textAlign: "center",
@@ -60,8 +60,12 @@ export function IPBWStudentInfo({
       <View
         style={{
           fontSize: 8,
+          flexDirection: "column",
+          border: "1px solid black",
+          width: "100%",
         }}
       >
+        {/* Name & Classroom */}
         <View
           style={{
             display: "flex",
@@ -70,17 +74,17 @@ export function IPBWStudentInfo({
           }}
         >
           <InfoItem
-            w={0.8}
+            style={{ width: "60%" }}
             label={"Nom et Prénoms"}
             value={student.lastName + " " + student.firstName}
           />
           <InfoItem
-            w={0.2}
             label={"Classe"}
             value={student.classroom?.name ?? ""}
             lastColumn={true}
           />
         </View>
+        {/* Datenaiss & Gender & Effectif */}
         <View
           style={{
             borderBottom: "1px solid black",
@@ -89,69 +93,67 @@ export function IPBWStudentInfo({
           }}
         >
           <InfoItem
-            w={0.7}
+            style={{ width: "60%" }}
             label={"Date et lieu de naissance"}
             value={naiss?.toString() ?? ""}
           />
           <InfoItem
-            w={0.15}
+            style={{ width: "15%" }}
             label={"Genre"}
             value={student.gender == "female" ? "F" : "M"}
           />
           <InfoItem
-            w={0.15}
             label={"Effectif"}
             value={classroom?.size.toString() ?? ""}
             lastColumn={true}
           />
         </View>
+        {/* ID & Gender & Repeating & Principal */}
+
         <View
           style={{
             flexDirection: "row",
             display: "flex",
-            borderBottom: "1px solid black",
           }}
         >
           <InfoItem
-            style={{ borderBottom: "1px solid black" }}
-            w={0.4}
+            style={{ borderBottom: "1px solid black", width: "30%" }}
             label={"Identifiant Unique"}
             value="HIWJU34"
           />
           <InfoItem
-            w={0.2}
             label={"Redoublant"}
             style={{
               borderBottom: "1px solid black",
+              width: "30%",
             }}
             value={student.isRepeating ? "OUI" : "NON"}
           />
-
           <InfoItem
             lastColumn={true}
-            w={0.4}
             label={"Professeur Principal"}
             value={""}
           />
         </View>
-        <View>
+        {/* Parent/ Tutors& & Principal name */}
+
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
           <InfoItem
-            w={0.605}
             label={"Parents / Tuteurs"}
+            style={{ width: "60%" }}
             value={contact?.contact.lastName ?? ""}
           />
-          <View
-            style={{
-              alignItems: "flex-start",
-              paddingLeft: 4,
-              width: 4,
-            }}
-          >
-            <Text>
-              {classroom?.headTeacher?.prefix}{" "}
-              {classroom?.headTeacher?.lastName}
-            </Text>
-          </View>
+          <InfoItem
+            lastColumn={true}
+            label={""}
+            value={`${classroom?.headTeacher?.prefix} ${classroom?.headTeacher?.lastName}`}
+          />
+          <Text></Text>
         </View>
       </View>
     </View>
@@ -161,14 +163,12 @@ export function IPBWStudentInfo({
 function InfoItem({
   label,
   value,
-  w,
   lastColumn = false,
   style,
 }: {
   label: string;
   value: string;
   style?: Style;
-  w: number;
   lastColumn?: boolean;
 }) {
   return (
@@ -180,16 +180,25 @@ function InfoItem({
         flexDirection: "row",
         display: "flex",
         gap: 2,
-        width: w,
         borderRight: lastColumn ? "" : "1px solid black",
         ...style,
       }}
     >
-      <Text style={{ fontWeight: "bold" }}>
-        {label}
-        {value ? ":" : ""}
-      </Text>{" "}
-      <Text>{value}</Text>
+      {label && value ? (
+        <>
+          <Text style={{ fontWeight: "bold" }}>
+            {label}
+            {":"}
+          </Text>
+          <Text>{value}</Text>
+        </>
+      ) : label ? (
+        <Text style={{ fontWeight: "bold" }}>{label}</Text>
+      ) : value ? (
+        <Text>{value}</Text>
+      ) : (
+        <></>
+      )}
     </View>
   );
 }

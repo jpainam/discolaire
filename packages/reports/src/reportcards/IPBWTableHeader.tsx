@@ -2,12 +2,15 @@ import { Text, View } from "@react-pdf/renderer";
 
 import "../fonts";
 
-export function IPBWTableHeader({ W }: { W: number[] }) {
+export function IPBWTableHeader({ W }: { W: number[] | string[] }) {
   return (
     <View
       style={{
-        //backgroundColor: "#000",
-        //color: "#fff",
+        backgroundColor: "#000",
+        color: "#fff",
+        flexDirection: "row",
+        display: "flex",
+        paddingVertical: 2,
         borderBottom: "1px solid black",
         fontWeight: "bold",
         fontSize: 8,
