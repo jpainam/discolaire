@@ -57,7 +57,7 @@ export async function ClassroomEffectif({
   const values = Object.values(levels);
   const chartData: { level: string; female: number; male: number }[] = sortBy(
     values,
-    "levelId"
+    "levelId",
   );
   const totalMale = values.reduce((acc, val) => acc + val.male, 0);
   const totalFemale = values.reduce((acc, val) => acc + val.female, 0);

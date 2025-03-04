@@ -33,7 +33,7 @@ export function SignUpContact() {
     return <EmptyState className="my-4" />;
   }
   const haveNotSignedUp = studentContactsQuery.data.map(
-    (std) => !std.contact.userId
+    (std) => !std.contact.userId,
   ).length;
   if (haveNotSignedUp == 0) {
     return;
@@ -74,7 +74,7 @@ export function SignUpContact() {
                             " " +
                             std.contact.lastName +
                             " " +
-                            std.contact.firstName
+                            std.contact.firstName,
                         );
                         return;
                       }
@@ -82,13 +82,13 @@ export function SignUpContact() {
                         `/api/emails/invite?email=${std.contact.email}`,
                         {
                           method: "GET",
-                        }
+                        },
                       ).catch((error) => {
                         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
                         toast.error(error.message, { id: 0 });
                       });
                       return true;
-                    })
+                    }),
                   );
                   await allPromise;
                 }}

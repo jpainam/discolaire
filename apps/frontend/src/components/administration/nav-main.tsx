@@ -1,7 +1,7 @@
 "use client";
 
 import type { LucideIcon } from "lucide-react";
-import { ArrowLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ChevronRight, Home } from "lucide-react";
 
 import {
   Collapsible,
@@ -43,7 +43,7 @@ export function NavMain({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip={t("back_to_home")}>
-              <a href={"/students"}>
+              <a href={"/"}>
                 <ArrowLeft />
                 <span>{t("back_to_home")}</span>
               </a>
@@ -53,6 +53,18 @@ export function NavMain({
       </SidebarGroup>
       <SidebarGroup className="pt-0">
         <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              tooltip={t("home")}
+              isActive={pathname === "/administration"}
+            >
+              <Link href={"/administration"}>
+                <Home />
+                <span>{t("home")}</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           {items.map((item) => (
             <Collapsible
               key={item.title}

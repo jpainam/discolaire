@@ -98,15 +98,16 @@ export function LinkContact({ studentId }: { studentId: string }) {
                     if (selectedContacts.includes(contact)) {
                       return setSelectedContacts(
                         selectedContacts.filter(
-                          (selectedContact) => selectedContact.id !== contact.id
-                        )
+                          (selectedContact) =>
+                            selectedContact.id !== contact.id,
+                        ),
                       );
                     }
 
                     return setSelectedContacts(
                       [...studentUnLinkedContact.data].filter((u) =>
-                        [...selectedContacts, contact].includes(u)
-                      )
+                        [...selectedContacts, contact].includes(u),
+                      ),
                     );
                   }}
                 >
@@ -190,7 +191,7 @@ export function LinkContact({ studentId }: { studentId: string }) {
                 error: (error) => {
                   return getErrorMessage(error);
                 },
-              }
+              },
             );
           }}
         >
