@@ -22,6 +22,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale } from "~/i18n";
+import { SearchForm } from "../search-form";
 import { SidebarLogo } from "../sidebar-logo";
 import { NavMain } from "./nav-main";
 import { NavProjects } from "./nav-projects";
@@ -46,8 +47,12 @@ export function AdminSidebar({
             url: "/administration/courses",
           },
           {
-            title: "classroom_settings",
+            title: "classrooms",
             url: "/administration/classrooms",
+          },
+          {
+            title: "students",
+            url: "/administration/students",
           },
           {
             title: "directory",
@@ -191,12 +196,13 @@ export function AdminSidebar({
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="h-16 max-md:mt-2 mb-2 justify-center">
+      <SidebarHeader className="max-md:mt-2 mb-2 justify-center">
         <SidebarLogo />
+        <SearchForm />
       </SidebarHeader>
       <SidebarContent className="-mt-2">
         <NavMain items={adminMenu.navMain} />
-        <SidebarGroup className="pt-0">
+        <SidebarGroup>
           <SidebarMenu>
             {others.map((item) => (
               <SidebarMenuItem key={item.name}>

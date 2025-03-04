@@ -10,10 +10,10 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
-import { useLocale } from "~/i18n";
+import { getServerTranslations } from "~/i18n/server";
 
-export function RepeatingPie({ students }: { students: Student[] }) {
-  const { t } = useLocale();
+export async function RepeatingPie({ students }: { students: Student[] }) {
+  const { t } = await getServerTranslations();
   const chartConfig = {
     repeating: {
       label: t("repeating"),

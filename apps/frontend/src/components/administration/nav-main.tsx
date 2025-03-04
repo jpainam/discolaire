@@ -38,58 +38,57 @@ export function NavMain({
   const { t } = useLocale();
   const pathname = usePathname();
   return (
-    <SidebarGroup className="pt-0">
-      <SidebarMenu>
-        <SidebarMenuItem>
-          <SidebarMenuButton asChild>
-            <Link
-              href="/"
-              className="flex items-center gap-2 py-1 text-sm text-muted-foreground hover:text-foreground"
+    <>
+      <SidebarGroup>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild tooltip={t("back_to_home")}>
+              <a href={"/students"}>
+                <ArrowLeft />
+                <span>{t("back_to_home")}</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroup>
+      <SidebarGroup className="pt-0">
+        <SidebarMenu>
+          {items.map((item) => (
+            <Collapsible
+              key={item.title}
+              asChild
+              defaultOpen={
+                item.isActive ??
+                item.items?.some((subItem) => pathname.startsWith(subItem.url))
+              }
+              className="group/collapsible"
             >
-              <ArrowLeft className="h-4 w-4" />
-              <span className="group-data-[collapsible=icon]:hidden">
-                {t("back_to_home")}
-              </span>
-            </Link>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-      </SidebarMenu>
-      <SidebarMenu>
-        {items.map((item) => (
-          <Collapsible
-            key={item.title}
-            asChild
-            defaultOpen={
-              item.isActive ??
-              item.items?.some((subItem) => pathname.startsWith(subItem.url))
-            }
-            className="group/collapsible"
-          >
-            <SidebarMenuItem>
-              <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip={t(item.title)}>
-                  {item.icon && <item.icon />}
-                  <span>{t(item.title)}</span>
-                  <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                </SidebarMenuButton>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <SidebarMenuSub>
-                  {item.items?.map((subItem) => (
-                    <SidebarMenuSubItem key={subItem.title}>
-                      <SidebarMenuSubButton asChild>
-                        <Link href={subItem.url}>
-                          <span>{t(subItem.title)}</span>
-                        </Link>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  ))}
-                </SidebarMenuSub>
-              </CollapsibleContent>
-            </SidebarMenuItem>
-          </Collapsible>
-        ))}
-      </SidebarMenu>
-    </SidebarGroup>
+              <SidebarMenuItem>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton tooltip={t(item.title)}>
+                    {item.icon && <item.icon />}
+                    <span>{t(item.title)}</span>
+                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <SidebarMenuSub>
+                    {item.items?.map((subItem) => (
+                      <SidebarMenuSubItem key={subItem.title}>
+                        <SidebarMenuSubButton asChild>
+                          <Link href={subItem.url}>
+                            <span>{t(subItem.title)}</span>
+                          </Link>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    ))}
+                  </SidebarMenuSub>
+                </CollapsibleContent>
+              </SidebarMenuItem>
+            </Collapsible>
+          ))}
+        </SidebarMenu>
+      </SidebarGroup>
+    </>
   );
 }

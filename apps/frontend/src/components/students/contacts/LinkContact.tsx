@@ -98,16 +98,15 @@ export function LinkContact({ studentId }: { studentId: string }) {
                     if (selectedContacts.includes(contact)) {
                       return setSelectedContacts(
                         selectedContacts.filter(
-                          (selectedContact) =>
-                            selectedContact.id !== contact.id,
-                        ),
+                          (selectedContact) => selectedContact.id !== contact.id
+                        )
                       );
                     }
 
                     return setSelectedContacts(
                       [...studentUnLinkedContact.data].filter((u) =>
-                        [...selectedContacts, contact].includes(u),
-                      ),
+                        [...selectedContacts, contact].includes(u)
+                      )
                     );
                   }}
                 >
@@ -125,13 +124,8 @@ export function LinkContact({ studentId }: { studentId: string }) {
                       />
                     </AvatarFallback>
                   </Avatar>
-                  <div className="ml-2">
-                    <span className="text-xs font-medium leading-none">
-                      {contact.lastName} {contact.firstName}
-                    </span>
-                    <span className="text-xs text-muted-foreground">
-                      {contact.email}
-                    </span>
+                  <div className="ml-2 text-xs font-medium leading-none">
+                    {getFullName(contact)}
                   </div>
                   {selectedContacts.includes(contact) ? (
                     <Check className="ml-auto flex h-5 w-5 text-primary" />
@@ -196,7 +190,7 @@ export function LinkContact({ studentId }: { studentId: string }) {
                 error: (error) => {
                   return getErrorMessage(error);
                 },
-              },
+              }
             );
           }}
         >

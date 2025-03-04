@@ -24,7 +24,7 @@ export const pageHeaderBreadcrumbs: Record<
       url: "/administration/my-school",
     },
     {
-      title: "classroom_settings",
+      title: "classrooms",
       url: "/administration/classrooms",
     },
   ],

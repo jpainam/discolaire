@@ -36,7 +36,7 @@ export async function StudentSiblingTable({
   const contact = studentContact.contact;
   const { t } = await getServerTranslations();
   return (
-    <Card className="mb-4">
+    <Card className="mb-4 p-0">
       <CardHeader className="flex flex-row items-center justify-center space-y-0 border-b bg-muted/50 px-2 py-1">
         <CardTitle className="text-md group flex items-center py-0">
           {t("studentsLinkedTo", {

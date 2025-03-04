@@ -129,14 +129,14 @@ export function StudentHeader({
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   const canEditStudent = useCheckPermissions(
     PermissionAction.UPDATE,
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   //const [open, setOpen] = React.useState(false);
 
@@ -160,7 +160,10 @@ export function StudentHeader({
 
           {canEditStudent && (
             <>
-              <Separator orientation="vertical" className="h-4" />
+              <Separator
+                orientation="vertical"
+                className="data-[orientation=vertical]:h-4"
+              />
               <Button
                 disabled={!canEditStudent}
                 size={"icon"}
@@ -174,13 +177,19 @@ export function StudentHeader({
               </Button>
             </>
           )}
-          <Separator orientation="vertical" className="h-4" />
+          <Separator
+            orientation="vertical"
+            className="data-[orientation=vertical]:h-4"
+          />
           <SimpleTooltip content="Notification reçus">
             <Button size={"icon"} aria-label="Notification" variant="ghost">
               <BellRing className="h-4 w-4" />
             </Button>
           </SimpleTooltip>
-          <Separator orientation="vertical" className="h-4" />
+          <Separator
+            orientation="vertical"
+            className="data-[orientation=vertical]:h-4"
+          />
           <SimpleTooltip content="Dialoguer">
             <Button
               size={"icon"}
@@ -193,7 +202,10 @@ export function StudentHeader({
               <MessageCircleMore className="h-4 w-4" />
             </Button>
           </SimpleTooltip>
-          <Separator orientation="vertical" className="h-4" />
+          <Separator
+            orientation="vertical"
+            className="data-[orientation=vertical]:h-4"
+          />
           <SimpleTooltip content="Contacts et Responsables">
             <Button
               size={"icon"}
@@ -206,7 +218,10 @@ export function StudentHeader({
               <Users className="h-4 w-4" />
             </Button>
           </SimpleTooltip>
-          <Separator orientation="vertical" className="h-4" />
+          <Separator
+            orientation="vertical"
+            className="data-[orientation=vertical]:h-4"
+          />
           <SimpleTooltip content="Impressions">
             <Button
               size={"icon"}
@@ -215,14 +230,17 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `${endpointReports.student_page(params.id)}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
               <Printer className="h-4 w-4" />
             </Button>
           </SimpleTooltip>
-          <Separator orientation="vertical" className="h-4" />
+          <Separator
+            orientation="vertical"
+            className="data-[orientation=vertical]:h-4"
+          />
           <SimpleTooltip content={t("add")}>
             <Button
               size={"icon"}
@@ -235,7 +253,10 @@ export function StudentHeader({
               <PlusIcon className="h-4 w-4" />
             </Button>
           </SimpleTooltip>
-          <Separator orientation="vertical" className="h-4" />
+          <Separator
+            orientation="vertical"
+            className="data-[orientation=vertical]:h-4"
+          />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -347,10 +368,12 @@ export function StudentHeader({
 
         <div className="grid grid-cols-2 flex-row items-center gap-4 text-sm font-semibold md:flex">
           {student.registrationNumber && (
-            <div className="flex flex-row items-center gap-2 rounded dark:bg-secondary">
-              <NotebookTabs className="h-4 w-4 text-foreground" />
-              <span> {student.registrationNumber}</span>
-            </div>
+            <SimpleTooltip content={t("registration_number")}>
+              <Button size={"sm"} variant={"ghost"}>
+                <NotebookTabs />
+                <span> {student.registrationNumber}</span>
+              </Button>
+            </SimpleTooltip>
           )}
           {student.classroom && (
             <div className="flex flex-row items-center gap-2 rounded dark:bg-secondary">

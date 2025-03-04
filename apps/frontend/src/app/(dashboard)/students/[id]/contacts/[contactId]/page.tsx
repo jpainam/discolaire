@@ -55,7 +55,7 @@ export default async function Page(props: {
       </div>
       <div className="grid w-full gap-2 text-sm md:grid-cols-2">
         <div className="flex flex-col">
-          <div className="mb-2 flex flex-row items-center gap-2 rounded-md border border-t-4 border-primary px-2">
+          <div className="mb-2 flex flex-row items-center gap-2 rounded-md border border-t-4 border-primary p-2">
             <AvatarState
               pos={0}
               className="h-16 w-16"

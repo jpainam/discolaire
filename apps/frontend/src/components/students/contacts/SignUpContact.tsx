@@ -33,13 +33,13 @@ export function SignUpContact() {
     return <EmptyState className="my-4" />;
   }
   const haveNotSignedUp = studentContactsQuery.data.map(
-    (std) => !std.contact.userId,
+    (std) => !std.contact.userId
   ).length;
   if (haveNotSignedUp == 0) {
     return;
   }
   return (
-    <div className="flex flex-row gap-4 p-2 text-sm">
+    <div className="flex flex-row gap-4 py-2 px-4 text-sm">
       <div className="flex w-full flex-col rounded-xl border border-[#f3ba63] bg-[#fff9ed] p-4 text-accent-foreground dark:border-[#693f05] dark:bg-[#271700]">
         <div className="flex flex-row">
           <div className="flex flex-1 flex-col gap-2">
@@ -74,7 +74,7 @@ export function SignUpContact() {
                             " " +
                             std.contact.lastName +
                             " " +
-                            std.contact.firstName,
+                            std.contact.firstName
                         );
                         return;
                       }
@@ -82,13 +82,13 @@ export function SignUpContact() {
                         `/api/emails/invite?email=${std.contact.email}`,
                         {
                           method: "GET",
-                        },
+                        }
                       ).catch((error) => {
                         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
                         toast.error(error.message, { id: 0 });
                       });
                       return true;
-                    }),
+                    })
                   );
                   await allPromise;
                 }}
