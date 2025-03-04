@@ -1,3 +1,4 @@
+pnpm i
 pnpm lint --fix
 pnpm format --write
 pnpm typecheck
