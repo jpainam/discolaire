@@ -52,16 +52,16 @@ export function ByChronologicalOrder({
                 coef: grade.gradeSheet.subject.coefficient.toString(),
               };
               router.push(
-                `${routes.students.grades(params.id)}/${grade.id}/?${createQueryString({ ...query })}`,
+                `${routes.students.grades(params.id)}/${grade.id}/?${createQueryString({ ...query })}`
               );
             }}
             key={grade.id}
             className={cn(
               "flex cursor-pointer flex-row items-center gap-4 border-b border-accent px-4 py-2",
-              grade.id === Number(params.gradeId) ? "bg-accent" : "bg-none",
+              grade.id === Number(params.gradeId) ? "bg-accent" : "bg-none"
             )}
           >
-            <div className="flex w-auto flex-col justify-center">
+            <div className="flex w-[50px] flex-col justify-center">
               <div className="mb-1 flex flex-col items-center rounded-md bg-secondary px-1 text-xs">
                 <div>{d}</div>
                 <div>{m}</div>
@@ -74,10 +74,10 @@ export function ByChronologicalOrder({
               ></div>
             </div>
             <div className="flex flex-col gap-0">
-              <div className="py-0 text-sm font-bold uppercase">
+              <div className="py-0 text-xs font-bold uppercase">
                 {grade.gradeSheet.subject.course.name}
               </div>
-              <div className="py-0 text-sm text-muted-foreground">
+              <div className="py-0 text-xs text-muted-foreground">
                 {grade.gradeSheet.name}
               </div>
               <div className="py-0 text-xs text-muted-foreground">
@@ -87,7 +87,7 @@ export function ByChronologicalOrder({
                   ?.avg?.toFixed(2)}
               </div>
             </div>
-            <div className="ml-auto flex flex-col text-sm">
+            <div className="ml-auto w-[100px] flex flex-col text-sm">
               <span className="font-bold">{grade.grade}</span>
               <span className="text-xs text-muted-foreground">
                 {grade.gradeSheet.term.name}

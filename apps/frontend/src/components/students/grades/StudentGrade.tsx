@@ -3,10 +3,9 @@
 import _ from "lodash";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { parseAsInteger, useQueryState } from "nuqs";
-import { useEffect, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 
-import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Skeleton } from "@repo/ui/components/skeleton";
@@ -28,7 +27,7 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
     id: studentId,
     termId: term ?? undefined,
   });
-  const [items, setItems] = useState<RouterOutputs["student"]["grades"]>([]);
+
   const [view] = useQueryState("view", {
     defaultValue: "by_chronological_order",
   });
@@ -41,27 +40,39 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
   const classroomMoyMinMaxGrades =
     api.classroom.getMinMaxMoyGrades.useQuery(classroomId);
 
-  useEffect(() => {
-    if (!studentGradesQuery.data) return;
-    let sortedGrades = [...studentGradesQuery.data];
+  const sortedGrades = useMemo(() => {
+    if (!studentGradesQuery.data) return [];
+
+    let filteredGrades = studentGradesQuery.data;
+
     if (term) {
-      sortedGrades = studentGradesQuery.data.filter(
-        (g) => g.gradeSheet.termId === Number(term),
+      filteredGrades = studentGradesQuery.data.filter(
+        (g) => g.gradeSheet.termId === Number(term)
       );
     }
-    if (orderBy == "grade") {
-      sortedGrades = _.sortBy(sortedGrades, (grade) => grade.grade);
-    } else {
-      sortedGrades = _.sortBy(
-        sortedGrades,
-        (grade) => grade.gradeSheet.subject.course.name,
-      );
-    }
-    if (sortOrder === "desc") {
-      sortedGrades.reverse();
-    }
-    setItems(sortedGrades);
+
+    const sorted =
+      orderBy === "grade"
+        ? _.sortBy(filteredGrades, (grade) => grade.grade)
+        : _.sortBy(
+            filteredGrades,
+            (grade) => grade.gradeSheet.subject.course.name
+          );
+
+    return sortOrder === "desc" ? sorted.reverse() : sorted;
   }, [orderBy, sortOrder, studentGradesQuery.data, term]);
+
+  const handleSort = useCallback(
+    (field: "subject" | "grade") => {
+      if (orderBy === field) {
+        setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+      } else {
+        setOrderBy(field);
+        setSortOrder("asc");
+      }
+    },
+    [orderBy, sortOrder, setOrderBy, setSortOrder]
+  );
 
   if (classroomMoyMinMaxGrades.isError) {
     toast.error(classroomMoyMinMaxGrades.error.message);
@@ -70,17 +81,7 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
   return (
     <div className="flex flex-col">
       <div className="flex flex-row justify-between gap-4 border-b border-r bg-muted/50 py-1 px-4">
-        <Button
-          variant={"ghost"}
-          onClick={() => {
-            if (orderBy === "subject") {
-              setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-            } else {
-              setOrderBy("subject");
-              setSortOrder("asc");
-            }
-          }}
-        >
+        <Button variant={"ghost"} onClick={() => handleSort("subject")}>
           {t("subject")}{" "}
           {orderBy === "subject" && sortOrder === "asc" ? (
             <ChevronUp className="ml-2 h-4 w-4" />
@@ -88,17 +89,7 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
             <ChevronDown className="ml-2 h-4 w-4" />
           )}
         </Button>
-        <Button
-          variant={"ghost"}
-          onClick={() => {
-            if (orderBy === "grade") {
-              setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-            } else {
-              setOrderBy("grade");
-              setSortOrder("asc");
-            }
-          }}
-        >
+        <Button variant={"ghost"} onClick={() => handleSort("subject")}>
           {t("grade")}
           {orderBy === "grade" && sortOrder === "asc" ? (
             <ChevronUp className="ml-2 h-4 w-4" />
@@ -114,20 +105,20 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
           ))}
         </div>
       )}
-      {items.length === 0 && !studentGradesQuery.isPending && (
+      {sortedGrades.length === 0 && !studentGradesQuery.isPending && (
         <EmptyState title={t("no_grades")} className="my-8" />
       )}
-      <ScrollArea className="flex h-[calc(100vh-15rem)] rounded-b-sm border-b border-r">
+      <ScrollArea className="flex h-[calc(100vh-21rem)] rounded-b-sm border-b border-r">
         {view === "by_chronological_order" && (
           <ByChronologicalOrder
-            grades={items}
+            grades={sortedGrades}
             minMaxMoy={classroomMoyMinMaxGrades.data ?? []}
           />
         )}
         {view === "by_subject" && (
           <BySubject
             minMaxMoy={classroomMoyMinMaxGrades.data ?? []}
-            grades={items}
+            grades={sortedGrades}
           />
         )}
       </ScrollArea>
