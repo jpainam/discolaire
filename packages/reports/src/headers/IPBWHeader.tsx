@@ -1,4 +1,4 @@
-import { Image, Text, View } from "@alexandernanberg/react-pdf-renderer";
+import { Image, Text, View } from "@react-pdf/renderer";
 
 import "../fonts";
 

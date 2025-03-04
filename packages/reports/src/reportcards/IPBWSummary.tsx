@@ -1,4 +1,4 @@
-import { View } from "@react-pdf/renderer";
+import { Text, View } from "@react-pdf/renderer";
 
 import { Table, TableCell, TableHeader, TableRow } from "../table";
 
@@ -23,7 +23,7 @@ export function IPBWSummary() {
                 width: "10px",
               }}
             >
-              Travail
+              <Text>Travail</Text>
             </TableCell>
             <TableCell
               w={w[0]}
@@ -51,7 +51,7 @@ export function IPBWSummary() {
                 marginRight: "4px",
               }}
             >
-              Discipline
+              <Text> Discipline</Text>
             </TableCell>
             <TableCell
               style={{ borderLeft: 0, marginRight: "4px" }}
@@ -76,7 +76,7 @@ export function IPBWSummary() {
                 borderRight: 0,
               }}
             >
-              Performance
+              <Text>Performance</Text>
             </TableCell>
             <TableCell
               style={{ borderLeft: 0, marginRight: "4px" }}
@@ -108,7 +108,7 @@ function SummaryItem({
   return (
     <TableRow>
       <TableCell w={w[0]} style={{ marginRight: "4px" }}>
-        {name}
+        <Text>{name}</Text>
       </TableCell>
       <TableCell
         w={w[1]}
@@ -117,7 +117,7 @@ function SummaryItem({
           marginRight: "4px",
         }}
       >
-        {value}
+        <Text>{value}</Text>
       </TableCell>
     </TableRow>
   );
@@ -139,7 +139,7 @@ function SummaryResult() {
             textTransform: "uppercase",
           }}
         >
-          Resume des resultats
+          <Text> Resume des resultats</Text>
         </TableCell>
       </TableRow>
       <TableRow>
@@ -150,14 +150,14 @@ function SummaryResult() {
             fontWeight: "bold",
           }}
         >
-          Moyenne
+          <Text> Moyenne</Text>
         </TableCell>
         <TableCell
           style={{
             borderLeft: 0,
           }}
         >
-          10.62
+          <Text> 10.62</Text>
         </TableCell>
       </TableRow>
       <TableRow>
@@ -168,14 +168,14 @@ function SummaryResult() {
             fontWeight: "bold",
           }}
         >
-          Rang
+          <Text> Rang</Text>
         </TableCell>
         <TableCell
           style={{
             borderLeft: 0,
           }}
         >
-          56 / 77
+          <Text> 56 / 77</Text>
         </TableCell>
       </TableRow>
       <TableRow>
@@ -186,7 +186,7 @@ function SummaryResult() {
             fontWeight: "bold",
           }}
         >
-          Appreciation
+          <Text> Appreciation</Text>
         </TableCell>
         <TableCell
           style={{
@@ -194,7 +194,7 @@ function SummaryResult() {
             fontWeight: "bold",
           }}
         >
-          Moyen
+          <Text> Moyen</Text>
         </TableCell>
       </TableRow>
       <TableRow>
@@ -206,7 +206,7 @@ function SummaryResult() {
             textTransform: "uppercase",
           }}
         >
-          Observation
+          <Text> Observation</Text>
         </TableCell>
       </TableRow>
       <TableRow>
@@ -221,7 +221,7 @@ function SummaryResult() {
             color: "#fff",
           }}
         >
-          O
+          <Text> O</Text>
         </TableCell>
       </TableRow>
     </Table>

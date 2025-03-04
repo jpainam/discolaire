@@ -1,5 +1,3 @@
-//import * as ReactPDFRenderer from "@alexandernanberg/react-pdf-renderer";
-
 export {
   Document,
   Font,

@@ -120,7 +120,7 @@ export function IPBW({
                       paddingHorizontal: "4px",
                     }}
                   >
-                    Parents
+                    <Text> Parents</Text>
                   </TableCell>
                   <TableCell
                     style={{
@@ -156,7 +156,7 @@ export function IPBW({
                       textTransform: "uppercase",
                     }}
                   >
-                    Directeur
+                    <Text> Directeur</Text>
                   </TableCell>
                 </TableHeader>
                 <TableRow>
