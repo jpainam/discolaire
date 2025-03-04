@@ -20,6 +20,7 @@ import { TopRightButtons } from "~/components/TopRightButtons";
 import GlobalModal from "~/layouts/GlobalModal";
 import GlobalSheet from "~/layouts/GlobalSheet";
 import { api } from "~/trpc/server";
+import { Breadcrumbs } from "~/components/breadcrumbs";
 
 export default async function Layout({
   children,
@@ -62,6 +63,7 @@ export default async function Layout({
                 className="mr-2 data-[orientation=vertical]:h-4"
               />
               {/* <NavHeader /> */}
+              <Breadcrumbs />
               <div className="ml-auto flex items-center gap-2">
                 <SchoolYearSwitcher defaultValue={schoolYear.id} />
                 <TopRightButtons />

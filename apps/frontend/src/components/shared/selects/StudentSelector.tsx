@@ -9,6 +9,7 @@ import { useLocale } from "~/i18n";
 
 import { AvatarState } from "~/components/AvatarState";
 import { cn } from "~/lib/utils";
+import { getFullName } from "~/utils/full-name";
 import { searchStudent } from "../../../actions/student";
 
 export function StudentSelector({
@@ -38,9 +39,7 @@ export function StudentSelector({
             pos={student.lastName?.length ?? 0}
           />
           <div className="flex flex-col">
-            <div className="font-normal">
-              {student.lastName} {student.firstName}
-            </div>
+            <div className="font-normal">{getFullName(student)}</div>
             {/* <div className="text-xs text-muted-foreground">{user.role}</div> */}
           </div>
         </div>
@@ -48,25 +47,7 @@ export function StudentSelector({
       placeholder={placeholder ?? t("search_for_an_option")}
       getOptionValue={(student) => student.id}
       getDisplayValue={(student) => (
-        <div className="flex items-center gap-x-2 text-left">
-          {/* {student.avatar ? (
-            <Image
-              src={student.avatar}
-              alt={"AV"}
-              width={24}
-              height={24}
-              className="rounded-full"
-            />
-          ) : (
-            <AvatarState pos={student.lastName?.length ?? 0} />
-          )} */}
-          <div className="flex flex-col leading-tight">
-            <div className="font-medium">
-              {student.lastName} {student.firstName}
-            </div>
-            {/* <div className="text-xxs text-muted-foreground">{user.role}</div> */}
-          </div>
-        </div>
+        <div className="leading-tight text-xs">{getFullName(student)}</div>
       )}
       notFound={
         <div className="py-6 text-center text-sm">{t("not_found")}</div>

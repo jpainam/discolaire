@@ -34,7 +34,7 @@ export function getNameParts(person: Person, part: number) {
   const v = getFullName(person);
   const tabs = v.split(" ").filter((s) => s.length > 0);
   if (tabs.length > part) {
-    return tabs[part - 1];
+    return tabs[part - 1] ?? "";
   }
-  return decode(v);
+  return v;
 }

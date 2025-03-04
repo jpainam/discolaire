@@ -9,6 +9,7 @@ import {
 import { KeyIcon, Shield, User } from "lucide-react";
 import { getServerTranslations } from "~/i18n/server";
 import { api } from "~/trpc/server";
+import { ChangeUserPassword } from "./ChangeUserPassword";
 import { UserProfile } from "./UserProfile";
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -49,7 +50,9 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         <TabsContent className="px-4" value="tab-1">
           <UserProfile user={user} />
         </TabsContent>
-        <TabsContent className="px-4" value="tab-2"></TabsContent>
+        <TabsContent className="px-4" value="tab-2">
+          <ChangeUserPassword user={user} />
+        </TabsContent>
         <TabsContent className="px-4" value="tab-3"></TabsContent>
       </Tabs>
     </div>

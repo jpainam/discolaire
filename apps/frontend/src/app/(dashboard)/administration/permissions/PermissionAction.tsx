@@ -20,6 +20,7 @@ export function PermissionAction() {
       <div className="ml-auto flex flex-row items-center gap-2">
         <Button
           variant={"outline"}
+          size={"sm"}
           onClick={() => {
             openModal({
               className: "w-96",
@@ -32,6 +33,7 @@ export function PermissionAction() {
           {t("create_group")}
         </Button>
         <Button
+          size={"sm"}
           onClick={() => {
             openModal({
               className: "w-96",
