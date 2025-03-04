@@ -1,8 +1,23 @@
 "use client";
 
+import { Badge } from "@repo/ui/components/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+import { Input } from "@repo/ui/components/input";
 import { cn } from "@repo/ui/lib/utils";
-import { FileIcon } from "lucide-react";
+import { format } from "date-fns";
+import { enUS, es, fr } from "date-fns/locale";
+import { DownloadIcon, FileIcon } from "lucide-react";
+import { useState } from "react";
 
+import { Button } from "@repo/ui/components/button";
+import i18next from "i18next";
+import Link from "next/link";
 import { useLocale } from "~/i18n";
 
 interface Resource {
@@ -15,61 +30,99 @@ const resources: Resource[] = [
   {
     subject: "MATHÉMATIQUES",
     fileName: "3e_MATHS_01_Utiliser les nombres pour comparer, calc...",
-    depositDate: "2 juin",
+    depositDate: "05/06/2022",
   },
   {
     subject: "MUSIQUE",
     fileName: "Biographie-Mozart.pdf",
-    depositDate: "22 mai",
+    depositDate: "05/22/2022",
   },
   {
     subject: "MATHÉMATIQUES",
     fileName: "3e_MATHS_04_Interpréter, représenter et traiter des d...",
-    depositDate: "22 mai",
+    depositDate: "05/06/2022",
   },
   {
     subject: "ANGLAIS LV1",
     fileName: "The Tales of Mother Goose - Blue Beard.pdf",
-    depositDate: "25 avril",
+    depositDate: "04/25/2022",
   },
   {
     subject: "MUSIQUE",
     fileName: "Biographie-Dvorak.pdf",
-    depositDate: "24 avril",
+    depositDate: "04/24/2022",
   },
 ];
 
 export function EducationalRessource({ className }: { className?: string }) {
   const { t } = useLocale();
+  const [today, setToday] = useState(new Date());
   return (
-    <div className={cn("rounded-lg border", className)}>
-      <div className="px-4 pt-2 text-center text-lg font-bold">
-        {t("resources")}
-      </div>
-      <div>
-        <h2 className="mx-4 mb-2 rounded-lg bg-gray-700 p-2 px-4 text-sm text-white">
-          {t("latest_educational_resources")}
-        </h2>
-        <ul className="flex flex-col gap-4 px-4 py-4">
+    <Card className={cn("rounded-lg border p-0 gap-0", className)}>
+      <CardHeader className="p-4 border-b justify-between  flex flex-row items-center">
+        <div className="flex flex-col gap-2 ">
+          <CardTitle>{t("resources")}</CardTitle>
+          <CardDescription>{t("latest_educational_resources")}</CardDescription>
+        </div>
+        <div>
+          <Input
+            type="date"
+            value={today.toISOString().split("T")[0]}
+            onChange={(e) => {
+              setToday(new Date(e.target.value));
+            }}
+          />
+        </div>
+      </CardHeader>
+      <CardContent className="p-2 ">
+        <div className="space-y-4">
           {resources.map((resource, index) => (
-            <li
+            <div
               key={index}
-              className="rounded-lg border-l-4 pl-4"
-              style={{ borderColor: getSubjectColor(resource.subject) }}
+              className="group relative flex justify-between pr-2 items-center space-x-4 border hover:bg-muted/50 transition-colors"
             >
-              <h3 className="font-bold">{resource.subject}</h3>
-              <div className="mb-2 mt-1 flex cursor-pointer flex-row items-center gap-2 rounded-md bg-purple-100 p-2 text-xs text-purple-800 hover:bg-purple-700 hover:text-purple-200">
-                <FileIcon className="h-4 w-4" />
-                {resource.fileName}
+              <div
+                className="border-l-4 py-2  p-4"
+                style={{ borderColor: getSubjectColor(resource.subject) }}
+              >
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <Badge className="font-medium" variant={"outline"}>
+                      {resource.subject}
+                    </Badge>
+                    <time className="text-sm text-muted-foreground">
+                      {format(resource.depositDate, "d MMMM", {
+                        locale:
+                          i18next.language == "fr"
+                            ? fr
+                            : i18next.language == "es"
+                              ? es
+                              : enUS,
+                      })}
+                    </time>
+                  </div>
+                  <div className="mt-1 leading-none tracking-tight group-hover:text-primary">
+                    <div className="flex text-xs items-center gap-2">
+                      <FileIcon className="h-4 w-4 text-muted-foreground" />
+                      <Link href={"#"} target="_blank" className="truncate">
+                        {resource.fileName}
+                      </Link>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <p className="text-sm text-gray-600">
-                {t("")} {resource.depositDate}
-              </p>
-            </li>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <DownloadIcon className="h-4 w-4" />
+              </Button>
+            </div>
           ))}
-        </ul>
-      </div>
-    </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 

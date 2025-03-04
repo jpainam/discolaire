@@ -7,6 +7,7 @@ import { StudentSidebar } from "~/components/students/StudentSidebar";
 import { MainSidebar } from "~/sidebars/main-sidebar";
 import { AdminSidebar } from "./administration/admin-sidebar";
 import { ClassroomSidebar } from "./classrooms/ClassroomSidebar";
+import { UserSidebar } from "./users/UserSidebar";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
@@ -23,12 +24,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const isClassroom =
     pathname.startsWith("/classrooms") && pathname.split("/").length > 2;
 
+  const isUser =
+    pathname.startsWith("/users") && pathname.split("/").length > 2;
+
   return (
     <>
       {isClassroom && <ClassroomSidebar {...props} />}
       {isHome && <MainSidebar {...props} />}
       {isStudent && <StudentSidebar {...props} />}
       {isAdmin && <AdminSidebar {...props} />}
+      {isUser && <UserSidebar {...props} />}
     </>
   );
 }

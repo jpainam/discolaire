@@ -24,6 +24,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SidebarLogo } from "~/components/sidebar-logo";
 import { useLocale } from "~/i18n";
+import { useSession } from "~/providers/AuthProvider";
 export function MainSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
@@ -61,16 +62,17 @@ export function MainSidebar({
       icon: RiAdminLine,
     },
   ];
+  const session = useSession();
 
   const others = [
     {
       name: "settings",
-      url: `/settings`,
+      url: `/users/${session.user?.id}/settings`,
       icon: RiSettings3Line,
     },
     {
       name: "help_center",
-      url: `/help_center`,
+      url: `https://docs.discolaire.com`,
       icon: RiLeafLine,
     },
   ];

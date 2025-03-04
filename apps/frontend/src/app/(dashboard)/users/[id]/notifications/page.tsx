@@ -4,7 +4,7 @@ import { NotificationsForm } from "~/components/users/notifications/notification
 
 export default function SettingsNotificationsPage() {
   return (
-    <div className="space-y-6">
+    <div className="px-4">
       <div>
         <h3 className="text-lg font-medium">Notifications</h3>
         <p className="text-sm text-muted-foreground">

@@ -4,7 +4,7 @@ import { AppearanceForm } from "~/components/users/settings/settings-form";
 
 export default function SettingsAppearancePage() {
   return (
-    <div className="space-y-6">
+    <div className="px-4 ">
       <div>
         <h3 className="text-lg font-medium">Appearance</h3>
         <p className="text-sm text-muted-foreground">

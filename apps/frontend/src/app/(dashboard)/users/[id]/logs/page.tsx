@@ -1,3 +1,3 @@
 export default function Page() {
-  return <div>Logs and activities</div>;
+  return <div className="p-4">Logs and activities</div>;
 }
