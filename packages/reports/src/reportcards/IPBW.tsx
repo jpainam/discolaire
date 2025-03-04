@@ -16,6 +16,7 @@ type ReportCardType =
   RouterOutputs["reportCard"]["getStudent"]["result"][number];
 export function IPBW({
   school,
+  average,
   student,
   groups,
   contact,
@@ -23,6 +24,7 @@ export function IPBW({
 }: {
   groups: Record<number, ReportCardType[]>;
   student: RouterOutputs["student"]["get"];
+  average: number;
   schoolYear: RouterOutputs["schoolYear"]["get"];
   contact: RouterOutputs["student"]["getPrimaryContact"];
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
@@ -97,7 +99,7 @@ export function IPBW({
               );
             })}
           </View>
-          <IPBWSummary />
+          <IPBWSummary average={average} />
           <IPBWSignature />
         </View>
       </Page>

@@ -1,7 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { CheckIcon } from "lucide-react";
 
-export function IPBWSummary() {
+export function IPBWSummary({ average }: { average: number }) {
   return (
     <View style={{ flexDirection: "row", marginTop: "4px", gap: 2 }}>
       <View
@@ -79,7 +79,7 @@ export function IPBWSummary() {
         <SummaryItem name="Taux de reussite" value={10} />
         <SummaryItem name="Mention" lastRow={true} value={10} />
       </View>
-      <SummaryResult />
+      <SummaryResult average={average} />
     </View>
   );
 }
@@ -119,7 +119,7 @@ function SummaryItem({
   );
 }
 
-function SummaryResult() {
+function SummaryResult({ average }: { average: number }) {
   return (
     <View
       style={{
@@ -172,7 +172,7 @@ function SummaryResult() {
             alignItems: "center",
           }}
         >
-          <Text> 10.62</Text>
+          <Text> {average}</Text>
         </View>
       </View>
       <View
