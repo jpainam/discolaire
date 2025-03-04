@@ -60,7 +60,7 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
     "contact:profile",
     {
       id: contactId,
-    }
+    },
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();

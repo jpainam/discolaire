@@ -53,14 +53,14 @@ export function StaffProfileHeader({
     "staff:profile",
     {
       id: params.id,
-    }
+    },
   );
   const canEditStaff = useCheckPermissions(
     PermissionAction.UPDATE,
     "staff:profile",
     {
       id: params.id,
-    }
+    },
   );
   const deleteStaffMutation = api.staff.delete.useMutation({
     onSettled: async () => {

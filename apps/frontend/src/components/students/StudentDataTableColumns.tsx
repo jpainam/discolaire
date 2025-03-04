@@ -253,7 +253,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
             year: "numeric",
             month: "short",
             day: "numeric",
-          }
+          },
         );
         return (
           <SimpleTooltip

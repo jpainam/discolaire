@@ -55,7 +55,7 @@ export function AssignmentDataTableActions({ table }: ToolbarActionsProps) {
                   error: (err) => {
                     return getErrorMessage(err);
                   },
-                }
+                },
               );
             }
           }}
