@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDownIcon, MoreVertical, PlusIcon } from "lucide-react";
+import { MoreVertical, PlusIcon } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@repo/ui/components/button";
@@ -19,25 +19,53 @@ import { useRouter } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
-import { StudentSearch } from "~/components/students/StudentSearch";
+import { StudentSearchCombobox } from "~/components/students/StudentSearchCombobox";
 import { endpointReports } from "~/configs/endpoints";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
-import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
+import { getFullName } from "~/utils/full-name";
 
 export function StudentPageHeader() {
   const { t } = useLocale();
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+
   const canCreateStudent = useCheckPermissions(
     PermissionAction.CREATE,
-    "student:profile",
+    "student:profile"
   );
+
+  const [value, setValue] = useState("");
+  const [label, setLabel] = useState(t("search_a_student"));
+  const [search, setSearch] = useState("");
+  const students = api.student.search.useQuery({
+    query: search,
+  });
 
   return (
     <div className="flex flex-row items-center gap-2 border-b px-4 py-1">
-      <Label>{t("students")}</Label>
-      <Button
+      <Label className="hidden md:block">{t("students")}</Label>
+      <StudentSearchCombobox
+        className="w-full lg:w-1/3"
+        items={
+          students.data?.map((stud) => ({
+            value: stud.id,
+            label: getFullName(stud),
+          })) ?? []
+        }
+        value={value}
+        label={label}
+        onSelect={(value, label) => {
+          setValue(value);
+          setLabel(label ?? "");
+          router.push(routes.students.details(value));
+        }}
+        onSearchChange={setSearch}
+        searchPlaceholder={t("search") + " ..."}
+        noResultsMsg={t("no_results")}
+        selectItemMsg={t("select_an_option")}
+      />
+      {/* <Button
         size={"sm"}
         variant="outline"
         className={cn(
@@ -54,7 +82,7 @@ export function StudentPageHeader() {
         onChange={(val) => {
           router.push(routes.students.details(val));
         }}
-      />
+      /> */}
       <div className="ml-auto flex flex-row items-center gap-2">
         {canCreateStudent && (
           <Button
@@ -80,7 +108,7 @@ export function StudentPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.student_list}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -91,7 +119,7 @@ export function StudentPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.student_list}?format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
