@@ -33,7 +33,9 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
     defaultValue: "by_chronological_order",
   });
 
-  const [orderBy, setOrderBy] = useQueryState("orderBy");
+  const [orderBy, setOrderBy] = useState<"subject" | "grade">("grade");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
   const { t } = useLocale();
 
   const classroomMoyMinMaxGrades =
@@ -44,21 +46,22 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
     let sortedGrades = [...studentGradesQuery.data];
     if (term) {
       sortedGrades = studentGradesQuery.data.filter(
-        (g) => g.gradeSheet.termId === Number(term),
+        (g) => g.gradeSheet.termId === Number(term)
       );
     }
     if (orderBy == "grade") {
       sortedGrades = _.sortBy(sortedGrades, (grade) => grade.grade);
-      sortedGrades.reverse();
     } else {
       sortedGrades = _.sortBy(
         sortedGrades,
-        (grade) => grade.gradeSheet.subject.course.name,
+        (grade) => grade.gradeSheet.subject.course.name
       );
+    }
+    if (sortOrder === "desc") {
       sortedGrades.reverse();
     }
     setItems(sortedGrades);
-  }, [orderBy, studentGradesQuery.data, term]);
+  }, [orderBy, sortOrder, studentGradesQuery.data, term]);
 
   if (classroomMoyMinMaxGrades.isError) {
     toast.error(classroomMoyMinMaxGrades.error.message);
@@ -70,11 +73,16 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
         <Button
           variant={"ghost"}
           onClick={() => {
-            void setOrderBy("subject");
+            if (orderBy === "subject") {
+              setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+            } else {
+              setOrderBy("subject");
+              setSortOrder("asc");
+            }
           }}
         >
           {t("subject")}{" "}
-          {orderBy == "subject" ? (
+          {orderBy === "subject" && sortOrder === "asc" ? (
             <ChevronUp className="ml-2 h-4 w-4" />
           ) : (
             <ChevronDown className="ml-2 h-4 w-4" />
@@ -83,11 +91,16 @@ export function StudentGrade({ classroomId, studentId }: StudentGradeProps) {
         <Button
           variant={"ghost"}
           onClick={() => {
-            void setOrderBy("grade");
+            if (orderBy === "grade") {
+              setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+            } else {
+              setOrderBy("grade");
+              setSortOrder("asc");
+            }
           }}
         >
           {t("grade")}
-          {orderBy == "grade" ? (
+          {orderBy === "grade" && sortOrder === "asc" ? (
             <ChevronUp className="ml-2 h-4 w-4" />
           ) : (
             <ChevronDown className="ml-2 h-4 w-4" />

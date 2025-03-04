@@ -39,7 +39,7 @@ export function StudentGradeHeader({
   const { t } = useLocale();
   // const searchParams = useSearchParams();
   const [term] = useQueryState("term", parseAsInteger);
-  const [_, setView] = useQueryState("view", {
+  const [view, setView] = useQueryState("view", {
     defaultValue: "by_chronological_order",
   });
   const studentGradesQuery = api.student.grades.useQuery({
@@ -101,7 +101,7 @@ export function StudentGradeHeader({
     );
   }
   return (
-    <div className="flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1 text-secondary-foreground">
+    <div className="flex flex-row items-center gap-2 border-b  px-4 py-1 text-secondary-foreground">
       <Label>{t("term")}</Label>
       <TermSelector
         className="w-[300px]"
@@ -112,7 +112,7 @@ export function StudentGradeHeader({
             "?" +
               createQueryString({
                 term: val,
-              }),
+              })
           );
         }}
         defaultValue={term ? `${term}` : undefined}
@@ -131,31 +131,30 @@ export function StudentGradeHeader({
       )}
       <div className="ml-auto flex flex-row items-center gap-2">
         <ToggleGroup
-          defaultValue="by_chronological_order"
+          defaultValue={view}
+          value={view}
+          size={"sm"}
+          className="*:data-[slot=toggle-group-item]:px-3 rounded-sm"
           onValueChange={(v) => {
             void setView(v);
           }}
+          variant={"outline"}
           type="single"
         >
           <ToggleGroupItem
             value="by_chronological_order"
-            className="rounded-sm data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
             aria-label="Toggle by_chronological_order"
           >
-            <ListIcon className="h-4 w-4" />
+            <ListIcon />
           </ToggleGroupItem>
-          <ToggleGroupItem
-            className="rounded-sm data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
-            value="by_subject"
-            aria-label="Toggle by_subject"
-          >
-            <LayoutGridIcon className="h-4 w-4" />
+          <ToggleGroupItem value="by_subject" aria-label="Toggle by_subject">
+            <LayoutGridIcon />
           </ToggleGroupItem>
         </ToggleGroup>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="icon" variant="outline">
-              <MoreVertical className="h-4 w-4" />
+              <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -177,7 +176,7 @@ export function StudentGradeHeader({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  },
+                  }
                 );
               }}
             >
@@ -201,7 +200,7 @@ export function StudentGradeHeader({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  },
+                  }
                 );
               }}
             >
