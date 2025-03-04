@@ -11,36 +11,36 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
 import { Separator } from "@repo/ui/components/separator";
-import { Skeleton } from "@repo/ui/components/skeleton";
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
+import type { RouterOutputs } from "@repo/api";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { useCheckPermissions } from "~/hooks/use-permissions";
-import { api } from "~/trpc/react";
 import { getAge } from "~/utils/student-utils";
 import { EnrollStudent } from "./EnrollStudent";
 
-export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
+export function EnrollmentHeader({
+  classroom,
+  students,
+}: {
+  classroom: RouterOutputs["classroom"]["get"];
+  students: RouterOutputs["classroom"]["students"];
+}) {
   const { t } = useLocale();
   const { openModal } = useModal();
-
-  const classroomStudentsQuery = api.classroom.students.useQuery(classroomId);
-  const classroomQuery = api.classroom.get.useQuery(classroomId);
-  const classroom = classroomQuery.data;
 
   const canEnroll = useCheckPermissions(
     PermissionAction.CREATE,
     "classroom:enrollment",
     {
-      id: classroomId,
-    },
+      id: classroom.id,
+    }
   );
 
-  const students = classroomStudentsQuery.data ?? [];
   const male = students.filter((student) => student.gender == "male").length;
   const total = students.length || 1e9;
   const female = students.length - male;
@@ -55,16 +55,6 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
       ? Math.min(...students.map((student) => getAge(student.dateOfBirth) || 0))
       : 0;
 
-  if (classroomStudentsQuery.isPending) {
-    return (
-      <div className="grid grid-cols-4 gap-2 px-2">
-        {Array.from({ length: 8 }).map((_, index) => (
-          <Skeleton key={index} className="h-8 w-full" />
-        ))}
-      </div>
-    );
-  }
-  if (!classroom) return null;
   return (
     <div className="grid grid-cols-3 items-center gap-2 border-y bg-secondary px-4 py-1 text-secondary-foreground md:flex md:flex-row">
       <FlatBadge
@@ -128,7 +118,7 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
                 description: (
                   <p className="px-4">{t("enroll_new_students_description")}</p>
                 ),
-                view: <EnrollStudent classroomId={classroomId} />,
+                view: <EnrollStudent classroomId={classroom.id} />,
               });
             }}
           >
@@ -144,11 +134,10 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
-              disabled={classroomQuery.isPending}
               onSelect={() => {
                 window.open(
-                  `/api/pdfs/classroom/students?id=${classroomId}&preview=true&size=a4&format=csv`,
-                  "_blank",
+                  `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=csv`,
+                  "_blank"
                 );
               }}
             >
@@ -158,8 +147,8 @@ export function EnrollmentHeader({ classroomId }: { classroomId: string }) {
             <DropdownMenuItem
               onSelect={() => {
                 window.open(
-                  `/api/pdfs/classroom/students?id=${classroomId}&preview=true&size=a4&format=pdf`,
-                  "_blank",
+                  `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=pdf`,
+                  "_blank"
                 );
               }}
             >

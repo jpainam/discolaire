@@ -3,22 +3,22 @@ import { NoPermission } from "~/components/no-permission";
 import { PermissionAction } from "~/permissions";
 
 import { EnrollmentDataTable } from "~/components/classrooms/enrollments/EnrollmentDataTable";
+import { api } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
 
-  const { id } = params;
-
   const canReadClassroom = await checkPermissions(
     PermissionAction.READ,
-    "classroom:enrollment",
+    "classroom:enrollment"
   );
   if (!canReadClassroom) {
     return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
   }
+  const students = await api.classroom.students(params.id);
   return (
     <div className="flex flex-col p-4">
-      <EnrollmentDataTable classroomId={id} />
+      <EnrollmentDataTable students={students} />
     </div>
   );
 }

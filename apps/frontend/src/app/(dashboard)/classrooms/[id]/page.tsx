@@ -4,6 +4,7 @@ import { PermissionAction } from "~/permissions";
 import { ClassroomDetails } from "~/components/classrooms/ClassroomDetails";
 import { EnrollmentDataTable } from "~/components/classrooms/enrollments/EnrollmentDataTable";
 import { EnrollmentHeader } from "~/components/classrooms/enrollments/EnrollmentHeader";
+import { api } from "~/trpc/server";
 //import TopTimetable from "~/components/classrooms/TopTimetable";
 //import { api } from "~/trpc/server";
 
@@ -14,16 +15,16 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   //   currentDate: new Date(),
   // });
 
-  const { id } = params;
-
   const canReadEnrollment = await checkPermissions(
     PermissionAction.READ,
-    "classroom:enrollment",
+    "classroom:enrollment"
   );
+  const students = await api.classroom.students(params.id);
+  const classroom = await api.classroom.get(params.id);
 
   return (
     <>
-      <ClassroomDetails classroomId={id} />
+      <ClassroomDetails classroomId={params.id} />
       {/* <div>
           <GenderPie classroom={classroom} />
         </div>
@@ -32,7 +33,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         </div> */}
       {/* {timetables.length != 0 && <TopTimetable />} */}
 
-      <EnrollmentHeader classroomId={id} />
+      <EnrollmentHeader students={students} classroom={classroom} />
       {/* <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-2 p-2 ">
         <GenderPie classroom={classroom} />
         <RepeatingPie students={students} />
@@ -41,7 +42,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
       </div> */}
       {canReadEnrollment && (
         <div className="py-2 px-4">
-          <EnrollmentDataTable classroomId={id} />
+          <EnrollmentDataTable students={students} />
         </div>
       )}
     </>

@@ -1,19 +1,20 @@
 "use client";
 
 import { useMemo } from "react";
-import { toast } from "sonner";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { useLocale } from "~/i18n";
 
-import { api } from "~/trpc/react";
+import type { RouterOutputs } from "@repo/api";
 import { EnrollmentDataTableActions } from "./EnrollmentDataTableActions";
 import { fetchEnrollmentColumns } from "./EnrollmentDataTableColumns";
 
-export function EnrollmentDataTable({ classroomId }: { classroomId: string }) {
+export function EnrollmentDataTable({
+  students,
+}: {
+  students: RouterOutputs["classroom"]["students"];
+}) {
   const { t } = useLocale();
-  const classroomStudentsQuery = api.classroom.students.useQuery(classroomId);
-  const students = classroomStudentsQuery.data ?? [];
 
   const columns = useMemo(() => {
     const columns = fetchEnrollmentColumns({
@@ -23,17 +24,13 @@ export function EnrollmentDataTable({ classroomId }: { classroomId: string }) {
   }, [t]);
 
   const { table } = useDataTable({
-    data: classroomStudentsQuery.data ?? [],
+    data: students,
     columns: columns,
     rowCount: students.length,
   });
 
-  if (classroomStudentsQuery.error) {
-    toast.error(classroomStudentsQuery.error.message);
-    return;
-  }
   return (
-    <DataTable isLoading={classroomStudentsQuery.isPending} table={table}>
+    <DataTable table={table}>
       <EnrollmentDataTableActions table={table} />
     </DataTable>
   );

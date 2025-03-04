@@ -4,8 +4,6 @@ import i18next from "i18next";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { Table, TableCell, TableRow } from "../table";
-
 export function IPBWStudentInfo({
   student,
   contact,
@@ -59,13 +57,15 @@ export function IPBWStudentInfo({
           <Text style={{ fontSize: 10 }}>PHOTO</Text>
         </View>
       )}
-      <Table
+      <View
         style={{
           fontSize: 8,
         }}
       >
-        <TableRow
+        <View
           style={{
+            display: "flex",
+            flexDirection: "row",
             borderBottom: "1px solid black",
           }}
         >
@@ -80,10 +80,12 @@ export function IPBWStudentInfo({
             value={student.classroom?.name ?? ""}
             lastColumn={true}
           />
-        </TableRow>
-        <TableRow
+        </View>
+        <View
           style={{
             borderBottom: "1px solid black",
+            flexDirection: "row",
+            display: "flex",
           }}
         >
           <InfoItem
@@ -102,8 +104,14 @@ export function IPBWStudentInfo({
             value={classroom?.size.toString() ?? ""}
             lastColumn={true}
           />
-        </TableRow>
-        <TableRow style={{}}>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            display: "flex",
+            borderBottom: "1px solid black",
+          }}
+        >
           <InfoItem
             style={{ borderBottom: "1px solid black" }}
             w={0.4}
@@ -125,27 +133,27 @@ export function IPBWStudentInfo({
             label={"Professeur Principal"}
             value={""}
           />
-        </TableRow>
-        <TableRow>
+        </View>
+        <View>
           <InfoItem
             w={0.605}
             label={"Parents / Tuteurs"}
             value={contact?.contact.lastName ?? ""}
           />
-          <TableCell
-            w={0.3999}
+          <View
             style={{
               alignItems: "flex-start",
               paddingLeft: 4,
+              width: 4,
             }}
           >
             <Text>
               {classroom?.headTeacher?.prefix}{" "}
               {classroom?.headTeacher?.lastName}
             </Text>
-          </TableCell>
-        </TableRow>
-      </Table>
+          </View>
+        </View>
+      </View>
     </View>
   );
 }
@@ -164,7 +172,7 @@ function InfoItem({
   lastColumn?: boolean;
 }) {
   return (
-    <TableCell
+    <View
       style={{
         alignItems: "flex-start",
         justifyContent: "flex-start",
@@ -172,16 +180,16 @@ function InfoItem({
         flexDirection: "row",
         display: "flex",
         gap: 2,
+        width: w,
         borderRight: lastColumn ? "" : "1px solid black",
         ...style,
       }}
-      w={w}
     >
       <Text style={{ fontWeight: "bold" }}>
         {label}
         {value ? ":" : ""}
       </Text>{" "}
       <Text>{value}</Text>
-    </TableCell>
+    </View>
   );
 }

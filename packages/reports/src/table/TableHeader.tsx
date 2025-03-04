@@ -8,13 +8,18 @@ export default function TableHeader({
   style,
   ...rest
 }: TableHeaderProps) {
+  const extraStyle = [...(Array.isArray(style) ? style : [style])].filter(
+    (e) => e !== undefined,
+  );
   return (
     <TableRow
       {...rest}
-      style={{
-        fontWeight: "bold",
-        ...style,
-      }}
+      style={[
+        {
+          fontWeight: "bold",
+        },
+        ...extraStyle,
+      ]}
     >
       {children}
     </TableRow>

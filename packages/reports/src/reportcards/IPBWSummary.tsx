@@ -1,22 +1,24 @@
 import { Text, View } from "@react-pdf/renderer";
 
-import { Table, TableCell, TableHeader, TableRow } from "../table";
-
 const w = [0.8, 0.2];
 export function IPBWSummary() {
   return (
     <View style={{ flexDirection: "row", gap: 4, paddingTop: 5 }}>
       <View style={{ flex: 0.6, flexDirection: "row", gap: 4 }}>
-        <Table
-          weightings={w}
+        <View
           style={{
             paddingVertical: "2px",
             paddingHorizontal: "2px",
           }}
         >
-          <TableHeader>
-            <TableCell
-              w={w[0]}
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              fontWeight: "bold",
+            }}
+          >
+            <View
               style={{
                 borderRight: 0,
                 marginRight: "4px",
@@ -24,70 +26,61 @@ export function IPBWSummary() {
               }}
             >
               <Text>Travail</Text>
-            </TableCell>
-            <TableCell
-              w={w[0]}
-              style={{ borderLeft: 0, marginRight: "4px" }}
-            ></TableCell>
-          </TableHeader>
+            </View>
+            <View style={{ borderLeft: 0, marginRight: "4px" }}></View>
+          </View>
           <SummaryItem w={w} name="Felicitations" />
           <SummaryItem w={w} name="Encouragements" />
-          <SummaryItem w={w} name="Tableau d'honneur" />
+          <SummaryItem w={w} name="Viewau d'honneur" />
           <SummaryItem w={w} name="Avertissement" />
           <SummaryItem w={w} name="Blâme" />
-        </Table>
+        </View>
 
-        <Table
-          weightings={w}
+        <View
           style={{
             paddingVertical: "2px",
             paddingHorizontal: "2px",
           }}
         >
-          <TableHeader>
-            <TableCell
+          <View>
+            <View
               style={{
                 borderRight: 0,
                 marginRight: "4px",
               }}
             >
               <Text> Discipline</Text>
-            </TableCell>
-            <TableCell
-              style={{ borderLeft: 0, marginRight: "4px" }}
-            ></TableCell>
-          </TableHeader>
+            </View>
+            <View style={{ borderLeft: 0, marginRight: "4px" }}></View>
+          </View>
           <SummaryItem w={w} name="Total absences" value={10} />
           <SummaryItem w={w} name="Justifiees" value={6} />
           <SummaryItem w={w} name="Non justifiees" value={4} />
           <SummaryItem w={w} name="Retards" value={"15h"} />
           <SummaryItem w={w} name="Consigne" value={3} />
-        </Table>
-        <Table
-          weightings={w}
+        </View>
+        <View
           style={{
             paddingVertical: "2px",
             paddingHorizontal: "2px",
           }}
         >
-          <TableHeader>
-            <TableCell
+          <View>
+            <View
               style={{
                 borderRight: 0,
               }}
             >
               <Text>Performance</Text>
-            </TableCell>
-            <TableCell
-              style={{ borderLeft: 0, marginRight: "4px" }}
-            ></TableCell>
-          </TableHeader>
+            </View>
+            <View style={{ borderLeft: 0, marginRight: "4px" }}></View>
+          </View>
           <SummaryItem w={w} name="Moy.Max" />
           <SummaryItem w={w} name="Moy.Min" />
           <SummaryItem w={w} name="Moy.Cl" />
           <SummaryItem w={w} name="Taux de reussite" />
           <SummaryItem w={w} name="Mention" />
-        </Table>
+        </View>
       </View>
       <View style={{ flex: 0.4 }}>
         <SummaryResult />
@@ -106,44 +99,42 @@ function SummaryItem({
   value?: React.ReactNode;
 }) {
   return (
-    <TableRow>
-      <TableCell w={w[0]} style={{ marginRight: "4px" }}>
+    <View>
+      <View style={{ marginRight: "4px" }}>
         <Text>{name}</Text>
-      </TableCell>
-      <TableCell
-        w={w[1]}
+      </View>
+      <View
         style={{
           justifyContent: "center",
           marginRight: "4px",
         }}
       >
         <Text>{value}</Text>
-      </TableCell>
-    </TableRow>
+      </View>
+    </View>
   );
 }
 
 function SummaryResult() {
   return (
-    <Table
-      weightings={w}
+    <View
       style={{
         paddingHorizontal: "2px",
         paddingVertical: "2px",
       }}
     >
-      <TableRow style={{ backgroundColor: "#D7D7D7" }}>
-        <TableCell
+      <View style={{ backgroundColor: "#D7D7D7" }}>
+        <View
           style={{
             fontWeight: "bold",
             textTransform: "uppercase",
           }}
         >
           <Text> Resume des resultats</Text>
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell
+        </View>
+      </View>
+      <View>
+        <View
           style={{
             textTransform: "uppercase",
             borderRight: 0,
@@ -151,17 +142,17 @@ function SummaryResult() {
           }}
         >
           <Text> Moyenne</Text>
-        </TableCell>
-        <TableCell
+        </View>
+        <View
           style={{
             borderLeft: 0,
           }}
         >
           <Text> 10.62</Text>
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell
+        </View>
+      </View>
+      <View>
+        <View
           style={{
             textTransform: "uppercase",
             borderRight: 0,
@@ -169,17 +160,17 @@ function SummaryResult() {
           }}
         >
           <Text> Rang</Text>
-        </TableCell>
-        <TableCell
+        </View>
+        <View
           style={{
             borderLeft: 0,
           }}
         >
           <Text> 56 / 77</Text>
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell
+        </View>
+      </View>
+      <View>
+        <View
           style={{
             textTransform: "uppercase",
             borderRight: 0,
@@ -187,18 +178,18 @@ function SummaryResult() {
           }}
         >
           <Text> Appreciation</Text>
-        </TableCell>
-        <TableCell
+        </View>
+        <View
           style={{
             borderLeft: 0,
             fontWeight: "bold",
           }}
         >
           <Text> Moyen</Text>
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell
+        </View>
+      </View>
+      <View>
+        <View
           style={{
             justifyContent: "center",
             backgroundColor: "#D7D7D7",
@@ -207,23 +198,23 @@ function SummaryResult() {
           }}
         >
           <Text> Observation</Text>
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell
+        </View>
+      </View>
+      <View>
+        <View
           style={{
             borderRight: 0,
           }}
-        ></TableCell>
-        <TableCell
+        ></View>
+        <View
           style={{
             borderLeft: 0,
             color: "#fff",
           }}
         >
           <Text> O</Text>
-        </TableCell>
-      </TableRow>
-    </Table>
+        </View>
+      </View>
+    </View>
   );
 }

@@ -1,12 +1,10 @@
-import { Text } from "@react-pdf/renderer";
+import { Text, View } from "@react-pdf/renderer";
 
 import "../fonts";
 
-import { TableCell, TableHeader } from "../table";
-
 export function IPBWTableHeader({ W }: { W: number[] }) {
   return (
-    <TableHeader
+    <View
       style={{
         //backgroundColor: "#000",
         //color: "#fff",
@@ -15,85 +13,86 @@ export function IPBWTableHeader({ W }: { W: number[] }) {
         fontSize: 8,
       }}
     >
-      <TableCell
-        w={W[0]}
+      <View
         style={{
           padding: 2,
+          width: W[0],
           borderRight: "1px solid black",
           paddingHorizontal: 2,
         }}
       >
         <Text>Matieres</Text>
-      </TableCell>
-      <TableCell
-        w={W[1]}
+      </View>
+      <View
         style={{
+          justifyContent: "center",
+          width: W[1],
           borderRight: "1px solid black",
           paddingHorizontal: 2,
         }}
       >
         <Text>Note</Text>
-      </TableCell>
-      <TableCell
-        w={W[2]}
+      </View>
+      <View
         style={{
+          width: W[2],
           justifyContent: "center",
           borderRight: "1px solid black",
           paddingHorizontal: 2,
         }}
       >
         <Text> Coef.</Text>
-      </TableCell>
-      <TableCell
-        w={W[3]}
+      </View>
+      <View
         style={{
+          width: W[3],
           justifyContent: "center",
           borderRight: "1px solid black",
           paddingHorizontal: 2,
         }}
       >
         <Text> Total</Text>
-      </TableCell>
-      <TableCell
-        w={W[4]}
+      </View>
+      <View
         style={{
+          width: W[4],
           justifyContent: "center",
           borderRight: "1px solid black",
           paddingHorizontal: 2,
         }}
       >
         <Text> Rang</Text>
-      </TableCell>
-      <TableCell
-        w={W[5]}
+      </View>
+      <View
         style={{
+          width: W[5],
           justifyContent: "center",
           borderRight: "1px solid black",
           paddingHorizontal: 2,
         }}
       >
         <Text> Moy.C</Text>
-      </TableCell>
-      <TableCell
-        w={W[6]}
+      </View>
+      <View
         style={{
+          width: W[6],
           justifyContent: "center",
           borderRight: "1px solid black",
           paddingHorizontal: 2,
         }}
       >
         <Text> Min/Max</Text>
-      </TableCell>
-      <TableCell
-        w={W[7]}
+      </View>
+      <View
         style={{
+          width: W[7],
           justifyContent: "center",
 
           paddingHorizontal: 2,
         }}
       >
         <Text> Appreciation</Text>
-      </TableCell>
-    </TableHeader>
+      </View>
+    </View>
   );
 }
