@@ -1,6 +1,5 @@
 import { Text, View } from "@react-pdf/renderer";
 
-const w = [0.8, 0.2];
 export function IPBWSummary() {
   return (
     <View style={{ flexDirection: "row", gap: 4, paddingTop: 5 }}>
@@ -29,11 +28,11 @@ export function IPBWSummary() {
             </View>
             <View style={{ borderLeft: 0, marginRight: "4px" }}></View>
           </View>
-          <SummaryItem w={w} name="Felicitations" />
-          <SummaryItem w={w} name="Encouragements" />
-          <SummaryItem w={w} name="Viewau d'honneur" />
-          <SummaryItem w={w} name="Avertissement" />
-          <SummaryItem w={w} name="Blâme" />
+          <SummaryItem name="Felicitations" />
+          <SummaryItem name="Encouragements" />
+          <SummaryItem name="Viewau d'honneur" />
+          <SummaryItem name="Avertissement" />
+          <SummaryItem name="Blâme" />
         </View>
 
         <View
@@ -53,11 +52,11 @@ export function IPBWSummary() {
             </View>
             <View style={{ borderLeft: 0, marginRight: "4px" }}></View>
           </View>
-          <SummaryItem w={w} name="Total absences" value={10} />
-          <SummaryItem w={w} name="Justifiees" value={6} />
-          <SummaryItem w={w} name="Non justifiees" value={4} />
-          <SummaryItem w={w} name="Retards" value={"15h"} />
-          <SummaryItem w={w} name="Consigne" value={3} />
+          <SummaryItem name="Total absences" value={10} />
+          <SummaryItem name="Justifiees" value={6} />
+          <SummaryItem name="Non justifiees" value={4} />
+          <SummaryItem name="Retards" value={"15h"} />
+          <SummaryItem name="Consigne" value={3} />
         </View>
         <View
           style={{
@@ -75,11 +74,11 @@ export function IPBWSummary() {
             </View>
             <View style={{ borderLeft: 0, marginRight: "4px" }}></View>
           </View>
-          <SummaryItem w={w} name="Moy.Max" />
-          <SummaryItem w={w} name="Moy.Min" />
-          <SummaryItem w={w} name="Moy.Cl" />
-          <SummaryItem w={w} name="Taux de reussite" />
-          <SummaryItem w={w} name="Mention" />
+          <SummaryItem name="Moy.Max" />
+          <SummaryItem name="Moy.Min" />
+          <SummaryItem name="Moy.Cl" />
+          <SummaryItem name="Taux de reussite" />
+          <SummaryItem name="Mention" />
         </View>
       </View>
       <View style={{ flex: 0.4 }}>
@@ -92,10 +91,9 @@ export function IPBWSummary() {
 function SummaryItem({
   name,
   value,
-  w,
 }: {
   name: string;
-  w: number[];
+
   value?: React.ReactNode;
 }) {
   return (
