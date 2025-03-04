@@ -38,10 +38,8 @@ export function TopRightButtons() {
                   {t("Feedback")}
                 </span>
               ),
-              description: (
-                <div className="px-4 text-sm">{t("feedback_description")}</div>
-              ),
-              className: "w-[600px] py-4 px-0",
+
+              className: "w-[400px] py-4 px-0",
               view: <FeedBackDialog />,
             });
           }}

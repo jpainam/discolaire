@@ -10,29 +10,19 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@repo/ui/components/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@repo/ui/components/select";
 import { Textarea } from "@repo/ui/components/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 const feedbackSchema = z.object({
-  type: z.enum(["feedback", "request", "question"]),
   content: z.string().min(10),
 });
 
 export function FeedBackDialog() {
   const form = useForm<z.infer<typeof feedbackSchema>>({
     defaultValues: {
-      type: "feedback",
       content: "",
     },
     resolver: zodResolver(feedbackSchema),
@@ -50,37 +40,13 @@ export function FeedBackDialog() {
       >
         <div className="flex flex-col gap-4 px-4">
           <FormField
-            name={"type"}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("feedback_type")}</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={(val) => {
-                      field.onChange(val);
-                    }}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder={t("feedback_type")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="feedback">{t("feedback")}</SelectItem>
-                      <SelectItem value="request">{t("request")}</SelectItem>
-                      <SelectItem value="question">{t("question")}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
             name={"content"}
             render={({ field }) => (
               <FormItem>
                 <FormControl>
                   <Textarea
                     {...field}
+                    rows={100}
                     placeholder={t("help_us_improve_this_page")}
                   />
                 </FormControl>
