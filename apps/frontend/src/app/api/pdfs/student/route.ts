@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { renderToStream, StudentList } from "@repo/reports/";
+import { renderToStream, StudentList } from "@repo/reports";
 import { getServerTranslations } from "~/i18n/server";
 
 import { auth } from "@repo/auth";
@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
           students: students,
           school: school,
           size: size,
-        }),
+        })
       );
 
       //const blob = await new Response(stream).blob();
