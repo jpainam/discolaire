@@ -22,6 +22,23 @@ const createUpdateSchema = z.object({
   phoneNumber2: z.string().optional(),
 });
 export const contactRouter = createTRPCRouter({
+  lastAccessed: protectedProcedure
+    .input(
+      z.object({
+        limit: z.number().optional().default(10),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.contact.findMany({
+        take: input.limit,
+        where: {
+          schoolId: ctx.schoolId,
+        },
+        orderBy: {
+          lastAccessed: "desc",
+        },
+      });
+    }),
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(async ({ ctx, input }) => {
@@ -178,10 +195,19 @@ export const contactRouter = createTRPCRouter({
     });
   }),
   search: protectedProcedure
-    .input(z.object({ query: z.string().optional().default("") }))
+    .input(
+      z.object({
+        limit: z.number().optional().default(30),
+        query: z.string().optional().default(""),
+      }),
+    )
     .query(async ({ ctx, input }) => {
       const q = `%${input.query}%`;
       return ctx.db.contact.findMany({
+        take: input.limit,
+        orderBy: {
+          lastName: "asc",
+        },
         where: {
           schoolId: ctx.schoolId,
           OR: [

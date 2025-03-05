@@ -10,7 +10,6 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import { Separator } from "@repo/ui/components/separator";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 
@@ -29,7 +28,7 @@ export function ContactHeader() {
   const { openSheet } = useSheet();
 
   const [value, setValue] = useState("");
-  const [label, setLabel] = useState(t("search_a_student"));
+  const [label, setLabel] = useState(t("search_a_contact"));
 
   const [search, setSearch] = useState("");
   const contacts = api.contact.search.useQuery({
@@ -42,7 +41,7 @@ export function ContactHeader() {
       <SearchCombobox
         className="w-full lg:w-1/3"
         items={
-          contacts.data.map((contact) => ({
+          contacts.data?.map((contact) => ({
             value: contact.id,
             label: getFullName(contact),
           })) ?? []
@@ -73,7 +72,7 @@ export function ContactHeader() {
 
       <div className="ml-auto flex flex-row items-center gap-2">
         <Button
-          size="icon"
+          size={"sm"}
           onClick={() => {
             openSheet({
               className: "w-[600px]",
@@ -84,24 +83,15 @@ export function ContactHeader() {
               view: <CreateEditContact />,
             });
           }}
-          variant="outline"
         >
-          <PlusIcon className="h-4 w-4" />
+          <PlusIcon />
+          {t("add")}
         </Button>
-        <Separator orientation="vertical" className="h-6" />
-        {/* <Button size="icon" variant="outline">
-          <Reply className="h-4 w-4" />
-        </Button>
-        <Button size="icon" variant="outline">
-          <Forward className="h-4 w-4" />
-        </Button> */}
-        {/* <Separator orientation="vertical" className="h-6" /> */}
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size="icon" variant="outline">
-              <MoreVertical className="h-4 w-4" />
-              <span className="sr-only">More</span>
+            <Button variant={"outline"} size={"icon"}>
+              <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

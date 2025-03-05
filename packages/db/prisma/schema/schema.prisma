@@ -682,6 +682,7 @@ model Contact {
     gender          String?          @default("male")
     observation     String?
     createdAt       DateTime         @default(now()) @db.Timestamp(6)
+    lastAccessed    DateTime?        @default(now()) @db.Date
     updatedAt       DateTime         @updatedAt
     userId          String?
     countryId       String?
