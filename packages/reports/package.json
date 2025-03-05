@@ -24,6 +24,8 @@
   },
   "prettier": "@repo/prettier-config",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@react-pdf/fns": "^3.1.1",
     "@react-pdf/renderer": "^4.2.2",
     "@react-pdf/stylesheet": "^5.2.2",

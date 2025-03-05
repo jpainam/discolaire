@@ -1,6 +1,8 @@
 import { Text, View } from "@react-pdf/renderer";
 import { sum } from "lodash";
 
+import { getAppreciations } from "../utils";
+
 export function IPBWGroup({
   W,
   cards,
@@ -136,7 +138,7 @@ export function IPBWGroup({
                 justifyContent: "center",
               }}
             >
-              <Text> Moyen</Text>
+              <Text> {getAppreciations(card.avg)}</Text>
             </View>
           </View>
         );

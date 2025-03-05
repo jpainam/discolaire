@@ -5,7 +5,9 @@ import type { RouterOutputs } from "@repo/api";
 
 import { IPBWHeader } from "../headers/IPBWHeader";
 import { IPBWGroup } from "./IPBWGroup";
+import { IPBWSignature } from "./IPBWSignature";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
+import { IPBWSummary } from "./IPBWSummary";
 import { IPBWTableHeader } from "./IPBWTableHeader";
 
 const W = ["40%", "6%", "6%", "6%", "6%", "6%", "10%", "10%"];
@@ -32,7 +34,6 @@ export function IPBWClassroom({
   summary: RouterOutputs["reportCard"]["getClassroom"]["summary"];
 }) {
   const gradesMap: Record<string, ClassroomReportCardType> = {};
-  console.log(summary);
   grades.forEach((grade) => {
     const studentId = grade.studentId;
     if (!gradesMap[grade.studentId]) {
@@ -42,7 +43,12 @@ export function IPBWClassroom({
   });
   return (
     <Document>
-      {results.map((result) => {
+      {results.map((result, index) => {
+        const rank =
+          index == 0 || results[index - 1]?.avg != result.avg
+            ? result.rank.toString()
+            : results[index - 1]?.rank.toString() + " ex";
+
         const student = students.find((s) => s.id === result.id);
         if (!student) return null;
         const contact = contacts.find((c) => c && c.studentId === student.id);
@@ -50,7 +56,7 @@ export function IPBWClassroom({
         const grades = gradesMap[student.id];
         if (!grades) return null;
         //const groups = _.groupBy(grades, "subjectGroup.id");
-        const groups: Record<number, ClassroomReportCardType[]> = {};
+        const groups: Record<number, ClassroomReportCardType> = {};
         subjects.forEach((subject) => {
           const subjectGrades = grades.filter(
             (grade) => grade.subjectId === subject.id,
@@ -137,20 +143,19 @@ export function IPBWClassroom({
                       cards={cards.map((c) => ({
                         courseName: c.course.name,
                         coefficient: c.coefficient,
-                        rank: 0,
+                        rank: c.rank,
                         classroom: {
-                          min: 0,
-                          max: 0,
-                          avg: 0,
+                          min: c.classroom.min,
+                          max: c.classroom.max,
+                          avg: c.classroom.avg,
                         },
                         teacher: {
                           prefix: c.teacher?.prefix ?? "",
                           lastName: c.teacher?.lastName ?? "",
                           firstName: c.teacher?.firstName ?? "",
                         },
-
                         isAbsent: c.isAbsent,
-                        avg: c.grade ?? -1,
+                        avg: c.avg,
                       }))}
                       key={groupId}
                       groupName={card.subjectGroup?.name ?? ""}
@@ -158,14 +163,16 @@ export function IPBWClassroom({
                     />
                   );
                 })}
-                {/* {subjects.map((subject) => {
-                  return (
-                    <View>
-                      <Text>{subject.course.name}</Text>
-                    </View>
-                  );
-                })} */}
               </View>
+              {result.avg && (
+                <IPBWSummary
+                  effectif={classroom.size}
+                  average={result.avg}
+                  summary={summary}
+                  rank={rank}
+                />
+              )}
+              <IPBWSignature />
             </View>
           </Page>
         );

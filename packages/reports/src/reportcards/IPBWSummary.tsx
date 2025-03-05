@@ -1,9 +1,10 @@
 import { Text, View } from "@react-pdf/renderer";
-import { CheckIcon } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
 
 import { getAppreciations } from "../utils";
+import { IPBWDiscipline } from "./IPBWDiscipline";
+import { IPBWTravail } from "./IPBWTravail";
 
 export function IPBWSummary({
   average,
@@ -18,57 +19,8 @@ export function IPBWSummary({
 }) {
   return (
     <View style={{ flexDirection: "row", marginTop: "4px", gap: 2 }}>
-      <View
-        style={{
-          width: "20%",
-          flexDirection: "column",
-          border: "1px solid black",
-          display: "flex",
-        }}
-      >
-        <View
-          style={{
-            borderBottom: "1px solid black",
-            paddingHorizontal: "2px",
-            fontWeight: "bold",
-            paddingVertical: 1,
-          }}
-        >
-          <Text style={{ paddingLeft: 4 }}>Travail</Text>
-        </View>
-
-        <SummaryItem name="Felicitations" value={<CheckIcon />} />
-        <SummaryItem name="Encouragements" value={10} />
-        <SummaryItem name="Viewau d'honneur" value={10} />
-        <SummaryItem name="Avertissement" />
-        <SummaryItem name="Blâme" value={10} lastRow={true} />
-      </View>
-
-      <View
-        style={{
-          width: "20%",
-          border: "1px solid black",
-          flexDirection: "column",
-          display: "flex",
-        }}
-      >
-        <View
-          style={{
-            borderBottom: "1px solid black",
-            paddingHorizontal: "2px",
-            fontWeight: "bold",
-            paddingVertical: 1,
-          }}
-        >
-          <Text style={{ paddingLeft: 4 }}>Discipline</Text>
-        </View>
-
-        <SummaryItem name="Total absences" value={10} />
-        <SummaryItem name="Justifiees" value={6} />
-        <SummaryItem name="Non justifiees" value={4} />
-        <SummaryItem name="Retards" value={"15h"} />
-        <SummaryItem name="Consigne" lastRow={true} value={3} />
-      </View>
+      <IPBWTravail style={{ width: "20%" }} />
+      <IPBWDiscipline style={{ width: "20%" }} />
       <View
         style={{
           width: "20%",

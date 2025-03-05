@@ -6,6 +6,7 @@ import "../fonts";
 import type { RouterOutputs } from "@repo/api";
 
 import { IPBWHeader } from "../headers/IPBWHeader";
+import { getAppreciations } from "../utils";
 import { IPBWSignature } from "./IPBWSignature";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWSummary } from "./IPBWSummary";
@@ -245,7 +246,7 @@ function ReportCardGroup({
                 justifyContent: "center",
               }}
             >
-              <Text> Moyen</Text>
+              <Text> {getAppreciations(card.avg)}</Text>
             </View>
           </View>
         );
