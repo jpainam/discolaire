@@ -8,11 +8,7 @@
     ".": {
       "default": "./src/index.ts",
       "types": "./dist/types.d.ts"
-    },
-    "./classroom/*": "./src/classroom/*",
-    "./reportcards/*": "./src/reportcards/*",
-    "./students/*": "./src/students/*",
-    "./statements/*": "./src/statements/*"
+    }
   },
   "scripts": {
     "build": "tsc",
