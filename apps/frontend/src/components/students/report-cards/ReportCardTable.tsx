@@ -81,7 +81,7 @@ export async function ReportCardTable({
                     <TableCell className="text-center text-sm" colSpan={3}>
                       {t("points")}:{" "}
                       {sum(
-                        cards.map((c) => (c.avg || 0) * c.coefficient)
+                        cards.map((c) => (c.avg || 0) * c.coefficient),
                       ).toFixed(1)}{" "}
                       / {sum(cards.map((c) => 20 * c.coefficient)).toFixed(1)}
                     </TableCell>
