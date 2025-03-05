@@ -4,12 +4,7 @@
   "private": true,
   "license": "MIT",
   "type": "module",
-  "exports": {
-    ".": {
-      "default": "./src/index.ts",
-      "types": "./dist/types.d.ts"
-    }
-  },
+  "exports": "./src/index.ts",
   "scripts": {
     "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
