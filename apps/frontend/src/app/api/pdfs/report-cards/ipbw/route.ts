@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
 
     return Response.json(
       { error: "Invalid request body", errors },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -84,7 +84,7 @@ async function classroomReportCard({
       summary,
       contacts,
       results: results.sort((a, b) => a.rank - b.rank),
-    })
+    }),
   );
 
   const headers: Record<string, string> = {
@@ -162,7 +162,7 @@ async function indvidualReportCard({
       rank: ranks.find((r) => r.studentId === student.id)?.rank ?? "",
       average: result.find((r) => r.id === student.id)?.avg ?? -1,
       schoolYear: classroom.schoolYear,
-    })
+    }),
   );
 
   const headers: Record<string, string> = {

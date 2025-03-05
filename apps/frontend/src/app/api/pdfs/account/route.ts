@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
         school: school,
         transactions: data,
         size: size,
-      })
+      }),
     );
 
     // @ts-expect-error TODO: fix this

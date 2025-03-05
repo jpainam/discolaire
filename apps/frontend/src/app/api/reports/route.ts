@@ -16,7 +16,7 @@ export async function POST(request: Request) {
   if (!url || !userId || !id) {
     return Response.json(
       { error: "Invalid request " + JSON.stringify({ url, userId, id }) },
-      { status: 400 }
+      { status: 400 },
     );
   }
   try {

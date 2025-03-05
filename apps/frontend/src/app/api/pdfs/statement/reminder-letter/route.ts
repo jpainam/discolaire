@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     const fees = await api.classroom.fees(classroomId);
     const amountDue = sumBy(
       fees.filter((fee) => fee.dueDate <= new Date()),
-      "amount"
+      "amount",
     );
     const students = await api.classroom.studentsBalance({ id: classroomId });
     const reminders = students
@@ -55,7 +55,7 @@ export async function POST(req: Request) {
         school: school,
         reminders: reminders,
         classroom: classroom.name,
-      })
+      }),
     );
 
     //const blob = await new Response(stream).blob();

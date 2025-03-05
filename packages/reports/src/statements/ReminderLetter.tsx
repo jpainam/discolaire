@@ -54,3 +54,5 @@ export function ReminderLetter({
     </Document>
   );
 }
+
+export default ReminderLetter;
