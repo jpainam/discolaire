@@ -9,7 +9,7 @@ import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWTableHeader } from "./IPBWTableHeader";
 
 const W = ["40%", "6%", "6%", "6%", "6%", "6%", "10%", "10%"];
-type ClassroomReportCardType = RouterOutputs["reportCard"]["getGrades"][number];
+type ClassroomReportCardType = RouterOutputs["reportCard"]["getGrades2"];
 export function IPBWClassroom({
   school,
   subjects,
@@ -28,10 +28,10 @@ export function IPBWClassroom({
   schoolYear: RouterOutputs["schoolYear"]["get"];
   contacts: RouterOutputs["student"]["getPrimaryContact"][];
   results: RouterOutputs["reportCard"]["getClassroom"]["result"];
-  grades: RouterOutputs["reportCard"]["getGrades"];
+  grades: RouterOutputs["reportCard"]["getGrades2"];
   summary: RouterOutputs["reportCard"]["getClassroom"]["summary"];
 }) {
-  const gradesMap: Record<string, ClassroomReportCardType[]> = {};
+  const gradesMap: Record<string, ClassroomReportCardType> = {};
   console.log(summary);
   grades.forEach((grade) => {
     const studentId = grade.studentId;

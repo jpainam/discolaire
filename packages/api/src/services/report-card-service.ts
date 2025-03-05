@@ -202,33 +202,35 @@ export async function getSummary(
   const result = Array.from(studentIds).map((studentId) => {
     const studentGrades = gradeStudentMap[studentId];
     if (!studentGrades) return null;
-    return subjects.map((subject) => {
-      const currentGrade = studentGrades.find(
-        (stg) => stg.subjectId === subject.id,
-      );
-      if (!currentGrade) return null;
-      const subjectGrades = gradeSubjectMap[subject.id];
-      if (!subjectGrades) return null;
-      const gradesArray = subjectGrades.map((stg) => stg.grade ?? 0);
+    return subjects
+      .map((subject) => {
+        const currentGrade = studentGrades.find(
+          (stg) => stg.subjectId === subject.id,
+        );
+        if (!currentGrade) return null;
+        const subjectGrades = gradeSubjectMap[subject.id];
+        if (!subjectGrades) return null;
+        const gradesArray = subjectGrades.map((stg) => stg.grade ?? 0);
 
-      return {
-        ...subject,
-        subjectId: subject.id,
-        studentId,
-        avg: currentGrade.grade ?? 0,
-        isAbsent: currentGrade.isAbsent,
-        rank:
-          currentGrade.grade != null
-            ? getRank(gradesArray, currentGrade.grade)
-            : -1,
-        num_grades: subjectGrades.length,
-        classroom: {
-          max: Math.max(...gradesArray),
-          min: Math.min(...gradesArray),
-          avg: _.mean(gradesArray),
-        },
-      };
-    });
+        return {
+          ...subject,
+          subjectId: subject.id,
+          studentId,
+          avg: currentGrade.grade ?? 0,
+          isAbsent: currentGrade.isAbsent,
+          rank:
+            currentGrade.grade != null
+              ? getRank(gradesArray, currentGrade.grade)
+              : -1,
+          num_grades: subjectGrades.length,
+          classroom: {
+            max: Math.max(...gradesArray),
+            min: Math.min(...gradesArray),
+            avg: _.mean(gradesArray),
+          },
+        };
+      })
+      .filter((r) => r != null);
   });
-  return result.filter((r) => r != null);
+  return result.filter((r) => r != null).flat();
 }
