@@ -29,7 +29,7 @@ export function StudentDataTable({
   });
 
   return (
-    <DataTable className="py-2 px-4" table={table}>
+    <DataTable className="py-2 px-4 w-full" table={table}>
       <StudentDataTableActions table={table} />
       {/* <DataTableToolbar table={table}></DataTableToolbar> */}
     </DataTable>

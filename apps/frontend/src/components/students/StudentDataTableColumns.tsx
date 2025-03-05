@@ -5,8 +5,6 @@ import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
-import type * as RPNInput from "react-phone-number-input";
-import flags from "react-phone-number-input/flags";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -105,7 +103,6 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
           </Link>
         );
       },
-      size: 250,
     },
     {
       id: "firstName",
@@ -127,7 +124,6 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
           </Link>
         );
       },
-      size: 250,
     },
     {
       id: "gender",
@@ -154,7 +150,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
         );
       },
       size: 48,
-      enableSorting: true,
+
       filterFn: (row, id, value) => {
         return value instanceof Array && value.includes(row.getValue(id));
       },
@@ -165,6 +161,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("isRepeating")} />
       ),
+      size: 60,
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));
       },
@@ -194,14 +191,13 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
         if (!classroom) return <div></div>;
         return (
           <Link
-            className="hover:text-blue-600 text-muted-foreground hover:underline"
+            className="hover:text-blue-600 text-muted-foreground hover:underline truncate"
             href={routes.classrooms.details(classroom.id)}
           >
             {classroom.name}
           </Link>
         );
       },
-      enableSorting: true,
     },
     // {
     //   id: "formerSchool",
@@ -253,7 +249,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
             year: "numeric",
             month: "short",
             day: "numeric",
-          },
+          }
         );
         return (
           <SimpleTooltip
@@ -303,28 +299,28 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
     //   cell: (info) => info.getValue(),
     //   enableSorting: true,
     // }),
-    {
-      id: "country",
-      accessorKey: "country",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("country")} />
-      ),
-      cell: ({ row }) => {
-        const countryId = row.original.country?.id as RPNInput.Country;
-        const Flag = flags[countryId];
-        return (
-          <div className="flex flex-row items-center gap-1">
-            <span className="flex h-4 w-6 overflow-hidden rounded-sm bg-foreground/20">
-              {Flag && <Flag title={row.original.country?.name ?? ""} />}
-            </span>
-            <span className="text-muted-foreground text-sm">
-              {row.original.country?.name}
-            </span>
-          </div>
-        );
-      },
-      enableSorting: true,
-    },
+    // {
+    //   id: "country",
+    //   accessorKey: "country",
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title={t("country")} />
+    //   ),
+    //   cell: ({ row }) => {
+    //     const countryId = row.original.country?.id as RPNInput.Country;
+    //     const Flag = flags[countryId];
+    //     return (
+    //       <div className="flex flex-row items-center gap-1">
+    //         <span className="flex h-4 w-6 overflow-hidden rounded-sm bg-foreground/20">
+    //           {Flag && <Flag title={row.original.country?.name ?? ""} />}
+    //         </span>
+    //         <span className="text-muted-foreground text-sm">
+    //           {row.original.country?.name}
+    //         </span>
+    //       </div>
+    //     );
+    //   },
+    //   enableSorting: true,
+    // },
     // {
     //   accessorKey: "observation",
     //   header: ({ column }) => (
