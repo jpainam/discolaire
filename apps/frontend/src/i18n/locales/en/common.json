@@ -11,6 +11,8 @@
   "every_three_days": "Every three days",
   "age": "Age",
   "mail": "Mail",
+  "activities": "Activities",
+  "no_results": "No results",
   "password_mismatch": "Password mismatch",
   "reset_password_description": "Change {{user}}'s password to keep this account secure",
   "confirm_password": "Confirm Password",

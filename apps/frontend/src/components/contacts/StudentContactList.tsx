@@ -64,7 +64,7 @@ export default function StudentContactList({
   }
 
   return (
-    <div className="p-2">
+    <div className="">
       {contactQuery.data && (
         <Button
           variant={"outline"}
@@ -97,7 +97,7 @@ export default function StudentContactList({
             return (
               <Card
                 key={index}
-                className="mt-1 border border-t-8"
+                className="mt-1 border border-t-8 p-0"
                 style={{
                   borderTopColor: color,
                 }}
@@ -117,7 +117,7 @@ export default function StudentContactList({
                       size="sm"
                       onClick={() => {
                         router.push(
-                          routes.students.details(studentcontact.studentId),
+                          routes.students.details(studentcontact.studentId)
                         );
                       }}
                       variant="outline"
@@ -197,7 +197,7 @@ export default function StudentContactList({
                                   error: (error) => {
                                     return getErrorMessage(error);
                                   },
-                                },
+                                }
                               );
                             }
                           }}
@@ -214,7 +214,7 @@ export default function StudentContactList({
                 </CardFooter>
               </Card>
             );
-          },
+          }
         )}
       </ScrollArea>
     </div>

@@ -15,7 +15,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   // const color = generateStringColor();
   return (
     <div className="grid gap-4 p-2 xl:grid-cols-2">
-      <Card>
+      <Card className="p-0">
         <CardHeader className="border-b bg-muted/50 p-2">
           <ContactDetailsHeader contactId={id} />
         </CardHeader>
