@@ -8,11 +8,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import { useLocale } from "~/i18n";
-
-import { DatePickerField } from "~/components/shared/forms/date-picker-field";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useFormContext,
+} from "@repo/ui/components/form";
+import { DatePicker } from "~/components/DatePicker";
 import { InputField } from "~/components/shared/forms/input-field";
 import { SelectField } from "~/components/shared/forms/SelectField";
+import { useLocale } from "~/i18n";
 
 export function CreateUpdateProfile() {
   const { t } = useLocale();
@@ -21,6 +28,8 @@ export function CreateUpdateProfile() {
     { label: t("male"), value: "male" },
     { label: t("female"), value: "female" },
   ];
+
+  const form = useFormContext();
 
   return (
     <Card className="rounded-md p-0 gap-0">
@@ -42,34 +51,20 @@ export function CreateUpdateProfile() {
           placeholder={t("firstName")}
           label={t("firstName")}
         />
-        {/* <FormField
+        <FormField
           control={form.control}
           name="dateOfBirth"
           render={({ field }) => (
-            <FormItem className="space-y-0">
-              <FormLabel>
-                {t("dateOfBirth")}
-                {field.value.toString()}
-              </FormLabel>
+            <FormItem>
+              <FormLabel>{t("dateOfBirth")}</FormLabel>
               <FormControl>
-                <Input
-                  type="date"
-                  placeholder={t("placeOfBirth")}
-                  {...field}
-                  defaultValue={new Date(field.value).toString()}
-                />
+                <DatePicker defaultValue={field.value} {...field} />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
-        /> */}
-        <DatePickerField
-          placeholder={t("dateOfBirth")}
-          name="dateOfBirth"
-          timeZone="UTC"
-          label={t("dateOfBirth")}
         />
+
         <InputField
           name="placeOfBirth"
           placeholder={t("placeOfBirth")}

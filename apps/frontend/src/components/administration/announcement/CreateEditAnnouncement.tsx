@@ -22,6 +22,7 @@ import { z } from "zod";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 
+import { DatePicker } from "~/components/DatePicker";
 import { RecipientMultiSelector } from "~/components/shared/selects/RecipientMultiSelector";
 import { getErrorMessage } from "~/lib/handle-error";
 import { SelectField } from "../../shared/forms/SelectField";
@@ -70,7 +71,7 @@ export function CreateEditAnnouncement({
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) =>
-      console.log(value, name, type),
+      console.log(value, name, type)
     );
     return () => subscription.unsubscribe();
   }, [watch]);
@@ -102,7 +103,7 @@ export function CreateEditAnnouncement({
           error: (error) => {
             return getErrorMessage(error);
           },
-        },
+        }
       );
     } else {
       toast.promise(
@@ -117,7 +118,7 @@ export function CreateEditAnnouncement({
           error: (error) => {
             return getErrorMessage(error);
           },
-        },
+        }
       );
     }
   }
@@ -183,11 +184,10 @@ export function CreateEditAnnouncement({
                 <FormItem>
                   <FormLabel>{t("to")}</FormLabel>
                   <FormControl>
-                    <Input
-                      type="date"
-                      onChange={(e) => field.onChange(new Date(e.target.value))}
-                      defaultValue={field.value?.toISOString().split("T")[0]}
+                    <DatePicker
                       className="mt-1"
+                      defaultValue={field.value}
+                      onChange={(e) => field.onChange(e)}
                     />
                   </FormControl>
                   <FormMessage />

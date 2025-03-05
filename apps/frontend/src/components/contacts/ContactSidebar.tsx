@@ -15,6 +15,7 @@ import { ArrowLeft, BellRing, User, Users } from "lucide-react";
 import { useParams, usePathname } from "next/navigation";
 import { useLocale } from "~/i18n";
 import { SidebarLogo } from "../sidebar-logo";
+import Link from "next/link";
 export function ContactSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
@@ -51,10 +52,10 @@ export function ContactSidebar({
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={t("back_to_home")}>
-                <a href={"/"}>
+                <Link href={"/"}>
                   <ArrowLeft />
                   <span>{t("back_to_home")}</span>
-                </a>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -70,14 +71,14 @@ export function ContactSidebar({
                   tooltip={t(item.name)}
                   isActive={pathname === item.url}
                 >
-                  <a href={item.url}>
+                  <Link href={item.url}>
                     <item.icon
                       className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
                       size={22}
                       aria-hidden="true"
                     />
                     <span>{t(item.name)}</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}

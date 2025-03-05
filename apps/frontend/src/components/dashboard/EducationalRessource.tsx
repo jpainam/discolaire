@@ -8,17 +8,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import { Input } from "@repo/ui/components/input";
 import { cn } from "@repo/ui/lib/utils";
 import { format } from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
 import { DownloadIcon, FileIcon } from "lucide-react";
-import { useState } from "react";
 
 import { Button } from "@repo/ui/components/button";
 import i18next from "i18next";
 import Link from "next/link";
 import { useLocale } from "~/i18n";
+import { DatePicker } from "../DatePicker";
 
 interface Resource {
   subject: string;
@@ -56,7 +55,7 @@ const resources: Resource[] = [
 
 export function EducationalRessource({ className }: { className?: string }) {
   const { t } = useLocale();
-  const [today, setToday] = useState(new Date());
+
   return (
     <Card className={cn("rounded-lg border p-0 gap-0", className)}>
       <CardHeader className="p-4 border-b justify-between  flex flex-row items-center">
@@ -65,11 +64,10 @@ export function EducationalRessource({ className }: { className?: string }) {
           <CardDescription>{t("latest_educational_resources")}</CardDescription>
         </div>
         <div>
-          <Input
-            type="date"
-            value={today.toISOString().split("T")[0]}
+          <DatePicker
+            defaultValue={new Date()}
             onChange={(e) => {
-              setToday(new Date(e.target.value));
+              console.log(e);
             }}
           />
         </div>

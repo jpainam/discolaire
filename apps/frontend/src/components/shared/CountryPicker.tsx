@@ -73,7 +73,7 @@ export function CountryPicker({
             className={cn(
               "w-full justify-between",
               !value && "text-muted-foreground",
-              className,
+              className
             )}
           >
             {value ? (
@@ -88,7 +88,10 @@ export function CountryPicker({
           </Button>
         )}
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0">
+      <PopoverContent
+        style={{ width: "var(--radix-popover-trigger-width)" }}
+        className="w-full p-0"
+      >
         <Command>
           <CommandInput
             placeholder={searchPlaceholder ?? t("search_for_an_option")}
@@ -114,7 +117,7 @@ export function CountryPicker({
                     <CheckIcon
                       className={cn(
                         "ml-auto h-4 w-4",
-                        country === value ? "opacity-100" : "opacity-0",
+                        country === value ? "opacity-100" : "opacity-0"
                       )}
                     />
                   </CommandItem>
@@ -143,10 +146,10 @@ const CountryComponent = ({
     <div
       className={cn(
         "flex cursor-pointer items-center gap-2 text-xs",
-        className,
+        className
       )}
     >
-      <span className="flex h-4 w-6 overflow-hidden rounded-sm bg-foreground/20">
+      <span className="flex w-fit rounded-sm">
         {Flag && <Flag title={countryName ?? ""} />}
       </span>
       <span>{countryName ?? (country ? countryNames[country] : "")}</span>

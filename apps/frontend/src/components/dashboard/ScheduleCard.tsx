@@ -1,10 +1,9 @@
 "use client";
 
-import { Input } from "@repo/ui/components/input";
-import { useState } from "react";
 import { useLocale } from "~/i18n";
 
 import { cn } from "~/lib/utils";
+import { DatePicker } from "../DatePicker";
 
 interface ScheduleItem {
   startTime: string;
@@ -60,18 +59,16 @@ const scheduleData: ScheduleItem[] = [
 
 export function ScheduleCard({ className }: { className?: string }) {
   const { t } = useLocale();
-  const [today, setToday] = useState(new Date());
 
   return (
     <div className={cn("w-full rounded-lg border overflow-hidden", className)}>
       <div className="p-3.5 flex items-center border-b justify-between">
         <h2 className="text-xl font-semibold">{t("timetable")}</h2>
         <div className="flex items-center gap-2">
-          <Input
-            type="date"
-            value={today.toISOString().split("T")[0]}
+          <DatePicker
+            defaultValue={new Date()}
             onChange={(e) => {
-              setToday(new Date(e.target.value));
+              console.log(e);
             }}
           />
         </div>

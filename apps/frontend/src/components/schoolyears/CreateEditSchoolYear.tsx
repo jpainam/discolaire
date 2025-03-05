@@ -114,11 +114,7 @@ export function CreateEditSchoolYear({
             <FormItem>
               <FormLabel>{t("start_date")}</FormLabel>
               <FormControl>
-                <Input
-                  type="date"
-                  onChange={(e) => field.onChange(new Date(e.target.value))}
-                  defaultValue={field.value.toISOString().split("T")[0]}
-                />
+                <DatePicker {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

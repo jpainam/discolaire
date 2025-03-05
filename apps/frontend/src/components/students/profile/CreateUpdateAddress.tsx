@@ -21,8 +21,8 @@ import {
 import { PhoneInput } from "~/components/phone-input";
 import { useLocale } from "~/i18n";
 
+import { DatePicker } from "~/components/DatePicker";
 import { CountryPicker } from "~/components/shared/CountryPicker";
-import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";
 import { FormerSchoolSelector } from "~/components/shared/selects/FormerSchoolSelector";
 import { useSchool } from "~/providers/SchoolProvider";
@@ -105,12 +105,32 @@ export function CreateUpdateAddress() {
           )}
         />
 
-        <DatePickerField
-          placeholder={t("dateOfEntry")}
+        <FormField
+          control={form.control}
           name="dateOfEntry"
-          label={t("dateOfEntry")}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("dateOfEntry")}</FormLabel>
+              <FormControl>
+                <DatePicker defaultValue={field.value} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        <DatePickerField name="dateOfExit" label={t("dateOfExit")} />
+        <FormField
+          control={form.control}
+          name="dateOfExit"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("dateOfExit")}</FormLabel>
+              <FormControl>
+                <DatePicker defaultValue={field.value} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </CardContent>
     </Card>
   );
