@@ -73,7 +73,7 @@ export function CountryPicker({
             className={cn(
               "w-full justify-between",
               !value && "text-muted-foreground",
-              className
+              className,
             )}
           >
             {value ? (
@@ -117,7 +117,7 @@ export function CountryPicker({
                     <CheckIcon
                       className={cn(
                         "ml-auto h-4 w-4",
-                        country === value ? "opacity-100" : "opacity-0"
+                        country === value ? "opacity-100" : "opacity-0",
                       )}
                     />
                   </CommandItem>
@@ -146,7 +146,7 @@ const CountryComponent = ({
     <div
       className={cn(
         "flex cursor-pointer items-center gap-2 text-xs",
-        className
+        className,
       )}
     >
       <span className="flex w-fit rounded-sm">

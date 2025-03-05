@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDownIcon, MoreVertical, PlusIcon } from "lucide-react";
+import { MoreVertical, PlusIcon } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@repo/ui/components/button";
@@ -16,9 +16,10 @@ import { useLocale } from "~/i18n";
 
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
+import { getFullName } from "~/utils/full-name";
+import { SearchCombobox } from "../SearchCombobox";
 import { DropdownHelp } from "../shared/DropdownHelp";
-import { ContactSearch } from "./ContactSearch";
 import CreateEditContact from "./CreateEditContact";
 
 export function ContactHeader() {
@@ -26,27 +27,37 @@ export function ContactHeader() {
   const { t } = useLocale();
   //const params = useParams<{ id: string }>();
   const { openSheet } = useSheet();
-  const [open, setOpen] = useState(false);
+
+  const [value, setValue] = useState("");
+  const [label, setLabel] = useState(t("search_a_student"));
+
+  const [search, setSearch] = useState("");
+  const contacts = api.contact.search.useQuery({
+    query: search,
+  });
 
   return (
-    <div className="grid flex-row items-center gap-4 px-4 py-1 md:flex">
+    <div className="flex flex-row items-center gap-2 border-b px-4 py-1">
       <Label className="hidden md:block">{t("contacts")}</Label>
-      <Button
-        variant="outline"
-        className={cn(
-          "flex w-full justify-between bg-background text-sm font-semibold shadow-none 2xl:w-[500px]",
-        )}
-        onClick={() => setOpen(true)}
-      >
-        {t("search")}
-        <ChevronDownIcon className="ml-2 h-4 w-4" />
-      </Button>
-      <ContactSearch
-        open={open}
-        setOpen={setOpen}
-        onChange={(val) => {
-          router.push(routes.contacts.details(val));
+      <SearchCombobox
+        className="w-full lg:w-1/3"
+        items={
+          contacts.data.map((contact) => ({
+            value: contact.id,
+            label: getFullName(contact),
+          })) ?? []
+        }
+        value={value}
+        label={label}
+        onSelect={(value, label) => {
+          setValue(value);
+          setLabel(label ?? "");
+          router.push(routes.contacts.details(value));
         }}
+        onSearchChange={setSearch}
+        searchPlaceholder={t("search") + " ..."}
+        noResultsMsg={t("no_results")}
+        selectItemMsg={t("select_an_option")}
       />
 
       {/* <Label className="hidden md:block"> {t("contacts")}</Label> */}

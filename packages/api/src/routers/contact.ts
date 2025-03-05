@@ -178,19 +178,20 @@ export const contactRouter = createTRPCRouter({
     });
   }),
   search: protectedProcedure
-    .input(z.object({ q: z.string() }))
+    .input(z.object({ query: z.string().optional().default("") }))
     .query(async ({ ctx, input }) => {
+      const q = `%${input.query}%`;
       return ctx.db.contact.findMany({
         where: {
           schoolId: ctx.schoolId,
           OR: [
-            { firstName: { startsWith: `%${input.q}%` } },
-            { lastName: { startsWith: `%${input.q}%` } },
-            { phoneNumber1: { startsWith: `%${input.q}%` } },
-            { phoneNumber2: { startsWith: `%${input.q}%` } },
-            { email: { startsWith: `%${input.q}%` } },
-            { employer: { startsWith: `%${input.q}%` } },
-            { title: { startsWith: `%${input.q}%` } },
+            { firstName: { startsWith: q } },
+            { lastName: { startsWith: q } },
+            { phoneNumber1: { startsWith: q } },
+            { phoneNumber2: { startsWith: q } },
+            { email: { startsWith: q } },
+            { employer: { startsWith: q } },
+            { title: { startsWith: q } },
           ],
         },
       });

@@ -50,7 +50,7 @@ const popOverStyles = {
   width: "var(--radix-popover-trigger-width)",
 };
 
-export function StudentSearchCombobox({
+export function SearchCombobox({
   value,
   label,
   onSelect,
@@ -123,7 +123,7 @@ export function StudentSearchCombobox({
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === "" ? "opacity-100" : "opacity-0",
+                      value === "" ? "opacity-100" : "opacity-0"
                     )}
                   />
                   {unselectMsg}
@@ -147,7 +147,7 @@ export function StudentSearchCombobox({
                     <Check
                       className={cn(
                         "ml-auto h-4 w-4",
-                        isSelected ? "opacity-100" : "opacity-0",
+                        isSelected ? "opacity-100" : "opacity-0"
                       )}
                     />
                   </CommandItem>

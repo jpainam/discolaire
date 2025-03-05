@@ -17,8 +17,8 @@ import { PermissionAction } from "~/permissions";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
+import { SearchCombobox } from "~/components/SearchCombobox";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
-import { StudentSearchCombobox } from "~/components/students/StudentSearchCombobox";
 import { endpointReports } from "~/configs/endpoints";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
@@ -32,7 +32,7 @@ export function StudentPageHeader() {
 
   const canCreateStudent = useCheckPermissions(
     PermissionAction.CREATE,
-    "student:profile",
+    "student:profile"
   );
 
   const [value, setValue] = useState("");
@@ -45,7 +45,7 @@ export function StudentPageHeader() {
   return (
     <div className="flex flex-row items-center gap-2 border-b px-4 py-1">
       <Label className="hidden md:block">{t("students")}</Label>
-      <StudentSearchCombobox
+      <SearchCombobox
         className="w-full lg:w-1/3"
         items={
           students.data?.map((stud) => ({
@@ -108,7 +108,7 @@ export function StudentPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.student_list}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -119,7 +119,7 @@ export function StudentPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.student_list}?format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

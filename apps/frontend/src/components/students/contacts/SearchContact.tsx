@@ -24,7 +24,9 @@ export function SearchContact({ onBack }: { onBack: () => void }) {
   const [relationship, setRelationship] = useState<string | null>(null);
   const createStudentContactMutation = api.studentContact.create.useMutation();
 
-  const searchContactsQuery = api.contact.search.useQuery({ q: debounceValue });
+  const searchContactsQuery = api.contact.search.useQuery({
+    query: debounceValue,
+  });
   const utils = api.useUtils();
 
   return (
@@ -54,7 +56,7 @@ export function SearchContact({ onBack }: { onBack: () => void }) {
           </div>
         ) : (
           <ul>
-            {searchContactsQuery.data?.map((contact) => {
+            {searchContactsQuery.data.map((contact) => {
               return (
                 <li
                   key={contact.id}
@@ -80,7 +82,7 @@ export function SearchContact({ onBack }: { onBack: () => void }) {
                         onError: (error) => {
                           showErrorToast(error);
                         },
-                      },
+                      }
                     );
                   }}
                   className="cursor-pointer overflow-hidden py-1 text-sm text-muted-foreground hover:text-blue-600  hover:underline"

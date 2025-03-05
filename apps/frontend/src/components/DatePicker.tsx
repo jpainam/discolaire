@@ -13,7 +13,7 @@ export function DatePicker({
   defaultValue?: Date;
 }) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(
-    defaultValue ?? null
+    defaultValue ?? null,
   );
 
   useEffect(() => {
