@@ -1,7 +1,11 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { getGrades, reportCardService } from "../services/report-card-service";
+import {
+  getGrades,
+  getSummary,
+  reportCardService,
+} from "../services/report-card-service";
 import { studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -62,15 +66,17 @@ export const reportCardRouter = createTRPCRouter({
         },
       });
     }),
-  getSummary: protectedProcedure
+  // Rename this and compare with grades
+  getGrades2: protectedProcedure
     .input(
       z.object({
         classroomId: z.string(),
         termId: z.coerce.number(),
       }),
     )
-    .query(() => {
-      return [];
+    .query(async ({ input }) => {
+      const grades = await getGrades(input.classroomId, input.termId);
+      return getSummary(grades, input.classroomId);
     }),
   deleteRemark: protectedProcedure
     .input(

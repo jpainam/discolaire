@@ -1,145 +1,32 @@
-import { Document, Page, Text, View } from "@react-pdf/renderer";
-import { sortBy, sum } from "lodash";
+import { Text, View } from "@react-pdf/renderer";
+import { sum } from "lodash";
 
-import "../fonts";
-
-import type { RouterOutputs } from "@repo/api";
-
-import { IPBWHeader } from "../headers/IPBWHeader";
-import { IPBWSignature } from "./IPBWSignature";
-import { IPBWStudentInfo } from "./IPBWStudentInfo";
-import { IPBWSummary } from "./IPBWSummary";
-import { IPBWTableHeader } from "./IPBWTableHeader";
-
-const W = ["40%", "6%", "6%", "6%", "6%", "6%", "10%", "10%"];
-type ReportCardType =
-  RouterOutputs["reportCard"]["getStudent"]["result"][number];
-export function IPBW({
-  school,
-  average,
-  rank,
-  student,
-  summary,
-  classroom,
-  groups,
-  contact,
-  schoolYear,
-}: {
-  groups: Record<number, ReportCardType[]>;
-  student: RouterOutputs["student"]["get"];
-  average: number;
-  rank: string; // student rank with ex-aequo
-  classroom: RouterOutputs["classroom"]["get"];
-  summary: RouterOutputs["reportCard"]["getClassroom"]["summary"];
-  schoolYear: RouterOutputs["schoolYear"]["get"];
-  contact: RouterOutputs["student"]["getPrimaryContact"];
-  school: NonNullable<RouterOutputs["school"]["getSchool"]>;
-}) {
-  return (
-    <Document>
-      <Page
-        size={"A4"}
-        wrap={false}
-        style={{
-          paddingVertical: 20,
-          paddingHorizontal: 40,
-          fontSize: 7,
-          backgroundColor: "#fff",
-          color: "#000",
-          fontFamily: "Roboto",
-        }}
-      >
-        <View style={{ flexDirection: "column" }}>
-          <IPBWHeader school={school} />
-          <View
-            style={{
-              flexDirection: "column",
-              display: "flex",
-            }}
-          >
-            <Text
-              style={{
-                fontWeight: "bold",
-                alignSelf: "center",
-                fontSize: 10,
-              }}
-            >
-              BULLETIN SCOLAIRE DU PREMIER TRIMESTRE
-            </Text>
-            <Text
-              style={{
-                alignSelf: "center",
-                fontSize: 9,
-              }}
-            >
-              Année scolaire {schoolYear.name}
-            </Text>
-          </View>
-          <IPBWStudentInfo
-            student={{
-              firstName: student.firstName,
-              lastName: student.lastName,
-              gender: student.gender ?? "male",
-              isRepeating: student.isRepeating,
-              dateOfBirth: student.dateOfBirth,
-              placeOfBirth: student.placeOfBirth,
-            }}
-            classroom={classroom}
-            contact={contact}
-          />
-
-          <View
-            style={{
-              display: "flex",
-              padding: 0,
-              border: "1px solid black",
-              flexDirection: "column",
-            }}
-          >
-            <IPBWTableHeader W={W} />
-            {Object.keys(groups).map((groupId: string, index: number) => {
-              let cards = groups[Number(groupId)];
-              if (!cards || cards.length == 0) return null;
-              cards = sortBy(cards, "order").filter((c) => !c.isAbsent);
-              const card = cards[0];
-              if (!card) return null;
-              const group = card.subjectGroup;
-              if (!group) return null;
-
-              return (
-                <ReportCardGroup
-                  groupId={Number(groupId)}
-                  key={`card-${groupId}`}
-                  cards={cards}
-                  lastRow={index === Object.keys(groups).length - 1}
-                  group={{ name: group.name }}
-                />
-              );
-            })}
-          </View>
-          <IPBWSummary
-            effectif={classroom.size}
-            average={average}
-            summary={summary}
-            rank={rank}
-          />
-          <IPBWSignature />
-        </View>
-      </Page>
-    </Document>
-  );
-}
-
-function ReportCardGroup({
+export function IPBWGroup({
+  W,
   cards,
-  groupId,
-  lastRow = false,
-  group,
+  lastRow,
+  groupName,
 }: {
-  groupId: number;
-  group: { name: string };
-  cards: ReportCardType[];
-  lastRow?: boolean;
+  W: string[];
+  groupName: string;
+  lastRow: boolean;
+  cards: {
+    courseName: string;
+    isAbsent: boolean;
+    avg: number;
+    coefficient: number;
+    rank: number;
+    classroom: {
+      min: number;
+      max: number;
+      avg: number;
+    };
+    teacher: {
+      prefix: string;
+      lastName: string;
+      firstName: string;
+    };
+  }[];
 }) {
   return (
     <>
@@ -151,7 +38,7 @@ function ReportCardGroup({
               flexDirection: "row",
               display: "flex",
             }}
-            key={`card-${groupId}-${index}`}
+            key={`card-${index}-${index}`}
           >
             <View
               style={{
@@ -164,12 +51,16 @@ function ReportCardGroup({
               }}
             >
               <Text
-                style={{ fontWeight: "bold", overflow: "hidden", maxLines: 1 }}
+                style={{
+                  fontWeight: "bold",
+                  overflow: "hidden",
+                  maxLines: 1,
+                }}
               >
-                {card.course.name}
+                {card.courseName}
               </Text>
               <Text style={{ paddingLeft: "8px" }}>
-                {card.teacher?.prefix} {card.teacher?.lastName}
+                {card.teacher.prefix} {card.teacher.lastName}
               </Text>
             </View>
 
@@ -271,7 +162,7 @@ function ReportCardGroup({
             justifyContent: "center",
           }}
         >
-          <Text style={{ paddingLeft: 4 }}>{group.name}</Text>
+          <Text style={{ paddingLeft: 4 }}>{groupName}</Text>
         </View>
         <View
           style={{

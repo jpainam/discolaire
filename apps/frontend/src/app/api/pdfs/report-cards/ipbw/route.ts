@@ -1,9 +1,8 @@
-import { sum } from "lodash";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { IPBW, renderToStream } from "@repo/reports";
+import { IPBW, IPBWClassroom, renderToStream } from "@repo/reports";
 
 import { api } from "~/trpc/server";
 
@@ -56,9 +55,39 @@ async function classroomReportCard({
   termId: number;
 }) {
   const school = await api.school.getSchool();
-  console.log("classroomReportCard");
-  console.log({ classroomId, termId, school });
-  return new Response("Student not registered", { status: 400 });
+  const classroom = await api.classroom.get(classroomId);
+  const { result: results, summary } = await api.reportCard.getClassroom({
+    termId,
+    classroomId,
+  });
+  const grades = await api.reportCard.getGrades({
+    classroomId: classroomId,
+    termId: termId,
+  });
+  const students = await api.classroom.students(classroomId);
+
+  const contacts = await api.student.getPrimaryContacts({ classroomId });
+  const subjects = await api.classroom.subjects(classroomId);
+  const stream = await renderToStream(
+    IPBWClassroom({
+      school,
+      classroom,
+      subjects,
+      students: students,
+      schoolYear: classroom.schoolYear,
+      grades,
+      summary,
+      contacts,
+      results: results.sort((a, b) => a.rank - b.rank),
+    })
+  );
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/pdf",
+    "Cache-Control": "no-store, max-age=0",
+  };
+  // @ts-expect-error TODO: fix this
+  return new Response(stream, { headers });
 }
 async function indvidualReportCard({
   studentId,
@@ -71,6 +100,7 @@ async function indvidualReportCard({
   if (!student.classroom) {
     return new Response("Student not registered", { status: 400 });
   }
+
   const gradeData = await api.reportCard.getStudent({
     studentId: studentId,
     termId: termId,
@@ -78,9 +108,9 @@ async function indvidualReportCard({
   const groups: Record<number, ReportCardType[]> = {};
 
   const { result: reportCard } = gradeData;
-  const totalCoeff = reportCard.reduce((acc, card) => {
-    return acc + (card.isAbsent ? 0 : card.coefficient);
-  }, 0);
+  // const totalCoeff = reportCard.reduce((acc, card) => {
+  //   return acc + (card.isAbsent ? 0 : card.coefficient);
+  // }, 0);
   reportCard.forEach((card) => {
     const groupId = card.subjectGroupId;
     if (!groupId) return;
@@ -89,23 +119,43 @@ async function indvidualReportCard({
     }
     groups[groupId].push(card);
   });
-  const points = sum(
-    reportCard.map((c) => (c.isAbsent ? 0 : c.avg * c.coefficient))
-  );
+  // const points = sum(
+  //   reportCard.map((c) => (c.isAbsent ? 0 : c.avg * c.coefficient))
+  // );
 
   const classroom = await api.classroom.get(student.classroom.id);
+  const { result, summary } = await api.reportCard.getClassroom({
+    termId: termId,
+    classroomId: classroom.id,
+  });
+
+  // In case there are ex-aequo
+  const ranks = result
+    .map((student, index) => {
+      if (student.rank < 0) return null;
+      const rank =
+        index == 0 || result[index - 1]?.avg != student.avg
+          ? student.rank.toString()
+          : result[index - 1]?.rank.toString() + " ex";
+      return { studentId: student.id, rank: rank };
+    })
+    .filter((r) => r !== null);
+
   const contact = await api.student.getPrimaryContact(student.id);
-  const average = points / (totalCoeff || 1e9);
+  //const average = points / (totalCoeff || 1e9);
 
   const school = await api.school.getSchool();
 
   const stream = await renderToStream(
     IPBW({
       school,
+      summary,
       student,
       groups,
       contact,
-      average: average,
+      classroom,
+      rank: ranks.find((r) => r.studentId === student.id)?.rank ?? "",
+      average: result.find((r) => r.id === student.id)?.avg ?? -1,
       schoolYear: classroom.schoolYear,
     })
   );

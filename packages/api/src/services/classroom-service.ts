@@ -213,9 +213,23 @@ async function getSubjects(classroomId: string) {
       order: "asc",
     },
     include: {
-      course: true,
+      course: {
+        select: {
+          id: true,
+          name: true,
+          color: true,
+          reportName: true,
+        },
+      },
       subjectGroup: true,
-      teacher: true,
+      teacher: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          prefix: true,
+        },
+      },
     },
   });
 }

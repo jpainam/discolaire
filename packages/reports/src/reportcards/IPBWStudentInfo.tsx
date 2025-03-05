@@ -7,12 +7,20 @@ import type { RouterOutputs } from "@repo/api";
 export function IPBWStudentInfo({
   student,
   contact,
+  classroom,
 }: {
-  student: RouterOutputs["student"]["get"];
+  student: {
+    firstName: string | null;
+    lastName: string | null;
+    gender: string | null;
+    dateOfBirth?: Date | null;
+    placeOfBirth?: string | null;
+    avatar?: string | null;
+    isRepeating: boolean;
+  };
+  classroom: RouterOutputs["classroom"]["get"];
   contact: RouterOutputs["student"]["getPrimaryContact"];
 }) {
-  const classroom = student.classroom;
-
   let naiss =
     student.dateOfBirth &&
     Intl.DateTimeFormat(i18next.language, {
@@ -78,11 +86,7 @@ export function IPBWStudentInfo({
             label={"Nom et Prénoms"}
             value={student.lastName + " " + student.firstName}
           />
-          <InfoItem
-            label={"Classe"}
-            value={student.classroom?.name ?? ""}
-            lastColumn={true}
-          />
+          <InfoItem label={"Classe"} value={classroom.name} lastColumn={true} />
         </View>
         {/* Datenaiss & Gender & Effectif */}
         <View
@@ -104,7 +108,7 @@ export function IPBWStudentInfo({
           />
           <InfoItem
             label={"Effectif"}
-            value={classroom?.size.toString() ?? ""}
+            value={classroom.size.toString()}
             lastColumn={true}
           />
         </View>
@@ -151,7 +155,7 @@ export function IPBWStudentInfo({
           <InfoItem
             lastColumn={true}
             label={""}
-            value={`${classroom?.headTeacher?.prefix} ${classroom?.headTeacher?.lastName}`}
+            value={`${classroom.headTeacher?.prefix} ${classroom.headTeacher?.lastName}`}
           />
           <Text></Text>
         </View>

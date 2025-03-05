@@ -1,7 +1,21 @@
 import { Text, View } from "@react-pdf/renderer";
 import { CheckIcon } from "lucide-react";
 
-export function IPBWSummary({ average }: { average: number }) {
+import type { RouterOutputs } from "@repo/api";
+
+import { getAppreciations } from "../utils";
+
+export function IPBWSummary({
+  average,
+  summary,
+  effectif,
+  rank,
+}: {
+  average: number;
+  rank: string;
+  effectif: number;
+  summary: RouterOutputs["reportCard"]["getClassroom"]["summary"];
+}) {
   return (
     <View style={{ flexDirection: "row", marginTop: "4px", gap: 2 }}>
       <View
@@ -73,13 +87,29 @@ export function IPBWSummary({ average }: { average: number }) {
         >
           <Text style={{ paddingLeft: 4 }}>Discipline</Text>
         </View>
-        <SummaryItem name="Moy.Max" value={10} />
-        <SummaryItem name="Moy.Min" value={10} />
-        <SummaryItem name="Moy.Cl" value={10} />
-        <SummaryItem name="Taux de reussite" value={10} />
-        <SummaryItem name="Mention" lastRow={true} value={10} />
+        <SummaryItem name="Moy.Max" value={summary.max.toFixed(2)} />
+        <SummaryItem name="Moy.Min" value={summary.min.toFixed(2)} />
+        <SummaryItem name="Moy.Cl" value={summary.avg.toFixed(2)} />
+        <SummaryItem
+          name="Taux de reussite"
+          value={(summary.successRate * 100).toFixed(2) + "%"}
+        />
+        <View
+          style={{
+            justifyContent: "center",
+            paddingVertical: 2,
+            alignItems: "center",
+          }}
+        >
+          <Text>{getAppreciations(summary.avg)}</Text>
+        </View>
+        {/* <SummaryItem
+          name="Mention"
+          lastRow={true}
+          value={getAppreciations(summary.avg)}
+        /> */}
       </View>
-      <SummaryResult average={average} />
+      <SummaryResult effectif={effectif} rank={rank} average={average} />
     </View>
   );
 }
@@ -119,7 +149,15 @@ function SummaryItem({
   );
 }
 
-function SummaryResult({ average }: { average: number }) {
+function SummaryResult({
+  average,
+  effectif,
+  rank,
+}: {
+  average: number;
+  rank: string;
+  effectif: number;
+}) {
   return (
     <View
       style={{
@@ -172,7 +210,7 @@ function SummaryResult({ average }: { average: number }) {
             alignItems: "center",
           }}
         >
-          <Text> {average}</Text>
+          <Text> {average.toFixed(2)}</Text>
         </View>
       </View>
       <View
@@ -201,7 +239,9 @@ function SummaryResult({ average }: { average: number }) {
             alignItems: "center",
           }}
         >
-          <Text> 56 / 77</Text>
+          <Text>
+            {rank} / {effectif}
+          </Text>
         </View>
       </View>
       <View
@@ -230,7 +270,9 @@ function SummaryResult({ average }: { average: number }) {
             alignItems: "center",
           }}
         >
-          <Text> Moyen</Text>
+          <Text style={{ textTransform: "uppercase" }}>
+            {getAppreciations(average)}
+          </Text>
         </View>
       </View>
       <View
