@@ -28,7 +28,7 @@ export function ReportCardHeader() {
   const searchParams = useSearchParams();
   const Icon = sidebarIcons.report_cards;
   return (
-    <div className="flex flex-row items-center gap-2 border-b bg-secondary px-2 py-1 text-secondary-foreground">
+    <div className="flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1 text-secondary-foreground">
       {Icon && <Icon className="h-6 w-6" />}
       <Label>{t("term")}</Label>
       <TermSelector
@@ -47,14 +47,14 @@ export function ReportCardHeader() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem>
-              <MailIcon className="mr-2 h-4 w-4" />
+              <MailIcon />
               {t("notify_parents")}
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={() => {
                 window.open(
                   `/api/pdfs/report-cards/ipbw/?studentId=${params.id}&termId=${searchParams.get("term")}`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

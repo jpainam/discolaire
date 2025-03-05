@@ -22,7 +22,7 @@ export default async function Layout(props: {
     );
   }
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full gap-2 flex-col">
       <ReportCardHeader />
       {children}
     </div>

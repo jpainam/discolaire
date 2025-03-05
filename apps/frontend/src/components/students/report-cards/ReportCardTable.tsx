@@ -29,70 +29,74 @@ export async function ReportCardTable({
 }) {
   const { t } = await getServerTranslations();
 
-  const rowClassName = "border text-center py-0 text-sm";
+  const rowClassName = "";
 
   return (
-    <Table className="my-4 border-y border-r text-sm">
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[15px]"></TableHead>
-          <TableHead className={cn(rowClassName)}>{t("subjects")}</TableHead>
-          <TableHead className={cn(rowClassName)}>{t("grades")}</TableHead>
-          <TableHead className={cn(rowClassName)}>{t("coeff")}</TableHead>
-          <TableHead className={cn(rowClassName)}>{t("total")}</TableHead>
-          <TableHead className={cn(rowClassName)}>{t("rank")}</TableHead>
-          <TableHead className={cn(rowClassName)}>{t("Avg.C")}</TableHead>
-          <TableHead className={cn(rowClassName)}>{t("min_max")}</TableHead>
-          <TableHead className="border-y">{t("appreciation")}</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {Object.keys(groups).map((groupId: string) => {
-          let cards = groups[Number(groupId)];
-          if (!cards || cards.length == 0) return null;
-          cards = sortBy(cards, "order").filter((c) => !c.isAbsent);
-          const card = cards[0];
-          if (!card) return null;
-          const group = card.subjectGroup;
-          if (!group) return null;
+    <div className="px-4">
+      <div className="bg-background overflow-hidden rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow className="hover:bg-transparent">
+              <TableHead className="w-[15px]"></TableHead>
+              <TableHead className={cn(rowClassName)}>
+                {t("subjects")}
+              </TableHead>
+              <TableHead className={cn(rowClassName)}>{t("grades")}</TableHead>
+              <TableHead className={cn(rowClassName)}>{t("coeff")}</TableHead>
+              <TableHead className={cn(rowClassName)}>{t("total")}</TableHead>
+              <TableHead className={cn(rowClassName)}>{t("rank")}</TableHead>
+              <TableHead className={cn(rowClassName)}>{t("Avg.C")}</TableHead>
+              <TableHead className={cn(rowClassName)}>{t("min_max")}</TableHead>
+              <TableHead>{t("appreciation")}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {Object.keys(groups).map((groupId: string) => {
+              let cards = groups[Number(groupId)];
+              if (!cards || cards.length == 0) return null;
+              cards = sortBy(cards, "order").filter((c) => !c.isAbsent);
+              const card = cards[0];
+              if (!card) return null;
+              const group = card.subjectGroup;
+              if (!group) return null;
 
-          return (
-            <Fragment key={`fragment-${groupId}`}>
-              <ReportCardGroup
-                groupId={Number(groupId)}
-                key={`card-${groupId}`}
-                cards={cards}
-              />
-              <TableRow
-                className="bg-secondary text-secondary-foreground"
-                key={`recap-${groupId}`}
-              >
-                <TableCell></TableCell>
-                <TableCell className="" colSpan={2}>
-                  {group.name}
-                </TableCell>
-                <TableCell className={cn(rowClassName)}>
-                  {sum(cards.map((c) => c.coefficient))}
-                </TableCell>
-                <TableCell className="text-center text-sm" colSpan={3}>
-                  {t("points")}:{" "}
-                  {sum(cards.map((c) => (c.avg || 0) * c.coefficient)).toFixed(
-                    1,
-                  )}{" "}
-                  / {sum(cards.map((c) => 20 * c.coefficient)).toFixed(1)}
-                </TableCell>
-                <TableCell className="text-sm" colSpan={2}>
-                  {t("average")} :
-                  {(
-                    sum(cards.map((c) => c.avg * c.coefficient)) /
-                    sum(cards.map((c) => c.coefficient))
-                  ).toFixed(2)}
-                </TableCell>
-              </TableRow>
-            </Fragment>
-          );
-        })}
-        {/* <TableRow className="text-sm font-semibold">
+              return (
+                <Fragment key={`fragment-${groupId}`}>
+                  <ReportCardGroup
+                    groupId={Number(groupId)}
+                    key={`card-${groupId}`}
+                    cards={cards}
+                  />
+                  <TableRow
+                    className="bg-secondary text-secondary-foreground"
+                    key={`recap-${groupId}`}
+                  >
+                    <TableCell></TableCell>
+                    <TableCell className="" colSpan={2}>
+                      {group.name}
+                    </TableCell>
+                    <TableCell className={cn(rowClassName)}>
+                      {sum(cards.map((c) => c.coefficient))}
+                    </TableCell>
+                    <TableCell className="text-center text-sm" colSpan={3}>
+                      {t("points")}:{" "}
+                      {sum(
+                        cards.map((c) => (c.avg || 0) * c.coefficient)
+                      ).toFixed(1)}{" "}
+                      / {sum(cards.map((c) => 20 * c.coefficient)).toFixed(1)}
+                    </TableCell>
+                    <TableCell className="text-sm" colSpan={2}>
+                      {t("average")} :
+                      {(
+                        sum(cards.map((c) => c.avg * c.coefficient)) /
+                        sum(cards.map((c) => c.coefficient))
+                      ).toFixed(2)}
+                    </TableCell>
+                  </TableRow>
+                </Fragment>
+              );
+            })}
+            {/* <TableRow className="text-sm font-semibold">
           <TableCell></TableCell>
           <TableCell className={cn(rowClassName, "text-left uppercase")}>
             {t("total")}
@@ -104,8 +108,10 @@ export async function ReportCardTable({
           </TableCell>
           <TableCell colSpan={2}></TableCell>
         </TableRow> */}
-      </TableBody>
-    </Table>
+          </TableBody>
+        </Table>
+      </div>
+    </div>
   );
 }
 
