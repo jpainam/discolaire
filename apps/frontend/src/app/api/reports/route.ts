@@ -1,9 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { auth } from "@repo/auth";
 import { db } from "@repo/db";
 
 import { env } from "~/env";
 
 export async function POST(request: Request) {
+  const session = await auth();
+  if (!session) {
+    return new Response("Unauthorized", { status: 401 });
+  }
   const { url, userId, size, id, reportApiKey } = await request.json();
   if (reportApiKey !== env.REPORT_API_KEY) {
     return Response.json({ error: "Not authorized" }, { status: 401 });
@@ -11,7 +16,7 @@ export async function POST(request: Request) {
   if (!url || !userId || !id) {
     return Response.json(
       { error: "Invalid request " + JSON.stringify({ url, userId, id }) },
-      { status: 400 },
+      { status: 400 }
     );
   }
   try {

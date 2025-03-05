@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { IPBWReceipt, renderToStream } from "@repo/reports";
 
+import { auth } from "@repo/auth";
 import { api } from "~/trpc/server";
 
 const searchSchema = z.object({
@@ -11,6 +12,10 @@ const searchSchema = z.object({
   id: z.coerce.number(),
 });
 export async function GET(req: NextRequest) {
+  const session = await auth();
+  if (!session) {
+    return new Response("Unauthorized", { status: 401 });
+  }
   try {
     const requestUrl = new URL(req.url);
 
@@ -42,7 +47,7 @@ export async function GET(req: NextRequest) {
         student: student,
         school: school,
         size: size,
-      }),
+      })
     );
 
     // @ts-expect-error TODO: fix this

@@ -4,6 +4,7 @@ import { z } from "zod";
 import type { RouterOutputs } from "@repo/api";
 import { IPBW, IPBWClassroom, renderToStream } from "@repo/reports";
 
+import { auth } from "@repo/auth";
 import { api } from "~/trpc/server";
 
 type ReportCardType =
@@ -15,6 +16,10 @@ const searchSchema = z.object({
   termId: z.coerce.number(),
 });
 export async function GET(req: NextRequest) {
+  const session = await auth();
+  if (!session) {
+    return new Response("Unauthorized", { status: 401 });
+  }
   const studId = req.nextUrl.searchParams.get("studentId");
   const term = req.nextUrl.searchParams.get("termId");
   const classId = req.nextUrl.searchParams.get("classroomId");
@@ -32,7 +37,7 @@ export async function GET(req: NextRequest) {
 
     return Response.json(
       { error: "Invalid request body", errors },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -79,7 +84,7 @@ async function classroomReportCard({
       summary,
       contacts,
       results: results.sort((a, b) => a.rank - b.rank),
-    }),
+    })
   );
 
   const headers: Record<string, string> = {
@@ -157,7 +162,7 @@ async function indvidualReportCard({
       rank: ranks.find((r) => r.studentId === student.id)?.rank ?? "",
       average: result.find((r) => r.id === student.id)?.avg ?? -1,
       schoolYear: classroom.schoolYear,
-    }),
+    })
   );
 
   const headers: Record<string, string> = {

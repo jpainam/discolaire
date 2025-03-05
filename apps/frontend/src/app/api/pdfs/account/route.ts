@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { AcccountStatement, renderToStream } from "@repo/reports";
 
+import { auth } from "@repo/auth";
 import { api } from "~/trpc/server";
 
 const searchSchema = z.object({
@@ -11,6 +12,10 @@ const searchSchema = z.object({
   id: z.string().min(1),
 });
 export async function GET(req: NextRequest) {
+  const session = await auth();
+  if (!session) {
+    return new Response("Unauthorized", { status: 401 });
+  }
   try {
     const requestUrl = new URL(req.url);
 
@@ -38,7 +43,7 @@ export async function GET(req: NextRequest) {
         school: school,
         transactions: data,
         size: size,
-      }),
+      })
     );
 
     // @ts-expect-error TODO: fix this

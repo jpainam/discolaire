@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { renderToStream } from "@repo/reports/";
 
+import { auth } from "@repo/auth";
 import { ReminderLetter } from "@repo/reports";
 import i18next from "i18next";
 import { sumBy } from "lodash";
@@ -12,6 +13,10 @@ const schema = z.object({
   classroomId: z.string().min(1),
 });
 export async function POST(req: Request) {
+  const session = await auth();
+  if (!session) {
+    return new Response("Unauthorized", { status: 401 });
+  }
   try {
     const reqBody = await req.json();
     const result = schema.safeParse(reqBody);
@@ -26,7 +31,7 @@ export async function POST(req: Request) {
     const fees = await api.classroom.fees(classroomId);
     const amountDue = sumBy(
       fees.filter((fee) => fee.dueDate <= new Date()),
-      "amount",
+      "amount"
     );
     const students = await api.classroom.studentsBalance({ id: classroomId });
     const reminders = students
@@ -50,7 +55,7 @@ export async function POST(req: Request) {
         school: school,
         reminders: reminders,
         classroom: classroom.name,
-      }),
+      })
     );
 
     //const blob = await new Response(stream).blob();

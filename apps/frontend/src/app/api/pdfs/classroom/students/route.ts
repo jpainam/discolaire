@@ -7,6 +7,7 @@ import type { RouterOutputs } from "@repo/api";
 import { ClassroomStudentList, renderToStream } from "@repo/reports";
 import { getServerTranslations } from "~/i18n/server";
 
+import { auth } from "@repo/auth";
 import { api } from "~/trpc/server";
 
 const searchSchema = z.object({
@@ -16,6 +17,10 @@ const searchSchema = z.object({
   format: z.union([z.literal("pdf"), z.literal("csv")]).default("pdf"),
 });
 export async function GET(req: NextRequest) {
+  const session = await auth();
+  if (!session) {
+    return new Response("Unauthorized", { status: 401 });
+  }
   try {
     const requestUrl = new URL(req.url);
 
@@ -145,7 +150,7 @@ async function toCSV({
             ? `"${cellValue.replace(/"/g, '""')}"`
             : cellValue;
         })
-        .join(","),
+        .join(",")
     ),
   ].join("\n");
   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
@@ -179,7 +184,7 @@ async function toPdf({
       school: school,
       size: size,
       classroom: classroom,
-    }),
+    })
   );
 
   //const blob = await new Response(stream).blob();

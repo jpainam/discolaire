@@ -7,6 +7,7 @@ import type { RouterOutputs } from "@repo/api";
 import { renderToStream, StudentList } from "@repo/reports/";
 import { getServerTranslations } from "~/i18n/server";
 
+import { auth } from "@repo/auth";
 import { getSheetName } from "~/lib/utils";
 import { api } from "~/trpc/server";
 import { xlsxType } from "~/utils/file-type";
@@ -23,6 +24,10 @@ const searchSchema = z.object({
     .default("pdf"),
 });
 export async function GET(req: NextRequest) {
+  const session = await auth();
+  if (!session) {
+    return new Response("Unauthorized", { status: 401 });
+  }
   try {
     const requestUrl = new URL(req.url);
 
@@ -52,7 +57,7 @@ export async function GET(req: NextRequest) {
           students: students,
           school: school,
           size: size,
-        }),
+        })
       );
 
       //const blob = await new Response(stream).blob();

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import type { NextRequest } from "next/server";
 import {
   DeleteObjectCommand,
   GetObjectCommand,
@@ -7,8 +6,10 @@ import {
 } from "@aws-sdk/client-s3";
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import type { NextRequest } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 
+import { auth } from "@repo/auth";
 import { env } from "~/env";
 
 const client = new S3Client({
@@ -20,11 +21,15 @@ const client = new S3Client({
 });
 
 export async function POST(request: Request) {
+  const session = await auth();
+  if (!session) {
+    return new Response("Unauthorized", { status: 401 });
+  }
   const { destination, contentType, bucket, key } = await request.json();
   if (typeof destination !== "string" || destination.length === 0) {
     return Response.json(
       { error: "Invalid dest " + destination },
-      { status: 400 },
+      { status: 400 }
     );
   }
   const fileKey = key ? `${destination}/${key}` : `${destination}/${uuidv4()}`;
@@ -51,7 +56,7 @@ export async function POST(request: Request) {
 
 export async function GET(
   request: NextRequest,
-  props: { params: Promise<{ key: string }> },
+  props: { params: Promise<{ key: string }> }
 ) {
   const params = await props.params;
   const searchParams = request.nextUrl.searchParams;
@@ -71,7 +76,7 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  props: { params: Promise<{ key: string }> },
+  props: { params: Promise<{ key: string }> }
 ) {
   const params = await props.params;
   const searchParams = request.nextUrl.searchParams;
