@@ -1,2 +1,0 @@
-export declare function getAppreciations(grade?: number | null): "" | "Nul" | "Très faible" | "Faible" | "Insuffisant" | "Médiocre" | "Moyen" | "Passable" | "Assez bien" | "Bien" | "Très bien" | "Excellent" | "Pas definie";
-//# sourceMappingURL=get-appreciation.d.ts.map

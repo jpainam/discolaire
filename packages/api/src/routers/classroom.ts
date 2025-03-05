@@ -111,11 +111,9 @@ export const classroomRouter = createTRPCRouter({
       });
     }),
 
-  subjects: protectedProcedure
-    .input(z.string().min(1))
-    .query(async ({ input }) => {
-      return classroomService.getSubjects(input);
-    }),
+  subjects: protectedProcedure.input(z.string().min(1)).query(({ input }) => {
+    return classroomService.getSubjects(input);
+  }),
 
   fees: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
     return ctx.db.fee.findMany({

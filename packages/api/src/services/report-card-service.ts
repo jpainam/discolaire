@@ -129,6 +129,7 @@ export const reportCardService = {
     const students = await db.student.findMany({
       select: {
         id: true,
+        registrationNumber: true,
         firstName: true,
         lastName: true,
         avatar: true,

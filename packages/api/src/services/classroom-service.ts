@@ -216,6 +216,7 @@ async function getSubjects(classroomId: string) {
       course: {
         select: {
           id: true,
+          shortName: true,
           name: true,
           color: true,
           reportName: true,

@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { useSheet } from "~/hooks/use-sheet";
 import { Button } from "@repo/ui/components/button";
 import {
   Form,
@@ -20,6 +19,7 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { Separator } from "@repo/ui/components/separator";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 
 import { CourseSelector } from "~/components/shared/selects/CourseSelector";
@@ -36,7 +36,7 @@ const createEditSubjectSchema = z.object({
   order: z.coerce.number().default(1),
 });
 
-type Subject = NonNullable<RouterOutputs["subject"]["get"]>;
+type Subject = NonNullable<RouterOutputs["classroom"]["subjects"][number]>;
 
 export function CreateEditSubject({ subject }: { subject?: Subject }) {
   const { t } = useLocale();
