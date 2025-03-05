@@ -156,3 +156,5 @@ export async function AcccountStatement({
     </Document>
   );
 }
+
+export default AcccountStatement;

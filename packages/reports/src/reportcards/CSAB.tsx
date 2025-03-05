@@ -114,3 +114,5 @@ export function CSAB({ size = "letter", school }: CSABReportCardProps) {
     </Document>
   );
 }
+
+export default CSAB;

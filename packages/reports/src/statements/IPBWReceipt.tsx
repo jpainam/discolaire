@@ -110,3 +110,4 @@ export function IPBWReceipt({
     </Document>
   );
 }
+export default IPBWReceipt;

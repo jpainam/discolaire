@@ -180,3 +180,5 @@ export function IPBWClassroom({
     </Document>
   );
 }
+
+export default IPBWClassroom;

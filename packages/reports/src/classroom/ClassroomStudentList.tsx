@@ -110,3 +110,4 @@ export function ClassroomStudentList({
     </Document>
   );
 }
+export default ClassroomStudentList;

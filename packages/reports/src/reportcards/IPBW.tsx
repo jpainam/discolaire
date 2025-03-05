@@ -318,3 +318,5 @@ function ReportCardGroup({
     </>
   );
 }
+
+export default IPBW;
