@@ -129,14 +129,14 @@ export function StudentHeader({
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   const canEditStudent = useCheckPermissions(
     PermissionAction.UPDATE,
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   //const [open, setOpen] = React.useState(false);
 
@@ -230,7 +230,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `${endpointReports.student_page(params.id)}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -369,7 +369,7 @@ export function StudentHeader({
         <div className="grid grid-cols-2 flex-row items-center gap-4 text-sm font-semibold md:flex">
           {student.registrationNumber && (
             <div className="flex flex-row items-center gap-2 rounded dark:bg-secondary">
-              <NotebookTabs />
+              <NotebookTabs className="h-4 w-4 text-foreground" />
               <span> {student.registrationNumber}</span>
             </div>
           )}
