@@ -165,8 +165,4 @@ export const subjectRouter = createTRPCRouter({
         },
       });
     }),
-
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
-  }),
 });

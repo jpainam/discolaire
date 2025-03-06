@@ -1,10 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -22,38 +17,48 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { useLocale } from "~/i18n";
 
+import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
+import { z } from "zod";
 import { useRouter } from "~/hooks/use-router";
+import { api } from "~/trpc/react";
 
 const formSchema = z.object({
-  lastName: z.string().min(1),
-  firstName: z.string().min(1),
-  registrationCode: z.string().min(1),
+  username: z.string().min(1),
+  password: z.string().min(1),
+  token: z.string().min(1),
 });
 
 export default function Page() {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      lastName: "",
-      firstName: "",
-      registrationCode: "",
+  const searchParams = useSearchParams();
+  const signUpMutation = api.user.signUp.useMutation({
+    onSettled: () => {
+      router.push("/auth/login");
+    },
+    onError: (err) => {
+      toast.error(err.message);
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsLoading(false);
+  const form = useForm({
+    schema: formSchema,
+    defaultValues: {
+      username: "",
+      token: searchParams.get("token") ?? "",
+    },
+  });
 
-    // In a real application, you would call your API here to reset the password
-    console.log(values);
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    signUpMutation.mutate({
+      username: values.username,
+      password: values.password,
+      token: values.token,
+    });
   }
   const router = useRouter();
   const { t } = useLocale();
@@ -72,12 +77,16 @@ export default function Page() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
-                name="lastName"
+                name="username"
                 render={({ field }) => (
-                  <FormItem className="space-y-0">
-                    <FormLabel>{t("lastName")}</FormLabel>
+                  <FormItem>
+                    <FormLabel>{t("username")}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t("lastName")} {...field} />
+                      <Input
+                        autoComplete="username"
+                        placeholder={t("username")}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -85,12 +94,16 @@ export default function Page() {
               />
               <FormField
                 control={form.control}
-                name="firstName"
+                name="password"
                 render={({ field }) => (
-                  <FormItem className="space-y-0">
-                    <FormLabel>{t("firstName")}</FormLabel>
+                  <FormItem>
+                    <FormLabel>{t("password")}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t("firstName")} {...field} />
+                      <Input
+                        autoComplete="current-password"
+                        placeholder={t("password")}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -98,22 +111,28 @@ export default function Page() {
               />
               <FormField
                 control={form.control}
-                name="registrationCode"
+                name="token"
                 render={({ field }) => (
-                  <FormItem className="space-y-0">
+                  <FormItem>
                     <FormLabel>{t("registrationCode")}</FormLabel>
                     <FormControl>
                       <Input placeholder={t("registrationCode")} {...field} />
                     </FormControl>
-                    <FormDescription>
+                    <FormDescription className="text-xs">
                       {t("registration_code_description")}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? t("creating") : t("create_an_account")}
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={signUpMutation.isPending}
+              >
+                {signUpMutation.isPending
+                  ? t("creating")
+                  : t("create_an_account")}
               </Button>
             </form>
           </Form>

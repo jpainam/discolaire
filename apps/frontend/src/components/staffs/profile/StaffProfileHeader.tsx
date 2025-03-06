@@ -141,7 +141,11 @@ export function StaffProfileHeader({
                 {t("change_password")}
               </DropdownMenuItem>
             )}
-            <DropdownInvitation email={staff.email} />
+            <DropdownInvitation
+              entityId={staff.id}
+              entityType="staff"
+              email={staff.email}
+            />
             <DropdownHelp />
             {canDeleteStaff && (
               <>

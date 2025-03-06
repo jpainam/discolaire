@@ -263,7 +263,11 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
             <ReceiptText />
             <span className="text-sm">{t("details")}</span>
           </DropdownMenuItem>
-          <DropdownInvitation email={staff.email} />
+          <DropdownInvitation
+            entityId={staff.id}
+            entityType="staff"
+            email={staff.email}
+          />
           <DropdownMenuItem
             className=""
             onClick={() => {

@@ -60,7 +60,7 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
     "contact:profile",
     {
       id: contactId,
-    },
+    }
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();
@@ -149,7 +149,13 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
                 </DropdownMenuItem>
               )}
               <DropdownMenuSeparator />
-              <DropdownInvitation email={contactQuery.data?.email} />
+              {contactQuery.data && (
+                <DropdownInvitation
+                  entityType="contact"
+                  entityId={contactQuery.data.id}
+                  email={contactQuery.data.email}
+                />
+              )}
               {canDeleteContact && (
                 <>
                   <DropdownMenuSeparator />

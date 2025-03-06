@@ -120,7 +120,7 @@ export function ContactStudentTable({ id }: { id: string }) {
                         onSelect={() => {
                           if (!student.id) return;
                           router.push(
-                            `${routes.students.contacts(student.id)}/${id}`,
+                            `${routes.students.contacts(student.id)}/${id}`
                           );
                         }}
                       >
@@ -128,7 +128,15 @@ export function ContactStudentTable({ id }: { id: string }) {
                         {t("details")}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownInvitation email={student.email} />
+
+                      {student.id && (
+                        <DropdownInvitation
+                          entityId={student.id}
+                          entityType={"student"}
+                          email={student.email}
+                        />
+                      )}
+
                       <DropdownMenuSeparator />
                       <DropdownHelp />
                       <DropdownMenuSeparator />
@@ -157,7 +165,7 @@ export function ContactStudentTable({ id }: { id: string }) {
                                 error: (error) => {
                                   return getErrorMessage(error);
                                 },
-                              },
+                              }
                             );
                           }
                         }}

@@ -4,7 +4,6 @@ import { announcementRouter } from "./routers/announcement";
 import { appreciationRouter } from "./routers/appreciation";
 import { assignmentRouter } from "./routers/assignment";
 import { attendanceRouter } from "./routers/attendance";
-import { authRouter } from "./routers/auth";
 import { bibleRouter } from "./routers/bible";
 import { bookRouter } from "./routers/book";
 import { calendarEventRouter } from "./routers/calendarEvent";
@@ -65,7 +64,6 @@ import { userRouter } from "./routers/user";
 import { createTRPCRouter } from "./trpc";
 
 export const appRouter = createTRPCRouter({
-  auth: authRouter,
   staff: staffRouter,
   upload: uploadRouter,
   classroom: classroomRouter,

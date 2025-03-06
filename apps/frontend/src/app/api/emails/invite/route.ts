@@ -7,6 +7,7 @@ import { getServerTranslations } from "~/i18n/server";
 
 import { env } from "~/env";
 import { api } from "~/trpc/server";
+import { createUniqueInvite } from "~/actions/invite";
 
 export async function GET(req: NextRequest) {
   try {
@@ -23,19 +24,22 @@ export async function GET(req: NextRequest) {
     const school = await api.school.getSchool();
     const { t, i18n } = await getServerTranslations();
     if (user.email) {
-      const invitation = await api.invitation.create({ email });
+      const invitation = await createUniqueInvite({
+        entityId: user.id,
+        entityType: "user",
+      });
       const emailHtml = await render(
         InviteEmail({
           invitedByEmail: user.email,
           invitedByName: user.name ?? "Admin",
-          inviteLink: `${env.NEXT_PUBLIC_BASE_URL}/invite/${invitation.token}?email=${user.email}`,
+          inviteLink: `${env.NEXT_PUBLIC_BASE_URL}/invite/${invitation}?email=${user.email}`,
           locale: i18n.language,
           school: {
             id: school.id,
             name: school.name,
             logo: school.logo,
           },
-        }),
+        })
       );
       await api.messaging.sendEmail({
         subject: t("join", { school: school.name }),

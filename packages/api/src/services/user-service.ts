@@ -159,3 +159,71 @@ export const userService = {
     };
   },
 };
+
+export async function attachUser({
+  entityId,
+  entityType,
+  userId,
+}: {
+  entityId: string;
+  entityType: "staff" | "contact" | "student";
+  userId: string;
+}) {
+  if (entityType === "staff") {
+    const d = await db.staff.update({
+      where: {
+        id: entityId,
+      },
+      data: {
+        user: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
+    });
+    return {
+      email: d.email,
+      name: `${d.lastName} ${d.firstName}`,
+      avatar: d.avatar,
+    };
+  }
+
+  if (entityType === "contact") {
+    const dd = await db.contact.update({
+      where: {
+        id: entityId,
+      },
+      data: {
+        user: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
+    });
+    return {
+      email: dd.email,
+      name: `${dd.lastName} ${dd.firstName}`,
+      avatar: dd.avatar,
+    };
+  }
+
+  const ddd = await db.student.update({
+    where: {
+      id: entityId,
+    },
+    data: {
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
+    },
+  });
+  return {
+    email: ddd.email,
+    name: `${ddd.lastName} ${ddd.firstName}`,
+    avatar: ddd.avatar,
+  };
+}

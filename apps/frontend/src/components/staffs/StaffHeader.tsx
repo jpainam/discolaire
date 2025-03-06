@@ -26,7 +26,7 @@ export function StaffHeader() {
 
   const canCreateStaff = useCheckPermissions(
     PermissionAction.CREATE,
-    "staff:profile"
+    "staff:profile",
   );
 
   const router = useRouter();

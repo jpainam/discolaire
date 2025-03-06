@@ -14,13 +14,14 @@ import { UserNav } from "~/components/user-nav";
 
 import { SchoolContextProvider } from "~/providers/SchoolProvider";
 
+import { db } from "@repo/db";
+import { Breadcrumbs } from "~/components/breadcrumbs";
 import { LanguageSwitcher } from "~/components/LanguageSwitcher";
 import { SchoolYearSwitcher } from "~/components/SchoolYearSwitcher";
 import { TopRightButtons } from "~/components/TopRightButtons";
 import GlobalModal from "~/layouts/GlobalModal";
 import GlobalSheet from "~/layouts/GlobalSheet";
 import { api } from "~/trpc/server";
-import { Breadcrumbs } from "~/components/breadcrumbs";
 
 export default async function Layout({
   children,

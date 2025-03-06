@@ -10,6 +10,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
+import { useLocale } from "~/i18n";
 
 function CopyButton({
   content,
@@ -67,6 +68,7 @@ function CopyButton({
       setPending(false);
     }
   };
+  const { t } = useLocale();
   return (
     <Tooltip delayDuration={0}>
       <TooltipTrigger asChild>
@@ -117,7 +119,7 @@ function CopyButton({
         </Button>
       </TooltipTrigger>
       <TooltipContent>
-        <span>Copy</span>
+        <span>{t("copy")}</span>
       </TooltipContent>
     </Tooltip>
   );

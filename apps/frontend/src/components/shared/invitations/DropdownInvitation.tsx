@@ -9,11 +9,19 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { createUniqueInvite } from "~/actions/invite";
 import { env } from "~/env";
-import { api } from "~/trpc/react";
 import { CopyConfirmationDialog } from "./CopyConfirmationDialog";
 
-export function DropdownInvitation({ email }: { email?: string | null }) {
+export function DropdownInvitation({
+  entityId,
+  entityType,
+  email,
+}: {
+  entityType: string;
+  entityId: string;
+  email?: string | null;
+}) {
   const { t } = useLocale();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -21,38 +29,18 @@ export function DropdownInvitation({ email }: { email?: string | null }) {
   const { openModal, closeModal } = useModal();
   const confirm = useConfirm();
 
-  const createInvitationMutation = api.invitation.create.useMutation({
-    onSuccess: (invitation) => {
-      const invitationLink =
-        env.NEXT_PUBLIC_BASE_URL +
-        "/invite/" +
-        invitation.token +
-        "?email=" +
-        email;
-      openModal({
-        title: t("copy_invite"),
-        className: "w-[500px]",
-        description: t("copy_invitation_link_description"),
-        view: <CopyConfirmationDialog invitationLink={invitationLink} />,
-      });
-      toast.success(t("invitation_created"), { id: 0 });
-    },
-
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-
   return (
     <>
       <DropdownMenuItem
-        disabled={createInvitationMutation.isPending}
-        onSelect={() => {
-          if (!email) {
-            toast.error(t("email_not_found"));
-            return;
-          }
-          createInvitationMutation.mutate({ email });
+        onSelect={async () => {
+          const token = await createUniqueInvite({ entityId, entityType });
+          const invitationLink = env.NEXT_PUBLIC_BASE_URL + "/invite/" + token;
+          openModal({
+            title: t("copy_invite"),
+
+            description: t("copy_invitation_link_description"),
+            view: <CopyConfirmationDialog invitationLink={invitationLink} />,
+          });
         }}
       >
         <CopyIcon />
@@ -82,9 +70,12 @@ export function DropdownInvitation({ email }: { email?: string | null }) {
           if (isConfirmed) {
             setIsLoading(true);
             toast.loading(t("sending_invite"), { id: 0 });
-            await fetch(`/api/emails/invite?email=${email}`, {
-              method: "GET",
-            })
+            await fetch(
+              `/api/emails/invite?email=${email}&entityId=${entityId}&entityType=${entityType}`,
+              {
+                method: "GET",
+              }
+            )
               .then(() => {
                 toast.success(t("email_sent_successfully"), { id: 0 });
                 closeModal();

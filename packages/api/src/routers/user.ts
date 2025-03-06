@@ -4,8 +4,10 @@ import { z } from "zod";
 import { comparePasswords, hashPassword } from "@repo/auth/session";
 
 import { ratelimiter } from "../rateLimit";
-import { userService } from "../services/user-service";
+import { attachUser, userService } from "../services/user-service";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+
+const MAX_ATTEMPTS = 5;
 
 export const userRouter = createTRPCRouter({
   getByEmail: publicProcedure
@@ -203,60 +205,12 @@ export const userRouter = createTRPCRouter({
         type: z.enum(["staff", "contact", "student"]),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
-      let email: string | null;
-      let name = "";
-      let avatar: string | null;
-
-      if (input.type === "staff") {
-        const d = await ctx.db.staff.update({
-          where: {
-            id: input.entityId,
-          },
-          data: {
-            user: {
-              connect: {
-                id: input.userId,
-              },
-            },
-          },
-        });
-        email = d.email;
-        name = `${d.lastName} ${d.firstName}`;
-        avatar = d.avatar;
-      } else if (input.type === "contact") {
-        const d = await ctx.db.contact.update({
-          where: {
-            id: input.entityId,
-          },
-          data: {
-            user: {
-              connect: {
-                id: input.userId,
-              },
-            },
-          },
-        });
-        email = d.email;
-        name = `${d.lastName} ${d.firstName}`;
-        avatar = d.avatar;
-      } else {
-        const d = await ctx.db.student.update({
-          where: {
-            id: input.entityId,
-          },
-          data: {
-            user: {
-              connect: {
-                id: input.userId,
-              },
-            },
-          },
-        });
-        email = d.email;
-        name = `${d.lastName} ${d.firstName}`;
-        avatar = d.avatar;
-      }
+    .mutation(async ({ input }) => {
+      const { email, avatar, name } = await attachUser({
+        entityId: input.entityId,
+        entityType: input.type,
+        userId: input.userId,
+      });
       return userService.updateProfile(input.userId, name, email, avatar);
     }),
   updateMyPassword: protectedProcedure
@@ -311,5 +265,66 @@ export const userRouter = createTRPCRouter({
           loginDate: "desc",
         },
       });
+    }),
+
+  signUp: publicProcedure
+    .input(
+      z.object({
+        username: z.string().min(1),
+        password: z.string().min(1),
+        token: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const invite = await ctx.db.invite.findUnique({
+        where: {
+          token: input.token,
+        },
+      });
+      if (!invite || invite.used || new Date(invite.expiresAt) < new Date()) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Invalid, expired invite or used token",
+        });
+      }
+
+      if (invite.attempts >= MAX_ATTEMPTS) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Too many failed attempts, contact support",
+        });
+      }
+      await ctx.db.invite.update({
+        where: { token: input.token },
+        data: {
+          attempts: 0,
+          used: true,
+          lastAttempt: new Date(),
+        },
+      });
+
+      const exists = await userService.validateUsername(input.username);
+      if (exists.error) {
+        throw new TRPCError({
+          message: exists.error,
+          code: "FORBIDDEN",
+        });
+      }
+      const user = await ctx.db.user.create({
+        data: {
+          email: `${input.username}@discolaire.com`,
+          username: input.username,
+          name: input.username,
+          schoolId: invite.schoolId,
+          password: await hashPassword(input.password),
+          isActive: true,
+        },
+      });
+      await attachUser({
+        entityId: invite.entityId,
+        entityType: invite.entityType as "staff" | "contact" | "student",
+        userId: user.id,
+      });
+      return user;
     }),
 });

@@ -249,7 +249,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
             year: "numeric",
             month: "short",
             day: "numeric",
-          },
+          }
         );
         return (
           <SimpleTooltip
@@ -390,7 +390,11 @@ function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
             {t("edit")}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownInvitation email={student.email} />
+          <DropdownInvitation
+            entityId={student.id}
+            entityType="student"
+            email={student.email}
+          />
           <DropdownMenuSeparator />
           <DropdownMenuItem
             variant="destructive"

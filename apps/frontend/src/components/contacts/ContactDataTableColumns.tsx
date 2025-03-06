@@ -214,7 +214,11 @@ export function getColumns({
                 {t("edit")}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownInvitation email={contact.email} />
+              <DropdownInvitation
+                entityId={contact.id}
+                entityType="contact"
+                email={contact.email}
+              />
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 disabled={deleteContactMutation.isPending}
@@ -236,7 +240,7 @@ export function getColumns({
                         error: (error) => {
                           return getErrorMessage(error);
                         },
-                      },
+                      }
                     );
                   }
                 }}
