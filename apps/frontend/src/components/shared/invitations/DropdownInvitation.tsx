@@ -74,7 +74,7 @@ export function DropdownInvitation({
               `/api/emails/invite?email=${email}&entityId=${entityId}&entityType=${entityType}`,
               {
                 method: "GET",
-              }
+              },
             )
               .then(() => {
                 toast.success(t("email_sent_successfully"), { id: 0 });

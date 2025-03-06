@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
             name: school.name,
             logo: school.logo,
           },
-        })
+        }),
       );
       await api.messaging.sendEmail({
         subject: t("join", { school: school.name }),

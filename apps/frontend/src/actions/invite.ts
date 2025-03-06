@@ -4,7 +4,8 @@ import { db } from "@repo/db";
 import { nanoid } from "nanoid";
 import { api } from "~/trpc/server";
 
-export function generateInviteToken() {
+// eslint-disable-next-line @typescript-eslint/require-await
+export async function generateInviteToken() {
   return nanoid(8); // Generates an 8-character token
 }
 export async function createUniqueInvite({
@@ -18,7 +19,7 @@ export async function createUniqueInvite({
   let exists = true;
 
   while (exists) {
-    token = generateInviteToken();
+    token = await generateInviteToken();
     const existing = await db.invite.findUnique({ where: { token } });
     exists = !!existing;
   }
