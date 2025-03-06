@@ -30,7 +30,7 @@ export function StudentContactHeader() {
     "student:contact",
     {
       id: params.id,
-    }
+    },
   );
 
   const Icon = sidebarIcons.contacts;
