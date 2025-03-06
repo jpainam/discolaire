@@ -197,7 +197,7 @@ export function getColumns({
                   });
                 }}
               >
-                <Users className="mr-2 h-4 w-4" />
+                <Users />
                 <span className="text-sm">{t("students")}</span>
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -210,7 +210,7 @@ export function getColumns({
                   });
                 }}
               >
-                <Pencil className="h-4 w-4" />
+                <Pencil />
                 {t("edit")}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -236,7 +236,7 @@ export function getColumns({
                         error: (error) => {
                           return getErrorMessage(error);
                         },
-                      },
+                      }
                     );
                   }
                 }}

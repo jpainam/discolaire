@@ -17,9 +17,6 @@ import {
   PaginationContent,
   PaginationItem,
 } from "@repo/ui/components/pagination";
-import { ScrollArea } from "@repo/ui/components/scroll-area";
-import { Separator } from "@repo/ui/components/separator";
-import { Skeleton } from "@repo/ui/components/skeleton";
 import { EmptyState } from "~/components/EmptyState";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
@@ -28,7 +25,6 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
-import { generateStringColor } from "~/utils/colors";
 import { getFullName } from "~/utils/full-name";
 import { routes } from "../../configs/routes";
 import { AvatarState } from "../AvatarState";
@@ -59,15 +55,12 @@ export default function StudentContactList({
     day: "numeric",
     timeZone: "UTC",
   });
-  if (contactStudentsQuery.isPending || contactQuery.isPending) {
-    return <Skeleton className="h-full w-48" />;
-  }
 
   return (
-    <div className="">
+    <div className="overflow-y-auto px-4 text-sm gap-2 flex flex-col">
       {contactQuery.data && (
         <Button
-          variant={"outline"}
+          className="w-fit"
           onClick={() => {
             const contact = contactQuery.data;
             if (!contact) return;
@@ -78,7 +71,7 @@ export default function StudentContactList({
             });
           }}
         >
-          <ExternalLink className="mr-1 h-3 w-3" /> {t("link_students")}
+          <ExternalLink /> {t("link_students")}
         </Button>
       )}
 
@@ -88,19 +81,19 @@ export default function StudentContactList({
           description={`${contactQuery.data?.prefix} ${getFullName(contactQuery.data)}`}
         />
       )}
-      <ScrollArea className="h-[calc(100vh-15rem)]">
+      <div className="flex flex-col gap-2">
         {contactStudentsQuery.data?.map(
           (studentcontact: StudentContactOutput, index) => {
             const student = studentcontact.student;
             const contact = contactQuery.data;
-            const color = generateStringColor();
+            //const color = generateStringColor();
             return (
               <Card
                 key={index}
-                className="mt-1 border border-t-8 p-0"
-                style={{
-                  borderTopColor: color,
-                }}
+                className="gap-0 p-0 shadow-none"
+                // style={{
+                //   borderTopColor: color,
+                // }}
               >
                 <CardHeader className="flex w-full flex-row items-start gap-12 border-b bg-muted/50 p-2">
                   <div className="grid gap-0.5">
@@ -117,7 +110,7 @@ export default function StudentContactList({
                       size="sm"
                       onClick={() => {
                         router.push(
-                          routes.students.details(studentcontact.studentId),
+                          routes.students.details(studentcontact.studentId)
                         );
                       }}
                       variant="outline"
@@ -149,22 +142,20 @@ export default function StudentContactList({
                       </span>
                       <span className="truncate">{student.firstName}</span>
                     </li>
-                  </ul>
-                  <Separator className="my-2" />
-                  <dl className="grid gap-2 p-2">
-                    <div className="flex items-center justify-between">
-                      <dt className="text-muted-foreground">
+
+                    <li className="flex items-center justify-between">
+                      <span className="text-muted-foreground">
                         {t("classroom")}
-                      </dt>
-                      <dd>{student.classroom?.name ?? ""}</dd>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <dt className="text-muted-foreground">
+                      </span>
+                      <span>{student.classroom?.name ?? ""}</span>
+                    </li>
+                    <li className="flex items-center justify-between">
+                      <span className="text-muted-foreground">
                         {t("studentContactName")}
-                      </dt>
-                      <dd>{getFullName(contact)}</dd>
-                    </div>
-                  </dl>
+                      </span>
+                      <span>{getFullName(contact)}</span>
+                    </li>
+                  </ul>
                 </CardContent>
                 <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-2 py-1">
                   <Pagination className="ml-auto mr-0 w-auto p-0">
@@ -177,7 +168,7 @@ export default function StudentContactList({
                             }
                             const isConfirmed = await confirm({
                               title: t("delete"),
-                              confirmText: t("delete_confirmation"),
+                              description: t("delete_confirmation"),
                             });
 
                             if (isConfirmed) {
@@ -197,7 +188,7 @@ export default function StudentContactList({
                                   error: (error) => {
                                     return getErrorMessage(error);
                                   },
-                                },
+                                }
                               );
                             }
                           }}
@@ -214,9 +205,9 @@ export default function StudentContactList({
                 </CardFooter>
               </Card>
             );
-          },
+          }
         )}
-      </ScrollArea>
+      </div>
     </div>
   );
 }
