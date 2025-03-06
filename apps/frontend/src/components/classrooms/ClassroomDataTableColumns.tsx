@@ -307,11 +307,11 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
   const utils = api.useUtils();
   const canDeleteClassroom = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:details",
+    "classroom:details"
   );
   const canUpdateClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
-    "classroom:details",
+    "classroom:details"
   );
   const classroomMutation = api.classroom.delete.useMutation({
     onSettled: () => utils.classroom.invalidate(),
@@ -342,12 +342,8 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
             <DropdownMenuItem
               onSelect={() => {
                 openSheet({
-                  className: "w-[700px]",
-                  title: (
-                    <div className="p-2">
-                      {t("edit", { name: classroom.name })}
-                    </div>
-                  ),
+                  description: t("edit_classroom_description"),
+                  title: t("edit_a_classroom"),
                   view: <CreateEditClassroom classroom={classroom} />,
                 });
               }}

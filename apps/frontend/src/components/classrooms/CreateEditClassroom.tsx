@@ -1,13 +1,15 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ReloadIcon } from "@radix-ui/react-icons";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
+import { useSheet } from "~/hooks/use-sheet";
+import { useLocale } from "~/i18n";
+
 import {
   Form,
   FormField,
@@ -15,14 +17,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@repo/ui/components/form";
-import { Separator } from "@repo/ui/components/separator";
-import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
-
+import { SheetClose, SheetFooter } from "@repo/ui/components/sheet";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
-import { InputField } from "../shared/forms/input-field";
 import { SelectField } from "../shared/forms/SelectField";
+import { InputField } from "../shared/forms/input-field";
 import { StaffSelector } from "../shared/selects/StaffSelector";
 
 type ClassroomAllProcedureOutput = NonNullable<
@@ -118,99 +117,94 @@ export function CreateEditClassroom({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="h-[calc(100vh-10rem)] items-start overflow-y-auto">
-          <div className="grid gap-4 p-2 md:grid-cols-2">
-            <InputField label={t("class_name_report")} name="reportName" />
-            <InputField label={t("class_name")} name="name" />
-            <InputField type="number" label={t("max_size")} name="maxSize" />
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col flex-1 overflow-hidden"
+      >
+        <div className="grid overflow-y-auto flex-1 auto-rows-min gap-2 px-4">
+          <InputField label={t("class_name_report")} name="reportName" />
+          <InputField label={t("class_name")} name="name" />
+          <InputField type="number" label={t("max_size")} name="maxSize" />
 
-            <SelectField
-              label={t("level")}
-              placeholder={t("choose_class_level")}
-              name="levelId"
-              items={levels?.map((l) => ({
-                label: l.name,
-                value: l.id.toString(),
-              }))}
-            />
-            <SelectField
-              label={t("cycle")}
-              placeholder={t("choose_class_cycle")}
-              name="cycleId"
-              items={cycles?.map((l) => ({
-                label: l.name,
-                value: l.id.toString(),
-              }))}
-            />
-            <SelectField
-              label={t("section")}
-              placeholder={t("choose_class_section")}
-              name="sectionId"
-              items={sections?.map((l) => ({
-                label: l.name,
-                value: l.id.toString(),
-              }))}
-            />
+          <SelectField
+            label={t("level")}
+            placeholder={t("choose_class_level")}
+            name="levelId"
+            items={levels?.map((l) => ({
+              label: l.name,
+              value: l.id.toString(),
+            }))}
+          />
+          <SelectField
+            label={t("cycle")}
+            placeholder={t("choose_class_cycle")}
+            name="cycleId"
+            items={cycles?.map((l) => ({
+              label: l.name,
+              value: l.id.toString(),
+            }))}
+          />
+          <SelectField
+            label={t("section")}
+            placeholder={t("choose_class_section")}
+            name="sectionId"
+            items={sections?.map((l) => ({
+              label: l.name,
+              value: l.id.toString(),
+            }))}
+          />
 
-            <FormField
-              control={form.control}
-              name={"seniorAdvisorId"}
-              render={({ field }) => (
-                <FormItem className="space-y-0">
-                  <FormLabel>{t("senior_advisor")}</FormLabel>
-                  <StaffSelector
-                    placeholder={t("choose_senior_advisor")}
-                    onChange={field.onChange}
-                    defaultValue={field.value || ""}
-                  />
+          <FormField
+            control={form.control}
+            name={"seniorAdvisorId"}
+            render={({ field }) => (
+              <FormItem className="space-y-0">
+                <FormLabel>{t("senior_advisor")}</FormLabel>
+                <StaffSelector
+                  placeholder={t("choose_senior_advisor")}
+                  onChange={field.onChange}
+                  defaultValue={field.value || ""}
+                />
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name={"headTeacherId"}
-              render={({ field }) => (
-                <FormItem className="space-y-0">
-                  <FormLabel>{t("head_teacher")}</FormLabel>
-                  <StaffSelector
-                    placeholder={t("choose_head_teacher")}
-                    onChange={field.onChange}
-                    defaultValue={field.value || ""}
-                  />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name={"headTeacherId"}
+            render={({ field }) => (
+              <FormItem className="space-y-0">
+                <FormLabel>{t("head_teacher")}</FormLabel>
+                <StaffSelector
+                  placeholder={t("choose_head_teacher")}
+                  onChange={field.onChange}
+                  defaultValue={field.value || ""}
+                />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <SheetFooter>
+          <div className="flex flex-row gap-2 justify-end">
+            <Button
+              size={"sm"}
+              variant={"default"}
+              isLoading={form.formState.isSubmitting}
+              disabled={form.formState.isSubmitting}
+              type="submit"
+            >
+              {classroom ? t("edit") : t("submit")}
+            </Button>
+            <SheetClose asChild>
+              <Button variant="outline" size={"sm"}>
+                {t("cancel")}
+              </Button>
+            </SheetClose>
           </div>
-        </div>
-        <Separator />
-        <div className="flex flex-row justify-end gap-4 p-2">
-          <Button
-            size={"sm"}
-            type="button"
-            variant={"outline"}
-            onClick={() => {
-              closeSheet();
-            }}
-          >
-            {t("cancel")}
-          </Button>
-          <Button
-            size={"sm"}
-            variant={"default"}
-            disabled={form.formState.isSubmitting}
-            type="submit"
-          >
-            {form.formState.isSubmitting && (
-              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-            )}{" "}
-            {classroom ? t("edit") : t("submit")}
-          </Button>
-        </div>
+        </SheetFooter>
       </form>
     </Form>
   );

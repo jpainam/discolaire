@@ -17,8 +17,8 @@ export function ClassroomHeader() {
       size={"sm"}
       onClick={() => {
         openSheet({
-          title: <span className="px-4">{t("add")}</span>,
-          className: "w-[600px]",
+          title: t("create_a_classroom"),
+          description: t("create_classroom_description"),
           view: <CreateEditClassroom />,
         });
       }}

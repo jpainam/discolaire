@@ -48,14 +48,14 @@ export function ClassroomHeader() {
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const canUpdateClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const deleteClassroomMutation = api.classroom.delete.useMutation({
     onSuccess: () => {
@@ -116,12 +116,12 @@ export function ClassroomHeader() {
                   variant="outline"
                   onClick={() => {
                     const classroom = classroomsQuery.data?.find(
-                      (c) => c.id === params.id,
+                      (c) => c.id === params.id
                     );
                     if (!classroom) return;
                     openSheet({
-                      className: "w-[700px]",
-                      title: <div className="p-2">{t("edit")}</div>,
+                      title: t("edit_a_classroom"),
+                      description: t("edit_classroom_description"),
                       view: <CreateEditClassroom classroom={classroom} />,
                     });
                   }}

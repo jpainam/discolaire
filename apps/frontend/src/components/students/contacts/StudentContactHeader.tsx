@@ -15,8 +15,7 @@ import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 
-// TODO uncomment this
-//import CreateEditContact from "~/components/contacts/CreateEditContact";
+import CreateEditContact from "~/components/contacts/CreateEditContact";
 import { SimpleTooltip } from "~/components/simple-tooltip";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { PermissionAction } from "~/permissions";
@@ -31,7 +30,7 @@ export function StudentContactHeader() {
     "student:contact",
     {
       id: params.id,
-    },
+    }
   );
 
   const Icon = sidebarIcons.contacts;
@@ -76,12 +75,8 @@ export function StudentContactHeader() {
                   onSelect={() => {
                     openSheet({
                       className: "w-[600px]",
-                      title: <p className="px-4 py-2">{t("create")}</p>,
-                      // description: (
-                      //   <p className="px-4">{getFullName(contactQuery.data)}</p>
-                      // ),
-                      view: <div>create editcontact</div>,
-                      // view: <CreateEditContact />,
+                      title: t("create"),
+                      view: <CreateEditContact />,
                     });
                   }}
                 >

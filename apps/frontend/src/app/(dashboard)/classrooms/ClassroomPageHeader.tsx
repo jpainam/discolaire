@@ -27,7 +27,7 @@ export function ClassroomPageHeader() {
 
   const canCreateClassroom = useCheckPermissions(
     PermissionAction.CREATE,
-    "classroom:details",
+    "classroom:details"
   );
 
   return (
@@ -45,8 +45,8 @@ export function ClassroomPageHeader() {
             disabled={!canCreateClassroom}
             onClick={() => {
               openSheet({
-                className: "w-[700px]",
-                title: t("create"),
+                title: t("create_a_classroom"),
+                description: t("create_classroom_description"),
                 view: <CreateEditClassroom />,
               });
             }}
@@ -68,7 +68,7 @@ export function ClassroomPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.classroom_list}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -79,7 +79,7 @@ export function ClassroomPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.classroom_list}?format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

@@ -47,11 +47,11 @@ export default function ClassroomTable() {
   });
   const canDeleteClassroom = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom",
+    "classroom"
   );
   const canEditClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
-    "classroom",
+    "classroom"
   );
   const confirm = useConfirm();
   return (
@@ -107,8 +107,8 @@ export default function ClassroomTable() {
                         <DropdownMenuItem
                           onSelect={() => {
                             openSheet({
-                              title: <span className="px-4">{t("edit")}</span>,
-                              className: "w-[600px]",
+                              title: t("edit_a_classroom"),
+                              description: t("edit_classroom_description"),
                               view: (
                                 <CreateEditClassroom classroom={classroom} />
                               ),
