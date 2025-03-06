@@ -19,7 +19,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@repo/ui/components/sidebar";
-import { FolderOpen, HouseIcon, Users } from "lucide-react";
+import { FolderOpen, HouseIcon, LibraryBigIcon, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SidebarLogo } from "~/components/sidebar-logo";
@@ -54,6 +54,11 @@ export function MainSidebar({
       name: "staffs",
       url: `/staffs`,
       icon: FolderOpen,
+    },
+    {
+      name: "library",
+      url: `/library`,
+      icon: LibraryBigIcon,
     },
 
     {

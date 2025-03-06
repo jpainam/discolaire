@@ -1,0 +1,36 @@
+model Book {
+    id            Int            @id @default(autoincrement())
+    title         String
+    description   String?
+    year          Int?
+    author        String
+    isbn          String?
+    publishedAt   DateTime?
+    lastBorrowed  DateTime       @default(now())
+    tags          String[]
+    schoolId      String
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
+    categoryId    Int
+    available     Int            @default(0)
+    category      BookCategory   @relation(fields: [categoryId], references: [id])
+    borrowedBooks BorrowedBook[]
+}
+
+model BookCategory {
+    id         Int    @id @default(autoincrement())
+    bookId     Int
+    categoryId Int
+    books      Book[]
+}
+
+model BorrowedBook {
+    id        Int       @id @default(autoincrement())
+    bookId    Int
+    userId    Int
+    borrowed  DateTime  @default(now())
+    returned  DateTime?
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    book      Book      @relation(fields: [bookId], references: [id])
+}
