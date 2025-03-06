@@ -65,7 +65,7 @@ export function LibraryStatsGrid({ stats, className }: StatsGridProps) {
     <div
       className={cn(
         "grid grid-cols-2 min-[1200px]:grid-cols-4 border border-border rounded-xl bg-gradient-to-br from-sidebar/60 to-sidebar",
-        className
+        className,
       )}
     >
       {stats.map((stat) => (

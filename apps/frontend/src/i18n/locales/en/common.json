@@ -376,6 +376,7 @@
   "insights": "Insights",
   "materials": "Materials",
   "books_borrowed": "Books Borrowed",
+  "overdue_books": "Overdue Books",
   "material_categories": "Material Categories",
   "create_a_category": "Create a category",
   "edit_a_category": "Edit a category",

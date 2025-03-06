@@ -13,7 +13,7 @@ export async function LibraryDashboard() {
         stats={[
           {
             title: t("total_books"),
-            value: `${counts.books}`,
+            value: `${counts.book}`,
             change: {
               value: "+100%",
               trend: "up",

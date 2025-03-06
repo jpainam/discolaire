@@ -8,6 +8,7 @@
   "FAILED": "Echouée",
   "total_books": "Total des livres",
   "books_borrowed": "Livres empruntés",
+  "overdue_books": "Livres en retards",
   "create_a_classroom": "Créer une classe",
   "edit_a_classroom": "Modifier une classe",
   "materials": "Matériels",

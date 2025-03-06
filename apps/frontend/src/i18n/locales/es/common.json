@@ -406,6 +406,7 @@
   "discount": "Descuento",
   "total_books": "Total de libros",
   "books_borrowed": "Libros prestados",
+  "overdue_books": "Libros atrasados",
   "discounts": "Descuentos",
   "documents": "Documentos",
   "create_a_classroom": "Crear un aula",
