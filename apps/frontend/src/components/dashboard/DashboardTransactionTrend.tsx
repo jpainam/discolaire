@@ -146,7 +146,7 @@ export function DashboardTransactionTrend({
                   "?" +
                     createQueryString({
                       timeRange: val == "All" ? undefined : val,
-                    })
+                    }),
                 );
               }}
             >
