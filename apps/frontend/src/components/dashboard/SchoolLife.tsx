@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
+import { Input } from "@repo/ui/components/input";
 import {
   Table,
   TableBody,
@@ -11,19 +11,11 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 import { cn } from "@repo/ui/lib/utils";
-import {
-  addWeeks,
-  eachDayOfInterval,
-  endOfWeek,
-  format,
-  startOfWeek,
-} from "date-fns";
+import { eachDayOfInterval, endOfWeek, format, startOfWeek } from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
 import {
   AlertTriangleIcon,
   AmbulanceIcon,
-  ChevronLeft,
-  ChevronRight,
   ClockIcon,
   FileTextIcon,
   ThumbsUp,
@@ -32,6 +24,7 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 import { useLocale } from "~/i18n";
+import type { ChangeEvent } from "~/types/event_type";
 import EyeIcon from "../icons/eye";
 
 export function SchoolLife({ className }: { className?: string }) {
@@ -111,58 +104,55 @@ export function SchoolLife({ className }: { className?: string }) {
   ];
   const { t, i18n } = useLocale();
 
-  const [today, setToday] = useState(new Date());
-  const startOfWeekDate = startOfWeek(today, { weekStartsOn: 0 });
-  const endOfWeekDate = endOfWeek(today, { weekStartsOn: 0 });
-  const formatDate = Intl.DateTimeFormat(i18n.language, {
-    month: "short",
-    day: "numeric",
-  });
+  const handleWeekChange = (event: ChangeEvent) => {
+    const selectedWeek = event.target.value; // format: "YYYY-Wxx"
+    if (!selectedWeek) return;
+
+    // Convert to Date (Monday of the selected week)
+    const year = parseInt(selectedWeek.substring(0, 4), 10);
+    const week = parseInt(selectedWeek.substring(6), 10);
+
+    // Calculate the first day of the selected week (Sunday-based)
+    const firstDayOfYear = new Date(year, 0, 1);
+    const daysToAdd = (week - 1) * 7;
+    const selectedWeekStart = startOfWeek(
+      new Date(firstDayOfYear.setDate(firstDayOfYear.getDate() + daysToAdd)),
+      { weekStartsOn: 0 }
+    );
+
+    setSelectedDate(selectedWeekStart);
+  };
+
+  //const [today, setToday] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(() => new Date());
+  const startOfWeekDate = startOfWeek(selectedDate, { weekStartsOn: 0 });
+  const endOfWeekDate = endOfWeek(selectedDate, { weekStartsOn: 0 });
+
+  // const formatDate = Intl.DateTimeFormat(i18n.language, {
+  //   month: "short",
+  //   day: "numeric",
+  // });
   // const dayFormat = Intl.DateTimeFormat(i18n.language, {
   //   weekday: "short",
   //   day: "numeric",
   // });
 
+  // Generate weekdays
   const days = eachDayOfInterval({ start: startOfWeekDate, end: endOfWeekDate })
     .slice(1, 6) // Select Monday to Friday
     .map((date) =>
       format(date, "EEE d", {
-        locale: i18n.language == "fr" ? fr : i18n.language == "es" ? es : enUS,
-      }),
+        locale:
+          i18n.language === "fr" ? fr : i18n.language === "es" ? es : enUS,
+      })
     );
 
   return (
     <div className={cn("w-full rounded-lg border overflow-hidden", className)}>
-      <div className="p-4 flex items-center justify-between">
-        <h2 className="text-xl font-semibold">{t("school_life")}</h2>
+      <div className="p-3.5 flex items-center border-b justify-between">
+        <h2 className="text-xl font-semibold">{t("timetable")}</h2>
         <div className="flex items-center gap-2">
-          <Button
-            onClick={() => {
-              setToday(addWeeks(today, -1));
-            }}
-            className="h-8 w-8 rounded-full"
-            variant={"outline"}
-            size={"icon"}
-          >
-            <span className="sr-only">Previous week</span>
-            <ChevronLeft className="h-6 w-6" />
-          </Button>
-
-          <div className="px-4 w-[200px] text-center py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium">
-            {formatDate.format(startOfWeekDate)} -{" "}
-            {formatDate.format(endOfWeekDate)}
-          </div>
-          <Button
-            onClick={() => {
-              setToday(addWeeks(today, 1));
-            }}
-            className="h-8 w-8 rounded-full"
-            variant={"outline"}
-            size={"icon"}
-          >
-            <span className="sr-only">Next week</span>
-            <ChevronRight className="h-6 w-6" />
-          </Button>
+          <Input type="week" onChange={handleWeekChange} />
         </div>
       </div>
 
