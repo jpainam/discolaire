@@ -17,13 +17,14 @@ import {
 import { getServerTranslations } from "~/i18n/server";
 import { api } from "~/trpc/server";
 import { BookTab } from "./BookTab";
+import { LibraryDashboard } from "./LibraryDashboard";
 import { LibrarySetting } from "./LibrarySetting";
 
 export default async function Page() {
   const { t } = await getServerTranslations();
   const books = await api.book.all();
   return (
-    <Tabs defaultValue="tab-2">
+    <Tabs defaultValue="tab-1">
       <ScrollArea>
         <TabsList className="text-foreground justify-start w-full mb-3 h-auto gap-2 rounded-none border-b bg-transparent px-0 py-1">
           <TabsTrigger
@@ -103,9 +104,7 @@ export default async function Page() {
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
       <TabsContent value="tab-1">
-        <p className="text-muted-foreground pt-1 text-center text-xs">
-          Encours d'implementation
-        </p>
+        <LibraryDashboard />
       </TabsContent>
       <TabsContent value="tab-2">
         <BookTab />

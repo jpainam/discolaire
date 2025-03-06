@@ -32,6 +32,7 @@ import { invitationRouter } from "./routers/invitation";
 import { journalRouter } from "./routers/journal";
 import { latenessRouter } from "./routers/lateness";
 import { lessonRouter } from "./routers/lesson";
+import { libraryRouter } from "./routers/library";
 import { menuRouter } from "./routers/menu";
 import { messagingRouter } from "./routers/messaging";
 import { passwordResetRouter } from "./routers/passwordReset";
@@ -73,6 +74,7 @@ export const appRouter = createTRPCRouter({
   timetable: timetableRouter,
   scheduleJob: scheduleJobRouter,
   directory: directoryRouter,
+  library: libraryRouter,
   subjectGroup: subjectGroupRouter,
   fee: feeRouter,
   book: bookRouter,
