@@ -5,6 +5,8 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 const createUpdateBook = z.object({
   title: z.string(),
   description: z.string().optional(),
+  isbn: z.string().optional(),
+  available: z.coerce.number(),
   categoryId: z.string().min(1),
   author: z.string().optional().default(""),
 });
@@ -96,6 +98,8 @@ export const bookRouter = createTRPCRouter({
           author: input.author,
           categoryId: input.categoryId,
           title: input.title,
+          isbn: input.isbn,
+          available: input.available,
           description: input.description,
           schoolId: ctx.schoolId,
         },
