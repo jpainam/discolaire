@@ -302,7 +302,6 @@ export const userRouter = createTRPCRouter({
           lastAttempt: new Date(),
         },
       });
-
       const exists = await userService.validateUsername(input.username);
       if (exists.error) {
         throw new TRPCError({
