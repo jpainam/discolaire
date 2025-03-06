@@ -1,6 +1,6 @@
 "use client";
 
-import { Forward, MoreVertical, Pencil, Reply, Trash2 } from "lucide-react";
+import { MoreVertical, Pencil, Plus, Trash2 } from "lucide-react";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
@@ -13,7 +13,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { Separator } from "@repo/ui/components/separator";
 import {
   Tooltip,
   TooltipContent,
@@ -25,6 +24,8 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { Label } from "@repo/ui/components/label";
+import { endpointReports } from "~/configs/endpoints";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
@@ -48,14 +49,14 @@ export function ClassroomHeader() {
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const canUpdateClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const deleteClassroomMutation = api.classroom.delete.useMutation({
     onSuccess: () => {
@@ -96,9 +97,14 @@ export function ClassroomHeader() {
       router.push(routes.classrooms.details(value));
     }
   };
+  const canCreateClassroom = useCheckPermissions(
+    PermissionAction.CREATE,
+    "classroom:details"
+  );
   const { openSheet } = useSheet();
   return (
     <div className="grid w-full flex-row border-b items-center gap-2 px-4 py-1 md:flex">
+      <Label className="hidden md:block">{t("classrooms")}</Label>
       <ClassroomSelector
         className="w-full md:w-[400px]"
         defaultValue={params.id}
@@ -107,97 +113,79 @@ export function ClassroomHeader() {
         }}
       />
       <div className="flex items-center gap-2 md:ml-auto">
-        {params.id && canUpdateClassroom && (
-          <>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  //disabled={!prevClassroom}
-                  variant="outline"
-                  onClick={() => {
-                    const classroom = classroomsQuery.data?.find(
-                      (c) => c.id === params.id,
-                    );
-                    if (!classroom) return;
-                    openSheet({
-                      title: t("edit_a_classroom"),
-                      description: t("edit_classroom_description"),
-                      view: <CreateEditClassroom classroom={classroom} />,
-                    });
-                  }}
-                  size="icon"
-                >
-                  <Pencil />
-                  <span className="sr-only">{t("create")}</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>{t("prev")}</TooltipContent>
-            </Tooltip>
-            <Separator orientation="vertical" className="h-6" />
-          </>
+        {canCreateClassroom && (
+          <Button
+            size={"sm"}
+            disabled={!canCreateClassroom}
+            onClick={() => {
+              openSheet({
+                title: t("create_a_classroom"),
+                description: t("create_classroom_description"),
+                view: <CreateEditClassroom />,
+              });
+            }}
+          >
+            <Plus aria-hidden="true" />
+            {t("add")}
+          </Button>
         )}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              //disabled={!prevClassroom}
-              variant="outline"
-              onClick={() => {
-                // prevClassroom &&
-                //   router.push(
-                //     pathname.replace(params.id as string, prevClassroom.id)
-                //   );
-              }}
-              size="icon"
-            >
-              <Reply className="h-4 w-4" />
-              <span className="sr-only">{t("prev")}</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>{t("prev")}</TooltipContent>
-        </Tooltip>
-
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              //disabled={!nextClassroom}
-              onClick={() => {
-                // nextClassroom &&
-                //   router.push(
-                //     pathname.replace(params.id as string, nextClassroom.id)
-                //   );
-              }}
-              variant="outline"
-              size="icon"
-            >
-              <Forward className="h-4 w-4" />
-              <span className="sr-only">{t("next")}</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>{t("next")}</TooltipContent>
-        </Tooltip>
-
-        <Separator orientation="vertical" className="h-6" />
+        {params.id && canUpdateClassroom && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  const classroom = classroomsQuery.data?.find(
+                    (c) => c.id === params.id
+                  );
+                  if (!classroom) return;
+                  openSheet({
+                    title: t("edit_a_classroom"),
+                    description: t("edit_classroom_description"),
+                    view: <CreateEditClassroom classroom={classroom} />,
+                  });
+                }}
+                size="icon"
+              >
+                <Pencil />
+                <span className="sr-only">{t("edit")}</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{t("prev")}</TooltipContent>
+          </Tooltip>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size="icon" variant="outline">
-              <MoreVertical className="h-4 w-4" />
-              <span className="sr-only">More</span>
+            <Button variant={"outline"} size={"icon"}>
+              <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownHelp />
             <DropdownMenuSeparator />
-
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                window.open(
+                  `${endpointReports.classroom_list}?format=pdf`,
+                  "_blank"
+                );
+              }}
+            >
               <PDFIcon />
-              <span>{t("pdf_export")}</span>
+              {t("pdf_export")}
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                window.open(
+                  `${endpointReports.classroom_list}?format=csv`,
+                  "_blank"
+                );
+              }}
+            >
               <XMLIcon />
-              <span>{t("xml_export")}</span>
+              {t("xml_export")}
             </DropdownMenuItem>
-
-            {canDeleteClassroom && (
+            {canDeleteClassroom && params.id && (
               <>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem

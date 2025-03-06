@@ -62,7 +62,7 @@ export function ClassroomDataTable() {
     return <DataTableSkeleton className="px-4" rowCount={10} columnCount={6} />;
   }
   return (
-    <div className="min-h-[100vh] flex-1 md:min-h-min px-4">
+    <div className="px-4 pt-2">
       <DataTable
         table={table}
         //floatingBar={}
