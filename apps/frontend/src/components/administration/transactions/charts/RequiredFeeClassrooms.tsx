@@ -3,8 +3,8 @@
 
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/components/chart";
 import { Card, CardContent } from "@repo/ui/components/card";
+import type { ChartConfig } from "@repo/ui/components/chart";
 import {
   ChartContainer,
   ChartLegend,
@@ -27,15 +27,15 @@ const chartData = [
 const chartConfig = {
   desktop: {
     label: "Desktop",
-    color: "hsl(var(--chart-1))",
+    color: "var(--chart-1)",
   },
   mobile: {
     label: "Mobile",
-    color: "hsl(var(--chart-2))",
+    color: "var(--chart-2)",
   },
   remaining: {
     label: "Remaining",
-    color: "hsl(var(--chart-3))",
+    color: "var(--chart-3)",
   },
 } satisfies ChartConfig;
 

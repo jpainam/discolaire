@@ -30,7 +30,7 @@ import { api } from "~/trpc/react";
 const chartConfig = {
   effectif: {
     label: "Effectif",
-    color: "hsl(var(--chart-2))",
+    color: "var(--chart-2)",
   },
   label: {
     color: "hsl(var(--background))",

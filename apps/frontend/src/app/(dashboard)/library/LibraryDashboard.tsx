@@ -2,14 +2,14 @@ import { BookMarked, BookOpen, Clock, UsersIcon } from "lucide-react";
 import { getServerTranslations } from "~/i18n/server";
 import { api } from "~/trpc/server";
 import { LibraryStatsGrid } from "./LibraryStatsGrid";
-
+import { MonthlyActivities } from "./MonthlyActivities";
+import { RecentBorrows } from "./RecentBorrows";
 export async function LibraryDashboard() {
   const counts = await api.library.count();
   const { t } = await getServerTranslations();
   return (
-    <div className="flex-1 space-y-4 p-8 pt-6">
+    <div className="flex-1  px-4">
       <LibraryStatsGrid
-        className="mx-4 mt-2"
         stats={[
           {
             title: t("total_books"),
@@ -49,6 +49,10 @@ export async function LibraryDashboard() {
           },
         ]}
       />
+      <div className="grid gap-4 md:grid-cols-2 mt-2 lg:grid-cols-7">
+        <MonthlyActivities className="col-span-4" />
+        <RecentBorrows className="col-span-3" />
+      </div>
     </div>
   );
 }

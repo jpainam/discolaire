@@ -17,11 +17,11 @@ export async function RepeatingPie({ students }: { students: Student[] }) {
   const chartConfig = {
     repeating: {
       label: t("repeating"),
-      color: "hsl(var(--chart-1))",
+      color: "var(--chart-1)",
     },
     nonrepeating: {
       label: t("nonrepeating"),
-      color: "hsl(var(--chart-3))",
+      color: "var(--chart-3)",
     },
   } satisfies ChartConfig;
   const repeating = students.filter((student) => student.isRepeating).length;

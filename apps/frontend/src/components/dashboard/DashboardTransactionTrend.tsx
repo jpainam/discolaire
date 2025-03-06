@@ -49,7 +49,7 @@ export function DashboardTransactionTrend({
       },
       amount: {
         label: t("amount"),
-        color: "hsl(var(--chart-2))",
+        color: "var(--chart-2)",
       },
     } satisfies ChartConfig;
   }, [t]);
@@ -146,7 +146,7 @@ export function DashboardTransactionTrend({
                   "?" +
                     createQueryString({
                       timeRange: val == "All" ? undefined : val,
-                    }),
+                    })
                 );
               }}
             >

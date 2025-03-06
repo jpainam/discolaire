@@ -26,7 +26,7 @@ export function FeeTrend() {
     },
     amount: {
       label: t("amount"),
-      color: "hsl(var(--chart-2))",
+      color: "var(--chart-2)",
     },
   } satisfies ChartConfig;
   if (feesTrendQuery.isPending) {

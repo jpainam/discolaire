@@ -34,15 +34,15 @@ export function TransactionClassrooms() {
     return {
       revenue: {
         label: t("expected_amount"),
-        color: "hsl(var(--chart-2))",
+        color: "var(--chart-2)",
       },
       paid: {
         label: t("received_amount"),
-        color: "hsl(var(--chart-1))",
+        color: "var(--chart-1)",
       },
       remaining: {
         label: t("difference"),
-        color: "hsl(var(--chart-4))",
+        color: "var(--chart-4)",
       },
     } satisfies ChartConfig;
   }, [t]);

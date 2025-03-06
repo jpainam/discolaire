@@ -39,11 +39,11 @@ export function MaleVsFemaleCount({
           config={{
             boys: {
               label: t("boys"),
-              color: "hsl(var(--chart-1))",
+              color: "var(--chart-1)",
             },
             girls: {
               label: t("girls"),
-              color: "hsl(var(--chart-2))",
+              color: "var(--chart-2)",
             },
           }}
           className="h-[140px] w-full"

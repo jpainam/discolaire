@@ -3,7 +3,6 @@
 import { TrendingUp } from "lucide-react";
 import { LabelList, RadialBar, RadialBarChart } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/components/chart";
 import {
   Card,
   CardContent,
@@ -12,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
+import type { ChartConfig } from "@repo/ui/components/chart";
 import {
   ChartContainer,
   ChartTooltip,
@@ -32,23 +32,23 @@ const chartConfig = {
   },
   chrome: {
     label: "0 enfant",
-    color: "hsl(var(--chart-1))",
+    color: "var(--chart-1)",
   },
   safari: {
     label: "+1 enfant",
-    color: "hsl(var(--chart-2))",
+    color: "var(--chart-2)",
   },
   firefox: {
     label: "+2 enfants",
-    color: "hsl(var(--chart-3))",
+    color: "var(--chart-3)",
   },
   edge: {
     label: "+3 enfants",
-    color: "hsl(var(--chart-4))",
+    color: "var(--chart-4)",
   },
   other: {
     label: "+4 enfants",
-    color: "hsl(var(--chart-5))",
+    color: "var(--chart-5)",
   },
 } satisfies ChartConfig;
 

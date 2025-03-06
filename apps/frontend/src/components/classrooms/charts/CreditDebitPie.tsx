@@ -22,11 +22,11 @@ export async function CreditDebitPie() {
     },
     credit: {
       label: "Credit",
-      color: "hsl(var(--chart-1))",
+      color: "var(--chart-1)",
     },
     debit: {
       label: "Debit",
-      color: "hsl(var(--chart-2))",
+      color: "var(--chart-2)",
     },
   } satisfies ChartConfig;
 

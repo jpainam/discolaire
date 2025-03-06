@@ -20,7 +20,7 @@ export function FeeBar() {
   const chartConfig = {
     count: {
       label: t("fees"),
-      color: "hsl(var(--chart-1))",
+      color: "var(--chart-1)",
     },
     label: {
       color: "hsl(var(--background))",

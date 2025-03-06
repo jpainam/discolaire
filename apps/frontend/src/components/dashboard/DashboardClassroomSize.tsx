@@ -33,15 +33,15 @@ export function DashboardClassroomSize({ className }: { className?: string }) {
     return {
       maxSize: {
         label: t("max_size"),
-        color: "hsl(var(--chart-5))",
+        color: "var(--chart-5)",
       },
       size: {
         label: t("effective"),
-        color: "hsl(var(--chart-3))",
+        color: "var(--chart-3)",
       },
       difference: {
         label: t("difference"),
-        color: "hsl(var(--chart-4))",
+        color: "var(--chart-4)",
       },
     } satisfies ChartConfig;
   }, [t]);
