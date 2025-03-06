@@ -62,7 +62,7 @@ export function CreateEditBook({
 
   const updateMutation = api.book.update.useMutation({
     onSettled: async () => {
-      await utils.classroom.invalidate();
+      await utils.book.invalidate();
     },
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
@@ -92,7 +92,7 @@ export function CreateEditBook({
     };
     if (book?.id) {
       toast.loading(t("updating"), { id: 0 });
-      updateMutation.mutate({ id: book.id, ...values });
+      void updateMutation.mutate({ id: book.id, ...values });
     } else {
       toast.loading(t("creating"), { id: 0 });
       createMutation.mutate(values);
@@ -194,7 +194,7 @@ export function CreateEditBook({
               <FormItem>
                 <FormLabel>{t("available")}</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input type="number" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

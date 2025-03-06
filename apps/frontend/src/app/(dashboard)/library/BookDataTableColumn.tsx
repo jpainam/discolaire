@@ -69,7 +69,7 @@ export function getBookColumns({
       ),
       cell: ({ row }) => {
         const book = row.original;
-        return <span className="text-muted-foreground">{book.title}</span>;
+        return <span className="text-muted-foreground">{book.author}</span>;
       },
     },
     {
@@ -99,20 +99,27 @@ export function getBookColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("availability")} />
       ),
+      size: 60,
       cell: ({ row }) => {
         const book = row.original;
         return (
-          <>
+          <div className="text-center">
             {book.available > 0 ? (
-              <Badge className="bg-green-100 text-green-800">
+              <Badge
+                variant={"outline"}
+                className="bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100"
+              >
                 {t("available")}
               </Badge>
             ) : (
-              <Badge className="bg-yellow-50 text-yellow-800">
+              <Badge
+                variant={"outline"}
+                className="bg-yellow-50 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100"
+              >
                 {t("unavailable")}
               </Badge>
             )}
-          </>
+          </div>
         );
       },
     },
@@ -123,8 +130,13 @@ export function getBookColumns({
       ),
       cell: ({ row }) => {
         const book = row.original;
-        return <span className="text-muted-foreground">{book.available}</span>;
+        return (
+          <div className="text-muted-foreground text-center">
+            {book.available}
+          </div>
+        );
       },
+      size: 38,
     },
 
     {
@@ -133,7 +145,7 @@ export function getBookColumns({
       cell: function Cell({ row }) {
         return <ActionCells book={row.original} />;
       },
-      size: 60,
+      size: 48,
       enableSorting: false,
       enableHiding: false,
     },

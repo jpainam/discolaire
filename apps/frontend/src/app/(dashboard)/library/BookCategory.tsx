@@ -36,7 +36,7 @@ export function BookCategory() {
   const utils = api.useUtils();
   const deleteCategory = api.book.deleteCategory.useMutation({
     onSettled: () => {
-      utils.book.categories.invalidate();
+      void utils.book.categories.invalidate();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -56,7 +56,8 @@ export function BookCategory() {
             <Button
               onClick={() => {
                 openModal({
-                  title: t("add_category"),
+                  className: "w-96",
+                  title: t("create_a_category"),
                   view: <CreateEditCategory />,
                 });
               }}
@@ -74,7 +75,7 @@ export function BookCategory() {
             <TableHeader>
               <TableRow className="hover:bg-transparent">
                 <TableHead>{t("name")}</TableHead>
-                <TableHead className="text-right"></TableHead>
+                <TableHead className="text-right w-[50px]"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -91,13 +92,30 @@ export function BookCategory() {
                     <TableCell>{category.name}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex flex-row gap-2 items-center">
-                        <Button variant={"outline"} size={"icon"}>
+                        <Button
+                          onClick={() => {
+                            openModal({
+                              className: "w-96",
+                              title: t("edit_a_category"),
+                              view: (
+                                <CreateEditCategory
+                                  category={{
+                                    name: category.name,
+                                    id: category.id,
+                                  }}
+                                />
+                              ),
+                            });
+                          }}
+                          variant={"outline"}
+                          size={"icon"}
+                        >
                           <Pencil />
                         </Button>
                         <Button
                           onClick={() => {
                             toast.loading(t("deleting"), { id: 0 });
-                            deleteCategory.mutate(category.id);
+                            void deleteCategory.mutate(category.id);
                           }}
                           variant={"destructive"}
                           size={"icon"}
@@ -134,7 +152,7 @@ function CreateEditCategory({
   const utils = api.useUtils();
   const createCategory = api.book.createCategory.useMutation({
     onSettled: () => {
-      utils.book.categories.invalidate();
+      void utils.book.categories.invalidate();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -146,7 +164,7 @@ function CreateEditCategory({
   });
   const updateCategory = api.book.updateCategory.useMutation({
     onSettled: () => {
-      utils.book.categories.invalidate();
+      void utils.book.categories.invalidate();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -183,8 +201,8 @@ function CreateEditCategory({
             </FormItem>
           )}
         />
-        <div className="flex flex-row justify-end items-center gap-2">
-          <Button size={"sm"}>{t("save")}</Button>
+        <div className="flex flex-row mt-2 justify-end items-center gap-2">
+          <Button size={"sm"}>{t("submit")}</Button>
           <Button
             type="button"
             onClick={() => {

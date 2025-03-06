@@ -12,8 +12,6 @@ import {
 } from "@repo/ui/components/dialog";
 import { useModal } from "~/hooks/use-modal";
 
-import { cn } from "~/lib/utils";
-
 export default function GlobalModal() {
   const { isOpen, view, closeModal, title, description, className } =
     useModal();
@@ -31,7 +29,7 @@ export default function GlobalModal() {
         }
       }}
     >
-      <DialogContent className={cn("sm:max-w-none", className)}>
+      <DialogContent className={className}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
