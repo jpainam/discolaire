@@ -254,17 +254,13 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            aria-label="Open menu"
-            variant={"ghost"}
-            className="flex size-8 p-0 data-[state=open]:bg-muted"
-          >
-            <DotsHorizontalIcon aria-hidden="true" className="h-4 w-4" />
+          <Button aria-label="Open menu" variant={"ghost"}>
+            <DotsHorizontalIcon />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem>
-            <ReceiptText className="mr-2 size-4" />
+            <ReceiptText />
             <span className="text-sm">{t("details")}</span>
           </DropdownMenuItem>
           <DropdownInvitation email={staff.email} />
@@ -275,11 +271,10 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
                 view: <CreateEditStaff staff={staff} />,
                 title: t("edit_staff"),
                 description: `${getFullName(staff)}`,
-                className: "w-[750px]",
               });
             }}
           >
-            <Pencil className="mr-2 size-4" /> {t("edit")}
+            <Pencil /> {t("edit")}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem

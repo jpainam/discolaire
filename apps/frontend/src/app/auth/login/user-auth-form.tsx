@@ -35,6 +35,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCorrect="off"
               required
               id="username"
+              autoComplete="username"
               autoCapitalize="none"
               name="username"
             />
@@ -47,7 +48,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCorrect="off"
               autoCapitalize="none"
               required
-              current-password="true"
+              autoComplete="current-password"
               type="password"
               id="password"
               name="password"

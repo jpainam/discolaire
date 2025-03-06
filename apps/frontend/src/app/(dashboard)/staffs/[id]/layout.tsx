@@ -3,13 +3,13 @@ import React from "react";
 
 import { checkPermissions } from "@repo/api/permission";
 import { auth } from "@repo/auth";
-import { PermissionAction } from "~/permissions";
 import { NoPermission } from "~/components/no-permission";
 import { getServerTranslations } from "~/i18n/server";
+import { PermissionAction } from "~/permissions";
 
 import { StaffProfile } from "~/components/staffs/profile/StaffProfile";
 import { StaffTabMenu } from "~/components/staffs/profile/StaffTabMenu";
-import { StaffDetailHeader } from "~/components/staffs/StaffDetailHeader";
+import { StaffHeader } from "~/components/staffs/StaffHeader";
 import { routes } from "~/configs/routes";
 import { api } from "~/trpc/server";
 
@@ -37,7 +37,7 @@ export default async function Layout(props: {
     "staff:profile",
     {
       id: id,
-    },
+    }
   );
   if (!staffIsCurrentUser && !canReadStaff) {
     return <NoPermission className="my-8" isFullPage resourceText="" />;
@@ -74,26 +74,27 @@ export default async function Layout(props: {
     },
   ];
   return (
-    <div className="my-1 flex flex-row gap-6">
-      <div className="flex flex-col gap-2">
-        <StaffDetailHeader />
+    <div className="flex flex-col gap-2">
+      <StaffHeader />
+      <div className="flex flex-row gap-2 px-4">
         <StaffProfile staffId={id} />
-      </div>
-      <div className="w-full md:grid-cols-2 xl:grid-cols-3">
-        <div className="flex max-w-fit items-center rounded-full bg-muted text-muted-foreground">
-          {userLinks.map((link: UserLink, _index) => {
-            return (
-              <StaffTabMenu
-                key={link.href}
-                href={link.href}
-                icon={link.icon}
-                title={link.name}
-              />
-            );
-          })}
-        </div>
 
-        <div className="flex-1">{children}</div>
+        <div className="w-full md:grid-cols-2 xl:grid-cols-3">
+          <div className="flex max-w-fit items-center rounded-full bg-muted text-muted-foreground">
+            {userLinks.map((link: UserLink, _index) => {
+              return (
+                <StaffTabMenu
+                  key={link.href}
+                  href={link.href}
+                  icon={link.icon}
+                  title={link.name}
+                />
+              );
+            })}
+          </div>
+
+          <div className="flex-1">{children}</div>
+        </div>
       </div>
     </div>
   );

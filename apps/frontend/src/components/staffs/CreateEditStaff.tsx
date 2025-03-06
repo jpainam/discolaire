@@ -20,9 +20,10 @@ import { Textarea } from "@repo/ui/components/textarea";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 
+import { SheetClose, SheetFooter } from "@repo/ui/components/sheet";
 import { api } from "~/trpc/react";
+import { DatePicker } from "../DatePicker";
 import { CountryPicker } from "../shared/CountryPicker";
-import { DatePickerField } from "../shared/forms/date-picker-field";
 import { InputField } from "../shared/forms/input-field";
 import { SelectField } from "../shared/forms/SelectField";
 import { StaffLevelSelector } from "../shared/selects/StaffLevelSelector";
@@ -58,11 +59,7 @@ interface CreateEditStaffProps {
 
 export function CreateEditStaff({ staff }: CreateEditStaffProps) {
   const { closeSheet } = useSheet();
-  const classNames = {
-    // inputClassName: "h-8",
-    labelClassName: "w-[150px] truncate",
-    className: "flex flex-row items-center px-2",
-  };
+
   const form = useForm({
     schema: staffCreateEditSchema,
     defaultValues: {
@@ -186,19 +183,23 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
 
   return (
     <Form {...form}>
-      <form className="h-full" onSubmit={form.handleSubmit(onSubmit)}>
-        <div
-          className={
-            "grid max-h-[85vh] grid-cols-2 gap-x-8 gap-y-2 overflow-y-auto p-2"
-          }
-        >
-          <SelectField label={t("civility")} name="prefix" items={prefixes} />
-          <InputField name="lastName" label={t("lastName")} />
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col flex-1 overflow-hidden"
+      >
+        <div className="grid overflow-y-auto flex-1 auto-rows-min gap-2 px-4">
+          <div className="grid grid-cols-[20%_80%] gap-2">
+            <SelectField label={t("civility")} name="prefix" items={prefixes} />
+            <InputField name="lastName" label={t("lastName")} />
+          </div>
+
           <InputField name="firstName" label={t("firstName")} />
           <InputField name="email" label={t("email")} />
+          <div className="grid grid-cols-2 gap-2">
+            <InputField name="phoneNumber1" label={`${t("phone")} 1`} />
+            <InputField name="phoneNumber2" label={`${t("phone")} 2`} />
+          </div>
 
-          <InputField name="phoneNumber1" label={`${t("phone")} 1`} />
-          <InputField name="phoneNumber2" label={`${t("phone")} 2`} />
           <InputField name="jobTitle" label={t("jobTitle")} />
           <FormField
             control={form.control}
@@ -217,56 +218,94 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
               </FormItem>
             )}
           />
-          <SelectField
-            name="gender"
-            label={t("gender")}
-            placeholder={t("gender")}
-            items={genders}
-          />
-
-          <InputField
-            name="address"
-            {...classNames}
-            className="px-2"
-            label={t("address")}
-          />
-          <div className="col-span-full grid w-full grid-cols-2 gap-2 gap-x-8">
+          <div className="grid grid-cols-2 gap-2">
+            <SelectField
+              name="gender"
+              label={t("gender")}
+              placeholder={t("gender")}
+              items={genders}
+            />
             <SelectField
               label={t("employmentType")}
               items={employmentTypeItems}
               name="employmentType"
             />
+          </div>
+
+          <InputField name="address" label={t("address")} />
+
+          <FormField
+            control={form.control}
+            name={"degreeId"}
+            render={({ field }) => (
+              <FormItem className="space-y-0">
+                <FormLabel>{t("degree")}</FormLabel>
+                <FormControl>
+                  <StaffLevelSelector
+                    className="w-full"
+                    onChange={(val) => {
+                      field.onChange(val);
+                    }}
+                    defaultValue={staff?.degreeId?.toString() ?? undefined}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="grid grid-cols-2 gap-2">
             <FormField
               control={form.control}
-              name={"degreeId"}
+              name="dateOfBirth"
               render={({ field }) => (
-                <FormItem className="space-y-0">
-                  <FormLabel>{t("degree")}</FormLabel>
+                <FormItem>
+                  <FormLabel>{t("dateOfBirth")}</FormLabel>
                   <FormControl>
-                    <StaffLevelSelector
-                      className="w-full"
-                      onChange={(val) => {
-                        field.onChange(val);
-                      }}
-                      defaultValue={staff?.degreeId?.toString() ?? undefined}
-                    />
+                    <DatePicker {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-            <DatePickerField name={"dateOfBirth"} label={t("dateOfBirth")} />
-            <DatePickerField name={"dateOfHire"} label={t("dateOfHire")} />
-            <DatePickerField
-              name={"dateOfLastAdvancement"}
-              label={t("dateOfLastAdvancement")}
+            <FormField
+              control={form.control}
+              name="dateOfHire"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("dateOfHire")}</FormLabel>
+                  <FormControl>
+                    <DatePicker {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <DatePickerField
-              name={"dateOfCriminalRecordCheck"}
-              label={t("lastCriminalRecordCheck")}
+            <FormField
+              control={form.control}
+              name="dateOfLastAdvancement"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("dateOfLastAdvancement")}</FormLabel>
+                  <FormControl>
+                    <DatePicker {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-
+            <FormField
+              control={form.control}
+              name="dateOfCriminalRecordCheck"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("lastCriminalRecordCheck")}</FormLabel>
+                  <FormControl>
+                    <DatePicker {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <SelectField
               label={t("sendAgenda")}
               items={sendAgendaFrequency}
@@ -277,52 +316,47 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
               items={isTeacherItems}
               name="isTeacher"
             />
-
-            <div className="col-span-full mx-2 flex flex-col gap-2">
-              <FormField
-                control={form.control}
-                name={"observation"}
-                render={({ field }) => (
-                  <FormItem className="space-y-0">
-                    <FormLabel>{t("observations")}</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        onChange={(event) => {
-                          field.onChange(event.target.value);
-                        }}
-                        className="h-24 rounded-md border p-2"
-                      />
-                    </FormControl>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
           </div>
+
+          <FormField
+            control={form.control}
+            name={"observation"}
+            render={({ field }) => (
+              <FormItem className="space-y-0">
+                <FormLabel>{t("observations")}</FormLabel>
+                <FormControl>
+                  <Textarea
+                    onChange={(event) => {
+                      field.onChange(event.target.value);
+                    }}
+                    className="h-24 rounded-md border p-2"
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
 
-        <div className="m-4 flex items-center justify-end gap-4">
-          <Button
-            size={"sm"}
-            type="button"
-            variant={"outline"}
-            onClick={() => {
-              closeSheet();
-            }}
-          >
-            {t("cancel")}
-          </Button>
-          <Button
-            isLoading={
-              updateStaffMutation.isPending || createStaffMutation.isPending
-            }
-            size={"sm"}
-            type="submit"
-          >
-            {t("submit")}
-          </Button>
-        </div>
+        <SheetFooter>
+          <div className="flex flex-row gap-2 justify-end">
+            <Button
+              isLoading={
+                updateStaffMutation.isPending || createStaffMutation.isPending
+              }
+              size={"sm"}
+              type="submit"
+            >
+              {t("submit")}
+            </Button>
+            <SheetClose asChild>
+              <Button type="button" variant="outline" size={"sm"}>
+                {t("cancel")}
+              </Button>
+            </SheetClose>
+          </div>
+        </SheetFooter>
       </form>
     </Form>
   );

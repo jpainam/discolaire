@@ -53,14 +53,14 @@ export function StaffProfileHeader({
     "staff:profile",
     {
       id: params.id,
-    },
+    }
   );
   const canEditStaff = useCheckPermissions(
     PermissionAction.UPDATE,
     "staff:profile",
     {
       id: params.id,
-    },
+    }
   );
   const deleteStaffMutation = api.staff.delete.useMutation({
     onSettled: async () => {
@@ -85,7 +85,7 @@ export function StaffProfileHeader({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant={"outline"} size={"icon"}>
-              <MoreHorizontal className="h-4 w-4" />
+              <MoreHorizontal />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -97,7 +97,6 @@ export function StaffProfileHeader({
                       view: <CreateEditStaff staff={staff} />,
                       title: t("edit_staff"),
                       description: `${getFullName(staff)}`,
-                      className: "w-[750px]",
                     });
                   }}
                 >
@@ -111,13 +110,12 @@ export function StaffProfileHeader({
               <DropdownMenuItem
                 onSelect={() => {
                   openModal({
-                    className: "w-[500px]",
                     title: t("attach_user"),
                     view: <CreateEditUser entityId={params.id} type="staff" />,
                   });
                 }}
               >
-                <UserPlus2 className="mr-2 h-4 w-4" />
+                <UserPlus2 />
                 {t("attach_user")}
               </DropdownMenuItem>
             )}
@@ -126,7 +124,6 @@ export function StaffProfileHeader({
                 onSelect={() => {
                   if (!staff.userId) return;
                   openModal({
-                    className: "w-[500px]",
                     title: t("change_password"),
                     view: (
                       <CreateEditUser
@@ -140,7 +137,7 @@ export function StaffProfileHeader({
                   });
                 }}
               >
-                <KeyRound className="mr-2 h-4 w-4" />
+                <KeyRound />
                 {t("change_password")}
               </DropdownMenuItem>
             )}

@@ -1,6 +1,5 @@
 import { FileTextIcon } from "lucide-react";
 
-import { EmptyState } from "~/components/EmptyState";
 import { Separator } from "@repo/ui/components/separator";
 import {
   Table,
@@ -10,10 +9,12 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 
 import { DocumentTableAction } from "~/components/shared/DocumentTableAction";
 import { api } from "~/trpc/server";
+import { LinkUser } from "./LinkUser";
 import { StaffDocumentHeader } from "./StaffDocumentHeader";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
@@ -26,10 +27,9 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const { t, i18n } = await getServerTranslations();
   if (!staff.userId) {
     return (
-      <EmptyState
-        title={t("no_user_found")}
-        description={t("create_a_user_first")}
-      />
+      <div className="p-4">
+        <LinkUser entityId={params.id} type="staff" />
+      </div>
     );
   }
   const documents = await api.document.byUserId({ ownerId: staff.userId });

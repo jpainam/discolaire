@@ -134,7 +134,11 @@ export function CreateEditUser({
             <FormItem>
               <FormLabel htmlFor="username"> {t("username")}</FormLabel>
               <FormControl>
-                <Input placeholder="username" {...field} />
+                <Input
+                  autoComplete="username"
+                  placeholder="username"
+                  {...field}
+                />
               </FormControl>
 
               <FormMessage />
@@ -149,7 +153,7 @@ export function CreateEditUser({
             <FormItem>
               <FormLabel htmlFor="username"> {t("password")}</FormLabel>
               <FormControl>
-                <Input type="password" {...field} />
+                <Input autoComplete="new-password" type="password" {...field} />
               </FormControl>
 
               <FormMessage />
