@@ -15,18 +15,13 @@ import {
   UsersRoundIcon,
 } from "lucide-react";
 import { getServerTranslations } from "~/i18n/server";
+import { api } from "~/trpc/server";
 import { BookTab } from "./BookTab";
+import { LibrarySetting } from "./LibrarySetting";
 
-{
-  /* <div>Dashboard</div>
-        <div>Materiels</div>
-        <div>Prets</div>
-        <div>Reservation</div>
-        <div>categories</div>
-        <div>Emplacement</div> */
-}
 export default async function Page() {
   const { t } = await getServerTranslations();
+  const books = await api.book.all();
   return (
     <Tabs defaultValue="tab-2">
       <ScrollArea>
@@ -56,7 +51,7 @@ export default async function Page() {
               className="bg-primary/15 ms-1.5 min-w-5 px-1"
               variant="secondary"
             >
-              3
+              {books.length}
             </Badge>
           </TabsTrigger>
           <TabsTrigger
@@ -131,9 +126,7 @@ export default async function Page() {
         </p>
       </TabsContent>
       <TabsContent value="tab-6">
-        <p className="text-muted-foreground pt-1 text-center text-xs">
-          Encours d'implementation
-        </p>
+        <LibrarySetting />
       </TabsContent>
     </Tabs>
   );

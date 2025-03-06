@@ -19,6 +19,51 @@ export const bookRouter = createTRPCRouter({
       },
     });
   }),
+  all: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.book.findMany({
+      where: {
+        schoolId: ctx.schoolId,
+      },
+      include: {
+        category: true,
+      },
+    });
+  }),
+  createCategory: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().min(1),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.bookCategory.create({
+        data: {
+          name: input.name,
+          schoolId: ctx.schoolId,
+        },
+      });
+    }),
+  updateCategory: protectedProcedure
+    .input(z.object({ id: z.string().min(1), name: z.string().min(1) }))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.bookCategory.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name,
+        },
+      });
+    }),
+  deleteCategory: protectedProcedure
+    .input(z.string().min(1))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.bookCategory.delete({
+        where: {
+          id: input,
+        },
+      });
+    }),
   categories: protectedProcedure.query(({ ctx }) => {
     return ctx.db.bookCategory.findMany({
       orderBy: {

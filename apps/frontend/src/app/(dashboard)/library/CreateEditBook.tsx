@@ -30,6 +30,7 @@ import { api } from "~/trpc/react";
 const updateBookSchema = z.object({
   title: z.string().trim().min(1),
   author: z.string().min(1),
+  available: z.coerce.number().min(0),
   description: z.string().optional(),
   isbn: z.string().optional(),
   categoryId: z.string().min(1),
@@ -51,6 +52,7 @@ export function CreateEditBook({
       description: book?.description ?? "",
       categoryId: book?.categoryId ?? "",
       isbn: book?.isbn ?? "",
+      available: book?.available ?? 0,
       author: book?.author ?? "",
     },
   });
@@ -185,6 +187,19 @@ export function CreateEditBook({
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="available"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("available")}</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
 
         <SheetFooter>
@@ -199,7 +214,7 @@ export function CreateEditBook({
               {book ? t("edit") : t("submit")}
             </Button>
             <SheetClose asChild>
-              <Button variant="outline" size={"sm"}>
+              <Button type="button" variant="outline" size={"sm"}>
                 {t("cancel")}
               </Button>
             </SheetClose>
