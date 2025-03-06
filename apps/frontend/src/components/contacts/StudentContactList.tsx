@@ -110,7 +110,7 @@ export default function StudentContactList({
                       size="sm"
                       onClick={() => {
                         router.push(
-                          routes.students.details(studentcontact.studentId)
+                          routes.students.details(studentcontact.studentId),
                         );
                       }}
                       variant="outline"
@@ -188,7 +188,7 @@ export default function StudentContactList({
                                   error: (error) => {
                                     return getErrorMessage(error);
                                   },
-                                }
+                                },
                               );
                             }
                           }}
@@ -205,7 +205,7 @@ export default function StudentContactList({
                 </CardFooter>
               </Card>
             );
-          }
+          },
         )}
       </div>
     </div>
