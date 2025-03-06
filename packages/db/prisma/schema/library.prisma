@@ -11,17 +11,17 @@ model Book {
     schoolId      String
     createdAt     DateTime       @default(now())
     updatedAt     DateTime       @updatedAt
-    categoryId    Int
+    categoryId    String
     available     Int            @default(0)
     category      BookCategory   @relation(fields: [categoryId], references: [id])
     borrowedBooks BorrowedBook[]
 }
 
 model BookCategory {
-    id         Int    @id @default(autoincrement())
-    bookId     Int
-    categoryId Int
-    books      Book[]
+    id       String @id @default(cuid())
+    name     String
+    schoolId String
+    books    Book[]
 }
 
 model BorrowedBook {

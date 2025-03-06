@@ -79,7 +79,16 @@ export default function TableCell({
           : `${tableStyle.borderWidth || 0}px ${tableStyle.borderStyle} ${tableStyle.borderColor}`,
       };
     }
-  }, [tableStyle, _firstColumn, _lastColumn, _firstRow, _firstRow]);
+  }, [
+    tableStyle.borderStyle,
+    tableStyle.borderWidth,
+    tableStyle.borderColor,
+    borderMargin,
+    _lastColumn,
+    _lastRow,
+    _firstRow,
+    _firstColumn,
+  ]);
   const extraStyles = [
     ...(Array.isArray(tdStyle) ? tdStyle : [tdStyle]),
     ...(Array.isArray(rest.style) ? rest.style : [rest.style]),

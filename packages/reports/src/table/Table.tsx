@@ -108,7 +108,7 @@ export default function Table({
             }
           : undefined,
       ].filter((s): s is Style => s !== undefined),
-    [styleProps],
+    [styleProps, tableStyle.borderStyle],
   );
 
   const tableContextValue = useMemo<TableContextType>(

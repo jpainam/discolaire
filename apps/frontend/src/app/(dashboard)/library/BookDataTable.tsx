@@ -1,5 +1,5 @@
 import type { RouterOutputs } from "@repo/api";
-import { useDataTable } from "@repo/ui/datatable/index";
+import { DataTable, useDataTable } from "@repo/ui/datatable";
 import React from "react";
 import { useLocale } from "~/i18n";
 import { getBookColumns } from "./BookDataTableColumn";
@@ -16,5 +16,5 @@ export function BookDataTable({
     data: books,
     columns: columns,
   });
-  return <div></div>;
+  return <DataTable table={table}></DataTable>;
 }

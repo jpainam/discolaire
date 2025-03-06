@@ -1,23 +1,26 @@
-import { Checkbox } from "@repo/ui/components/checkbox";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@repo/ui/components/dropdown-menu";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { RouterOutputs } from "@repo/api";
-import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-import { ColumnDef } from "@tanstack/react-table";
-import { TFunction } from "i18next";
-import { Eye, Pencil, Trash2 } from "lucide-react";
-import { useRouter } from "~/hooks/use-router";
+import type { RouterOutputs } from "@repo/api";
+import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
+import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+import type { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
+import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { CreateEditClassroom } from "~/components/classrooms/CreateEditClassroom";
-import { routes } from "~/configs/routes";
-import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { getErrorMessage } from "~/lib/handle-error";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { api } from "~/trpc/react";
+import { CreateEditBook } from "./CreateEditBook";
 
 type BookProcedureOutput = RouterOutputs["book"]["lastBorrowed"][number];
 export function getBookColumns({
@@ -56,9 +59,71 @@ export function getBookColumns({
       ),
       cell: ({ row }) => {
         const book = row.original;
+        return <span>{book.title}</span>;
+      },
+    },
+    {
+      accessorKey: "author",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("author")} />
+      ),
+      cell: ({ row }) => {
+        const book = row.original;
+        return <span className="text-muted-foreground">{book.title}</span>;
+      },
+    },
+    {
+      accessorKey: "isbn",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("Isbn")} />
+      ),
+      cell: ({ row }) => {
+        const book = row.original;
+        return <span className="text-muted-foreground">{book.isbn}</span>;
+      },
+    },
+    {
+      accessorKey: "categoryId",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("category")} />
+      ),
+      cell: ({ row }) => {
+        const book = row.original;
         return (
-          <span>{book.title}</span>>
+          <span className="text-muted-foreground">{book.category.name}</span>
         );
+      },
+    },
+    {
+      accessorKey: "available",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("availability")} />
+      ),
+      cell: ({ row }) => {
+        const book = row.original;
+        return (
+          <>
+            {book.available > 0 ? (
+              <Badge className="bg-green-100 text-green-800">
+                {t("available")}
+              </Badge>
+            ) : (
+              <Badge className="bg-yellow-50 text-yellow-800">
+                {t("unavailable")}
+              </Badge>
+            )}
+          </>
+        );
+      },
+    },
+    {
+      accessorKey: "available",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("copies")} />
+      ),
+      cell: ({ row }) => {
+        const book = row.original;
+        return <span className="text-muted-foreground">{book.available}</span>;
       },
     },
 
@@ -66,7 +131,7 @@ export function getBookColumns({
       id: "actions",
       header: () => <span className="sr-only">Actions</span>,
       cell: function Cell({ row }) {
-        return <ActionCells classroom={row.original} />;
+        return <ActionCells book={row.original} />;
       },
       size: 60,
       enableSorting: false,
@@ -75,92 +140,64 @@ export function getBookColumns({
   ];
 }
 
-
-
-
-function ActionCells({ classroom }: { classroom: BookProcedureOutput }) {
+function ActionCells({ book }: { book: BookProcedureOutput }) {
   const { openSheet } = useSheet();
   const confirm = useConfirm();
   const { t } = useLocale();
-  const router = useRouter();
+  //const router = useRouter();
   const utils = api.useUtils();
-  const canDeleteClassroom = useCheckPermissions(
-    PermissionAction.DELETE,
-    "classroom:details"
-  );
-  const canUpdateClassroom = useCheckPermissions(
-    PermissionAction.UPDATE,
-    "classroom:details"
-  );
-  const classroomMutation = api.classroom.delete.useMutation({
-    onSettled: () => utils.classroom.invalidate(),
+
+  const bookMutation = api.book.delete.useMutation({
+    onSettled: () => utils.book.invalidate(),
   });
 
   return (
     <div className="flex justify-end">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            aria-label="Open menu"
-            variant="ghost"
-            className="flex size-8 p-0 data-[state=open]:bg-muted"
-          >
-            <DotsHorizontalIcon className="size-4" aria-hidden="true" />
+          <Button variant="ghost" size={"icon"}>
+            <DotsHorizontalIcon />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-40">
           <DropdownMenuItem
             onSelect={() => {
-              router.push(routes.classrooms.details(classroom.id));
+              openSheet({
+                description: t("edit_classroom_description"),
+                title: t("edit_a_classroom"),
+                view: <CreateEditBook book={book} />,
+              });
             }}
           >
-            <Eye className="mr-2 size-4" />
-            {t("details")}
+            <Pencil />
+            {t("edit")}
           </DropdownMenuItem>
-          {canUpdateClassroom && (
-            <DropdownMenuItem
-              onSelect={() => {
-                openSheet({
-                  description: t("edit_classroom_description"),
-                  title: t("edit_a_classroom"),
-                  view: <CreateEditClassroom classroom={classroom} />,
+
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            variant="destructive"
+            className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+            onSelect={async () => {
+              const isConfirmed = await confirm({
+                title: t("delete"),
+                description: t("delete_confirmation"),
+              });
+              if (isConfirmed) {
+                toast.promise(bookMutation.mutateAsync(book.id), {
+                  loading: t("deleting"),
+                  success: () => {
+                    return t("deleted_successfully");
+                  },
+                  error: (error) => {
+                    return getErrorMessage(error);
+                  },
                 });
-              }}
-            >
-              <Pencil className="mr-2 size-4" />
-              {t("edit")}
-            </DropdownMenuItem>
-          )}
-          {canDeleteClassroom && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                disabled={!canDeleteClassroom}
-                variant="destructive"
-                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-                onSelect={async () => {
-                  const isConfirmed = await confirm({
-                    title: t("delete"),
-                    description: t("delete_confirmation"),
-                  });
-                  if (isConfirmed) {
-                    toast.promise(classroomMutation.mutateAsync(classroom.id), {
-                      loading: t("deleting"),
-                      success: () => {
-                        return t("deleted_successfully");
-                      },
-                      error: (error) => {
-                        return getErrorMessage(error);
-                      },
-                    });
-                  }
-                }}
-              >
-                <Trash2 className="mr-2 size-4" />
-                {t("delete")}
-              </DropdownMenuItem>
-            </>
-          )}
+              }
+            }}
+          >
+            <Trash2 className="mr-2 size-4" />
+            {t("delete")}
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

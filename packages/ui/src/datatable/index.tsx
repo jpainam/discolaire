@@ -158,11 +158,11 @@ export function DataTable<TData>({
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow className="hover:bg-transparent" key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
+              {headerGroup.headers.map((header, index) => {
                 return (
                   <TableHead
                     style={{ width: `${header.getSize()}px` }}
-                    key={header.id}
+                    key={`${header.id}-${index}`}
                     colSpan={header.colSpan}
                     className="bg-sidebar border-border relative h-9 border-y select-none first:rounded-l-lg first:border-l last:rounded-r-lg last:border-r"
                   >

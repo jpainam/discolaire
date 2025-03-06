@@ -15,6 +15,7 @@ import {
   UsersRoundIcon,
 } from "lucide-react";
 import { getServerTranslations } from "~/i18n/server";
+import { BookTab } from "./BookTab";
 
 {
   /* <div>Dashboard</div>
@@ -27,7 +28,7 @@ import { getServerTranslations } from "~/i18n/server";
 export default async function Page() {
   const { t } = await getServerTranslations();
   return (
-    <Tabs defaultValue="tab-1">
+    <Tabs defaultValue="tab-2">
       <ScrollArea>
         <TabsList className="text-foreground justify-start w-full mb-3 h-auto gap-2 rounded-none border-b bg-transparent px-0 py-1">
           <TabsTrigger
@@ -108,32 +109,30 @@ export default async function Page() {
       </ScrollArea>
       <TabsContent value="tab-1">
         <p className="text-muted-foreground pt-1 text-center text-xs">
-          Content for Tab 1
+          Encours d'implementation
         </p>
       </TabsContent>
       <TabsContent value="tab-2">
-        <p className="text-muted-foreground pt-1 text-center text-xs">
-          Content for Tab 2
-        </p>
+        <BookTab />
       </TabsContent>
       <TabsContent value="tab-3">
         <p className="text-muted-foreground pt-1 text-center text-xs">
-          Content for Tab 3
+          Encours d'implementation
         </p>
       </TabsContent>
       <TabsContent value="tab-4">
         <p className="text-muted-foreground pt-1 text-center text-xs">
-          Content for Tab 4
+          Encours d'implementation
         </p>
       </TabsContent>
       <TabsContent value="tab-5">
         <p className="text-muted-foreground pt-1 text-center text-xs">
-          Content for Tab 5
+          Encours d'implementation
         </p>
       </TabsContent>
       <TabsContent value="tab-6">
         <p className="text-muted-foreground pt-1 text-center text-xs">
-          Content for Tab 6
+          Encours d'implementation
         </p>
       </TabsContent>
     </Tabs>
