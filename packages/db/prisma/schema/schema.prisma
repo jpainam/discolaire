@@ -525,7 +525,7 @@ model Student {
     dateOfEntry        DateTime?          @db.Date
     dateOfExit         DateTime?          @db.Date
     dateOfWithdraw     DateTime?          @db.Date
-    lastAccessed       DateTime?          @db.Date
+    lastAccessed       DateTime           @default(now()) @db.Date
     observation        String?
     sunPlusNo          String?
     countryId          String?

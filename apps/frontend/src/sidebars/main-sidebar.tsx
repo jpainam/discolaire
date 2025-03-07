@@ -46,15 +46,16 @@ export function MainSidebar({
       icon: HouseIcon,
     },
     {
-      name: "contacts",
-      url: `/contacts`,
-      icon: RiUserFollowLine,
-    },
-    {
       name: "staffs",
       url: `/staffs`,
       icon: FolderOpen,
     },
+    {
+      name: "contacts",
+      url: `/contacts`,
+      icon: RiUserFollowLine,
+    },
+
     {
       name: "library",
       url: `/library`,

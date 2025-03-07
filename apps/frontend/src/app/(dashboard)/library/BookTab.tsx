@@ -1,16 +1,25 @@
 "use client";
 
 import { Button } from "@repo/ui/components/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
 import { Separator } from "@repo/ui/components/separator";
 import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
-import { LibraryBigIcon, PlusIcon } from "lucide-react";
+import { LibraryBigIcon, MoreVerticalIcon, PlusIcon } from "lucide-react";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { api } from "~/trpc/react";
 import { BookDataTable } from "./BookDataTable";
 import { CreateEditBook } from "./CreateEditBook";
-
 export function BookTab() {
   const { t } = useLocale();
   const { openSheet } = useSheet();
@@ -33,8 +42,28 @@ export function BookTab() {
             }}
           >
             <PlusIcon />
-            {t("create")}
+            {t("add")}
           </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant={"outline"} size={"icon"} className="size-8">
+                <MoreVerticalIcon />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownHelp />
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem>
+                <XMLIcon />
+                {t("xml_export")}
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <PDFIcon />
+                {t("pdf_export")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       <Separator />
