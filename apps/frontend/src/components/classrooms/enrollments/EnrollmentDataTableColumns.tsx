@@ -22,6 +22,7 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { Badge } from "@repo/ui/components/badge";
+import Link from "next/link";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
@@ -80,7 +81,12 @@ export function fetchEnrollmentColumns({
               pos={getFullName(student).length}
               avatar={student.avatar}
             />
-            <div className="font-medium">{getFullName(student)}</div>
+            <Link
+              href={`/students/${student.id}`}
+              className="font-medium hover:underline"
+            >
+              {getFullName(student)}
+            </Link>
           </div>
         );
       },
@@ -185,7 +191,7 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
   const router = useRouter();
   const canDeleteEnrollment = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:enrollment",
+    "classroom:enrollment"
   );
   const utils = api.useUtils();
   const unenrollStudentsMutation =
