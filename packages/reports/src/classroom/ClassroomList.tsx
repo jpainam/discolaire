@@ -1,8 +1,10 @@
-import { Document, Image, Page, Text, View } from "@react-pdf/renderer";
+import { Document, Page, Text, View } from "@react-pdf/renderer";
+//import { getServerTranslations } from "~/i18n/server";
+import { decode } from "entities";
 
 import type { RouterOutputs } from "@repo/api";
 
-//import { getServerTranslations } from "~/i18n/server";
+import { IPBWHeader } from "../headers/IPBWHeader";
 
 export function ClassroomList({
   school,
@@ -13,7 +15,7 @@ export function ClassroomList({
   size: "a4" | "letter";
   classrooms: RouterOutputs["classroom"]["all"];
 }) {
-  const w = [0.1, 0.3, 0.3, 0.2, 0.1];
+  const w = [0.3, 0.3, 0.3, 0.1, 0.1];
   //const { t, i18n } = await getServerTranslations();
   return (
     <Document>
@@ -29,75 +31,65 @@ export function ClassroomList({
       >
         <View
           style={{
-            marginBottom: 20,
-            flex: 1,
-            alignItems: "center",
+            display: "flex",
+            flexDirection: "column",
+            gap: 6,
           }}
         >
-          {school.logo && (
-            <Image
-              src={school.logo}
-              style={{
-                width: 100,
-                height: 80,
-              }}
-            />
-          )}
-        </View>
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexDirection: "row",
-            gap: 4,
-            fontWeight: "bold",
-            fontSize: 12,
-            marginBottom: 20,
-          }}
-        >
-          <Text>{school.name}</Text>
-          <Text>{school.name}</Text>
-        </View>
-        <View style={{ flexDirection: "row" }}>
-          <View style={{ flex: w[0] }}>
-            <Text>{"No"}</Text>
-          </View>
-          <View style={{ flex: w[1] }}>
-            <Text>{"lastName"}</Text>
-          </View>
-          <View style={{ flex: w[2] }}>
-            <Text>{"firstName"}</Text>
-          </View>
-          <View style={{ flex: w[3] }}>
-            <Text>{"dateOfBirth"}</Text>
-          </View>
-        </View>
-        {classrooms.map((classroom, index) => {
-          return (
-            <View
-              key={index}
-              style={{
-                flexDirection: "row",
-                borderTop: "1px solid black",
-                //borderBottom: "1px solid black",
-                padding: "2px",
-              }}
-            >
-              <View style={{ flex: w[0] }}>
-                <Text>{classroom.name}</Text>
-              </View>
-              <View style={{ flex: w[1] }}>
-                <Text>{classroom.headTeacher?.firstName}</Text>
-              </View>
-              <View style={{ flex: w[2] }}>
-                <Text>{classroom.reportName}</Text>
-              </View>
-              <View style={{ flex: w[3] }}>
-                <Text></Text>
-              </View>
+          <IPBWHeader school={school} />
+          <Text
+            style={{
+              alignSelf: "center",
+              fontSize: 12,
+              fontWeight: "bold",
+            }}
+          >
+            Liste des classes
+          </Text>
+
+          <View style={{ flexDirection: "row" }}>
+            <View style={{ flex: w[0] }}>
+              <Text>{"Nom"}</Text>
             </View>
-          );
-        })}
+
+            <View style={{ flex: w[1] }}>
+              <Text>{"Nom court"}</Text>
+            </View>
+
+            <View style={{ flex: w[2] }}>
+              <Text>{"Prof. Princ"}</Text>
+            </View>
+            <View style={{ flex: w[3] }}>
+              <Text>{"Effectif"}</Text>
+            </View>
+          </View>
+          {classrooms.map((classroom, index) => {
+            return (
+              <View
+                key={index}
+                style={{
+                  flexDirection: "row",
+                  borderTop: "1px solid black",
+                  paddingVertical: 2,
+                  //borderBottom: "1px solid black",
+                }}
+              >
+                <View style={{ flex: w[0] }}>
+                  <Text>{classroom.name}</Text>
+                </View>
+                <View style={{ flex: w[1] }}>
+                  <Text>{classroom.reportName}</Text>
+                </View>
+                <View style={{ flex: w[2] }}>
+                  <Text>{decode(classroom.headTeacher?.firstName ?? "")}</Text>
+                </View>
+                <View style={{ flex: w[3] }}>
+                  <Text>{classroom.size}</Text>
+                </View>
+              </View>
+            );
+          })}
+        </View>
       </Page>
     </Document>
   );

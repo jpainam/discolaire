@@ -150,7 +150,7 @@ async function toCSV({
             ? `"${cellValue.replace(/"/g, '""')}"`
             : cellValue;
         })
-        .join(","),
+        .join(",")
     ),
   ].join("\n");
   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
@@ -170,21 +170,18 @@ async function toPdf({
   preview,
   school,
   classroom,
-  size = "a4",
 }: {
   students: RouterOutputs["classroom"]["students"];
   preview: boolean;
   classroom: RouterOutputs["classroom"]["get"];
   school: RouterOutputs["school"]["getSchool"];
-  size?: "a4" | "letter";
 }) {
   const stream = await renderToStream(
     ClassroomStudentList({
       students: students,
       school: school,
-      size: size,
       classroom: classroom,
-    }),
+    })
   );
 
   //const blob = await new Response(stream).blob();

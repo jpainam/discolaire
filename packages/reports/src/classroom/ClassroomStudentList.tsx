@@ -1,17 +1,19 @@
-import { Document, Image, Page, Text, View } from "@react-pdf/renderer";
+import { Document, Page, Text, View } from "@react-pdf/renderer";
 
 import type { RouterOutputs } from "@repo/api";
+
+import "../fonts";
+
+import { IPBWHeader } from "../headers/IPBWHeader";
 
 //import { getServerTranslations } from "~/i18n/server";
 
 export function ClassroomStudentList({
   school,
   students,
-  size = "a4",
   classroom,
 }: {
   school: RouterOutputs["school"]["getSchool"];
-  size: "a4" | "letter";
   classroom: RouterOutputs["classroom"]["get"];
   students: RouterOutputs["classroom"]["students"];
 }) {
@@ -20,92 +22,93 @@ export function ClassroomStudentList({
   return (
     <Document>
       <Page
-        size={size.toUpperCase() as "LETTER" | "A4"}
+        size={"A4"}
         style={{
-          padding: 20,
-          fontSize: 9,
+          paddingVertical: 20,
+          paddingHorizontal: 40,
+          fontSize: 10,
           backgroundColor: "#fff",
-          fontFamily: "Helvetica",
           color: "#000",
+          fontFamily: "Roboto",
         }}
       >
         <View
           style={{
-            marginBottom: 20,
-            flex: 1,
-            alignItems: "center",
+            display: "flex",
+            flexDirection: "column",
+            gap: 6,
           }}
         >
-          {school.logo && (
-            <Image
-              src={school.logo}
-              style={{
-                width: 100,
-                height: 80,
-              }}
-            />
-          )}
-        </View>
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexDirection: "row",
-            gap: 4,
-            fontWeight: "bold",
-            fontSize: 12,
-            marginBottom: 20,
-          }}
-        >
-          <Text>{classroom.name}</Text>
-          <Text>{classroom.schoolYear.name}</Text>
-        </View>
-        <View style={{ flexDirection: "row" }}>
-          <View style={{ flex: w[0] }}>
-            <Text>{"No"}</Text>
+          <IPBWHeader style={{ fontSize: 7 }} school={school} />
+          <View
+            style={{
+              flexDirection: "column",
+              display: "flex",
+              fontWeight: "bold",
+              gap: 4,
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: 10,
+            }}
+          >
+            <Text>{classroom.name}</Text>
+            <Text>{classroom.schoolYear.name}</Text>
+            <Text>Liste des élèves</Text>
           </View>
-          <View style={{ flex: w[1] }}>
-            <Text>{"lastName"}</Text>
-          </View>
-          <View style={{ flex: w[2] }}>
-            <Text>{"firstName"}</Text>
-          </View>
-          <View style={{ flex: w[3] }}>
-            <Text>{"dateOfBirth"}</Text>
-          </View>
-        </View>
-        {students.map((student, index) => {
-          return (
-            <View
-              key={index}
-              style={{
-                flexDirection: "row",
-                borderTop: "1px solid black",
-                //borderBottom: "1px solid black",
-                padding: "2px",
-              }}
-            >
-              <View style={{ flex: w[0] }}>
-                <Text>{student.registrationNumber}</Text>
-              </View>
-              <View style={{ flex: w[1] }}>
-                <Text>{student.lastName}</Text>
-              </View>
-              <View style={{ flex: w[2] }}>
-                <Text>{student.firstName}</Text>
-              </View>
-              <View style={{ flex: w[3] }}>
-                <Text>
-                  {student.dateOfBirth?.toLocaleDateString("fr", {
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                  })}
-                </Text>
-              </View>
+
+          <View style={{ flexDirection: "row" }}>
+            <View style={{ flex: w[0] }}>
+              <Text>{"No"}</Text>
             </View>
-          );
-        })}
+            <View style={{ flex: w[1] }}>
+              <Text>{"Nom"}</Text>
+            </View>
+            <View style={{ flex: w[2] }}>
+              <Text>{"Prenom"}</Text>
+            </View>
+            <View style={{ flex: w[0] }}>
+              <Text>{"Redoub."}</Text>
+            </View>
+            <View style={{ flex: w[3] }}>
+              <Text>{"Date de naiss."}</Text>
+            </View>
+          </View>
+          {students.map((student, index) => {
+            return (
+              <View
+                key={index}
+                style={{
+                  flexDirection: "row",
+                  borderTop: "1px solid black",
+                  //borderBottom: "1px solid black",
+                  padding: "2px",
+                }}
+              >
+                <View style={{ flex: w[0] }}>
+                  <Text>{student.registrationNumber}</Text>
+                </View>
+                <View style={{ flex: w[1] }}>
+                  <Text>{student.lastName}</Text>
+                </View>
+                <View style={{ flex: w[2] }}>
+                  <Text>{student.firstName}</Text>
+                </View>
+                <View style={{ flex: w[0] }}>
+                  <Text>{student.isRepeating ? "OUI" : "NON"}</Text>
+                </View>
+                <View style={{ flex: w[3] }}>
+                  <Text>
+                    {student.dateOfBirth?.toLocaleDateString("fr", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                    })}
+                  </Text>
+                </View>
+              </View>
+            );
+          })}
+        </View>
       </Page>
     </Document>
   );

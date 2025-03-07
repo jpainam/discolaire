@@ -2,6 +2,8 @@ import { Document, Page, Text, View } from "@react-pdf/renderer";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { IPBWHeader } from "../headers/IPBWHeader";
+
 //import { getServerTranslations } from "~/i18n/server";
 
 export function ClassroomDetails({
@@ -29,6 +31,7 @@ export function ClassroomDetails({
             gap: 10,
           }}
         >
+          <IPBWHeader school={school} />
           <View style={{ flexDirection: "row" }}>
             <Text>{"name"}</Text>
             <Text>{classroom.name}</Text>

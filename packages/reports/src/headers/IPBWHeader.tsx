@@ -19,6 +19,7 @@ export function IPBWHeader({
         flexDirection: "row",
         justifyContent: "space-between",
         gap: 2,
+        fontSize: 7,
         alignItems: "flex-start",
         marginBottom: "8px",
         ...style,
