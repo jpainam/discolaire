@@ -5,7 +5,6 @@ import { getServerTranslations } from "~/i18n/server";
 
 import { ModeToggle } from "~/components/mode-toggle";
 import { routes } from "~/configs/routes";
-import { api } from "~/trpc/server";
 import { UserAuthForm } from "./user-auth-form";
 
 export const metadata: Metadata = {
@@ -16,7 +15,7 @@ export const metadata: Metadata = {
 export default async function Page() {
   const { t } = await getServerTranslations();
 
-  const { verse, book } = await api.bible.random();
+  //const { verse, book } = await api.bible.random();
 
   return (
     <>
@@ -45,10 +44,8 @@ export default async function Page() {
           </div>
           <div className="relative z-20 mt-auto rounded-md bg-secondary/40">
             <blockquote className="space-y-2">
-              <p className="text-lg tracking-tighter">
-                {verse ?? t("signin_quote")}
-              </p>
-              <footer className="text-sm">{book ?? "Ellen G. White"}</footer>
+              <p className="text-lg tracking-tighter">{t("signin_quote")}</p>
+              <footer className="text-sm">{"Ellen G. White"}</footer>
             </blockquote>
           </div>
         </div>
