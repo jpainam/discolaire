@@ -38,6 +38,7 @@ export default async function Layout({
     throw new Error("No school year selected");
   }
   const schoolYear = await api.schoolYear.get(schoolYearId);
+  const schoolYears = await api.schoolYear.all();
   const permissions = await api.user.permissions();
   return (
     <SidebarProvider
@@ -66,7 +67,10 @@ export default async function Layout({
               {/* <NavHeader /> */}
               <Breadcrumbs />
               <div className="ml-auto flex items-center gap-2">
-                <SchoolYearSwitcher defaultValue={schoolYear.id} />
+                <SchoolYearSwitcher
+                  schoolYears={schoolYears}
+                  defaultValue={schoolYear.id}
+                />
                 <TopRightButtons />
                 <ModeToggle />
                 <LanguageSwitcher />

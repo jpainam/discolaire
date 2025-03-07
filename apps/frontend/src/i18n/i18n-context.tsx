@@ -4,7 +4,7 @@
 import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import resourcesToBackend from "i18next-resources-to-backend";
-import { useMemo } from "react";
+import { useEffect } from "react";
 import { initReactI18next, I18nextProvider as Provider } from "react-i18next";
 
 import { getOptions } from "./settings";
@@ -15,8 +15,8 @@ void i18next
   .use(
     resourcesToBackend(
       (language: any, namespace: any) =>
-        import(`./locales/${language}/${namespace}.json`),
-    ),
+        import(`./locales/${language}/${namespace}.json`)
+    )
   )
   .init({
     ...getOptions(),
@@ -32,7 +32,10 @@ export function I18nProvider({
   children: any;
   language: string;
 }) {
-  useMemo(() => {
+  // useMemo(() => {
+  //   void i18next.changeLanguage(language);
+  // }, [language]);
+  useEffect(() => {
     void i18next.changeLanguage(language);
   }, [language]);
   return <Provider i18n={i18next}>{children}</Provider>;
