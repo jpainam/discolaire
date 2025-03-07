@@ -70,7 +70,7 @@ export function SignUpForm() {
           console.error(err);
           toast.error(err.message);
         },
-      }
+      },
     );
   }
 
