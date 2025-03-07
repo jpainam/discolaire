@@ -10,9 +10,11 @@ import { IPBWHeader } from "../headers/IPBWHeader";
 
 export function StudentPage({
   student,
+  contacts,
   school,
 }: {
   student: RouterOutputs["student"]["get"];
+  contacts: RouterOutputs["student"]["contacts"];
   school: RouterOutputs["school"]["getSchool"];
 }) {
   return (
@@ -22,14 +24,19 @@ export function StudentPage({
         style={{
           paddingVertical: 20,
           paddingHorizontal: 40,
-          fontSize: 7,
+          fontSize: 10,
           backgroundColor: "#fff",
           color: "#000",
           fontFamily: "Roboto",
         }}
       >
         <View style={{ flexDirection: "column", display: "flex", gap: 6 }}>
-          <IPBWHeader school={school} />
+          <IPBWHeader
+            style={{
+              fontSize: 7,
+            }}
+            school={school}
+          />
 
           <Text
             style={{
@@ -38,7 +45,7 @@ export function StudentPage({
               fontSize: 12,
             }}
           >
-            Profile de l'élève
+            Profil de l'élève
           </Text>
 
           {student.avatar && <Image src={student.avatar} />}
@@ -69,6 +76,13 @@ export function StudentPage({
             />
           </View>
           <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
+            <Item label={"Classe"} value={student.classroom?.name} />
+            <Item
+              label="Redoublant"
+              value={student.isRepeating ? "OUI" : "NON"}
+            />
+          </View>
+          <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
             <Item label={"Residence"} value={student.residence} />
             <Item
               style={{ width: "50%" }}
@@ -76,16 +90,25 @@ export function StudentPage({
               value={student.gender == "female" ? "F" : "M"}
             />
           </View>
+
           <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
             <Item label={"Status"} value={student.status} />
             <Item label="Religion" value={student.religion?.name} />
           </View>
           <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
-            <Item label={"Tel"} value={student.phoneNumber} />
-            <Item label="Email" value={student.email} />
+            <Item label={"No. Sun+"} value={student.sunPlusNo} />
+            <Item label="Ancienne école" value={student.formerSchool?.name} />
           </View>
           <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
+            <Item
+              label={"Baptisé"}
+              value={student.isBaptized ? "OUI" : "NON"}
+            />
             <Item label={"Group sanguin"} value={student.bloodType} />
+          </View>
+          <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
+            <Item label={"Tel"} value={student.phoneNumber} />
+            <Item label="Email" value={student.email} />
           </View>
 
           <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
@@ -100,17 +123,29 @@ export function StudentPage({
           </View>
 
           <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
-            <Item label={"Classe"} value={student.classroom?.name} />
-            <Item label={"Niveau"} value={student.classroom?.level.name} />
-          </View>
-
-          <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
             <Item
               label={"Achievements"}
               value={student.achievements.join(", ")}
             />
-            <Item label={"Tuteur"} value={student.hobbies.join(", ")} />
+            <Item label={"Hobbies"} value={student.hobbies.join(", ")} />
           </View>
+          <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
+            <Item
+              label={"Clubs"}
+              value={student.clubs.map((c) => c.club.name).join(", ")}
+            />
+            <Item
+              label={"Reseau sociaux"}
+              value={student.socialMedias.join(",")}
+            />
+          </View>
+          <View
+            style={{
+              borderBottom: "1px solid black",
+              width: "100%",
+              marginVertical: 5,
+            }}
+          />
           <Text
             style={{
               fontWeight: "bold",
@@ -120,6 +155,41 @@ export function StudentPage({
           >
             Parents de l'élève
           </Text>
+          {contacts.map((contact, index) => {
+            return (
+              <View
+                key={`${contact.contactId}-${index}`}
+                style={{
+                  flexDirection: "column",
+                  gap: 2,
+                  display: "flex",
+                }}
+              >
+                <Text style={{ fontWeight: "bold" }}>Parent {index + 1}</Text>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: 2,
+                  }}
+                >
+                  <View style={{ width: "40%" }}>
+                    <Text>
+                      {contact.contact.lastName} {contact.contact.firstName}
+                    </Text>
+                  </View>
+                  <View style={{ width: "30%" }}>
+                    <Text>
+                      {contact.contact.phoneNumber1}/{contact.contact.email}
+                    </Text>
+                  </View>
+                  <View style={{ width: "30%" }}>
+                    <Text>{contact.relationship?.name}</Text>
+                  </View>
+                </View>
+              </View>
+            );
+          })}
         </View>
       </Page>
     </Document>

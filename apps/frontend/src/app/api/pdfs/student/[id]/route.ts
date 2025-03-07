@@ -25,7 +25,7 @@ const searchSchema = z.object({
 });
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await auth();
   if (!session) {
@@ -55,6 +55,7 @@ export async function GET(
   console.log(size);
 
   const student = await api.student.get(id);
+  const contacts = await api.student.contacts(id);
 
   const school = await api.school.getSchool();
   if (format === "csv") {
@@ -65,8 +66,9 @@ export async function GET(
     const stream = await renderToStream(
       StudentPage({
         student: student,
+        contacts: contacts,
         school: school,
-      }),
+      })
     );
 
     //const blob = await new Response(stream).blob();

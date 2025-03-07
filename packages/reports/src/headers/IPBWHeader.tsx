@@ -2,11 +2,15 @@ import { Image, Text, View } from "@react-pdf/renderer";
 
 import "../fonts";
 
+import type { Style } from "@react-pdf/stylesheet";
+
 import type { RouterOutputs } from "@repo/api";
 
 export function IPBWHeader({
   school,
+  style,
 }: {
+  style?: Style;
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
 }) {
   return (
@@ -15,9 +19,9 @@ export function IPBWHeader({
         flexDirection: "row",
         justifyContent: "space-between",
         gap: 2,
-
         alignItems: "flex-start",
         marginBottom: "8px",
+        ...style,
       }}
     >
       <View
