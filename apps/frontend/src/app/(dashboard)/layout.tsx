@@ -30,7 +30,8 @@ export default async function Layout({
     redirect("/auth/login");
   }
   const cookieStore = await cookies();
-  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
+  const sidebarState = cookieStore.get("sidebar_state");
+  const defaultOpen = sidebarState ? sidebarState.value === "true" : true;
   const school = await api.school.get(session.user.schoolId);
   const schoolYearId = cookieStore.get("schoolYear")?.value;
   if (!schoolYearId) {
