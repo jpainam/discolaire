@@ -35,7 +35,7 @@ export function CreateGradeSheetHeader({
   const { createQueryString } = useCreateQueryString();
   const form = useFormContext();
   return (
-    <div className="grid flex-row gap-2 border-b md:flex">
+    <div className="grid px-2 flex-row gap-2 border-b md:flex">
       <div className="grid w-[75%] grid-cols-1 items-center gap-x-4 gap-y-2 border-r p-2 md:grid-cols-2">
         <FormField
           control={form.control}
@@ -102,12 +102,13 @@ export function CreateGradeSheetHeader({
         </div>
         <div className="grid grid-cols-2 gap-2">
           <Button
+            type="button"
             variant={"outline"}
             onClick={() => {
               router.push(
                 routes.classrooms.gradesheets.index(params.id) +
                   "?" +
-                  createQueryString({}),
+                  createQueryString({})
               );
             }}
           >

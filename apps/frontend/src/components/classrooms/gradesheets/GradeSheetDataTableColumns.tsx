@@ -288,28 +288,28 @@ function ActionCells({
             <DotsHorizontalIcon className="size-4" aria-hidden="true" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-40">
+        <DropdownMenuContent align="end">
           <DropdownMenuItem
             onSelect={() => {
               router.push(
                 routes.classrooms.gradesheets.details(
                   classroomId,
-                  gradesheet.id,
-                ),
+                  gradesheet.id
+                )
               );
             }}
           >
-            <Eye className="mr-2 size-4" />
+            <Eye />
             {t("details")}
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
               router.push(
-                routes.classrooms.gradesheets.edit(classroomId, gradesheet.id),
+                routes.classrooms.gradesheets.edit(classroomId, gradesheet.id)
               );
             }}
           >
-            <Pencil className="mr-2 size-4" />
+            <Pencil />
             {t("edit")}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -321,10 +321,10 @@ function ActionCells({
               const isConfirmed = await confirm({
                 title: t("delete"),
                 description: t("delete_confirmation"),
-                icon: <Trash2 className="text-destructive" />,
-                alertDialogTitle: {
-                  className: "flex items-center gap-2",
-                },
+                //icon: <Trash2 className="text-destructive" />,
+                // alertDialogTitle: {
+                //   className: "flex items-center gap-2",
+                // },
               });
               if (isConfirmed) {
                 toast.loading("deleting", { id: 0 });
@@ -332,7 +332,7 @@ function ActionCells({
               }
             }}
           >
-            <Trash2 className="mr-2 size-4" />
+            <Trash2 />
             {t("delete")}
           </DropdownMenuItem>
         </DropdownMenuContent>

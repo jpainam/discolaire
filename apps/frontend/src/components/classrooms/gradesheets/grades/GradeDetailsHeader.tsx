@@ -59,12 +59,12 @@ export function GradeDetailsHeader({
 
   const males10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "male",
+      (grade) => grade.grade >= 10 && grade.student.gender == "male"
     ).length / len;
 
   const females10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "female",
+      (grade) => grade.grade >= 10 && grade.student.gender == "female"
     ).length / len;
 
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
@@ -93,8 +93,8 @@ export function GradeDetailsHeader({
   });
   return (
     <div className="flex flex-col gap-2 border-b">
-      <div className="grid gap-4 p-2 text-sm md:grid-cols-3">
-        <div className="flex flex-col gap-2 rounded border bg-secondary p-2 shadow-sm">
+      <div className="grid gap-4 px-4 py-2 text-sm md:grid-cols-3">
+        <div className="flex flex-col gap-2 rounded-md border bg-muted p-2">
           {/* <span>
             {classroomQuery.isPending ? (
               <Skeleton className="h-8 w-full" />
@@ -110,7 +110,7 @@ export function GradeDetailsHeader({
 
           <span> {gradesheet.subject.teacher?.lastName}</span>
         </div>
-        <div className="flex flex-col gap-2 rounded border bg-secondary p-2 shadow-sm">
+        <div className="flex flex-col gap-2 rounded-md border bg-muted p-2">
           <span>{dateFormatter.format(gradesheet.createdAt)}</span>
 
           <span>
@@ -121,7 +121,7 @@ export function GradeDetailsHeader({
           </span>
         </div>
 
-        <div className="flex flex-col gap-2 rounded border bg-secondary p-2 shadow-sm">
+        <div className="flex flex-col gap-2 rounded-md border bg-muted p-2">
           <span>
             {t("max_grade")} : {isFinite(maxGrade) ? maxGrade : "-"}
           </span>
@@ -134,60 +134,63 @@ export function GradeDetailsHeader({
           </span>
         </div>
       </div>
-      <div className="mx-2 mb-2">
-        <Table className="border text-center">
-          <TableHeader>
-            <TableRow>
-              <TableHead
-                align="center"
-                className="border text-center"
-                rowSpan={2}
-              >
-                {t("number_assessed")}
-              </TableHead>
-              <TableHead className="border text-center" rowSpan={2}>
-                {t("overall_class_average")}
-              </TableHead>
-              <TableHead className="border text-center" rowSpan={2}>
-                {t("number_of_avg_ge_10")}
-              </TableHead>
-              <TableHead className="border text-center" colSpan={2}>
-                {t("success_rate")}
-              </TableHead>
-              <TableHead className="border text-center" rowSpan={2}>
-                {t("overall_success_rate")}
-              </TableHead>
-              <TableHead className="border text-center" rowSpan={2}>
-                {t("observation")}
-              </TableHead>
-            </TableRow>
-            <TableRow>
-              <TableHead className="border text-center">{t("males")}</TableHead>
-              <TableHead className="text-center">{t("females")}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody className="text-center">
-            <TableRow>
-              <TableCell className="border">{grades.length}</TableCell>
-              <TableCell className="border">{average.toFixed(2)}</TableCell>
-              <TableCell className="border">{grades10}</TableCell>
-              <TableCell className="border">
-                {(males10Rate * 100).toFixed(2)}%
-              </TableCell>
-              <TableCell className="border">
-                {(females10Rate * 100).toFixed(2)} %
-              </TableCell>
-              <TableCell className="border">
-                {((grades10 * 100) / len).toFixed(2)}%
-              </TableCell>
-              <TableCell className="border">
-                {getAppreciations(grades10)}
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+      <div className="px-4 py-2">
+        <div className="bg-background overflow-hidden rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow className="hover:bg-transparent">
+                <TableHead
+                  align="center"
+                  className="border-r text-center"
+                  rowSpan={2}
+                >
+                  {t("number_assessed")}
+                </TableHead>
+                <TableHead className=" text-center" rowSpan={2}>
+                  {t("overall_class_average")}
+                </TableHead>
+                <TableHead
+                  className="border-r border-l text-center"
+                  rowSpan={2}
+                >
+                  {t("number_of_avg_ge_10")}
+                </TableHead>
+                <TableHead className=" text-center" colSpan={2}>
+                  {t("success_rate")}
+                </TableHead>
+                <TableHead className="border-l text-center" rowSpan={2}>
+                  {t("overall_success_rate")}
+                </TableHead>
+                <TableHead className="border-l text-center" rowSpan={2}>
+                  {t("observation")}
+                </TableHead>
+              </TableRow>
+              <TableRow>
+                <TableHead className=" text-center">{t("males")}</TableHead>
+                <TableHead className="text-center">{t("females")}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody className="text-center">
+              <TableRow>
+                <TableCell>{grades.length}</TableCell>
+                <TableCell className="border-r">{average.toFixed(2)}</TableCell>
+                <TableCell className="border-r">{grades10}</TableCell>
+                <TableCell className="border-r">
+                  {(males10Rate * 100).toFixed(2)}%
+                </TableCell>
+                <TableCell className="border-r">
+                  {(females10Rate * 100).toFixed(2)} %
+                </TableCell>
+                <TableCell className="border-r">
+                  {((grades10 * 100) / len).toFixed(2)}%
+                </TableCell>
+                <TableCell>{getAppreciations(grades10)}</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
       </div>
-      <div className="flex border-t bg-muted/50 px-2 py-1">
+      <div className="flex border-t bg-muted/50 px-4 py-1">
         <ReportFalseGrade />
         <div className="ml-auto flex flex-row items-center gap-4">
           <DropdownMenu>
@@ -198,16 +201,16 @@ export function GradeDetailsHeader({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem>
-                <Pencil className="mr-2 size-4" />
+                <Pencil />
                 {t("edit")}
               </DropdownMenuItem>
               <DropdownHelp />
               <DropdownMenuItem>
-                <PDFIcon className="mr-2 size-4" />
+                <PDFIcon />
                 {t("pdf_export")}
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <XMLIcon className="mr-2 size-4" />
+                <XMLIcon />
                 {t("xml_export")}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -230,7 +233,7 @@ export function GradeDetailsHeader({
                 variant="destructive"
                 className="dark:data-[variant=destructive]:focus:bg-destructive/10"
               >
-                <Trash2 className="mr-2 size-4" />
+                <Trash2 />
                 {t("delete")}
               </DropdownMenuItem>
             </DropdownMenuContent>

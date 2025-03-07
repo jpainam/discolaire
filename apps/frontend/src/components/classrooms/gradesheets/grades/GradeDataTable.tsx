@@ -28,7 +28,7 @@ export function GradeDataTable({ gradeSheetId }: { gradeSheetId: number }) {
     return <DataTableSkeleton columnCount={6} rowCount={10} />;
   }
   return (
-    <DataTable className="px-2" table={table}>
+    <DataTable className="px-4" table={table}>
       <DataTableToolbar
         table={table}
         //filterFields={filterFields}

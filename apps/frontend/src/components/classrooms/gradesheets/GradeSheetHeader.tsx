@@ -50,7 +50,7 @@ export function GradeSheetHeader() {
         classroomId={params.id}
       />
       <Button size={"sm"} variant={"ghost"}>
-        <SettingsIcon className="mr-1 h-4 w-4" />
+        <SettingsIcon />
         {t("manage_appreciation")}
       </Button>
       <div className="ml-auto flex flex-row items-center gap-2">

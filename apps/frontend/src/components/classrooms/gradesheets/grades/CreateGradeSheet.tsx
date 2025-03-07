@@ -47,7 +47,7 @@ const createGradeSchema = z.object({
       studentId: z.string(),
       absent: z.boolean().default(false),
       grade: z.string().default(""),
-    }),
+    })
   ),
 });
 
@@ -66,7 +66,7 @@ export function CreateGradeSheet() {
         }
       }
     },
-    [], // No dependencies, so this function is only created once
+    [] // No dependencies, so this function is only created once
   );
   const searchParams = useSearchParams();
   const form = useForm({
@@ -120,132 +120,133 @@ export function CreateGradeSheet() {
         <CreateGradeSheetHeader
           isSubmitting={createGradesheetMutation.isPending}
         />
-
-        <div className="mb-10 border-y">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-muted/50">
-                <TableHead className="w-[10px]"></TableHead>
-                <TableHead className="w-[10px]"></TableHead>
-                <TableHead>{t("lastName")}</TableHead>
-                <TableHead>{t("firstName")}</TableHead>
-                <TableHead>{t("grade")}</TableHead>
-                <TableHead>{t("absence")}</TableHead>
-                <TableHead>{t("appreciation")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {classroomStudentsQuery.isPending && (
-                <TableRow>
-                  <TableCell colSpan={7}>
-                    <div className="grid w-full grid-cols-4 gap-4 px-2">
-                      {Array.from({ length: 40 }).map((_, index) => (
-                        <Skeleton
-                          key={`gradesheet-table-${index}`}
-                          className="h-8 w-full"
-                        />
-                      ))}
-                    </div>
-                  </TableCell>
+        <div className="px-4">
+          <div className="bg-background overflow-hidden rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-muted/50">
+                  <TableHead className="w-[10px]"></TableHead>
+                  <TableHead className="w-[10px]"></TableHead>
+                  <TableHead>{t("lastName")}</TableHead>
+                  <TableHead>{t("firstName")}</TableHead>
+                  <TableHead>{t("grade")}</TableHead>
+                  <TableHead>{t("absence")}</TableHead>
+                  <TableHead>{t("appreciation")}</TableHead>
                 </TableRow>
-              )}
-              {classroomStudentsQuery.data?.map((st, index) => {
-                return (
-                  <TableRow
-                    key={st.id}
-                    className="hover:bg-green-50 hover:text-green-700 hover:ring-green-600/20 dark:hover:bg-green-700/10 dark:hover:text-green-50"
-                  >
-                    <TableCell className="py-0">{index + 1}.</TableCell>
-                    <TableCell className="py-0">
-                      <AvatarState
-                        avatar={st.avatar}
-                        pos={getFullName(st).length}
-                      />
-                    </TableCell>
-                    <TableCell className="py-0">
-                      <Link
-                        className="hover:text-blue-600 hover:underline"
-                        href={routes.students.details(st.id)}
-                      >
-                        {st.lastName}
-                      </Link>
-                    </TableCell>
-                    <TableCell className="py-0">
-                      <Link
-                        className="hover:text-blue-600 hover:underline"
-                        href={routes.students.details(st.id)}
-                      >
-                        {st.firstName}
-                      </Link>
-                    </TableCell>
-                    <TableCell className="py-0">
-                      <Input
-                        value={st.id}
-                        className="hidden"
-                        {...form.register(`grades.${index}.studentId`)}
-                      />
-                      <FormField
-                        control={form.control}
-                        name={`grades.${index}.grade`}
-                        render={({ field }) => (
-                          <FormItem className="space-y-0">
-                            <FormControl>
-                              <Input
-                                {...field}
-                                maxLength={6}
-                                size={6}
-                                // step=".01"
-                                // type="number"
-
-                                className="h-8 w-[150px] text-sm"
-                                ref={(el) => {
-                                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                                  inputRefs.current[index] = el!; // TODO: Fix this shouldn't use null assession
-                                }}
-                                onKeyDown={(event) =>
-                                  handleKeyDown(event, index)
-                                }
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </TableCell>
-                    <TableCell className="py-0">
-                      <FormField
-                        control={form.control}
-                        name={`grades.${index}.absent`}
-                        render={({ field }) => (
-                          <FormItem className="space-y-0">
-                            <FormControl>
-                              <Checkbox
-                                defaultChecked={true}
-                                checked={
-                                  form.watch(`grades.${index}.grade`)
-                                    ? false
-                                    : true
-                                }
-                                onCheckedChange={(checked: boolean) => {
-                                  console.log("checked change", checked);
-                                  field.onChange(checked);
-                                }}
-                              />
-                            </FormControl>
-
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </TableCell>
-                    <TableCell className="py-0">
-                      {/* {watchValue.grade && getAppreciations(Number(watchValue.grade))} */}
+              </TableHeader>
+              <TableBody>
+                {classroomStudentsQuery.isPending && (
+                  <TableRow>
+                    <TableCell colSpan={7}>
+                      <div className="grid w-full grid-cols-4 gap-4 px-2">
+                        {Array.from({ length: 40 }).map((_, index) => (
+                          <Skeleton
+                            key={`gradesheet-table-${index}`}
+                            className="h-8 w-full"
+                          />
+                        ))}
+                      </div>
                     </TableCell>
                   </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+                )}
+                {classroomStudentsQuery.data?.map((st, index) => {
+                  return (
+                    <TableRow
+                      key={st.id}
+                      className="hover:bg-green-50 hover:text-green-700 hover:ring-green-600/20 dark:hover:bg-green-700/10 dark:hover:text-green-50"
+                    >
+                      <TableCell>{index + 1}.</TableCell>
+                      <TableCell>
+                        <AvatarState
+                          avatar={st.avatar}
+                          pos={getFullName(st).length}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Link
+                          className="hover:text-blue-600 hover:underline"
+                          href={routes.students.details(st.id)}
+                        >
+                          {st.lastName}
+                        </Link>
+                      </TableCell>
+                      <TableCell>
+                        <Link
+                          className="hover:text-blue-600 hover:underline"
+                          href={routes.students.details(st.id)}
+                        >
+                          {st.firstName}
+                        </Link>
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          value={st.id}
+                          className="hidden"
+                          {...form.register(`grades.${index}.studentId`)}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`grades.${index}.grade`}
+                          render={({ field }) => (
+                            <FormItem className="space-y-0">
+                              <FormControl>
+                                <Input
+                                  {...field}
+                                  maxLength={6}
+                                  size={6}
+                                  // step=".01"
+                                  // type="number"
+
+                                  className="h-8 w-[150px] text-sm"
+                                  ref={(el) => {
+                                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                                    inputRefs.current[index] = el!; // TODO: Fix this shouldn't use null assession
+                                  }}
+                                  onKeyDown={(event) =>
+                                    handleKeyDown(event, index)
+                                  }
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <FormField
+                          control={form.control}
+                          name={`grades.${index}.absent`}
+                          render={({ field }) => (
+                            <FormItem className="space-y-0">
+                              <FormControl>
+                                <Checkbox
+                                  defaultChecked={true}
+                                  checked={
+                                    form.watch(`grades.${index}.grade`)
+                                      ? false
+                                      : true
+                                  }
+                                  onCheckedChange={(checked: boolean) => {
+                                    console.log("checked change", checked);
+                                    field.onChange(checked);
+                                  }}
+                                />
+                              </FormControl>
+
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        {/* {watchValue.grade && getAppreciations(Number(watchValue.grade))} */}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </form>
     </Form>
