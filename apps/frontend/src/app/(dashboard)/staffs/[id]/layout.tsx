@@ -44,6 +44,7 @@ export default async function Layout(props: {
   }
 
   const { t } = await getServerTranslations();
+  const staffs = await api.staff.all();
 
   const userLinks: UserLink[] = [
     {
@@ -75,7 +76,7 @@ export default async function Layout(props: {
   ];
   return (
     <div className="flex flex-col gap-2">
-      <StaffHeader />
+      <StaffHeader staffs={staffs} />
       <div className="flex flex-row gap-2 px-4">
         <StaffProfile staffId={id} />
 

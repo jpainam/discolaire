@@ -15,6 +15,7 @@ import { PermissionAction } from "~/permissions";
 
 import type { RouterOutputs } from "@repo/api";
 import { Label } from "@repo/ui/components/label";
+import { useParams } from "next/navigation";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
 import PDFIcon from "../icons/pdf-solid";
@@ -29,10 +30,11 @@ export function StaffHeader({
   staffs: RouterOutputs["staff"]["all"];
 }) {
   const { t } = useLocale();
+  const params = useParams<{ id: string }>();
 
   const canCreateStaff = useCheckPermissions(
     PermissionAction.CREATE,
-    "staff:profile"
+    "staff:profile",
   );
 
   const router = useRouter();
@@ -48,7 +50,7 @@ export function StaffHeader({
           }}
         />
       </div>
-      <StaffEffectif staffs={staffs} />
+      {!params.id && <StaffEffectif staffs={staffs} />}
 
       <div className="flex flex-row items-center gap-2 py-1">
         {canCreateStaff && (
