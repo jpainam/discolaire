@@ -59,12 +59,12 @@ export function GradeDetailsHeader({
 
   const males10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "male"
+      (grade) => grade.grade >= 10 && grade.student.gender == "male",
     ).length / len;
 
   const females10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "female"
+      (grade) => grade.grade >= 10 && grade.student.gender == "female",
     ).length / len;
 
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
