@@ -1,13 +1,10 @@
-import {
-  Document,
-  Image,
-  Page,
-  StyleSheet,
-  Text,
-  View,
-} from "@react-pdf/renderer";
+import { Document, Image, Page, Text, View } from "@react-pdf/renderer";
 
 import type { RouterOutputs } from "@repo/api";
+
+import "../fonts";
+
+import type { Style } from "@react-pdf/stylesheet";
 
 import { IPBWHeader } from "../headers/IPBWHeader";
 
@@ -20,116 +17,137 @@ export function StudentPage({
 }) {
   return (
     <Document>
-      <Page size="A4" style={styles.page}>
-        <IPBWHeader school={school} />
-        <View style={styles.header}>
-          <Text>Student Details</Text>
-        </View>
+      <Page
+        size={"A4"}
+        style={{
+          paddingVertical: 20,
+          paddingHorizontal: 40,
+          fontSize: 7,
+          backgroundColor: "#fff",
+          color: "#000",
+          fontFamily: "Roboto",
+        }}
+      >
+        <View style={{ flexDirection: "column", display: "flex", gap: 6 }}>
+          <IPBWHeader school={school} />
 
-        {student.avatar && <Image style={styles.avatar} src={student.avatar} />}
-
-        <View style={styles.section}>
-          <Text style={styles.label}>Full Name:</Text>
-          <Text style={styles.value}>
-            {student.firstName} {student.lastName}
+          <Text
+            style={{
+              fontWeight: "bold",
+              alignSelf: "center",
+              fontSize: 12,
+            }}
+          >
+            Profile de l'élève
           </Text>
-        </View>
 
-        <View style={styles.section}>
-          <Text style={styles.label}>Registration Number:</Text>
-          <Text style={styles.value}>{student.registrationNumber}</Text>
-        </View>
+          {student.avatar && <Image src={student.avatar} />}
 
-        <View style={styles.section}>
-          <Text style={styles.label}>Email:</Text>
-          <Text style={styles.value}>{student.email}</Text>
-        </View>
+          <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
+            <Item
+              style={{ width: "50%" }}
+              label="Matricule"
+              value={student.registrationNumber}
+            />
+            <Item
+              style={{ width: "50%" }}
+              label="Nom et Prenom"
+              value={`${student.firstName} ${student.lastName}`}
+            />
+          </View>
 
-        <View style={styles.section}>
-          <Text style={styles.label}>Date of Birth:</Text>
-          <Text style={styles.value}>
-            {student.dateOfBirth?.toLocaleDateString()}
+          <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
+            <Item
+              style={{ width: "50%" }}
+              label="Date de naissance"
+              value={student.dateOfBirth?.toLocaleDateString()}
+            />
+            <Item
+              style={{ width: "50%" }}
+              label="Lieu de naissance"
+              value={student.placeOfBirth}
+            />
+          </View>
+          <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
+            <Item label={"Residence"} value={student.residence} />
+            <Item
+              style={{ width: "50%" }}
+              label="Sexe"
+              value={student.gender == "female" ? "F" : "M"}
+            />
+          </View>
+          <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
+            <Item label={"Status"} value={student.status} />
+            <Item label="Religion" value={student.religion?.name} />
+          </View>
+          <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
+            <Item label={"Tel"} value={student.phoneNumber} />
+            <Item label="Email" value={student.email} />
+          </View>
+          <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
+            <Item label={"Group sanguin"} value={student.bloodType} />
+          </View>
+
+          <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
+            <Item
+              label={"Date d'entree"}
+              value={student.dateOfEntry?.toLocaleDateString()}
+            />
+            <Item
+              label={"Date de sortie"}
+              value={student.dateOfExit?.toLocaleDateString()}
+            />
+          </View>
+
+          <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
+            <Item label={"Classe"} value={student.classroom?.name} />
+            <Item label={"Niveau"} value={student.classroom?.level.name} />
+          </View>
+
+          <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
+            <Item
+              label={"Achievements"}
+              value={student.achievements.join(", ")}
+            />
+            <Item label={"Tuteur"} value={student.hobbies.join(", ")} />
+          </View>
+          <Text
+            style={{
+              fontWeight: "bold",
+              alignSelf: "center",
+              fontSize: 12,
+            }}
+          >
+            Parents de l'élève
           </Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.label}>Place of Birth:</Text>
-          <Text style={styles.value}>{student.placeOfBirth}</Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.label}>Blood Type:</Text>
-          <Text style={styles.value}>{student.bloodType}</Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.label}>Residence:</Text>
-          <Text style={styles.value}>{student.residence}</Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.label}>Phone Number:</Text>
-          <Text style={styles.value}>{student.phoneNumber}</Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.label}>Status:</Text>
-          <Text style={styles.value}>{student.status}</Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.label}>Religion:</Text>
-          <Text style={styles.value}>{student.religion?.name}</Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.label}>Enrollment Date:</Text>
-          <Text style={styles.value}>
-            {student.dateOfEntry?.toLocaleDateString()}
-          </Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.label}>Achievements:</Text>
-          <Text style={styles.value}>{student.achievements.join(", ")}</Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.label}>Hobbies:</Text>
-          <Text style={styles.value}>{student.hobbies.join(", ")}</Text>
         </View>
       </Page>
     </Document>
   );
 }
 
-const styles = StyleSheet.create({
-  page: {
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-  },
-  header: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  section: {
-    marginBottom: 15,
-  },
-  label: {
-    fontSize: 12,
-    fontWeight: "bold",
-  },
-  value: {
-    fontSize: 12,
-    marginBottom: 5,
-  },
-  avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 20,
-  },
-});
-
+function Item({
+  value,
+  label,
+  style,
+}: {
+  value?: string | null;
+  label: string;
+  style?: Style;
+}) {
+  return (
+    <View
+      style={{
+        display: "flex",
+        width: "50%",
+        flexDirection: "column",
+        gap: 1,
+        ...style,
+      }}
+    >
+      <Text style={{ fontSize: 10, fontWeight: "bold" }}>{label}</Text>
+      <Text style={{ fontSize: 8 }}>{value ?? "..."}</Text>
+    </View>
+  );
+}
 export default StudentPage;
