@@ -58,7 +58,7 @@ export function ReinitializePasswordForm() {
   const { t } = useLocale();
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="oldPassword"
@@ -68,7 +68,7 @@ export function ReinitializePasswordForm() {
               <FormControl>
                 <Input id="oldPassword" type="password" required {...field} />
               </FormControl>
-              <FormDescription className="flex justify-end">
+              <FormDescription className="flex justify-end text-sm text-muted-foreground">
                 <Link
                   target="_blank"
                   className="underline"

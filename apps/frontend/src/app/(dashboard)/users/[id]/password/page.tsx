@@ -6,8 +6,8 @@ import { ReinitializePasswordForm } from "~/components/users/password/reinitiali
 export default async function Page() {
   const { t } = await getServerTranslations();
   return (
-    <div className="px-4">
-      <div>
+    <div className="px-4 flex flex-col gap-4 mx-auto max-w-3xl">
+      <div className="flex flex-col gap-4 py-4">
         <h3 className="text-lg font-medium">{t("reinitializeUserPassword")}</h3>
         <p className="text-sm text-muted-foreground">
           {t("reinitializeUserPasswordDescription")}

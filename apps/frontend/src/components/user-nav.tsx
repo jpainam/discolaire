@@ -1,6 +1,13 @@
 "use client";
 
-import { Bell, Computer, LogOut, Settings, User } from "lucide-react";
+import {
+  Bell,
+  Computer,
+  LockKeyhole,
+  LogOut,
+  Settings,
+  User,
+} from "lucide-react";
 
 import {
   Avatar,
@@ -76,6 +83,16 @@ export function UserNav() {
             <User className="h-4 w-4" />
             <span>{t("profile")}</span>
           </DropdownMenuItem>
+          {user?.id && (
+            <DropdownMenuItem
+              onSelect={() => {
+                router.push(`/users/${user.id}/password`);
+              }}
+            >
+              <LockKeyhole />
+              {t("password")}
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem
             onClick={() => {
               if (user?.id) router.push(routes.users.settings(user.id));
