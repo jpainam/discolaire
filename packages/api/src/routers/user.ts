@@ -296,14 +296,7 @@ export const userRouter = createTRPCRouter({
           message: "Too many failed attempts, contact support",
         });
       }
-      await ctx.db.invite.update({
-        where: { token: input.token },
-        data: {
-          attempts: 0,
-          used: true,
-          lastAttempt: new Date(),
-        },
-      });
+
       const exists = await userService.validateUsername(input.username);
       if (exists.error) {
         throw new TRPCError({
@@ -321,11 +314,20 @@ export const userRouter = createTRPCRouter({
           isActive: true,
         },
       });
+      await ctx.db.invite.update({
+        where: { token: input.token },
+        data: {
+          attempts: 0,
+          used: true,
+          lastAttempt: new Date(),
+        },
+      });
       await attachUser({
         entityId: invite.entityId,
         entityType: invite.entityType as "staff" | "contact" | "student",
         userId: user.id,
       });
+
       return user;
     }),
 });
