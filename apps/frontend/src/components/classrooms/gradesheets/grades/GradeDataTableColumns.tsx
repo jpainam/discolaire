@@ -227,7 +227,7 @@ function ActionCells({
               });
             }}
           >
-            <Pencil className="mr-2 size-4" />
+            <Pencil />
             {t("edit")}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -254,7 +254,7 @@ function ActionCells({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  },
+                  }
                 );
               }
             }}

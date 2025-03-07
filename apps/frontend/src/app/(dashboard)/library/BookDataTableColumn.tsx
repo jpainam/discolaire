@@ -207,7 +207,7 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
               }
             }}
           >
-            <Trash2 className="mr-2 size-4" />
+            <Trash2 />
             {t("delete")}
           </DropdownMenuItem>
         </DropdownMenuContent>

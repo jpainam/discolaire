@@ -307,11 +307,11 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
   const utils = api.useUtils();
   const canDeleteClassroom = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:details",
+    "classroom:details"
   );
   const canUpdateClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
-    "classroom:details",
+    "classroom:details"
   );
   const classroomMutation = api.classroom.delete.useMutation({
     onSettled: () => utils.classroom.invalidate(),
@@ -329,13 +329,13 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
             <DotsHorizontalIcon className="size-4" aria-hidden="true" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-40">
+        <DropdownMenuContent align="end">
           <DropdownMenuItem
             onSelect={() => {
               router.push(routes.classrooms.details(classroom.id));
             }}
           >
-            <Eye className="mr-2 size-4" />
+            <Eye />
             {t("details")}
           </DropdownMenuItem>
           {canUpdateClassroom && (
@@ -348,7 +348,7 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
                 });
               }}
             >
-              <Pencil className="mr-2 size-4" />
+              <Pencil />
               {t("edit")}
             </DropdownMenuItem>
           )}
@@ -377,7 +377,7 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
                   }
                 }}
               >
-                <Trash2 className="mr-2 size-4" />
+                <Trash2 />
                 {t("delete")}
               </DropdownMenuItem>
             </>

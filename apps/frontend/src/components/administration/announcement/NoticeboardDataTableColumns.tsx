@@ -237,7 +237,7 @@ function ActionCells({
               });
             }}
           >
-            <Pencil className="mr-2 size-4" />
+            <Pencil />
             {t("edit")}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -258,12 +258,12 @@ function ActionCells({
                       return t("deleted_successfully");
                     },
                     error: (error) => getErrorMessage(error),
-                  },
+                  }
                 );
               }
             }}
           >
-            <Trash2 className="mr-2 size-4" />
+            <Trash2 />
             {t("delete")}
           </DropdownMenuItem>
         </DropdownMenuContent>

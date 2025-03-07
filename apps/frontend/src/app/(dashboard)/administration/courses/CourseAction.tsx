@@ -22,7 +22,7 @@ export function CourseAction() {
   const { t } = useLocale();
   const { openModal } = useModal();
   return (
-    <div className="flex flex-row items-center gap-4">
+    <div className="flex flex-row items-center gap-2">
       <Button
         onClick={() => {
           openModal({

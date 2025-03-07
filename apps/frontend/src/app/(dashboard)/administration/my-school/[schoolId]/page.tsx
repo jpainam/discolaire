@@ -52,8 +52,8 @@ export default async function Page(props: {
 
   const { t } = await getServerTranslations();
   return (
-    <div className="flex flex-col gap-2 p-2 text-sm">
-      <Card>
+    <div className="flex flex-col gap-2 text-sm">
+      <Card className="p-0">
         <CardHeader className="flex flex-row items-center space-x-4 border-b bg-muted/50 p-2">
           <Image
             src={school.logo ?? ""}
@@ -139,7 +139,7 @@ export default async function Page(props: {
           </div> */}
         </CardContent>
       </Card>
-      <Card>
+      <Card className="p-0">
         <CardHeader className="border-b bg-muted/50 p-2">
           <CardTitle>{t("default_settings")}</CardTitle>
         </CardHeader>
