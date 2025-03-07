@@ -52,7 +52,7 @@ export function SubjectHeader({
   const { openSheet } = useSheet();
   const canAddClassroomSubject = useCheckPermissions(
     PermissionAction.CREATE,
-    "classroom:subject",
+    "classroom:subject"
   );
 
   const badgeVariants = [
@@ -111,7 +111,7 @@ export function SubjectHeader({
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} size={"icon"}>
+            <Button variant={"outline"} className="size-8" size={"icon"}>
               <MoreVertical className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>

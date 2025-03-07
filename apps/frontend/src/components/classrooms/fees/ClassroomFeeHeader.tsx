@@ -30,7 +30,7 @@ export function ClassroomFeeHeader() {
     "classroom:fee",
     {
       id: params.id,
-    },
+    }
   );
   const Icon = sidebarIcons.fees;
   return (
@@ -55,7 +55,7 @@ export function ClassroomFeeHeader() {
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} size={"icon"}>
+            <Button variant={"outline"} className="size-8" size={"icon"}>
               <MoreVertical className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>

@@ -28,7 +28,7 @@ export function AccessLogsHeader() {
       <div className="ml-auto flex flex-row">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} size={"icon"}>
+            <Button variant={"outline"} className="size-8" size={"icon"}>
               <MoreVertical className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>

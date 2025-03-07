@@ -53,14 +53,14 @@ export function StaffProfileHeader({
     "staff:profile",
     {
       id: params.id,
-    },
+    }
   );
   const canEditStaff = useCheckPermissions(
     PermissionAction.UPDATE,
     "staff:profile",
     {
       id: params.id,
-    },
+    }
   );
   const deleteStaffMutation = api.staff.delete.useMutation({
     onSettled: async () => {
@@ -84,7 +84,7 @@ export function StaffProfileHeader({
         <Button variant={"outline"}>{t("change_avatar")}</Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} size={"icon"}>
+            <Button variant={"outline"} className="size-8" size={"icon"}>
               <MoreHorizontal />
             </Button>
           </DropdownMenuTrigger>

@@ -90,7 +90,7 @@ export function ContactHeader() {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} size={"icon"}>
+            <Button variant={"outline"} className="size-8" size={"icon"}>
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>

@@ -38,7 +38,7 @@ export function EnrollmentHeader({
     "classroom:enrollment",
     {
       id: classroom.id,
-    },
+    }
   );
 
   const male = students.filter((student) => student.gender == "male").length;
@@ -128,7 +128,7 @@ export function EnrollmentHeader({
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} size={"icon"}>
+            <Button variant={"outline"} className="size-8" size={"icon"}>
               <MoreVertical className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -137,7 +137,7 @@ export function EnrollmentHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -148,7 +148,7 @@ export function EnrollmentHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

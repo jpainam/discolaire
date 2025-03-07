@@ -32,7 +32,7 @@ export function StudentPageHeader() {
 
   const canCreateStudent = useCheckPermissions(
     PermissionAction.CREATE,
-    "student:profile",
+    "student:profile"
   );
 
   const [value, setValue] = useState("");
@@ -97,7 +97,7 @@ export function StudentPageHeader() {
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} size={"icon"}>
+            <Button variant={"outline"} className="size-8" size={"icon"}>
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
@@ -108,7 +108,7 @@ export function StudentPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.student_list}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -119,7 +119,7 @@ export function StudentPageHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.student_list}?format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

@@ -42,7 +42,7 @@ export function ReportCardHeader() {
       <div className="flex flex-row items-center gap-2 md:ml-auto">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} size={"icon"}>
+            <Button variant={"outline"} className="size-8" size={"icon"}>
               <MoreVertical className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -51,7 +51,7 @@ export function ReportCardHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/report-cards/ipbw?classroomId=${params.id}&termId=${termId}`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

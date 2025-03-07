@@ -34,14 +34,14 @@ export function StaffHeader({
 
   const canCreateStaff = useCheckPermissions(
     PermissionAction.CREATE,
-    "staff:profile",
+    "staff:profile"
   );
 
   const router = useRouter();
   const { openSheet } = useSheet();
   return (
-    <div className="flex flex-row items-center justify-between py-1">
-      <div className="flex flex-row items-center gap-2 px-4">
+    <div className="flex flex-row items-center justify-between py-1 px-4">
+      <div className="flex flex-row items-center gap-2">
         <Label>{t("staffs")}</Label>
         <StaffSelector
           className="w-[350px]"
@@ -52,7 +52,7 @@ export function StaffHeader({
       </div>
       {!params.id && <StaffEffectif staffs={staffs} />}
 
-      <div className="flex flex-row items-center gap-2 py-1">
+      <div className="flex flex-row items-center gap-2">
         {canCreateStaff && (
           <Button
             onClick={() => {
@@ -69,7 +69,7 @@ export function StaffHeader({
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size="icon" variant="outline">
+            <Button size="icon" className="size-8" variant="outline">
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
