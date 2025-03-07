@@ -3,7 +3,6 @@
 import { LayoutGridIcon, ListIcon, MoreVertical } from "lucide-react";
 import { parseAsInteger, useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -20,14 +19,11 @@ import FlatBadge from "~/components/FlatBadge";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
-import { printStudentGrade } from "~/actions/reporting";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useRouter } from "~/hooks/use-router";
-import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
 
 export function StudentGradeHeader({
   student,
@@ -91,7 +87,6 @@ export function StudentGradeHeader({
 
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
-  const utils = api.useUtils();
 
   if (classroomMinMaxMoyGrades.isPending) {
     return (
@@ -112,7 +107,7 @@ export function StudentGradeHeader({
             "?" +
               createQueryString({
                 term: val,
-              }),
+              })
           );
         }}
         defaultValue={term ? `${term}` : undefined}
@@ -153,30 +148,16 @@ export function StudentGradeHeader({
         </ToggleGroup>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size="icon" variant="outline">
+            <Button size="icon" className="size-8" variant="outline">
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
               onSelect={() => {
-                toast.promise(
-                  printStudentGrade({
-                    studentId: student.id,
-                    title: `${getFullName(student)} - ${t("grades")}`,
-                    termId: term,
-                    type: "pdf",
-                  }),
-                  {
-                    loading: t("printing"),
-                    success: () => {
-                      void utils.reporting.invalidate();
-                      return t("printing_job_submitted");
-                    },
-                    error: (error) => {
-                      return getErrorMessage(error);
-                    },
-                  },
+                window.open(
+                  `/api/pdfs/student/grades/?id=${student.id}&format=pdf`,
+                  "_blank"
                 );
               }}
             >
@@ -184,23 +165,9 @@ export function StudentGradeHeader({
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={() => {
-                toast.promise(
-                  printStudentGrade({
-                    studentId: student.id,
-                    title: `${getFullName(student)} - ${t("grades")}`,
-                    termId: term,
-                    type: "excel",
-                  }),
-                  {
-                    loading: t("printing"),
-                    success: () => {
-                      void utils.reporting.invalidate();
-                      return t("printing_job_submitted");
-                    },
-                    error: (error) => {
-                      return getErrorMessage(error);
-                    },
-                  },
+                window.open(
+                  `/api/pdfs/student/grades/?id=${student.id}&format=csv`,
+                  "_blank"
                 );
               }}
             >

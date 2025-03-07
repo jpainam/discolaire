@@ -17,5 +17,6 @@ export * from "./statements/IPBWReceipt";
 export * from "./classroom/ClassroomList";
 export * from "./reportcards/IPBWClassroom";
 export * from "./statements/ReminderLetter";
+export * from "./students/GradeList";
 export * from "./students/StudentList";
 export * from "./students/StudentPage";
