@@ -52,7 +52,7 @@ export function SubjectHeader({
   const { openSheet } = useSheet();
   const canAddClassroomSubject = useCheckPermissions(
     PermissionAction.CREATE,
-    "classroom:subject"
+    "classroom:subject",
   );
 
   const badgeVariants = [
