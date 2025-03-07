@@ -19,10 +19,10 @@ import {
   User,
 } from "lucide-react";
 
+import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { useLocale } from "~/i18n";
 import { SidebarLogo } from "../sidebar-logo";
-import Link from "next/link";
 export function StaffSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
@@ -69,9 +69,9 @@ export function StaffSidebar({
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={t("back_to_home")}>
-                <Link href={"/"}>
+                <Link href={"/staffs"}>
                   <ArrowLeft />
-                  <span>{t("back_to_home")}</span>
+                  <span>{t("back")}</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>

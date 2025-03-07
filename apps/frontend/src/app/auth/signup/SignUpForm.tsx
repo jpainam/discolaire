@@ -35,12 +35,13 @@ const formSchema = z.object({
 });
 
 export function SignUpForm() {
+  const router = useRouter();
+  const { t } = useLocale();
   const searchParams = useSearchParams();
   const signUpMutation = api.user.signUp.useMutation({
     onSuccess: () => {
-      //router.push("/auth/login");
-      console.log("success");
       toast.success("Account created successfully");
+      router.push("/auth/login");
     },
     onError: (err) => {
       console.error(err);
@@ -58,16 +59,20 @@ export function SignUpForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("Calling signUpMutation.mutate");
-    console.log(values);
-    signUpMutation.mutate({
-      username: values.username,
-      password: values.password,
-      token: values.token,
-    });
+    signUpMutation.mutate(
+      {
+        username: values.username,
+        password: values.password,
+        token: values.token,
+      },
+      {
+        onError: (err) => {
+          console.error(err);
+          toast.error(err.message);
+        },
+      }
+    );
   }
-  const router = useRouter();
-  const { t } = useLocale();
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-secondary">

@@ -9,12 +9,8 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   const { id } = params;
 
-  // const contact = await api.contact.get(id);
-
-  // const { t } = await getServerTranslations();
-  // const color = generateStringColor();
   return (
-    <div className="grid gap-4 p-2 xl:grid-cols-2">
+    <div className="grid gap-4 py-2 px-4 xl:grid-cols-[40%_60%]">
       <Card className="p-0">
         <CardHeader className="border-b bg-muted/50 p-2">
           <ContactDetailsHeader contactId={id} />

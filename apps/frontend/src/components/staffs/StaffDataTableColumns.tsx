@@ -23,6 +23,7 @@ import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
@@ -250,6 +251,7 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
   const deleteStaffMutation = api.staff.delete.useMutation({
     onSettled: () => utils.staff.invalidate(),
   });
+  const router = useRouter();
   return (
     <>
       <DropdownMenu>
@@ -259,7 +261,11 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => {
+              router.push(`/staffs/${staff.id}`);
+            }}
+          >
             <ReceiptText />
             <span className="text-sm">{t("details")}</span>
           </DropdownMenuItem>
@@ -306,7 +312,7 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
               }
             }}
           >
-            <Trash2 className="mr-2 size-4" /> {t("delete")}
+            <Trash2 /> {t("delete")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

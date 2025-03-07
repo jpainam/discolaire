@@ -12,10 +12,10 @@ import {
 } from "@repo/ui/components/sidebar";
 import { ArrowLeft, BellRing, User, Users } from "lucide-react";
 
+import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { useLocale } from "~/i18n";
 import { SidebarLogo } from "../sidebar-logo";
-import Link from "next/link";
 export function ContactSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
@@ -52,9 +52,9 @@ export function ContactSidebar({
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={t("back_to_home")}>
-                <Link href={"/"}>
+                <Link href={"/contacts"}>
                   <ArrowLeft />
-                  <span>{t("back_to_home")}</span>
+                  <span>{t("back")}</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>

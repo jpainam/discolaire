@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  ChevronDown,
   ImageUpIcon,
   KeyRound,
   MoreVertical,
@@ -60,7 +59,7 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
     "contact:profile",
     {
       id: contactId,
-    },
+    }
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();
@@ -121,7 +120,7 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
                     });
                   }}
                 >
-                  <UserPlus2 className="mr-2 h-4 w-4" />
+                  <UserPlus2 />
                   {t("attach_user")}
                 </DropdownMenuItem>
               )}
@@ -186,25 +185,15 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
           </DropdownMenu>
         </div>
         <div className="grid flex-row gap-2 md:flex">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant={"outline"} size={"sm"}>
-                <Printer className="mr-2 h-4 w-4" />
-                {t("print")}
-                <ChevronDown className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>{t("profile")}</DropdownMenuItem>
-              <DropdownMenuItem>{t("students")}</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Button className="size-8" variant={"outline"} size={"icon"}>
+            <Printer />
+          </Button>
+
           <Button variant={"outline"} size={"sm"}>
-            <ImageUpIcon className="mr-2 h-4 w-4" />
+            <ImageUpIcon />
             {t("change_avatar")}
           </Button>
           <Button
-            variant={"outline"}
             onClick={() => {
               openModal({
                 className: "p-0 w-[600px]",

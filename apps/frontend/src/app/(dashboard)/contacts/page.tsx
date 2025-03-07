@@ -8,12 +8,6 @@ export default async function Page() {
   return (
     <div className="px-4">
       <ContactDataTable contacts={contacts} />
-      {/* <div className="grid md:grid-cols-2 p-1 gap-2">
-        <ContactEffectif />
-        <ContactGenderEffectif />
-        <ContactEffectif />
-        <ContactEffectif />
-      </div> */}
     </div>
   );
 }
