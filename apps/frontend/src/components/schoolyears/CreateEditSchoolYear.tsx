@@ -18,8 +18,8 @@ import { Input } from "@repo/ui/components/input";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { DatePicker } from "~/components/DatePicker";
 import { api } from "~/trpc/react";
-import { DatePicker } from "../shared/date-picker";
 
 const schoolYearSchema = z.object({
   name: z.string().min(1),
@@ -114,7 +114,10 @@ export function CreateEditSchoolYear({
             <FormItem>
               <FormLabel>{t("start_date")}</FormLabel>
               <FormControl>
-                <DatePicker {...field} />
+                <DatePicker
+                  defaultValue={field.value}
+                  onChange={(v) => field.onChange(v)}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -127,7 +130,10 @@ export function CreateEditSchoolYear({
             <FormItem>
               <FormLabel>{t("end_date")}</FormLabel>
               <FormControl>
-                <DatePicker {...field} />
+                <DatePicker
+                  defaultValue={field.value}
+                  onChange={(v) => field.onChange(v)}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

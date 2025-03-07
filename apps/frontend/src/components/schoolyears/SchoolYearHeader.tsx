@@ -16,7 +16,7 @@ export function SchoolYearHeader() {
       onClick={() => {
         openModal({
           title: `${t("create")} - ${t("schoolYear")}`,
-          className: "w-96",
+
           view: <CreateEditSchoolYear />,
         });
       }}

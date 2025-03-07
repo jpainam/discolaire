@@ -21,7 +21,7 @@ export function TermHeader() {
   const { t } = useLocale();
   const { openModal } = useModal();
   return (
-    <>
+    <div className="px-4 flex justify-end items-center gap-2">
       <Button
         onClick={() => {
           openModal({
@@ -38,8 +38,8 @@ export function TermHeader() {
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant={"outline"} size={"icon"}>
-            <MoreVertical className="h-4 w-4" />
+          <Button variant={"outline"} className="size-8" size={"icon"}>
+            <MoreVertical />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -54,6 +54,6 @@ export function TermHeader() {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </>
+    </div>
   );
 }

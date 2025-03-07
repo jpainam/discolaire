@@ -56,7 +56,7 @@ export function SchoolYearTable() {
 
   if (schoolYearsQuery.isPending) {
     return (
-      <div className="grid grid-cols-1 gap-2">
+      <div className="grid grid-cols-1 gap-2 px-4">
         {Array.from({ length: 10 }).map((_, i) => (
           <Skeleton key={i} className="h-8 w-full" />
         ))}
@@ -65,124 +65,127 @@ export function SchoolYearTable() {
   }
 
   return (
-    <div className="m-2 rounded-lg border">
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-muted/50">
-            <TableHead>{t("name")}</TableHead>
-            <TableHead>{t("classrooms")}</TableHead>
-            <TableHead>{t("students")}</TableHead>
-            <TableHead>{t("start_date")}</TableHead>
-            <TableHead>{t("end_date")}</TableHead>
-            <TableHead>{t("lock")}?</TableHead>
-            <TableHead></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {schoolYearsQuery.data?.map((schoolYear) => {
-            return (
-              <TableRow key={schoolYear.id}>
-                <TableCell> {schoolYear.name}</TableCell>
-                <TableCell>
-                  <div className="flex flex-row gap-2">
-                    <SchoolIcon className="h-4 w-4" />
-                    {schoolYear.classroom}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="flex flex-row items-center gap-2">
-                    <FaUsers className="h-4 w-4" />
-                    {schoolYear.enrollment}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="flex flex-row items-center gap-2">
-                    <CalendarDays className="h-4 w-4" />
-                    {fullDateFormatter.format(schoolYear.startDate)}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="flex flex-row items-center gap-2">
-                    <CalendarClock className="h-4 w-4" />
-                    {fullDateFormatter.format(schoolYear.endDate)}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <FlatBadge variant={schoolYear.isActive ? "gray" : "yellow"}>
-                    {schoolYear.isActive ? (
-                      <>
-                        <FaUnlockAlt className="mr-2 h-4 w-4" />
-                        {t("no")}
-                      </>
-                    ) : (
-                      <>
-                        <FaLock className="mr-2 h-4 w-4" />
-                        {t("yes")}
-                      </>
-                    )}
-                  </FlatBadge>
-                </TableCell>
-                <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant={"ghost"} size={"icon"}>
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem
-                        onSelect={() => {
-                          openModal({
-                            title: `${t("edit")} - ${t("schoolYear")}`,
-                            description: schoolYear.name,
-                            className: "w-96",
-                            view: (
-                              <CreateEditSchoolYear
-                                id={schoolYear.id}
-                                name={schoolYear.name}
-                                startDate={schoolYear.startDate}
-                                endDate={schoolYear.endDate}
-                                isActive={schoolYear.isActive}
-                              />
-                            ),
-                          });
-                        }}
-                      >
-                        <Pencil />
-                        {t("edit")}
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        disabled={!schoolYear.isActive}
-                        onSelect={async () => {
-                          const isConfirm = await confirm({
-                            icon: (
-                              <Trash2 className="h-4 w-4 text-destructive" />
-                            ),
-                            title: t("delete"),
-                            description: t("delete_confirmation"),
-                            alertDialogTitle: {
-                              className: "flex items-center gap-2",
-                            },
-                          });
-                          if (isConfirm) {
-                            toast.loading(t("deleting"), { id: 0 });
-                            deleteSchoolYearMutation.mutate(schoolYear.id);
-                          }
-                        }}
-                        className="text-destructive"
-                      >
-                        <Trash2 />
-                        {t("Delete")}
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+    <div className="px-4">
+      <div className="bg-background overflow-hidden rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow className="hover:bg-transparent">
+              <TableHead>{t("name")}</TableHead>
+              <TableHead>{t("classrooms")}</TableHead>
+              <TableHead>{t("students")}</TableHead>
+              <TableHead>{t("start_date")}</TableHead>
+              <TableHead>{t("end_date")}</TableHead>
+              <TableHead>{t("lock")}?</TableHead>
+              <TableHead className="w-[96px] "></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {schoolYearsQuery.data?.map((schoolYear) => {
+              return (
+                <TableRow key={schoolYear.id}>
+                  <TableCell> {schoolYear.name}</TableCell>
+                  <TableCell>
+                    <div className="flex flex-row gap-2">
+                      <SchoolIcon className="h-4 w-4" />
+                      {schoolYear.classroom}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-row items-center gap-2">
+                      <FaUsers className="h-4 w-4" />
+                      {schoolYear.enrollment}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-row items-center gap-2">
+                      <CalendarDays className="h-4 w-4" />
+                      {fullDateFormatter.format(schoolYear.startDate)}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-row items-center gap-2">
+                      <CalendarClock className="h-4 w-4" />
+                      {fullDateFormatter.format(schoolYear.endDate)}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <FlatBadge
+                      variant={schoolYear.isActive ? "gray" : "yellow"}
+                    >
+                      {schoolYear.isActive ? (
+                        <>
+                          <FaUnlockAlt className="mr-2 h-4 w-4" />
+                          {t("no")}
+                        </>
+                      ) : (
+                        <>
+                          <FaLock className="mr-2 h-4 w-4" />
+                          {t("yes")}
+                        </>
+                      )}
+                    </FlatBadge>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant={"ghost"} size={"icon"}>
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          onSelect={() => {
+                            openModal({
+                              title: `${t("edit")} - ${t("schoolYear")}`,
+                              description: schoolYear.name,
+                              view: (
+                                <CreateEditSchoolYear
+                                  id={schoolYear.id}
+                                  name={schoolYear.name}
+                                  startDate={schoolYear.startDate}
+                                  endDate={schoolYear.endDate}
+                                  isActive={schoolYear.isActive}
+                                />
+                              ),
+                            });
+                          }}
+                        >
+                          <Pencil />
+                          {t("edit")}
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          disabled={!schoolYear.isActive}
+                          onSelect={async () => {
+                            const isConfirm = await confirm({
+                              icon: (
+                                <Trash2 className="h-4 w-4 text-destructive" />
+                              ),
+                              title: t("delete"),
+                              description: t("delete_confirmation"),
+                              alertDialogTitle: {
+                                className: "flex items-center gap-2",
+                              },
+                            });
+                            if (isConfirm) {
+                              toast.loading(t("deleting"), { id: 0 });
+                              deleteSchoolYearMutation.mutate(schoolYear.id);
+                            }
+                          }}
+                          className="text-destructive"
+                        >
+                          <Trash2 />
+                          {t("Delete")}
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

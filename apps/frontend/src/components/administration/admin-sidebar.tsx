@@ -104,21 +104,6 @@ export function AdminSidebar({
         ],
       },
       {
-        title: "schoolYear",
-        url: "/administration/school-years",
-        icon: CalendarDays,
-        items: [
-          {
-            title: "schoolYear",
-            url: "/administration/school-years",
-          },
-          {
-            title: "periods",
-            url: "/administration/school-years/terms",
-          },
-        ],
-      },
-      {
         title: "settings",
         url: "/administration/settings",
         icon: Settings,
@@ -184,6 +169,11 @@ export function AdminSidebar({
     ],
   };
   const others = [
+    {
+      name: "schoolYear",
+      url: "/administration/school-years",
+      icon: CalendarDays,
+    },
     {
       name: "school_life",
       url: "/administration/attendances",

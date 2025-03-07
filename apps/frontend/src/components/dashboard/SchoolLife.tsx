@@ -117,7 +117,7 @@ export function SchoolLife({ className }: { className?: string }) {
     const daysToAdd = (week - 1) * 7;
     const selectedWeekStart = startOfWeek(
       new Date(firstDayOfYear.setDate(firstDayOfYear.getDate() + daysToAdd)),
-      { weekStartsOn: 0 },
+      { weekStartsOn: 0 }
     );
 
     setSelectedDate(selectedWeekStart);
@@ -144,13 +144,13 @@ export function SchoolLife({ className }: { className?: string }) {
       format(date, "EEE d", {
         locale:
           i18n.language === "fr" ? fr : i18n.language === "es" ? es : enUS,
-      }),
+      })
     );
 
   return (
     <div className={cn("w-full rounded-lg border overflow-hidden", className)}>
-      <div className="p-3.5 flex items-center border-b justify-between">
-        <h2 className="text-xl font-semibold">{t("timetable")}</h2>
+      <div className="p-3.5 flex items-center justify-between">
+        <h2 className="text-xl font-semibold">{t("school_life")}</h2>
         <div className="flex items-center gap-2">
           <Input type="week" onChange={handleWeekChange} />
         </div>

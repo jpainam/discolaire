@@ -19,6 +19,7 @@ import { Switch } from "@repo/ui/components/switch";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { DatePicker } from "~/components/DatePicker";
 import { api } from "~/trpc/react";
 
 type Term = RouterOutputs["term"]["all"][number];
@@ -33,8 +34,8 @@ export function CreateEditTerm({ term }: { term?: Term }) {
     schema: createEditTermSchema,
     defaultValues: {
       name: term?.name,
-      startDate: term?.startDate,
-      endDate: term?.endDate,
+      startDate: term?.startDate ?? new Date(),
+      endDate: term?.endDate ?? new Date(),
       isActive: term?.isActive,
     },
   });
@@ -102,11 +103,9 @@ export function CreateEditTerm({ term }: { term?: Term }) {
                 {t("start_date")}
               </FormLabel>
               <FormControl>
-                <Input
-                  id="startDate"
-                  onChange={(e) => field.onChange(e.target.value)}
-                  name="startDate"
-                  type="date"
+                <DatePicker
+                  defaultValue={field.value}
+                  onChange={(e) => field.onChange(e)}
                 />
               </FormControl>
               <FormMessage />
@@ -123,11 +122,9 @@ export function CreateEditTerm({ term }: { term?: Term }) {
                 {t("end_date")}
               </FormLabel>
               <FormControl>
-                <Input
-                  id="endDate"
-                  onChange={(e) => field.onChange(e.target.value)}
-                  name="endDate"
-                  type="date"
+                <DatePicker
+                  defaultValue={field.value}
+                  onChange={(e) => field.onChange(e)}
                 />
               </FormControl>
               <FormMessage />
