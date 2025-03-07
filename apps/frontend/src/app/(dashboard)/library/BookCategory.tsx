@@ -88,7 +88,7 @@ export function BookCategory() {
               )}
               {categoryQuery.data?.map((category) => {
                 return (
-                  <TableRow>
+                  <TableRow key={category.id}>
                     <TableCell>{category.name}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex flex-row gap-2 items-center">
