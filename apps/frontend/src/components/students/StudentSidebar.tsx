@@ -139,10 +139,10 @@ export function StudentSidebar({
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={t("back_to_home")}>
+              <SidebarMenuButton asChild tooltip={t("back")}>
                 <Link href={"/students"}>
                   <ArrowLeft />
-                  <span>{t("back_to_home")}</span>
+                  <span>{t("back")}</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
