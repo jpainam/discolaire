@@ -13,6 +13,7 @@ import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
+import type { RouterOutputs } from "@repo/api";
 import { Label } from "@repo/ui/components/label";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
@@ -20,20 +21,25 @@ import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
 import { StaffSelector } from "../shared/selects/StaffSelector";
 import { CreateEditStaff } from "./CreateEditStaff";
+import { StaffEffectif } from "./StaffEffectif";
 
-export function StaffHeader() {
+export function StaffHeader({
+  staffs,
+}: {
+  staffs: RouterOutputs["staff"]["all"];
+}) {
   const { t } = useLocale();
 
   const canCreateStaff = useCheckPermissions(
     PermissionAction.CREATE,
-    "staff:profile",
+    "staff:profile"
   );
 
   const router = useRouter();
   const { openSheet } = useSheet();
   return (
-    <div className="flex flex-row items-center justify-between border-b py-1">
-      <div className="flex flex-row items-center gap-2 px-4 py-1">
+    <div className="flex flex-row items-center justify-between py-1">
+      <div className="flex flex-row items-center gap-2 px-4">
         <Label>{t("staffs")}</Label>
         <StaffSelector
           className="w-[350px]"
@@ -42,6 +48,8 @@ export function StaffHeader() {
           }}
         />
       </div>
+      <StaffEffectif staffs={staffs} />
+
       <div className="flex flex-row items-center gap-2 py-1">
         {canCreateStaff && (
           <Button

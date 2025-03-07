@@ -1,37 +1,18 @@
-import { Suspense } from "react";
-
 import { Separator } from "@repo/ui/components/separator";
-import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 
 import { StaffDataTable } from "~/components/staffs/StaffDataTable";
-import { StaffEffectif } from "~/components/staffs/StaffEffectif";
 import { StaffHeader } from "~/components/staffs/StaffHeader";
+import { api } from "~/trpc/server";
 
-export default function Page() {
+export default async function Page() {
+  const staffs = await api.staff.all();
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row items-center justify-between px-4">
-        <StaffEffectif />
-        <StaffHeader />
-      </div>
+      <StaffHeader staffs={staffs} />
 
       <Separator />
       <div className="mt-2 flex-1 px-4">
-        {/* <StaffGrid staffs={staffs} /> */}
-        <Suspense
-          key={"staff-data-table-suspense"}
-          fallback={
-            <DataTableSkeleton
-              columnCount={5}
-              searchableColumnCount={1}
-              filterableColumnCount={2}
-              cellWidths={["10rem", "40rem", "12rem", "12rem", "8rem"]}
-              shrinkZero
-            />
-          }
-        >
-          <StaffDataTable />
-        </Suspense>
+        <StaffDataTable staffs={staffs} />
       </div>
     </div>
   );

@@ -1,18 +1,19 @@
-import { Label } from "@repo/ui/components/label";
-import { getServerTranslations } from "~/i18n/server";
-import { api } from "~/trpc/server";
+"use client";
+import type { RouterOutputs } from "@repo/api";
+import { useLocale } from "~/i18n";
 
-export async function StaffEffectif() {
-  const staffs = await api.staff.all();
+export function StaffEffectif({
+  staffs,
+}: {
+  staffs: RouterOutputs["staff"]["all"];
+}) {
   const females = staffs.filter((staff) => staff.gender == "female").length;
   const total = staffs.length;
   const males = total - females;
-  const { t } = await getServerTranslations();
+  const { t } = useLocale();
   const COLORS = ["#6741D9", "#E0C6FD", "#FFBC75", "#FF7272"];
   return (
     <div className="flex flex-row items-center gap-4 text-sm">
-      <Label>{t("staffs")}</Label>
-
       <Detail color={COLORS[0]} value={total} text={t("total")} />
       <Detail color={COLORS[2]} value={males} text={t("male")} />
       <Detail color={COLORS[3]} value={females} text={t("female")} />
