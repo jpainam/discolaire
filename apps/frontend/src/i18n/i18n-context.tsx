@@ -15,8 +15,8 @@ void i18next
   .use(
     resourcesToBackend(
       (language: any, namespace: any) =>
-        import(`./locales/${language}/${namespace}.json`)
-    )
+        import(`./locales/${language}/${namespace}.json`),
+    ),
   )
   .init({
     ...getOptions(),
