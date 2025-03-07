@@ -394,7 +394,7 @@ export const studentRouter = createTRPCRouter({
   get: protectedProcedure
     .input(z.string().min(1))
     .query(async ({ ctx, input }) => {
-      void ctx.db.student.update({
+      await ctx.db.student.update({
         where: {
           id: input,
         },

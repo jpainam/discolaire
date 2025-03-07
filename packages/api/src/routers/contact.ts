@@ -72,7 +72,7 @@ export const contactRouter = createTRPCRouter({
       );
     }),
   get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    void ctx.db.contact.update({
+    await ctx.db.contact.update({
       where: {
         id: input,
       },

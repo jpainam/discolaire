@@ -85,7 +85,7 @@ export function CreateUpdateDenom() {
             name="isRepeating"
             render={({ field }) => (
               <FormItem className="space-y-0">
-                <FormLabel>{t("is_repeating")}</FormLabel>
+                <FormLabel>{t("repeating")}</FormLabel>
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
