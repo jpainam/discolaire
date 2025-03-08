@@ -28,7 +28,7 @@ const caller = createCaller(createContext);
 
 export const { trpc: api, HydrateClient } = createHydrationHelpers<AppRouter>(
   caller,
-  getQueryClient
+  getQueryClient,
 );
 
 // // eslint-disable-next-line @typescript-eslint/no-explicit-any
