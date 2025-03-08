@@ -49,14 +49,14 @@ export function ClassroomHeader() {
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const canUpdateClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const deleteClassroomMutation = api.classroom.delete.useMutation({
     onSuccess: () => {
@@ -99,7 +99,7 @@ export function ClassroomHeader() {
   };
   const canCreateClassroom = useCheckPermissions(
     PermissionAction.CREATE,
-    "classroom:details",
+    "classroom:details"
   );
   const { openSheet } = useSheet();
   return (
@@ -133,10 +133,11 @@ export function ClassroomHeader() {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
+                className="size-8"
                 variant="outline"
                 onClick={() => {
                   const classroom = classroomsQuery.data?.find(
-                    (c) => c.id === params.id,
+                    (c) => c.id === params.id
                   );
                   if (!classroom) return;
                   openSheet({
@@ -167,7 +168,7 @@ export function ClassroomHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.classroom_list}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -178,7 +179,7 @@ export function ClassroomHeader() {
               onSelect={() => {
                 window.open(
                   `${endpointReports.classroom_list}?format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
