@@ -91,7 +91,7 @@ export function Step1() {
             toast.error(t("required_fee_warning"));
           }
         },
-      },
+      }
     );
   }
   const items: { label: string; value: string }[] = [
@@ -117,7 +117,7 @@ export function Step1() {
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder={t("select_an_option")} />
                       </SelectTrigger>
                     </FormControl>
@@ -143,7 +143,7 @@ export function Step1() {
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder={t("select_an_option")} />
                       </SelectTrigger>
                     </FormControl>
