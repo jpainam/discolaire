@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-
 import path from "path";
 import { fileURLToPath } from "url";
 import { Font } from "@react-pdf/renderer";
@@ -25,6 +22,7 @@ import RobotoBoldItalic from "./Roboto/Roboto-BoldItalic.ttf";
 import RobotoItalic from "./Roboto/Roboto-Italic.ttf";
 import RobotoRegular from "./Roboto/Roboto-Regular.ttf";*/
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
 Font.register({
   family: "Geist",
   //format: "truetype",
@@ -40,6 +38,7 @@ Font.register({
   ],
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
 Font.register({
   family: "Roboto",
   fonts: [
