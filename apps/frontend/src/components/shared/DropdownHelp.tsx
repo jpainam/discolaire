@@ -26,11 +26,22 @@ export function DropdownHelp() {
       </DropdownMenuSubTrigger>
       <DropdownMenuPortal>
         <DropdownMenuSubContent>
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => {
+              window.open("https://docs.discolaire.com", "_blank");
+            }}
+          >
             <LibraryBig />
             <span>{t("how_to_get_started")}</span>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => {
+              window.open(
+                "https://youtube.com/@discolaire?si=3b2XmG6oOVLkhh3n",
+                "_blank"
+              );
+            }}
+          >
             <YoutubeIcon />
             <span>{t("watch_a_video")}</span>
           </DropdownMenuItem>

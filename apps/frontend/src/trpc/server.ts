@@ -1,6 +1,6 @@
-import { cache } from "react";
-import { cookies, headers } from "next/headers";
 import { createHydrationHelpers } from "@trpc/react-query/rsc";
+import { cookies, headers } from "next/headers";
+import { cache } from "react";
 
 import type { AppRouter } from "@repo/api";
 import { createCaller, createTRPCContext } from "@repo/api";
@@ -28,5 +28,18 @@ const caller = createCaller(createContext);
 
 export const { trpc: api, HydrateClient } = createHydrationHelpers<AppRouter>(
   caller,
-  getQueryClient,
+  getQueryClient
 );
+
+// // eslint-disable-next-line @typescript-eslint/no-explicit-any
+// export function prefetch<T extends ReturnType<TRPCQueryOptions<any>>>(
+//   queryOptions: T
+// ) {
+//   const queryClient = getQueryClient();
+//   if (queryOptions.queryKey[1]?.type === "infinite") {
+//     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+//     void queryClient.prefetchInfiniteQuery(queryOptions as any);
+//   } else {
+//     void queryClient.prefetchQuery(queryOptions);
+//   }
+// }

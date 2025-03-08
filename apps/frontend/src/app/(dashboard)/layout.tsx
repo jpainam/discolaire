@@ -11,7 +11,6 @@ import {
 import { AppSidebar } from "~/components/app-sidebar";
 import { ModeToggle } from "~/components/mode-toggle";
 import { UserNav } from "~/components/user-nav";
-
 import { SchoolContextProvider } from "~/providers/SchoolProvider";
 
 import { Breadcrumbs } from "~/components/breadcrumbs";
@@ -32,14 +31,19 @@ export default async function Layout({
   const cookieStore = await cookies();
   const sidebarState = cookieStore.get("sidebar_state");
   const defaultOpen = sidebarState ? sidebarState.value === "true" : true;
-  const school = await api.school.get(session.user.schoolId);
+
   const schoolYearId = cookieStore.get("schoolYear")?.value;
   if (!schoolYearId) {
     throw new Error("No school year selected");
   }
-  const schoolYear = await api.schoolYear.get(schoolYearId);
-  const schoolYears = await api.schoolYear.all();
-  const permissions = await api.user.permissions();
+  //prefetch(api.classroom.all.queryOptions());
+  const [school, schoolYear, schoolYears, permissions] = await Promise.all([
+    api.school.get(session.user.schoolId),
+    api.schoolYear.get(schoolYearId),
+    api.schoolYear.all(),
+    api.user.permissions(),
+  ]);
+
   return (
     <SidebarProvider
       style={{
