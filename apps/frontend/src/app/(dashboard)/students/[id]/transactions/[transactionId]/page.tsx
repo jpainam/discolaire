@@ -2,14 +2,14 @@ import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
 
 import { Separator } from "@repo/ui/components/separator";
-import FlatBadge from "~/components/FlatBadge";
 import { getServerTranslations } from "~/i18n/server";
 
+import { Badge } from "@repo/ui/components/badge";
 import { routes } from "~/configs/routes";
 import { CURRENCY } from "~/lib/constants";
+import { numberToWords } from "~/lib/toword";
 import { api } from "~/trpc/server";
 import { getFullName } from "~/utils/full-name";
-import { numberToWords } from "~/lib/toword";
 
 export default async function Page(props: {
   params: Promise<{ id: string; transactionId: number }>;
@@ -45,8 +45,8 @@ export default async function Page(props: {
     day: "numeric",
   });
   return (
-    <>
-      <div className="relative mx-2 overflow-hidden rounded-md border p-4">
+    <div className="px-4">
+      <div className="relative mx-auto w-full xl:w-1/2 overflow-hidden rounded-md border p-4">
         {/* Watermark */}
 
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-10">
@@ -85,7 +85,7 @@ export default async function Page(props: {
             <p className="text-lg font-bold">{transaction.transactionRef}</p>
           </div>
           <Separator className="mb-2" />
-          <div className="mb-2 flex justify-between">
+          <div className="mb-2 gap-4 flex justify-between">
             <div>
               {/* <p>
               <span className="font-bold">Reçu de</span> : NYA TCHATAT
@@ -119,12 +119,9 @@ export default async function Page(props: {
               <p className="text-lg font-bold">
                 {t("classroom")} : {classroom.name}
               </p>
-              <FlatBadge
-                variant={"gray"}
-                className="rounded-lg border px-2 text-lg font-bold"
-              >
+              <Badge variant={"default"} className="px-2 text-lg font-bold">
                 {t("amount")} : #{transaction.amount}#
-              </FlatBadge>
+              </Badge>
             </div>
           </div>
 
@@ -172,6 +169,6 @@ export default async function Page(props: {
         </div> */}
         </div>
       </div>
-    </>
+    </div>
   );
 }
