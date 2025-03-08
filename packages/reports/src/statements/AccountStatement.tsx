@@ -22,7 +22,6 @@ import { LineItems } from "./LineItems";
 // });
 const CDN_URL = "https://cdn.midday.ai";
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
 Font.register({
   family: "GeistMono",
   fonts: [
