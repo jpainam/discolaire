@@ -5,7 +5,7 @@ import { SchoolLife } from "~/components/dashboard/SchoolLife";
 
 export default function Page() {
   return (
-    <div className="grid grid-cols-2 gap-4 p-4">
+    <div className="lg:grid flex flex-col grid-cols-2 gap-4 p-4">
       <QuickStatistics className="col-span-full" />
       {/* <SearchBlock className="col-span-full md:col-span-6" /> */}
       <SchoolLife />
