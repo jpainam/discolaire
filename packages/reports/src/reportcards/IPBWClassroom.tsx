@@ -79,7 +79,6 @@ export function IPBWClassroom({
             }
             groups[group.id]?.push(...subjectGrades);
           });
-          console.log({ groups });
           return (
             <View style={{ flexDirection: "column" }}>
               <IPBWHeader school={school} />

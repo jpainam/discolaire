@@ -152,11 +152,13 @@ export function IPBWStudentInfo({
             style={{ width: "60%" }}
             value={contact?.contact.lastName ?? ""}
           />
-          <InfoItem
-            lastColumn={true}
-            label={""}
-            value={`${classroom.headTeacher?.prefix} ${classroom.headTeacher?.lastName}`}
-          />
+          {classroom.headTeacher && (
+            <InfoItem
+              lastColumn={true}
+              label={""}
+              value={`${classroom.headTeacher.prefix} ${classroom.headTeacher.lastName}`}
+            />
+          )}
           <Text></Text>
         </View>
       </View>

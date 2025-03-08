@@ -40,7 +40,6 @@ export function IPBW({
     <Document>
       <Page
         size={"A4"}
-        wrap={false}
         style={{
           paddingVertical: 20,
           paddingHorizontal: 40,
