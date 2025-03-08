@@ -27,7 +27,7 @@ import RobotoRegular from "./Roboto/Roboto-Regular.ttf";*/
 
 Font.register({
   family: "Geist",
-  format: "truetype",
+  //format: "truetype",
   fonts: [
     {
       src: GeistRegular,
@@ -62,5 +62,5 @@ Font.register({
       fontStyle: "italic",
     },
   ],
-  format: "truetype",
+  //format: "truetype",
 });
