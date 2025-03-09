@@ -20,7 +20,7 @@ export function TransactionDetailsHeader() {
           onClick={() => {
             window.open(
               `/api/pdf/receipts?id=${params.transactionId}`,
-              "_blank"
+              "_blank",
             );
           }}
           variant={"outline"}

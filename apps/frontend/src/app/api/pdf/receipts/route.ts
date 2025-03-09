@@ -33,9 +33,7 @@ export async function GET(req: NextRequest) {
     const { id } = result.data;
 
     const transaction = await api.transaction.get(id);
-    if (!transaction) {
-      return new Response("Transaction not found", { status: 404 });
-    }
+
     const school = await api.school.getSchool();
     //const student = await api.student.get(transaction.account.studentId);
     //const contacts = await api.student.contacts(transaction.account.studentId);
@@ -49,7 +47,7 @@ export async function GET(req: NextRequest) {
         amountInWords: amountInWords,
         school: school,
         info: info,
-      })
+      }),
     );
 
     // @ts-expect-error TODO: fix this

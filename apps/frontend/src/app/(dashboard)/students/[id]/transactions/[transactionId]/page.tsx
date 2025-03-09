@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 
 import { Separator } from "@repo/ui/components/separator";
 import { getServerTranslations } from "~/i18n/server";
@@ -19,9 +19,7 @@ export default async function Page(props: {
   const { id, transactionId } = params;
 
   const transaction = await api.transaction.get(Number(transactionId));
-  if (!transaction) {
-    notFound();
-  }
+
   const {
     student,
     createdBy,

@@ -32,9 +32,7 @@ export async function POST(req: Request) {
       result.data;
 
     const transaction = await api.transaction.get(transactionId);
-    if (!transaction) {
-      return new Response("Transaction not found", { status: 404 });
-    }
+
     const student = await api.student.get(studentId);
 
     const studentContacts = await api.student.contacts(
