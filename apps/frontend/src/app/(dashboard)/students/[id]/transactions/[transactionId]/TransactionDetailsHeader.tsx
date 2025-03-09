@@ -2,20 +2,14 @@
 
 import { EuroIcon, Printer } from "lucide-react";
 import { useParams } from "next/navigation";
-import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
 import { useLocale } from "~/i18n";
 
-import { printReceipt } from "~/actions/reporting";
-import { getErrorMessage } from "~/lib/handle-error";
-import { api } from "~/trpc/react";
-
 export function TransactionDetailsHeader() {
   const params = useParams<{ transactionId: string }>();
   const { t } = useLocale();
-  const utils = api.useUtils();
 
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1 text-secondary-foreground">
@@ -24,20 +18,15 @@ export function TransactionDetailsHeader() {
       <div className="ml-auto">
         <Button
           onClick={() => {
-            toast.loading(t("printing"), { id: 0 });
-            void printReceipt(Number(params.transactionId))
-              .then(() => {
-                void utils.reporting.invalidate();
-                toast.success(t("printing_job_submitted"), { id: 0 });
-              })
-              .catch((e) => {
-                toast.error(getErrorMessage(e), { id: 0 });
-              });
+            window.open(
+              `/api/pdf/receipts?id=${params.transactionId}`,
+              "_blank"
+            );
           }}
           variant={"outline"}
           size={"sm"}
         >
-          <Printer className="mr-2 h-4 w-4" />
+          <Printer />
           {t("print")}
         </Button>
       </div>

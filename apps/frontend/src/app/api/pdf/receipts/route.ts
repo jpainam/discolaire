@@ -4,11 +4,11 @@ import { z } from "zod";
 import { IPBWReceipt, renderToStream } from "@repo/reports";
 
 import { auth } from "@repo/auth";
+import i18next from "i18next";
+import { numberToWords } from "~/lib/toword";
 import { api } from "~/trpc/server";
 
 const searchSchema = z.object({
-  preview: z.coerce.boolean().default(true),
-  size: z.union([z.literal("letter"), z.literal("a4")]).default("letter"),
   id: z.coerce.number(),
 });
 export async function GET(req: NextRequest) {
@@ -30,24 +30,26 @@ export async function GET(req: NextRequest) {
       const error = result.error.issues.map((e) => e.message).join(", ");
       return new Response(error, { status: 400 });
     }
-    const { id, size, preview } = result.data;
+    const { id } = result.data;
 
     const transaction = await api.transaction.get(id);
     if (!transaction) {
       return new Response("Transaction not found", { status: 404 });
     }
     const school = await api.school.getSchool();
-    const student = await api.student.get(transaction.account.studentId);
-    const contacts = await api.student.contacts(transaction.account.studentId);
+    //const student = await api.student.get(transaction.account.studentId);
+    //const contacts = await api.student.contacts(transaction.account.studentId);
+    const amountInWords = numberToWords(transaction.amount, i18next.language);
+
+    const info = await api.transaction.getReceiptInfo(id);
 
     const stream = await renderToStream(
       IPBWReceipt({
         transaction: transaction,
-        contacts: contacts,
-        student: student,
+        amountInWords: amountInWords,
         school: school,
-        size: size,
-      }),
+        info: info,
+      })
     );
 
     // @ts-expect-error TODO: fix this
@@ -57,11 +59,6 @@ export async function GET(req: NextRequest) {
       "Content-Type": "application/pdf",
       "Cache-Control": "no-store, max-age=0",
     };
-
-    if (!preview) {
-      headers["Content-Disposition"] =
-        `attachment; filename="Receipt-${student.lastName}-${student.firstName}.pdf"`;
-    }
 
     return new Response(blob, { headers });
   } catch (error) {

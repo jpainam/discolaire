@@ -1,60 +1,44 @@
-import { Document, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+import { Document, Image, Page, Text, View } from "@react-pdf/renderer";
+import { decode } from "entities";
+import i18next from "i18next";
 
 import type { RouterOutputs } from "@repo/api";
 
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
-  schoolDetails: {
-    textAlign: "center",
-  },
-  amountBox: {
-    border: "1px solid black",
-    padding: 5,
-    alignSelf: "center",
-    marginTop: 10,
-  },
-  content: {
-    marginTop: 20,
-  },
-  footer: {
-    marginTop: 30,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-});
+import "../fonts";
 
 export function IPBWReceipt({
+  amountInWords,
   transaction,
-  size = "a4",
   school,
-  contacts,
-  student,
+  info,
 }: {
+  amountInWords: string;
   transaction: NonNullable<RouterOutputs["transaction"]["get"]>;
-  size: "a4" | "letter";
-  student: RouterOutputs["student"]["get"];
+  info: RouterOutputs["transaction"]["getReceiptInfo"];
   school: RouterOutputs["school"]["getSchool"];
-  contacts: RouterOutputs["student"]["contacts"];
 }) {
-  let contact = contacts.find((c) => c.primaryContact)?.contact;
-  if (!contact) {
-    contact = contacts[0]?.contact;
-  }
+  const {
+    student,
+    createdBy,
+    printedBy,
+    //receivedBy,
+    classroom,
+    contact,
+    remaining,
+  } = info;
+
   const numberOfReceipts = 3; //school.numberOfReceipts ?? 1
   return (
     <Document>
       <Page
-        size={size.toUpperCase() as "LETTER" | "A4"}
+        size={"A4"}
         style={{
-          padding: 20,
+          paddingVertical: 20,
+          paddingHorizontal: 40,
+          fontSize: 10,
           backgroundColor: "#fff",
-          fontSize: 9,
-          fontFamily: "Helvetica",
           color: "#000",
+          fontFamily: "Roboto",
         }}
       >
         {Array.from({ length: numberOfReceipts }).map((_, index) => {
@@ -64,44 +48,125 @@ export function IPBWReceipt({
               style={{
                 border: "1px solid black",
                 padding: 10,
-                marginBottom: 35,
+                marginBottom: 30,
               }}
             >
-              <View style={styles.header}>
-                <Text style={{ textTransform: "uppercase" }}>
-                  {school.name}
-                </Text>
-                <Text>BP : 5062 YAOUNDE / CAMEROUN</Text>
+              <View
+                style={{
+                  justifyContent: "space-between",
+                  flexDirection: "row",
+                  marginBottom: 5,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text style={{ textTransform: "uppercase" }}>
+                    {school.name}
+                  </Text>
+                  <Text>{school.phoneNumber1}</Text>
+                </View>
+
+                {school.logo && (
+                  <Image
+                    src={school.logo}
+                    style={{
+                      width: 125,
+                      height: 80,
+                    }}
+                  />
+                )}
+                <View>
+                  <Text>BP : 5062 YAOUNDE / CAMEROUN</Text>
+                </View>
               </View>
-              <View style={styles.schoolDetails}>
-                <Text>+23797868499</Text>
-                <Text>
-                  {student.lastName} {student.firstName}
-                </Text>
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginBottom: 10,
+                  fontSize: 12,
+                  fontWeight: "bold",
+                }}
+              >
                 <Text>{transaction.transactionRef}</Text>
-                <Text>Classe: {student.classroom?.name}</Text>
-              </View>
 
-              {/* Amount Section */}
-              <View style={styles.amountBox}>
-                <Text>MONTANT : # {transaction.amount} #</Text>
-              </View>
-
-              {/* Content */}
-              <View style={styles.content}>
-                <Text>POUR:{transaction.description}</Text>
-                <Text>MONTANT : 50 000 CFA (cinquante mille)</Text>
-                <Text>RESTE : -50000 CFA</Text>
                 <Text>
-                  S/C : {contact?.prefix} {contact?.lastName}
+                  {decode(student.lastName ?? "")}{" "}
+                  {decode(student.firstName ?? "")}
                 </Text>
-                <Text>{contact?.phoneNumber1}</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <View style={{ flexDirection: "column", gap: 4 }}>
+                  <View style={{ flexDirection: "row", gap: 4 }}>
+                    <Text style={{ fontWeight: "bold" }}>POUR : </Text>
+                    <Text>{transaction.description}</Text>
+                  </View>
+                  <View style={{ flexDirection: "row", gap: 4 }}>
+                    <Text style={{ fontWeight: "bold" }}>MONTANT : </Text>
+                    <Text>
+                      {transaction.amount.toLocaleString(i18next.language, {
+                        currency: school.currency,
+                        style: "currency",
+                        maximumFractionDigits: 0,
+                        minimumFractionDigits: 0,
+                      })}{" "}
+                      ({amountInWords})
+                    </Text>
+                  </View>
+                  <View style={{ flexDirection: "row", gap: 4 }}>
+                    <Text style={{ fontWeight: "bold" }}>RESTE : </Text>
+                    <Text>
+                      {remaining.toLocaleString(i18next.language, {
+                        currency: school.currency,
+                        style: "currency",
+                        maximumFractionDigits: 0,
+                        minimumFractionDigits: 0,
+                      })}
+                    </Text>
+                  </View>
+                </View>
+                <View style={{ flexDirection: "column", gap: 4 }}>
+                  <Text> {classroom.name}</Text>
+                  <View
+                    style={{
+                      fontWeight: "bold",
+                      border: "1px solid black",
+                      padding: 5,
+                      borderRadius: 5,
+                    }}
+                  >
+                    <Text>MONTANT : # {transaction.amount} #</Text>
+                  </View>
+
+                  <Text>
+                    S/C : {contact?.prefix} {contact?.lastName}{" "}
+                    {contact?.phoneNumber1}
+                  </Text>
+                </View>
               </View>
 
               {/* Footer */}
-              <View style={styles.footer}>
-                <Text>Enregistré par : M. Administrateur</Text>
-                <Text>Imprimé par M. Administrateur le 19 Nov 2024 12:21</Text>
+              <View
+                style={{
+                  marginTop: 20,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text>Enregistré par : {createdBy?.lastName}</Text>
+                <Text>
+                  Imprimé par {printedBy?.lastName} le{" "}
+                  {transaction.printedAt?.toLocaleDateString()}
+                </Text>
               </View>
             </View>
           );

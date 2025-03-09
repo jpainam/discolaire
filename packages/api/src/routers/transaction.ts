@@ -99,20 +99,29 @@ export const transactionRouter = createTRPCRouter({
         },
       });
     }),
-  get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
-    return ctx.db.transaction.findUnique({
-      include: {
-        account: {
-          include: {
-            student: true,
+  get: protectedProcedure
+    .input(z.coerce.number())
+    .query(async ({ ctx, input }) => {
+      const t = await ctx.db.transaction.findUnique({
+        include: {
+          account: {
+            include: {
+              student: true,
+            },
           },
         },
-      },
-      where: {
-        id: input,
-      },
-    });
-  }),
+        where: {
+          id: input,
+        },
+      });
+      if (!t) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `Transaction with id ${input} not found`,
+        });
+      }
+      return t;
+    }),
   getReceiptInfo: protectedProcedure
     .input(z.coerce.number())
     .query(({ input }) => {
