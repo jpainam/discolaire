@@ -965,6 +965,8 @@
   "today": "Hoy",
   "reports": "Informes",
   "printing": "Imprimiendo...",
+  "weekly_attendance_report": "Informe de asistencia semanal",
+  "periodic_attendance_report": "Informe de asistencia periódica",
   "student_list": "Lista de estudiantes",
   "edit_staff": "Editar personal",
   "default_country": "País predeterminado",

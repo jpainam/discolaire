@@ -14,11 +14,12 @@ import { getFullName } from "~/utils/full-name";
 
 const querySchema = z.object({
   format: z.enum(["pdf", "csv"]).optional(),
+  type: z.enum(["weekly", "periodic"]).optional().default("weekly"),
 });
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: { id: string } }
 ) {
   const session = await auth();
   if (!session) {
@@ -33,7 +34,7 @@ export async function GET(
   if (!parsedQuery.success) {
     return NextResponse.json(
       { error: parsedQuery.error.format() },
-      { status: 400 },
+      { status: 400 }
     );
   }
   try {
@@ -41,7 +42,8 @@ export async function GET(
 
     const school = await api.school.getSchool();
     const students = await api.classroom.students(id);
-    const { format } = parsedQuery.data;
+    const { format, type: attendanceType } = parsedQuery.data;
+
     if (format === "csv") {
       const { blob, headers } = await toExcel({ classroom, students });
       return new Response(blob, { headers });
@@ -49,9 +51,10 @@ export async function GET(
       const stream = await renderToStream(
         AttendanceSheet({
           classroom: classroom,
+          type: attendanceType,
           school: school,
           students: students,
-        }),
+        })
       );
 
       //const blob = await new Response(stream).blob();
