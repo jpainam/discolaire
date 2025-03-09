@@ -28,9 +28,7 @@ import { api } from "~/trpc/react";
 export function ProgramHeader() {
   const { t } = useLocale();
   const params = useParams<{ id: string; subjectId: string }>();
-  const subjectQuery = api.subject.get.useQuery({
-    id: Number(params.subjectId),
-  });
+  const subjectQuery = api.subject.get.useQuery(Number(params.subjectId));
   const subject = subjectQuery.data;
   const pathname = usePathname();
   const canEditSubjectProgram = useCheckPermissions(
@@ -38,7 +36,7 @@ export function ProgramHeader() {
     "subject:program",
     {
       subjectId: Number(params.subjectId),
-    },
+    }
   );
   useEffect(() => {
     if (subject) {
@@ -87,7 +85,7 @@ export function ProgramHeader() {
               router.push(
                 routes.classrooms.programs(params.id) +
                   `/${subject?.id}` +
-                  "/create-or-edit",
+                  "/create-or-edit"
               );
             }}
             size={"icon"}

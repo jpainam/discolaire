@@ -11,7 +11,6 @@ import {
 import { useState } from "react";
 import { z } from "zod";
 
-import { useModal } from "~/hooks/use-modal";
 import { Button } from "@repo/ui/components/button";
 import { Calendar } from "@repo/ui/components/calendar";
 import {
@@ -38,6 +37,7 @@ import {
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { Switch } from "@repo/ui/components/switch";
 import { Textarea } from "@repo/ui/components/textarea";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { api } from "~/trpc/react";
@@ -51,7 +51,7 @@ const createSubjectJournalSchema = z.object({
 });
 export function SubjectJournalEditor({ subjectId }: { subjectId: number }) {
   const { t, i18n } = useLocale();
-  const subjectQuery = api.subject.get.useQuery({ id: subjectId });
+  const subjectQuery = api.subject.get.useQuery(subjectId);
   const createSubjectJournal = api.subjectJournal.create.useMutation();
 
   const [richText, setRichText] = useState(false);

@@ -27,6 +27,8 @@
     "@repo/api": "workspace:*",
     "date-fns": "^4.1.0",
     "entities": "^6.0.0",
+    "html-react-parser": "^5.2.2",
+    "html-to-react": "^1.7.0",
     "jose": "^6.0.8",
     "qrcode": "^1.5.4"
   },

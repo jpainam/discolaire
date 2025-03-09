@@ -1,9 +1,45 @@
 import { z } from "zod";
 
 import { enrollmentService } from "../services/enrollment-service";
+import { studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const enrollmentRouter = createTRPCRouter({
+  getEnrolledStudents: protectedProcedure
+    .input(z.object({ schoolYearId: z.string().optional() }))
+    .query(async ({ ctx, input }) => {
+      const data = await ctx.db.student.findMany({
+        include: {
+          formerSchool: true,
+          religion: true,
+        },
+        where: {
+          enrollments: {
+            some: {
+              schoolYearId: input.schoolYearId
+                ? input.schoolYearId
+                : ctx.schoolYearId,
+            },
+          },
+        },
+      });
+      const students = await Promise.all(
+        data.map(async (student) => {
+          return {
+            ...student,
+            isRepeating: await studentService.isRepeating(
+              student.id,
+              ctx.schoolYearId,
+            ),
+            classroom: await studentService.getClassroom(
+              student.id,
+              ctx.schoolYearId,
+            ),
+          };
+        }),
+      );
+      return students;
+    }),
   create: protectedProcedure
     .input(
       z.object({

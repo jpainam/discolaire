@@ -1,11 +1,12 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { usePathname } from "next/navigation";
-import { toast } from "sonner";
-import { z } from "zod";
-
 import { Button } from "@repo/ui/components/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
 import {
   Form,
   FormControl,
@@ -16,9 +17,17 @@ import {
 } from "@repo/ui/components/form";
 import { Label } from "@repo/ui/components/label";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import dynamic from "next/dynamic";
+import { useParams, usePathname } from "next/navigation";
+import { toast } from "sonner";
+import { z } from "zod";
 import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 
+import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
+import { MoreVertical } from "lucide-react";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { html_content } from "./editor-content";
@@ -41,6 +50,7 @@ export function CreateEditProgram({
 }) {
   const router = useRouter();
   const pathname = usePathname();
+  const params = useParams<{ id: string }>();
 
   const form = useForm({
     defaultValues: { content: defaultContent },
@@ -66,7 +76,7 @@ export function CreateEditProgram({
     });
   };
 
-  const subjectQuery = api.subject.get.useQuery({ id: subjectId });
+  const subjectQuery = api.subject.get.useQuery(subjectId);
 
   const { t } = useLocale();
 
@@ -113,6 +123,60 @@ export function CreateEditProgram({
             >
               {t("cancel")}
             </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="icon" className="size-8" variant="outline">
+                  <MoreVertical />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onSelect={() => {
+                    window.open(
+                      `/api/pdfs/classroom/${params.id}/programs?format=pdf`,
+                      "_blank"
+                    );
+                  }}
+                >
+                  <PDFIcon />
+                  {t("all_programs")}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={() => {
+                    window.open(
+                      `/api/pdfs/classroom/${params.id}/programs?format=pdf&subjectId=${subjectId}`,
+                      "_blank"
+                    );
+                  }}
+                >
+                  <PDFIcon />
+                  {t("selected_program")}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onSelect={() => {
+                    window.open(
+                      `/api/pdfs/classroom/${params.id}/programs?format=csv`,
+                      "_blank"
+                    );
+                  }}
+                >
+                  <XMLIcon />
+                  {t("all_programs")}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={() => {
+                    window.open(
+                      `/api/pdfs/classroom/${params.id}/programs?format=csv&subjectId=${subjectId}`,
+                      "_blank"
+                    );
+                  }}
+                >
+                  <XMLIcon />
+                  {t("selected_program")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
         <FormField

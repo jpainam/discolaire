@@ -19,7 +19,6 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { SearchCombobox } from "~/components/SearchCombobox";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
-import { endpointReports } from "~/configs/endpoints";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
@@ -32,7 +31,7 @@ export function StudentPageHeader() {
 
   const canCreateStudent = useCheckPermissions(
     PermissionAction.CREATE,
-    "student:profile",
+    "student:profile"
   );
 
   const [value, setValue] = useState("");
@@ -106,10 +105,7 @@ export function StudentPageHeader() {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onSelect={() => {
-                window.open(
-                  `${endpointReports.student_list}?format=pdf`,
-                  "_blank",
-                );
+                window.open(`/api/pdfs/student?format=pdf`, "_blank");
               }}
             >
               <PDFIcon />
@@ -117,10 +113,7 @@ export function StudentPageHeader() {
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={() => {
-                window.open(
-                  `${endpointReports.student_list}?format=csv`,
-                  "_blank",
-                );
+                window.open(`/api/pdfs/student?format=csv`, "_blank");
               }}
             >
               <XMLIcon />

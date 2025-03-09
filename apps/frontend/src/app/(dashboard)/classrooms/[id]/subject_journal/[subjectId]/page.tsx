@@ -14,7 +14,7 @@ export default async function Page(props: {
 
   const { subjectId } = params;
 
-  const subject = await api.subject.get({ id: Number(subjectId) });
+  const subject = await api.subject.get(Number(subjectId));
   if (!subject) {
     notFound();
   }

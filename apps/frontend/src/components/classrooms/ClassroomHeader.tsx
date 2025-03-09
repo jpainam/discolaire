@@ -25,7 +25,7 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { Label } from "@repo/ui/components/label";
-import { endpointReports } from "~/configs/endpoints";
+
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
@@ -49,14 +49,14 @@ export function ClassroomHeader() {
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const canUpdateClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const deleteClassroomMutation = api.classroom.delete.useMutation({
     onSuccess: () => {
@@ -99,7 +99,7 @@ export function ClassroomHeader() {
   };
   const canCreateClassroom = useCheckPermissions(
     PermissionAction.CREATE,
-    "classroom:details",
+    "classroom:details"
   );
   const { openSheet } = useSheet();
   return (
@@ -137,7 +137,7 @@ export function ClassroomHeader() {
                 variant="outline"
                 onClick={() => {
                   const classroom = classroomsQuery.data?.find(
-                    (c) => c.id === params.id,
+                    (c) => c.id === params.id
                   );
                   if (!classroom) return;
                   openSheet({
@@ -166,10 +166,7 @@ export function ClassroomHeader() {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onSelect={() => {
-                window.open(
-                  `${endpointReports.classroom_list}?format=pdf`,
-                  "_blank",
-                );
+                window.open(`/api/pdfs/classroom?format=pdf`, "_blank");
               }}
             >
               <PDFIcon />
@@ -177,10 +174,7 @@ export function ClassroomHeader() {
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={() => {
-                window.open(
-                  `${endpointReports.classroom_list}?format=csv`,
-                  "_blank",
-                );
+                window.open(`/api/pdfs/classroom?format=csv`, "_blank");
               }}
             >
               <XMLIcon />

@@ -14,10 +14,6 @@ import { xlsxType } from "~/utils/file-type";
 
 const searchSchema = z.object({
   preview: z.coerce.boolean().default(true),
-  size: z
-    .union([z.literal("letter"), z.literal("a4")])
-    .optional()
-    .default("letter"),
   format: z
     .union([z.literal("pdf"), z.literal("csv")])
     .optional()
@@ -43,9 +39,9 @@ export async function GET(req: NextRequest) {
       return new Response(error, { status: 400 });
     }
 
-    const { size, preview, format } = result.data;
+    const { preview, format } = result.data;
 
-    const students = await api.student.all();
+    const students = await api.enrollment.getEnrolledStudents({});
 
     const school = await api.school.getSchool();
     if (format === "csv") {
@@ -56,8 +52,7 @@ export async function GET(req: NextRequest) {
         StudentList({
           students: students,
           school: school,
-          size: size,
-        }),
+        })
       );
 
       //const blob = await new Response(stream).blob();
@@ -83,7 +78,7 @@ export async function GET(req: NextRequest) {
 async function toExcel({
   students,
 }: {
-  students: RouterOutputs["student"]["all"];
+  students: RouterOutputs["enrollment"]["getEnrolledStudents"];
 }) {
   const { t, i18n } = await getServerTranslations();
   const dateFormat = Intl.DateTimeFormat(i18n.language, {

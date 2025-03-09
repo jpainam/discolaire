@@ -1,5 +1,0 @@
-export const endpointReports = {
-  classroom_list: "/api/pdfs/classroom",
-  student_list: "/api/pdfs/student",
-  student_page: (id: string) => `/api/pdfs/student/${id}`,
-};

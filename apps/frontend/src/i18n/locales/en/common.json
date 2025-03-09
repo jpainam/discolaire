@@ -1044,6 +1044,8 @@
   "userManagementDescription": "Manage the user account settings and set e-mail preferences.",
   "user_id_copied": "User ID copied!!!",
   "username": "Username",
+  "all_programs": "All Programs",
+  "selected_program": "Selected Program",
   "users": "Users",
   "directory": "Directory",
   "no_reports": "No reports",

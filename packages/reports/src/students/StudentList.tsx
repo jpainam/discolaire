@@ -7,19 +7,17 @@ import type { RouterOutputs } from "@repo/api";
 export function StudentList({
   school,
   students,
-  size = "a4",
 }: {
   school: RouterOutputs["school"]["getSchool"];
-  size: "a4" | "letter";
 
-  students: RouterOutputs["student"]["all"];
+  students: RouterOutputs["enrollment"]["getEnrolledStudents"];
 }) {
   const w = [0.1, 0.3, 0.3, 0.2, 0.1];
   //const { t, i18n } = await getServerTranslations();
   return (
     <Document>
       <Page
-        size={size.toUpperCase() as "LETTER" | "A4"}
+        size={"A4"}
         style={{
           padding: 20,
           fontSize: 9,

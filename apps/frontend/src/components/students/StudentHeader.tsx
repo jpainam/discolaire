@@ -45,7 +45,7 @@ import { decode } from "entities";
 import { useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { SimpleTooltip } from "~/components/simple-tooltip";
-import { endpointReports } from "~/configs/endpoints";
+
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
@@ -129,14 +129,14 @@ export function StudentHeader({
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   const canEditStudent = useCheckPermissions(
     PermissionAction.UPDATE,
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   //const [open, setOpen] = React.useState(false);
 
@@ -229,8 +229,8 @@ export function StudentHeader({
               variant="ghost"
               onClick={() => {
                 window.open(
-                  `${endpointReports.student_page(params.id)}?format=pdf`,
-                  "_blank",
+                  `/api/pdfs/student/${params.id}?format=pdf`,
+                  "_blank"
                 );
               }}
             >

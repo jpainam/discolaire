@@ -28,7 +28,7 @@ export default async function Page(props: {
     return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
   }
 
-  const subject = await api.subject.get({ id: Number(subjectId) });
+  const subject = await api.subject.get(Number(subjectId));
   if (!subject) {
     notFound();
   }

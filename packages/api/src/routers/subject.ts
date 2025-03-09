@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { classroomService } from "../services/classroom-service";
@@ -24,15 +25,11 @@ export const subjectRouter = createTRPCRouter({
     });
   }),
   get: protectedProcedure
-    .input(
-      z.object({
-        id: z.coerce.number(),
-      }),
-    )
+    .input(z.coerce.number())
     .query(async ({ input, ctx }) => {
       const subject = await ctx.db.subject.findUnique({
         where: {
-          id: input.id,
+          id: input,
         },
         include: {
           course: true,
@@ -46,6 +43,12 @@ export const subjectRouter = createTRPCRouter({
           },
         },
       });
+      if (!subject) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Subject not found",
+        });
+      }
       return subject;
     }),
 
