@@ -76,7 +76,7 @@ export function AttendanceHeader() {
           router.push(
             routes.classrooms.attendances.index(params.id) +
               "?" +
-              createQueryString({ term: val })
+              createQueryString({ term: val }),
           );
         }}
       />
@@ -87,7 +87,7 @@ export function AttendanceHeader() {
           router.push(
             routes.classrooms.attendances.index(params.id) +
               "?" +
-              createQueryString({ type: val })
+              createQueryString({ type: val }),
           );
         }}
       >
@@ -110,7 +110,7 @@ export function AttendanceHeader() {
           router.push(
             routes.classrooms.attendances.index(params.id) +
               "?" +
-              createQueryString({ date: e.target.value })
+              createQueryString({ date: e.target.value }),
           );
         }}
       />
@@ -173,7 +173,7 @@ export function AttendanceHeader() {
                 router.push(
                   routes.classrooms.attendances.absences(params.id) +
                     "?" +
-                    createQueryString({ term: searchParams.get("term") })
+                    createQueryString({ term: searchParams.get("term") }),
                 );
               }}
             >
@@ -185,7 +185,7 @@ export function AttendanceHeader() {
                 router.push(
                   routes.classrooms.attendances.lateness(params.id) +
                     "?" +
-                    createQueryString({ term: searchParams.get("term") })
+                    createQueryString({ term: searchParams.get("term") }),
                 );
               }}
             >
@@ -197,7 +197,7 @@ export function AttendanceHeader() {
                 router.push(
                   routes.classrooms.attendances.chatters(params.id) +
                     "?" +
-                    createQueryString({ term: searchParams.get("term") })
+                    createQueryString({ term: searchParams.get("term") }),
                 );
               }}
             >
@@ -209,7 +209,7 @@ export function AttendanceHeader() {
                 router.push(
                   routes.classrooms.attendances.consignes(params.id) +
                     "?" +
-                    createQueryString({ term: searchParams.get("term") })
+                    createQueryString({ term: searchParams.get("term") }),
                 );
               }}
             >
@@ -221,7 +221,7 @@ export function AttendanceHeader() {
                 router.push(
                   routes.classrooms.attendances.exclusions(params.id) +
                     "?" +
-                    createQueryString({ term: searchParams.get("term") })
+                    createQueryString({ term: searchParams.get("term") }),
                 );
               }}
             >
@@ -249,7 +249,7 @@ export function AttendanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/attendances?format=pdf&type=weekly`,
-                        "_blank"
+                        "_blank",
                       );
                     }}
                   >
@@ -259,7 +259,7 @@ export function AttendanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/attendances?format=pdf&type=periodic`,
-                        "_blank"
+                        "_blank",
                       );
                     }}
                   >
@@ -279,7 +279,7 @@ export function AttendanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/attendances?format=csv&type=weekly`,
-                        "_blank"
+                        "_blank",
                       );
                     }}
                   >
@@ -289,7 +289,7 @@ export function AttendanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/attendances?format=csv&type=periodic`,
-                        "_blank"
+                        "_blank",
                       );
                     }}
                   >
