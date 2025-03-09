@@ -2,7 +2,7 @@ import { ClassroomPrintOptions } from "~/components/classrooms/print/print-optio
 
 export default function Page() {
   return (
-    <div className="pl-4 pt-4">
+    <div className="p-4">
       <ClassroomPrintOptions />
     </div>
   );

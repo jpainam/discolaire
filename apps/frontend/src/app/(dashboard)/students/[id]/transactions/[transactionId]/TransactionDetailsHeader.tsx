@@ -19,8 +19,8 @@ export function TransactionDetailsHeader() {
         <Button
           onClick={() => {
             window.open(
-              `/api/pdf/receipts?id=${params.transactionId}`,
-              "_blank",
+              `/api/pdfs/receipts?id=${params.transactionId}`,
+              "_blank"
             );
           }}
           variant={"outline"}

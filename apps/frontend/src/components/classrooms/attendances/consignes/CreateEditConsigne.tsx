@@ -33,7 +33,7 @@ const attendanceSchema = z.object({
       id: z.string().min(1),
       absence: z.coerce.number().nullish(),
       justify: z.coerce.number().nullable(),
-    }),
+    })
   ),
 });
 
@@ -67,7 +67,7 @@ export function CreateEditConsigne({
     onSuccess: () => {
       toast.success(t("added_successfully"), { id: 0 });
       router.push(
-        `${routes.classrooms.attendances.index(classroomId)}?type=absence&term=${termId}`,
+        `${routes.classrooms.attendances.index(classroomId)}?type=absence&term=${termId}`
       );
     },
     onError: (error) => {
@@ -90,7 +90,7 @@ export function CreateEditConsigne({
         toast.error(
           t("absence_cannot_be_less_than_justify_for", {
             name: getFullName(std),
-          }),
+          })
         );
         hasError = true;
         break;
@@ -115,8 +115,8 @@ export function CreateEditConsigne({
   };
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-row items-center justify-between gap-2 py-1">
+      <form className="mb-10 gap-4 px-2" onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="flex flex-row mb-2 items-center justify-between gap-2 py-1">
           <div className="flex flex-row items-center gap-2">
             <BaselineIcon className="h-4 w-4" />
             <Label className="font-semibold">
@@ -170,7 +170,7 @@ export function CreateEditConsigne({
               {students.map((student, index) => {
                 return (
                   <TableRow key={student.id}>
-                    <TableCell className="py-0 font-medium">
+                    <TableCell className="font-medium">
                       {index + 1}.
                       <Input
                         {...form.register(`students.${index}.id`)}
@@ -178,10 +178,10 @@ export function CreateEditConsigne({
                         defaultValue={student.id}
                       />
                     </TableCell>
-                    <TableCell className="py-0 sm:table-cell">
+                    <TableCell className="sm:table-cell">
                       <AvatarState pos={index} avatar={student.avatar} />
                     </TableCell>
-                    <TableCell className="py-0">
+                    <TableCell>
                       <Link
                         className="hover:text-blue-600 hover:underline"
                         href={routes.students.details(student.id)}
@@ -190,14 +190,14 @@ export function CreateEditConsigne({
                       </Link>
                     </TableCell>
                     <TableCell></TableCell>
-                    <TableCell className="py-0">
+                    <TableCell>
                       <Input
                         {...form.register(`students.${index}.absence`)}
                         className="h-8 w-[100px]"
                         type="number"
                       />
                     </TableCell>
-                    <TableCell className="py-0">
+                    <TableCell>
                       <Input
                         className="h-8 w-[100px]"
                         type="number"

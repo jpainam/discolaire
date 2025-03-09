@@ -41,7 +41,7 @@ const attendanceSchema = z.object({
       id: z.string().min(1),
       absence: z.coerce.number().nullish(),
       justify: z.coerce.number().nullable(),
-    }),
+    })
   ),
   notifyParents: z.boolean().default(true),
   notifyStudents: z.boolean().default(true),
@@ -77,7 +77,7 @@ export function CreateEditAbsence({
     onSuccess: () => {
       toast.success(t("added_successfully"), { id: 0 });
       router.push(
-        `${routes.classrooms.attendances.index(classroomId)}?type=absence&term=${termId}`,
+        `${routes.classrooms.attendances.index(classroomId)}?type=absence&term=${termId}`
       );
     },
     onError: (error) => {
@@ -100,7 +100,7 @@ export function CreateEditAbsence({
         toast.error(
           t("absence_cannot_be_less_than_justify_for", {
             name: getFullName(std),
-          }),
+          })
         );
         hasError = true;
         break;
@@ -141,14 +141,14 @@ export function CreateEditAbsence({
             //     });
             // }
           },
-        },
+        }
       );
     }
   };
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-row items-center justify-between gap-2 py-1">
+      <form className="px-2 gap-4 mb-10" onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="flex flex-row mb-2 items-center justify-between gap-2 py-1">
           <div className="flex flex-row items-center gap-2">
             <BaselineIcon className="h-4 w-4" />
             <Label className="font-semibold">
@@ -233,7 +233,7 @@ export function CreateEditAbsence({
               {students.map((student, index) => {
                 return (
                   <TableRow key={student.id}>
-                    <TableCell className="py-0 font-medium">
+                    <TableCell className="font-medium">
                       {index + 1}.
                       <Input
                         {...form.register(`students.${index}.id`)}
@@ -241,10 +241,10 @@ export function CreateEditAbsence({
                         defaultValue={student.id}
                       />
                     </TableCell>
-                    <TableCell className="py-0 sm:table-cell">
+                    <TableCell className="sm:table-cell">
                       <AvatarState pos={index} avatar={student.avatar} />
                     </TableCell>
-                    <TableCell className="py-0">
+                    <TableCell>
                       <Link
                         className="hover:text-blue-600 hover:underline"
                         href={routes.students.details(student.id)}
@@ -253,14 +253,14 @@ export function CreateEditAbsence({
                       </Link>
                     </TableCell>
                     <TableCell></TableCell>
-                    <TableCell className="py-0">
+                    <TableCell>
                       <Input
                         {...form.register(`students.${index}.absence`)}
                         className="h-8 w-[100px]"
                         type="number"
                       />
                     </TableCell>
-                    <TableCell className="py-0">
+                    <TableCell>
                       <Input
                         className="h-8 w-[100px]"
                         type="number"
