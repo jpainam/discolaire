@@ -18,7 +18,7 @@ const querySchema = z.object({
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   const session = await auth();
   if (!session) {
@@ -33,7 +33,7 @@ export async function GET(
   if (!parsedQuery.success) {
     return NextResponse.json(
       { error: parsedQuery.error.format() },
-      { status: 400 }
+      { status: 400 },
     );
   }
   try {
@@ -53,7 +53,7 @@ export async function GET(
           fees: fees,
           school: school,
           lang: i18next.language as "fr" | "en" | "es",
-        })
+        }),
       );
 
       //const blob = await new Response(stream).blob();

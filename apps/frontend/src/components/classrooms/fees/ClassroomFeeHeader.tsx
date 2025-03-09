@@ -30,7 +30,7 @@ export function ClassroomFeeHeader() {
     "classroom:fee",
     {
       id: params.id,
-    }
+    },
   );
   const Icon = sidebarIcons.fees;
   return (
@@ -64,7 +64,7 @@ export function ClassroomFeeHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/fees?format=pdf`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >
@@ -75,7 +75,7 @@ export function ClassroomFeeHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/fees?format=csv`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >
