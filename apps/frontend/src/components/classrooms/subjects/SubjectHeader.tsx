@@ -19,6 +19,7 @@ import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
+import { useParams } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
@@ -33,7 +34,7 @@ export function SubjectHeader({
 }) {
   const Icon = sidebarIcons.subjects;
   const { t } = useLocale();
-
+  const params = useParams<{ id: string }>();
   const v = new Set<string>(subjects.map((s) => s.teacherId ?? ""));
   const nbTeacher = v.size;
   const groups: Record<string, number> = {};
@@ -52,7 +53,7 @@ export function SubjectHeader({
   const { openSheet } = useSheet();
   const canAddClassroomSubject = useCheckPermissions(
     PermissionAction.CREATE,
-    "classroom:subject",
+    "classroom:subject"
   );
 
   const badgeVariants = [
@@ -118,11 +119,25 @@ export function SubjectHeader({
           <DropdownMenuContent align="end">
             <DropdownHelp />
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                window.open(
+                  `/api/pdfs/classroom/${params.id}/subjects?format=csv`,
+                  "_blank"
+                );
+              }}
+            >
               <XMLIcon />
               {t("xml_export")}
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                window.open(
+                  `/api/pdfs/classroom/${params.id}/subjects?format=pdf`,
+                  "_blank"
+                );
+              }}
+            >
               <PDFIcon />
               {t("pdf_export")}
             </DropdownMenuItem>
