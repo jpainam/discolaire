@@ -27,10 +27,14 @@
     "@repo/api": "workspace:*",
     "date-fns": "^4.1.0",
     "entities": "^6.0.0",
+    "hast-util-to-jsx-runtime": "^2.3.6",
     "html-react-parser": "^5.2.2",
     "html-to-react": "^1.7.0",
     "jose": "^6.0.8",
-    "qrcode": "^1.5.4"
+    "preact": "^10.26.4",
+    "qrcode": "^1.5.4",
+    "rehype-parse": "^9.0.1",
+    "unified": "^11.0.5"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

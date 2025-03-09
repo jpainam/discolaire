@@ -4,8 +4,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { StyleSheet, Text } from "@react-pdf/renderer";
-import { Parser as HtmlToReactParser } from "html-to-react";
+import { StyleSheet, Text, View } from "@react-pdf/renderer";
+import { toJsxRuntime } from "hast-util-to-jsx-runtime";
+import { Fragment, jsx, jsxs } from "preact/jsx-runtime";
+import rehypeParse from "rehype-parse";
+import { unified } from "unified";
 
 export function flatten({ values }: { values: any }) {
   const styles = Array.isArray(values) ? values : [values];
@@ -56,8 +59,7 @@ export function getAppreciations(grade?: number | null) {
   }
   return "Pas definie";
 }
-
-// Define styles for different HTML elements
+// Define styles
 const styles = StyleSheet.create({
   paragraph: { marginBottom: 4 },
   bold: { fontWeight: "bold" },
@@ -68,50 +70,49 @@ const styles = StyleSheet.create({
   list: { marginLeft: 10 },
   listItem: { marginBottom: 2 },
 });
-//const HtmlToReactParser = HtmlToReact.Parser;
-// @ts-expect-error Fix this later
-const htmlToReactParser = new HtmlToReactParser();
 
-export const convertToReact = ({ html }: { html: string }) => {
-  const reactElement = htmlToReactParser.parse(html);
-  const convertElement = (element: any) => {
-    if (!element) return null;
+export const renderHtml = (html: string) => {
+  const hastTree = unified().use(rehypeParse, { fragment: true }).parse(html);
 
-    const { type, props } = element;
-    const { children } = props;
-
-    switch (type) {
-      case "h1":
-        return (
-          <Text style={styles.heading1}>{children.map(convertElement)}</Text>
-        );
-      case "h2":
-        return (
-          <Text style={styles.heading2}>{children.map(convertElement)}</Text>
-        );
-      case "strong":
-      case "b":
-        return <Text style={styles.bold}>{children.map(convertElement)}</Text>;
-      case "p":
-        return (
-          <Text style={styles.paragraph}>{children.map(convertElement)}</Text>
-        );
-      case "i":
-      case "em":
-        return (
-          <Text style={styles.italic}>{children.map(convertElement)}</Text>
-        );
-      case "br":
-        return <Text>{"\n"}</Text>;
-
-      case "u":
-        return (
-          <Text style={styles.underline}>{children.map(convertElement)}</Text>
-        );
-      default:
-        return <Text>{children.map(convertElement)}</Text>;
-    }
-  };
-
-  return convertElement(reactElement);
+  return toJsxRuntime(hastTree, {
+    Fragment,
+    jsx,
+    jsxs,
+    jsxDEV: jsx, // Add jsxDEV for development mode
+    components: {
+      p: (props: any) => (
+        <Text style={styles.paragraph}>{props?.children ?? null}</Text>
+      ),
+      strong: (props: any) => (
+        <Text style={styles.bold}>{props?.children ?? null}</Text>
+      ),
+      b: (props: any) => (
+        <Text style={styles.bold}>{props?.children ?? null}</Text>
+      ),
+      i: (props: any) => (
+        <Text style={styles.italic}>{props?.children ?? null}</Text>
+      ),
+      em: (props: any) => (
+        <Text style={styles.italic}>{props?.children ?? null}</Text>
+      ),
+      u: (props: any) => (
+        <Text style={styles.underline}>{props?.children ?? null}</Text>
+      ),
+      h1: (props: any) => (
+        <Text style={styles.heading1}>{props?.children ?? null}</Text>
+      ),
+      h2: (props: any) => (
+        <Text style={styles.heading2}>{props?.children ?? null}</Text>
+      ),
+      br: () => <Text>{"\n"}</Text>,
+      ul: (props: any) => (
+        <View style={styles.list}>{props?.children ?? null}</View>
+      ),
+      li: (props: any) => (
+        <Text style={styles.listItem}>{props?.children ?? null}</Text>
+      ),
+    },
+    elementAttributeNameCase: "html",
+    development: process.env.NODE_ENV !== "production",
+  });
 };

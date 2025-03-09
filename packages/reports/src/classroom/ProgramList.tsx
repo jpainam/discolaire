@@ -8,6 +8,7 @@ import "../fonts";
 import { decode } from "entities";
 
 import { IPBWHeader } from "../headers/IPBWHeader";
+import { renderHtml } from "../utils";
 
 export function ProgramList({
   school,
@@ -73,9 +74,7 @@ export function ProgramList({
                   <Text>{decode(subject.teacher?.lastName ?? "")}</Text>
                   <Text>Coeff. {subject.coefficient}</Text>
                 </View>
-                <View>
-                  <Text>{subject.program ?? "N/A"}</Text>
-                </View>
+                <View>{renderHtml(subject.program ?? "<p>N/A</p>")}</View>
               </View>
             );
           })}
