@@ -1,5 +1,4 @@
 import { ActivityIcon, BookIcon, VideoIcon } from "lucide-react";
-import { notFound } from "next/navigation";
 
 import { checkPermissions } from "@repo/api/permission";
 import { Button } from "@repo/ui/components/button";
@@ -29,9 +28,7 @@ export default async function Page(props: {
   }
 
   const subject = await api.subject.get(Number(subjectId));
-  if (!subject) {
-    notFound();
-  }
+
   return (
     <div className="flex flex-col">
       <SubjectDetailsHeader />

@@ -16,9 +16,7 @@ export const enrollmentRouter = createTRPCRouter({
         where: {
           enrollments: {
             some: {
-              schoolYearId: input.schoolYearId
-                ? input.schoolYearId
-                : ctx.schoolYearId,
+              schoolYearId: input.schoolYearId ?? ctx.schoolYearId,
             },
           },
         },

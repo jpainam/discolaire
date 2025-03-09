@@ -31,7 +31,7 @@ export function StudentPageHeader() {
 
   const canCreateStudent = useCheckPermissions(
     PermissionAction.CREATE,
-    "student:profile"
+    "student:profile",
   );
 
   const [value, setValue] = useState("");

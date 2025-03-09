@@ -36,7 +36,7 @@ export function ProgramHeader() {
     "subject:program",
     {
       subjectId: Number(params.subjectId),
-    }
+    },
   );
   useEffect(() => {
     if (subject) {
@@ -85,7 +85,7 @@ export function ProgramHeader() {
               router.push(
                 routes.classrooms.programs(params.id) +
                   `/${subject?.id}` +
-                  "/create-or-edit"
+                  "/create-or-edit",
               );
             }}
             size={"icon"}

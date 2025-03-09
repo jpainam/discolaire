@@ -1,7 +1,4 @@
-import { notFound } from "next/navigation";
-
 import { CreateEditProgram } from "~/components/classrooms/programs/CreateEditProgram";
-import { api } from "~/trpc/server";
 
 export default async function Page(props: {
   params: Promise<{ subjectId: string }>;
@@ -10,10 +7,6 @@ export default async function Page(props: {
 
   const { subjectId } = params;
 
-  const subject = await api.subject.get(Number(subjectId));
-  if (!subject) {
-    notFound();
-  }
   return (
     <div className="flex flex-col">
       {/* <ProgramHeader />

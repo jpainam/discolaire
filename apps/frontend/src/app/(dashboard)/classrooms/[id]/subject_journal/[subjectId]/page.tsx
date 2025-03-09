@@ -1,5 +1,3 @@
-import { notFound } from "next/navigation";
-
 import { Separator } from "@repo/ui/components/separator";
 
 import { api } from "~/trpc/server";
@@ -15,9 +13,7 @@ export default async function Page(props: {
   const { subjectId } = params;
 
   const subject = await api.subject.get(Number(subjectId));
-  if (!subject) {
-    notFound();
-  }
+
   return (
     <div className="flex flex-col">
       <SubjectJournalHeader
