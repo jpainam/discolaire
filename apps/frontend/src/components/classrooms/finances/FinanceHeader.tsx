@@ -23,6 +23,7 @@ import { Label } from "@repo/ui/components/label";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 import { useLocale } from "~/i18n";
 
+import { useParams } from "next/navigation";
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
@@ -31,6 +32,7 @@ import { FinanceBulkAction } from "./FinanceBulkAction";
 
 export function FinanceHeader() {
   const { t } = useLocale();
+  const params = useParams<{ id: string }>();
   //const { createQueryString } = useCreateQueryString();
   const [type, setType] = useQueryState("type");
   const [search, setSearch] = useQueryState("query");
@@ -85,16 +87,45 @@ export function FinanceHeader() {
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      window.open(
+                        `/api/pdfs/classroom/${params.id}/finances?format=csv&type=all`,
+                        "_blank"
+                      );
+                    }}
+                  >
                     <span>{t("financial_situation")}</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      window.open(
+                        `/api/pdfs/classroom/${params.id}/finances?format=csv&type=debit`,
+                        "_blank"
+                      );
+                    }}
+                  >
                     <span>{t("theDebtorList")}</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      window.open(
+                        `/api/pdfs/classroom/${params.id}/finances?format=csv&type=credit`,
+                        "_blank"
+                      );
+                    }}
+                  >
                     <span>{t("theCreditorList")}</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem disabled={selectedStudents.length == 0}>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      window.open(
+                        `/api/pdfs/classroom/${params.id}/finances?format=csv&type=selected`,
+                        "_blank"
+                      );
+                    }}
+                    disabled={selectedStudents.length == 0}
+                  >
                     {t("currentSelection")} ({selectedStudents.length})
                   </DropdownMenuItem>
                 </DropdownMenuSubContent>
@@ -108,16 +139,45 @@ export function FinanceHeader() {
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      window.open(
+                        `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=all`,
+                        "_blank"
+                      );
+                    }}
+                  >
                     <span> {t("financial_situation")}</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      window.open(
+                        `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=debit`,
+                        "_blank"
+                      );
+                    }}
+                  >
                     <span>{t("theDebtorList")}</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      window.open(
+                        `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=credit`,
+                        "_blank"
+                      );
+                    }}
+                  >
                     <span>{t("theCreditorList")}</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem disabled={selectedStudents.length == 0}>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      window.open(
+                        `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=selected`,
+                        "_blank"
+                      );
+                    }}
+                    disabled={selectedStudents.length == 0}
+                  >
                     {t("currentSelection")} ({selectedStudents.length})
                   </DropdownMenuItem>
                 </DropdownMenuSubContent>
