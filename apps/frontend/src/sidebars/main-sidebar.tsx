@@ -55,6 +55,11 @@ export function MainSidebar({
       url: `/contacts`,
       icon: RiUserFollowLine,
     },
+    // {
+    //   name: "report_cards",
+    //   url: `/report-cards`,
+    //   icon: RiScanLine,
+    // },
 
     {
       name: "library",

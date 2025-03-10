@@ -19,6 +19,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     pathname === "/classrooms" ||
     pathname === "/contacts" ||
     pathname === "/library" ||
+    //pathname === "/report-cards" ||
     pathname === "/staffs";
   const isStudent =
     pathname.startsWith("/students") && pathname.split("/").length > 2;
