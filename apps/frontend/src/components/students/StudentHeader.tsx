@@ -109,8 +109,8 @@ export function StudentHeader({
   const pathname = usePathname();
 
   const studentStatusMutation = api.student.updateStatus.useMutation({
-    onSettled: async () => {
-      await utils.student.invalidate();
+    onSettled: () => {
+      void utils.student.invalidate();
       router.refresh();
     },
     onSuccess: () => {
@@ -122,13 +122,13 @@ export function StudentHeader({
   });
 
   const changeStudentStatus = useCallback(
-    async (status: StudentStatus) => {
-      await studentStatusMutation.mutate({
+    (status: StudentStatus) => {
+      studentStatusMutation.mutate({
         studentId: student.id,
         status,
       });
     },
-    [studentStatusMutation, student.id]
+    [studentStatusMutation, student.id],
   );
 
   const navigateToStudent = (id: string) => {
@@ -150,14 +150,14 @@ export function StudentHeader({
     "student:profile",
     {
       id: params.id,
-    }
+    },
   );
   const canEditStudent = useCheckPermissions(
     PermissionAction.UPDATE,
     "student:profile",
     {
       id: params.id,
-    }
+    },
   );
   //const [open, setOpen] = React.useState(false);
 
@@ -257,7 +257,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >

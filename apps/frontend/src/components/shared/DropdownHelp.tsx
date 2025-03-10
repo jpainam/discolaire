@@ -38,7 +38,7 @@ export function DropdownHelp() {
             onSelect={() => {
               window.open(
                 "https://youtube.com/@discolaire?si=3b2XmG6oOVLkhh3n",
-                "_blank"
+                "_blank",
               );
             }}
           >
