@@ -19,7 +19,7 @@ export function GradesReportsHeader() {
           className="w-[300px]"
           onChange={(val) => {
             router.push(
-              `/administration/grades-reports?${createQueryString({ classroom: val })}`
+              `/administration/grades-reports?${createQueryString({ classroom: val })}`,
             );
           }}
         />
@@ -30,7 +30,7 @@ export function GradesReportsHeader() {
           className="w-[300px]"
           onChange={(val) => {
             router.push(
-              `/administration/grades-reports?${createQueryString({ classroom: val })}`
+              `/administration/grades-reports?${createQueryString({ classroom: val })}`,
             );
           }}
         />
