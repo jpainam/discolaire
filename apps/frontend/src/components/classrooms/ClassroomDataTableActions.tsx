@@ -40,7 +40,7 @@ export function ClassroomDataTableActions({
   const router = useRouter();
   const canDeleteClassroom = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:details"
+    "classroom:details",
   );
   const classroomDeleteMutation = api.classroom.delete.useMutation({
     onSettled: () => utils.classroom.invalidate(),
@@ -165,7 +165,7 @@ export function ClassroomDataTableActions({
                         }
                         const filterValues = Array.from(selectedStatuses);
                         cycleColumn?.setFilterValue(
-                          filterValues.length ? filterValues : undefined
+                          filterValues.length ? filterValues : undefined,
                         );
                         //handleStatusChange(checked, value)
                       }}

@@ -28,7 +28,7 @@ export function StaffDataTableActions({
 
   const canDeleteStaff = useCheckPermissions(
     PermissionAction.DELETE,
-    "staff:profile"
+    "staff:profile",
   );
   const utils = api.useUtils();
   const deleteStaffMutation = api.staff.delete.useMutation({
