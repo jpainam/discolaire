@@ -34,7 +34,6 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
-import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { CreateEditClassroom } from "./CreateEditClassroom";
 
@@ -313,8 +312,15 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
     PermissionAction.UPDATE,
     "classroom:details"
   );
-  const classroomMutation = api.classroom.delete.useMutation({
+  const deleteClassroomMutation = api.classroom.delete.useMutation({
     onSettled: () => utils.classroom.invalidate(),
+    onSuccess: () => {
+      toast.success(t("deleted_successfully"), { id: 0 });
+      router.refresh();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
   });
 
   return (
@@ -365,15 +371,8 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
                     description: t("delete_confirmation"),
                   });
                   if (isConfirmed) {
-                    toast.promise(classroomMutation.mutateAsync(classroom.id), {
-                      loading: t("deleting"),
-                      success: () => {
-                        return t("deleted_successfully");
-                      },
-                      error: (error) => {
-                        return getErrorMessage(error);
-                      },
-                    });
+                    toast.loading(t("deleting"), { id: 0 });
+                    deleteClassroomMutation.mutate(classroom.id);
                   }
                 }}
               >

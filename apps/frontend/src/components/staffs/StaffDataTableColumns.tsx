@@ -24,7 +24,6 @@ import { useConfirm } from "~/providers/confirm-dialog";
 
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { AvatarState } from "../AvatarState";
@@ -248,8 +247,16 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
   const { openSheet } = useSheet();
   const confirm = useConfirm();
   const utils = api.useUtils();
+
   const deleteStaffMutation = api.staff.delete.useMutation({
     onSettled: () => utils.staff.invalidate(),
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+    onSuccess: () => {
+      toast.success(t("deleted_successfully"), { id: 0 });
+      router.refresh();
+    },
   });
   const router = useRouter();
   return (
@@ -299,16 +306,8 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
                 }),
               });
               if (isConfirmed) {
-                toast.promise(deleteStaffMutation.mutateAsync(staff.id), {
-                  loading: t("deleting"),
-                  success: () => {
-                    return t("deleted_successfully");
-                  },
-                  error: (err) => {
-                    console.error(err);
-                    return getErrorMessage(err);
-                  },
-                });
+                toast.loading(t("deleting"), { id: 0 });
+                deleteStaffMutation.mutate(staff.id);
               }
             }}
           >

@@ -1,24 +1,18 @@
 "use client";
 
 import type { Table } from "@tanstack/react-table";
-import { ChevronsUpDown } from "lucide-react";
 import * as React from "react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { RiDeleteBinLine } from "@remixicon/react";
 import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
@@ -30,14 +24,22 @@ export function StaffDataTableActions({
   table: Table<StaffProcedureOutput>;
 }) {
   const { t } = useLocale();
+  const router = useRouter();
 
   const canDeleteStaff = useCheckPermissions(
     PermissionAction.DELETE,
-    "staff:profile",
+    "staff:profile"
   );
   const utils = api.useUtils();
   const deleteStaffMutation = api.staff.delete.useMutation({
     onSettled: () => utils.staff.invalidate(),
+    onSuccess: () => {
+      toast.success(t("deleted_successfully"), { id: 0 });
+      router.refresh();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
   });
 
   const rows = table.getFilteredSelectedRowModel().rows;
@@ -57,54 +59,46 @@ export function StaffDataTableActions({
   const confirm = useConfirm();
 
   return (
-    <div className="animate-fadeIn fixed inset-x-0 bottom-12 z-50 mx-auto flex h-[60px] max-w-xl items-center justify-between rounded-md border bg-background px-6 py-3 shadow">
-      <p className="text-sm font-semibold">
-        {rows.length} {t("selected")}
-      </p>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant={"outline"}>
-            {t("bulk_actions")} <ChevronsUpDown className="ml-1 h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem>{t("pdf_export")}</DropdownMenuItem>
-          <DropdownMenuItem>{t("xml_export")}</DropdownMenuItem>
-          {canDeleteStaff && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onSelect={async () => {
-                  const isConfirmed = await confirm({
-                    title: t("delete"),
-                    description: t("delete_confirmation"),
-                  });
-                  if (isConfirmed) {
-                    const ids = table
-                      .getFilteredSelectedRowModel()
-                      .rows.map((row) => row.original.id);
+    <>
+      {table.getSelectedRowModel().rows.length > 0 && canDeleteStaff && (
+        <>
+          <Button
+            size={"sm"}
+            onClick={async () => {
+              const isConfirmed = await confirm({
+                title: t("delete"),
+                description: t("delete_confirmation"),
+              });
+              if (isConfirmed) {
+                const ids = rows.map((row) => row.original.id);
 
-                    toast.promise(deleteStaffMutation.mutateAsync(ids), {
-                      loading: t("deleting"),
-                      success: () => {
-                        table.toggleAllRowsSelected(false);
-                        return t("deleted_successfully");
-                      },
-                      error: (err) => {
-                        return getErrorMessage(err);
-                      },
-                    });
-                  }
-                }}
-                variant="destructive"
-                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-              >
-                {t("delete")}
-              </DropdownMenuItem>
-            </>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+                toast.promise(deleteStaffMutation.mutateAsync(ids), {
+                  loading: t("deleting"),
+                  success: () => {
+                    table.toggleAllRowsSelected(false);
+                    return t("deleted_successfully");
+                  },
+                  error: (err) => {
+                    return getErrorMessage(err);
+                  },
+                });
+              }
+            }}
+            variant="destructive"
+            //className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+          >
+            <RiDeleteBinLine
+              className="-ms-1 opacity-60"
+              size={16}
+              aria-hidden="true"
+            />
+            {t("delete")}
+            <span className="-me-1 ms-1 inline-flex h-5 max-h-full items-center rounded border border-border bg-background px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground/70">
+              {table.getSelectedRowModel().rows.length}
+            </span>
+          </Button>
+        </>
+      )}
+    </>
   );
 }

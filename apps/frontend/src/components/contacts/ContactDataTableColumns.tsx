@@ -25,7 +25,7 @@ import { useConfirm } from "~/providers/confirm-dialog";
 
 import { decode } from "entities";
 import { routes } from "~/configs/routes";
-import { getErrorMessage } from "~/lib/handle-error";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { AvatarState } from "../AvatarState";
@@ -171,13 +171,22 @@ export function getColumns({
     },
     {
       id: "actions",
+
       cell: function Cell({ row }) {
         const { openSheet } = useSheet();
         const confirm = useConfirm();
+        const router = useRouter();
         const contact = row.original;
         const utils = api.useUtils();
         const deleteContactMutation = api.contact.delete.useMutation({
           onSettled: () => utils.contact.all.invalidate(),
+          onError: (error) => {
+            toast.error(error.message, { id: 0 });
+          },
+          onSuccess: () => {
+            toast.success(t("deleted_successfully"), { id: 0 });
+            router.refresh();
+          },
         });
 
         return (
@@ -230,18 +239,8 @@ export function getColumns({
                     description: t("delete_confirmation"),
                   });
                   if (isConfirmed) {
-                    toast.promise(
-                      deleteContactMutation.mutateAsync(contact.id),
-                      {
-                        loading: t("deleting"),
-                        success: () => {
-                          return t("deleted_successfully");
-                        },
-                        error: (error) => {
-                          return getErrorMessage(error);
-                        },
-                      },
-                    );
+                    toast.loading(t("deleting"), { id: 0 });
+                    deleteContactMutation.mutate(contact.id);
                   }
                 }}
               >
