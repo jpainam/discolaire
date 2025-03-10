@@ -109,7 +109,7 @@ export function CreateEditAbsence({
                 });
             }
           },
-        }
+        },
       );
     }
   };
