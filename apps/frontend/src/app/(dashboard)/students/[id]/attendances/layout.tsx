@@ -10,6 +10,7 @@ import {
 
 import { getServerTranslations } from "~/i18n/server";
 
+import { EmptyState } from "~/components/EmptyState";
 import { StudentAttendanceHeader } from "~/components/students/attendances/StudentAttendanceHeader";
 import { api } from "~/trpc/server";
 
@@ -19,10 +20,14 @@ export default async function Layout(props: {
 }) {
   const { children } = props;
   const params = await props.params;
-
-  const classroom = await api.student.classroom({ studentId: params.id });
-
   const { t } = await getServerTranslations();
+  const classroom = await api.student.classroom({ studentId: params.id });
+  if (!classroom) {
+    return (
+      <EmptyState className="my-8" title={t("student_not_registered_yet")} />
+    );
+  }
+
   const [absence, late, chatter, exclusion, consigne] = await Promise.all([
     api.absence.studentSummary({ studentId: params.id }),
     api.lateness.studentSummary({ studentId: params.id }),
@@ -41,7 +46,7 @@ export default async function Layout(props: {
   return (
     <div className="flex flex-col">
       <StudentAttendanceHeader
-        classroomId={classroom?.id}
+        classroomId={classroom.id}
         studentId={params.id}
       />
       <div className="grid  md:grid-cols-[275px_1fr]">

@@ -25,7 +25,7 @@ import {
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
-import { DatePicker } from "~/components/shared/date-picker";
+import { DatePicker } from "~/components/DatePicker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { api } from "~/trpc/react";
 
@@ -116,7 +116,7 @@ export function CreateEditLateness({
             <FormItem className="space-y-0">
               <FormLabel>{t("date")}</FormLabel>
               <FormControl>
-                <DatePicker {...field} />
+                <DatePicker defaultValue={field.value} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

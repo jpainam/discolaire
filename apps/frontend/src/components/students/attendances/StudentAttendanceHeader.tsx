@@ -4,6 +4,7 @@ import {
   BaselineIcon,
   ChevronDown,
   DiameterIcon,
+  LineChart,
   MoreVertical,
   NewspaperIcon,
   ShapesIcon,
@@ -47,6 +48,7 @@ export function StudentAttendanceHeader({
 
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-muted/50 px-4 py-1">
+      <LineChart className="w-6 h-6" />
       <Label className="hidden md:block">{t("attendances")}</Label>
       <div className="w-[15px] hidden md:block"></div>
       {/* <FlatBadge>Total justified records: 2 out of 5</FlatBadge> */}
@@ -104,7 +106,6 @@ export function StudentAttendanceHeader({
                 if (!classroomId) return;
                 openModal({
                   title: `${t("add")} - ${t("absence")}`,
-                  className: "w-[400px]",
                   view: <CreateEditAbsence classroomId={classroomId} />,
                 });
               }}
@@ -116,7 +117,6 @@ export function StudentAttendanceHeader({
               onClick={() => {
                 openModal({
                   title: `${t("add")} - ${t("lateness")}`,
-                  className: "w-[400px]",
                   view: <CreateEditLateness />,
                 });
               }}
@@ -128,7 +128,6 @@ export function StudentAttendanceHeader({
               onClick={() => {
                 openModal({
                   title: `${t("add")} - ${t("chatter")}`,
-                  className: "w-[400px]",
                   view: <CreateEditChatter />,
                 });
               }}

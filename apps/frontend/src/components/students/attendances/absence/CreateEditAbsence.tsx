@@ -20,7 +20,7 @@ import { Input } from "@repo/ui/components/input";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
-import { DatePicker } from "~/components/shared/date-picker";
+import { DatePicker } from "~/components/DatePicker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
@@ -109,7 +109,7 @@ export function CreateEditAbsence({
                 });
             }
           },
-        },
+        }
       );
     }
   };
@@ -136,7 +136,7 @@ export function CreateEditAbsence({
             <FormItem className="space-y-0">
               <FormLabel>{t("date")}</FormLabel>
               <FormControl>
-                <DatePicker {...field} />
+                <DatePicker defaultValue={field.value} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
