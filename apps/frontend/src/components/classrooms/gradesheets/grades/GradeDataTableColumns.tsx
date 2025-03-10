@@ -16,11 +16,11 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { Badge } from "@repo/ui/components/badge";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { getErrorMessage } from "~/lib/handle-error";
@@ -66,6 +66,7 @@ export function fetchGradeColumns({
     },
     {
       id: "avatar",
+      size: 40,
       cell: ({ row }) => {
         const student = row.original.student;
         return (
@@ -84,6 +85,7 @@ export function fetchGradeColumns({
           title={t("registrationNumber")}
         />
       ),
+      size: 60,
       cell: ({ row }) => {
         const student = row.original.student;
         return (
@@ -142,18 +144,20 @@ export function fetchGradeColumns({
         const grade = row.original;
         return <div>{grade.isAbsent ? "-" : grade.grade}</div>;
       },
+      size: 60,
     },
     {
       accessorKey: "isAbsent",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("absent")} />
       ),
+      size: 60,
       cell: ({ row }) => {
         const grade = row.original;
         return (
-          <FlatBadge variant={grade.isAbsent ? "red" : "green"}>
+          <Badge variant={grade.isAbsent ? "destructive" : "outline"}>
             {grade.isAbsent ? t("yes") : t("no")}
-          </FlatBadge>
+          </Badge>
         );
       },
     },
@@ -254,7 +258,7 @@ function ActionCells({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  },
+                  }
                 );
               }
             }}

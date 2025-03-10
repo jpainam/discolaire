@@ -59,12 +59,12 @@ export function GradeDetailsHeader({
 
   const males10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "male",
+      (grade) => grade.grade >= 10 && grade.student.gender == "male"
     ).length / len;
 
   const females10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "female",
+      (grade) => grade.grade >= 10 && grade.student.gender == "female"
     ).length / len;
 
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
@@ -172,7 +172,7 @@ export function GradeDetailsHeader({
             </TableHeader>
             <TableBody className="text-center">
               <TableRow>
-                <TableCell>{grades.length}</TableCell>
+                <TableCell className="border-r">{grades.length}</TableCell>
                 <TableCell className="border-r">{average.toFixed(2)}</TableCell>
                 <TableCell className="border-r">{grades10}</TableCell>
                 <TableCell className="border-r">

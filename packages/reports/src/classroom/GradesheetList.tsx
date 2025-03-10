@@ -285,7 +285,7 @@ export function GradesheetList({
                       borderRight: "1px solid black",
                     }}
                   >
-                    <Text>{gr.min.toFixed(2)}</Text>
+                    <Text>{isFinite(gr.min) ? gr.min.toFixed(2) : ""}</Text>
                   </View>
                   <View
                     style={{
@@ -295,7 +295,7 @@ export function GradesheetList({
                       borderRight: "1px solid black",
                     }}
                   >
-                    <Text>{gr.max.toFixed(2)}</Text>
+                    <Text>{isFinite(gr.max) ? gr.max.toFixed(2) : ""}</Text>
                   </View>
                   <View
                     style={{

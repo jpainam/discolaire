@@ -68,7 +68,7 @@ export function EditGradeStudent({
           <InputField className="hidden" name="studentId" />
           <InputField className="hidden" name="gradeId" />
           <InputField name="grade" label={t("grade")} type="number" />
-          <CheckboxField name="isAbsent" label={t("is_absent")} />
+          <CheckboxField name="isAbsent" label={t("absent")} />
         </div>
         <div className="ml-auto mt-4 flex flex-row gap-4">
           <Button
