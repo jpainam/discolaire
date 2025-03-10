@@ -240,7 +240,7 @@ export function getColumns({
       filterFn: (row, id, value) => {
         return (
           Array.isArray(value) &&
-          Array.from(value, Number).includes(row.getValue(id))
+          Array.from(value, Number).includes(Number(row.getValue(id)))
         );
       },
     },
@@ -307,11 +307,11 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
   const utils = api.useUtils();
   const canDeleteClassroom = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:details",
+    "classroom:details"
   );
   const canUpdateClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
-    "classroom:details",
+    "classroom:details"
   );
   const classroomMutation = api.classroom.delete.useMutation({
     onSettled: () => utils.classroom.invalidate(),

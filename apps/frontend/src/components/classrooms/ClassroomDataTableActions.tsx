@@ -1,24 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
+
 "use client";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
 import type { Table } from "@tanstack/react-table";
-import { ChevronsUpDown, Trash2 } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import { useLocale } from "~/i18n";
@@ -27,6 +20,7 @@ import { useConfirm } from "~/providers/confirm-dialog";
 
 import { RiDeleteBinLine, RiFilter3Line } from "@remixicon/react";
 import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
@@ -43,15 +37,17 @@ export function ClassroomDataTableActions({
   const rows = table.getFilteredSelectedRowModel().rows;
   const utils = api.useUtils();
   const { t } = useLocale();
+  const router = useRouter();
   const canDeleteClassroom = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:details",
+    "classroom:details"
   );
   const classroomDeleteMutation = api.classroom.delete.useMutation({
     onSettled: () => utils.classroom.invalidate(),
     onSuccess: () => {
       table.toggleAllRowsSelected(false);
       toast.success("deleted_successfully", { id: 0 });
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -72,6 +68,9 @@ export function ClassroomDataTableActions({
 
   const confirm = useConfirm();
 
+  const cycleQuery = api.classroomCycle.all.useQuery();
+  const cycles = cycleQuery.data ?? [];
+
   // Extract complex expressions into separate variables
   const cycleColumn = table.getColumn("cycleId");
   const cycleFacetedValues = cycleColumn?.getFacetedUniqueValues();
@@ -81,11 +80,12 @@ export function ClassroomDataTableActions({
   const uniqueStatusValues = useMemo(() => {
     if (!cycleColumn) return [];
     const values = Array.from(cycleFacetedValues?.keys() ?? []);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return values.sort();
   }, [cycleColumn, cycleFacetedValues]);
 
   const selectedStatuses = useMemo(() => {
-    return (cycleFilterValue as string[]) ?? [];
+    return new Set((cycleFilterValue as string[]) ?? []);
   }, [cycleFilterValue]);
 
   const statusCounts = useMemo(() => {
@@ -101,13 +101,13 @@ export function ClassroomDataTableActions({
             const isConfirmed = await confirm({
               title: t("delete"),
               description: t("delete_confirmation"),
-              icon: <Trash2 className="text-destructive" />,
-              alertDialogTitle: {
-                className: "flex items-center gap-2",
-              },
+              // icon: <Trash2 className="text-destructive" />,
+              // alertDialogTitle: {
+              //   className: "flex items-center gap-2",
+              // },
             });
             if (isConfirmed) {
-              toast.loading("deleting", { id: 0 });
+              toast.loading(t("deleting"), { id: 0 });
               const selectedIds = rows.map((row) => row.original.id);
               classroomDeleteMutation.mutate(selectedIds);
             }
@@ -127,16 +127,16 @@ export function ClassroomDataTableActions({
       )}
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="outline">
+          <Button size={"sm"} variant="outline">
             <RiFilter3Line
               className="size-5 -ms-1.5 text-muted-foreground/60"
               size={20}
               aria-hidden="true"
             />
-            Filter
-            {selectedStatuses.length > 0 && (
-              <span className="-me-1 ms-3 inline-flex h-5 max-h-full items-center rounded border border-border bg-background px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground/70">
-                {selectedStatuses.length}
+            {t("filter")}
+            {selectedStatuses.size > 0 && (
+              <span className="-me-1 inline-flex h-5 max-h-full items-center rounded border border-border bg-background px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground/70">
+                {selectedStatuses.size}
               </span>
             )}
           </Button>
@@ -144,44 +144,47 @@ export function ClassroomDataTableActions({
         <PopoverContent className="w-auto min-w-36 p-3" align="end">
           <div className="space-y-3">
             <div className="text-xs font-medium uppercase text-muted-foreground/60">
-              Status
+              {t("cycle")}
             </div>
             <div className="space-y-3">
-              {uniqueStatusValues.map((value, i) => (
-                <div key={value} className="flex items-center gap-2">
-                  <Checkbox
-                    id={`${i}-${i}`}
-                    checked={selectedStatuses.includes(value)}
-                    onCheckedChange={(_checked: boolean) => {
-                      //handleStatusChange(checked, value)
-                    }}
-                  />
-                  <Label
-                    htmlFor={`${i}-${i}`}
-                    className="flex grow justify-between gap-2 font-normal"
-                  >
-                    {value}{" "}
-                    <span className="ms-2 text-xs text-muted-foreground">
-                      {statusCounts.get(value)}
-                    </span>
-                  </Label>
-                </div>
-              ))}
+              {uniqueStatusValues.map((value, i) => {
+                const label = cycles.find((cycle) => cycle.id === value)?.name;
+                if (!label) return null;
+                return (
+                  <div key={value} className="flex items-center gap-2">
+                    <Checkbox
+                      id={`${i}-${i}`}
+                      checked={selectedStatuses.has(value)}
+                      onCheckedChange={(_checked: boolean) => {
+                        const isSelected = selectedStatuses.has(value);
+                        if (isSelected) {
+                          selectedStatuses.delete(value);
+                        } else {
+                          selectedStatuses.add(value);
+                        }
+                        const filterValues = Array.from(selectedStatuses);
+                        cycleColumn?.setFilterValue(
+                          filterValues.length ? filterValues : undefined
+                        );
+                        //handleStatusChange(checked, value)
+                      }}
+                    />
+                    <Label
+                      htmlFor={`${i}-${i}`}
+                      className="flex grow justify-between gap-2 font-normal"
+                    >
+                      {label}{" "}
+                      <span className="ms-2 text-xs text-muted-foreground">
+                        {statusCounts.get(value)}
+                      </span>
+                    </Label>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </PopoverContent>
       </Popover>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant={"outline"}>
-            {t("bulk_actions")} <ChevronsUpDown className="ml-1 h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem>{t("pdf_export")}</DropdownMenuItem>
-          <DropdownMenuItem>{t("xml_export")}</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
     </>
   );
 }

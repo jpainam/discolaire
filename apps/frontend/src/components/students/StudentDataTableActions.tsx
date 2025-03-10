@@ -1,24 +1,19 @@
 "use client";
 
 import type { Table } from "@tanstack/react-table";
-import { ChevronsUpDown, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { api } from "~/trpc/react";
+import { useRouter } from "~/hooks/use-router";
 
 type StudentGetAllProcedureOutput = NonNullable<
   RouterOutputs["student"]["all"]
@@ -31,10 +26,11 @@ export function StudentDataTableActions({
 }) {
   const confirm = useConfirm();
   const { t } = useLocale();
+  const router = useRouter();
   const utils = api.useUtils();
   const canDeleteStudent = useCheckPermissions(
     PermissionAction.DELETE,
-    "student:profile",
+    "student:profile"
   );
   const deleteStudentMutation = api.student.delete.useMutation({
     onSettled: () => utils.student.invalidate(),
@@ -44,6 +40,7 @@ export function StudentDataTableActions({
     onSuccess: () => {
       table.toggleAllRowsSelected(false);
       toast.success("deleted_successfully", { id: 0 });
+      router.refresh();
     },
   });
   const rows = table.getFilteredSelectedRowModel().rows;
@@ -69,15 +66,15 @@ export function StudentDataTableActions({
             const isConfirmed = await confirm({
               title: t("delete"),
               description: t("delete_confirmation"),
-              icon: <Trash2 className="text-destructive" />,
-              alertDialogTitle: {
-                className: "flex items-center gap-2",
-              },
+              // icon: <Trash2 className="text-destructive" />,
+              // alertDialogTitle: {
+              //   className: "flex items-center gap-2",
+              // },
             });
 
             if (isConfirmed) {
               const selectedStudentIds = rows.map((row) => row.original.id);
-              toast.loading("deleting", { id: 0 });
+              toast.loading(t("deleting"), { id: 0 });
               deleteStudentMutation.mutate(selectedStudentIds);
             }
           }}
@@ -85,22 +82,22 @@ export function StudentDataTableActions({
         >
           <Trash2 />
           {t("delete")}
-          <span className="-me-1 ms-1 inline-flex h-5 max-h-full items-center rounded border border-border bg-background px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground/70">
+          <span className="-me-1 ms-1 inline-flex h-5 max-h-full items-center rounded border border-border bg-background px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground">
             {table.getSelectedRowModel().rows.length}
           </span>
         </Button>
       )}
-      <DropdownMenu>
+      {/* <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button size={"sm"} variant={"outline"}>
-            {t("bulk_actions")} <ChevronsUpDown className="ml-1 h-4 w-4" />
+            {t("bulk_actions")} <ChevronsUpDown />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem>{t("pdf_export")}</DropdownMenuItem>
           <DropdownMenuItem>{t("xml_export")}</DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu>
+      </DropdownMenu> */}
     </>
   );
 }
