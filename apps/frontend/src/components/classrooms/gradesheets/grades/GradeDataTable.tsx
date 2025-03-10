@@ -4,27 +4,26 @@ import { useParams } from "next/navigation";
 import { useMemo } from "react";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
-import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 import { useLocale } from "~/i18n";
 
-import { api } from "~/trpc/react";
+import type { RouterOutputs } from "@repo/api";
 import { fetchGradeColumns } from "./GradeDataTableColumns";
 
-export function GradeDataTable({ gradeSheetId }: { gradeSheetId: number }) {
+export function GradeDataTable({
+  grades,
+}: {
+  grades: RouterOutputs["gradeSheet"]["grades"];
+}) {
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
-  const gradesQuery = api.gradeSheet.grades.useQuery(Number(gradeSheetId));
   const columns = useMemo(() => {
     return fetchGradeColumns({ t: t, classroomId: params.id });
   }, [t, params.id]);
 
   const { table } = useDataTable({
     columns: columns,
-    data: gradesQuery.data ?? [],
-    rowCount: gradesQuery.data?.length ?? 0,
+    data: grades,
   });
-  if (gradesQuery.isPending) {
-    return <DataTableSkeleton columnCount={6} rowCount={10} />;
-  }
+
   return <DataTable className="px-4" table={table}></DataTable>;
 }

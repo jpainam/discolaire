@@ -109,7 +109,7 @@ export const gradeSheetRouter = createTRPCRouter({
     }),
 
   get: protectedProcedure.input(z.number()).query(async ({ ctx, input }) => {
-    return ctx.db.gradeSheet.findUnique({
+    return ctx.db.gradeSheet.findUniqueOrThrow({
       include: {
         subject: {
           include: {

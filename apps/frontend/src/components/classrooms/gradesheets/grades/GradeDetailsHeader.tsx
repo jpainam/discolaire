@@ -205,11 +205,25 @@ export function GradeDetailsHeader({
                 {t("edit")}
               </DropdownMenuItem>
               <DropdownHelp />
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={() => {
+                  window.open(
+                    `/api/pdfs/gradesheets/${gradesheet.id}?format=pdf&classroomId=${params.id}`,
+                    "_blank",
+                  );
+                }}
+              >
                 <PDFIcon />
                 {t("pdf_export")}
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={() => {
+                  window.open(
+                    `/api/pdfs/gradesheets/${gradesheet.id}?format=csv&classroomId=${params.id}`,
+                    "_blank",
+                  );
+                }}
+              >
                 <XMLIcon />
                 {t("xml_export")}
               </DropdownMenuItem>

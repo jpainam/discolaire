@@ -75,8 +75,11 @@ export function GradeList({
               fontSize: 12,
             }}
           >
-            <Text>SITUATION FINANCIERE</Text>
-            <Text></Text>
+            <Text>FICHE DE REPORT DE NOTES</Text>
+            <Text>
+              {classroom.name} - {gradesheet.subject.course.reportName} -{" "}
+              {gradesheet.term.name}
+            </Text>
           </View>
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
@@ -104,19 +107,122 @@ export function GradeList({
             style={{
               flexDirection: "column",
               display: "flex",
-              gap: 4,
               fontSize: 10,
-              fontWeight: "bold",
             }}
           >
-            <Text>Classe: {classroom.name}</Text>
-            <Text>Effectif: {classroom.size}</Text>
             <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
+              style={{
+                flexDirection: "row",
+                width: "100%",
+                display: "flex",
+                border: "1px solid black",
+              }}
             >
-              <Text>Total des frais à payer: </Text>
-              <Text>Total dûe: </Text>
+              <Item label="Effectif évalué" />
+              <Item label="Moy. générale de la classe" />
+              <Item label="Nombre de notes >= 10" />
+              <View
+                style={{
+                  width: "25%",
+                  flexDirection: "column",
+                  borderRight: "1px solid black",
+                }}
+              >
+                <View
+                  style={{
+                    borderBottom: "1px solid black",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text>Taux de réussite</Text>
+                </View>
+                <View style={{ flexDirection: "row", gap: 2 }}>
+                  <View
+                    style={{
+                      width: "50%",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRight: "1px solid black",
+                    }}
+                  >
+                    <Text>Garçons</Text>
+                  </View>
+                  <View
+                    style={{
+                      width: "50%",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text>Filles</Text>
+                  </View>
+                </View>
+              </View>
+
+              <View
+                style={{
+                  width: "15%",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  paddingLeft: 3,
+                  borderRight: "1px solid black",
+                }}
+              >
+                <Text>{"Taux de réussite général"}</Text>
+              </View>
+              <View
+                style={{
+                  width: "15%",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text>Observation</Text>
+              </View>
             </View>
+            <View
+              style={{
+                flexDirection: "row",
+                borderBottom: "1px solid black",
+                borderLeft: "1px solid black",
+                borderRight: "1px solid black",
+              }}
+            >
+              <Item label={len.toString()} />
+              <Item label={average.toFixed(2)} />
+              <Item label={grades10.toString()} />
+              <View
+                style={{
+                  width: "25%",
+                  flexDirection: "row",
+                  borderRight: "1px solid black",
+                }}
+              >
+                <View
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "50%",
+                    borderRight: "1px solid black",
+                  }}
+                >
+                  <Text>{(males10Rate * 100).toFixed(2)}%</Text>
+                </View>
+                <View
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "50%",
+                  }}
+                >
+                  <Text>{(females10Rate * 100).toFixed(2)}%</Text>
+                </View>
+              </View>
+              <Item label={((grades10 / len) * 100).toFixed(2) + "%"} />
+              <Item last={true} label={getAppreciations(average)} />
+            </View>
+            {/* Statistic */}
           </View>
           <View
             style={{
@@ -143,40 +249,46 @@ export function GradeList({
                 <Text>No</Text>
               </View>
               <View
-                style={{ width: "40%", paddingLeft: 5, paddingVertical: 3 }}
+                style={{
+                  width: "45%",
+                  borderRight: "1px solid black",
+                  paddingLeft: 5,
+                  paddingVertical: 3,
+                }}
               >
                 <Text>Nom et Prénom</Text>
               </View>
               <View
                 style={{
-                  width: "15%",
+                  width: "10%",
                   justifyContent: "center",
                   alignItems: "center",
+                  borderRight: "1px solid black",
                 }}
               >
-                <Text>Redoublant</Text>
+                <Text>Redoub.</Text>
               </View>
               <View
                 style={{
-                  width: "15%",
+                  width: "10%",
                   justifyContent: "center",
                   alignItems: "center",
+                  borderRight: "1px solid black",
                 }}
               >
-                <Text>Total versé</Text>
+                <Text>Note</Text>
               </View>
               <View
                 style={{
-                  width: "15%",
+                  width: "10%",
                   justifyContent: "center",
                   alignItems: "center",
+                  borderRight: "1px solid black",
                 }}
               >
-                <Text>Restant</Text>
+                <Text>Absent</Text>
               </View>
-              <View style={{ width: "5%" }}>
-                <Text></Text>
-              </View>
+              <Item label="Appréciation" last={true} />
             </View>
             {grades.map((grade, index) => {
               return (
@@ -198,7 +310,12 @@ export function GradeList({
                     <Text> {index + 1}</Text>
                   </View>
                   <View
-                    style={{ width: "40%", paddingLeft: 5, paddingVertical: 3 }}
+                    style={{
+                      width: "45%",
+                      paddingLeft: 5,
+                      paddingVertical: 3,
+                      borderRight: "1px solid black",
+                    }}
                   >
                     <Text>
                       {decode(grade.student.lastName ?? "")}{" "}
@@ -207,34 +324,38 @@ export function GradeList({
                   </View>
                   <View
                     style={{
-                      width: "15%",
+                      width: "10%",
                       justifyContent: "center",
                       alignItems: "center",
+                      borderRight: "1px solid black",
                     }}
                   >
                     <Text>{grade.student.isRepeating ? "OUI" : "NON"}</Text>
                   </View>
                   <View
                     style={{
-                      width: "15%",
+                      width: "10%",
                       justifyContent: "center",
                       alignItems: "center",
+                      borderRight: "1px solid black",
                     }}
                   >
                     <Text>{grade.grade}</Text>
                   </View>
                   <View
                     style={{
-                      width: "15%",
+                      width: "10%",
                       justifyContent: "center",
                       alignItems: "center",
+                      borderRight: "1px solid black",
                     }}
                   >
                     <Text>{grade.isAbsent ? "OUI" : ""}</Text>
                   </View>
                   <View
                     style={{
-                      width: "5%",
+                      width: "20%",
+                      paddingLeft: 3,
                     }}
                   >
                     <Text>{getAppreciations(grade.grade)}</Text>
@@ -246,5 +367,22 @@ export function GradeList({
         </View>
       </Page>
     </Document>
+  );
+}
+
+function Item({ label, last = false }: { label: string; last?: boolean }) {
+  return (
+    <View
+      style={{
+        width: "15%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        paddingHorizontal: 3,
+        borderRight: last ? "" : "1px solid black",
+      }}
+    >
+      <Text>{label}</Text>
+    </View>
   );
 }

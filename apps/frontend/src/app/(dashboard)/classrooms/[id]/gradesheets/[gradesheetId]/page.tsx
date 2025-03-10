@@ -1,5 +1,3 @@
-import { notFound } from "next/navigation";
-
 import { GradeDataTable } from "~/components/classrooms/gradesheets/grades/GradeDataTable";
 import { GradeDetailsHeader } from "~/components/classrooms/gradesheets/grades/GradeDetailsHeader";
 import { api } from "~/trpc/server";
@@ -13,14 +11,11 @@ export default async function Page(props: {
 
   const grades = await api.gradeSheet.grades(Number(gradesheetId));
   const gradesheet = await api.gradeSheet.get(Number(gradesheetId));
-  if (!gradesheet) {
-    notFound();
-  }
 
   return (
     <div className="flex w-full flex-col gap-2">
       <GradeDetailsHeader gradesheet={gradesheet} grades={grades} />
-      <GradeDataTable gradeSheetId={gradesheetId} />
+      <GradeDataTable grades={grades} />
     </div>
   );
 }
