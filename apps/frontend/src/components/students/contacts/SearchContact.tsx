@@ -33,7 +33,7 @@ export function SearchContact({ onBack }: { onBack: () => void }) {
     <div className="flex flex-col gap-2 p-2">
       <RelationshipSelector
         showAllOption={false}
-        className="h-8"
+        className="h-8 w-full"
         onChange={(v) => {
           setRelationship(v);
         }}
@@ -82,7 +82,7 @@ export function SearchContact({ onBack }: { onBack: () => void }) {
                         onError: (error) => {
                           showErrorToast(error);
                         },
-                      },
+                      }
                     );
                   }}
                   className="cursor-pointer overflow-hidden py-1 text-sm text-muted-foreground hover:text-blue-600  hover:underline"

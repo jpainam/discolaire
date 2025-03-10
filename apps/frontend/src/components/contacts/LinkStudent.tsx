@@ -60,6 +60,7 @@ export function LinkStudent({ contactId }: { contactId: string }) {
     <div className="flex flex-col gap-2">
       <div className="mx-2">
         <RelationshipSelector
+          className="w-full"
           showAllOption={false}
           onChange={(v) => {
             setRelationship(v);
@@ -96,15 +97,15 @@ export function LinkStudent({ contactId }: { contactId: string }) {
                     if (selectedStudents.includes(stud)) {
                       return setSelectedStudents(
                         selectedStudents.filter(
-                          (selectedStudent) => selectedStudent.id !== stud.id,
-                        ),
+                          (selectedStudent) => selectedStudent.id !== stud.id
+                        )
                       );
                     }
 
                     return setSelectedStudents(
                       [...contactUnLinkedStudent.data].filter((u) =>
-                        [...selectedStudents, stud].includes(u),
-                      ),
+                        [...selectedStudents, stud].includes(u)
+                      )
                     );
                   }}
                 >
@@ -184,7 +185,7 @@ export function LinkStudent({ contactId }: { contactId: string }) {
                 error: (error) => {
                   return getErrorMessage(error);
                 },
-              },
+              }
             );
           }}
         >
