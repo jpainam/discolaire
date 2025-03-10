@@ -75,7 +75,7 @@ export function GradeSheetHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/gradesheets?termId=${term ?? 0}&subjectId=${subject ?? 0}&format=pdf`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >
@@ -86,7 +86,7 @@ export function GradeSheetHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/gradesheets?termId=${term ?? 0}&subjectId=${subject ?? 0}&format=csv`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >
