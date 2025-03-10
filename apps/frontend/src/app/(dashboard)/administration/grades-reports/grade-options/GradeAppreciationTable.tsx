@@ -47,14 +47,13 @@ export function GradeAppreciationTable() {
   const confirm = useConfirm();
 
   return (
-    <Card>
+    <Card className="p-0 gap-0">
       <CardHeader className="flex flex-row items-center border-b bg-muted/50 px-2 pb-1 pt-0">
         <CardTitle>{t("appreciations")}</CardTitle>
-        <div className="ml-auto">
+        <div className="ml-auto py-1">
           <Button
             onClick={() => {
               openModal({
-                className: "w-[500px]",
                 title: t("add_appreciation"),
                 view: <CreateEditGradeAppreciation />,
               });

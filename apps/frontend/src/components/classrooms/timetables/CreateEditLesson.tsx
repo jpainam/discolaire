@@ -69,7 +69,7 @@ export function CreateEditLesson({
     },
   });
 
-  const daysOptions: Option<string>[] = [
+  const daysOptions: Option[] = [
     {
       label: t("sunday"),
       value: "0",

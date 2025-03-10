@@ -95,7 +95,7 @@ export function CreateEditTimetable({
     },
   });
 
-  const daysOptions: Option<string>[] = [
+  const daysOptions: Option[] = [
     {
       label: t("monday"),
       value: "monday",

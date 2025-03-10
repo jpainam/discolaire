@@ -55,6 +55,10 @@ export function AdminSidebar({
             url: "/administration/students",
           },
           {
+            title: "grades_and_reports",
+            url: "/administration/grades-reports",
+          },
+          {
             title: "directory",
             url: "/administration/directory",
           },

@@ -95,7 +95,7 @@ export function CreateEditUser({
   });
 
   const rolesQuery = api.role.all.useQuery();
-  const roleOptions: Option<string>[] = rolesQuery.data
+  const roleOptions: Option[] = rolesQuery.data
     ? rolesQuery.data.map((role) => ({
         label: role.name,
         value: role.id,
