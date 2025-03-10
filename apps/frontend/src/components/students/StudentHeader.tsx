@@ -2,6 +2,7 @@
 
 import {
   BellRing,
+  CheckIcon,
   KeyRound,
   MessageCircleMore,
   MoreVertical,
@@ -11,7 +12,10 @@ import {
   Phone,
   PlusIcon,
   Printer,
-  ShieldBan,
+  Shield,
+  ShieldCheck,
+  ShieldEllipsis,
+  ShieldX,
   SquareEqual,
   Trash2,
   UserPlus2,
@@ -29,7 +33,11 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuPortal,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Separator } from "@repo/ui/components/separator";
@@ -43,7 +51,7 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import type { RouterOutputs } from "@repo/api";
 import { decode } from "entities";
 import { useSetAtom } from "jotai";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { SimpleTooltip } from "~/components/simple-tooltip";
 
 import { routes } from "~/configs/routes";
@@ -100,8 +108,11 @@ export function StudentHeader({
   const { createQueryString } = useCreateQueryString();
   const pathname = usePathname();
 
-  const disableStudentMutation = api.student.disable.useMutation({
-    onSettled: () => utils.student.invalidate(),
+  const studentStatusMutation = api.student.updateStatus.useMutation({
+    onSettled: async () => {
+      await utils.student.invalidate();
+      router.refresh();
+    },
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
     },
@@ -109,6 +120,16 @@ export function StudentHeader({
       toast.error(error.message, { id: 0 });
     },
   });
+
+  const changeStudentStatus = useCallback(
+    async (status: StudentStatus) => {
+      await studentStatusMutation.mutate({
+        studentId: student.id,
+        status,
+      });
+    },
+    [studentStatusMutation, student.id]
+  );
 
   const navigateToStudent = (id: string) => {
     if (!pathname.includes(params.id)) {
@@ -129,14 +150,14 @@ export function StudentHeader({
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   const canEditStudent = useCheckPermissions(
     PermissionAction.UPDATE,
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   //const [open, setOpen] = React.useState(false);
 
@@ -153,7 +174,13 @@ export function StudentHeader({
 
         <div className="flex flex-row items-center gap-1">
           <FlatBadge
-            variant={student.status == StudentStatus.ACTIVE ? "green" : "red"}
+            variant={
+              student.status == StudentStatus.ACTIVE
+                ? "green"
+                : student.status == StudentStatus.INACTIVE
+                  ? "yellow"
+                  : "red"
+            }
           >
             {t(`${student.status}`)}
           </FlatBadge>
@@ -230,7 +257,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -282,7 +309,6 @@ export function StudentHeader({
                 <DropdownMenuItem
                   onSelect={() => {
                     openModal({
-                      className: "w-[500px]",
                       title: t("attach_user"),
                       view: (
                         <CreateEditUser entityId={params.id} type="student" />
@@ -317,7 +343,60 @@ export function StudentHeader({
                   {t("change_password")}
                 </DropdownMenuItem>
               )}
-              <DropdownMenuItem
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  <ShieldCheck className="mr-2 h-4 w-4" />
+                  <span>{t("status")}</span>
+                </DropdownMenuSubTrigger>
+                <DropdownMenuPortal>
+                  <DropdownMenuSubContent>
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        void changeStudentStatus(StudentStatus.ACTIVE);
+                      }}
+                    >
+                      <ShieldCheck />
+                      <span>{t("active")}</span>
+                      {student.status == StudentStatus.ACTIVE && <CheckIcon />}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        void changeStudentStatus(StudentStatus.INACTIVE);
+                      }}
+                    >
+                      <Shield />
+                      <span>{t("inactive")}</span>
+                      {student.status == StudentStatus.INACTIVE && (
+                        <CheckIcon />
+                      )}
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        void changeStudentStatus(StudentStatus.GRADUATED);
+                      }}
+                    >
+                      <ShieldEllipsis />
+                      <span>{t("graduated")}</span>
+                      {student.status == StudentStatus.GRADUATED && (
+                        <CheckIcon />
+                      )}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        void changeStudentStatus(StudentStatus.EXPELLED);
+                      }}
+                    >
+                      <ShieldX />
+                      <span>{t("expelled")}</span>
+                      {student.status == StudentStatus.EXPELLED && (
+                        <CheckIcon />
+                      )}
+                    </DropdownMenuItem>
+                  </DropdownMenuSubContent>
+                </DropdownMenuPortal>
+              </DropdownMenuSub>
+              {/* <DropdownMenuItem
                 onSelect={() => {
                   toast.loading(t("updating"), { id: 0 });
                   disableStudentMutation.mutate({
@@ -328,7 +407,7 @@ export function StudentHeader({
               >
                 <ShieldBan />
                 {student.isActive ? t("disable") : t("enable")}
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               {canEditStudent && (
                 <DropdownMenuItem
                   onSelect={() => {

@@ -656,4 +656,21 @@ export const studentRouter = createTRPCRouter({
       });
       return contacts.filter((c) => c.primaryContact);
     }),
+  updateStatus: protectedProcedure
+    .input(
+      z.object({
+        studentId: z.string().min(1),
+        status: z.enum(["ACTIVE", "GRADUATED", "INACTIVE", "EXPELLED"]),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.student.update({
+        where: {
+          id: input.studentId,
+        },
+        data: {
+          status: input.status,
+        },
+      });
+    }),
 });
