@@ -1094,11 +1094,11 @@ model User {
     createdAt         DateTime         @default(now())
     updatedAt         DateTime         @updatedAt
     profile           String           @default("student")
-    Contact           Contact[]
+    contacts          Contact[]
     photos            Photo[]
     reportQueues      ReportQueue[]
-    Staff             Staff[]
-    Student           Student[]
+    staffs            Staff[]
+    students          Student[]
     tokens            Token[]
     roles             UserRole[]
     assignments       Assignment[]
