@@ -91,7 +91,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=csv&type=all`,
-                        "_blank"
+                        "_blank",
                       );
                     }}
                   >
@@ -101,7 +101,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=csv&type=debit`,
-                        "_blank"
+                        "_blank",
                       );
                     }}
                   >
@@ -111,7 +111,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=csv&type=credit`,
-                        "_blank"
+                        "_blank",
                       );
                     }}
                   >
@@ -121,7 +121,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=csv&type=selected`,
-                        "_blank"
+                        "_blank",
                       );
                     }}
                     disabled={selectedStudents.length == 0}
@@ -143,7 +143,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=all`,
-                        "_blank"
+                        "_blank",
                       );
                     }}
                   >
@@ -153,7 +153,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=debit`,
-                        "_blank"
+                        "_blank",
                       );
                     }}
                   >
@@ -163,7 +163,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=credit`,
-                        "_blank"
+                        "_blank",
                       );
                     }}
                   >
@@ -173,7 +173,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=selected`,
-                        "_blank"
+                        "_blank",
                       );
                     }}
                     disabled={selectedStudents.length == 0}

@@ -71,11 +71,25 @@ export function GradeSheetHeader() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                window.open(
+                  `/api/pdfs/classroom/${params.id}/gradesheets?termId=${term ?? 0}&subjectId=${subject ?? 0}&format=pdf`,
+                  "_blank"
+                );
+              }}
+            >
               <PDFIcon />
               {t("pdf_export")}
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                window.open(
+                  `/api/pdfs/classroom/${params.id}/gradesheets?termId=${term ?? 0}&subjectId=${subject ?? 0}&format=csv`,
+                  "_blank"
+                );
+              }}
+            >
               <XMLIcon />
               {t("xml_export")}
             </DropdownMenuItem>

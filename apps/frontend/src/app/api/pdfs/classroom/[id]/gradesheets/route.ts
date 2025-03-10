@@ -2,8 +2,7 @@ import * as XLSX from "@e965/xlsx";
 import type { RouterOutputs } from "@repo/api";
 import { auth } from "@repo/auth";
 import { renderToStream } from "@repo/reports";
-import { FinanceList } from "@repo/reports/classroom/FinanceList";
-import { sumBy } from "lodash";
+import { GradesheetList } from "@repo/reports/classroom/GradesheetList";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -15,12 +14,13 @@ import { getFullName } from "~/utils/full-name";
 
 const querySchema = z.object({
   format: z.enum(["pdf", "csv"]).optional(),
-  type: z.enum(["all", "debit", "credit", "selected"]).default("all"),
+  termId: z.coerce.number().optional(),
+  subjectId: z.coerce.number().optional(),
 });
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: { id: string } }
 ) {
   const session = await auth();
   if (!session) {
@@ -35,7 +35,7 @@ export async function GET(
   if (!parsedQuery.success) {
     return NextResponse.json(
       { error: parsedQuery.error.format() },
-      { status: 400 },
+      { status: 400 }
     );
   }
   try {
@@ -43,38 +43,29 @@ export async function GET(
 
     const school = await api.school.getSchool();
 
-    const { format } = parsedQuery.data;
+    const { format, subjectId, termId } = parsedQuery.data;
 
-    const fees = await api.classroom.fees(id);
-    const students = await api.classroom.studentsBalance({ id });
-
-    const amountDue = sumBy(
-      fees.filter((fee) => fee.dueDate <= new Date()),
-      "amount",
-    );
-
-    const total = students.reduce(
-      (acc, stud) => acc + (stud.balance - amountDue),
-      0,
-    );
+    let gradesheets = await api.classroom.gradesheets(id);
+    if (subjectId) {
+      gradesheets = gradesheets.filter((g) => g.subjectId == subjectId);
+    }
+    if (termId) {
+      gradesheets = gradesheets.filter((g) => g.termId == Number(termId));
+    }
 
     if (format === "csv") {
       const { blob, headers } = await toExcel({
         classroom,
-        amountDue,
-        students,
+        gradesheets,
       });
       return new Response(blob, { headers });
     } else {
       const stream = await renderToStream(
-        FinanceList({
+        GradesheetList({
           classroom: classroom,
-          students: students,
-          total: total,
-          type: parsedQuery.data.type,
-          amountDue: amountDue,
+          gradesheets: gradesheets,
           school: school,
-        }),
+        })
       );
 
       //const blob = await new Response(stream).blob();
@@ -94,21 +85,25 @@ export async function GET(
 
 async function toExcel({
   classroom,
-  students,
-  amountDue,
+  gradesheets,
 }: {
   classroom: RouterOutputs["classroom"]["get"];
-  amountDue: number;
-  students: RouterOutputs["classroom"]["studentsBalance"];
+  gradesheets: RouterOutputs["classroom"]["gradesheets"];
 }) {
   const { t } = await getServerTranslations();
-  const rows = students.map((stud) => {
+  const rows = gradesheets.map((gr) => {
     return {
-      "Nom et Prénom": getFullName(stud.student),
-      Redoublant: stud.student.isRepeating ? "Oui" : "Non",
-      "Total versé": stud.balance,
-      Restant: stud.balance - amountDue,
-      Status: stud.balance - amountDue < 0 ? "Débiteur" : "Créditeur",
+      Date: gr.createdAt.toLocaleDateString(),
+      Matière: gr.subject.course.name,
+      Enseignant: getFullName(gr.subject.teacher),
+      Coefficient: gr.subject.coefficient,
+      Noté: gr.num_grades,
+      Absent: gr.num_is_absent,
+      Moyenne: gr.avg.toFixed(2),
+      Min: gr.min.toFixed(2),
+      Max: gr.max.toFixed(2),
+      Poids: gr.weight,
+      Période: gr.term.name,
     };
   });
   const worksheet = XLSX.utils.json_to_sheet(rows);
@@ -126,7 +121,7 @@ async function toExcel({
     "Content-Type": xlsxType,
     "Cache-Control": "no-store, max-age=0",
   };
-  const filename = `Situation-Financiere-${classroom.name}.xlsx`;
+  const filename = `Liste-des-notes-${classroom.name}.xlsx`;
   headers["Content-Disposition"] = `attachment; filename="${filename}"`;
 
   return { blob, headers };
