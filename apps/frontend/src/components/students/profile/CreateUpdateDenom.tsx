@@ -91,7 +91,7 @@ export function CreateUpdateDenom() {
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder={t("select_an_option")} />
                     </SelectTrigger>
                     <SelectContent>

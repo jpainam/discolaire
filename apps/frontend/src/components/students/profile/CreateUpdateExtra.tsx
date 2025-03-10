@@ -30,14 +30,14 @@ export function CreateUpdateExtra() {
   const { t } = useLocale();
   const clubsQuery = api.setting.clubs.useQuery();
   const sportsQuery = api.setting.sports.useQuery();
-  const sportOptions: Option<string>[] = sportsQuery.data
+  const sportOptions: Option[] = sportsQuery.data
     ? sportsQuery.data.map((sport) => ({
         label: sport.name,
         value: sport.id,
       }))
     : [];
 
-  const clubOptions: Option<string>[] = clubsQuery.data
+  const clubOptions: Option[] = clubsQuery.data
     ? clubsQuery.data.map((club) => ({
         label: club.name,
         value: club.id,
@@ -76,11 +76,28 @@ export function CreateUpdateExtra() {
             <FormItem className="space-y-0">
               <FormLabel>{t("sports")}</FormLabel>
               <FormControl>
+                {/* <MultipleSelector
+                  commandProps={{
+                    label: "Select frameworks",
+                  }}
+                  //value={frameworks.slice(0, 2)}
+                  defaultOptions={sportOptions}
+                  options={sportOptions}
+                  placeholder="Select frameworks"
+                  hideClearAllButton
+                  hidePlaceholderWhenSelected
+                  emptyIndicator={
+                    <p className="text-center text-sm">No results found</p>
+                  }
+                /> */}
                 <MultipleSelector
                   {...field}
                   defaultOptions={form.getValues("sports")}
                   options={sportOptions}
                   hidePlaceholderWhenSelected
+                  emptyIndicator={
+                    <p className="text-center text-sm">{t("no_results")}</p>
+                  }
                 />
               </FormControl>
               <FormMessage />
@@ -99,6 +116,9 @@ export function CreateUpdateExtra() {
                   defaultOptions={form.getValues("clubs")}
                   options={clubOptions}
                   hidePlaceholderWhenSelected
+                  emptyIndicator={
+                    <p className="text-center text-sm">{t("no_results")}</p>
+                  }
                 />
               </FormControl>
               <FormMessage />

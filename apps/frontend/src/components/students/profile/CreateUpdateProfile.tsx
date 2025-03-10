@@ -73,6 +73,7 @@ export function CreateUpdateProfile() {
         />
         <SelectField
           name="gender"
+          inputClassName="w-full"
           label={t("gender")}
           placeholder={t("gender")}
           items={genders}
