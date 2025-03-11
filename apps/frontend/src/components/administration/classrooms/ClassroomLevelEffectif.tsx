@@ -33,7 +33,7 @@ const chartConfig = {
     color: "var(--chart-2)",
   },
   label: {
-    color: "hsl(var(--background))",
+    color: "var(--background)",
   },
 } satisfies ChartConfig;
 
