@@ -15,12 +15,8 @@ import { api } from "~/trpc/react";
 import { ReligionTableAction } from "./ReligionTableAction";
 
 export function ReligionTable() {
-  const { t, i18n } = useLocale();
-  const dateFormatter = Intl.DateTimeFormat(i18n.language, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  const { t } = useLocale();
+
   const religionsQuery = api.religion.all.useQuery();
   const religions = religionsQuery.data ?? [];
   return (
