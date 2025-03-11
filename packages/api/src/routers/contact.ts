@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
 import { hashPassword } from "@repo/auth/session";
+import redisClient from "@repo/kv";
 
 import { userService } from "../services/user-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
@@ -42,6 +43,13 @@ export const contactRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(async ({ ctx, input }) => {
+      if (Array.isArray(input)) {
+        void Promise.all(
+          input.map((id) => redisClient.del(`contact:${id}:students`)),
+        );
+      } else {
+        void redisClient.del(`contact:${input}:students`);
+      }
       return ctx.db.contact.deleteMany({
         where: {
           schoolId: ctx.schoolId,
@@ -50,34 +58,6 @@ export const contactRouter = createTRPCRouter({
           },
         },
       });
-      /*return ctx.db.$transaction(
-        async (tx) => {
-          const contacts = await tx.contact.findMany({
-            where: {
-              schoolId: ctx.schoolId,
-              id: {
-                in: Array.isArray(input) ? input : [input],
-              },
-            },
-          });
-          await tx.contact.deleteMany({
-            where: {
-              schoolId: ctx.schoolId,
-              id: {
-                in: Array.isArray(input) ? input : [input],
-              },
-            },
-          });
-          await userService.deleteUsers(
-            contacts.map((c) => c.userId).filter((t) => t !== null),
-          );
-          return true;
-        },
-        {
-          maxWait: 5000,
-          timeout: 20000,
-        },
-      );*/
     }),
   get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
     await ctx.db.contact.update({
@@ -147,6 +127,14 @@ export const contactRouter = createTRPCRouter({
         },
       });
       const studentIds = std.map((s) => s.studentId);
+      void redisClient.del(`contact:${input}:students`); // Clear old cache
+      void redisClient.sadd(`contact:${input}:students`, ...studentIds);
+
+      // const studentIds2 = await redisClient.smembers(
+      //   `contact:${input}:students`,
+      // );
+      // console.log("TO BE REMOVED>>>>>>>StudentId from Redis", studentIds2);
+
       const students = await ctx.db.student.findMany({
         where: {
           id: {

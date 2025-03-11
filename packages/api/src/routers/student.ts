@@ -6,6 +6,7 @@ import { z } from "zod";
 
 import type { Prisma } from "@repo/db";
 import { hashPassword } from "@repo/auth/session";
+import redisClient from "@repo/kv";
 
 import { accountService } from "../services/account-service";
 import { studentService } from "../services/student-service";
@@ -341,25 +342,34 @@ export const studentRouter = createTRPCRouter({
       });
       return { total: students.length, new: newStudents, female, male };
     }),
-  contacts: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
-    return ctx.db.studentContact.findMany({
-      where: {
-        studentId: input,
-      },
-      include: {
-        contact: {
-          include: {
-            user: {
-              include: {
-                roles: true,
+  contacts: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const contacts = await ctx.db.studentContact.findMany({
+        where: {
+          studentId: input,
+        },
+        include: {
+          contact: {
+            include: {
+              user: {
+                include: {
+                  roles: true,
+                },
               },
             },
           },
+          relationship: true,
         },
-        relationship: true,
-      },
-    });
-  }),
+      });
+      void Promise.all(
+        contacts.map((stdc) =>
+          redisClient.sadd(`contact:${stdc.contact.id}:students`, input),
+        ),
+      );
+
+      return contacts;
+    }),
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(({ ctx, input }) => {
