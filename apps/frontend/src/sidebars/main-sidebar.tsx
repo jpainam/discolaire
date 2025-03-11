@@ -19,7 +19,13 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@repo/ui/components/sidebar";
-import { FolderOpen, HouseIcon, LibraryBigIcon, Users } from "lucide-react";
+import {
+  CalendarDays,
+  FolderOpen,
+  HouseIcon,
+  LibraryBigIcon,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SidebarLogo } from "~/components/sidebar-logo";
@@ -60,6 +66,11 @@ export function MainSidebar({
     //   url: `/report-cards`,
     //   icon: RiScanLine,
     // },
+    {
+      name: "timetables",
+      url: `/timetables`,
+      icon: CalendarDays,
+    },
 
     {
       name: "library",

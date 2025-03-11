@@ -40,7 +40,7 @@ export function ClassroomLesson() {
   const params = useParams<{ id: string }>();
   const [_currentDate, _] = useQueryState(
     "date",
-    parseAsIsoDateTime.withDefault(new Date()),
+    parseAsIsoDateTime.withDefault(new Date())
   );
   const calendarEventsQuery = api.lesson.byClassroom.useQuery({
     classroomId: params.id,
@@ -87,22 +87,20 @@ export function ClassroomLesson() {
       const days = getUniqueWeekdaysBetweenDates(start, end);
       openModal({
         title: t("create_timetable"),
-        className: "w-[550px]",
         view: <CreateEditLesson days={days} />,
       });
     },
-    [openModal, t],
+    [openModal, t]
   );
 
   const handleSelectEvent = useCallback(
     (event: TimetableEventType) => {
       openModal({
         title: t("timetable"),
-        className: "w-[500px]",
         view: <LessonDetails event={event} />,
       });
     },
-    [openModal, t],
+    [openModal, t]
   );
 
   const { _views, _scrollToTime, formats } = useMemo(
@@ -119,18 +117,18 @@ export function ClassroomLesson() {
         weekdayFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer,
+          localizer?: DateLocalizer
         ) => localizer?.format(date, "EEE", culture),
         dayFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) =>
           localizer?.format(date, "EEE M/d", culture),
         timeGutterFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer,
+          localizer?: DateLocalizer
         ) => localizer?.format(date, "HH:mm", culture),
       } as Formats,
     }),
-    [],
+    []
   );
 
   const handleViewChange = (view: RbcView) => {
@@ -155,7 +153,7 @@ export function ClassroomLesson() {
   const CustomEvent: React.FC<EventProps<TimetableEventType>> = ({ event }) => {
     return (
       <div
-        className="hidden flex-row gap-1 font-serif text-xs text-white md:flex"
+        className="hidden flex-row gap-1 text-xs text-white md:flex"
         style={{
           backgroundColor: event.subject.course.color,
         }}
@@ -228,7 +226,7 @@ export function ClassroomLesson() {
 
 const getUniqueWeekdaysBetweenDates = (
   startDate: Date,
-  endDate: Date,
+  endDate: Date
 ): string[] => {
   const dayNames = ["0", "1", "2", "3", "4", "5", "6"];
   const uniqueWeekdays = new Set<string>();

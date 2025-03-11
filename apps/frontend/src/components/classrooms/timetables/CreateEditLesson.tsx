@@ -52,6 +52,7 @@ export function CreateEditLesson({
       days: days ?? [],
     },
   });
+
   const { t } = useLocale();
   const utils = api.useUtils();
   const { closeModal } = useModal();
@@ -153,9 +154,14 @@ export function CreateEditLesson({
               <FormLabel>{t("week_days")}</FormLabel>
               <FormControl>
                 <MultipleSelector
-                  {...field}
-                  // @ts-expect-error TODO: fix this
-                  defaultOptions={form.getValues("days")}
+                  //{...field}
+
+                  defaultOptions={daysOptions.filter((day) =>
+                    field.value?.includes(day.value)
+                  )}
+                  onChange={(values) => {
+                    field.onChange(values.map((v) => v.value));
+                  }}
                   options={daysOptions}
                   hidePlaceholderWhenSelected
                 />

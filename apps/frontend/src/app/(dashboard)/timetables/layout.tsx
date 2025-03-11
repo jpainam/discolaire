@@ -1,11 +1,10 @@
 import type { PropsWithChildren } from "react";
-
-import { TimetableSidebar } from "~/components/timetables/TimetableSidebar";
+import { TimetableHeader } from "./TimetableHeader";
 
 export default function Layout({ children }: PropsWithChildren) {
   return (
-    <div className="flex flex-row">
-      <TimetableSidebar />
+    <div className="flex flex-col gap-2">
+      <TimetableHeader />
       <main className="flex-1">{children}</main>
     </div>
   );

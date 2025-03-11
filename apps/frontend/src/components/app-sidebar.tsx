@@ -10,6 +10,7 @@ import { ClassroomSidebar } from "./classrooms/ClassroomSidebar";
 import { ContactSidebar } from "./contacts/ContactSidebar";
 import { StaffSidebar } from "./staffs/StaffSidebar";
 import { UserSidebar } from "./users/UserSidebar";
+import { TimetableSidebar } from "./timetables/TimetableSidebar";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
@@ -37,6 +38,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const isStaff =
     pathname.startsWith("/staffs") && pathname.split("/").length > 2;
 
+  const isTimetable = pathname.startsWith("/timetables");
+
   return (
     <>
       {isClassroom && <ClassroomSidebar {...props} />}
@@ -46,6 +49,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {isUser && <UserSidebar {...props} />}
       {isContact && <ContactSidebar {...props} />}
       {isStaff && <StaffSidebar {...props} />}
+      {isTimetable && <TimetableSidebar {...props} />}
     </>
   );
 }

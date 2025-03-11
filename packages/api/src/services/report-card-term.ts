@@ -56,7 +56,6 @@ export async function getReportCardTerm({
       },
     },
   });
-  console.log(">>>>>>>> grades", grades.length);
 
   const studentMap: Record<string, StudentMapType> = {};
   const subjectMap: Record<string, SubjectMapType> = {};

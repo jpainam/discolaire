@@ -129,7 +129,7 @@ export function StudentSidebar({
   };
   const { t } = useLocale();
   const pathname = usePathname();
-  console.log(">>>>>>>>>", params.id);
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="h-16 max-md:mt-2 mb-2 justify-center">

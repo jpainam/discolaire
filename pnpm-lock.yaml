@@ -288,7 +288,7 @@ importers:
         specifier: ^1.5.3
         version: 1.5.3(react@19.0.0)
       react-big-calendar:
-        specifier: ^1.18.0
+        specifier: ^1.13.2
         version: 1.18.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react-countup:
         specifier: ^6.5.3
@@ -361,7 +361,7 @@ importers:
         specifier: 19.0.10
         version: 19.0.10
       '@types/react-big-calendar':
-        specifier: ^1.16.1
+        specifier: ^1.8.9
         version: 1.16.1
       '@types/react-dom':
         specifier: 19.0.4
