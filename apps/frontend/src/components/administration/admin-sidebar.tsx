@@ -116,30 +116,30 @@ export function AdminSidebar({
             title: "configurations_page",
             url: "/administration/settings",
           },
-          {
-            title: "grade_options",
-            url: "/administration/settings/grade-options",
-          },
-          {
-            title: "religions",
-            url: "/administration/settings/religions",
-          },
-          {
-            title: "sports",
-            url: "/administration/settings/sports",
-          },
-          {
-            title: "clubs",
-            url: "/administration/settings/clubs",
-          },
+          // {
+          //   title: "grade_options",
+          //   url: "/administration/settings/grade-options",
+          // },
+          // {
+          //   title: "religions",
+          //   url: "/administration/settings/religions",
+          // },
+          // {
+          //   title: "sports",
+          //   url: "/administration/settings/sports",
+          // },
+          // {
+          //   title: "clubs",
+          //   url: "/administration/settings/clubs",
+          // },
           {
             title: "former_schools",
             url: "/administration/settings/former-schools",
           },
-          {
-            title: "staff_level",
-            url: "/administration/settings/staff-levels",
-          },
+          // {
+          //   title: "staff_level",
+          //   url: "/administration/settings/staff-levels",
+          // },
         ],
       },
     ],

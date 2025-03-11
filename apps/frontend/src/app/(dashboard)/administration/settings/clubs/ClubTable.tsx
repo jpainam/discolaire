@@ -19,34 +19,32 @@ export function ClubTable() {
   const clubs = clubsQuery.data ?? [];
   const { t } = useLocale();
   return (
-    <div className="mx-2 rounded-lg border">
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-muted/50">
-            <TableHead>{t("name")}</TableHead>
-            <TableHead className="text-right"></TableHead>
+    <Table>
+      <TableHeader>
+        <TableRow className="bg-muted/50">
+          <TableHead>{t("name")}</TableHead>
+          <TableHead className="text-right"></TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {clubs.length === 0 && (
+          <TableRow>
+            <TableCell colSpan={2}>
+              <EmptyState />
+            </TableCell>
           </TableRow>
-        </TableHeader>
-        <TableBody>
-          {clubs.length === 0 && (
-            <TableRow>
-              <TableCell colSpan={2}>
-                <EmptyState />
+        )}
+        {clubs.map((club) => {
+          return (
+            <TableRow key={club.id}>
+              <TableCell className="py-0">{club.name}</TableCell>
+              <TableCell className="py-0 text-right">
+                <ClubTableAction name={club.name} id={club.id} />
               </TableCell>
             </TableRow>
-          )}
-          {clubs.map((club) => {
-            return (
-              <TableRow key={club.id}>
-                <TableCell className="py-0">{club.name}</TableCell>
-                <TableCell className="py-0 text-right">
-                  <ClubTableAction name={club.name} id={club.id} />
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </div>
+          );
+        })}
+      </TableBody>
+    </Table>
   );
 }

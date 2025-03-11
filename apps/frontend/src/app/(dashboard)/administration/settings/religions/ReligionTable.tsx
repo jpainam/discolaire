@@ -24,41 +24,39 @@ export function ReligionTable() {
   const religionsQuery = api.religion.all.useQuery();
   const religions = religionsQuery.data ?? [];
   return (
-    <div className="rounded-lg border">
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-muted/50">
-            <TableHead>{t("name")}</TableHead>
-            <TableHead>{t("createdAt")}</TableHead>
-            <TableHead>{t("created_by")}</TableHead>
-            <TableHead className="text-right"></TableHead>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>{t("name")}</TableHead>
+          {/* <TableHead>{t("createdAt")}</TableHead>
+          <TableHead>{t("created_by")}</TableHead> */}
+          <TableHead className="text-right"></TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {religions.length === 0 && (
+          <TableRow>
+            <TableCell colSpan={2}>
+              <EmptyState />
+            </TableCell>
           </TableRow>
-        </TableHeader>
-        <TableBody>
-          {religions.length === 0 && (
-            <TableRow>
-              <TableCell colSpan={4}>
-                <EmptyState />
+        )}
+        {religions.map((denom) => {
+          return (
+            <TableRow key={denom.id}>
+              <TableCell className="py-0">{denom.name}</TableCell>
+
+              {/* <TableCell className="py-0">
+                {dateFormatter.format(new Date(denom.createdAt))}
+              </TableCell> */}
+              {/* <TableCell className="py-0">{denom.createdBy.name}</TableCell> */}
+              <TableCell className="py-0 text-right">
+                <ReligionTableAction name={denom.name} id={denom.id} />
               </TableCell>
             </TableRow>
-          )}
-          {religions.map((denom) => {
-            return (
-              <TableRow key={denom.id}>
-                <TableCell className="py-0">{denom.name}</TableCell>
-
-                <TableCell className="py-0">
-                  {dateFormatter.format(new Date(denom.createdAt))}
-                </TableCell>
-                <TableCell className="py-0">{denom.createdBy.name}</TableCell>
-                <TableCell className="py-0 text-right">
-                  <ReligionTableAction name={denom.name} id={denom.id} />
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </div>
+          );
+        })}
+      </TableBody>
+    </Table>
   );
 }

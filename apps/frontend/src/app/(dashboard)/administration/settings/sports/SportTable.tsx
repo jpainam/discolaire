@@ -19,34 +19,32 @@ export function SportTable() {
   const sports = sportsQuery.data ?? [];
   const { t } = useLocale();
   return (
-    <div className="rounded-lg border">
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-muted/50">
-            <TableHead>{t("name")}</TableHead>
-            <TableHead className="text-right"></TableHead>
+    <Table>
+      <TableHeader>
+        <TableRow className="bg-muted/50">
+          <TableHead>{t("name")}</TableHead>
+          <TableHead className="text-right"></TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {sports.length === 0 && (
+          <TableRow>
+            <TableCell colSpan={2}>
+              <EmptyState />
+            </TableCell>
           </TableRow>
-        </TableHeader>
-        <TableBody>
-          {sports.length === 0 && (
-            <TableRow>
-              <TableCell colSpan={2}>
-                <EmptyState />
+        )}
+        {sports.map((sport) => {
+          return (
+            <TableRow key={sport.id}>
+              <TableCell className="py-0">{sport.name}</TableCell>
+              <TableCell className="py-0 text-right">
+                <SportTableAction name={sport.name} id={sport.id} />
               </TableCell>
             </TableRow>
-          )}
-          {sports.map((sport) => {
-            return (
-              <TableRow key={sport.id}>
-                <TableCell className="py-0">{sport.name}</TableCell>
-                <TableCell className="py-0 text-right">
-                  <SportTableAction name={sport.name} id={sport.id} />
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </div>
+          );
+        })}
+      </TableBody>
+    </Table>
   );
 }

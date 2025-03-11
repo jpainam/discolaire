@@ -44,7 +44,7 @@ export function StudentContactRelationship() {
   const confirm = useConfirm();
   const data = relationshipsQuery.data ?? [];
   return (
-    <Card>
+    <Card className="p-0 gap-0">
       <CardHeader className="flex flex-row items-center border-b bg-muted/50 p-2">
         <CardTitle>{t("parent_relationships")}</CardTitle>
         <CardDescription></CardDescription>
@@ -52,7 +52,6 @@ export function StudentContactRelationship() {
           <Button
             onClick={() => {
               openModal({
-                className: "w-[400px]",
                 title: t("add_relationship"),
                 view: <CreateEditRelationship />,
               });
