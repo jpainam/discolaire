@@ -17,7 +17,7 @@ export default async function Layout(props: {
     "classroom:details",
     {
       id: id,
-    },
+    }
   );
   if (!canReadStudent) {
     console.warn("No permission");

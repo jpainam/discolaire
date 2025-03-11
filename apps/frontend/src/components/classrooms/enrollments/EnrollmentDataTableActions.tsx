@@ -1,25 +1,18 @@
 "use client";
 
 import type { Table } from "@tanstack/react-table";
-import { ChevronsUpDown, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { useParams } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { useCheckPermissions } from "~/hooks/use-permissions";
-import { exportTableToCSV } from "~/lib/export";
 import { api } from "~/trpc/react";
 
 type ClassroomStudentProcedureOutput = NonNullable<
@@ -40,7 +33,7 @@ export function EnrollmentDataTableActions({
   //const rows = table.getFilteredSelectedRowModel().rows;
   const canUnEnrollStudent = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:enrollment",
+    "classroom:enrollment"
   );
   const selectedIds = table
     .getFilteredSelectedRowModel()
@@ -98,32 +91,12 @@ export function EnrollmentDataTableActions({
           }}
         >
           <Trash2 />
-          {t("delete")}
+          {t("unenroll")}
           <span className="-me-1 ms-1 inline-flex h-5 max-h-full items-center rounded border border-border bg-background px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground/70">
             {table.getSelectedRowModel().rows.length}
           </span>
         </Button>
       )}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant={"outline"}>
-            {t("bulk_actions")} <ChevronsUpDown className="ml-1 h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem
-            onSelect={() => {
-              exportTableToCSV(table, {
-                filename: "students",
-                excludeColumns: ["select", "actions"],
-              });
-            }}
-          >
-            Export in csv
-          </DropdownMenuItem>
-          <DropdownMenuItem>Export in excel</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
     </>
   );
 }

@@ -2,7 +2,6 @@
 
 import { MoreVertical, Pencil, Plus, Trash2 } from "lucide-react";
 import { useParams, usePathname } from "next/navigation";
-import { useEffect } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -26,9 +25,13 @@ import { useConfirm } from "~/providers/confirm-dialog";
 
 import { Label } from "@repo/ui/components/label";
 
+import type { RouterOutputs } from "@repo/api";
+import { useSetAtom } from "jotai";
+import { useEffect } from "react";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
+import { breadcrumbAtom } from "~/lib/atoms";
 import { api } from "~/trpc/react";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
@@ -36,11 +39,13 @@ import { DropdownHelp } from "../shared/DropdownHelp";
 import { ClassroomSelector } from "../shared/selects/ClassroomSelector";
 import { CreateEditClassroom } from "./CreateEditClassroom";
 
-export function ClassroomHeader() {
+export function ClassroomHeader({
+  classrooms,
+}: {
+  classrooms: RouterOutputs["classroom"]["all"];
+}) {
   const { t } = useLocale();
   const { createQueryString } = useCreateQueryString();
-  //const [nextClassroom, setNextClassroom] = useState<Classroom | null>(null);
-  //const [prevClassroom, setPrevClassrom] = useState<Classroom | null>(null);
   const params = useParams<{ id: string }>();
   const pathname = usePathname();
   const router = useRouter();
@@ -49,14 +54,14 @@ export function ClassroomHeader() {
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const canUpdateClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const deleteClassroomMutation = api.classroom.delete.useMutation({
     onSuccess: () => {
@@ -67,23 +72,7 @@ export function ClassroomHeader() {
     },
   });
 
-  const classroomsQuery = api.classroom.all.useQuery();
-  //const classroomQuery = api.classroom.get.useQuery(params.id);
   const confirm = useConfirm();
-
-  useEffect(() => {
-    if (!params.id || !classroomsQuery.data) return;
-    // const currentClassroomIdx = classroomsQuery.data.findIndex(
-    //   (s) => s.id === params.id,
-    // );
-    // if (!classroomsQuery.data) return;
-    // setPrevClassrom(
-    //   classroomsQuery.data
-    //     ? classroomsQuery.data[currentClassroomIdx - 1]
-    //     : null
-    // );
-    // setNextClassroom(classrooms[currentClassroomIdx + 1] || null);
-  }, [params.id, classroomsQuery.data]);
 
   const handleClassroomChange = (value: string) => {
     if (params.id) {
@@ -99,9 +88,24 @@ export function ClassroomHeader() {
   };
   const canCreateClassroom = useCheckPermissions(
     PermissionAction.CREATE,
-    "classroom:details",
+    "classroom:details"
   );
   const { openSheet } = useSheet();
+
+  const setBreadcrumbs = useSetAtom(breadcrumbAtom);
+
+  useEffect(() => {
+    const classroom = classrooms.find((c) => c.id === params.id);
+    const breads = [
+      { name: t("home"), url: "/" },
+      { name: t("classrooms"), url: "/classrooms" },
+    ];
+    if (classroom) {
+      breads.push({ name: classroom.name, url: `/classrooms/${classroom.id}` });
+    }
+    setBreadcrumbs(breads);
+  }, [classrooms, params.id, setBreadcrumbs, t]);
+
   return (
     <div className="grid w-full flex-row border-b items-center gap-2 px-4 py-1 md:flex">
       <Label className="hidden md:block">{t("classrooms")}</Label>
@@ -136,9 +140,7 @@ export function ClassroomHeader() {
                 className="size-8"
                 variant="outline"
                 onClick={() => {
-                  const classroom = classroomsQuery.data?.find(
-                    (c) => c.id === params.id,
-                  );
+                  const classroom = classrooms.find((c) => c.id === params.id);
                   if (!classroom) return;
                   openSheet({
                     title: t("edit_a_classroom"),
