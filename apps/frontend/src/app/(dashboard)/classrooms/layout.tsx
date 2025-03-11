@@ -12,7 +12,7 @@ export default async function Layout({
 }) {
   const canReadClassroom = await checkPermissions(
     PermissionAction.READ,
-    "classroom:list"
+    "classroom:list",
   );
   if (!canReadClassroom) {
     console.warn("No permission");

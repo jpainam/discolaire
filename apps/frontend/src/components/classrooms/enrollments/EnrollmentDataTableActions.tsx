@@ -33,7 +33,7 @@ export function EnrollmentDataTableActions({
   //const rows = table.getFilteredSelectedRowModel().rows;
   const canUnEnrollStudent = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:enrollment"
+    "classroom:enrollment",
   );
   const selectedIds = table
     .getFilteredSelectedRowModel()
