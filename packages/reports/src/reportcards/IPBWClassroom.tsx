@@ -43,43 +43,43 @@ export function IPBWClassroom({
   });
   return (
     <Document>
-      <Page
-        size={"A4"}
-        style={{
-          paddingVertical: 20,
-          paddingHorizontal: 40,
-          fontSize: 7,
-          backgroundColor: "#fff",
-          color: "#000",
-          fontFamily: "Roboto",
-        }}
-      >
-        {results.map((result, index) => {
-          const rank =
-            index == 0 || results[index - 1]?.avg != result.avg
-              ? result.rank.toString()
-              : results[index - 1]?.rank.toString() + " ex";
+      {results.map((result, index) => {
+        const rank =
+          index == 0 || results[index - 1]?.avg != result.avg
+            ? result.rank.toString()
+            : results[index - 1]?.rank.toString() + " ex";
 
-          const student = students.find((s) => s.id === result.id);
-          if (!student) return null;
-          const contact = contacts.find((c) => c && c.studentId === student.id);
-          if (!contact) return null;
-          const grades = gradesMap[student.id];
-          if (!grades) return null;
-          //const groups = _.groupBy(grades, "subjectGroup.id");
-          const groups: Record<number, ClassroomReportCardType> = {};
-          subjects.forEach((subject) => {
-            const subjectGrades = grades.filter(
-              (grade) => grade.subjectId === subject.id,
-            );
-            const group = subject.subjectGroup;
-            if (!group) return;
-            if (!groups[group.id]) {
-              groups[group.id] = [];
-            }
-            groups[group.id]?.push(...subjectGrades);
-          });
-          return (
+        const student = students.find((s) => s.id === result.id);
+        if (!student) return null;
+        const contact = contacts.find((c) => c && c.studentId === student.id);
+        if (!contact) return null;
+        const grades = gradesMap[student.id];
+        if (!grades) return null;
+        //const groups = _.groupBy(grades, "subjectGroup.id");
+        const groups: Record<number, ClassroomReportCardType> = {};
+        subjects.forEach((subject) => {
+          const subjectGrades = grades.filter(
+            (grade) => grade.subjectId === subject.id,
+          );
+          const group = subject.subjectGroup;
+          if (!group) return;
+          if (!groups[group.id]) {
+            groups[group.id] = [];
+          }
+          groups[group.id]?.push(...subjectGrades);
+        });
+        return (
+          <Page
+            size={"A4"}
+            style={{
+              paddingVertical: 20,
+              paddingHorizontal: 40,
+              fontSize: 7,
+              backgroundColor: "#fff",
+              color: "#000",
+              fontFamily: "Roboto",
+            }}
+          >
             <View style={{ flexDirection: "column" }}>
               <IPBWHeader school={school} />
               <View
@@ -172,9 +172,9 @@ export function IPBWClassroom({
               )}
               <IPBWSignature />
             </View>
-          );
-        })}
-      </Page>
+          </Page>
+        );
+      })}
     </Document>
   );
 }
