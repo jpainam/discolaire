@@ -20,27 +20,33 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { Skeleton } from "@repo/ui/components/skeleton";
 import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import type { RouterOutputs } from "@repo/api";
+import { useSetAtom } from "jotai";
+import { useEffect } from "react";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
-import rangeMap from "~/lib/range-map";
+import { breadcrumbAtom } from "~/lib/atoms";
 import { api } from "~/trpc/react";
+import { getFullName } from "~/utils/full-name";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { CreateEditUser } from "../users/CreateEditUser";
 import CreateEditContact from "./CreateEditContact";
 import { LinkStudent } from "./LinkStudent";
 
-export function ContactDetailsHeader({ contactId }: { contactId: string }) {
-  const contactQuery = api.contact.get.useQuery(contactId);
+export function ContactDetailsHeader({
+  contact,
+}: {
+  contact: NonNullable<RouterOutputs["contact"]["get"]>;
+}) {
   const utils = api.useUtils();
   const router = useRouter();
   const confirm = useConfirm();
@@ -58,23 +64,23 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
     PermissionAction.DELETE,
     "contact:profile",
     {
-      id: contactId,
-    },
+      id: contact.id,
+    }
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();
   const { openModal } = useModal();
 
-  if (contactQuery.isPending) {
-    return (
-      <div className="flex flex-col gap-2">
-        {rangeMap(4, (index) => (
-          <Skeleton key={index} className="h-8 w-full" />
-        ))}
-      </div>
-    );
-  }
-  const contact = contactQuery.data;
+  const setBreadcrumbs = useSetAtom(breadcrumbAtom);
+  useEffect(() => {
+    const breads = [
+      { name: t("home"), url: "/" },
+      { name: t("contacts"), url: "/contacts" },
+      { name: getFullName(contact), url: `/contacts/${contact.id}` },
+    ];
+    setBreadcrumbs(breads);
+  }, [contact, setBreadcrumbs, t]);
+
   return (
     <div className="flex flex-row items-start gap-2">
       <AvatarState pos={0} className="h-auto w-[100px]" />
@@ -84,14 +90,11 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
             onClick={() => {
               openSheet({
                 title: (
-                  <p className="px-4 py-2">
-                    {t("edit")} -{" "}
-                    {contactQuery.data?.lastName ??
-                      contactQuery.data?.firstName}
-                  </p>
+                  <>
+                    {t("edit")} - {contact.lastName ?? contact.firstName}
+                  </>
                 ),
-                className: "w-[600px]",
-                // @ts-expect-error TODO fix this
+
                 view: <CreateEditContact contact={contact} />,
               });
             }}
@@ -108,11 +111,10 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownHelp />
-              {contact && !contact.userId && (
+              {!contact.userId && (
                 <DropdownMenuItem
                   onSelect={() => {
                     openModal({
-                      className: "w-[500px]",
                       title: t("attach_user"),
                       view: (
                         <CreateEditUser entityId={contact.id} type="contact" />
@@ -124,7 +126,7 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
                   {t("attach_user")}
                 </DropdownMenuItem>
               )}
-              {contact?.userId && (
+              {contact.userId && (
                 <DropdownMenuItem
                   onSelect={() => {
                     if (!contact.userId) return;
@@ -148,13 +150,13 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
                 </DropdownMenuItem>
               )}
               <DropdownMenuSeparator />
-              {contactQuery.data && (
-                <DropdownInvitation
-                  entityType="contact"
-                  entityId={contactQuery.data.id}
-                  email={contactQuery.data.email}
-                />
-              )}
+
+              <DropdownInvitation
+                entityType="contact"
+                entityId={contact.id}
+                email={contact.email}
+              />
+
               {canDeleteContact && (
                 <>
                   <DropdownMenuSeparator />
@@ -170,7 +172,7 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
                       });
                       if (isConfirmed) {
                         toast.loading(t("deleting"), { id: 0 });
-                        deleteContactMutation.mutate(contactId);
+                        deleteContactMutation.mutate(contact.id);
                       }
                     }}
                     variant="destructive"
@@ -198,7 +200,7 @@ export function ContactDetailsHeader({ contactId }: { contactId: string }) {
               openModal({
                 className: "p-0 w-[600px]",
                 title: <p className="px-4 pt-2">{t("link_students")}</p>,
-                view: <LinkStudent contactId={contactId} />,
+                view: <LinkStudent contactId={contact.id} />,
               });
             }}
             size={"sm"}

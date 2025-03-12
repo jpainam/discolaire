@@ -10,11 +10,20 @@ import {
 } from "@repo/ui/components/breadcrumb";
 import { useAtom } from "jotai";
 import Link from "next/link";
-import React from "react";
+import { usePathname } from "next/navigation";
+import React, { useEffect } from "react";
 import { breadcrumbAtom } from "~/lib/atoms";
 
 export const Breadcrumbs = () => {
-  const [breadcrumbs] = useAtom(breadcrumbAtom);
+  const [breadcrumbs, setBreadcrumbs] = useAtom(breadcrumbAtom);
+  //const { t } = useLocale();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (pathname === "/") {
+      setBreadcrumbs([]);
+    }
+  }, [setBreadcrumbs, pathname]);
 
   if (breadcrumbs.length === 0) return null;
 

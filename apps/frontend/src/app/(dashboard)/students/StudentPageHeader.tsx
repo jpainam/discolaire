@@ -1,7 +1,7 @@
 "use client";
 
 import { MoreVertical, PlusIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -15,6 +15,7 @@ import { Label } from "@repo/ui/components/label";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
+import { useSetAtom } from "jotai";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { SearchCombobox } from "~/components/SearchCombobox";
@@ -22,6 +23,7 @@ import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
+import { breadcrumbAtom } from "~/lib/atoms";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 
@@ -31,7 +33,7 @@ export function StudentPageHeader() {
 
   const canCreateStudent = useCheckPermissions(
     PermissionAction.CREATE,
-    "student:profile",
+    "student:profile"
   );
 
   const [value, setValue] = useState("");
@@ -40,6 +42,15 @@ export function StudentPageHeader() {
   const students = api.student.search.useQuery({
     query: search,
   });
+
+  const setBreadcrumbs = useSetAtom(breadcrumbAtom);
+  useEffect(() => {
+    const breads = [
+      { name: t("home"), url: "/" },
+      { name: t("students"), url: "/students" },
+    ];
+    setBreadcrumbs(breads);
+  }, [setBreadcrumbs, t]);
 
   return (
     <div className="flex flex-row items-center gap-2 border-b px-4 py-1">

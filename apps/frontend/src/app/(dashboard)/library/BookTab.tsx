@@ -24,6 +24,7 @@ export function BookTab() {
   const { t } = useLocale();
   const { openSheet } = useSheet();
   const bookQuery = api.book.recentlyUsed.useQuery();
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-row px-4 border-y py-1 bg-muted/50 items-center justify-between">

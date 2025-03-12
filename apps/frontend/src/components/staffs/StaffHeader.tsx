@@ -15,9 +15,13 @@ import { PermissionAction } from "~/permissions";
 
 import type { RouterOutputs } from "@repo/api";
 import { Label } from "@repo/ui/components/label";
+import { useSetAtom } from "jotai";
 import { useParams } from "next/navigation";
+import { useEffect } from "react";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
+import { breadcrumbAtom } from "~/lib/atoms";
+import { getFullName } from "~/utils/full-name";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
 import { StaffSelector } from "../shared/selects/StaffSelector";
@@ -34,11 +38,24 @@ export function StaffHeader({
 
   const canCreateStaff = useCheckPermissions(
     PermissionAction.CREATE,
-    "staff:profile",
+    "staff:profile"
   );
 
   const router = useRouter();
   const { openSheet } = useSheet();
+  const setBreadcrumbs = useSetAtom(breadcrumbAtom);
+  useEffect(() => {
+    const staff = staffs.find((c) => c.id === params.id);
+    const breads = [
+      { name: t("home"), url: "/" },
+      { name: t("staffs"), url: "/staffs" },
+    ];
+    if (staff) {
+      breads.push({ name: getFullName(staff), url: `/staffs/${staff.id}` });
+    }
+    setBreadcrumbs(breads);
+  }, [staffs, params.id, setBreadcrumbs, t]);
+
   return (
     <div className="flex flex-row items-center justify-between py-1 px-4">
       <div className="flex flex-row items-center gap-2">

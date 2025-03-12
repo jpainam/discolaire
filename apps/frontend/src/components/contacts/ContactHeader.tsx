@@ -1,7 +1,7 @@
 "use client";
 
 import { MoreVertical, PlusIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -13,8 +13,11 @@ import { Label } from "@repo/ui/components/label";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 
+import { useSetAtom } from "jotai";
+import { useParams } from "next/navigation";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
+import { breadcrumbAtom } from "~/lib/atoms";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { SearchCombobox } from "../SearchCombobox";
@@ -24,7 +27,7 @@ import CreateEditContact from "./CreateEditContact";
 export function ContactHeader() {
   const router = useRouter();
   const { t } = useLocale();
-  //const params = useParams<{ id: string }>();
+  const params = useParams<{ id: string }>();
   const { openSheet } = useSheet();
 
   const [value, setValue] = useState("");
@@ -34,6 +37,17 @@ export function ContactHeader() {
   const contacts = api.contact.search.useQuery({
     query: search,
   });
+
+  const setBreadcrumbs = useSetAtom(breadcrumbAtom);
+  useEffect(() => {
+    if (!params.id) {
+      const breads = [
+        { name: t("home"), url: "/" },
+        { name: t("contacts"), url: "/contacts" },
+      ];
+      setBreadcrumbs(breads);
+    }
+  }, [setBreadcrumbs, t, params.id]);
 
   return (
     <div className="flex flex-row items-center gap-2 border-b px-4 py-1">
