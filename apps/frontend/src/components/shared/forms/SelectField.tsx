@@ -72,7 +72,11 @@ export function SelectField({
               })}
             </SelectContent>
           </Select>
-          {description && <FormDescription>{description}</FormDescription>}
+          {description && (
+            <FormDescription className="text-xs text-muted-foreground">
+              {description}
+            </FormDescription>
+          )}
           <FormMessage />
         </FormItem>
       )}

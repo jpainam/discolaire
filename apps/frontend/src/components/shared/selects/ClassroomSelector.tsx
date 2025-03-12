@@ -67,7 +67,7 @@ export function ClassroomSelector({
           role="combobox"
           disabled={disabled}
           aria-expanded={open}
-          className={cn("w-[400px] justify-between", className)}
+          className={cn("justify-between", className)}
         >
           {data.find((it) => it.id === value)?.name ??
             placeholder ??
@@ -75,9 +75,14 @@ export function ClassroomSelector({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 justify-end opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0" side="bottom" align="start">
+      <PopoverContent
+        style={{ width: "var(--radix-popover-trigger-width)" }}
+        className="p-0"
+        side="bottom"
+        align="start"
+      >
         <Command
-          className="rounded-lg border shadow-md md:min-w-[450px]"
+          //className="rounded-lg border shadow-md"
           filter={(value, search) => {
             const item = data.find((it) => it.id === value);
             if (item?.name.toLowerCase().includes(search.toLowerCase())) {

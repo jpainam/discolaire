@@ -72,7 +72,10 @@ export function CourseSelector({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className={cn("p-0", contentClassName)}>
+      <PopoverContent
+        style={{ width: "var(--radix-popover-trigger-width)" }}
+        className={cn("p-0", contentClassName)}
+      >
         <Command
           filter={(value, search) => {
             const item = data.find((it) => it.id === value);
@@ -102,7 +105,7 @@ export function CourseSelector({
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === item.id ? "opacity-100" : "opacity-0",
+                      value === item.id ? "opacity-100" : "opacity-0"
                     )}
                   />
                   <div className="flex flex-row items-center space-x-1">

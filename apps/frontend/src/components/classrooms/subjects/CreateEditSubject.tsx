@@ -17,7 +17,6 @@ import {
   useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { Separator } from "@repo/ui/components/separator";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
@@ -145,15 +144,17 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
           <SelectField
             placeholder={t("select_an_option")}
             label={t("coefficient")}
+            inputClassName="w-full"
             name="coefficient"
             items={coeffs}
           />
-          <Separator />
+
           {subjectGroupsQuery.isPending ? (
             <Skeleton className="h-10" />
           ) : (
             <SelectField
               label={t("group")}
+              inputClassName="w-full"
               name="subjectGroupId"
               placeholder={t("select_an_option")}
               items={
@@ -179,7 +180,7 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
                     defaultValue={subject?.order.toString()}
                   />
                 </FormControl>
-                <FormDescription>
+                <FormDescription className="text-xs text-muted-foreground">
                   {t("subject_order_description")}
                 </FormDescription>
                 <FormMessage />

@@ -83,7 +83,12 @@ export const StaffSelector = ({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0" side="bottom" align="start">
+      <PopoverContent
+        style={{ width: "var(--radix-popover-trigger-width)" }}
+        className="p-0"
+        side="bottom"
+        align="start"
+      >
         <Command>
           <CommandInput
             placeholder={searchPlaceholder ?? t("search_for_an_option")}

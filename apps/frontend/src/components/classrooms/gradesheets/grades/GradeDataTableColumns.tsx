@@ -258,7 +258,7 @@ function ActionCells({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  }
+                  },
                 );
               }
             }}
