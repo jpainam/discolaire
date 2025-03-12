@@ -58,7 +58,7 @@ export function SelectField({
             defaultValue={field.value}
           >
             <FormControl>
-              <SelectTrigger className={cn(inputClassName)}>
+              <SelectTrigger className={cn("w-full", inputClassName)}>
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
             </FormControl>

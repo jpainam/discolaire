@@ -139,6 +139,7 @@ export function CreateEditClassroom({
             label={t("cycle")}
             placeholder={t("choose_class_cycle")}
             name="cycleId"
+            inputClassName="w-full"
             items={cycles?.map((l) => ({
               label: l.name,
               value: l.id.toString(),
@@ -146,6 +147,7 @@ export function CreateEditClassroom({
           />
           <SelectField
             label={t("section")}
+            inputClassName="w-full"
             placeholder={t("choose_class_section")}
             name="sectionId"
             items={sections?.map((l) => ({

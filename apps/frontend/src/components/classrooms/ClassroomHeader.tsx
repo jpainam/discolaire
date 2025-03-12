@@ -12,11 +12,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@repo/ui/components/tooltip";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
@@ -54,14 +49,14 @@ export function ClassroomHeader({
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const canUpdateClassroom = useCheckPermissions(
     PermissionAction.UPDATE,
     "classroom:details",
     {
       id: params.id,
-    },
+    }
   );
   const deleteClassroomMutation = api.classroom.delete.useMutation({
     onSuccess: () => {
@@ -88,7 +83,7 @@ export function ClassroomHeader({
   };
   const canCreateClassroom = useCheckPermissions(
     PermissionAction.CREATE,
-    "classroom:details",
+    "classroom:details"
   );
   const { openSheet } = useSheet();
 
@@ -134,28 +129,23 @@ export function ClassroomHeader({
           </Button>
         )}
         {params.id && canUpdateClassroom && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                className="size-8"
-                variant="outline"
-                onClick={() => {
-                  const classroom = classrooms.find((c) => c.id === params.id);
-                  if (!classroom) return;
-                  openSheet({
-                    title: t("edit_a_classroom"),
-                    description: t("edit_classroom_description"),
-                    view: <CreateEditClassroom classroom={classroom} />,
-                  });
-                }}
-                size="icon"
-              >
-                <Pencil />
-                <span className="sr-only">{t("edit")}</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>{t("prev")}</TooltipContent>
-          </Tooltip>
+          <Button
+            className="size-8"
+            variant="outline"
+            onClick={() => {
+              const classroom = classrooms.find((c) => c.id === params.id);
+              if (!classroom) return;
+              openSheet({
+                title: t("edit_a_classroom"),
+                description: t("edit_classroom_description"),
+                view: <CreateEditClassroom classroom={classroom} />,
+              });
+            }}
+            size="icon"
+          >
+            <Pencil />
+            <span className="sr-only">{t("edit")}</span>
+          </Button>
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
