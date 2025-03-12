@@ -16,11 +16,12 @@ import { getFullName } from "~/utils/full-name";
 const querySchema = z.object({
   format: z.enum(["pdf", "csv"]).optional(),
   type: z.enum(["all", "debit", "credit", "selected"]).default("all"),
+  ids: z.string().optional(),
 });
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: { id: string } }
 ) {
   const session = await auth();
   if (!session) {
@@ -35,7 +36,7 @@ export async function GET(
   if (!parsedQuery.success) {
     return NextResponse.json(
       { error: parsedQuery.error.format() },
-      { status: 400 },
+      { status: 400 }
     );
   }
   try {
@@ -43,19 +44,25 @@ export async function GET(
 
     const school = await api.school.getSchool();
 
-    const { format } = parsedQuery.data;
+    const { format, ids } = parsedQuery.data;
 
     const fees = await api.classroom.fees(id);
-    const students = await api.classroom.studentsBalance({ id });
+    let students = await api.classroom.studentsBalance({ id });
+    if (ids) {
+      const selectedIds = ids.split(",");
+      students = students.filter((stud) =>
+        selectedIds.includes(stud.student.id)
+      );
+    }
 
     const amountDue = sumBy(
       fees.filter((fee) => fee.dueDate <= new Date()),
-      "amount",
+      "amount"
     );
 
     const total = students.reduce(
       (acc, stud) => acc + (stud.balance - amountDue),
-      0,
+      0
     );
 
     if (format === "csv") {
@@ -74,7 +81,7 @@ export async function GET(
           type: parsedQuery.data.type,
           amountDue: amountDue,
           school: school,
-        }),
+        })
       );
 
       //const blob = await new Response(stream).blob();

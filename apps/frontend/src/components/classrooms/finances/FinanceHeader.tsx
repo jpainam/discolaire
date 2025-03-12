@@ -27,8 +27,10 @@ import { useParams } from "next/navigation";
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
+import { useModal } from "~/hooks/use-modal";
 import { sidebarIcons } from "../sidebar-icons";
 import { FinanceBulkAction } from "./FinanceBulkAction";
+import { SelectDueDate } from "./SelectDueDay";
 
 export function FinanceHeader() {
   const { t } = useLocale();
@@ -36,9 +38,11 @@ export function FinanceHeader() {
   //const { createQueryString } = useCreateQueryString();
   const [type, setType] = useQueryState("type");
   const [search, setSearch] = useQueryState("query");
+  const { openModal } = useModal();
 
   const selectedStudents = useAtomValue(selectedStudentIdsAtom);
   const Icon = sidebarIcons.financial_situation;
+  const ids = selectedStudents.join(",");
   return (
     <div className="flex flex-row items-center gap-2 border-b  px-4 py-1 ">
       {Icon && <Icon className="h-6 w-6" />}
@@ -82,58 +86,6 @@ export function FinanceHeader() {
             <FinanceBulkAction />
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
-                <XMLIcon className="h-4 w-4" />
-                <span className="px-2">{t("xml_export")}</span>
-              </DropdownMenuSubTrigger>
-              <DropdownMenuPortal>
-                <DropdownMenuSubContent>
-                  <DropdownMenuItem
-                    onSelect={() => {
-                      window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?format=csv&type=all`,
-                        "_blank",
-                      );
-                    }}
-                  >
-                    <span>{t("financial_situation")}</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onSelect={() => {
-                      window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?format=csv&type=debit`,
-                        "_blank",
-                      );
-                    }}
-                  >
-                    <span>{t("theDebtorList")}</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onSelect={() => {
-                      window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?format=csv&type=credit`,
-                        "_blank",
-                      );
-                    }}
-                  >
-                    <span>{t("theCreditorList")}</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onSelect={() => {
-                      window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?format=csv&type=selected`,
-                        "_blank",
-                      );
-                    }}
-                    disabled={selectedStudents.length == 0}
-                  >
-                    {t("currentSelection")} ({selectedStudents.length})
-                  </DropdownMenuItem>
-                </DropdownMenuSubContent>
-              </DropdownMenuPortal>
-            </DropdownMenuSub>
-            <DropdownMenuSeparator />
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger>
                 <PDFIcon className="h-4 w-4" />
                 <span className="px-2">{t("pdf_export")}</span>
               </DropdownMenuSubTrigger>
@@ -142,44 +94,171 @@ export function FinanceHeader() {
                   <DropdownMenuItem
                     onSelect={() => {
                       window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=all`,
-                        "_blank",
+                        `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=all&ids=${ids}`,
+                        "_blank"
                       );
                     }}
                   >
-                    <span> {t("financial_situation")}</span>
+                    <span>
+                      {" "}
+                      {t("financial_situation")}{" "}
+                      {selectedStudents.length > 0
+                        ? `(${selectedStudents.length})`
+                        : null}
+                    </span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onSelect={() => {
                       window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=debit`,
-                        "_blank",
+                        `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=debit&ids=${ids}`,
+                        "_blank"
                       );
                     }}
                   >
-                    <span>{t("theDebtorList")}</span>
+                    <span>
+                      {t("theDebtorList")}{" "}
+                      {selectedStudents.length > 0
+                        ? `(${selectedStudents.length})`
+                        : null}
+                    </span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onSelect={() => {
                       window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=credit`,
-                        "_blank",
+                        `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=credit&ids=${ids}`,
+                        "_blank"
                       );
                     }}
                   >
-                    <span>{t("theCreditorList")}</span>
+                    <span>
+                      {t("theCreditorList")}{" "}
+                      {selectedStudents.length > 0
+                        ? `(${selectedStudents.length})`
+                        : null}
+                    </span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
+                    onSelect={() => {
+                      openModal({
+                        title: t("due_date"),
+                        view: (
+                          <SelectDueDate
+                            format="pdf"
+                            classroomId={params.id}
+                            ids={ids}
+                          />
+                        ),
+                      });
+                    }}
+                  >
+                    <span>
+                      {" "}
+                      {t("reminder_letter")}{" "}
+                      {selectedStudents.length > 0
+                        ? `(${selectedStudents.length})`
+                        : null}
+                    </span>
+                  </DropdownMenuItem>
+                  {/* <DropdownMenuItem
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=selected`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                     disabled={selectedStudents.length == 0}
                   >
                     {t("currentSelection")} ({selectedStudents.length})
+                  </DropdownMenuItem> */}
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
+            <DropdownMenuSeparator />
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <XMLIcon className="h-4 w-4" />
+                <span className="px-2">{t("xml_export")}</span>
+              </DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      window.open(
+                        `/api/pdfs/classroom/${params.id}/finances?format=csv&type=all&ids=${ids}`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    <span>
+                      {t("financial_situation")}{" "}
+                      {selectedStudents.length > 0
+                        ? `(${selectedStudents.length})`
+                        : null}
+                    </span>
                   </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      window.open(
+                        `/api/pdfs/classroom/${params.id}/finances?format=csv&type=debit&ids=${ids}`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    <span>
+                      {t("theDebtorList")}{" "}
+                      {selectedStudents.length > 0
+                        ? `(${selectedStudents.length})`
+                        : null}
+                    </span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      window.open(
+                        `/api/pdfs/classroom/${params.id}/finances?format=csv&type=credit&ids=${ids}`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    <span>
+                      {t("theCreditorList")}{" "}
+                      {selectedStudents.length > 0
+                        ? `(${selectedStudents.length})`
+                        : null}
+                    </span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      openModal({
+                        title: t("due_date"),
+                        view: (
+                          <SelectDueDate
+                            format="csv"
+                            classroomId={params.id}
+                            ids={ids}
+                          />
+                        ),
+                      });
+                    }}
+                  >
+                    <span>
+                      {" "}
+                      {t("reminder_letter")}{" "}
+                      {selectedStudents.length > 0
+                        ? `(${selectedStudents.length})`
+                        : null}
+                    </span>
+                  </DropdownMenuItem>
+                  {/* <DropdownMenuItem
+                    onSelect={() => {
+                      window.open(
+                        `/api/pdfs/classroom/${params.id}/finances?format=csv&type=selected`,
+                        "_blank"
+                      );
+                    }}
+                    disabled={selectedStudents.length == 0}
+                  >
+                    {t("currentSelection")} ({selectedStudents.length})
+                  </DropdownMenuItem> */}
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>
             </DropdownMenuSub>

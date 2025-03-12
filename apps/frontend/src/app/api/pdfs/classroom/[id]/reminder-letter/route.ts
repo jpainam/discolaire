@@ -1,39 +1,62 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { z } from "zod";
 
 import { renderToStream } from "@repo/reports";
 
 import { auth } from "@repo/auth";
 import { ReminderLetter } from "@repo/reports";
+import { addDays } from "date-fns";
 import i18next from "i18next";
 import { sumBy } from "lodash";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { api } from "~/trpc/server";
 
-const schema = z.object({
-  classroomId: z.string().min(1),
+const querySchema = z.object({
+  ids: z.string().optional(),
+  format: z.enum(["pdf", "csv"]).optional(),
+  dueDate: z.coerce
+    .date()
+    .optional()
+    .default(() => addDays(new Date(), 7)),
 });
-export async function POST(req: Request) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   const session = await auth();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }
+  const { id } = params;
+  if (!id) {
+    return NextResponse.json({ message: "No ID provided", status: 400 });
+  }
+  const searchParams = Object.fromEntries(request.nextUrl.searchParams);
+  const parsedQuery = querySchema.safeParse(searchParams);
+  if (!parsedQuery.success) {
+    return NextResponse.json(
+      { error: parsedQuery.error.format() },
+      { status: 400 }
+    );
+  }
   try {
-    const reqBody = await req.json();
-    const result = schema.safeParse(reqBody);
-    if (!result.success) {
-      const error = result.error.errors.map((e) => e.message).join(", ");
-      return new Response(error, { status: 400 });
-    }
+    const classroom = await api.classroom.get(id);
+    const school = await api.school.getSchool();
+    const { ids, dueDate } = parsedQuery.data;
 
-    const { classroomId } = result.data;
-    const classroom = await api.classroom.get(classroomId);
-
-    const fees = await api.classroom.fees(classroomId);
+    const fees = await api.classroom.fees(id);
     const amountDue = sumBy(
       fees.filter((fee) => fee.dueDate <= new Date()),
-      "amount",
+      "amount"
     );
-    const students = await api.classroom.studentsBalance({ id: classroomId });
+
+    let students = await api.classroom.studentsBalance({ id });
+    if (ids) {
+      const selectedIds = ids.split(",");
+      students = students.filter((stud) =>
+        selectedIds.includes(stud.student.id)
+      );
+    }
     const reminders = students
       .filter((stud) => stud.balance - amountDue < 0)
       .map((stud) => {
@@ -48,22 +71,20 @@ export async function POST(req: Request) {
         };
       });
 
-    const school = await api.school.getSchool();
-
     const stream = await renderToStream(
       ReminderLetter({
         school: school,
+        dueDate: dueDate,
         reminders: reminders,
         classroom: classroom.name,
-      }),
+      })
     );
 
     //const blob = await new Response(stream).blob();
-    const filename = crypto.randomUUID();
+
     const headers: Record<string, string> = {
       "Content-Type": "application/pdf",
       "Cache-Control": "no-store, max-age=0",
-      "Content-Disposition": `attachment; filename="Liste-${filename}.pdf"`,
     };
 
     // @ts-expect-error TODO: fix this
