@@ -59,6 +59,7 @@ import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { api } from "~/trpc/react";
+import { getFullName } from "../../utils/full-name";
 import { CountryComponent } from "../shared/CountryPicker";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
@@ -128,7 +129,7 @@ export function StudentHeader({
         status,
       });
     },
-    [studentStatusMutation, student.id],
+    [studentStatusMutation, student.id]
   );
 
   const navigateToStudent = (id: string) => {
@@ -150,14 +151,14 @@ export function StudentHeader({
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   const canEditStudent = useCheckPermissions(
     PermissionAction.UPDATE,
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   //const [open, setOpen] = React.useState(false);
 
@@ -166,7 +167,7 @@ export function StudentHeader({
       <SquaredAvatar student={student} />
       <div className="flex w-full flex-col gap-1">
         <StudentSelector
-          placeholder={student.lastName + " " + student.firstName}
+          placeholder={getFullName(student)}
           onChange={(val) => {
             navigateToStudent(val);
           }}
@@ -257,7 +258,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

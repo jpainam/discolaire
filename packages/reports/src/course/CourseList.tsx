@@ -67,10 +67,10 @@ export function CourseList({
                 <View style={{ width: "10%" }}>
                   <Text>{course.shortName}</Text>
                 </View>
-                <View style={{ width: "20%" }}>
+                <View style={{ width: "40%" }}>
                   <Text>{course.name}</Text>
                 </View>
-                <View style={{ width: "20%" }}>
+                <View style={{ width: "40%" }}>
                   <Text>{course.reportName}</Text>
                 </View>
                 <View style={{ width: "10%" }}>

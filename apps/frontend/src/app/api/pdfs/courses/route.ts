@@ -3,6 +3,7 @@ import type { RouterOutputs } from "@repo/api";
 import { auth } from "@repo/auth";
 import { renderToStream } from "@repo/reports";
 import { CourseList } from "@repo/reports/course/CourseList";
+import { cookies } from "next/headers";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -26,7 +27,7 @@ export async function GET(request: NextRequest) {
   if (!parsedQuery.success) {
     return NextResponse.json(
       { error: parsedQuery.error.format() },
-      { status: 400 },
+      { status: 400 }
     );
   }
   try {
@@ -35,11 +36,13 @@ export async function GET(request: NextRequest) {
     const school = await api.school.getSchool();
 
     const { format } = parsedQuery.data;
-    const schoolYearId = request.headers.get("schoolYearId");
+    const cookieStore = await cookies();
+
+    const schoolYearId = cookieStore.get("schoolYear");
     if (!schoolYearId) {
       throw new Error("School year id is required");
     }
-    const schoolYear = await api.schoolYear.get(schoolYearId);
+    const schoolYear = await api.schoolYear.get(schoolYearId.value);
 
     if (format === "csv") {
       const { blob, headers } = await toExcel({ courses });
@@ -50,7 +53,7 @@ export async function GET(request: NextRequest) {
           courses: courses,
           schoolYear: schoolYear,
           school: school,
-        }),
+        })
       );
 
       //const blob = await new Response(stream).blob();
@@ -78,7 +81,7 @@ async function toExcel({
     return {
       Code: course.shortName,
       Libelle: course.name,
-      "Nom court": course.shortName,
+      "Libelle Bulletin": course.reportName,
       active: course.isActive ? "OUI" : "NON",
     };
   });
