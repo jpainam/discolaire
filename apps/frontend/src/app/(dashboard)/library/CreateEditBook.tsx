@@ -40,7 +40,7 @@ export function CreateEditBook({
   book,
 }: {
   book?:
-    | RouterOutputs["book"]["lastBorrowed"][number]
+    | RouterOutputs["book"]["recentlyUsed"][number]
     | RouterOutputs["book"]["get"];
 }) {
   const { t } = useLocale();

@@ -7,7 +7,7 @@ import { getBookColumns } from "./BookDataTableColumn";
 export function BookDataTable({
   books,
 }: {
-  books: RouterOutputs["book"]["lastBorrowed"];
+  books: RouterOutputs["book"]["recentlyUsed"];
 }) {
   const { t } = useLocale();
   const columns = React.useMemo(() => getBookColumns({ t: t }), [t]);

@@ -208,7 +208,7 @@ function ActionCells({
             <DotsHorizontalIcon className="size-4" aria-hidden="true" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-40">
+        <DropdownMenuContent align="end">
           <DropdownMenuItem
             onSelect={() => {
               const st = grade.student;

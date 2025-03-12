@@ -13,17 +13,17 @@ import {
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
+import i18next from "i18next";
 import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
-import { getErrorMessage } from "~/lib/handle-error";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { api } from "~/trpc/react";
-import { CreateEditBook } from "./CreateEditBook";
+import { CreateEditLoan } from "./CreateEditLoan";
 
-type BookProcedureOutput = RouterOutputs["book"]["recentlyUsed"][number];
-export function getBookColumns({
+type BookProcedureOutput = RouterOutputs["library"]["borrowBooks"][number];
+export function getBorrowBooksColumns({
   t,
 }: {
   t: TFunction<string, unknown>;
@@ -53,90 +53,95 @@ export function getBookColumns({
       enableHiding: false,
     },
     {
-      accessorKey: "title",
+      accessorKey: "borrowed",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("borrow_date")} />
+      ),
+      cell: ({ row }) => {
+        const book = row.original;
+        return (
+          <span>
+            {book.borrowed.toLocaleDateString(i18next.language, {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </span>
+        );
+      },
+    },
+    {
+      accessorKey: "book.title",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("title")} />
       ),
       cell: ({ row }) => {
         const book = row.original;
-        return <span>{book.title}</span>;
+        return <span className="text-muted-foreground">{book.book.title}</span>;
       },
     },
     {
-      accessorKey: "author",
+      accessorKey: "book.author",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("author")} />
       ),
       cell: ({ row }) => {
         const book = row.original;
-        return <span className="text-muted-foreground">{book.author}</span>;
-      },
-    },
-    {
-      accessorKey: "isbn",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("Isbn")} />
-      ),
-      cell: ({ row }) => {
-        const book = row.original;
-        return <span className="text-muted-foreground">{book.isbn}</span>;
-      },
-    },
-    {
-      accessorKey: "categoryId",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("category")} />
-      ),
-      cell: ({ row }) => {
-        const book = row.original;
         return (
-          <span className="text-muted-foreground">{book.category.name}</span>
+          <span className="text-muted-foreground">{book.book.author}</span>
         );
       },
     },
     {
-      accessorKey: "available",
+      accessorKey: "user.name",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("name")} />
+      ),
+      cell: ({ row }) => {
+        const book = row.original;
+        return <span className="text-muted-foreground">{book.user.name}</span>;
+      },
+    },
+    {
+      accessorKey: "returned",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("availability")} />
       ),
       size: 60,
       cell: ({ row }) => {
         const book = row.original;
-        return (
-          <div className="text-center">
-            {book.available > 0 ? (
-              <Badge
-                variant={"outline"}
-                className="bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100"
-              >
-                {t("available")}
-              </Badge>
-            ) : (
-              <Badge
-                variant={"outline"}
-                className="bg-yellow-50 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100"
-              >
-                {t("unavailable")}
-              </Badge>
-            )}
-          </div>
-        );
+        const today = new Date();
+        let content = <></>;
+        if (book.expected && book.expected < today) {
+          content = (
+            <Badge
+              variant={"outline"}
+              className="bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100"
+            >
+              {t("overdue")}
+            </Badge>
+          );
+        } else if (book.returned && book.returned <= today) {
+          content = (
+            <Badge
+              variant={"outline"}
+              className="bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100"
+            >
+              {t("returned")}
+            </Badge>
+          );
+        } else {
+          content = (
+            <Badge
+              variant={"outline"}
+              className="bg-yellow-50 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100"
+            >
+              {t("borrowed")}
+            </Badge>
+          );
+        }
+        return <div className="text-center">{content}</div>;
       },
-    },
-    {
-      accessorKey: "available",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("copies")} />
-      ),
-      cell: ({ row }) => {
-        const book = row.original;
-        return (
-          <div className="text-muted-foreground text-center">
-            {book.available}
-          </div>
-        );
-      },
-      size: 38,
     },
 
     {
@@ -159,8 +164,17 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
   //const router = useRouter();
   const utils = api.useUtils();
 
-  const bookMutation = api.book.delete.useMutation({
-    onSettled: () => utils.book.invalidate(),
+  const bookMutation = api.library.deleteBorrow.useMutation({
+    onSettled: () => {
+      void utils.book.invalidate();
+      void utils.library.invalidate();
+    },
+    onSuccess: () => {
+      toast.success(t("deleted_successfully"), { id: 0 });
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
   });
 
   return (
@@ -175,9 +189,8 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
           <DropdownMenuItem
             onSelect={() => {
               openSheet({
-                description: t("edit_classroom_description"),
-                title: t("edit_a_classroom"),
-                view: <CreateEditBook book={book} />,
+                title: t("edit_a_loan"),
+                view: <CreateEditLoan borrow={book} />,
               });
             }}
           >
@@ -195,15 +208,8 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
                 description: t("delete_confirmation"),
               });
               if (isConfirmed) {
-                toast.promise(bookMutation.mutateAsync(book.id), {
-                  loading: t("deleting"),
-                  success: () => {
-                    return t("deleted_successfully");
-                  },
-                  error: (error) => {
-                    return getErrorMessage(error);
-                  },
-                });
+                toast.loading(t("deleting"), { id: 0 });
+                void bookMutation.mutate(book.id);
               }
             }}
           >

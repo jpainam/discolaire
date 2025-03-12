@@ -100,6 +100,15 @@ export const libraryRouter = createTRPCRouter({
         },
       });
     }),
+  deleteBorrow: protectedProcedure
+    .input(z.coerce.number())
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.borrowedBook.delete({
+        where: {
+          id: input,
+        },
+      });
+    }),
   borrowBooks: protectedProcedure
     .input(
       z.object({
@@ -114,7 +123,12 @@ export const libraryRouter = createTRPCRouter({
           user: true,
         },
         where: {
-          user: {},
+          book: {
+            schoolId: ctx.schoolId,
+          },
+          user: {
+            schoolId: ctx.schoolId,
+          },
         },
       });
     }),

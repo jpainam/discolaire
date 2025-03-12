@@ -17,6 +17,7 @@ import { z } from "zod";
 import { DatePicker } from "~/components/DatePicker";
 import { UserSelector } from "~/components/shared/selects/UserSelector";
 import { useModal } from "~/hooks/use-modal";
+import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 import { api } from "~/trpc/react";
 import { BookSelector } from "../BookSelector";
@@ -44,6 +45,7 @@ export function CreateEditLoan({
   });
   const { closeModal } = useModal();
   const utils = api.useUtils();
+  const router = useRouter();
   const createMutation = api.library.createBorrow.useMutation({
     onSettled: () => {
       void utils.book.invalidate();
@@ -52,6 +54,7 @@ export function CreateEditLoan({
     onSuccess: () => {
       toast.success("Loan created successfully", { id: 0 });
       closeModal();
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });

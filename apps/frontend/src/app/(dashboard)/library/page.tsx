@@ -19,11 +19,13 @@ import { api } from "~/trpc/server";
 import { BookTab } from "./BookTab";
 import { LibraryDashboard } from "./LibraryDashboard";
 import { LibrarySetting } from "./LibrarySetting";
+import { BorrowBookDataTable } from "./loans/LoanDataTable";
 import { LoanHeader } from "./loans/LoanHeader";
 
 export default async function Page() {
   const { t } = await getServerTranslations();
   const books = await api.book.all();
+  const borrowBooks = await api.library.borrowBooks({ limit: 2000 });
   return (
     <Tabs defaultValue="tab-1">
       <ScrollArea>
@@ -113,6 +115,7 @@ export default async function Page() {
       <TabsContent value="tab-3">
         <div className="flex flex-col gap-2">
           <LoanHeader />
+          <BorrowBookDataTable books={borrowBooks} />
         </div>
       </TabsContent>
       <TabsContent value="tab-4">

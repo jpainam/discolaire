@@ -3,7 +3,6 @@ import { useState } from "react";
 import { SearchCombobox } from "~/components/SearchCombobox";
 import { useLocale } from "~/i18n";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
 
 export function UserSelector({
   className,
@@ -26,9 +25,9 @@ export function UserSelector({
     <SearchCombobox
       className={cn("w-full", className)}
       items={
-        usersQuery.data?.map((stud) => ({
-          value: stud.id,
-          label: getFullName(stud),
+        usersQuery.data?.map((user) => ({
+          value: user.id,
+          label: user.name ?? user.username,
         })) ?? []
       }
       value={value}
