@@ -19,11 +19,11 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { RiDeleteBinLine, RiFilter3Line } from "@remixicon/react";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import { Label } from "@repo/ui/components/label";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
-import { Checkbox } from "../ui/checkbox";
-import { Label } from "../ui/label";
 
 type ClassroomProcedureOutput = NonNullable<
   RouterOutputs["classroom"]["all"]
@@ -40,7 +40,7 @@ export function ClassroomDataTableActions({
   const router = useRouter();
   const canDeleteClassroom = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:details",
+    "classroom:details"
   );
   const classroomDeleteMutation = api.classroom.delete.useMutation({
     onSettled: () => utils.classroom.invalidate(),
@@ -165,7 +165,7 @@ export function ClassroomDataTableActions({
                         }
                         const filterValues = Array.from(selectedStatuses);
                         cycleColumn?.setFilterValue(
-                          filterValues.length ? filterValues : undefined,
+                          filterValues.length ? filterValues : undefined
                         );
                         //handleStatusChange(checked, value)
                       }}

@@ -38,7 +38,7 @@ export function CourseAction() {
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant={"outline"} size={"icon"}>
+          <Button variant={"outline"} className="size-8" size={"icon"}>
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>

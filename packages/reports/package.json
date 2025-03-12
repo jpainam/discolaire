@@ -8,7 +8,8 @@
     ".": "./src/index.ts",
     "./classroom/*": "./src/classroom/*.tsx",
     "./student/*": "./src/student/*.tsx",
-    "./gradesheet/*": "./src/gradesheet/*.tsx"
+    "./gradesheet/*": "./src/gradesheet/*.tsx",
+    "./course/*": "./src/course/*.tsx"
   },
   "scripts": {
     "build": "tsc",

@@ -7,15 +7,18 @@ export const courseRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.course.delete({ where: { id: input } });
+      return ctx.db.course.delete({
+        where: { schoolId: ctx.schoolId, id: input },
+      });
     }),
   deleteMany: protectedProcedure
-    .input(z.object({ ids: z.array(z.string()) }))
+    .input(z.array(z.string()))
     .mutation(async ({ ctx, input }) => {
       return ctx.db.course.deleteMany({
         where: {
+          schoolId: ctx.schoolId,
           id: {
-            in: input.ids,
+            in: input,
           },
         },
       });
