@@ -29,7 +29,7 @@ export function CourseDataTableActions({
   const router = useRouter();
   const canDeleteCourse = useCheckPermissions(
     PermissionAction.DELETE,
-    "classroom:details"
+    "classroom:details",
   );
   const courseDeleteMutation = api.course.deleteMany.useMutation({
     onSettled: () => utils.course.invalidate(),

@@ -46,11 +46,19 @@ export function CourseAction() {
           <DropdownHelp />
 
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => {
+              window.open("/api/pdfs/courses?format=pdf", "_blank");
+            }}
+          >
             <PDFIcon />
             {t("pdf_export")}
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => {
+              window.open("/api/pdfs/courses?format=csv", "_blank");
+            }}
+          >
             <XMLIcon />
             {t("xml_export")}
           </DropdownMenuItem>
