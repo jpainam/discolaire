@@ -26,6 +26,7 @@ const createCourseSchema = z.object({
   name: z.string().min(1),
   shortName: z.string().min(1),
   reportName: z.string().min(1),
+  color: z.string().optional().default(""),
   isActive: z.boolean().default(true),
 });
 export function CreateEditCourse({
@@ -37,6 +38,7 @@ export function CreateEditCourse({
     schema: createCourseSchema,
     defaultValues: {
       name: course?.name ?? "",
+      color: course?.color ?? "",
       shortName: course?.shortName ?? "",
       reportName: course?.reportName ?? "",
       isActive: course?.isActive ?? true,
@@ -75,6 +77,7 @@ export function CreateEditCourse({
       shortName: data.shortName,
       reportName: data.reportName,
       isActive: data.isActive,
+      color: data.color,
     };
     if (course?.id) {
       toast.loading(t("updating"), { id: 0 });
@@ -94,6 +97,34 @@ export function CreateEditCourse({
         className="flex flex-col gap-2"
         onSubmit={form.handleSubmit(onSubmit)}
       >
+        <div className="grid grid-cols-[20%_80%] gap-2">
+          <FormField
+            control={form.control}
+            name="color"
+            render={({ field }) => (
+              <FormItem className="space-y-0">
+                <FormLabel>{t("color")}</FormLabel>
+                <FormControl>
+                  <Input type="color" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="shortName"
+            render={({ field }) => (
+              <FormItem className="space-y-0">
+                <FormLabel>{t("shortName")}</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <FormField
           control={form.control}
           name="name"
@@ -107,19 +138,7 @@ export function CreateEditCourse({
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="shortName"
-          render={({ field }) => (
-            <FormItem className="space-y-0">
-              <FormLabel>{t("shortName")}</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
         <FormField
           control={form.control}
           name="reportName"

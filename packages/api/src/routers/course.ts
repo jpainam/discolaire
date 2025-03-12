@@ -48,6 +48,7 @@ export const courseRouter = createTRPCRouter({
         name: z.string().min(1),
         shortName: z.string().min(1),
         reportName: z.string().min(1),
+        color: z.string().optional().default(""),
         isActive: z.boolean().default(true),
       }),
     )
@@ -59,7 +60,7 @@ export const courseRouter = createTRPCRouter({
           reportName: input.reportName,
           isActive: input.isActive,
           schoolId: ctx.schoolId,
-          color: generateStringColor(),
+          color: input.color ? input.color : generateStringColor(),
         },
       });
     }),
@@ -70,10 +71,17 @@ export const courseRouter = createTRPCRouter({
         name: z.string().min(1),
         shortName: z.string().min(1),
         reportName: z.string().min(1),
+        color: z.string().optional().default(""),
         isActive: z.boolean().default(true),
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const course = await ctx.db.course.findUniqueOrThrow({
+        where: {
+          id: input.id,
+          schoolId: ctx.schoolId,
+        },
+      });
       return ctx.db.course.update({
         where: {
           id: input.id,
@@ -83,6 +91,7 @@ export const courseRouter = createTRPCRouter({
           name: input.name,
           reportName: input.reportName,
           isActive: input.isActive,
+          color: input.color ? input.color : course.color,
         },
       });
     }),
