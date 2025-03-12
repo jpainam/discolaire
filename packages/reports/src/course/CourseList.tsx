@@ -53,6 +53,25 @@ export function CourseList({
             <Text>{schoolYear.name}</Text>
           </View>
 
+          <View
+            style={{
+              flexDirection: "row",
+            }}
+          >
+            <View style={{ width: "15%" }}>
+              <Text>Code</Text>
+            </View>
+            <View style={{ width: "40%" }}>
+              <Text>Libelle</Text>
+            </View>
+            <View style={{ width: "35%" }}>
+              <Text>Nom Court</Text>
+            </View>
+            <View style={{ width: "10%" }}>
+              <Text>Active</Text>
+            </View>
+          </View>
+
           {courses.map((course, index) => {
             return (
               <View
@@ -64,13 +83,13 @@ export function CourseList({
                   padding: "2px",
                 }}
               >
-                <View style={{ width: "10%" }}>
+                <View style={{ width: "15%" }}>
                   <Text>{course.shortName}</Text>
                 </View>
                 <View style={{ width: "40%" }}>
                   <Text>{course.name}</Text>
                 </View>
-                <View style={{ width: "40%" }}>
+                <View style={{ width: "35%" }}>
                   <Text>{course.reportName}</Text>
                 </View>
                 <View style={{ width: "10%" }}>
