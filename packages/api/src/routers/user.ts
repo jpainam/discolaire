@@ -10,6 +10,31 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 const MAX_ATTEMPTS = 5;
 
 export const userRouter = createTRPCRouter({
+  search: protectedProcedure
+    .input(
+      z.object({
+        limit: z.number().optional().default(30),
+        query: z.string().optional().default(""),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      const q = `%${input.query}%`;
+      return ctx.db.user.findMany({
+        take: input.limit,
+        orderBy: {
+          name: "asc",
+        },
+        where: {
+          schoolId: ctx.schoolId,
+          OR: [
+            { name: { startsWith: q } },
+            { profile: { startsWith: q } },
+            { username: { startsWith: q } },
+          ],
+        },
+      });
+    }),
+
   getByEmail: publicProcedure
     .use(ratelimiter({ limit: 5, namespace: "getByEmail.password" }))
     .input(

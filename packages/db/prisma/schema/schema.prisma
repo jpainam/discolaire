@@ -1123,6 +1123,7 @@ model User {
     passwordResets    PasswordReset?
     scheduleJobs      ScheduleJob[]
     loginActivities   LoginActivity[]
+    borrowedBooks     BorrowedBook[]
 }
 
 model VerificationToken {

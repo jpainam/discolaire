@@ -76,7 +76,7 @@ export const bookRouter = createTRPCRouter({
       },
     });
   }),
-  lastBorrowed: protectedProcedure.query(({ ctx }) => {
+  recentlyUsed: protectedProcedure.query(({ ctx }) => {
     return ctx.db.book.findMany({
       where: {
         schoolId: ctx.schoolId,

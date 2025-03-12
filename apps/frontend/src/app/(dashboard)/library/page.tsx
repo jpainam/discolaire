@@ -19,6 +19,7 @@ import { api } from "~/trpc/server";
 import { BookTab } from "./BookTab";
 import { LibraryDashboard } from "./LibraryDashboard";
 import { LibrarySetting } from "./LibrarySetting";
+import { LoanHeader } from "./loans/LoanHeader";
 
 export default async function Page() {
   const { t } = await getServerTranslations();
@@ -110,9 +111,9 @@ export default async function Page() {
         <BookTab />
       </TabsContent>
       <TabsContent value="tab-3">
-        <p className="text-muted-foreground pt-1 text-center text-xs">
-          Encours d'implementation
-        </p>
+        <div className="flex flex-col gap-2">
+          <LoanHeader />
+        </div>
       </TabsContent>
       <TabsContent value="tab-4">
         <p className="text-muted-foreground pt-1 text-center text-xs">
