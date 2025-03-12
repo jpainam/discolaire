@@ -40,7 +40,7 @@ export async function ReportCardTable({
   const subjects = await api.classroom.subjects(classroomId);
   const studentGrades: Record<string, StudentGradeReport[]> = _.groupBy(
     grades,
-    (g) => g.studentId,
+    (g) => g.studentId
   );
 
   return (
@@ -119,16 +119,16 @@ export async function ReportCardTable({
               const grades = studentGrades[student.id] ?? [];
               return (
                 <TableRow className="bg-transparent" key={student.id}>
-                  <TableCell className="w-[10px] py-0">
+                  <TableCell className="w-[10px] ">
                     <AvatarState
                       className="h-8 w-8"
                       avatar={student.avatar}
                       pos={index}
                     />
                   </TableCell>
-                  <TableCell className=" py-0">
+                  <TableCell>
                     <Link
-                      className="text-blue-700 underline"
+                      className=" hover:underline"
                       href={
                         routes.students.details(student.id) +
                         `/report-cards?term=${term}`
@@ -137,30 +137,28 @@ export async function ReportCardTable({
                       {student.lastName}
                     </Link>
                   </TableCell>
-                  <TableCell className="border py-0 text-center">
+                  <TableCell className="border text-center">
                     {student.gender == "female" ? "F" : "M"}
                   </TableCell>
-                  <TableCell className="border py-0 text-center">
+                  <TableCell className="border text-center">
                     {student.avg?.toFixed(2)}
                   </TableCell>
-                  <TableCell className="border py-0 text-center">
-                    {rank}
-                  </TableCell>
+                  <TableCell className="border text-center">{rank}</TableCell>
                   {subjects.map((subject, index) => {
                     const grade = grades.find(
-                      (g) => g.subjectId === subject.id,
+                      (g) => g.subjectId === subject.id
                     );
                     const g = grade?.grade ?? 0;
                     return (
                       <TableCell
                         key={`grade-${index}${subject.id}`}
                         className={cn(
-                          "border-l py-0 text-center",
+                          "border-l  text-center",
                           g < 10
                             ? "!bg-red-50 dark:!bg-red-800"
                             : g < 15
                               ? "!bg-yellow-50 dark:!bg-yellow-800"
-                              : "!bg-green-50 dark:!bg-green-800",
+                              : "!bg-green-50 dark:!bg-green-800"
                         )}
                       >
                         {grade?.grade?.toFixed(2) ?? "-"}
