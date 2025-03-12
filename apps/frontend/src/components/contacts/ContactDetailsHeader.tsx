@@ -65,7 +65,7 @@ export function ContactDetailsHeader({
     "contact:profile",
     {
       id: contact.id,
-    }
+    },
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();
