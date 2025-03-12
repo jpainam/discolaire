@@ -26,7 +26,6 @@ export function CourseAction() {
       <Button
         onClick={() => {
           openModal({
-            className: "w-[400px]",
             title: t("create"),
             view: <CreateEditCourse />,
           });

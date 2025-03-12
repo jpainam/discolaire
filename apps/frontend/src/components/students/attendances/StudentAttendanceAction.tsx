@@ -68,7 +68,6 @@ export function StudentAttendanceAction({
             if (type == "lateness") {
               const lateness = attendance as LatenessType;
               openModal({
-                className: "w-[400px]",
                 title: t("justify_lateness"),
                 view: <JustifyLateness lateness={lateness} />,
               });

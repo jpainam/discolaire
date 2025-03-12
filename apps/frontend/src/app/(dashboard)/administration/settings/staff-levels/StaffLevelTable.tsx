@@ -74,7 +74,6 @@ export function StaffLevelTable() {
                     <DropdownMenuItem
                       onClick={() => {
                         openModal({
-                          className: "w-[400px]",
                           title: t("edit"),
                           view: (
                             <CreateEditStaffLevel

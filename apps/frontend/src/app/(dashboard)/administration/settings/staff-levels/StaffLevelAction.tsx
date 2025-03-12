@@ -15,7 +15,6 @@ export function StaffLevelAction() {
     <Button
       onClick={() => {
         openModal({
-          className: "w-[400px]",
           title: t("create"),
           view: <CreateEditStaffLevel />,
         });

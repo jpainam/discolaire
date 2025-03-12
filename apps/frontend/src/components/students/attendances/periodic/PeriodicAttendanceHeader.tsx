@@ -47,7 +47,6 @@ export function PeriodicAttendanceHeader() {
               toast.error(t("please_select_a_term_first"));
             } else {
               openModal({
-                className: "w-[400px]",
                 title: t("add_periodic_attendance"),
                 view: <CreateEditPeriodicAttendance />,
               });

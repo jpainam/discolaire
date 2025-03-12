@@ -36,7 +36,7 @@ export function TransactionDataTableActions({
 
   const canDeleteTransaction = useCheckPermissions(
     PermissionAction.DELETE,
-    "transaction",
+    "transaction"
   );
   const { openModal } = useModal();
 
@@ -82,7 +82,6 @@ export function TransactionDataTableActions({
                     openModal({
                       title: t("delete"),
                       view: <DeleteTransaction transactionId={selectedIds} />,
-                      className: "w-[400px]",
                     });
                   }
                 }}

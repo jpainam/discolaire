@@ -111,7 +111,6 @@ function ActionCell({ school }: { school: FormerSchool }) {
           <DropdownMenuItem
             onSelect={() => {
               openModal({
-                className: "w-[400px]",
                 title: t("edit"),
                 view: <CreateEditSchool name={school.name} id={school.id} />,
               });

@@ -93,7 +93,6 @@ export function StudentContactRelationship() {
                       <Button
                         onClick={() => {
                           openModal({
-                            className: "w-[400px]",
                             title: t("edit_relationship"),
                             view: (
                               <CreateEditRelationship

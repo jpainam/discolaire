@@ -53,7 +53,6 @@ export function SportTableAction({
         <DropdownMenuItem
           onClick={() => {
             openModal({
-              className: "w-[400px]",
               title: t("edit"),
               view: <CreateEditSport id={id} name={name} />,
             });

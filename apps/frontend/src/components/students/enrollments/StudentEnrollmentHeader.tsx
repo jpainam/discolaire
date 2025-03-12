@@ -24,7 +24,7 @@ export function StudentEnrollmentHeader({
   const Icon = sidebarIcons.enrollments;
   const canEnroll = useCheckPermissions(
     PermissionAction.CREATE,
-    "classroom:enrollment",
+    "classroom:enrollment"
   );
 
   return (
@@ -37,7 +37,7 @@ export function StudentEnrollmentHeader({
             onClick={() => {
               openModal({
                 title: t("enrollment"),
-                className: "w-[400px]",
+
                 description: t("enroll_student_description"),
                 view: <EnrollStudentModal studentId={params.id} />,
               });

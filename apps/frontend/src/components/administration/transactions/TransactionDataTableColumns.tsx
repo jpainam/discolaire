@@ -163,7 +163,7 @@ function ActionCell({
 
   const canDeleteTransaction = useCheckPermissions(
     PermissionAction.DELETE,
-    "transaction",
+    "transaction"
   );
 
   const { openModal } = useModal();
@@ -246,7 +246,7 @@ function ActionCell({
               onClick={() => {
                 openModal({
                   title: t("delete"),
-                  className: "w-[400px]",
+
                   view: <DeleteTransaction transactionId={transaction.id} />,
                 });
               }}

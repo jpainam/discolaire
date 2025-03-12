@@ -101,7 +101,6 @@ export function CourseTable() {
                       <DropdownMenuItem
                         onClick={() => {
                           openModal({
-                            className: "w-[400px]",
                             title: t("edit"),
                             view: <CreateEditCourse course={course} />,
                           });

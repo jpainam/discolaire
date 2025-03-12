@@ -77,7 +77,6 @@ export function StudentAttendanceHeader({
             <DropdownMenuItem
               onSelect={() => {
                 openModal({
-                  className: "w-[400px]",
                   title: t("prevent_an_absence"),
                   view: <PreventAbsence studentId={studentId} />,
                 });
@@ -139,7 +138,7 @@ export function StudentAttendanceHeader({
               onClick={() => {
                 openModal({
                   title: `${t("add")} - ${t("consigne")}`,
-                  className: "w-[400px]",
+
                   view: <CreateEditConsigne />,
                 });
               }}

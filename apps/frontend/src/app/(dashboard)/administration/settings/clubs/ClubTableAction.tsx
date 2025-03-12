@@ -53,7 +53,6 @@ export function ClubTableAction({
         <DropdownMenuItem
           onClick={() => {
             openModal({
-              className: "w-[400px]",
               title: t("edit"),
               view: <CreateEditClub id={id} name={name} />,
             });

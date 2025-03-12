@@ -220,7 +220,7 @@ function ActionCells({
                 description: t("edit_grade_description", {
                   name: `${st.lastName} ${st.firstName}`,
                 }),
-                className: "w-[400px]",
+
                 view: (
                   <EditGradeStudent
                     gradeId={grade.id}
@@ -258,7 +258,7 @@ function ActionCells({
                     error: (error) => {
                       return getErrorMessage(error);
                     },
-                  },
+                  }
                 );
               }
             }}
