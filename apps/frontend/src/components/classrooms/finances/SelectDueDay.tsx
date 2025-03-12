@@ -37,7 +37,7 @@ export function SelectDueDate({
             }
             window.open(
               `/api/pdfs/classroom/${classroomId}/reminder-letter?format=${format}&ids=${ids}&dueDate=${date.toISOString()}`,
-              "_blank"
+              "_blank",
             );
             closeModal();
           }}

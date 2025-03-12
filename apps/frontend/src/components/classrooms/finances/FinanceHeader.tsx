@@ -226,7 +226,7 @@ export function FinanceHeader() {
                         : null}
                     </span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem
+                  {/* <DropdownMenuItem
                     onSelect={() => {
                       openModal({
                         title: t("due_date"),
@@ -247,7 +247,7 @@ export function FinanceHeader() {
                         ? `(${selectedStudents.length})`
                         : null}
                     </span>
-                  </DropdownMenuItem>
+                  </DropdownMenuItem> */}
                   {/* <DropdownMenuItem
                     onSelect={() => {
                       window.open(
