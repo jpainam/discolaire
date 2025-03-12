@@ -436,6 +436,7 @@
   "extra_activities": "Activités extra-scolaires",
   "failed": "Echoué",
   "login_date": "Date de connexion",
+  "borrow_date": "Date d'emprunt",
   "filter_by_status": "Filtrer par statut",
   "books": "Livres",
   "returned_books": "Livres retournés",

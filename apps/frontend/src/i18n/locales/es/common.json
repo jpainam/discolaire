@@ -67,6 +67,7 @@
   "ip_address": "Dirección IP",
   "device": "Dispositivo",
   "duration": "Duración",
+  "borrow_date": "Date",
   "filter_by_status": "Filtrar por estado",
   "books": "Libros",
   "returned_books": "Libros devueltos",

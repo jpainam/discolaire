@@ -52,6 +52,7 @@
   "frequence": "Frequence",
   "join": "Join {{school}}",
   "edit_a_loan": "Edit a loan",
+  "borrow_date": "Borrow date",
   "books": "Books",
   "filter_by_status": "Filter by status",
   "returned_books": "Returned books",
