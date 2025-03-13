@@ -23,6 +23,7 @@ import { Separator } from "@repo/ui/components/separator";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
+import { decode } from "entities";
 import House from "~/components/icons/house";
 import { routes } from "~/configs/routes";
 import { api } from "~/trpc/react";
@@ -59,12 +60,12 @@ export default function StudentDetails() {
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <SquareUserRound className="h-4 w-4 stroke-1" /> {t("lastName")}
         </span>
-        <span>{student.lastName ?? "N/A"}</span>
+        <span>{decode(student.lastName ?? "")}</span>
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <SquareUserRound className="h-4 w-4 stroke-1" />
           {t("firstName")}
         </span>
-        <span>{student.firstName ?? "N/A"} </span>
+        <span>{decode(student.firstName ?? "")} </span>
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <PiChurchDuotone className="h-4 w-4 stroke-1" />
           {t("religion")}
