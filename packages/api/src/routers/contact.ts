@@ -75,28 +75,30 @@ export const contactRouter = createTRPCRouter({
         },
       });
     }),
-  get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    await ctx.db.contact.update({
-      where: {
-        id: input,
-      },
-      data: {
-        lastAccessed: new Date(),
-      },
-    });
-    return ctx.db.contact.findUnique({
-      include: {
-        user: {
-          include: {
-            roles: true,
+  get: protectedProcedure
+    .input(z.string().min(1))
+    .query(async ({ ctx, input }) => {
+      await ctx.db.contact.update({
+        where: {
+          id: input,
+        },
+        data: {
+          lastAccessed: new Date(),
+        },
+      });
+      return ctx.db.contact.findUnique({
+        include: {
+          user: {
+            include: {
+              roles: true,
+            },
           },
         },
-      },
-      where: {
-        id: input,
-      },
-    });
-  }),
+        where: {
+          id: input,
+        },
+      });
+    }),
 
   all: protectedProcedure
     .input(
@@ -247,7 +249,7 @@ export const contactRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const user = await userService.createAutoUser({
         name: `${input.firstName} ${input.lastName}`,
-        profile: "staff",
+        profile: "contact",
         schoolId: ctx.schoolId,
       });
       const contact = await ctx.db.contact.create({

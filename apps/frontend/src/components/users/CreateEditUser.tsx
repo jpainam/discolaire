@@ -101,6 +101,7 @@ export function CreateEditUser({
       createUserMutation.mutate({
         username: data.username,
         password: data.password,
+        profile: type,
       });
     }
   };

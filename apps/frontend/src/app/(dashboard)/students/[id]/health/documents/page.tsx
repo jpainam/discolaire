@@ -9,12 +9,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const student = await api.student.get(params.id);
   const { t } = await getServerTranslations();
   if (!student.userId) {
-    return (
-      <EmptyState
-        className="py-8"
-        title={t("no_user_attached_to_the_student")}
-      />
-    );
+    return <EmptyState className="py-8" title={t("no_user_attached_yet")} />;
   }
   const documents = await api.health.documents({ userId: student.userId });
   if (!documents.length) {

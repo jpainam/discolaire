@@ -157,6 +157,21 @@ export const userService = {
     }
   },
 
+  updatePermission: async ({
+    userId,
+    permission,
+    action,
+    allow,
+  }: {
+    userId: string;
+    permission: string;
+    action: string;
+    allow: boolean;
+  }) => {
+    await Promise.resolve(() => console.log(""));
+    console.log("updatePermission", userId, permission, action, allow);
+  },
+
   deleteUsers: async (userIds: string[]) => {
     return db.user.deleteMany({
       where: {

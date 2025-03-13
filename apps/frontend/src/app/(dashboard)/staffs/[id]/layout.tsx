@@ -1,4 +1,10 @@
-import { BookOpenCheck, CalendarDays, Folders, History } from "lucide-react";
+import {
+  BookOpenCheck,
+  CalendarDays,
+  Folders,
+  History,
+  KeySquare,
+} from "lucide-react";
 import React from "react";
 
 import { checkPermissions } from "@repo/api/permission";
@@ -37,7 +43,7 @@ export default async function Layout(props: {
     "staff:profile",
     {
       id: id,
-    },
+    }
   );
   if (!staffIsCurrentUser && !canReadStaff) {
     return <NoPermission className="my-8" isFullPage resourceText="" />;
@@ -51,6 +57,11 @@ export default async function Layout(props: {
       name: t("timeline"),
       href: routes.staffs.details(id),
       icon: <History className="h-4 w-4" />,
+    },
+    {
+      name: t("permissions"),
+      href: `/staffs/${id}/permissions`,
+      icon: <KeySquare className="h-4 w-4" />,
     },
     {
       name: t("teachings"),

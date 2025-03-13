@@ -135,6 +135,7 @@ export const userRouter = createTRPCRouter({
         password: z.string().min(1),
         emailVerified: z.coerce.date().optional(),
         isActive: z.boolean().default(true),
+        profile: z.enum(["staff", "contact", "student"]),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -150,6 +151,7 @@ export const userRouter = createTRPCRouter({
           email: `${input.username}@discolaire.com`,
           username: input.username,
           name: input.username,
+          profile: input.profile,
           schoolId: ctx.schoolId,
           password: await hashPassword(input.password),
           emailVerified: input.emailVerified,
@@ -342,5 +344,22 @@ export const userRouter = createTRPCRouter({
       });
 
       return user;
+    }),
+  updatePermission: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string().min(1),
+        action: z.string().min(1),
+        permission: z.string().min(1),
+        allow: z.boolean().default(false),
+      }),
+    )
+    .mutation(({ input }) => {
+      return userService.updatePermission({
+        userId: input.userId,
+        permission: input.permission,
+        action: input.action,
+        allow: input.allow,
+      });
     }),
 });

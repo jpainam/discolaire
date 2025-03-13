@@ -16,6 +16,7 @@ import {
   CalendarDays,
   Folders,
   HistoryIcon,
+  KeySquare,
   User,
 } from "lucide-react";
 
@@ -33,6 +34,11 @@ export function StaffSidebar({
         name: "profile",
         icon: User,
         url: `/staffs/${params.id}`,
+      },
+      {
+        name: "permissions",
+        icon: KeySquare,
+        url: `/staffs/${params.id}/permissions`,
       },
 
       {

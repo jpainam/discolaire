@@ -124,7 +124,7 @@ export function ContactStudentTable({
                         onSelect={() => {
                           if (!student.id) return;
                           router.push(
-                            `${routes.students.contacts(student.id)}/${stc.contactId}`
+                            `${routes.students.contacts(student.id)}/${stc.contactId}`,
                           );
                         }}
                       >
