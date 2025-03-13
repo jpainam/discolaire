@@ -130,7 +130,7 @@ export function StudentHeader({
         status,
       });
     },
-    [studentStatusMutation, student.id]
+    [studentStatusMutation, student.id],
   );
 
   const navigateToStudent = (id: string) => {
@@ -152,14 +152,14 @@ export function StudentHeader({
     "student:profile",
     {
       id: params.id,
-    }
+    },
   );
   const canEditStudent = useCheckPermissions(
     PermissionAction.UPDATE,
     "student:profile",
     {
       id: params.id,
-    }
+    },
   );
   //const [open, setOpen] = React.useState(false);
 
@@ -267,7 +267,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >
