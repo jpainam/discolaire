@@ -65,7 +65,7 @@ export function ContactDetailsHeader({
     "contact:profile",
     {
       id: contact.id,
-    },
+    }
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();
@@ -131,13 +131,11 @@ export function ContactDetailsHeader({
                   onSelect={() => {
                     if (!contact.userId) return;
                     openModal({
-                      className: "w-[500px]",
                       title: t("change_password"),
                       view: (
                         <CreateEditUser
                           userId={contact.userId}
                           type="contact"
-                          roleIds={contact.user?.roles.map((r) => r.roleId)}
                           entityId={contact.id}
                           username={contact.user?.username}
                         />

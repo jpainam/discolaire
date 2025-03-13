@@ -13,11 +13,9 @@ export function AttachUserButton({
   entityId,
   type,
   username,
-  roleIds,
 }: {
   userId?: string;
   entityId: string;
-  roleIds?: string[];
   username?: string;
   type: "staff" | "contact" | "student";
 }) {
@@ -31,7 +29,6 @@ export function AttachUserButton({
           title: userId ? t("change_password") : t("create_user"),
           view: (
             <CreateEditUser
-              roleIds={roleIds}
               userId={userId}
               type={type}
               entityId={entityId}

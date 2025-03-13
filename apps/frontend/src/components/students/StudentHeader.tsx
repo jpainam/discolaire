@@ -129,7 +129,7 @@ export function StudentHeader({
         status,
       });
     },
-    [studentStatusMutation, student.id],
+    [studentStatusMutation, student.id]
   );
 
   const navigateToStudent = (id: string) => {
@@ -151,14 +151,14 @@ export function StudentHeader({
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   const canEditStudent = useCheckPermissions(
     PermissionAction.UPDATE,
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   //const [open, setOpen] = React.useState(false);
 
@@ -258,7 +258,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -326,13 +326,11 @@ export function StudentHeader({
                   onSelect={() => {
                     if (!student.userId) return;
                     openModal({
-                      className: "w-[500px]",
                       title: t("change_password"),
                       view: (
                         <CreateEditUser
                           userId={student.userId}
                           type="student"
-                          roleIds={student.user?.roles.map((r) => r.roleId)}
                           entityId={params.id}
                           username={student.user?.username}
                         />

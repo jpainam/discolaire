@@ -12,8 +12,6 @@ import {
   useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import type { Option } from "~/components/students/multiple-selector";
-import MultipleSelector from "~/components/students/multiple-selector";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
@@ -23,7 +21,6 @@ import { api } from "~/trpc/react";
 const createEditUserSchema = z.object({
   username: z.string().min(1),
   password: z.string().min(1),
-  roleId: z.array(z.string().min(1)),
 });
 
 export function CreateEditUser({
@@ -31,12 +28,10 @@ export function CreateEditUser({
   userId,
   username,
   type,
-  roleIds,
 }: {
   entityId: string;
   userId?: string;
   username?: string;
-  roleIds?: string[];
   type: "staff" | "contact" | "student";
 }) {
   const form = useForm({
@@ -44,7 +39,6 @@ export function CreateEditUser({
     defaultValues: {
       username: username ?? "",
       password: "",
-      roleId: roleIds ?? [],
     },
   });
   const { closeModal } = useModal();
@@ -94,14 +88,6 @@ export function CreateEditUser({
     },
   });
 
-  const rolesQuery = api.role.all.useQuery();
-  const roleOptions: Option[] = rolesQuery.data
-    ? rolesQuery.data.map((role) => ({
-        label: role.name,
-        value: role.id,
-      }))
-    : [];
-
   const handleSubmit = (data: z.infer<typeof createEditUserSchema>) => {
     if (userId) {
       toast.loading(t("updating"), { id: 0 });
@@ -109,14 +95,12 @@ export function CreateEditUser({
         id: userId,
         username: data.username,
         password: data.password,
-        roleId: data.roleId,
       });
     } else {
       toast.loading(t("creating"), { id: 0 });
       createUserMutation.mutate({
         username: data.username,
         password: data.password,
-        roleId: data.roleId,
       });
     }
   };
@@ -156,25 +140,6 @@ export function CreateEditUser({
                 <Input autoComplete="new-password" type="password" {...field} />
               </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="roleId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("roles")}</FormLabel>
-              <FormControl>
-                <MultipleSelector
-                  {...field}
-                  // @ts-expect-error TODO: fix this
-                  defaultOptions={form.getValues("roleId")}
-                  options={roleOptions}
-                  hidePlaceholderWhenSelected
-                />
-              </FormControl>
               <FormMessage />
             </FormItem>
           )}

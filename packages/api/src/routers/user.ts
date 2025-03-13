@@ -135,7 +135,6 @@ export const userRouter = createTRPCRouter({
         password: z.string().min(1),
         emailVerified: z.coerce.date().optional(),
         isActive: z.boolean().default(true),
-        roleId: z.array(z.string().min(1)),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -146,7 +145,7 @@ export const userRouter = createTRPCRouter({
           code: "FORBIDDEN",
         });
       }
-      const user = await ctx.db.user.create({
+      return ctx.db.user.create({
         data: {
           email: `${input.username}@discolaire.com`,
           username: input.username,
@@ -157,8 +156,6 @@ export const userRouter = createTRPCRouter({
           isActive: input.isActive,
         },
       });
-      await userService.attachRoles(user.id, input.roleId);
-      return user;
     }),
   update: protectedProcedure
     .input(
@@ -169,7 +166,6 @@ export const userRouter = createTRPCRouter({
         password: z.string().optional(),
         email: z.string().optional(),
         isActive: z.boolean().default(true),
-        roleId: z.array(z.string().min(1)).optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -187,7 +183,7 @@ export const userRouter = createTRPCRouter({
           message: "User with this username already exists",
         });
       }
-      const user = await ctx.db.user.update({
+      return ctx.db.user.update({
         where: {
           id: input.id,
         },
@@ -201,10 +197,6 @@ export const userRouter = createTRPCRouter({
           isActive: input.isActive,
         },
       });
-      if (input.roleId) {
-        await userService.attachRoles(user.id, input.roleId);
-      }
-      return user;
     }),
   permissions: protectedProcedure.query(({ ctx }) => {
     const userId = ctx.session.user.id;
