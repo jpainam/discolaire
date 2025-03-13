@@ -354,12 +354,13 @@ export const userRouter = createTRPCRouter({
         allow: z.boolean().default(false),
       }),
     )
-    .mutation(({ input }) => {
+    .mutation(({ ctx, input }) => {
       return userService.updatePermission({
         userId: input.userId,
         permission: input.permission,
         action: input.action,
         allow: input.allow,
+        schoolId: ctx.schoolId,
       });
     }),
 });

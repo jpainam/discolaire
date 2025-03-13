@@ -162,14 +162,39 @@ export const userService = {
     permission,
     action,
     allow,
+    schoolId,
   }: {
     userId: string;
+    schoolId: string;
     permission: string;
     action: string;
     allow: boolean;
   }) => {
-    await Promise.resolve(() => console.log(""));
-    console.log("updatePermission", userId, permission, action, allow);
+    const user = await db.user.findUniqueOrThrow({
+      where: {
+        id: userId,
+        schoolId: schoolId,
+      },
+    });
+    const permissions = user.permissions;
+    if (!allow) {
+      const index = permissions.findIndex(
+        (p) => p === `${permission}:${action}`,
+      );
+      if (index !== -1) {
+        permissions.splice(index, 1);
+      }
+    } else {
+      permissions.push(`${permission}:${action}`);
+    }
+    return db.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        permissions,
+      },
+    });
   },
 
   deleteUsers: async (userIds: string[]) => {
