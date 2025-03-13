@@ -669,4 +669,14 @@ export const studentRouter = createTRPCRouter({
         },
       });
     }),
+
+  getFromUserId: protectedProcedure
+    .input(z.string().min(1))
+    .query(async ({ ctx, input }) => {
+      return ctx.db.student.findFirstOrThrow({
+        where: {
+          userId: input,
+        },
+      });
+    }),
 });

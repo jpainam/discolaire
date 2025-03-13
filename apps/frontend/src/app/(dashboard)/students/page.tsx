@@ -1,3 +1,5 @@
+import { auth } from "@repo/auth";
+import { redirect } from "next/navigation";
 import { StudentDataTable } from "~/components/students/StudentDataTable";
 import { StatsGrid } from "~/components/students/StudentStats";
 import { getServerTranslations } from "~/i18n/server";
@@ -5,6 +7,15 @@ import { api } from "~/trpc/server";
 import { StudentPageHeader } from "./StudentPageHeader";
 
 export default async function Page() {
+  const session = await auth();
+  if (!session) {
+    redirect("/auth/login");
+  }
+  if (session.user.profile == "student") {
+    const student = await api.student.getFromUserId(session.user.id);
+    redirect(`/student/${student.id}`);
+  }
+
   const { t } = await getServerTranslations();
   const effectif = await api.enrollment.count({});
   const students = await api.student.lastAccessed({ limit: 50 });
