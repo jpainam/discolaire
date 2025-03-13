@@ -20,38 +20,42 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 import { EmptyState } from "~/components/EmptyState";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import type { RouterOutputs } from "@repo/api";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 
-export function ContactStudentTable({ id }: { id: string }) {
-  const studentContactsQuery = api.contact.students.useQuery(id);
+export function ContactStudentTable({
+  studentContacts,
+}: {
+  studentContacts: RouterOutputs["contact"]["students"];
+}) {
   const utils = api.useUtils();
   const confirm = useConfirm();
   const router = useRouter();
   const { t } = useLocale();
-  const deleteStudentContactMutation = api.studentContact.delete.useMutation();
-  if (studentContactsQuery.isPending) {
-    return (
-      <DataTableSkeleton
-        withPagination={false}
-        showViewOptions={false}
-        rowCount={3}
-        columnCount={4}
-      />
-    );
-  }
-  const studentContacts = studentContactsQuery.data;
-  if (!studentContacts) {
+  const deleteStudentContactMutation = api.studentContact.delete.useMutation({
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+    onSettled: async () => {
+      await utils.contact.students.invalidate();
+      await utils.student.contacts.invalidate();
+    },
+    onSuccess: () => {
+      toast.success(t("delete_successfully"), { id: 0 });
+      router.refresh();
+    },
+  });
+
+  if (studentContacts.length == 0) {
     return <EmptyState className="m-8" />;
   }
   return (
@@ -120,7 +124,7 @@ export function ContactStudentTable({ id }: { id: string }) {
                         onSelect={() => {
                           if (!student.id) return;
                           router.push(
-                            `${routes.students.contacts(student.id)}/${id}`,
+                            `${routes.students.contacts(student.id)}/${stc.contactId}`
                           );
                         }}
                       >
@@ -151,22 +155,12 @@ export function ContactStudentTable({ id }: { id: string }) {
                             description: t("delete_confirmation"),
                           });
                           if (isConfirmed) {
-                            toast.promise(
-                              deleteStudentContactMutation.mutateAsync({
-                                contactId: stc.contactId,
-                                studentId: student.id,
-                              }),
-                              {
-                                success: async () => {
-                                  await utils.contact.students.invalidate();
-                                  await utils.student.contacts.invalidate();
-                                  return t("delete_successfully");
-                                },
-                                error: (error) => {
-                                  return getErrorMessage(error);
-                                },
-                              },
-                            );
+                            toast.loading(t("deleting"), { id: 0 });
+
+                            deleteStudentContactMutation.mutate({
+                              contactId: stc.contactId,
+                              studentId: student.id,
+                            });
                           }
                         }}
                       >

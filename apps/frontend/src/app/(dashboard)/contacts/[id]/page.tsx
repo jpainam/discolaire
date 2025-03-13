@@ -15,6 +15,8 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     notFound();
   }
 
+  const studentContacts = await api.contact.students(id);
+
   return (
     <div className="grid gap-4 py-2 px-4 xl:grid-cols-[40%_60%]">
       <Card className="p-0">
@@ -25,7 +27,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           <ContactDetails contactId={id} />
         </CardContent>
       </Card>
-      <ContactStudentTable id={id} />
+      <ContactStudentTable studentContacts={studentContacts} />
     </div>
   );
 }

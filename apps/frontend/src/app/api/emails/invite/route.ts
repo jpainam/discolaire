@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
     if (user.email) {
       const invitation = await createUniqueInvite({
         entityId: user.id,
-        entityType: "user",
+        entityType: user.profile,
       });
       const emailHtml = await render(
         InviteEmail({
@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
             name: school.name,
             logo: school.logo,
           },
-        }),
+        })
       );
       await api.messaging.sendEmail({
         subject: t("join", { school: school.name }),
