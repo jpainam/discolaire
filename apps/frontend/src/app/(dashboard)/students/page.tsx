@@ -13,7 +13,7 @@ export default async function Page() {
   }
   if (session.user.profile == "student") {
     const student = await api.student.getFromUserId(session.user.id);
-    redirect(`/student/${student.id}`);
+    redirect(`/students/${student.id}`);
   }
 
   const { t } = await getServerTranslations();

@@ -58,6 +58,7 @@ import { routes } from "~/configs/routes";
 import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
+import { useSession } from "~/providers/AuthProvider";
 import { api } from "~/trpc/react";
 import { getFullName } from "../../utils/full-name";
 import { CountryComponent } from "../shared/CountryPicker";
@@ -129,7 +130,7 @@ export function StudentHeader({
         status,
       });
     },
-    [studentStatusMutation, student.id],
+    [studentStatusMutation, student.id]
   );
 
   const navigateToStudent = (id: string) => {
@@ -151,27 +152,35 @@ export function StudentHeader({
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   const canEditStudent = useCheckPermissions(
     PermissionAction.UPDATE,
     "student:profile",
     {
       id: params.id,
-    },
+    }
   );
   //const [open, setOpen] = React.useState(false);
+
+  const { user } = useSession();
 
   return (
     <div className="flex border-b bg-muted/50 py-1 px-4 w-full gap-1">
       <SquaredAvatar student={student} />
       <div className="flex w-full flex-col gap-1">
-        <StudentSelector
-          placeholder={getFullName(student)}
-          onChange={(val) => {
-            navigateToStudent(val);
-          }}
-        />
+        {user?.profile == "student" ? (
+          <span className="bg-background h-9 px-4 py-2 rounded-md font-semibold w-full text-sm 2xl:w-[450px]">
+            {getFullName(student)}
+          </span>
+        ) : (
+          <StudentSelector
+            placeholder={getFullName(student)}
+            onChange={(val) => {
+              navigateToStudent(val);
+            }}
+          />
+        )}
 
         <div className="flex flex-row items-center gap-1">
           <FlatBadge
@@ -258,7 +267,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -350,6 +359,7 @@ export function StudentHeader({
                 <DropdownMenuPortal>
                   <DropdownMenuSubContent>
                     <DropdownMenuItem
+                      disabled={user?.profile == "student"}
                       onSelect={() => {
                         void changeStudentStatus(StudentStatus.ACTIVE);
                       }}
@@ -359,6 +369,7 @@ export function StudentHeader({
                       {student.status == StudentStatus.ACTIVE && <CheckIcon />}
                     </DropdownMenuItem>
                     <DropdownMenuItem
+                      disabled={user?.profile == "student"}
                       onSelect={() => {
                         void changeStudentStatus(StudentStatus.INACTIVE);
                       }}
@@ -371,6 +382,7 @@ export function StudentHeader({
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
+                      disabled={user?.profile == "student"}
                       onSelect={() => {
                         void changeStudentStatus(StudentStatus.GRADUATED);
                       }}
@@ -382,6 +394,7 @@ export function StudentHeader({
                       )}
                     </DropdownMenuItem>
                     <DropdownMenuItem
+                      disabled={user?.profile == "student"}
                       onSelect={() => {
                         void changeStudentStatus(StudentStatus.EXPELLED);
                       }}
