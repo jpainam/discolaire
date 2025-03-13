@@ -9,8 +9,8 @@ import { AdminSidebar } from "./administration/admin-sidebar";
 import { ClassroomSidebar } from "./classrooms/ClassroomSidebar";
 import { ContactSidebar } from "./contacts/ContactSidebar";
 import { StaffSidebar } from "./staffs/StaffSidebar";
-import { UserSidebar } from "./users/UserSidebar";
 import { TimetableSidebar } from "./timetables/TimetableSidebar";
+import { UserSidebar } from "./users/UserSidebar";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
@@ -20,7 +20,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     pathname === "/classrooms" ||
     pathname === "/contacts" ||
     pathname === "/library" ||
-    //pathname === "/report-cards" ||
+    pathname === "/cards" ||
     pathname === "/staffs";
   const isStudent =
     pathname.startsWith("/students") && pathname.split("/").length > 2;
