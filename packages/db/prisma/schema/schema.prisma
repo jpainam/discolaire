@@ -477,7 +477,7 @@ model Staff {
     countryId                 String?
     dateOfLastAdvancement     DateTime?   @db.Date
     country                   Country?    @relation(fields: [countryId], references: [id])
-    user                      User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+    user                      User?       @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade)
     subjects                  Subject[]
     degree                    Degree?     @relation(fields: [degreeId], references: [id])
     classrooms                Classroom[] @relation("seniorAdvisor")
@@ -542,7 +542,7 @@ model Student {
     grades             Grade[]
     country            Country?           @relation(fields: [countryId], references: [id])
     formerSchool       FormerSchool?      @relation(fields: [formerSchoolId], references: [id])
-    user               User?              @relation(fields: [userId], references: [id], onDelete: Cascade)
+    user               User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
     accounts           StudentAccount[]
     studentContacts    StudentContact[]
     siblings           StudentSibling[]   @relation("sibling")
@@ -668,7 +668,7 @@ model Contact {
     userId          String?
     countryId       String?
     country         Country?         @relation(fields: [countryId], references: [id])
-    user            User?            @relation(fields: [userId], references: [id], onDelete: Cascade)
+    user            User?            @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade)
     studentContacts StudentContact[]
     school          School           @relation(fields: [schoolId], references: [id])
     schoolId        String

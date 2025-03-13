@@ -1,20 +1,15 @@
 import type { Table } from "@tanstack/react-table";
-import { ChevronsUpDown, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import * as React from "react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { RiDeleteBinLine } from "@remixicon/react";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
 type User = RouterOutputs["user"]["all"][number];
@@ -23,11 +18,13 @@ export function UserDataTableAction({ table }: { table: Table<User> }) {
   const rows = table.getFilteredSelectedRowModel().rows;
   const utils = api.useUtils();
   const { t } = useLocale();
+  const router = useRouter();
   const deleteUsersMutation = api.user.delete.useMutation({
     onSettled: () => utils.user.invalidate(),
     onSuccess: () => {
       table.toggleAllRowsSelected(false);
       toast.success("deleted_successfully", { id: 0 });
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -49,43 +46,39 @@ export function UserDataTableAction({ table }: { table: Table<User> }) {
   const confirm = useConfirm();
 
   return (
-    <div className="animate-fadeIn fixed inset-x-0 bottom-12 z-50 mx-auto flex h-[60px] max-w-xl items-center justify-between rounded-md border bg-background px-6 py-3 shadow">
-      <p className="text-sm font-semibold">
-        {rows.length} {t("selected")}
-      </p>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant={"outline"}>
-            {t("bulk_actions")} <ChevronsUpDown className="ml-1 h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem>{t("pdf_export")}</DropdownMenuItem>
-          <DropdownMenuItem>{t("xml_export")}</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onSelect={async () => {
-              const isConfirmed = await confirm({
-                title: t("delete"),
-                description: t("delete_confirmation"),
-                icon: <Trash2 className="text-destructive" />,
-                alertDialogTitle: {
-                  className: "flex items-center gap-2",
-                },
-              });
-              if (isConfirmed) {
-                toast.loading("deleting", { id: 0 });
-                const selectedIds = rows.map((row) => row.original.id);
-                deleteUsersMutation.mutate(selectedIds);
-              }
-            }}
-            variant="destructive"
-            className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-          >
-            {t("delete")}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+    <>
+      {table.getSelectedRowModel().rows.length > 0 && (
+        <Button
+          size={"sm"}
+          onClick={async () => {
+            const isConfirmed = await confirm({
+              title: t("delete"),
+              description: t("delete_confirmation"),
+              icon: <Trash2 className="text-destructive" />,
+              alertDialogTitle: {
+                className: "flex items-center gap-2",
+              },
+            });
+            if (isConfirmed) {
+              toast.loading("deleting", { id: 0 });
+              const selectedIds = rows.map((row) => row.original.id);
+              deleteUsersMutation.mutate(selectedIds);
+            }
+          }}
+          variant="destructive"
+          //className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+        >
+          <RiDeleteBinLine
+            className="-ms-1 opacity-60"
+            size={16}
+            aria-hidden="true"
+          />
+          {t("delete")}
+          <span className="-me-1 ms-1 inline-flex h-5 max-h-full items-center rounded border border-border bg-background px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground/70">
+            {table.getSelectedRowModel().rows.length}
+          </span>
+        </Button>
+      )}
+    </>
   );
 }

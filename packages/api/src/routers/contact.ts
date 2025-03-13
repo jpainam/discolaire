@@ -50,6 +50,24 @@ export const contactRouter = createTRPCRouter({
       } else {
         void redisClient.del(`contact:${input}:students`);
       }
+      const contacts = await ctx.db.contact.findMany({
+        where: {
+          schoolId: ctx.schoolId,
+          id: {
+            in: Array.isArray(input) ? input : [input],
+          },
+        },
+      });
+      const userIds = contacts.map((c) => c.userId).filter((u) => u != null);
+      if (userIds.length > 0) {
+        await ctx.db.user.deleteMany({
+          where: {
+            id: {
+              in: userIds,
+            },
+          },
+        });
+      }
       return ctx.db.contact.deleteMany({
         where: {
           schoolId: ctx.schoolId,

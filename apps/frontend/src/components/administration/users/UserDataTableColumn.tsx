@@ -16,12 +16,10 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 import { useLocale } from "~/i18n";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
-import { useCheckPermissions } from "~/hooks/use-permissions";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
@@ -140,11 +138,13 @@ function ActionCell({ user }: { user: User }) {
   const confirm = useConfirm();
   const utils = api.useUtils();
   const router = useRouter();
-  const canDeleteUser = useCheckPermissions(PermissionAction.DELETE, "user");
+  // TODO fix permissions
+  //const canDeleteUser = true; //useCheckPermissions(PermissionAction.DELETE, "user");
   const deleteUserMutation = api.user.delete.useMutation({
     onSettled: () => utils.user.invalidate(),
     onSuccess: () => {
       toast.success(t("deleted_successfully"), { id: 0 });
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -167,32 +167,33 @@ function ActionCell({ user }: { user: User }) {
             <Eye />
             {t("details")}
           </DropdownMenuItem>
-          {canDeleteUser && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onSelect={async () => {
-                  const isConfirmed = await confirm({
-                    title: t("delete"),
-                    icon: <Trash2 className="size-4 text-destructive" />,
-                    alertDialogTitle: {
-                      className: "flex items-center gap-2",
-                    },
-                    description: t("delete_confirmation"),
-                  });
+          {/* {canDeleteUser && ( */}
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onSelect={async () => {
+                const isConfirmed = await confirm({
+                  title: t("delete"),
+                  // icon: <Trash2 className="size-4 text-destructive" />,
+                  // alertDialogTitle: {
+                  //   className: "flex items-center gap-2",
+                  // },
+                  description: t("delete_confirmation"),
+                });
 
-                  if (isConfirmed) {
-                    toast.loading(t("deleting"), { id: 0 });
-                    deleteUserMutation.mutate(user.id);
-                  }
-                }}
-                className="text-destructive"
-              >
-                <Trash2 />
-                {t("delete")}
-              </DropdownMenuItem>
-            </>
-          )}
+                if (isConfirmed) {
+                  toast.loading(t("deleting"), { id: 0 });
+                  deleteUserMutation.mutate(user.id);
+                }
+              }}
+              variant="destructive"
+              className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+            >
+              <Trash2 />
+              {t("delete")}
+            </DropdownMenuItem>
+          </>
+          {/* )} */}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

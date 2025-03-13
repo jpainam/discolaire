@@ -90,8 +90,8 @@ export function UserProfile({
                         .join("")}
                     </AvatarFallback>
                   </Avatar>
-                  <Button variant="outline" size="sm">
-                    Change Avatar
+                  <Button variant="outline" type="button" size="sm">
+                    {t("change_avatar")}
                   </Button>
                 </div>
 

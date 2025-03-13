@@ -6,8 +6,8 @@ import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { useLocale } from "~/i18n";
 
 import type { RouterOutputs } from "@repo/api";
-import { ClassroomDataTableActions } from "./ClassroomDataTableActions";
-import { getColumns } from "./ClassroomDataTableColumns";
+import { ClassroomDataTableAction } from "./ClassroomDataTableAction";
+import { getColumns } from "./ClassroomDataTableColumn";
 
 export function ClassroomDataTable({
   classrooms,
@@ -29,7 +29,7 @@ export function ClassroomDataTable({
         table={table}
         //floatingBar={}
       >
-        <ClassroomDataTableActions table={table} />
+        <ClassroomDataTableAction table={table} />
         {/* <DataTableToolbar table={table} /> */}
       </DataTable>
     </div>

@@ -161,6 +161,24 @@ export const studentService = {
     return requiredFees.filter((fee) => !paidRequiredFeeIds.includes(fee.id));
   },
   delete: async (studentIds: string | string[], schoolId: string) => {
+    const students = await db.student.findMany({
+      where: {
+        schoolId: schoolId,
+        id: {
+          in: Array.isArray(studentIds) ? studentIds : [studentIds],
+        },
+      },
+    });
+    const userIds = students.map((c) => c.userId).filter((u) => u != null);
+    if (userIds.length > 0) {
+      await db.user.deleteMany({
+        where: {
+          id: {
+            in: userIds,
+          },
+        },
+      });
+    }
     return db.student.deleteMany({
       where: {
         schoolId: schoolId,

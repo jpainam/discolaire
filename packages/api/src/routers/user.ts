@@ -64,20 +64,15 @@ export const userRouter = createTRPCRouter({
   all: protectedProcedure
     .input(
       z.object({
-        pageSize: z.number().default(30),
-        q: z.string().optional(),
-        pageIndex: z.number().default(0),
+        limit: z.number().optional().default(30),
       }),
     )
     .query(({ ctx, input }) => {
-      const offset = input.pageSize * input.pageIndex;
-      const qq = `%${input.q}%`;
       return ctx.db.user.findMany({
-        skip: offset,
-        take: input.pageSize,
+        take: input.limit,
         where: {
           schoolId: ctx.schoolId,
-          name: { startsWith: qq, mode: "insensitive" },
+          isActive: true,
         },
         orderBy: {
           createdAt: "desc",
