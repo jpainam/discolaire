@@ -1,8 +1,6 @@
 import { subMonths } from "date-fns";
-import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
-import { hashPassword } from "@repo/auth/session";
 import redisClient from "@repo/kv";
 
 import { userService } from "../services/user-service";
@@ -247,10 +245,16 @@ export const contactRouter = createTRPCRouter({
   create: protectedProcedure
     .input(createUpdateSchema)
     .mutation(async ({ ctx, input }) => {
+      const user = await userService.createAutoUser({
+        name: `${input.firstName} ${input.lastName}`,
+        profile: "staff",
+        schoolId: ctx.schoolId,
+      });
       const contact = await ctx.db.contact.create({
         data: {
           firstName: input.firstName,
           lastName: input.lastName,
+          userId: user.id,
           email: input.email,
           title: input.title,
           gender: input.gender,
@@ -264,25 +268,7 @@ export const contactRouter = createTRPCRouter({
           schoolId: ctx.schoolId,
         },
       });
-      // create user
-      const userData = {
-        username: uuidv4(),
-        password: await hashPassword("password"),
-        schoolId: ctx.schoolId,
-        profile: "contact",
-        name: `${contact.firstName} ${contact.lastName}`,
-      };
-      const user = await ctx.db.user.create({
-        data: userData,
-      });
-      await ctx.db.contact.update({
-        where: {
-          id: contact.id,
-        },
-        data: {
-          userId: user.id,
-        },
-      });
+
       void userService.sendWelcomeEmail({ email: input.email });
       return contact;
     }),

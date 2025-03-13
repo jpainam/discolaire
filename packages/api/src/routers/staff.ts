@@ -1,10 +1,7 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { subMonths } from "date-fns";
 import { fromZonedTime } from "date-fns-tz";
-import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
-
-import { hashPassword } from "@repo/auth/session";
 
 import { userService } from "../services/user-service";
 import { protectedProcedure } from "../trpc";
@@ -142,34 +139,22 @@ export const staffRouter = {
   create: protectedProcedure
     .input(createUpdateSchema)
     .mutation(async ({ ctx, input }) => {
+      const user = await userService.createAutoUser({
+        name: `${input.firstName} ${input.lastName}`,
+        profile: "staff",
+        schoolId: ctx.schoolId,
+      });
       const staff = await ctx.db.staff.create({
         data: {
           ...input,
+          userId: user.id,
           dateOfBirth: input.dateOfBirth
             ? fromZonedTime(input.dateOfBirth, "UTC")
             : undefined,
           schoolId: ctx.schoolId,
         },
       });
-      // create user
-      const userData = {
-        username: uuidv4(),
-        password: await hashPassword("password"),
-        schoolId: ctx.schoolId,
-        profile: "staff",
-        name: `${staff.firstName} ${staff.lastName}`,
-      };
-      const user = await ctx.db.user.create({
-        data: userData,
-      });
-      await ctx.db.staff.update({
-        where: {
-          id: staff.id,
-        },
-        data: {
-          userId: user.id,
-        },
-      });
+
       void userService.sendWelcomeEmail({ email: input.email });
       return staff;
     }),

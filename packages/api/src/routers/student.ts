@@ -1,11 +1,9 @@
 import { TRPCError } from "@trpc/server";
 import { subMonths } from "date-fns";
 import { fromZonedTime } from "date-fns-tz";
-import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
 import type { Prisma } from "@repo/db";
-import { hashPassword } from "@repo/auth/session";
 import redisClient from "@repo/kv";
 
 import { accountService } from "../services/account-service";
@@ -192,11 +190,17 @@ export const studentRouter = createTRPCRouter({
         //   message: "Registration number already exists",
         // });
       }
+      const user = await userService.createAutoUser({
+        name: `${input.firstName} ${input.lastName}`,
+        profile: "student",
+        schoolId: ctx.schoolId,
+      });
       const student = await ctx.db.student.create({
         data: {
           registrationNumber: registrationNumber,
           firstName: input.firstName,
           lastName: input.lastName,
+          userId: user.id,
           dateOfBirth: fromZonedTime(input.dateOfBirth, "UTC"),
           placeOfBirth: input.placeOfBirth,
           gender: input.gender,
@@ -242,25 +246,7 @@ export const studentRouter = createTRPCRouter({
           },
         });
       }
-      // create user
-      const userData = {
-        username: uuidv4(),
-        password: await hashPassword("password"),
-        schoolId: ctx.schoolId,
-        profile: "student",
-        name: `${student.firstName} ${student.lastName}`,
-      };
-      const user = await ctx.db.user.create({
-        data: userData,
-      });
-      await ctx.db.student.update({
-        where: {
-          id: student.id,
-        },
-        data: {
-          userId: user.id,
-        },
-      });
+
       void userService.sendWelcomeEmail({ email: input.email });
       return student;
     }),

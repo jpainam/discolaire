@@ -57,6 +57,7 @@ export const userRouter = createTRPCRouter({
           id: input.userId,
         },
         data: {
+          isActive: true,
           password: await hashPassword(input.password),
         },
       });

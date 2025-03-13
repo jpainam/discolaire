@@ -1,10 +1,34 @@
 import { headers } from "next/headers";
+import { v4 as uuidv4 } from "uuid";
 
+import { hashPassword } from "@repo/auth/session";
 import { db } from "@repo/db";
 
 import { env } from "../env";
 
 export const userService = {
+  createAutoUser: async ({
+    schoolId,
+    profile,
+    name,
+  }: {
+    schoolId: string;
+    profile: string;
+    name: string;
+  }) => {
+    // create user
+    const userData = {
+      username: uuidv4(),
+      password: await hashPassword("password"),
+      schoolId: schoolId,
+      profile: profile,
+      isActive: false,
+      name: name,
+    };
+    return db.user.create({
+      data: userData,
+    });
+  },
   sendWelcomeEmail: async ({
     userId,
     email,
