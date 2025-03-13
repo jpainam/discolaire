@@ -24,7 +24,7 @@ import {
 } from "@repo/ui/components/select";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-
+import { useRouter } from "~/hooks/use-router";
 import { DatePicker } from "~/components/DatePicker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { api } from "~/trpc/react";
@@ -51,6 +51,7 @@ export function CreateEditLateness({
     },
   });
   const utils = api.useUtils();
+  const router = useRouter();
   const createLatenessMutation = api.lateness.create.useMutation({
     onSettled: () => {
       void utils.attendance.invalidate();
@@ -58,6 +59,7 @@ export function CreateEditLateness({
     onSuccess: () => {
       toast.success(t("created_successfully"), { id: 0 });
       closeModal();
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -70,6 +72,7 @@ export function CreateEditLateness({
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
       closeModal();
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });

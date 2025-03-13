@@ -1,8 +1,8 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
+import { useRouter } from "~/hooks/use-router";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -20,6 +20,7 @@ import { Input } from "@repo/ui/components/input";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useParams } from "next/navigation";
 import { DatePicker } from "~/components/DatePicker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { getErrorMessage } from "~/lib/handle-error";
@@ -49,6 +50,7 @@ export function CreateEditAbsence({
     },
   });
   const utils = api.useUtils();
+  const router = useRouter();
   const createAbsenceMutation = api.absence.create.useMutation({
     onSettled: () => {
       void utils.attendance.invalidate();
@@ -56,6 +58,7 @@ export function CreateEditAbsence({
     onSuccess: () => {
       toast.success(t("created_successfully"), { id: 0 });
       closeModal();
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -67,6 +70,7 @@ export function CreateEditAbsence({
     },
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
+      router.refresh();
       closeModal();
     },
     onError: (error) => {
@@ -109,7 +113,7 @@ export function CreateEditAbsence({
                 });
             }
           },
-        },
+        }
       );
     }
   };

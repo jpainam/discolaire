@@ -41,18 +41,18 @@ export function PermissionTable({ userId }: { userId: string }) {
         allow: checked,
       });
     },
-    2000,
+    2000
   );
   return (
     <div className="bg-background overflow-hidden rounded-md border">
       <Table>
         <TableHeader>
-          <TableRow className="hover:bg-transparent">
-            <TableHead className="h-11">{t("name")}</TableHead>
-            <TableHead className="h-11">{t("read")}</TableHead>
-            <TableHead className="h-11">{t("edit")}</TableHead>
-            <TableHead className="h-11">{t("create")}</TableHead>
-            <TableHead className="h-11">{t("delete")}</TableHead>
+          <TableRow className="hover:bg-transparent bg-muted/50">
+            <TableHead>{t("name")}</TableHead>
+            <TableHead>{t("read")}</TableHead>
+            <TableHead>{t("edit")}</TableHead>
+            <TableHead>{t("create")}</TableHead>
+            <TableHead>{t("delete")}</TableHead>
             {/* <TableHead>{t("conditions")}</TableHead> */}
           </TableRow>
         </TableHeader>

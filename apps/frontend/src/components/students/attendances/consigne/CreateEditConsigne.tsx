@@ -29,6 +29,7 @@ import { useLocale } from "~/i18n";
 import { DatePicker } from "~/components/shared/date-picker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { api } from "~/trpc/react";
+import { useRouter } from "~/hooks/use-router";
 
 const schema = z.object({
   termId: z.string().min(1),
@@ -54,6 +55,7 @@ export function CreateEditConsigne({
     },
   });
   const utils = api.useUtils();
+  const router = useRouter();
   const createConsigneMutation = api.consigne.create.useMutation({
     onSettled: () => {
       void utils.attendance.invalidate();
@@ -61,6 +63,7 @@ export function CreateEditConsigne({
     onSuccess: () => {
       toast.success(t("created_successfully"), { id: 0 });
       closeModal();
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -73,6 +76,7 @@ export function CreateEditConsigne({
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
       closeModal();
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });

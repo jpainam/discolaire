@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
+import { useRouter } from "~/hooks/use-router";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -41,6 +42,7 @@ export function CreateEditChatter({
     },
   });
   const utils = api.useUtils();
+  const router = useRouter();
   const createChatterMutation = api.chatter.create.useMutation({
     onSettled: () => {
       void utils.attendance.invalidate();
@@ -48,6 +50,7 @@ export function CreateEditChatter({
     onSuccess: () => {
       toast.success(t("created_successfully"), { id: 0 });
       closeModal();
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -60,6 +63,7 @@ export function CreateEditChatter({
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
       closeModal();
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });

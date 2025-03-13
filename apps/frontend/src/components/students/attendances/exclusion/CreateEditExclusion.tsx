@@ -18,6 +18,7 @@ import {
 import { Textarea } from "@repo/ui/components/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
+import { useRouter } from "~/hooks/use-router";
 
 import { DatePicker } from "~/components/shared/date-picker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
@@ -41,6 +42,7 @@ export function CreateEditExclusion({
     },
   });
   const utils = api.useUtils();
+  const router = useRouter();
   const createExclusionMutation = api.exclusion.create.useMutation({
     onSettled: () => {
       void utils.attendance.invalidate();
@@ -48,6 +50,7 @@ export function CreateEditExclusion({
     onSuccess: () => {
       toast.success(t("created_successfully"), { id: 0 });
       closeModal();
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -60,6 +63,7 @@ export function CreateEditExclusion({
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
       closeModal();
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
