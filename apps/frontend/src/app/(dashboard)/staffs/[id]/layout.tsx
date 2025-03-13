@@ -43,7 +43,7 @@ export default async function Layout(props: {
     "staff:profile",
     {
       id: id,
-    }
+    },
   );
   if (!staffIsCurrentUser && !canReadStaff) {
     return <NoPermission className="my-8" isFullPage resourceText="" />;
