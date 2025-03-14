@@ -1,4 +1,5 @@
 "use client";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { Switch } from "@repo/ui/components/switch";
 import {
   Table,
@@ -26,14 +27,17 @@ import { api } from "~/trpc/react";
 export function PermissionTable({ userId }: { userId: string }) {
   const { t } = useLocale();
   const permissionsQuery = api.user.getPermissions.useQuery(userId);
+  //const router = useRouter();
   const permissionMutation = api.user.updatePermission.useMutation({
     onError: (error) => {
       toast.error(error.message, { id: 0 });
     },
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
+      //router.refresh();
     },
   });
+
   const groups = _.groupBy(policies, "resource");
   const debounced = useDebouncedCallback(
     (
@@ -51,7 +55,6 @@ export function PermissionTable({ userId }: { userId: string }) {
     1000
   );
   const permissions = permissionsQuery.data ?? [];
-  console.log(permissions);
   return (
     <div className="bg-background overflow-hidden rounded-md border">
       <Table>
@@ -66,69 +69,89 @@ export function PermissionTable({ userId }: { userId: string }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {Object.keys(groups).map((key, index) => {
-            const group = groups[key];
-            if (!group) return null;
-            const perm = group[0];
-            if (!perm) return null;
-            const canRead = permissions.find(
-              (p) =>
-                p.resource === perm.resource &&
-                p.action === "Read" &&
-                p.effect === "Allow"
-            );
-            const canUpdate = permissions.find(
-              (p) =>
-                p.resource === perm.resource &&
-                p.action === "Update" &&
-                p.effect === "Allow"
-            );
-            const canCreate = permissions.find(
-              (p) =>
-                p.resource === perm.resource &&
-                p.action === "Create" &&
-                p.effect === "Allow"
-            );
-            const canDelete = permissions.find(
-              (p) =>
-                p.resource === perm.resource &&
-                p.action === "Delete" &&
-                p.effect === "Allow"
-            );
-            return (
-              <TableRow key={index}>
-                <TableCell className="font-medium">{t(perm.title)}</TableCell>
-                <TableCell>
-                  <Switch
-                    onCheckedChange={(checked) => {
-                      debounced(perm.resource, "Read", checked);
-                    }}
-                  />
-                </TableCell>
-                <TableCell>
-                  <Switch
-                    onCheckedChange={(checked) => {
-                      debounced(perm.resource, "Update", checked);
-                    }}
-                  />
-                </TableCell>
-                <TableCell>
-                  <Switch
-                    onCheckedChange={(checked) => {
-                      debounced(perm.resource, "Create", checked);
-                    }}
-                  />
-                </TableCell>
-                <TableCell>
-                  <Switch
-                    onCheckedChange={(checked) => {
-                      debounced(perm.resource, "Delete", checked);
-                    }}
-                  />
-                </TableCell>
-              </TableRow>
-            );
-          })}
+          {permissionsQuery.isPending ? (
+            <TableRow>
+              <TableCell colSpan={5}>
+                <div className="grid grid-cols-1 gap-4 p-2">
+                  {Array.from({ length: 10 }).map((_, index) => (
+                    <Skeleton key={index} className="h-8" />
+                  ))}
+                </div>
+              </TableCell>
+            </TableRow>
+          ) : (
+            <>
+              {Object.keys(groups).map((key, index) => {
+                const group = groups[key];
+                if (!group) return null;
+                const perm = group[0];
+                if (!perm) return null;
+                const canRead = !!permissions.find(
+                  (p) =>
+                    p.resource === perm.resource &&
+                    p.action === "Read" &&
+                    p.effect === "Allow"
+                );
+                const canUpdate = permissions.find(
+                  (p) =>
+                    p.resource === perm.resource &&
+                    p.action === "Update" &&
+                    p.effect === "Allow"
+                );
+                const canCreate = permissions.find(
+                  (p) =>
+                    p.resource === perm.resource &&
+                    p.action === "Create" &&
+                    p.effect === "Allow"
+                );
+                const canDelete = permissions.find(
+                  (p) =>
+                    p.resource === perm.resource &&
+                    p.action === "Delete" &&
+                    p.effect === "Allow"
+                );
+                return (
+                  <TableRow key={index}>
+                    <TableCell className="font-medium">
+                      {t(perm.title)}
+                    </TableCell>
+                    <TableCell>
+                      <Switch
+                        defaultChecked={canRead ? true : false}
+                        onCheckedChange={(checked) => {
+                          debounced(perm.resource, "Read", checked);
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Switch
+                        defaultChecked={canUpdate ? true : false}
+                        onCheckedChange={(checked) => {
+                          debounced(perm.resource, "Update", checked);
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Switch
+                        defaultChecked={canCreate ? true : false}
+                        onCheckedChange={(checked) => {
+                          debounced(perm.resource, "Create", checked);
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Switch
+                        defaultChecked={canDelete ? true : false}
+                        onCheckedChange={(checked) => {
+                          debounced(perm.resource, "Delete", checked);
+                        }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </>
+          )}
         </TableBody>
       </Table>
     </div>
