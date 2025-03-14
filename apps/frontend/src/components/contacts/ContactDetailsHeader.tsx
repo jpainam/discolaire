@@ -62,7 +62,7 @@ export function ContactDetailsHeader({
   });
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();
@@ -78,28 +78,39 @@ export function ContactDetailsHeader({
     setBreadcrumbs(breads);
   }, [contact, setBreadcrumbs, t]);
 
+  const canUpdateContact = useCheckPermission(
+    "contact",
+    PermissionAction.UPDATE
+  );
+  const canCreateContact = useCheckPermission(
+    "contact",
+    PermissionAction.CREATE
+  );
+
   return (
     <div className="flex flex-row items-start gap-2">
       <AvatarState pos={0} className="h-auto w-[100px]" />
       <div className="flex flex-col gap-2">
         <div className="flex flex-row items-center gap-2">
-          <Button
-            onClick={() => {
-              openSheet({
-                title: (
-                  <>
-                    {t("edit")} - {contact.lastName ?? contact.firstName}
-                  </>
-                ),
+          {canUpdateContact && (
+            <Button
+              onClick={() => {
+                openSheet({
+                  title: (
+                    <>
+                      {t("edit")} - {contact.lastName ?? contact.firstName}
+                    </>
+                  ),
 
-                view: <CreateEditContact contact={contact} />,
-              });
-            }}
-            variant={"outline"}
-            size={"icon"}
-          >
-            <Pencil className="h-4 w-4" />
-          </Button>
+                  view: <CreateEditContact contact={contact} />,
+                });
+              }}
+              variant={"outline"}
+              size={"icon"}
+            >
+              <Pencil className="h-4 w-4" />
+            </Button>
+          )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant={"outline"} size={"icon"}>
@@ -108,7 +119,7 @@ export function ContactDetailsHeader({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownHelp />
-              {!contact.userId && (
+              {!contact.userId && canCreateContact && (
                 <DropdownMenuItem
                   onSelect={() => {
                     openModal({
@@ -190,19 +201,21 @@ export function ContactDetailsHeader({
             <ImageUpIcon />
             {t("change_avatar")}
           </Button>
-          <Button
-            onClick={() => {
-              openModal({
-                className: "p-0 w-[600px]",
-                title: <p className="px-4 pt-2">{t("link_students")}</p>,
-                view: <LinkStudent contactId={contact.id} />,
-              });
-            }}
-            size={"sm"}
-          >
-            <PlusIcon />
-            {t("link_students")}
-          </Button>
+          {canCreateContact && (
+            <Button
+              onClick={() => {
+                openModal({
+                  className: "p-0 w-[600px]",
+                  title: <p className="px-4 pt-2">{t("link_students")}</p>,
+                  view: <LinkStudent contactId={contact.id} />,
+                });
+              }}
+              size={"sm"}
+            >
+              <PlusIcon />
+              {t("link_students")}
+            </Button>
+          )}
         </div>
       </div>
     </div>

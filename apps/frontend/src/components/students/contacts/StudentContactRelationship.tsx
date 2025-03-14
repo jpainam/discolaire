@@ -48,7 +48,8 @@ export function StudentContactRelationship({
   studentContact: StudentContactGetProcedureOutput;
 }) {
   const session = useSession();
-  const disabled = session.user?.profile === "student";
+  const disabled =
+    session.user?.profile === "student" || session.user?.profile === "contact";
 
   const form = useForm<z.infer<typeof editRelationshipSchema>>({
     resolver: zodResolver(editRelationshipSchema),
@@ -89,7 +90,7 @@ export function StudentContactRelationship({
           error: (error) => {
             return getErrorMessage(error);
           },
-        },
+        }
       );
     }
   }

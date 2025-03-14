@@ -22,8 +22,10 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
+import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { routes } from "../../configs/routes";
@@ -55,10 +57,14 @@ export default function StudentContactList({
     day: "numeric",
     timeZone: "UTC",
   });
+  const canCreateContact = useCheckPermission(
+    "contact",
+    PermissionAction.CREATE
+  );
 
   return (
     <div className="overflow-y-auto px-4 text-sm gap-2 flex flex-col">
-      {contactQuery.data && (
+      {contactQuery.data && canCreateContact && (
         <Button
           className="w-fit"
           onClick={() => {
@@ -110,7 +116,7 @@ export default function StudentContactList({
                       size="sm"
                       onClick={() => {
                         router.push(
-                          routes.students.details(studentcontact.studentId),
+                          routes.students.details(studentcontact.studentId)
                         );
                       }}
                       variant="outline"
@@ -188,7 +194,7 @@ export default function StudentContactList({
                                   error: (error) => {
                                     return getErrorMessage(error);
                                   },
-                                },
+                                }
                               );
                             }
                           }}
@@ -205,7 +211,7 @@ export default function StudentContactList({
                 </CardFooter>
               </Card>
             );
-          },
+          }
         )}
       </div>
     </div>
