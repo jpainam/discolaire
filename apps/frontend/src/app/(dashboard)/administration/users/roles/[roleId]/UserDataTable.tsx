@@ -5,7 +5,7 @@ import { useQueryState } from "nuqs";
 import { toast } from "sonner";
 import { useDebounce } from "use-debounce";
 
-import { PermissionAction } from "@repo/api";
+import { PermissionAction } from "~/permissions";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -41,7 +41,7 @@ export function UserDataTable({ roleId }: { roleId: string }) {
   const canAddRoleToUser = useCheckPermission("role", PermissionAction.CREATE);
   const canRemoveRoleFromUser = useCheckPermission(
     "role",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const confirm = useConfirm();
   const [debounceValue] = useDebounce(query, 300);
@@ -118,7 +118,7 @@ export function UserDataTable({ roleId }: { roleId: string }) {
                         <DropdownMenuItem
                           onSelect={() => {
                             router.push(
-                              `/administration/users/${userRole.userId}`,
+                              `/administration/users/${userRole.userId}`
                             );
                           }}
                         >

@@ -24,7 +24,7 @@ export default async function Layout(props: {
   } else {
     canReadClassroom = await checkPermission(
       "classroom",
-      PermissionAction.READ
+      PermissionAction.READ,
     );
   }
 

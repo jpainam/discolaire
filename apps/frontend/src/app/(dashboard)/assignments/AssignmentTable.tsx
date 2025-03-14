@@ -4,7 +4,6 @@ import { format } from "date-fns";
 import { Eye, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { PermissionAction } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -24,6 +23,7 @@ import {
 } from "@repo/ui/components/table";
 import { EmptyState } from "~/components/EmptyState";
 import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { useCheckPermission } from "~/hooks/use-permission";

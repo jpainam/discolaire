@@ -1,4 +1,3 @@
-import { PermissionAction } from "@repo/api";
 import { checkPermission } from "@repo/api/permission";
 import { Label } from "@repo/ui/components/label";
 import { Separator } from "@repo/ui/components/separator";
@@ -14,6 +13,7 @@ import { EmptyState } from "~/components/EmptyState";
 import FlatBadge from "~/components/FlatBadge";
 import { NoPermission } from "~/components/no-permission";
 import { getServerTranslations } from "~/i18n/server";
+import { PermissionAction } from "~/permissions";
 
 import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/server";
@@ -23,22 +23,22 @@ import { GroupTableAction } from "./GroupTableAction";
 export default async function Page() {
   const canReadFinnaceGroup = await checkPermission(
     "accounting",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
   if (!canReadFinnaceGroup) {
     return <NoPermission />;
   }
   const canCreateGroups = await checkPermission(
     "accounting",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const canEditGroup = await checkPermission(
     "accounting",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const canDeleteGroups = await checkPermission(
     "accounting",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
 
   const { t, i18n } = await getServerTranslations();
