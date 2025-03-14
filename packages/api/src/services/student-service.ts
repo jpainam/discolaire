@@ -3,6 +3,13 @@ import { db } from "@repo/db";
 import { classroomService } from "./classroom-service";
 
 export const studentService = {
+  getFromUserId: async (userId: string) => {
+    return db.student.findFirstOrThrow({
+      where: {
+        userId: userId,
+      },
+    });
+  },
   getClassroomByUserId: async (userId: string, schoolYearId: string) => {
     const student = await db.student.findFirst({
       where: {

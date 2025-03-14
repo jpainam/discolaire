@@ -1,6 +1,13 @@
 import { db } from "@repo/db";
 
 export const contactService = {
+  getFromUserId: async (userId: string) => {
+    return db.contact.findFirstOrThrow({
+      where: {
+        userId: userId,
+      },
+    });
+  },
   getClassrooms: async (userId: string, schoolYearId: string) => {
     const contact = await db.contact.findFirst({
       where: {

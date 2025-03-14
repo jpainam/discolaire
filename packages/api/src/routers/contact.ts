@@ -233,13 +233,13 @@ export const contactRouter = createTRPCRouter({
         where: {
           schoolId: ctx.schoolId,
           OR: [
-            { firstName: { startsWith: q } },
-            { lastName: { startsWith: q } },
-            { phoneNumber1: { startsWith: q } },
-            { phoneNumber2: { startsWith: q } },
-            { email: { startsWith: q } },
-            { employer: { startsWith: q } },
-            { title: { startsWith: q } },
+            { firstName: { startsWith: q, mode: "insensitive" } },
+            { lastName: { startsWith: q, mode: "insensitive" } },
+            { phoneNumber1: { startsWith: q, mode: "insensitive" } },
+            { phoneNumber2: { startsWith: q, mode: "insensitive" } },
+            { email: { startsWith: q, mode: "insensitive" } },
+            { employer: { startsWith: q, mode: "insensitive" } },
+            { title: { startsWith: q, mode: "insensitive" } },
           ],
         },
       });

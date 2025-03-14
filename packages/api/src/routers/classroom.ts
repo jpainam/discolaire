@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { TransactionStatus } from "@repo/db";
@@ -25,50 +26,37 @@ export const classroomRouter = createTRPCRouter({
       schoolYearId: ctx.schoolYearId,
       schoolId: ctx.session.user.schoolId,
     });
-    // Has access to all classrooms
-    if (await checkPermission("classroom", "Read")) {
-      return classrooms;
+    if (ctx.session.user.profile === "student") {
+      const classroom = await studentService.getClassroomByUserId(
+        ctx.session.user.id,
+        ctx.schoolYearId,
+      );
+      return classrooms.filter((cl) => cl.id === classroom?.id);
+    }
+    if (ctx.session.user.profile === "contact") {
+      const classes = await contactService.getClassrooms(
+        ctx.session.user.id,
+        ctx.schoolYearId,
+      );
+      const classesIds = classes.map((c) => c.id);
+      return classrooms.filter((cl) => classesIds.includes(cl.id));
     }
     // Has access to classrooms where he teachers
     if (ctx.session.user.profile === "staff") {
-      const shortedClassrooms = await staffService.getClassrooms(
+      if (await checkPermission("classroom", "Read")) {
+        return classrooms;
+      }
+      const classes = await staffService.getClassrooms(
         ctx.session.user.id,
         ctx.schoolYearId,
       );
-      return classrooms.filter((cl) =>
-        shortedClassrooms.some((sc) => sc.id === cl.id),
-      );
+      const classesIds = classes.map((c) => c.id);
+      return classrooms.filter((cl) => classesIds.includes(cl.id));
     }
-    // Has access to classrooms where he is a parent
-    if (ctx.session.user.profile === "contact") {
-      const shortedClassrooms = await contactService.getClassrooms(
-        ctx.session.user.id,
-        ctx.schoolYearId,
-      );
-      return classrooms.filter((cl) =>
-        shortedClassrooms.some((sc) => sc.id === cl.id),
-      );
-    }
-    // Has access to his classroom
-    if (ctx.session.user.profile === "student") {
-      const shortedClassroom = await studentService.getClassroomByUserId(
-        ctx.session.user.id,
-        ctx.schoolYearId,
-      );
-      return classrooms.filter((cl) => cl.id === shortedClassroom?.id);
-    }
-    return [];
-    // return classrooms.filter((cl) => {
-    //   return doPermissionsCheck(
-    //     ctx.permissions,
-    //     PermissionAction.READ,
-    //     "classroom:list",
-    //     ctx.schoolId,
-    //     {
-    //       id: cl.id,
-    //     },
-    //   );
-    // });
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "You are not allowed to access this resource",
+    });
   }),
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
