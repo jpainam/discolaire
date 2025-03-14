@@ -133,7 +133,7 @@ export const contactRouter = createTRPCRouter({
       });
     }),
   students: protectedProcedure
-    .input(z.string())
+    .input(z.string().min(1))
     .query(async ({ ctx, input }) => {
       const std = await ctx.db.studentContact.findMany({
         where: {

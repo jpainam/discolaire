@@ -51,7 +51,7 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import type { RouterOutputs } from "@repo/api";
 import { decode } from "entities";
 import { useSetAtom } from "jotai";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { SimpleTooltip } from "~/components/simple-tooltip";
 
 import { routes } from "~/configs/routes";
@@ -61,10 +61,10 @@ import { breadcrumbAtom } from "~/lib/atoms";
 import { useSession } from "~/providers/AuthProvider";
 import { api } from "~/trpc/react";
 import { getFullName } from "../../utils/full-name";
+import { SearchCombobox } from "../SearchCombobox";
 import { CountryComponent } from "../shared/CountryPicker";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
-import { StudentSelector } from "../shared/selects/StudentSelector";
 import { CreateEditUser } from "../users/CreateEditUser";
 import { SquaredAvatar } from "./SquaredAvatar";
 
@@ -130,7 +130,7 @@ export function StudentHeader({
         status,
       });
     },
-    [studentStatusMutation, student.id],
+    [studentStatusMutation, student.id]
   );
 
   const navigateToStudent = (id: string) => {
@@ -149,12 +149,19 @@ export function StudentHeader({
 
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditStudent = useCheckPermission("student", PermissionAction.UPDATE);
   //const [open, setOpen] = React.useState(false);
 
   const { user } = useSession();
+
+  const [value, setValue] = useState("");
+  const [label, setLabel] = useState(getFullName(student));
+  const [search, setSearch] = useState("");
+  const students = api.student.search.useQuery({
+    query: search,
+  });
 
   return (
     <div className="flex border-b bg-muted/50 py-1 px-4 w-full gap-1">
@@ -165,11 +172,25 @@ export function StudentHeader({
             {getFullName(student)}
           </span>
         ) : (
-          <StudentSelector
-            placeholder={getFullName(student)}
-            onChange={(val) => {
-              navigateToStudent(val);
+          <SearchCombobox
+            className="w-full lg:w-1/3"
+            items={
+              students.data?.map((stud) => ({
+                value: stud.id,
+                label: getFullName(stud),
+              })) ?? []
+            }
+            value={value}
+            label={label}
+            onSelect={(value, label) => {
+              setValue(value);
+              setLabel(label ?? "");
+              navigateToStudent(value);
             }}
+            onSearchChange={setSearch}
+            searchPlaceholder={t("search") + " ..."}
+            noResultsMsg={t("no_results")}
+            selectItemMsg={t("select_an_option")}
           />
         )}
 
@@ -258,7 +279,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
