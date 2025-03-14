@@ -1,6 +1,6 @@
 "use client";
 
-import { PlusIcon, UserPlus, UserSearch } from "lucide-react";
+import { MoreVertical, PlusIcon, UserPlus, UserSearch } from "lucide-react";
 import { useParams } from "next/navigation";
 
 import { Button } from "@repo/ui/components/button";
@@ -15,7 +15,11 @@ import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 
+import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 import CreateEditContact from "~/components/contacts/CreateEditContact";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { SimpleTooltip } from "~/components/simple-tooltip";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";
@@ -82,17 +86,39 @@ export function StudentContactHeader() {
           </SimpleTooltip>
         )}
 
-        {/* <DropdownMenu>
+        <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size={"sm"} variant={"secondary"}>
-              <span>Plus</span>
-              <MoreVertical className="h-4 w-4" />
+            <Button size={"icon"} className="size-8" variant={"outline"}>
+              <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownHelp />
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onSelect={() => {
+                window.open(
+                  `/api/pdfs/student/${params.id}?format=pdf`,
+                  "_blank"
+                );
+              }}
+            >
+              <PDFIcon />
+              {t("pdf_export")}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                window.open(
+                  `/api/pdfs/student/${params.id}?format=pdf`,
+                  "_blank"
+                );
+              }}
+            >
+              <XMLIcon />
+              {t("xml_export")}
+            </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu> */}
+        </DropdownMenu>
       </div>
     </div>
   );

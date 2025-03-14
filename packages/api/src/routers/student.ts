@@ -393,6 +393,7 @@ export const studentRouter = createTRPCRouter({
       await ctx.db.student.update({
         where: {
           id: input,
+          schoolId: ctx.schoolId,
         },
         data: {
           lastAccessed: new Date(),
@@ -401,6 +402,7 @@ export const studentRouter = createTRPCRouter({
       const student = await ctx.db.student.findUnique({
         where: {
           id: input,
+          schoolId: ctx.schoolId,
         },
         include: {
           formerSchool: true,

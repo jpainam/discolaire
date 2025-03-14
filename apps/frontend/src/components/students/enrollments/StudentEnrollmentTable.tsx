@@ -27,7 +27,9 @@ import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { routes } from "~/configs/routes";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
 
@@ -45,6 +47,10 @@ export function StudentEnrollmentTable({
   const { fullDateFormatter } = useDateFormat();
   const utils = api.useUtils();
   const router = useRouter();
+  const canDeleteEnrollment = useCheckPermission(
+    "enrollment",
+    PermissionAction.DELETE
+  );
   const deleteEnrollmentMutation = api.enrollment.delete.useMutation({
     onSettled: async () => {
       await utils.student.invalidate();
@@ -79,13 +85,13 @@ export function StudentEnrollmentTable({
         <TableBody>
           {enrollments.map((c) => {
             const createdAt = fullDateFormatter.format(
-              c.createdAt ?? new Date(),
+              c.createdAt ?? new Date()
             );
             const enrollmentStartDate = fullDateFormatter.format(
-              c.schoolYear?.enrollmentStartDate ?? new Date(),
+              c.schoolYear?.enrollmentStartDate ?? new Date()
             );
             const enrolmmentEndDate = fullDateFormatter.format(
-              c.schoolYear?.enrollmentEndDate ?? new Date(),
+              c.schoolYear?.enrollmentEndDate ?? new Date()
             );
 
             return (
@@ -112,42 +118,44 @@ export function StudentEnrollmentTable({
                 </TableCell>
 
                 <TableCell className="flex justify-end">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className="h-8 w-8"
-                        size={"icon"}
-                      >
-                        <MoreVertical className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem
-                        variant="destructive"
-                        className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-                        onSelect={async () => {
-                          const isConfirmed = await confirm({
-                            title: t("delete"),
-                            description: t("delete_confirmation"),
-                            icon: (
-                              <Trash2 className="h-5 w-5 text-destructive" />
-                            ),
-                            alertDialogTitle: {
-                              className: "flex items-center gap-2",
-                            },
-                          });
-                          if (isConfirmed) {
-                            toast.loading(t("unenrolling"));
-                            deleteEnrollmentMutation.mutate(c.id);
-                          }
-                        }}
-                      >
-                        <Trash2 />
-                        {t("unenroll")}
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  {canDeleteEnrollment && (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          className="h-8 w-8"
+                          size={"icon"}
+                        >
+                          <MoreVertical className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          variant="destructive"
+                          className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+                          onSelect={async () => {
+                            const isConfirmed = await confirm({
+                              title: t("delete"),
+                              description: t("delete_confirmation"),
+                              icon: (
+                                <Trash2 className="h-5 w-5 text-destructive" />
+                              ),
+                              alertDialogTitle: {
+                                className: "flex items-center gap-2",
+                              },
+                            });
+                            if (isConfirmed) {
+                              toast.loading(t("unenrolling"));
+                              deleteEnrollmentMutation.mutate(c.id);
+                            }
+                          }}
+                        >
+                          <Trash2 />
+                          {t("unenroll")}
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
                 </TableCell>
               </TableRow>
             );

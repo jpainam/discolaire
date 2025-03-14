@@ -20,6 +20,7 @@ import { useLocale } from "~/i18n";
 
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
 import { getErrorMessage } from "~/lib/handle-error";
+import { useSession } from "~/providers/AuthProvider";
 import { api } from "~/trpc/react";
 
 const editRelationshipSchema = z.object({
@@ -46,8 +47,12 @@ export function StudentContactRelationship({
 }: {
   studentContact: StudentContactGetProcedureOutput;
 }) {
+  const session = useSession();
+  const disabled = session.user?.profile === "student";
+
   const form = useForm<z.infer<typeof editRelationshipSchema>>({
     resolver: zodResolver(editRelationshipSchema),
+    disabled: disabled,
     defaultValues: {
       primaryContact: studentContact.primaryContact ?? false,
       emergencyContact: studentContact.emergencyContact ?? false,
@@ -84,7 +89,7 @@ export function StudentContactRelationship({
           error: (error) => {
             return getErrorMessage(error);
           },
-        },
+        }
       );
     }
   }
@@ -137,22 +142,22 @@ export function StudentContactRelationship({
           <CardContent className="p-2">
             <div className="flex flex-col gap-4">
               <CheckboxField
-                //disabled={disabled}
+                disabled={disabled}
                 name="livesWith"
                 label={t("liveWithTheStudent")}
               />
               <CheckboxField
-                //disabled={disabled}
+                disabled={disabled}
                 name="primaryContact"
                 label={t("primaryContact")}
               />
               <CheckboxField
-                // disabled={disabled}
+                disabled={disabled}
                 name="emergencyContact"
                 label={t("emergencyContact")}
               />
               <CheckboxField
-                //disabled={disabled}
+                disabled={disabled}
                 name="enablePortalAccess"
                 label={t("enableParentPortalAccess")}
               />
@@ -164,33 +169,33 @@ export function StudentContactRelationship({
               </div>
               <div className="grid gap-2 md:grid-cols-3">
                 <CheckboxField
-                  //disabled={disabled}
+                  disabled={disabled}
                   name="canAccessData"
                   label={t("database")}
                 />
                 <CheckboxField
-                  //disabled={disabled}
+                  disabled={disabled}
                   name="accessReportCard"
                   label={t("reportCards")}
                 />
                 <CheckboxField
-                  //disabled={disabled}
+                  disabled={disabled}
                   name="accessDiscipline"
                   label={t("discipline")}
                 />
 
                 <CheckboxField
-                  //disabled={disabled}
+                  disabled={disabled}
                   name="accessAttendance"
                   label={t("attendance")}
                 />
                 <CheckboxField
-                  //disabled={disabled}
+                  disabled={disabled}
                   name="accessScheduling"
                   label={t("scheduling")}
                 />
                 <CheckboxField
-                  //disabled={disabled}
+                  disabled={disabled}
                   name="accessBilling"
                   label={t("billing")}
                 />
@@ -202,14 +207,14 @@ export function StudentContactRelationship({
                 </span>
                 <div className="flex flex-row gap-2">
                   <CheckboxField
-                    //disabled={disabled}
+                    disabled={disabled}
                     name="paysFee"
                     label={""}
                   />
                 </div>
                 <span className="font-semibold">{t("canPickupStudent")}</span>
                 <CheckboxField
-                  //disabled={disabled}
+                  disabled={disabled}
                   name="schoolPickup"
                   label={""}
                 />

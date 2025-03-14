@@ -54,7 +54,7 @@ export async function StudentLatestGrade({
                         year: "numeric",
                         month: "short",
                         day: "numeric",
-                      }
+                      },
                     )}
                   </span>
                 </div>
