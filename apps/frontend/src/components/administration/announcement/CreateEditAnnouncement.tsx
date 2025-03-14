@@ -71,7 +71,7 @@ export function CreateEditAnnouncement({
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) =>
-      console.log(value, name, type),
+      console.log(value, name, type)
     );
     return () => subscription.unsubscribe();
   }, [watch]);
@@ -103,7 +103,7 @@ export function CreateEditAnnouncement({
           error: (error) => {
             return getErrorMessage(error);
           },
-        },
+        }
       );
     } else {
       toast.promise(
@@ -118,7 +118,7 @@ export function CreateEditAnnouncement({
           error: (error) => {
             return getErrorMessage(error);
           },
-        },
+        }
       );
     }
   }
@@ -127,7 +127,7 @@ export function CreateEditAnnouncement({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="h-[calc(100vh-10rem)] items-start overflow-y-auto p-4">
-          <div className="grid grid-cols-1 gap-4 p-2 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 p-2 md:grid-cols-2">
             <FormField
               control={form.control}
               name="title"

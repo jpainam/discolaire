@@ -105,7 +105,7 @@ export function CreateEditBook({
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col flex-1 overflow-hidden"
       >
-        <div className="grid overflow-y-auto flex-1 auto-rows-min gap-2 px-4">
+        <div className="grid overflow-y-auto flex-1 auto-rows-min gap-6 px-4">
           <FormField
             control={form.control}
             name="title"

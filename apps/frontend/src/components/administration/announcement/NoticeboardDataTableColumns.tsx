@@ -227,12 +227,7 @@ function ActionCells({
           <DropdownMenuItem
             onSelect={() => {
               openSheet({
-                className: "w-[700px]",
-                title: (
-                  <div className="p-2">
-                    {t("edit", { name: noticeboard.title })}
-                  </div>
-                ),
+                title: <>{t("edit", { name: noticeboard.title })}</>,
                 view: <CreateEditAnnouncement noticeBoard={noticeboard} />,
               });
             }}
@@ -258,7 +253,7 @@ function ActionCells({
                       return t("deleted_successfully");
                     },
                     error: (error) => getErrorMessage(error),
-                  },
+                  }
                 );
               }
             }}

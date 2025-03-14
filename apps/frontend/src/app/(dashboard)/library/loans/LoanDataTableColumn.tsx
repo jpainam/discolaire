@@ -16,8 +16,10 @@ import type { TFunction } from "i18next";
 import i18next from "i18next";
 import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { api } from "~/trpc/react";
 import { CreateEditLoan } from "./CreateEditLoan";
@@ -177,47 +179,58 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
     },
   });
 
+  const canUpdateLoan = useCheckPermission("library", PermissionAction.UPDATE);
+  const canDeleteLoan = useCheckPermission("library", PermissionAction.DELETE);
+
   return (
     <div className="flex justify-end">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size={"icon"}>
-            <DotsHorizontalIcon />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            onSelect={() => {
-              openSheet({
-                title: t("edit_a_loan"),
-                view: <CreateEditLoan borrow={book} />,
-              });
-            }}
-          >
-            <Pencil />
-            {t("edit")}
-          </DropdownMenuItem>
+      {(canDeleteLoan || canUpdateLoan) && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size={"icon"}>
+              <DotsHorizontalIcon />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {canUpdateLoan && (
+              <>
+                <DropdownMenuItem
+                  onSelect={() => {
+                    openSheet({
+                      title: t("edit_a_loan"),
+                      view: <CreateEditLoan borrow={book} />,
+                    });
+                  }}
+                >
+                  <Pencil />
+                  {t("edit")}
+                </DropdownMenuItem>
 
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            variant="destructive"
-            className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-            onSelect={async () => {
-              const isConfirmed = await confirm({
-                title: t("delete"),
-                description: t("delete_confirmation"),
-              });
-              if (isConfirmed) {
-                toast.loading(t("deleting"), { id: 0 });
-                void bookMutation.mutate(book.id);
-              }
-            }}
-          >
-            <Trash2 />
-            {t("delete")}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+                <DropdownMenuSeparator />
+              </>
+            )}
+            {canDeleteLoan && (
+              <DropdownMenuItem
+                variant="destructive"
+                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+                onSelect={async () => {
+                  const isConfirmed = await confirm({
+                    title: t("delete"),
+                    description: t("delete_confirmation"),
+                  });
+                  if (isConfirmed) {
+                    toast.loading(t("deleting"), { id: 0 });
+                    void bookMutation.mutate(book.id);
+                  }
+                }}
+              >
+                <Trash2 />
+                {t("delete")}
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
     </div>
   );
 }

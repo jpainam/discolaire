@@ -17,8 +17,8 @@ export async function StaffProfile({ staffId }: { staffId: string }) {
   });
 
   return (
-    <Card className="md:col-span-1 p-0">
-      <CardHeader className="flex flex-row items-start gap-4 py-1 border-b bg-muted/50">
+    <Card className="p-0">
+      <CardHeader className="flex flex-row items-start gap-4 py-4 border-b bg-muted/50">
         <AvatarState
           className="h-[50px] w-[50px] xl:h-[100px] xl:w-[100px]"
           avatar={staff.avatar}

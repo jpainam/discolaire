@@ -121,7 +121,7 @@ export function CreateEditClassroom({
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col flex-1 overflow-hidden"
       >
-        <div className="grid overflow-y-auto flex-1 auto-rows-min gap-2 px-4">
+        <div className="grid overflow-y-auto flex-1 auto-rows-min gap-6 px-4">
           <InputField label={t("class_name_report")} name="reportName" />
           <InputField label={t("class_name")} name="name" />
           <InputField type="number" label={t("max_size")} name="maxSize" />

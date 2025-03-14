@@ -81,10 +81,11 @@ export function CreateEditLoan({
     }
   };
   const { t } = useLocale();
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-6">
           <FormField
             control={form.control}
             name="bookId"

@@ -94,7 +94,7 @@ export function CreateEditCourse({
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-2"
+        className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <div className="grid grid-cols-[20%_80%] gap-2">

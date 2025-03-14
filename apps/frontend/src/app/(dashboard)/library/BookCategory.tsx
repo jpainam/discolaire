@@ -28,7 +28,9 @@ import { Pencil, PlusIcon, TrashIcon } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useModal } from "~/hooks/use-modal";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
 
 export function BookCategory() {
@@ -47,25 +49,40 @@ export function BookCategory() {
   });
   const { t } = useLocale();
   const { openModal } = useModal();
+  const canUpdateCategory = useCheckPermission(
+    "library",
+    PermissionAction.UPDATE
+  );
+  const canCreateCategory = useCheckPermission(
+    "library",
+    PermissionAction.CREATE
+  );
+  const canDeleteCategory = useCheckPermission(
+    "library",
+    PermissionAction.DELETE
+  );
+
   return (
     <Card className="p-0 gap-0">
       <CardHeader className="bg-muted/50 border-b p-2">
         <CardTitle className="flex flex-row justify-between items-center">
           {t("material_categories")}
           <div className="ml-auto">
-            <Button
-              onClick={() => {
-                openModal({
-                  className: "w-96",
-                  title: t("create_a_category"),
-                  view: <CreateEditCategory />,
-                });
-              }}
-              size={"sm"}
-            >
-              <PlusIcon />
-              {t("add")}
-            </Button>
+            {canCreateCategory && (
+              <Button
+                onClick={() => {
+                  openModal({
+                    className: "w-96",
+                    title: t("create_a_category"),
+                    view: <CreateEditCategory />,
+                  });
+                }}
+                size={"sm"}
+              >
+                <PlusIcon />
+                {t("add")}
+              </Button>
+            )}
           </div>
         </CardTitle>
       </CardHeader>
@@ -92,36 +109,40 @@ export function BookCategory() {
                     <TableCell>{category.name}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex flex-row gap-2 items-center">
-                        <Button
-                          onClick={() => {
-                            openModal({
-                              className: "w-96",
-                              title: t("edit_a_category"),
-                              view: (
-                                <CreateEditCategory
-                                  category={{
-                                    name: category.name,
-                                    id: category.id,
-                                  }}
-                                />
-                              ),
-                            });
-                          }}
-                          variant={"outline"}
-                          size={"icon"}
-                        >
-                          <Pencil />
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            toast.loading(t("deleting"), { id: 0 });
-                            void deleteCategory.mutate(category.id);
-                          }}
-                          variant={"destructive"}
-                          size={"icon"}
-                        >
-                          <TrashIcon />
-                        </Button>
+                        {canUpdateCategory && (
+                          <Button
+                            onClick={() => {
+                              openModal({
+                                className: "w-96",
+                                title: t("edit_a_category"),
+                                view: (
+                                  <CreateEditCategory
+                                    category={{
+                                      name: category.name,
+                                      id: category.id,
+                                    }}
+                                  />
+                                ),
+                              });
+                            }}
+                            variant={"outline"}
+                            size={"icon"}
+                          >
+                            <Pencil />
+                          </Button>
+                        )}
+                        {canDeleteCategory && (
+                          <Button
+                            onClick={() => {
+                              toast.loading(t("deleting"), { id: 0 });
+                              void deleteCategory.mutate(category.id);
+                            }}
+                            variant={"destructive"}
+                            size={"icon"}
+                          >
+                            <TrashIcon />
+                          </Button>
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>

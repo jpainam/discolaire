@@ -214,7 +214,7 @@ export function getColumns({
                 onSelect={() => {
                   openSheet({
                     placement: "right",
-                    className: "w-[500px]",
+
                     view: <CreateEditContact contact={row.original} />,
                   });
                 }}

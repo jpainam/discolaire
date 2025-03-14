@@ -131,7 +131,6 @@ export function HealthVisitTable({
                         <DropdownMenuItem
                           onClick={() => {
                             openSheet({
-                              className: "w-[700px]",
                               view: <CreateEditHealthVisit userId={userId} />,
                             });
                           }}

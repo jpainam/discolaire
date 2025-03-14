@@ -108,7 +108,7 @@ export function CreateEditHealthVisit({
         error: (err) => {
           return getErrorMessage(err);
         },
-      },
+      }
     );
   };
 
@@ -135,7 +135,7 @@ export function CreateEditHealthVisit({
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-2"
+        className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <div className="flex flex-row items-center gap-2 border-b bg-muted/50 px-2 py-1">

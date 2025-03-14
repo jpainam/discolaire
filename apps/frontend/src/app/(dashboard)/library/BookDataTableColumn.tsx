@@ -15,9 +15,11 @@ import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
 import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { getErrorMessage } from "~/lib/handle-error";
+import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { api } from "~/trpc/react";
 import { CreateEditBook } from "./CreateEditBook";
@@ -162,56 +164,66 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
   const bookMutation = api.book.delete.useMutation({
     onSettled: () => utils.book.invalidate(),
   });
+  const canUpdateBook = useCheckPermission("library", PermissionAction.UPDATE);
+  const canDeleteBook = useCheckPermission("library", PermissionAction.DELETE);
 
   return (
     <div className="flex justify-end">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size={"icon"}>
-            <DotsHorizontalIcon />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            onSelect={() => {
-              openSheet({
-                description: t("edit_classroom_description"),
-                title: t("edit_a_classroom"),
-                view: <CreateEditBook book={book} />,
-              });
-            }}
-          >
-            <Pencil />
-            {t("edit")}
-          </DropdownMenuItem>
+      {(canDeleteBook || canUpdateBook) && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size={"icon"}>
+              <DotsHorizontalIcon />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {canUpdateBook && (
+              <>
+                <DropdownMenuItem
+                  onSelect={() => {
+                    openSheet({
+                      description: t("edit_classroom_description"),
+                      title: t("edit_a_classroom"),
+                      view: <CreateEditBook book={book} />,
+                    });
+                  }}
+                >
+                  <Pencil />
+                  {t("edit")}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+              </>
+            )}
 
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            variant="destructive"
-            className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-            onSelect={async () => {
-              const isConfirmed = await confirm({
-                title: t("delete"),
-                description: t("delete_confirmation"),
-              });
-              if (isConfirmed) {
-                toast.promise(bookMutation.mutateAsync(book.id), {
-                  loading: t("deleting"),
-                  success: () => {
-                    return t("deleted_successfully");
-                  },
-                  error: (error) => {
-                    return getErrorMessage(error);
-                  },
-                });
-              }
-            }}
-          >
-            <Trash2 />
-            {t("delete")}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+            {canDeleteBook && (
+              <DropdownMenuItem
+                variant="destructive"
+                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+                onSelect={async () => {
+                  const isConfirmed = await confirm({
+                    title: t("delete"),
+                    description: t("delete_confirmation"),
+                  });
+                  if (isConfirmed) {
+                    toast.promise(bookMutation.mutateAsync(book.id), {
+                      loading: t("deleting"),
+                      success: () => {
+                        return t("deleted_successfully");
+                      },
+                      error: (error) => {
+                        return getErrorMessage(error);
+                      },
+                    });
+                  }
+                }}
+              >
+                <Trash2 />
+                {t("delete")}
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
     </div>
   );
 }

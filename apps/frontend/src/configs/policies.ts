@@ -71,6 +71,26 @@ export const policies: {
     action: PermissionAction.Update,
   },
   {
+    title: "contacts",
+    resource: "contact",
+    action: PermissionAction.Read,
+  },
+  {
+    title: "contacts",
+    resource: "contact",
+    action: PermissionAction.Update,
+  },
+  {
+    title: "contacts",
+    resource: "contact",
+    action: PermissionAction.Create,
+  },
+  {
+    title: "contacts",
+    resource: "contact",
+    action: PermissionAction.Delete,
+  },
+  {
     title: "all_subjects",
     resource: "subject",
     action: PermissionAction.Read,
@@ -149,5 +169,42 @@ export const policies: {
     title: "transactions",
     resource: "transaction",
     action: PermissionAction.Update,
+  },
+  {
+    title: "library",
+    resource: "library",
+    action: PermissionAction.Read,
+  },
+  {
+    title: "library",
+    resource: "library",
+    action: PermissionAction.Update,
+  },
+  {
+    title: "library",
+    resource: "library",
+    action: PermissionAction.Create,
+  },
+  {
+    title: "library",
+    resource: "library",
+    action: PermissionAction.Delete,
+  },
+];
+
+export const menuPolicies: {
+  title: string;
+  resource: string;
+  action: PermissionAction;
+}[] = [
+  {
+    title: "menu:administration",
+    resource: "menu:administration",
+    action: PermissionAction.Read,
+  },
+  {
+    title: "menu:library",
+    resource: "menu:library",
+    action: PermissionAction.Read,
   },
 ];

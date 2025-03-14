@@ -107,7 +107,7 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="grid h-full grid-cols-1 gap-4 p-2">
+        <div className="grid h-full grid-cols-1 gap-6 p-2">
           <FormField
             control={form.control}
             name={"courseId"}

@@ -15,8 +15,10 @@ import { LibraryBigIcon, MoreVerticalIcon, PlusIcon } from "lucide-react";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
 import { BookDataTable } from "./BookDataTable";
 import { CreateEditBook } from "./CreateEditBook";
@@ -24,6 +26,7 @@ export function BookTab() {
   const { t } = useLocale();
   const { openSheet } = useSheet();
   const bookQuery = api.book.recentlyUsed.useQuery();
+  const canCreateBook = useCheckPermission("library", PermissionAction.CREATE);
 
   return (
     <div className="flex flex-col gap-2">
@@ -33,18 +36,20 @@ export function BookTab() {
           <Label>{t("materials")}</Label>
         </div>
         <div className="flex flex-row items-center gap-2">
-          <Button
-            size={"sm"}
-            onClick={() => {
-              openSheet({
-                title: t("create_a_new_book"),
-                view: <CreateEditBook />,
-              });
-            }}
-          >
-            <PlusIcon />
-            {t("add")}
-          </Button>
+          {canCreateBook && (
+            <Button
+              size={"sm"}
+              onClick={() => {
+                openSheet({
+                  title: t("create_a_new_book"),
+                  view: <CreateEditBook />,
+                });
+              }}
+            >
+              <PlusIcon />
+              {t("add")}
+            </Button>
+          )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant={"outline"} size={"icon"} className="size-8">

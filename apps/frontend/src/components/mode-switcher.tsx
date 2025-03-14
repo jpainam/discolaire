@@ -5,18 +5,26 @@ import { useTheme } from "next-themes";
 import * as React from "react";
 
 import { Button } from "@repo/ui/components/button";
+import { META_THEME_COLORS, useMetaColor } from "~/hooks/use-meta-color";
 
-export function ModeToggle() {
+export function ModeSwitcher() {
   const { setTheme, resolvedTheme } = useTheme();
+  const { setMetaColor } = useMetaColor();
 
   const toggleTheme = React.useCallback(() => {
     setTheme(resolvedTheme === "dark" ? "light" : "dark");
-  }, [resolvedTheme, setTheme]);
+    setMetaColor(
+      resolvedTheme === "dark"
+        ? META_THEME_COLORS.light
+        : META_THEME_COLORS.dark
+    );
+  }, [resolvedTheme, setTheme, setMetaColor]);
 
   return (
     <Button
-      variant="ghost"
-      className="group/toggle h-8 w-8 px-0"
+      variant="outline"
+      size="icon"
+      className="group/toggle size-8"
       onClick={toggleTheme}
     >
       <SunIcon className="hidden [html.dark_&]:block" />

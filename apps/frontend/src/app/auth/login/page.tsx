@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { getServerTranslations } from "~/i18n/server";
 
-import { ModeToggle } from "~/components/mode-toggle";
+import { ModeToggle } from "~/components/mode-switcher";
 import { routes } from "~/configs/routes";
 import { UserAuthForm } from "./user-auth-form";
 

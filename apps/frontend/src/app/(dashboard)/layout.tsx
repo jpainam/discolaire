@@ -9,7 +9,7 @@ import {
   SidebarTrigger,
 } from "@repo/ui/components/sidebar";
 import { AppSidebar } from "~/components/app-sidebar";
-import { ModeToggle } from "~/components/mode-toggle";
+import { ModeSwitcher } from "~/components/mode-switcher";
 import { UserNav } from "~/components/user-nav";
 import { SchoolContextProvider } from "~/providers/SchoolProvider";
 
@@ -78,7 +78,7 @@ export default async function Layout({
                 />
                 <ThemeSelector />
                 <TopRightButtons />
-                <ModeToggle />
+                <ModeSwitcher />
                 <LanguageSwitcher />
                 <UserNav />
               </div>

@@ -55,7 +55,7 @@ export function StudentContactHeader() {
                 <DropdownMenuItem
                   onSelect={() => {
                     openModal({
-                      className: "w-[600px] p-0",
+                      className: "p-0",
                       title: (
                         <p className="px-2 pt-4">{t("add_from_existing")}</p>
                       ),
@@ -72,7 +72,6 @@ export function StudentContactHeader() {
                 <DropdownMenuItem
                   onSelect={() => {
                     openSheet({
-                      className: "w-[600px]",
                       title: t("create"),
                       view: <CreateEditContact />,
                     });
@@ -99,7 +98,7 @@ export function StudentContactHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -110,7 +109,7 @@ export function StudentContactHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

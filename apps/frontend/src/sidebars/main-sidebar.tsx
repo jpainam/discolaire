@@ -29,7 +29,9 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SidebarLogo } from "~/components/sidebar-logo";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
 import { useSession } from "~/providers/AuthProvider";
 export function MainSidebar({
   ...props
@@ -71,20 +73,30 @@ export function MainSidebar({
       url: `/timetables`,
       icon: CalendarDays,
     },
-
-    {
+  ];
+  const session = useSession();
+  const canReadLibrary = useCheckPermission(
+    "menu:library",
+    PermissionAction.READ
+  );
+  if (canReadLibrary) {
+    data.push({
       name: "library",
       url: `/library`,
       icon: LibraryBigIcon,
-    },
-
-    {
+    });
+  }
+  const canReadAdministration = useCheckPermission(
+    "menu:administration",
+    PermissionAction.READ
+  );
+  if (canReadAdministration) {
+    data.push({
       name: "administration",
       url: `/administration`,
       icon: RiAdminLine,
-    },
-  ];
-  const session = useSession();
+    });
+  }
 
   const others = [
     {

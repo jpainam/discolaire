@@ -26,8 +26,10 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
 import { BookSelector } from "../BookSelector";
 import { CreateEditLoan } from "./CreateEditLoan";
 export function LoanHeader() {
@@ -35,6 +37,7 @@ export function LoanHeader() {
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
   const { openModal } = useModal();
+  const canCreateLoan = useCheckPermission("library", PermissionAction.CREATE);
   return (
     <div className="grid md:flex flex-row items-center gap-4 px-4 py-1 border-y">
       <div className="flex flex-row items-center gap-2">
@@ -42,7 +45,7 @@ export function LoanHeader() {
         <BookSelector
           onChange={(val) => {
             router.push(
-              `/library?${createQueryString({ bookId: val, tab: "tab-3" })}`,
+              `/library?${createQueryString({ bookId: val, tab: "tab-3" })}`
             );
           }}
         />
@@ -52,7 +55,7 @@ export function LoanHeader() {
         <Select
           onValueChange={(val) => {
             router.push(
-              `/library?${createQueryString({ status: val, tab: "tab-3" })}`,
+              `/library?${createQueryString({ status: val, tab: "tab-3" })}`
             );
           }}
         >
@@ -76,18 +79,20 @@ export function LoanHeader() {
         </Select>
       </div>
       <div className="ml-auto flex gap-2 flex-row items-center">
-        <Button
-          onClick={() => {
-            openModal({
-              title: t("create_a_book_loan"),
-              view: <CreateEditLoan />,
-            });
-          }}
-          size={"sm"}
-        >
-          <PlusIcon />
-          {t("add")}
-        </Button>
+        {canCreateLoan && (
+          <Button
+            onClick={() => {
+              openModal({
+                title: t("create_a_book_loan"),
+                view: <CreateEditLoan />,
+              });
+            }}
+            size={"sm"}
+          >
+            <PlusIcon />
+            {t("add")}
+          </Button>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size={"icon"} className="size-8" variant={"outline"}>
