@@ -30,22 +30,25 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useSession } from "~/providers/AuthProvider";
 import { api } from "~/trpc/react";
+import { getFullName } from "~/utils/full-name";
 import { CreateEditSubject } from "./CreateEditSubject";
 
 //type ClassroomSubject = RouterOutputs["classroom"]["subjects"][number];
 export function SubjectTable({ classroomId }: { classroomId: string }) {
   const { t } = useLocale();
   const { openSheet } = useSheet();
+  const session = useSession();
   const subjectsQuery = api.classroom.subjects.useQuery(classroomId);
   const confirm = useConfirm();
   const canDeleteClassroomSubject = useCheckPermission(
     "subject",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditClassroomSubject = useCheckPermission(
     "subject",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const router = useRouter();
   const utils = api.useUtils();
@@ -119,12 +122,18 @@ export function SubjectTable({ classroomId }: { classroomId: string }) {
                   </Link>
                 </TableCell>
                 <TableCell className="text-muted-foreground">
-                  <Link
-                    className="hover:text-blue-600 hover:underline"
-                    href={routes.staffs.details(subject.teacher?.id ?? "#")}
-                  >
-                    {subject.teacher?.lastName} {subject.teacher?.firstName}
-                  </Link>
+                  {session.user?.profile == "staff" ? (
+                    <Link
+                      className="hover:text-blue-600 hover:underline"
+                      href={routes.staffs.details(subject.teacher?.id ?? "#")}
+                    >
+                      {subject.teacher?.prefix} {getFullName(subject.teacher)}
+                    </Link>
+                  ) : (
+                    <span>
+                      {subject.teacher?.prefix} {getFullName(subject.teacher)}
+                    </span>
+                  )}
                 </TableCell>
                 <TableCell className="text-muted-foreground">
                   {subject.coefficient}

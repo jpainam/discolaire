@@ -21,7 +21,7 @@ const querySchema = z.object({
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   const session = await auth();
   if (!session) {
@@ -36,7 +36,7 @@ export async function GET(
   if (!parsedQuery.success) {
     return NextResponse.json(
       { error: parsedQuery.error.format() },
-      { status: 400 }
+      { status: 400 },
     );
   }
   try {
@@ -52,31 +52,31 @@ export async function GET(
     if (session.user.profile == "student") {
       const student = await api.student.getFromUserId(session.user.id);
       balances = balances.filter(
-        (balance) => balance.student.id === student.id
+        (balance) => balance.student.id === student.id,
       );
     } else if (session.user.profile == "contact") {
       const contact = await api.contact.getFromUserId(session.user.id);
       const students = await api.contact.students(contact.id);
       const studentIds = students.map((student) => student.studentId);
       balances = balances.filter((balance) =>
-        studentIds.includes(balance.student.id)
+        studentIds.includes(balance.student.id),
       );
     }
     if (ids) {
       const selectedIds = ids.split(",");
       balances = balances.filter((stud) =>
-        selectedIds.includes(stud.student.id)
+        selectedIds.includes(stud.student.id),
       );
     }
 
     const amountDue = sumBy(
       fees.filter((fee) => fee.dueDate <= new Date()),
-      "amount"
+      "amount",
     );
 
     const total = balances.reduce(
       (acc, stud) => acc + (stud.balance - amountDue),
-      0
+      0,
     );
 
     if (format === "csv") {
@@ -95,7 +95,7 @@ export async function GET(
           type: parsedQuery.data.type,
           amountDue: amountDue,
           school: school,
-        })
+        }),
       );
 
       //const blob = await new Response(stream).blob();

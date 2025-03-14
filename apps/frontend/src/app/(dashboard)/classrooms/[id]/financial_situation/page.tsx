@@ -27,7 +27,7 @@ export default async function Page(props: {
     const students = await api.contact.students(contact.id);
     const studentIds = students.map((student) => student.studentId);
     balances = balances.filter((balance) =>
-      studentIds.includes(balance.student.id)
+      studentIds.includes(balance.student.id),
     );
   }
 
@@ -42,12 +42,12 @@ export default async function Page(props: {
             ?.toLowerCase()
             .includes(query.toLowerCase()) ??
           balance.student.email?.toLowerCase().includes(query.toLowerCase()) ??
-          (!isNaN(Number(query)) && balance.balance >= Number(query))
+          (!isNaN(Number(query)) && balance.balance >= Number(query)),
       );
 
   const amountDue = sumBy(
     fees.filter((fee) => fee.dueDate <= new Date()),
-    "amount"
+    "amount",
   );
   return <FinanceContentView amountDue={amountDue} students={students} />;
 }
