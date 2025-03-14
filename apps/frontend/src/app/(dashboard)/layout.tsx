@@ -75,7 +75,7 @@ export default async function Layout({
                   schoolYears={schoolYears}
                   defaultValue={schoolYear.id}
                 />
-
+                {/* <ThemeSelector /> */}
                 <TopRightButtons />
                 <ModeToggle />
                 <LanguageSwitcher />
