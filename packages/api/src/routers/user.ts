@@ -353,7 +353,7 @@ export const userRouter = createTRPCRouter({
     .input(
       z.object({
         userId: z.string().min(1),
-        action: z.enum(["Read", "Write", "Delete", "Create"]),
+        action: z.enum(["Read", "Update", "Create", "Delete"]),
         resource: z.string().min(1),
         effect: z.enum(["Allow", "Deny"]),
       }),

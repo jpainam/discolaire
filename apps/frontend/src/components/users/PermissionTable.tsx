@@ -35,7 +35,11 @@ export function PermissionTable({ userId }: { userId: string }) {
   });
   const groups = _.groupBy(permissions, "resource");
   const debounced = useDebouncedCallback(
-    (resource: string, action: string, checked: boolean) => {
+    (
+      resource: string,
+      action: "Read" | "Update" | "Create" | "Delete",
+      checked: boolean,
+    ) => {
       permissionMutation.mutate({
         userId: userId,
         resource: resource,
