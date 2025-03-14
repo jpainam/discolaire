@@ -131,7 +131,7 @@ export function StudentHeader({
         status,
       });
     },
-    [studentStatusMutation, student.id],
+    [studentStatusMutation, student.id]
   );
 
   const navigateToStudent = (id: string) => {
@@ -150,7 +150,7 @@ export function StudentHeader({
 
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditStudent = useCheckPermission("student", PermissionAction.UPDATE);
   //const [open, setOpen] = React.useState(false);
@@ -168,12 +168,15 @@ export function StudentHeader({
     <div className="flex border-b bg-muted/50 py-1 px-4 w-full gap-1">
       <SquaredAvatar student={student} />
       <div className="flex w-full flex-col gap-1">
-        {user?.profile == "student" || user?.profile == "contact" ? (
+        {user?.profile == "student" ? (
           <span className="bg-background h-9 px-4 py-2 rounded-md font-semibold w-full text-sm 2xl:w-[450px]">
             {getFullName(student)}
           </span>
         ) : user?.profile == "contact" ? (
-          <StudentSelector className="w-full lg:w-1/3" />
+          <StudentSelector
+            defaultValue={student.id}
+            className="w-full lg:w-1/3"
+          />
         ) : (
           <SearchCombobox
             className="w-full lg:w-1/3"
@@ -282,7 +285,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
