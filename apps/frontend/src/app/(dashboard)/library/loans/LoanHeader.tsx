@@ -45,7 +45,7 @@ export function LoanHeader() {
         <BookSelector
           onChange={(val) => {
             router.push(
-              `/library?${createQueryString({ bookId: val, tab: "tab-3" })}`
+              `/library?${createQueryString({ bookId: val, tab: "tab-3" })}`,
             );
           }}
         />
@@ -55,7 +55,7 @@ export function LoanHeader() {
         <Select
           onValueChange={(val) => {
             router.push(
-              `/library?${createQueryString({ status: val, tab: "tab-3" })}`
+              `/library?${createQueryString({ status: val, tab: "tab-3" })}`,
             );
           }}
         >

@@ -51,7 +51,7 @@ export function NoticeboardDataTableActions({
             if (isConfirmed) {
               toast.promise(
                 deleteAnnouncementMutation.mutateAsync(
-                  selectedNotices.map((cl) => cl.id)
+                  selectedNotices.map((cl) => cl.id),
                 ),
                 {
                   loading: t("deleting"),
@@ -63,7 +63,7 @@ export function NoticeboardDataTableActions({
                     console.error(error);
                     return getErrorMessage(error);
                   },
-                }
+                },
               );
             }
           }}

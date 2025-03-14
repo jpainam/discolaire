@@ -16,7 +16,7 @@ export function ModeSwitcher() {
     setMetaColor(
       resolvedTheme === "dark"
         ? META_THEME_COLORS.light
-        : META_THEME_COLORS.dark
+        : META_THEME_COLORS.dark,
     );
   }, [resolvedTheme, setTheme, setMetaColor]);
 

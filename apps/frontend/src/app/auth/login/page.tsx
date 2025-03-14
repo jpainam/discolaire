@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { getServerTranslations } from "~/i18n/server";
 
-import { ModeToggle } from "~/components/mode-switcher";
+import { ModeSwitcher } from "~/components/mode-switcher";
 import { routes } from "~/configs/routes";
 import { UserAuthForm } from "./user-auth-form";
 
@@ -21,7 +21,7 @@ export default async function Page() {
     <>
       <div className="container relative h-[100vh] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <div className="absolute right-4 top-4 flex flex-row gap-2 md:right-8 md:top-8">
-          <ModeToggle />
+          <ModeSwitcher />
         </div>
         <div className="relative hidden h-full flex-col bg-muted bg-[url('/images/bg-login.png')] bg-cover bg-no-repeat p-10 dark:border-r md:block lg:flex">
           {/* <div className="absolute inset-0 bg-zinc-900" /> */}
