@@ -16,6 +16,7 @@ import { SchoolContextProvider } from "~/providers/SchoolProvider";
 import { Breadcrumbs } from "~/components/breadcrumbs";
 import { LanguageSwitcher } from "~/components/LanguageSwitcher";
 import { SchoolYearSwitcher } from "~/components/SchoolYearSwitcher";
+import { ThemeSelector } from "~/components/theme-selector";
 import { TopRightButtons } from "~/components/TopRightButtons";
 import GlobalModal from "~/layouts/GlobalModal";
 import GlobalSheet from "~/layouts/GlobalSheet";
@@ -75,7 +76,7 @@ export default async function Layout({
                   schoolYears={schoolYears}
                   defaultValue={schoolYear.id}
                 />
-                {/* <ThemeSelector /> */}
+                <ThemeSelector />
                 <TopRightButtons />
                 <ModeToggle />
                 <LanguageSwitcher />
