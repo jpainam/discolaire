@@ -1,12 +1,12 @@
 "use client";
 
 import type { RouterOutputs } from "@repo/api";
+import { PermissionAction } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import type { Table } from "@tanstack/react-table";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { useLocale } from "~/i18n";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { RiDeleteBinLine } from "@remixicon/react";
@@ -29,7 +29,7 @@ export function CourseDataTableActions({
   const router = useRouter();
   const canDeleteCourse = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const courseDeleteMutation = api.course.deleteMany.useMutation({
     onSettled: () => utils.course.invalidate(),

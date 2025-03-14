@@ -7,6 +7,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
+import { PermissionAction } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import {
@@ -18,7 +19,6 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 import { useLocale } from "~/i18n";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { Badge } from "@repo/ui/components/badge";
@@ -160,11 +160,11 @@ function ActionCells({ course }: { course: CourseProcedureOutput }) {
 
   const canDeleteCourse = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateCourse = useCheckPermission(
     "classroom",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
 
   return (
