@@ -114,7 +114,7 @@ export const userService = {
   }: {
     userId: string;
     resource: string;
-    action: string;
+    action: "Read" | "Write" | "Delete" | "Create";
     effect: "Allow" | "Deny";
   }) => {
     const permissions = await getPermissions(userId);

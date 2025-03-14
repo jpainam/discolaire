@@ -32,6 +32,13 @@ type RouterOutputs = inferRouterOutputs<AppRouter>;
 // export type RouterInputs = inferRouterInputs<AppRouter>;
 // export type RouterOutputs = inferRouterOutputs<AppRouter>;
 
+export enum PermissionAction {
+  CREATE = "Create",
+  READ = "Read",
+  DELETE = "Delete",
+  UPDATE = "Update",
+}
+
 interface Permission {
   resource: string;
   action: "Read" | "Write" | "Delete" | "Create";
