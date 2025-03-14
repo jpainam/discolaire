@@ -104,7 +104,8 @@ export const studentRouter = createTRPCRouter({
   all: protectedProcedure.query(async ({ ctx }) => {
     if (ctx.session.user.profile === "student") {
       const student = await studentService.getFromUserId(ctx.session.user.id);
-      return studentService.get(student.id, ctx.schoolId);
+      const stud = await studentService.get(student.id, ctx.schoolId);
+      return [stud];
     }
     const studentIds: string[] = [];
     if (ctx.session.user.profile === "contact") {

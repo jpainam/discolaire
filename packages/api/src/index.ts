@@ -46,6 +46,5 @@ interface Permission {
   condition?: Record<string, unknown> | null;
 }
 
-export type { Student } from "./types";
 export { appRouter, createCaller, createTRPCContext };
 export type { AppRouter, Permission, RouterInputs, RouterOutputs };

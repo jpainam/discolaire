@@ -54,6 +54,7 @@ import { useSetAtom } from "jotai";
 import { useCallback, useEffect, useState } from "react";
 import { SimpleTooltip } from "~/components/simple-tooltip";
 
+import { StudentSelector } from "~/components/shared/selects/StudentSelector";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
@@ -171,6 +172,8 @@ export function StudentHeader({
           <span className="bg-background h-9 px-4 py-2 rounded-md font-semibold w-full text-sm 2xl:w-[450px]">
             {getFullName(student)}
           </span>
+        ) : user?.profile == "contact" ? (
+          <StudentSelector className="w-full lg:w-1/3" />
         ) : (
           <SearchCombobox
             className="w-full lg:w-1/3"

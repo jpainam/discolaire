@@ -4,7 +4,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import type { Student } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   Pagination,
@@ -14,8 +13,9 @@ import {
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
+import type { RouterOutputs } from "@repo/api";
 import { api } from "~/trpc/react";
-
+type Student = RouterOutputs["student"]["all"][number];
 export function StudentFooter() {
   const { t, i18n } = useLocale();
   const params = useParams<{ id: string }>();
