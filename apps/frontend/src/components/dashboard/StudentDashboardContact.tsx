@@ -50,7 +50,7 @@ export async function StudentDashboardContact({
 
               <Link
                 className="text-primary underline-offset-4 hover:underline"
-                href={`/staffs/${contact.id}`}
+                href={`/contacts/${contact.id}`}
               >
                 {t("details")}
               </Link>
