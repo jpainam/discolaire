@@ -36,7 +36,7 @@ export function StudentPageHeader() {
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   const [value, setValue] = useState("");
@@ -62,7 +62,16 @@ export function StudentPageHeader() {
     <div className="flex flex-row items-center gap-2 border-b px-4 py-1">
       <Label className="hidden md:block">{t("students")}</Label>
       {session.user?.profile === "contact" ? (
-        <StudentSelector className="w-full lg:w-1/3" />
+        <StudentSelector
+          onChange={(val) => {
+            if (val) {
+              router.push(routes.students.details(val));
+            } else {
+              router.push("/students");
+            }
+          }}
+          className="w-full lg:w-1/3"
+        />
       ) : (
         <SearchCombobox
           className="w-full lg:w-1/3"

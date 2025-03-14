@@ -21,10 +21,15 @@ export default async function Layout(props: {
     if (classroom?.id === params.id) {
       canReadClassroom = true;
     }
+  } else if (session?.user.profile === "contact") {
+    const contact = await api.contact.getFromUserId(session.user.id);
+    const classrooms = await api.contact.classrooms(contact.id);
+    const classroomIds = classrooms.map((c) => c.id);
+    canReadClassroom = classroomIds.includes(params.id);
   } else {
     canReadClassroom = await checkPermission(
       "classroom",
-      PermissionAction.READ,
+      PermissionAction.READ
     );
   }
 

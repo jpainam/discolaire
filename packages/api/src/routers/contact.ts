@@ -103,6 +103,16 @@ export const contactRouter = createTRPCRouter({
       });
     }),
 
+  classrooms: protectedProcedure
+    .input(z.string().min(1))
+    .query(async ({ ctx, input }) => {
+      return contactService.getClassrooms(input, ctx.schoolYearId);
+    }),
+  getFromUserId: protectedProcedure
+    .input(z.string().min(1))
+    .query(async ({ input }) => {
+      return contactService.getFromUserId(input);
+    }),
   all: protectedProcedure.query(async ({ ctx }) => {
     if (ctx.session.user.profile == "contact") {
       const contact = await contactService.getFromUserId(ctx.session.user.id);

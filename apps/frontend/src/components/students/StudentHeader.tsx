@@ -80,6 +80,10 @@ export function StudentHeader({
   //const studentQuery = api.student.get.useQuery(params.id);
   const utils = api.useUtils();
 
+  const canCreateStudent = useCheckPermission(
+    "student",
+    PermissionAction.CREATE
+  );
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
 
   useEffect(() => {
@@ -131,7 +135,7 @@ export function StudentHeader({
         status,
       });
     },
-    [studentStatusMutation, student.id],
+    [studentStatusMutation, student.id]
   );
 
   const navigateToStudent = (id: string) => {
@@ -150,7 +154,7 @@ export function StudentHeader({
 
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditStudent = useCheckPermission("student", PermissionAction.UPDATE);
   //const [open, setOpen] = React.useState(false);
@@ -174,6 +178,11 @@ export function StudentHeader({
           </span>
         ) : user?.profile == "contact" ? (
           <StudentSelector
+            onChange={(val) => {
+              if (val) {
+                router.push(routes.students.details(val));
+              }
+            }}
             defaultValue={student.id}
             className="w-full lg:w-1/3"
           />
@@ -285,7 +294,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -296,22 +305,27 @@ export function StudentHeader({
             orientation="vertical"
             className="data-[orientation=vertical]:h-4"
           />
-          <SimpleTooltip content={t("add")}>
-            <Button
-              size={"icon"}
-              aria-label="add"
-              variant="ghost"
-              onClick={() => {
-                router.push(routes.students.create);
-              }}
-            >
-              <PlusIcon className="h-4 w-4" />
-            </Button>
-          </SimpleTooltip>
-          <Separator
-            orientation="vertical"
-            className="data-[orientation=vertical]:h-4"
-          />
+          {canCreateStudent && (
+            <>
+              <SimpleTooltip content={t("add")}>
+                <Button
+                  size={"icon"}
+                  aria-label="add"
+                  variant="ghost"
+                  onClick={() => {
+                    router.push(routes.students.create);
+                  }}
+                >
+                  <PlusIcon className="h-4 w-4" />
+                </Button>
+              </SimpleTooltip>
+              <Separator
+                orientation="vertical"
+                className="data-[orientation=vertical]:h-4"
+              />
+            </>
+          )}
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
