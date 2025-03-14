@@ -87,7 +87,7 @@ export default async function Layout(props: {
   return (
     <div className="flex flex-col gap-2">
       <StaffHeader staffs={staffs} />
-      <div className="flex flex-row gap-2 px-4">
+      <div className="grid 2xl:flex flex-row gap-2 px-4">
         <StaffProfile staffId={id} />
 
         <div className="w-full md:grid-cols-2 xl:grid-cols-3">

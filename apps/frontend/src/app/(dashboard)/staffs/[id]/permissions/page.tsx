@@ -12,7 +12,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-2 2xl:p-4">
       <PermissionTable userId={staff.userId} />
     </div>
   );
