@@ -41,7 +41,7 @@ export enum PermissionAction {
 
 interface Permission {
   resource: string;
-  action: "Read" | "Write" | "Delete" | "Create";
+  action: "Read" | "Update" | "Create" | "Delete";
   effect: "Allow" | "Deny";
   condition?: Record<string, unknown> | null;
 }

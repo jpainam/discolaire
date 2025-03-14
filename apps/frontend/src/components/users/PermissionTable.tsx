@@ -39,7 +39,7 @@ export function PermissionTable({ userId }: { userId: string }) {
     (
       resource: string,
       action: "Read" | "Update" | "Create" | "Delete",
-      checked: boolean,
+      checked: boolean
     ) => {
       permissionMutation.mutate({
         userId: userId,
@@ -48,7 +48,7 @@ export function PermissionTable({ userId }: { userId: string }) {
         effect: checked ? "Allow" : "Deny",
       });
     },
-    1000,
+    1000
   );
   const permissions = permissionsQuery.data ?? [];
   console.log(permissions);
@@ -71,6 +71,30 @@ export function PermissionTable({ userId }: { userId: string }) {
             if (!group) return null;
             const perm = group[0];
             if (!perm) return null;
+            const canRead = permissions.find(
+              (p) =>
+                p.resource === perm.resource &&
+                p.action === "Read" &&
+                p.effect === "Allow"
+            );
+            const canUpdate = permissions.find(
+              (p) =>
+                p.resource === perm.resource &&
+                p.action === "Update" &&
+                p.effect === "Allow"
+            );
+            const canCreate = permissions.find(
+              (p) =>
+                p.resource === perm.resource &&
+                p.action === "Create" &&
+                p.effect === "Allow"
+            );
+            const canDelete = permissions.find(
+              (p) =>
+                p.resource === perm.resource &&
+                p.action === "Delete" &&
+                p.effect === "Allow"
+            );
             return (
               <TableRow key={index}>
                 <TableCell className="font-medium">{t(perm.title)}</TableCell>

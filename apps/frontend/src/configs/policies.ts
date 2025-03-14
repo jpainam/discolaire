@@ -1,6 +1,6 @@
 export enum PermissionAction {
   Read = "Read",
-  Write = "Write",
+  Create = "Create",
   Delete = "Delete",
   Update = "Update",
 }
@@ -18,7 +18,7 @@ export const policies: {
   {
     title: "classrooms",
     resource: "classroom",
-    action: PermissionAction.Write,
+    action: PermissionAction.Create,
   },
   {
     title: "classrooms",
@@ -38,7 +38,7 @@ export const policies: {
   {
     title: "students",
     resource: "student",
-    action: PermissionAction.Write,
+    action: PermissionAction.Create,
   },
   {
     title: "students",
@@ -58,7 +58,7 @@ export const policies: {
   {
     title: "staffs",
     resource: "staff",
-    action: PermissionAction.Write,
+    action: PermissionAction.Create,
   },
   {
     title: "staffs",
@@ -78,7 +78,7 @@ export const policies: {
   {
     title: "all_subjects",
     resource: "subject",
-    action: PermissionAction.Write,
+    action: PermissionAction.Create,
   },
   {
     title: "all_subjects",
@@ -98,7 +98,7 @@ export const policies: {
   {
     title: "enrollments",
     resource: "enrollment",
-    action: PermissionAction.Write,
+    action: PermissionAction.Create,
   },
   {
     title: "enrollments",
@@ -118,7 +118,7 @@ export const policies: {
   {
     title: "school_fees",
     resource: "fee",
-    action: PermissionAction.Write,
+    action: PermissionAction.Create,
   },
   {
     title: "school_fees",
@@ -138,7 +138,7 @@ export const policies: {
   {
     title: "transactions",
     resource: "transaction",
-    action: PermissionAction.Write,
+    action: PermissionAction.Create,
   },
   {
     title: "transactions",
