@@ -321,6 +321,8 @@
   "consignes": "Instrucciones",
   "contactAccessHistory": "Contactos",
   "contactAdministrator": "Contacto",
+  "latest_grades": "Últimas calificaciones",
+  "student_contact_description": "Información de contacto del estudiante",
   "contactInformation": "Información de contacto",
   "contact_has_not_signed_up": "{{n}} contacto no se ha registrado",
   "contact_have_not_signed_up_description": "Los contactos deben crear una cuenta para acceder a los estudiantes desde sus dispositivos.",

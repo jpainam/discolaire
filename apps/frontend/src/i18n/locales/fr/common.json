@@ -832,6 +832,8 @@
   "reportings": "Rapports",
   "request": "Demande",
   "required_fees": "Frais obligatoires",
+  "latest_grades": "Dernières notes",
+  "student_contact_description": "Informations de contact de l'élève",
   "required_fees_description": "Ce frais est appliquée avant les inscriptions",
   "resend": "Renvoyer",
   "reset": "Réinitialiser",

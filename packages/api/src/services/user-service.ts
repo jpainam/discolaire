@@ -118,13 +118,7 @@ export const userService = {
     effect: "Allow" | "Deny";
   }) => {
     const permissions = await getPermissions(userId);
-    const exists = permissions.some(
-      (perm) => perm.resource === resource && perm.action === action,
-    );
 
-    if (exists) {
-      return true;
-    }
     let updatedPermissions = [];
     if (effect === "Allow") {
       const newPermission = {
