@@ -2,7 +2,7 @@
 
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
-import { TooltipProvider } from "@repo/ui/components/tooltip";
+//import { TooltipProvider } from "@repo/ui/components/tooltip";
 
 type ThemeProviderProps = React.ComponentProps<typeof NextThemesProvider>;
 
@@ -11,10 +11,10 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
 
   return (
     <NextThemesProvider {...props}>
-      <TooltipProvider delayDuration={0}>
-        {/* <div className={cn(theme && `theme-${theme}`)}>{children}</div> */}
-        {children}
-      </TooltipProvider>
+      {/* <TooltipProvider delayDuration={0}> */}
+      {/* <div className={cn(theme && `theme-${theme}`)}>{children}</div> */}
+      {children}
+      {/* </TooltipProvider> */}
     </NextThemesProvider>
   );
 }

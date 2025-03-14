@@ -1,13 +1,49 @@
-import { Inter, Lexend_Deca } from "next/font/google";
-import { GeistMono } from "geist/font/mono";
-import { GeistSans } from "geist/font/sans";
+import {
+  Geist,
+  Geist_Mono,
+  Instrument_Sans,
+  Inter,
+  Mulish,
+  Noto_Sans_Mono,
+} from "next/font/google";
 
-export const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+import { cn } from "@repo/ui/lib/utils";
 
-export const lexendDeca = Lexend_Deca({
+const fontSans = Geist({
   subsets: ["latin"],
-  variable: "--font-lexend",
+  variable: "--font-sans",
 });
 
-export const fontSans = GeistSans;
-export const fontMono = GeistMono;
+const fontMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+});
+
+const fontInstrument = Instrument_Sans({
+  subsets: ["latin"],
+  variable: "--font-instrument",
+});
+
+const fontNotoMono = Noto_Sans_Mono({
+  subsets: ["latin"],
+  variable: "--font-noto-mono",
+});
+
+const fontMullish = Mulish({
+  subsets: ["latin"],
+  variable: "--font-mullish",
+});
+
+const fontInter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
+
+export const fontVariables = cn(
+  fontSans.variable,
+  fontMono.variable,
+  fontInstrument.variable,
+  fontNotoMono.variable,
+  fontMullish.variable,
+  fontInter.variable
+);

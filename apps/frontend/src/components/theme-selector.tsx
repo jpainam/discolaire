@@ -1,0 +1,30 @@
+"use client";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/components/select";
+import { THEMES } from "~/lib/themes";
+import { useThemeConfig } from "~/providers/ActiveThemeProvider";
+
+export function ThemeSelector() {
+  const { activeTheme, setActiveTheme } = useThemeConfig();
+
+  return (
+    <Select value={activeTheme} onValueChange={setActiveTheme}>
+      <SelectTrigger size="sm" className="w-32">
+        <SelectValue placeholder="Select a theme" />
+      </SelectTrigger>
+      <SelectContent align="end">
+        {THEMES.map((theme) => (
+          <SelectItem key={theme.name} value={theme.value}>
+            {theme.name}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+}

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { fontVariables } from "~/lib/fonts";
 
 import { Toaster } from "@repo/ui/components/sonner";
 import { I18nProvider } from "~/i18n/i18n-context";
@@ -7,7 +8,7 @@ import { I18nProvider } from "~/i18n/i18n-context";
 import { cn } from "~/lib/utils";
 import { TRPCReactProvider } from "~/trpc/react";
 
-import "./globals.css";
+import "@repo/ui/globals.css";
 
 //import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
@@ -15,24 +16,26 @@ import "./globals.css";
 import { getUser } from "@repo/auth/session";
 import { detectLanguage } from "~/i18n/server";
 
-import { GeistMono } from "geist/font/mono";
-import { GeistSans } from "geist/font/sans";
-
+import { cookies } from "next/headers";
 import ProgressBarProvider from "~/components/next-progress";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { ThemeProvider } from "~/components/theme-provider";
 import { env } from "~/env";
 import { AuthProvider } from "~/providers/AuthProvider";
-import ConfirmDialogProvider from "~/providers/confirm-dialog-provider";
-const fontSans = GeistSans;
 
-const fontMono = GeistMono;
+import { ActiveThemeProvider } from "~/providers/ActiveThemeProvider";
+import ConfirmDialogProvider from "~/providers/confirm-dialog-provider";
+
+const META_THEME_COLORS = {
+  light: "#ffffff",
+  dark: "#09090b",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(
     env.VERCEL_ENV === "production"
       ? "https://school.discolaire.com"
-      : "http://localhost:3000",
+      : "http://localhost:3000"
   ),
   title: "Gestion Scolaire",
   description: "Gestion scolaire pour les écoles",
@@ -50,14 +53,13 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-  ],
+  themeColor: META_THEME_COLORS.light,
 };
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   //const session = await auth();
+  const cookieStore = await cookies();
+  const activeThemeValue = cookieStore.get("active_theme")?.value ?? "small";
   const userPromise = getUser();
 
   const lng = await detectLanguage();
@@ -72,6 +74,17 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
       >
         <head>
           <meta name="google" content="notranslate" />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+              try {
+                if (localStorage.theme === 'dark' || ((!('theme' in localStorage) || localStorage.theme === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  document.querySelector('meta[name="theme-color"]').setAttribute('content', '${META_THEME_COLORS.dark}')
+                }
+              } catch (_) {}
+            `,
+            }}
+          />
           {/* <script
             src="https://unpkg.com/react-scan/dist/auto.global.js"
             async
@@ -80,30 +93,34 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
         <body
           className={cn(
             "bg-background overscroll-none font-sans antialiased",
-            fontSans.variable,
-            fontMono.variable,
+            activeThemeValue ? `theme-${activeThemeValue}` : "",
+            fontVariables
           )}
         >
-          <NuqsAdapter>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="dark"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <TRPCReactProvider>
-                <AuthProvider userPromise={userPromise}>
-                  <ConfirmDialogProvider>
-                    <ProgressBarProvider>{props.children}</ProgressBarProvider>
-                  </ConfirmDialogProvider>
-                  {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-                </AuthProvider>
-              </TRPCReactProvider>
-              <TailwindIndicator />
-              <Toaster richColors />
-              {/* <Analytics /> */}
-            </ThemeProvider>
-          </NuqsAdapter>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <ActiveThemeProvider initialTheme={activeThemeValue}>
+              <NuqsAdapter>
+                <TRPCReactProvider>
+                  <AuthProvider userPromise={userPromise}>
+                    <ConfirmDialogProvider>
+                      <ProgressBarProvider>
+                        {props.children}
+                      </ProgressBarProvider>
+                    </ConfirmDialogProvider>
+                    {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+                  </AuthProvider>
+                </TRPCReactProvider>
+                <TailwindIndicator />
+                <Toaster richColors />
+                {/* <Analytics /> */}
+              </NuqsAdapter>
+            </ActiveThemeProvider>
+          </ThemeProvider>
         </body>
       </html>
     </I18nProvider>

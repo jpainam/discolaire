@@ -190,11 +190,11 @@ export function AdminSidebar({
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="max-md:mt-2 mb-2 justify-center">
+      <SidebarHeader>
         <SidebarLogo />
         <SearchForm />
       </SidebarHeader>
-      <SidebarContent className="-mt-2">
+      <SidebarContent>
         <NavMain items={adminMenu.navMain} />
         <SidebarGroup>
           <SidebarMenu>

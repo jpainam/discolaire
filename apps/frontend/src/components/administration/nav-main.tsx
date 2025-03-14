@@ -1,7 +1,7 @@
 "use client";
 
 import type { LucideIcon } from "lucide-react";
-import { ArrowLeft, ChevronRight, Home } from "lucide-react";
+import { ArrowLeft, ChevronRightIcon, Home } from "lucide-react";
 
 import {
   Collapsible,
@@ -51,7 +51,7 @@ export function NavMain({
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroup>
-      <SidebarGroup className="pt-0">
+      <SidebarGroup>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
@@ -80,7 +80,7 @@ export function NavMain({
                   <SidebarMenuButton tooltip={t(item.title)}>
                     {item.icon && <item.icon />}
                     <span>{t(item.title)}</span>
-                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                    <ChevronRightIcon className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
