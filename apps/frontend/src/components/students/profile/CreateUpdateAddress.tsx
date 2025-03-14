@@ -33,104 +33,122 @@ export function CreateUpdateAddress() {
   const { school } = useSchool();
 
   return (
-    <Card className="rounded-md py-0 gap-0">
-      <CardHeader className="border-b bg-muted/50 py-2.5">
-        <CardTitle className="flex items-center gap-1 text-sm">
-          <PiCalendarDotsDuotone className="h-4 w-4" />
-          {t("date")}/{t("information")}
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          <div className="flex items-center gap-2">
+            <PiCalendarDotsDuotone className="h-6 w-6" />
+            {t("date")}/{t("information")}
+          </div>
         </CardTitle>
         {/* <CardDescription></CardDescription> */}
       </CardHeader>
-      <CardContent className="grid grid-cols-1 py-4 gap-x-4 gap-y-2 md:grid-cols-2">
-        {school.requestSunPlusNo && (
-          <InputField
-            name="sunPlusNo"
-            placeholder={t("sun_plus_no")}
-            label={t("sun_plus_no")}
-          />
-        )}
-        <InputField name="email" placeholder="Email" label="Email" />
-        <FormField
-          control={form.control}
-          name="phoneNumber"
-          render={({ field }) => (
-            <FormItem className="flex flex-col items-start">
-              <FormLabel>{t("phoneNumber")}</FormLabel>
-              <FormControl className="w-full">
-                <PhoneInput
-                  placeholder="Placeholder"
-                  {...field}
-                  defaultCountry={school.defaultCountryId as Country}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <CardContent>
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-3 md:flex-row">
+            {school.requestSunPlusNo && (
+              <InputField
+                name="sunPlusNo"
+                className="flex-1"
+                placeholder={t("sun_plus_no")}
+                label={t("sun_plus_no")}
+              />
+            )}
+            <InputField
+              name="email"
+              className="flex-1"
+              placeholder="Email"
+              label="Email"
+            />
+          </div>
+          <div className="flex flex-col gap-3 md:flex-row">
+            <FormField
+              control={form.control}
+              name="phoneNumber"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>{t("phoneNumber")}</FormLabel>
+                  <FormControl className="w-full">
+                    <PhoneInput
+                      placeholder="Placeholder"
+                      {...field}
+                      defaultCountry={school.defaultCountryId as Country}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <FormField
-          control={form.control}
-          name="formerSchoolId"
-          render={({ field }) => (
-            <FormItem className="space-y-0">
-              <FormLabel htmlFor="formerSchoolId">
-                {t("formerSchool")}
-              </FormLabel>
-              <FormControl>
-                <FormerSchoolSelector
-                  placeholder={t("formerSchool")}
-                  onChange={field.onChange}
-                  defaultValue={field.value}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="countryId"
-          render={({ field }) => (
-            <FormItem className="space-y-0">
-              <FormLabel htmlFor="countryId">{t("citizenship")}</FormLabel>
-              <FormControl>
-                <CountryPicker
-                  placeholder={t("citizenship")}
-                  onChange={field.onChange}
-                  defaultValue={field.value}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name="formerSchoolId"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel htmlFor="formerSchoolId">
+                    {t("formerSchool")}
+                  </FormLabel>
+                  <FormControl>
+                    <FormerSchoolSelector
+                      placeholder={t("formerSchool")}
+                      onChange={field.onChange}
+                      defaultValue={field.value}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="flex flex-col gap-3 md:flex-row">
+            <FormField
+              control={form.control}
+              name="countryId"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel htmlFor="countryId">{t("citizenship")}</FormLabel>
+                  <FormControl>
+                    <CountryPicker
+                      placeholder={t("citizenship")}
+                      onChange={field.onChange}
+                      defaultValue={field.value}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <FormField
-          control={form.control}
-          name="dateOfEntry"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("dateOfEntry")}</FormLabel>
-              <FormControl>
-                <DatePicker defaultValue={field.value} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="dateOfExit"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("dateOfExit")}</FormLabel>
-              <FormControl>
-                <DatePicker defaultValue={field.value} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name="dateOfEntry"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>{t("dateOfEntry")}</FormLabel>
+                  <FormControl>
+                    <DatePicker defaultValue={field.value} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="flex flex-col gap-3 md:flex-row">
+            <FormField
+              control={form.control}
+              name="dateOfExit"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>{t("dateOfExit")}</FormLabel>
+                  <FormControl>
+                    <DatePicker defaultValue={field.value} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

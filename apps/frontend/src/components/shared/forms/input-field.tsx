@@ -44,7 +44,7 @@ export function InputField({
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem className={cn("space-y-0", className)}>
+        <FormItem className={cn(className)}>
           <FormLabel className={cn(labelClassName)}>{label}</FormLabel>
           <FormControl>
             <Input

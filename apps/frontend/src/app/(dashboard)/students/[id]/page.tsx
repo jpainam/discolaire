@@ -16,10 +16,11 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const session = await auth();
   let canReadContacts =
     session?.user.profile === "student" && session.user.id === student.userId;
+
   if (session?.user.profile === "staff") {
     const canReadStudent = await checkPermission(
       "student",
-      PermissionAction.READ,
+      PermissionAction.READ
     );
     if (!canReadStudent) {
       return <NoPermission className="my-8" />;

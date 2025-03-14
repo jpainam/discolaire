@@ -14,10 +14,11 @@ export async function checkPermission(
   if (!session) return false;
 
   const key = `${session.user.id}:${resource}:${action}:${JSON.stringify(condition)}`;
-  const cached = await redisClient.get(key);
-  if (cached) {
-    return cached === "true";
-  }
+  // TODO I need to update the cache when the permissions are assigned
+  const _cached = await redisClient.get(key);
+  //if (cached) {
+  //  return cached === "true";
+  //}
 
   const permissions = await getPermissions(session.user.id);
 

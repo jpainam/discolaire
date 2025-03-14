@@ -33,63 +33,76 @@ export function CreateUpdateProfile() {
   const form = useFormContext();
 
   return (
-    <Card className="rounded-md p-0 gap-0">
-      <CardHeader className="border-b bg-muted/50 py-2.5">
-        <CardTitle className="flex items-center gap-1 text-sm">
-          <PiAddressBookTabsDuotone className="h-4 w-4" />
-          {t("information")}
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-lg">
+          <div className="flex items-center gap-2">
+            <PiAddressBookTabsDuotone className="h-6 w-6" />
+            {t("information")}
+          </div>
         </CardTitle>
         {/* <CardDescription></CardDescription> */}
       </CardHeader>
-      <CardContent className="grid grid-cols-1 gap-x-4 gap-y-2 py-4 md:grid-cols-2">
-        <InputField
-          name="lastName"
-          placeholder={t("lastName")}
-          label={t("lastName")}
-        />
-        <InputField
-          name="firstName"
-          placeholder={t("firstName")}
-          label={t("firstName")}
-        />
-        <FormField
-          control={form.control}
-          name="dateOfBirth"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("dateOfBirth")}</FormLabel>
-              <FormControl>
-                <DatePicker defaultValue={field.value} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <CardContent>
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-3 md:flex-row">
+            <InputField
+              className="flex-1"
+              name="lastName"
+              placeholder={t("lastName")}
+              label={t("lastName")}
+            />
+            <InputField
+              className="flex-1"
+              name="firstName"
+              placeholder={t("firstName")}
+              label={t("firstName")}
+            />
+          </div>
+          <div className="flex flex-col gap-3 md:flex-row">
+            <FormField
+              control={form.control}
+              name="dateOfBirth"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>{t("dateOfBirth")}</FormLabel>
+                  <FormControl>
+                    <DatePicker defaultValue={field.value} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <InputField
-          name="placeOfBirth"
-          placeholder={t("placeOfBirth")}
-          label={t("placeOfBirth")}
-        />
-        <SelectField
-          name="gender"
-          inputClassName="w-full"
-          label={t("gender")}
-          placeholder={t("gender")}
-          items={genders}
-        />
-        <InputField
-          className="gap-2"
-          name="residence"
-          placeholder={t("address")}
-          label={t("address")}
-        />
-        <InputField
-          className="gap-2"
-          name="registrationNumber"
-          placeholder={t("registrationNumber")}
-          label={t("registrationNumber")}
-        />
+            <InputField
+              className="flex-1"
+              name="placeOfBirth"
+              placeholder={t("placeOfBirth")}
+              label={t("placeOfBirth")}
+            />
+          </div>
+          <div className="flex flex-col gap-3 md:flex-row">
+            <SelectField
+              name="gender"
+              inputClassName="w-[150px]"
+              label={t("gender")}
+              placeholder={t("gender")}
+              items={genders}
+            />
+            <InputField
+              className="flex-1"
+              name="residence"
+              placeholder={t("address")}
+              label={t("address")}
+            />
+          </div>
+          <InputField
+            className="gap-2"
+            name="registrationNumber"
+            placeholder={t("registrationNumber")}
+            label={t("registrationNumber")}
+          />
+        </div>
       </CardContent>
     </Card>
   );
