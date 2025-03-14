@@ -5,7 +5,7 @@ export enum PermissionAction {
   Update = "Update",
 }
 
-export const permissions: {
+export const policies: {
   title: string;
   resource: string;
   action: PermissionAction;

@@ -11,7 +11,7 @@ import {
 import _ from "lodash";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
-import { permissions } from "~/configs/permissions";
+import { policies } from "~/configs/policies";
 import { useLocale } from "~/i18n";
 import { api } from "~/trpc/react";
 
@@ -25,6 +25,7 @@ import { api } from "~/trpc/react";
 // }
 export function PermissionTable({ userId }: { userId: string }) {
   const { t } = useLocale();
+  const permissionsQuery = api.user.getPermissions.useQuery(userId);
   const permissionMutation = api.user.updatePermission.useMutation({
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -33,12 +34,12 @@ export function PermissionTable({ userId }: { userId: string }) {
       toast.success(t("updated_successfully"), { id: 0 });
     },
   });
-  const groups = _.groupBy(permissions, "resource");
+  const groups = _.groupBy(policies, "resource");
   const debounced = useDebouncedCallback(
     (
       resource: string,
       action: "Read" | "Update" | "Create" | "Delete",
-      checked: boolean,
+      checked: boolean
     ) => {
       permissionMutation.mutate({
         userId: userId,
@@ -47,8 +48,10 @@ export function PermissionTable({ userId }: { userId: string }) {
         effect: checked ? "Allow" : "Deny",
       });
     },
-    2000,
+    1000
   );
+  const permissions = permissionsQuery.data ?? [];
+  console.log(permissions);
   return (
     <div className="bg-background overflow-hidden rounded-md border">
       <Table>

@@ -204,9 +204,11 @@ export const userRouter = createTRPCRouter({
         },
       });
     }),
-  getPermissions: protectedProcedure.query(({ ctx }) => {
-    return getPermissions(ctx.session.user.id);
-  }),
+  getPermissions: protectedProcedure
+    .input(z.string().min(1))
+    .query(({ input }) => {
+      return getPermissions(input);
+    }),
 
   attachPolicy: protectedProcedure
     .input(
