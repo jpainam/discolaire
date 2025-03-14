@@ -161,14 +161,14 @@ export const userService = {
     userId,
     permission,
     action,
-    allow,
+    effect,
     schoolId,
   }: {
     userId: string;
     schoolId: string;
     permission: string;
     action: string;
-    allow: boolean;
+    effect: "Allow" | "Deny";
   }) => {
     const user = await db.user.findUniqueOrThrow({
       where: {
@@ -176,25 +176,32 @@ export const userService = {
         schoolId: schoolId,
       },
     });
-    const permissions = user.permissions;
-    if (!allow) {
-      const index = permissions.findIndex(
-        (p) => p === `${permission}:${action}`,
-      );
-      if (index !== -1) {
-        permissions.splice(index, 1);
-      }
+    if (effect == "Allow") {
+      return db.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          permissions: {
+            push: `${permission}:${action}`,
+          },
+        },
+      });
     } else {
-      permissions.push(`${permission}:${action}`);
+      const updatedPermissions = user.permissions.filter(
+        (p) => p !== `${permission}:${action}`,
+      );
+      return db.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          permissions: {
+            set: updatedPermissions,
+          },
+        },
+      });
     }
-    return db.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        permissions,
-      },
-    });
   },
 
   deleteUsers: async (userIds: string[]) => {

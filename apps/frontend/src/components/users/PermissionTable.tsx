@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import _ from "lodash";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 import { permissions } from "~/configs/permissions";
@@ -32,6 +33,7 @@ export function PermissionTable({ userId }: { userId: string }) {
       toast.success(t("updated_successfully"), { id: 0 });
     },
   });
+  const groups = _.groupBy(permissions, "resource");
   const debounced = useDebouncedCallback(
     (permission: string, action: string, checked: boolean) => {
       permissionMutation.mutate({
@@ -41,7 +43,7 @@ export function PermissionTable({ userId }: { userId: string }) {
         allow: checked,
       });
     },
-    2000,
+    2000
   );
   return (
     <div className="bg-background overflow-hidden rounded-md border">
@@ -57,38 +59,45 @@ export function PermissionTable({ userId }: { userId: string }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {permissions.map((perm, index) => (
-            <TableRow key={index}>
-              <TableCell className="font-medium">{t(perm.title)}</TableCell>
-              <TableCell>
-                <Switch
-                  onCheckedChange={(checked) => {
-                    debounced(perm.permission, "Read", checked);
-                  }}
-                />
-              </TableCell>
-              <TableCell>
-                <Switch
-                  onCheckedChange={(checked) => {
-                    debounced(perm.permission, "Read", checked);
-                  }}
-                />
-              </TableCell>
-              <TableCell>
-                <Switch
-                  onCheckedChange={(checked) => {
-                    debounced(perm.permission, "Read", checked);
-                  }}
-                />
-              </TableCell>
-              <TableCell>
-                <Switch />
-              </TableCell>
-              {/* <TableCell>
-                <Textarea rows={2}></Textarea>
-              </TableCell> */}
-            </TableRow>
-          ))}
+          {Object.keys(groups).map((key, index) => {
+            const group = groups[key];
+            if (!group) return null;
+            const perm = group[0];
+            if (!perm) return null;
+            return (
+              <TableRow key={index}>
+                <TableCell className="font-medium">{t(perm.title)}</TableCell>
+                <TableCell>
+                  <Switch
+                    onCheckedChange={(checked) => {
+                      debounced(perm.resource, "Read", checked);
+                    }}
+                  />
+                </TableCell>
+                <TableCell>
+                  <Switch
+                    onCheckedChange={(checked) => {
+                      debounced(perm.resource, "Update", checked);
+                    }}
+                  />
+                </TableCell>
+                <TableCell>
+                  <Switch
+                    onCheckedChange={(checked) => {
+                      debounced(perm.resource, "Create", checked);
+                    }}
+                  />
+                </TableCell>
+                <TableCell>
+                  <Switch
+                    onCheckedChange={(checked) => {
+                      debounced(perm.resource, "Delete", checked);
+                    }}
+                  />
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>

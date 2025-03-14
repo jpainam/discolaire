@@ -1094,7 +1094,7 @@ model User {
     createdAt         DateTime         @default(now())
     updatedAt         DateTime         @updatedAt
     profile           String           @default("student")
-    permissions       String[]
+    permissions       Json[]
     contacts          Contact[]
     photos            Photo[]
     reportQueues      ReportQueue[]
