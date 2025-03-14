@@ -1,6 +1,3 @@
-import { checkPermission } from "@repo/api/permission";
-import { PermissionAction } from "~/permissions";
-
 import { ClassroomDetails } from "~/components/classrooms/ClassroomDetails";
 import { EnrollmentDataTable } from "~/components/classrooms/enrollments/EnrollmentDataTable";
 import { EnrollmentHeader } from "~/components/classrooms/enrollments/EnrollmentHeader";
@@ -15,10 +12,10 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   //   currentDate: new Date(),
   // });
 
-  const canReadEnrollment = await checkPermission(
-    "enrollment",
-    PermissionAction.READ,
-  );
+  // const canReadEnrollment = await checkPermission(
+  //   "enrollment",
+  //   PermissionAction.READ,
+  // );
   const students = await api.classroom.students(params.id);
   const classroom = await api.classroom.get(params.id);
 
@@ -40,11 +37,10 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         <GenderPie classroom={classroom} />
         <GenderPie classroom={classroom} />
       </div> */}
-      {canReadEnrollment && (
-        <div className="py-2 px-4">
-          <EnrollmentDataTable students={students} />
-        </div>
-      )}
+
+      <div className="py-2 px-4">
+        <EnrollmentDataTable students={students} />
+      </div>
     </>
   );
 }

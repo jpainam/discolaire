@@ -75,8 +75,19 @@ export const classroomRouter = createTRPCRouter({
   }),
   students: protectedProcedure
     .input(z.string().min(1))
-    .query(async ({ input }) => {
-      return classroomService.getStudents(input);
+    .query(async ({ input, ctx }) => {
+      const students = await classroomService.getStudents(input);
+      if (ctx.session.user.profile === "student") {
+        return students.filter(
+          (student) => student.userId === ctx.session.user.id,
+        );
+      } else if (ctx.session.user.profile === "contact") {
+        const contact = await contactService.getFromUserId(ctx.session.user.id);
+        const studs = await contactService.getStudents(contact.id);
+        const studentIds = studs.map((s) => s.studentId);
+        return students.filter((student) => studentIds.includes(student.id));
+      }
+      return students;
     }),
   create: protectedProcedure
     .input(createUpdateSchema)
