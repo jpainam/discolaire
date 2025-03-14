@@ -1,4 +1,3 @@
-import { TRPCError } from "@trpc/server";
 import { subMonths } from "date-fns";
 import { z } from "zod";
 
@@ -107,7 +106,7 @@ export const contactRouter = createTRPCRouter({
   all: protectedProcedure.query(async ({ ctx }) => {
     if (ctx.session.user.profile == "contact") {
       const contact = await contactService.getFromUserId(ctx.session.user.id);
-      const c = await ctx.db.contact.findFirst({
+      const c = await ctx.db.contact.findUniqueOrThrow({
         where: {
           id: contact.id,
         },
@@ -130,25 +129,19 @@ export const contactRouter = createTRPCRouter({
         },
       });
     }
-    if (ctx.session.user.profile == "staff") {
-      const canReadStaff = await checkPermission("staff", "Read");
-      if (!canReadStaff) {
-        return [];
-      } else {
-        return ctx.db.contact.findMany({
-          where: {
-            schoolId: ctx.schoolId,
-          },
-          orderBy: {
-            lastName: "asc",
-          },
-        });
-      }
+
+    const canReadStaff = await checkPermission("staff", "Read");
+    if (!canReadStaff) {
+      return ctx.db.contact.findMany({
+        where: {
+          schoolId: ctx.schoolId,
+        },
+        orderBy: {
+          lastName: "asc",
+        },
+      });
     }
-    throw new TRPCError({
-      code: "FORBIDDEN",
-      message: "Unknown user profile",
-    });
+    return [];
   }),
   students: protectedProcedure
     .input(z.string().min(1))
