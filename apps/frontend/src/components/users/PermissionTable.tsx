@@ -43,7 +43,7 @@ export function PermissionTable({ userId }: { userId: string }) {
         effect: checked ? "Allow" : "Deny",
       });
     },
-    2000
+    2000,
   );
   return (
     <div className="bg-background overflow-hidden rounded-md border">

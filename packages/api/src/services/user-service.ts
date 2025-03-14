@@ -177,7 +177,7 @@ export async function getPermissions(userId: string) {
   const user = await db.user.findUniqueOrThrow({
     where: { id: userId },
   });
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
   return (user.permissions ?? []) as unknown as Permission[];
 }
 

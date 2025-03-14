@@ -16,7 +16,7 @@ import { auth } from "@repo/auth";
 import { validateToken } from "@repo/auth/session";
 import { db } from "@repo/db";
 
-import { userService } from "./services/user-service";
+import { getPermissions } from "./services/user-service";
 
 /**
  * Isomorphic Session getter for API requests
@@ -150,7 +150,7 @@ export const protectedProcedure = t.procedure
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
 
-    const permissions = await userService.getPermissions(ctx.session.user.id);
+    const permissions = await getPermissions(ctx.session.user.id);
     return next({
       ctx: {
         // infers the `session` as non-nullable
