@@ -1,11 +1,9 @@
-import { TRPCError } from "@trpc/server";
-
 import { db } from "@repo/db";
 
 import { classroomService } from "./classroom-service";
 
 export const studentService = {
-  get: async (studentId: string, schoolId: string) => {
+  get: async (studentId: string, schoolYearId: string, schoolId: string) => {
     await db.student.update({
       where: {
         id: studentId,
@@ -15,7 +13,7 @@ export const studentService = {
         lastAccessed: new Date(),
       },
     });
-    const student = await db.student.findUnique({
+    const student = await db.student.findUniqueOrThrow({
       where: {
         id: studentId,
         schoolId: schoolId,
@@ -52,13 +50,10 @@ export const studentService = {
         },
       },
     });
-    if (!student) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Student not found",
-      });
-    }
-    const classroom = await studentService.getClassroom(studentId, schoolId);
+    const classroom = await studentService.getClassroom(
+      studentId,
+      schoolYearId,
+    );
     return {
       ...student,
       classroom: classroom,

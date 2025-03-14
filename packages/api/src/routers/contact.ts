@@ -162,7 +162,6 @@ export const contactRouter = createTRPCRouter({
       // const studentIds2 = await redisClient.smembers(
       //   `contact:${input}:students`,
       // );
-      // console.log("TO BE REMOVED>>>>>>>StudentId from Redis", studentIds2);
 
       const students = await ctx.db.student.findMany({
         where: {

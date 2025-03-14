@@ -104,7 +104,11 @@ export const studentRouter = createTRPCRouter({
   all: protectedProcedure.query(async ({ ctx }) => {
     if (ctx.session.user.profile === "student") {
       const student = await studentService.getFromUserId(ctx.session.user.id);
-      const stud = await studentService.get(student.id, ctx.schoolId);
+      const stud = await studentService.get(
+        student.id,
+        ctx.schoolYearId,
+        ctx.schoolId,
+      );
       return [stud];
     }
     const studentIds: string[] = [];
@@ -403,7 +407,7 @@ export const studentRouter = createTRPCRouter({
   get: protectedProcedure
     .input(z.string().min(1))
     .query(async ({ ctx, input }) => {
-      return studentService.get(input, ctx.schoolId);
+      return studentService.get(input, ctx.schoolYearId, ctx.schoolId);
     }),
   selector: protectedProcedure.query(({ ctx }) => {
     return ctx.db.student.findMany({
