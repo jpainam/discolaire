@@ -1,8 +1,12 @@
+import { TRPCError } from "@trpc/server";
 import { subMonths } from "date-fns";
 import { z } from "zod";
 
 import redisClient from "@repo/kv";
 
+import { checkPermission } from "../permission";
+import { contactService } from "../services/contact-service";
+import { studentService } from "../services/student-service";
 import { userService } from "../services/user-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -100,38 +104,52 @@ export const contactRouter = createTRPCRouter({
       });
     }),
 
-  all: protectedProcedure
-    .input(
-      z.object({
-        // per_page: z.coerce.number().optional().default(30),
-        // page: z.coerce.number().optional().default(1),
-        // sort: z.string().optional().default("lastName"),
-        q: z.string().optional().default(""),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      //const offset = (input.page - 1) * input.per_page;
-      const qq = `%${input.q}%`;
-      return ctx.db.contact.findMany({
-        //skip: offset,
-        take: 30, //input.per_page,
+  all: protectedProcedure.query(async ({ ctx }) => {
+    if (ctx.session.user.profile == "contact") {
+      const contact = await contactService.getFromUserId(ctx.session.user.id);
+      const c = await ctx.db.contact.findFirst({
         where: {
-          schoolId: ctx.schoolId,
-          OR: [
-            { firstName: { startsWith: qq, mode: "insensitive" } },
-            { lastName: { startsWith: qq, mode: "insensitive" } },
-            { phoneNumber1: { startsWith: qq, mode: "insensitive" } },
-            { phoneNumber2: { startsWith: qq, mode: "insensitive" } },
-            { email: { startsWith: qq, mode: "insensitive" } },
-            { employer: { startsWith: qq, mode: "insensitive" } },
-            { title: { startsWith: qq, mode: "insensitive" } },
-          ],
-        },
-        orderBy: {
-          lastName: "asc",
+          id: contact.id,
         },
       });
-    }),
+      return [c];
+    }
+    if (ctx.session.user.profile == "student") {
+      const student = await studentService.getFromUserId(ctx.session.user.id);
+      const studentContacts = await ctx.db.studentContact.findMany({
+        where: {
+          studentId: student.id,
+        },
+      });
+      const contactIds = studentContacts.map((sc) => sc.contactId);
+      return ctx.db.contact.findMany({
+        where: {
+          id: {
+            in: contactIds,
+          },
+        },
+      });
+    }
+    if (ctx.session.user.profile == "staff") {
+      const canReadStaff = await checkPermission("staff", "Read");
+      if (!canReadStaff) {
+        return [];
+      } else {
+        return ctx.db.contact.findMany({
+          where: {
+            schoolId: ctx.schoolId,
+          },
+          orderBy: {
+            lastName: "asc",
+          },
+        });
+      }
+    }
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "Unknown user profile",
+    });
+  }),
   students: protectedProcedure
     .input(z.string().min(1))
     .query(async ({ ctx, input }) => {

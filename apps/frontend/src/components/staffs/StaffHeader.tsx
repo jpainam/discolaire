@@ -54,11 +54,11 @@ export function StaffHeader({
   }, [staffs, params.id, setBreadcrumbs, t]);
 
   return (
-    <div className="flex flex-row gap-4 items-center justify-between py-1 px-4">
+    <div className="grid lg:flex flex-row gap-4 items-center justify-between py-1 px-4">
       <div className="flex  w-full flex-row items-center gap-2">
         <Label className="hidden md:block">{t("staffs")}</Label>
         <StaffSelector
-          className="w-full 2xl:w-[350px]"
+          className="w-full lg:w-1/2 2xl:w-[350px]"
           onChange={(val) => {
             router.push(`/staffs/${val}`);
           }}

@@ -12,7 +12,9 @@ import { getColumns } from "./ContactDataTableColumns";
 export function ContactDataTable({
   contacts,
 }: {
-  contacts: RouterOutputs["contact"]["lastAccessed"];
+  contacts:
+    | RouterOutputs["contact"]["lastAccessed"]
+    | RouterOutputs["contact"]["all"];
 }) {
   const { t } = useLocale();
 

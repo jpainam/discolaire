@@ -16,6 +16,7 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 import type { ColumnDef } from "@tanstack/react-table";
+import { addDays } from "date-fns";
 import type { TFunction } from "i18next";
 import i18next from "i18next";
 import { Pencil, StampIcon, Trash2 } from "lucide-react";
@@ -185,7 +186,7 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
   const utils = api.useUtils();
   const updateBookMutation = api.library.updateBorrowedStatus.useMutation({
     onSettled: () => {
-      utils.library.invalidate();
+      void utils.library.invalidate();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -253,7 +254,16 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
                     />
                     {t("overdue")}
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      toast.loading(t("updating"), { id: 0 });
+                      void updateBookMutation.mutate({
+                        id: book.id,
+                        returned: false,
+                        expected: addDays(new Date(), 7),
+                      });
+                    }}
+                  >
                     <Checkbox checked={book.returned === null} />
                     {t("borrowed")}
                   </DropdownMenuItem>
