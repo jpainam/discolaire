@@ -160,11 +160,11 @@ function ActionCells({ course }: { course: CourseProcedureOutput }) {
 
   const canDeleteCourse = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const canUpdateCourse = useCheckPermission(
     "classroom",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
 
   return (

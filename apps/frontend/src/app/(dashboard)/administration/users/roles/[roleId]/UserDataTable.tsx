@@ -41,7 +41,7 @@ export function UserDataTable({ roleId }: { roleId: string }) {
   const canAddRoleToUser = useCheckPermission("role", PermissionAction.CREATE);
   const canRemoveRoleFromUser = useCheckPermission(
     "role",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const confirm = useConfirm();
   const [debounceValue] = useDebounce(query, 300);
@@ -118,7 +118,7 @@ export function UserDataTable({ roleId }: { roleId: string }) {
                         <DropdownMenuItem
                           onSelect={() => {
                             router.push(
-                              `/administration/users/${userRole.userId}`
+                              `/administration/users/${userRole.userId}`,
                             );
                           }}
                         >
