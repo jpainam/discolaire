@@ -39,7 +39,7 @@ export function PermissionTable({ userId }: { userId: string }) {
     (
       resource: string,
       action: "Read" | "Update" | "Create" | "Delete",
-      checked: boolean
+      checked: boolean,
     ) => {
       permissionMutation.mutate({
         userId: userId,
@@ -48,7 +48,7 @@ export function PermissionTable({ userId }: { userId: string }) {
         effect: checked ? "Allow" : "Deny",
       });
     },
-    1000
+    1000,
   );
   const permissions = permissionsQuery.data ?? [];
   console.log(permissions);
