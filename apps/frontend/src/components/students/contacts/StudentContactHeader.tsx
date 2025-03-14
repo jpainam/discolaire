@@ -99,7 +99,7 @@ export function StudentContactHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >
@@ -110,7 +110,7 @@ export function StudentContactHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >

@@ -16,7 +16,7 @@ export function TransactionTabMenu() {
   const params = useParams<{ id: string }>();
   const canCreateTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
 
   const menuTabs: TabMenuOption[] = [

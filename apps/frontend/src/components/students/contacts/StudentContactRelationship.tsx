@@ -89,7 +89,7 @@ export function StudentContactRelationship({
           error: (error) => {
             return getErrorMessage(error);
           },
-        }
+        },
       );
     }
   }
