@@ -7,16 +7,21 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuPortal,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
 import i18next from "i18next";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, StampIcon, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
@@ -163,8 +168,7 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
   const { openSheet } = useSheet();
   const confirm = useConfirm();
   const { t } = useLocale();
-  //const router = useRouter();
-  const utils = api.useUtils();
+  const router = useRouter();
 
   const bookMutation = api.library.deleteBorrow.useMutation({
     onSettled: () => {
@@ -176,6 +180,19 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
+    },
+  });
+  const utils = api.useUtils();
+  const updateBookMutation = api.library.updateBorrowedStatus.useMutation({
+    onSettled: () => {
+      utils.library.invalidate();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+    onSuccess: () => {
+      toast.success(t("updated_successfully"), { id: 0 });
+      router.refresh();
     },
   });
 
@@ -209,6 +226,41 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
                 <DropdownMenuSeparator />
               </>
             )}
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <StampIcon className="h-4 w-4" />
+                <span className="px-2">{t("status")}</span>
+              </DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      toast.loading(t("updating"), { id: 0 });
+                      void updateBookMutation.mutate({
+                        id: book.id,
+                        returned: true,
+                      });
+                    }}
+                  >
+                    <Checkbox checked={book.returned !== null} />
+                    {t("returned")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Checkbox
+                      checked={
+                        book.expected ? book.expected < new Date() : false
+                      }
+                    />
+                    {t("overdue")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Checkbox checked={book.returned === null} />
+                    {t("borrowed")}
+                  </DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
+            <DropdownMenuSeparator />
             {canDeleteLoan && (
               <DropdownMenuItem
                 variant="destructive"

@@ -43,10 +43,10 @@ export function NavMain({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip={t("back_to_home")}>
-              <a href={"/"}>
+              <Link href={"/"}>
                 <ArrowLeft />
                 <span>{t("back_to_home")}</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

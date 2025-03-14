@@ -132,4 +132,23 @@ export const libraryRouter = createTRPCRouter({
         },
       });
     }),
+  updateBorrowedStatus: protectedProcedure
+    .input(
+      z.object({
+        id: z.coerce.number(),
+        returned: z.boolean().default(false),
+        expected: z.date().nullable().default(null),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.borrowedBook.update({
+        data: {
+          returned: input.returned ? new Date() : null,
+          expected: input.expected,
+        },
+        where: {
+          id: input.id,
+        },
+      });
+    }),
 });
