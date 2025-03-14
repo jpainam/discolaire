@@ -198,13 +198,18 @@ export const menuPolicies: {
   action: PermissionAction;
 }[] = [
   {
-    title: "menu:administration",
+    title: "administration",
     resource: "menu:administration",
     action: PermissionAction.Read,
   },
   {
-    title: "menu:library",
+    title: "library",
     resource: "menu:library",
+    action: PermissionAction.Read,
+  },
+  {
+    title: "staff",
+    resource: "menu:staff",
     action: PermissionAction.Read,
   },
 ];

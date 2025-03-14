@@ -53,11 +53,7 @@ export function MainSidebar({
       url: `/classrooms`,
       icon: HouseIcon,
     },
-    {
-      name: "staffs",
-      url: `/staffs`,
-      icon: FolderOpen,
-    },
+
     {
       name: "contacts",
       url: `/contacts`,
@@ -68,16 +64,27 @@ export function MainSidebar({
     //   url: `/report-cards`,
     //   icon: RiScanLine,
     // },
-    {
-      name: "timetables",
-      url: `/timetables`,
-      icon: CalendarDays,
-    },
   ];
   const session = useSession();
+  if (session.user?.profile == "staff") {
+    data.push(
+      ...[
+        {
+          name: "staffs",
+          url: `/staffs`,
+          icon: FolderOpen,
+        },
+        {
+          name: "timetables",
+          url: `/timetables`,
+          icon: CalendarDays,
+        },
+      ]
+    );
+  }
   const canReadLibrary = useCheckPermission(
     "menu:library",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
   if (canReadLibrary) {
     data.push({
@@ -88,7 +95,7 @@ export function MainSidebar({
   }
   const canReadAdministration = useCheckPermission(
     "menu:administration",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
   if (canReadAdministration) {
     data.push({
