@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { v4 as uuidv4 } from "uuid";
 
+import type { Prisma } from "@repo/db";
 import { hashPassword } from "@repo/auth/session";
 import { db } from "@repo/db";
 
@@ -52,12 +53,6 @@ export const userService = {
         headers: await headers(),
       },
     );
-  },
-  getPermissions: async (userId: string) => {
-    const user = await db.user.findUniqueOrThrow({
-      where: { id: userId },
-    });
-    return user.permissions as unknown as Permission[];
   },
 
   updateProfile: async (
@@ -111,59 +106,44 @@ export const userService = {
     }
   },
 
-  updatePermission: ({
+  updatePermission: async ({
     userId,
-    permission,
+    resource,
     action,
     effect,
-    schoolId,
   }: {
     userId: string;
-    schoolId: string;
-    permission: string;
+    resource: string;
     action: string;
     effect: "Allow" | "Deny";
   }) => {
-    console.log(
-      "updatePermission",
-      userId,
-      permission,
-      action,
-      effect,
-      schoolId,
+    const permissions = await getPermissions(userId);
+    const exists = permissions.some(
+      (perm) => perm.resource === resource && perm.action === action,
     );
-    // const user = await db.user.findUniqueOrThrow({
-    //   where: {
-    //     id: userId,
-    //     schoolId: schoolId,
-    //   },
-    // });
-    // if (effect == "Allow") {
-    //   return db.user.update({
-    //     where: {
-    //       id: userId,
-    //     },
-    //     data: {
-    //       permissions: {
-    //         push: `${permission}:${action}`,
-    //       },
-    //     },
-    //   });
-    // } else {
-    //   const updatedPermissions = user.permissions.filter(
-    //     (p) => p !== `${permission}:${action}`,
-    //   );
-    //   return db.user.update({
-    //     where: {
-    //       id: userId,
-    //     },
-    //     data: {
-    //       permissions: {
-    //         set: updatedPermissions,
-    //       },
-    //     },
-    //   });
-    // }
+
+    if (exists) {
+      return true;
+    }
+    let updatedPermissions = [];
+    if (effect === "Allow") {
+      const newPermission = {
+        resource,
+        action,
+        effect,
+      } as Permission;
+      updatedPermissions = [...permissions, newPermission];
+    } else {
+      updatedPermissions = permissions.filter(
+        (perm) => !(perm.resource === resource && perm.action === action),
+      );
+    }
+    return db.user.update({
+      where: { id: userId },
+      data: {
+        permissions: updatedPermissions as unknown as Prisma.JsonArray,
+      },
+    });
   },
 
   deleteUsers: async (userIds: string[]) => {
@@ -192,6 +172,14 @@ export const userService = {
     };
   },
 };
+
+export async function getPermissions(userId: string) {
+  const user = await db.user.findUniqueOrThrow({
+    where: { id: userId },
+  });
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  return (user.permissions ?? []) as unknown as Permission[];
+}
 
 export async function attachUser({
   entityId,

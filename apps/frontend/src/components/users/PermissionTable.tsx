@@ -35,15 +35,15 @@ export function PermissionTable({ userId }: { userId: string }) {
   });
   const groups = _.groupBy(permissions, "resource");
   const debounced = useDebouncedCallback(
-    (permission: string, action: string, checked: boolean) => {
+    (resource: string, action: string, checked: boolean) => {
       permissionMutation.mutate({
         userId: userId,
-        permission: permission,
+        resource: resource,
         action: action,
         effect: checked ? "Allow" : "Deny",
       });
     },
-    2000,
+    2000
   );
   return (
     <div className="bg-background overflow-hidden rounded-md border">

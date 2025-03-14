@@ -1,4 +1,4 @@
-import { EducationalRessource } from "~/components/dashboard/EducationalRessource";
+import { EducationalResource } from "~/components/dashboard/EducationalResource";
 import { QuickStatistics } from "~/components/dashboard/QuickStatistics";
 import { ScheduleCard } from "~/components/dashboard/ScheduleCard";
 import { SchoolLife } from "~/components/dashboard/SchoolLife";
@@ -10,7 +10,7 @@ export default function Page() {
       {/* <SearchBlock className="col-span-full md:col-span-6" /> */}
       <SchoolLife />
       <ScheduleCard />
-      <EducationalRessource />
+      <EducationalResource />
 
       {/* <Suspense>
         <EffectiveStat className="col-span-full" />

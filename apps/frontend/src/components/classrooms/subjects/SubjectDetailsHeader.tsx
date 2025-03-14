@@ -30,7 +30,7 @@ export function SubjectDetailsHeader() {
     { label: t("subjects"), href: routes.classrooms.subjects(params.id) },
     { label: t("programs"), href: routes.classrooms.programs(params.id) },
     {
-      label: t("ressources"),
+      label: t("resources"),
       href: routes.classrooms.subjects(params.id) + `/${params.subjectId}`,
     },
   ];

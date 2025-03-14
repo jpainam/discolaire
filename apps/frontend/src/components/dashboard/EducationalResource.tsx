@@ -53,7 +53,7 @@ const resources: Resource[] = [
   },
 ];
 
-export function EducationalRessource({ className }: { className?: string }) {
+export function EducationalResource({ className }: { className?: string }) {
   const { t } = useLocale();
 
   return (

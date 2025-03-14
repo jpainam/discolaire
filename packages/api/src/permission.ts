@@ -3,7 +3,7 @@
 import { auth } from "@repo/auth";
 import redisClient from "@repo/kv";
 
-import { userService } from "./services/user-service";
+import { getPermissions } from "./services/user-service";
 
 export async function checkPermission(
   resource: string,
@@ -19,7 +19,7 @@ export async function checkPermission(
     return cached === "true";
   }
 
-  const permissions = await userService.getPermissions(session.user.id);
+  const permissions = await getPermissions(session.user.id);
 
   let isAllowed = false;
 

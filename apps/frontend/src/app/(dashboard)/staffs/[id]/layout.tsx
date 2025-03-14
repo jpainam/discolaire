@@ -36,11 +36,16 @@ export default async function Layout(props: {
   const { children } = props;
   const session = await auth();
   const staff = await api.staff.get(id);
-  const staffIsCurrentUser = session?.user.id === staff.userId;
-
-  const canReadStaff = await checkPermission("staff", PermissionAction.READ);
-  if (!staffIsCurrentUser && !canReadStaff) {
-    return <NoPermission className="my-8" isFullPage resourceText="" />;
+  if (staff.userId !== session?.user.id) {
+    const canReadStaff = await checkPermission("staff", PermissionAction.READ);
+    if (!canReadStaff) {
+      return (
+        <div>
+          {staff.userId} {session?.user.id}
+          <NoPermission className="my-8" isFullPage resourceText="" />
+        </div>
+      );
+    }
   }
 
   const { t } = await getServerTranslations();

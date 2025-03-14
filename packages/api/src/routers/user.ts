@@ -4,7 +4,11 @@ import { z } from "zod";
 import { comparePasswords, hashPassword } from "@repo/auth/session";
 
 import { ratelimiter } from "../rateLimit";
-import { attachUser, userService } from "../services/user-service";
+import {
+  attachUser,
+  getPermissions,
+  userService,
+} from "../services/user-service";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 const MAX_ATTEMPTS = 5;
@@ -201,12 +205,9 @@ export const userRouter = createTRPCRouter({
       });
     }),
   getPermissions: protectedProcedure.query(({ ctx }) => {
-    return userService.getPermissions(ctx.session.user.id);
+    return getPermissions(ctx.session.user.id);
   }),
-  permissions: protectedProcedure.query(({ ctx }) => {
-    const userId = ctx.session.user.id;
-    return userService.getPermissions(userId);
-  }),
+
   attachPolicy: protectedProcedure
     .input(
       z.object({
@@ -353,17 +354,16 @@ export const userRouter = createTRPCRouter({
       z.object({
         userId: z.string().min(1),
         action: z.string().min(1),
-        permission: z.string().min(1),
+        resource: z.string().min(1),
         effect: z.enum(["Allow", "Deny"]),
       }),
     )
-    .mutation(({ ctx, input }) => {
+    .mutation(({ input }) => {
       return userService.updatePermission({
         userId: input.userId,
-        permission: input.permission,
+        resource: input.resource,
         action: input.action,
         effect: input.effect,
-        schoolId: ctx.schoolId,
       });
     }),
 });

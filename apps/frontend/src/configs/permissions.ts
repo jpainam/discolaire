@@ -71,7 +71,7 @@ export const permissions: {
     action: PermissionAction.Update,
   },
   {
-    title: "all_all_subjects",
+    title: "all_subjects",
     resource: "subject",
     action: PermissionAction.Read,
   },
