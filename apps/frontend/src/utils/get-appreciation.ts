@@ -23,5 +23,5 @@ export function getAppreciations(grade?: number | null) {
   } else if (grade >= 18 && grade <= 20) {
     return "Excellent";
   }
-  return "Pas definie";
+  return `${grade}`;
 }

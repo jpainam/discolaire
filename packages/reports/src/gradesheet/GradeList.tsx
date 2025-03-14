@@ -15,24 +15,26 @@ export function GradeList({
   grades,
   classroom,
   gradesheet,
+  allGrades,
 }: {
   school: RouterOutputs["school"]["getSchool"];
   classroom: RouterOutputs["classroom"]["get"];
   gradesheet: NonNullable<RouterOutputs["gradeSheet"]["get"]>;
   grades: RouterOutputs["gradeSheet"]["grades"];
+  allGrades: RouterOutputs["gradeSheet"]["grades"];
 }) {
-  const maxGrade = Math.max(...grades.map((grade) => grade.grade));
-  const minGrade = Math.min(...grades.map((grade) => grade.grade));
-  const grades10 = grades.filter((grade) => grade.grade >= 10).length;
-  const len = grades.filter((grade) => !grade.isAbsent).length || 1e9;
+  const maxGrade = Math.max(...allGrades.map((grade) => grade.grade));
+  const minGrade = Math.min(...allGrades.map((grade) => grade.grade));
+  const grades10 = allGrades.filter((grade) => grade.grade >= 10).length;
+  const len = allGrades.filter((grade) => !grade.isAbsent).length || 1e9;
 
   const males10Rate =
-    grades.filter(
+    allGrades.filter(
       (grade) => grade.grade >= 10 && grade.student.gender == "male",
     ).length / len;
 
   const females10Rate =
-    grades.filter(
+    allGrades.filter(
       (grade) => grade.grade >= 10 && grade.student.gender == "female",
     ).length / len;
 
@@ -42,7 +44,7 @@ export function GradeList({
     year: "numeric",
     weekday: "short",
   });
-  const average = grades.reduce((acc, grade) => acc + grade.grade, 0) / len;
+  const average = allGrades.reduce((acc, grade) => acc + grade.grade, 0) / len;
   return (
     <Document>
       <Page

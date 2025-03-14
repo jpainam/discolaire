@@ -20,6 +20,7 @@ import type { RouterOutputs } from "@repo/api";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useSession } from "~/providers/AuthProvider";
 import { getAge } from "~/utils/student-utils";
 import { EnrollStudent } from "./EnrollStudent";
 
@@ -32,6 +33,7 @@ export function EnrollmentHeader({
 }) {
   const { t } = useLocale();
   const { openModal } = useModal();
+  const session = useSession();
 
   const canEnroll = useCheckPermission("enrollment", PermissionAction.CREATE);
 
@@ -56,49 +58,62 @@ export function EnrollmentHeader({
         className="flex flex-row items-center gap-2"
       >
         <Label>{t("effective")}: </Label>
-        <span className="text-muted-foreground">{students.length}</span>
+        <span className="text-muted-foreground">{classroom.size}</span>
       </FlatBadge>
-      <Separator orientation="vertical" className="hidden h-5 md:block" />
-      <FlatBadge variant={"green"} className="flex flex-row items-center gap-2">
-        <Label>{t("male")}: </Label>
-        <span className="text-muted-foreground">
-          {male} - ({((male / total) * 100).toFixed()}%)
-        </span>
-      </FlatBadge>
-      <Separator orientation="vertical" className="hidden h-5 md:block" />
-      <FlatBadge
-        variant={"indigo"}
-        className="flex flex-row items-center gap-2"
-      >
-        <Label>{t("female")}: </Label>
-        <span className="text-muted-foreground">
-          {female} - ({((female / total) * 100).toFixed()}%)
-        </span>
-      </FlatBadge>
-      <Separator orientation="vertical" className="hidden h-5 md:block" />
-      <FlatBadge
-        variant={"purple"}
-        className="flex flex-row items-center gap-2"
-      >
-        <Label>{t("isRepeating")}: </Label>
-        <span className="text-muted-foreground">
-          {repeating} - ({((repeating / total) * 100).toFixed()}%)
-        </span>
-      </FlatBadge>
-      <Separator orientation="vertical" className="hidden h-5 md:block" />
-      <FlatBadge variant={"red"} className="flex flex-row items-center gap-2">
-        <Label>{t("oldest")}: </Label>
-        <span className="text-muted-foreground">
-          {youngest} {t("old")}
-        </span>
-      </FlatBadge>
-      <Separator orientation="vertical" className="hidden h-5 md:block" />
-      <FlatBadge variant={"blue"} className="flex flex-row items-center gap-2">
-        <Label>{t("youngest")}: </Label>
-        <span className="text-muted-foreground">
-          {oldest} {t("old")}
-        </span>
-      </FlatBadge>
+      {session.user?.profile == "staff" && (
+        <>
+          <Separator orientation="vertical" className="hidden h-5 md:block" />
+          <FlatBadge
+            variant={"green"}
+            className="flex flex-row items-center gap-2"
+          >
+            <Label>{t("male")}: </Label>
+            <span className="text-muted-foreground">
+              {male} - ({((male / total) * 100).toFixed()}%)
+            </span>
+          </FlatBadge>
+          <Separator orientation="vertical" className="hidden h-5 md:block" />
+          <FlatBadge
+            variant={"indigo"}
+            className="flex flex-row items-center gap-2"
+          >
+            <Label>{t("female")}: </Label>
+            <span className="text-muted-foreground">
+              {female} - ({((female / total) * 100).toFixed()}%)
+            </span>
+          </FlatBadge>
+          <Separator orientation="vertical" className="hidden h-5 md:block" />
+          <FlatBadge
+            variant={"purple"}
+            className="flex flex-row items-center gap-2"
+          >
+            <Label>{t("isRepeating")}: </Label>
+            <span className="text-muted-foreground">
+              {repeating} - ({((repeating / total) * 100).toFixed()}%)
+            </span>
+          </FlatBadge>
+          <Separator orientation="vertical" className="hidden h-5 md:block" />
+          <FlatBadge
+            variant={"red"}
+            className="flex flex-row items-center gap-2"
+          >
+            <Label>{t("oldest")}: </Label>
+            <span className="text-muted-foreground">
+              {youngest} {t("old")}
+            </span>
+          </FlatBadge>
+          <Separator orientation="vertical" className="hidden h-5 md:block" />
+          <FlatBadge
+            variant={"blue"}
+            className="flex flex-row items-center gap-2"
+          >
+            <Label>{t("youngest")}: </Label>
+            <span className="text-muted-foreground">
+              {oldest} {t("old")}
+            </span>
+          </FlatBadge>
+        </>
+      )}
       <div className="ml-auto flex flex-row items-center gap-2">
         {canEnroll && (
           <Button
@@ -120,6 +135,7 @@ export function EnrollmentHeader({
             {t("enroll")}
           </Button>
         )}
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant={"outline"} className="size-8" size={"icon"}>
@@ -131,7 +147,7 @@ export function EnrollmentHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -142,7 +158,7 @@ export function EnrollmentHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

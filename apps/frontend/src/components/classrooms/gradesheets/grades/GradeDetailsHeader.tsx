@@ -28,7 +28,9 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { routes } from "~/configs/routes";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
 import { getAppreciations } from "~/utils/get-appreciation";
 import { ReportFalseGrade } from "./ReportFalseGrade";
@@ -59,12 +61,12 @@ export function GradeDetailsHeader({
 
   const males10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "male",
+      (grade) => grade.grade >= 10 && grade.student.gender == "male"
     ).length / len;
 
   const females10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "female",
+      (grade) => grade.grade >= 10 && grade.student.gender == "female"
     ).length / len;
 
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
@@ -91,6 +93,15 @@ export function GradeDetailsHeader({
       toast.error(error.message, { id: 0 });
     },
   });
+
+  const canDeleteGradesheet = useCheckPermission(
+    "gradesheet",
+    PermissionAction.DELETE
+  );
+  const canUpdateGradesheet = useCheckPermission(
+    "gradesheet",
+    PermissionAction.UPDATE
+  );
   return (
     <div className="flex flex-col gap-2 border-b">
       <div className="grid gap-4 px-4 py-2 text-sm md:grid-cols-3">
@@ -184,7 +195,7 @@ export function GradeDetailsHeader({
                 <TableCell className="border-r">
                   {((grades10 * 100) / len).toFixed(2)}%
                 </TableCell>
-                <TableCell>{getAppreciations(grades10)}</TableCell>
+                <TableCell>{getAppreciations(average)}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
@@ -200,16 +211,18 @@ export function GradeDetailsHeader({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>
-                <Pencil />
-                {t("edit")}
-              </DropdownMenuItem>
+              {canUpdateGradesheet && (
+                <DropdownMenuItem>
+                  <Pencil />
+                  {t("edit")}
+                </DropdownMenuItem>
+              )}
               <DropdownHelp />
               <DropdownMenuItem
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/gradesheets/${gradesheet.id}?format=pdf&classroomId=${params.id}`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >
@@ -220,36 +233,40 @@ export function GradeDetailsHeader({
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/gradesheets/${gradesheet.id}?format=csv&classroomId=${params.id}`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >
                 <XMLIcon />
                 {t("xml_export")}
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                disabled={deleteGradeSheetMutation.isPending}
-                onSelect={async () => {
-                  const isConfirmed = await confirm({
-                    title: t("delete"),
-                    description: t("delete_confirmation"),
-                    icon: <Trash2 className="size-6 text-destructive" />,
-                    alertDialogTitle: {
-                      className: "flex items-center gap-2",
-                    },
-                  });
-                  if (isConfirmed) {
-                    toast.loading(t("deleting"), { id: 0 });
-                    deleteGradeSheetMutation.mutate(gradesheet.id);
-                  }
-                }}
-                variant="destructive"
-                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-              >
-                <Trash2 />
-                {t("delete")}
-              </DropdownMenuItem>
+              {canDeleteGradesheet && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    disabled={deleteGradeSheetMutation.isPending}
+                    onSelect={async () => {
+                      const isConfirmed = await confirm({
+                        title: t("delete"),
+                        description: t("delete_confirmation"),
+                        icon: <Trash2 className="size-6 text-destructive" />,
+                        alertDialogTitle: {
+                          className: "flex items-center gap-2",
+                        },
+                      });
+                      if (isConfirmed) {
+                        toast.loading(t("deleting"), { id: 0 });
+                        deleteGradeSheetMutation.mutate(gradesheet.id);
+                      }
+                    }}
+                    variant="destructive"
+                    className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+                  >
+                    <Trash2 />
+                    {t("delete")}
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

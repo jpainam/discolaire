@@ -19,7 +19,9 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { routes } from "~/configs/routes";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { PermissionAction } from "~/permissions";
 
 export function GradeSheetHeader() {
   const params = useParams<{ id: string }>();
@@ -28,6 +30,10 @@ export function GradeSheetHeader() {
   const [subject, setSubject] = useQueryState("subject", { shallow: false });
   const { t } = useLocale();
   const router = useRouter();
+  const canCreateGradeSheet = useCheckPermission(
+    "gradesheet",
+    PermissionAction.CREATE
+  );
 
   return (
     <div className="grid flex-row items-center gap-4 bg-muted/40 px-4 py-1 md:flex md:border-b">
@@ -49,21 +55,25 @@ export function GradeSheetHeader() {
         }}
         classroomId={params.id}
       />
-      <Button size={"sm"} variant={"ghost"}>
-        <SettingsIcon />
-        {t("manage_appreciation")}
-      </Button>
-      <div className="ml-auto flex flex-row items-center gap-2">
-        <Button
-          onClick={() => {
-            router.push(routes.classrooms.gradesheets.create(params.id));
-          }}
-          variant={"default"}
-          size={"sm"}
-        >
-          <PlusIcon />
-          {t("new")}
+      {canCreateGradeSheet && (
+        <Button size={"sm"} variant={"ghost"}>
+          <SettingsIcon />
+          {t("manage_appreciation")}
         </Button>
+      )}
+      <div className="ml-auto flex flex-row items-center gap-2">
+        {canCreateGradeSheet && (
+          <Button
+            onClick={() => {
+              router.push(routes.classrooms.gradesheets.create(params.id));
+            }}
+            variant={"default"}
+            size={"sm"}
+          >
+            <PlusIcon />
+            {t("new")}
+          </Button>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant={"outline"} className="size-8" size={"icon"}>
@@ -75,7 +85,7 @@ export function GradeSheetHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/gradesheets?termId=${term ?? 0}&subjectId=${subject ?? 0}&format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -86,7 +96,7 @@ export function GradeSheetHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/gradesheets?termId=${term ?? 0}&subjectId=${subject ?? 0}&format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

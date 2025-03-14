@@ -190,6 +190,26 @@ export const policies: {
     resource: "library",
     action: PermissionAction.Delete,
   },
+  {
+    title: "gradesheets",
+    resource: "gradesheet",
+    action: PermissionAction.Read,
+  },
+  {
+    title: "gradesheets",
+    resource: "gradesheet",
+    action: PermissionAction.Update,
+  },
+  {
+    title: "gradesheets",
+    resource: "gradesheet",
+    action: PermissionAction.Create,
+  },
+  {
+    title: "gradesheets",
+    resource: "gradesheet",
+    action: PermissionAction.Delete,
+  },
 ];
 
 export const menuPolicies: {
