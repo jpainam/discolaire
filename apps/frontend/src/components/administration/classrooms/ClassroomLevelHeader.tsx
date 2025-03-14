@@ -30,10 +30,6 @@ export function ClassroomLevelHeader() {
     selectedClassroomLevelAtom,
   );
 
-  // const canAddLevel = useCheckPermissions(
-  //   PermissionAction.CREATE,
-  //   "classroom:level",
-  // );
   const utils = api.useUtils();
   const deleteClassroomLevelMutation = api.classroomLevel.delete.useMutation({
     onSettled: () => utils.classroomLevel.invalidate(),

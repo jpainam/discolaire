@@ -1,25 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { auth } from "@repo/auth";
-import redisClient from "@repo/kv";
+import { useSchool } from "~/providers/SchoolProvider";
 
-import { userService } from "./services/user-service";
+const cache = new Map<string, boolean>();
 
-export async function checkPermission(
+export const useCheckPermission = (
   resource: string,
   action: "Read" | "Update" | "Delete" | "Create",
   condition: Record<string, any> = {},
-) {
-  const session = await auth();
-  if (!session) return false;
-
-  const key = `${session.user.id}:${resource}:${action}:${JSON.stringify(condition)}`;
-  const cached = await redisClient.get(key);
-  if (cached) {
-    return cached === "true";
+): boolean => {
+  const { permissions } = useSchool();
+  const key = `${resource}-${action}-${JSON.stringify(condition)}`;
+  if (cache.has(key)) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return cache.get(key)!;
   }
-
-  const permissions = await userService.getPermissions(session.user.id);
 
   let isAllowed = false;
 
@@ -28,15 +23,16 @@ export async function checkPermission(
       if (perm.effect === "Deny") {
         if (perm.condition) {
           // If deny condition matches, return false
+
           const conditionMatches = Object.entries(perm.condition).every(
             ([key, value]) => condition[key] === value,
           );
           if (conditionMatches) {
-            await redisClient.set(key, "false");
+            cache.set(key, false);
             return false;
           }
         } else {
-          await redisClient.set(key, "false");
+          cache.set(key, false);
           return false; // Deny without condition overrides allow
         }
       }
@@ -53,6 +49,6 @@ export async function checkPermission(
       }
     }
   }
-  await redisClient.set(key, isAllowed ? "true" : "false");
+  cache.set(key, isAllowed);
   return isAllowed;
-}
+};

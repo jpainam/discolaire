@@ -21,7 +21,7 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { RiDeleteBinLine, RiFilter3Line } from "@remixicon/react";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import { Label } from "@repo/ui/components/label";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
@@ -38,9 +38,9 @@ export function ClassroomDataTableAction({
   const utils = api.useUtils();
   const { t } = useLocale();
   const router = useRouter();
-  const canDeleteClassroom = useCheckPermissions(
+  const canDeleteClassroom = useCheckPermission(
+    "classroom",
     PermissionAction.DELETE,
-    "classroom:details",
   );
   const classroomDeleteMutation = api.classroom.delete.useMutation({
     onSettled: () => utils.classroom.invalidate(),

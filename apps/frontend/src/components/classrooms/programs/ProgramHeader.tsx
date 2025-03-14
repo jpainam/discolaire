@@ -20,7 +20,7 @@ import { PermissionAction } from "~/permissions";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { routes } from "~/configs/routes";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
@@ -31,12 +31,9 @@ export function ProgramHeader() {
   const subjectQuery = api.subject.get.useQuery(Number(params.subjectId));
   const subject = subjectQuery.data;
   const pathname = usePathname();
-  const canEditSubjectProgram = useCheckPermissions(
+  const canEditSubjectProgram = useCheckPermission(
+    "program",
     PermissionAction.UPDATE,
-    "subject:program",
-    {
-      subjectId: Number(params.subjectId),
-    },
   );
   useEffect(() => {
     if (subject) {

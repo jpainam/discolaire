@@ -1,4 +1,4 @@
-import { checkPermissions } from "@repo/api/permission";
+import { checkPermission } from "@repo/api/permission";
 import { PermissionAction } from "~/permissions";
 
 import { ClassroomDetails } from "~/components/classrooms/ClassroomDetails";
@@ -15,9 +15,9 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   //   currentDate: new Date(),
   // });
 
-  const canReadEnrollment = await checkPermissions(
+  const canReadEnrollment = await checkPermission(
+    "enrollment",
     PermissionAction.READ,
-    "classroom:enrollment",
   );
   const students = await api.classroom.students(params.id);
   const classroom = await api.classroom.get(params.id);

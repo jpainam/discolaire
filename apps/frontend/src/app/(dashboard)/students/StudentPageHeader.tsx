@@ -21,7 +21,7 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { SearchCombobox } from "~/components/SearchCombobox";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { routes } from "~/configs/routes";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { api } from "~/trpc/react";
@@ -31,9 +31,9 @@ export function StudentPageHeader() {
   const { t } = useLocale();
   const router = useRouter();
 
-  const canCreateStudent = useCheckPermissions(
+  const canCreateStudent = useCheckPermission(
+    "student",
     PermissionAction.CREATE,
-    "student:profile",
   );
 
   const [value, setValue] = useState("");

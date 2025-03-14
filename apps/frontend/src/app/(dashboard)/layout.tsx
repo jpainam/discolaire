@@ -41,7 +41,7 @@ export default async function Layout({
     api.school.get(session.user.schoolId),
     api.schoolYear.get(schoolYearId),
     api.schoolYear.all(),
-    api.user.permissions(),
+    api.user.getPermissions(),
   ]);
 
   return (

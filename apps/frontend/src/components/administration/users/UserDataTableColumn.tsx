@@ -20,7 +20,9 @@ import { useConfirm } from "~/providers/confirm-dialog";
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
 
 type User = RouterOutputs["user"]["all"][number];
@@ -139,7 +141,7 @@ function ActionCell({ user }: { user: User }) {
   const utils = api.useUtils();
   const router = useRouter();
   // TODO fix permissions
-  //const canDeleteUser = true; //useCheckPermissions(PermissionAction.DELETE, "user");
+  const canDeleteUser = useCheckPermission("user", PermissionAction.DELETE);
   const deleteUserMutation = api.user.delete.useMutation({
     onSettled: () => utils.user.invalidate(),
     onSuccess: () => {
@@ -167,33 +169,33 @@ function ActionCell({ user }: { user: User }) {
             <Eye />
             {t("details")}
           </DropdownMenuItem>
-          {/* {canDeleteUser && ( */}
-          <>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onSelect={async () => {
-                const isConfirmed = await confirm({
-                  title: t("delete"),
-                  // icon: <Trash2 className="size-4 text-destructive" />,
-                  // alertDialogTitle: {
-                  //   className: "flex items-center gap-2",
-                  // },
-                  description: t("delete_confirmation"),
-                });
+          {canDeleteUser && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onSelect={async () => {
+                  const isConfirmed = await confirm({
+                    title: t("delete"),
+                    // icon: <Trash2 className="size-4 text-destructive" />,
+                    // alertDialogTitle: {
+                    //   className: "flex items-center gap-2",
+                    // },
+                    description: t("delete_confirmation"),
+                  });
 
-                if (isConfirmed) {
-                  toast.loading(t("deleting"), { id: 0 });
-                  deleteUserMutation.mutate(user.id);
-                }
-              }}
-              variant="destructive"
-              className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-            >
-              <Trash2 />
-              {t("delete")}
-            </DropdownMenuItem>
-          </>
-          {/* )} */}
+                  if (isConfirmed) {
+                    toast.loading(t("deleting"), { id: 0 });
+                    deleteUserMutation.mutate(user.id);
+                  }
+                }}
+                variant="destructive"
+                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+              >
+                <Trash2 />
+                {t("delete")}
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

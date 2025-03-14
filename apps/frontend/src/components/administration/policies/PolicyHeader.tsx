@@ -6,14 +6,14 @@ import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { useDebounce } from "~/hooks/use-debounce";
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
+import { useDebounce } from "~/hooks/use-debounce";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { api } from "~/trpc/react";
 import { selectedPoliciesAtom } from "./_selected_policies_atom";
 import { CreateEditPolicy } from "./CreateEditPolicy";
@@ -27,14 +27,8 @@ export function PolicyHeader() {
   const [selectedPolicies, setSelectedPolicies] = useAtom(selectedPoliciesAtom);
   const utils = api.useUtils();
 
-  const canCreatePolicy = useCheckPermissions(
-    PermissionAction.CREATE,
-    "policy",
-  );
-  const canDeletePolicy = useCheckPermissions(
-    PermissionAction.DELETE,
-    "policy",
-  );
+  const canCreatePolicy = useCheckPermission("policy", PermissionAction.CREATE);
+  const canDeletePolicy = useCheckPermission("policy", PermissionAction.DELETE);
   const deletePolicyMutation = api.policy.delete.useMutation({
     onSettled: () => utils.policy.invalidate(),
     onError: (error) => toast.error(error.message, { id: 0 }),

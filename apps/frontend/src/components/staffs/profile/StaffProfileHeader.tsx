@@ -32,7 +32,7 @@ import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvi
 
 import { CreateEditUser } from "~/components/users/CreateEditUser";
 import { routes } from "~/configs/routes";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
@@ -48,20 +48,8 @@ export function StaffProfileHeader({
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const utils = api.useUtils();
-  const canDeleteStaff = useCheckPermissions(
-    PermissionAction.DELETE,
-    "staff:profile",
-    {
-      id: params.id,
-    },
-  );
-  const canEditStaff = useCheckPermissions(
-    PermissionAction.UPDATE,
-    "staff:profile",
-    {
-      id: params.id,
-    },
-  );
+  const canDeleteStaff = useCheckPermission("staff", PermissionAction.DELETE);
+  const canEditStaff = useCheckPermission("staff", PermissionAction.UPDATE);
   const deleteStaffMutation = api.staff.delete.useMutation({
     onSettled: async () => {
       await utils.staff.invalidate();

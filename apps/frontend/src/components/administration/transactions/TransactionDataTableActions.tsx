@@ -19,7 +19,7 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { DeleteTransaction } from "~/components/students/transactions/DeleteTransaction";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 
 type TransactionAllProcedureOutput = NonNullable<
   RouterOutputs["transaction"]["all"]
@@ -34,9 +34,9 @@ export function TransactionDataTableActions({
   const rows = table.getFilteredSelectedRowModel().rows;
   const confirm = useConfirm();
 
-  const canDeleteTransaction = useCheckPermissions(
-    PermissionAction.DELETE,
+  const canDeleteTransaction = useCheckPermission(
     "transaction",
+    PermissionAction.DELETE,
   );
   const { openModal } = useModal();
 

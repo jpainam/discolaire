@@ -17,7 +17,7 @@ import { useConfirm } from "~/providers/confirm-dialog";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { api } from "~/trpc/react";
 
 export function AssignmentDetailsHeader({
@@ -41,9 +41,7 @@ export function AssignmentDetailsHeader({
   });
   const confirm = useConfirm();
 
-  const canDelete = useCheckPermissions(PermissionAction.DELETE, "assignment", {
-    id: assignmentId,
-  });
+  const canDelete = useCheckPermission("assignment", PermissionAction.DELETE);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

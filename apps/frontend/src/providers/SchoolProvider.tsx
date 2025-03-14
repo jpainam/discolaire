@@ -3,8 +3,8 @@
 import type { PropsWithChildren } from "react";
 import { createContext, useContext, useMemo } from "react";
 
+import type { Permission } from "@repo/api";
 import type { School, SchoolYear } from "@repo/db";
-import type { Permission } from "~/permissions";
 
 interface SchoolContextProps {
   school: School;

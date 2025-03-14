@@ -25,7 +25,7 @@ import { Badge } from "@repo/ui/components/badge";
 import Link from "next/link";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
@@ -189,9 +189,9 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
   const params = useParams<{ id: string }>();
   const { t } = useLocale();
   const router = useRouter();
-  const canDeleteEnrollment = useCheckPermissions(
+  const canDeleteEnrollment = useCheckPermission(
+    "enrollment",
     PermissionAction.DELETE,
-    "classroom:enrollment",
   );
   const utils = api.useUtils();
   const unenrollStudentsMutation =

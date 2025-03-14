@@ -28,7 +28,7 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { routes } from "~/configs/routes";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { CreateEditSubject } from "./CreateEditSubject";
@@ -39,13 +39,13 @@ export function SubjectTable({ classroomId }: { classroomId: string }) {
   const { openSheet } = useSheet();
   const subjectsQuery = api.classroom.subjects.useQuery(classroomId);
   const confirm = useConfirm();
-  const canDeleteClassroomSubject = useCheckPermissions(
+  const canDeleteClassroomSubject = useCheckPermission(
+    "subject",
     PermissionAction.DELETE,
-    "classroom:subject",
   );
-  const canEditClassroomSubject = useCheckPermissions(
+  const canEditClassroomSubject = useCheckPermission(
+    "subject",
     PermissionAction.UPDATE,
-    "classroom:subject",
   );
   const router = useRouter();
   const utils = api.useUtils();

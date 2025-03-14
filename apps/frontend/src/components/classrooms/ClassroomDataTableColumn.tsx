@@ -32,7 +32,7 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { routes } from "~/configs/routes";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { CreateEditClassroom } from "./CreateEditClassroom";
@@ -304,13 +304,13 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
   const { t } = useLocale();
   const router = useRouter();
   const utils = api.useUtils();
-  const canDeleteClassroom = useCheckPermissions(
+  const canDeleteClassroom = useCheckPermission(
+    "classroom",
     PermissionAction.DELETE,
-    "classroom:details",
   );
-  const canUpdateClassroom = useCheckPermissions(
+  const canUpdateClassroom = useCheckPermission(
+    "classroom",
     PermissionAction.UPDATE,
-    "classroom:details",
   );
   const deleteClassroomMutation = api.classroom.delete.useMutation({
     onSettled: () => utils.classroom.invalidate(),

@@ -10,7 +10,7 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { RiDeleteBinLine } from "@remixicon/react";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
@@ -27,9 +27,9 @@ export function CourseDataTableActions({
   const utils = api.useUtils();
   const { t } = useLocale();
   const router = useRouter();
-  const canDeleteCourse = useCheckPermissions(
+  const canDeleteCourse = useCheckPermission(
+    "classroom",
     PermissionAction.DELETE,
-    "classroom:details",
   );
   const courseDeleteMutation = api.course.deleteMany.useMutation({
     onSettled: () => utils.course.invalidate(),

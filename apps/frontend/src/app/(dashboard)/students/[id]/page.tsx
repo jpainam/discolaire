@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
 
-import { checkPermissions } from "@repo/api/permission";
 import { Separator } from "@repo/ui/components/separator";
 import { NoPermission } from "~/components/no-permission";
 import { PermissionAction } from "~/permissions";
 
+import { checkPermission } from "@repo/api/permission";
 import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";
 import StudentDetails from "~/components/students/profile/StudentDetails";
 import { api } from "~/trpc/server";
@@ -16,22 +16,16 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   if (student.schoolId !== school.id) {
     notFound();
   }
-  const canReadStudent = await checkPermissions(
+  const canReadStudent = await checkPermission(
+    "student",
     PermissionAction.READ,
-    "student:profile",
-    {
-      id: student.id,
-    },
   );
   if (!canReadStudent) {
     return <NoPermission className="my-8" />;
   }
-  const canReadContacts = await checkPermissions(
+  const canReadContacts = await checkPermission(
+    "student",
     PermissionAction.READ,
-    "student:contact",
-    {
-      id: params.id,
-    },
   );
   return (
     <div className="grid py-2 text-sm">

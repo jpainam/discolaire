@@ -33,7 +33,7 @@ import { PermissionAction } from "~/permissions";
 
 import { DeleteTransaction } from "~/components/students/transactions/DeleteTransaction";
 import { TransactionStatus } from "~/components/students/transactions/TransactionTable";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { api } from "~/trpc/react";
 import { TransactionDetails } from "./TransactionDetails";
 
@@ -161,9 +161,9 @@ function ActionCell({
     },
   });
 
-  const canDeleteTransaction = useCheckPermissions(
-    PermissionAction.DELETE,
+  const canDeleteTransaction = useCheckPermission(
     "transaction",
+    PermissionAction.DELETE,
   );
 
   const { openModal } = useModal();

@@ -36,7 +36,7 @@ import { AvatarState } from "~/components/AvatarState";
 import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import { routes } from "~/configs/routes";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
@@ -73,12 +73,9 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
     },
   });
   const utils = api.useUtils();
-  const canDeleteStudentContact = useCheckPermissions(
+  const canDeleteStudentContact = useCheckPermission(
+    "contact",
     PermissionAction.DELETE,
-    "student:contact",
-    {
-      id: studentId,
-    },
   );
 
   const studentContacts = studentContactsQuery.data ?? [];

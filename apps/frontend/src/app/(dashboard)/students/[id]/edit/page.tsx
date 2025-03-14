@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { checkPermissions } from "@repo/api/permission";
+import { checkPermission } from "@repo/api/permission";
 import { NoPermission } from "~/components/no-permission";
 import { PermissionAction } from "~/permissions";
 
@@ -13,10 +13,9 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const { id } = params;
 
   const student = await api.student.get(id);
-  const canEditStudent = await checkPermissions(
+  const canEditStudent = await checkPermission(
+    "student",
     PermissionAction.UPDATE,
-    "student:profile",
-    { id },
   );
   if (!canEditStudent) {
     return <NoPermission className="my-8" />;

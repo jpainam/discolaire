@@ -1,7 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import type { Prisma } from "@repo/db";
 import { comparePasswords, hashPassword } from "@repo/auth/session";
 
 import { ratelimiter } from "../rateLimit";
@@ -202,13 +201,7 @@ export const userRouter = createTRPCRouter({
       });
     }),
   getPermissions: protectedProcedure.query(({ ctx }) => {
-    const permissions = ctx.session.user.permissions as Prisma.JsonArray;
-    return permissions as {
-      resource: string;
-      action: string;
-      effect: string;
-      condition: Record<string, unknown>;
-    }[];
+    return userService.getPermissions(ctx.session.user.id);
   }),
   permissions: protectedProcedure.query(({ ctx }) => {
     const userId = ctx.session.user.id;

@@ -12,7 +12,7 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { api } from "~/trpc/react";
 
 type ClassroomStudentProcedureOutput = NonNullable<
@@ -31,9 +31,9 @@ export function EnrollmentDataTableActions({
   const confirm = useConfirm();
   const utils = api.useUtils();
   //const rows = table.getFilteredSelectedRowModel().rows;
-  const canUnEnrollStudent = useCheckPermissions(
+  const canUnEnrollStudent = useCheckPermission(
+    "enrollment",
     PermissionAction.DELETE,
-    "classroom:enrollment",
   );
   const selectedIds = table
     .getFilteredSelectedRowModel()

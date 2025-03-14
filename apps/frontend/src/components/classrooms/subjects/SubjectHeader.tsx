@@ -23,7 +23,7 @@ import { useParams } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { sidebarIcons } from "../sidebar-icons";
 import { CreateEditSubject } from "./CreateEditSubject";
 
@@ -51,9 +51,9 @@ export function SubjectHeader({
   });
 
   const { openSheet } = useSheet();
-  const canAddClassroomSubject = useCheckPermissions(
+  const canAddClassroomSubject = useCheckPermission(
+    "subject",
     PermissionAction.CREATE,
-    "classroom:subject",
   );
 
   const badgeVariants = [

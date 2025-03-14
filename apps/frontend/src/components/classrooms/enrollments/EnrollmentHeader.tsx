@@ -19,7 +19,7 @@ import { PermissionAction } from "~/permissions";
 import type { RouterOutputs } from "@repo/api";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { getAge } from "~/utils/student-utils";
 import { EnrollStudent } from "./EnrollStudent";
 
@@ -33,13 +33,7 @@ export function EnrollmentHeader({
   const { t } = useLocale();
   const { openModal } = useModal();
 
-  const canEnroll = useCheckPermissions(
-    PermissionAction.CREATE,
-    "classroom:enrollment",
-    {
-      id: classroom.id,
-    },
-  );
+  const canEnroll = useCheckPermission("enrollment", PermissionAction.CREATE);
 
   const male = students.filter((student) => student.gender == "male").length;
   const total = students.length || 1e9;

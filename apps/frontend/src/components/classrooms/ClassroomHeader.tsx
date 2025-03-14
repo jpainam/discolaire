@@ -24,7 +24,7 @@ import type { RouterOutputs } from "@repo/api";
 import { useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { routes } from "~/configs/routes";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { api } from "~/trpc/react";
@@ -44,19 +44,13 @@ export function ClassroomHeader({
   const params = useParams<{ id: string }>();
   const pathname = usePathname();
   const router = useRouter();
-  const canDeleteClassroom = useCheckPermissions(
+  const canDeleteClassroom = useCheckPermission(
+    "classroom",
     PermissionAction.DELETE,
-    "classroom:details",
-    {
-      id: params.id,
-    },
   );
-  const canUpdateClassroom = useCheckPermissions(
+  const canUpdateClassroom = useCheckPermission(
+    "classroom",
     PermissionAction.UPDATE,
-    "classroom:details",
-    {
-      id: params.id,
-    },
   );
   const deleteClassroomMutation = api.classroom.delete.useMutation({
     onSuccess: () => {
@@ -81,9 +75,9 @@ export function ClassroomHeader({
       router.push(routes.classrooms.details(value));
     }
   };
-  const canCreateClassroom = useCheckPermissions(
+  const canCreateClassroom = useCheckPermission(
+    "classroom",
     PermissionAction.CREATE,
-    "classroom:details",
   );
   const { openSheet } = useSheet();
 

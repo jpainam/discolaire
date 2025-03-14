@@ -17,7 +17,7 @@ import { PermissionAction } from "~/permissions";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { sidebarIcons } from "../sidebar-icons";
 import { CreateEditFee } from "./CreateEditFee";
 
@@ -25,12 +25,9 @@ export function ClassroomFeeHeader() {
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
   const { openModal } = useModal();
-  const canCreateClassroomFee = useCheckPermissions(
+  const canCreateClassroomFee = useCheckPermission(
+    "fee",
     PermissionAction.CREATE,
-    "classroom:fee",
-    {
-      id: params.id,
-    },
   );
   const Icon = sidebarIcons.fees;
   return (

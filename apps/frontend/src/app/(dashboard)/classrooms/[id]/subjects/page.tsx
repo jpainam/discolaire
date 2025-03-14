@@ -1,4 +1,4 @@
-import { checkPermissions } from "@repo/api/permission";
+import { checkPermission } from "@repo/api/permission";
 import { NoPermission } from "~/components/no-permission";
 import { PermissionAction } from "~/permissions";
 
@@ -11,12 +11,9 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   const { id } = params;
 
-  const canReadClassroomSubject = await checkPermissions(
+  const canReadClassroomSubject = await checkPermission(
+    "subject",
     PermissionAction.READ,
-    "classroom:subject",
-    {
-      id: id,
-    },
   );
   if (!canReadClassroomSubject) {
     return <NoPermission className="my-8" isFullPage={true} resourceText="" />;

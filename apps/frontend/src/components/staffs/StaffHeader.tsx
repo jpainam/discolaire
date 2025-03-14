@@ -18,7 +18,7 @@ import { Label } from "@repo/ui/components/label";
 import { useSetAtom } from "jotai";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { getFullName } from "~/utils/full-name";
@@ -36,10 +36,7 @@ export function StaffHeader({
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
 
-  const canCreateStaff = useCheckPermissions(
-    PermissionAction.CREATE,
-    "staff:profile",
-  );
+  const canCreateStaff = useCheckPermission("staff", PermissionAction.CREATE);
 
   const router = useRouter();
   const { openSheet } = useSheet();

@@ -1,9 +1,10 @@
-import { checkPermissions } from "@repo/api/permission";
+import { checkPermission } from "@repo/api/permission";
 import { Label } from "@repo/ui/components/label";
 import { getServerTranslations } from "~/i18n/server";
 import { PermissionAction } from "~/permissions";
 
 import { PolicyHeader } from "~/components/administration/policies/PolicyHeader";
+import { NoPermission } from "~/components/no-permission";
 import { NavBar } from "./NavBar";
 
 export default async function Layout({
@@ -11,9 +12,9 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  const canReadPolicy = await checkPermissions(PermissionAction.READ, "policy");
+  const canReadPolicy = await checkPermission("policy", PermissionAction.READ);
   if (!canReadPolicy) {
-    //return <NoPermission className="py-8" />;
+    return <NoPermission className="py-8" />;
   }
   const { t } = await getServerTranslations();
   return (

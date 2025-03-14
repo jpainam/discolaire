@@ -32,6 +32,13 @@ type RouterOutputs = inferRouterOutputs<AppRouter>;
 // export type RouterInputs = inferRouterInputs<AppRouter>;
 // export type RouterOutputs = inferRouterOutputs<AppRouter>;
 
+interface Permission {
+  resource: string;
+  action: "Read" | "Write" | "Delete" | "Create";
+  effect: "Allow" | "Deny";
+  condition?: Record<string, unknown> | null;
+}
+
 export type { Student } from "./types";
 export { appRouter, createCaller, createTRPCContext };
-export type { AppRouter, RouterInputs, RouterOutputs };
+export type { AppRouter, Permission, RouterInputs, RouterOutputs };

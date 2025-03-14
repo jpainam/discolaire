@@ -1,4 +1,4 @@
-import { checkPermissions } from "@repo/api/permission";
+import { checkPermission } from "@repo/api/permission";
 import { Label } from "@repo/ui/components/label";
 import { Separator } from "@repo/ui/components/separator";
 import {
@@ -21,24 +21,24 @@ import { FinanceGroupAction } from "./FinanceGroupAction";
 import { GroupTableAction } from "./GroupTableAction";
 
 export default async function Page() {
-  const canReadFinnaceGroup = await checkPermissions(
+  const canReadFinnaceGroup = await checkPermission(
+    "accounting",
     PermissionAction.READ,
-    "accounting:group",
   );
   if (!canReadFinnaceGroup) {
     return <NoPermission />;
   }
-  const canCreateGroups = await checkPermissions(
+  const canCreateGroups = await checkPermission(
+    "accounting",
     PermissionAction.CREATE,
-    "accounting:group",
   );
-  const canEditGroup = await checkPermissions(
+  const canEditGroup = await checkPermission(
+    "accounting",
     PermissionAction.UPDATE,
-    "accounting:group",
   );
-  const canDeleteGroups = await checkPermissions(
+  const canDeleteGroups = await checkPermission(
+    "accounting",
     PermissionAction.DELETE,
-    "accounting:group",
   );
 
   const { t, i18n } = await getServerTranslations();

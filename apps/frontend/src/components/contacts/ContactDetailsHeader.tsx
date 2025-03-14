@@ -31,7 +31,7 @@ import { useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { api } from "~/trpc/react";
@@ -60,12 +60,9 @@ export function ContactDetailsHeader({
       toast.error(error.message, { id: 0 });
     },
   });
-  const canDeleteContact = useCheckPermissions(
+  const canDeleteContact = useCheckPermission(
+    "contact",
     PermissionAction.DELETE,
-    "contact:profile",
-    {
-      id: contact.id,
-    },
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();

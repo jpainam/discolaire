@@ -26,7 +26,7 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { CreateEditClassroom } from "~/components/classrooms/CreateEditClassroom";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
@@ -45,13 +45,13 @@ export default function ClassroomTable() {
       toast.error(error.message, { id: 0 });
     },
   });
-  const canDeleteClassroom = useCheckPermissions(
+  const canDeleteClassroom = useCheckPermission(
+    "classroom",
     PermissionAction.DELETE,
-    "classroom",
   );
-  const canEditClassroom = useCheckPermissions(
-    PermissionAction.UPDATE,
+  const canEditClassroom = useCheckPermission(
     "classroom",
+    PermissionAction.UPDATE,
   );
   const confirm = useConfirm();
   return (

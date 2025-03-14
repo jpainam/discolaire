@@ -26,14 +26,14 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { api } from "~/trpc/react";
 
 export function AssignmentTable() {
   const assignmentsQuery = api.assignment.getLatest.useQuery({ pageSize: 10 });
   const confirm = useConfirm();
   const { t } = useLocale();
-  const canDelete = useCheckPermissions(PermissionAction.DELETE, "assignment");
+  const canDelete = useCheckPermission("assignment", PermissionAction.DELETE);
   const utils = api.useUtils();
   const deleteAssignmentMutation = api.assignment.delete.useMutation({
     onSettled: async () => {

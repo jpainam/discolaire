@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import React from "react";
 
-import { checkPermissions } from "@repo/api/permission";
+import { checkPermission } from "@repo/api/permission";
 import { auth } from "@repo/auth";
 import { NoPermission } from "~/components/no-permission";
 import { getServerTranslations } from "~/i18n/server";
@@ -38,13 +38,7 @@ export default async function Layout(props: {
   const staff = await api.staff.get(id);
   const staffIsCurrentUser = session?.user.id === staff.userId;
 
-  const canReadStaff = await checkPermissions(
-    PermissionAction.READ,
-    "staff:profile",
-    {
-      id: id,
-    },
-  );
+  const canReadStaff = await checkPermission("staff", PermissionAction.READ);
   if (!staffIsCurrentUser && !canReadStaff) {
     return <NoPermission className="my-8" isFullPage resourceText="" />;
   }

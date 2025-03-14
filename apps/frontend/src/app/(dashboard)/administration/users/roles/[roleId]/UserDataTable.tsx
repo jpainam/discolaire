@@ -29,7 +29,7 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { AddUserToRole } from "./AddUserToRole";
@@ -38,13 +38,10 @@ export function UserDataTable({ roleId }: { roleId: string }) {
   const [query, setQuery] = useQueryState("q", {
     defaultValue: "",
   });
-  const canAddRoleToUser = useCheckPermissions(
-    PermissionAction.CREATE,
-    "user:role",
-  );
-  const canRemoveRoleFromUser = useCheckPermissions(
+  const canAddRoleToUser = useCheckPermission("role", PermissionAction.CREATE);
+  const canRemoveRoleFromUser = useCheckPermission(
+    "role",
     PermissionAction.DELETE,
-    "user:role",
   );
   const confirm = useConfirm();
   const [debounceValue] = useDebounce(query, 300);

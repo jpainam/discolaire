@@ -11,9 +11,9 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useCheckPermissions } from "~/hooks/use-permissions";
-import { api } from "~/trpc/react";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { api } from "~/trpc/react";
 
 type StudentGetAllProcedureOutput = NonNullable<
   RouterOutputs["student"]["all"]
@@ -28,9 +28,9 @@ export function StudentDataTableActions({
   const { t } = useLocale();
   const router = useRouter();
   const utils = api.useUtils();
-  const canDeleteStudent = useCheckPermissions(
+  const canDeleteStudent = useCheckPermission(
+    "student",
     PermissionAction.DELETE,
-    "student:profile",
   );
   const deleteStudentMutation = api.student.delete.useMutation({
     onSettled: () => utils.student.invalidate(),

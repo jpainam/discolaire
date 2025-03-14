@@ -23,7 +23,7 @@ import { useConfirm } from "~/providers/confirm-dialog";
 
 import { Badge } from "@repo/ui/components/badge";
 import { useModal } from "~/hooks/use-modal";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { CreateEditCourse } from "./CreateEditCourse";
@@ -158,13 +158,13 @@ function ActionCells({ course }: { course: CourseProcedureOutput }) {
     },
   });
 
-  const canDeleteCourse = useCheckPermissions(
+  const canDeleteCourse = useCheckPermission(
+    "classroom",
     PermissionAction.DELETE,
-    "classroom:details",
   );
-  const canUpdateCourse = useCheckPermissions(
+  const canUpdateCourse = useCheckPermission(
+    "classroom",
     PermissionAction.UPDATE,
-    "classroom:details",
   );
 
   return (

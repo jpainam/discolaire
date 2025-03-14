@@ -1,4 +1,4 @@
-import { checkPermissions } from "@repo/api/permission";
+import { checkPermission } from "@repo/api/permission";
 import { NoPermission } from "~/components/no-permission";
 import { PermissionAction } from "~/permissions";
 
@@ -8,9 +8,9 @@ import { api } from "~/trpc/server";
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
 
-  const canReadClassroom = await checkPermissions(
+  const canReadClassroom = await checkPermission(
+    "enrollment",
     PermissionAction.READ,
-    "classroom:enrollment",
   );
   if (!canReadClassroom) {
     return <NoPermission className="my-8" isFullPage={true} resourceText="" />;

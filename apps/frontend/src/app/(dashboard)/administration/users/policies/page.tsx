@@ -1,16 +1,16 @@
-import { checkPermissions } from "@repo/api/permission";
+import { checkPermission } from "@repo/api/permission";
 import { PermissionAction } from "~/permissions";
 
 import { PolicyTable } from "~/components/administration/policies/PolicyTable";
 
 export default async function Page() {
-  const canDeletePolicy = await checkPermissions(
+  const canDeletePolicy = await checkPermission(
+    "policy",
     PermissionAction.DELETE,
-    "policy",
   );
-  const canEditPolicy = await checkPermissions(
-    PermissionAction.UPDATE,
+  const canEditPolicy = await checkPermission(
     "policy",
+    PermissionAction.UPDATE,
   );
 
   return <PolicyTable canDelete={canDeletePolicy} canEdit={canEditPolicy} />;

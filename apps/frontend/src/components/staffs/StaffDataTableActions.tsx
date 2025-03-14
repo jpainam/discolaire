@@ -11,7 +11,7 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { RiDeleteBinLine } from "@remixicon/react";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
@@ -26,10 +26,7 @@ export function StaffDataTableActions({
   const { t } = useLocale();
   const router = useRouter();
 
-  const canDeleteStaff = useCheckPermissions(
-    PermissionAction.DELETE,
-    "staff:profile",
-  );
+  const canDeleteStaff = useCheckPermission("staff", PermissionAction.DELETE);
   const utils = api.useUtils();
   const deleteStaffMutation = api.staff.delete.useMutation({
     onSettled: () => utils.staff.invalidate(),

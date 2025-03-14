@@ -17,7 +17,7 @@ import { useLocale } from "~/i18n";
 
 import CreateEditContact from "~/components/contacts/CreateEditContact";
 import { SimpleTooltip } from "~/components/simple-tooltip";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";
 import { sidebarIcons } from "../sidebar-icons";
 import { LinkContact } from "./LinkContact";
@@ -25,13 +25,7 @@ import { LinkContact } from "./LinkContact";
 export function StudentContactHeader() {
   const params = useParams<{ id: string }>();
   const { t } = useLocale();
-  const canAddContact = useCheckPermissions(
-    PermissionAction.CREATE,
-    "student:contact",
-    {
-      id: params.id,
-    },
-  );
+  const canAddContact = useCheckPermission("contact", PermissionAction.CREATE);
 
   const Icon = sidebarIcons.contacts;
 

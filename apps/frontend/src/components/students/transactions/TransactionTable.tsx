@@ -40,7 +40,7 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
 import { routes } from "~/configs/routes";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
@@ -52,9 +52,9 @@ export function TransactionTable() {
   const { fullDateFormatter } = useDateFormat();
   const transactionsQuery = api.student.transactions.useQuery(params.id);
   const utils = api.useUtils();
-  const canDeleteTransaction = useCheckPermissions(
-    PermissionAction.DELETE,
+  const canDeleteTransaction = useCheckPermission(
     "transaction",
+    PermissionAction.DELETE,
   );
 
   const updateTransactionMutation = api.transaction.updateStatus.useMutation({

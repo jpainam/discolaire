@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { hashPassword } from "@repo/auth/session";
 import { db } from "@repo/db";
 
+import type { Permission } from "..";
 import { env } from "../env";
 
 export const userService = {
@@ -53,57 +54,10 @@ export const userService = {
     );
   },
   getPermissions: async (userId: string) => {
-    const user = await db.user.findUnique({
+    const user = await db.user.findUniqueOrThrow({
       where: { id: userId },
     });
-
-    const userWithRolesAndPolicies = await db.user.findUnique({
-      where: { id: userId },
-      include: {
-        policies: {
-          include: {
-            policy: true,
-          },
-        },
-        roles: {
-          include: {
-            role: {
-              include: {
-                policies: {
-                  include: {
-                    policy: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    });
-
-    // Extract and format policies from the nested structure
-    const rolePolicies = userWithRolesAndPolicies?.roles.flatMap((userRole) =>
-      userRole.role.policies.map((rolePolicy) => ({
-        actions: rolePolicy.policy.actions,
-        effect: rolePolicy.policy.effect,
-        resources: rolePolicy.policy.resources,
-        condition: rolePolicy.policy.condition,
-        schoolId: user?.schoolId ?? "UNKNOWN",
-      })),
-    );
-    const userPolicies = userWithRolesAndPolicies?.policies.map(
-      (userPolicy) => {
-        return {
-          actions: userPolicy.policy.actions,
-          effect: userPolicy.policy.effect,
-          resources: userPolicy.policy.resources,
-          condition: userPolicy.policy.condition,
-          schoolId: user?.schoolId ?? "UNKNOWN",
-        };
-      },
-    );
-
-    return [...(rolePolicies ?? []), ...(userPolicies ?? [])];
+    return user.permissions as unknown as Permission[];
   },
 
   updateProfile: async (
@@ -157,7 +111,7 @@ export const userService = {
     }
   },
 
-  updatePermission: async ({
+  updatePermission: ({
     userId,
     permission,
     action,
@@ -170,38 +124,46 @@ export const userService = {
     action: string;
     effect: "Allow" | "Deny";
   }) => {
-    const user = await db.user.findUniqueOrThrow({
-      where: {
-        id: userId,
-        schoolId: schoolId,
-      },
-    });
-    if (effect == "Allow") {
-      return db.user.update({
-        where: {
-          id: userId,
-        },
-        data: {
-          permissions: {
-            push: `${permission}:${action}`,
-          },
-        },
-      });
-    } else {
-      const updatedPermissions = user.permissions.filter(
-        (p) => p !== `${permission}:${action}`,
-      );
-      return db.user.update({
-        where: {
-          id: userId,
-        },
-        data: {
-          permissions: {
-            set: updatedPermissions,
-          },
-        },
-      });
-    }
+    console.log(
+      "updatePermission",
+      userId,
+      permission,
+      action,
+      effect,
+      schoolId,
+    );
+    // const user = await db.user.findUniqueOrThrow({
+    //   where: {
+    //     id: userId,
+    //     schoolId: schoolId,
+    //   },
+    // });
+    // if (effect == "Allow") {
+    //   return db.user.update({
+    //     where: {
+    //       id: userId,
+    //     },
+    //     data: {
+    //       permissions: {
+    //         push: `${permission}:${action}`,
+    //       },
+    //     },
+    //   });
+    // } else {
+    //   const updatedPermissions = user.permissions.filter(
+    //     (p) => p !== `${permission}:${action}`,
+    //   );
+    //   return db.user.update({
+    //     where: {
+    //       id: userId,
+    //     },
+    //     data: {
+    //       permissions: {
+    //         set: updatedPermissions,
+    //       },
+    //     },
+    //   });
+    // }
   },
 
   deleteUsers: async (userIds: string[]) => {

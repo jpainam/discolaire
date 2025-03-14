@@ -2,8 +2,7 @@ import { z } from "zod";
 
 import { TransactionStatus } from "@repo/db";
 
-import { checkPermissions } from "../permission";
-import { PermissionAction } from "../permission2";
+import { checkPermission } from "../permission";
 import { classroomService } from "../services/classroom-service";
 import { contactService } from "../services/contact-service";
 import { staffService } from "../services/staff-service";
@@ -27,7 +26,7 @@ export const classroomRouter = createTRPCRouter({
       schoolId: ctx.session.user.schoolId,
     });
     // Has access to all classrooms
-    if (await checkPermissions(PermissionAction.READ, "classroom:list")) {
+    if (await checkPermission("classroom", "Read")) {
       return classrooms;
     }
     // Has access to classrooms where he teachers

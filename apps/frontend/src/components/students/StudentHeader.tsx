@@ -55,7 +55,7 @@ import { useCallback, useEffect } from "react";
 import { SimpleTooltip } from "~/components/simple-tooltip";
 
 import { routes } from "~/configs/routes";
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { useSession } from "~/providers/AuthProvider";
@@ -147,20 +147,11 @@ export function StudentHeader({
 
   //const studentTags = JSON.stringify(student?.tags ?? []);
 
-  const canDeleteStudent = useCheckPermissions(
+  const canDeleteStudent = useCheckPermission(
+    "student",
     PermissionAction.DELETE,
-    "student:profile",
-    {
-      id: params.id,
-    },
   );
-  const canEditStudent = useCheckPermissions(
-    PermissionAction.UPDATE,
-    "student:profile",
-    {
-      id: params.id,
-    },
-  );
+  const canEditStudent = useCheckPermission("student", PermissionAction.UPDATE);
   //const [open, setOpen] = React.useState(false);
 
   const { user } = useSession();

@@ -29,7 +29,7 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useCheckPermissions } from "~/hooks/use-permissions";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
@@ -40,19 +40,13 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
   const { t, i18n } = useLocale();
 
   const { fullDateFormatter } = useDateFormat();
-  const canDeleteClassroomFee = useCheckPermissions(
+  const canDeleteClassroomFee = useCheckPermission(
+    "fee",
     PermissionAction.DELETE,
-    "classroom:fee",
-    {
-      id: classroomId,
-    },
   );
-  const canUpdateClassroomFee = useCheckPermissions(
+  const canUpdateClassroomFee = useCheckPermission(
+    "fee",
     PermissionAction.UPDATE,
-    "classroom:fee",
-    {
-      id: classroomId,
-    },
   );
   const utils = api.useUtils();
   const disableFeeMutation = api.fee.disable.useMutation({
