@@ -33,7 +33,7 @@
     "hast-util-to-jsx-runtime": "^2.3.6",
     "html-react-parser": "^5.2.2",
     "html-to-react": "^1.7.0",
-    "jose": "^6.0.8",
+    "jose": "^6.0.10",
     "preact": "^10.26.4",
     "qrcode": "^1.5.4",
     "rehype-parse": "^9.0.1",

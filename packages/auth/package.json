@@ -20,7 +20,7 @@
         "@repo/db": "workspace:*",
         "@t3-oss/env-nextjs": "^0.12.0",
         "bcryptjs": "^3.0.2",
-        "jose": "^6.0.8",
+        "jose": "^6.0.10",
         "jsonwebtoken": "^9.0.2",
         "next": "catalog:",
         "react": "catalog:",
