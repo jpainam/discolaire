@@ -14,20 +14,23 @@ import { Label } from "@repo/ui/components/label";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
+import { CreateEditFee } from "~/components/classrooms/fees/CreateEditFee";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
-import { JournalSelector } from "~/components/shared/selects/JounalSelector";
+import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
 
 export function FeeHeader() {
   const { t } = useLocale();
   const router = useRouter();
+
   const searchParams = useSearchParams();
   const { createQueryString } = useCreateQueryString();
+  const { openModal } = useModal();
 
   return (
-    <div className="flex flex-row items-center gap-2 px-4 py-1">
+    <div className="flex flex-row items-center gap-2 px-4 border-b py-1">
       <Label>{t("classrooms")}</Label>
 
       <ClassroomSelector
@@ -37,18 +40,20 @@ export function FeeHeader() {
           router.push("?" + createQueryString({ classroom: val }));
         }}
       />
-      <Label>{t("journals")}</Label>
-      <JournalSelector
-        defaultValue={searchParams.get("journal") ?? ""}
-        className="w-[300px]"
-        onChange={(val) => {
-          router.push("?" + createQueryString({ journal: val }));
-        }}
-      />
 
       <div className="ml-auto flex items-center gap-2">
         {searchParams.get("classroom") && (
-          <Button variant={"default"}>
+          <Button
+            onClick={() => {
+              const classroomId = searchParams.get("classroom");
+              if (!classroomId) return;
+              openModal({
+                title: t("add"),
+                view: <CreateEditFee classroomId={classroomId} />,
+              });
+            }}
+            variant={"default"}
+          >
             <Plus />
             {t("add")}
           </Button>

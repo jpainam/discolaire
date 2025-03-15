@@ -27,7 +27,7 @@ export function ClassroomFeeHeader() {
   const { openModal } = useModal();
   const canCreateClassroomFee = useCheckPermission(
     "fee",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const Icon = sidebarIcons.fees;
   return (
@@ -39,9 +39,8 @@ export function ClassroomFeeHeader() {
           <Button
             onClick={() => {
               openModal({
-                title: <div>{t("add")}</div>,
-                className: "w-[500px]",
-                view: <CreateEditFee />,
+                title: t("add"),
+                view: <CreateEditFee classroomId={params.id} />,
               });
             }}
             size={"sm"}
@@ -61,7 +60,7 @@ export function ClassroomFeeHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/fees?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -72,7 +71,7 @@ export function ClassroomFeeHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/fees?format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

@@ -175,6 +175,7 @@ function ActionCell({ fee }: { fee: Fee }) {
   const confirm = useConfirm();
   const feeMutation = api.fee.delete.useMutation();
   const utils = api.useUtils();
+
   return (
     <div className="flex justify-end">
       <DropdownMenu>
@@ -188,7 +189,7 @@ function ActionCell({ fee }: { fee: Fee }) {
             onSelect={() => {
               openModal({
                 title: t("edit"),
-                view: <CreateEditFee fee={fee} />,
+                view: <CreateEditFee classroomId={fee.classroomId} fee={fee} />,
               });
             }}
           >

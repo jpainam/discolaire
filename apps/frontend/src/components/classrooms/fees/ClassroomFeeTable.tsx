@@ -42,11 +42,11 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
   const { fullDateFormatter } = useDateFormat();
   const canDeleteClassroomFee = useCheckPermission(
     "fee",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateClassroomFee = useCheckPermission(
     "fee",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const utils = api.useUtils();
 
@@ -136,8 +136,12 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
                                 onSelect={() => {
                                   openModal({
                                     title: t("edit"),
-                                    className: "w-[500px]",
-                                    view: <CreateEditFee fee={fee} />,
+                                    view: (
+                                      <CreateEditFee
+                                        classroomId={classroomId}
+                                        fee={fee}
+                                      />
+                                    ),
                                   });
                                 }}
                               >

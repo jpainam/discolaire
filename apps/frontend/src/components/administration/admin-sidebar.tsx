@@ -71,7 +71,7 @@ export function AdminSidebar({
         //isActive: true,
         items: [
           {
-            title: "Frais",
+            title: "school_fees",
             url: "/administration/accounting/fees",
           },
           {

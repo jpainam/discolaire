@@ -210,6 +210,26 @@ export const policies: {
     resource: "gradesheet",
     action: PermissionAction.Delete,
   },
+  {
+    title: "attendance",
+    resource: "attendance",
+    action: PermissionAction.Read,
+  },
+  {
+    title: "attendance",
+    resource: "attendance",
+    action: PermissionAction.Update,
+  },
+  {
+    title: "attendance",
+    resource: "attendance",
+    action: PermissionAction.Create,
+  },
+  {
+    title: "attendance",
+    resource: "attendance",
+    action: PermissionAction.Delete,
+  },
 ];
 
 export const menuPolicies: {

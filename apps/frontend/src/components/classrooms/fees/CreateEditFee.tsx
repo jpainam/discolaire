@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Fee } from "@prisma/client";
 import { Save, X } from "lucide-react";
-import { useParams } from "next/navigation";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -16,11 +15,12 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@repo/ui/components/form";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
-import { DatePickerField } from "~/components/shared/forms/date-picker-field";
+import { DatePicker } from "~/components/DatePicker";
 import { InputField } from "~/components/shared/forms/input-field";
 import { api } from "~/trpc/react";
 
@@ -33,7 +33,13 @@ const createEditFeeSchema = z.object({
   //isActive: z.boolean().default(true),
 });
 
-export function CreateEditFee({ fee }: { fee?: Fee }) {
+export function CreateEditFee({
+  fee,
+  classroomId,
+}: {
+  fee?: Fee;
+  classroomId: string;
+}) {
   const { t } = useLocale();
   const form = useForm<z.infer<typeof createEditFeeSchema>>({
     resolver: zodResolver(createEditFeeSchema),
@@ -46,8 +52,6 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
       //isActive: fee?.isActive ?? true,
     },
   });
-  const params = useParams<{ id: string }>();
-  const classroomId = params.id;
 
   const { closeModal } = useModal();
   const utils = api.useUtils();
@@ -79,7 +83,7 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof createEditFeeSchema>> = (
-    data: z.infer<typeof createEditFeeSchema>,
+    data: z.infer<typeof createEditFeeSchema>
   ) => {
     const values = {
       code: data.code,
@@ -119,7 +123,22 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
         </div>
 
         <InputField label="Amount" name="amount" />
-        <DatePickerField label={t("due_date")} name="dueDate" />
+        <FormField
+          control={form.control}
+          name="dueDate"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("due_date")}</FormLabel>
+              <FormControl>
+                <DatePicker
+                  defaultValue={field.value}
+                  onChange={(val) => field.onChange(val)}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -134,7 +153,7 @@ export function CreateEditFee({ fee }: { fee?: Fee }) {
               </FormControl>
               <div className="space-y-1 leading-none">
                 <FormLabel>{t("required_fees")} ? </FormLabel>
-                <FormDescription>
+                <FormDescription className="text-sm">
                   {t("required_fees_description")}
                 </FormDescription>
               </div>
