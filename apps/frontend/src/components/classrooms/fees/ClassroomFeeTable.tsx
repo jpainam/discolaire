@@ -3,7 +3,7 @@
 import { subDays } from "date-fns";
 import { addDays } from "date-fns/addDays";
 import { sumBy } from "lodash";
-import { MoreHorizontal, Pencil, ShieldOff, Trash2 } from "lucide-react";
+import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -42,25 +42,14 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
   const { fullDateFormatter } = useDateFormat();
   const canDeleteClassroomFee = useCheckPermission(
     "fee",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateClassroomFee = useCheckPermission(
     "fee",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const utils = api.useUtils();
-  const disableFeeMutation = api.fee.disable.useMutation({
-    onSettled: async () => {
-      await utils.classroom.fees.invalidate(classroomId);
-      await utils.fee.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+
   const deleteFeeMutation = api.fee.delete.useMutation({
     onSettled: async () => {
       await utils.classroom.fees.invalidate(classroomId);
@@ -128,13 +117,6 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
                     )}
                   </TableCell>
                   <TableCell className="">
-                    {fee.isActive ? (
-                      <FlatBadge variant={"green"}>{t("active")}</FlatBadge>
-                    ) : (
-                      <FlatBadge variant={"red"}>{t("inactive")}</FlatBadge>
-                    )}
-                  </TableCell>
-                  <TableCell className="">
                     <FlatBadge variant={fee.isRequired ? "red" : "green"}>
                       {fee.isRequired ? t("yes") : t("no")}
                     </FlatBadge>
@@ -166,18 +148,6 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
                             {canDeleteClassroomFee && (
                               <>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem
-                                  onSelect={() => {
-                                    toast.loading(t("updating"), { id: 0 });
-                                    disableFeeMutation.mutate({
-                                      id: fee.id,
-                                      isActive: !fee.isActive,
-                                    });
-                                  }}
-                                >
-                                  <ShieldOff />
-                                  {fee.isActive ? t("disable") : t("enable")}
-                                </DropdownMenuItem>
                                 <DropdownMenuItem
                                   variant="destructive"
                                   className="dark:data-[variant=destructive]:focus:bg-destructive/10"

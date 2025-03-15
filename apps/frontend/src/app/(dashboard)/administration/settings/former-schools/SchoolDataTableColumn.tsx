@@ -23,13 +23,7 @@ import { CreateEditSchool } from "./CreateEditSchool";
 
 type FormerSchool = RouterOutputs["formerSchool"]["all"][number];
 
-export function getSchoolColumns({
-  t,
-  fullDateFormatter,
-}: {
-  t: TFunction<string, unknown>;
-  fullDateFormatter: Intl.DateTimeFormat;
-}) {
+export function getSchoolColumns({ t }: { t: TFunction<string, unknown> }) {
   return [
     {
       accessorKey: "selected",
@@ -63,16 +57,7 @@ export function getSchoolColumns({
       ),
       cell: ({ row }) => <div className="flex">{row.getValue("name")}</div>,
     },
-    {
-      accessorKey: "createdAt",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("createdAt")} />
-      ),
-      cell: ({ row }) => {
-        const createdAt = row.original.createdAt;
-        return fullDateFormatter.format(createdAt);
-      },
-    },
+
     {
       id: "actions",
 
@@ -124,10 +109,10 @@ function ActionCell({ school }: { school: FormerSchool }) {
             onSelect={async () => {
               const isConfirmed = await confirm({
                 title: t("delete"),
-                icon: <Trash2 className="size-4 text-destructive" />,
-                alertDialogTitle: {
-                  className: "flex items-center gap-2",
-                },
+                // icon: <Trash2 className="size-4 text-destructive" />,
+                // alertDialogTitle: {
+                //   className: "flex items-center gap-2",
+                // },
                 description: t("delete_confirmation"),
               });
 

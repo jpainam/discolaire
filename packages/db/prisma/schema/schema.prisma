@@ -610,7 +610,6 @@ model Fee {
     createdBy   String?
     updatedBy   String?
     classroomId String
-    isActive    Boolean?  @default(true)
     isRequired  Boolean?  @default(false)
     classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
 }
