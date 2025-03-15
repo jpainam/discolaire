@@ -211,7 +211,6 @@ export const studentService = {
       where: {
         classroomId: classroomId,
         isRequired: true,
-        isActive: true,
       },
     });
 

@@ -149,7 +149,6 @@ const CommandEmpty = ({
   className,
   ...props
 }: React.ComponentProps<typeof CommandPrimitive.Empty>) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const render = useCommandState((state) => state.filtered.count === 0);
 
   if (!render) return null;

@@ -45,9 +45,7 @@ export function FeesDetailsForm({ fee }: { fee?: Fee }) {
       description: fee?.description ?? "",
       amount: fee?.amount ?? 0,
       dueDate: fee?.dueDate ?? new Date(),
-
       classroom: "",
-      isActive: fee?.isActive ?? false,
     },
     resolver: zodResolver(editFeeFormSchema),
   });
