@@ -1,7 +1,9 @@
 import { z } from "zod";
 
+import redisClient from "@repo/kv";
+
 import { enrollmentService } from "../services/enrollment-service";
-import { studentService } from "../services/student-service";
+import { isRepeating, studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const enrollmentRouter = createTRPCRouter({
@@ -25,10 +27,7 @@ export const enrollmentRouter = createTRPCRouter({
         data.map(async (student) => {
           return {
             ...student,
-            isRepeating: await studentService.isRepeating(
-              student.id,
-              ctx.schoolYearId,
-            ),
+            isRepeating: await isRepeating(student.id, ctx.schoolYearId),
             classroom: await studentService.getClassroom(
               student.id,
               ctx.schoolYearId,
@@ -64,6 +63,17 @@ export const enrollmentRouter = createTRPCRouter({
               schoolYearId: ctx.schoolYearId,
             },
           ];
+      if (Array.isArray(input.studentId)) {
+        await Promise.all(
+          input.studentId.map((studId) => {
+            const key = `student:${studId}:schoolYear:${ctx.schoolYearId}:isRepeating`;
+            return redisClient.del(key);
+          }),
+        );
+      } else {
+        const key = `student:${input.studentId}:schoolYear:${ctx.schoolYearId}:isRepeating`;
+        await redisClient.del(key);
+      }
       return ctx.db.enrollment.createMany({
         data: data,
       });
@@ -129,6 +139,19 @@ export const enrollmentRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.union([z.array(z.coerce.number()), z.coerce.number()]))
     .mutation(async ({ ctx, input }) => {
+      const enrollments = await ctx.db.enrollment.findMany({
+        where: {
+          id: {
+            in: Array.isArray(input) ? input : [input],
+          },
+        },
+      });
+      await Promise.all(
+        enrollments.map((enr) => {
+          const key = `student:${enr.studentId}:schoolYear:${enr.schoolYearId}:isRepeating`;
+          void redisClient.del(key);
+        }),
+      );
       return ctx.db.enrollment.deleteMany({
         where: {
           id: {

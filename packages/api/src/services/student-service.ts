@@ -1,4 +1,5 @@
 import { db } from "@repo/db";
+import redisClient from "@repo/kv";
 
 import { classroomService } from "./classroom-service";
 
@@ -56,6 +57,7 @@ export const studentService = {
     );
     return {
       ...student,
+      isRepeating: await isRepeating(studentId, schoolYearId),
       classroom: classroom,
     };
   },
@@ -126,46 +128,6 @@ export const studentService = {
       data: studentSports,
       skipDuplicates: true,
     });
-  },
-  isRepeating: async (
-    studentId: string,
-    schoolYearId: string,
-  ): Promise<boolean> => {
-    const currentClassroom = await studentService.getClassroom(
-      studentId,
-      schoolYearId,
-    );
-    const student = await db.student.findUnique({
-      where: {
-        id: studentId,
-      },
-    });
-    if (!student) {
-      return false;
-    }
-    if (!currentClassroom) {
-      return false;
-    }
-    const enrollments = await db.enrollment.findMany({
-      where: {
-        studentId: studentId,
-      },
-    });
-    if (enrollments.length <= 1) {
-      return student.isRepeating;
-    }
-    const enrollement = await db.enrollment.findFirst({
-      where: {
-        studentId: studentId,
-        schoolYearId: {
-          lt: schoolYearId,
-        },
-        classroom: {
-          levelId: currentClassroom.levelId,
-        },
-      },
-    });
-    return !!enrollement;
   },
   getGrades: ({
     studentId,
@@ -330,3 +292,39 @@ export const studentService = {
     return `${startWidth}${school.registrationPrefix}2001`;
   },
 };
+
+export async function isRepeating(studentId: string, schoolYearId: string) {
+  const key = `student:${studentId}:schoolYear:${schoolYearId}:isRepeating`;
+  const rep = await redisClient.get(key);
+  if (rep !== null) {
+    return rep === "true";
+  }
+  const enrollments = await db.enrollment.findMany({
+    where: {
+      studentId: studentId,
+      schoolYearId: {
+        lte: schoolYearId,
+      },
+    },
+    include: {
+      classroom: true,
+    },
+  });
+  if (enrollments.length <= 1) {
+    void redisClient.set(key, "false");
+    return false;
+  }
+  const currentEnrollement = enrollments.find(
+    (enr) => enr.classroom.schoolYearId === schoolYearId,
+  );
+  const previousEnrollments = enrollments.filter(
+    (enr) => enr.classroom.schoolYearId !== schoolYearId,
+  );
+  const isRepeating =
+    previousEnrollments.filter(
+      (prev) =>
+        prev.classroom.levelId === currentEnrollement?.classroom.levelId,
+    ).length > 0;
+  void redisClient.set(key, isRepeating ? "true" : "false");
+  return isRepeating;
+}

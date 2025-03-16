@@ -8,7 +8,7 @@ import redisClient from "@repo/kv";
 
 import { accountService } from "../services/account-service";
 import { contactService } from "../services/contact-service";
-import { studentService } from "../services/student-service";
+import { isRepeating, studentService } from "../services/student-service";
 import { userService } from "../services/user-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -88,10 +88,7 @@ export const studentRouter = createTRPCRouter({
         data.map(async (student) => {
           return {
             ...student,
-            isRepeating: await studentService.isRepeating(
-              student.id,
-              ctx.schoolYearId,
-            ),
+            isRepeating: await isRepeating(student.id, ctx.schoolYearId),
             classroom: await studentService.getClassroom(
               student.id,
               ctx.schoolYearId,
@@ -136,10 +133,7 @@ export const studentRouter = createTRPCRouter({
       data.map(async (student) => {
         return {
           ...student,
-          isRepeating: await studentService.isRepeating(
-            student.id,
-            ctx.schoolYearId,
-          ),
+          isRepeating: await isRepeating(student.id, ctx.schoolYearId),
           classroom: await studentService.getClassroom(
             student.id,
             ctx.schoolYearId,
@@ -177,10 +171,7 @@ export const studentRouter = createTRPCRouter({
         data.map(async (student) => {
           return {
             ...student,
-            isRepeating: await studentService.isRepeating(
-              student.id,
-              ctx.schoolYearId,
-            ),
+            isRepeating: await isRepeating(student.id, ctx.schoolYearId),
             classroom: await studentService.getClassroom(
               student.id,
               ctx.schoolYearId,
