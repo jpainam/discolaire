@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     env.VERCEL_ENV === "production"
       ? "https://school.discolaire.com"
-      : "http://localhost:3000"
+      : "http://localhost:3000",
   ),
   title: "Gestion Scolaire",
   description: "Gestion scolaire pour les écoles",
@@ -94,7 +94,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
           className={cn(
             "bg-background overscroll-none font-sans antialiased",
             activeThemeValue ? `theme-${activeThemeValue}` : "",
-            fontVariables
+            fontVariables,
           )}
         >
           <ThemeProvider
