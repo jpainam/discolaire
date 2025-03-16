@@ -31,6 +31,25 @@ export const absenceRouter = {
       },
     });
   }),
+  justify: protectedProcedure
+    .input(
+      z.object({
+        absenceId: z.coerce.number(),
+        reason: z.string().min(1),
+        comment: z.string().optional(),
+        value: z.coerce.number(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.absenceJustification.create({
+        data: {
+          reason: input.reason,
+          absenceId: input.absenceId,
+          createdById: ctx.session.user.id,
+          value: input.value,
+        },
+      });
+    }),
   studentSummary: protectedProcedure
     .input(
       z.object({
@@ -56,7 +75,10 @@ export const absenceRouter = {
       return {
         total: absences.reduce((acc, curr) => acc + curr.value, 0),
         value: absences.reduce((acc, curr) => acc + curr.value, 0),
-        justified: justifications.reduce((acc, curr) => acc + curr.value, 0),
+        justified: justifications.reduce(
+          (acc, curr) => acc + (curr.justification?.value ?? 0),
+          0,
+        ),
       };
     }),
   byClassroom: protectedProcedure

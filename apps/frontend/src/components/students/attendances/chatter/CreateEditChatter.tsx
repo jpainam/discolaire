@@ -20,7 +20,7 @@ import { Input } from "@repo/ui/components/input";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
-import { DatePicker } from "~/components/shared/date-picker";
+import { DatePicker } from "~/components/DatePicker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { api } from "~/trpc/react";
 
@@ -88,12 +88,12 @@ export function CreateEditChatter({
   };
   return (
     <Form {...form}>
-      <form className="grid gap-4" onSubmit={form.handleSubmit(handleSubmit)}>
+      <form className="grid gap-6" onSubmit={form.handleSubmit(handleSubmit)}>
         <FormField
           control={form.control}
           name="termId"
           render={({ field }) => (
-            <FormItem className="space-y-0">
+            <FormItem>
               <FormLabel>{t("terms")}</FormLabel>
               <FormControl>
                 <TermSelector {...field} />
@@ -106,10 +106,13 @@ export function CreateEditChatter({
           control={form.control}
           name="date"
           render={({ field }) => (
-            <FormItem className="space-y-0">
+            <FormItem>
               <FormLabel>{t("date")}</FormLabel>
               <FormControl>
-                <DatePicker {...field} />
+                <DatePicker
+                  defaultValue={field.value}
+                  onChange={(val) => field.onChange(val)}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -119,7 +122,7 @@ export function CreateEditChatter({
           control={form.control}
           name="value"
           render={({ field }) => (
-            <FormItem className="space-y-0">
+            <FormItem>
               <FormLabel>{t("number")}</FormLabel>
               <FormControl>
                 <Input

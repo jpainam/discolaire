@@ -15,25 +15,20 @@ import {
   FormMessage,
   useForm,
 } from "@repo/ui/components/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@repo/ui/components/select";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
-import { useRouter } from "~/hooks/use-router";
+import { Input } from "@repo/ui/components/input";
 import { DatePicker } from "~/components/DatePicker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { useModal } from "~/hooks/use-modal";
+import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { api } from "~/trpc/react";
 
 const schema = z.object({
   termId: z.string().min(1),
   date: z.coerce.date().default(() => new Date()),
-  hours: z.string().min(1),
-  minutes: z.string().min(1),
+  duration: z.coerce.number(),
+  // hours: z.string().min(1),
+  // minutes: z.string().min(1),
 });
 export function CreateEditLateness({
   lateness,
@@ -44,10 +39,11 @@ export function CreateEditLateness({
     schema: schema,
     defaultValues: {
       date: lateness?.date ?? new Date(),
-      hours: lateness?.duration
-        ? Math.floor(lateness.duration / 60).toString()
-        : "0",
-      minutes: lateness?.duration ? (lateness.duration % 60).toString() : "0",
+      duration: lateness?.duration ?? 0,
+      // hours: lateness?.duration
+      //   ? Math.floor(lateness.duration / 60).toString()
+      //   : "0",
+      // minutes: lateness?.duration ? (lateness.duration % 60).toString() : "0",
     },
   });
   const utils = api.useUtils();
@@ -84,7 +80,7 @@ export function CreateEditLateness({
   const handleSubmit = (data: z.infer<typeof schema>) => {
     const values = {
       studentId: params.id,
-      duration: parseInt(data.hours) * 60 + parseInt(data.minutes),
+      duration: Number(data.duration), //parseInt(data.hours) * 60 + parseInt(data.minutes),
       termId: parseInt(data.termId),
     };
     if (lateness) {
@@ -97,12 +93,12 @@ export function CreateEditLateness({
   };
   return (
     <Form {...form}>
-      <form className="grid gap-4" onSubmit={form.handleSubmit(handleSubmit)}>
+      <form className="grid gap-6" onSubmit={form.handleSubmit(handleSubmit)}>
         <FormField
           control={form.control}
           name="termId"
           render={({ field }) => (
-            <FormItem className="space-y-0">
+            <FormItem>
               <FormLabel>{t("terms")}</FormLabel>
               <FormControl>
                 <TermSelector {...field} />
@@ -116,7 +112,7 @@ export function CreateEditLateness({
           control={form.control}
           name="date"
           render={({ field }) => (
-            <FormItem className="space-y-0">
+            <FormItem>
               <FormLabel>{t("date")}</FormLabel>
               <FormControl>
                 <DatePicker defaultValue={field.value} {...field} />
@@ -125,57 +121,22 @@ export function CreateEditLateness({
             </FormItem>
           )}
         />
-        <div className="grid grid-cols-2 gap-2">
-          <FormField
-            control={form.control}
-            name="hours"
-            render={({ field }) => (
-              <FormItem className="space-y-0">
-                <FormLabel>{t("hours")}</FormLabel>
-                <FormControl>
-                  <Select defaultValue={"0"} onValueChange={field.onChange}>
-                    <SelectTrigger>
-                      <SelectValue placeholder={t("hours")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: 23 }, (_, i) => (
-                        <SelectItem key={i} value={i.toString()}>
-                          {i.toString().padStart(2, "0")}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="minutes"
-            render={({ field }) => (
-              <FormItem className="space-y-0">
-                <FormLabel>{t("minutes")}</FormLabel>
-                <FormControl>
-                  <Select defaultValue={"0"} onValueChange={field.onChange}>
-                    <SelectTrigger>
-                      <SelectValue placeholder={t("hours")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: 60 }, (_, i) => (
-                        <SelectItem key={i} value={i.toString()}>
-                          {i.toString().padStart(2, "0")}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+        <FormField
+          control={form.control}
+          name="duration"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("duration")}</FormLabel>
+              <FormControl>
+                <Input type="number" {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <div className="grid grid-cols-2 gap-2">
           <Button
             onClick={() => {

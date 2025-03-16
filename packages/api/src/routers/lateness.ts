@@ -68,21 +68,16 @@ export const latenessRouter = createTRPCRouter({
         },
       });
       const duration = lateness.reduce((acc, curr) => acc + curr.duration, 0);
-      const hours = Math.floor(duration / 60);
-      const remainingMinutes = duration % 60;
-      const latenessvalue = `${String(hours).padStart(2, "0")}:${String(remainingMinutes).padStart(2, "0")}`;
+
       const justifications = lateness.filter((l) => l.justification);
       const justificationDuration = justifications.reduce(
-        (acc, curr) => acc + curr.duration,
+        (acc, curr) => acc + (curr.justification?.duration ?? 0),
         0,
       );
-      const justifiedHours = Math.floor(justificationDuration / 60);
-      const justifiedMinutes = justificationDuration % 60;
-      const justifiedValue = `${String(justifiedHours).padStart(2, "0")}:${String(justifiedMinutes).padStart(2, "0")}`;
       return {
-        value: latenessvalue,
+        value: duration,
         total: lateness.length,
-        justified: justifiedValue,
+        justified: justificationDuration,
       };
     }),
   byClassroom: protectedProcedure

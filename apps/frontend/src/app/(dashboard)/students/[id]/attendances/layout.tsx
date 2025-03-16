@@ -69,26 +69,31 @@ export default async function Layout(props: {
             title={t("my_absences")}
             value={absence.total.toString()}
             icon={BaselineIcon}
+            description={`${t("justified")}: ${absence.justified}`}
           />
           <AttendanceGroup
             title={t("my_lates")}
             value={late.value}
             icon={ClockIcon}
+            description={`${t("justified")}: ${late.justified}`}
           />
           <AttendanceGroup
             title={t("my_exclusions")}
             value={exclusion.value.toString()}
             icon={ShieldAlertIcon}
+            description={`N/A`}
           />
           <AttendanceGroup
             title={t("my_chatters")}
             value={chatter.value.toString()}
             icon={NewspaperIcon}
+            description={`N/A`}
           />
           <AttendanceGroup
             title={t("my_consignes")}
             value={consigne.value.toString()}
             icon={ShapesIcon}
+            description={`N/A`}
           />
         </div>
         {children}
@@ -97,27 +102,24 @@ export default async function Layout(props: {
   );
 }
 
-async function AttendanceGroup({
+function AttendanceGroup({
   icon,
   title,
   value,
-  justified,
+  description,
 }: {
   icon: LucideIcon;
   title: string;
   value: string;
-  justified?: string;
+  description?: string;
 }) {
-  const { t } = await getServerTranslations();
   const Icon = icon;
   return (
     <div className="flex cursor-pointer items-center gap-2 border-b px-2 py-2 hover:bg-muted hover:text-muted-foreground">
       <Icon className="h-4 w-4" />
       <div className="flex flex-col">
         <span className="text-sm font-semibold">{title}</span>
-        <span className="text-xs text-muted-foreground">
-          {t("justified")}: {justified ?? 0}
-        </span>
+        <span className="text-xs text-muted-foreground">{description}</span>
       </div>
       <span className="ml-auto text-xs font-bold">{value}</span>
     </div>

@@ -68,11 +68,9 @@ export const consigneRouter = createTRPCRouter({
         },
       });
       const duration = consignes.reduce((acc, curr) => acc + curr.duration, 0);
-      const hours = Math.floor(duration / 60);
-      const remainingMinutes = duration % 60;
-      const consignesvalue = `${String(hours).padStart(2, "0")}:${String(remainingMinutes).padStart(2, "0")}`;
+
       return {
-        value: consignesvalue,
+        value: duration,
         total: consignes.length,
         justified: 0,
       };

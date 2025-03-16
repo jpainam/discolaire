@@ -63,20 +63,27 @@ export function StudentAttendanceAction({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem
-          onSelect={() => {
-            if (type == "lateness") {
-              const lateness = attendance as LatenessType;
-              openModal({
-                title: t("justify_lateness"),
-                view: <JustifyLateness lateness={lateness} />,
-              });
-            }
-          }}
-        >
-          <Columns4Icon />
-          {t("justify")}
-        </DropdownMenuItem>
+        {(type == "lateness" || type == "absence") && (
+          <DropdownMenuItem
+            onSelect={() => {
+              if (type == "lateness") {
+                const lateness = attendance as LatenessType;
+                openModal({
+                  title: t("justify_lateness"),
+                  description: (
+                    <>
+                      {t("lateness")}: {lateness.duration.toString()}
+                    </>
+                  ),
+                  view: <JustifyLateness lateness={lateness} />,
+                });
+              }
+            }}
+          >
+            <Columns4Icon />
+            {t("justify")}
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem
           onSelect={() => {
             toast.loading(t("sending"), { id: 0 });
@@ -106,10 +113,10 @@ export function StudentAttendanceAction({
             const isConfirmed = await confirm({
               title: t("delete"),
               description: t("delete_confirmation"),
-              icon: <Trash2 className="text-destructive" />,
-              alertDialogTitle: {
-                className: "flex items-center gap-1",
-              },
+              // icon: <Trash2 className="text-destructive" />,
+              // alertDialogTitle: {
+              //   className: "flex items-center gap-1",
+              // },
             });
 
             if (isConfirmed) {

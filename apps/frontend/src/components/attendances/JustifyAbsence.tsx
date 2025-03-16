@@ -25,16 +25,14 @@ import { api } from "~/trpc/react";
 const justifySchema = z.object({
   reason: z.string().min(1),
   comment: z.string().min(1),
-  duration: z.string().min(1),
-  // hours: z.string().min(1),
-  // minutes: z.string().min(1),
+  value: z.string().min(1),
 });
-export function JustifyLateness({
-  lateness,
+export function JustifyAbsence({
+  absence,
 }: {
-  lateness:
-    | RouterOutputs["lateness"]["get"]
-    | RouterOutputs["lateness"]["byClassroom"][number];
+  absence:
+    | RouterOutputs["absence"]["get"]
+    | RouterOutputs["absence"]["byClassroom"][number];
 }) {
   const { closeModal } = useModal();
 
@@ -44,15 +42,11 @@ export function JustifyLateness({
     defaultValues: {
       reason: "",
       comment: "",
-      duration: lateness.duration ? lateness.duration.toString() : "0",
-      // hours: lateness.duration
-      //   ? Math.floor(lateness.duration / 60).toString()
-      //   : "0",
-      // minutes: lateness.duration ? (lateness.duration % 60).toString() : "0",
+      value: absence.value ? absence.value.toString() : "0",
     },
   });
   const router = useRouter();
-  const justifyLatenessMutation = api.lateness.justify.useMutation({
+  const justifyMutation = api.absence.justify.useMutation({
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
       closeModal();
@@ -62,21 +56,21 @@ export function JustifyLateness({
       toast.error(error.message, { id: 0 });
     },
     onSettled: () => {
-      void utils.lateness.invalidate();
+      void utils.absence.invalidate();
       closeModal();
     },
   });
   const handleSubmit = (data: z.infer<typeof justifySchema>) => {
-    if (Number(data.duration) <= 0) {
-      toast.error(`Duration must >=0 and <= ${lateness.duration}`);
+    if (Number(data.value) <= 0 || Number(data.value) > absence.value) {
+      toast.error(`Must be >= 0 or <= ${absence.value}`);
       return;
     }
     const values = {
       reason: data.reason,
-      latenessId: lateness.id,
-      duration: Number(data.duration),
+      absenceId: absence.id,
+      value: Number(data.value),
     };
-    justifyLatenessMutation.mutate(values);
+    justifyMutation.mutate(values);
   };
   const { i18n, t } = useLocale();
 
@@ -93,9 +87,8 @@ export function JustifyLateness({
               weekday: "short",
               month: "short",
               day: "numeric",
-            }).format(lateness.date)}
+            }).format(absence.date)}
           </span>
-          {/* <span className="text-muted-foreground">{lateness.duration}</span> */}
         </div>
         <div className="grid grid-cols-2 gap-4">
           <FormField
@@ -113,7 +106,7 @@ export function JustifyLateness({
           />
           <FormField
             control={form.control}
-            name="duration"
+            name="value"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t("number")}</FormLabel>
@@ -150,7 +143,7 @@ export function JustifyLateness({
           >
             {t("cancel")}
           </Button>
-          <Button isLoading={justifyLatenessMutation.isPending} type="submit">
+          <Button isLoading={justifyMutation.isPending} type="submit">
             {t("submit")}
           </Button>
         </div>
