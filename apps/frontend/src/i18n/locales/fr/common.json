@@ -54,7 +54,7 @@
   "average_completion_rate": "Taux de complétion moyen",
   "across_all_assignments": "Sur tous les devoirs",
   "next_assignment_due": "Prochain devoir à rendre",
-  "delete_periodic_attendance": "Supprimer la présence périodique",
+  "delete_all_periodic_attendance": "Supprimer toutes les présences périodique",
   "absence_cannot_be_less_than_justify_for": "L'absence ne peut être inférieure à la justification pour {{name}}",
   "PENDING": "En attente",
   "academics": "Académies",

@@ -3,7 +3,6 @@
 import {
   BaselineIcon,
   ChevronDown,
-  ChevronsUpDown,
   DiameterIcon,
   MoreVertical,
   NewspaperIcon,
@@ -20,7 +19,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuPortal,
-  DropdownMenuSeparator,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -119,45 +117,6 @@ export function AttendanceHeader() {
       <div className="ml-auto flex flex-row items-center gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size={"sm"} variant={"outline"}>
-              {t("bulk_actions")} <ChevronsUpDown className="ml-1 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>{t("pdf_export")}</DropdownMenuItem>
-            <DropdownMenuItem>{t("xml_export")}</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              disabled={!termId}
-              onSelect={async () => {
-                const isConfirmed = await confirm({
-                  title: t("delete"),
-                  description: t("delete_confirmation"),
-                  icon: <Trash2 className="text-destructive" />,
-                  alertDialogTitle: {
-                    className: "flex items-center gap-2",
-                  },
-                });
-                if (isConfirmed) {
-                  toast.loading(t("deleting"), { id: 0 });
-                  if (!termId) {
-                    return;
-                  }
-                  deletePeriodictAttendance.mutate({
-                    classroomId: params.id,
-                    termId: Number(termId),
-                  });
-                }
-              }}
-              variant="destructive"
-              className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-            >
-              {t("delete_periodic_attendance")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
             <Button disabled={!termId} size={"sm"}>
               {t("add")}
               <ChevronDown
@@ -231,6 +190,34 @@ export function AttendanceHeader() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        <Button
+          size={"icon"}
+          disabled={!termId}
+          onClick={async () => {
+            const isConfirmed = await confirm({
+              title: t("delete"),
+              description: t("delete_all_periodic_attendance"),
+              // icon: <Trash2 className="text-destructive" />,
+              // alertDialogTitle: {
+              //   className: "flex items-center gap-2",
+              // },
+            });
+            if (isConfirmed) {
+              toast.loading(t("deleting"), { id: 0 });
+              if (!termId) {
+                return;
+              }
+              deletePeriodictAttendance.mutate({
+                classroomId: params.id,
+                termId: Number(termId),
+              });
+            }
+          }}
+          variant="destructive"
+          className="size-8"
+        >
+          <Trash2 className="w-4 h-4" />
+        </Button>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
