@@ -309,22 +309,24 @@ export async function isRepeating(studentId: string, schoolYearId: string) {
     },
     include: {
       classroom: true,
+      student: true,
     },
   });
-  if (enrollments.length <= 1) {
-    void redisClient.set(key, "false");
-    return false;
-  }
-  const currentEnrollement = enrollments.find(
+  const curEnrollement = enrollments.find(
     (enr) => enr.classroom.schoolYearId === schoolYearId,
   );
-  const previousEnrollments = enrollments.filter(
+  if (enrollments.length <= 1) {
+    const r = curEnrollement?.student.isRepeating;
+    void redisClient.set(key, r ? "true" : "false");
+    return r;
+  }
+
+  const prevEnrollments = enrollments.filter(
     (enr) => enr.classroom.schoolYearId !== schoolYearId,
   );
   const isRepeating =
-    previousEnrollments.filter(
-      (prev) =>
-        prev.classroom.levelId === currentEnrollement?.classroom.levelId,
+    prevEnrollments.filter(
+      (prev) => prev.classroom.levelId === curEnrollement?.classroom.levelId,
     ).length > 0;
   void redisClient.set(key, isRepeating ? "true" : "false");
   return isRepeating;

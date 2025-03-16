@@ -79,20 +79,36 @@ export const studentRouter = createTRPCRouter({
           formerSchool: true,
           religion: true,
           country: true,
+          enrollments: {
+            include: {
+              classroom: true,
+            },
+          },
         },
         where: {
           schoolId: ctx.schoolId,
         },
       });
       const students = await Promise.all(
-        data.map(async (student) => {
+        data.map((student) => {
+          let isRepeating = student.isRepeating;
+          const curEnrollement = student.enrollments.find(
+            (enr) => enr.classroom.schoolYearId === ctx.schoolYearId,
+          );
+          if (student.enrollments.length > 1) {
+            const prevEnrollments = student.enrollments.filter(
+              (enr) => enr.classroom.schoolYearId !== ctx.schoolYearId,
+            );
+            isRepeating =
+              prevEnrollments.filter(
+                (prev) =>
+                  prev.classroom.levelId === curEnrollement?.classroom.levelId,
+              ).length > 0;
+          }
           return {
             ...student,
-            isRepeating: await isRepeating(student.id, ctx.schoolYearId),
-            classroom: await studentService.getClassroom(
-              student.id,
-              ctx.schoolYearId,
-            ),
+            isRepeating: isRepeating,
+            classroom: curEnrollement?.classroom,
           };
         }),
       );
@@ -126,18 +142,34 @@ export const studentRouter = createTRPCRouter({
         formerSchool: true,
         religion: true,
         country: true,
+        enrollments: {
+          include: {
+            classroom: true,
+          },
+        },
       },
     });
 
     const students = await Promise.all(
-      data.map(async (student) => {
+      data.map((student) => {
+        let isRepeating = student.isRepeating;
+        const curEnrollement = student.enrollments.find(
+          (enr) => enr.classroom.schoolYearId === ctx.schoolYearId,
+        );
+        if (student.enrollments.length > 1) {
+          const prevEnrollments = student.enrollments.filter(
+            (enr) => enr.classroom.schoolYearId !== ctx.schoolYearId,
+          );
+          isRepeating =
+            prevEnrollments.filter(
+              (prev) =>
+                prev.classroom.levelId === curEnrollement?.classroom.levelId,
+            ).length > 0;
+        }
         return {
           ...student,
-          isRepeating: await isRepeating(student.id, ctx.schoolYearId),
-          classroom: await studentService.getClassroom(
-            student.id,
-            ctx.schoolYearId,
-          ),
+          isRepeating: isRepeating,
+          classroom: curEnrollement?.classroom,
         };
       }),
     );
