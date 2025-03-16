@@ -40,7 +40,7 @@ export default async function Page(props: {
     api.chatter.byClassroom({ classroomId, termId }),
     api.exclusion.byClassroom({ classroomId, termId }),
   ]);
-  const attendances: {
+  let attendances: {
     id: number;
     name?: string | null;
     studentId: string;
@@ -109,6 +109,33 @@ export default async function Page(props: {
 
   if (!attendances.length) {
     return <EmptyState className="my-8" title={t("no_attendances_recorded")} />;
+  }
+  switch (searchParams.type) {
+    case "absence":
+      attendances = attendances.filter(
+        (attendance) => attendance.type === "absence"
+      );
+      break;
+    case "lateness":
+      attendances = attendances.filter(
+        (attendance) => attendance.type === "lateness"
+      );
+      break;
+    case "consigne":
+      attendances = attendances.filter(
+        (attendance) => attendance.type === "consigne"
+      );
+      break;
+    case "chatter":
+      attendances = attendances.filter(
+        (attendance) => attendance.type === "chatter"
+      );
+      break;
+    case "exclusion":
+      attendances = attendances.filter(
+        (attendance) => attendance.type === "exclusion"
+      );
+      break;
   }
 
   return (

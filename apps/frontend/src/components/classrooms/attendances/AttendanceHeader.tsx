@@ -67,7 +67,7 @@ export function AttendanceHeader() {
   const termId = searchParams.get("term");
 
   return (
-    <div className="grid flex-row items-center gap-4 border-b bg-muted px-2 py-1 md:flex">
+    <div className="grid flex-row items-center gap-4 border-b bg-muted px-4 py-1 md:flex">
       <Label className="hidden md:block">{t("periods")}</Label>
       <TermSelector
         className="md:w-[300px]"
@@ -76,7 +76,7 @@ export function AttendanceHeader() {
           router.push(
             routes.classrooms.attendances.index(params.id) +
               "?" +
-              createQueryString({ term: val }),
+              createQueryString({ term: val })
           );
         }}
       />
@@ -87,7 +87,7 @@ export function AttendanceHeader() {
           router.push(
             routes.classrooms.attendances.index(params.id) +
               "?" +
-              createQueryString({ type: val }),
+              createQueryString({ type: val == "all" ? undefined : val })
           );
         }}
       >
@@ -95,8 +95,9 @@ export function AttendanceHeader() {
           <SelectValue placeholder={t("all_types")} />
         </SelectTrigger>
         <SelectContent>
+          <SelectItem value="all">{t("all_types")}</SelectItem>
           <SelectItem value="absence">{t("absence")}</SelectItem>
-          <SelectItem value="late">{t("late")}</SelectItem>
+          <SelectItem value="lateness">{t("late")}</SelectItem>
           <SelectItem value="chatter">{t("chatter")}</SelectItem>
           <SelectItem value="consigne">{t("consigne")}</SelectItem>
           <SelectItem value="exclusion">{t("exclusion")}</SelectItem>
@@ -110,7 +111,7 @@ export function AttendanceHeader() {
           router.push(
             routes.classrooms.attendances.index(params.id) +
               "?" +
-              createQueryString({ date: e.target.value }),
+              createQueryString({ date: e.target.value })
           );
         }}
       />
@@ -173,7 +174,7 @@ export function AttendanceHeader() {
                 router.push(
                   routes.classrooms.attendances.absences(params.id) +
                     "?" +
-                    createQueryString({ term: searchParams.get("term") }),
+                    createQueryString({ term: searchParams.get("term") })
                 );
               }}
             >
@@ -185,7 +186,7 @@ export function AttendanceHeader() {
                 router.push(
                   routes.classrooms.attendances.lateness(params.id) +
                     "?" +
-                    createQueryString({ term: searchParams.get("term") }),
+                    createQueryString({ term: searchParams.get("term") })
                 );
               }}
             >
@@ -197,7 +198,7 @@ export function AttendanceHeader() {
                 router.push(
                   routes.classrooms.attendances.chatters(params.id) +
                     "?" +
-                    createQueryString({ term: searchParams.get("term") }),
+                    createQueryString({ term: searchParams.get("term") })
                 );
               }}
             >
@@ -209,7 +210,7 @@ export function AttendanceHeader() {
                 router.push(
                   routes.classrooms.attendances.consignes(params.id) +
                     "?" +
-                    createQueryString({ term: searchParams.get("term") }),
+                    createQueryString({ term: searchParams.get("term") })
                 );
               }}
             >
@@ -221,7 +222,7 @@ export function AttendanceHeader() {
                 router.push(
                   routes.classrooms.attendances.exclusions(params.id) +
                     "?" +
-                    createQueryString({ term: searchParams.get("term") }),
+                    createQueryString({ term: searchParams.get("term") })
                 );
               }}
             >
@@ -249,7 +250,7 @@ export function AttendanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/attendances?format=pdf&type=weekly`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >
@@ -259,7 +260,7 @@ export function AttendanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/attendances?format=pdf&type=periodic`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >
@@ -279,7 +280,7 @@ export function AttendanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/attendances?format=csv&type=weekly`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >
@@ -289,7 +290,7 @@ export function AttendanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/attendances?format=csv&type=periodic`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >
