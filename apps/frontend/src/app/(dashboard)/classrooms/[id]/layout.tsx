@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from "react";
 
 import { checkPermission } from "@repo/api/permission";
@@ -32,7 +29,7 @@ export default async function Layout(props: {
   } else {
     canReadClassroom = await checkPermission(
       "classroom",
-      PermissionAction.READ
+      PermissionAction.READ,
     );
   }
 

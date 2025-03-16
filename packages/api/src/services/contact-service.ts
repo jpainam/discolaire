@@ -26,6 +26,7 @@ export const contactService = {
         },
         schoolYearId: schoolYearId,
         classroom: {
+          schoolYearId: schoolYearId,
           schoolId: schoolId,
         },
       },

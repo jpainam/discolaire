@@ -38,6 +38,7 @@ export const classroomRouter = createTRPCRouter({
       const classes = await contactService.getClassrooms(
         contact.id,
         ctx.schoolYearId,
+        ctx.schoolId,
       );
       const classesIds = classes.map((c) => c.id);
       return classrooms.filter((cl) => classesIds.includes(cl.id));
