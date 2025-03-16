@@ -248,6 +248,9 @@ async function getStudents(classroomId: string) {
       enrollments: {
         some: {
           classroomId: classroomId,
+          schoolYearId: {
+            lte: classroom.schoolYearId,
+          },
         },
       },
     },
@@ -270,45 +273,30 @@ async function getStudents(classroomId: string) {
       },
     },
   });
-  const studentIds = students.map((st) => st.id);
-
-  const previousEnrollments = await db.enrollment.findMany({
-    where: {
-      studentId: {
-        in: studentIds,
-      },
-      schoolYearId: {
-        lt: classroom.schoolYearId,
-      },
-    },
-    select: {
-      studentId: true,
-      classroom: {
-        select: {
-          schoolYearId: true,
-          levelId: true,
-        },
-      },
-    },
-  });
 
   // Check for repeating status
   const withIsRepeating = students.map((st) => {
+    if (st.enrollments.length <= 1) {
+      return {
+        ...st,
+        isRepeating: st.isRepeating,
+      };
+    }
     const currentEnrollement = st.enrollments.find(
       (enr) => enr.classroomId === classroomId,
+    );
+    const previousEnrollments = st.enrollments.filter(
+      (enr) => enr.classroomId !== classroomId,
     );
     const isRepeating =
       previousEnrollments.filter(
         (prev) =>
-          prev.studentId === st.id &&
           prev.classroom.levelId === currentEnrollement?.classroom.levelId,
       ).length > 0;
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { enrollments, ...studentWithoutEnrollments } = st;
     return {
-      ...studentWithoutEnrollments,
-      isRepeating,
+      ...st,
+      isRepeating: isRepeating,
     };
   });
 

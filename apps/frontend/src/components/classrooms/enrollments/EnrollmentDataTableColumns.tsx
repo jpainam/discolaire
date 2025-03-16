@@ -191,7 +191,7 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
   const router = useRouter();
   const canDeleteEnrollment = useCheckPermission(
     "enrollment",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const utils = api.useUtils();
   const unenrollStudentsMutation =
