@@ -1,6 +1,5 @@
 "use client";
 
-import { DownloadIcon } from "@radix-ui/react-icons";
 import type { Table } from "@tanstack/react-table";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -10,7 +9,6 @@ import { Button } from "@repo/ui/components/button";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { exportTableToCSV } from "~/lib/export";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
 
@@ -28,8 +26,8 @@ export function FeeDataTableActions({
     onSettled: () => utils.fee.invalidate(),
   });
   return (
-    <div className="flex items-center gap-2">
-      {table.getFilteredSelectedRowModel().rows.length > 0 ? (
+    <>
+      {table.getFilteredSelectedRowModel().rows.length > 0 && (
         <Button
           size={"sm"}
           onClick={async () => {
@@ -61,21 +59,7 @@ export function FeeDataTableActions({
           <Trash2 />
           {t("delete")} ({table.getFilteredSelectedRowModel().rows.length})
         </Button>
-      ) : null}
-
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() =>
-          exportTableToCSV(table, {
-            filename: "tasks",
-            excludeColumns: ["select", "actions"],
-          })
-        }
-      >
-        <DownloadIcon className="mr-2 size-4" aria-hidden="true" />
-        {t("export")}
-      </Button>
-    </div>
+      )}
+    </>
   );
 }

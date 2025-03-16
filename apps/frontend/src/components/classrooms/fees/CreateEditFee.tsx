@@ -83,7 +83,7 @@ export function CreateEditFee({
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof createEditFeeSchema>> = (
-    data: z.infer<typeof createEditFeeSchema>
+    data: z.infer<typeof createEditFeeSchema>,
   ) => {
     const values = {
       code: data.code,
