@@ -7,6 +7,40 @@ import { isRepeating, studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const enrollmentRouter = createTRPCRouter({
+  students: protectedProcedure
+    .input(z.object({ classroomId: z.string().min(1) }))
+    .query(async ({ ctx, input }) => {
+      // TODO Use this to replace classroom.student in classroom/[id]enrollment
+      const enrollments = await ctx.db.enrollment.findMany({
+        where: {
+          classroomId: input.classroomId,
+        },
+        include: {
+          student: {
+            include: {
+              formerSchool: true,
+              religion: true,
+            },
+          },
+        },
+      });
+      const enrollmentWithRepeating = await Promise.all(
+        enrollments.map(async (enrollment) => {
+          const isRep = await isRepeating(
+            enrollment.student.id,
+            ctx.schoolYearId,
+          );
+          return {
+            ...enrollment,
+            student: {
+              ...enrollment.student,
+              isRepeating: isRep,
+            },
+          };
+        }),
+      );
+      return enrollmentWithRepeating;
+    }),
   getEnrolledStudents: protectedProcedure
     .input(z.object({ schoolYearId: z.string().optional() }))
     .query(async ({ ctx, input }) => {
@@ -125,6 +159,22 @@ export const enrollmentRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const enrollments = await ctx.db.enrollment.findMany({
+        where: {
+          studentId: {
+            in: Array.isArray(input.studentId)
+              ? input.studentId
+              : [input.studentId],
+          },
+          classroomId: input.classroomId,
+        },
+      });
+      await Promise.all(
+        enrollments.map((enr) => {
+          const key = `student:${enr.studentId}:schoolYear:${enr.schoolYearId}:isRepeating`;
+          void redisClient.del(key);
+        }),
+      );
       return ctx.db.enrollment.deleteMany({
         where: {
           studentId: {
