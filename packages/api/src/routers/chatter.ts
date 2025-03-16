@@ -12,6 +12,38 @@ export const chatterRouter = createTRPCRouter({
       },
     });
   }),
+  createClassroom: protectedProcedure
+    .input(
+      z.object({
+        termId: z.coerce.number(),
+        classroomId: z.string().min(1),
+        students: z.array(
+          z.object({
+            id: z.string().min(1),
+            chatter: z.string().optional(),
+          }),
+        ),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      for (const student of input.students) {
+        if (!student.chatter) {
+          continue;
+        }
+        await ctx.db.chatter.create({
+          data: {
+            termId: input.termId,
+            studentId: student.id,
+            classroomId: input.classroomId,
+            date: new Date(),
+            type: "periodically",
+            createdById: ctx.session.user.id,
+            value: Number(student.chatter),
+          },
+        });
+      }
+      return true;
+    }),
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.chatter.findMany({
       orderBy: {
