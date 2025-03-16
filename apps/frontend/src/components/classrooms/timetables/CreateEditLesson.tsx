@@ -204,7 +204,7 @@ export function CreateEditLesson({
                   //{...field}
 
                   defaultOptions={daysOptions.filter((day) =>
-                    field.value?.includes(day.value)
+                    field.value?.includes(day.value),
                   )}
                   onChange={(values) => {
                     field.onChange(values.map((v) => v.value));

@@ -1,4 +1,4 @@
-import { addMonths } from "date-fns";
+import { addMonths, getDay } from "date-fns";
 import { z } from "zod";
 
 import { timetableService } from "../services/timetable-service";
@@ -88,7 +88,37 @@ export const lessonRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.coerce.number())
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.lesson.delete({ where: { id: input } });
+      const event = await ctx.db.lesson.findUniqueOrThrow({
+        where: {
+          id: input,
+        },
+      });
+      const schoolYear = await ctx.db.schoolYear.findUnique({
+        where: {
+          id: ctx.schoolYearId,
+        },
+      });
+      const endDate = schoolYear?.endDate ?? addMonths(new Date(), 9);
+      const events = await ctx.db.lesson.findMany({
+        where: {
+          subjectId: event.subjectId,
+          startTime: {
+            gte: event.startTime,
+            lt: endDate,
+          },
+        },
+      });
+      const targetDayOfTheWeek = getDay(event.startTime);
+      const matchingEventIds = events
+        .filter((evt) => getDay(evt.startTime) === targetDayOfTheWeek)
+        .map((ev) => ev.id);
+      return ctx.db.lesson.deleteMany({
+        where: {
+          id: {
+            in: matchingEventIds,
+          },
+        },
+      });
     }),
 });
 
