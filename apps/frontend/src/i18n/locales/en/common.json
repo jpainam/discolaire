@@ -193,6 +193,7 @@
   "total_absences": "Total Absences",
   "non_justified": "Non Justified",
   "late": "Late",
+  "delete_justification": "Delete Justification",
   "performance": "Performance",
   "justify_absence": "Justify an absence",
   "attendance_justification": "Attendance Justification",

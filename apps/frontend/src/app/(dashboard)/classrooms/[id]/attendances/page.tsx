@@ -55,7 +55,7 @@ export default async function Page(props: {
       name: absence.student.lastName,
       studentId: absence.studentId,
       type: "absence" as const,
-      justification: absence.justification?.reason ?? "",
+      justification: absence.justification?.value.toString() ?? "",
       description: absence.value.toString(),
       date: absence.date,
       attendance: absence,
@@ -127,7 +127,7 @@ export default async function Page(props: {
                 className={cn(
                   attendance.type === "chatter" && "bg-yellow-800",
                   attendance.type === "consigne" && "bg-pink-800",
-                  attendance.type === "lateness" && "bg-green-800 text-white",
+                  attendance.type === "lateness" && "bg-green-800 text-white"
                 )}
                 variant={
                   attendance.type === "absence"
@@ -156,9 +156,14 @@ export default async function Page(props: {
                   attendance.type.slice(1)}
               </Badge>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <div className="text-sm text-muted-foreground justify-between flex items-center">
               {t(attendance.type)} - {attendance.description}
-            </p>
+              {attendance.justification && (
+                <Badge variant="default" className="text-xs">
+                  {t("justified")}: {attendance.justification}
+                </Badge>
+              )}
+            </div>
             <p className="text-xs text-muted-foreground">
               {format(attendance.date, "PPP")}
             </p>

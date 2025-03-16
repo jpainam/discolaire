@@ -141,6 +141,7 @@
   "attachments": "Pièces jointes",
   "attendance": "Assiduité",
   "justify_absence": "Justifier une absence",
+  "delete_justification": "Supprimer la justification",
   "absences": "Absences",
   "attendance_date": "Date de présence",
   "attendance_justification": "Justification des absences",
