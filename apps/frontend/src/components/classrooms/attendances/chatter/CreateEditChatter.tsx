@@ -1,6 +1,6 @@
 "use client";
 
-import { SaveIcon, XIcon } from "lucide-react";
+import { NewspaperIcon, SaveIcon, XIcon } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -28,7 +28,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import { PiAddressBookTabsDuotone } from "react-icons/pi";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
@@ -45,7 +44,7 @@ const attendanceSchema = z.object({
   ),
 });
 
-export function CreateEditLateness({
+export function CreateEditChatter({
   students,
   termId,
   classroomId,
@@ -125,8 +124,8 @@ export function CreateEditLateness({
           <CardHeader>
             <CardTitle className="text-lg flex flex-row items-center gap-2">
               <div className="flex items-center gap-2">
-                <PiAddressBookTabsDuotone className="h-6 w-6" />
-                {t("lateness")}
+                <NewspaperIcon className="h-6 w-6" />
+                {t("chatter")}
               </div>
               <div className="ml-auto flex flex-row items-center gap-2">
                 <Button

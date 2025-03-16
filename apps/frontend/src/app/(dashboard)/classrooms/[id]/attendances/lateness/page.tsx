@@ -1,4 +1,4 @@
-import { CreateEditLateness } from "~/components/classrooms/attendances/lates/CreateEditLateness";
+import { CreateEditLateness } from "~/components/classrooms/attendances/lateness/CreateEditLateness";
 import { api } from "~/trpc/server";
 
 export default async function Page(props: {
