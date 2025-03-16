@@ -74,7 +74,7 @@ export function StudentAttendanceAction({
             }
           }}
         >
-          <Columns4Icon className="mr-2 h-4 w-4" />
+          <Columns4Icon />
           {t("justify")}
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -97,7 +97,7 @@ export function StudentAttendanceAction({
               });
           }}
         >
-          <MailIcon className="mr-2 h-4 w-4" />
+          <MailIcon />
           {t("notify")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />

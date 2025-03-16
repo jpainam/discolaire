@@ -12,6 +12,41 @@ export const exclusionRouter = createTRPCRouter({
       },
     });
   }),
+  createClassroom: protectedProcedure
+    .input(
+      z.object({
+        termId: z.coerce.number(),
+        classroomId: z.string().min(1),
+        students: z.array(
+          z.object({
+            id: z.string().min(1),
+            from: z.coerce.date().nullish(),
+            to: z.coerce.date().nullish(),
+            reason: z.string().nullish(),
+          }),
+        ),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      for (const student of input.students) {
+        if (!student.from || !student.to) {
+          continue;
+        }
+
+        await ctx.db.exclusion.create({
+          data: {
+            termId: input.termId,
+            studentId: student.id,
+            classroomId: input.classroomId,
+            startDate: student.from,
+            endDate: student.to,
+            reason: student.reason ?? "",
+            createdById: ctx.session.user.id,
+          },
+        });
+      }
+      return true;
+    }),
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.exclusion.findMany({
       orderBy: {

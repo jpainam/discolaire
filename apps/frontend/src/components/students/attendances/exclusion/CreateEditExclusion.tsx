@@ -17,10 +17,10 @@ import {
 } from "@repo/ui/components/form";
 import { Textarea } from "@repo/ui/components/textarea";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 
-import { DatePicker } from "~/components/shared/date-picker";
+import { DatePicker } from "~/components/DatePicker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { api } from "~/trpc/react";
 
@@ -90,12 +90,12 @@ export function CreateEditExclusion({
   };
   return (
     <Form {...form}>
-      <form className="grid gap-4" onSubmit={form.handleSubmit(handleSubmit)}>
+      <form className="grid gap-6" onSubmit={form.handleSubmit(handleSubmit)}>
         <FormField
           control={form.control}
           name="termId"
           render={({ field }) => (
-            <FormItem className="space-y-0">
+            <FormItem>
               <FormLabel>{t("terms")}</FormLabel>
               <FormControl>
                 <TermSelector {...field} />
@@ -110,10 +110,13 @@ export function CreateEditExclusion({
             control={form.control}
             name="startDate"
             render={({ field }) => (
-              <FormItem className="space-y-0">
+              <FormItem>
                 <FormLabel>{t("from")}</FormLabel>
                 <FormControl>
-                  <DatePicker {...field} />
+                  <DatePicker
+                    defaultValue={field.value}
+                    onChange={(val) => field.onChange(val)}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -123,10 +126,13 @@ export function CreateEditExclusion({
             control={form.control}
             name="endDate"
             render={({ field }) => (
-              <FormItem className="space-y-0">
+              <FormItem>
                 <FormLabel>{t("to")}</FormLabel>
                 <FormControl>
-                  <DatePicker {...field} />
+                  <DatePicker
+                    defaultValue={field.value}
+                    onChange={(val) => field.onChange(val)}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -137,7 +143,7 @@ export function CreateEditExclusion({
           control={form.control}
           name="reason"
           render={({ field }) => (
-            <FormItem className="space-y-0">
+            <FormItem>
               <FormLabel>{t("reason")}</FormLabel>
               <FormControl>
                 <Textarea {...field} />

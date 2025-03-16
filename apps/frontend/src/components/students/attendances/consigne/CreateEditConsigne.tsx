@@ -15,27 +15,20 @@ import {
   FormMessage,
   useForm,
 } from "@repo/ui/components/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@repo/ui/components/select";
 import { Textarea } from "@repo/ui/components/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
-import { DatePicker } from "~/components/shared/date-picker";
+import { Input } from "@repo/ui/components/input";
+import { DatePicker } from "~/components/DatePicker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
-import { api } from "~/trpc/react";
 import { useRouter } from "~/hooks/use-router";
+import { api } from "~/trpc/react";
 
 const schema = z.object({
   termId: z.string().min(1),
   date: z.coerce.date().default(() => new Date()),
-  hours: z.string().min(1),
-  minutes: z.string().min(1),
+  duration: z.coerce.number(),
   task: z.string().min(1),
 });
 export function CreateEditConsigne({
@@ -47,10 +40,11 @@ export function CreateEditConsigne({
     schema: schema,
     defaultValues: {
       date: consigne?.date ?? new Date(),
-      hours: consigne?.duration
-        ? Math.floor(consigne.duration / 60).toString()
-        : "0",
-      minutes: consigne?.duration ? (consigne.duration % 60).toString() : "0",
+      duration: consigne?.duration ?? 0,
+      // hours: consigne?.duration
+      //   ? Math.floor(consigne.duration / 60).toString()
+      //   : "0",
+      // minutes: consigne?.duration ? (consigne.duration % 60).toString() : "0",
       task: consigne?.task ?? "",
     },
   });
@@ -88,7 +82,8 @@ export function CreateEditConsigne({
   const handleSubmit = (data: z.infer<typeof schema>) => {
     const values = {
       studentId: params.id,
-      duration: parseInt(data.hours) * 60 + parseInt(data.minutes),
+      //duration: parseInt(data.hours) * 60 + parseInt(data.minutes),
+      duration: Number(data.duration),
       termId: parseInt(data.termId),
       date: data.date,
       task: data.task,
@@ -103,12 +98,12 @@ export function CreateEditConsigne({
   };
   return (
     <Form {...form}>
-      <form className="grid gap-4" onSubmit={form.handleSubmit(handleSubmit)}>
+      <form className="grid gap-6" onSubmit={form.handleSubmit(handleSubmit)}>
         <FormField
           control={form.control}
           name="termId"
           render={({ field }) => (
-            <FormItem className="space-y-0">
+            <FormItem>
               <FormLabel>{t("terms")}</FormLabel>
               <FormControl>
                 <TermSelector {...field} />
@@ -121,71 +116,38 @@ export function CreateEditConsigne({
           control={form.control}
           name="date"
           render={({ field }) => (
-            <FormItem className="space-y-0">
+            <FormItem>
               <FormLabel>{t("date")}</FormLabel>
               <FormControl>
-                <DatePicker {...field} />
+                <DatePicker
+                  defaultValue={field.value}
+                  onChange={(val) => field.onChange(val)}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <div className="grid grid-cols-2 gap-2">
-          <FormField
-            control={form.control}
-            name="hours"
-            render={({ field }) => (
-              <FormItem className="space-y-0">
-                <FormLabel>{t("hours")}</FormLabel>
-                <FormControl>
-                  <Select defaultValue={"0"} onValueChange={field.onChange}>
-                    <SelectTrigger>
-                      <SelectValue placeholder={t("hours")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: 23 }, (_, i) => (
-                        <SelectItem key={i} value={i.toString()}>
-                          {i.toString().padStart(2, "0")}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="minutes"
-            render={({ field }) => (
-              <FormItem className="space-y-0">
-                <FormLabel>{t("minutes")}</FormLabel>
-                <FormControl>
-                  <Select defaultValue={"0"} onValueChange={field.onChange}>
-                    <SelectTrigger>
-                      <SelectValue placeholder={t("hours")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: 60 }, (_, i) => (
-                        <SelectItem key={i} value={i.toString()}>
-                          {i.toString().padStart(2, "0")}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+        <FormField
+          control={form.control}
+          name="duration"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("duration")}</FormLabel>
+              <FormControl>
+                <Input {...field} type="number" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="task"
           render={({ field }) => (
-            <FormItem className="space-y-0">
+            <FormItem>
               <FormLabel>{t("task")}</FormLabel>
               <FormControl>
                 <Textarea {...field} />

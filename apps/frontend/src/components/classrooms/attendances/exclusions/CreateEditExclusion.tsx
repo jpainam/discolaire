@@ -38,13 +38,14 @@ const attendanceSchema = z.object({
   students: z.array(
     z.object({
       id: z.string().min(1),
-      late: z.string().optional(),
-      justify: z.string().optional(),
-    }),
+      from: z.coerce.date().nullish(),
+      to: z.coerce.date().nullish(),
+      reason: z.string().nullish(),
+    })
   ),
 });
 
-export function CreateEditLateness({
+export function CreateEditExclusion({
   students,
   termId,
   classroomId,
@@ -60,21 +61,22 @@ export function CreateEditLateness({
     defaultValues: {
       students: students.map((student) => ({
         id: student.id,
-        late: "",
-        justify: "",
+        from: null,
+        to: null,
+        reason: "",
       })),
     },
   });
   const utils = api.useUtils();
   const router = useRouter();
-  const createLateness = api.lateness.createClassroom.useMutation({
+  const createExclusion = api.exclusion.createClassroom.useMutation({
     onSettled: async () => {
-      await utils.absence.invalidate();
+      await utils.exclusion.invalidate();
     },
     onSuccess: () => {
       toast.success(t("added_successfully"), { id: 0 });
       router.push(
-        `/classrooms/${classroomId}/attendances?type=lateness&term=${termId}`,
+        `/classrooms/${classroomId}/attendances?type=exclusion&term=${termId}`
       );
     },
     onError: (error) => {
@@ -89,11 +91,11 @@ export function CreateEditLateness({
     toast.loading(t("creating"), { id: 0 });
     let hasError = false;
     for (const student of data.students) {
-      if (!student.late) {
+      if (!student.from || !student.to) {
         continue;
       }
       // convert late and justify to hh:mm if not already.
-      if (student.justify && Number(student.late) < Number(student.justify)) {
+      if (student.to < student.from) {
         const std = students.find((s) => s.id === student.id);
         toast.error(`Erreur avec ${getFullName(std)}`, { id: 0 });
         hasError = true;
@@ -101,19 +103,20 @@ export function CreateEditLateness({
       }
     }
     if (!hasError) {
-      const lates = data.students
+      const exclusions = data.students
         .map((student) => {
           return {
             id: student.id,
-            late: student.late ?? "",
-            justify: student.justify ?? "",
+            from: student.from,
+            to: student.to,
+            reason: student.reason,
           };
         })
-        .filter((student) => student.late != "");
-      createLateness.mutate({
+        .filter((student) => student.from && student.to);
+      createExclusion.mutate({
         termId: termId,
         classroomId: classroomId,
-        students: lates,
+        students: exclusions,
       });
     }
   };
@@ -131,7 +134,7 @@ export function CreateEditLateness({
                 <Button
                   onClick={() => {
                     router.push(
-                      routes.classrooms.attendances.index(classroomId),
+                      routes.classrooms.attendances.index(classroomId)
                     );
                   }}
                   size={"sm"}
@@ -142,7 +145,7 @@ export function CreateEditLateness({
                   {t("cancel")}
                 </Button>
                 <Button
-                  isLoading={createLateness.isPending}
+                  isLoading={createExclusion.isPending}
                   size={"sm"}
                   variant={"default"}
                 >
@@ -174,8 +177,9 @@ export function CreateEditLateness({
                     </TableHead>
                     <TableHead>{t("fullName")}</TableHead>
                     <TableHead></TableHead>
-                    <TableHead>{t("lateness")}</TableHead>
-                    <TableHead>{t("justified")}</TableHead>
+                    <TableHead>{t("from")}</TableHead>
+                    <TableHead>{t("to")}</TableHead>
+                    <TableHead>{t("reason")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -204,16 +208,23 @@ export function CreateEditLateness({
                         <TableCell></TableCell>
                         <TableCell>
                           <Input
-                            {...form.register(`students.${index}.late`)}
-                            className="h-8 w-[100px]"
-                            type="number"
+                            {...form.register(`students.${index}.from`)}
+                            className="h-8"
+                            type="date"
                           />
                         </TableCell>
                         <TableCell>
                           <Input
-                            className="h-8 w-[100px]"
-                            type="number"
-                            {...form.register(`students.${index}.justify`)}
+                            {...form.register(`students.${index}.to`)}
+                            className="h-8"
+                            type="date"
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Input
+                            className="h-8"
+                            type="text"
+                            {...form.register(`students.${index}.reason`)}
                           />
                         </TableCell>
                       </TableRow>

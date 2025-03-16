@@ -1,10 +1,16 @@
 import { format } from "date-fns";
-import { AlertCircle, Clock, MessageSquare } from "lucide-react";
+import {
+  AlertCircle,
+  Clock,
+  MessageSquare,
+  ShieldAlertIcon,
+} from "lucide-react";
 
 import { Badge } from "@repo/ui/components/badge";
 import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 
+import i18next from "i18next";
 import { AvatarState } from "~/components/AvatarState";
 import { AttendanceAction } from "~/components/classrooms/attendances/AttendanceAction";
 import { api } from "~/trpc/server";
@@ -32,7 +38,7 @@ export default async function Page(props: {
   ]);
   const attendances: {
     id: number;
-    name: string;
+    name?: string | null;
     studentId: string;
     type: "absence" | "lateness" | "chatter" | "consigne" | "exclusion";
     justification?: string;
@@ -41,7 +47,7 @@ export default async function Page(props: {
   }[] = [
     ...absences.map((absence) => ({
       id: absence.id,
-      name: absence.student.lastName + " " + absence.student.firstName,
+      name: absence.student.lastName,
       studentId: absence.studentId,
       type: "absence" as const,
       justification: absence.justification?.reason ?? "",
@@ -50,7 +56,7 @@ export default async function Page(props: {
     })),
     ...lates.map((late) => ({
       id: late.id,
-      name: late.student.lastName + " " + late.student.firstName,
+      name: late.student.lastName,
       studentId: late.studentId,
       type: "lateness" as const,
       justification: late.justification?.reason ?? "",
@@ -59,7 +65,7 @@ export default async function Page(props: {
     })),
     ...consignes.map((consigne) => ({
       id: consigne.id,
-      name: consigne.student.lastName + " " + consigne.student.firstName,
+      name: consigne.student.lastName,
       studentId: consigne.studentId,
       type: "consigne" as const,
       description: consigne.duration.toString(),
@@ -67,7 +73,7 @@ export default async function Page(props: {
     })),
     ...chatters.map((chatter) => ({
       id: chatter.id,
-      name: chatter.student.lastName + " " + chatter.student.firstName,
+      name: chatter.student.lastName,
       studentId: chatter.studentId,
       type: "chatter" as const,
       description: chatter.value.toString(),
@@ -75,10 +81,21 @@ export default async function Page(props: {
     })),
     ...exclusions.map((excl) => ({
       id: excl.id,
-      name: excl.student.lastName + " " + excl.student.firstName,
+      name: excl.student.lastName,
       studentId: excl.studentId,
       type: "exclusion" as const,
-      description: excl.reason,
+      description:
+        t("from") +
+        " " +
+        excl.startDate.toLocaleDateString(i18next.language, {
+          month: "short",
+          day: "numeric",
+        }) +
+        ` ${t("to")} ` +
+        excl.endDate.toLocaleDateString(i18next.language, {
+          month: "short",
+          day: "numeric",
+        }),
       date: excl.startDate,
     })),
   ].sort((a, b) => a.date.getTime() - b.date.getTime());
@@ -116,6 +133,9 @@ export default async function Page(props: {
                 )}
                 {attendance.type === "chatter" && (
                   <MessageSquare className="mr-1 h-3 w-3" />
+                )}
+                {attendance.type === "exclusion" && (
+                  <ShieldAlertIcon className="mr-1 h-3 w-3" />
                 )}
                 {attendance.type.charAt(0).toUpperCase() +
                   attendance.type.slice(1)}
