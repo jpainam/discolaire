@@ -1,18 +1,25 @@
 import { Separator } from "@repo/ui/components/separator";
 
-import { DisplayForm } from "~/components/users/roles/roles-form";
+import { TriangleAlert } from "lucide-react";
+import { getServerTranslations } from "~/i18n/server";
+import { SubscriptionPlans } from "./SubscriptionPlans";
 
-export default function Page() {
+export default async function Page() {
+  const { t } = await getServerTranslations();
   return (
     <div className="px-4">
-      <div>
-        <h3 className="text-lg font-medium">Display</h3>
-        <p className="text-sm text-muted-foreground">
-          Turn items on or off to control what&apos;s displayed in the app.
+      <div className="rounded-md border border-amber-500/50 px-4 py-3 text-amber-600">
+        <p className="text-md">
+          <TriangleAlert
+            className="me-3 -mt-0.5 inline-flex opacity-60"
+            size={24}
+            aria-hidden="true"
+          />
+          {t("no_subscription_plan")}
         </p>
       </div>
       <Separator />
-      <DisplayForm />
+      <SubscriptionPlans />
     </div>
   );
 }

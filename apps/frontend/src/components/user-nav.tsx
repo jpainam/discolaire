@@ -3,6 +3,7 @@
 import {
   Bell,
   Computer,
+  DollarSignIcon,
   LockKeyhole,
   LogOut,
   Settings,
@@ -39,15 +40,16 @@ export function UserNav() {
   const session = useSession();
   const { isMobile } = useSidebar();
   const user = session.user;
-  const initials = user?.name?.charAt(0) ?? "" + user?.name?.charAt(1);
+  if (!user) return null;
+  const initials = user.name?.charAt(0) ?? "" + user.name?.charAt(1);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="h-auto p-0 hover:bg-transparent">
           <Avatar className="size-8">
-            <AvatarImage src={user?.avatar ?? undefined} alt={initials} />
-            <AvatarFallback className="rounded-lg uppercase">{`${user?.name?.charAt(0)}${user?.name?.charAt(1)}`}</AvatarFallback>
+            <AvatarImage src={user.avatar ?? undefined} alt={initials} />
+            <AvatarFallback className="rounded-lg uppercase">{`${user.name?.charAt(0)}${user.name?.charAt(1)}`}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -61,14 +63,14 @@ export function UserNav() {
           <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
             <Avatar className="h-8 w-8 rounded-lg">
               <AvatarImage
-                src={user?.avatar ?? undefined}
-                alt={user?.name ?? ""}
+                src={user.avatar ?? undefined}
+                alt={user.name ?? ""}
               />
-              <AvatarFallback className="rounded-lg uppercase">{`${user?.name?.charAt(0)}${user?.name?.charAt(1)}`}</AvatarFallback>
+              <AvatarFallback className="rounded-lg uppercase">{`${user.name?.charAt(0)}${user.name?.charAt(1)}`}</AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-semibold">{user?.name}</span>
-              <span className="truncate text-xs">{user?.email}</span>
+              <span className="truncate font-semibold">{user.name}</span>
+              <span className="truncate text-xs">{user.email}</span>
             </div>
           </div>
         </DropdownMenuLabel>
@@ -77,13 +79,13 @@ export function UserNav() {
         <DropdownMenuGroup>
           <DropdownMenuItem
             onClick={() => {
-              if (user?.id) router.push(routes.users.details(user.id));
+              if (user.id) router.push(routes.users.details(user.id));
             }}
           >
             <User className="h-4 w-4" />
             <span>{t("profile")}</span>
           </DropdownMenuItem>
-          {user?.id && (
+          {user.id && (
             <DropdownMenuItem
               onSelect={() => {
                 router.push(`/users/${user.id}/password`);
@@ -95,23 +97,31 @@ export function UserNav() {
           )}
           <DropdownMenuItem
             onClick={() => {
-              if (user?.id) router.push(routes.users.settings(user.id));
+              if (user.id) router.push(routes.users.settings(user.id));
             }}
           >
             <Settings className="h-4 w-4" />
             <span>{t("settings")}</span>
           </DropdownMenuItem>
           <DropdownMenuItem
+            onSelect={() => router.push(`/users/${user.id}/subscriptions`)}
+          >
+            <DollarSignIcon />
+            {t("subscriptions")}
+          </DropdownMenuItem>
+          <DropdownMenuItem
             onClick={() => {
-              if (user?.id) router.push(routes.users.logs(user.id));
+              if (user.id) router.push(routes.users.logs(user.id));
             }}
           >
-            <Computer className="h-4 w-4" />
+            <Computer />
             <span>{t("logs_and_activities")}</span>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => router.push(`/users/${user.id}/notifications`)}
+          >
             <Bell />
-            Notifications
+            {t("notifications")}
           </DropdownMenuItem>
         </DropdownMenuGroup>
 

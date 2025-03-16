@@ -30,15 +30,22 @@ export default async function Layout(props: {
         />
 
         <div className="space-y-0.5">
+          <h2 className=" font-bold tracking-tight">{t("user_management")}</h2>
           <div className="flex flex-row items-center gap-16">
-            <h2 className=" font-bold tracking-tight">{t("userManagement")}</h2>
-            {/* <div className="flex flex-row items-center gap-2 text-muted-foreground">
-              <span className="font-bold">ID:</span>
-              {params.id}
-              <CopyUserIdButton userId={params.id} />
-            </div> */}
+            <div className="flex flex-row items-center gap-2 text-muted-foreground">
+              <span className="font-bold">{t("name")}</span>
+              {user.name}
+            </div>
+            <div className="flex flex-row items-center gap-2 text-muted-foreground">
+              <span className="font-bold">{t("username")}</span>
+              {user.username}
+            </div>
+            <div className="flex flex-row items-center gap-2 text-muted-foreground">
+              <span className="font-bold">{t("email")}</span>
+              {user.email}
+            </div>
           </div>
-          <p className="text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             {t("userManagementDescription")}
           </p>
         </div>
