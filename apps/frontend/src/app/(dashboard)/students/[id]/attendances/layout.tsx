@@ -73,7 +73,7 @@ export default async function Layout(props: {
           />
           <AttendanceGroup
             title={t("my_lates")}
-            value={late.value}
+            value={late.value.toString()}
             icon={ClockIcon}
             description={`${t("justified")}: ${late.justified}`}
           />

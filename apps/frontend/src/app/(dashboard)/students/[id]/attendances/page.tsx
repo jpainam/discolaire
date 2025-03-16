@@ -326,7 +326,7 @@ async function AbsenceItem({
             <BaselineIcon
               className={cn(
                 "h-6 w-6",
-                !item.justification ? "text-destructive" : "text-green-700"
+                !item.justification ? "text-destructive" : "text-green-700",
               )}
             />
             <div className="flex-1 items-start justify-start">

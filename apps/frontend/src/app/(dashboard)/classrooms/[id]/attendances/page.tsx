@@ -127,7 +127,7 @@ export default async function Page(props: {
                 className={cn(
                   attendance.type === "chatter" && "bg-yellow-800",
                   attendance.type === "consigne" && "bg-pink-800",
-                  attendance.type === "lateness" && "bg-green-800 text-white"
+                  attendance.type === "lateness" && "bg-green-800 text-white",
                 )}
                 variant={
                   attendance.type === "absence"

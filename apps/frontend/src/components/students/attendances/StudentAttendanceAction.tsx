@@ -18,6 +18,7 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { JustifyAbsence } from "~/components/attendances/JustifyAbsence";
 import { JustifyLateness } from "~/components/attendances/JustifyLateness";
 import { api } from "~/trpc/react";
 
@@ -76,6 +77,17 @@ export function StudentAttendanceAction({
                     </>
                   ),
                   view: <JustifyLateness lateness={lateness} />,
+                });
+              } else {
+                const absence = attendance as AbsenceType;
+                openModal({
+                  title: t("justify_absence"),
+                  description: (
+                    <>
+                      {t("absence")}: {absence.date.toString()}
+                    </>
+                  ),
+                  view: <JustifyAbsence absence={absence} />,
                 });
               }
             }}
