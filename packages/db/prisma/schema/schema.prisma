@@ -217,7 +217,6 @@ model Classroom {
     fees              Fee[]
     subjects          Subject[]
     assignments       Assignment[]
-    studentId         String?
     reportCards       ReportCard[]
     Attendance        Attendance[]
     school            School         @relation(fields: [schoolId], references: [id])

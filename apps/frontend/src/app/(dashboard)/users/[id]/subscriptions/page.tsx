@@ -2,7 +2,7 @@ import { Separator } from "@repo/ui/components/separator";
 
 import { DisplayForm } from "~/components/users/roles/roles-form";
 
-export default function SettingsDisplayPage() {
+export default function Page() {
   return (
     <div className="px-4">
       <div>

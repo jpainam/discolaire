@@ -13,17 +13,17 @@ import {
 import {
   ArrowLeft,
   BellRing,
+  CircleDollarSign,
   Computer,
-  KeySquare,
   LockKeyhole,
   Settings,
   User,
 } from "lucide-react";
 
+import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { useLocale } from "~/i18n";
 import { SidebarLogo } from "../sidebar-logo";
-import Link from "next/link";
 export function UserSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
@@ -41,9 +41,9 @@ export function UserSidebar({
         url: `/users/${params.id}/password`,
       },
       {
-        name: "roles",
-        icon: KeySquare,
-        url: `/users/${params.id}/roles`,
+        name: "subscriptions",
+        icon: CircleDollarSign,
+        url: `/users/${params.id}/subscriptions`,
       },
       {
         name: "notifications",

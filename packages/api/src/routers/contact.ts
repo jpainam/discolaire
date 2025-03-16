@@ -105,8 +105,12 @@ export const contactRouter = createTRPCRouter({
 
   classrooms: protectedProcedure
     .input(z.string().min(1))
-    .query(async ({ ctx, input }) => {
-      return contactService.getClassrooms(input, ctx.schoolYearId);
+    .query(({ ctx, input }) => {
+      return contactService.getClassrooms(
+        input,
+        ctx.schoolYearId,
+        ctx.schoolId,
+      );
     }),
   getFromUserId: protectedProcedure
     .input(z.string().min(1))

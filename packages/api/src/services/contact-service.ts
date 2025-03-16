@@ -8,18 +8,16 @@ export const contactService = {
       },
     });
   },
-  getClassrooms: async (contactId: string, schoolYearId: string) => {
+  getClassrooms: async (
+    contactId: string,
+    schoolYearId: string,
+    schoolId: string,
+  ) => {
     const students = await db.studentContact.findMany({
       where: {
         contactId: contactId,
       },
     });
-    const contact = await db.contact.findUniqueOrThrow({
-      where: {
-        id: contactId,
-      },
-    });
-
     const studentIds = students.map((s) => s.studentId);
     const enrollments = await db.enrollment.findMany({
       where: {
@@ -28,13 +26,14 @@ export const contactService = {
         },
         schoolYearId: schoolYearId,
         classroom: {
-          schoolId: contact.schoolId,
+          schoolId: schoolId,
         },
       },
       include: {
         classroom: true,
       },
     });
+
     return enrollments.map((e) => e.classroom);
   },
   getStudents: async (contactId: string) => {

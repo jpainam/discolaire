@@ -30,7 +30,7 @@ export function FeeDataTable({ fees }: { fees: FeeProcedureOutput }) {
       fetchFeesColumns({
         t: t,
       }),
-    [t]
+    [t],
   );
 
   const { table } = useDataTable({
