@@ -21,6 +21,7 @@ import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 
 import { SheetClose, SheetFooter } from "@repo/ui/components/sheet";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { DatePicker } from "../DatePicker";
 import { CountryPicker } from "../shared/CountryPicker";
@@ -90,6 +91,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
   });
   const { t } = useLocale();
   const utils = api.useUtils();
+  const router = useRouter();
   const createStaffMutation = api.staff.create.useMutation({
     onSettled: async () => {
       await utils.staff.invalidate();
@@ -97,6 +99,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
     onSuccess: () => {
       toast.success(t("created_successfully"), { id: 0 });
       closeSheet();
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -109,6 +112,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
       closeSheet();
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
