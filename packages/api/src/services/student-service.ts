@@ -51,14 +51,25 @@ export const studentService = {
         },
       },
     });
-    const classroom = await studentService.getClassroom(
-      studentId,
-      schoolYearId,
+
+    let isRepeating = student.isRepeating;
+    const curEnrollement = student.enrollments.find(
+      (enr) => enr.classroom.schoolYearId === schoolYearId,
     );
+    if (student.enrollments.length > 1) {
+      const prevEnrollments = student.enrollments.filter(
+        (enr) => enr.classroom.schoolYearId !== schoolYearId,
+      );
+      isRepeating =
+        prevEnrollments.filter(
+          (prev) =>
+            prev.classroom.levelId === curEnrollement?.classroom.levelId,
+        ).length > 0;
+    }
     return {
       ...student,
-      isRepeating: await isRepeating(studentId, schoolYearId),
-      classroom: classroom,
+      isRepeating: isRepeating,
+      classroom: curEnrollement?.classroom,
     };
   },
   getFromUserId: async (userId: string) => {
