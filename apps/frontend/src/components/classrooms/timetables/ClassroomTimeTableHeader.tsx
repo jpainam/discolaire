@@ -49,7 +49,6 @@ export function ClassroomTimeTableHeader() {
           onClick={() => {
             openModal({
               title: t("create_timetable"),
-              className: "w-[550px]",
               view: <CreateEditLesson />,
             });
           }}

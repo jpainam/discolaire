@@ -163,7 +163,6 @@ export default function TopTimetable() {
               onClick={() => {
                 openModal({
                   title: t("create_timetable"),
-                  className: "w-[550px]",
                   view: <CreateEditLesson />,
                 });
               }}

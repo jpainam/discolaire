@@ -118,10 +118,9 @@ export function LessonDetails({
 
           openModal({
             title: t("update"),
-            className: "w-[550px]",
             view: (
               <CreateEditLesson
-                days={[event.dayOfWeek.toString()]}
+                days={[event.startTime.getDay().toString()]}
                 startTime={`${startHours}:${startMinutes}`}
                 endTime={`${endHours}:${endMinutes}`}
                 subjectId={event.subjectId}
