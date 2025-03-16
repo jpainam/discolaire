@@ -43,6 +43,7 @@ export function CreateEditTimetable({
   timetableId,
   start,
   end,
+  days,
   description,
   subjectId,
   classroomId,
@@ -50,6 +51,7 @@ export function CreateEditTimetable({
   timetableId?: string;
   start?: Date;
   end?: Date;
+  days?: string[];
   description?: string | null;
   subjectId?: number;
   classroomId: string;
@@ -60,14 +62,14 @@ export function CreateEditTimetable({
         minute: "2-digit",
         hour12: false,
       })
-    : "";
+    : "08:00";
   const endTimeString = end
     ? end.toLocaleTimeString("en-GB", {
         hour: "2-digit",
         minute: "2-digit",
         hour12: false,
       })
-    : "";
+    : "09:00";
   const form = useForm({
     schema: createEditTimetable,
     defaultValues: {
@@ -75,7 +77,7 @@ export function CreateEditTimetable({
       endTime: endTimeString,
       description: description ?? "",
       subjectId: subjectId ? `${subjectId}` : "",
-      days: start && end ? getUniqueWeekdaysBetweenDates(start, end) : [],
+      days: days ?? [],
     },
   });
   const { t } = useLocale();
@@ -289,31 +291,31 @@ export function CreateEditTimetable({
   );
 }
 
-const getUniqueWeekdaysBetweenDates = (
-  startDate: Date,
-  endDate: Date,
-): string[] => {
-  const dayNames = [
-    "sunday",
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-  ];
-  const uniqueWeekdays = new Set<string>();
+// const getUniqueWeekdaysBetweenDates = (
+//   startDate: Date,
+//   endDate: Date
+// ): string[] => {
+//   const dayNames = [
+//     "sunday",
+//     "monday",
+//     "tuesday",
+//     "wednesday",
+//     "thursday",
+//     "friday",
+//     "saturday",
+//   ];
+//   const uniqueWeekdays = new Set<string>();
 
-  const currentDate = new Date(startDate);
+//   const currentDate = new Date(startDate);
 
-  while (currentDate < endDate) {
-    const dayIndex = currentDate.getDay(); // Get day index (0 for Sunday, 1 for Monday, etc.)
-    // @ts-expect-error TODO: fix this
-    uniqueWeekdays.add(dayNames[dayIndex]); // Add to Set for uniqueness
+//   while (currentDate < endDate) {
+//     const dayIndex = currentDate.getDay(); // Get day index (0 for Sunday, 1 for Monday, etc.)
+//     // @ts-expect-error TODO: fix this
+//     uniqueWeekdays.add(dayNames[dayIndex]); // Add to Set for uniqueness
 
-    // Increment the date by 1 day
-    currentDate.setDate(currentDate.getDate() + 1);
-  }
+//     // Increment the date by 1 day
+//     currentDate.setDate(currentDate.getDate() + 1);
+//   }
 
-  return Array.from(uniqueWeekdays); // Convert the Set back to an array
-};
+//   return Array.from(uniqueWeekdays); // Convert the Set back to an array
+// };

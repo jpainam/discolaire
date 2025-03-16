@@ -77,7 +77,6 @@ export function ClassroomTimeTable() {
     ({ start, end }: { start: Date; end: Date }) => {
       openModal({
         title: t("create_timetable"),
-        className: "w-[550px]",
         view: (
           <CreateEditTimetable
             classroomId={params.id}
@@ -87,16 +86,17 @@ export function ClassroomTimeTable() {
         ),
       });
     },
-    [openModal, params.id, t],
+    [openModal, params.id, t]
   );
 
   const handleSelectEvent = useCallback(
     (event: TimetableEventType) => {
+      const days = getUniqueWeekdaysBetweenDates(event.start, event.end);
       openModal({
         title: t("update"),
-        className: "w-[550px]",
         view: (
           <CreateEditTimetable
+            days={days}
             classroomId={params.id}
             start={event.start}
             end={event.end}
@@ -106,7 +106,7 @@ export function ClassroomTimeTable() {
         ),
       });
     },
-    [openModal, params.id, t],
+    [openModal, params.id, t]
   );
 
   const { _views, _scrollToTime, formats } = useMemo(
@@ -123,18 +123,18 @@ export function ClassroomTimeTable() {
         weekdayFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer,
+          localizer?: DateLocalizer
         ) => localizer?.format(date, "EEE", culture),
         dayFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) =>
           localizer?.format(date, "EEE M/d", culture),
         timeGutterFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer,
+          localizer?: DateLocalizer
         ) => localizer?.format(date, "HH:mm", culture),
       } as Formats,
     }),
-    [],
+    []
   );
 
   const handleViewChange = (view: RbcView) => {
@@ -228,3 +228,23 @@ export function ClassroomTimeTable() {
     </div>
   );
 }
+
+const getUniqueWeekdaysBetweenDates = (
+  startDate: Date,
+  endDate: Date
+): string[] => {
+  const dayNames = ["0", "1", "2", "3", "4", "5", "6"];
+  const uniqueWeekdays = new Set<string>();
+
+  const currentDate = new Date(startDate);
+
+  while (currentDate < endDate) {
+    const dayIndex = currentDate.getDay(); // Get day index (0 for Sunday, 1 for Monday, etc.)
+    // @ts-expect-error TODO: fix this
+    uniqueWeekdays.add(dayNames[dayIndex]); // Add to Set for uniqueness
+
+    // Increment the date by 1 day
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+  return Array.from(uniqueWeekdays); // Convert the Set back to an array
+};

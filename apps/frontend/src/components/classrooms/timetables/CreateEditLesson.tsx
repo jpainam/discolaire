@@ -20,6 +20,13 @@ import MultipleSelector from "~/components/students/multiple-selector";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/components/select";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { api } from "~/trpc/react";
 
@@ -28,18 +35,23 @@ const createEditTimetable = z.object({
   endTime: z.string().min(1),
   days: z.array(z.string()).default([]),
   subjectId: z.string().min(1),
+  repeat: z
+    .enum(["daily", "weekly", "biweekly", "monthly", "yearly"])
+    .default("weekly"),
 });
 export function CreateEditLesson({
   lessonId,
   startTime,
   endTime,
   days,
+  start,
   subjectId,
 }: {
   lessonId?: string;
   startTime?: string;
   endTime?: string;
   days?: string[];
+  start?: Date;
   subjectId?: number;
 }) {
   const params = useParams<{ id: string }>();
@@ -50,6 +62,7 @@ export function CreateEditLesson({
       endTime: endTime ?? "09:00",
       subjectId: subjectId ? `${subjectId}` : "",
       days: days ?? [],
+      repeat: "weekly",
     },
   });
 
@@ -72,32 +85,32 @@ export function CreateEditLesson({
 
   const daysOptions: Option[] = [
     {
-      label: t("sunday"),
-      value: "0",
-    },
-    {
       label: t("monday"),
-      value: "1",
+      value: "monday",
     },
     {
       label: t("tuesday"),
-      value: "2",
+      value: "tuesday",
     },
     {
       label: t("wednesday"),
-      value: "3",
+      value: "wednesday",
     },
     {
       label: t("thursday"),
-      value: "4",
+      value: "thursday",
     },
     {
       label: t("friday"),
-      value: "5",
+      value: "friday",
     },
     {
       label: t("saturday"),
-      value: "6",
+      value: "saturday",
+    },
+    {
+      label: t("sunday"),
+      value: "sunday",
     },
   ];
 
@@ -106,15 +119,17 @@ export function CreateEditLesson({
       toast.error(t("subject_required"), { id: 0 });
       return;
     }
-    // Hack from https://github.com/prisma/prisma/issues/15454 Issue opened
-    const dummyDate = "1970-01-01";
+
     const values = {
-      startTime: new Date(dummyDate + "T" + data.startTime + "Z"),
-      endTime: new Date(dummyDate + "T" + data.endTime + "Z"),
+      startTime: data.startTime,
+      endTime: data.endTime,
       subjectId: Number(data.subjectId),
-      daysOfWeek: data.days.map(Number),
+      repeat: data.repeat,
+      daysOfWeek: data.days,
+      startDate: start ?? new Date(),
     };
     if (lessonId) {
+      toast.loading(t("updating"), { id: 0 });
       console.log("updating");
     } else {
       toast.loading(t("creating"), { id: 0 });
@@ -127,24 +142,56 @@ export function CreateEditLesson({
         className="flex flex-col gap-4"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
-        <FormField
-          control={form.control}
-          name="subjectId"
-          render={({ field }) => (
-            <FormItem className="space-y-0">
-              <FormLabel>{t("subject")}</FormLabel>
-              <FormControl>
-                <SubjectSelector
-                  defaultValue={subjectId ? `${subjectId}` : undefined}
-                  classroomId={params.id}
-                  {...field}
-                />
-              </FormControl>
+        <div className="grid grid-cols-2 gap-x-4">
+          <FormField
+            control={form.control}
+            name="subjectId"
+            render={({ field }) => (
+              <FormItem className="space-y-0">
+                <FormLabel>{t("subject")}</FormLabel>
+                <FormControl>
+                  <SubjectSelector
+                    defaultValue={subjectId ? `${subjectId}` : undefined}
+                    classroomId={params.id}
+                    {...field}
+                  />
+                </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="repeat"
+            render={({ field }) => (
+              <FormItem className="space-y-0">
+                <FormLabel>{t("repeat")} ?</FormLabel>
+                <FormControl>
+                  <Select
+                    defaultValue={"weekly"}
+                    onValueChange={(val) => {
+                      field.onChange(val);
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder={t("repeat")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="daily">{t("daily")}</SelectItem>
+                      <SelectItem value="weekly">{t("weekly")}</SelectItem>
+                      <SelectItem value="biweekly">{t("biweekly")}</SelectItem>
+                      <SelectItem value="monthly">{t("monthly")}</SelectItem>
+                      <SelectItem value="yearly">{t("yearly")}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <FormField
           control={form.control}
@@ -157,7 +204,7 @@ export function CreateEditLesson({
                   //{...field}
 
                   defaultOptions={daysOptions.filter((day) =>
-                    field.value?.includes(day.value),
+                    field.value?.includes(day.value)
                   )}
                   onChange={(values) => {
                     field.onChange(values.map((v) => v.value));

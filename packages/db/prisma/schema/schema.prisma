@@ -790,15 +790,13 @@ model Subject {
 
 model Lesson {
     id        Int      @id @default(autoincrement())
-    startTime DateTime @db.Timetz()
-    endTime   DateTime @db.Timetz()
-    dayOfWeek Int      @db.SmallInt
+    startTime DateTime
+    endTime   DateTime
     subjectId Int
     schoolId  String
-    isActive  Boolean? @default(true)
     subject   Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
 
-    @@unique([dayOfWeek, startTime, endTime, subjectId])
+    @@unique([startTime, endTime, subjectId])
 }
 
 model SubjectGroup {

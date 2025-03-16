@@ -1,25 +1,39 @@
-import { addDays, endOfMonth, isBefore, isEqual, startOfMonth } from "date-fns";
+import { addMonths } from "date-fns";
 import { z } from "zod";
 
+import { timetableService } from "../services/timetable-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const createEditLessonSchema = z.object({
-  daysOfWeek: z.array(z.coerce.number().nonnegative()),
-  startTime: z.coerce.date(),
+  daysOfWeek: z.array(z.string()).default([]),
+  startTime: z.string().min(1),
   subjectId: z.coerce.number().nonnegative(),
-  endTime: z.coerce.date(),
+  endTime: z.string().min(1),
+  startDate: z.coerce.date(),
 });
 export const lessonRouter = createTRPCRouter({
   create: protectedProcedure
     .input(createEditLessonSchema)
-    .mutation(({ ctx, input }) => {
-      const data = input.daysOfWeek.map((dayOfWeek) => {
+    .mutation(async ({ ctx, input }) => {
+      const schoolYear = await ctx.db.schoolYear.findUnique({
+        where: {
+          id: ctx.schoolYearId,
+        },
+      });
+      const events = timetableService.generateRange({
+        startDate: input.startDate,
+        startTime: input.startTime,
+        endTime: input.endTime,
+        daysOfWeek: input.daysOfWeek,
+        finalDate: schoolYear?.endDate ?? addMonths(new Date(), 9),
+      });
+      const data = events.map((event) => {
         return {
           subjectId: input.subjectId,
-          dayOfWeek: dayOfWeek,
-          startTime: input.startTime,
-          endTime: input.endTime,
+          startTime: event.start,
+          endTime: event.end,
           schoolId: ctx.schoolId,
+          createdById: ctx.session.user.id,
         };
       });
       return ctx.db.lesson.createMany({
@@ -55,7 +69,6 @@ export const lessonRouter = createTRPCRouter({
           },
         },
         where: {
-          isActive: true,
           subject: {
             classroomId: input.classroomId,
           },
@@ -64,21 +77,11 @@ export const lessonRouter = createTRPCRouter({
 
       const events = [];
       for (const lesson of lessons) {
-        const weekDates = getWeekdayDatesInMonth(
-          input.currentDate,
-          lesson.dayOfWeek,
-        );
-        for (const week of weekDates) {
-          const startDate = new Date(week);
-          startDate.setHours(lesson.startTime.getHours());
-          const endDate = new Date(week);
-          endDate.setHours(lesson.endTime.getHours());
-          events.push({
-            start: startDate,
-            end: endDate,
-            ...lesson,
-          });
-        }
+        events.push({
+          start: lesson.startTime,
+          end: lesson.endTime,
+          ...lesson,
+        });
       }
       return events;
     }),
@@ -89,21 +92,21 @@ export const lessonRouter = createTRPCRouter({
     }),
 });
 
-function getWeekdayDatesInMonth(currentDate: Date, weekday: number): Date[] {
-  const startDate = startOfMonth(currentDate);
-  const endDate = endOfMonth(startDate);
-  let firstWeekdayDate = startDate;
-  while (firstWeekdayDate.getDay() !== weekday) {
-    firstWeekdayDate = addDays(firstWeekdayDate, 1);
-  }
+// function getWeekdayDatesInMonth(currentDate: Date, weekday: number): Date[] {
+//   const startDate = startOfMonth(currentDate);
+//   const endDate = endOfMonth(startDate);
+//   let firstWeekdayDate = startDate;
+//   while (firstWeekdayDate.getDay() !== weekday) {
+//     firstWeekdayDate = addDays(firstWeekdayDate, 1);
+//   }
 
-  const dates = [];
-  let current = firstWeekdayDate;
+//   const dates = [];
+//   let current = firstWeekdayDate;
 
-  while (isBefore(current, endDate) || isEqual(current, endDate)) {
-    dates.push(current);
-    current = addDays(current, 7);
-  }
+//   while (isBefore(current, endDate) || isEqual(current, endDate)) {
+//     dates.push(current);
+//     current = addDays(current, 7);
+//   }
 
-  return dates;
-}
+//   return dates;
+// }
