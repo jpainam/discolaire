@@ -295,10 +295,11 @@ export const studentService = {
 
 export async function isRepeating(studentId: string, schoolYearId: string) {
   const key = `student:${studentId}:schoolYear:${schoolYearId}:isRepeating`;
-  const rep = await redisClient.get(key);
-  if (rep !== null) {
-    return rep === "true";
-  }
+  // TODO, when i edit student, i need to delete this key as well
+  const _rep = await redisClient.get(key);
+  // if (rep !== null) {
+  //   return rep === "true";
+  // }
   const enrollments = await db.enrollment.findMany({
     where: {
       studentId: studentId,
