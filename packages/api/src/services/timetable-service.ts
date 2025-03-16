@@ -38,7 +38,13 @@ export const timetableService = {
     const weekRange = eachWeekOfInterval({ start: startDate, end: finalDate });
     const [startHour, startMinute] = startTime.split(":").map(Number);
     const [endHour, endMinute] = endTime.split(":").map(Number);
-    if (!startHour || !startMinute || !endHour || !endMinute) {
+    if (
+      startHour == undefined ||
+      endHour == undefined ||
+      startMinute === undefined ||
+      endMinute === undefined
+    ) {
+      console.error("Invalid time format", startTime, endTime);
       throw new Error("Invalid time format");
     }
 

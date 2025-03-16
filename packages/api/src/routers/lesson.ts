@@ -33,7 +33,7 @@ export const lessonRouter = createTRPCRouter({
           startTime: event.start,
           endTime: event.end,
           schoolId: ctx.schoolId,
-          createdById: ctx.session.user.id,
+          //createdById: ctx.session.user.id,
         };
       });
       return ctx.db.lesson.createMany({
