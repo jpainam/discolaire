@@ -88,7 +88,7 @@ export default async function Page(props: {
   }
 
   return (
-    <div className="grid w-full gap-2 p-2 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid w-full gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
       {attendances.map((attendance, index) => (
         <div
           key={`attendance-${index}`}

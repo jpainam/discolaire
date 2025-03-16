@@ -12,7 +12,7 @@ export default async function Page(props: {
   const classroomId = params.id;
 
   return (
-    <div className="flex flex-col gap-2 px-2 py-1">
+    <div className="flex flex-col gap-2 p-4">
       <CreateEditLateness
         termId={termId}
         classroomId={classroomId}

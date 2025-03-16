@@ -139,7 +139,7 @@ export const latenessRouter = createTRPCRouter({
             classroomId: input.classroomId,
             date: new Date(),
             createdById: ctx.session.user.id,
-            duration: 0,
+            duration: Number(student.late),
           },
         });
         if (student.justify)
@@ -147,7 +147,7 @@ export const latenessRouter = createTRPCRouter({
             data: {
               latenessId: late.id,
               status: "approved",
-              duration: 0, // student.justify
+              duration: Number(student.justify),
               approvedBy: ctx.session.user.id,
               createdById: ctx.session.user.id,
             },

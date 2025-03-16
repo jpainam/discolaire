@@ -64,11 +64,11 @@ export function AttendanceAction({
             console.log("Justifying attendance", type);
           }}
         >
-          <Columns4 className="mr-2 h-4 w-4" />
+          <Columns4 />
           {t("justify")}
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <MailCheckIcon className="mr-2 h-4 w-4" />
+          <MailCheckIcon />
           {t("notify")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
@@ -77,10 +77,10 @@ export function AttendanceAction({
             const isConfirmed = await confirm({
               title: t("delete"),
               description: t("delete_confirmation"),
-              icon: <Trash2 className="text-destructive" />,
-              alertDialogTitle: {
-                className: "flex items-center gap-1",
-              },
+              // icon: <Trash2 className="text-destructive" />,
+              // alertDialogTitle: {
+              //   className: "flex items-center gap-1",
+              // },
             });
             if (isConfirmed) {
               toast.loading(t("deleting"), { id: 0 });
