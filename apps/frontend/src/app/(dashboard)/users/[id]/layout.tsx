@@ -2,8 +2,10 @@ import { auth } from "@repo/auth";
 import { Separator } from "@repo/ui/components/separator";
 import { getServerTranslations } from "~/i18n/server";
 
+import { notFound } from "next/navigation";
 import { AvatarState } from "~/components/AvatarState";
 import { NoPermission } from "~/components/no-permission";
+import { api } from "~/trpc/server";
 
 export default async function Layout(props: {
   params: Promise<{ id: string }>;
@@ -19,7 +21,10 @@ export default async function Layout(props: {
 
   const { t } = await getServerTranslations();
 
-  const user = session.user;
+  const user = await api.user.get(params.id);
+  if (!user) {
+    notFound();
+  }
   return (
     <div>
       <div className="flex flex-row items-center gap-2 px-4 py-2">
@@ -52,7 +57,7 @@ export default async function Layout(props: {
       </div>
       <Separator />
 
-      <div className="flex-1">{children}</div>
+      {children}
     </div>
   );
 }

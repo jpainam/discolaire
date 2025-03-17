@@ -19,7 +19,6 @@ import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { AvatarState } from "~/components/AvatarState";
-import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
@@ -27,13 +26,7 @@ import { api } from "~/trpc/react";
 
 type User = RouterOutputs["user"]["all"][number];
 
-export function getUserColumns({
-  t,
-  fullDateFormatter,
-}: {
-  t: TFunction<string, unknown>;
-  fullDateFormatter: Intl.DateTimeFormat;
-}) {
+export function getUserColumns({ t }: { t: TFunction<string, unknown> }) {
   return [
     {
       accessorKey: "selected",
@@ -83,7 +76,7 @@ export function getUserColumns({
         const user = row.original;
         return (
           <Link
-            href={routes.administration.users.details(user.id)}
+            href={`/users/${user.id}`}
             className="hover:text-blue-600 hover:underline"
           >
             {user.username}
@@ -99,7 +92,7 @@ export function getUserColumns({
       cell: ({ row }) => {
         const user = row.original;
 
-        return <div className="flex">{user.name}</div>;
+        return <div className="flex text-muted-foreground">{user.name}</div>;
       },
     },
     {
@@ -107,7 +100,23 @@ export function getUserColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="E-mail" />
       ),
-      cell: ({ row }) => <div className="flex">{row.getValue("email")}</div>,
+      cell: ({ row }) => (
+        <div className="flex text-muted-foreground">
+          {row.getValue("email")}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "profile",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("profile")} />
+      ),
+      cell: ({ row }) => {
+        const user = row.original;
+        return (
+          <div className="flex text-muted-foreground">{t(user.profile)}</div>
+        );
+      },
     },
     // {
     //   accessorKey: "emailVerified",
@@ -122,7 +131,8 @@ export function getUserColumns({
         <DataTableColumnHeader column={column} title={t("createdAt")} />
       ),
       cell: ({ row }) => {
-        return fullDateFormatter.format(new Date(row.getValue("createdAt")));
+        const user = row.original;
+        return <span>{user.createdAt.toLocaleDateString()} </span>;
       },
     },
     {

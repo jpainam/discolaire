@@ -6,7 +6,6 @@ import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { useLocale } from "~/i18n";
 
 import type { RouterOutputs } from "@repo/api";
-import { useDateFormat } from "~/utils/date-format";
 import { UserDataTableAction } from "./UserDataTableAction";
 import { getUserColumns } from "./UserDataTableColumn";
 
@@ -17,11 +16,7 @@ export function UserDataTable({
 }) {
   const { t } = useLocale();
 
-  const { fullDateFormatter } = useDateFormat();
-  const columns = useMemo(
-    () => getUserColumns({ t: t, fullDateFormatter: fullDateFormatter }),
-    [fullDateFormatter, t],
-  );
+  const columns = useMemo(() => getUserColumns({ t: t }), [t]);
 
   const { table } = useDataTable({
     data: users,
