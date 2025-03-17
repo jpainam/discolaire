@@ -89,7 +89,7 @@ export default async function Page(props: {
             <TableBody>
               {Object.keys(groups).map((groupId: string) => {
                 const items = groups[Number(groupId)]?.sort(
-                  (a, b) => a.order - b.order,
+                  (a, b) => a.order - b.order
                 );
 
                 if (!items) return null;
@@ -98,7 +98,7 @@ export default async function Page(props: {
                   <Fragment key={`fragment-${groupId}`}>
                     {items.map((subject, index) => {
                       const grade = studentReport.studentCourses.find(
-                        (c) => c.subjectId === subject.id,
+                        (c) => c.subjectId === subject.id
                       );
                       const subjectSummary = summary.get(subject.id);
                       return (
@@ -116,13 +116,14 @@ export default async function Page(props: {
                           <TableCell className="text-center">
                             {grade?.coeff}
                           </TableCell>
-                          <TableCell>{grade?.total}</TableCell>
+                          <TableCell>{grade?.total?.toFixed(2)}</TableCell>
                           <TableCell>{grade?.rank}</TableCell>
                           <TableCell>
                             {subjectSummary?.average.toFixed(2)}
                           </TableCell>
                           <TableCell>
-                            {subjectSummary?.min} / {subjectSummary?.max}
+                            {subjectSummary?.min.toFixed(2)} /{" "}
+                            {subjectSummary?.max.toFixed(2)}
                           </TableCell>
                           <TableCell className="uppercase">
                             {getAppreciations(subjectSummary?.average)}
@@ -146,9 +147,9 @@ export default async function Page(props: {
                           items.map(
                             (subject) =>
                               (studentReport.studentCourses.find(
-                                (c) => subject.id === c.subjectId,
-                              )?.average ?? 0) * subject.coefficient,
-                          ),
+                                (c) => subject.id === c.subjectId
+                              )?.average ?? 0) * subject.coefficient
+                          )
                         ).toFixed(1)}{" "}
                         / {sum(items.map((c) => 20 * c.coefficient)).toFixed(1)}
                       </TableCell>
@@ -159,9 +160,9 @@ export default async function Page(props: {
                             items.map(
                               (subject) =>
                                 (studentReport.studentCourses.find(
-                                  (c) => c.subjectId === subject.id,
-                                )?.average ?? 0) * subject.coefficient,
-                            ),
+                                  (c) => c.subjectId === subject.id
+                                )?.average ?? 0) * subject.coefficient
+                            )
                           ) / sum(items.map((subject) => subject.coefficient))
                         ).toFixed(2)}
                       </TableCell>
