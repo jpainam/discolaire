@@ -14,15 +14,21 @@ import { Label } from "@repo/ui/components/label";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
+import type { RouterOutputs } from "@repo/api";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { TrimestreSelector } from "~/components/shared/selects/TrimestreSelector";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
 import { sidebarIcons } from "../sidebar-icons";
 
-export function ReportCardHeader() {
+export function ReportCardHeader({
+  classroom,
+}: {
+  classroom: NonNullable<RouterOutputs["student"]["classroom"]>;
+}) {
   const { t } = useLocale();
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
@@ -31,7 +37,7 @@ export function ReportCardHeader() {
   const Icon = sidebarIcons.report_cards;
   const canPrintReportCard = useCheckPermission(
     "reportcard",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1 text-secondary-foreground">
@@ -42,6 +48,19 @@ export function ReportCardHeader() {
         defaultValue={searchParams.get("term")}
         onChange={(val) => {
           router.push(`?` + createQueryString({ term: val }));
+        }}
+      />
+      <TrimestreSelector
+        onChange={(val) => {
+          router.push(
+            `/api/pdfs/classroom/${params.id}/trimestre?` +
+              createQueryString({
+                trimestreId: val,
+                classroomId: classroom.id,
+                studentId: params.id,
+                format: "pdf",
+              })
+          );
         }}
       />
       {canPrintReportCard && (
@@ -61,7 +80,7 @@ export function ReportCardHeader() {
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/report-cards/ipbw/?studentId=${params.id}&termId=${searchParams.get("term")}`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >

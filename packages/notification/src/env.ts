@@ -5,11 +5,13 @@ export const env = createEnv({
   server: {
     NODE_ENV: z.enum(["development", "production"]).optional(),
     NOVU_API_KEY: z.string().min(1),
+    RESEND_API_KEY: z.string().min(1),
   },
   client: {},
   runtimeEnv: {
     ...process.env,
     NODE_ENV: process.env.NODE_ENV,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
     NOVU_API_KEY: process.env.NOVU_API_KEY,
   },
   //experimental__runtimeEnv: {},

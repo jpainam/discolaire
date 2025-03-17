@@ -9,7 +9,8 @@
     "./classroom/*": "./src/classroom/*.tsx",
     "./student/*": "./src/student/*.tsx",
     "./gradesheet/*": "./src/gradesheet/*.tsx",
-    "./course/*": "./src/course/*.tsx"
+    "./course/*": "./src/course/*.tsx",
+    "./reportcards/*": "./src/reportcards/*.tsx"
   },
   "scripts": {
     "build": "tsc",
