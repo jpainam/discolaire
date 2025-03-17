@@ -73,7 +73,7 @@ export default async function Page(props: {
             <TableBody>
               {Object.keys(groups).map((groupId: string) => {
                 const items = groups[Number(groupId)]?.sort(
-                  (a, b) => a.order - b.order
+                  (a, b) => a.order - b.order,
                 );
                 if (!items) return null;
                 return <div></div>;

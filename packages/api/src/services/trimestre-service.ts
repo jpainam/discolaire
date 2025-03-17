@@ -16,34 +16,49 @@ export async function getTrimestreGrades(
   });
   let grades1: Awaited<ReturnType<typeof getGrades>> = [];
   let grades2: Awaited<ReturnType<typeof getGrades>> = [];
+  let seq1: number | null | undefined = null;
+  let seq2: number | null | undefined = null;
   if (trimestreId === "trim1") {
-    const seq1 = terms.find((t) => t.order === 1);
-    const seq2 = terms.find((t) => t.order === 2);
-    if (!seq1 || !seq2) return [];
-    grades1 = await getGrades(classroomId, seq1.id);
-    grades2 = await getGrades(classroomId, seq2.id);
+    seq1 = terms.find((t) => t.order === 1)?.id;
+    seq2 = terms.find((t) => t.order === 2)?.id;
   } else if (trimestreId === "trim2") {
-    const seq1 = terms.find((t) => t.order === 3);
-    const seq2 = terms.find((t) => t.order === 4);
-    if (!seq1 || !seq2) return [];
-    grades1 = await getGrades(classroomId, seq1.id);
-    grades2 = await getGrades(classroomId, seq2.id);
-  } else if (trimestreId === "trim3") {
-    const seq1 = terms.find((t) => t.order === 5);
-    const seq2 = terms.find((t) => t.order === 6);
-    if (!seq1 || !seq2) return [];
-    grades1 = await getGrades(classroomId, seq1.id);
-    grades2 = await getGrades(classroomId, seq2.id);
+    seq1 = terms.find((t) => t.order === 3)?.id;
+    seq2 = terms.find((t) => t.order === 4)?.id;
   } else {
+    seq1 = terms.find((t) => t.order === 5)?.id;
+    seq2 = terms.find((t) => t.order === 6)?.id;
+  }
+  if (!seq1 || !seq2) {
     throw new Error("Invalid trimestreId");
   }
+  grades1 = await getGrades(classroomId, seq1);
+  grades2 = await getGrades(classroomId, seq2);
   return computeReport(grades1, grades2);
 }
 
 function computeReport(
   grades1: Awaited<ReturnType<typeof getGrades>>,
   grades2: Awaited<ReturnType<typeof getGrades>>,
-) {
+): {
+  studentsReport: Map<
+    string,
+    {
+      studentCourses: {
+        subjectId: number;
+        grade1: number | null;
+        grade2: number | null;
+        average: number | null;
+        coeff: number;
+        total: number | null;
+        rank: number;
+      }[];
+      globalAverage: number;
+      globalRank: number;
+    }
+  >;
+  summary: Map<number, { average: number; min: number; max: number }>;
+  globalRanks: Map<string, { average: number; rank: number }>;
+} {
   const allStudents = new Set<string>(
     [...grades1, ...grades2].map((g) => g.studentId),
   );
