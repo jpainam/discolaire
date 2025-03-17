@@ -37,7 +37,7 @@ export function ReportCardHeader({
   const Icon = sidebarIcons.report_cards;
   const canPrintReportCard = useCheckPermission(
     "reportcard",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1 text-secondary-foreground">
@@ -51,16 +51,17 @@ export function ReportCardHeader({
         }}
       />
       <TrimestreSelector
+        className="w-[300px]"
         onChange={(val) => {
-          router.push(
-            `/api/pdfs/classroom/${params.id}/trimestre?` +
-              createQueryString({
-                trimestreId: val,
-                classroomId: classroom.id,
-                studentId: params.id,
-                format: "pdf",
-              }),
-          );
+          const url =
+            `/api/pdfs/classroom/${classroom.id}/trimestres?` +
+            createQueryString({
+              trimestreId: val,
+              classroomId: classroom.id,
+              studentId: params.id,
+              format: "pdf",
+            });
+          window.open(url, "_blank");
         }}
       />
       {canPrintReportCard && (
@@ -80,7 +81,7 @@ export function ReportCardHeader({
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/report-cards/ipbw/?studentId=${params.id}&termId=${searchParams.get("term")}`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >
