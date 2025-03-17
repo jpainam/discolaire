@@ -15,7 +15,7 @@ import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { UserSelector } from "~/components/shared/selects/UserSelector";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
-export function PermissionHeader() {
+export function PermissionHeader({ defaultValue }: { defaultValue: string }) {
   const { t } = useLocale();
   const router = useRouter();
   return (
@@ -28,6 +28,7 @@ export function PermissionHeader() {
         <Label>{t("user")}</Label>
         <UserSelector
           className="w-96"
+          defaultValue={defaultValue}
           onChange={(val) => {
             router.push(`/administration/users/permissions?userId=${val}`);
           }}
