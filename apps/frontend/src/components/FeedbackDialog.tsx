@@ -1,8 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { resend } from "@repo/notification";
-import { FeedbackEmail } from "@repo/transactional/emails/FeedbackEmail";
 import { Button } from "@repo/ui/components/button";
 import {
   Form,
@@ -18,8 +16,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-import { useSession } from "~/providers/AuthProvider";
-import { useSchool } from "~/providers/SchoolProvider";
 const feedbackSchema = z.object({
   content: z.string().min(5),
 });
@@ -32,35 +28,32 @@ export function FeedBackDialog() {
     resolver: zodResolver(feedbackSchema),
   });
   const { closeModal } = useModal();
-  const { user } = useSession();
-  const { school } = useSchool();
   const [isLoading, setIsLoading] = React.useState(false);
-  const onSubmit = async (feedback: z.infer<typeof feedbackSchema>) => {
+  const onSubmit = (feedback: z.infer<typeof feedbackSchema>) => {
     setIsLoading(true);
-    const { data, error } = await resend.emails.send({
-      from: "Feedback <no-reply@discolaire.com>",
-      to: ["jpainam@gmail.com"],
-      subject: "Feedback",
-      react: FeedbackEmail({
-        message: feedback.content,
-        usernameSender: user?.username,
-        emailSender: user?.email ?? "",
-        userId: user?.id,
-        school: { name: school.name, id: school.id },
-      }) as React.ReactElement,
-    });
-
-    if (error) {
-      console.error(error);
-      toast.error(error.message);
-    } else {
-      toast.success("Feedback sent");
-      console.log(data);
-    }
-    setIsLoading(false);
-    closeModal();
+    fetch("/api/emails/feedback", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ content: feedback.content }),
+    })
+      .then((res) => {
+        if (res.ok) {
+          toast.success("Feedback sent");
+          closeModal();
+        } else {
+          toast.error("An error occured");
+        }
+        setIsLoading(false);
+      })
+      .catch((e) => {
+        setIsLoading(false);
+        toast.error(e.message);
+      });
   };
-  const { t } = useLocale("description");
+
+  const { t } = useLocale();
   return (
     <Form {...form}>
       <form
