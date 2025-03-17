@@ -83,11 +83,8 @@ export function UserProfile({
                       src={user.avatar ?? undefined}
                       alt={user.name ?? ""}
                     />
-                    <AvatarFallback>
-                      {user.name
-                        ?.split(" ")
-                        .map((n) => n[0])
-                        .join("")}
+                    <AvatarFallback className="text-2xl font-bold uppercase">
+                      {user.name?.slice(0, 2) ?? "N/A"}
                     </AvatarFallback>
                   </Avatar>
                   <Button variant="outline" type="button" size="sm">
