@@ -50,7 +50,7 @@ export function ReportCardHeader() {
             <DropdownMenuItem
               onSelect={() => {
                 window.open(
-                  `/api/pdfs/report-cards/ipbw?classroomId=${params.id}&termId=${termId}`,
+                  `/api/pdfs/reportcards/ipbw?classroomId=${params.id}&termId=${termId}`,
                   "_blank"
                 );
               }}

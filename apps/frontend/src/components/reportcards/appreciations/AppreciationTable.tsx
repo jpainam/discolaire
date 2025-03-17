@@ -28,8 +28,8 @@ import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import type { ReportCardType } from "~/types/report-card";
-import { showErrorToast } from "../../../lib/handle-error";
-import { getFullName } from "../../../utils/full-name";
+import { showErrorToast } from "~/lib/handle-error";
+import { getFullName } from "~/utils/full-name";
 import { AppreciationCategoryList } from "./AppreciationCategoryList";
 import { EditableAppreciation } from "./EditableAppreciation";
 

@@ -66,7 +66,7 @@ export async function ReportCardTable({
                   className="flex flex-row items-center hover:underline"
                   href={
                     routes.students.details(card.id) +
-                    `/report-cards?term=${term}`
+                    `/reportcards?term=${term}`
                   }
                 >
                   {card.avg?.toFixed(2)}

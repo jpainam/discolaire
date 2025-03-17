@@ -39,6 +39,7 @@ export function ReportCardHeader({
     "reportcard",
     PermissionAction.CREATE
   );
+  const termId = searchParams.get("term");
   return (
     <div className="grid md:flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1 text-secondary-foreground">
       {Icon && <Icon className="h-6 w-6" />}
@@ -47,14 +48,14 @@ export function ReportCardHeader({
         className="w-[300px]"
         defaultValue={searchParams.get("term")}
         onChange={(val) => {
-          router.push(`/students/${params.id}/report-cards?term=${val}`);
+          router.push(`/students/${params.id}/reportcards?term=${val}`);
         }}
       />
       <TrimestreSelector
         className="w-[300px]"
         onChange={(val) => {
           const url =
-            `/students/${params.id}/report-cards/trimestres?` +
+            `/students/${params.id}/reportcards/trimestres?` +
             createQueryString({
               trimestreId: val,
               classroomId: classroom.id,
@@ -73,14 +74,15 @@ export function ReportCardHeader({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>
+              <DropdownMenuItem disabled={!termId}>
                 <MailIcon />
                 {t("notify_parents")}
               </DropdownMenuItem>
               <DropdownMenuItem
+                disabled={!termId}
                 onSelect={() => {
                   window.open(
-                    `/api/pdfs/report-cards/ipbw/?studentId=${params.id}&termId=${searchParams.get("term")}`,
+                    `/api/pdfs/reportcards/ipbw/?studentId=${params.id}&termId=${searchParams.get("term")}`,
                     "_blank"
                   );
                 }}
@@ -88,7 +90,7 @@ export function ReportCardHeader({
                 <PDFIcon />
                 {t("pdf_export")}
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem disabled={!termId}>
                 <XMLIcon />
                 {t("xml_export")}
               </DropdownMenuItem>

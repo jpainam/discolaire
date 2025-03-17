@@ -1,5 +1,3 @@
-//import { StudentReportCard } from "~/types/report-card";
-
 import { Separator } from "@repo/ui/components/separator";
 import { getServerTranslations } from "~/i18n/server";
 

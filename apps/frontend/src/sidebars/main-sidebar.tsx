@@ -74,12 +74,12 @@ export function MainSidebar({
           url: `/timetables`,
           icon: CalendarDays,
         },
-      ]
+      ],
     );
   }
   const canReadLibrary = useCheckPermission(
     "menu:library",
-    PermissionAction.READ
+    PermissionAction.READ,
   );
   if (canReadLibrary) {
     data.push({
@@ -90,7 +90,7 @@ export function MainSidebar({
   }
   const canReadAdministration = useCheckPermission(
     "menu:administration",
-    PermissionAction.READ
+    PermissionAction.READ,
   );
   if (canReadAdministration) {
     data.push({

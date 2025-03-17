@@ -40,7 +40,7 @@ export async function ReportCardTable({
   const subjects = await api.classroom.subjects(classroomId);
   const studentGrades: Record<string, StudentGradeReport[]> = _.groupBy(
     grades,
-    (g) => g.studentId,
+    (g) => g.studentId
   );
 
   return (
@@ -131,7 +131,7 @@ export async function ReportCardTable({
                       className=" hover:underline"
                       href={
                         routes.students.details(student.id) +
-                        `/report-cards?term=${term}`
+                        `/reportcards?term=${term}`
                       }
                     >
                       {student.lastName}
@@ -146,7 +146,7 @@ export async function ReportCardTable({
                   <TableCell className="border text-center">{rank}</TableCell>
                   {subjects.map((subject, index) => {
                     const grade = grades.find(
-                      (g) => g.subjectId === subject.id,
+                      (g) => g.subjectId === subject.id
                     );
                     const g = grade?.grade ?? 0;
                     return (
@@ -158,7 +158,7 @@ export async function ReportCardTable({
                             ? "!bg-red-50 dark:!bg-red-800"
                             : g < 15
                               ? "!bg-yellow-50 dark:!bg-yellow-800"
-                              : "!bg-green-50 dark:!bg-green-800",
+                              : "!bg-green-50 dark:!bg-green-800"
                         )}
                       >
                         {grade?.grade?.toFixed(2) ?? "-"}
