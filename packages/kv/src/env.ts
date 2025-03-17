@@ -8,7 +8,7 @@ export const env = createEnv({
   client: {},
   runtimeEnv: {
     ...process.env,
-    REDIS_URL: process.env.NOVU_API_KEY,
+    REDIS_URL: process.env.REDIS_URL,
   },
   //experimental__runtimeEnv: {},
   skipValidation:

@@ -2,6 +2,8 @@ import "server-only";
 
 import IORedis from "ioredis";
 
+import { env } from "./env";
+
 class RedisClient {
   private static instance: IORedis;
 
@@ -11,7 +13,7 @@ class RedisClient {
   public static getInstance(): IORedis {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!this.instance) {
-      this.instance = new IORedis(`${process.env.REDIS_URL}?family=0`, {
+      this.instance = new IORedis(`${env.REDIS_URL}?family=0`, {
         maxRetriesPerRequest: null,
         enableReadyCheck: false,
       });
@@ -25,12 +27,6 @@ class RedisClient {
   }
 }
 
-// Export the Redis singleton instance
 const client = RedisClient.getInstance();
-// const redis = new IORedis(process.env.REDIS_URL ?? "redis://localhost:6379");
 
-// redis
-//   .ping()
-//   .then(() => console.log("✅ Redis connection successful"))
-//   .catch((err) => console.error("❌ Redis connection failed:", err));
 export default client;
