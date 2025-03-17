@@ -681,50 +681,33 @@ model Country {
     students Student[]
 }
 
-model PermissionGroup {
-    id          String       @id @default(cuid())
-    name        String
-    schoolId    String
-    School      School       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-    permissions Permission[]
-}
-
-model Permission {
-    id      String          @id @default(cuid())
-    code    String
-    title   String
-    groupId String
-    type    PermissionType  @default(READ)
-    group   PermissionGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
-}
-
 model School {
-    id                 String            @id @default(cuid())
-    code               String            @unique
+    id                 String           @id @default(cuid())
+    code               String           @unique
     name               String
     authorization      String?
     ministry           String?
     department         String?
     region             String?
-    defaultLocale      String            @default("fr")
+    defaultLocale      String           @default("fr")
     city               String?
     headmaster         String?
     phoneNumber1       String?
     phoneNumber2       String?
     email              String?
     website            String?
-    numberOfReceipts   Int?              @default(1)
+    numberOfReceipts   Int?             @default(1)
     logo               String?
-    createdAt          DateTime          @default(now()) @db.Timestamp(6)
-    updatedAt          DateTime          @updatedAt
-    isActive           Boolean           @default(true)
+    createdAt          DateTime         @default(now()) @db.Timestamp(6)
+    updatedAt          DateTime         @updatedAt
+    isActive           Boolean          @default(true)
     address            String?
-    timezone           String            @default("Africa/Brazzaville")
+    timezone           String           @default("Africa/Brazzaville")
     defaultCountryId   String?
-    registrationPrefix String            @default("1")
-    requestSunPlusNo   Boolean?          @default(true)
-    applyRequiredFee   ApplyRequiredFee  @default(NO)
-    includeRequiredFee Boolean?          @default(false)
+    registrationPrefix String           @default("1")
+    requestSunPlusNo   Boolean?         @default(true)
+    applyRequiredFee   ApplyRequiredFee @default(NO)
+    includeRequiredFee Boolean?         @default(false)
     contacts           Contact[]
     users              User[]
     students           Student[]
@@ -736,7 +719,6 @@ model School {
     sports             Sport[]
     clubs              Club[]
     permissions        Policy[]
-    permissionGroups   PermissionGroup[]
     roles              Role[]
     subjectGroup       SubjectGroup[]
     courses            Course[]
@@ -1214,13 +1196,6 @@ enum StudentStatus {
     INACTIVE
     GRADUATED
     EXPELLED
-}
-
-enum PermissionType {
-    CREATE
-    READ
-    UPDATE
-    DELETE
 }
 
 model PasswordReset {

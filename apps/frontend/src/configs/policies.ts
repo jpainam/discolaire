@@ -250,6 +250,26 @@ export const policies: {
     resource: "reportcard",
     action: PermissionAction.Delete,
   },
+  {
+    title: "policy",
+    resource: "policy",
+    action: PermissionAction.Read,
+  },
+  {
+    title: "policy",
+    resource: "policy",
+    action: PermissionAction.Update,
+  },
+  {
+    title: "policy",
+    resource: "policy",
+    action: PermissionAction.Create,
+  },
+  {
+    title: "policy",
+    resource: "policy",
+    action: PermissionAction.Delete,
+  },
 ];
 
 export const menuPolicies: {

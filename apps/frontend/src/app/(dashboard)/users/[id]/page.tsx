@@ -42,13 +42,15 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             <LockKeyhole />
             {t("password")}
           </TabsTrigger>
-          <TabsTrigger
-            value="tab-3"
-            className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-          >
-            <Shield />
-            {t("permissions")}
-          </TabsTrigger>
+          {session?.user.profile == "staff" && (
+            <TabsTrigger
+              value="tab-3"
+              className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+            >
+              <Shield />
+              {t("permissions")}
+            </TabsTrigger>
+          )}
         </TabsList>
         <TabsContent className="px-4" value="tab-1">
           <UserProfile user={user} />
@@ -60,9 +62,11 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             <ChangeUserPassword user={user} />
           )}
         </TabsContent>
-        <TabsContent className="px-4" value="tab-3">
-          <PermissionTable userId={user.id} />
-        </TabsContent>
+        {session?.user.profile == "staff" && (
+          <TabsContent className="px-4" value="tab-3">
+            <PermissionTable userId={user.id} />
+          </TabsContent>
+        )}
       </Tabs>
     </div>
   );

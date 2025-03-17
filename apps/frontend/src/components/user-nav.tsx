@@ -4,7 +4,6 @@ import {
   Bell,
   Computer,
   DollarSignIcon,
-  LockKeyhole,
   LogOut,
   Settings,
   User,
@@ -85,16 +84,7 @@ export function UserNav() {
             <User className="h-4 w-4" />
             <span>{t("profile")}</span>
           </DropdownMenuItem>
-          {user.id && (
-            <DropdownMenuItem
-              onSelect={() => {
-                router.push(`/users/${user.id}/password`);
-              }}
-            >
-              <LockKeyhole />
-              {t("password")}
-            </DropdownMenuItem>
-          )}
+
           <DropdownMenuItem
             onClick={() => {
               if (user.id) router.push(routes.users.settings(user.id));

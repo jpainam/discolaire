@@ -103,7 +103,7 @@ export function AdminSidebar({
           },
           {
             title: "Permissions",
-            url: "/administration/users/policies",
+            url: "/administration/users/permissions",
           },
         ],
       },
