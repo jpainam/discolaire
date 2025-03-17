@@ -6,7 +6,9 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import { cn } from "@repo/ui/lib/utils";
 import _, { sum } from "lodash";
+import Link from "next/link";
 import { Fragment } from "react";
 import { EmptyState } from "~/components/EmptyState";
 import type { FlatBadgeVariant } from "~/components/FlatBadge";
@@ -60,9 +62,9 @@ export default async function Page(props: {
   const averages = values.map((g) => g.average);
   const successCount = averages.filter((val) => val >= 10).length;
   const successRate = successCount / averages.length;
-
+  const rowClassName = "border text-center py-0";
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-2">
       <TrimestreHeader
         trimestreId={trimestreId}
         studentId={params.id}
@@ -70,20 +72,26 @@ export default async function Page(props: {
         classroomId={classroom.id}
       />
       <div className="px-4">
-        <div className="bg-background overflow-hidden rounded-md border">
+        <div className="bg-background overflow-hidden rounded-md">
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent">
-                <TableHead>{t("subject")}</TableHead>
-                <TableHead>{seq1}</TableHead>
-                <TableHead>{seq2}</TableHead>
-                <TableHead>{t("Moy")}</TableHead>
-                <TableHead className="text-center">{t("coeff")}</TableHead>
-                <TableHead>{t("total")}</TableHead>
-                <TableHead>{t("rank")}</TableHead>
-                <TableHead>{t("Moy.C")}</TableHead>
-                <TableHead>{t("Min/Max")}</TableHead>
-                <TableHead>{t("appreciation")}</TableHead>
+                <TableHead className={cn(rowClassName, "text-left")}>
+                  {t("subject")}
+                </TableHead>
+                <TableHead className={cn(rowClassName)}>{seq1}</TableHead>
+                <TableHead className={cn(rowClassName)}>{seq2}</TableHead>
+                <TableHead className={cn(rowClassName)}>{t("Moy")}</TableHead>
+                <TableHead className={cn(rowClassName)}>{t("coeff")}</TableHead>
+                <TableHead className={cn(rowClassName)}>{t("total")}</TableHead>
+                <TableHead className={cn(rowClassName)}>{t("rank")}</TableHead>
+                <TableHead className={cn(rowClassName)}>{t("Moy.C")}</TableHead>
+                <TableHead className={cn(rowClassName)}>
+                  {t("Min/Max")}
+                </TableHead>
+                <TableHead className={cn(rowClassName)}>
+                  {t("appreciation")}
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -103,46 +111,69 @@ export default async function Page(props: {
                       const subjectSummary = summary.get(subject.id);
                       return (
                         <TableRow key={`${subject.id}-${groupId}-${index}`}>
-                          <TableCell>{subject.course.reportName}</TableCell>
-                          <TableCell>
+                          <TableCell className={cn(rowClassName, "text-left")}>
+                            <div className="flex flex-col">
+                              <span className="font-semibold">
+                                {subject.course.reportName}
+                              </span>
+                              <Link
+                                href={`/staffs/${subject.teacher?.id}`}
+                                className="ml-4 hover:text-blue-500 hover:underline"
+                              >
+                                {subject.teacher?.prefix}{" "}
+                                {subject.teacher?.lastName}
+                              </Link>
+                            </div>
+                            {/* {subject.course.reportName} */}
+                          </TableCell>
+                          <TableCell className={rowClassName}>
                             <Cell n={grade?.grade1} />
                           </TableCell>
-                          <TableCell>
+                          <TableCell className={rowClassName}>
                             <Cell n={grade?.grade2} />
                           </TableCell>
-                          <TableCell>
+                          <TableCell className={rowClassName}>
                             <Cell n={grade?.average} />
                           </TableCell>
-                          <TableCell className="text-center">
+                          <TableCell
+                            className={cn("text-center", rowClassName)}
+                          >
                             {grade?.coeff}
                           </TableCell>
-                          <TableCell>{grade?.total?.toFixed(2)}</TableCell>
-                          <TableCell>{grade?.rank}</TableCell>
-                          <TableCell>
+                          <TableCell className={rowClassName}>
+                            {grade?.total?.toFixed(2)}
+                          </TableCell>
+                          <TableCell className={rowClassName}>
+                            {grade?.rank}
+                          </TableCell>
+                          <TableCell className={rowClassName}>
                             {subjectSummary?.average.toFixed(2)}
                           </TableCell>
-                          <TableCell>
+                          <TableCell className={rowClassName}>
                             {subjectSummary?.min.toFixed(2)} /{" "}
                             {subjectSummary?.max.toFixed(2)}
                           </TableCell>
-                          <TableCell className="uppercase">
+                          <TableCell className={cn("uppercase", rowClassName)}>
                             {getAppreciations(subjectSummary?.average)}
                           </TableCell>
                         </TableRow>
                       );
                     })}
                     <TableRow
-                      className="bg-secondary text-secondary-foreground"
+                      className="bg-secondary border text-secondary-foreground"
                       key={`recap-${groupId}`}
                     >
-                      <TableCell className="" colSpan={4}>
+                      <TableCell
+                        className={cn(rowClassName, "text-left")}
+                        colSpan={4}
+                      >
                         {group?.subjectGroup?.name}
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className={cn(rowClassName)}>
                         {sum(items.map((c) => c.coefficient))}
                       </TableCell>
-                      <TableCell className="text-center text-sm" colSpan={3}>
-                        {t("points")}:{" "}
+                      <TableCell className={cn(rowClassName)} colSpan={3}>
+                        {t("points")} :{" "}
                         {sum(
                           items.map(
                             (subject) =>
@@ -153,8 +184,11 @@ export default async function Page(props: {
                         ).toFixed(1)}{" "}
                         / {sum(items.map((c) => 20 * c.coefficient)).toFixed(1)}
                       </TableCell>
-                      <TableCell className="text-sm" colSpan={2}>
-                        {t("average")} :
+                      <TableCell
+                        className={cn(rowClassName, "py-2")}
+                        colSpan={2}
+                      >
+                        {t("average")} :{" "}
                         {(
                           sum(
                             items.map(
