@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import type { NextRequest } from "next/server";
 import { z } from "zod";
 
 import { auth } from "@repo/auth/session";
 import { resend } from "@repo/notification";
 import FeedbackEmail from "@repo/transactional/emails/FeedbackEmail";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { api } from "~/trpc/server";
 
 const schema = z.object({
-  content: z.string().email(),
+  content: z.string().min(1),
 });
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -20,7 +21,12 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const result = schema.safeParse(body);
     if (!result.success) {
-      return new Response("Invalid request", { status: 400 });
+      const errors = result.error.format();
+      console.error(errors);
+      return NextResponse.json(
+        { error: result.error.format() },
+        { status: 400 }
+      );
     }
     const { content } = result.data;
     const { user } = session;

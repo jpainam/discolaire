@@ -49,7 +49,8 @@ export function FeedBackDialog() {
       })
       .catch((e) => {
         setIsLoading(false);
-        toast.error(e.message);
+        console.error(e);
+        toast.error("An error occured");
       });
   };
 
