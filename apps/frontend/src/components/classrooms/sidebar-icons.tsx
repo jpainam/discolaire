@@ -28,7 +28,7 @@ export const sidebarIcons: Record<string, LucideIcon> = {
   subjects: Captions,
   programs: BookText,
   attendances: Contact,
-  report_cards: Proportions,
+  reportcards: Proportions,
   timetables: CalendarDays,
   subject_journal: NotepadTextDashed,
 };

@@ -1,7 +1,7 @@
 import { Separator } from "@repo/ui/components/separator";
 
-import { ReportCard } from "~/components/report-cards/ReportCard";
-import { ReportCardHeader } from "~/components/report-cards/ReportCardHeader";
+import { ReportCard } from "~/components/reportcards/ReportCard";
+import { ReportCardHeader } from "~/components/reportcards/ReportCardHeader";
 
 export default async function Page(props: {
   searchParams: Promise<{

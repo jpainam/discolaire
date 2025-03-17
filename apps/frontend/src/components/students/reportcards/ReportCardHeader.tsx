@@ -34,10 +34,10 @@ export function ReportCardHeader({
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const searchParams = useSearchParams();
-  const Icon = sidebarIcons.report_cards;
+  const Icon = sidebarIcons.reportcards;
   const canPrintReportCard = useCheckPermission(
     "reportcard",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   return (
     <div className="grid md:flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1 text-secondary-foreground">
@@ -81,7 +81,7 @@ export function ReportCardHeader({
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/report-cards/ipbw/?studentId=${params.id}&termId=${searchParams.get("term")}`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >

@@ -23,11 +23,11 @@ export const routes = {
     details: (id: string) => `/staffs/${id}`,
     teachings: (id: string) => `/staffs/${id}/teachings`,
   },
-  report_cards: {
-    index: "/report-cards",
-    transcripts: "/report-cards/transcripts",
-    appreciations: "/report-cards/appreciations",
-    charts: "/report-cards/charts",
+  reportcards: {
+    index: "/reportcards",
+    transcripts: "/reportcards/transcripts",
+    appreciations: "/reportcards/appreciations",
+    charts: "/reportcards/charts",
   },
   timetables: {
     index: "/timetables",

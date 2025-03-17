@@ -1,7 +1,7 @@
 import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 
-import { ReportCardHeader } from "~/components/students/report-cards/ReportCardHeader";
+import { ReportCardHeader } from "~/components/students/reportcards/ReportCardHeader";
 import { api } from "~/trpc/server";
 
 export default async function Layout(props: {

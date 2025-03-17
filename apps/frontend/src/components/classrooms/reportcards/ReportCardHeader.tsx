@@ -27,7 +27,7 @@ export function ReportCardHeader() {
   const [termId] = useQueryState("term", parseAsInteger);
   const router = useRouter();
   const params = useParams<{ id: string }>();
-  const Icon = sidebarIcons.report_cards;
+  const Icon = sidebarIcons.reportcards;
   return (
     <div className="grid flex-row items-center gap-4 border-b bg-muted/40 px-4 py-1 md:flex">
       {Icon && <Icon className="hidden h-6 w-6 md:block" />}
@@ -51,7 +51,7 @@ export function ReportCardHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/report-cards/ipbw?classroomId=${params.id}&termId=${termId}`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

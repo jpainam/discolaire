@@ -12,10 +12,10 @@ export function ReportCardMenu() {
   const { t } = useLocale();
   const pathname = usePathname();
   const menuItems: { href: string; label: string }[] = [
-    { href: routes.report_cards.index, label: t("report_cards") },
-    // { href: routes.report_cards.transcripts, label: t("transcripts") },
-    { href: routes.report_cards.appreciations, label: t("appreciations") },
-    { href: routes.report_cards.charts, label: t("charts") },
+    { href: routes.reportcards.index, label: t("reportcards") },
+    // { href: routes.reportcards.transcripts, label: t("transcripts") },
+    { href: routes.reportcards.appreciations, label: t("appreciations") },
+    { href: routes.reportcards.charts, label: t("charts") },
   ];
 
   return (
@@ -28,7 +28,7 @@ export function ReportCardMenu() {
             className={cn(
               isActive
                 ? "border-b-2 border-blue-500 bg-secondary text-secondary-foreground"
-                : "",
+                : ""
             )}
             href={item.href}
           >

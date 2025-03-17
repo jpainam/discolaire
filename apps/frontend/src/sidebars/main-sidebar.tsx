@@ -59,11 +59,6 @@ export function MainSidebar({
       url: `/contacts`,
       icon: RiUserFollowLine,
     },
-    // {
-    //   name: "report_cards",
-    //   url: `/report-cards`,
-    //   icon: RiScanLine,
-    // },
   ];
   const session = useSession();
   if (session.user?.profile == "staff") {
@@ -79,12 +74,12 @@ export function MainSidebar({
           url: `/timetables`,
           icon: CalendarDays,
         },
-      ],
+      ]
     );
   }
   const canReadLibrary = useCheckPermission(
     "menu:library",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
   if (canReadLibrary) {
     data.push({
@@ -95,7 +90,7 @@ export function MainSidebar({
   }
   const canReadAdministration = useCheckPermission(
     "menu:administration",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
   if (canReadAdministration) {
     data.push({

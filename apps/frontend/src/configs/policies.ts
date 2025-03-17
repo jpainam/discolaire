@@ -230,6 +230,26 @@ export const policies: {
     resource: "attendance",
     action: PermissionAction.Delete,
   },
+  {
+    title: "reportcards",
+    resource: "reportcard",
+    action: PermissionAction.Read,
+  },
+  {
+    title: "reportcards",
+    resource: "reportcard",
+    action: PermissionAction.Update,
+  },
+  {
+    title: "reportcard",
+    resource: "reportcard",
+    action: PermissionAction.Create,
+  },
+  {
+    title: "reportcard",
+    resource: "reportcard",
+    action: PermissionAction.Delete,
+  },
 ];
 
 export const menuPolicies: {

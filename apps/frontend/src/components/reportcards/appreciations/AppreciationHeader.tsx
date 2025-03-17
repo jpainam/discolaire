@@ -84,9 +84,9 @@ export function AppreciationHeader() {
         defaultValue={classroomId ?? undefined}
         onChange={(val) => {
           router.push(
-            routes.report_cards.appreciations +
+            routes.reportcards.appreciations +
               "/?" +
-              createQueryString({ classroom: val }),
+              createQueryString({ classroom: val })
           );
         }}
       />

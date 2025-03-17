@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from "react";
 
-import { ReportCardHeader } from "~/components/classrooms/report-cards/ReportCardHeader";
+import { ReportCardHeader } from "~/components/classrooms/reportcards/ReportCardHeader";
 
 export default function Layout({ children }: PropsWithChildren) {
   return (

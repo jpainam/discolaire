@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from "react";
 
-import { ReportCardMenu } from "~/components/report-cards/ReportCardMenu";
+import { ReportCardMenu } from "~/components/reportcards/ReportCardMenu";
 
 export default function Layout({ children }: PropsWithChildren) {
   return (

@@ -5,12 +5,12 @@ import { Separator } from "@repo/ui/components/separator";
 import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 
-import { ReportCardDiscipline } from "~/components/students/report-cards/ReportCardDiscipline";
-import { ReportCardMention } from "~/components/students/report-cards/ReportCardMention";
-import { ReportCardPerformance } from "~/components/students/report-cards/ReportCardPerformance";
-import { ReportCardSignature } from "~/components/students/report-cards/ReportCardSignature";
-import { ReportCardSummary } from "~/components/students/report-cards/ReportCardSummary";
-import { ReportCardTable } from "~/components/students/report-cards/ReportCardTable";
+import { ReportCardDiscipline } from "~/components/students/reportcards/ReportCardDiscipline";
+import { ReportCardMention } from "~/components/students/reportcards/ReportCardMention";
+import { ReportCardPerformance } from "~/components/students/reportcards/ReportCardPerformance";
+import { ReportCardSignature } from "~/components/students/reportcards/ReportCardSignature";
+import { ReportCardSummary } from "~/components/students/reportcards/ReportCardSummary";
+import { ReportCardTable } from "~/components/students/reportcards/ReportCardTable";
 import { api } from "~/trpc/server";
 
 type ReportCardType =
@@ -53,7 +53,7 @@ export default async function Page(props: {
     groups[groupId].push(card);
   });
   const points = sum(
-    reportCard.map((c) => (c.isAbsent ? 0 : c.avg * c.coefficient)),
+    reportCard.map((c) => (c.isAbsent ? 0 : c.avg * c.coefficient))
   );
 
   //const totalPoints = sum(reportCard.map((c) => 20 * c.coefficient));

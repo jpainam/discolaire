@@ -1,6 +1,6 @@
 import { db } from "@repo/db";
 
-import { getGrades } from "./report-card-service";
+import { getGrades } from "./reportcard-service";
 
 export async function getTrimestreGrades(
   classroomId: string,

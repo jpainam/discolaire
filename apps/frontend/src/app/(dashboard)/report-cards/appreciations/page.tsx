@@ -1,6 +1,6 @@
 import { Separator } from "@repo/ui/components/separator";
 
-import { AppreciationHeader } from "~/components/report-cards/appreciations/AppreciationHeader";
+import { AppreciationHeader } from "~/components/reportcards/appreciations/AppreciationHeader";
 
 // interface AppreciationProps {
 //   searchParams: {

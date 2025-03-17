@@ -3,7 +3,7 @@ import { EmptyState } from "~/components/EmptyState";
 import FlatBadge from "~/components/FlatBadge";
 import { getServerTranslations } from "~/i18n/server";
 
-import { ReportCardTable } from "~/components/classrooms/report-cards/ReportCardTable2";
+import { ReportCardTable } from "~/components/classrooms/reportcards/ReportCardTable2";
 import { api } from "~/trpc/server";
 import { getAppreciations } from "~/utils/get-appreciation";
 

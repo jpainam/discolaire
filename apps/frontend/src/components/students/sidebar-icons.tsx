@@ -23,7 +23,7 @@ export const sidebarIcons: Record<string, LucideIcon> = {
   contacts: Users,
   transactions: CircleDollarSign,
   grades: NotepadTextDashed,
-  report_cards: BookText,
+  reportcards: BookText,
   photos: Image,
   enrollments: ArrowRightLeft,
   id_card: CreditCard,

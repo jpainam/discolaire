@@ -97,8 +97,8 @@ export function ClassroomSidebar({
         icon: Contact,
       },
       {
-        name: "report_cards",
-        url: `/classrooms/${params.id}/report_cards`,
+        name: "reportcards",
+        url: `/classrooms/${params.id}/reportcards`,
         icon: Proportions,
       },
       {

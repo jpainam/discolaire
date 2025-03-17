@@ -67,9 +67,9 @@ export function StudentSidebar({
         url: `/students/${params.id}/grades`,
       },
       {
-        name: "report_cards",
+        name: "reportcards",
         icon: BookText,
-        url: `/students/${params.id}/report-cards`,
+        url: `/students/${params.id}/reportcards`,
       },
       {
         name: "attendances",

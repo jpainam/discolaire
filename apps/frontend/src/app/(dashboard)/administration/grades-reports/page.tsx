@@ -43,7 +43,7 @@ export default async function Page() {
               size={16}
               aria-hidden="true"
             />
-            {t("report_cards")}
+            {t("reportcards")}
             <Badge
               className="bg-primary/15 ms-1.5 min-w-5 px-1"
               variant="secondary"

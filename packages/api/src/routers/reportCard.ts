@@ -5,7 +5,7 @@ import {
   getGrades,
   getSummary,
   reportCardService,
-} from "../services/report-card-service";
+} from "../services/reportcard-service";
 import { studentService } from "../services/student-service";
 import { getTrimestreGrades } from "../services/trimestre-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
