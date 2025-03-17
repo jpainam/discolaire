@@ -7,6 +7,7 @@ import {
   reportCardService,
 } from "../services/report-card-service";
 import { studentService } from "../services/student-service";
+import { getTrimestreGrades } from "../services/trimestre-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const reportCardRouter = createTRPCRouter({
@@ -127,5 +128,21 @@ export const reportCardRouter = createTRPCRouter({
           remark: input.remark,
         },
       });
+    }),
+  getTrimestre: protectedProcedure
+    .input(
+      z.object({
+        trimestreId: z.string().min(1),
+        classroomId: z.string().min(1),
+        studentId: z.string().optional(),
+      }),
+    )
+    .query(({ input, ctx }) => {
+      return getTrimestreGrades(
+        input.classroomId,
+        input.trimestreId,
+        ctx.schoolId,
+        ctx.schoolYearId,
+      );
     }),
 });

@@ -5,6 +5,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import _ from "lodash";
 import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 import { api } from "~/trpc/server";
@@ -30,6 +31,19 @@ export default async function Page(props: {
   const searchParams = await props.searchParams;
   const { trimestreId } = searchParams;
   const { title, seq1, seq2 } = getTitle({ trimestreId });
+
+  const { studentsReport, summary, globalRanks } =
+    await api.reportCard.getTrimestre({
+      studentId: id,
+      classroomId: classroom.id,
+      trimestreId: trimestreId,
+    });
+  console.log(studentsReport);
+  const subjects = await api.classroom.subjects(classroom.id);
+  const groups = _.groupBy(subjects, "subjectGroupId");
+  const studentReport = studentsReport.get(id);
+  console.log(studentReport, summary, globalRanks);
+
   return (
     <div className="flex flex-col gap-4">
       <TrimestreHeader
@@ -56,7 +70,15 @@ export default async function Page(props: {
                 <TableHead>{t("appreciation")}</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody></TableBody>
+            <TableBody>
+              {Object.keys(groups).map((groupId: string) => {
+                const items = groups[Number(groupId)]?.sort(
+                  (a, b) => a.order - b.order
+                );
+                if (!items) return null;
+                return <div></div>;
+              })}
+            </TableBody>
           </Table>
         </div>
       </div>
