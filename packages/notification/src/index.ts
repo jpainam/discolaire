@@ -5,9 +5,9 @@ import { Resend } from "resend";
 
 import { env } from "./env";
 
-const resend = new Resend(env.RESEND_API_KEY);
+export const resend = new Resend(env.RESEND_API_KEY);
 const novu = new Novu(env.NOVU_API_KEY);
-export { novu, resend };
+export { novu };
 const API_ENDPOINT = "https://api.novu.co/v1";
 
 export enum TriggerEvents {
