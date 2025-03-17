@@ -1,19 +1,22 @@
 import { notFound } from "next/navigation";
 
+import { auth } from "@repo/auth";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@repo/ui/components/tabs";
-import { KeyIcon, Shield, User } from "lucide-react";
+import { LockKeyhole, Shield, User } from "lucide-react";
+import { ReinitializePassword } from "~/components/users/password/ReinitializePassword";
+import { PermissionTable } from "~/components/users/PermissionTable";
 import { getServerTranslations } from "~/i18n/server";
 import { api } from "~/trpc/server";
 import { ChangeUserPassword } from "./ChangeUserPassword";
 import { UserProfile } from "./UserProfile";
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
-
+  const session = await auth();
   const { id } = params;
   const { t } = await getServerTranslations();
 
@@ -36,7 +39,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             value="tab-2"
             className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
           >
-            <KeyIcon />
+            <LockKeyhole />
             {t("password")}
           </TabsTrigger>
           <TabsTrigger
@@ -51,9 +54,15 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           <UserProfile user={user} />
         </TabsContent>
         <TabsContent className="px-4" value="tab-2">
-          <ChangeUserPassword user={user} />
+          {session?.user.id == user.id ? (
+            <ReinitializePassword />
+          ) : (
+            <ChangeUserPassword user={user} />
+          )}
         </TabsContent>
-        <TabsContent className="px-4" value="tab-3"></TabsContent>
+        <TabsContent className="px-4" value="tab-3">
+          <PermissionTable userId={user.id} />
+        </TabsContent>
       </Tabs>
     </div>
   );

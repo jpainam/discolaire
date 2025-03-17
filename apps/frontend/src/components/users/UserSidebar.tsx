@@ -15,7 +15,6 @@ import {
   BellRing,
   CircleDollarSign,
   Computer,
-  LockKeyhole,
   Settings,
   User,
 } from "lucide-react";
@@ -34,11 +33,6 @@ export function UserSidebar({
         name: "profile",
         icon: User,
         url: `/users/${params.id}`,
-      },
-      {
-        name: "password",
-        icon: LockKeyhole,
-        url: `/users/${params.id}/password`,
       },
       {
         name: "subscriptions",

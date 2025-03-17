@@ -68,9 +68,11 @@ export function UserProfile({
     <div className="mx-auto max-w-3xl">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
-          <Card className="shadow-none border-0 mx-auto rounded-none">
+          <Card>
             <CardHeader>
-              <CardTitle>{t("personal_information")}</CardTitle>
+              <CardTitle className="text-lg">
+                {t("personal_information")}
+              </CardTitle>
               <CardDescription>
                 {t("personal_information_description")}
               </CardDescription>

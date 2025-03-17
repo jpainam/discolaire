@@ -64,14 +64,14 @@ export function ChangeUserPassword({
   };
   return (
     <div className="mx-auto max-w-3xl">
-      <Card className="shadow-none border-0 mx-auto rounded-none">
-        <CardHeader className="p-0">
-          <CardTitle>{t("reset_password")}</CardTitle>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">{t("reset_password")}</CardTitle>
           <CardDescription>
             {t("reset_password_description", { user: user.name })}
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-0">
+        <CardContent>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(handleSubmit)}
