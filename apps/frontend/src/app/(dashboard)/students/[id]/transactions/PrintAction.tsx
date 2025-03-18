@@ -34,7 +34,7 @@ export function PrintAction() {
           onSelect={() => {
             window.open(
               `/api/pdfs/student/${params.id}/transactions?format=pdf`,
-              "_blank"
+              "_blank",
             );
           }}
         >
@@ -45,7 +45,7 @@ export function PrintAction() {
           onSelect={() => {
             window.open(
               `/api/pdfs/student/${params.id}/transactions?format=csv`,
-              "_blank"
+              "_blank",
             );
           }}
         >

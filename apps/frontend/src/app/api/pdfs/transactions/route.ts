@@ -61,7 +61,7 @@ export async function GET(req: NextRequest) {
       TransactionList({
         transactions: transactions,
         school: school,
-      })
+      }),
     );
 
     //const blob = await new Response(stream).blob();
