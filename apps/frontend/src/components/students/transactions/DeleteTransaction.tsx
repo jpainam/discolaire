@@ -41,7 +41,7 @@ export function DeleteTransaction({
   const router = useRouter();
   const transactionQuery = api.transaction.get.useQuery(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    Array.isArray(transactionId) ? transactionId[0]! : transactionId
+    Array.isArray(transactionId) ? transactionId[0]! : transactionId,
   );
   const deleteTransactionMutation = api.transaction.delete.useMutation({
     onSuccess: () => {

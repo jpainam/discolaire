@@ -1,14 +1,8 @@
-import {
-  CheckCircledIcon,
-  CrossCircledIcon,
-  StopwatchIcon,
-} from "@radix-ui/react-icons";
 import type { ColumnDef, Row } from "@tanstack/react-table";
 import { createColumnHelper } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
 import i18next from "i18next";
-import { BookCopy, Eye, MoreHorizontal, Trash2 } from "lucide-react";
-import { toast } from "sonner";
+import { Eye, MoreHorizontal } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -17,34 +11,23 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-import { PermissionAction } from "~/permissions";
 
 import Link from "next/link";
-import { DeleteTransaction } from "~/components/students/transactions/DeleteTransaction";
 import { TransactionStatus } from "~/components/students/transactions/TransactionTable";
-import { useCheckPermission } from "~/hooks/use-permission";
-import { api } from "~/trpc/react";
 import { TransactionDetails } from "./TransactionDetails";
 
 type TransactionAllProcedureOutput = NonNullable<
-  RouterOutputs["transaction"]["all"]
+  RouterOutputs["transaction"]["getDeleted"]
 >[number];
 
 const columnHelper = createColumnHelper<TransactionAllProcedureOutput>();
 
-export const fetchTransactionColumns = ({
+export const getDeletedDataTableColumn = ({
   t,
   currency,
 }: {
@@ -178,28 +161,6 @@ function ActionCell({
   transaction: TransactionAllProcedureOutput;
 }) {
   const { t } = useLocale();
-  const utils = api.useUtils();
-  const updateTransactionMutation = api.transaction.updateStatus.useMutation({
-    onSettled: async () => {
-      await utils.transaction.invalidate();
-      await utils.student.transactions.invalidate();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-    },
-  });
-
-  const canDeleteTransaction = useCheckPermission(
-    "transaction",
-    PermissionAction.DELETE,
-  );
-  const canUpdateTransaction = useCheckPermission(
-    "transaction",
-    PermissionAction.UPDATE,
-  );
 
   const { openModal } = useModal();
   return (
@@ -221,84 +182,6 @@ function ActionCell({
           <Eye />
           {t("details")}
         </DropdownMenuItem>
-        {canUpdateTransaction && (
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>
-              <BookCopy className="mr-2 h-4 w-4" />
-              {t("status")}
-            </DropdownMenuSubTrigger>
-            <DropdownMenuSubContent>
-              <DropdownMenuRadioGroup
-                value={transaction.status}
-                onValueChange={(value) => {
-                  if (["PENDING", "CANCELED", "VALIDATED"].includes(value)) {
-                    const v = value as "PENDING" | "CANCELED" | "VALIDATED";
-                    toast.loading(t("updating"), { id: 0 });
-                    updateTransactionMutation.mutate({
-                      transactionId: transaction.id,
-                      status: v,
-                    });
-                  } else {
-                    toast.error(t("invalid_status"), { id: 0 });
-                  }
-                }}
-              >
-                <DropdownMenuRadioItem
-                  value={"VALIDATED"}
-                  className="capitalize"
-                >
-                  <FlatBadge variant={"green"}>
-                    <CheckCircledIcon
-                      className="mr-2 size-4 text-muted-foreground"
-                      aria-hidden="true"
-                    />
-                    {t("validate")}
-                  </FlatBadge>
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem
-                  value={"CANCELED"}
-                  className="capitalize"
-                >
-                  <FlatBadge variant={"red"}>
-                    <CrossCircledIcon
-                      className="mr-2 size-4 text-muted-foreground"
-                      aria-hidden="true"
-                    />
-                    {t("cancel")}
-                  </FlatBadge>
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value={"PENDING"} className="capitalize">
-                  <FlatBadge variant={"yellow"}>
-                    <StopwatchIcon
-                      className="mr-2 size-4 text-muted-foreground"
-                      aria-hidden="true"
-                    />
-                    {t("pending")}
-                  </FlatBadge>
-                </DropdownMenuRadioItem>
-              </DropdownMenuRadioGroup>
-            </DropdownMenuSubContent>
-          </DropdownMenuSub>
-        )}
-
-        {canDeleteTransaction && (
-          <>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => {
-                openModal({
-                  title: t("delete"),
-                  view: <DeleteTransaction transactionId={transaction.id} />,
-                });
-              }}
-              variant="destructive"
-              className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-            >
-              <Trash2 />
-              {t("delete")}
-            </DropdownMenuItem>
-          </>
-        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

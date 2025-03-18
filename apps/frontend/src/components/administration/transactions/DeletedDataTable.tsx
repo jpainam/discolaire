@@ -7,20 +7,19 @@ import { useLocale } from "~/i18n";
 
 import type { RouterOutputs } from "@repo/api";
 import { useSchool } from "~/providers/SchoolProvider";
-import { TransactionDataTableAction } from "./TransactionDataTableAction";
-import { fetchTransactionColumns } from "./TransactionDataTableColumn";
+import { getDeletedDataTableColumn } from "./DeletedDataTableColumn";
 
 export function TransactionDataTable({
   transactions,
 }: {
-  transactions: RouterOutputs["transaction"]["all"];
+  transactions: RouterOutputs["transaction"]["getDeleted"];
 }) {
   const { t } = useLocale();
   const { school } = useSchool();
 
   const columns = useMemo(
     () =>
-      fetchTransactionColumns({
+      getDeletedDataTableColumn({
         t: t,
         currency: school.currency,
       }),
@@ -32,9 +31,5 @@ export function TransactionDataTable({
     columns: columns,
   });
 
-  return (
-    <DataTable table={table}>
-      <TransactionDataTableAction table={table} />
-    </DataTable>
-  );
+  return <DataTable table={table}></DataTable>;
 }

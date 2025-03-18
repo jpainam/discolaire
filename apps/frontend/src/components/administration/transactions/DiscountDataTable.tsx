@@ -9,8 +9,8 @@ import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
 import { useLocale } from "~/i18n";
 
+import { useSchool } from "~/providers/SchoolProvider";
 import { api } from "~/trpc/react";
-import { useMoneyFormat } from "~/utils/money-format";
 import { TransactionDataTableAction } from "./TransactionDataTableAction";
 import { fetchTransactionColumns } from "./TransactionDataTableColumn";
 
@@ -29,15 +29,15 @@ export function DiscountDataTable() {
   //const transactionsCountQuery = api.transaction.count.useQuery();
 
   const { t } = useLocale();
+  const { school } = useSchool();
 
-  const { moneyFormatter } = useMoneyFormat();
   const columns = useMemo(
     () =>
       fetchTransactionColumns({
         t: t,
-        moneyFormatter: moneyFormatter,
+        currency: school.currency,
       }),
-    [moneyFormatter, t]
+    [school.currency, t],
   );
   const transactions =
     transactionsQuery.data?.filter((t) => t.transactionType == "DISCOUNT") ??

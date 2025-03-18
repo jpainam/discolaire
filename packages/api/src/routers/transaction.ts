@@ -31,6 +31,61 @@ export const transactionRouter = createTRPCRouter({
     });
   }),
 
+  getDeleted: protectedProcedure
+    .input(
+      z.object({
+        from: z.coerce.date().optional().default(subMonths(new Date(), 3)),
+        to: z.coerce.date().optional().default(new Date()),
+        status: z.string().optional(),
+        classroom: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const status = input.status
+        ? (input.status as TransactionStatus)
+        : undefined;
+      const students = input.classroom
+        ? await classroomService.getStudents(input.classroom)
+        : [];
+      const studentIds: string[] = students.map((stud) => stud.id);
+      return ctx.db.transaction.findMany({
+        include: {
+          account: true,
+        },
+        where: {
+          AND: [
+            { schoolYearId: ctx.schoolYearId },
+            {
+              deletedAt: {
+                not: null,
+              },
+            },
+            {
+              createdAt: {
+                gte: input.from,
+                lte: input.to,
+              },
+            },
+            ...(status ? [{ status: { equals: status } }] : [{}]),
+            ...(input.classroom
+              ? [
+                  {
+                    account: {
+                      studentId: {
+                        in: studentIds,
+                      },
+                    },
+                  },
+                ]
+              : [{}]),
+          ],
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }),
+
   all: protectedProcedure
     .input(
       z.object({

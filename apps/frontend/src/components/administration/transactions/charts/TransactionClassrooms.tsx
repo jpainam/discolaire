@@ -63,11 +63,11 @@ export function TransactionClassrooms() {
   if (transactionsQuotaQuery.isPending) {
     return (
       <div className="flex w-full flex-col">
-        <div className="flex w-full flex-row gap-4 p-2">
+        <div className="flex w-full flex-row gap-4">
           <Skeleton className="h-[200px] w-1/3" />
           <Skeleton className="h-[200px] w-2/3" />
         </div>
-        <div className="flex w-full flex-row gap-4 p-2">
+        <div className="flex w-full flex-row gap-4">
           <Skeleton className="h-[200px] w-1/3" />
           <Skeleton className="h-[200px] w-2/3" />
         </div>
@@ -80,7 +80,7 @@ export function TransactionClassrooms() {
   }
 
   return (
-    <div className="grid w-full items-end gap-8 p-2 md:grid-cols-2">
+    <div className="grid items-end gap-8 md:grid-cols-2">
       {filteredData.map((data, index) => {
         return (
           <Card key={index} className="rounded-sm shadow-none">

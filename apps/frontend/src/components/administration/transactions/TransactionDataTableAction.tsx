@@ -29,7 +29,7 @@ export function TransactionDataTableAction({
 
   const canDeleteTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const { openModal } = useModal();
 
