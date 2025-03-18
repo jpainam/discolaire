@@ -29,7 +29,7 @@ export function TabMenu({
           "flex flex-row items-center gap-2 rounded-full px-4 py-1.5 text-sm text-muted-foreground transition-all",
           isActive
             ? "bg-primary text-primary-foreground"
-            : "hover:text-secondary-foreground"
+            : "hover:text-secondary-foreground",
         )}
       >
         {icon} {title}

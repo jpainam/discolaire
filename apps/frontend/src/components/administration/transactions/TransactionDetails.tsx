@@ -29,6 +29,7 @@ import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
 import { getFullName } from "~/utils/full-name";
 import { useMoneyFormat } from "~/utils/money-format";
+import { useRouter } from "~/hooks/use-router";
 
 export function TransactionDetails({
   transactionId,
@@ -39,6 +40,7 @@ export function TransactionDetails({
   const { moneyFormatter } = useMoneyFormat();
   const { fullDateFormatter } = useDateFormat();
   const { closeModal } = useModal();
+
   const transactionQuery = api.transaction.get.useQuery(transactionId);
 
   if (transactionQuery.isPending) {

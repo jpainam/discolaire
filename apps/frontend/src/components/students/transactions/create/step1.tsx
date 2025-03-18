@@ -91,7 +91,7 @@ export function Step1() {
             toast.error(t("required_fee_warning"));
           }
         },
-      }
+      },
     );
   }
   const items: { label: string; value: string }[] = [

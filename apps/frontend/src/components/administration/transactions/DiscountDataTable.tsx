@@ -24,7 +24,7 @@ export function DiscountDataTable({
         t: t,
         currency: school.currency,
       }),
-    [school.currency, t]
+    [school.currency, t],
   );
 
   const { table } = useDataTable({

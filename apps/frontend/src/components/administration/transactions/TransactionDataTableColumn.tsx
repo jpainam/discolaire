@@ -35,6 +35,7 @@ import Link from "next/link";
 import { DeleteTransaction } from "~/components/students/transactions/DeleteTransaction";
 import { TransactionStatus } from "~/components/students/transactions/TransactionTable";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { TransactionDetails } from "./TransactionDetails";
 
@@ -179,6 +180,7 @@ function ActionCell({
 }) {
   const { t } = useLocale();
   const utils = api.useUtils();
+  const router = useRouter();
   const updateTransactionMutation = api.transaction.updateStatus.useMutation({
     onSettled: async () => {
       await utils.transaction.invalidate();
@@ -189,16 +191,17 @@ function ActionCell({
     },
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
+      router.refresh();
     },
   });
 
   const canDeleteTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
 
   const { openModal } = useModal();
