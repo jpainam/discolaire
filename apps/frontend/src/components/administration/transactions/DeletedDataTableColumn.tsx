@@ -120,8 +120,7 @@ export const getDeletedDataTableColumn = ({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("status")} />
       ),
-      cell: ({ row }) => {
-        const status = row.original.status;
+      cell: () => {
         return (
           <FlatBadge className="gap-2" variant={"red"}>
             <CrossCircledIcon

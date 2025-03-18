@@ -9,5 +9,5 @@ export default async function Page(props: {
   const searchParams = await props.searchParams;
   console.log(searchParams);
   //const transactions = await api.transaction.required({});
-  return <div>En cours d'implementation</div>;
+  return <div className="p-4">En cours d'implementation</div>;
 }

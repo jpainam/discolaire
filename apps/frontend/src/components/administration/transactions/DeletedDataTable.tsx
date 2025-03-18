@@ -23,7 +23,7 @@ export function DeletedTransactionDataTable({
         t: t,
         currency: school.currency,
       }),
-    [t, school.currency]
+    [t, school.currency],
   );
 
   const { table } = useDataTable({
