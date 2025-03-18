@@ -104,7 +104,7 @@ export const fetchTransactionColumns = ({
             className="hover:underline hover:text-blue-600"
             href={`/students/${transaction.account.studentId}/transactions`}
           >
-            {transaction.account.name}
+            {transaction.account.student.lastName}
           </Link>
         );
       },
@@ -197,11 +197,11 @@ function ActionCell({
 
   const canDeleteTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
 
   const { openModal } = useModal();

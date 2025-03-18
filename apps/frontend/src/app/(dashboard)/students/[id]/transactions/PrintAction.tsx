@@ -12,12 +12,14 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { useLocale } from "~/i18n";
 
+import { useParams } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 
 export function PrintAction() {
   const { t } = useLocale();
+  const params = useParams<{ id: string }>();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -28,13 +30,27 @@ export function PrintAction() {
       <DropdownMenuContent align="end">
         <DropdownHelp />
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <XMLIcon />
-          {t("xml_export")}
-        </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem
+          onSelect={() => {
+            window.open(
+              `/api/pdfs/student/${params.id}/transactions?format=pdf`,
+              "_blank"
+            );
+          }}
+        >
           <PDFIcon />
           {t("pdf_export")}
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onSelect={() => {
+            window.open(
+              `/api/pdfs/student/${params.id}/transactions?format=csv`,
+              "_blank"
+            );
+          }}
+        >
+          <XMLIcon />
+          {t("xml_export")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

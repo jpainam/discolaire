@@ -44,22 +44,23 @@ export const transactionRouter = createTRPCRouter({
       const status = input.status
         ? (input.status as TransactionStatus)
         : undefined;
+
       const students = input.classroom
         ? await classroomService.getStudents(input.classroom)
         : [];
       const studentIds: string[] = students.map((stud) => stud.id);
       return ctx.db.transaction.findMany({
         include: {
-          account: true,
+          account: {
+            include: {
+              student: true,
+            },
+          },
         },
         where: {
           AND: [
             { schoolYearId: ctx.schoolYearId },
-            {
-              deletedAt: {
-                not: null,
-              },
-            },
+            { deletedAt: null },
             {
               createdAt: {
                 gte: input.from,
@@ -107,7 +108,11 @@ export const transactionRouter = createTRPCRouter({
       const studentIds: string[] = students.map((stud) => stud.id);
       return ctx.db.transaction.findMany({
         include: {
-          account: true,
+          account: {
+            include: {
+              student: true,
+            },
+          },
         },
         where: {
           AND: [

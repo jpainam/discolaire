@@ -98,6 +98,7 @@ export const getDeletedDataTableColumn = ({
       ),
       cell: ({ row }) => {
         const transaction = row.original;
+
         return (
           <Link
             className="hover:underline hover:text-blue-600"

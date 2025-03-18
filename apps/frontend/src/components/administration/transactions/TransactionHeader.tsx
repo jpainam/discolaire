@@ -18,6 +18,7 @@ import { useSearchParams } from "next/navigation";
 import { DatePicker } from "~/components/DatePicker";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { TransactionStatusSelector } from "~/components/shared/selects/TransactionStatusSelector";
 import { useRouter } from "~/hooks/use-router";
@@ -84,11 +85,20 @@ export function TransactionHeader() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>
+            <DropdownHelp />
+            <DropdownMenuItem
+              onSelect={() => {
+                window.open(`/api/pdfs/transactions?format=pdf`, "_blank");
+              }}
+            >
               <PDFIcon />
               {t("pdf_export")}
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                window.open(`/api/pdfs/transactions?format=csv`, "_blank");
+              }}
+            >
               <XMLIcon />
               {t("xml_export")}
             </DropdownMenuItem>

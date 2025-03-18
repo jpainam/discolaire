@@ -64,7 +64,7 @@ export function TransactionStats({
       title: t("transactionsCompleted"),
       amount: sumBy(
         transactions.filter((t) => t.status == "VALIDATED"),
-        "amount",
+        "amount"
       ).toLocaleString(i18n.language),
       icon: PiMoneyBold,
       iconWrapperFill: "#FF0000",
@@ -72,7 +72,7 @@ export function TransactionStats({
   ];
 
   return (
-    <div className="px-4 mt-2 grid gap-2 md:grid-cols-4">
+    <div className="grid-cols-1 px-4 mt-2 grid gap-2 2xl:grid-cols-4">
       {statData.map((stat: any, index: number) => {
         return (
           <TransactionStatCard key={"transaction-card-" + index} {...stat} />
@@ -102,7 +102,7 @@ function TransactionStatCard({
     <div
       className={cn(
         "rounded-md border p-2 bg-muted hover:bg-secondary",
-        className,
+        className
       )}
     >
       <div className="flex items-center gap-5">

@@ -7,7 +7,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./classroom/*": "./src/classroom/*.tsx",
-    "./student/*": "./src/student/*.tsx",
+    "./students/*": "./src/students/*.tsx",
+    "./transactions/*": "./src/transactions/*.tsx",
     "./gradesheet/*": "./src/gradesheet/*.tsx",
     "./course/*": "./src/course/*.tsx",
     "./reportcards/*": "./src/reportcards/*.tsx"
