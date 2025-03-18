@@ -23,13 +23,13 @@ export function TabMenu({
   const pathname = usePathname();
   const isActive = pathname == href.split("?")[0];
   return (
-    <Link href={href} className="relative z-10">
+    <Link href={href} className="relative z-5">
       <div
         className={cn(
           "flex flex-row items-center gap-2 rounded-full px-4 py-1.5 text-sm text-muted-foreground transition-all",
           isActive
             ? "bg-primary text-primary-foreground"
-            : "hover:text-secondary-foreground",
+            : "hover:text-secondary-foreground"
         )}
       >
         {icon} {title}

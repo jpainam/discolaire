@@ -93,6 +93,7 @@ export const transactionRouter = createTRPCRouter({
         to: z.coerce.date().optional().default(new Date()),
         status: z.string().optional(),
         classroom: z.string().optional(),
+        transactionType: z.enum(["CREDIT", "DEBIT", "DISCOUNT"]).optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -112,6 +113,9 @@ export const transactionRouter = createTRPCRouter({
           AND: [
             { schoolYearId: ctx.schoolYearId },
             { deletedAt: null },
+            ...(input.transactionType
+              ? [{ transactionType: { equals: input.transactionType } }]
+              : [{}]),
             {
               createdAt: {
                 gte: input.from,

@@ -1,3 +1,3 @@
 export default function Page() {
-  return <div>Moratoire</div>;
+  return <div className="p-4">Moratoire</div>;
 }

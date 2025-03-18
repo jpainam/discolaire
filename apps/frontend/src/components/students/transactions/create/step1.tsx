@@ -91,7 +91,7 @@ export function Step1() {
             toast.error(t("required_fee_warning"));
           }
         },
-      },
+      }
     );
   }
   const items: { label: string; value: string }[] = [
@@ -105,12 +105,12 @@ export function Step1() {
       {school.applyRequiredFee !== "NO" && <RequiredFeeForm />}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-1 gap-2 px-4 md:grid-cols-2 md:gap-4">
+          <div className="grid grid-cols-1 gap-6 px-4 md:grid-cols-2 md:gap-4">
             <FormField
               control={form.control}
               name="paymentMethod"
               render={({ field }) => (
-                <FormItem className="space-y-0">
+                <FormItem>
                   <FormLabel>{t("payment_method")}</FormLabel>
                   <Select
                     onValueChange={field.onChange}
@@ -136,7 +136,7 @@ export function Step1() {
               control={form.control}
               name="transactionType"
               render={({ field }) => (
-                <FormItem className="space-y-0">
+                <FormItem>
                   <FormLabel>{t("transaction_type")}</FormLabel>
                   <Select
                     onValueChange={field.onChange}
@@ -163,10 +163,10 @@ export function Step1() {
               control={form.control}
               name="description"
               render={({ field }) => (
-                <FormItem className="space-y-0">
-                  <FormLabel>{t("Description")}</FormLabel>
+                <FormItem>
+                  <FormLabel>{t("description")}</FormLabel>
                   <FormControl>
-                    <Input placeholder={t("Description")} {...field} />
+                    <Input placeholder={t("description")} {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -177,7 +177,7 @@ export function Step1() {
               control={form.control}
               name="amount"
               render={({ field }) => (
-                <FormItem className="space-y-0">
+                <FormItem>
                   <FormLabel>{t("amount")}</FormLabel>
                   <FormControl>
                     <Input type="number" placeholder={t("amount")} {...field} />
