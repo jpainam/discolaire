@@ -13,6 +13,32 @@ const healthVisitSchema = z.object({
   attachments: z.array(z.string()).default([]),
 });
 
+const issueSchema = z.object({
+  hasADD: z.boolean().default(false),
+  studentId: z.string().min(1),
+  addNotes: z.string().optional(),
+  hasAllergies: z.boolean().default(false),
+  allergyFood: z.boolean().default(false),
+  allergyInsectStings: z.boolean().default(false),
+  allergyPollen: z.boolean().default(false),
+  allergyAnimals: z.boolean().default(false),
+  allergyMedications: z.boolean().default(false),
+  allergyNotes: z.string().optional(),
+  usesEpiPenAtSchool: z.boolean().optional(),
+  hasAsthma: z.boolean().default(false),
+  asthmaNotes: z.string().optional(),
+  inhalerAtSchool: z.boolean().optional(),
+  hasMobilityIssues: z.boolean().default(false),
+  mobilityNotes: z.string().optional(),
+  hasDiabetes: z.boolean().default(false),
+  diabetesNotes: z.string().optional(),
+  needsInsulinOrGlucometer: z.boolean().optional(),
+  hasEarThroatInfections: z.boolean().default(false),
+  earThroatNotes: z.string().optional(),
+  hasEmotionalIssues: z.boolean().default(false),
+  emotionalNotes: z.string().optional(),
+});
+
 export const healthRouter = createTRPCRouter({
   createVisit: protectedProcedure
     .input(healthVisitSchema)
@@ -44,19 +70,30 @@ export const healthRouter = createTRPCRouter({
         },
       });
     }),
-  issues: protectedProcedure.query(() => {
-    return [
-      "ADD_ADHD",
-      "ALLERGIES",
-      "ASTHMA",
-      "MUSCLE_CONDITION",
-      "DIABETES",
-      "EAR_THROAT_INFECTIONS",
-      "EMOTIONAL_PROBLEMS",
-      "FAINTING",
-      "HEADACHES",
-    ];
-  }),
+  updateIssues: protectedProcedure
+    .input(issueSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.healthRecord.upsert({
+        where: {
+          studentId: input.studentId,
+        },
+        update: {
+          ...input,
+        },
+        create: {
+          ...input,
+        },
+      });
+    }),
+  issues: protectedProcedure
+    .input(z.string().min(1))
+    .query(({ ctx, input }) => {
+      return ctx.db.healthRecord.findFirst({
+        where: {
+          studentId: input,
+        },
+      });
+    }),
   documents: protectedProcedure
     .input(
       z.object({

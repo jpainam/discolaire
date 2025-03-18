@@ -1,112 +1,157 @@
-import { Checkbox } from "@repo/ui/components/checkbox";
-import { Label } from "@repo/ui/components/label";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
+"use client";
 import { Textarea } from "@repo/ui/components/textarea";
 
-import type { SubHistoryType } from "./data";
-import { cn } from "~/lib/utils";
-import { historyData } from "./data";
+import type { RouterOutputs } from "@repo/api";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+import { Form, useForm } from "@repo/ui/components/form";
+import { Label } from "@repo/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
+import { Ambulance } from "lucide-react";
+import { z } from "zod";
+import { useLocale } from "~/i18n";
+import { api } from "~/trpc/react";
 
-export default function HealthHistory({ history }: { history: string[] }) {
-  console.log(history);
+const schemaForm = z.object({
+  hasADD: z.boolean().default(false),
+  addNotes: z.string().optional(),
+  hasAllergies: z.boolean().default(false),
+  allergyFood: z.boolean().default(false),
+  allergyInsectStings: z.boolean().default(false),
+  allergyPollen: z.boolean().default(false),
+  allergyAnimals: z.boolean().default(false),
+  allergyMedications: z.boolean().default(false),
+  allergyNotes: z.string().optional(),
+  usesEpiPenAtSchool: z.boolean().optional(),
+  hasAsthma: z.boolean().default(false),
+  asthmaNotes: z.string().optional(),
+  inhalerAtSchool: z.boolean().optional(),
+  hasMobilityIssues: z.boolean().default(false),
+  mobilityNotes: z.string().optional(),
+  hasDiabetes: z.boolean().default(false),
+  diabetesNotes: z.string().optional(),
+  needsInsulinOrGlucometer: z.boolean().optional(),
+  hasEarThroatInfections: z.boolean().default(false),
+  earThroatNotes: z.string().optional(),
+  hasEmotionalIssues: z.boolean().default(false),
+  emotionalNotes: z.string().optional(),
+});
+
+export function HealthHistory({
+  issue,
+}: {
+  issue: RouterOutputs["health"]["issues"];
+}) {
+  const { t } = useLocale();
+  const utils = api.useUtils();
+  const updateIssueMutation = api.health.updateIssues.useMutation({
+    onSettled: () => {
+      void utils.health.invalidate();
+    },
+  });
+  const form = useForm({
+    schema: schemaForm,
+    defaultValues: {
+      hasADD: issue?.hasADD ?? false,
+      addNotes: issue?.addNotes ?? "",
+      hasAllergies: issue?.hasAllergies ?? false,
+      allergyFood: issue?.allergyFood ?? false,
+      allergyInsectStings: issue?.allergyInsectStings ?? false,
+      allergyPollen: issue?.allergyPollen ?? false,
+      allergyAnimals: issue?.allergyAnimals ?? false,
+      allergyMedications: issue?.allergyMedications ?? false,
+      allergyNotes: issue?.allergyNotes ?? "",
+      usesEpiPenAtSchool: issue?.usesEpiPenAtSchool ?? false,
+      hasAsthma: issue?.hasAsthma ?? false,
+      asthmaNotes: issue?.asthmaNotes ?? "",
+      inhalerAtSchool: issue?.inhalerAtSchool ?? false,
+      hasMobilityIssues: issue?.hasMobilityIssues ?? false,
+      mobilityNotes: issue?.mobilityNotes ?? "",
+      hasDiabetes: issue?.hasDiabetes ?? false,
+      diabetesNotes: issue?.diabetesNotes ?? "",
+      needsInsulinOrGlucometer: issue?.needsInsulinOrGlucometer ?? false,
+      hasEarThroatInfections: issue?.hasEarThroatInfections ?? false,
+      earThroatNotes: issue?.earThroatNotes ?? "",
+      hasEmotionalIssues: issue?.hasEmotionalIssues ?? false,
+      emotionalNotes: issue?.emotionalNotes ?? "",
+    },
+  });
+  const onSubmit = (data: z.infer<typeof schemaForm>) => {
+    updateIssueMutation.mutate(data);
+  };
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex md:grid md:grid-cols-12">
-        <div className="font-bold md:col-span-8">
-          Problèmes de santé passés et présents
-        </div>
-        <div className="flex font-bold md:col-span-4">
-          Observation / Médicaments / Traitements
-        </div>
-      </div>
-      {historyData.map((history, index) => {
-        const bg =
-          index % 2 === 0 ? "bg-secondary text-secondary-foreground" : "";
-        return (
-          <div
-            key={history.id}
-            className={cn(
-              "grid grid-cols-1 rounded-md p-1 md:grid-cols-12",
-              bg,
-            )}
-          >
-            <div className="flex flex-row md:col-span-8">
-              <RadioGroup
-                className="flex w-auto flex-row items-start gap-2 pt-1"
-                defaultValue="No"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem
-                    id="Yes"
-                    value="Yes"
-                    //checked={history.includes(history.id)}
-                  />
-                  <Label htmlFor="Yes">Oui</Label>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg flex flex-row items-center gap-2">
+              <Ambulance />
+              {t("past_and_present_health_problems")}
+            </CardTitle>
+            <CardDescription className="text-xs">
+              {t("please_check_all_that_apply")}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-sm grid 2xl:grid-cols-2 gap-6 divide">
+            <div className="grid grid-cols-1 gap-4">
+              <div className="flex flex-row items-center gap-4">
+                <RadioGroup defaultValue="no" className="flex flex-row gap-4">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="yes" id="add-yes" />
+                    <Label htmlFor="add-yes">{t("yes")}</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="no" id="add-no" />
+                    <Label htmlFor="add-no">{t("no")}</Label>
+                  </div>
+                </RadioGroup>
+                <div className="flex flex-col space-y-2">
+                  <span>{t("attention_deficit_disorder")}</span>
+                  <span>{t("please_explain_and_document_every_drugs")}</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem id="No" value="No" />
-                  <Label htmlFor="No">No</Label>
+              </div>
+              <Textarea placeholder="Observation / Médicaments / Traitements" />
+            </div>
+            <div className="grid grid-cols-1 gap-4">
+              <div className="flex flex-row items-center gap-4">
+                <RadioGroup defaultValue="no" className="flex flex-row gap-4">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="yes" id="add-yes" />
+                    <Label htmlFor="add-yes">{t("yes")}</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="no" id="add-no" />
+                    <Label htmlFor="add-no">{t("no")}</Label>
+                  </div>
+                </RadioGroup>
+                <div className="flex flex-col space-y-2">
+                  <span>{}Condition musculaire/Mobilité</span>
+                  <span>{t("please_explain_and_document_every_drugs")}</span>
                 </div>
-              </RadioGroup>
-              <div className="flex w-full flex-col items-start px-2">
-                <div>-- {history.title}</div>
-                <div className="italic">{history.description}</div>
-                {history.sub_types && (
-                  <DisplaySubHistory sub_types={history.sub_types} />
-                )}
+              </div>
+              <Textarea placeholder="Observation / Médicaments / Traitements" />
+            </div>
+          </CardContent>
+          <CardFooter>
+            <div className="grid w-full grid-cols-1 text-sm gap-6 xl:grid-cols-2">
+              <div>
+                <span>Notes internes: (Invisible sur les rapports)</span>
+                <Textarea />
+              </div>
+              <div>
+                <span>Observations médicales: (Visible sur les rapports)</span>
+                <Textarea />
               </div>
             </div>
-            <div className="p-1 md:col-span-4">
-              <Textarea />
-            </div>
-          </div>
-        );
-      })}
-      <div className="flex flex-col gap-4 md:grid md:grid-cols-12">
-        <div className="flex md:col-span-6">
-          <span>Notes internes: (Invisible sur les rapports)</span>
-          <Textarea />
-        </div>
-        <div className="flex md:col-span-6">
-          <span>Observations médicales: (Visible sur les rapports)</span>
-          <Textarea />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function DisplaySubHistory({ sub_types }: { sub_types: SubHistoryType[] }) {
-  return (
-    <div className="flex w-full flex-wrap gap-2">
-      {sub_types.map((subType: SubHistoryType) => (
-        <div key={subType.id} className="flex flex-row space-x-2">
-          {subType.type === "checkbox" && (
-            <>
-              <Checkbox id={subType.id} value={subType.id} />
-              <Label htmlFor={subType.id}>{subType.title}</Label>
-            </>
-          )}
-          {subType.type === "radio" && (
-            <>
-              <Label htmlFor={subType.id}>{subType.title}</Label>
-              <RadioGroup
-                className="flex w-[150px] flex-row items-start gap-4"
-                defaultValue="No"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem id="Yes" value="Yes" />
-                  <Label htmlFor="Yes">Oui</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem id="No" value="No" />
-                  <Label htmlFor="No">No</Label>
-                </div>
-              </RadioGroup>
-            </>
-          )}
-        </div>
-      ))}
-    </div>
+          </CardFooter>
+        </Card>
+      </form>
+    </Form>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { BrickWall, Frame, LifeBuoy, Send } from "lucide-react";
+import { BrickWall, Frame, ImageUp, LifeBuoy, Send } from "lucide-react";
 
 import {
   Sidebar,
@@ -81,6 +81,10 @@ export function AdminSidebar({
           {
             title: "Groupes",
             url: "/administration/accounting/groups",
+          },
+          {
+            title: "reports",
+            url: "/administration/accounting/reports",
           },
           {
             title: "settings",
@@ -183,6 +187,11 @@ export function AdminSidebar({
       url: "/administration/attendances",
       icon: BrickWall,
       //icon: CalendarArrowUp,
+    },
+    {
+      name: "photos",
+      url: "/administration/photos",
+      icon: ImageUp,
     },
   ];
   const pathname = usePathname();

@@ -1,4 +1,3 @@
-import { checkPermission } from "@repo/api/permission";
 import { Label } from "@repo/ui/components/label";
 import { Separator } from "@repo/ui/components/separator";
 import {
@@ -11,9 +10,7 @@ import {
 } from "@repo/ui/components/table";
 import { EmptyState } from "~/components/EmptyState";
 import FlatBadge from "~/components/FlatBadge";
-import { NoPermission } from "~/components/no-permission";
 import { getServerTranslations } from "~/i18n/server";
-import { PermissionAction } from "~/permissions";
 
 import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/server";
@@ -21,25 +18,25 @@ import { FinanceGroupAction } from "./FinanceGroupAction";
 import { GroupTableAction } from "./GroupTableAction";
 
 export default async function Page() {
-  const canReadFinnaceGroup = await checkPermission(
-    "accounting",
-    PermissionAction.READ,
-  );
-  if (!canReadFinnaceGroup) {
-    return <NoPermission />;
-  }
-  const canCreateGroups = await checkPermission(
-    "accounting",
-    PermissionAction.CREATE,
-  );
-  const canEditGroup = await checkPermission(
-    "accounting",
-    PermissionAction.UPDATE,
-  );
-  const canDeleteGroups = await checkPermission(
-    "accounting",
-    PermissionAction.DELETE,
-  );
+  // const canReadFinnaceGroup = await checkPermission(
+  //   "accounting",
+  //   PermissionAction.READ,
+  // );
+  // if (!canReadFinnaceGroup) {
+  //   return <NoPermission />;
+  // }
+  // const canCreateGroups = await checkPermission(
+  //   "accounting",
+  //   PermissionAction.CREATE,
+  // );
+  // const canEditGroup = await checkPermission(
+  //   "accounting",
+  //   PermissionAction.UPDATE,
+  // );
+  // const canDeleteGroups = await checkPermission(
+  //   "accounting",
+  //   PermissionAction.DELETE,
+  // );
 
   const { t, i18n } = await getServerTranslations();
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
@@ -55,7 +52,7 @@ export default async function Page() {
         <Label>
           {t("finances")} - {t("group")}
         </Label>
-        {canCreateGroups && <FinanceGroupAction />}
+        <FinanceGroupAction />
       </div>
       <Separator />
       <div className="rounded-lg border">
@@ -96,17 +93,15 @@ export default async function Page() {
                   </TableCell>
                   <TableCell className="py-0">{group.createdById}</TableCell>
                   <TableCell className="py-0 text-right">
-                    {(canCreateGroups || canDeleteGroups) && (
-                      <GroupTableAction
-                        canEdit={canEditGroup}
-                        type={group.type}
-                        value={group.value}
-                        name={group.name}
-                        canAdd={canCreateGroups}
-                        canDelete={canDeleteGroups}
-                        id={group.id}
-                      />
-                    )}
+                    <GroupTableAction
+                      canEdit={true}
+                      type={group.type}
+                      value={group.value}
+                      name={group.name}
+                      canAdd={true}
+                      canDelete={true}
+                      id={group.id}
+                    />
                   </TableCell>
                 </TableRow>
               );

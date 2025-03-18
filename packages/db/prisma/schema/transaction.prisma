@@ -79,3 +79,32 @@ model LoginActivity {
     createdAt  DateTime  @default(now()) @db.Timestamp(6)
     user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+model HealthRecord {
+    id                       Int      @id @default(autoincrement())
+    studentId                String   @unique
+    hasADD                   Boolean
+    addNotes                 String?
+    hasAllergies             Boolean
+    allergyFood              Boolean
+    allergyInsectStings      Boolean
+    allergyPollen            Boolean
+    allergyAnimals           Boolean
+    allergyMedications       Boolean
+    allergyNotes             String?
+    usesEpiPenAtSchool       Boolean?
+    hasAsthma                Boolean
+    asthmaNotes              String?
+    inhalerAtSchool          Boolean?
+    hasMobilityIssues        Boolean
+    mobilityNotes            String?
+    hasDiabetes              Boolean
+    diabetesNotes            String?
+    needsInsulinOrGlucometer Boolean?
+    hasEarThroatInfections   Boolean
+    earThroatNotes           String?
+    hasEmotionalIssues       Boolean
+    emotionalNotes           String?
+    createdAt                DateTime @default(now())
+    updatedAt                DateTime @updatedAt
+}
