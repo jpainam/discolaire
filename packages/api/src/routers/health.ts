@@ -14,8 +14,8 @@ const healthVisitSchema = z.object({
 });
 
 const issueSchema = z.object({
-  hasADD: z.boolean().default(false),
   studentId: z.string().min(1),
+  hasAdd: z.boolean().default(false),
   addNotes: z.string().optional(),
   hasAllergies: z.boolean().default(false),
   allergyFood: z.boolean().default(false),
@@ -37,6 +37,30 @@ const issueSchema = z.object({
   earThroatNotes: z.string().optional(),
   hasEmotionalIssues: z.boolean().default(false),
   emotionalNotes: z.string().optional(),
+  hasEpilepsy: z.boolean().default(false),
+  epilepsyNotes: z.string().optional(),
+  frequentHeadaches: z.boolean().default(false),
+  frequentHeadachesNotes: z.string().optional(),
+  hasHeadInjuries: z.boolean().default(false),
+  headInjuriesNotes: z.string().optional(),
+  hasHeartIssues: z.boolean().default(false),
+  heartIssuesNotes: z.string().optional(),
+  hasHearingLoss: z.boolean().default(false),
+  hearingLossNotes: z.string().optional(),
+  hasSeizures: z.boolean().default(false),
+  seizuresNotes: z.string().optional(),
+  hasHandicap: z.boolean().default(false),
+  handicapNotes: z.string().optional(),
+  hasSkinProblems: z.boolean().default(false),
+  skinProblemsNotes: z.string().optional(),
+  hasVisionProblems: z.boolean().default(false),
+  visionProblemsNotes: z.string().optional(),
+  hasUrinaryProblems: z.boolean().default(false),
+  urinaryProblemsNotes: z.string().optional(),
+  hospitalizationIssues: z.boolean().default(false),
+  hospitalizationNotes: z.string().optional(),
+  internalObservations: z.string().optional(),
+  observations: z.string().optional(),
 });
 
 export const healthRouter = createTRPCRouter({

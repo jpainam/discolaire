@@ -6,7 +6,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const issue = await api.health.issues(params.id);
   return (
     <div className="p-4">
-      <HealthHistory issue={issue} />
+      <HealthHistory issue={issue} studentId={params.id} />
     </div>
   );
 }

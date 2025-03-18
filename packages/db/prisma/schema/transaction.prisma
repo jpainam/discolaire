@@ -83,28 +83,52 @@ model LoginActivity {
 model HealthRecord {
     id                       Int      @id @default(autoincrement())
     studentId                String   @unique
-    hasADD                   Boolean
+    hasAdd                   Boolean  @default(false)
     addNotes                 String?
-    hasAllergies             Boolean
-    allergyFood              Boolean
-    allergyInsectStings      Boolean
-    allergyPollen            Boolean
-    allergyAnimals           Boolean
-    allergyMedications       Boolean
+    hasAllergies             Boolean  @default(false)
+    allergyFood              Boolean  @default(false)
+    allergyInsectStings      Boolean  @default(false)
+    allergyPollen            Boolean  @default(false)
+    allergyAnimals           Boolean  @default(false)
+    allergyMedications       Boolean  @default(false)
     allergyNotes             String?
-    usesEpiPenAtSchool       Boolean?
-    hasAsthma                Boolean
+    usesEpiPenAtSchool       Boolean? @default(false)
+    hasAsthma                Boolean  @default(false)
     asthmaNotes              String?
-    inhalerAtSchool          Boolean?
-    hasMobilityIssues        Boolean
+    inhalerAtSchool          Boolean? @default(false)
+    hasMobilityIssues        Boolean  @default(false)
     mobilityNotes            String?
-    hasDiabetes              Boolean
+    hasDiabetes              Boolean  @default(false)
     diabetesNotes            String?
-    needsInsulinOrGlucometer Boolean?
-    hasEarThroatInfections   Boolean
+    needsInsulinOrGlucometer Boolean? @default(false)
+    hasEarThroatInfections   Boolean  @default(false)
     earThroatNotes           String?
-    hasEmotionalIssues       Boolean
+    hasEmotionalIssues       Boolean  @default(false)
     emotionalNotes           String?
+    hasEpilepsy              Boolean  @default(false)
+    epilepsyNotes            String?
+    frequentHeadaches        Boolean  @default(false)
+    frequentHeadachesNotes   String?
+    hasHeadInjuries          Boolean  @default(false)
+    headInjuriesNotes        String?
+    hasHeartIssues           Boolean  @default(false)
+    heartIssuesNotes         String?
+    hasHearingLoss           Boolean  @default(false)
+    hearingLossNotes         String?
+    hasSeizures              Boolean  @default(false)
+    seizuresNotes            String?
+    hasHandicap              Boolean  @default(false)
+    handicapNotes            String?
+    hasSkinProblems          Boolean  @default(false)
+    skinProblemsNotes        String?
+    hasVisionProblems        Boolean  @default(false)
+    visionProblemsNotes      String?
+    hasUrinaryProblems       Boolean  @default(false)
+    urinaryProblemsNotes     String?
+    hospitalizationIssues    Boolean  @default(false)
+    hospitalizationNotes     String?
+    internalObservations     String?
+    observations             String?
     createdAt                DateTime @default(now())
     updatedAt                DateTime @updatedAt
 }
