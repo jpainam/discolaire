@@ -33,20 +33,20 @@ export default async function Page(props: {
   const totals = transactions.reduce((acc, curr) => acc + curr.amount, 0);
   const validated = transactions.reduce(
     (acc, curr) => acc + (curr.status == "VALIDATED" ? curr.amount : 0),
-    0,
+    0
   );
   const canceled = transactions.reduce(
     (acc, curr) => acc + (curr.status == "CANCELED" ? curr.amount : 0),
-    0,
+    0
   );
   const pending = transactions.reduce(
     (acc, curr) => acc + (curr.status == "PENDING" ? curr.amount : 0),
-    0,
+    0
   );
 
   return (
-    <div className="flex flex-col">
-      <div className="grid flex-row items-center gap-4 md:flex">
+    <div className="flex flex-col px-4">
+      <div className="grid flex-row items-center gap-4 py-2 md:flex">
         <FlatBadge variant={"indigo"}>
           {t("totals")} : {moneyFormatter.format(totals)}
         </FlatBadge>
@@ -60,7 +60,7 @@ export default async function Page(props: {
           {t("canceled")} : {moneyFormatter.format(canceled)}
         </FlatBadge>
       </div>
-      <TransactionDataTable />
+      <TransactionDataTable transactions={transactions} />
     </div>
   );
 }

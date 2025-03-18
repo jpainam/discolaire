@@ -18,12 +18,12 @@ import { notFound } from "next/navigation";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
-import { Label } from "@repo/ui/components/label";
 import { Separator } from "@repo/ui/components/separator";
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { Label } from "@repo/ui/components/label";
 import { api } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
 import { getFullName } from "~/utils/full-name";
@@ -58,32 +58,32 @@ export function TransactionDetails({
   return (
     <div className="grid gap-3 text-sm md:grid-cols-2">
       <div className="flex flex-row items-center gap-1">
-        <Badge className="stroke-1" />
-        <Label>{t("account")}:</Label>
+        <Badge className="w-4 h-4" />
+        {/* <Label>{t("account")}:</Label> */}
         {transactionQuery.data.account.name}
       </div>
       <div className="flex flex-row items-center gap-1">
-        <User className="stroke-1" />
-        <Label>{t("student")}:</Label>
+        <User className="w-4 h-4" />
+        {/* <Label>{t("student")}:</Label> */}
         <span className="overflow-hidden truncate">
           {getFullName(transactionQuery.data.account.student)}
         </span>
       </div>
       <div className="flex flex-row items-center gap-1">
-        <DollarSign className="stroke-1" />
-        <Label>{t("amount")}:</Label>
+        <DollarSign className="w-4 h-4" />
+        {/* <Label>{t("amount")}:</Label> */}
         {moneyFormatter.format(transactionQuery.data.amount)}
       </div>
       <div className="flex flex-row items-center gap-1">
-        <File className="stroke-1" />
-        <Label>{t("description")}:</Label>
+        <File className="w-4 h-4" />
+        {/* <Label>{t("description")}:</Label> */}
         <span className="overflow-hidden truncate">
           {transactionQuery.data.description}
         </span>
       </div>
       <div className="flex flex-row items-center gap-1">
-        <Clock className="stroke-1" />
-        <Label>{t("status")}:</Label>
+        <Clock className="w-4 h-4" />
+        {/* <Label>{t("status")}:</Label> */}
         <FlatBadge
           variant={
             transactionQuery.data.status == "VALIDATED"
@@ -97,22 +97,22 @@ export function TransactionDetails({
         </FlatBadge>
       </div>
       <div className="flex flex-row items-center gap-1">
-        <FileSliders className="stroke-1" />
-        <Label>{t("transactionRef")}:</Label>
+        <FileSliders className="w-4 h-4" />
+        {/* <Label>{t("transactionRef")}:</Label> */}
         {transaction.transactionRef}
       </div>
       <div className="flex flex-row items-center gap-1">
-        <AlignStartHorizontal className="stroke-1" />
-        <Label>{t("transactionType")}:</Label>
+        <AlignStartHorizontal className="w-4 h-4" />
+        {/* <Label>{t("transactionType")}:</Label> */}
         {transaction.transactionType}
       </div>
       <div className="flex flex-row items-center gap-1">
-        <CalendarDays className="stroke-1" />
-        <Label>{t("createdAt")}:</Label>
+        <CalendarDays className="w-4 h-4" />
+        {/* <Label>{t("createdAt")}:</Label> */}
         {fullDateFormatter.format(transaction.createdAt)}
       </div>
       <div className="col-span-full flex flex-row items-center gap-1">
-        <Library className="stroke-1" />
+        <Library className="w-4 h-4" />
         <Label>{t("observation")}</Label>
       </div>
       <div className="col-span-full">{transaction.observation ?? "N/A"}</div>
@@ -120,13 +120,13 @@ export function TransactionDetails({
       <div className="col-span-full ml-auto flex flex-row gap-4">
         <Button
           onClick={() => {
-            toast.warning("Not implemented yet"); // TODO: Implement print
-            //closeModal();
+            window.open(`/api/pdfs/receipts?id=${transaction.id}`, "_blank");
+            closeModal();
           }}
           size={"icon"}
           variant={"outline"}
         >
-          <Printer className="h-4 w-4 stroke-1" />
+          <Printer className="h-4 w-4" />
         </Button>
         <Button
           onClick={() => {

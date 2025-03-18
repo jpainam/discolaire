@@ -5,10 +5,11 @@ import { TransactionToolbar } from "~/components/administration/transactions/Tra
 
 export default function Layout({ children }: PropsWithChildren) {
   return (
-    <div className="flex h-full w-full flex-col gap-2">
+    <div className="flex flex-col">
       <TransactionHeader />
-
-      <TransactionToolbar />
+      <div className="px-4">
+        <TransactionToolbar />
+      </div>
       {children}
     </div>
   );

@@ -31,6 +31,7 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
+import Link from "next/link";
 import { DeleteTransaction } from "~/components/students/transactions/DeleteTransaction";
 import { TransactionStatus } from "~/components/students/transactions/TransactionTable";
 import { useCheckPermission } from "~/hooks/use-permission";
@@ -45,17 +46,11 @@ const columnHelper = createColumnHelper<TransactionAllProcedureOutput>();
 
 export const fetchTransactionColumns = ({
   t,
-
-  moneyFormatter,
+  currency,
 }: {
   t: TFunction<string, unknown>;
-  moneyFormatter: Intl.NumberFormat;
+  currency: string;
 }): ColumnDef<TransactionAllProcedureOutput, unknown>[] => {
-  const dateFormatter = new Intl.DateTimeFormat(i18next.language, {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
   return [
     columnHelper.accessor("id", {
       header: ({ table }) => (
@@ -84,22 +79,49 @@ export const fetchTransactionColumns = ({
         <DataTableColumnHeader column={column} title={t("createdAt")} />
       ),
       cell: ({ row }) => {
-        const d = dateFormatter.format(new Date(row.original.createdAt));
-        return <div>{d}</div>;
+        const transaction = row.original;
+
+        return (
+          <div>
+            {transaction.createdAt.toLocaleDateString(i18next.language, {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </div>
+        );
       },
     }),
     columnHelper.accessor("account", {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("account")} />
       ),
-      cell: ({ row }) => <div>{row.original.account.name}</div>,
+      cell: ({ row }) => {
+        const transaction = row.original;
+        return (
+          <Link
+            className="hover:underline hover:text-blue-600"
+            href={`/students/${transaction.account.studentId}/transactions`}
+          >
+            {transaction.account.name}
+          </Link>
+        );
+      },
     }),
     columnHelper.accessor("transactionRef", {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("transactionRef")} />
       ),
       cell: ({ row }) => {
-        return <div>{row.original.transactionRef}</div>;
+        const transaction = row.original;
+        return (
+          <Link
+            className="hover:underline hover:text-blue-600"
+            href={`/students/${transaction.account.studentId}/transactions/${transaction.id}`}
+          >
+            {transaction.transactionRef}
+          </Link>
+        );
       },
     }),
     columnHelper.accessor("description", {
@@ -125,7 +147,16 @@ export const fetchTransactionColumns = ({
       ),
       cell: ({ row }) => {
         const amount = row.original.amount;
-        return <div>{amount && moneyFormatter.format(amount)}</div>;
+        return (
+          <div>
+            {amount.toLocaleString(i18next.language, {
+              style: "currency",
+              currency: currency,
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            })}
+          </div>
+        );
       },
     }),
 
@@ -163,7 +194,11 @@ function ActionCell({
 
   const canDeleteTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
+  );
+  const canUpdateTransaction = useCheckPermission(
+    "transaction",
+    PermissionAction.UPDATE
   );
 
   const { openModal } = useModal();
@@ -179,7 +214,6 @@ function ActionCell({
           onSelect={() => {
             openModal({
               title: t("details"),
-              className: "p-4 w-[600px]",
               view: <TransactionDetails transactionId={transaction.id} />,
             });
           }}
@@ -187,57 +221,65 @@ function ActionCell({
           <Eye />
           {t("details")}
         </DropdownMenuItem>
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger>
-            <BookCopy className="mr-2 h-4 w-4" />
-            {t("status")}
-          </DropdownMenuSubTrigger>
-          <DropdownMenuSubContent>
-            <DropdownMenuRadioGroup
-              value={transaction.status}
-              onValueChange={(value) => {
-                if (["PENDING", "CANCELED", "VALIDATED"].includes(value)) {
-                  const v = value as "PENDING" | "CANCELED" | "VALIDATED";
-                  toast.loading(t("updating"), { id: 0 });
-                  updateTransactionMutation.mutate({
-                    transactionId: transaction.id,
-                    status: v,
-                  });
-                } else {
-                  toast.error(t("invalid_status"), { id: 0 });
-                }
-              }}
-            >
-              <DropdownMenuRadioItem value={"VALIDATED"} className="capitalize">
-                <FlatBadge variant={"green"}>
-                  <CheckCircledIcon
-                    className="mr-2 size-4 text-muted-foreground"
-                    aria-hidden="true"
-                  />
-                  {t("validate")}
-                </FlatBadge>
-              </DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value={"CANCELED"} className="capitalize">
-                <FlatBadge variant={"red"}>
-                  <CrossCircledIcon
-                    className="mr-2 size-4 text-muted-foreground"
-                    aria-hidden="true"
-                  />
-                  {t("cancel")}
-                </FlatBadge>
-              </DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value={"PENDING"} className="capitalize">
-                <FlatBadge variant={"yellow"}>
-                  <StopwatchIcon
-                    className="mr-2 size-4 text-muted-foreground"
-                    aria-hidden="true"
-                  />
-                  {t("pending")}
-                </FlatBadge>
-              </DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
+        {canUpdateTransaction && (
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
+              <BookCopy className="mr-2 h-4 w-4" />
+              {t("status")}
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              <DropdownMenuRadioGroup
+                value={transaction.status}
+                onValueChange={(value) => {
+                  if (["PENDING", "CANCELED", "VALIDATED"].includes(value)) {
+                    const v = value as "PENDING" | "CANCELED" | "VALIDATED";
+                    toast.loading(t("updating"), { id: 0 });
+                    updateTransactionMutation.mutate({
+                      transactionId: transaction.id,
+                      status: v,
+                    });
+                  } else {
+                    toast.error(t("invalid_status"), { id: 0 });
+                  }
+                }}
+              >
+                <DropdownMenuRadioItem
+                  value={"VALIDATED"}
+                  className="capitalize"
+                >
+                  <FlatBadge variant={"green"}>
+                    <CheckCircledIcon
+                      className="mr-2 size-4 text-muted-foreground"
+                      aria-hidden="true"
+                    />
+                    {t("validate")}
+                  </FlatBadge>
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem
+                  value={"CANCELED"}
+                  className="capitalize"
+                >
+                  <FlatBadge variant={"red"}>
+                    <CrossCircledIcon
+                      className="mr-2 size-4 text-muted-foreground"
+                      aria-hidden="true"
+                    />
+                    {t("cancel")}
+                  </FlatBadge>
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value={"PENDING"} className="capitalize">
+                  <FlatBadge variant={"yellow"}>
+                    <StopwatchIcon
+                      className="mr-2 size-4 text-muted-foreground"
+                      aria-hidden="true"
+                    />
+                    {t("pending")}
+                  </FlatBadge>
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+        )}
 
         {canDeleteTransaction && (
           <>
@@ -246,7 +288,6 @@ function ActionCell({
               onClick={() => {
                 openModal({
                   title: t("delete"),
-
                   view: <DeleteTransaction transactionId={transaction.id} />,
                 });
               }}

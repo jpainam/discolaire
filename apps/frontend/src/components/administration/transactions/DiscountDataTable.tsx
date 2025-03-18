@@ -11,8 +11,8 @@ import { useLocale } from "~/i18n";
 
 import { api } from "~/trpc/react";
 import { useMoneyFormat } from "~/utils/money-format";
-import { TransactionDataTableActions } from "./TransactionDataTableActions";
-import { fetchTransactionColumns } from "./TransactionDataTableColumns";
+import { TransactionDataTableAction } from "./TransactionDataTableAction";
+import { fetchTransactionColumns } from "./TransactionDataTableColumn";
 
 export function DiscountDataTable() {
   const [status] = useQueryState("status");
@@ -37,7 +37,7 @@ export function DiscountDataTable() {
         t: t,
         moneyFormatter: moneyFormatter,
       }),
-    [moneyFormatter, t],
+    [moneyFormatter, t]
   );
   const transactions =
     transactionsQuery.data?.filter((t) => t.transactionType == "DISCOUNT") ??
@@ -59,7 +59,7 @@ export function DiscountDataTable() {
 
   return (
     <DataTable
-      floatingBar={<TransactionDataTableActions table={table} />}
+      floatingBar={<TransactionDataTableAction table={table} />}
       table={table}
     >
       <DataTableToolbar table={table} />

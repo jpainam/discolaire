@@ -11,8 +11,8 @@ import { useLocale } from "~/i18n";
 
 import { api } from "~/trpc/react";
 import { useMoneyFormat } from "~/utils/money-format";
-import { TransactionDataTableActions } from "./TransactionDataTableActions";
-import { fetchTransactionColumns } from "./TransactionDataTableColumns";
+import { TransactionDataTableAction } from "./TransactionDataTableAction";
+import { fetchTransactionColumns } from "./TransactionDataTableColumn";
 
 export function RequiredFeeDataTable() {
   const searchParams = useSearchParams();
@@ -34,7 +34,7 @@ export function RequiredFeeDataTable() {
         t: t,
         moneyFormatter: moneyFormatter,
       }),
-    [moneyFormatter, t],
+    [moneyFormatter, t]
   );
 
   const { table } = useDataTable({
@@ -52,7 +52,7 @@ export function RequiredFeeDataTable() {
   return (
     <DataTable className="px-2" table={table}>
       <DataTableToolbar table={table}>
-        <TransactionDataTableActions table={table} />
+        <TransactionDataTableAction table={table} />
       </DataTableToolbar>
     </DataTable>
   );

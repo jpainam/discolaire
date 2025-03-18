@@ -63,7 +63,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           )}
         </TabsContent>
         {session?.user.profile == "staff" && (
-          <TabsContent className="px-4" value="tab-3">
+          <TabsContent value="tab-3">
             <PermissionTable userId={user.id} />
           </TabsContent>
         )}

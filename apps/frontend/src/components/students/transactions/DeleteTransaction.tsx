@@ -17,6 +17,7 @@ import { Textarea } from "@repo/ui/components/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useRouter } from "~/hooks/use-router";
 import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/react";
 
@@ -37,14 +38,16 @@ export function DeleteTransaction({
   const { t } = useLocale();
   const utils = api.useUtils();
   const { closeModal } = useModal();
+  const router = useRouter();
   const transactionQuery = api.transaction.get.useQuery(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    Array.isArray(transactionId) ? transactionId[0]! : transactionId,
+    Array.isArray(transactionId) ? transactionId[0]! : transactionId
   );
   const deleteTransactionMutation = api.transaction.delete.useMutation({
     onSuccess: () => {
       toast.success(t("deleted_successfully"), { id: 0 });
       closeModal();
+      router.refresh();
     },
     onSettled: async () => {
       await utils.transaction.invalidate();
