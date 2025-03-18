@@ -2,7 +2,7 @@ import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 
 import { api } from "~/trpc/server";
-import { DocumentGrid } from "./DocumentGrid";
+import { HealthDocumentTable } from "./DocumentTable";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -19,7 +19,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   }
   return (
     <div>
-      <DocumentGrid />
+      <HealthDocumentTable />
     </div>
   );
 }

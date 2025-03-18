@@ -75,7 +75,7 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
   const utils = api.useUtils();
   const canDeleteStudentContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
 
   const studentContacts = studentContactsQuery.data ?? [];
@@ -123,7 +123,7 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
                     <Link
                       href={`${routes.students.contacts(c.studentId)}/${contact.id}`}
                       className={cn(
-                        "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline"
+                        "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline",
                       )}
                     >
                       {getFullName(contact)}
@@ -176,7 +176,7 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
                           <DropdownMenuItem
                             onSelect={() => {
                               router.push(
-                                `${routes.students.contacts(c.studentId)}/${c.contactId}`
+                                `${routes.students.contacts(c.studentId)}/${c.contactId}`,
                               );
                             }}
                           >

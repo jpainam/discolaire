@@ -32,7 +32,7 @@ import { useUpload } from "~/hooks/use-upload";
 import { useLocale } from "~/i18n";
 import { FileUploader } from "~/uploads/file-uploader";
 
-import { DatePicker } from "~/components/shared/date-picker";
+import { DatePicker } from "~/components/DatePicker";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
@@ -108,7 +108,7 @@ export function CreateEditHealthVisit({
         error: (err) => {
           return getErrorMessage(err);
         },
-      },
+      }
     );
   };
 
@@ -138,7 +138,7 @@ export function CreateEditHealthVisit({
         className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="flex flex-row items-center gap-2 border-b bg-muted/50 px-2 py-1">
+        <div className="flex flex-row items-center gap-2 border-b bg-muted/50 px-4 py-2">
           <Label>{t("patient_visit_notes")}</Label>
           <div className="ml-auto flex items-center gap-2">
             <Button
@@ -155,13 +155,13 @@ export function CreateEditHealthVisit({
             </Button>
           </div>
         </div>
-        <span className="px-2 text-sm text-muted-foreground">
+        <span className="px-4 text-sm text-muted-foreground">
           {t("patient_visit_notes_description")}
         </span>
 
-        <div className="grid gap-x-8 gap-y-4 px-2 md:grid-cols-2">
-          <div className="flex flex-col gap-2">
-            <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-x-8 gap-y-6 px-4 md:grid-cols-2">
+          <div className="flex flex-col gap-6">
+            <div className="grid grid-cols-2 gap-6">
               <div className="flex flex-col space-y-2">
                 <Label htmlFor="patient-name">{t("patient_name")}</Label>
                 {studentQuery.isPending ? (
@@ -178,10 +178,13 @@ export function CreateEditHealthVisit({
                 control={form.control}
                 name="date"
                 render={({ field }) => (
-                  <FormItem className="space-y-0">
+                  <FormItem>
                     <FormLabel>{t("date_of_visit")}</FormLabel>
                     <FormControl>
-                      <DatePicker {...field} />
+                      <DatePicker
+                        defaultValue={field.value}
+                        onChange={(val) => field.onChange(val)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -192,7 +195,7 @@ export function CreateEditHealthVisit({
               control={form.control}
               name="complaint"
               render={({ field }) => (
-                <FormItem className="space-y-0">
+                <FormItem>
                   <FormLabel>{t("chief_complaint")}</FormLabel>
                   <FormControl>
                     <Textarea

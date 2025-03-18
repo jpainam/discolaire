@@ -15,7 +15,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   return (
     <div className="flex w-full flex-col">
       <HealthVisitHeader />
-      <HealthVisitTable userId={student.userId} className="mx-2" />
+      <HealthVisitTable userId={student.userId} />
     </div>
   );
 }

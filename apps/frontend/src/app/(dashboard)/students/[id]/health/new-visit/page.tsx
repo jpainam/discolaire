@@ -12,9 +12,5 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     return <EmptyState className="py-8" title={t("no_user_attached_yet")} />;
   }
 
-  return (
-    <div>
-      <CreateEditHealthVisit userId={student.userId} />
-    </div>
-  );
+  return <CreateEditHealthVisit userId={student.userId} />;
 }
