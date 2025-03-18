@@ -65,9 +65,9 @@ export function TransactionList({
                 fontSize: 8,
               }}
             >
-              <Text style={{ width: "10%" }}>Date</Text>
-              <Text style={{ width: "25%" }}>Compte</Text>
-              <Text style={{ width: "10%" }}>Ref. Caisse</Text>
+              <Text style={{ width: "10%", paddingLeft: 2 }}>Date</Text>
+              <Text style={{ width: "15%" }}>Compte</Text>
+              <Text style={{ width: "20%" }}>Ref. Caisse</Text>
               <Text style={{ width: "10%" }}>Type</Text>
               <Text style={{ width: "25%" }}>Description</Text>
               <Text style={{ width: "10%" }}>Montant</Text>
@@ -79,22 +79,23 @@ export function TransactionList({
                   style={{
                     flexDirection: "row",
                     display: "flex",
-                    borderBottom: "1px solid black",
+                    borderBottom:
+                      transactions.length - 1 == index ? "" : "1px solid black",
                     paddingVertical: 6,
                     fontSize: 8,
                   }}
                   key={index}
                 >
-                  <Text style={{ width: "10%" }}>
+                  <Text style={{ width: "10%", paddingLeft: 2 }}>
                     {tra.createdAt.toLocaleDateString()}
                   </Text>
-                  <Text style={{ width: "20%" }}>
+                  <Text style={{ width: "15%" }}>
                     {tra.account.student.lastName}
                   </Text>
-                  <Text style={{ width: "10%" }}>{tra.transactionRef}</Text>
+                  <Text style={{ width: "20%" }}>{tra.transactionRef}</Text>
                   <Text style={{ width: "10%" }}>{tra.transactionType}</Text>
-                  <Text style={{ width: "30%" }}>{tra.description}</Text>
-                  <Text style={{ width: "15%" }}>
+                  <Text style={{ width: "25%" }}>{tra.description}</Text>
+                  <Text style={{ width: "10%" }}>
                     {tra.amount.toLocaleString("fr-FR", {
                       style: "currency",
                       currency: school.currency,

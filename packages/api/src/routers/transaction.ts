@@ -60,7 +60,11 @@ export const transactionRouter = createTRPCRouter({
         where: {
           AND: [
             { schoolYearId: ctx.schoolYearId },
-            { deletedAt: null },
+            {
+              deletedAt: {
+                not: null,
+              },
+            },
             {
               createdAt: {
                 gte: input.from,
