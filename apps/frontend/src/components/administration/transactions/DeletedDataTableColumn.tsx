@@ -17,8 +17,9 @@ import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-head
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { CrossCircledIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
-import { TransactionStatus } from "~/components/students/transactions/TransactionTable";
+import FlatBadge from "~/components/FlatBadge";
 import { TransactionDetails } from "./TransactionDetails";
 
 type TransactionAllProcedureOutput = NonNullable<
@@ -121,7 +122,33 @@ export const getDeletedDataTableColumn = ({
       ),
       cell: ({ row }) => {
         const status = row.original.status;
-        return <TransactionStatus status={status} />;
+        return (
+          <FlatBadge className="gap-2" variant={"red"}>
+            <CrossCircledIcon
+              className="size-4 text-muted-foreground"
+              aria-hidden="true"
+            />
+            <span className="capitalize">{t("deleted")}</span>
+          </FlatBadge>
+        );
+      },
+    }),
+    columnHelper.accessor("deletedAt", {
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("deletedAt")} />
+      ),
+      cell: ({ row }) => {
+        const transaction = row.original;
+
+        return (
+          <div>
+            {transaction.deletedAt?.toLocaleDateString(i18next.language, {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </div>
+        );
       },
     }),
     columnHelper.accessor("amount", {

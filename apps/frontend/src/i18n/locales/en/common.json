@@ -952,6 +952,7 @@
   "student_contacts": "Student Contacts",
   "student_enrolled": "Student enrolled",
   "student_enrollments": "Student Enrollments",
+  "deletedAt": "Deleted At",
   "student_general_avg": "Student General Avg.",
   "student_grade_list": "Student grade list",
   "student_menu": "Student Menu",

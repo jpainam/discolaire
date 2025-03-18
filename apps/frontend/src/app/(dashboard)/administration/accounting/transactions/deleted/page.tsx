@@ -1,7 +1,7 @@
 import FlatBadge from "~/components/FlatBadge";
 import { getServerTranslations } from "~/i18n/server";
 
-import { TransactionDataTable } from "~/components/administration/transactions/TransactionDataTable";
+import { DeletedTransactionDataTable } from "~/components/administration/transactions/DeletedDataTable";
 import { api } from "~/trpc/server";
 
 export default async function Page(props: {
@@ -40,7 +40,7 @@ export default async function Page(props: {
           {t("deleted")} : {transactions.length}
         </FlatBadge>
       </div>
-      <TransactionDataTable transactions={transactions} />
+      <DeletedTransactionDataTable transactions={transactions} />
     </div>
   );
 }

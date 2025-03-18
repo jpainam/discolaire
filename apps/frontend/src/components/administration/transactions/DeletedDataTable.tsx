@@ -9,7 +9,7 @@ import type { RouterOutputs } from "@repo/api";
 import { useSchool } from "~/providers/SchoolProvider";
 import { getDeletedDataTableColumn } from "./DeletedDataTableColumn";
 
-export function TransactionDataTable({
+export function DeletedTransactionDataTable({
   transactions,
 }: {
   transactions: RouterOutputs["transaction"]["getDeleted"];
@@ -23,7 +23,7 @@ export function TransactionDataTable({
         t: t,
         currency: school.currency,
       }),
-    [t, school.currency],
+    [t, school.currency]
   );
 
   const { table } = useDataTable({

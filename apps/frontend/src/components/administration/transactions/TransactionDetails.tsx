@@ -11,6 +11,7 @@ import {
   Library,
   Loader,
   Printer,
+  Trash2,
   User,
   X,
 } from "lucide-react";
@@ -111,10 +112,24 @@ export function TransactionDetails({
         {/* <Label>{t("createdAt")}:</Label> */}
         {fullDateFormatter.format(transaction.createdAt)}
       </div>
+      {transaction.deletedAt && (
+        <div className="flex flex-row text-destructive items-center gap-1">
+          <CalendarDays className="w-4 h-4 " />
+          {t("deletedAt")}
+        </div>
+      )}
+      {transaction.deletedAt && (
+        <div className="flex flex-row text-destructive items-center gap-1">
+          <Trash2 className="w-4 h-4 " />
+          {/* <Label>{t("createdAt")}:</Label> */}
+          {fullDateFormatter.format(transaction.deletedAt)}
+        </div>
+      )}
       <div className="col-span-full flex flex-row items-center gap-1">
         <Library className="w-4 h-4" />
         <Label>{t("observation")}</Label>
       </div>
+
       <div className="col-span-full">{transaction.observation ?? "N/A"}</div>
       <Separator className="col-span-full" />
       <div className="col-span-full ml-auto flex flex-row gap-4">
