@@ -35,7 +35,8 @@ export default async function Layout({
 
   const schoolYearId = cookieStore.get("schoolYear")?.value;
   if (!schoolYearId) {
-    throw new Error("No school year selected");
+    console.error("No school year selected");
+    redirect("/auth/login");
   }
   //prefetch(api.classroom.all.queryOptions());
   const [school, schoolYear, schoolYears, permissions] = await Promise.all([

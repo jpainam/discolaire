@@ -75,7 +75,7 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
   const utils = api.useUtils();
   const canDeleteStudentContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
 
   const studentContacts = studentContactsQuery.data ?? [];
@@ -118,32 +118,28 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
               const relationship = c.relationship;
               return (
                 <TableRow key={`${contact.id}-${index}`}>
-                  <TableCell className="flex items-center justify-start gap-1 py-0">
+                  <TableCell className="flex items-center justify-start gap-1">
                     <AvatarState pos={index} avatar={contact.avatar} />
                     <Link
                       href={`${routes.students.contacts(c.studentId)}/${contact.id}`}
                       className={cn(
-                        "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline",
+                        "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline"
                       )}
                     >
                       {getFullName(contact)}
                     </Link>
                   </TableCell>
-                  <TableCell className="py-0">{relationship?.name}</TableCell>
-                  <TableCell className="py-0 text-right">
-                    {contact.email ?? "N/A"}
-                  </TableCell>
-                  <TableCell className="py-0 text-right">
-                    {contact.phoneNumber1}{" "}
-                  </TableCell>
-                  <TableCell className="py-0">
+                  <TableCell>{relationship?.name}</TableCell>
+                  <TableCell>{contact.email ?? "N/A"}</TableCell>
+                  <TableCell>{contact.phoneNumber1} </TableCell>
+                  <TableCell>
                     {contact.userId ? (
                       <FlatBadge variant={"green"}>{t("invited")}</FlatBadge>
                     ) : (
                       <FlatBadge variant={"red"}>{t("not_invited")}</FlatBadge>
                     )}
                   </TableCell>
-                  <TableCell className="py-0">
+                  <TableCell>
                     <div className="flex items-center justify-end gap-2">
                       <Popover>
                         <PopoverTrigger asChild>
@@ -180,7 +176,7 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
                           <DropdownMenuItem
                             onSelect={() => {
                               router.push(
-                                `${routes.students.contacts(c.studentId)}/${c.contactId}`,
+                                `${routes.students.contacts(c.studentId)}/${c.contactId}`
                               );
                             }}
                           >

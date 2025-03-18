@@ -96,7 +96,7 @@ export function StudentGradeHeader({
     );
   }
   return (
-    <div className="flex flex-row items-center gap-2 border-b  px-4 py-1 text-secondary-foreground">
+    <div className="flex flex-row items-center gap-2 border-b  px-4 py-2 text-secondary-foreground">
       <Label>{t("term")}</Label>
       <TermSelector
         className="w-[300px]"
@@ -107,17 +107,17 @@ export function StudentGradeHeader({
             "?" +
               createQueryString({
                 term: val,
-              }),
+              })
           );
         }}
         defaultValue={term ? `${term}` : undefined}
       />
 
-      <>
+      {studentAvg && (
         <FlatBadge variant={"yellow"}>
-          {t("student_general_avg")} : {studentAvg?.toFixed(2)}
+          {t("student_general_avg")} : {studentAvg.toFixed(2)}
         </FlatBadge>
-      </>
+      )}
 
       {classroomAvg && (
         <FlatBadge variant={"blue"}>
@@ -157,7 +157,7 @@ export function StudentGradeHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/student/grades/?id=${student.id}&format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -167,7 +167,7 @@ export function StudentGradeHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/student/grades/?id=${student.id}&format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

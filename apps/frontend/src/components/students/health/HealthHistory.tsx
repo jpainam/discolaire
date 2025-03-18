@@ -156,7 +156,9 @@ export function HealthHistory({
               <Ambulance />
               {t("past_and_present_health_problems")}
               <div className="ml-auto flex flex-row items-center gap-2">
-                <Button size={"sm"}>{t("submit")}</Button>
+                <Button isLoading={updateIssueMutation.isPending} size={"sm"}>
+                  {t("submit")}
+                </Button>
                 <Button variant={"outline"} type="reset" size={"sm"}>
                   {t("reset")}
                 </Button>
@@ -166,7 +168,7 @@ export function HealthHistory({
               {t("please_check_all_that_apply")}
             </CardDescription>
           </CardHeader>
-          <CardContent className="text-sm grid 2xl:grid-cols-2 gap-6 divide">
+          <CardContent className="text-sm grid grid-cols-2 gap-8">
             <RadioFormItem
               title={t("attention_deficit_disorder")}
               name="hasAdd"
@@ -247,16 +249,17 @@ function RadioFormItem({
 }) {
   const form = useFormContext();
   const { t } = useLocale();
+  const radioValue = form.watch(name) as boolean;
   return (
-    <div className="flex  flex-row items-start space-x-2">
+    <div className="flex flex-row items-start space-x-2">
       <FormField
         control={form.control}
         name={name}
         render={({ field }) => (
-          <FormItem className="flex flex-row pt-1 items-center space-x-2">
+          <FormItem className="flex flex-row py-0.5 items-center space-x-2">
             <FormControl>
               <RadioGroup
-                onValueChange={field.onChange}
+                onValueChange={(val) => field.onChange(val === "yes")}
                 defaultValue={field.value ? "yes" : "no"}
                 className="flex flex-row gap-4"
               >
@@ -278,32 +281,31 @@ function RadioFormItem({
           </FormItem>
         )}
       />
-      <div className="grid  w-full grid-cols-1 gap-2">
-        <div className="flex flex-row items-center gap-4">
-          <div className="flex flex-col space-y-2">
-            <span>{title}</span>
-          </div>
-        </div>
-        <FormField
-          control={form.control}
-          name={textarea}
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Textarea
-                  //disabled={form.getValues(name)?.value === "no"}
-                  placeholder={t("please_explain_and_document_every_drugs")}
-                  className="resize-none"
-                  {...field}
-                />
-              </FormControl>
-              {/* <FormDescription>
+      <div className="grid pl-4  w-full grid-cols-1 gap-2">
+        <div>{title}</div>
+
+        {radioValue && (
+          <FormField
+            control={form.control}
+            name={textarea}
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Textarea
+                    //disabled={form.getValues(name)?.value === "no"}
+                    placeholder={t("please_explain_and_document_every_drugs")}
+                    className="resize-none"
+                    {...field}
+                  />
+                </FormControl>
+                {/* <FormDescription>
                 {t("please_explain_and_document_every_drugs")}
               </FormDescription> */}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
       </div>
     </div>
   );
