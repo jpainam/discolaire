@@ -18,6 +18,8 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { useCheckPermission } from "~/hooks/use-permission";
+import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
 
 export function SubjectJournalHeader({
@@ -39,10 +41,14 @@ export function SubjectJournalHeader({
       toast.error(error.message, { id: 0 });
     },
   });
+  const canDeleteSubject = useCheckPermission(
+    "subject",
+    PermissionAction.DELETE
+  );
   return (
-    <div className="flex flex-row items-center justify-between border-b bg-muted/50 px-2 py-1">
+    <div className="flex flex-row items-center justify-between border-b bg-muted/50 px-4 py-1">
       <Label>{t("subject_journal")}</Label>
-      <div className="font-bold">{subject.name}</div>
+      <Label className="font-bold">{subject.name}</Label>
       <div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -52,36 +58,48 @@ export function SubjectJournalHeader({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownHelp />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                toast.warning(t("not_implemented"), { id: 0 });
+              }}
+            >
               <XMLIcon />
               {t("xml_export")}
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                toast.warning(t("not_implemented"), { id: 0 });
+              }}
+            >
               <PDFIcon />
               {t("pdf_export")}
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onSelect={async () => {
-                const isConfirmed = await confirm({
-                  title: t("clear_all"),
-                  description: t("delete_description"),
-                  icon: <Trash2 className="text-destructive" />,
-                  alertDialogTitle: {
-                    className: "flex items-center gap-2",
-                  },
-                });
-                if (isConfirmed) {
-                  toast.loading(t("deleting"), { id: 0 });
-                  deleteSubjectJournal.mutate({ subjectId: subject.id });
-                }
-              }}
-              variant="destructive"
-              className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-            >
-              <Trash2 />
-              {t("clear_all")}
-            </DropdownMenuItem>
+            {canDeleteSubject && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onSelect={async () => {
+                    const isConfirmed = await confirm({
+                      title: t("clear_all"),
+                      description: t("delete_description"),
+                      icon: <Trash2 className="text-destructive" />,
+                      alertDialogTitle: {
+                        className: "flex items-center gap-2",
+                      },
+                    });
+                    if (isConfirmed) {
+                      toast.loading(t("deleting"), { id: 0 });
+                      deleteSubjectJournal.mutate({ subjectId: subject.id });
+                    }
+                  }}
+                  variant="destructive"
+                  className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+                >
+                  <Trash2 />
+                  {t("clear_all")}
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

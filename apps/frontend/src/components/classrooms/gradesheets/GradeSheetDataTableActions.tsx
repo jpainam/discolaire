@@ -57,7 +57,7 @@ export function GradeSheetDataTableActions({
 
   const canDeleteGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
 
   return (

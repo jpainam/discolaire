@@ -285,11 +285,11 @@ function ActionCells({
 
   const canDeleteGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const canUpdateGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
 
   return (
@@ -306,8 +306,8 @@ function ActionCells({
               router.push(
                 routes.classrooms.gradesheets.details(
                   classroomId,
-                  gradesheet.id
-                )
+                  gradesheet.id,
+                ),
               );
             }}
           >
@@ -318,7 +318,10 @@ function ActionCells({
             <DropdownMenuItem
               onSelect={() => {
                 router.push(
-                  routes.classrooms.gradesheets.edit(classroomId, gradesheet.id)
+                  routes.classrooms.gradesheets.edit(
+                    classroomId,
+                    gradesheet.id,
+                  ),
                 );
               }}
             >

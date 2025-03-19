@@ -7,28 +7,40 @@ import {
   ImageIcon,
   LinkIcon,
 } from "lucide-react";
-import { parseAsInteger, useQueryState } from "nuqs";
 
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
-import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
-import { api } from "~/trpc/react";
+import type { RouterOutputs } from "@repo/api";
+import { useParams, useSearchParams } from "next/navigation";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useRouter } from "~/hooks/use-router";
 
-export function SubjectJournalList({ subjectId }: { subjectId: number }) {
+export function SubjectJournalList({
+  subjectId,
+  journals,
+}: {
+  subjectId: number;
+  journals: RouterOutputs["subjectJournal"]["bySubject"];
+}) {
   const { t, i18n } = useLocale();
-  const [pageSize] = useQueryState("pageSize", parseAsInteger.withDefault(10));
-  const [pageIndex, setPageIndex] = useQueryState(
-    "pageIndex",
-    parseAsInteger.withDefault(0),
-  );
-  const paginate = (pageNumber: number) => setPageIndex(pageNumber);
-  const subjectJournalsQuery = api.subjectJournal.bySubject.useQuery({
-    subjectId: subjectId,
-    pageIndex,
-    pageSize,
-  });
+  const params = useParams<{ id: string }>();
+  const searchParams = useSearchParams();
+  const { createQueryString } = useCreateQueryString();
+  const router = useRouter();
+  const pageIndex = searchParams.get("pageIndex")
+    ? Number(searchParams.get("pageIndex"))
+    : 1;
+  const pageSize = searchParams.get("pageSize")
+    ? Number(searchParams.get("pageSize"))
+    : 10;
+  const paginate = (page: number) => {
+    router.push(
+      `/classrooms/${params.id}/subject_journal/${subjectId}?${createQueryString({ pageIndex: page, pageSize })}`
+    );
+  };
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "APPROVED":
@@ -58,17 +70,10 @@ export function SubjectJournalList({ subjectId }: { subjectId: number }) {
     month: "short",
     day: "numeric",
   });
-  const journals = subjectJournalsQuery.data ?? [];
   return (
-    <div className="mb-4 flex flex-col gap-2 px-2">
+    <div className="mb-4 flex flex-col gap-2 p-4">
       <h3 className="text-xl font-bold">Existing Posts</h3>
-      {subjectJournalsQuery.isPending && (
-        <div className="grid gap-2">
-          {Array.from({ length: pageSize }).map((_, index) => (
-            <Skeleton key={index} className="h-12" />
-          ))}
-        </div>
-      )}
+
       {journals.map((journal) => (
         <div key={journal.id} className="rounded-lg bg-white p-2 shadow">
           <div className="mb-2 flex items-start justify-between">
@@ -95,7 +100,9 @@ export function SubjectJournalList({ subjectId }: { subjectId: number }) {
       <div className="flex items-center justify-between pb-4">
         <Button
           size={"sm"}
-          onClick={() => paginate(pageIndex - 1)}
+          onClick={() => {
+            paginate(pageIndex - 1);
+          }}
           disabled={pageIndex === 1}
           variant="outline"
         >

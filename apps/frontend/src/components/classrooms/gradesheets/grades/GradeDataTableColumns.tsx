@@ -200,7 +200,7 @@ function ActionCells({
   const markGradeAbsent = api.grade.update.useMutation();
   const canUpdateGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   return (
     <div className="flex justify-end">
@@ -266,7 +266,7 @@ function ActionCells({
                       error: (error) => {
                         return getErrorMessage(error);
                       },
-                    }
+                    },
                   );
                 }
               }}

@@ -1,11 +1,9 @@
-import { Skeleton } from "@repo/ui/components/skeleton";
+import { Loader2 } from "lucide-react";
 
 export default function Loading() {
   return (
-    <div className="m-2 grid h-full w-full grid-cols-2 gap-2">
-      {Array.from({ length: 4 }).map((_, index) => (
-        <Skeleton key={index} className="h-full w-full" />
-      ))}
+    <div className="m-auto flex justify-center my-32 items-center">
+      <Loader2 className="h-8 w-8 animate-spin" />
     </div>
   );
 }
