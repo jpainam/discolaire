@@ -74,7 +74,7 @@ export default function List01({
         "bg-white dark:bg-zinc-900/70",
         "border border-zinc-100 dark:border-zinc-800",
         "rounded-xl shadow-sm backdrop-blur-xl",
-        className
+        className,
       )}
     >
       {/* Total Balance Section */}
@@ -103,7 +103,7 @@ export default function List01({
                 "group flex items-center justify-between",
                 "p-2 rounded-lg",
                 "hover:bg-zinc-100 dark:hover:bg-zinc-800/50",
-                "transition-all duration-200"
+                "transition-all duration-200",
               )}
             >
               <div className="flex items-center gap-2">
@@ -165,7 +165,7 @@ export default function List01({
               "text-zinc-50 dark:text-zinc-900",
               "hover:bg-zinc-800 dark:hover:bg-zinc-200",
               "shadow-sm hover:shadow",
-              "transition-all duration-200"
+              "transition-all duration-200",
             )}
           >
             <Plus className="w-3.5 h-3.5" />
@@ -181,7 +181,7 @@ export default function List01({
               "text-zinc-50 dark:text-zinc-900",
               "hover:bg-zinc-800 dark:hover:bg-zinc-200",
               "shadow-sm hover:shadow",
-              "transition-all duration-200"
+              "transition-all duration-200",
             )}
           >
             <SendHorizontal className="w-3.5 h-3.5" />
@@ -197,7 +197,7 @@ export default function List01({
               "text-zinc-50 dark:text-zinc-900",
               "hover:bg-zinc-800 dark:hover:bg-zinc-200",
               "shadow-sm hover:shadow",
-              "transition-all duration-200"
+              "transition-all duration-200",
             )}
           >
             <ArrowDownLeft className="w-3.5 h-3.5" />
@@ -213,7 +213,7 @@ export default function List01({
               "text-zinc-50 dark:text-zinc-900",
               "hover:bg-zinc-800 dark:hover:bg-zinc-200",
               "shadow-sm hover:shadow",
-              "transition-all duration-200"
+              "transition-all duration-200",
             )}
           >
             <ArrowRight className="w-3.5 h-3.5" />

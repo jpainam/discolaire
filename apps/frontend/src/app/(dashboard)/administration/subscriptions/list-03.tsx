@@ -105,7 +105,7 @@ export default function List03({ items = ITEMS, className }: List03Props) {
               "border border-zinc-100 dark:border-zinc-800",
               "hover:border-zinc-200 dark:hover:border-zinc-700",
               "transition-all duration-200",
-              "shadow-sm backdrop-blur-xl"
+              "shadow-sm backdrop-blur-xl",
             )}
           >
             <div className="p-4 space-y-3">
@@ -113,7 +113,7 @@ export default function List03({ items = ITEMS, className }: List03Props) {
                 <div
                   className={cn(
                     "p-2 rounded-lg",
-                    iconStyles[item.iconStyle as keyof typeof iconStyles]
+                    iconStyles[item.iconStyle as keyof typeof iconStyles],
                   )}
                 >
                   <item.icon className="w-4 h-4" />
@@ -122,7 +122,7 @@ export default function List03({ items = ITEMS, className }: List03Props) {
                   className={cn(
                     "px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1.5",
                     statusConfig[item.status].bg,
-                    statusConfig[item.status].class
+                    statusConfig[item.status].class,
                   )}
                 >
                   {React.createElement(statusConfig[item.status].icon, {
@@ -186,7 +186,7 @@ export default function List03({ items = ITEMS, className }: List03Props) {
                   "text-zinc-600 dark:text-zinc-400",
                   "hover:text-zinc-900 dark:hover:text-zinc-100",
                   "hover:bg-zinc-100 dark:hover:bg-zinc-800/50",
-                  "transition-colors duration-200"
+                  "transition-colors duration-200",
                 )}
               >
                 View Details

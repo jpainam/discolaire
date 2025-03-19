@@ -26,7 +26,7 @@ export function SubscriptionHeader() {
         <Button
           onClick={() => {
             openModal({
-              title: t("add_a_new_subscription"),
+              title: `${t("add")} - ${t("subscription")}`,
               view: <CreateEditSubscription />,
             });
           }}
