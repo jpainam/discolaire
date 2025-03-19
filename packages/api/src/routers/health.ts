@@ -118,6 +118,64 @@ export const healthRouter = createTRPCRouter({
         },
       });
     }),
+  drugs: protectedProcedure
+    .input(z.object({ studentId: z.string().min(1) }))
+    .query(({ ctx, input }) => {
+      return ctx.db.healthDrug.findMany({
+        where: {
+          studentId: input.studentId,
+        },
+      });
+    }),
+  createDrug: protectedProcedure
+    .input(
+      z.object({
+        studentId: z.string().min(1),
+        name: z.string().min(1),
+        dosage: z.string().min(1),
+        description: z.string().min(1),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.healthDrug.create({
+        data: {
+          studentId: input.studentId,
+          name: input.name,
+          dosage: input.dosage,
+          description: input.description,
+        },
+      });
+    }),
+  deleteDrug: protectedProcedure
+    .input(z.coerce.number())
+    .mutation(({ ctx, input }) => {
+      return ctx.db.healthDrug.delete({
+        where: {
+          id: input,
+        },
+      });
+    }),
+  updateDrug: protectedProcedure
+    .input(
+      z.object({
+        id: z.coerce.number(),
+        name: z.string().min(1),
+        dosage: z.string().min(1),
+        description: z.string().min(1),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.healthDrug.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name,
+          dosage: input.dosage,
+          description: input.description,
+        },
+      });
+    }),
   documents: protectedProcedure
     .input(
       z.object({

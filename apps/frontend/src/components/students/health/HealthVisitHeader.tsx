@@ -26,7 +26,7 @@ export function HealthVisitHeader() {
           <Button
             onClick={() => {
               router.push(
-                routes.students.health.index(params.id) + "/new-visit"
+                routes.students.health.index(params.id) + "/new-visit",
               );
             }}
             variant={"default"}

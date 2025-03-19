@@ -10,8 +10,10 @@ import {
 } from "@repo/ui/components/table";
 import { Trash2 } from "lucide-react";
 import { useLocale } from "~/i18n";
+import { api } from "~/trpc/react";
 export function DrugTable() {
   const { t } = useLocale();
+  //const deleteDrug = api.health.del;
   return (
     <div className="px-4 py-2">
       <div className="bg-background overflow-hidden rounded-md border">
