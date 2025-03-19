@@ -25,7 +25,9 @@ import { useConfirm } from "~/providers/confirm-dialog";
 
 import { decode } from "entities";
 import { routes } from "~/configs/routes";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { AvatarState } from "../AvatarState";
@@ -178,6 +180,14 @@ export function getColumns({
         const router = useRouter();
         const contact = row.original;
         const utils = api.useUtils();
+        const canDeleteContact = useCheckPermission(
+          "contact",
+          PermissionAction.DELETE
+        );
+        const canUpdateContact = useCheckPermission(
+          "contact",
+          PermissionAction.UPDATE
+        );
         const deleteContactMutation = api.contact.delete.useMutation({
           onSettled: () => utils.contact.all.invalidate(),
           onError: (error) => {
@@ -190,65 +200,70 @@ export function getColumns({
         });
 
         return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button aria-label="Open menu" variant="ghost">
-                <DotsHorizontalIcon className="size-4" aria-hidden="true" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                onSelect={() => {
-                  openSheet({
-                    className: "w-[500px]",
-                    title: <div className="p-2">{t("students")}</div>,
-                    view: <StudentContactList contactId={contact.id} />,
-                  });
-                }}
-              >
-                <Users />
-                <span className="text-sm">{t("students")}</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="gap-2"
-                onSelect={() => {
-                  openSheet({
-                    placement: "right",
+          <div className="justify-end flex">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button aria-label="Open menu" variant="ghost">
+                  <DotsHorizontalIcon className="size-4" aria-hidden="true" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownInvitation
+                  entityId={contact.id}
+                  entityType="contact"
+                  email={contact.email}
+                />
+                <DropdownMenuItem
+                  onSelect={() => {
+                    openSheet({
+                      title: t("students"),
+                      view: <StudentContactList contactId={contact.id} />,
+                    });
+                  }}
+                >
+                  <Users />
+                  <span className="text-sm">{t("students")}</span>
+                </DropdownMenuItem>
+                {canUpdateContact && (
+                  <>
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        openSheet({
+                          placement: "right",
+                          view: <CreateEditContact contact={row.original} />,
+                        });
+                      }}
+                    >
+                      <Pencil />
+                      {t("edit")}
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                  </>
+                )}
 
-                    view: <CreateEditContact contact={row.original} />,
-                  });
-                }}
-              >
-                <Pencil />
-                {t("edit")}
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownInvitation
-                entityId={contact.id}
-                entityType="contact"
-                email={contact.email}
-              />
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                disabled={deleteContactMutation.isPending}
-                variant="destructive"
-                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-                onSelect={async () => {
-                  const isConfirmed = await confirm({
-                    title: t("delete"),
-                    description: t("delete_confirmation"),
-                  });
-                  if (isConfirmed) {
-                    toast.loading(t("deleting"), { id: 0 });
-                    deleteContactMutation.mutate(contact.id);
-                  }
-                }}
-              >
-                <Trash2 />
-                {t("delete")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                {canDeleteContact && (
+                  <DropdownMenuItem
+                    disabled={deleteContactMutation.isPending}
+                    variant="destructive"
+                    className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+                    onSelect={async () => {
+                      const isConfirmed = await confirm({
+                        title: t("delete"),
+                        description: t("delete_confirmation"),
+                      });
+                      if (isConfirmed) {
+                        toast.loading(t("deleting"), { id: 0 });
+                        deleteContactMutation.mutate(contact.id);
+                      }
+                    }}
+                  >
+                    <Trash2 />
+                    {t("delete")}
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         );
       },
       size: 60,

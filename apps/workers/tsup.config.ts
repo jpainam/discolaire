@@ -11,4 +11,5 @@ export default defineConfig({
   target: "node22",
   sourcemap: true,
   dts: false, // no type defs needed for a worker
+  noExternal: ["@repo/db", "@repo/transactional", "@repo/api"],
 });

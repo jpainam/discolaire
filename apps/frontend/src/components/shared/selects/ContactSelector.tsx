@@ -1,8 +1,18 @@
-import { ChevronsUpDown } from "lucide-react";
+"use client";
+
+import { Check, ChevronsUpDown } from "lucide-react";
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@repo/ui/components/command";
 import {
   Popover,
   PopoverContent,
@@ -14,102 +24,100 @@ import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
-import VirtualizedCommand from "./VirtualizedCommand";
 
-interface Option {
-  value: string;
-  label: string;
-  avatar?: string;
-}
-
-interface ContactSelectorProps {
-  searchPlaceholder?: string;
-  placeholder?: string;
-  width?: string;
-  height?: string;
+interface SelectorProps {
   className?: string;
   defaultValue?: string;
+  disabled?: boolean;
   onChange?: (value: string | null | undefined) => void;
 }
 
 export function ContactSelector({
-  searchPlaceholder,
-  placeholder,
   className,
-  height = "400px",
-  onChange,
+  disabled = false,
   defaultValue,
-}: ContactSelectorProps) {
-  const contactSelectorQuery = api.contact.selector.useQuery();
-
-  const contacts = contactSelectorQuery.data;
-
-  const [open, setOpen] = useState<boolean>(false);
-  const [selectedOption, setSelectedOption] = useState<Option>({
-    label: "",
-    value: defaultValue ?? "",
-  });
-  const [options, setOptions] = React.useState<Option[]>([]);
+  onChange,
+}: SelectorProps) {
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState(defaultValue);
   const { t } = useLocale();
+  const [label, setLabel] = React.useState(t("select_an_option"));
+  const contactsQuery = api.contact.all.useQuery();
 
-  useEffect(() => {
-    if (contacts) {
-      if (defaultValue) {
-        const dValue = contacts.find((item) => item.id === defaultValue);
-        if (dValue)
-          setSelectedOption({ label: getFullName(dValue), value: dValue.id });
+  React.useEffect(() => {
+    if (contactsQuery.data) {
+      const contact = contactsQuery.data.find((it) => it.id === value);
+      if (contact) {
+        setLabel(getFullName(contact));
       }
-      setOptions(
-        contacts.map((contact) => ({
-          label: getFullName(contact),
-          value: contact.id,
-          avatar: contact.avatar ?? undefined,
-        })),
-      );
     }
-  }, [defaultValue, contacts]);
+  }, [contactsQuery.data, value]);
 
-  if (contactSelectorQuery.isPending) {
+  if (contactsQuery.isPending) {
     return <Skeleton className={cn("h-8 w-full", className)} />;
   }
+  if (contactsQuery.isError) {
+    toast.error(contactsQuery.error.message);
+    return null;
+  }
+
+  const data = contactsQuery.data;
+
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={setOpen} modal={false}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
           role="combobox"
+          disabled={disabled}
           aria-expanded={open}
-          className={cn("w-[400px] justify-between", className)}
+          className={cn("justify-between", className)}
         >
-          {selectedOption.value
-            ? options.find((option) => option.value === selectedOption.value)
-                ?.label
-            : (placeholder ?? t("select_an_option"))}{" "}
-          {""}
+          {label}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 justify-end opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0">
-        <VirtualizedCommand
-          height={height}
-          options={options.map((option) => ({
-            value: option.value,
-            label: option.label,
-            avatar: option.avatar,
-          }))}
-          placeholder={searchPlaceholder ?? t("search")}
-          selectedOption={selectedOption.value}
-          onSelectOption={(currentValue) => {
-            onChange?.(
-              currentValue === selectedOption.value ? null : currentValue,
-            );
-            setSelectedOption({
-              value: currentValue === selectedOption.value ? "" : currentValue,
-              label: "",
-            });
-            setOpen(false);
+      <PopoverContent
+        style={{ width: "var(--radix-popover-trigger-width)" }}
+        className="p-0"
+        side="bottom"
+        align="start"
+      >
+        <Command
+          //className="rounded-lg border shadow-md"
+          filter={(value, search) => {
+            const item = data.find((it) => it.id === value);
+            const name = getFullName(item);
+            if (name.toLowerCase().includes(search.toLowerCase())) {
+              return 1;
+            }
+            return 0;
           }}
-        />
+        >
+          <CommandInput placeholder={t("search_for_an_option")} />
+          <CommandList className="max-h-[300px] overflow-y-auto">
+            <CommandEmpty>{t("select_an_option")}</CommandEmpty>
+            <CommandGroup>
+              {data.map((item) => (
+                <CommandItem
+                  key={item.id}
+                  className="flex w-full cursor-pointer items-center justify-between space-x-2"
+                  value={item.id}
+                  onSelect={(currentValue) => {
+                    onChange?.(currentValue == value ? null : currentValue);
+                    setValue(currentValue === value ? "" : currentValue);
+                    setOpen(false);
+                  }}
+                >
+                  <span>{getFullName(item)}</span>
+                  {value === item.id && (
+                    <Check className="text-brand" strokeWidth={2} size={16} />
+                  )}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
       </PopoverContent>
     </Popover>
   );

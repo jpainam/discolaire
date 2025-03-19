@@ -1,22 +1,21 @@
-// // packages/worker/src/server.ts
-// import { createBullBoard } from "@bull-board/api";
-// import { BullMQAdapter } from "@bull-board/api/bullMQAdapter";
-// import { Queue } from "bullmq";
-// import express from "express";
-// import IORedis from "ioredis";
+// packages/worker/src/server.ts
+//import { createBullBoard } from "@bull-board/api";
+//import { BullMQAdapter } from "@bull-board/api/bullMQAdapter";
+import { Queue } from "bullmq";
+import IORedis from "ioredis";
 
-// // Redis connection
-// const connection = new IORedis(
-//   process.env.REDIS_URL ?? "redis://localhost:6379",
-// );
+// Redis connection
+const connection = new IORedis(
+  process.env.REDIS_URL ?? "redis://localhost:6379",
+);
 
-// // Define queues (same as your worker queues)
-// const emailQueue = new Queue("email", { connection });
-// const smsQueue = new Queue("sms", { connection });
-// const logQueue = new Queue("log", { connection });
+// Define queues (same as your worker queues)
+export const emailQueue = new Queue("email", { connection });
+export const smsQueue = new Queue("sms", { connection });
+export const logQueue = new Queue("log", { connection });
 
-// // Setup Bull Board
-// const { router } = createBullBoard([
+// Setup Bull Board
+// export const { router } = createBullBoard([
 //   new BullMQAdapter(emailQueue),
 //   new BullMQAdapter(smsQueue),
 //   new BullMQAdapter(logQueue),

@@ -27,7 +27,9 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import type { RouterOutputs } from "@repo/api";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
@@ -41,6 +43,10 @@ export function ContactStudentTable({
   const confirm = useConfirm();
   const router = useRouter();
   const { t } = useLocale();
+  const canUpdateContact = useCheckPermission(
+    "contact",
+    PermissionAction.UPDATE
+  );
   const deleteStudentContactMutation = api.studentContact.delete.useMutation({
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -83,10 +89,10 @@ export function ContactStudentTable({
             const student = stc.student;
             return (
               <TableRow key={`${stc.contactId}-${index}`}>
-                <TableCell className="py-0">
+                <TableCell>
                   <AvatarState pos={index} avatar={student.avatar} />
                 </TableCell>
-                <TableCell className="py-0">
+                <TableCell>
                   <Link
                     href={
                       routes.students.contacts(student.id ?? "") +
@@ -97,7 +103,7 @@ export function ContactStudentTable({
                     {student.lastName}
                   </Link>
                 </TableCell>
-                <TableCell className="py-0">
+                <TableCell>
                   <Link
                     href={
                       routes.students.contacts(student.id ?? "") +
@@ -108,11 +114,9 @@ export function ContactStudentTable({
                     {student.firstName}
                   </Link>
                 </TableCell>
-                <TableCell className="py-0">
-                  {student.classroom?.name}
-                </TableCell>
+                <TableCell>{student.classroom?.name}</TableCell>
 
-                <TableCell className="py-0 text-right">
+                <TableCell className=" text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button size={"icon"} variant={"ghost"}>
@@ -124,7 +128,7 @@ export function ContactStudentTable({
                         onSelect={() => {
                           if (!student.id) return;
                           router.push(
-                            `${routes.students.contacts(student.id)}/${stc.contactId}`,
+                            `${routes.students.contacts(student.id)}/${stc.contactId}`
                           );
                         }}
                       >
@@ -143,30 +147,34 @@ export function ContactStudentTable({
 
                       <DropdownMenuSeparator />
                       <DropdownHelp />
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        variant="destructive"
-                        className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-                        onSelect={async () => {
-                          if (!student.id) return;
+                      {canUpdateContact && (
+                        <>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            variant="destructive"
+                            className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+                            onSelect={async () => {
+                              if (!student.id) return;
 
-                          const isConfirmed = await confirm({
-                            title: t("delete"),
-                            description: t("delete_confirmation"),
-                          });
-                          if (isConfirmed) {
-                            toast.loading(t("deleting"), { id: 0 });
+                              const isConfirmed = await confirm({
+                                title: t("delete"),
+                                description: t("delete_confirmation"),
+                              });
+                              if (isConfirmed) {
+                                toast.loading(t("deleting"), { id: 0 });
 
-                            deleteStudentContactMutation.mutate({
-                              contactId: stc.contactId,
-                              studentId: student.id,
-                            });
-                          }
-                        }}
-                      >
-                        <Trash2 />
-                        {t("delete")}
-                      </DropdownMenuItem>
+                                deleteStudentContactMutation.mutate({
+                                  contactId: stc.contactId,
+                                  studentId: student.id,
+                                });
+                              }
+                            }}
+                          >
+                            <Trash2 />
+                            {t("delete")}
+                          </DropdownMenuItem>
+                        </>
+                      )}
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>

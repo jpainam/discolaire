@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { subMonths } from "date-fns";
 import { z } from "zod";
 
@@ -31,6 +32,12 @@ export const contactRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
+      if (ctx.session.user.profile != "staff") {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Unauthorized to access last contact as a non staff",
+        });
+      }
       return ctx.db.contact.findMany({
         take: input.limit,
         where: {
@@ -230,16 +237,7 @@ export const contactRouter = createTRPCRouter({
     });
     return { total: result, new: newContacts };
   }),
-  selector: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db.contact.findMany({
-      where: {
-        schoolId: ctx.schoolId,
-      },
-      orderBy: {
-        lastName: "asc",
-      },
-    });
-  }),
+
   search: protectedProcedure
     .input(
       z.object({

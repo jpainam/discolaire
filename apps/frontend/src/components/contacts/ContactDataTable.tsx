@@ -7,7 +7,7 @@ import { useLocale } from "~/i18n";
 
 import type { RouterOutputs } from "@repo/api";
 import { ContactDataTableAction } from "./ContactDataTableAction";
-import { getColumns } from "./ContactDataTableColumns";
+import { getColumns } from "./ContactDataTableColumn";
 
 export function ContactDataTable({
   contacts,

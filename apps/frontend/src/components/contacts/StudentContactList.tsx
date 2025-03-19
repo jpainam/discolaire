@@ -57,9 +57,13 @@ export default function StudentContactList({
     day: "numeric",
     timeZone: "UTC",
   });
+  const canDeleteContact = useCheckPermission(
+    "contact",
+    PermissionAction.DELETE
+  );
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (
@@ -116,7 +120,7 @@ export default function StudentContactList({
                       size="sm"
                       onClick={() => {
                         router.push(
-                          routes.students.details(studentcontact.studentId),
+                          routes.students.details(studentcontact.studentId)
                         );
                       }}
                       variant="outline"
@@ -163,55 +167,57 @@ export default function StudentContactList({
                     </li>
                   </ul>
                 </CardContent>
-                <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-2 py-1">
-                  <Pagination className="ml-auto mr-0 w-auto p-0">
-                    <PaginationContent>
-                      <PaginationItem>
-                        <Button
-                          onClick={async () => {
-                            if (!contact?.id) {
-                              return;
-                            }
-                            const isConfirmed = await confirm({
-                              title: t("delete"),
-                              description: t("delete_confirmation"),
-                            });
+                {canDeleteContact && (
+                  <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-2 py-1">
+                    <Pagination className="ml-auto mr-0 w-auto p-0">
+                      <PaginationContent>
+                        <PaginationItem>
+                          <Button
+                            onClick={async () => {
+                              if (!contact?.id) {
+                                return;
+                              }
+                              const isConfirmed = await confirm({
+                                title: t("delete"),
+                                description: t("delete_confirmation"),
+                              });
 
-                            if (isConfirmed) {
-                              toast.promise(
-                                deleteStudentContactMutation.mutateAsync({
-                                  studentId: studentcontact.studentId,
-                                  contactId: contact.id,
-                                }),
-                                {
-                                  loading: t("deleting"),
-                                  success: async () => {
-                                    await utils.student.contacts.invalidate();
-                                    await utils.contact.students.invalidate();
+                              if (isConfirmed) {
+                                toast.promise(
+                                  deleteStudentContactMutation.mutateAsync({
+                                    studentId: studentcontact.studentId,
+                                    contactId: contact.id,
+                                  }),
+                                  {
+                                    loading: t("deleting"),
+                                    success: async () => {
+                                      await utils.student.contacts.invalidate();
+                                      await utils.contact.students.invalidate();
 
-                                    return t("deleted_successfully");
-                                  },
-                                  error: (error) => {
-                                    return getErrorMessage(error);
-                                  },
-                                },
-                              );
-                            }
-                          }}
-                          size="icon"
-                          className="w-8"
-                          variant="outline"
-                        >
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                          <span className="sr-only">{t("delete")}</span>
-                        </Button>
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
-                </CardFooter>
+                                      return t("deleted_successfully");
+                                    },
+                                    error: (error) => {
+                                      return getErrorMessage(error);
+                                    },
+                                  }
+                                );
+                              }
+                            }}
+                            size="icon"
+                            className="w-8"
+                            variant="outline"
+                          >
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                            <span className="sr-only">{t("delete")}</span>
+                          </Button>
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
+                  </CardFooter>
+                )}
               </Card>
             );
-          },
+          }
         )}
       </div>
     </div>

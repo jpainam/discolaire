@@ -15,6 +15,7 @@ import { useLocale } from "~/i18n";
 
 import { useSetAtom } from "jotai";
 import { useParams } from "next/navigation";
+import { ContactSelector } from "~/components/shared/selects/ContactSelector";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
@@ -55,14 +56,19 @@ export function ContactHeader() {
 
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (
     <div className="flex flex-row items-center gap-2 border-b px-4 py-1">
       <Label className="hidden md:block">{t("contacts")}</Label>
-      {session.user?.profile == "contact" ? (
-        <></>
+      {session.user?.profile != "staff" ? (
+        <ContactSelector
+          className="w-full lg:w-1/3"
+          onChange={(val) => {
+            if (val) router.push(routes.contacts.details(val));
+          }}
+        />
       ) : (
         <SearchCombobox
           className="w-full lg:w-1/3"

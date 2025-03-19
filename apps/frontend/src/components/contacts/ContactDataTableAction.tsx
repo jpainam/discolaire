@@ -8,7 +8,9 @@ import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { RiDeleteBinLine } from "@remixicon/react";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
 
 type Contact = RouterOutputs["contact"]["all"][number];
@@ -18,11 +20,15 @@ export function ContactDataTableAction({ table }: { table: Table<Contact> }) {
   const utils = api.useUtils();
   const { t } = useLocale();
   const router = useRouter();
-  const deleteUsersMutation = api.contact.delete.useMutation({
+  const canDeleteContact = useCheckPermission(
+    "contact",
+    PermissionAction.DELETE
+  );
+  const deleteContactMutation = api.contact.delete.useMutation({
     onSettled: () => utils.contact.invalidate(),
     onSuccess: () => {
       table.toggleAllRowsSelected(false);
-      toast.success("deleted_successfully", { id: 0 });
+      toast.success(t("deleted_successfully"), { id: 0 });
       router.refresh();
     },
     onError: (error) => {
@@ -46,7 +52,7 @@ export function ContactDataTableAction({ table }: { table: Table<Contact> }) {
 
   return (
     <>
-      {table.getSelectedRowModel().rows.length > 0 && (
+      {table.getSelectedRowModel().rows.length > 0 && canDeleteContact && (
         <Button
           size={"sm"}
           onClick={async () => {
@@ -61,7 +67,7 @@ export function ContactDataTableAction({ table }: { table: Table<Contact> }) {
             if (isConfirmed) {
               toast.loading(t("deleting"), { id: 0 });
               const selectedIds = rows.map((row) => row.original.id);
-              deleteUsersMutation.mutate(selectedIds);
+              deleteContactMutation.mutate(selectedIds);
             }
           }}
           variant="destructive"
