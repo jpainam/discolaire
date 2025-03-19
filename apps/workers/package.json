@@ -9,10 +9,10 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "start:worker": "dotenv -e ../../.env -- node -r @swc-node/register src/index.ts",
-    "start:dashboard": "dotenv -e ../../.env -- node -r @swc-node/register src/server.ts",
+    "build": "tsup",
+    "start:worker": "node dist/index.js",
+    "start:dashboard": "node dist/server.js",
     "start": "concurrently \"pnpm start:worker\" \"pnpm start:dashboard\"",
-    "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "dev": "tsc",
     "format": "prettier --check . --ignore-path ../../.gitignore",
@@ -44,10 +44,12 @@
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@swc-node/register": "^1.10.10",
+    "@swc/core": "^1.11.11",
     "@types/qrcode": "^1.5.5",
     "concurrently": "^8.0.0",
     "eslint": "catalog:",
     "prettier": "catalog:",
+    "tsup": "^8.4.0",
     "typescript": "catalog:"
   },
   "engines": {
