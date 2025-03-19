@@ -9,8 +9,8 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "start:worker": "dotenv -e ../../.env -- ts-node src/index.ts",
-    "start:dashboard": "dotenv -e ../../.env -- ts-node src/server.ts",
+    "start:worker": "dotenv -e ../../.env -- node -r @swc-node/register src/index.ts",
+    "start:dashboard": "dotenv -e ../../.env -- node -r @swc-node/register src/server.ts",
     "start": "concurrently \"pnpm start:worker\" \"pnpm start:dashboard\"",
     "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
@@ -43,11 +43,14 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@swc-node/register": "^1.10.10",
     "@types/qrcode": "^1.5.5",
     "concurrently": "^8.0.0",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "ts-node": "^10.0.0",
     "typescript": "catalog:"
+  },
+  "engines": {
+    "node": ">=22.11.0"
   }
 }
