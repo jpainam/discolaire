@@ -1,5 +1,6 @@
 "use client";
 
+import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   Form,
@@ -14,7 +15,9 @@ import { Input } from "@repo/ui/components/input";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useModal } from "~/hooks/use-modal";
+import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
+import { api } from "~/trpc/react";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -22,29 +25,65 @@ const formSchema = z.object({
   dosage: z.string().min(1),
 });
 export function CreateEditDrug({
-  name,
-  description,
-  dosage,
   studentId,
+  drug,
 }: {
-  name?: string;
-  description?: string;
-  dosage?: string;
+  drug?: RouterOutputs["health"]["drugs"][number];
   studentId: string;
 }) {
   const form = useForm({
     schema: formSchema,
     defaultValues: {
-      name: "",
-      description: "",
-      dosage: "",
+      name: drug?.name ?? "",
+      description: drug?.description ?? "",
+      dosage: drug?.dosage ?? "",
     },
   });
   const { closeModal } = useModal();
+  const router = useRouter();
+  const utils = api.useUtils();
+  const createDrug = api.health.createDrug.useMutation({
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+    onSuccess: () => {
+      toast.success(t("created_successfully"), { id: 0 });
+      closeModal();
+      router.refresh();
+    },
+    onSettled: () => {
+      void utils.health.invalidate();
+    },
+  });
+  const updateDrug = api.health.updateDrug.useMutation({
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+    onSuccess: () => {
+      toast.success(t("updated_successfully"), { id: 0 });
+      closeModal();
+      router.refresh();
+    },
+    onSettled: () => {
+      void utils.health.invalidate();
+    },
+  });
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
-    console.log(studentId, name, description, dosage);
-    toast.warning("Not implemented");
+    if (drug) {
+      toast.loading(t("updating"), { id: 0 });
+      void updateDrug.mutate({
+        name: data.name,
+        dosage: data.dosage,
+        description: data.description,
+        id: drug.id,
+      });
+    } else {
+      toast.loading(t("creating"), { id: 0 });
+      void createDrug.mutate({
+        studentId: studentId,
+        ...data,
+      });
+    }
   };
   const { t } = useLocale();
 
@@ -101,7 +140,12 @@ export function CreateEditDrug({
             >
               {t("cancel")}
             </Button>
-            <Button type="submit">{t("submit")}</Button>
+            <Button
+              isLoading={createDrug.isPending || updateDrug.isPending}
+              type="submit"
+            >
+              {t("submit")}
+            </Button>
           </div>
         </div>
       </form>
