@@ -85,7 +85,7 @@ export const WelcomeEmail = ({
               className="block h-[20px]"
             />
 
-            <Section className="mt-[32px] mb-[32px] text-center">
+            <Section className="mb-[32px] mt-[32px] text-center">
               <Button
                 style={{
                   ...button,

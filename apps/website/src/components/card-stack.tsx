@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -34,8 +33,10 @@ export const CardStack = ({
 }) => {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const CARD_OFFSET = isDesktop ? 10 : 5;
+
   const SCALE_FACTOR = scaleFactor ?? 0.06;
-  const [cards, setCards] = useState<Card[]>([items.at(0)!]);
+  // @ts-expect-error TODO: Fix this
+  const [cards, setCards] = useState<Card[]>([items.at(0)]);
 
   useEffect(() => {
     startFlipping();
@@ -45,11 +46,11 @@ export const CardStack = ({
   }, [items]);
 
   const startFlipping = () => {
-    // eslint-disable-next-line react-compiler/react-compiler
     interval = setInterval(() => {
       setCards((prevCards: Card[]) => {
         const newArray = [...prevCards]; // create a copy of the array
-        newArray.unshift(newArray.pop()!); // move the last element to the front
+        // @ts-expect-error TODO: Fix this
+        newArray.unshift(newArray.pop()); // move the last element to the front
         return newArray;
       });
     }, 5000);

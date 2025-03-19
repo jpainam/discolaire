@@ -76,7 +76,7 @@ export const InviteEmail = ({
               ) {t("invite.link1")} <strong>{school.name}</strong>{" "}
               {t("invite.link2")} <strong>Discolaire</strong>.
             </Text>
-            <Section className="mt-[32px] mb-[42px] text-center">
+            <Section className="mb-[42px] mt-[32px] text-center">
               <Button
                 style={{
                   ...button,
@@ -91,7 +91,7 @@ export const InviteEmail = ({
               </Button>
             </Section>
 
-            <Text className="text-[14px] leading-[24px] break-all text-[#707070]">
+            <Text className="break-all text-[14px] leading-[24px] text-[#707070]">
               {t("invite.link3")}:{" "}
               <Link href={inviteLink} className="text-[#707070] underline">
                 {inviteLink}

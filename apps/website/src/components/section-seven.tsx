@@ -20,7 +20,7 @@ export function SectionSeven() {
   ];
   return (
     <div className="flex flex-col items-center justify-center">
-      <p className="text-xs text-neutral-600 dark:text-neutral-200 sm:text-base">
+      <p className="text-xs text-neutral-600 sm:text-base dark:text-neutral-200">
         Le chemin vers la réussite commence ici
       </p>
       <TypewriterEffectSmooth words={words} />
