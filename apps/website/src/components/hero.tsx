@@ -27,7 +27,7 @@ export function Hero() {
             <Link href="/signup">
               <Button variant={"default"}>Nous contacter</Button>
             </Link>
-            <a href="https://app.midday.ai">
+            <a href="https://demo.discolaire.com">
               <Button className="h-10" variant={"secondary"}>
                 Plateforme démo
               </Button>
