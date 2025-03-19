@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { GeistMono } from "geist/font/mono";
-import { GeistSans } from "geist/font/sans";
+
+import { cn } from "@repo/ui/lib/utils";
 
 import { Header } from "~/components/header";
+import { fontVariables } from "~/lib/fonts";
 
 import "~/styles/globals.css";
 
@@ -23,7 +24,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${GeistSans.variable} ${GeistMono.variable} dark overflow-x-hidden font-sans antialiased`}
+        className={cn(
+          `dark overflow-x-hidden font-sans antialiased`,
+          fontVariables,
+        )}
       >
         <Header />
         <main className="container mx-auto overflow-hidden px-4 md:overflow-visible">
