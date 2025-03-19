@@ -45,11 +45,12 @@ new Worker(
       console.error(errors);
       return;
     }
-    const { message, level, userId } = result.data;
+    const { message, action, level, userId } = result.data;
     await db.logActivity.create({
       data: {
         message,
         level,
+        action,
         userId,
       },
     });
