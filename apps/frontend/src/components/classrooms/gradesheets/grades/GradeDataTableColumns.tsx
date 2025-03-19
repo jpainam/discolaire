@@ -23,7 +23,9 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { Badge } from "@repo/ui/components/badge";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { getErrorMessage } from "~/lib/handle-error";
+import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
 import { getAppreciations } from "~/utils/get-appreciation";
 import { EditGradeStudent } from "./EditGradeStudent";
@@ -196,78 +198,85 @@ function ActionCells({
   const { openModal } = useModal();
 
   const markGradeAbsent = api.grade.update.useMutation();
+  const canUpdateGradesheet = useCheckPermission(
+    "gradesheet",
+    PermissionAction.UPDATE
+  );
   return (
     <div className="flex justify-end">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            aria-label="Open menu"
-            variant="ghost"
-            className="flex size-8 p-0 data-[state=open]:bg-muted"
-          >
-            <DotsHorizontalIcon className="size-4" aria-hidden="true" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            onSelect={() => {
-              const st = grade.student;
-              if (!st.id) {
-                return;
-              }
-              openModal({
-                title: t("edit"),
-                description: t("edit_grade_description", {
-                  name: `${st.lastName} ${st.firstName}`,
-                }),
-
-                view: (
-                  <EditGradeStudent
-                    gradeId={grade.id}
-                    grade={grade.grade}
-                    studentId={st.id}
-                  />
-                ),
-              });
-            }}
-          >
-            <Pencil />
-            {t("edit")}
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            variant="destructive"
-            className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-            onSelect={async () => {
-              const isConfirmed = await confirm({
-                title: t("delete"),
-                description: t("delete_confirmation"),
-              });
-              if (isConfirmed) {
-                toast.promise(
-                  markGradeAbsent.mutateAsync({
-                    id: grade.id,
-                    grade: 0,
-                    isAbsent: true,
+      {canUpdateGradesheet && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              aria-label="Open menu"
+              variant="ghost"
+              className="flex size-8 p-0 data-[state=open]:bg-muted"
+            >
+              <DotsHorizontalIcon className="size-4" aria-hidden="true" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onSelect={() => {
+                const st = grade.student;
+                if (!st.id) {
+                  return;
+                }
+                openModal({
+                  title: t("edit"),
+                  description: t("edit_grade_description", {
+                    name: `${st.lastName} ${st.firstName}`,
                   }),
-                  {
-                    loading: t("mark_absent") + "...",
-                    success: () => {
-                      return t("marked_absent_successfully");
-                    },
-                    error: (error) => {
-                      return getErrorMessage(error);
-                    },
-                  },
-                );
-              }
-            }}
-          >
-            <FlagOff className="mr-2 size-4" />
-            {t("mark_absent")}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+
+                  view: (
+                    <EditGradeStudent
+                      gradeId={grade.id}
+                      grade={grade.grade}
+                      studentId={st.id}
+                    />
+                  ),
+                });
+              }}
+            >
+              <Pencil />
+              {t("edit")}
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+
+            <DropdownMenuItem
+              variant="destructive"
+              className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+              onSelect={async () => {
+                const isConfirmed = await confirm({
+                  title: t("delete"),
+                  description: t("delete_confirmation"),
+                });
+                if (isConfirmed) {
+                  toast.promise(
+                    markGradeAbsent.mutateAsync({
+                      id: grade.id,
+                      grade: 0,
+                      isAbsent: true,
+                    }),
+                    {
+                      loading: t("mark_absent") + "...",
+                      success: () => {
+                        return t("marked_absent_successfully");
+                      },
+                      error: (error) => {
+                        return getErrorMessage(error);
+                      },
+                    }
+                  );
+                }
+              }}
+            >
+              <FlagOff className="mr-2 size-4" />
+              {t("mark_absent")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
     </div>
   );
 }

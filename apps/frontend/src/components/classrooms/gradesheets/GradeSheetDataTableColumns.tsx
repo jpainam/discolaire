@@ -22,8 +22,10 @@ import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { routes } from "~/configs/routes";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
+import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
 
 type ClassroomGradeSheetProcedureOutput = NonNullable<
@@ -266,20 +268,30 @@ function ActionCells({
   const confirm = useConfirm();
   const { t } = useLocale();
   const utils = api.useUtils();
+  const router = useRouter();
   const deleteGradeSheetMutation = api.gradeSheet.delete.useMutation({
     onSettled: async () => {
       await utils.gradeSheet.invalidate();
       await utils.grade.invalidate();
     },
     onSuccess: () => {
-      toast.success("deleted_successfully", { id: 0 });
+      toast.success(t("deleted_successfully"), { id: 0 });
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
     },
   });
 
-  const router = useRouter();
+  const canDeleteGradesheet = useCheckPermission(
+    "gradesheet",
+    PermissionAction.DELETE
+  );
+  const canUpdateGradesheet = useCheckPermission(
+    "gradesheet",
+    PermissionAction.UPDATE
+  );
+
   return (
     <div className="flex justify-end">
       <DropdownMenu>
@@ -294,47 +306,53 @@ function ActionCells({
               router.push(
                 routes.classrooms.gradesheets.details(
                   classroomId,
-                  gradesheet.id,
-                ),
+                  gradesheet.id
+                )
               );
             }}
           >
             <Eye />
             {t("details")}
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onSelect={() => {
-              router.push(
-                routes.classrooms.gradesheets.edit(classroomId, gradesheet.id),
-              );
-            }}
-          >
-            <Pencil />
-            {t("edit")}
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            disabled={deleteGradeSheetMutation.isPending}
-            variant="destructive"
-            className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-            onSelect={async () => {
-              const isConfirmed = await confirm({
-                title: t("delete"),
-                description: t("delete_confirmation"),
-                //icon: <Trash2 className="text-destructive" />,
-                // alertDialogTitle: {
-                //   className: "flex items-center gap-2",
-                // },
-              });
-              if (isConfirmed) {
-                toast.loading("deleting", { id: 0 });
-                deleteGradeSheetMutation.mutate(gradesheet.id);
-              }
-            }}
-          >
-            <Trash2 />
-            {t("delete")}
-          </DropdownMenuItem>
+          {canUpdateGradesheet && (
+            <DropdownMenuItem
+              onSelect={() => {
+                router.push(
+                  routes.classrooms.gradesheets.edit(classroomId, gradesheet.id)
+                );
+              }}
+            >
+              <Pencil />
+              {t("edit")}
+            </DropdownMenuItem>
+          )}
+          {canDeleteGradesheet && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                disabled={deleteGradeSheetMutation.isPending}
+                variant="destructive"
+                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+                onSelect={async () => {
+                  const isConfirmed = await confirm({
+                    title: t("delete"),
+                    description: t("delete_confirmation"),
+                    //icon: <Trash2 className="text-destructive" />,
+                    // alertDialogTitle: {
+                    //   className: "flex items-center gap-2",
+                    // },
+                  });
+                  if (isConfirmed) {
+                    toast.loading(t("deleting"), { id: 0 });
+                    deleteGradeSheetMutation.mutate(gradesheet.id);
+                  }
+                }}
+              >
+                <Trash2 />
+                {t("delete")}
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

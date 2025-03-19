@@ -12,4 +12,5 @@ export default defineConfig({
   sourcemap: true,
   dts: false, // no type defs needed for a worker
   noExternal: ["@repo/db", "@repo/transactional", "@repo/api"],
+  external: ["fs", "path", "os", "prisma", "@prisma/client", "nodemailer"],
 });
