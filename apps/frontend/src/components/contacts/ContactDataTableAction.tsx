@@ -22,7 +22,7 @@ export function ContactDataTableAction({ table }: { table: Table<Contact> }) {
   const router = useRouter();
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const deleteContactMutation = api.contact.delete.useMutation({
     onSettled: () => utils.contact.invalidate(),

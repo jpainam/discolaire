@@ -56,7 +56,7 @@ export function ContactHeader() {
 
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
 
   return (
