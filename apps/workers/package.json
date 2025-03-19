@@ -1,0 +1,53 @@
+{
+  "prettier": "@repo/prettier-config",
+  "name": "@repo/workers",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "start:worker": "ts-node src/index.ts",
+    "start:dashboard": "ts-node src/server.ts",
+    "start": "concurrently \"pnpm with-env start:worker\" \"pnpm with-env start:dashboard\"",
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "with-env": "dotenv -e ../../.env --"
+  },
+  "dependencies": {
+    "@bull-board/express": "^6.7.10",
+    "@repo/api": "workspace:*",
+    "@repo/db": "workspace:*",
+    "@repo/transactional": "workspace:*",
+    "bullmq": "^5.43.1",
+    "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
+    "dotenv": "^16.4.7",
+    "entities": "^6.0.0",
+    "express": "^4.21.2",
+    "ioredis": "^5.6.0",
+    "jose": "^6.0.10",
+    "preact": "^10.26.4",
+    "qrcode": "^1.5.4",
+    "rehype-parse": "^9.0.1",
+    "unified": "^11.0.5",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/prettier-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/qrcode": "^1.5.5",
+    "concurrently": "^8.0.0",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "ts-node": "^10.0.0",
+    "typescript": "catalog:"
+  }
+}
