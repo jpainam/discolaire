@@ -9,9 +9,9 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "start:worker": "ts-node src/index.ts",
-    "start:dashboard": "ts-node src/server.ts",
-    "start": "concurrently \"pnpm with-env start:worker\" \"pnpm with-env start:dashboard\"",
+    "start:worker": "dotenv -e ../../.env -- ts-node src/index.ts",
+    "start:dashboard": "dotenv -e ../../.env -- ts-node src/server.ts",
+    "start": "concurrently \"pnpm start:worker\" \"pnpm start:dashboard\"",
     "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "dev": "tsc",

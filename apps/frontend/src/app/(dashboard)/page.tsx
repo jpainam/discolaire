@@ -10,6 +10,10 @@ import { api } from "~/trpc/server";
 
 export default async function Page() {
   const session = await auth();
+  // logQueue.add("log", {
+  //   message: "User logged in",
+  //   userId: session?.user.id,
+  // });
   if (session?.user.profile === "student") {
     const student = await api.student.getFromUserId(session.user.id);
     return (

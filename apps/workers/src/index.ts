@@ -6,9 +6,13 @@ import * as z from "zod";
 
 import { db } from "@repo/db";
 
-const connection = new IORedis(
-  process.env.REDIS_URL ?? "redis://localhost:6379",
-);
+// const connection = new IORedis(
+//   process.env.REDIS_URL ?? "redis://localhost:6379",
+// );
+const connection = new IORedis(`${process.env.REDIS_URL}?family=0`, {
+  maxRetriesPerRequest: null,
+  enableReadyCheck: false,
+});
 
 // Define workers
 new Worker(
