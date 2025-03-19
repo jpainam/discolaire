@@ -14,7 +14,7 @@ import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
 interface TermSelectorProps {
-  onChange?: (value: string) => void;
+  onChange?: (value?: string | null) => void;
   placeholder?: string;
   className?: string;
   defaultValue?: string | null;
@@ -35,7 +35,7 @@ export function TermSelector({
     <Select
       defaultValue={defaultValue ?? undefined}
       onValueChange={(value) => {
-        onChange?.(value == "all" ? "" : value);
+        onChange?.(value == "all" ? undefined : value);
       }}
     >
       {!termsQuery.isPending ? (

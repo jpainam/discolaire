@@ -33,7 +33,7 @@ export function PeriodicAttendanceHeader() {
     <div className="flex flex-row items-center gap-4 border-y bg-muted/50 px-2 py-1">
       <Label>{t("term")}</Label>
       <TermSelector
-        className="h-8 w-[300px]"
+        className="w-[300px]"
         showAllOption={true}
         defaultValue={searchParams.get("term")}
         onChange={(val) => {

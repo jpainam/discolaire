@@ -42,7 +42,7 @@ export async function StudentLatestGrade({
             >
               <div className="flex flex-col items-start gap-0">
                 <h2 className="font-semibold ">
-                  {grade.gradeSheet.subject.course.shortName}
+                  {grade.gradeSheet.subject.course.name}
                 </h2>
                 <div className="flex items-center text-muted-foreground text-sm mt-1">
                   <Calendar className="h-3.5 w-3.5 mr-1.5" />
@@ -54,7 +54,7 @@ export async function StudentLatestGrade({
                         year: "numeric",
                         month: "short",
                         day: "numeric",
-                      },
+                      }
                     )}
                   </span>
                 </div>

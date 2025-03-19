@@ -86,7 +86,7 @@ export function AppreciationHeader() {
           router.push(
             routes.reportcards.appreciations +
               "/?" +
-              createQueryString({ classroom: val }),
+              createQueryString({ classroom: val })
           );
         }}
       />
@@ -95,7 +95,7 @@ export function AppreciationHeader() {
         className="md:w-[250px]"
         defaultValue={termId}
         onChange={(val) => {
-          void setTermId(val);
+          void setTermId(val ?? null);
         }}
       />
       {classroomId && searchParams.get("type") === "students" && (

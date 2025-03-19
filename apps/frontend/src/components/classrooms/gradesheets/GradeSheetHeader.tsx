@@ -32,7 +32,7 @@ export function GradeSheetHeader() {
   const router = useRouter();
   const canCreateGradeSheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (
@@ -42,7 +42,7 @@ export function GradeSheetHeader() {
         showAllOption={true}
         defaultValue={term ?? undefined}
         onChange={(val) => {
-          void setTerm(val);
+          void setTerm(val ?? null);
         }}
         className="w-[300px]"
       />
@@ -85,7 +85,7 @@ export function GradeSheetHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/gradesheets?termId=${term ?? 0}&subjectId=${subject ?? 0}&format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -96,7 +96,7 @@ export function GradeSheetHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/gradesheets?termId=${term ?? 0}&subjectId=${subject ?? 0}&format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
