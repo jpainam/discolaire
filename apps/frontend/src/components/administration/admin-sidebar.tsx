@@ -1,6 +1,13 @@
 "use client";
 
-import { BrickWall, Frame, ImageUp, LifeBuoy, Send } from "lucide-react";
+import {
+  BrickWall,
+  CircleArrowOutUpRight,
+  Frame,
+  ImageUp,
+  LifeBuoy,
+  Send,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -192,6 +199,11 @@ export function AdminSidebar({
       name: "photos",
       url: "/administration/photos",
       icon: ImageUp,
+    },
+    {
+      name: "subscriptions",
+      url: "/administration/subscriptions",
+      icon: CircleArrowOutUpRight,
     },
   ];
   const pathname = usePathname();
