@@ -37,7 +37,7 @@ export function SubjectJournalList({
     : 10;
   const paginate = (page: number) => {
     router.push(
-      `/classrooms/${params.id}/subject_journal/${subjectId}?${createQueryString({ pageIndex: page, pageSize })}`
+      `/classrooms/${params.id}/subject_journal/${subjectId}?${createQueryString({ pageIndex: page, pageSize })}`,
     );
   };
 
