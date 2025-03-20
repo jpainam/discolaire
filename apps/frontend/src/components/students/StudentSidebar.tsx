@@ -156,7 +156,7 @@ export function StudentSidebar({
               <SidebarMenuItem key={item.name}>
                 <SidebarMenuButton
                   asChild
-                  className="data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:hover:bg-primary/90 data-[active=true]:hover:text-primary-foreground data-[active=true]:duration-200 data-[active=true]:ease-linear"
+                  //className="data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:hover:bg-primary/90 data-[active=true]:hover:text-primary-foreground data-[active=true]:duration-200 data-[active=true]:ease-linear"
                   //disabled={true}
                   tooltip={t(item.name)}
                   isActive={pathname === item.url}

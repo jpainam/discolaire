@@ -78,7 +78,13 @@ export function NavMain({
               <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
                   <SidebarMenuButton tooltip={t(item.title)}>
-                    {item.icon && <item.icon />}
+                    {item.icon && (
+                      <item.icon
+                        className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
+                        size={22}
+                        aria-hidden="true"
+                      />
+                    )}
                     <span>{t(item.title)}</span>
                     <ChevronRightIcon className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                   </SidebarMenuButton>

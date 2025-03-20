@@ -227,7 +227,11 @@ export function AdminSidebar({
                   isActive={pathname === item.url}
                 >
                   <Link href={item.url}>
-                    <item.icon />
+                    <item.icon
+                      className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
+                      size={22}
+                      aria-hidden="true"
+                    />
                     <span>{t(item.name)}</span>
                   </Link>
                 </SidebarMenuButton>

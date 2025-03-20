@@ -143,7 +143,7 @@ export function ClassroomSidebar({
                 <SidebarMenuButton
                   asChild
                   tooltip={t(item.name)}
-                  className="data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:hover:bg-primary/90 data-[active=true]:hover:text-primary-foreground data-[active=true]:duration-200 data-[active=true]:ease-linear"
+                  //className="data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:hover:bg-primary/90 data-[active=true]:hover:text-primary-foreground data-[active=true]:duration-200 data-[active=true]:ease-linear"
                   isActive={pathname === item.url}
                 >
                   <Link href={item.url}>
@@ -159,36 +159,6 @@ export function ClassroomSidebar({
             ))}
           </SidebarMenu>
         </SidebarGroup>
-        {/* <SidebarGroup>
-        <SidebarGroupLabel>{t("academics")}</SidebarGroupLabel>
-        <SidebarMenu>
-          {data.academics.map((item) => (
-            <SidebarMenuItem key={item.name}>
-              <SidebarMenuButton asChild tooltip={t(item.name)}>
-                <Link href={item.url}>
-                  <item.icon />
-                  <span>{t(item.name)}</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarGroup>
-      <SidebarGroup>
-        <SidebarGroupLabel>{t("others")}</SidebarGroupLabel>
-        <SidebarMenu>
-          {data.finances.map((item) => (
-            <SidebarMenuItem key={item.name}>
-              <SidebarMenuButton asChild tooltip={t(item.name)}>
-                <a href={item.url}>
-                  <item.icon />
-                  <span>{t(item.name)}</span>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarGroup> */}
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
