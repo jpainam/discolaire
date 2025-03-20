@@ -42,11 +42,11 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
   const { fullDateFormatter } = useDateFormat();
   const canDeleteClassroomFee = useCheckPermission(
     "fee",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const canUpdateClassroomFee = useCheckPermission(
     "fee",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   const utils = api.useUtils();
 

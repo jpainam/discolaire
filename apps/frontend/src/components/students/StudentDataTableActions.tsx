@@ -30,7 +30,7 @@ export function StudentDataTableActions({
   const utils = api.useUtils();
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const deleteStudentMutation = api.student.delete.useMutation({
     onSettled: () => utils.student.invalidate(),
@@ -39,7 +39,7 @@ export function StudentDataTableActions({
     },
     onSuccess: () => {
       table.toggleAllRowsSelected(false);
-      toast.success("deleted_successfully", { id: 0 });
+      toast.success(t("deleted_successfully"), { id: 0 });
       router.refresh();
     },
   });

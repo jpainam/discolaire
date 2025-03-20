@@ -40,13 +40,13 @@ export function ClassroomDataTableAction({
   const router = useRouter();
   const canDeleteClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const classroomDeleteMutation = api.classroom.delete.useMutation({
     onSettled: () => utils.classroom.invalidate(),
     onSuccess: () => {
       table.toggleAllRowsSelected(false);
-      toast.success("deleted_successfully", { id: 0 });
+      toast.success(t("deleted_successfully"), { id: 0 });
       router.refresh();
     },
     onError: (error) => {
@@ -165,7 +165,7 @@ export function ClassroomDataTableAction({
                         }
                         const filterValues = Array.from(selectedStatuses);
                         cycleColumn?.setFilterValue(
-                          filterValues.length ? filterValues : undefined,
+                          filterValues.length ? filterValues : undefined
                         );
                         //handleStatusChange(checked, value)
                       }}

@@ -25,7 +25,7 @@ export function UserDataTableAction({ table }: { table: Table<User> }) {
     onSettled: () => utils.user.invalidate(),
     onSuccess: () => {
       table.toggleAllRowsSelected(false);
-      toast.success("deleted_successfully", { id: 0 });
+      toast.success(t("deleted_successfully"), { id: 0 });
       router.refresh();
     },
     onError: (error) => {
@@ -62,7 +62,7 @@ export function UserDataTableAction({ table }: { table: Table<User> }) {
               },
             });
             if (isConfirmed) {
-              toast.loading("deleting", { id: 0 });
+              toast.loading(t("deleting"), { id: 0 });
               const selectedIds = rows.map((row) => row.original.id);
               deleteUsersMutation.mutate(selectedIds);
             }

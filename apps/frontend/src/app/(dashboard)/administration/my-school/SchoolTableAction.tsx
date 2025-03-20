@@ -62,7 +62,7 @@ export function SchoolTableAction({ schoolId }: { schoolId: string }) {
               },
             });
             if (isConfirmed) {
-              toast.loading("deleting", { id: 0 });
+              toast.loading(t("deleting"), { id: 0 });
               deleteSchoolMutation.mutate(schoolId);
             }
           }}

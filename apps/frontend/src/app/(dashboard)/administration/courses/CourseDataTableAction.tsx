@@ -29,13 +29,13 @@ export function CourseDataTableActions({
   const router = useRouter();
   const canDeleteCourse = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const courseDeleteMutation = api.course.deleteMany.useMutation({
     onSettled: () => utils.course.invalidate(),
     onSuccess: () => {
       table.toggleAllRowsSelected(false);
-      toast.success("deleted_successfully", { id: 0 });
+      toast.success(t("deleted_successfully"), { id: 0 });
       router.refresh();
     },
     onError: (error) => {
