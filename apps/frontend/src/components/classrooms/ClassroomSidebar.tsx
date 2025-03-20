@@ -143,6 +143,7 @@ export function ClassroomSidebar({
                 <SidebarMenuButton
                   asChild
                   tooltip={t(item.name)}
+                  className="data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:hover:bg-primary/90 data-[active=true]:hover:text-primary-foreground data-[active=true]:duration-200 data-[active=true]:ease-linear"
                   isActive={pathname === item.url}
                 >
                   <Link href={item.url}>

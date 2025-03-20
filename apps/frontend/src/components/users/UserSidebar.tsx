@@ -39,6 +39,11 @@ export function UserSidebar({
         url: `/users/${params.id}`,
       },
       {
+        name: "mail",
+        icon: User,
+        url: `/users/${params.id}/mails`,
+      },
+      {
         name: "subscriptions",
         icon: CircleDollarSign,
         url: `/users/${params.id}/subscriptions`,

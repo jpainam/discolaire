@@ -26,7 +26,7 @@ export default async function Layout(props: {
     notFound();
   }
   return (
-    <div>
+    <div className="">
       <div className="flex flex-row items-center gap-2 px-4 py-2">
         <AvatarState
           pos={1}

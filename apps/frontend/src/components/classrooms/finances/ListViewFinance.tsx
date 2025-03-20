@@ -18,6 +18,7 @@ import {
 import { useLocale } from "~/i18n";
 
 import { Badge } from "@repo/ui/components/badge";
+import { cn } from "@repo/ui/lib/utils";
 import i18next from "i18next";
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import { AvatarState } from "~/components/AvatarState";
@@ -38,14 +39,14 @@ export function ListViewFinance({
 }) {
   const { t, i18n } = useLocale();
   const [selectedStudents, setSelectedStudents] = useAtom(
-    selectedStudentIdsAtom,
+    selectedStudentIdsAtom
   );
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
 
   const total = students.reduce(
     (acc, stud) => acc + (stud.balance - amountDue),
-    0,
+    0
   );
   return (
     <div className="px-4">
@@ -57,17 +58,18 @@ export function ListViewFinance({
                 <Checkbox
                   onCheckedChange={(checked) => {
                     setSelectedStudents((_stds) =>
-                      checked ? students.map((stud) => stud.student.id) : [],
+                      checked ? students.map((stud) => stud.student.id) : []
                     );
                   }}
                 />
               </TableHead>
               <TableHead className="w-[50px]"></TableHead>
-              <TableHead className="w-[96px]">
+              <TableHead className="w-[100px]">
                 {t("registrationNumber")}
               </TableHead>
               <TableHead>{t("fullName")}</TableHead>
               <TableHead>{t("balance")}</TableHead>
+              <TableHead></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -87,7 +89,7 @@ export function ListViewFinance({
                         setSelectedStudents((students) =>
                           checked
                             ? [...students, stud.student.id]
-                            : students.filter((id) => id !== stud.student.id),
+                            : students.filter((id) => id !== stud.student.id)
                         );
                       }}
                       checked={selectedStudents.includes(stud.student.id)}
@@ -102,7 +104,7 @@ export function ListViewFinance({
                   <TableCell className="text-muted-foreground">
                     {stud.student.registrationNumber}
                   </TableCell>
-                  <TableCell className="py-0">
+                  <TableCell>
                     <Link
                       className="hover:text-blue-600 hover:underline"
                       href={routes.students.details(stud.student.id)}
@@ -122,6 +124,16 @@ export function ListViewFinance({
                       })}{" "}
                       {CURRENCY}
                     </Badge>
+                  </TableCell>
+                  <TableCell className="w-32">
+                    <div
+                      className={cn(
+                        "w-fit px-2 text-center text-primary-foreground rounded-sm",
+                        remaining < 0 ? "bg-red-500" : "bg-green-500"
+                      )}
+                    >
+                      {remaining < 0 ? "#D#" : "#C#"}
+                    </div>
                   </TableCell>
                 </TableRow>
               );

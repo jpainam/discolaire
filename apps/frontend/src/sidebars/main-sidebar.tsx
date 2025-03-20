@@ -68,7 +68,7 @@ export function MainSidebar({
           url: `/timetables`,
           icon: CalendarDays,
         },
-      ],
+      ]
     );
   }
   data.push({
@@ -78,7 +78,7 @@ export function MainSidebar({
   });
   const canReadLibrary = useCheckPermission(
     "menu:library",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
   if (canReadLibrary) {
     data.push({
@@ -89,7 +89,7 @@ export function MainSidebar({
   }
   const canReadAdministration = useCheckPermission(
     "menu:administration",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
   if (canReadAdministration) {
     data.push({
@@ -127,6 +127,7 @@ export function MainSidebar({
               {data.map((item) => (
                 <SidebarMenuItem key={item.name}>
                   <SidebarMenuButton
+                    className="data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:hover:bg-primary/90 data-[active=true]:hover:text-primary-foreground data-[active=true]:duration-200 data-[active=true]:ease-linear"
                     //className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
                     asChild
                     tooltip={t(item.name)}

@@ -7,16 +7,23 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { SimpleTooltip } from "~/components/simple-tooltip";
+import { useRouter } from "~/hooks/use-router";
+import { useSession } from "~/providers/AuthProvider";
 import { FeedBackDialog } from "./FeedbackDialog";
 
 export function TopRightButtons() {
   const { openModal } = useModal();
   //const isActive = false;
+  const session = useSession();
+  const router = useRouter();
   const { t } = useLocale("description");
   return (
     <>
       <SimpleTooltip content="Dialoguer">
         <Button
+          onClick={() => {
+            router.push(`/users/${session.user?.id}/mails`);
+          }}
           className="size-8"
           size={"icon"}
           aria-label="Message"
