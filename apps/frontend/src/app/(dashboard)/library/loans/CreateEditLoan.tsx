@@ -11,6 +11,7 @@ import {
   FormMessage,
   useForm,
 } from "@repo/ui/components/form";
+import { SheetFooter } from "@repo/ui/components/sheet";
 import { addDays } from "date-fns";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -84,8 +85,11 @@ export function CreateEditLoan({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 gap-6">
+      <form
+        className="flex flex-col flex-1 overflow-hidden"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        <div className="grid overflow-y-auto flex-1 auto-rows-min gap-6 px-4">
           <FormField
             control={form.control}
             name="bookId"
@@ -167,26 +171,26 @@ export function CreateEditLoan({
               </FormItem>
             )}
           />
-          <div className="ml-auto flex flex-row items-center gap-2">
-            <Button
-              isLoading={createMutation.isPending || updateMutation.isPending}
-              size={"sm"}
-              type="submit"
-            >
-              {t("submit")}
-            </Button>
-            <Button
-              variant={"outline"}
-              size={"sm"}
-              type="button"
-              onClick={() => {
-                closeModal();
-              }}
-            >
-              {t("close")}
-            </Button>
-          </div>
         </div>
+        <SheetFooter>
+          <Button
+            isLoading={createMutation.isPending || updateMutation.isPending}
+            size={"sm"}
+            type="submit"
+          >
+            {t("submit")}
+          </Button>
+          <Button
+            variant={"outline"}
+            size={"sm"}
+            type="button"
+            onClick={() => {
+              closeModal();
+            }}
+          >
+            {t("close")}
+          </Button>
+        </SheetFooter>
       </form>
     </Form>
   );

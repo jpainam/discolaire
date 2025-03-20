@@ -178,7 +178,7 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
                 <FormControl>
                   <Textarea
                     placeholder={t("observation")}
-                    // className="resize-none"
+                    className="resize-none"
                     {...field}
                   />
                 </FormControl>
@@ -188,28 +188,25 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
         </div>
 
         <SheetFooter>
-          <div className="flex flex-row gap-2 justify-end">
-            <Button
-              disabled={
-                createContactMutation.isPending ||
-                updateContactMutation.isPending
-              }
-              type="submit"
-              size={"sm"}
-              variant={"default"}
-            >
-              {createContactMutation.isPending ||
-                (updateContactMutation.isPending && (
-                  <Loader className="h-4 w-4 animate-spin" />
-                ))}
-              {contact ? t("edit") : t("submit")}
+          <Button
+            disabled={
+              createContactMutation.isPending || updateContactMutation.isPending
+            }
+            type="submit"
+            size={"sm"}
+            variant={"default"}
+          >
+            {createContactMutation.isPending ||
+              (updateContactMutation.isPending && (
+                <Loader className="h-4 w-4 animate-spin" />
+              ))}
+            {contact ? t("edit") : t("submit")}
+          </Button>
+          <SheetClose asChild>
+            <Button variant="outline" size={"sm"}>
+              {t("cancel")}
             </Button>
-            <SheetClose asChild>
-              <Button variant="outline" size={"sm"}>
-                {t("cancel")}
-              </Button>
-            </SheetClose>
-          </div>
+          </SheetClose>
         </SheetFooter>
       </form>
     </Form>

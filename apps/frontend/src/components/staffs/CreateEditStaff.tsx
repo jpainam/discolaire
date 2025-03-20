@@ -191,7 +191,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col flex-1 overflow-hidden"
       >
-        <div className="grid overflow-y-auto flex-1 auto-rows-min gap-2 px-4">
+        <div className="grid overflow-y-auto flex-1 auto-rows-min gap-6 px-4">
           <div className="grid grid-cols-[20%_80%] gap-2">
             <SelectField label={t("civility")} name="prefix" items={prefixes} />
             <InputField name="lastName" label={t("lastName")} />
@@ -209,7 +209,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
             control={form.control}
             name="countryId"
             render={({ field }) => (
-              <FormItem className="space-y-0">
+              <FormItem>
                 <FormLabel htmlFor="countryId">{t("citizenship")}</FormLabel>
                 <FormControl>
                   <CountryPicker
@@ -242,7 +242,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
             control={form.control}
             name={"degreeId"}
             render={({ field }) => (
-              <FormItem className="space-y-0">
+              <FormItem>
                 <FormLabel>{t("degree")}</FormLabel>
                 <FormControl>
                   <StaffLevelSelector
@@ -257,83 +257,82 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
               </FormItem>
             )}
           />
-          <div className="grid grid-cols-2 gap-2">
-            <FormField
-              control={form.control}
-              name="dateOfBirth"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("dateOfBirth")}</FormLabel>
-                  <FormControl>
-                    <DatePicker {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="dateOfHire"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("dateOfHire")}</FormLabel>
-                  <FormControl>
-                    <DatePicker {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="dateOfLastAdvancement"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("dateOfLastAdvancement")}</FormLabel>
-                  <FormControl>
-                    <DatePicker {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="dateOfCriminalRecordCheck"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("lastCriminalRecordCheck")}</FormLabel>
-                  <FormControl>
-                    <DatePicker {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <SelectField
-              label={t("sendAgenda")}
-              items={sendAgendaFrequency}
-              name="sendAgendaFrequency"
-            />
-            <SelectField
-              label={t("isTeacher")}
-              items={isTeacherItems}
-              name="isTeacher"
-            />
-          </div>
+
+          <FormField
+            control={form.control}
+            name="dateOfBirth"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("dateOfBirth")}</FormLabel>
+                <FormControl>
+                  <DatePicker {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="dateOfHire"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("dateOfHire")}</FormLabel>
+                <FormControl>
+                  <DatePicker {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="dateOfLastAdvancement"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("dateOfLastAdvancement")}</FormLabel>
+                <FormControl>
+                  <DatePicker {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="dateOfCriminalRecordCheck"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("lastCriminalRecordCheck")}</FormLabel>
+                <FormControl>
+                  <DatePicker {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <SelectField
+            label={t("sendAgenda")}
+            items={sendAgendaFrequency}
+            name="sendAgendaFrequency"
+          />
+          <SelectField
+            label={t("isTeacher")}
+            items={isTeacherItems}
+            name="isTeacher"
+          />
 
           <FormField
             control={form.control}
             name={"observation"}
             render={({ field }) => (
-              <FormItem className="space-y-0">
+              <FormItem>
                 <FormLabel>{t("observations")}</FormLabel>
                 <FormControl>
                   <Textarea
                     onChange={(event) => {
                       field.onChange(event.target.value);
                     }}
-                    className="h-24 rounded-md border p-2"
+                    className="resize-none"
                   />
                 </FormControl>
 
@@ -344,22 +343,20 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
         </div>
 
         <SheetFooter>
-          <div className="flex flex-row gap-2 justify-end">
-            <Button
-              isLoading={
-                updateStaffMutation.isPending || createStaffMutation.isPending
-              }
-              size={"sm"}
-              type="submit"
-            >
-              {t("submit")}
+          <Button
+            isLoading={
+              updateStaffMutation.isPending || createStaffMutation.isPending
+            }
+            size={"sm"}
+            type="submit"
+          >
+            {t("submit")}
+          </Button>
+          <SheetClose asChild>
+            <Button type="button" variant="outline" size={"sm"}>
+              {t("cancel")}
             </Button>
-            <SheetClose asChild>
-              <Button type="button" variant="outline" size={"sm"}>
-                {t("cancel")}
-              </Button>
-            </SheetClose>
-          </div>
+          </SheetClose>
         </SheetFooter>
       </form>
     </Form>

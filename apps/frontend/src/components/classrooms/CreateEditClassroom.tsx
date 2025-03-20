@@ -190,22 +190,20 @@ export function CreateEditClassroom({
         </div>
 
         <SheetFooter>
-          <div className="flex flex-row gap-2 justify-end">
-            <Button
-              size={"sm"}
-              variant={"default"}
-              isLoading={form.formState.isSubmitting}
-              disabled={form.formState.isSubmitting}
-              type="submit"
-            >
-              {classroom ? t("edit") : t("submit")}
+          <Button
+            size={"sm"}
+            variant={"default"}
+            isLoading={form.formState.isSubmitting}
+            disabled={form.formState.isSubmitting}
+            type="submit"
+          >
+            {classroom ? t("edit") : t("submit")}
+          </Button>
+          <SheetClose asChild>
+            <Button variant="outline" size={"sm"}>
+              {t("cancel")}
             </Button>
-            <SheetClose asChild>
-              <Button variant="outline" size={"sm"}>
-                {t("cancel")}
-              </Button>
-            </SheetClose>
-          </div>
+          </SheetClose>
         </SheetFooter>
       </form>
     </Form>

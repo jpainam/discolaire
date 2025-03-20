@@ -108,7 +108,7 @@ export function CreateEditHealthVisit({
         error: (err) => {
           return getErrorMessage(err);
         },
-      },
+      }
     );
   };
 
@@ -202,6 +202,7 @@ export function CreateEditHealthVisit({
                       id="chief-complaint"
                       placeholder={t("chief_complaint_placeholder")}
                       {...field}
+                      className="resize-none"
                     />
                   </FormControl>
 
@@ -242,6 +243,7 @@ export function CreateEditHealthVisit({
                     <FormItem>
                       <Textarea
                         {...field}
+                        className="resize-none"
                         id="signs"
                         placeholder={t("vital_signs_placeholder")}
                       />
@@ -262,6 +264,7 @@ export function CreateEditHealthVisit({
                     <FormItem>
                       <Textarea
                         id="examination"
+                        className="resize-none"
                         {...field}
                         placeholder={t("examination_findings_placeholder")}
                       />
@@ -281,6 +284,7 @@ export function CreateEditHealthVisit({
                     <FormItem>
                       <Textarea
                         id="assessment"
+                        className="resize-none"
                         {...field}
                         placeholder={t("assessment_placeholder")}
                       />
@@ -301,6 +305,7 @@ export function CreateEditHealthVisit({
                     <FormItem>
                       <Textarea
                         id="plan"
+                        className="resize-none"
                         {...field}
                         placeholder={t("plan_of_care_placeholder")}
                       />
