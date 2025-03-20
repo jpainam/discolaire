@@ -9,7 +9,9 @@ import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { RiDeleteBinLine } from "@remixicon/react";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
 
 type User = RouterOutputs["user"]["all"][number];
@@ -44,10 +46,10 @@ export function UserDataTableAction({ table }: { table: Table<User> }) {
   }, [table]);
 
   const confirm = useConfirm();
-
+  const canDeleteUser = useCheckPermission("user", PermissionAction.DELETE);
   return (
     <>
-      {table.getSelectedRowModel().rows.length > 0 && (
+      {canDeleteUser && table.getSelectedRowModel().rows.length > 0 && (
         <Button
           size={"sm"}
           onClick={async () => {

@@ -1,5 +1,3 @@
-import { Separator } from "@repo/ui/components/separator";
-
 import { TriangleAlert } from "lucide-react";
 import { getServerTranslations } from "~/i18n/server";
 import { SubscriptionPlans } from "./SubscriptionPlans";
@@ -18,7 +16,7 @@ export default async function Page() {
           {t("no_subscription_plan")}
         </p>
       </div>
-      <Separator />
+
       <SubscriptionPlans />
     </div>
   );

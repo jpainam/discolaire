@@ -8,7 +8,7 @@ export default async function Page() {
   const { t } = await getServerTranslations();
   const users = await api.user.all({});
   return (
-    <div className="flex gap-2 flex-col p-4">
+    <div className="flex gap-2 px-4 flex-col">
       <Label>{t("users")}</Label>
       <UserDataTable users={users} />
     </div>

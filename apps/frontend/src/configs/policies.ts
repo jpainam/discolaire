@@ -270,6 +270,26 @@ export const policies: {
     resource: "policy",
     action: PermissionAction.Delete,
   },
+  {
+    title: "user",
+    resource: "user",
+    action: PermissionAction.Read,
+  },
+  {
+    title: "user",
+    resource: "user",
+    action: PermissionAction.Update,
+  },
+  {
+    title: "user",
+    resource: "user",
+    action: PermissionAction.Create,
+  },
+  {
+    title: "user",
+    resource: "user",
+    action: PermissionAction.Delete,
+  },
 ];
 
 export const menuPolicies: {

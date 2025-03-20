@@ -15,13 +15,17 @@ import {
   BellRing,
   CircleDollarSign,
   Computer,
+  KeySquareIcon,
   Settings,
   User,
 } from "lucide-react";
 
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
+import { useSession } from "~/providers/AuthProvider";
 import { SidebarLogo } from "../sidebar-logo";
 export function UserSidebar({
   ...props
@@ -58,6 +62,15 @@ export function UserSidebar({
     ],
   };
   const { t } = useLocale();
+  const session = useSession();
+  const canReadPermission = useCheckPermission("policy", PermissionAction.READ);
+  if (canReadPermission && session.user?.profile === "staff") {
+    data.information.push({
+      name: "permissions",
+      icon: KeySquareIcon,
+      url: `/users/${params.id}/permissions`,
+    });
+  }
   const pathname = usePathname();
   return (
     <Sidebar collapsible="icon" {...props}>

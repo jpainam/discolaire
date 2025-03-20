@@ -55,7 +55,7 @@ export function getUserColumns({ t }: { t: TFunction<string, unknown> }) {
     {
       accessorKey: "avatar",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Avatar" />
+        <DataTableColumnHeader column={column} title="" />
       ),
       cell: ({ row }) => (
         <AvatarState
@@ -70,7 +70,7 @@ export function getUserColumns({ t }: { t: TFunction<string, unknown> }) {
     {
       accessorKey: "username",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("username")} />
+        <DataTableColumnHeader column={column} title={t("user")} />
       ),
       cell: ({ row }) => {
         const user = row.original;
@@ -125,16 +125,16 @@ export function getUserColumns({ t }: { t: TFunction<string, unknown> }) {
     //   ),
     //   cell: () => <Switch checked={false} />,
     // },
-    {
-      accessorKey: "createdAt",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("createdAt")} />
-      ),
-      cell: ({ row }) => {
-        const user = row.original;
-        return <span>{user.createdAt.toLocaleDateString()} </span>;
-      },
-    },
+    // {
+    //   accessorKey: "createdAt",
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title={t("createdAt")} />
+    //   ),
+    //   cell: ({ row }) => {
+    //     const user = row.original;
+    //     return <span>{user.createdAt.toLocaleDateString()} </span>;
+    //   },
+    // },
     {
       id: "actions",
       size: 60,

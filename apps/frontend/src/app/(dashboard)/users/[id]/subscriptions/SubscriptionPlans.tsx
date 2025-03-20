@@ -74,10 +74,10 @@ export function SubscriptionPlans() {
   ];
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4">
-      <h2 className="text-xl font-bold text-center mb-8">
+    <div className="w-full max-w-5xl mx-auto p-4">
+      {/* <h2 className="text-xl font-bold text-center mb-8">
         {t("choose_your_plan")}
-      </h2>
+      </h2> */}
       <RadioGroup
         value={selectedPlan}
         onValueChange={(val) => {
@@ -99,7 +99,7 @@ export function SubscriptionPlans() {
                 "h-full transition-all duration-200",
                 selectedPlan === plan.id
                   ? "border-primary ring-2 ring-primary"
-                  : "border-border hover:border-primary/50",
+                  : "border-border hover:border-primary/50"
               )}
             >
               {selectedPlan === plan.id && (
@@ -112,8 +112,8 @@ export function SubscriptionPlans() {
               <CardHeader>
                 <CardTitle>{plan.name}</CardTitle>
                 <div className="mt-2">
-                  <span className="text-3xl font-bold">{plan.price}</span>
-                  {plan.id !== "enterprise" && (
+                  <span className="text-2xl font-bold">{plan.price}</span>
+                  {plan.id !== "full" && (
                     <span className="text-muted-foreground ml-1">
                       /{t("month")}
                     </span>
