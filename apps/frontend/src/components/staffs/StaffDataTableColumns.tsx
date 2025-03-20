@@ -121,24 +121,24 @@ export function fetchStaffColumns({
         );
       },
     },
-    {
-      id: "fullName",
-      accessorKey: "",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("fullName")} />
-      ),
-      cell: ({ row }) => {
-        const staff = row.original;
-        return (
-          <Link
-            className="hover:text-blue-600 hover:underline"
-            href={routes.staffs.details(staff.id)}
-          >
-            {getFullName(staff)}
-          </Link>
-        );
-      },
-    },
+    // {
+    //   id: "fullName",
+    //   accessorKey: "",
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title={t("fullName")} />
+    //   ),
+    //   cell: ({ row }) => {
+    //     const staff = row.original;
+    //     return (
+    //       <Link
+    //         className="hover:text-blue-600 hover:underline"
+    //         href={routes.staffs.details(staff.id)}
+    //       >
+    //         {getFullName(staff)}
+    //       </Link>
+    //     );
+    //   },
+    // },
     {
       id: "gender",
       accessorKey: "gender",

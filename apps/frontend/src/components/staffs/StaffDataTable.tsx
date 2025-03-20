@@ -25,8 +25,8 @@ export function StaffDataTable({ staffs }: { staffs: StaffProcedureOutput[] }) {
       "jobTitle",
       "phoneNumber1",
       "email",
-      "degreeId",
-      "employmentType",
+      //"degreeId",
+      //"employmentType",
       "actions",
     ];
     const { columns } = fetchStaffColumns({
