@@ -293,6 +293,9 @@ importers:
       nuqs:
         specifier: ^2.4.1
         version: 2.4.1(next@15.2.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)
+      postcss:
+        specifier: ^8.5.3
+        version: 8.5.3
       react:
         specifier: 'catalog:'
         version: 19.0.0
@@ -344,9 +347,15 @@ importers:
       tailwind-merge:
         specifier: ^3.0.2
         version: 3.0.2
+      tailwindcss:
+        specifier: ^4.0.14
+        version: 4.0.14
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@4.0.14)
+      tw-animate-css:
+        specifier: ^1.2.4
+        version: 1.2.4
       use-debounce:
         specifier: ^10.0.4
         version: 10.0.4(react@19.0.0)
@@ -381,12 +390,6 @@ importers:
       dotenv-cli:
         specifier: ^8.0.0
         version: 8.0.0
-      postcss:
-        specifier: ^8.5.3
-        version: 8.5.3
-      tailwindcss:
-        specifier: ^4.0.14
-        version: 4.0.14
       typescript:
         specifier: 'catalog:'
         version: 5.8.2
@@ -1116,6 +1119,9 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@4.0.14)
+      tw-animate-css:
+        specifier: ^1.2.4
+        version: 1.2.4
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -7680,6 +7686,9 @@ packages:
   turbo@2.4.4:
     resolution: {integrity: sha512-N9FDOVaY3yz0YCOhYIgOGYad7+m2ptvinXygw27WPLQvcZDl3+0Sa77KGVlLSiuPDChOUEnTKE9VJwLSi9BPGQ==}
     hasBin: true
+
+  tw-animate-css@1.2.4:
+    resolution: {integrity: sha512-yt+HkJB41NAvOffe4NweJU6fLqAlVx/mBX6XmHRp15kq0JxTtOKaIw8pVSWM1Z+n2nXtyi7cW6C9f0WG/F/QAQ==}
 
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
@@ -15512,6 +15521,8 @@ snapshots:
       turbo-linux-arm64: 2.4.4
       turbo-windows-64: 2.4.4
       turbo-windows-arm64: 2.4.4
+
+  tw-animate-css@1.2.4: {}
 
   type-check@0.4.0:
     dependencies:

@@ -1,6 +1,3 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-
 import { auth } from "@repo/auth";
 import { Separator } from "@repo/ui/components/separator";
 import {
@@ -8,6 +5,8 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@repo/ui/components/sidebar";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { AppSidebar } from "~/components/app-sidebar";
 import { ModeSwitcher } from "~/components/mode-switcher";
 import { UserNav } from "~/components/user-nav";

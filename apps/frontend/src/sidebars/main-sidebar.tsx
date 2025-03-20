@@ -68,7 +68,7 @@ export function MainSidebar({
           url: `/timetables`,
           icon: CalendarDays,
         },
-      ],
+      ]
     );
   }
   data.push({
@@ -78,7 +78,7 @@ export function MainSidebar({
   });
   const canReadLibrary = useCheckPermission(
     "menu:library",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
   if (canReadLibrary) {
     data.push({
@@ -89,7 +89,7 @@ export function MainSidebar({
   }
   const canReadAdministration = useCheckPermission(
     "menu:administration",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
   if (canReadAdministration) {
     data.push({
@@ -121,23 +121,19 @@ export function MainSidebar({
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>{t("information")}</SidebarGroupLabel>
-          <SidebarGroupContent>
+          {/* <SidebarGroupLabel>{t("information")}</SidebarGroupLabel> */}
+          <SidebarGroupContent className="flex flex-col gap-2">
             <SidebarMenu>
               {data.map((item) => (
                 <SidebarMenuItem key={item.name}>
                   <SidebarMenuButton
-                    //className="group/menu-button font-medium gap-2 h-9 rounded-md bg-gradient-to-r hover:bg-transparent hover:from-sidebar-accent hover:to-sidebar-accent/40 data-[active=true]:from-primary/20 data-[active=true]:to-primary/5 "
+                    //className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
                     asChild
                     tooltip={t(item.name)}
-                    isActive={pathname === item.url}
+                    isActive={pathname == item.url}
                   >
                     <Link href={item.url}>
-                      <item.icon
-                      // className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
-                      // size={22}
-                      // aria-hidden="true"
-                      />
+                      <item.icon />
                       <span>{t(item.name)}</span>
                     </Link>
                   </SidebarMenuButton>
@@ -147,32 +143,25 @@ export function MainSidebar({
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel className="uppercase text-muted-foreground/60">
-            {t("others")}
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {others.map((item) => (
-                <SidebarMenuItem key={item.name}>
-                  <SidebarMenuButton
-                    className="group/menu-button font-medium gap-3 h-9 rounded-md bg-gradient-to-r hover:bg-transparent hover:from-sidebar-accent hover:to-sidebar-accent/40 data-[active=true]:from-primary/20 data-[active=true]:to-primary/5"
-                    asChild
-                    tooltip={t(item.name)}
-                    isActive={pathname === item.url}
-                  >
-                    <Link href={item.url}>
-                      <item.icon
-                        className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
-                        size={22}
-                        aria-hidden="true"
-                      />
-                      <span>{t(item.name)}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+          <SidebarGroupLabel>{t("others")}</SidebarGroupLabel>
+          {/* <SidebarGroupContent> */}
+          <SidebarMenu>
+            {others.map((item) => (
+              <SidebarMenuItem key={item.name}>
+                <SidebarMenuButton
+                  asChild
+                  tooltip={t(item.name)}
+                  isActive={pathname === item.url}
+                >
+                  <Link href={item.url}>
+                    <item.icon />
+                    <span>{t(item.name)}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+          {/* </SidebarGroupContent> */}
         </SidebarGroup>
       </SidebarContent>
       <SidebarRail />
