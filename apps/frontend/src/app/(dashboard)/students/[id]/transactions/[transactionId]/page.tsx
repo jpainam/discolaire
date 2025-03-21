@@ -7,6 +7,7 @@ import { getServerTranslations } from "~/i18n/server";
 import { Badge } from "@repo/ui/components/badge";
 import { routes } from "~/configs/routes";
 import { CURRENCY } from "~/lib/constants";
+import { notificationQueue } from "~/lib/queue";
 import { numberToWords } from "~/lib/toword";
 import { api } from "~/trpc/server";
 import { getFullName } from "~/utils/full-name";
@@ -37,6 +38,10 @@ export default async function Page(props: {
     redirect(routes.students.transactions.index(id));
   }
 
+  void notificationQueue.add("notification", {
+    type: "transaction",
+    id: transactionId,
+  });
   const fullDateFormatter = Intl.DateTimeFormat(i18n.language, {
     year: "numeric",
     month: "short",

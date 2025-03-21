@@ -1,5 +1,4 @@
 {
-  "prettier": "@repo/prettier-config",
   "name": "@repo/workers",
   "version": "0.1.0",
   "private": true,
@@ -9,19 +8,19 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "build": "tsup",
-    "start:worker": "node dist/index.js",
-    "start:dashboard": "node dist/server.js",
-    "start": "concurrently \"pnpm start:worker\" \"pnpm start:dashboard\"",
-    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "build": "tsc",
+    "clean": "git clean -xdf .cache dist .turbo node_modules",
     "dev": "tsc",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
+    "start": "npx tsx --tsconfig ./tsconfig.json --watch src/index.ts",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "with-env": "dotenv -e ../../.env --"
   },
+  "prettier": "@repo/prettier-config",
   "dependencies": {
     "@bull-board/express": "^6.7.10",
+    "@react-email/render": "^1.0.5",
     "@repo/api": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/transactional": "workspace:*",
@@ -36,6 +35,8 @@
     "nanoid": "^5.1.4",
     "preact": "^10.26.4",
     "qrcode": "^1.5.4",
+    "react": "catalog:",
+    "react-dom": "catalog:",
     "rehype-parse": "^9.0.1",
     "resend": "^4.1.2",
     "unified": "^11.0.5",
@@ -48,6 +49,8 @@
     "@swc-node/register": "^1.10.10",
     "@swc/core": "^1.11.11",
     "@types/qrcode": "^1.5.5",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
     "concurrently": "^8.0.0",
     "eslint": "catalog:",
     "prettier": "catalog:",
