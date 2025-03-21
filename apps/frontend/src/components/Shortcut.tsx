@@ -1,5 +1,6 @@
 "use client";
 
+import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   Dialog,
@@ -9,6 +10,7 @@ import {
   DialogTitle,
 } from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
+import { Label } from "@repo/ui/components/label";
 import {
   Popover,
   PopoverContent,
@@ -16,62 +18,88 @@ import {
 } from "@repo/ui/components/popover";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Separator } from "@repo/ui/components/separator";
-import { BookmarkPlus, Edit2, Search, Trash2, X } from "lucide-react";
+import {
+  BookmarkPlus,
+  Edit2,
+  Loader2Icon,
+  Search,
+  Trash2,
+  X,
+} from "lucide-react";
+import { usePathname } from "next/navigation";
+
 import { useState } from "react";
+import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
+import { env } from "~/env";
 import { useLocale } from "~/i18n";
 import { api } from "~/trpc/react";
 import { SimpleTooltip } from "./simple-tooltip";
-import { usePathname } from "next/navigation";
 
-interface Shortcut {
-  id: string;
-  title: string;
-  url: string;
-}
+type Shortcut = RouterOutputs["shortcut"]["search"][number];
 
 export function Shortcut() {
-  const [shortcuts, setShortcuts] = useState<Shortcut[]>([
-    { id: "1", title: "Vercel Dashboard", url: "https://vercel.com/dashboard" },
-    { id: "2", title: "GitHub", url: "https://github.com" },
-    { id: "3", title: "Next.js Documentation", url: "https://nextjs.org/docs" },
-    { id: "4", title: "React Documentation", url: "https://react.dev" },
-    { id: "5", title: "Tailwind CSS", url: "https://tailwindcss.com" },
-  ]);
-  const [searchText, setSearchText] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const debounced = useDebouncedCallback((value: string) => {
-    void setSearchText(value);
+    void setSearchQuery(value);
   }, 1000);
   const pathname = usePathname();
-  const shortcutsQuery = api.shortcut.search({ query: searchText });
-  const [searchQuery, setSearchQuery] = useState("");
+
+  const shortcutsQuery = api.shortcut.search.useQuery({
+    query: searchQuery,
+  });
+
   const [isOpen, setIsOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [currentShortcut, setCurrentShortcut] = useState<Shortcut | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editUrl, setEditUrl] = useState("");
 
-  // Current page URL (in a real app, this would come from the browser)
-  const currentUrl = "https://example.com/current-page";
-  const currentTitle = "Current Page Title";
+  const utils = api.useUtils();
 
-  const filteredShortcuts = shortcuts.filter(
-    (shortcut) =>
-      shortcut.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      shortcut.url.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const addShortcut = api.shortcut.create.useMutation({
+    onSettled: async () => {
+      await utils.shortcut.invalidate();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+    onSuccess: () => {
+      toast.success(t("added_successfully"), { id: 0 });
+    },
+  });
+  const deleteShortcut = api.shortcut.delete.useMutation({
+    onSettled: async () => {
+      await utils.shortcut.invalidate();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+    onSuccess: () => {
+      toast.success(t("deleted_successfully"), { id: 0 });
+    },
+  });
+  const updateShortcut = api.shortcut.update.useMutation({
+    onSettled: async () => {
+      await utils.shortcut.invalidate();
+    },
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+    onSuccess: () => {
+      toast.success(t("updated_successfully"), { id: 0 });
+    },
+  });
 
   const addCurrentPageToShortcuts = () => {
     const newShortcut = {
-      id: Date.now().toString(),
-      title: currentTitle,
-      url: currentUrl,
+      title: document.title,
+      url:
+        pathname === "/"
+          ? env.NEXT_PUBLIC_BASE_URL
+          : env.NEXT_PUBLIC_BASE_URL + pathname,
     };
-    setShortcuts([...shortcuts, newShortcut]);
-  };
-
-  const deleteShortcut = (id: string) => {
-    setShortcuts(shortcuts.filter((shortcut) => shortcut.id !== id));
+    addShortcut.mutate(newShortcut);
   };
 
   const openEditDialog = (shortcut: Shortcut) => {
@@ -83,18 +111,19 @@ export function Shortcut() {
 
   const saveEdit = () => {
     if (!currentShortcut) return;
+    toast.loading(t("updating"), { id: 0 });
+    updateShortcut.mutate({
+      id: currentShortcut.id,
+      title: editTitle,
+      url: editUrl,
+    });
 
-    setShortcuts(
-      shortcuts.map((shortcut) =>
-        shortcut.id === currentShortcut.id
-          ? { ...shortcut, title: editTitle, url: editUrl }
-          : shortcut
-      )
-    );
     setIsEditDialogOpen(false);
   };
 
   const { t } = useLocale();
+
+  const shortcuts = shortcutsQuery.data ?? [];
   return (
     <>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -107,120 +136,133 @@ export function Shortcut() {
           </PopoverTrigger>
         </SimpleTooltip>
         <PopoverContent className="w-96 p-0" align="end">
-          <div className="flex items-center justify-between p-4">
-            <h3 className="font-medium">{t("shortcuts")}</h3>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-8 px-2 text-xs"
-              onClick={addCurrentPageToShortcuts}
-            >
-              <BookmarkPlus className="mr-1 h-3.5 w-3.5" />
-              {t("add_current_page")}
-            </Button>
-          </div>
-          <Separator />
-          <div className="p-4">
-            <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search shortcuts..."
-                className="pl-8"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              {searchQuery && (
+          {shortcutsQuery.isPending ? (
+            <div className="flex justify-center items-center w-32">
+              <Loader2Icon className="animate-spin h-8 w-8" />
+            </div>
+          ) : (
+            <>
+              <div className="flex items-center justify-between p-4">
+                <h3 className="font-medium">{t("shortcuts")}</h3>
                 <Button
                   variant="ghost"
-                  size="icon"
-                  className="absolute right-1 top-1 h-7 w-7"
-                  onClick={() => setSearchQuery("")}
+                  size="sm"
+                  className="h-8 px-2 text-xs"
+                  onClick={addCurrentPageToShortcuts}
                 >
-                  <X className="h-4 w-4" />
-                  <span className="sr-only">Clear search</span>
+                  <BookmarkPlus className="mr-1 h-3.5 w-3.5" />
+                  {t("add_current_page")}
                 </Button>
-              )}
-            </div>
-          </div>
-          <ScrollArea className="h-[300px] px-4">
-            {filteredShortcuts.length > 0 ? (
-              <ul className="space-y-2 pb-4">
-                {filteredShortcuts.map((shortcut) => (
-                  <li
-                    key={shortcut.id}
-                    className="group flex items-center justify-between rounded-md p-2 hover:bg-muted"
-                  >
-                    <a
-                      href={shortcut.url}
-                      className="flex-1 truncate text-sm"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      {shortcut.title}
-                      <span className="block text-xs text-muted-foreground truncate">
-                        {shortcut.url}
-                      </span>
-                    </a>
-                    <div className="flex opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7"
-                        onClick={() => openEditDialog(shortcut)}
-                      >
-                        <Edit2 className="h-3.5 w-3.5" />
-                        <span className="sr-only">Edit</span>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7 text-destructive"
-                        onClick={() => deleteShortcut(shortcut.id)}
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                        <span className="sr-only">Delete</span>
-                      </Button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <div className="flex h-32 items-center justify-center">
-                <p className="text-sm text-muted-foreground">
-                  {searchQuery
-                    ? t("no_shortcuts_found")
-                    : t("no_shortcuts_yet")}
-                </p>
               </div>
-            )}
-          </ScrollArea>
+              <Separator />
+              <div className="p-4">
+                <div className="relative">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder={t("search") + "..."}
+                    className="pl-8"
+                    value={searchQuery}
+                    onChange={(e) => debounced(e.target.value)}
+                  />
+                  {searchQuery && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-1 top-1 h-7 w-7"
+                      onClick={() => debounced("")}
+                    >
+                      <X className="h-4 w-4" />
+                      <span className="sr-only">Clear search</span>
+                    </Button>
+                  )}
+                </div>
+              </div>
+              <ScrollArea className="h-[300px] px-4">
+                {shortcuts.length > 0 ? (
+                  <ul className="space-y-2 pb-4">
+                    {shortcuts.map((shortcut) => (
+                      <li
+                        key={shortcut.id}
+                        className="group flex items-center justify-between rounded-md py-2 hover:bg-muted"
+                      >
+                        <a
+                          rel="noopener noreferrer"
+                          onClick={() => setIsOpen(false)}
+                          className="truncate w-72 text-sm"
+                          target="_blank"
+                          href={shortcut.url}
+                        >
+                          {shortcut.title}
+                          <span className="block truncate text-muted-foreground text-xs w-72">
+                            {shortcut.url}
+                          </span>
+                        </a>
+                        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-4 w-4"
+                            onClick={() => openEditDialog(shortcut)}
+                          >
+                            <Edit2 className="h-3 w-3" />
+                            <span className="sr-only">{t("edit")}</span>
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-4 w-4 text-destructive hover:text-destructive/90"
+                            onClick={() => {
+                              toast.loading(t("deleting"), { id: 0 });
+                              deleteShortcut.mutate(shortcut.id);
+                            }}
+                          >
+                            <Trash2 className="h-3 w-3" />
+                            <span className="sr-only">{t("delete")}</span>
+                          </Button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="flex h-32 items-center justify-center">
+                    <p className="text-sm text-muted-foreground">
+                      {searchQuery
+                        ? t("no_shortcuts_found")
+                        : t("no_shortcuts_yet")}
+                    </p>
+                  </div>
+                )}
+              </ScrollArea>
+            </>
+          )}
         </PopoverContent>
       </Popover>
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Edit Shortcut</DialogTitle>
+            <DialogTitle>{t("edit_shortcut")}</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <label htmlFor="title" className="text-sm font-medium">
-                Title
-              </label>
+              <Label htmlFor="title" className="text-sm font-medium">
+                {t("title")}
+              </Label>
               <Input
                 id="title"
                 value={editTitle}
+                required={true}
                 onChange={(e) => setEditTitle(e.target.value)}
               />
             </div>
             <div className="grid gap-2">
-              <label htmlFor="url" className="text-sm font-medium">
+              <Label htmlFor="url" className="text-sm font-medium">
                 URL
-              </label>
+              </Label>
               <Input
                 id="url"
+                required={true}
                 value={editUrl}
                 onChange={(e) => setEditUrl(e.target.value)}
               />
@@ -228,12 +270,13 @@ export function Shortcut() {
           </div>
           <DialogFooter>
             <Button
+              type="button"
               variant="outline"
               onClick={() => setIsEditDialogOpen(false)}
             >
-              Cancel
+              {t("cancel")}
             </Button>
-            <Button onClick={saveEdit}>Save changes</Button>
+            <Button onClick={saveEdit}>{t("submit")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

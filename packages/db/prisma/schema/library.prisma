@@ -45,4 +45,7 @@ model Shortcut {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     schoolId  String
+
+    @@unique([userId, url, schoolId])
+    @@index([userId, schoolId])
 }

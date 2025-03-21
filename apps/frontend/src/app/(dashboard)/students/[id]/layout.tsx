@@ -9,6 +9,34 @@ import { StudentFooter } from "~/components/students/StudentFooter";
 import { StudentHeader } from "~/components/students/StudentHeader";
 import { api } from "~/trpc/server";
 
+import type { Metadata } from "next";
+
+interface Props {
+  params: Promise<{ id: string }>;
+  //searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export async function generateMetadata(
+  { params }: Props
+  //parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { id } = await params;
+  const student = await api.student.get(id);
+
+  // optionally access and extend (rather than replace) parent metadata
+  //const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: {
+      template: `${student.lastName}-%s`,
+      default: "Student",
+    },
+    // openGraph: {
+    //   images: ["/some-specific-page-image.jpg", ...previousImages],
+    // },
+  };
+}
+
 export default async function Layout(props: {
   children: React.ReactNode;
   params: Promise<{ id: string }>;

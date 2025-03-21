@@ -11,8 +11,19 @@ export const shortcutRouter = createTRPCRouter({
       }),
     )
     .mutation(({ ctx, input }) => {
-      return ctx.db.shortcut.create({
-        data: {
+      return ctx.db.shortcut.upsert({
+        where: {
+          userId_url_schoolId: {
+            url: input.url,
+            userId: ctx.session.user.id,
+            schoolId: ctx.schoolId,
+          },
+        },
+        update: {
+          title: input.title,
+          url: input.url,
+        },
+        create: {
           title: input.title,
           url: input.url,
           userId: ctx.session.user.id,
