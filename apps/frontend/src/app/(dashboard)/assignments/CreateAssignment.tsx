@@ -9,7 +9,6 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
-import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 
 export function CreateAssignment() {
@@ -41,7 +40,7 @@ export function CreateAssignment() {
             toast.error(t("please_select_a_classroom"));
             return;
           }
-          router.push(routes.classrooms.assignments.create(classroomId));
+          router.push(`/classrooms/${classroomId}/assignments/create`);
         }}
       >
         {t("submit")}

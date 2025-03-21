@@ -73,7 +73,7 @@ export function MainSidebar({
           icon: CalendarDays,
           prefetch: false,
         },
-      ]
+      ],
     );
   }
   data.push({
@@ -84,7 +84,7 @@ export function MainSidebar({
   });
   const canReadLibrary = useCheckPermission(
     "menu:library",
-    PermissionAction.READ
+    PermissionAction.READ,
   );
   if (canReadLibrary) {
     data.push({
@@ -96,7 +96,7 @@ export function MainSidebar({
   }
   const canReadAdministration = useCheckPermission(
     "menu:administration",
-    PermissionAction.READ
+    PermissionAction.READ,
   );
   if (canReadAdministration) {
     data.push({

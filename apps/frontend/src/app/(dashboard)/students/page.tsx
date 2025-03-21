@@ -12,10 +12,10 @@ export default async function Page() {
   if (!session) {
     redirect("/auth/login");
   }
-  if (session.user.profile == "student") {
-    const student = await api.student.getFromUserId(session.user.id);
-    redirect(`/students/${student.id}`);
-  }
+  // if (session.user.profile == "student") {
+  //   const student = await api.student.getFromUserId(session.user.id);
+  //   redirect(`/students/${student.id}`);
+  // }
 
   const { t } = await getServerTranslations();
   const effectif = await api.enrollment.count({});

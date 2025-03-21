@@ -30,7 +30,7 @@ export function AssignmentDataTableActions({ table }: ToolbarActionsProps) {
 
   const canDeleteAssignment = useCheckPermission(
     "assignment",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   return (
     <>
@@ -57,7 +57,7 @@ export function AssignmentDataTableActions({ table }: ToolbarActionsProps) {
                     error: (err) => {
                       return getErrorMessage(err);
                     },
-                  }
+                  },
                 );
               }
             }}
