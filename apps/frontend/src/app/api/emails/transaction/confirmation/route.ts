@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     const student = await api.student.get(studentId);
 
     const studentContacts = await api.student.contacts(
-      transaction.account.studentId
+      transaction.account.studentId,
     );
     if (studentContacts.length === 0) {
       return new Response("Student has no contact", { status: 404 });
@@ -65,7 +65,7 @@ export async function POST(req: Request) {
           paymentRecorder: createdBy,
           title: "",
           paymentStatus: t(status),
-        })
+        }),
       );
       await api.messaging.sendEmail({
         subject: t("transaction_confirmation"),
