@@ -48,6 +48,7 @@ import { scheduleTaskRouter } from "./routers/scheduleTask";
 import { schoolRouter } from "./routers/school";
 import { schoolYearRouter } from "./routers/schoolYear";
 import { settingRouter } from "./routers/setting";
+import { shortcutRouter } from "./routers/shortcut";
 import { staffRouter } from "./routers/staff";
 import { studentRouter } from "./routers/student";
 import { studentAccountRouter } from "./routers/studentAccount";
@@ -104,6 +105,7 @@ export const appRouter = createTRPCRouter({
   gradeSheet: gradeSheetRouter,
   health: healthRouter,
   role: roleRouter,
+  shortcut: shortcutRouter,
   exclusion: exclusionRouter,
   enrollment: enrollmentRouter,
   appreciation: appreciationRouter,

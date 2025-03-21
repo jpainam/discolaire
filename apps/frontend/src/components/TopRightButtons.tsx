@@ -19,7 +19,7 @@ export function TopRightButtons() {
   const { t } = useLocale("description");
   return (
     <>
-      <SimpleTooltip content="Dialoguer">
+      <SimpleTooltip content="Messages">
         <Button
           onClick={() => {
             router.push(`/users/${session.user?.id}/mails`);
@@ -27,7 +27,7 @@ export function TopRightButtons() {
           className="size-8"
           size={"icon"}
           aria-label="Message"
-          variant="ghost"
+          variant="outline"
         >
           <Mail className="h-4 w-4" />
         </Button>
@@ -37,7 +37,7 @@ export function TopRightButtons() {
           className="size-8"
           size={"icon"}
           aria-label="Feedback"
-          variant="ghost"
+          variant="outline"
           onClick={() => {
             openModal({
               title: (

@@ -32,7 +32,7 @@ export const LanguageSwitcher = ({ className }: { className?: string }) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant={"ghost"}
+          variant={"outline"}
           size={"icon"}
           className={cn("rounded-lg hover:bg-transparent", className)}
         >

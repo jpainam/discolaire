@@ -15,6 +15,7 @@ import { SchoolContextProvider } from "~/providers/SchoolProvider";
 import { Breadcrumbs } from "~/components/breadcrumbs";
 import { LanguageSwitcher } from "~/components/LanguageSwitcher";
 import { SchoolYearSwitcher } from "~/components/SchoolYearSwitcher";
+import { Shortcut } from "~/components/Shortcut";
 import { ThemeSelector } from "~/components/theme-selector";
 import { TopRightButtons } from "~/components/TopRightButtons";
 import GlobalModal from "~/layouts/GlobalModal";
@@ -71,13 +72,14 @@ export default async function Layout({
               />
               {/* <NavHeader /> */}
               <Breadcrumbs />
-              <div className="ml-auto flex items-center gap-2">
+              <div className="ml-auto flex items-center gap-4">
                 <SchoolYearSwitcher
                   schoolYears={schoolYears}
                   defaultValue={schoolYear.id}
                 />
                 <ThemeSelector />
                 <TopRightButtons />
+                <Shortcut />
                 <ModeSwitcher />
                 <LanguageSwitcher />
                 <UserNav />
