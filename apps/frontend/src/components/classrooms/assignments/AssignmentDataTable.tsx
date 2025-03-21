@@ -5,7 +5,6 @@ import { useMemo } from "react";
 
 import type { RouterOutputs } from "@repo/api";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
-import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
 import { useLocale } from "~/i18n";
 
 import { AssignmentDataTableActions } from "./AssignmentDataTableActions";
@@ -32,11 +31,8 @@ export function AssignmentDataTable({
   });
 
   return (
-    <DataTable
-      floatingBar={<AssignmentDataTableActions table={table} />}
-      table={table}
-    >
-      <DataTableToolbar table={table} />
+    <DataTable table={table}>
+      <AssignmentDataTableActions table={table} />
     </DataTable>
   );
 }

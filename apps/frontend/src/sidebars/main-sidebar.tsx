@@ -41,10 +41,12 @@ export function MainSidebar({
       name: "dashboard",
       url: `/`,
       icon: RiScanLine,
+      prefetch: false,
     },
     {
       name: "students",
       url: `/students`,
+      prefetch: true,
       icon: Users,
     },
 
@@ -52,6 +54,7 @@ export function MainSidebar({
       name: "classrooms",
       url: `/classrooms`,
       icon: HouseIcon,
+      prefetch: true,
     },
   ];
   const session = useSession();
@@ -61,40 +64,45 @@ export function MainSidebar({
         {
           name: "staffs",
           url: `/staffs`,
+          prefetch: true,
           icon: FolderOpen,
         },
         {
           name: "timetables",
           url: `/timetables`,
           icon: CalendarDays,
+          prefetch: false,
         },
-      ],
+      ]
     );
   }
   data.push({
     name: "contacts",
     url: `/contacts`,
+    prefetch: true,
     icon: RiUserFollowLine,
   });
   const canReadLibrary = useCheckPermission(
     "menu:library",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
   if (canReadLibrary) {
     data.push({
       name: "library",
       url: `/library`,
+      prefetch: false,
       icon: LibraryBigIcon,
     });
   }
   const canReadAdministration = useCheckPermission(
     "menu:administration",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
   if (canReadAdministration) {
     data.push({
       name: "administration",
       url: `/administration`,
+      prefetch: false,
       icon: RiAdminLine,
     });
   }
@@ -133,7 +141,7 @@ export function MainSidebar({
                     tooltip={t(item.name)}
                     isActive={pathname == item.url}
                   >
-                    <Link href={item.url}>
+                    <Link prefetch={item.prefetch} href={item.url}>
                       <item.icon
                         className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
                         size={22}

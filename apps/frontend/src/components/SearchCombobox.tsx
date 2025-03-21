@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import * as React from "react";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -44,6 +44,7 @@ interface ComboboxProps {
   align?: (typeof ALIGN_OPTIONS)[number];
   popoverContentClassName?: string;
   total?: number;
+  isLoading?: boolean;
 }
 
 const popOverStyles = {
@@ -55,6 +56,7 @@ export function SearchCombobox({
   label,
   onSelect,
   items,
+  isLoading = false,
   searchPlaceholder = "Search item...",
   noResultsMsg = "No items found",
   selectItemMsg = "Select an item",
@@ -109,51 +111,57 @@ export function SearchCombobox({
             onValueChange={handleOnSearchChange}
           />
           <CommandList>
-            <CommandEmpty>{noResultsMsg}</CommandEmpty>
-            <CommandGroup>
-              {unselect && (
-                <CommandItem
-                  key="unselect"
-                  value=""
-                  onSelect={() => {
-                    onSelect("");
-                    setOpen(false);
-                  }}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === "" ? "opacity-100" : "opacity-0",
-                    )}
-                  />
-                  {unselectMsg}
-                </CommandItem>
-              )}
-              {items.map((item) => {
-                const isSelected =
-                  value === item.value || selected.includes(item.value);
-                return (
+            {!isLoading && <CommandEmpty>{noResultsMsg}</CommandEmpty>}
+            {isLoading ? (
+              <div className="flex items-center justify-center p-4">
+                <Loader2 className="h-8 w-8 animate-spin" />
+              </div>
+            ) : (
+              <CommandGroup>
+                {unselect && (
                   <CommandItem
-                    key={item.value}
-                    value={item.value}
-                    keywords={[item.label]}
-                    onSelect={(value) => {
-                      onSelect(value, item.label);
+                    key="unselect"
+                    value=""
+                    onSelect={() => {
+                      onSelect("");
                       setOpen(false);
                     }}
-                    disabled={isSelected}
                   >
-                    {item.label}
                     <Check
                       className={cn(
-                        "ml-auto h-4 w-4",
-                        isSelected ? "opacity-100" : "opacity-0",
+                        "mr-2 h-4 w-4",
+                        value === "" ? "opacity-100" : "opacity-0"
                       )}
                     />
+                    {unselectMsg}
                   </CommandItem>
-                );
-              })}
-            </CommandGroup>
+                )}
+                {items.map((item) => {
+                  const isSelected =
+                    value === item.value || selected.includes(item.value);
+                  return (
+                    <CommandItem
+                      key={item.value}
+                      value={item.value}
+                      keywords={[item.label]}
+                      onSelect={(value) => {
+                        onSelect(value, item.label);
+                        setOpen(false);
+                      }}
+                      disabled={isSelected}
+                    >
+                      {item.label}
+                      <Check
+                        className={cn(
+                          "ml-auto h-4 w-4",
+                          isSelected ? "opacity-100" : "opacity-0"
+                        )}
+                      />
+                    </CommandItem>
+                  );
+                })}
+              </CommandGroup>
+            )}
           </CommandList>
           {!!more && (
             <div className="px-3 py-2.5 text-sm opacity-50">

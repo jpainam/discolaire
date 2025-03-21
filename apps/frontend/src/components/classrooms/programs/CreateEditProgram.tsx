@@ -26,9 +26,12 @@ import { useLocale } from "~/i18n";
 
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 import { MoreVertical } from "lucide-react";
+import { EmptyState } from "~/components/EmptyState";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
 import { html_content } from "./editor-content";
 
@@ -57,6 +60,10 @@ export function CreateEditProgram({
     schema: programFormSchema,
   });
   const utils = api.useUtils();
+  const canUpdateSubject = useCheckPermission(
+    "subject",
+    PermissionAction.UPDATE
+  );
   const updateSubjectProgram = api.subject.updateProgram.useMutation({
     onSettled: () => utils.subject.invalidate(),
     onSuccess: () => {
@@ -106,23 +113,27 @@ export function CreateEditProgram({
             </div>
           )}
           <div className="ml-auto flex flex-row items-center gap-2">
-            <Button
-              size={"sm"}
-              isLoading={updateSubjectProgram.isPending}
-              type="submit"
-            >
-              {t("submit")}
-            </Button>
-            <Button
-              type="button"
-              onClick={() => {
-                router.push(pathname.split("/").slice(0, -1).join("/"));
-              }}
-              variant={"outline"}
-              size={"sm"}
-            >
-              {t("cancel")}
-            </Button>
+            {canUpdateSubject && (
+              <>
+                <Button
+                  size={"sm"}
+                  isLoading={updateSubjectProgram.isPending}
+                  type="submit"
+                >
+                  {t("submit")}
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    router.push(pathname.split("/").slice(0, -1).join("/"));
+                  }}
+                  variant={"outline"}
+                  size={"sm"}
+                >
+                  {t("cancel")}
+                </Button>
+              </>
+            )}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button size="icon" className="size-8" variant="outline">
@@ -134,7 +145,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=pdf`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -145,7 +156,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=pdf&subjectId=${subjectId}`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -157,7 +168,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=csv`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -168,7 +179,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=csv&subjectId=${subjectId}`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -179,28 +190,43 @@ export function CreateEditProgram({
             </DropdownMenu>
           </div>
         </div>
-        <FormField
-          control={form.control}
-          name="content"
-          render={({ field: { onChange } }) => (
-            // <QuillEditor
-            //   value={value}
-            //   onChange={onChange}
-            //   className="col-span-full [&_.ql-editor]:min-h-[calc(100vh-15rem)]"
-            //   labelClassName="font-medium text-gray-700 dark:text-gray-600 mb-1.5"
-            // />
-            <FormItem className="">
-              <FormControl>
-                <QuillEditor
-                  className="h-[calc(100vh-15rem)]"
-                  onChange={onChange}
-                  defaultValue={subjectQuery.data?.program ?? html_content}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {!canUpdateSubject && (
+          <>
+            <div
+              className="prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{
+                __html: subject?.program ?? "",
+              }}
+            ></div>
+            {!subject?.program && (
+              <EmptyState title={t("no_data")} className="my-8" />
+            )}
+          </>
+        )}
+        {canUpdateSubject && (
+          <FormField
+            control={form.control}
+            name="content"
+            render={({ field: { onChange } }) => (
+              // <QuillEditor
+              //   value={value}
+              //   onChange={onChange}
+              //   className="col-span-full [&_.ql-editor]:min-h-[calc(100vh-15rem)]"
+              //   labelClassName="font-medium text-gray-700 dark:text-gray-600 mb-1.5"
+              // />
+              <FormItem className="">
+                <FormControl>
+                  <QuillEditor
+                    className="h-[calc(100vh-15rem)]"
+                    onChange={onChange}
+                    defaultValue={subjectQuery.data?.program ?? html_content}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
       </form>
     </Form>
   );

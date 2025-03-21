@@ -290,6 +290,46 @@ export const policies: {
     resource: "user",
     action: PermissionAction.Delete,
   },
+  {
+    title: "assignment",
+    resource: "assignment",
+    action: PermissionAction.Read,
+  },
+  {
+    title: "assignment",
+    resource: "assignment",
+    action: PermissionAction.Update,
+  },
+  {
+    title: "assignment",
+    resource: "assignment",
+    action: PermissionAction.Delete,
+  },
+  {
+    title: "assignment",
+    resource: "assignment",
+    action: PermissionAction.Create,
+  },
+  {
+    title: "timetable",
+    resource: "timetable",
+    action: PermissionAction.Read,
+  },
+  {
+    title: "timetable",
+    resource: "timetable",
+    action: PermissionAction.Update,
+  },
+  {
+    title: "timetable",
+    resource: "timetable",
+    action: PermissionAction.Create,
+  },
+  {
+    title: "timetable",
+    resource: "timetable",
+    action: PermissionAction.Delete,
+  },
 ];
 
 export const menuPolicies: {

@@ -118,7 +118,6 @@ export const routes = {
     timetables: (id: string) => `/classrooms/${id}/timetables`,
     assignments: {
       index: (id: string) => `/classrooms/${id}/assignments`,
-      create: (id: string) => `/classrooms/${id}/assignments/create`,
 
       edit: (id: string, assignmentId: string) =>
         `/classrooms/${id}/assignments/${assignmentId}/edit`,

@@ -20,6 +20,8 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { useCheckPermission } from "~/hooks/use-permission";
+import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
 import { CreateEditLesson } from "./CreateEditLesson";
 
@@ -29,6 +31,14 @@ export function ClassroomTimeTableHeader() {
   const params = useParams<{ id: string }>();
   const utils = api.useUtils();
   const { openModal } = useModal();
+  const canDeleteTimetable = useCheckPermission(
+    "timetable",
+    PermissionAction.DELETE
+  );
+  const canCreateTimetable = useCheckPermission(
+    "timetable",
+    PermissionAction.CREATE
+  );
   const clearClassroomLessonMutation = api.lesson.clearByClassroom.useMutation({
     onSettled: async () => {
       await utils.lesson.invalidate();
@@ -45,19 +55,21 @@ export function ClassroomTimeTableHeader() {
       <CalendarDays className="h-4 w-4" />
       <Label>{t("classroom_timetables")}</Label>
       <div className="ml-auto flex flex-row items-center gap-2">
-        <Button
-          onClick={() => {
-            openModal({
-              title: t("create_timetable"),
-              view: <CreateEditLesson />,
-            });
-          }}
-          variant={"default"}
-          size={"sm"}
-        >
-          <PlusIcon />
-          {t("add")}
-        </Button>
+        {canCreateTimetable && (
+          <Button
+            onClick={() => {
+              openModal({
+                title: t("create_timetable"),
+                view: <CreateEditLesson />,
+              });
+            }}
+            variant={"default"}
+            size={"sm"}
+          >
+            <PlusIcon />
+            {t("add")}
+          </Button>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant={"outline"} className="size-8" size={"icon"}>
@@ -74,30 +86,34 @@ export function ClassroomTimeTableHeader() {
               <XMLIcon />
               {t("xml_export")}
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={async () => {
-                const isConfirmed = await confirm({
-                  title: t("delete"),
-                  description: t("delete_confirmation"),
-                  icon: <Trash2 className="h-5 w-5 text-destructive" />,
-                  alertDialogTitle: {
-                    className: "flex items-center gap-1",
-                  },
-                });
-                if (isConfirmed) {
-                  toast.loading(t("deleting"), { id: 0 });
-                  clearClassroomLessonMutation.mutate({
-                    classroomId: params.id,
-                  });
-                }
-              }}
-              variant="destructive"
-              className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-            >
-              <Trash2 />
-              {t("clear_all")}
-            </DropdownMenuItem>
+            {canDeleteTimetable && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={async () => {
+                    const isConfirmed = await confirm({
+                      title: t("delete"),
+                      description: t("delete_confirmation"),
+                      // icon: <Trash2 className="h-5 w-5 text-destructive" />,
+                      // alertDialogTitle: {
+                      //   className: "flex items-center gap-1",
+                      // },
+                    });
+                    if (isConfirmed) {
+                      toast.loading(t("deleting"), { id: 0 });
+                      clearClassroomLessonMutation.mutate({
+                        classroomId: params.id,
+                      });
+                    }
+                  }}
+                  variant="destructive"
+                  className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+                >
+                  <Trash2 />
+                  {t("clear_all")}
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

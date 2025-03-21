@@ -48,7 +48,18 @@ export function StudentPage({
             Profil de l'élève
           </Text>
 
-          {student.avatar && <Image src={student.avatar} />}
+          {student.avatar && (
+            <Image
+              style={{ width: 100, height: 100 }}
+              // src={{
+              //   uri: student.avatar,
+              //   method: "GET",
+              //   headers: { "Cache-Control": "no-cache" },
+              //   body: "",
+              // }}
+              src={student.avatar}
+            />
+          )}
 
           <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
             <Item

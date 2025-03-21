@@ -41,7 +41,9 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { routes } from "~/configs/routes";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
 
 export function AttendanceHeader() {
@@ -50,6 +52,14 @@ export function AttendanceHeader() {
   const searchParams = useSearchParams();
   const params = useParams<{ id: string }>();
   const confirm = useConfirm();
+  const canDeleteAttendance = useCheckPermission(
+    "attendance",
+    PermissionAction.DELETE
+  );
+  const canCreateAttendance = useCheckPermission(
+    "attendance",
+    PermissionAction.CREATE
+  );
   const deletePeriodictAttendance = api.attendance.deletePeriodic.useMutation({
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -74,7 +84,7 @@ export function AttendanceHeader() {
           router.push(
             routes.classrooms.attendances.index(params.id) +
               "?" +
-              createQueryString({ term: val }),
+              createQueryString({ term: val })
           );
         }}
       />
@@ -85,7 +95,7 @@ export function AttendanceHeader() {
           router.push(
             routes.classrooms.attendances.index(params.id) +
               "?" +
-              createQueryString({ type: val == "all" ? undefined : val }),
+              createQueryString({ type: val == "all" ? undefined : val })
           );
         }}
       >
@@ -109,115 +119,119 @@ export function AttendanceHeader() {
           router.push(
             routes.classrooms.attendances.index(params.id) +
               "?" +
-              createQueryString({ date: e.target.value }),
+              createQueryString({ date: e.target.value })
           );
         }}
       />
 
       <div className="ml-auto flex flex-row items-center gap-2">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button disabled={!termId} size={"sm"}>
-              {t("add")}
-              <ChevronDown
-                className="-me-1 ms-2 opacity-60"
-                size={16}
-                strokeWidth={2}
-                aria-hidden="true"
-              />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() => {
-                router.push(
-                  routes.classrooms.attendances.absences(params.id) +
-                    "?" +
-                    createQueryString({ term: searchParams.get("term") }),
-                );
-              }}
-            >
-              <BaselineIcon className="mr-2 h-4 w-4" />
-              {t("absence")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                router.push(
-                  routes.classrooms.attendances.lateness(params.id) +
-                    "?" +
-                    createQueryString({ term: searchParams.get("term") }),
-                );
-              }}
-            >
-              <DiameterIcon className="mr-2 h-4 w-4" />
-              {t("lateness")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                router.push(
-                  routes.classrooms.attendances.chatters(params.id) +
-                    "?" +
-                    createQueryString({ term: searchParams.get("term") }),
-                );
-              }}
-            >
-              <NewspaperIcon className="mr-2 h-4 w-4" />
-              {t("chatter")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                router.push(
-                  routes.classrooms.attendances.consignes(params.id) +
-                    "?" +
-                    createQueryString({ term: searchParams.get("term") }),
-                );
-              }}
-            >
-              <ShapesIcon className="mr-2 h-4 w-4" />
-              {t("consigne")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                router.push(
-                  routes.classrooms.attendances.exclusions(params.id) +
-                    "?" +
-                    createQueryString({ term: searchParams.get("term") }),
-                );
-              }}
-            >
-              <ShieldAlertIcon className="mr-2 h-4 w-4" />
-              {t("exclusion")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <Button
-          size={"icon"}
-          disabled={!termId}
-          onClick={async () => {
-            const isConfirmed = await confirm({
-              title: t("delete"),
-              description: t("delete_all_periodic_attendance"),
-              // icon: <Trash2 className="text-destructive" />,
-              // alertDialogTitle: {
-              //   className: "flex items-center gap-2",
-              // },
-            });
-            if (isConfirmed) {
-              toast.loading(t("deleting"), { id: 0 });
-              if (!termId) {
-                return;
-              }
-              deletePeriodictAttendance.mutate({
-                classroomId: params.id,
-                termId: Number(termId),
+        {canCreateAttendance && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button disabled={!termId} size={"sm"}>
+                {t("add")}
+                <ChevronDown
+                  className="-me-1 ms-2 opacity-60"
+                  size={16}
+                  strokeWidth={2}
+                  aria-hidden="true"
+                />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={() => {
+                  router.push(
+                    routes.classrooms.attendances.absences(params.id) +
+                      "?" +
+                      createQueryString({ term: searchParams.get("term") })
+                  );
+                }}
+              >
+                <BaselineIcon className="mr-2 h-4 w-4" />
+                {t("absence")}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  router.push(
+                    routes.classrooms.attendances.lateness(params.id) +
+                      "?" +
+                      createQueryString({ term: searchParams.get("term") })
+                  );
+                }}
+              >
+                <DiameterIcon className="mr-2 h-4 w-4" />
+                {t("lateness")}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  router.push(
+                    routes.classrooms.attendances.chatters(params.id) +
+                      "?" +
+                      createQueryString({ term: searchParams.get("term") })
+                  );
+                }}
+              >
+                <NewspaperIcon className="mr-2 h-4 w-4" />
+                {t("chatter")}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  router.push(
+                    routes.classrooms.attendances.consignes(params.id) +
+                      "?" +
+                      createQueryString({ term: searchParams.get("term") })
+                  );
+                }}
+              >
+                <ShapesIcon className="mr-2 h-4 w-4" />
+                {t("consigne")}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  router.push(
+                    routes.classrooms.attendances.exclusions(params.id) +
+                      "?" +
+                      createQueryString({ term: searchParams.get("term") })
+                  );
+                }}
+              >
+                <ShieldAlertIcon className="mr-2 h-4 w-4" />
+                {t("exclusion")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
+        {canDeleteAttendance && (
+          <Button
+            size={"icon"}
+            disabled={!termId}
+            onClick={async () => {
+              const isConfirmed = await confirm({
+                title: t("delete"),
+                description: t("delete_all_periodic_attendance"),
+                // icon: <Trash2 className="text-destructive" />,
+                // alertDialogTitle: {
+                //   className: "flex items-center gap-2",
+                // },
               });
-            }
-          }}
-          variant="destructive"
-          className="size-8"
-        >
-          <Trash2 className="w-4 h-4" />
-        </Button>
+              if (isConfirmed) {
+                toast.loading(t("deleting"), { id: 0 });
+                if (!termId) {
+                  return;
+                }
+                deletePeriodictAttendance.mutate({
+                  classroomId: params.id,
+                  termId: Number(termId),
+                });
+              }
+            }}
+            variant="destructive"
+            className="size-8"
+          >
+            <Trash2 className="w-4 h-4" />
+          </Button>
+        )}
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -237,7 +251,7 @@ export function AttendanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/attendances?format=pdf&type=weekly`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >
@@ -247,7 +261,7 @@ export function AttendanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/attendances?format=pdf&type=periodic`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >
@@ -267,7 +281,7 @@ export function AttendanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/attendances?format=csv&type=weekly`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >
@@ -277,7 +291,7 @@ export function AttendanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/attendances?format=csv&type=periodic`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >

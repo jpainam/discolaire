@@ -89,7 +89,7 @@ export function fetchAssignmentTableColumns({
             className="truncate hover:text-blue-600 hover:underline"
             href={routes.classrooms.assignments.details(
               row.original.classroomId,
-              row.original.id,
+              row.original.id
             )}
           >
             {row.original.title}
@@ -159,6 +159,10 @@ function ActionsCell({
   assignment: ClassroomGetAssignemntProcedureOutput;
 }) {
   const [isUpdatePending, startUpdateTransition] = useTransition();
+  // const canDeleteAssignment = useCheckPermission(
+  //   "assignment",
+  //   PermissionAction.DELETE
+  // );
 
   return (
     <DropdownMenu>
@@ -204,7 +208,7 @@ function ActionsCell({
                   >
                     {label}
                   </DropdownMenuRadioItem>
-                ),
+                )
               )}
             </DropdownMenuRadioGroup>
           </DropdownMenuSubContent>
