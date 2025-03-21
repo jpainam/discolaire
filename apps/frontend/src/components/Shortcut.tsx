@@ -49,7 +49,7 @@ export function Shortcut() {
   const filteredShortcuts = shortcuts.filter(
     (shortcut) =>
       shortcut.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      shortcut.url.toLowerCase().includes(searchQuery.toLowerCase())
+      shortcut.url.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const addCurrentPageToShortcuts = () => {
@@ -79,8 +79,8 @@ export function Shortcut() {
       shortcuts.map((shortcut) =>
         shortcut.id === currentShortcut.id
           ? { ...shortcut, title: editTitle, url: editUrl }
-          : shortcut
-      )
+          : shortcut,
+      ),
     );
     setIsEditDialogOpen(false);
   };
