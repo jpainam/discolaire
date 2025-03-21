@@ -52,7 +52,7 @@ new Worker(
     const { type, id } = result.data;
     switch (type) {
       case "transaction":
-        void transactionWorker.create(Number(id));
+        await transactionWorker.create(Number(id));
         break;
     }
     console.log("Sending SMS...", job.data);
@@ -65,6 +65,7 @@ const logSchema = z.object({
   level: z.enum(["info", "warn", "error"]).default("info"),
   action: z.enum(["create", "update", "delete", "read"]).default("read"),
   userId: z.string().min(1),
+  data: z.record(z.unknown()).default({}),
 });
 new Worker(
   "log",
@@ -75,13 +76,14 @@ new Worker(
       console.error(errors);
       return;
     }
-    const { message, action, level, userId } = result.data;
+    const { message, action, level, userId, data } = result.data;
     await db.logActivity.create({
       data: {
         message,
         level,
         action,
         userId,
+        data: JSON.stringify(data),
       },
     });
   },

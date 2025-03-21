@@ -150,4 +150,5 @@ model LogActivity {
     level     String   @default("info")
     action    String   @default("read")
     createdAt DateTime @default(now())
+    data      Json?
 }

@@ -6,14 +6,15 @@ import { ScheduleCard } from "~/components/dashboard/ScheduleCard";
 import { SchoolLife } from "~/components/dashboard/SchoolLife";
 import { StudentDashboardContact } from "~/components/dashboard/StudentDashboardContact";
 import { StudentLatestGrade } from "~/components/dashboard/StudentLatestGrade";
+import { logQueue } from "~/lib/queue";
 import { api } from "~/trpc/server";
 
 export default async function Page() {
   const session = await auth();
-  // logQueue.add("log", {
-  //   message: "User logged in",
-  //   userId: session?.user.id,
-  // });
+  void logQueue.add("log", {
+    message: "User logged in",
+    userId: session?.user.id,
+  });
   if (session?.user.profile === "student") {
     const student = await api.student.getFromUserId(session.user.id);
     return (

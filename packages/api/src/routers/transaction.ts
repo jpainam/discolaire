@@ -348,7 +348,7 @@ export const transactionRouter = createTRPCRouter({
         id: result.id,
       });
       void logQueue.add("log", {
-        type: "transaction",
+        message: `Transaction created`,
         action: "create",
         userId: ctx.session.user.id,
         data: result,
