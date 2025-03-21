@@ -83,7 +83,7 @@ export function StudentHeader({
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
 
@@ -136,7 +136,7 @@ export function StudentHeader({
         status,
       });
     },
-    [studentStatusMutation, student.id]
+    [studentStatusMutation, student.id],
   );
 
   const navigateToStudent = (id: string) => {
@@ -155,7 +155,7 @@ export function StudentHeader({
 
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const canEditStudent = useCheckPermission("student", PermissionAction.UPDATE);
   //const [open, setOpen] = React.useState(false);
@@ -309,7 +309,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >
