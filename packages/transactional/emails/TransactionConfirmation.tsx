@@ -2,73 +2,73 @@ import {
   Body,
   Container,
   Head,
-  Heading,
   Html,
   Preview,
   Section,
+  Tailwind,
   Text,
 } from "@react-email/components";
 
-export function TransactionConfirmationEmail({
+import { Logo } from "../components/logo";
+import { getAssetUrl } from "../utils";
+
+interface School {
+  logo?: string | null;
+  name: string;
+  id: string;
+}
+
+const assetUrl = getAssetUrl();
+const defaultSchool = {
+  logo: `${assetUrl}/images/logo-round.png`,
+  name: "Institut Polyvalent Wague",
+  id: "1",
+};
+
+export function TransactionConfirmation({
   studentName = "Doe John",
-  parentEmail = "example@gmail.com",
   paymentAmount = 50000,
+  school = defaultSchool,
   remainingBalance = 100000,
   paymentRecorder = "Dupont Pierre",
   paymentStatus = "Success",
+  title = "Confirmation de paiement scolaire",
 }: {
   studentName: string;
-  parentEmail: string;
+  school: School;
   paymentAmount: number;
   remainingBalance: number;
   paymentRecorder: string;
   paymentStatus: string;
+  title: string;
 }) {
   return (
     <Html>
-      <Head />
-      <Preview>Confirmation de paiement des frais scolaires</Preview>
-      <Body
-        style={{
-          fontFamily: "Arial, sans-serif",
-          backgroundColor: "#f5f5f5",
-          color: "#333",
-        }}
-      >
-        <Container
-          style={{
-            padding: "20px",
-            backgroundColor: "#ffffff",
-            borderRadius: "5px",
-            maxWidth: "600px",
-            margin: "0 auto",
-          }}
-        >
-          <Heading style={{ textAlign: "center", color: "#0073e6" }}>
-            Confirmation de Paiement
-          </Heading>
+      <Tailwind>
+        <Head />
+        <Preview>{title}</Preview>
 
-          <Section>
-            <Text style={{ fontSize: "16px", margin: "10px 0" }}>
-              Cher parent,
-            </Text>
-            <Text style={{ fontSize: "16px", margin: "10px 0" }}>
-              Nous avons bien reçu le paiement pour les frais scolaires de votre
-              enfant <strong>{studentName}</strong>.
+        <Body className="mx-auto my-auto bg-[#fff] font-sans">
+          <Container
+            className="mx-auto my-[40px] max-w-[600px] border-transparent p-[20px] md:border-[#E8E7E1]"
+            style={{ borderStyle: "solid", borderWidth: 1 }}
+          >
+            <Logo logoUrl={school.logo ?? defaultSchool.logo} />
+
+            <br />
+            <span className="font-medium">Madame/Monsieur</span>
+            <Text className="text-[#121212]">
+              Nous avons bien reçu le paiement pour les frais scolaires de{" "}
+              <strong>{studentName}</strong>.
             </Text>
 
             <Section>
-              <Text style={{ fontSize: "16px", fontWeight: "bold" }}>
-                Détails du paiement :
-              </Text>
-              <Text style={{ fontSize: "14px", margin: "5px 0" }}>
+              <Text style={{ fontWeight: "bold" }}>Détails du paiement :</Text>
+              <Text style={{ margin: "5px 0" }}>
                 Montant payé : <strong>{paymentAmount} CFA</strong>
               </Text>
-              <Text style={{ fontSize: "14px", margin: "5px 0" }}>
+              <Text style={{ margin: "5px 0" }}>
                 Montant restant : <strong>{remainingBalance} CFA</strong>
-              </Text>
-              <Text style={{ fontSize: "14px", margin: "5px 0" }}>
-                Parent notifié : <strong>{parentEmail}</strong>
               </Text>
               <Text style={{ fontSize: "14px", margin: "5px 0" }}>
                 Enregistré par : <strong>{paymentRecorder}</strong>
@@ -84,20 +84,17 @@ export function TransactionConfirmationEmail({
               </Text>
             </Section>
 
-            <Text style={{ fontSize: "16px", marginTop: "20px" }}>
-              Merci de votre confiance et de votre engagement envers l'éducation
-              de votre enfant.
+            <Text style={{ marginTop: "20px" }}>
+              Merci de votre confiance et de votre engagement.
             </Text>
-            <Text style={{ fontSize: "16px", margin: "10px 0" }}>
-              Cordialement,
-              <br />
+            <Text style={{ margin: "10px 0" }}>
               L'équipe de gestion scolaire
             </Text>
-          </Section>
-        </Container>
-      </Body>
+          </Container>
+        </Body>
+      </Tailwind>
     </Html>
   );
 }
 
-export default TransactionConfirmationEmail;
+export default TransactionConfirmation;

@@ -7,6 +7,7 @@ import type { TransactionStatus } from "@repo/db";
 import { classroomService } from "../services/classroom-service";
 import { transactionService } from "../services/transaction-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { logQueue, notificationQueue } from "../utils";
 
 const createUpdateSchema = z.object({
   amount: z.number(),
@@ -94,8 +95,8 @@ export const transactionRouter = createTRPCRouter({
   all: protectedProcedure
     .input(
       z.object({
-        from: z.coerce.date().optional().default(subMonths(new Date(), 3)),
-        to: z.coerce.date().optional().default(new Date()),
+        from: z.coerce.date().optional(),
+        to: z.coerce.date().optional(),
         status: z.string().optional(),
         classroom: z.string().optional(),
         transactionType: z.enum(["CREDIT", "DEBIT", "DISCOUNT"]).optional(),
@@ -111,6 +112,7 @@ export const transactionRouter = createTRPCRouter({
         : [];
       const studentIds: string[] = students.map((stud) => stud.id);
       return ctx.db.transaction.findMany({
+        take: 50,
         include: {
           account: {
             include: {
@@ -125,12 +127,16 @@ export const transactionRouter = createTRPCRouter({
             ...(input.transactionType
               ? [{ transactionType: { equals: input.transactionType } }]
               : [{}]),
-            {
-              createdAt: {
-                gte: input.from,
-                lte: input.to,
-              },
-            },
+            ...(input.from && input.to
+              ? [
+                  {
+                    createdAt: {
+                      gte: input.from,
+                      lte: input.to,
+                    },
+                  },
+                ]
+              : [{}]),
             ...(status ? [{ status: { equals: status } }] : [{}]),
             ...(input.classroom
               ? [
@@ -337,7 +343,16 @@ export const transactionRouter = createTRPCRouter({
           receivedById: ctx.session.user.id,
         },
       });
-      // TODO : send notification
+      void notificationQueue.add("notification", {
+        type: "transaction",
+        id: result.id,
+      });
+      void logQueue.add("log", {
+        type: "transaction",
+        action: "create",
+        userId: ctx.session.user.id,
+        data: result,
+      });
       return result;
     }),
   trends: protectedProcedure.query(async ({ ctx }) => {

@@ -1,3 +1,17 @@
+// export const generateToken = (user: { id: string }) => {
+//   const payload = {
+//     sub: user.id,
+//     iat: new Date().getTime(),
+//     exp: addDays(new Date(), 30).getTime(),
+//   };
+//   return jwt.sign(payload, env.AUTH_SECRET);
+// };
+
+import { Queue } from "bullmq";
+import IORedis from "ioredis";
+
+import { env } from "./env";
+
 export function generateStringColor(): string {
   const letters = "0123456789ABCDEF";
   let color = "#";
@@ -23,11 +37,11 @@ export const exclude = <Type, Key extends keyof Type>(
   return obj;
 };
 
-// export const generateToken = (user: { id: string }) => {
-//   const payload = {
-//     sub: user.id,
-//     iat: new Date().getTime(),
-//     exp: addDays(new Date(), 30).getTime(),
-//   };
-//   return jwt.sign(payload, env.AUTH_SECRET);
-// };
+const connection = new IORedis(`${env.REDIS_URL}?family=0`, {
+  maxRetriesPerRequest: null,
+  enableReadyCheck: false,
+});
+
+// Define queues
+export const logQueue = new Queue("log", { connection });
+export const notificationQueue = new Queue("notification", { connection });

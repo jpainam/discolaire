@@ -4,32 +4,21 @@ import { studentService } from "./student-service";
 
 export const transactionService = {
   getReceiptInfo: async (transactionId: number) => {
-    const transaction = await db.transaction.findUnique({
+    const transaction = await db.transaction.findUniqueOrThrow({
+      include: {
+        account: {
+          include: {
+            student: true,
+          },
+        },
+      },
       where: {
         id: transactionId,
       },
     });
-    if (!transaction) {
-      throw new Error("Transaction not found");
-    }
-    const studentAccount = await db.studentAccount.findFirst({
-      where: {
-        id: transaction.accountId,
-      },
-    });
-    if (!studentAccount) {
-      throw new Error("Student account not found");
-    }
-    const student = await db.student.findUnique({
-      where: {
-        id: studentAccount.studentId,
-      },
-    });
-    if (!student) {
-      throw new Error("Student not found");
-    }
+
     const classroom = await studentService.getClassroom(
-      student.id,
+      transaction.account.studentId,
       transaction.schoolYearId,
     );
     if (!classroom) {
@@ -44,7 +33,7 @@ export const transactionService = {
     const transactions = await db.transaction.findMany({
       where: {
         account: {
-          studentId: student.id,
+          studentId: transaction.account.studentId,
         },
         deletedAt: null,
         schoolYearId: transaction.schoolYearId,
@@ -72,7 +61,7 @@ export const transactionService = {
 
     const school = await db.school.findUniqueOrThrow({
       where: {
-        id: student.schoolId,
+        id: classroom.schoolId,
       },
     });
 
@@ -81,7 +70,7 @@ export const transactionService = {
         contact: true,
       },
       where: {
-        studentId: student.id,
+        studentId: transaction.account.studentId,
       },
     });
     let contact = studentContact.find((c) => c.primaryContact)?.contact;
@@ -90,7 +79,7 @@ export const transactionService = {
     }
 
     return {
-      student,
+      student: transaction.account.student,
       contact: contact ?? null,
       remaining,
       totalFee,

@@ -8,6 +8,5 @@ const connection = new IORedis(`${env.REDIS_URL}?family=0`, {
 });
 
 // Define queues
-export const emailQueue = new Queue("email", { connection });
-export const smsQueue = new Queue("sms", { connection });
 export const logQueue = new Queue("log", { connection });
+export const notificationQueue = new Queue("notification", { connection });

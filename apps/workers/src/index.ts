@@ -6,6 +6,8 @@ import * as z from "zod";
 
 import { db } from "@repo/db";
 
+import { transactionWorker } from "./transaction";
+
 // const connection = new IORedis(
 //   process.env.REDIS_URL ?? "redis://localhost:6379",
 // );
@@ -29,6 +31,30 @@ new Worker(
   "sms",
   async (job) => {
     // SMS logic here (e.g., Twilio)
+    console.log("Sending SMS...", job.data);
+  },
+  { connection },
+);
+
+const notificationSchema = z.object({
+  type: z.string().min(1),
+  id: z.union([z.string(), z.coerce.number()]),
+});
+new Worker(
+  "notification",
+  async (job) => {
+    const result = notificationSchema.safeParse(job.data);
+    if (!result.success) {
+      const errors = result.error.format();
+      console.error(errors);
+      return;
+    }
+    const { type, id } = result.data;
+    switch (type) {
+      case "transaction":
+        void transactionWorker.create(Number(id));
+        break;
+    }
     console.log("Sending SMS...", job.data);
   },
   { connection },

@@ -3,7 +3,7 @@ import { render } from "@react-email/render";
 import { z } from "zod";
 
 import { auth } from "@repo/auth";
-import { TransactionConfirmationEmail } from "@repo/transactional";
+import { TransactionConfirmation } from "@repo/transactional";
 import { getServerTranslations } from "~/i18n/server";
 
 import { api } from "~/trpc/server";
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     const student = await api.student.get(studentId);
 
     const studentContacts = await api.student.contacts(
-      transaction.account.studentId,
+      transaction.account.studentId
     );
     if (studentContacts.length === 0) {
       return new Response("Student has no contact", { status: 404 });
@@ -49,17 +49,23 @@ export async function POST(req: Request) {
     const contact = studentContact?.contact;
 
     const { t } = await getServerTranslations();
+    const school = await api.school.getSchool();
 
     if (contact?.email) {
       const emailHtml = await render(
-        TransactionConfirmationEmail({
+        TransactionConfirmation({
           studentName: getFullName(student),
-          parentEmail: contact.email,
+          school: {
+            logo: school.logo ?? "",
+            name: school.name,
+            id: school.id,
+          },
           paymentAmount: transaction.amount,
           remainingBalance: remaining,
           paymentRecorder: createdBy,
+          title: "",
           paymentStatus: t(status),
-        }),
+        })
       );
       await api.messaging.sendEmail({
         subject: t("transaction_confirmation"),
