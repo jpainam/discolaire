@@ -8,8 +8,8 @@ import { I18nProvider } from "~/i18n/i18n-context";
 import { cn } from "~/lib/utils";
 import { TRPCReactProvider } from "~/trpc/react";
 
-import "./globals.css";
-
+//import "./globals.css";
+import "@repo/ui/globals.css";
 //import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 //import { auth } from "@repo/auth";
@@ -26,7 +26,7 @@ import { AuthProvider } from "~/providers/AuthProvider";
 import { ActiveThemeProvider } from "~/providers/ActiveThemeProvider";
 import ConfirmDialogProvider from "~/providers/confirm-dialog-provider";
 
-import "./theme.css";
+//import "./theme.css";
 const META_THEME_COLORS = {
   light: "#ffffff",
   dark: "#09090b",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     env.VERCEL_ENV === "production"
       ? "https://school.discolaire.com"
-      : "http://localhost:3000",
+      : "http://localhost:3000"
   ),
   title: "Gestion Scolaire",
   description: "Gestion scolaire pour les écoles",
@@ -60,8 +60,7 @@ export const viewport: Viewport = {
 export default async function RootLayout(props: { children: React.ReactNode }) {
   //const session = await auth();
   const cookieStore = await cookies();
-  const activeThemeValue =
-    cookieStore.get("active_theme")?.value ?? "blue-scaled";
+  const activeThemeValue = cookieStore.get("active_theme")?.value ?? "blue";
   const isScaled = activeThemeValue.endsWith("-scaled");
   const userPromise = getUser();
 
@@ -98,7 +97,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
             "bg-background overscroll-none font-sans antialiased",
             activeThemeValue ? `theme-${activeThemeValue}` : "",
             isScaled ? "theme-scaled" : "",
-            fontVariables,
+            fontVariables
           )}
         >
           <ThemeProvider

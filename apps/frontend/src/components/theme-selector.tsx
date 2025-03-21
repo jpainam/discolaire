@@ -6,50 +6,49 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
-  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
 import { useLocale } from "~/i18n";
+import { THEMES } from "~/lib/themes";
 import { useThemeConfig } from "~/providers/ActiveThemeProvider";
 
-const DEFAULT_THEMES = [
-  {
-    name: "Default",
-    value: "default",
-  },
-  {
-    name: "Blue",
-    value: "blue",
-  },
-  {
-    name: "Green",
-    value: "green",
-  },
-  {
-    name: "Amber",
-    value: "amber",
-  },
-];
+// const DEFAULT_THEMES = [
+//   {
+//     name: "Default",
+//     value: "default",
+//   },
+//   {
+//     name: "Blue",
+//     value: "blue",
+//   },
+//   {
+//     name: "Green",
+//     value: "green",
+//   },
+//   {
+//     name: "Amber",
+//     value: "amber",
+//   },
+// ];
 
-const SCALED_THEMES = [
-  {
-    name: "Default",
-    value: "default-scaled",
-  },
-  {
-    name: "Blue",
-    value: "blue-scaled",
-  },
-];
+// const SCALED_THEMES = [
+//   {
+//     name: "Default",
+//     value: "default-scaled",
+//   },
+//   {
+//     name: "Blue",
+//     value: "blue-scaled",
+//   },
+// ];
 
-const MONO_THEMES = [
-  {
-    name: "Mono",
-    value: "mono-scaled",
-  },
-];
+// const MONO_THEMES = [
+//   {
+//     name: "Mono",
+//     value: "mono-scaled",
+//   },
+// ];
 
 export function ThemeSelector() {
   const { activeTheme, setActiveTheme } = useThemeConfig();
@@ -76,14 +75,14 @@ export function ThemeSelector() {
         </SelectTrigger>
         <SelectContent align="end">
           <SelectGroup>
-            <SelectLabel>Default</SelectLabel>
-            {DEFAULT_THEMES.map((theme) => (
+            {/* <SelectLabel>Default</SelectLabel> */}
+            {THEMES.map((theme) => (
               <SelectItem key={theme.name} value={theme.value}>
                 {theme.name}
               </SelectItem>
             ))}
           </SelectGroup>
-          <SelectSeparator />
+          {/* <SelectSeparator />
           <SelectGroup>
             <SelectLabel>Scaled</SelectLabel>
             {SCALED_THEMES.map((theme) => (
@@ -99,7 +98,7 @@ export function ThemeSelector() {
                 {theme.name}
               </SelectItem>
             ))}
-          </SelectGroup>
+          </SelectGroup> */}
         </SelectContent>
       </Select>
     </div>
