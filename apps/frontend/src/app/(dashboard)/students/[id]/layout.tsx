@@ -16,26 +16,22 @@ interface Props {
   //searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export async function generateMetadata(
+export const generateMetadata = async (
   { params }: Props
-  //parent: ResolvingMetadata
-): Promise<Metadata> {
+  // parent: ResolvingMetadata
+): Promise<Metadata> => {
   const { id } = await params;
   const student = await api.student.get(id);
-
-  // optionally access and extend (rather than replace) parent metadata
-  //const previousImages = (await parent).openGraph?.images || [];
-
   return {
     title: {
       template: `${student.lastName}-%s`,
-      default: "Student",
+      default: `${student.lastName}`,
     },
     // openGraph: {
     //   images: ["/some-specific-page-image.jpg", ...previousImages],
     // },
   };
-}
+};
 
 export default async function Layout(props: {
   children: React.ReactNode;

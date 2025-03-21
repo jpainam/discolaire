@@ -1,8 +1,13 @@
 import { Separator } from "@repo/ui/components/separator";
+import type { Metadata } from "next";
 
 import { SignUpContact } from "~/components/students/contacts/SignUpContact";
 import { StudentContactHeader } from "~/components/students/contacts/StudentContactHeader";
 import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";
+
+export const metadata: Metadata = {
+  title: "Contacts",
+};
 
 export default async function Layout(props: {
   children: React.ReactNode;
