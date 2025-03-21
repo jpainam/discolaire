@@ -8,6 +8,7 @@ import {
   PlusIcon,
   Printer,
   Trash2,
+  UserIcon,
   UserPlus2,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -38,6 +39,7 @@ import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
+import { SimpleTooltip } from "../simple-tooltip";
 import { CreateEditUser } from "../users/CreateEditUser";
 import CreateEditContact from "./CreateEditContact";
 import { LinkStudent } from "./LinkStudent";
@@ -62,7 +64,7 @@ export function ContactDetailsHeader({
   });
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();
@@ -80,11 +82,11 @@ export function ContactDetailsHeader({
 
   const canUpdateContact = useCheckPermission(
     "contact",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (
@@ -111,6 +113,23 @@ export function ContactDetailsHeader({
               <Pencil className="h-4 w-4" />
             </Button>
           )}
+          {contact.userId && (
+            <SimpleTooltip content={t("user")}>
+              <Button
+                onClick={() => {
+                  router.push(`/users/${contact.userId}`);
+                }}
+                size={"icon"}
+                aria-label="User"
+                variant="outline"
+              >
+                <UserIcon className="h-4 w-4" />
+              </Button>
+            </SimpleTooltip>
+          )}
+          <Button variant={"outline"} size={"icon"}>
+            <Printer />
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant={"outline"} size={"icon"}>
@@ -193,10 +212,6 @@ export function ContactDetailsHeader({
           </DropdownMenu>
         </div>
         <div className="grid flex-row gap-2 md:flex">
-          <Button className="size-8" variant={"outline"} size={"icon"}>
-            <Printer />
-          </Button>
-
           <Button variant={"outline"} size={"sm"}>
             <ImageUpIcon />
             {t("change_avatar")}
