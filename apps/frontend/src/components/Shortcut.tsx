@@ -18,8 +18,11 @@ import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Separator } from "@repo/ui/components/separator";
 import { BookmarkPlus, Edit2, Search, Trash2, X } from "lucide-react";
 import { useState } from "react";
+import { useDebouncedCallback } from "use-debounce";
 import { useLocale } from "~/i18n";
+import { api } from "~/trpc/react";
 import { SimpleTooltip } from "./simple-tooltip";
+import { usePathname } from "next/navigation";
 
 interface Shortcut {
   id: string;
@@ -35,6 +38,12 @@ export function Shortcut() {
     { id: "4", title: "React Documentation", url: "https://react.dev" },
     { id: "5", title: "Tailwind CSS", url: "https://tailwindcss.com" },
   ]);
+  const [searchText, setSearchText] = useState("");
+  const debounced = useDebouncedCallback((value: string) => {
+    void setSearchText(value);
+  }, 1000);
+  const pathname = usePathname();
+  const shortcutsQuery = api.shortcut.search({ query: searchText });
   const [searchQuery, setSearchQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -49,7 +58,7 @@ export function Shortcut() {
   const filteredShortcuts = shortcuts.filter(
     (shortcut) =>
       shortcut.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      shortcut.url.toLowerCase().includes(searchQuery.toLowerCase()),
+      shortcut.url.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const addCurrentPageToShortcuts = () => {
@@ -79,8 +88,8 @@ export function Shortcut() {
       shortcuts.map((shortcut) =>
         shortcut.id === currentShortcut.id
           ? { ...shortcut, title: editTitle, url: editUrl }
-          : shortcut,
-      ),
+          : shortcut
+      )
     );
     setIsEditDialogOpen(false);
   };

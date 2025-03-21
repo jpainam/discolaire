@@ -56,7 +56,7 @@ export const shortcutRouter = createTRPCRouter({
     .input(
       z.object({
         query: z.string().default(""),
-        limit: z.number().int().default(10),
+        limit: z.number().int().optional().default(10),
       }),
     )
     .query(({ ctx, input }) => {
