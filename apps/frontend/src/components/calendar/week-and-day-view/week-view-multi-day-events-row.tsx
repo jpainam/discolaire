@@ -58,8 +58,8 @@ export function WeekViewMultiDayEventsRow({
     processedEvents.forEach((event) => {
       let rowIndex = rows.findIndex((row) =>
         row.every(
-          (e) => e.endIndex < event.startIndex || e.startIndex > event.endIndex
-        )
+          (e) => e.endIndex < event.startIndex || e.startIndex > event.endIndex,
+        ),
       );
 
       if (rowIndex === -1) {
@@ -105,7 +105,7 @@ export function WeekViewMultiDayEventsRow({
           >
             {eventRows.map((row, rowIndex) => {
               const event = row.find(
-                (e) => e.startIndex <= dayIndex && e.endIndex >= dayIndex
+                (e) => e.startIndex <= dayIndex && e.endIndex >= dayIndex,
               );
 
               if (!event) {

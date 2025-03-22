@@ -13,7 +13,7 @@ export const eventSchema = z.object({
     },
     {
       required_error: "Start time is required",
-    }
+    },
   ),
   endDate: z.date({
     required_error: "End date is required",
@@ -25,7 +25,7 @@ export const eventSchema = z.object({
     },
     {
       required_error: "End time is required",
-    }
+    },
   ),
   variant: z.enum(["blue", "green", "red", "yellow", "purple", "gray"], {
     required_error: "Variant is required",

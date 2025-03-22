@@ -30,9 +30,9 @@ export function CalendarMonthView({ singleDayEvents, multiDayEvents }: IProps) {
       calculateMonthEventPositions(
         multiDayEvents,
         singleDayEvents,
-        selectedDate
+        selectedDate,
       ),
-    [multiDayEvents, singleDayEvents, selectedDate]
+    [multiDayEvents, singleDayEvents, selectedDate],
   );
 
   return (

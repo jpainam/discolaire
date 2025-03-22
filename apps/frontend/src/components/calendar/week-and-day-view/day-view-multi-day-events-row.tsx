@@ -37,11 +37,11 @@ export function DayViewMultiDayEventsRow({
     .sort((a, b) => {
       const durationA = differenceInDays(
         parseISO(a.endDate),
-        parseISO(a.startDate)
+        parseISO(a.startDate),
       );
       const durationB = differenceInDays(
         parseISO(b.endDate),
-        parseISO(b.startDate)
+        parseISO(b.startDate),
       );
       return durationB - durationA;
     });

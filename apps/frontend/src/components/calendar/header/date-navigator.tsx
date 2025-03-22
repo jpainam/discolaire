@@ -27,7 +27,7 @@ export function DateNavigator({ events }: IProps) {
 
   const eventCount = useMemo(
     () => getEventsCount(events, selectedDate, view),
-    [events, selectedDate, view]
+    [events, selectedDate, view],
   );
 
   const handlePrevious = () =>

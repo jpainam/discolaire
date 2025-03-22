@@ -49,7 +49,7 @@ export function rangeText(view: TCalendarView, date: Date) {
 export function navigateDate(
   date: Date,
   view: TCalendarView,
-  direction: "previous" | "next"
+  direction: "previous" | "next",
 ): Date {
   const operations = {
     month: direction === "next" ? addMonths : subMonths,
@@ -63,7 +63,7 @@ export function navigateDate(
 export function getEventsCount(
   events: IEvent[],
   date: Date,
-  view: TCalendarView
+  view: TCalendarView,
 ): number {
   const compareFns = {
     day: isSameDay,
@@ -72,7 +72,7 @@ export function getEventsCount(
   };
 
   return events.filter((event) =>
-    compareFns[view](new Date(event.startDate), date)
+    compareFns[view](new Date(event.startDate), date),
   ).length;
 }
 
@@ -80,7 +80,7 @@ export function getEventsCount(
 
 export function groupEvents(dayEvents: IEvent[]) {
   const sortedEvents = dayEvents.sort(
-    (a, b) => parseISO(a.startDate).getTime() - parseISO(b.startDate).getTime()
+    (a, b) => parseISO(a.startDate).getTime() - parseISO(b.startDate).getTime(),
   );
   const groups: IEvent[][] = [];
 
@@ -110,7 +110,7 @@ export function getEventBlockStyle(
   event: IEvent,
   day: Date,
   groupIndex: number,
-  groupSize: number
+  groupSize: number,
 ) {
   const startDate = parseISO(event.startDate);
   const dayStart = new Date(day.setHours(0, 0, 0, 0));
@@ -146,7 +146,7 @@ export function getCalendarCells(selectedDate: Date): ICalendarCell[] {
     date: new Date(
       currentYear,
       currentMonth - 1,
-      daysInPrevMonth - firstDayOfMonth + i + 1
+      daysInPrevMonth - firstDayOfMonth + i + 1,
     ),
   }));
 
@@ -162,7 +162,7 @@ export function getCalendarCells(selectedDate: Date): ICalendarCell[] {
       day: i + 1,
       currentMonth: false,
       date: new Date(currentYear, currentMonth + 1, i + 1),
-    })
+    }),
   );
 
   return [...prevMonthCells, ...currentMonthCells, ...nextMonthCells];
@@ -171,7 +171,7 @@ export function getCalendarCells(selectedDate: Date): ICalendarCell[] {
 export function calculateMonthEventPositions(
   multiDayEvents: IEvent[],
   singleDayEvents: IEvent[],
-  selectedDate: Date
+  selectedDate: Date,
 ) {
   const monthStart = startOfMonth(selectedDate);
   const monthEnd = endOfMonth(selectedDate);
@@ -187,11 +187,11 @@ export function calculateMonthEventPositions(
     ...multiDayEvents.sort((a, b) => {
       const aDuration = differenceInDays(
         parseISO(a.endDate),
-        parseISO(a.startDate)
+        parseISO(a.startDate),
       );
       const bDuration = differenceInDays(
         parseISO(b.endDate),
-        parseISO(b.startDate)
+        parseISO(b.startDate),
       );
       return (
         bDuration - aDuration ||
@@ -200,7 +200,7 @@ export function calculateMonthEventPositions(
     }),
     ...singleDayEvents.sort(
       (a, b) =>
-        parseISO(a.startDate).getTime() - parseISO(b.startDate).getTime()
+        parseISO(a.startDate).getTime() - parseISO(b.startDate).getTime(),
     ),
   ];
 
@@ -242,7 +242,7 @@ export function calculateMonthEventPositions(
 export function getMonthCellEvents(
   date: Date,
   events: IEvent[],
-  eventPositions: Record<string, number>
+  eventPositions: Record<string, number>,
 ) {
   const eventsForDate = events.filter((event) => {
     const eventStart = parseISO(event.startDate);

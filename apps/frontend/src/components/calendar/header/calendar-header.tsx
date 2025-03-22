@@ -68,7 +68,7 @@ export function CalendarHeader({ events }: IProps) {
                     value={modeValue}
                     className={cn(
                       "w-full rounded-none shadow-none focus-visible:z-10 text-base flex items-center justify-center gap-2 relative border-none",
-                      isSelected && "z-10"
+                      isSelected && "z-10",
                     )}
                   >
                     <motion.div

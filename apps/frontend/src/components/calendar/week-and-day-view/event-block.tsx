@@ -29,17 +29,17 @@ const calendarWeekEventCardVariants = cva(
 
         // Dot variants
         "blue-dot":
-          "border-b-primary bg-bg-secondary text-t-primary [&_svg]:fill-blue-600",
+          "border-b-primary bg-secondary text-t-primary [&_svg]:fill-blue-600",
         "green-dot":
-          "border-b-primary bg-bg-secondary text-t-primary [&_svg]:fill-green-600",
+          "border-b-primary bg-secondary text-t-primary [&_svg]:fill-green-600",
         "red-dot":
-          "border-b-primary bg-bg-secondary text-t-primary [&_svg]:fill-red-600",
+          "border-b-primary bg-secondary text-t-primary [&_svg]:fill-red-600",
         "orange-dot":
-          "border-b-primary bg-bg-secondary text-t-primary [&_svg]:fill-orange-600",
+          "border-b-primary bg-secondary text-t-primary [&_svg]:fill-orange-600",
         "purple-dot":
-          "border-b-primary bg-bg-secondary text-t-primary [&_svg]:fill-purple-600",
+          "border-b-primary bg-secondary text-t-primary [&_svg]:fill-purple-600",
         "yellow-dot":
-          "border-b-primary bg-bg-secondary text-t-primary [&_svg]:fill-yellow-600",
+          "border-b-primary bg-secondary text-t-primary [&_svg]:fill-yellow-600",
       },
     },
     defaultVariants: {

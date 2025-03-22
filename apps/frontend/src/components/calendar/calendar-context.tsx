@@ -35,7 +35,7 @@ export function CalendarProvider({
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedUserId, setSelectedUserId] = useState<IUser["id"] | "all">(
-    "all"
+    "all",
   );
 
   const [view, setView] = useState<TCalendarView>("week");
