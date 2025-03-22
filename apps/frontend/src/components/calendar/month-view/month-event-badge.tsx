@@ -52,7 +52,7 @@ const eventBadgeVariants = cva(
     defaultVariants: {
       color: "blue-dot",
     },
-  }
+  },
 );
 
 interface IProps
@@ -107,7 +107,7 @@ export function MonthEventBadge({
   ) as VariantProps<typeof eventBadgeVariants>["color"];
 
   const eventBadgeClasses = cn(
-    eventBadgeVariants({ color, multiDayPosition: position, className })
+    eventBadgeVariants({ color, multiDayPosition: position, className }),
   );
 
   return (
