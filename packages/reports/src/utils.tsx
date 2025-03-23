@@ -115,3 +115,25 @@ export const renderHtml = (html: string) => {
     development: process.env.NODE_ENV !== "production",
   });
 };
+
+export function getTitle({ trimestreId }: { trimestreId: string }) {
+  if (trimestreId == "trim1") {
+    return {
+      title: "BULLETIN SCOLAIRE DU PREMIER TRIMESTRE",
+      seq1: "SEQ1",
+      seq2: "SEQ2",
+    };
+  }
+  if (trimestreId == "trim2") {
+    return {
+      title: "BULLETIN SCOLAIRE DU SECOND TRIMESTRE",
+      seq1: "SEQ3",
+      seq2: "SEQ4",
+    };
+  }
+  return {
+    title: "BULLETIN SCOLAIRE DU TROISIEME TRIMESTRE",
+    seq1: "SEQ5",
+    seq2: "SEQ6",
+  };
+}

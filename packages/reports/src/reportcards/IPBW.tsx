@@ -22,10 +22,12 @@ export function IPBW({
   subjects,
   report,
   contact,
+  title,
   schoolYear,
 }: {
   subjects: RouterOutputs["classroom"]["subjects"];
   student: RouterOutputs["student"]["get"];
+  title: string;
   classroom: RouterOutputs["classroom"]["get"];
   report: RouterOutputs["reportCard"]["getSequence"];
   schoolYear: RouterOutputs["schoolYear"]["get"];
@@ -67,9 +69,10 @@ export function IPBW({
                 fontWeight: "bold",
                 alignSelf: "center",
                 fontSize: 10,
+                textTransform: "uppercase",
               }}
             >
-              BULLETIN SCOLAIRE DU PREMIER TRIMESTRE
+              {title}
             </Text>
             <Text
               style={{
@@ -292,7 +295,7 @@ export function IPBW({
                       }}
                     >
                       <Text>
-                        MOY :
+                        MOY :{" "}
                         {(
                           sum(
                             items.map(

@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
 
     return Response.json(
       { error: "Invalid request body", errors },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -56,31 +56,28 @@ async function classroomReportCard({
   termId: number;
 }) {
   const school = await api.school.getSchool();
-  const classroom = await api.classroom.get(classroomId);
-  const { result: results, summary: _summary } =
-    await api.reportCard.getClassroom({
-      termId,
-      classroomId,
-    });
-  const grades = await api.reportCard.getGrades2({
+  const students = await api.classroom.students(classroomId);
+  const contacts = await api.student.getPrimaryContacts({ classroomId });
+  const report = await caller.reportCard.getSequence({
     classroomId: classroomId,
     termId: termId,
   });
-  const students = await api.classroom.students(classroomId);
 
-  const contacts = await api.student.getPrimaryContacts({ classroomId });
   const subjects = await api.classroom.subjects(classroomId);
+  const term = await api.term.get(termId);
+  const classroom = await caller.classroom.get(classroomId);
+
   const stream = await renderToStream(
     IPBWClassroom({
       school,
+      students,
       classroom,
+      title: `BULLETIN SCOLAIRE : ${term?.name}`,
       subjects,
-      students: students,
-      schoolYear: classroom.schoolYear,
-      grades,
+      report,
       contacts,
-      results: results.sort((a, b) => a.rank - b.rank),
-    }),
+      schoolYear: classroom.schoolYear,
+    })
   );
 
   const headers: Record<string, string> = {
@@ -116,20 +113,21 @@ async function indvidualReportCard({
     return new Response("Student has no grades", { status: 400 });
   }
 
-  //TODO respect In case there are ex-aequo
   const contact = await api.student.getPrimaryContact(student.id);
   const school = await api.school.getSchool();
+  const term = await caller.term.get(termId);
 
   const stream = await renderToStream(
     IPBW({
       school,
       student,
       classroom,
+      title: `BULLETIN SCOLAIRE : ${term?.name}`,
       subjects,
       report,
       contact,
       schoolYear: classroom.schoolYear,
-    }),
+    })
   );
 
   const headers: Record<string, string> = {
