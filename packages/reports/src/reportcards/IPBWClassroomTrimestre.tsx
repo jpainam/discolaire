@@ -12,7 +12,7 @@ import { IPBWTableHeader } from "./IPBWTableHeader";
 
 const W = ["40%", "6%", "6%", "6%", "6%", "6%", "10%", "10%"];
 
-export function IPBWClassroom({
+export function IPBWClassroomTrimestre({
   school,
   subjects,
   students,
@@ -26,7 +26,7 @@ export function IPBWClassroom({
   students: RouterOutputs["classroom"]["students"];
   classroom: RouterOutputs["classroom"]["get"];
   title: string;
-  report: RouterOutputs["reportCard"]["getSequence"];
+  report: RouterOutputs["reportCard"]["getTrimestre"];
   schoolYear: RouterOutputs["schoolYear"]["get"];
   contacts: RouterOutputs["student"]["getPrimaryContacts"];
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
@@ -130,7 +130,8 @@ export function IPBWClassroom({
                           (c) => c.subjectId === subject.id,
                         );
                         const subjectSummary = summary.get(subject.id);
-                        coeff += grade?.grade != null ? subject.coefficient : 0;
+                        coeff +=
+                          grade?.average != null ? subject.coefficient : 0;
                         return (
                           <View
                             style={{
@@ -185,7 +186,7 @@ export function IPBWClassroom({
                             >
                               <Text>
                                 {" "}
-                                {grade?.grade != null
+                                {grade?.average != null
                                   ? subject.coefficient
                                   : ""}
                               </Text>
@@ -199,7 +200,7 @@ export function IPBWClassroom({
                               }}
                             >
                               <Text>
-                                {grade?.grade != null
+                                {grade?.average != null
                                   ? grade.total?.toFixed(2)
                                   : ""}
                               </Text>
@@ -213,7 +214,7 @@ export function IPBWClassroom({
                               }}
                             >
                               <Text>
-                                {grade?.grade != null ? grade.rank : ""}
+                                {grade?.average != null ? grade.rank : ""}
                               </Text>
                             </View>
                             <View
@@ -344,7 +345,7 @@ export function IPBWClassroom({
                   max: Math.max(...averages),
                   average: average,
                 }}
-                rank={value.aequoRank}
+                rank={"2"}
               />
               <IPBWSignature />
             </View>
@@ -354,5 +355,3 @@ export function IPBWClassroom({
     </Document>
   );
 }
-
-export default IPBWClassroom;

@@ -1,7 +1,7 @@
 "use client";
 
 import { MailIcon, MoreVertical } from "lucide-react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -34,12 +34,14 @@ export function ReportCardHeader({
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const Icon = sidebarIcons.reportcards;
   const canPrintReportCard = useCheckPermission(
     "reportcard",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const termId = searchParams.get("term");
+  const trimestreId = searchParams.get("trimestreId");
   return (
     <div className="grid md:flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1 text-secondary-foreground">
       {Icon && <Icon className="h-6 w-6" />}
@@ -75,23 +77,24 @@ export function ReportCardHeader({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem disabled={!termId}>
+              <DropdownMenuItem disabled={!termId && !trimestreId}>
                 <MailIcon />
                 {t("notify_parents")}
               </DropdownMenuItem>
               <DropdownMenuItem
-                disabled={!termId}
+                disabled={!termId && !trimestreId}
                 onSelect={() => {
-                  window.open(
-                    `/api/pdfs/reportcards/ipbw/?studentId=${params.id}&termId=${searchParams.get("term")}`,
-                    "_blank",
-                  );
+                  let url = `/api/pdfs/reportcards/ipbw/?studentId=${params.id}&termId=${searchParams.get("term")}`;
+                  if (pathname.includes("/trimestres") && trimestreId) {
+                    url = `/api/pdfs/reportcards/ipbw/trimestres/?studentId=${params.id}&trimestreId=${searchParams.get("trimestreId")}`;
+                  }
+                  window.open(url, "_blank");
                 }}
               >
                 <PDFIcon />
                 {t("pdf_export")}
               </DropdownMenuItem>
-              <DropdownMenuItem disabled={!termId}>
+              <DropdownMenuItem disabled={!termId && !trimestreId}>
                 <XMLIcon />
                 {t("xml_export")}
               </DropdownMenuItem>
