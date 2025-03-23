@@ -112,6 +112,7 @@ export function IPBW({
 
               if (!items) return null;
               const group = items[0]?.subjectGroup;
+              let coeff = 0;
               return (
                 <>
                   {items.map((subject, index2) => {
@@ -119,6 +120,7 @@ export function IPBW({
                       (c) => c.subjectId === subject.id,
                     );
                     const subjectSummary = summary.get(subject.id);
+                    coeff += grade?.grade != null ? subject.coefficient : 0;
                     return (
                       <View
                         style={{
@@ -262,9 +264,7 @@ export function IPBW({
                         borderRight: "1px solid black",
                       }}
                     >
-                      <Text>
-                        {sum(items.map((subject) => subject.coefficient))}
-                      </Text>
+                      <Text>{coeff}</Text>
                     </View>
 
                     <View
@@ -304,7 +304,7 @@ export function IPBW({
                                   (c) => c.subjectId === subject.id,
                                 )?.total,
                             ),
-                          ) / sum(items.map((subject) => subject.coefficient))
+                          ) / (coeff || 1)
                         ).toFixed(2)}
                       </Text>
                     </View>

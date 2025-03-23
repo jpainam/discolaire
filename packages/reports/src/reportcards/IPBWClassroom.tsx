@@ -56,7 +56,7 @@ export function IPBWClassroom({
         return (
           <Page
             size={"A4"}
-            key={"page-" + index}
+            key={`page-${index}-${key}`}
             style={{
               paddingVertical: 20,
               paddingHorizontal: 40,
@@ -121,11 +121,12 @@ export function IPBWClassroom({
 
                   if (!items) return null;
                   const group = items[0]?.subjectGroup;
-                  const coeff = sum(
-                    studentReport.studentCourses
-                      .filter((c) => c.average != null)
-                      .map((cc) => cc.coeff),
-                  );
+                  let coeff = 0;
+                  // const coeff = sum(
+                  //   studentReport.studentCourses
+                  //     .filter((c) => c.average != null)
+                  //     .map((cc) => cc.coeff),
+                  // );
 
                   return (
                     <>
@@ -134,6 +135,7 @@ export function IPBWClassroom({
                           (c) => c.subjectId === subject.id,
                         );
                         const subjectSummary = summary.get(subject.id);
+                        coeff += grade?.grade != null ? subject.coefficient : 0;
                         return (
                           <View
                             style={{
@@ -141,7 +143,7 @@ export function IPBWClassroom({
                               flexDirection: "row",
                               display: "flex",
                             }}
-                            key={`card-${index}-${index}`}
+                            key={`${subject.id}-${student.id}-${index}`}
                           >
                             <View
                               style={{
