@@ -75,7 +75,7 @@ function SummaryItem({
           borderBottom: lastRow ? "" : "1px solid black",
         }}
       >
-        <Text>{value ?? ""}</Text>
+        <Text>{value != 0 ? value : ""}</Text>
       </View>
     </View>
   );

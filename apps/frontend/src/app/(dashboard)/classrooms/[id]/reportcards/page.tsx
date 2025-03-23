@@ -23,15 +23,15 @@ import { api, caller } from "~/trpc/server";
 import { getAppreciations } from "~/utils/get-appreciation";
 
 export default async function Page(props: {
-  searchParams: Promise<{ term: string }>;
+  searchParams: Promise<{ termId: string }>;
   params: Promise<{ id: string }>;
 }) {
   const searchParams = await props.searchParams;
   const params = await props.params;
 
-  const { term } = searchParams;
+  const { termId } = searchParams;
 
-  if (!term) {
+  if (!termId) {
     return <EmptyState className="my-8" />;
   }
   const {
@@ -40,7 +40,7 @@ export default async function Page(props: {
     globalRanks,
   } = await caller.reportCard.getSequence({
     classroomId: params.id,
-    termId: Number(term),
+    termId: Number(termId),
   });
 
   const classroom = await caller.classroom.get(params.id);
@@ -135,7 +135,7 @@ export default async function Page(props: {
                     <TableCell>
                       <Link
                         className=" hover:underline"
-                        href={`/students/${student.id}/reportcards?term=${term}`}
+                        href={`/students/${student.id}/reportcards?termId=${termId}`}
                       >
                         {student.lastName}
                       </Link>
@@ -153,7 +153,7 @@ export default async function Page(props: {
                       .sort((a, b) => a.order - b.order)
                       .map((subject, index) => {
                         const g = studentReport.studentCourses.find(
-                          (c) => c.subjectId === subject.id,
+                          (c) => c.subjectId === subject.id
                         )?.average;
                         return (
                           <TableCell
@@ -164,7 +164,7 @@ export default async function Page(props: {
                                 ? "!bg-red-50 dark:!bg-red-800"
                                 : (g ?? 0) < 15
                                   ? "!bg-yellow-50 dark:!bg-yellow-800"
-                                  : "!bg-green-50 dark:!bg-green-800",
+                                  : "!bg-green-50 dark:!bg-green-800"
                             )}
                           >
                             {g ? g.toFixed(2) : "-"}

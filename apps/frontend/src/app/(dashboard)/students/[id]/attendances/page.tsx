@@ -39,7 +39,7 @@ export default async function Page(props: {
   }
 
   return (
-    <div className="grid auto-rows-min gap-2 md:grid-cols-2 px-4">
+    <div className="grid auto-rows-min gap-4 md:grid-cols-2 p-4">
       <Suspense>
         <AbsenceItem termId={termId} studentId={studentId} />
       </Suspense>
@@ -326,7 +326,7 @@ async function AbsenceItem({
             <BaselineIcon
               className={cn(
                 "h-6 w-6",
-                !item.justification ? "text-destructive" : "text-green-700",
+                !item.justification ? "text-destructive" : "text-green-700"
               )}
             />
             <div className="flex-1 items-start justify-start">
