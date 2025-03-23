@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
 
     return Response.json(
       { error: "Invalid request body", errors },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -80,7 +80,7 @@ async function classroomReportCard({
       grades,
       contacts,
       results: results.sort((a, b) => a.rank - b.rank),
-    })
+    }),
   );
 
   const headers: Record<string, string> = {
@@ -129,7 +129,7 @@ async function indvidualReportCard({
       report,
       contact,
       schoolYear: classroom.schoolYear,
-    })
+    }),
   );
 
   const headers: Record<string, string> = {
