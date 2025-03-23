@@ -37,7 +37,7 @@ export function ReportCardHeader({
   const Icon = sidebarIcons.reportcards;
   const canPrintReportCard = useCheckPermission(
     "reportcard",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const termId = searchParams.get("term");
   return (
@@ -53,6 +53,7 @@ export function ReportCardHeader({
       />
       <TrimestreSelector
         className="w-[300px]"
+        defaultValue={searchParams.get("trimestreId") ?? undefined}
         onChange={(val) => {
           const url =
             `/students/${params.id}/reportcards/trimestres?` +
@@ -83,7 +84,7 @@ export function ReportCardHeader({
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/reportcards/ipbw/?studentId=${params.id}&termId=${searchParams.get("term")}`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >
