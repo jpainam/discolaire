@@ -4,20 +4,19 @@ import _, { sum } from "lodash";
 import type { RouterOutputs } from "@repo/api";
 
 import { IPBWHeader } from "../headers/IPBWHeader";
-import { getAppreciations } from "../utils";
+import { getAppreciations, getTitle } from "../utils";
 import { IPBWSignature } from "./IPBWSignature";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWSummary } from "./IPBWSummary";
-import { IPBWTableHeader } from "./IPBWTableHeader";
 
-const W = ["40%", "6%", "6%", "6%", "6%", "6%", "10%", "10%"];
+const W = ["30%", "6%", "6%", "6%", "6%", "6%", "10%", "12%"];
 
 export function IPBWClassroomTrimestre({
   school,
   subjects,
   students,
   classroom,
-  title,
+  trimestreId,
   report,
   contacts,
   schoolYear,
@@ -25,7 +24,7 @@ export function IPBWClassroomTrimestre({
   subjects: RouterOutputs["classroom"]["subjects"];
   students: RouterOutputs["classroom"]["students"];
   classroom: RouterOutputs["classroom"]["get"];
-  title: string;
+  trimestreId: string;
   report: RouterOutputs["reportCard"]["getTrimestre"];
   schoolYear: RouterOutputs["schoolYear"]["get"];
   contacts: RouterOutputs["student"]["getPrimaryContacts"];
@@ -43,6 +42,7 @@ export function IPBWClassroomTrimestre({
   const successCount = averages.filter((val) => val >= 10).length;
   const successRate = successCount / averages.length;
   const average = averages.reduce((acc, val) => acc + val, 0) / averages.length;
+  const { title, seq1, seq2 } = getTitle({ trimestreId });
 
   return (
     <Document>
@@ -113,8 +113,8 @@ export function IPBWClassroomTrimestre({
                   flexDirection: "column",
                 }}
               >
-                <IPBWTableHeader W={W} />
-                {Object.keys(groups).map((groupId: string, index: number) => {
+                <IPBWTableHeader seq1={seq1} seq2={seq2} W={W} />
+                {Object.keys(groups).map((groupId: string) => {
                   const items = groups[Number(groupId)]?.sort(
                     (a, b) => a.order - b.order,
                   );
@@ -166,6 +166,26 @@ export function IPBWClassroomTrimestre({
                               </Text>
                             </View>
 
+                            <View
+                              style={{
+                                width: W[1],
+                                borderRight: "1px solid black",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <Text> {grade ? grade.grade1 : ""}</Text>
+                            </View>
+                            <View
+                              style={{
+                                width: W[1],
+                                borderRight: "1px solid black",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <Text> {grade ? grade.grade2 : ""}</Text>
+                            </View>
                             <View
                               style={{
                                 width: W[1],
@@ -262,15 +282,12 @@ export function IPBWClassroomTrimestre({
                           display: "flex",
                           fontWeight: "bold",
                           width: "100%",
-                          borderBottom:
-                            index === Object.keys(groups).length - 1
-                              ? ""
-                              : "1px solid black",
+                          borderBottom: "1px solid black",
                         }}
                       >
                         <View
                           style={{
-                            width: "46%",
+                            width: "48%",
                             paddingVertical: 2,
                             borderRight: "1px solid black",
 
@@ -335,6 +352,85 @@ export function IPBWClassroomTrimestre({
                     </>
                   );
                 })}
+                <View
+                  style={{
+                    flexDirection: "row",
+                    fontWeight: "bold",
+                    display: "flex",
+                  }}
+                >
+                  <View
+                    style={{
+                      width: W[0],
+                      borderRight: "1px solid black",
+                      padding: 2,
+                    }}
+                  >
+                    <Text>MOY. MENSUELLES</Text>
+                  </View>
+                  <View
+                    style={{
+                      width: W[1],
+                      padding: 2,
+                      borderRight: "1px solid black",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text>{studentReport.global.grade1Average.toFixed(2)}</Text>
+                  </View>
+                  <View
+                    style={{
+                      width: W[1],
+                      borderRight: "1px solid black",
+                      alignItems: "center",
+                      padding: 2,
+                    }}
+                  >
+                    <Text>{studentReport.global.grade2Average.toFixed(2)}</Text>
+                  </View>
+                  <View
+                    style={{
+                      width: W[1],
+                      borderRight: "1px solid black",
+                      padding: 2,
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text></Text>
+                  </View>
+                  <View
+                    style={{
+                      width: W[2],
+                      borderRight: "1px solid black",
+                      padding: 2,
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text>
+                      {sum(
+                        studentReport.studentCourses
+                          .filter((s) => s.average != null)
+                          .map((s) => s.coeff),
+                      )}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      width: W[2],
+                      borderRight: "1px solid black",
+                      padding: 2,
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text>
+                      {sum(
+                        studentReport.studentCourses
+                          .filter((s) => s.average != null)
+                          .map((s) => s.total ?? 0),
+                      ).toFixed(1)}
+                    </Text>
+                  </View>
+                </View>
               </View>
               <IPBWSummary
                 effectif={classroom.size}
@@ -345,7 +441,7 @@ export function IPBWClassroomTrimestre({
                   max: Math.max(...averages),
                   average: average,
                 }}
-                rank={"2"}
+                rank={`${value.rank}`}
               />
               <IPBWSignature />
             </View>
@@ -353,5 +449,140 @@ export function IPBWClassroomTrimestre({
         );
       })}
     </Document>
+  );
+}
+
+function IPBWTableHeader({
+  W,
+  seq1,
+  seq2,
+}: {
+  W: number[] | string[];
+  seq1: string;
+  seq2: string;
+}) {
+  return (
+    <View
+      style={{
+        backgroundColor: "#000",
+        color: "#fff",
+        flexDirection: "row",
+        display: "flex",
+        paddingVertical: 2,
+        borderBottom: "1px solid black",
+        fontWeight: "bold",
+        fontSize: 8,
+      }}
+    >
+      <View
+        style={{
+          padding: 2,
+          width: W[0],
+          alignItems: "center",
+          borderRight: "1px solid black",
+          paddingHorizontal: 2,
+        }}
+      >
+        <Text>Matieres</Text>
+      </View>
+      <View
+        style={{
+          justifyContent: "center",
+          width: W[1],
+          alignItems: "center",
+          borderRight: "1px solid black",
+          paddingHorizontal: 2,
+        }}
+      >
+        <Text>{seq1}</Text>
+      </View>
+      <View
+        style={{
+          justifyContent: "center",
+          width: W[1],
+          alignItems: "center",
+          borderRight: "1px solid black",
+          paddingHorizontal: 2,
+        }}
+      >
+        <Text>{seq2}</Text>
+      </View>
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          width: W[1],
+          borderRight: "1px solid black",
+          paddingHorizontal: 2,
+        }}
+      >
+        <Text>Moy</Text>
+      </View>
+      <View
+        style={{
+          width: W[2],
+          alignItems: "center",
+          justifyContent: "center",
+          borderRight: "1px solid black",
+          paddingHorizontal: 2,
+        }}
+      >
+        <Text> Coef.</Text>
+      </View>
+      <View
+        style={{
+          width: W[3],
+          justifyContent: "center",
+          alignItems: "center",
+          borderRight: "1px solid black",
+          paddingHorizontal: 2,
+        }}
+      >
+        <Text> Total</Text>
+      </View>
+      <View
+        style={{
+          width: W[4],
+          justifyContent: "center",
+          alignItems: "center",
+          borderRight: "1px solid black",
+          paddingHorizontal: 2,
+        }}
+      >
+        <Text> Rang</Text>
+      </View>
+      <View
+        style={{
+          width: W[5],
+          justifyContent: "center",
+          alignItems: "center",
+          borderRight: "1px solid black",
+          paddingHorizontal: 2,
+        }}
+      >
+        <Text> Moy.C</Text>
+      </View>
+      <View
+        style={{
+          width: W[6],
+          justifyContent: "center",
+          alignItems: "center",
+          borderRight: "1px solid black",
+          paddingHorizontal: 2,
+        }}
+      >
+        <Text> Min/Max</Text>
+      </View>
+      <View
+        style={{
+          width: W[7],
+          justifyContent: "center",
+          alignItems: "center",
+          paddingHorizontal: 2,
+        }}
+      >
+        <Text> Appreciation</Text>
+      </View>
+    </View>
   );
 }

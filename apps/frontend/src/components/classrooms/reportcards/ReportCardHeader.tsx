@@ -1,7 +1,7 @@
 "use client";
 
 import { MoreVertical } from "lucide-react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { parseAsInteger, useQueryState } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
@@ -27,6 +27,8 @@ export function ReportCardHeader() {
   const { createQueryString } = useCreateQueryString();
   const searchParams = useSearchParams();
   const [termId] = useQueryState("term", parseAsInteger);
+  const pathname = usePathname();
+  const [trimestreId] = useQueryState("trimestreId");
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const Icon = sidebarIcons.reportcards;
@@ -40,7 +42,7 @@ export function ReportCardHeader() {
         onChange={(val) => {
           router.push(
             `/classrooms/${params.id}/reportcards?` +
-              createQueryString({ term: val, trimestreId: undefined }),
+              createQueryString({ term: val, trimestreId: undefined })
           );
         }}
       />
@@ -67,11 +69,13 @@ export function ReportCardHeader() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
+              disabled={!termId && !trimestreId}
               onSelect={() => {
-                window.open(
-                  `/api/pdfs/reportcards/ipbw?classroomId=${params.id}&termId=${termId}`,
-                  "_blank",
-                );
+                let url = `/api/pdfs/reportcards/ipbw?classroomId=${params.id}&termId=${termId}`;
+                if (pathname.includes("/trimestres")) {
+                  url = `/api/pdfs/reportcards/ipbw/trimestres?trimestreId=${trimestreId}&classroomId=${params.id}&format=pdf`;
+                }
+                window.open(url, "_blank");
               }}
             >
               <PDFIcon />

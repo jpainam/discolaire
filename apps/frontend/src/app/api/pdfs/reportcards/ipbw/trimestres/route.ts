@@ -69,7 +69,7 @@ async function classroomReportCard({
       school,
       students,
       classroom,
-      title: trimestreId,
+      trimestreId,
       subjects,
       report,
       contacts,
