@@ -24,7 +24,7 @@
     "@repo/api": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/transactional": "workspace:*",
-    "bullmq": "^5.43.1",
+    "bullmq": "^5.44.3",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "dotenv": "^16.4.7",
@@ -32,7 +32,7 @@
     "express": "^4.21.2",
     "ioredis": "^5.6.0",
     "jose": "^6.0.10",
-    "nanoid": "^5.1.4",
+    "nanoid": "^5.1.5",
     "preact": "^10.26.4",
     "qrcode": "^1.5.4",
     "react": "catalog:",
@@ -58,6 +58,6 @@
     "typescript": "catalog:"
   },
   "engines": {
-    "node": ">=22.11.0"
+    "node": ">=22.14.0"
   }
 }
