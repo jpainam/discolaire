@@ -42,7 +42,7 @@ export function ReportCardHeader() {
         onChange={(val) => {
           router.push(
             `/classrooms/${params.id}/reportcards?` +
-              createQueryString({ term: val, trimestreId: undefined })
+              createQueryString({ term: val, trimestreId: undefined }),
           );
         }}
       />
