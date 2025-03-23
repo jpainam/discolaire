@@ -52,7 +52,7 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
           },
         }),
       ],
-    })
+    }),
   );
   const [trpcClient] = useState(() =>
     createTRPCClient<AppRouter>({
@@ -72,7 +72,7 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
           },
         }),
       ],
-    })
+    }),
   );
 
   return (
