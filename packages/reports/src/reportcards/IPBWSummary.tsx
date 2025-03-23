@@ -9,12 +9,20 @@ export function IPBWSummary({
   summary,
   effectif,
   successRate,
+  discipline,
   rank,
 }: {
   average: number;
   rank: string;
   effectif: number;
   successRate: number;
+  discipline: {
+    absence: number;
+    lateness: number;
+    justifiedLateness: number;
+    consigne: number;
+    justifiedAbsence: number;
+  };
   summary: {
     min: number;
     max: number;
@@ -24,7 +32,7 @@ export function IPBWSummary({
   return (
     <View style={{ flexDirection: "row", marginTop: "4px", gap: 2 }}>
       <IPBWTravail grade={average} style={{ width: "20%" }} />
-      <IPBWDiscipline style={{ width: "20%" }} />
+      <IPBWDiscipline discipline={discipline} style={{ width: "20%" }} />
       <View
         style={{
           width: "20%",

@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
@@ -58,4 +59,37 @@ export const termRouter = createTRPCRouter({
       },
     });
   }),
+  fromTrimestre: protectedProcedure
+    .input(z.string().min(1))
+    .query(async ({ ctx, input }) => {
+      const terms = await ctx.db.term.findMany({
+        where: {
+          schoolId: ctx.schoolId,
+          schoolYearId: ctx.schoolYearId,
+        },
+      });
+
+      if (!["trim1", "trim2", "trim3"].includes(input)) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Trimestre not found",
+        });
+      }
+      if (input === "trim1") {
+        return {
+          seq1: terms.find((t) => t.order === 1),
+          seq2: terms.find((t) => t.order === 2),
+        };
+      } else if (input === "trim2") {
+        return {
+          seq1: terms.find((t) => t.order === 3),
+          seq2: terms.find((t) => t.order === 4),
+        };
+      } else {
+        return {
+          seq1: terms.find((t) => t.order === 5),
+          seq2: terms.find((t) => t.order === 6),
+        };
+      }
+    }),
 });

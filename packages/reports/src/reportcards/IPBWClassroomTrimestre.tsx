@@ -20,6 +20,7 @@ export function IPBWClassroomTrimestre({
   report,
   contacts,
   schoolYear,
+  discipline,
 }: {
   subjects: RouterOutputs["classroom"]["subjects"];
   students: RouterOutputs["classroom"]["students"];
@@ -29,6 +30,10 @@ export function IPBWClassroomTrimestre({
   schoolYear: RouterOutputs["schoolYear"]["get"];
   contacts: RouterOutputs["student"]["getPrimaryContacts"];
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
+  discipline: {
+    disc1: RouterOutputs["discipline"]["classroom"];
+    disc2: RouterOutputs["discipline"]["classroom"];
+  };
 }) {
   const { studentsReport, summary, globalRanks } = report;
   const values = Array.from(globalRanks.values());
@@ -53,6 +58,8 @@ export function IPBWClassroomTrimestre({
         if (!studentReport || !student) {
           return null;
         }
+        const disc1 = discipline.disc1.get(student.id);
+        const disc2 = discipline.disc2.get(student.id);
         return (
           <Page
             size={"A4"}
@@ -433,6 +440,17 @@ export function IPBWClassroomTrimestre({
                 </View>
               </View>
               <IPBWSummary
+                discipline={{
+                  absence: (disc1?.absence ?? 0) + (disc2?.absence ?? 0),
+                  lateness: (disc1?.lateness ?? 0) + (disc2?.lateness ?? 0),
+                  justifiedLateness:
+                    (disc1?.justifiedLateness ?? 0) +
+                    (disc2?.justifiedLateness ?? 0),
+                  consigne: (disc1?.consigne ?? 0) + (disc2?.consigne ?? 0),
+                  justifiedAbsence:
+                    (disc1?.justifiedAbsence ?? 0) +
+                    (disc2?.justifiedAbsence ?? 0),
+                }}
                 effectif={classroom.size}
                 average={value.average}
                 successRate={successRate}

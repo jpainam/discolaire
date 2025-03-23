@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
 
     return Response.json(
       { error: "Invalid request body", errors },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -64,17 +64,31 @@ async function classroomReportCard({
   const subjects = await api.classroom.subjects(classroomId);
   const classroom = await caller.classroom.get(classroomId);
 
+  const terms = await caller.term.fromTrimestre(trimestreId);
+  const disc1 = await caller.discipline.classroom({
+    classroomId: classroomId,
+    termId: terms.seq1?.id ?? 0,
+  });
+  const disc2 = await caller.discipline.classroom({
+    classroomId: classroomId,
+    termId: terms.seq2?.id ?? 0,
+  });
+
   const stream = await renderToStream(
     IPBWClassroomTrimestre({
       school,
       students,
+      discipline: {
+        disc1,
+        disc2,
+      },
       classroom,
       trimestreId,
       subjects,
       report,
       contacts,
       schoolYear: classroom.schoolYear,
-    }),
+    })
   );
 
   const headers: Record<string, string> = {
@@ -113,17 +127,34 @@ async function indvidualReportCard({
   const contact = await api.student.getPrimaryContact(student.id);
   const school = await api.school.getSchool();
 
+  const terms = await caller.term.fromTrimestre(trimestreId);
+  const disc1 = await caller.discipline.student({
+    studentId: studentId,
+    termId: terms.seq1?.id ?? 0,
+  });
+  const disc2 = await caller.discipline.student({
+    studentId: studentId,
+    termId: terms.seq2?.id ?? 0,
+  });
+
   const stream = await renderToStream(
     IPBWTrimestre({
       school,
       student,
       classroom,
       trimestreId,
+      discipline: {
+        absence: disc1.absence + disc2.absence,
+        lateness: disc1.lateness + disc2.lateness,
+        justifiedLateness: disc1.justifiedLateness + disc2.justifiedLateness,
+        consigne: disc1.consigne + disc2.consigne,
+        justifiedAbsence: disc1.justifiedAbsence + disc2.justifiedAbsence,
+      },
       subjects,
       report,
       contact,
       schoolYear: classroom.schoolYear,
-    }),
+    })
   );
 
   const headers: Record<string, string> = {

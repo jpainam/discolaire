@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
 
     return Response.json(
       { error: "Invalid request body", errors },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -67,17 +67,23 @@ async function classroomReportCard({
   const term = await api.term.get(termId);
   const classroom = await caller.classroom.get(classroomId);
 
+  const discipline = await caller.discipline.classroom({
+    classroomId: classroomId,
+    termId: termId,
+  });
+
   const stream = await renderToStream(
     IPBWClassroom({
       school,
       students,
+      discipline: discipline,
       classroom,
       title: `BULLETIN SCOLAIRE : ${term?.name}`,
       subjects,
       report,
       contacts,
       schoolYear: classroom.schoolYear,
-    }),
+    })
   );
 
   const headers: Record<string, string> = {
@@ -117,9 +123,21 @@ async function indvidualReportCard({
   const school = await api.school.getSchool();
   const term = await caller.term.get(termId);
 
+  const discipline = await caller.discipline.student({
+    studentId: studentId,
+    termId: Number(term),
+  });
+
   const stream = await renderToStream(
     IPBW({
       school,
+      discipline: {
+        absence: discipline.absence,
+        lateness: discipline.lateness,
+        justifiedLateness: discipline.justifiedLateness,
+        consigne: discipline.consigne,
+        justifiedAbsence: discipline.justifiedAbsence,
+      },
       student,
       classroom,
       title: `BULLETIN SCOLAIRE : ${term?.name}`,
@@ -127,7 +145,7 @@ async function indvidualReportCard({
       report,
       contact,
       schoolYear: classroom.schoolYear,
-    }),
+    })
   );
 
   const headers: Record<string, string> = {

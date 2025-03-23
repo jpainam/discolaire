@@ -10,7 +10,21 @@ import { getServerTranslations } from "~/i18n/server";
 
 import { cn } from "~/lib/utils";
 
-export async function ReportCardDiscipline({ id }: { id: string }) {
+export async function ReportCardDiscipline({
+  absence,
+  lateness,
+  justifiedAbsence,
+  consigne,
+  //justifiedLateness,
+  id,
+}: {
+  id: string;
+  absence: number;
+  lateness: number;
+  justifiedAbsence: number;
+  justifiedLateness: number;
+  consigne: number;
+}) {
   console.log(id);
   const { t } = await getServerTranslations();
   const rowClassName = "border-r text-sm";
@@ -29,25 +43,29 @@ export async function ReportCardDiscipline({ id }: { id: string }) {
             <TableCell className={cn(rowClassName)}>
               {t("total_absences")}
             </TableCell>
-            <TableCell className="min-w-[60px]"></TableCell>
+            <TableCell className="min-w-[60px]">
+              {absence ? absence : ""}
+            </TableCell>
           </TableRow>
           <TableRow>
             <TableCell className={cn(rowClassName)}>{t("justified")}</TableCell>
-            <TableCell></TableCell>
+            <TableCell>{justifiedAbsence ? justifiedAbsence : ""}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell className={cn(rowClassName)}>
               {t("non_justified")}
             </TableCell>
-            <TableCell></TableCell>
+            <TableCell>
+              {absence - justifiedAbsence ? absence - justifiedAbsence : ""}
+            </TableCell>
           </TableRow>
           <TableRow>
             <TableCell className={cn(rowClassName)}>{t("late")}</TableCell>
-            <TableCell></TableCell>
+            <TableCell>{lateness ? lateness : ""}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell className={cn(rowClassName)}>{t("consigne")}</TableCell>
-            <TableCell></TableCell>
+            <TableCell>{consigne}</TableCell>
           </TableRow>
         </TableBody>
       </Table>

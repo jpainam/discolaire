@@ -1,7 +1,19 @@
 import type { Style } from "@react-pdf/stylesheet";
 import { Text, View } from "@react-pdf/renderer";
 
-export function IPBWDiscipline({ style }: { style: Style }) {
+export function IPBWDiscipline({
+  discipline,
+  style,
+}: {
+  style: Style;
+  discipline: {
+    absence: number;
+    lateness: number;
+    justifiedLateness: number;
+    consigne: number;
+    justifiedAbsence: number;
+  };
+}) {
   return (
     <View
       style={{

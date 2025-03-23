@@ -18,7 +18,7 @@ import { ReportCardMention } from "~/components/students/reportcards/ReportCardM
 import { ReportCardPerformance } from "~/components/students/reportcards/ReportCardPerformance";
 import { ReportCardSummary } from "~/components/students/reportcards/ReportCardSummary";
 import { getServerTranslations } from "~/i18n/server";
-import { api } from "~/trpc/server";
+import { api, caller } from "~/trpc/server";
 import { getAppreciations } from "~/utils/get-appreciation";
 import { TrimestreHeader } from "./TrimestreHeader";
 export default async function Page(props: {
@@ -63,6 +63,16 @@ export default async function Page(props: {
   const successRate = successCount / averages.length;
   const rowClassName = "border text-center py-0";
   const average = averages.reduce((acc, val) => acc + val, 0) / averages.length;
+  const terms = await api.term.fromTrimestre(trimestreId);
+  const disc1 = await caller.discipline.student({
+    studentId: params.id,
+    termId: terms.seq1?.id ?? 0,
+  });
+  const disc2 = await caller.discipline.student({
+    studentId: params.id,
+    termId: terms.seq2?.id ?? 0,
+  });
+
   return (
     <div className="flex flex-col gap-2">
       <TrimestreHeader
@@ -97,7 +107,7 @@ export default async function Page(props: {
             <TableBody>
               {Object.keys(groups).map((groupId: string) => {
                 const items = groups[Number(groupId)]?.sort(
-                  (a, b) => a.order - b.order,
+                  (a, b) => a.order - b.order
                 );
 
                 if (!items) return null;
@@ -106,7 +116,7 @@ export default async function Page(props: {
                   <Fragment key={`fragment-${groupId}`}>
                     {items.map((subject, index) => {
                       const grade = studentReport.studentCourses.find(
-                        (c) => c.subjectId === subject.id,
+                        (c) => c.subjectId === subject.id
                       );
                       const subjectSummary = summary.get(subject.id);
                       return (
@@ -178,9 +188,9 @@ export default async function Page(props: {
                           items.map(
                             (subject) =>
                               (studentReport.studentCourses.find(
-                                (c) => subject.id === c.subjectId,
-                              )?.average ?? 0) * subject.coefficient,
-                          ),
+                                (c) => subject.id === c.subjectId
+                              )?.average ?? 0) * subject.coefficient
+                          )
                         ).toFixed(1)}{" "}
                         / {sum(items.map((c) => 20 * c.coefficient)).toFixed(1)}
                       </TableCell>
@@ -194,9 +204,9 @@ export default async function Page(props: {
                             items.map(
                               (subject) =>
                                 (studentReport.studentCourses.find(
-                                  (c) => c.subjectId === subject.id,
-                                )?.average ?? 0) * subject.coefficient,
-                            ),
+                                  (c) => c.subjectId === subject.id
+                                )?.average ?? 0) * subject.coefficient
+                            )
                           ) / sum(items.map((subject) => subject.coefficient))
                         ).toFixed(2)}
                       </TableCell>
@@ -209,7 +219,16 @@ export default async function Page(props: {
         </div>
         <div className="flex flex-row items-start gap-2 p-2">
           <ReportCardMention average={globalRank.average} id={params.id} />
-          <ReportCardDiscipline id={params.id} />
+          <ReportCardDiscipline
+            absence={disc1.absence + disc2.absence}
+            lateness={disc1.lateness + disc2.lateness}
+            justifiedLateness={
+              disc1.justifiedLateness + disc2.justifiedLateness
+            }
+            consigne={disc1.consigne + disc2.consigne}
+            justifiedAbsence={disc1.justifiedAbsence + disc2.justifiedAbsence}
+            id={params.id}
+          />
           <ReportCardPerformance
             successRate={successRate}
             max={Math.max(...averages)}

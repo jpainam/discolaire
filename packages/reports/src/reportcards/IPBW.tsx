@@ -24,6 +24,7 @@ export function IPBW({
   contact,
   title,
   schoolYear,
+  discipline,
 }: {
   subjects: RouterOutputs["classroom"]["subjects"];
   student: RouterOutputs["student"]["get"];
@@ -33,6 +34,13 @@ export function IPBW({
   schoolYear: RouterOutputs["schoolYear"]["get"];
   contact: RouterOutputs["student"]["getPrimaryContact"];
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
+  discipline: {
+    absence: number;
+    lateness: number;
+    justifiedLateness: number;
+    consigne: number;
+    justifiedAbsence: number;
+  };
 }) {
   const { studentsReport, summary, globalRanks } = report;
   const studentReport = studentsReport.get(student.id);
@@ -315,6 +323,7 @@ export function IPBW({
           </View>
           <IPBWSummary
             effectif={classroom.size}
+            discipline={discipline}
             average={globalRank.average}
             successRate={successRate}
             summary={{

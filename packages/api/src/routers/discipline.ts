@@ -7,7 +7,10 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 export const disciplineRouter = createTRPCRouter({
   student: protectedProcedure
     .input(
-      z.object({ studentId: z.string().min(1), termId: z.coerce.number() }),
+      z.object({
+        studentId: z.string().min(1),
+        termId: z.number().optional(),
+      }),
     )
     .query(async ({ ctx, input }) => {
       const absence = await ctx.db.absence.findMany({
@@ -46,7 +49,7 @@ export const disciplineRouter = createTRPCRouter({
         consigne: consigne.length,
       };
     }),
-  students: protectedProcedure
+  classroom: protectedProcedure
     .input(
       z.object({
         classroomId: z.string().min(1),
@@ -90,6 +93,7 @@ export const disciplineRouter = createTRPCRouter({
         string,
         {
           absence: number;
+          studentId: string;
           justifiedAbsence: number;
           lateness: number;
           justifiedLateness: number;
@@ -99,6 +103,7 @@ export const disciplineRouter = createTRPCRouter({
       for (const student of students) {
         disciplines.set(student.id, {
           absence: 0,
+          studentId: student.id,
           justifiedAbsence: 0,
           lateness: 0,
           justifiedLateness: 0,
@@ -129,11 +134,12 @@ export const disciplineRouter = createTRPCRouter({
           student.consigne++;
         }
       }
-      return Array.from(disciplines.entries()).map(
-        ([studentId, discipline]) => ({
-          studentId,
-          ...discipline,
-        }),
-      );
+      // return Array.from(disciplines.entries()).map(
+      //   ([studentId, discipline]) => ({
+      //     studentId,
+      //     ...discipline,
+      //   }),
+      // );
+      return disciplines;
     }),
 });
