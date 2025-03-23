@@ -1,14 +1,10 @@
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
-import type { RouterOutputs } from "@repo/api";
 import { IPBW, IPBWClassroom, renderToStream } from "@repo/reports";
 
 import { auth } from "@repo/auth";
-import { api } from "~/trpc/server";
-
-type ReportCardType =
-  RouterOutputs["reportCard"]["getStudent"]["result"][number];
+import { api, caller } from "~/trpc/server";
 
 const searchSchema = z.object({
   studentId: z.string().nullable(),
@@ -37,7 +33,7 @@ export async function GET(req: NextRequest) {
 
     return Response.json(
       { error: "Invalid request body", errors },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -61,10 +57,11 @@ async function classroomReportCard({
 }) {
   const school = await api.school.getSchool();
   const classroom = await api.classroom.get(classroomId);
-  const { result: results, summary } = await api.reportCard.getClassroom({
-    termId,
-    classroomId,
-  });
+  const { result: results, summary: _summary } =
+    await api.reportCard.getClassroom({
+      termId,
+      classroomId,
+    });
   const grades = await api.reportCard.getGrades2({
     classroomId: classroomId,
     termId: termId,
@@ -81,10 +78,9 @@ async function classroomReportCard({
       students: students,
       schoolYear: classroom.schoolYear,
       grades,
-      summary,
       contacts,
       results: results.sort((a, b) => a.rank - b.rank),
-    }),
+    })
   );
 
   const headers: Record<string, string> = {
@@ -106,63 +102,34 @@ async function indvidualReportCard({
     return new Response("Student not registered", { status: 400 });
   }
 
-  const gradeData = await api.reportCard.getStudent({
-    studentId: studentId,
+  const report = await caller.reportCard.getSequence({
+    classroomId: student.classroom.id,
     termId: termId,
   });
-  const groups: Record<number, ReportCardType[]> = {};
 
-  const { result: reportCard } = gradeData;
-  // const totalCoeff = reportCard.reduce((acc, card) => {
-  //   return acc + (card.isAbsent ? 0 : card.coefficient);
-  // }, 0);
-  reportCard.forEach((card) => {
-    const groupId = card.subjectGroupId;
-    if (!groupId) return;
-    if (!groups[groupId]) {
-      groups[groupId] = [];
-    }
-    groups[groupId].push(card);
-  });
-  // const points = sum(
-  //   reportCard.map((c) => (c.isAbsent ? 0 : c.avg * c.coefficient))
-  // );
+  const subjects = await api.classroom.subjects(student.classroom.id);
+  const classroom = await caller.classroom.get(student.classroom.id);
 
-  const classroom = await api.classroom.get(student.classroom.id);
-  const { result, summary } = await api.reportCard.getClassroom({
-    termId: termId,
-    classroomId: classroom.id,
-  });
+  const studentReport = report.studentsReport.get(studentId);
+  const globalRank = report.globalRanks.get(studentId);
+  if (!studentReport || !globalRank) {
+    return new Response("Student has no grades", { status: 400 });
+  }
 
-  // In case there are ex-aequo
-  const ranks = result
-    .map((student, index) => {
-      if (student.rank < 0) return null;
-      const rank =
-        index == 0 || result[index - 1]?.avg != student.avg
-          ? student.rank.toString()
-          : result[index - 1]?.rank.toString() + " ex";
-      return { studentId: student.id, rank: rank };
-    })
-    .filter((r) => r !== null);
-
+  //TODO respect In case there are ex-aequo
   const contact = await api.student.getPrimaryContact(student.id);
-  //const average = points / (totalCoeff || 1e9);
-
   const school = await api.school.getSchool();
 
   const stream = await renderToStream(
     IPBW({
       school,
-      summary,
       student,
-      groups,
-      contact,
       classroom,
-      rank: ranks.find((r) => r.studentId === student.id)?.rank ?? "",
-      average: result.find((r) => r.id === student.id)?.avg ?? -1,
+      subjects,
+      report,
+      contact,
       schoolYear: classroom.schoolYear,
-    }),
+    })
   );
 
   const headers: Record<string, string> = {
@@ -170,8 +137,6 @@ async function indvidualReportCard({
     "Cache-Control": "no-store, max-age=0",
   };
 
-  //headers["Content-Disposition"] =
-  // `attachment; filename="CSABReportCard.pdf"`;
   // @ts-expect-error TODO: fix this
   return new Response(stream, { headers });
 }

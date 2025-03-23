@@ -7,7 +7,6 @@ import { IPBWHeader } from "../headers/IPBWHeader";
 import { IPBWGroup } from "./IPBWGroup";
 import { IPBWSignature } from "./IPBWSignature";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
-import { IPBWSummary } from "./IPBWSummary";
 import { IPBWTableHeader } from "./IPBWTableHeader";
 
 const W = ["40%", "6%", "6%", "6%", "6%", "6%", "10%", "10%"];
@@ -20,7 +19,6 @@ export function IPBWClassroom({
   results,
   contacts,
   grades,
-  summary,
   schoolYear,
 }: {
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
@@ -31,7 +29,6 @@ export function IPBWClassroom({
   contacts: RouterOutputs["student"]["getPrimaryContact"][];
   results: RouterOutputs["reportCard"]["getClassroom"]["result"];
   grades: RouterOutputs["reportCard"]["getGrades2"];
-  summary: RouterOutputs["reportCard"]["getClassroom"]["summary"];
 }) {
   const gradesMap: Record<string, ClassroomReportCardType> = {};
   grades.forEach((grade) => {
@@ -43,12 +40,7 @@ export function IPBWClassroom({
   });
   return (
     <Document>
-      {results.map((result, index) => {
-        const rank =
-          index == 0 || results[index - 1]?.avg != result.avg
-            ? result.rank.toString()
-            : results[index - 1]?.rank.toString() + " ex";
-
+      {results.map((result) => {
         const student = students.find((s) => s.id === result.id);
         if (!student) return null;
         const contact = contacts.find((c) => c && c.studentId === student.id);
@@ -162,14 +154,14 @@ export function IPBWClassroom({
                   );
                 })}
               </View>
-              {result.avg && (
+              {/* {result.avg && (
                 <IPBWSummary
                   effectif={classroom.size}
                   average={result.avg}
                   summary={summary}
                   rank={rank}
                 />
-              )}
+              )} */}
               <IPBWSignature />
             </View>
           </Page>

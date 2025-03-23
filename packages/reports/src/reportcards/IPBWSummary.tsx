@@ -1,7 +1,5 @@
 import { Text, View } from "@react-pdf/renderer";
 
-import type { RouterOutputs } from "@repo/api";
-
 import { getAppreciations } from "../utils";
 import { IPBWDiscipline } from "./IPBWDiscipline";
 import { IPBWTravail } from "./IPBWTravail";
@@ -10,12 +8,18 @@ export function IPBWSummary({
   average,
   summary,
   effectif,
+  successRate,
   rank,
 }: {
   average: number;
   rank: string;
   effectif: number;
-  summary: RouterOutputs["reportCard"]["getClassroom"]["summary"];
+  successRate: number;
+  summary: {
+    min: number;
+    max: number;
+    average: number;
+  };
 }) {
   return (
     <View style={{ flexDirection: "row", marginTop: "4px", gap: 2 }}>
@@ -41,10 +45,10 @@ export function IPBWSummary({
         </View>
         <SummaryItem name="Moy.Max" value={summary.max.toFixed(2)} />
         <SummaryItem name="Moy.Min" value={summary.min.toFixed(2)} />
-        <SummaryItem name="Moy.Cl" value={summary.avg.toFixed(2)} />
+        <SummaryItem name="Moy.Cl" value={summary.average.toFixed(2)} />
         <SummaryItem
           name="Taux de reussite"
-          value={(summary.successRate * 100).toFixed(2) + "%"}
+          value={(successRate * 100).toFixed(2) + "%"}
         />
         <View
           style={{
@@ -53,7 +57,7 @@ export function IPBWSummary({
             alignItems: "center",
           }}
         >
-          <Text>{getAppreciations(summary.avg)}</Text>
+          <Text>{getAppreciations(summary.average)}</Text>
         </View>
         {/* <SummaryItem
           name="Mention"

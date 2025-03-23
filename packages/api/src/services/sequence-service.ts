@@ -1,3 +1,4 @@
+import { roundToTwo } from "../utils";
 import { getGrades } from "./reportcard-service";
 
 export async function getSequenceGrades(
@@ -22,7 +23,10 @@ export async function getSequenceGrades(
     }
   >;
   summary: Map<number, { average: number; min: number; max: number }>;
-  globalRanks: Map<string, { average: number; rank: number }>;
+  globalRanks: Map<
+    string,
+    { average: number; rank: number; aequoRank: string }
+  >;
 }> {
   const grades = await getGrades(classroomId, sequenceId);
   const allStudents = new Set<string>(grades.map((g) => g.studentId));
@@ -41,6 +45,7 @@ export async function getSequenceGrades(
       global: {
         average: number;
         rank: number;
+        aequoRank: string;
       };
     }
   >();
@@ -92,15 +97,16 @@ export async function getSequenceGrades(
     studentsReport.set(studentId, {
       studentCourses,
       global: {
-        average: globalAverage,
+        average: roundToTwo(globalAverage),
         rank: 0,
+        aequoRank: "",
       },
     });
     tempGlobalAverages.push({
       studentId,
       total: totalSum,
       coeffSum,
-      globalAverage: globalAverage,
+      globalAverage: roundToTwo(globalAverage),
     });
   });
 
@@ -129,12 +135,31 @@ export async function getSequenceGrades(
   const sortedGlobal = [...tempGlobalAverages].sort(
     (a, b) => b.globalAverage - a.globalAverage,
   );
-  const globalRanks = new Map<string, { average: number; rank: number }>();
+  const globalRanks = new Map<
+    string,
+    { average: number; rank: number; aequoRank: string }
+  >();
+  let rank = 1;
+  let lastScore: number | null = null;
+  let tieCount = 0;
   sortedGlobal.forEach((s, idx) => {
-    globalRanks.set(s.studentId, { average: s.globalAverage, rank: idx + 1 });
+    if (s.globalAverage !== lastScore) {
+      rank = idx + 1;
+      lastScore = s.globalAverage;
+      tieCount = 1;
+    } else {
+      tieCount++;
+    }
+    const aequoRank = tieCount > 1 ? `${rank} ex` : `${rank}`;
+    globalRanks.set(s.studentId, {
+      average: s.globalAverage,
+      rank: idx + 1,
+      aequoRank,
+    });
     const report = studentsReport.get(s.studentId);
     if (report) {
       report.global.rank = idx + 1;
+      report.global.aequoRank = aequoRank;
     }
   });
   // Step 4: Per-course ranking inside each student report

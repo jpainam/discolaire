@@ -1,7 +1,8 @@
 import { Document, Page, Text, View } from "@react-pdf/renderer";
-import { sortBy, sum } from "lodash";
 
 import "../fonts";
+
+import _, { sum } from "lodash";
 
 import type { RouterOutputs } from "@repo/api";
 
@@ -13,29 +14,33 @@ import { IPBWSummary } from "./IPBWSummary";
 import { IPBWTableHeader } from "./IPBWTableHeader";
 
 const W = ["40%", "6%", "6%", "6%", "6%", "6%", "10%", "10%"];
-type ReportCardType =
-  RouterOutputs["reportCard"]["getStudent"]["result"][number];
+
 export function IPBW({
   school,
-  average,
-  rank,
   student,
-  summary,
   classroom,
-  groups,
+  subjects,
+  report,
   contact,
   schoolYear,
 }: {
-  groups: Record<number, ReportCardType[]>;
+  subjects: RouterOutputs["classroom"]["subjects"];
   student: RouterOutputs["student"]["get"];
-  average: number;
-  rank: string; // student rank with ex-aequo
   classroom: RouterOutputs["classroom"]["get"];
-  summary: RouterOutputs["reportCard"]["getClassroom"]["summary"];
+  report: RouterOutputs["reportCard"]["getSequence"];
   schoolYear: RouterOutputs["schoolYear"]["get"];
   contact: RouterOutputs["student"]["getPrimaryContact"];
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
 }) {
+  const { studentsReport, summary, globalRanks } = report;
+  const studentReport = studentsReport.get(student.id);
+  const globalRank = globalRanks.get(student.id);
+  if (!studentReport || !globalRank) return <></>;
+  const groups = _.groupBy(subjects, "subjectGroupId");
+  const values = Array.from(globalRanks.values());
+  const averages = values.map((g) => g.average);
+  const successCount = averages.filter((val) => val >= 10).length;
+  const successRate = successCount / averages.length;
   return (
     <Document>
       <Page
@@ -98,223 +103,229 @@ export function IPBW({
           >
             <IPBWTableHeader W={W} />
             {Object.keys(groups).map((groupId: string, index: number) => {
-              let cards = groups[Number(groupId)];
-              if (!cards || cards.length == 0) return null;
-              cards = sortBy(cards, "order").filter((c) => !c.isAbsent);
-              const card = cards[0];
-              if (!card) return null;
-              const group = card.subjectGroup;
-              if (!group) return null;
+              const items = groups[Number(groupId)]?.sort(
+                (a, b) => a.order - b.order,
+              );
 
+              if (!items) return null;
+              const group = items[0]?.subjectGroup;
               return (
-                <ReportCardGroup
-                  groupId={Number(groupId)}
-                  key={`card-${groupId}`}
-                  cards={cards}
-                  lastRow={index === Object.keys(groups).length - 1}
-                  group={{ name: group.name }}
-                />
+                <>
+                  {items.map((subject, index2) => {
+                    const grade = studentReport.studentCourses.find(
+                      (c) => c.subjectId === subject.id,
+                    );
+                    const subjectSummary = summary.get(subject.id);
+                    return (
+                      <View
+                        style={{
+                          borderBottom: "1px solid black",
+                          flexDirection: "row",
+                          display: "flex",
+                        }}
+                        key={`group-${groupId}-${index2}`}
+                      >
+                        <View
+                          style={{
+                            width: W[0],
+                            flexDirection: "column",
+                            display: "flex",
+                            borderRight: "1px solid black",
+                            paddingHorizontal: 2,
+                            alignItems: "flex-start",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontWeight: "bold",
+                              overflow: "hidden",
+                              maxLines: 1,
+                            }}
+                          >
+                            {subject.course.reportName}
+                          </Text>
+                          <Text style={{ paddingLeft: "8px" }}>
+                            {subject.teacher?.prefix}{" "}
+                            {subject.teacher?.lastName}
+                          </Text>
+                        </View>
+
+                        <View
+                          style={{
+                            width: W[1],
+                            borderRight: "1px solid black",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <Text> {grade ? grade.average : ""}</Text>
+                        </View>
+                        <View
+                          style={{
+                            width: W[2],
+                            borderRight: "1px solid black",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <Text> {subject.coefficient}</Text>
+                        </View>
+                        <View
+                          style={{
+                            width: W[3],
+                            borderRight: "1px solid black",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <Text>{grade ? grade.total?.toFixed(2) : ""}</Text>
+                        </View>
+                        <View
+                          style={{
+                            width: W[4],
+                            borderRight: "1px solid black",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <Text>{grade ? grade.rank : ""}</Text>
+                        </View>
+                        <View
+                          style={{
+                            width: W[5],
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRight: "1px solid black",
+                          }}
+                        >
+                          <Text>{subjectSummary?.average.toFixed(2)}</Text>
+                        </View>
+                        <View
+                          style={{
+                            width: W[6],
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRight: "1px solid black",
+                          }}
+                        >
+                          <Text>
+                            {subjectSummary?.min.toFixed(2)}/
+                            {subjectSummary?.max.toFixed(2)}
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            width: W[7],
+                            textTransform: "uppercase",
+                            paddingLeft: 4,
+                            justifyContent: "center",
+                          }}
+                        >
+                          <Text> {getAppreciations(grade?.average)}</Text>
+                        </View>
+                      </View>
+                    );
+                  })}
+                  <View
+                    style={{
+                      backgroundColor: "#D7D7D7",
+                      fontSize: 8,
+                      flexDirection: "row",
+                      display: "flex",
+                      fontWeight: "bold",
+                      width: "100%",
+                      borderBottom:
+                        index === Object.keys(groups).length - 1
+                          ? ""
+                          : "1px solid black",
+                    }}
+                  >
+                    <View
+                      style={{
+                        width: "46%",
+                        paddingVertical: 2,
+                        borderRight: "1px solid black",
+
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Text style={{ paddingLeft: 4 }}>{group?.name}</Text>
+                    </View>
+                    <View
+                      style={{
+                        width: "6%",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRight: "1px solid black",
+                      }}
+                    >
+                      <Text>
+                        {sum(items.map((subject) => subject.coefficient))}
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        width: "6%",
+                        alignItems: "center",
+                        borderRight: "1px solid black",
+                      }}
+                    >
+                      <Text>
+                        {sum(
+                          items.map(
+                            (subject) =>
+                              studentReport.studentCourses.find(
+                                (c) => c.subjectId === subject.id,
+                              )?.total,
+                          ),
+                        ).toFixed(1)}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        width: "22%",
+                        alignItems: "center",
+                        borderRight: "1px solid black",
+                      }}
+                    >
+                      <Text>
+                        MOY :
+                        {(
+                          sum(
+                            items.map(
+                              (subject) =>
+                                studentReport.studentCourses.find(
+                                  (c) => c.subjectId === subject.id,
+                                )?.total,
+                            ),
+                          ) / sum(items.map((subject) => subject.coefficient))
+                        ).toFixed(2)}
+                      </Text>
+                    </View>
+                  </View>
+                </>
               );
             })}
           </View>
           <IPBWSummary
             effectif={classroom.size}
-            average={average}
-            summary={summary}
-            rank={rank}
+            average={globalRank.average}
+            successRate={successRate}
+            summary={{
+              min: Math.min(...averages),
+              max: Math.max(...averages),
+              average:
+                averages.reduce((acc, val) => acc + val, 0) / averages.length,
+            }}
+            rank={globalRank.aequoRank}
           />
           <IPBWSignature />
         </View>
       </Page>
     </Document>
-  );
-}
-
-function ReportCardGroup({
-  cards,
-  groupId,
-  lastRow = false,
-  group,
-}: {
-  groupId: number;
-  group: { name: string };
-  cards: ReportCardType[];
-  lastRow?: boolean;
-}) {
-  return (
-    <>
-      {cards.map((card, index) => {
-        return (
-          <View
-            style={{
-              borderBottom: "1px solid black",
-              flexDirection: "row",
-              display: "flex",
-            }}
-            key={`card-${groupId}-${index}`}
-          >
-            <View
-              style={{
-                width: W[0],
-                flexDirection: "column",
-                display: "flex",
-                borderRight: "1px solid black",
-                paddingHorizontal: 2,
-                alignItems: "flex-start",
-              }}
-            >
-              <Text
-                style={{ fontWeight: "bold", overflow: "hidden", maxLines: 1 }}
-              >
-                {card.course.name}
-              </Text>
-              <Text style={{ paddingLeft: "8px" }}>
-                {card.teacher?.prefix} {card.teacher?.lastName}
-              </Text>
-            </View>
-
-            <View
-              style={{
-                width: W[1],
-                borderRight: "1px solid black",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Text> {!card.isAbsent && card.avg}</Text>
-            </View>
-            <View
-              style={{
-                width: W[2],
-                borderRight: "1px solid black",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Text> {!card.isAbsent && card.coefficient}</Text>
-            </View>
-            <View
-              style={{
-                width: W[3],
-                borderRight: "1px solid black",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Text>
-                {!card.isAbsent && (card.avg * card.coefficient).toFixed(2)}
-              </Text>
-            </View>
-            <View
-              style={{
-                width: W[4],
-                borderRight: "1px solid black",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Text>{!card.isAbsent && card.rank}</Text>
-            </View>
-            <View
-              style={{
-                width: W[5],
-                alignItems: "center",
-                justifyContent: "center",
-                borderRight: "1px solid black",
-              }}
-            >
-              <Text>{card.classroom.avg.toFixed(2)}</Text>
-            </View>
-            <View
-              style={{
-                width: W[6],
-                alignItems: "center",
-                justifyContent: "center",
-                borderRight: "1px solid black",
-              }}
-            >
-              <Text>
-                {card.classroom.min.toFixed(2)}/{card.classroom.max.toFixed(2)}
-              </Text>
-            </View>
-            <View
-              style={{
-                width: W[7],
-                textTransform: "uppercase",
-                paddingLeft: 4,
-                justifyContent: "center",
-              }}
-            >
-              <Text> {getAppreciations(card.avg)}</Text>
-            </View>
-          </View>
-        );
-      })}
-
-      <View
-        style={{
-          backgroundColor: "#D7D7D7",
-          fontSize: 8,
-          flexDirection: "row",
-          display: "flex",
-          fontWeight: "bold",
-          width: "100%",
-          borderBottom: lastRow ? "" : "1px solid black",
-        }}
-      >
-        <View
-          style={{
-            width: "46%",
-            paddingVertical: 2,
-            borderRight: "1px solid black",
-
-            justifyContent: "center",
-          }}
-        >
-          <Text style={{ paddingLeft: 4 }}>{group.name}</Text>
-        </View>
-        <View
-          style={{
-            width: "6%",
-            alignItems: "center",
-            justifyContent: "center",
-            borderRight: "1px solid black",
-          }}
-        >
-          <Text>{sum(cards.map((c) => c.coefficient))}</Text>
-        </View>
-
-        <View
-          style={{
-            justifyContent: "center",
-            width: "6%",
-            alignItems: "center",
-            borderRight: "1px solid black",
-          }}
-        >
-          <Text>
-            {sum(cards.map((c) => (c.avg || 0) * c.coefficient)).toFixed(1)}
-            {/* {sum(cards.map((c) => 20 * c.coefficient)).toFixed(1)} */}
-          </Text>
-        </View>
-        <View
-          style={{
-            justifyContent: "center",
-            width: "22%",
-            alignItems: "center",
-            borderRight: "1px solid black",
-          }}
-        >
-          <Text>
-            MOY :
-            {(
-              sum(cards.map((c) => c.avg * c.coefficient)) /
-              sum(cards.map((c) => c.coefficient))
-            ).toFixed(2)}
-          </Text>
-        </View>
-      </View>
-    </>
   );
 }
 
