@@ -40,7 +40,7 @@ export function ReportCardHeader() {
         onChange={(val) => {
           router.push(
             `/classrooms/${params.id}/reportcards?` +
-              createQueryString({ term: val, trimestreId: undefined })
+              createQueryString({ term: val, trimestreId: undefined }),
           );
         }}
       />
@@ -70,7 +70,7 @@ export function ReportCardHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/reportcards/ipbw?classroomId=${params.id}&termId=${termId}`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >
