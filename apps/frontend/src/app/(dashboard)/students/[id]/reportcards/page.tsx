@@ -61,6 +61,7 @@ export default async function Page(props: {
   const averages = values.map((g) => g.average);
   const successCount = averages.filter((val) => val >= 10).length;
   const successRate = successCount / averages.length;
+  const average = averages.reduce((acc, val) => acc + val, 0) / averages.length;
   const rowClassName = "border text-center py-0";
 
   return (
@@ -86,7 +87,7 @@ export default async function Page(props: {
           <TableBody>
             {Object.keys(groups).map((groupId: string) => {
               const items = groups[Number(groupId)]?.sort(
-                (a, b) => a.order - b.order,
+                (a, b) => a.order - b.order
               );
 
               if (!items) return null;
@@ -95,7 +96,7 @@ export default async function Page(props: {
                 <Fragment key={`fragment-${groupId}`}>
                   {items.map((subject, index) => {
                     const grade = studentReport.studentCourses.find(
-                      (c) => c.subjectId === subject.id,
+                      (c) => c.subjectId === subject.id
                     );
                     const subjectSummary = summary.get(subject.id);
                     return (
@@ -159,13 +160,13 @@ export default async function Page(props: {
                         items.map(
                           (subject) =>
                             studentReport.studentCourses.find(
-                              (c) => c.subjectId === subject.id,
-                            )?.total,
-                        ),
+                              (c) => c.subjectId === subject.id
+                            )?.total
+                        )
                       ).toFixed(1)}{" "}
                       /{" "}
                       {sum(
-                        items.map((subject) => 20 * subject.coefficient),
+                        items.map((subject) => 20 * subject.coefficient)
                       ).toFixed(1)}
                     </TableCell>
                     <TableCell className="text-sm" colSpan={2}>
@@ -175,9 +176,9 @@ export default async function Page(props: {
                           items.map(
                             (subject) =>
                               studentReport.studentCourses.find(
-                                (c) => c.subjectId === subject.id,
-                              )?.total,
-                          ),
+                                (c) => c.subjectId === subject.id
+                              )?.total
+                          )
                         ) / sum(items.map((subject) => subject.coefficient))
                       ).toFixed(2)}
                     </TableCell>
@@ -189,13 +190,13 @@ export default async function Page(props: {
         </Table>
       </div>
       <div className="flex flex-row items-start gap-2 p-2">
-        <ReportCardMention id={params.id} />
+        <ReportCardMention average={globalRank.average} id={params.id} />
         <ReportCardDiscipline id={params.id} />
         <ReportCardPerformance
           successRate={successRate}
           max={Math.max(...averages)}
           min={Math.min(...averages)}
-          avg={averages.reduce((acc, val) => acc + val, 0) / averages.length}
+          avg={average}
         />
         <ReportCardSummary
           id={params.id}

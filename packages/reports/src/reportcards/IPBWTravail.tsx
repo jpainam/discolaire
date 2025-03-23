@@ -4,7 +4,7 @@ import { Text, View } from "@react-pdf/renderer";
 
 import { FontAwesomeIcon } from "../components/FontAwesomeIcon";
 
-export function IPBWTravail({ style }: { style: Style }) {
+export function IPBWTravail({ grade, style }: { grade: number; style: Style }) {
   return (
     <View
       style={{
@@ -26,11 +26,11 @@ export function IPBWTravail({ style }: { style: Style }) {
         <Text style={{ paddingLeft: 4 }}>Travail</Text>
       </View>
 
-      <SummaryItem name="Felicitations" value={true} />
-      <SummaryItem name="Encouragements" value={false} />
-      <SummaryItem name="Tableau d'honneur" value={true} />
-      <SummaryItem name="Avertissement" value={false} />
-      <SummaryItem name="Blâme" value={false} lastRow={true} />
+      <SummaryItem name="Felicitations" value={grade >= 18} />
+      <SummaryItem name="Encouragements" value={grade >= 14} />
+      <SummaryItem name="Tableau d'honneur" value={grade >= 12} />
+      <SummaryItem name="Avertissement" value={grade <= 9.99} />
+      <SummaryItem name="Blâme" value={grade <= 5} lastRow={true} />
     </View>
   );
 }

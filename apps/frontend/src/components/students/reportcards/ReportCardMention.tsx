@@ -6,11 +6,18 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import { CheckIcon } from "lucide-react";
 import { getServerTranslations } from "~/i18n/server";
 
 import { cn } from "~/lib/utils";
 
-export async function ReportCardMention({ id }: { id: string }) {
+export async function ReportCardMention({
+  average,
+  id,
+}: {
+  id: string;
+  average: number;
+}) {
   console.log(id);
   const { t } = await getServerTranslations();
   const rowClassName = "border-r text-sm";
@@ -29,31 +36,61 @@ export async function ReportCardMention({ id }: { id: string }) {
             <TableCell className={cn(rowClassName)}>
               {t("congratulations")}
             </TableCell>
-            <TableCell className="min-w-[60px]"></TableCell>
+            <TableCell className="min-w-[60px] text-center">
+              {average >= 18 && (
+                <div className="flex justify-center items-center">
+                  <CheckIcon className="w-4 h-4" />
+                </div>
+              )}
+            </TableCell>
           </TableRow>
           <TableRow>
             <TableCell className={cn(rowClassName)}>
               {t("encouragments")}
             </TableCell>
-            <TableCell></TableCell>
+            <TableCell className="text-center">
+              {average >= 14 && (
+                <div className="flex justify-center items-center">
+                  <CheckIcon className="w-4 h-4" />
+                </div>
+              )}
+            </TableCell>
           </TableRow>
           <TableRow>
             <TableCell className={cn(rowClassName)}>
               {t("roll_of_honor")}
             </TableCell>
-            <TableCell></TableCell>
+            <TableCell className="text-center">
+              {average >= 12 && (
+                <div className="flex justify-center items-center">
+                  <CheckIcon className="w-4 h-4" />
+                </div>
+              )}
+            </TableCell>
           </TableRow>
           <TableRow>
             <TableCell className={cn(rowClassName)}>
               {t("work_warning")}
             </TableCell>
-            <TableCell></TableCell>
+            <TableCell>
+              {average <= 9.99 && (
+                <div className="flex justify-center items-center">
+                  <CheckIcon className="w-4 h-4 self-center" />
+                </div>
+              )}
+            </TableCell>
           </TableRow>
           <TableRow>
             <TableCell className={cn(rowClassName)}>
               {t("work_blame")}
             </TableCell>
-            <TableCell></TableCell>
+            <TableCell>
+              {average <= 5.99 && (
+                <div className="flex justify-center items-center">
+                  <CheckIcon className="w-4 h-4 self-center" />
+                </div>
+              )}
+            </TableCell>
           </TableRow>
         </TableBody>
       </Table>

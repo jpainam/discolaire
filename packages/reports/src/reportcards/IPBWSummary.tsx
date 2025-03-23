@@ -23,7 +23,7 @@ export function IPBWSummary({
 }) {
   return (
     <View style={{ flexDirection: "row", marginTop: "4px", gap: 2 }}>
-      <IPBWTravail style={{ width: "20%" }} />
+      <IPBWTravail grade={average} style={{ width: "20%" }} />
       <IPBWDiscipline style={{ width: "20%" }} />
       <View
         style={{
