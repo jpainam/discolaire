@@ -6,6 +6,7 @@ import {
   getSummary,
   reportCardService,
 } from "../services/reportcard-service";
+import { getSequenceGrades } from "../services/sequence-service";
 import { studentService } from "../services/student-service";
 import { getTrimestreGrades } from "../services/trimestre-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
@@ -129,12 +130,21 @@ export const reportCardRouter = createTRPCRouter({
         },
       });
     }),
+  getSequence: protectedProcedure
+    .input(
+      z.object({
+        classroomId: z.string(),
+        termId: z.coerce.number(),
+      }),
+    )
+    .query(({ input }) => {
+      return getSequenceGrades(input.classroomId, input.termId);
+    }),
   getTrimestre: protectedProcedure
     .input(
       z.object({
         trimestreId: z.string().min(1),
         classroomId: z.string().min(1),
-        studentId: z.string().optional(),
       }),
     )
     .query(({ input, ctx }) => {

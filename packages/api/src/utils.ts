@@ -45,3 +45,7 @@ const connection = new IORedis(`${env.REDIS_URL}?family=0`, {
 // Define queues
 export const logQueue = new Queue("log", { connection });
 export const notificationQueue = new Queue("notification", { connection });
+
+export function roundToTwo(num: number): number {
+  return Math.round((num + Number.EPSILON) * 100) / 100;
+}
