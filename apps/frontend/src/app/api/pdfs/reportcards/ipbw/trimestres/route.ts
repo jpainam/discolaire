@@ -62,7 +62,6 @@ async function classroomReportCard({
   });
 
   const subjects = await api.classroom.subjects(classroomId);
-
   const classroom = await caller.classroom.get(classroomId);
 
   const stream = await renderToStream(

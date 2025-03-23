@@ -24,7 +24,7 @@ export function TrimestreHeader({
       <Button
         onClick={() => {
           const url =
-            `/api/pdfs/classroom/${classroomId}/trimestres?` +
+            `/api/pdfs/reportcards/ipbw/trimestres?` +
             createQueryString({
               trimestreId: trimestreId,
               classroomId: classroomId,
