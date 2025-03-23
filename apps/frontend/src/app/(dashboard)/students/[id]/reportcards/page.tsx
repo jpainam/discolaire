@@ -37,6 +37,7 @@ export default async function Page(props: {
   }
 
   const searchParams = await props.searchParams;
+  const discipline = await caller.discipline.student({ studentId: id });
 
   const { term } = searchParams;
 

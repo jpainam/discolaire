@@ -17,6 +17,7 @@ import { contactRouter } from "./routers/contact";
 import { courseRouter } from "./routers/course";
 import { degreeRouter } from "./routers/degree";
 import { directoryRouter } from "./routers/directory";
+import { disciplineRouter } from "./routers/discipline";
 import { documentRouter } from "./routers/document";
 import { enrollmentRouter } from "./routers/enrollment";
 import { exclusionRouter } from "./routers/exclusion";
@@ -127,6 +128,7 @@ export const appRouter = createTRPCRouter({
   lateness: latenessRouter,
   absence: absenceRouter,
   chatter: chatterRouter,
+  discipline: disciplineRouter,
 });
 
 // export type definition of API
