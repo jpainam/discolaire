@@ -47,7 +47,7 @@
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@swc-node/register": "^1.10.10",
-    "@swc/core": "^1.11.11",
+    "@swc/core": "^1.11.12",
     "@types/qrcode": "^1.5.5",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",

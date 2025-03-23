@@ -34,11 +34,14 @@ export function IPBWDiscipline({
         <Text style={{ paddingLeft: 4 }}>Discipline</Text>
       </View>
 
-      <SummaryItem name="Total absences" value={10} />
-      <SummaryItem name="Justifiees" value={6} />
-      <SummaryItem name="Non justifiees" value={4} />
-      <SummaryItem name="Retards" value={"15h"} />
-      <SummaryItem name="Consigne" lastRow={true} value={3} />
+      <SummaryItem name="Total absences" value={discipline.absence} />
+      <SummaryItem name="Justifiees" value={discipline.justifiedAbsence} />
+      <SummaryItem
+        name="Non justifiees"
+        value={discipline.absence - discipline.justifiedAbsence}
+      />
+      <SummaryItem name="Retards" value={discipline.lateness} />
+      <SummaryItem name="Consigne" lastRow={true} value={discipline.consigne} />
     </View>
   );
 }
@@ -72,7 +75,7 @@ function SummaryItem({
           borderBottom: lastRow ? "" : "1px solid black",
         }}
       >
-        <Text>{value}</Text>
+        <Text>{value ?? ""}</Text>
       </View>
     </View>
   );

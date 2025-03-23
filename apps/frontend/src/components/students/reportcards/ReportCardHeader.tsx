@@ -38,9 +38,9 @@ export function ReportCardHeader({
   const Icon = sidebarIcons.reportcards;
   const canPrintReportCard = useCheckPermission(
     "reportcard",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
-  const termId = searchParams.get("term");
+  const termId = searchParams.get("termId");
   const trimestreId = searchParams.get("trimestreId");
   return (
     <div className="grid md:flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1 text-secondary-foreground">
@@ -48,9 +48,9 @@ export function ReportCardHeader({
       <Label>{t("term")}</Label>
       <TermSelector
         className="w-[300px]"
-        defaultValue={searchParams.get("term")}
+        defaultValue={searchParams.get("termId")}
         onChange={(val) => {
-          router.push(`/students/${params.id}/reportcards?term=${val}`);
+          router.push(`/students/${params.id}/reportcards?termId=${val}`);
         }}
       />
       <TrimestreSelector
@@ -84,7 +84,7 @@ export function ReportCardHeader({
               <DropdownMenuItem
                 disabled={!termId && !trimestreId}
                 onSelect={() => {
-                  let url = `/api/pdfs/reportcards/ipbw/?studentId=${params.id}&termId=${searchParams.get("term")}`;
+                  let url = `/api/pdfs/reportcards/ipbw/?studentId=${params.id}&termId=${searchParams.get("termId")}`;
                   if (pathname.includes("/trimestres") && trimestreId) {
                     url = `/api/pdfs/reportcards/ipbw/trimestres/?studentId=${params.id}&trimestreId=${searchParams.get("trimestreId")}`;
                   }

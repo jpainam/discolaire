@@ -125,7 +125,7 @@ async function indvidualReportCard({
 
   const discipline = await caller.discipline.student({
     studentId: studentId,
-    termId: Number(term),
+    termId: Number(termId),
   });
 
   const stream = await renderToStream(

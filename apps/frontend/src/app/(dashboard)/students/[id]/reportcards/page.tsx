@@ -24,7 +24,7 @@ import { getAppreciations } from "~/utils/get-appreciation";
 
 export default async function Page(props: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ term: string }>;
+  searchParams: Promise<{ termId: string }>;
 }) {
   const params = await props.params;
   const { t } = await getServerTranslations();
@@ -38,20 +38,20 @@ export default async function Page(props: {
 
   const searchParams = await props.searchParams;
 
-  const { term } = searchParams;
+  const { termId } = searchParams;
 
-  if (!term) {
+  if (!termId) {
     return <EmptyState className="my-8" title={t("select_terms")} />;
   }
   const { studentsReport, summary, globalRanks } =
     await caller.reportCard.getSequence({
       classroomId: student.classroom.id,
-      termId: Number(term),
+      termId: Number(termId),
     });
 
   const discipline = await caller.discipline.student({
     studentId: id,
-    termId: Number(term),
+    termId: Number(termId),
   });
 
   const subjects = await api.classroom.subjects(student.classroom.id);
@@ -92,7 +92,7 @@ export default async function Page(props: {
           <TableBody>
             {Object.keys(groups).map((groupId: string) => {
               const items = groups[Number(groupId)]?.sort(
-                (a, b) => a.order - b.order,
+                (a, b) => a.order - b.order
               );
 
               if (!items) return null;
@@ -101,7 +101,7 @@ export default async function Page(props: {
                 <Fragment key={`fragment-${groupId}`}>
                   {items.map((subject, index) => {
                     const grade = studentReport.studentCourses.find(
-                      (c) => c.subjectId === subject.id,
+                      (c) => c.subjectId === subject.id
                     );
                     const subjectSummary = summary.get(subject.id);
                     return (
@@ -165,13 +165,13 @@ export default async function Page(props: {
                         items.map(
                           (subject) =>
                             studentReport.studentCourses.find(
-                              (c) => c.subjectId === subject.id,
-                            )?.total,
-                        ),
+                              (c) => c.subjectId === subject.id
+                            )?.total
+                        )
                       ).toFixed(1)}{" "}
                       /{" "}
                       {sum(
-                        items.map((subject) => 20 * subject.coefficient),
+                        items.map((subject) => 20 * subject.coefficient)
                       ).toFixed(1)}
                     </TableCell>
                     <TableCell className="text-sm" colSpan={2}>
@@ -181,9 +181,9 @@ export default async function Page(props: {
                           items.map(
                             (subject) =>
                               studentReport.studentCourses.find(
-                                (c) => c.subjectId === subject.id,
-                              )?.total,
-                          ),
+                                (c) => c.subjectId === subject.id
+                              )?.total
+                          )
                         ) / sum(items.map((subject) => subject.coefficient))
                       ).toFixed(2)}
                     </TableCell>

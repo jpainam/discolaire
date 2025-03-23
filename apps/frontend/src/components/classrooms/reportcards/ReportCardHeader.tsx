@@ -26,7 +26,7 @@ export function ReportCardHeader() {
   const { t } = useLocale();
   const { createQueryString } = useCreateQueryString();
   const searchParams = useSearchParams();
-  const [termId] = useQueryState("term", parseAsInteger);
+  const [termId] = useQueryState("termId", parseAsInteger);
   const pathname = usePathname();
   const [trimestreId] = useQueryState("trimestreId");
   const router = useRouter();
@@ -42,7 +42,7 @@ export function ReportCardHeader() {
         onChange={(val) => {
           router.push(
             `/classrooms/${params.id}/reportcards?` +
-              createQueryString({ term: val, trimestreId: undefined }),
+              createQueryString({ termId: val, trimestreId: undefined })
           );
         }}
       />
