@@ -55,7 +55,7 @@ export const createTRPCContext = async (opts: {
 
   const source = opts.headers.get("x-trpc-source") ?? "unknown";
   const schoolYearId = opts.headers.get("schoolYearId") ?? null;
-  console.log(">>> tRPC Request from", source);
+  console.log(">>> tRPC Request from", source, "by", session?.user?.username);
 
   return {
     session,
