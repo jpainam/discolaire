@@ -92,7 +92,7 @@ export default async function Page(props: {
           <TableBody>
             {Object.keys(groups).map((groupId: string) => {
               const items = groups[Number(groupId)]?.sort(
-                (a, b) => a.order - b.order
+                (a, b) => a.order - b.order,
               );
 
               if (!items) return null;
@@ -102,7 +102,7 @@ export default async function Page(props: {
                 <Fragment key={`fragment-${groupId}`}>
                   {items.map((subject, index) => {
                     const grade = studentReport.studentCourses.find(
-                      (c) => c.subjectId === subject.id
+                      (c) => c.subjectId === subject.id,
                     );
                     const subjectSummary = summary.get(subject.id);
                     coeff += grade?.grade != null ? subject.coefficient : 0;
@@ -167,13 +167,13 @@ export default async function Page(props: {
                         items.map(
                           (subject) =>
                             studentReport.studentCourses.find(
-                              (c) => c.subjectId === subject.id
-                            )?.total
-                        )
+                              (c) => c.subjectId === subject.id,
+                            )?.total,
+                        ),
                       ).toFixed(1)}{" "}
                       /{" "}
                       {sum(
-                        items.map((subject) => 20 * subject.coefficient)
+                        items.map((subject) => 20 * subject.coefficient),
                       ).toFixed(1)}
                     </TableCell>
                     <TableCell className="text-sm" colSpan={2}>
@@ -183,9 +183,9 @@ export default async function Page(props: {
                           items.map(
                             (subject) =>
                               studentReport.studentCourses.find(
-                                (c) => c.subjectId === subject.id
-                              )?.total
-                          )
+                                (c) => c.subjectId === subject.id,
+                              )?.total,
+                          ),
                         ) / (coeff || 1)
                       ).toFixed(2)}
                     </TableCell>
