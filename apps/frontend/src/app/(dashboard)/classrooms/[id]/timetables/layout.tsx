@@ -1,7 +1,5 @@
 import { CalendarProvider } from "~/components/calendar/calendar-context";
 
-import { ChangeBadgeVariantInput } from "~/components/calendar/change-badge-variant-input";
-
 import { getEvents, getUsers } from "~/components/calendar/requests";
 
 export default async function Layout({
@@ -13,10 +11,7 @@ export default async function Layout({
 
   return (
     <CalendarProvider users={users} events={events}>
-      <div className="flex  flex-col gap-4 p-4">
-        {children}
-        <ChangeBadgeVariantInput />
-      </div>
+      <div className="flex  flex-col gap-4 py-2 px-4">{children}</div>
     </CalendarProvider>
   );
 }

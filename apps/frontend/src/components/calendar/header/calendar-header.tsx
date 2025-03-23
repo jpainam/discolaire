@@ -14,6 +14,7 @@ import { CreateEditLesson } from "~/components/classrooms/timetables/CreateEditL
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useCalendar } from "../calendar-context";
+import { ChangeBadgeVariantInput } from "../change-badge-variant-input";
 
 interface IProps {
   events: IEvent[];
@@ -36,6 +37,7 @@ export function CalendarHeader({ events }: IProps) {
       </div>
 
       <div className="flex items-center justify-between gap-1.5">
+        <ChangeBadgeVariantInput />
         <LayoutGroup>
           <ToggleGroup
             className="flex gap-0 -space-x-px rounded-sm border overflow-hidden shadow-sm shadow-black/5 rtl:space-x-reverse"
@@ -67,8 +69,8 @@ export function CalendarHeader({ events }: IProps) {
                   <ToggleGroupItem
                     value={modeValue}
                     className={cn(
-                      "w-full rounded-none shadow-none focus-visible:z-10 text-base flex items-center justify-center gap-2 relative border-none",
-                      isSelected && "z-10",
+                      "w-full rounded-none shadow-none text-base flex items-center justify-center gap-2 relative border-none"
+                      //isSelected && "z-5"
                     )}
                   >
                     <motion.div

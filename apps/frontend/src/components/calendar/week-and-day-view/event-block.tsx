@@ -28,24 +28,18 @@ const calendarWeekEventCardVariants = cva(
           "border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-800 dark:bg-orange-950 dark:text-orange-300",
 
         // Dot variants
-        "blue-dot":
-          "border-b-primary bg-secondary text-t-primary [&_svg]:fill-blue-600",
-        "green-dot":
-          "border-b-primary bg-secondary text-t-primary [&_svg]:fill-green-600",
-        "red-dot":
-          "border-b-primary bg-secondary text-t-primary [&_svg]:fill-red-600",
-        "orange-dot":
-          "border-b-primary bg-secondary text-t-primary [&_svg]:fill-orange-600",
-        "purple-dot":
-          "border-b-primary bg-secondary text-t-primary [&_svg]:fill-purple-600",
-        "yellow-dot":
-          "border-b-primary bg-secondary text-t-primary [&_svg]:fill-yellow-600",
+        "blue-dot": "bg-secondary text-t-primary [&_svg]:fill-blue-600",
+        "green-dot": "bg-secondary text-t-primary [&_svg]:fill-green-600",
+        "red-dot": "bg-secondary text-t-primary [&_svg]:fill-red-600",
+        "orange-dot": "bg-secondary text-t-primary [&_svg]:fill-orange-600",
+        "purple-dot": "bg-secondary text-t-primary [&_svg]:fill-purple-600",
+        "yellow-dot": "bg-secondary text-t-primary [&_svg]:fill-yellow-600",
       },
     },
     defaultVariants: {
       color: "blue-dot",
     },
-  },
+  }
 );
 
 interface IProps
@@ -68,7 +62,7 @@ export function EventBlock({ event, className }: IProps) {
 
   const calendarWeekEventCardClasses = cn(
     calendarWeekEventCardVariants({ color, className }),
-    durationInMinutes < 35 && "py-0 justify-center",
+    durationInMinutes < 35 && "py-0 justify-center"
   );
   const { openModal } = useModal();
 
