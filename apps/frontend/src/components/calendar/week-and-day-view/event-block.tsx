@@ -39,7 +39,7 @@ const calendarWeekEventCardVariants = cva(
     defaultVariants: {
       color: "blue-dot",
     },
-  }
+  },
 );
 
 interface IProps
@@ -62,7 +62,7 @@ export function EventBlock({ event, className }: IProps) {
 
   const calendarWeekEventCardClasses = cn(
     calendarWeekEventCardVariants({ color, className }),
-    durationInMinutes < 35 && "py-0 justify-center"
+    durationInMinutes < 35 && "py-0 justify-center",
   );
   const { openModal } = useModal();
 

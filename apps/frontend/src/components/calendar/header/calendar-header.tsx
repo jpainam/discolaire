@@ -114,7 +114,7 @@ export function CalendarHeader({ events }: IProps) {
                           <motion.p
                             layout="position"
                             key={`text-${modeValue}`}
-                            className="font-medium origin-left whitespace-nowrap"
+                            className="text-sm origin-left whitespace-nowrap"
                             initial={{
                               opacity: 0,
                               x: -2,
@@ -143,8 +143,7 @@ export function CalendarHeader({ events }: IProps) {
                               },
                             }}
                           >
-                            {modeValue.charAt(0).toUpperCase() +
-                              modeValue.slice(1)}
+                            {t(modeValue)}
                           </motion.p>
                         )}
                       </AnimatePresence>
