@@ -181,7 +181,7 @@ export function IPBW({
                             justifyContent: "center",
                           }}
                         >
-                          <Text> {subject.coefficient}</Text>
+                          <Text> {grade?.average && subject.coefficient}</Text>
                         </View>
                         <View
                           style={{
@@ -221,10 +221,12 @@ export function IPBW({
                             borderRight: "1px solid black",
                           }}
                         >
-                          <Text>
-                            {subjectSummary?.min.toFixed(2)}/
-                            {subjectSummary?.max.toFixed(2)}
-                          </Text>
+                          {grade?.grade && (
+                            <Text>
+                              {subjectSummary?.min.toFixed(2)}/
+                              {subjectSummary?.max.toFixed(2)}
+                            </Text>
+                          )}
                         </View>
                         <View
                           style={{

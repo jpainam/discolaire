@@ -35,7 +35,7 @@ export function StudentPageHeader() {
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   const [value, setValue] = useState("");
@@ -58,7 +58,7 @@ export function StudentPageHeader() {
     return null;
   }
   return (
-    <div className="flex flex-row items-center gap-2 border-b px-4 py-1">
+    <div className="grid md:flex flex-row items-center gap-2 border-b px-4 py-1">
       <Label className="hidden md:block">{t("students")}</Label>
       {/* {session.user?.profile === "contact" ? (
         <StudentSelector

@@ -92,18 +92,20 @@ export default async function Page(props: {
           <TableBody>
             {Object.keys(groups).map((groupId: string) => {
               const items = groups[Number(groupId)]?.sort(
-                (a, b) => a.order - b.order,
+                (a, b) => a.order - b.order
               );
 
               if (!items) return null;
               const group = items[0]?.subjectGroup;
+              let coeff = 0;
               return (
                 <Fragment key={`fragment-${groupId}`}>
                   {items.map((subject, index) => {
                     const grade = studentReport.studentCourses.find(
-                      (c) => c.subjectId === subject.id,
+                      (c) => c.subjectId === subject.id
                     );
                     const subjectSummary = summary.get(subject.id);
+                    coeff += grade?.grade != null ? subject.coefficient : 0;
                     return (
                       <TableRow key={`${subject.id}-${groupId}-${index}`}>
                         <TableCell>{index + 1}</TableCell>
@@ -125,7 +127,7 @@ export default async function Page(props: {
                           <Cell n={grade?.grade} />
                         </TableCell>
                         <TableCell className={cn(rowClassName)}>
-                          {subject.coefficient}
+                          {grade?.grade != null && subject.coefficient}
                         </TableCell>
                         <TableCell className={cn(rowClassName)}>
                           {grade?.total}
@@ -136,10 +138,12 @@ export default async function Page(props: {
                         <TableCell className={cn(rowClassName)}>
                           {subjectSummary?.average.toFixed(2)}
                         </TableCell>
-                        <TableCell className={cn(rowClassName)}>
-                          {subjectSummary?.min.toFixed(2)} /{" "}
-                          {subjectSummary?.max.toFixed(2)}
-                        </TableCell>
+                        {grade?.grade && (
+                          <TableCell className={cn(rowClassName)}>
+                            {subjectSummary?.min.toFixed(2)} /{" "}
+                            {subjectSummary?.max.toFixed(2)}
+                          </TableCell>
+                        )}
                         <TableCell
                           className={cn("border-y text-left uppercase")}
                         >
@@ -156,22 +160,20 @@ export default async function Page(props: {
                     <TableCell className="" colSpan={2}>
                       {group?.name}
                     </TableCell>
-                    <TableCell className={cn(rowClassName)}>
-                      {sum(items.map((c) => c.coefficient))}
-                    </TableCell>
+                    <TableCell className={cn(rowClassName)}>{coeff}</TableCell>
                     <TableCell className="text-center text-sm" colSpan={3}>
                       {t("points")}:{" "}
                       {sum(
                         items.map(
                           (subject) =>
                             studentReport.studentCourses.find(
-                              (c) => c.subjectId === subject.id,
-                            )?.total,
-                        ),
+                              (c) => c.subjectId === subject.id
+                            )?.total
+                        )
                       ).toFixed(1)}{" "}
                       /{" "}
                       {sum(
-                        items.map((subject) => 20 * subject.coefficient),
+                        items.map((subject) => 20 * subject.coefficient)
                       ).toFixed(1)}
                     </TableCell>
                     <TableCell className="text-sm" colSpan={2}>
@@ -181,10 +183,10 @@ export default async function Page(props: {
                           items.map(
                             (subject) =>
                               studentReport.studentCourses.find(
-                                (c) => c.subjectId === subject.id,
-                              )?.total,
-                          ),
-                        ) / sum(items.map((subject) => subject.coefficient))
+                                (c) => c.subjectId === subject.id
+                              )?.total
+                          )
+                        ) / (coeff || 1)
                       ).toFixed(2)}
                     </TableCell>
                   </TableRow>
