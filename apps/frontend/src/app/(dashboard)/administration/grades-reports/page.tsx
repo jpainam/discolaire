@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { getServerTranslations } from "~/i18n/server";
 import { GradeAppreciationTable } from "./grade-options/GradeAppreciationTable";
+import { GradeReportSettings } from "./settings/GradeReportSettings";
 
 export default async function Page() {
   const { t } = await getServerTranslations();
@@ -127,6 +128,7 @@ export default async function Page() {
       <TabsContent value="tab-6">
         <div className="grid gap-2 lg:grid-cols-2 px-4">
           <GradeAppreciationTable />
+          <GradeReportSettings />
         </div>
       </TabsContent>
     </Tabs>
