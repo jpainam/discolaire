@@ -38,7 +38,10 @@ export function ReportCardHeader() {
         className="md:w-[350px]"
         defaultValue={termId?.toString()}
         onChange={(val) => {
-          router.push(`?` + createQueryString({ term: val }));
+          router.push(
+            `/classrooms/${params.id}/reportcards?` +
+              createQueryString({ term: val, trimestreId: undefined })
+          );
         }}
       />
       <TrimestreSelector
@@ -67,7 +70,7 @@ export function ReportCardHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/reportcards/ipbw?classroomId=${params.id}&termId=${termId}`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
