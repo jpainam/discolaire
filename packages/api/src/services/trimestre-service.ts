@@ -52,8 +52,12 @@ function computeReport(
         total: number | null;
         rank: number;
       }[];
-      globalAverage: number;
-      globalRank: number;
+      global: {
+        average: number;
+        rank: number;
+        grade1Average: number;
+        grade2Average: number;
+      };
     }
   >;
   summary: Map<number, { average: number; min: number; max: number }>;
@@ -75,8 +79,12 @@ function computeReport(
         total: number | null;
         rank: number;
       }[];
-      globalAverage: number;
-      globalRank: number;
+      global: {
+        average: number;
+        rank: number;
+        grade1Average: number;
+        grade2Average: number;
+      };
     }
   >();
   const summary = new Map<
@@ -137,10 +145,24 @@ function computeReport(
     const totalSum = validTotals.reduce((sum, c) => sum + (c.total ?? 0), 0);
     const coeffSum = validTotals.reduce((sum, c) => sum + c.coeff, 0);
     const globalAverage = coeffSum > 0 ? totalSum / coeffSum : 0;
+    // Grade 1 and Grade 2 averages
+    const valid1Totals = studentCourses.filter((c) => c.grade1 !== null);
+    const total1Sum = valid1Totals.reduce((sum, c) => sum + (c.grade1 ?? 0), 0);
+    const coeff1Sum = valid1Totals.reduce((sum, c) => sum + c.coeff, 0);
+    const grade1Average = coeff1Sum > 0 ? total1Sum / coeff1Sum : 0;
+    //
+    const valid2Totals = studentCourses.filter((c) => c.grade2 !== null);
+    const total2Sum = valid2Totals.reduce((sum, c) => sum + (c.grade2 ?? 0), 0);
+    const coeff2Sum = valid2Totals.reduce((sum, c) => sum + c.coeff, 0);
+    const grade2Average = coeff2Sum > 0 ? total2Sum / coeff2Sum : 0;
     studentsReport.set(studentId, {
       studentCourses,
-      globalAverage,
-      globalRank: 0,
+      global: {
+        average: globalAverage,
+        rank: 0,
+        grade1Average: grade1Average,
+        grade2Average: grade2Average,
+      },
     });
     tempGlobalAverages.push({ studentId, total: totalSum, coeffSum });
   });
@@ -177,7 +199,7 @@ function computeReport(
     globalRanks.set(s.studentId, { average: avg, rank: idx + 1 });
     const report = studentsReport.get(s.studentId);
     if (report) {
-      report.globalRank = idx + 1;
+      report.global.rank = idx + 1;
     }
   });
   // Step 4: Per-course ranking inside each student report
