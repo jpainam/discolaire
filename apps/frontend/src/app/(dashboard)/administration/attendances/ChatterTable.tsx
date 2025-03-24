@@ -37,8 +37,8 @@ export function ChatterTable() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg">{t("all_absences")}</CardTitle>
-        <CardDescription>Toutes les absences de la journée</CardDescription>
+        <CardTitle className="text-lg">{t("all_chatters")}</CardTitle>
+        <CardDescription>Tous les bavardages de la journée</CardDescription>
         <CardAction>
           <DatePicker />
         </CardAction>
