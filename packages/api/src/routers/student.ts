@@ -662,4 +662,60 @@ export const studentRouter = createTRPCRouter({
         },
       });
     }),
+
+  gradeTrends: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const grades = await ctx.db.grade.findMany({
+        where: {
+          studentId: input,
+          gradeSheet: {
+            subject: {
+              classroom: {
+                schoolYearId: ctx.schoolYearId,
+                schoolId: ctx.schoolId,
+              },
+            },
+          },
+        },
+        include: {
+          gradeSheet: {
+            include: {
+              subject: {
+                include: {
+                  course: true,
+                },
+              },
+            },
+          },
+        },
+        orderBy: {
+          gradeSheet: {
+            createdAt: "desc",
+          },
+        },
+      });
+      const gradeSheetIds = grades.map((g) => g.gradeSheetId);
+
+      const maxGrades = await ctx.db.grade.groupBy({
+        by: ["gradeSheetId"],
+        where: {
+          gradeSheetId: { in: gradeSheetIds },
+        },
+        _max: {
+          grade: true,
+        },
+      });
+      const maxGradeMap = new Map<number, number>();
+      maxGrades.forEach((entry) => {
+        maxGradeMap.set(entry.gradeSheetId, entry._max.grade ?? 0);
+      });
+      return grades.map((grade) => ({
+        subjectId: grade.gradeSheet.subjectId,
+        date: grade.gradeSheet.createdAt,
+        name: grade.gradeSheet.subject.course.reportName,
+        grade: grade.grade,
+        maxGrade: maxGradeMap.get(grade.gradeSheetId),
+      }));
+    }),
 });
