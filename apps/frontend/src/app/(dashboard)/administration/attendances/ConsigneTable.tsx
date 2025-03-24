@@ -25,6 +25,7 @@ import {
 } from "@repo/ui/components/table";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2Icon, MoreVertical, Pencil, Trash2 } from "lucide-react";
+import Link from "next/link";
 import { toast } from "sonner";
 import { DatePicker } from "~/components/DatePicker";
 import { useLocale } from "~/i18n";
@@ -64,7 +65,12 @@ export function ConsigneTable() {
               consignes.slice(0, 5).map((consigne, index) => (
                 <TableRow key={`${consigne.id}-${index}`}>
                   <TableCell className="py-0">
-                    {consigne.student.lastName}
+                    <Link
+                      className="hover:underline"
+                      href={`/students/${consigne.student.id}`}
+                    >
+                      {consigne.student.lastName}
+                    </Link>
                   </TableCell>
                   <TableCell className="py-0">{consigne.task}</TableCell>
                   <TableCell className="py-0">{consigne.duration}</TableCell>

@@ -52,6 +52,9 @@ export const exclusionRouter = createTRPCRouter({
       orderBy: {
         startDate: "desc",
       },
+      include: {
+        student: true,
+      },
       where: {
         term: {
           schoolId: ctx.schoolId,

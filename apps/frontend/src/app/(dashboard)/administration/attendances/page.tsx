@@ -3,6 +3,7 @@ import { AttendanceChart } from "./AttendanceChart";
 import { AttendanceStats } from "./AttendanceStats";
 import { ChatterTable } from "./ChatterTable";
 import { ConsigneTable } from "./ConsigneTable";
+import { ExclusionTable } from "./ExclusionTable";
 
 export default async function Page(props: {
   searchParams: Promise<{ category: string }>;
@@ -17,7 +18,7 @@ export default async function Page(props: {
         <AbsenceTable />
         <ConsigneTable />
         <ChatterTable />
-        <AbsenceTable />
+        <ExclusionTable />
       </div>
     </div>
   );

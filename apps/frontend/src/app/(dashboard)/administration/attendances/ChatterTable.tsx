@@ -25,6 +25,7 @@ import {
 } from "@repo/ui/components/table";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2Icon, MoreVertical, Pencil, Trash2 } from "lucide-react";
+import Link from "next/link";
 import { toast } from "sonner";
 import { DatePicker } from "~/components/DatePicker";
 import { useLocale } from "~/i18n";
@@ -48,8 +49,8 @@ export function ChatterTable() {
           <TableHeader>
             <TableRow>
               <TableHead>{t("fullName")}</TableHead>
-              <TableHead>{t("absence")}</TableHead>
-              <TableHead>{t("justified")}</TableHead>
+              <TableHead>{t("chatter")}</TableHead>
+              <TableHead>{t("")}</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
@@ -64,7 +65,12 @@ export function ChatterTable() {
               chatters.slice(0, 5).map((chatter, index) => (
                 <TableRow key={`${chatter.id}-${index}`}>
                   <TableCell className="py-0">
-                    {chatter.student.lastName}
+                    <Link
+                      className="hover:underline"
+                      href={`/students/${chatter.studentId}`}
+                    >
+                      {chatter.student.lastName}
+                    </Link>
                   </TableCell>
                   <TableCell className="py-0">{chatter.value}</TableCell>
                   <TableCell className="py-0"></TableCell>

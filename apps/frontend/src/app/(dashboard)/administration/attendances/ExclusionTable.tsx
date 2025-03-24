@@ -24,22 +24,23 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 import { useQuery } from "@tanstack/react-query";
+import i18next from "i18next";
 import { Loader2Icon, MoreVertical, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { DatePicker } from "~/components/DatePicker";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
-export function AbsenceTable() {
+export function ExclusionTable() {
   const { t } = useLocale();
   const trpc = useTRPC();
-  const absenceQuery = useQuery(trpc.absence.all.queryOptions());
-  const absences = absenceQuery.data ?? [];
+  const exclusionQuery = useQuery(trpc.exclusion.all.queryOptions());
+  const exclusion = exclusionQuery.data ?? [];
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg">{t("all_absences")}</CardTitle>
-        <CardDescription>Toutes les absences de la journée</CardDescription>
+        <CardTitle className="text-lg">{t("all_exclusions")}</CardTitle>
+        <CardDescription>Toutes les exclusion de la journée</CardDescription>
         <CardAction>
           <DatePicker />
         </CardAction>
@@ -49,33 +50,38 @@ export function AbsenceTable() {
           <TableHeader>
             <TableRow>
               <TableHead>{t("fullName")}</TableHead>
-              <TableHead>{t("absence")}</TableHead>
-              <TableHead>{t("justified")}</TableHead>
+              <TableHead>{t("reason")}</TableHead>
+              <TableHead>{t("date")}</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {absenceQuery.isPending ? (
+            {exclusionQuery.isPending ? (
               <TableRow>
                 <TableCell colSpan={4} className="text-center">
                   <Loader2Icon className="w-4 h-4 animate-spin" />
                 </TableCell>
               </TableRow>
             ) : (
-              absences.slice(0, 5).map((absence, index) => (
-                <TableRow key={`${absence.id}-${index}`}>
+              exclusion.slice(0, 5).map((exclusion, index) => (
+                <TableRow key={`${exclusion.id}-${index}`}>
                   <TableCell className="py-0">
                     <Link
                       className="hover:underline"
-                      href={`/students/${absence.student.id}`}
+                      href={`/students/${exclusion.student.id}`}
                     >
-                      {absence.student.lastName}
+                      {exclusion.student.lastName}
                     </Link>
                   </TableCell>
-                  <TableCell className="py-0">{absence.value}</TableCell>
+                  <TableCell className="py-0">{exclusion.reason}</TableCell>
                   <TableCell className="py-0">
-                    {absence.justification?.value}
+                    {exclusion.startDate.toLocaleDateString(i18next.language, {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
                   </TableCell>
+
                   <TableCell className="text-right py-0">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
