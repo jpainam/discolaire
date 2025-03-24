@@ -10,13 +10,6 @@ import { AppreciationHeader } from "~/components/reportcards/appreciations/Appre
 //   };
 // }
 export default function Page() {
-  // const reports =
-  //   searchParams.classroom &&
-  //   searchParams.term &&
-  //   (await reportCardService.getStudentSummary(
-  //     searchParams.classroom,
-  //     searchParams.term,
-  //   ));
   return (
     <div className="flex flex-col">
       <AppreciationHeader />
