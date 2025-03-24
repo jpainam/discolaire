@@ -126,7 +126,7 @@ const chartConfig = {
     color: "var(--chart-2)",
   },
   justified: {
-    label: "Justifications",
+    label: "Justi.",
     color: "var(--chart-1)",
   },
 } satisfies ChartConfig;
