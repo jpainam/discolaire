@@ -222,6 +222,7 @@ async function ConsigneItem({
               }).format(item.date)}
             </div>
             <StudentAttendanceAction
+              // @ts-expect-error TODO: fix this
               attendance={item}
               type={"consigne"}
               id={item.id}

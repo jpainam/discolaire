@@ -29,16 +29,16 @@ import { toast } from "sonner";
 import { DatePicker } from "~/components/DatePicker";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
-export function ConsigneTable() {
+export function ChatterTable() {
   const { t } = useLocale();
   const trpc = useTRPC();
-  const consigneQuery = useQuery(trpc.consigne.all.queryOptions());
-  const consignes = consigneQuery.data ?? [];
+  const chatterQuery = useQuery(trpc.chatter.all.queryOptions());
+  const chatters = chatterQuery.data ?? [];
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg">{t("all_consignes")}</CardTitle>
-        <CardDescription>Tous les consignes de la journée</CardDescription>
+        <CardTitle className="text-lg">{t("all_absences")}</CardTitle>
+        <CardDescription>Toutes les absences de la journée</CardDescription>
         <CardAction>
           <DatePicker />
         </CardAction>
@@ -48,26 +48,26 @@ export function ConsigneTable() {
           <TableHeader>
             <TableRow>
               <TableHead>{t("fullName")}</TableHead>
-              <TableHead>{t("task")}</TableHead>
-              <TableHead>{t("duration")}</TableHead>
+              <TableHead>{t("absence")}</TableHead>
+              <TableHead>{t("justified")}</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {consigneQuery.isPending ? (
+            {chatterQuery.isPending ? (
               <TableRow>
                 <TableCell colSpan={4} className="text-center">
                   <Loader2Icon className="w-4 h-4 animate-spin" />
                 </TableCell>
               </TableRow>
             ) : (
-              consignes.slice(0, 5).map((consigne, index) => (
-                <TableRow key={`${consigne.id}-${index}`}>
+              chatters.slice(0, 5).map((chatter, index) => (
+                <TableRow key={`${chatter.id}-${index}`}>
                   <TableCell className="py-0">
-                    {consigne.student.lastName}
+                    {chatter.student.lastName}
                   </TableCell>
-                  <TableCell className="py-0">{consigne.task}</TableCell>
-                  <TableCell className="py-0">{consigne.duration}</TableCell>
+                  <TableCell className="py-0">{chatter.value}</TableCell>
+                  <TableCell className="py-0"></TableCell>
                   <TableCell className="text-right py-0">
                     <DropdownMenu>
                       <DropdownMenuTrigger>

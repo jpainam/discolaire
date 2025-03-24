@@ -7,6 +7,9 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 export const chatterRouter = createTRPCRouter({
   get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
     return ctx.db.chatter.findUniqueOrThrow({
+      include: {
+        student: true,
+      },
       where: {
         id: input,
       },
@@ -48,6 +51,9 @@ export const chatterRouter = createTRPCRouter({
     return ctx.db.chatter.findMany({
       orderBy: {
         date: "desc",
+      },
+      include: {
+        student: true,
       },
       where: {
         term: {

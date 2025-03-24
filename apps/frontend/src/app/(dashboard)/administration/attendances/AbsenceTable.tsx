@@ -25,6 +25,7 @@ import {
 } from "@repo/ui/components/table";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2Icon, MoreVertical, Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { DatePicker } from "~/components/DatePicker";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
@@ -77,12 +78,21 @@ export function AbsenceTable() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem
+                          onSelect={() => {
+                            toast.warning("Not implemented yet");
+                          }}
+                        >
                           <Pencil />
                           {t("edit")}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem variant="destructive">
+                        <DropdownMenuItem
+                          onSelect={() => {
+                            toast.warning("Not implemented yet");
+                          }}
+                          variant="destructive"
+                        >
                           <Trash2 />
                           {t("delete")}
                         </DropdownMenuItem>
