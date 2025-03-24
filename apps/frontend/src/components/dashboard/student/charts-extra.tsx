@@ -28,7 +28,7 @@ export function CustomTooltipContent({
       acc[item.dataKey as string] = item;
       return acc;
     },
-    {} as Record<string, (typeof payload)[0]>
+    {} as Record<string, (typeof payload)[0]>,
   );
 
   // If dataKeys is provided, use it to order the items
@@ -48,11 +48,11 @@ export function CustomTooltipContent({
           if (!entry) return null;
 
           const name = entry.dataKey as string;
-          const value = entry.value!;
+          const value = entry.value;
 
           // Get color and label from maps, with fallbacks
-          const color = colorMap[name] || "var(--chart-1)";
-          const displayLabel = labelMap[name] || name;
+          const color = colorMap[name] ?? "var(--chart-1)";
+          const displayLabel = labelMap[name] ?? name;
 
           return (
             <div
@@ -67,7 +67,7 @@ export function CustomTooltipContent({
                 <span className="text-muted-foreground">{displayLabel}</span>
               </div>
               <span className="text-foreground font-mono font-medium tabular-nums">
-                {valueFormatter(value)}
+                {value && valueFormatter(value)}
               </span>
             </div>
           );

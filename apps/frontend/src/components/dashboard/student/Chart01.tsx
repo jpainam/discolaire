@@ -62,8 +62,8 @@ export function Chart01() {
 
   const chartData = selectedValue === "on" ? arrData : mrrData;
 
-  const firstMonth = chartData[0]?.month!;
-  const lastMonth = chartData[chartData.length - 1]?.month!;
+  const firstMonth = chartData[0]?.month;
+  const lastMonth = chartData[chartData.length - 1]?.month;
 
   return (
     <Card className=" ">
@@ -129,7 +129,7 @@ export function Chart01() {
               dataKey="month"
               tickLine={false}
               tickMargin={12}
-              ticks={[firstMonth, lastMonth]}
+              ticks={[firstMonth ?? "", lastMonth ?? ""]}
               stroke="var(--border)"
             />
             <YAxis

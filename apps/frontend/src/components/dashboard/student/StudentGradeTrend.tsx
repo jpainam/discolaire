@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 "use client";
 
 import * as React from "react";
@@ -64,6 +65,7 @@ export function StudentGradeTrend({
   }[];
 }) {
   const isMobile = useIsMobile();
+  console.log(data);
   const [timeRange, setTimeRange] = React.useState("90d");
   React.useEffect(() => {
     if (isMobile) {
