@@ -23,8 +23,8 @@ import { z } from "zod";
 import { useLocale } from "~/i18n";
 import { api } from "~/trpc/react";
 const updateUserPasswordSchema = z.object({
-  new_password: z.string().min(8),
-  confirm_password: z.string().min(8),
+  new_password: z.string().min(1),
+  confirm_password: z.string().min(1),
 });
 export function ChangeUserPassword({
   user,
