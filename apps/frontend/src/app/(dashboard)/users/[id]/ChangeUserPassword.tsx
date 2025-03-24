@@ -51,6 +51,7 @@ export function ChangeUserPassword({
     },
   });
   const { t } = useLocale();
+
   const handleSubmit = (values: z.infer<typeof updateUserPasswordSchema>) => {
     if (values.new_password !== values.confirm_password) {
       toast.error(t("password_mismatch"));
