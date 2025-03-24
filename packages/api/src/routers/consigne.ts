@@ -7,6 +7,9 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 export const consigneRouter = createTRPCRouter({
   get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
     return ctx.db.consigne.findUniqueOrThrow({
+      include: {
+        student: true,
+      },
       where: {
         id: input,
       },
@@ -16,6 +19,9 @@ export const consigneRouter = createTRPCRouter({
     return ctx.db.consigne.findMany({
       orderBy: {
         date: "desc",
+      },
+      include: {
+        student: true,
       },
       where: {
         term: {
