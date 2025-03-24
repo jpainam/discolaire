@@ -26,7 +26,6 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { useIsMobile } from "~/hooks/use-mobile";
-import { useLocale } from "~/i18n";
 
 export const description = "An interactive area chart";
 
@@ -86,7 +85,7 @@ export function StudentGradeTrend({
     startDate.setDate(startDate.getDate() - daysToSubtract);
     return date >= startDate;
   });
-  const { t } = useLocale();
+  //const { t } = useLocale();
 
   return (
     <Card className="@container/card">
@@ -137,6 +136,17 @@ export function StudentGradeTrend({
               <SelectItem value="90d">Last 3 months</SelectItem>
               <SelectItem value="30d">Last 30 days</SelectItem>
               <SelectItem value="7d">Last 7 days</SelectItem>
+              {subjects.map((subject, index) => {
+                return (
+                  <SelectItem
+                    key={`${subject.id}-${index}`}
+                    value={`${subject.id}`}
+                    //className="rounded-lg"
+                  >
+                    {subject.name}
+                  </SelectItem>
+                );
+              })}
             </SelectContent>
           </Select>
         </CardAction>

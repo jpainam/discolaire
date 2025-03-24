@@ -56,24 +56,6 @@ export async function getGrades(classroomId: string, termId: number) {
   });
 }
 export const reportCardService = {
-  getGrades: async (classroomId: string, termId: number) => {
-    return db.grade.findMany({
-      where: {
-        gradeSheet: {
-          termId: termId,
-          subject: {
-            classroomId: classroomId,
-          },
-        },
-      },
-      select: {
-        grade: true,
-        gradeSheetId: true,
-        studentId: true,
-        gradeSheet: true,
-      },
-    });
-  },
   getStudent: async (
     classroomId: string,
     studentId: string,
@@ -188,49 +170,4 @@ function computeAveragesAndRank(
     ...student,
     rank: index + 1,
   }));
-}
-
-export async function getSummary(
-  grades: Awaited<ReturnType<typeof getGrades>>,
-  classroomId: string,
-) {
-  const studentIds = new Set(grades.map((g) => g.studentId));
-  const gradeStudentMap = _.groupBy(grades, "studentId");
-  const gradeSubjectMap = _.groupBy(grades, "subjectId");
-  const subjects = await classroomService.getSubjects(classroomId);
-
-  const result = Array.from(studentIds).map((studentId) => {
-    const studentGrades = gradeStudentMap[studentId];
-    if (!studentGrades) return null;
-    return subjects
-      .map((subject) => {
-        const currentGrade = studentGrades.find(
-          (stg) => stg.subjectId === subject.id,
-        );
-        if (!currentGrade) return null;
-        const subjectGrades = gradeSubjectMap[subject.id];
-        if (!subjectGrades) return null;
-        const gradesArray = subjectGrades.map((stg) => stg.grade ?? 0);
-
-        return {
-          ...subject,
-          subjectId: subject.id,
-          studentId,
-          avg: currentGrade.grade ?? 0,
-          isAbsent: currentGrade.isAbsent,
-          rank:
-            currentGrade.grade != null
-              ? getRank(gradesArray, currentGrade.grade)
-              : -1,
-          num_grades: subjectGrades.length,
-          classroom: {
-            max: Math.max(...gradesArray),
-            min: Math.min(...gradesArray),
-            avg: _.mean(gradesArray),
-          },
-        };
-      })
-      .filter((r) => r != null);
-  });
-  return result.filter((r) => r != null).flat();
 }

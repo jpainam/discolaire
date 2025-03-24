@@ -89,7 +89,7 @@ const mockGenerator = (numberOfEvents: number): IEvent[] => {
 
     const startDate = new Date(
       startRange.getTime() +
-        Math.random() * (endRange.getTime() - startRange.getTime())
+        Math.random() * (endRange.getTime() - startRange.getTime()),
     );
 
     // Set time between 8 AM and 8 PM
@@ -97,7 +97,7 @@ const mockGenerator = (numberOfEvents: number): IEvent[] => {
       8 + Math.floor(Math.random() * 12),
       Math.floor(Math.random() * 60),
       0,
-      0
+      0,
     );
 
     const endDate = new Date(startDate);
@@ -110,7 +110,7 @@ const mockGenerator = (numberOfEvents: number): IEvent[] => {
         8 + Math.floor(Math.random() * 12),
         Math.floor(Math.random() * 60),
         0,
-        0
+        0,
       );
     } else {
       // Same-day event: Add 1-3 hours
