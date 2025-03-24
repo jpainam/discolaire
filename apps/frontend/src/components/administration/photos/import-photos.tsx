@@ -95,7 +95,7 @@ export function ImportPhotos() {
                 control={form.control}
                 name="firstRow"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                  <FormItem className="flex flex-row items-start space-x-0 space-y-0">
                     <FormControl>
                       <Checkbox
                         checked={field.value}

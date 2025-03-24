@@ -1,15 +1,16 @@
 "use client";
 
-import { Pencil, Trash2 } from "lucide-react";
+import { MoreVertical, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 
 import { Button } from "@repo/ui/components/button";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@repo/ui/components/popover";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
 import { useLocale } from "~/i18n";
 
 import FolderIcon from "~/components/icons/folder-solid";
@@ -30,43 +31,41 @@ export function PhotoListItem({
 }: PhotoCardProps) {
   const { t } = useLocale();
   return (
-    <div className="min-w-[273px] rounded-lg border border-muted p-5 shadow-sm hover:shadow-lg">
+    <div className=" rounded-lg border border-muted p-5 shadow-sm hover:shadow-lg">
       <div className="flex items-start justify-between">
         <Link
-          className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gray-100"
+          className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl"
           href={href ?? "#"}
         >
           <FolderIcon className="h-7 w-7" />
         </Link>
-        <div className="flex">
+        <div className="flex gap-0 items-center">
           <Favorite />
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="ghost" size={"icon"}>
-                <PiDotsThreeOutlineVerticalFill className="h-5 w-5 text-gray-500" />
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Button variant={"ghost"} size={"icon"}>
+                <MoreVertical />
               </Button>
-            </PopoverTrigger>
-            <PopoverContent>
-              <div className="flex flex-col gap-2">
-                <Button variant="ghost" size="sm">
-                  <Pencil className="mr-2 h-5 w-5" /> {t("edit")}
-                </Button>
-                <Button variant="ghost" size="sm">
-                  <Trash2 className="mr-2 h-5 w-5" />
-                  {t("delete")}
-                </Button>
-              </div>
-            </PopoverContent>
-          </Popover>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem>
+                <Pencil />
+                {t("edit")}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem variant="destructive">
+                <Trash2 />
+                {t("delete")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       <Link href={href ?? "#"}>
-        <h4 className="mb-1 truncate text-sm font-medium text-gray-800">
-          {title}
-        </h4>
+        <h4 className="mb-1 truncate text-sm font-medium ">{title}</h4>
         <ul className="flex list-inside list-disc gap-3.5">
-          <li className="list-none text-sm text-gray-500">{size}</li>
-          <li className="text-sm text-gray-500">
+          <li className="list-none text-sm ">{size}</li>
+          <li className="text-sm ">
             {totalFiles} {t("files")}
           </li>
         </ul>
