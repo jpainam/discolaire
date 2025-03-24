@@ -163,6 +163,7 @@ async function ChatterItem({
               }).format(item.date)}
             </div>
             <StudentAttendanceAction
+              // @ts-expect-error TODO: fix this
               attendance={item}
               type={"chatter"}
               id={item.id}
