@@ -66,31 +66,31 @@ export default async function Layout(props: {
           </div>
 
           <AttendanceGroup
-            title={t("my_absences")}
+            title={t("all_absences")}
             value={absence.total.toString()}
             icon={BaselineIcon}
             description={`${t("justified")}: ${absence.justified}`}
           />
           <AttendanceGroup
-            title={t("my_lates")}
+            title={t("all_lates")}
             value={late.value.toString()}
             icon={ClockIcon}
             description={`${t("justified")}: ${late.justified}`}
           />
           <AttendanceGroup
-            title={t("my_exclusions")}
+            title={t("all_exclusions")}
             value={exclusion.value.toString()}
             icon={ShieldAlertIcon}
             description={`N/A`}
           />
           <AttendanceGroup
-            title={t("my_chatters")}
+            title={t("all_chatters")}
             value={chatter.value.toString()}
             icon={NewspaperIcon}
             description={`N/A`}
           />
           <AttendanceGroup
-            title={t("my_consignes")}
+            title={t("all_consignes")}
             value={consigne.value.toString()}
             icon={ShapesIcon}
             description={`N/A`}
