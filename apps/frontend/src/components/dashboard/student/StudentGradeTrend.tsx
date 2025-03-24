@@ -45,7 +45,7 @@ const chartConfig = {
   },
   grade: {
     label: "Grade",
-    color: "var(--chart-2)",
+    color: "var(--chart-1)",
   },
   maxGrade: {
     label: "MaxGrade",
@@ -99,7 +99,7 @@ export function StudentGradeTrend({
           <span className="@[540px]/card:hidden">Last 3 months</span>
         </CardDescription>
         <CardAction>
-          <Select
+          {/* <Select
             defaultValue="all"
             value={timeRange}
             onValueChange={setTimeRange}
@@ -113,10 +113,10 @@ export function StudentGradeTrend({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">{t("all")}</SelectItem>
-              {subjects.map((subject) => {
+              {subjects.map((subject, index) => {
                 return (
                   <SelectItem
-                    key={subject.id}
+                    key={`${subject.id}-${index}`}
                     value={`${subject.id}`}
                     //className="rounded-lg"
                   >
@@ -125,13 +125,27 @@ export function StudentGradeTrend({
                 );
               })}
             </SelectContent>
+          </Select> */}
+          <Select value={timeRange} onValueChange={setTimeRange}>
+            <SelectTrigger
+              className="w-[160px] sm:ml-auto"
+              aria-label="Select a value"
+            >
+              <SelectValue placeholder="Last 3 months" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="90d">Last 3 months</SelectItem>
+              <SelectItem value="30d">Last 30 days</SelectItem>
+              <SelectItem value="7d">Last 7 days</SelectItem>
+            </SelectContent>
           </Select>
         </CardAction>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
+          //className="aspect-auto h-[250px] w-full"
+          className="aspect-auto h-60 w-full [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-[var(--chart-1)]/15"
         >
           <AreaChart data={filteredData}>
             <defs>

@@ -37,7 +37,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
         isWithinInterval(now, {
           start: parseISO(event.startDate),
           end: parseISO(event.endDate),
-        }),
+        })
       ) || null
     );
   };
@@ -112,7 +112,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                         //startTime={{ hour, minute: 0 }}
                       }}
                     >
-                      <div className="absolute inset-x-0 top-0 h-[48px] cursor-pointer transition-colors hover:bg-bg-primary-hover" />
+                      <div className="absolute inset-x-0 top-0 h-[48px] cursor-pointer transition-colors hover:bg-muted" />
                     </button>
 
                     <div className="pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed border-b-tertiary"></div>
@@ -123,7 +123,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                         //startTime={{ hour, minute: 30 }}
                       }}
                     >
-                      <div className="absolute inset-x-0 top-[48px] h-[48px] cursor-pointer transition-colors hover:bg-bg-primary-hover" />
+                      <div className="absolute inset-x-0 top-[48px] h-[48px] cursor-pointer transition-colors hover:bg-muted" />
                     </button>
                   </div>
                 ))}
@@ -134,7 +134,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                       event,
                       selectedDate,
                       groupIndex,
-                      groupedEvents.length,
+                      groupedEvents.length
                     );
                     const hasOverlap = groupedEvents.some(
                       (otherGroup, otherIndex) =>
@@ -148,9 +148,9 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                             {
                               start: parseISO(otherEvent.startDate),
                               end: parseISO(otherEvent.endDate),
-                            },
-                          ),
-                        ),
+                            }
+                          )
+                        )
                     );
 
                     if (!hasOverlap)
@@ -165,7 +165,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                         <EventBlock event={event} />
                       </div>
                     );
-                  }),
+                  })
                 )}
               </div>
 
@@ -188,8 +188,8 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
           {currentEvents.length > 0 ? (
             <div className="flex items-start gap-2 px-4 pt-4">
               <span className="relative mt-[5px] flex size-2.5">
-                <span className="absolute inline-flex size-full animate-ping rounded-full bg-success-400 opacity-75"></span>
-                <span className="relative inline-flex size-2.5 rounded-full bg-success-600"></span>
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex size-2.5 rounded-full bg-green-600"></span>
               </span>
 
               <p className="text-sm font-semibold text-t-secondary">

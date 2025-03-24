@@ -4,6 +4,7 @@ import { EducationalResource } from "~/components/dashboard/EducationalResource"
 import { QuickStatistics } from "~/components/dashboard/QuickStatistics";
 import { ScheduleCard } from "~/components/dashboard/ScheduleCard";
 import { SchoolLife } from "~/components/dashboard/SchoolLife";
+import { Chart01 } from "~/components/dashboard/student/Chart01";
 import { StudentGradeTrend } from "~/components/dashboard/student/StudentGradeTrend";
 import { StudentDashboardContact } from "~/components/dashboard/StudentDashboardContact";
 import { StudentLatestGrade } from "~/components/dashboard/StudentLatestGrade";
@@ -41,6 +42,7 @@ export default async function Page() {
             };
           })}
         />
+        <Chart01 />
 
         <StudentDashboardContact studentId={student.id} />
       </div>
