@@ -42,7 +42,7 @@ export function PhotoListItem({
         <div className="flex gap-0 items-center">
           <Favorite />
           <DropdownMenu>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger asChild>
               <Button variant={"ghost"} size={"icon"}>
                 <MoreVertical />
               </Button>

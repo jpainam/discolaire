@@ -70,7 +70,7 @@ export function ChatterTable() {
                   <TableCell className="py-0"></TableCell>
                   <TableCell className="text-right py-0">
                     <DropdownMenu>
-                      <DropdownMenuTrigger>
+                      <DropdownMenuTrigger asChild>
                         <Button variant={"ghost"}>
                           <MoreVertical />
                         </Button>

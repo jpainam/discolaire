@@ -70,7 +70,7 @@ export function ConsigneTable() {
                   <TableCell className="py-0">{consigne.duration}</TableCell>
                   <TableCell className="text-right py-0">
                     <DropdownMenu>
-                      <DropdownMenuTrigger>
+                      <DropdownMenuTrigger asChild>
                         <Button variant={"ghost"}>
                           <MoreVertical />
                         </Button>
