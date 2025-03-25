@@ -112,7 +112,7 @@ export function AssignmentTable() {
                               title: t("delete"),
                               description: t("delete_confirmation"),
                               icon: (
-                                <Trash2 className="h-6 w-6 text-destructive" />
+                                <Trash2 className="h-4 w-4 text-destructive" />
                               ),
                               alertDialogTitle: {
                                 className: "flex items-center gap-1",

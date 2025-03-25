@@ -38,13 +38,13 @@ export function ReportCardHeader({
   const Icon = sidebarIcons.reportcards;
   const canPrintReportCard = useCheckPermission(
     "reportcard",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const termId = searchParams.get("termId");
   const trimestreId = searchParams.get("trimestreId");
   return (
     <div className="grid md:flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1 text-secondary-foreground">
-      {Icon && <Icon className="h-6 w-6" />}
+      {Icon && <Icon className="h-4 w-4" />}
       <Label>{t("term")}</Label>
       <TermSelector
         className="w-[300px]"

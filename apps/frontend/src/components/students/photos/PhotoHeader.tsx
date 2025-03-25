@@ -31,7 +31,7 @@ export function PhotoHeader() {
         error: (err) => {
           return getErrorMessage(err);
         },
-      },
+      }
     );
   };
   const params = useParams<{ id: string }>();
@@ -60,7 +60,7 @@ export function PhotoHeader() {
   }, [addStudentPhotoMutation, params.id, uploadedFiles]);
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary p-1 text-secondary-foreground">
-      {Icon && <Icon className="h-6 w-6" />}
+      {Icon && <Icon className="h-4 w-4" />}
       <Label>{t("photos")}</Label>
       <div className="ml-auto">
         <input

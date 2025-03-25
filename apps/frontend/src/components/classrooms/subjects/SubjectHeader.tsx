@@ -53,7 +53,7 @@ export function SubjectHeader({
   const { openSheet } = useSheet();
   const canAddClassroomSubject = useCheckPermission(
     "subject",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   const badgeVariants = [
@@ -66,7 +66,7 @@ export function SubjectHeader({
 
   return (
     <div className="grid w-full grid-cols-1 flex-row items-center gap-2 border-b bg-muted px-4 py-1 text-secondary-foreground md:flex">
-      {Icon && <Icon className="hidden h-6 w-6 md:block" />}
+      {Icon && <Icon className="hidden h-4 w-4 md:block" />}
       <Label className="hidden md:block">{t("subjects")}</Label>
       <div className="grid grid-cols-3 flex-row items-center gap-2 md:flex">
         <FlatBadge variant={"indigo"}>
@@ -123,7 +123,7 @@ export function SubjectHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/subjects?format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -134,7 +134,7 @@ export function SubjectHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/subjects?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

@@ -36,12 +36,12 @@ export function AssignmentHeader() {
   const Icon = sidebarIcons.assignments;
   const canCreateAssignment = useCheckPermission(
     "assignment",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   return (
     <div className="flex w-full flex-col">
       <div className="flex flex-row items-center gap-6 border-b bg-secondary px-4 py-1 text-secondary-foreground">
-        {Icon && <Icon className="h-6 w-6" />}
+        {Icon && <Icon className="h-4 w-4" />}
         <Label>{t("assignments")}</Label>
         <div className="flex flex-row items-center gap-2">
           <Label>{t("from")}</Label>
@@ -50,7 +50,7 @@ export function AssignmentHeader() {
             className="w-56"
             onChange={(val) => {
               router.push(
-                `?${createQueryString({ from: val?.toDateString() })}`,
+                `?${createQueryString({ from: val?.toDateString() })}`
               );
             }}
           />

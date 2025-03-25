@@ -19,7 +19,7 @@ export function LoginInfoHeader() {
   const Icon = sidebarIcons.login_info;
   return (
     <div className="flex flex-row items-center bg-secondary px-2 py-1 text-secondary-foreground">
-      {Icon && <Icon className="mr-2 h-6 w-6" />}
+      {Icon && <Icon className="mr-2 h-4 w-4" />}
       <Label>{t("login_info")}</Label>
       <div className="ml-auto">
         <DropdownMenu>

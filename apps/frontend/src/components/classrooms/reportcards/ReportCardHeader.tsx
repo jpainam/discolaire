@@ -34,7 +34,7 @@ export function ReportCardHeader() {
   const Icon = sidebarIcons.reportcards;
   return (
     <div className="grid flex-row items-center gap-4 border-b bg-muted/40 px-4 py-1 md:flex">
-      {Icon && <Icon className="hidden h-6 w-6 md:block" />}
+      {Icon && <Icon className="hidden h-4 w-4 md:block" />}
       <Label className="hidden md:block">{t("term")}</Label>
       <TermSelector
         className="md:w-[350px]"
@@ -42,7 +42,7 @@ export function ReportCardHeader() {
         onChange={(val) => {
           router.push(
             `/classrooms/${params.id}/reportcards?` +
-              createQueryString({ termId: val, trimestreId: undefined }),
+              createQueryString({ termId: val, trimestreId: undefined })
           );
         }}
       />

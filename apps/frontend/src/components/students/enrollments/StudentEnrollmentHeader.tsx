@@ -26,7 +26,7 @@ export function StudentEnrollmentHeader({
 
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary px-2 py-1">
-      {Icon && <Icon className="h-6 w-6" />}
+      {Icon && <Icon className="h-4 w-4" />}
       <Label className="py-2.5">{t("enrollments")}</Label>
       <div className="ml-auto flex flex-row items-center gap-2">
         {!isEnrolled && canEnroll && (

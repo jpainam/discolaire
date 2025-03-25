@@ -21,7 +21,7 @@ export function TrimestreHeader({
   const { t } = useLocale();
   return (
     <div className="flex flex-row gap-2 items-center justify-between px-4">
-      <FileSliders className="w-6 h-6" />
+      <FileSliders className="w-4 h-4" />
       <Label>{title}</Label>
 
       <Button
