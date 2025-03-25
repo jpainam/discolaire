@@ -425,7 +425,7 @@
   "please_check_the_amount_received_box": "Por favor marque la casilla 'Monto recibido'",
   "please_check_the_payment_details_box": "Por favor marque la casilla 'Detalles de pago'",
   "number_of_receipts_to_print": "Número de recibos a imprimir",
-  "required_fee_warning": "¡Asegúrese de pagar las tarifas requeridas marcando las casillas de arriba!",
+  "required_fee_warning": "El estudiante no ha pagado las tarifas requeridas",
   "disable": "Deshabilitar",
   "sending_invite": "Enviando invitación...",
   "upload_files": "Subir archivos",

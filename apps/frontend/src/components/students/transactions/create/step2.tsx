@@ -5,7 +5,6 @@ import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import {
@@ -30,21 +29,7 @@ const step2Schema = z.object({
   notifications: z.array(z.string()).default([]),
 });
 
-export function Step2({
-  classroomId,
-  amount,
-  description,
-  transactionType,
-  paymentMethod,
-  contacts,
-}: {
-  classroomId: string;
-  amount: number;
-  paymentMethod: string;
-  description: string;
-  transactionType: string;
-  contacts: RouterOutputs["student"]["contacts"][number][];
-}) {
+export function Step2() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
 
@@ -58,7 +43,7 @@ export function Step2({
     onSuccess: (transaction) => {
       toast.success(t("created_successfully"), { id: 0 });
       router.push(
-        routes.students.transactions.details(params.id, transaction.id),
+        routes.students.transactions.details(params.id, transaction.id)
       );
     },
     onError: (error) => {

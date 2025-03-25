@@ -584,7 +584,7 @@
   "link": "Lier",
   "link_contacts": "Lier les contacts",
   "link_students": "Lier les élèves",
-  "required_fee_warning": "Veuillez vous rassurer des payement des frais obligatoires en cochant les cases ci-dessus!!!",
+  "required_fee_warning": "L'élève n'a pas encore payé les frais obligatoires",
   "links": "Liens",
   "list": "Liste",
   "student_list": "Liste des élèves",

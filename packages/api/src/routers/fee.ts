@@ -1,8 +1,6 @@
-import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { feeService } from "../services/fee-service";
-import { studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const feeRouter = createTRPCRouter({
@@ -110,41 +108,41 @@ export const feeRouter = createTRPCRouter({
       },
     });
   }),
-  checkRequiredFees: protectedProcedure
-    .input(
-      z.object({
-        studentId: z.string().min(1),
-        feeIds: z.array(z.number().min(1)),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const school = await ctx.db.school.findUnique({
-        where: {
-          id: ctx.schoolId,
-        },
-      });
-      console.log(school);
-      if (school?.applyRequiredFee !== "YES") {
-        return true;
-      }
-      const classroom = await studentService.getClassroom(
-        input.studentId,
-        ctx.schoolYearId,
-      );
-      if (!classroom) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Classroom not found",
-        });
-      }
-      const requiredFees = await studentService.getUnpaidRequiredFees(
-        input.studentId,
-        classroom.id,
-      );
-      const requiredFeeIds = requiredFees.map((fee) => fee.id);
-      const missingFees = requiredFeeIds.filter(
-        (feeId) => !input.feeIds.includes(feeId),
-      );
-      return missingFees.length === 0;
-    }),
+  // checkRequiredFees: protectedProcedure
+  //   .input(
+  //     z.object({
+  //       studentId: z.string().min(1),
+  //       feeIds: z.array(z.number().min(1)),
+  //     }),
+  //   )
+  //   .mutation(async ({ ctx, input }) => {
+  //     const school = await ctx.db.school.findUnique({
+  //       where: {
+  //         id: ctx.schoolId,
+  //       },
+  //     });
+
+  //     if (school?.applyRequiredFee !== "YES") {
+  //       return true;
+  //     }
+  //     const classroom = await studentService.getClassroom(
+  //       input.studentId,
+  //       ctx.schoolYearId,
+  //     );
+  //     if (!classroom) {
+  //       throw new TRPCError({
+  //         code: "NOT_FOUND",
+  //         message: "Classroom not found",
+  //       });
+  //     }
+  //     const requiredFees = await studentService.getUnpaidRequiredFees(
+  //       input.studentId,
+  //       classroom.id,
+  //     );
+  //     const requiredFeeIds = requiredFees.map((fee) => fee.id);
+  //     const missingFees = requiredFeeIds.filter(
+  //       (feeId) => !input.feeIds.includes(feeId),
+  //     );
+  //     return missingFees.length === 0;
+  //   }),
 });

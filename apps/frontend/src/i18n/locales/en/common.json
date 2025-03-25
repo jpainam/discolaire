@@ -435,7 +435,7 @@
   "include_required_fees_in_finances": "Include required fees in cash reports?",
   "discount": "Discount",
   "discounts": "Discounts",
-  "required_fee_warning": "Please ensure that the required fees are paid by checking the boxes above!!!",
+  "required_fee_warning": "The student hasn't paid the required fees yet",
   "documents": "Documents",
   "double_clicked_to_edit_or_add_remarks": "Double click to edit or add remarks for this student",
   "download": "Download",

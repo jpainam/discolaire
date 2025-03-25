@@ -1,9 +1,7 @@
 "use client";
 
-import { useAtomValue } from "jotai";
 import { ArrowRight } from "lucide-react";
 import { useParams } from "next/navigation";
-import { parseAsFloat, useQueryState } from "nuqs";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -27,10 +25,13 @@ import {
 } from "@repo/ui/components/select";
 import { useLocale } from "~/i18n";
 
+import { Checkbox } from "@repo/ui/components/checkbox";
+import { Label } from "@repo/ui/components/label";
+import i18next from "i18next";
 import { useRouter } from "~/hooks/use-router";
+import { CURRENCY } from "~/lib/constants";
 import { useSchool } from "~/providers/SchoolProvider";
-import { api } from "~/trpc/react";
-import { requiredFeesAtom } from "./required-fees-atom";
+import { useCreateTransaction } from "./CreateTransactionContextProvider";
 import { RequiredFeeForm } from "./RequiredFeeForm";
 
 const makePaymentFormSchema = z.object({
@@ -41,26 +42,28 @@ const makePaymentFormSchema = z.object({
 });
 
 export function Step1() {
-  const [amount] = useQueryState("amount", parseAsFloat.withDefault(0));
+  const {
+    amount,
+    setAmount,
+    description,
+    setDescription,
+    transactionType,
+    setTransactionType,
+    paymentMethod,
+    setPaymentMethod,
+    unpaidRequiredFees,
+    requiredFeeIds,
+    setRequiredFeeIds,
+  } = useCreateTransaction();
+
   const { school } = useSchool();
 
-  const requiredFeeIds = useAtomValue(requiredFeesAtom);
-
-  const [description] = useQueryState("description", {
-    defaultValue: "",
-  });
-  const [transactionType] = useQueryState("transactionType", {
-    defaultValue: "",
-  });
-  const [paymentMethod] = useQueryState("paymentMethod", {
-    defaultValue: "",
-  });
   const form = useForm({
     defaultValues: {
-      amount: amount,
-      description: description,
-      transactionType: transactionType,
-      paymentMethod: paymentMethod,
+      amount: amount ?? 0,
+      description: description ?? "",
+      transactionType: transactionType ?? "",
+      paymentMethod: paymentMethod ?? "",
     },
     schema: makePaymentFormSchema,
   });
@@ -68,31 +71,20 @@ export function Step1() {
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
 
-  const checkRequiredFeeMutation = api.fee.checkRequiredFees.useMutation();
-
   function onSubmit(data: z.infer<typeof makePaymentFormSchema>) {
-    const values = {
-      amount: `${data.amount}`,
-      description: data.description,
-      transactionType: data.transactionType,
-      paymentMethod: data.paymentMethod,
-    };
-    const searchParams = new URLSearchParams(values).toString();
-    checkRequiredFeeMutation.mutate(
-      { studentId: params.id, feeIds: requiredFeeIds },
-      {
-        onError: (error) => {
-          toast.error(error.message);
-        },
-        onSuccess: (result) => {
-          if (result) {
-            router.push(`./create?${searchParams}`);
-          } else {
-            toast.error(t("required_fee_warning"));
-          }
-        },
-      },
-    );
+    if (school.applyRequiredFee === "YES") {
+      const missingFees = unpaidRequiredFees.filter(
+        (fee) => !requiredFeeIds.includes(fee.id)
+      );
+      if (missingFees.length !== 0) {
+        toast.error(t("required_fee_warning"));
+        return;
+      }
+    }
+    setTransactionType(data.transactionType);
+    setPaymentMethod(data.paymentMethod);
+    setAmount(data.amount);
+    setDescription(data.description);
   }
   const items: { label: string; value: string }[] = [
     { label: "credit", value: "CREDIT" },
@@ -102,7 +94,44 @@ export function Step1() {
 
   return (
     <div className="mx-auto w-full max-w-3xl">
+      {school.applyRequiredFee !== "NO" && (
+        <>
+          {unpaidRequiredFees.map((fee, index) => {
+            return (
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id={`requiredfee-${index}`}
+                  checked={requiredFeeIds.includes(fee.id)}
+                  onCheckedChange={(checked: boolean) => {
+                    if (checked) {
+                      setRequiredFeeIds((prev) => [...prev, fee.id]);
+                    } else {
+                      setRequiredFeeIds((prev) =>
+                        prev.filter((i) => i !== fee.id)
+                      );
+                    }
+                  }}
+                />
+                <Label
+                  htmlFor={`requiredfee-${index}`}
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  {fee.description} (
+                  {fee.amount.toLocaleString(i18next.language, {
+                    style: "currency",
+                    currency: CURRENCY,
+                    maximumFractionDigits: 0,
+                    minimumFractionDigits: 0,
+                  })}
+                  )
+                </Label>
+              </div>
+            );
+          })}
+        </>
+      )}
       {school.applyRequiredFee !== "NO" && <RequiredFeeForm />}
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 gap-6 px-4 md:grid-cols-2 md:gap-4">
@@ -189,11 +218,7 @@ export function Step1() {
             />
 
             <div className="col-span-full flex justify-end gap-2">
-              <Button
-                isLoading={checkRequiredFeeMutation.isPending}
-                size="sm"
-                type="submit"
-              >
+              <Button size="sm" type="submit">
                 {t("next")}
                 <ArrowRight />
               </Button>

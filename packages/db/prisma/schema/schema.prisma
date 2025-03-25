@@ -587,7 +587,10 @@ model RequiredFeeTransaction {
     studentId   String
     feeId       Int
     createdAt   DateTime @default(now()) @db.Timestamp(6)
+    updatedAt   DateTime @updatedAt
     createdById String
+    status      String   @default("PENDING")
+    updatedById String?
 
     @@id([studentId, feeId])
 }
