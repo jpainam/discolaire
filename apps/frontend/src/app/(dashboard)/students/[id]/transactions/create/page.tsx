@@ -23,22 +23,28 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     );
   }
   const studentContacts = await api.student.contacts(id);
+  const student = await api.student.get(id);
   const fees = await caller.classroom.fees(classroom.id);
   const unpaidRequiredFees = await caller.student.unpaidRequiredFees(params.id);
+  const transactions = await caller.student.transactions(params.id);
 
   return (
-    <div className="flex w-full flex-col gap-2">
+    <div className="flex w-full flex-col gap-8">
       <div className="flex items-center border-b bg-secondary px-2 py-2 text-secondary-foreground">
         <CircleDollarSign className="mr-2 h-4 w-4" />
         <Label className="py-1.5"> {t("make_payment")}</Label>
       </div>
 
       {unpaidRequiredFees.length !== 0 && (
-        <AlertState variant="warning">{t("required_fee_warning")}</AlertState>
+        <div className="mx-auto w-full flex flex-col  max-w-3xl">
+          <AlertState variant="warning">{t("required_fee_warning")}</AlertState>
+        </div>
       )}
       <CreateTransactionContextProvider
         studentContacts={studentContacts}
+        transactions={transactions}
         fees={fees}
+        student={student}
         unpaidRequiredFees={unpaidRequiredFees}
         classroom={classroom}
       >

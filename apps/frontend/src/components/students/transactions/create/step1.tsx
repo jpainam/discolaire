@@ -1,7 +1,6 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -28,11 +27,9 @@ import { useLocale } from "~/i18n";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import { Label } from "@repo/ui/components/label";
 import i18next from "i18next";
-import { useRouter } from "~/hooks/use-router";
 import { CURRENCY } from "~/lib/constants";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useCreateTransaction } from "./CreateTransactionContextProvider";
-import { RequiredFeeForm } from "./RequiredFeeForm";
 
 const makePaymentFormSchema = z.object({
   amount: z.coerce.number().min(1),
@@ -67,15 +64,14 @@ export function Step1() {
     },
     schema: makePaymentFormSchema,
   });
-  const router = useRouter();
   const { t } = useLocale();
-  const params = useParams<{ id: string }>();
 
   function onSubmit(data: z.infer<typeof makePaymentFormSchema>) {
-    if (school.applyRequiredFee === "YES") {
+    if (school.applyRequiredFee !== "YES") {
       const missingFees = unpaidRequiredFees.filter(
-        (fee) => !requiredFeeIds.includes(fee.id)
+        (fee) => !requiredFeeIds.includes(fee.id),
       );
+      console.log(missingFees, unpaidRequiredFees, requiredFeeIds);
       if (missingFees.length !== 0) {
         toast.error(t("required_fee_warning"));
         return;
@@ -93,21 +89,25 @@ export function Step1() {
   ];
 
   return (
-    <div className="mx-auto w-full max-w-3xl">
+    <div className="mx-auto w-full flex flex-col gap-8 max-w-3xl">
       {school.applyRequiredFee !== "NO" && (
-        <>
+        <div className="flex flex-col gap-2">
+          <Label>{t("required_fees")}</Label>
           {unpaidRequiredFees.map((fee, index) => {
             return (
-              <div className="flex items-center space-x-2">
+              <div
+                key={`unpaid-${fee.id}`}
+                className="flex items-center space-x-2"
+              >
                 <Checkbox
                   id={`requiredfee-${index}`}
                   checked={requiredFeeIds.includes(fee.id)}
                   onCheckedChange={(checked: boolean) => {
                     if (checked) {
-                      setRequiredFeeIds((prev) => [...prev, fee.id]);
+                      setRequiredFeeIds([...requiredFeeIds, fee.id]);
                     } else {
-                      setRequiredFeeIds((prev) =>
-                        prev.filter((i) => i !== fee.id)
+                      setRequiredFeeIds(
+                        requiredFeeIds.filter((i) => i !== fee.id),
                       );
                     }
                   }}
@@ -128,13 +128,12 @@ export function Step1() {
               </div>
             );
           })}
-        </>
+        </div>
       )}
-      {school.applyRequiredFee !== "NO" && <RequiredFeeForm />}
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-1 gap-6 px-4 md:grid-cols-2 md:gap-4">
+          <div className="grid grid-cols-1 gap-6  md:grid-cols-2 md:gap-4">
             <FormField
               control={form.control}
               name="paymentMethod"

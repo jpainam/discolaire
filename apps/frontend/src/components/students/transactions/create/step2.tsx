@@ -21,6 +21,7 @@ import { useLocale } from "~/i18n";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
+import { useCreateTransaction } from "./CreateTransactionContextProvider";
 import Step2Details from "./step2details";
 
 const step2Schema = z.object({
@@ -30,11 +31,16 @@ const step2Schema = z.object({
 });
 
 export function Step2() {
+  const {
+    amount,
+    description,
+    transactionType,
+    paymentMethod,
+    studentContacts,
+  } = useCreateTransaction();
   const router = useRouter();
   const params = useParams<{ id: string }>();
-
   const studentId = params.id;
-
   const utils = api.useUtils();
   const createTransactionMutation = api.transaction.create.useMutation({
     onSettled: async () => {
@@ -43,7 +49,7 @@ export function Step2() {
     onSuccess: (transaction) => {
       toast.success(t("created_successfully"), { id: 0 });
       router.push(
-        routes.students.transactions.details(params.id, transaction.id)
+        routes.students.transactions.details(params.id, transaction.id),
       );
     },
     onError: (error) => {
@@ -56,7 +62,7 @@ export function Step2() {
     defaultValues: {
       paymentReceived: false,
       paymentCorrectness: false,
-      notifications: [params.id, ...contacts.map((c) => c.contactId)],
+      notifications: [params.id, ...studentContacts.map((c) => c.contactId)],
     },
   });
   function onSubmit(data: z.infer<typeof step2Schema>) {
@@ -66,6 +72,11 @@ export function Step2() {
     }
     if (!data.paymentCorrectness) {
       toast.warning(t("please_check_the_payment_details_box"));
+      return;
+    }
+
+    if (!amount || !description || !transactionType || !paymentMethod) {
+      toast.error(t("missing_required_fields"));
       return;
     }
     toast.loading(t("creating"), { id: 0 });
@@ -86,7 +97,7 @@ export function Step2() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="mx-auto mb-8 w-full max-w-3xl space-y-2"
       >
-        <Step2Details classroomId={classroomId} />
+        <Step2Details />
         <div className="flex flex-row justify-between rounded-xl border">
           <FormField
             control={form.control}
