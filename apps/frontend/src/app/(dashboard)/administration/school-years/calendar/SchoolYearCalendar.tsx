@@ -118,7 +118,7 @@ const getDayOfWeek = (year: number, month: number, day: number) => {
 
 export function SchoolYearCalendar() {
   const [activeFilters, setActiveFilters] = useState<string[]>(
-    Object.keys(EVENT_TYPES)
+    Object.keys(EVENT_TYPES),
   );
   const [currentYear, setCurrentYear] = useState(SCHOOL_YEAR_DATA.year);
   const [viewMode, setViewMode] = useState<"calendar" | "list">("calendar");
@@ -183,7 +183,7 @@ export function SchoolYearCalendar() {
           <div
             key={`empty-${i}`}
             className="h-16 md:h-20 border border-border/50 bg-muted/20"
-          ></div>
+          ></div>,
         );
       }
 
@@ -191,7 +191,7 @@ export function SchoolYearCalendar() {
       for (let day = 1; day <= daysInMonth; day++) {
         const date = `${actualYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
         const dayEvents = events.filter(
-          (event) => event.date === date && activeFilters.includes(event.type)
+          (event) => event.date === date && activeFilters.includes(event.type),
         );
 
         days.push(
@@ -206,7 +206,7 @@ export function SchoolYearCalendar() {
                   key={index}
                   className={cn(
                     "text-xs rounded px-1 py-0.5 border truncate",
-                    EVENT_TYPES[event.type as keyof typeof EVENT_TYPES].color
+                    EVENT_TYPES[event.type as keyof typeof EVENT_TYPES].color,
                   )}
                   title={event.name}
                 >
@@ -214,7 +214,7 @@ export function SchoolYearCalendar() {
                 </div>
               ))}
             </div>
-          </div>
+          </div>,
         );
       }
 
@@ -301,7 +301,7 @@ export function SchoolYearCalendar() {
               key={index}
               className={cn(
                 "p-4 rounded-lg border",
-                EVENT_TYPES[event.type as keyof typeof EVENT_TYPES].color
+                EVENT_TYPES[event.type as keyof typeof EVENT_TYPES].color,
               )}
             >
               <div className="font-semibold">{event.name}</div>
