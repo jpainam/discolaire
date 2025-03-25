@@ -17,6 +17,7 @@ import { Input } from "@repo/ui/components/input";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { decode } from "entities";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
@@ -27,7 +28,7 @@ export function CreateEditSchool({ id, name }: { id?: string; name?: string }) {
   const form = useForm({
     schema: createSchoolSchema,
     defaultValues: {
-      name: name ?? "",
+      name: name ? decode(name) : "",
     },
   });
   const { closeModal } = useModal();

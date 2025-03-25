@@ -24,6 +24,7 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { decode } from "entities";
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
@@ -68,16 +69,16 @@ export function FormerSchoolSelector({
     if (formerSchoolsQuery.data) {
       if (defaultValue) {
         const dValue = formerSchoolsQuery.data.find(
-          (item) => item.id === defaultValue,
+          (item) => item.id === defaultValue
         );
         if (dValue) setSelectedOption({ label: dValue.name, value: dValue.id });
       }
       setOptions(
         formerSchoolsQuery.data.map((item) => ({
-          label: item.name,
+          label: decode(item.name),
           value: item.id,
           avatar: undefined,
-        })),
+        }))
       );
     }
   }, [defaultValue, formerSchoolsQuery.data]);
@@ -114,7 +115,7 @@ export function FormerSchoolSelector({
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    isSelected ? "opacity-100" : "opacity-0",
+                    isSelected ? "opacity-100" : "opacity-0"
                   )}
                 />
               </>
@@ -122,14 +123,14 @@ export function FormerSchoolSelector({
           }}
           options={options.map((option) => ({
             value: option.value,
-            label: option.label,
+            label: decode(option.label),
             avatar: option.avatar,
           }))}
           placeholder={searchPlaceholder ?? t("search")}
           selectedOption={selectedOption.value}
           onSelectOption={(currentValue) => {
             onChange?.(
-              currentValue === selectedOption.value ? null : currentValue,
+              currentValue === selectedOption.value ? null : currentValue
             );
             setSelectedOption({
               value: currentValue === selectedOption.value ? "" : currentValue,

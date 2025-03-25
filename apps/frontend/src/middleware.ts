@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
   const sessionCookie = request.cookies.get("session");
 
   const isProtectedRoute = !unProtectedRoutes.some((route) =>
-    pathname.startsWith(route)
+    pathname.startsWith(route),
   );
 
   if (isProtectedRoute && !sessionCookie) {
@@ -40,15 +40,15 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(
         new URL(
           `/auth/login?redirect=${newUrl}`,
-          new URL(env.NEXT_PUBLIC_BASE_URL)
-        )
+          new URL(env.NEXT_PUBLIC_BASE_URL),
+        ),
       );
     } else {
       return NextResponse.redirect(
         new URL(
           `/auth/login?redirect=${request.url}`,
-          new URL(env.NEXT_PUBLIC_BASE_URL)
-        )
+          new URL(env.NEXT_PUBLIC_BASE_URL),
+        ),
       );
     }
   }
@@ -76,7 +76,7 @@ export async function middleware(request: NextRequest) {
       res.cookies.delete("session");
       if (isProtectedRoute) {
         return NextResponse.redirect(
-          new URL("/auth/login", new URL(env.NEXT_PUBLIC_BASE_URL))
+          new URL("/auth/login", new URL(env.NEXT_PUBLIC_BASE_URL)),
         );
       }
     }

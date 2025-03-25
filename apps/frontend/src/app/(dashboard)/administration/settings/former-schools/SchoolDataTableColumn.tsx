@@ -18,6 +18,7 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { decode } from "entities";
 import { api } from "~/trpc/react";
 import { CreateEditSchool } from "./CreateEditSchool";
 
@@ -55,7 +56,9 @@ export function getSchoolColumns({ t }: { t: TFunction<string, unknown> }) {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("name")} />
       ),
-      cell: ({ row }) => <div className="flex">{row.getValue("name")}</div>,
+      cell: ({ row }) => (
+        <div className="flex">{decode(row.getValue("name"))}</div>
+      ),
     },
 
     {
