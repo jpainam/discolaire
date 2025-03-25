@@ -9,6 +9,7 @@ import { Calendar, CalendarDays, PanelsTopLeftIcon } from "lucide-react";
 import { SchoolYearHeader } from "~/components/schoolyears/SchoolYearHeader";
 import { SchoolYearTable } from "~/components/schoolyears/SchoolYearTable";
 import { getServerTranslations } from "~/i18n/server";
+import { SchoolYearCalendar } from "./calendar/SchoolYearCalendar";
 import { TermHeader } from "./terms/TermHeader";
 import { TermTable } from "./terms/TermTable";
 
@@ -55,12 +56,7 @@ export default async function Page() {
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
       <TabsContent value="tab-1">
-        <div className="flex flex-col gap-2 ">
-          <div className="ml-auto px-4">
-            <SchoolYearHeader />
-          </div>
-          <SchoolYearTable />
-        </div>
+        <SchoolYearCalendar />
       </TabsContent>
       <TabsContent value="tab-2">
         <div className="flex flex-col gap-2">
@@ -69,9 +65,12 @@ export default async function Page() {
         </div>
       </TabsContent>
       <TabsContent value="tab-3">
-        <p className="text-muted-foreground p-4 pt-1 text-center text-xs">
-          En cours d'implémentation
-        </p>
+        <div className="flex flex-col gap-2 ">
+          <div className="ml-auto px-4">
+            <SchoolYearHeader />
+          </div>
+          <SchoolYearTable />
+        </div>
       </TabsContent>
     </Tabs>
   );
