@@ -13,6 +13,8 @@
   "age": "Age",
   "mail": "Mail",
   "activities": "Activities",
+  "no_activities_found": "No activities found",
+  "try_adjusting_filters": "Try adjusting your filters to see more results",
   "no_results": "No results",
   "search_a_contact": "Search a contact",
   "password_mismatch": "Password mismatch",

@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleHelp, Mail } from "lucide-react";
+import { ActivityIcon, CircleHelp, Mail } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 import { useModal } from "~/hooks/use-modal";
@@ -8,12 +8,15 @@ import { useLocale } from "~/i18n";
 
 import { SimpleTooltip } from "~/components/simple-tooltip";
 import { useRouter } from "~/hooks/use-router";
+import { useSheet } from "~/hooks/use-sheet";
 import { useSession } from "~/providers/AuthProvider";
 import { FeedBackDialog } from "./FeedbackDialog";
+import { UserLog } from "./UserLogs";
 
 export function TopRightButtons() {
   const { openModal } = useModal();
   //const isActive = false;
+  const { openSheet } = useSheet();
   const session = useSession();
   const router = useRouter();
   const { t } = useLocale("description");
@@ -30,6 +33,23 @@ export function TopRightButtons() {
           variant="outline"
         >
           <Mail className="h-4 w-4" />
+        </Button>
+      </SimpleTooltip>
+      <SimpleTooltip content="Activity">
+        <Button
+          className="size-8"
+          size={"icon"}
+          aria-label="Feedback"
+          variant="outline"
+          onClick={() => {
+            openSheet({
+              className: "w-[700px] py-4 px-4",
+              title: t("activities"),
+              view: <UserLog />,
+            });
+          }}
+        >
+          <ActivityIcon className="h-4 w-4" />
         </Button>
       </SimpleTooltip>
       <SimpleTooltip content="Feedback">
