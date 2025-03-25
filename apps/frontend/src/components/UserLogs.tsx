@@ -116,7 +116,7 @@ const actionTypes = {
 export function UserLog() {
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [selectedActions, setSelectedActions] = useState<string[]>(
-    Object.keys(actionTypes)
+    Object.keys(actionTypes),
   );
 
   // Filter activities based on selected filters
