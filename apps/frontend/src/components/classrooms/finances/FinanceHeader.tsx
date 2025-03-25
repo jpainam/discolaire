@@ -95,7 +95,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=all&ids=${ids}`,
-                        "_blank"
+                        "_blank",
                       );
                     }}
                   >
@@ -111,7 +111,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=debit&ids=${ids}`,
-                        "_blank"
+                        "_blank",
                       );
                     }}
                   >
@@ -126,7 +126,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=credit&ids=${ids}`,
-                        "_blank"
+                        "_blank",
                       );
                     }}
                   >
@@ -185,7 +185,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=csv&type=all&ids=${ids}`,
-                        "_blank"
+                        "_blank",
                       );
                     }}
                   >
@@ -200,7 +200,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=csv&type=debit&ids=${ids}`,
-                        "_blank"
+                        "_blank",
                       );
                     }}
                   >
@@ -215,7 +215,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=csv&type=credit&ids=${ids}`,
-                        "_blank"
+                        "_blank",
                       );
                     }}
                   >

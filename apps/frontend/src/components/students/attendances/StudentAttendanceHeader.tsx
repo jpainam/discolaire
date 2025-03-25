@@ -50,7 +50,7 @@ export function StudentAttendanceHeader({
 
   const canCreateAttendance = useCheckPermission(
     "attendance",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
 
   return (
