@@ -67,11 +67,10 @@ export function Step1() {
   const { t } = useLocale();
 
   function onSubmit(data: z.infer<typeof makePaymentFormSchema>) {
-    if (school.applyRequiredFee !== "YES") {
+    if (school.applyRequiredFee === "YES") {
       const missingFees = unpaidRequiredFees.filter(
-        (fee) => !requiredFeeIds.includes(fee.id),
+        (fee) => !requiredFeeIds.includes(fee.id)
       );
-      console.log(missingFees, unpaidRequiredFees, requiredFeeIds);
       if (missingFees.length !== 0) {
         toast.error(t("required_fee_warning"));
         return;
@@ -107,7 +106,7 @@ export function Step1() {
                       setRequiredFeeIds([...requiredFeeIds, fee.id]);
                     } else {
                       setRequiredFeeIds(
-                        requiredFeeIds.filter((i) => i !== fee.id),
+                        requiredFeeIds.filter((i) => i !== fee.id)
                       );
                     }
                   }}
