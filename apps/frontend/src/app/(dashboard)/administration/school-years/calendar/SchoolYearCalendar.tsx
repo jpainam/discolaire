@@ -319,10 +319,10 @@ export function SchoolYearCalendar() {
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={prevYear}>
             <ChevronLeft className="h-4 w-4" />
-            <span className="ml-1">Previous Year</span>
+            <span>Previous Year</span>
           </Button>
           <Button variant="outline" size="sm" onClick={nextYear}>
-            <span className="mr-1">Next Year</span>
+            <span>Next Year</span>
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
