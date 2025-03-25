@@ -52,7 +52,7 @@ export function CreateEditFinanceGroup({
   const createFinanceGroup = api.accounting.createGroup.useMutation({
     onSettled: () => utils.accounting.groups.invalidate(),
     onSuccess: () => {
-      toast.success("created_successfully", { id: 0 });
+      toast.success(t("created_successfully"), { id: 0 });
       router.refresh();
       closeModal();
     },
@@ -64,7 +64,7 @@ export function CreateEditFinanceGroup({
   const updateFinanceGroup = api.accounting.updateGroup.useMutation({
     onSettled: () => utils.accounting.groups.invalidate(),
     onSuccess: () => {
-      toast.success("updated_successfully", { id: 0 });
+      toast.success(t("updated_successfully"), { id: 0 });
       router.refresh();
       closeModal();
     },

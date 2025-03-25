@@ -98,7 +98,7 @@ export function UserRoleTable() {
                   <Checkbox
                     checked={userRoleIds.includes(role.id)}
                     onCheckedChange={(checked: boolean) => {
-                      toast.loading("updating", { id: 0 });
+                      toast.loading(t("updating"), { id: 0 });
                       debounced(role.id, checked);
                     }}
                   />
