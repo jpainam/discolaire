@@ -11,6 +11,9 @@ const GeistBold = path.resolve(__dirname, "Geist/Geist-Bold.ttf");
 const RobotoRegular = path.resolve(__dirname, "Roboto/Roboto-Regular.ttf");
 const RobotoBold = path.resolve(__dirname, "Roboto/Roboto-Bold.ttf");
 const RobotoItalic = path.resolve(__dirname, "Roboto/Roboto-Italic.ttf");
+
+const RobotoMono = path.resolve(__dirname, "Roboto/RobotoMono-Regular.ttf");
+
 const RobotoBoldItalic = path.resolve(
   __dirname,
   "Roboto/Roboto-BoldItalic.ttf",
@@ -33,6 +36,16 @@ Font.register({
     {
       src: GeistBold,
       fontWeight: "bold",
+    },
+  ],
+});
+
+Font.register({
+  family: "RobotoMono",
+  fonts: [
+    {
+      src: RobotoMono,
+      fontWeight: "normal",
     },
   ],
 });

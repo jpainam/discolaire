@@ -1,9 +1,13 @@
-import { Document, Font, Image, Page, Text, View } from "@react-pdf/renderer";
+import { Document, Font, Page, Text, View } from "@react-pdf/renderer";
+import { getMonth } from "date-fns";
+import { decode } from "entities";
 import QRCodeUtil from "qrcode";
+
+import "../fonts";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { LineItems } from "./LineItems";
+import { IPBWHeader } from "../headers/IPBWHeader";
 
 // const CDN_URL = "https://discolaire-public.s3.eu-central-1.amazonaws.com";
 
@@ -36,45 +40,16 @@ Font.register({
   ],
 });
 
-export interface Template {
-  logo_url?: string;
-  from_label: string;
-  customer_label: string;
-  invoice_no_label: string;
-  issue_date_label: string;
-  due_date_label: string;
-  date_format: string;
-  payment_label: string;
-  note_label: string;
-  description_label: string;
-  quantity_label: string;
-  price_label: string;
-  total_label: string;
-  tax_label: string;
-  vat_label: string;
-}
-
-export interface LineItem {
-  name: string;
-  quantity: number;
-  price: number;
-  invoice_number?: string;
-  issue_date?: string;
-  due_date?: string;
-}
-
 interface Props {
   student: NonNullable<RouterOutputs["student"]["get"]>;
   transactions: RouterOutputs["studentAccount"]["getStatements"];
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
-  size?: "letter" | "a4";
 }
 
 export async function AcccountStatement({
   student,
   school,
   transactions,
-  size = "letter",
 }: Props) {
   // @ts-expect-error Fix this later
   const _qrCode = await QRCodeUtil.toDataURL(
@@ -85,58 +60,191 @@ export async function AcccountStatement({
       margin: 0,
     },
   );
+  let balance = 0;
+  let month = getMonth(new Date());
 
   //await new Promise((resolve) => setTimeout(resolve, 1000));
 
   return (
     <Document>
       <Page
-        size={size.toUpperCase() as "LETTER" | "A4"}
+        size={"A4"}
         style={{
-          padding: 20,
+          paddingVertical: 20,
+          paddingHorizontal: 40,
+          fontSize: 10,
           backgroundColor: "#fff",
-          fontFamily: "Helvetica",
           color: "#000",
+          fontFamily: "Roboto",
         }}
       >
-        <View style={{ marginBottom: 20 }}>
-          {school.logo && (
-            <Image
-              src={school.logo}
-              style={{
-                width: 78,
-                height: 78,
-              }}
-            />
-          )}
-        </View>
+        <View style={{ flexDirection: "column", marginBottom: 40 }}>
+          <IPBWHeader school={school} />
 
-        <View style={{ flexDirection: "row" }}>
-          <View style={{ flex: 1, marginRight: 10 }}>
-            <View style={{ marginBottom: 20 }}>
-              <Text style={{ fontSize: 9, fontWeight: 500 }}>
-                {student.lastName}
-              </Text>
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: 12,
+              alignSelf: "center",
+            }}
+          >
+            RELEVE DE COMPTE
+          </Text>
+
+          <View
+            style={{
+              marginVertical: 15,
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <Text style={{ fontSize: 10, fontWeight: "bold" }}>
+              {decode(student.lastName ?? "")} {decode(student.firstName ?? "")}
+            </Text>
+            <View style={{ flexDirection: "column", gap: 2 }}>
+              <Text>N° compte : ABADAV004528 </Text>
+              <Text>Date génération état : 25-Mar-25 </Text>
+              <Text>Période : 2022-2023</Text>
             </View>
           </View>
-
-          <View style={{ flex: 1, marginLeft: 10 }}>
-            <View style={{ marginBottom: 20 }}>
-              <Text style={{ fontSize: 9, fontWeight: 500 }}>
-                {student.firstName}
-              </Text>
+          <View
+            style={{
+              fontFamily: "RobotoMono",
+              borderTop: "1px solid black",
+              borderBottom: "1px solid black",
+              padding: 5,
+              fontSize: 8,
+              flexDirection: "column",
+            }}
+          >
+            <View style={{ flexDirection: "row" }}>
+              <View style={{ width: "10%", alignItems: "center" }}>
+                <Text>Date transaction</Text>
+              </View>
+              <View style={{ width: "10%", alignItems: "center" }}>
+                <Text>Réf.Caisse</Text>
+              </View>
+              <View style={{ width: "20%", alignItems: "center" }}>
+                <Text>Réf. transaction</Text>
+              </View>
+              <View style={{ width: "30%", alignItems: "center" }}>
+                <Text>Libellé</Text>
+              </View>
+              <View style={{ width: "10%", alignItems: "center" }}>
+                <Text>Débit</Text>
+              </View>
+              <View style={{ width: "10%", alignItems: "center" }}>
+                <Text>Crédit</Text>
+              </View>
+              <View style={{ width: "10%", alignItems: "center" }}>
+                <Text>Balance</Text>
+              </View>
             </View>
           </View>
-        </View>
+          {transactions.map((transaction, index) => {
+            balance += transaction.amount;
+            const isNewMonth =
+              month !== getMonth(transaction.transactionDate) && index !== 0;
+            month = getMonth(transaction.transactionDate);
+            const content = isNewMonth ? (
+              <View
+                style={{
+                  flexDirection: "row",
+                  fontFamily: "RobotoMono",
+                  fontWeight: "bold",
 
-        <LineItems
-          lineItems={transactions}
-          currency={"CFA"}
-          descriptionLabel={"Description"}
-          quantityLabel={"Reference"}
-          priceLabel={"Debit"}
-          totalLabel={"Credit"}
-        />
+                  fontSize: 8,
+                }}
+              >
+                <View
+                  style={{
+                    width: "40%",
+                  }}
+                ></View>
+                <View
+                  style={{
+                    width: "50%",
+                    paddingVertical: 2,
+                    backgroundColor: "#f0f0f0",
+                    flexDirection: "row",
+                    borderTop: "1px solid black",
+                    borderBottom: "1px solid black",
+                  }}
+                >
+                  <View style={{ width: "60%" }}>
+                    <Text>Total pour periode</Text>
+                  </View>
+                  <View style={{ width: "20%" }}>
+                    <Text>{balance < 0 && balance}</Text>
+                  </View>
+                  <View style={{ width: "20%" }}>
+                    <Text>{balance >= 0 && balance}</Text>
+                  </View>
+                </View>
+              </View>
+            ) : (
+              <></>
+            );
+
+            return (
+              <>
+                {content}
+                <View
+                  key={`transaction-${index}`}
+                  style={{
+                    flexDirection: "row",
+                    fontSize: 8,
+                    fontFamily: "RobotoMono",
+                    //letterSpacing: 0.01,
+                  }}
+                >
+                  <View
+                    key={index}
+                    style={{ flexDirection: "row", width: "10%" }}
+                  >
+                    <Text>
+                      {transaction.transactionDate.toLocaleDateString("fr", {
+                        month: "numeric",
+                        day: "2-digit",
+                        year: "2-digit",
+                      })}
+                    </Text>
+                  </View>
+                  <View style={{ width: "10%" }}>
+                    <Text>{transaction.transactionRef.slice(0, 10)}</Text>
+                  </View>
+                  <View style={{ width: "20%" }}>
+                    <Text>
+                      {transaction.id.slice(0, 4)} / {transaction.classroom}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      width: "30%",
+                      paddingVertical: 2,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text>{transaction.description}</Text>
+                  </View>
+                  <View style={{ width: "10%" }}>
+                    <Text>
+                      {transaction.type == "DEBIT" ? transaction.amount : ""}
+                    </Text>
+                  </View>
+                  <View style={{ width: "10%" }}>
+                    <Text>
+                      {transaction.type == "CREDIT" ? transaction.amount : ""}
+                    </Text>
+                  </View>
+                  <View style={{ width: "10%" }}>
+                    <Text>{balance}</Text>
+                  </View>
+                </View>
+              </>
+            );
+          })}
+        </View>
 
         <View
           style={{

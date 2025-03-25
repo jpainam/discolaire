@@ -12,7 +12,7 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { useLocale } from "~/i18n";
 
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
@@ -20,6 +20,7 @@ import { DropdownHelp } from "~/components/shared/DropdownHelp";
 export function PrintAction() {
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
+  const pathname = usePathname();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -32,10 +33,11 @@ export function PrintAction() {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onSelect={() => {
-            window.open(
-              `/api/pdfs/student/${params.id}/transactions?format=pdf`,
-              "_blank",
-            );
+            let url = `/api/pdfs/student/${params.id}/transactions?format=pdf`;
+            if (pathname.includes("/account")) {
+              url = `/api/pdfs/student/${params.id}/account?format=pdf`;
+            }
+            window.open(url, "_blank");
           }}
         >
           <PDFIcon />
@@ -45,7 +47,7 @@ export function PrintAction() {
           onSelect={() => {
             window.open(
               `/api/pdfs/student/${params.id}/transactions?format=csv`,
-              "_blank",
+              "_blank"
             );
           }}
         >
