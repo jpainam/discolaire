@@ -40,6 +40,7 @@ import {
 } from "@repo/ui/components/select";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 import { cn } from "@repo/ui/lib/utils";
+import i18next from "i18next";
 
 // Define event types and their colors
 const EVENT_TYPES = {
@@ -100,7 +101,9 @@ const SCHOOL_YEAR_DATA = {
 
 // Helper function to get month name
 const getMonthName = (month: number) => {
-  return new Date(2000, month, 1).toLocaleString("default", { month: "long" });
+  return new Date(2000, month, 1).toLocaleString(i18next.language, {
+    month: "long",
+  });
 };
 
 // Helper function to get days in month
@@ -254,7 +257,7 @@ export function SchoolYearCalendar() {
           >
             {pair.map((monthData) => (
               <div key={`${monthData?.year}-${monthData?.month}`}>
-                <h2 className="mb-2 text-xl font-semibold">
+                <h2 className="mb-2 capitalize text-xl font-semibold">
                   {monthData?.name} {monthData?.year}
                 </h2>
                 <div className="grid grid-cols-7 text-center">

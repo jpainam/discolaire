@@ -28,7 +28,7 @@ export default async function Page() {
               size={16}
               aria-hidden="true"
             />
-            {t("schoolYear")}
+            {t("calendar")}
           </TabsTrigger>
           <TabsTrigger
             value="tab-2"
@@ -50,7 +50,7 @@ export default async function Page() {
               size={16}
               aria-hidden="true"
             />
-            {t("calendar")}
+            {t("schoolYear")}
           </TabsTrigger>
         </TabsList>
         <ScrollBar orientation="horizontal" />
