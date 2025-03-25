@@ -196,12 +196,16 @@ function ActionCells({
   const confirm = useConfirm();
   const { t } = useLocale();
   const { openModal } = useModal();
+  const isClosed = grade.gradeSheet.term.endDate
+    ? grade.gradeSheet.term.endDate < new Date()
+    : false;
 
   const markGradeAbsent = api.grade.update.useMutation();
   const canUpdateGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
+
   return (
     <div className="flex justify-end">
       {canUpdateGradesheet && (
@@ -217,6 +221,7 @@ function ActionCells({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
+              disabled={isClosed}
               onSelect={() => {
                 const st = grade.student;
                 if (!st.id) {
@@ -244,6 +249,7 @@ function ActionCells({
             <DropdownMenuSeparator />
 
             <DropdownMenuItem
+              disabled={isClosed}
               variant="destructive"
               className="dark:data-[variant=destructive]:focus:bg-destructive/10"
               onSelect={async () => {
@@ -266,7 +272,7 @@ function ActionCells({
                       error: (error) => {
                         return getErrorMessage(error);
                       },
-                    },
+                    }
                   );
                 }
               }}

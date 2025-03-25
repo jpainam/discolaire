@@ -54,6 +54,7 @@
   "absence_cannot_be_less_than_justify_for": "La ausencia no puede ser menor que la justificación para {{name}}",
   "transaction_confirmation": "Confirmación de transacción",
   "add_a_comment": "Agregar un comentario",
+  "this_term_is_closed": "Este término está bloqueado, no puedes realizar ningún cambio.",
   "prevent_an_absence": "Prevenir una ausencia",
   "no_attendances_recorded": "No se registraron asistencias",
   "all_types": "Todos los tipos",

@@ -1,6 +1,6 @@
 "use client";
 
-import { MoreVertical, Pencil, Trash2 } from "lucide-react";
+import { MoreVertical, Trash2 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
@@ -24,9 +24,11 @@ import {
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useEffect } from "react";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { TermIsClosed } from "~/components/TermIsClosed";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
@@ -61,12 +63,12 @@ export function GradeDetailsHeader({
 
   const males10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "male",
+      (grade) => grade.grade >= 10 && grade.student.gender == "male"
     ).length / len;
 
   const females10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "female",
+      (grade) => grade.grade >= 10 && grade.student.gender == "female"
     ).length / len;
 
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
@@ -80,6 +82,9 @@ export function GradeDetailsHeader({
   const confirm = useConfirm();
   const router = useRouter();
   const utils = api.useUtils();
+  useEffect(() => {
+    toast.warning(t("this_term_is_closed"), { id: 0 });
+  }, [t]);
   const deleteGradeSheetMutation = api.gradeSheet.delete.useMutation({
     onSettled: async () => {
       await utils.gradeSheet.invalidate();
@@ -96,12 +101,12 @@ export function GradeDetailsHeader({
 
   const canDeleteGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
-  const canUpdateGradesheet = useCheckPermission(
-    "gradesheet",
-    PermissionAction.UPDATE,
-  );
+  const isClosed = gradesheet.term.endDate
+    ? gradesheet.term.endDate < new Date()
+    : false;
+
   return (
     <div className="flex flex-col gap-2 border-b">
       <div className="grid gap-4 px-4 py-2 text-sm md:grid-cols-3">
@@ -201,8 +206,9 @@ export function GradeDetailsHeader({
           </Table>
         </div>
       </div>
-      <div className="flex border-t bg-muted/50 px-4 py-1">
+      <div className="flex items-center gap-4 border-t bg-muted/50 px-4 py-1">
         <ReportFalseGrade />
+        <TermIsClosed className="py-1" isClosed={isClosed} />
         <div className="ml-auto flex flex-row items-center gap-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -211,18 +217,18 @@ export function GradeDetailsHeader({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              {canUpdateGradesheet && (
+              {/* {canUpdateGradesheet && (
                 <DropdownMenuItem>
                   <Pencil />
                   {t("edit")}
                 </DropdownMenuItem>
-              )}
+              )} */}
               <DropdownHelp />
               <DropdownMenuItem
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/gradesheets/${gradesheet.id}?format=pdf&classroomId=${params.id}`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >
@@ -233,7 +239,7 @@ export function GradeDetailsHeader({
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/gradesheets/${gradesheet.id}?format=csv&classroomId=${params.id}`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >
@@ -244,7 +250,7 @@ export function GradeDetailsHeader({
                 <>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
-                    disabled={deleteGradeSheetMutation.isPending}
+                    disabled={deleteGradeSheetMutation.isPending || isClosed}
                     onSelect={async () => {
                       const isConfirmed = await confirm({
                         title: t("delete"),

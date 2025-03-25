@@ -400,7 +400,7 @@ model Term {
     schoolYear   SchoolYear   @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
     attendances  Attendance[]
     reportCards  ReportCard[]
-    Assignment   Assignment[]
+    assignments  Assignment[]
     School       School       @relation(fields: [schoolId], references: [id])
     schoolId     String
     absences     Absence[]

@@ -186,6 +186,7 @@
   "email_title_lateness": "Notification de retard de {{name}}",
   "email_title_exclusion": "Notification d'exclusion temporaire de {{name}}",
   "all_lates": "Tous les retards",
+  "this_term_is_closed": "Cette période est terminée, vous ne pouvez apporter aucune modification",
   "try_adjusting_filters": "Essayez d'ajuster vos filtres pour voir plus de résultats",
   "all_exclusions": "Toutes les exclusions",
   "all_sanctions": "Toutes les sanctions",
