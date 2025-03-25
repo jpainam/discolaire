@@ -119,7 +119,7 @@ export async function AcccountStatement({
           >
             <View style={{ flexDirection: "row" }}>
               <View style={{ width: "10%", alignItems: "center" }}>
-                <Text>Date transaction</Text>
+                <Text>Date</Text>
               </View>
               <View style={{ width: "10%", alignItems: "center" }}>
                 <Text>Réf.Caisse</Text>
