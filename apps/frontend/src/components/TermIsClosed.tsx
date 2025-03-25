@@ -16,7 +16,7 @@ export function TermIsClosed({
       <div
         className={cn(
           "rounded-md border border-amber-500/50 px-4 py-3 text-amber-600",
-          className
+          className,
         )}
       >
         <p className="text-sm">
