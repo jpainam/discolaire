@@ -78,7 +78,9 @@ import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { Badge } from "@repo/ui/components/badge";
 import {
   Card,
+  CardAction,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
@@ -89,30 +91,30 @@ import { CustomTooltipContent } from "~/components/charts-extra";
 import { useLocale } from "~/i18n";
 
 const chartData = [
-  { month: "Jan 2025", individual: 2000, team: 1000, enterprise: 1000 },
-  { month: "Feb 2025", individual: 800, team: 4500, enterprise: 1700 },
-  { month: "Mar 2025", individual: 400, team: 4600, enterprise: 1000 },
-  { month: "Apr 2025", individual: 1800, team: 4700, enterprise: 2000 },
-  { month: "May 2025", individual: 1800, team: 6000, enterprise: 4000 },
-  { month: "Jun 2025", individual: 2500, team: 6000, enterprise: 1500 },
-  { month: "Jul 2025", individual: 1000, team: 2500, enterprise: 1000 },
-  { month: "Aug 2025", individual: 2000, team: 4000, enterprise: 2500 },
-  { month: "Sep 2025", individual: 4500, team: 7000, enterprise: 3000 },
-  { month: "Oct 2025", individual: 2500, team: 3000, enterprise: 3500 },
-  { month: "Nov 2025", individual: 500, team: 1500, enterprise: 1000 },
-  { month: "Dec 2025", individual: 2000, team: 3000, enterprise: 1500 },
+  { month: "Jan 2025", borrowed: 20, returned: 10, overdue: 10 },
+  { month: "Feb 2025", borrowed: 8, returned: 45, overdue: 17 },
+  { month: "Mar 2025", borrowed: 4, returned: 46, overdue: 10 },
+  { month: "Apr 2025", borrowed: 18, returned: 47, overdue: 20 },
+  { month: "May 2025", borrowed: 18, returned: 60, overdue: 40 },
+  { month: "Jun 2025", borrowed: 25, returned: 60, overdue: 15 },
+  { month: "Jul 2025", borrowed: 10, returned: 25, overdue: 10 },
+  { month: "Aug 2025", borrowed: 20, returned: 40, overdue: 25 },
+  { month: "Sep 2025", borrowed: 45, returned: 70, overdue: 30 },
+  { month: "Oct 2025", borrowed: 25, returned: 30, overdue: 35 },
+  { month: "Nov 2025", borrowed: 5, returned: 15, overdue: 10 },
+  { month: "Dec 2025", borrowed: 20, returned: 30, overdue: 15 },
 ];
 
 const chartConfig = {
-  individual: {
-    label: "Individual",
+  borrowed: {
+    label: "Borrowed",
     color: "var(--chart-4)",
   },
-  team: {
-    label: "Team",
+  returned: {
+    label: "Returned",
     color: "var(--chart-1)",
   },
-  enterprise: {
+  overdue: {
     label: "Enterprise",
     color: "var(--chart-2)",
   },
@@ -125,48 +127,50 @@ export function MonthlyActivities({ className }: { className?: string }) {
   // Get first and last month with type assertions
   const firstMonth = chartData[0]?.month ?? "Jan 2025";
   const lastMonth = chartData[chartData.length - 1]?.month ?? "Dec 2025";
+  const total = chartData.reduce(
+    (acc, { borrowed, returned, overdue }) =>
+      acc + borrowed + returned + overdue,
+    0
+  );
 
   return (
-    <Card className={cn("gap-4", className)}>
+    <Card className={cn(className)}>
       <CardHeader>
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="space-y-0.5">
-            <CardTitle>{t("monthly_activities")}</CardTitle>
-            <div className="flex items-start gap-2">
-              <div className="font-semibold text-2xl">12,296</div>
-              <Badge className="mt-1.5 bg-emerald-500/24 text-emerald-500 border-none">
-                +11.9%
-              </Badge>
+        <CardTitle className="text-lg">{t("monthly_activities")}</CardTitle>
+        <CardDescription className="flex items-start gap-2">
+          <Badge className=" bg-emerald-500/24 text-emerald-500 border-none">
+            {total.toLocaleString()} emprunts
+          </Badge>
+        </CardDescription>
+        <CardAction className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div
+              aria-hidden="true"
+              className="size-1.5 shrink-0 rounded-xs bg-chart-4"
+            ></div>
+            <div className="text-[13px]/3 text-muted-foreground/50">
+              {t("borrowed")}
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-2">
-              <div
-                aria-hidden="true"
-                className="size-1.5 shrink-0 rounded-xs bg-chart-4"
-              ></div>
-              <div className="text-[13px]/3 text-muted-foreground/50">
-                Individual
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <div
-                aria-hidden="true"
-                className="size-1.5 shrink-0 rounded-xs bg-chart-1"
-              ></div>
-              <div className="text-[13px]/3 text-muted-foreground/50">Team</div>
-            </div>
-            <div className="flex items-center gap-2">
-              <div
-                aria-hidden="true"
-                className="size-1.5 shrink-0 rounded-xs bg-chart-3"
-              ></div>
-              <div className="text-[13px]/3 text-muted-foreground/50">
-                Enterprise
-              </div>
+          <div className="flex items-center gap-2">
+            <div
+              aria-hidden="true"
+              className="size-1.5 shrink-0 rounded-xs bg-chart-1"
+            ></div>
+            <div className="text-[13px]/3 text-muted-foreground/50">
+              {t("returned")}
             </div>
           </div>
-        </div>
+          <div className="flex items-center gap-2">
+            <div
+              aria-hidden="true"
+              className="size-1.5 shrink-0 rounded-xs bg-chart-3"
+            ></div>
+            <div className="text-[13px]/3 text-muted-foreground/50">
+              {t("overdue")}
+            </div>
+          </div>
+        </CardAction>
       </CardHeader>
       <CardContent>
         <ChartContainer
@@ -195,36 +199,36 @@ export function MonthlyActivities({ className }: { className?: string }) {
               tickLine={false}
               tickMargin={12}
               ticks={[firstMonth, lastMonth]}
-              stroke="var(--border)"
+              //stroke="var(--border)"
             />
             <YAxis
               tickLine={false}
               axisLine={false}
-              tickFormatter={(value) =>
-                value === 0 ? "0" : `${(value / 1000).toFixed(0)}K`
+              tickFormatter={(value: number) =>
+                value === 0 ? "0" : `${value.toFixed(0)}`
               }
             />
             <ChartTooltip
               content={
                 <CustomTooltipContent
                   colorMap={{
-                    individual: "var(--chart-4)",
-                    team: "var(--chart-1)",
-                    enterprise: "var(--chart-3)",
+                    borrowed: "var(--chart-4)",
+                    returned: "var(--chart-1)",
+                    overdue: "var(--chart-3)",
                   }}
                   labelMap={{
-                    individual: "Individual",
-                    team: "Team",
-                    enterprise: "Enterprise",
+                    borrowed: t("borrowed"),
+                    returned: t("returned"),
+                    overdue: t("overdue"),
                   }}
-                  dataKeys={["individual", "team", "enterprise"]}
-                  valueFormatter={(value) => `$${value.toLocaleString()}`}
+                  dataKeys={["borrowed", "returned", "overdue"]}
+                  valueFormatter={(value) => `${value.toLocaleString()}`}
                 />
               }
             />
-            <Bar dataKey="individual" fill="var(--chart-4)" stackId="a" />
-            <Bar dataKey="team" fill={`url(#${id}-gradient)`} stackId="a" />
-            <Bar dataKey="enterprise" fill="var(--chart-3)" stackId="a" />
+            <Bar dataKey="borrowed" fill="var(--chart-4)" stackId="a" />
+            <Bar dataKey="returned" fill={`url(#${id}-gradient)`} stackId="a" />
+            <Bar dataKey="overdue" fill="var(--chart-3)" stackId="a" />
           </BarChart>
         </ChartContainer>
       </CardContent>

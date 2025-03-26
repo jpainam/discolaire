@@ -15,6 +15,8 @@
   "borrowed": "Emprunté",
   "returned": "Retourné",
   "monthly_activities": "Activités mensuelles",
+  "recent_borrows": "Emprunts récents",
+  "recent_borrows_description": "Derniers livres empruntés par les élèves",
   "copy_invitation_link_description": "Copiez le lien d'invitation pour l'envoyer à un contact",
   "FAILED": "Echouée",
   "copy": "Copier",
