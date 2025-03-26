@@ -118,10 +118,10 @@ export function ClassroomSidebar({
   const pathname = usePathname();
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="h-16 max-md:mt-2 mb-2 justify-center">
+      <SidebarHeader>
         <SidebarLogo />
       </SidebarHeader>
-      <SidebarContent className="-mt-2">
+      <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>

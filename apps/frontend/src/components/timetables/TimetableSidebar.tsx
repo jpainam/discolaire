@@ -49,10 +49,10 @@ export function TimetableSidebar({
   const { t } = useLocale();
   return (
     <Sidebar {...props}>
-      <SidebarHeader className="h-16 max-md:mt-2 mb-2 justify-center">
+      <SidebarHeader>
         <SidebarLogo />
       </SidebarHeader>
-      <SidebarContent className="-mt-2">
+      <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
