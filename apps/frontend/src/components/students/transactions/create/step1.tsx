@@ -69,7 +69,7 @@ export function Step1() {
   function onSubmit(data: z.infer<typeof makePaymentFormSchema>) {
     if (school.applyRequiredFee === "YES") {
       const missingFees = unpaidRequiredFees.filter(
-        (fee) => !requiredFeeIds.includes(fee.id),
+        (fee) => !requiredFeeIds.includes(fee.id)
       );
       if (missingFees.length !== 0) {
         toast.error(t("required_fee_warning"));
@@ -89,7 +89,7 @@ export function Step1() {
 
   return (
     <div className="mx-auto w-full flex flex-col gap-8 max-w-3xl">
-      {school.applyRequiredFee !== "NO" && (
+      {school.applyRequiredFee !== "NO" && unpaidRequiredFees.length > 0 && (
         <div className="flex flex-col gap-2">
           <Label>{t("required_fees")}</Label>
           {unpaidRequiredFees.map((fee, index) => {
@@ -106,7 +106,7 @@ export function Step1() {
                       setRequiredFeeIds([...requiredFeeIds, fee.id]);
                     } else {
                       setRequiredFeeIds(
-                        requiredFeeIds.filter((i) => i !== fee.id),
+                        requiredFeeIds.filter((i) => i !== fee.id)
                       );
                     }
                   }}
