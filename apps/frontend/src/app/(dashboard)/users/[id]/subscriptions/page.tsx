@@ -6,6 +6,7 @@ export default async function Page() {
   const { t } = await getServerTranslations();
   return (
     <div className="p-4">
+      {/* <CurrentSubscription /> */}
       <div className="rounded-md border border-amber-500/50 px-4 py-3 text-amber-600">
         <p className="text-md">
           <TriangleAlert

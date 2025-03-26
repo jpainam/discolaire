@@ -13,7 +13,7 @@ import {
 import type { ChartConfig } from "@repo/ui/components/chart";
 import { ChartContainer, ChartTooltip } from "@repo/ui/components/chart";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
-import { CustomTooltipContent } from "./charts-extra";
+import { CustomTooltipContent } from "../../charts-extra";
 
 const mrrData = [
   { month: "Jan 2025", actual: 300000, projected: 120000 },
