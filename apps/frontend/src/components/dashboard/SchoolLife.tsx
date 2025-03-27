@@ -124,7 +124,7 @@ export function SchoolLife({ className }: { className?: string }) {
     const daysToAdd = (week - 1) * 7;
     const selectedWeekStart = startOfWeek(
       new Date(firstDayOfYear.setDate(firstDayOfYear.getDate() + daysToAdd)),
-      { weekStartsOn: 0 }
+      { weekStartsOn: 0 },
     );
 
     setSelectedDate(selectedWeekStart);
@@ -151,7 +151,7 @@ export function SchoolLife({ className }: { className?: string }) {
       format(date, "EEE d", {
         locale:
           i18n.language === "fr" ? fr : i18n.language === "es" ? es : enUS,
-      })
+      }),
     );
 
   return (
