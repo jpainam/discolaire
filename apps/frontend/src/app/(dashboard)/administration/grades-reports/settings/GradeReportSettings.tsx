@@ -31,7 +31,7 @@ const formSchema = z.object({
       termId: z.string(),
       date: z.coerce.date(),
       observation: z.string().default(""),
-    })
+    }),
   ),
 });
 export function GradeReportSettings({
