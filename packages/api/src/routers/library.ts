@@ -122,6 +122,9 @@ export const libraryRouter = createTRPCRouter({
           book: true,
           user: true,
         },
+        orderBy: {
+          borrowed: "desc",
+        },
         where: {
           book: {
             schoolId: ctx.schoolId,

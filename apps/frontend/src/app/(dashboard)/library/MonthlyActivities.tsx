@@ -136,7 +136,7 @@ export function MonthlyActivities({ className }: { className?: string }) {
   return (
     <Card className={cn(className)}>
       <CardHeader>
-        <CardTitle className="text-lg">{t("monthly_activities")}</CardTitle>
+        <CardTitle>{t("monthly_activities")}</CardTitle>
         <CardDescription className="flex items-start gap-2">
           <Badge className=" bg-emerald-500/24 text-emerald-500 border-none">
             {total.toLocaleString()} emprunts

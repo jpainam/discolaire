@@ -23,12 +23,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const student = await api.student.get(id);
   const { t, i18n } = await getServerTranslations();
   if (!student.userId) {
-    return (
-      <EmptyState
-        title={t("no_user_found")}
-        description={t("create_a_user_first")}
-      />
-    );
+    return <EmptyState />;
   }
   const documents = await api.document.byUserId({ ownerId: student.userId });
   const dateFormat = Intl.DateTimeFormat(i18n.language, {

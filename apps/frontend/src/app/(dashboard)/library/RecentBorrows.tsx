@@ -1,46 +1,26 @@
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/avatar";
-import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import { differenceInCalendarDays, format, subDays } from "date-fns";
+import { differenceInCalendarDays, format } from "date-fns";
+import { AvatarState } from "~/components/AvatarState";
 import { getServerTranslations } from "~/i18n/server";
+import { caller } from "~/trpc/server";
 export async function RecentBorrows({ className }: { className?: string }) {
   const { t } = await getServerTranslations();
-  const recentBorrows = [
-    {
-      name: "Jackson Miller",
-      book: "To Kill a Mockingbird",
-      date: new Date(),
-    },
-    {
-      name: "Sophia Davis",
-      book: "The Great Gatsby",
-      date: subDays(new Date(), 1),
-    },
-    {
-      name: "Ethan Thompson",
-      book: "1984",
-      date: subDays(new Date(), 1),
-    },
-    {
-      name: "Olivia Wilson",
-      book: "Pride and Prejudice",
-      date: subDays(new Date(), 2),
-    },
-    {
-      name: "Liam Johnson",
-      book: "The Catcher in the Rye",
-      date: subDays(new Date(), 3),
-    },
-  ];
+  const borrows = await caller.library.borrowBooks({});
+  const recents = borrows.slice(0, 5).map((borrow) => {
+    return {
+      name: borrow.user.name ?? borrow.user.email ?? borrow.user.username,
+      book: borrow.book.title,
+      avatar: borrow.user.avatar,
+      date: borrow.borrowed,
+    };
+  });
+
   return (
     <Card className={className}>
       <CardHeader>
@@ -49,25 +29,20 @@ export async function RecentBorrows({ className }: { className?: string }) {
       </CardHeader>
       <CardContent>
         <div className="space-y-8">
-          {recentBorrows.map((borrow, index) => {
+          {recents.length === 0 && (
+            <p className="text-muted-foreground">{t("no_data")}</p>
+          )}
+          {recents.map((borrow, index) => {
             return (
               <div key={index} className="flex items-center">
-                <Avatar className="h-9 w-9">
-                  <AvatarImage
-                    src="/placeholder.svg?height=36&width=36"
-                    alt="Avatar"
-                  />
-                  <AvatarFallback>{borrow.name.slice(0, 2)}</AvatarFallback>
-                </Avatar>
+                <AvatarState pos={borrow.name.length} avatar={borrow.avatar} />
                 <div className="ml-4 space-y-1">
                   <p className="text-sm font-medium leading-none">
                     {borrow.name}
                   </p>
                   <p className="text-sm text-muted-foreground">{borrow.book}</p>
                 </div>
-                <div className="ml-auto text-muted-foreground text-sm">
-                  {getRelativeDayLabel(borrow.date)}
-                </div>
+                <RelativeDayLabel date={borrow.date} />
               </div>
             );
           })}
@@ -76,22 +51,28 @@ export async function RecentBorrows({ className }: { className?: string }) {
     </Card>
   );
 }
-
-function getRelativeDayLabel(date: Date): string {
+async function RelativeDayLabel({ date }: { date: Date }) {
   const today = new Date();
   const diff = differenceInCalendarDays(today, date);
-  //const { t } = await getServerTranslations();
-
+  const { t } = await getServerTranslations();
+  let label = "";
   switch (diff) {
     case 0:
-      return "Today";
+      label = "today";
+      break;
     case 1:
-      return "Yesterday";
+      label = "yesterday";
+      break;
     case 2:
-      return "2 days ago";
+      label = "2_days_ago";
+      break;
     case 3:
-      return "3 days ago";
+      label = "3_days_ago";
+      break;
     default:
-      return format(date, "MMMM d, yyyy");
+      label = format(date, "MMMM d, yyyy");
   }
+  return (
+    <div className="ml-auto text-muted-foreground text-sm">{t(label)}</div>
+  );
 }
