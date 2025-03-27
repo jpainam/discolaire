@@ -35,7 +35,7 @@ export function IPBWAnnual({
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
   disciplines: RouterOutputs["discipline"]["annual"];
 }) {
-  const { studentsReport, summary, globalRanks } = report;
+  const { studentsReport, summary: _summary, globalRanks } = report;
   const values = Array.from(globalRanks.values());
   const studentsMap = new Map(students.map((s) => [s.id, s]));
   const primaryContactsMap = new Map(
@@ -136,7 +136,7 @@ export function IPBWAnnual({
                         const grade = studentReport.studentCourses.find(
                           (c) => c.subjectId === subject.id,
                         );
-                        const subjectSummary = summary.get(subject.id);
+                        //const subjectSummary = summary.get(subject.id);
                         coeff +=
                           grade?.average != null ? subject.coefficient : 0;
                         return (
