@@ -1,15 +1,29 @@
 "use client";
 
-import { Pencil, PlusIcon, Trash2 } from "lucide-react";
+import {
+  AlignVerticalJustifyCenter,
+  MoreVertical,
+  Pencil,
+  PlusIcon,
+  Trash2,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
+  CardAction,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
@@ -23,7 +37,6 @@ import { EmptyState } from "~/components/EmptyState";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
-
 import { api } from "~/trpc/react";
 import { CreateEditGradeAppreciation } from "./CreateEditGradeAppreciation";
 
@@ -47,10 +60,13 @@ export function GradeAppreciationTable() {
   const confirm = useConfirm();
 
   return (
-    <Card className="p-0 gap-0">
-      <CardHeader className="flex flex-row items-center border-b bg-muted/50 px-2 pb-1 pt-0">
-        <CardTitle>{t("appreciations")}</CardTitle>
-        <div className="ml-auto py-1">
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex flex-row items-center gap-2">
+          <AlignVerticalJustifyCenter className="w-4 h-4" />
+          {t("appreciations")}
+        </CardTitle>
+        <CardAction>
           <Button
             onClick={() => {
               openModal({
@@ -64,9 +80,9 @@ export function GradeAppreciationTable() {
             <PlusIcon />
             {t("add")}
           </Button>
-        </div>
+        </CardAction>
       </CardHeader>
-      <CardContent className="p-0">
+      <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
@@ -114,45 +130,52 @@ export function GradeAppreciationTable() {
                     {gradeOption.appreciation}
                   </TableCell>
                   <TableCell className="py-0 text-right">
-                    <div className="flex flex-row items-center justify-end gap-2">
-                      <Button
-                        onClick={() => {
-                          openModal({
-                            className: "w-[500px]",
-                            title: t("add_appreciation"),
-                            view: (
-                              <CreateEditGradeAppreciation
-                                gradeAppreciation={gradeOption}
-                              />
-                            ),
-                          });
-                        }}
-                        size={"icon"}
-                        variant={"ghost"}
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        onClick={async () => {
-                          const isConfirm = await confirm({
-                            title: t("delete"),
-                            description: t("delete_confirmation"),
-                            icon: <Trash2 className="text-destructive" />,
-                            alertDialogTitle: {
-                              className: "flex items-center gap-2",
-                            },
-                          });
-                          if (isConfirm) {
-                            toast.loading(t("deleting"), { id: 0 });
-                            deleteAppreciation.mutate(gradeOption.id);
-                          }
-                        }}
-                        size={"icon"}
-                        variant={"ghost"}
-                      >
-                        <Trash2 className="h-4 w-4 text-destructive" />
-                      </Button>
-                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant={"ghost"} size={"icon"}>
+                          <MoreVertical />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem
+                          onSelect={() => {
+                            openModal({
+                              className: "w-[500px]",
+                              title: t("add_appreciation"),
+                              view: (
+                                <CreateEditGradeAppreciation
+                                  gradeAppreciation={gradeOption}
+                                />
+                              ),
+                            });
+                          }}
+                        >
+                          <Pencil />
+                          {t("edit")}
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          variant="destructive"
+                          onSelect={async () => {
+                            const isConfirm = await confirm({
+                              title: t("delete"),
+                              description: t("delete_confirmation"),
+                              // icon: <Trash2 className="text-destructive" />,
+                              // alertDialogTitle: {
+                              //   className: "flex items-center gap-2",
+                              // },
+                            });
+                            if (isConfirm) {
+                              toast.loading(t("deleting"), { id: 0 });
+                              deleteAppreciation.mutate(gradeOption.id);
+                            }
+                          }}
+                        >
+                          <Trash2 />
+                          {t("delete")}
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               );

@@ -17,9 +17,11 @@ import {
 import { getServerTranslations } from "~/i18n/server";
 import { GradeAppreciationTable } from "./grade-options/GradeAppreciationTable";
 import { GradeReportSettings } from "./settings/GradeReportSettings";
+import { caller } from "~/trpc/server";
 
 export default async function Page() {
   const { t } = await getServerTranslations();
+  const terms = await caller.term.all();
   return (
     <Tabs defaultValue="tab-1">
       <ScrollArea>
@@ -128,7 +130,7 @@ export default async function Page() {
       <TabsContent value="tab-6">
         <div className="grid gap-2 lg:grid-cols-2 px-4">
           <GradeAppreciationTable />
-          <GradeReportSettings />
+          <GradeReportSettings terms={terms} />
         </div>
       </TabsContent>
     </Tabs>
