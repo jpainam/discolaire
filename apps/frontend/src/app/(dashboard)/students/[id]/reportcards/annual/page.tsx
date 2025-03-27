@@ -11,8 +11,6 @@ import _, { sum } from "lodash";
 import Link from "next/link";
 import { Fragment } from "react";
 import { EmptyState } from "~/components/EmptyState";
-import type { FlatBadgeVariant } from "~/components/FlatBadge";
-import FlatBadge from "~/components/FlatBadge";
 import { ReportCardDiscipline } from "~/components/students/reportcards/ReportCardDiscipline";
 import { ReportCardMention } from "~/components/students/reportcards/ReportCardMention";
 import { ReportCardPerformance } from "~/components/students/reportcards/ReportCardPerformance";
@@ -39,14 +37,10 @@ export default async function Page(props: {
       <EmptyState className="my-8" title={t("student_not_registered_yet")} />
     );
   }
-  const searchParams = await props.searchParams;
-  const { trimestreId } = searchParams;
-  const { title, seq1, seq2 } = getTitle({ trimestreId });
 
   const { studentsReport, summary, globalRanks } =
-    await api.reportCard.getTrimestre({
+    await caller.reportCard.getAnnualReport({
       classroomId: classroom.id,
-      trimestreId: trimestreId,
     });
 
   const subjects = await api.classroom.subjects(classroom.id);
@@ -63,7 +57,7 @@ export default async function Page(props: {
   const successRate = successCount / averages.length;
   const rowClassName = "border text-center py-0";
   const average = averages.reduce((acc, val) => acc + val, 0) / averages.length;
-  const terms = await api.term.fromTrimestre(trimestreId);
+  const terms = await api.term.fromTrimestre("trim1");
   const disc1 = await caller.discipline.student({
     studentId: params.id,
     termId: terms.seq1?.id ?? 0,
@@ -75,11 +69,7 @@ export default async function Page(props: {
 
   return (
     <div className="flex flex-col gap-2">
-      <AnnualHeader
-        studentId={params.id}
-        title={title}
-        classroomId={classroom.id}
-      />
+      <AnnualHeader studentId={params.id} classroomId={classroom.id} />
       <div className="px-4">
         <div className="bg-background overflow-hidden rounded-md">
           <Table>
@@ -88,8 +78,12 @@ export default async function Page(props: {
                 <TableHead className={cn(rowClassName, "text-left")}>
                   {t("subject")}
                 </TableHead>
-                <TableHead className={cn(rowClassName)}>{seq1}</TableHead>
-                <TableHead className={cn(rowClassName)}>{seq2}</TableHead>
+                <TableHead className={cn(rowClassName)}>SEQ1</TableHead>
+                <TableHead className={cn(rowClassName)}>SEQ2</TableHead>
+                <TableHead className={cn(rowClassName)}>SEQ3</TableHead>
+                <TableHead className={cn(rowClassName)}>SEQ4</TableHead>
+                <TableHead className={cn(rowClassName)}>SEQ5</TableHead>
+                <TableHead className={cn(rowClassName)}>SEQ6</TableHead>
                 <TableHead className={cn(rowClassName)}>{t("Moy")}</TableHead>
                 <TableHead className={cn(rowClassName)}>{t("coeff")}</TableHead>
                 <TableHead className={cn(rowClassName)}>{t("total")}</TableHead>
@@ -135,17 +129,35 @@ export default async function Page(props: {
                                 {subject.teacher?.lastName}
                               </Link>
                             </div>
-                            {/* {subject.course.reportName} */}
                           </TableCell>
-                          <TableCell className={rowClassName}>
-                            <Cell n={grade?.grade1} />
-                          </TableCell>
-                          <TableCell className={rowClassName}>
-                            <Cell n={grade?.grade2} />
-                          </TableCell>
-                          <TableCell className={rowClassName}>
-                            <Cell n={grade?.average} />
-                          </TableCell>
+                          {grade?.grades.map((g, i) => {
+                            return (
+                              <TableCell
+                                className={cn(rowClassName)}
+                                key={`g-${i}-${subject.id}-${groupId}`}
+                              >
+                                {g?.toFixed(2)}
+                              </TableCell>
+                            );
+                          })}
+                          {grade == null && <TableCell colSpan={6}></TableCell>}
+
+                          {grade && grade.average !== null ? (
+                            <TableCell
+                              className={cn(
+                                "border-l  text-center",
+                                grade.average < 10
+                                  ? "!bg-red-100 dark:!bg-red-900"
+                                  : grade.average < 15
+                                    ? "!bg-yellow-100 dark:!bg-yellow-900"
+                                    : "!bg-green-100 dark:!bg-green-900"
+                              )}
+                            >
+                              {grade.average.toFixed(2)}
+                            </TableCell>
+                          ) : (
+                            <TableCell></TableCell>
+                          )}
                           <TableCell
                             className={cn("text-center", rowClassName)}
                           >
@@ -178,7 +190,7 @@ export default async function Page(props: {
                     >
                       <TableCell
                         className={cn(rowClassName, "text-left")}
-                        colSpan={4}
+                        colSpan={8}
                       >
                         {group?.subjectGroup?.name}
                       </TableCell>
@@ -246,51 +258,5 @@ export default async function Page(props: {
         </div>
       </div>
     </div>
-  );
-}
-
-function getTitle({ trimestreId }: { trimestreId: string }) {
-  if (trimestreId == "trim1") {
-    return {
-      title: "BULLETIN SCOLAIRE DU PREMIER TRIMESTRE",
-      seq1: "SEQ1",
-      seq2: "SEQ2",
-    };
-  }
-  if (trimestreId == "trim2") {
-    return {
-      title: "BULLETIN SCOLAIRE DU SECOND TRIMESTRE",
-      seq1: "SEQ3",
-      seq2: "SEQ4",
-    };
-  }
-  return {
-    title: "BULLETIN SCOLAIRE DU TROISIEME TRIMESTRE",
-    seq1: "SEQ5",
-    seq2: "SEQ6",
-  };
-}
-
-function Cell({ n }: { n?: number | null }) {
-  let v: FlatBadgeVariant = "green";
-
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  if (n == undefined || n == null) {
-    return <></>;
-  }
-  if (n < 10) {
-    v = "red";
-  } else if (n < 12) {
-    v = "yellow";
-  } else if (n < 14) {
-    v = "blue";
-  }
-  return (
-    <FlatBadge
-      className="w-[50px] justify-center text-center text-xs font-normal"
-      variant={v}
-    >
-      {n.toFixed(2)}
-    </FlatBadge>
   );
 }

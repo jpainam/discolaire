@@ -9,10 +9,8 @@ import { useLocale } from "~/i18n";
 export function AnnualHeader({
   studentId,
   classroomId,
-  title,
 }: {
   studentId: string;
-  title: string;
   classroomId: string;
 }) {
   const { createQueryString } = useCreateQueryString();
@@ -20,7 +18,7 @@ export function AnnualHeader({
   return (
     <div className="flex flex-row gap-2 items-center justify-between px-4">
       <FileSliders className="w-4 h-4" />
-      <Label>{title}</Label>
+      <Label>BULLETIN ANNUEL</Label>
 
       <Button
         onClick={() => {

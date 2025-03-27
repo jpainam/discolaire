@@ -38,7 +38,7 @@ export function ReportCardHeader({
   const Icon = sidebarIcons.reportcards;
   const canPrintReportCard = useCheckPermission(
     "reportcard",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const termId = searchParams.get("termId");
   const trimestreId = searchParams.get("trimestreId");
@@ -57,15 +57,19 @@ export function ReportCardHeader({
         className="w-[300px]"
         defaultValue={searchParams.get("trimestreId") ?? undefined}
         onChange={(val) => {
-          const url =
-            `/students/${params.id}/reportcards/trimestres?` +
-            createQueryString({
-              trimestreId: val,
-              classroomId: classroom.id,
-              studentId: params.id,
-              format: "pdf",
-            });
-          router.push(url);
+          if (val == "ann") {
+            router.push(`/students/${params.id}/reportcards/annual`);
+          } else {
+            const url =
+              `/students/${params.id}/reportcards/trimestres?` +
+              createQueryString({
+                trimestreId: val,
+                classroomId: classroom.id,
+                studentId: params.id,
+                format: "pdf",
+              });
+            router.push(url);
+          }
         }}
       />
       {canPrintReportCard && (
