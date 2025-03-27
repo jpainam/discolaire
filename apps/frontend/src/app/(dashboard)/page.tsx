@@ -1,7 +1,6 @@
 import { auth } from "@repo/auth";
 import { decode } from "entities";
 import { DashboardClassroomSize } from "~/components/dashboard/DashboardClassroomSize";
-import { DashboardTransactionTrend } from "~/components/dashboard/DashboardTransactionTrend";
 import { EducationalResource } from "~/components/dashboard/EducationalResource";
 import { LatestGradesheet } from "~/components/dashboard/LatestGradesheet";
 import { QuickStatistics } from "~/components/dashboard/QuickStatistics";
@@ -55,6 +54,7 @@ export default async function Page() {
   const latestGrades = await caller.gradeSheet.getLatestGradesheet({
     limit: 15,
   });
+  const classrooms = await caller.classroom.all();
   return (
     <div className="lg:grid flex flex-col grid-cols-2 gap-4 p-4">
       <QuickStatistics className="col-span-full" />
@@ -69,7 +69,7 @@ export default async function Page() {
               (
                 g.grades.reduce((acc, grade) => acc + grade.grade, 0) /
                 g.grades.length
-              ).toFixed(2),
+              ).toFixed(2)
             ),
           };
         })}
@@ -86,8 +86,11 @@ export default async function Page() {
       {/* <Suspense>
         <TransactionStat className="col-span-full" />
       </Suspense> */}
-      <DashboardClassroomSize className="col-span-full hidden md:block" />
-      <DashboardTransactionTrend className="col-span-full hidden md:block" />
+      <DashboardClassroomSize
+        classrooms={classrooms}
+        className="col-span-full hidden md:block"
+      />
+      {/* <DashboardTransactionTrend className="col-span-full hidden md:block" /> */}
     </div>
   );
 }

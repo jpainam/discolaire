@@ -1,13 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 "use client";
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 
-import React, { useEffect, useMemo } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
@@ -17,82 +15,83 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
-import { Skeleton } from "@repo/ui/components/skeleton";
+
+import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "~/i18n";
-
-import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
 
-export function DashboardClassroomSize({ className }: { className?: string }) {
+export function DashboardClassroomSize({
+  className,
+  classrooms,
+}: {
+  className?: string;
+  classrooms: RouterOutputs["classroom"]["all"];
+}) {
   const { t } = useLocale();
   // useEffect(() => {
   //   void captureException(new Error("DashboardClassroomSize").stack ?? "");
   // }, []);
-  const chartConfig = useMemo(() => {
+  const chartConfig = {
+    maxSize: {
+      label: t("max_size"),
+      color: "var(--chart-5)",
+    },
+    size: {
+      label: t("effective"),
+      color: "var(--chart-3)",
+    },
+    difference: {
+      label: t("difference"),
+      color: "var(--chart-4)",
+    },
+  } satisfies ChartConfig;
+
+  const filteredData = classrooms.slice(0, 10).map((classroom) => {
     return {
-      maxSize: {
-        label: t("max_size"),
-        color: "var(--chart-5)",
-      },
-      size: {
-        label: t("effective"),
-        color: "var(--chart-3)",
-      },
-      difference: {
-        label: t("difference"),
-        color: "var(--chart-4)",
-      },
-    } satisfies ChartConfig;
-  }, [t]);
+      name: classroom.name,
+      maxSize: classroom.maxSize || 0,
+      size: classroom.size,
+      difference: (classroom.maxSize || 0) - classroom.size,
+    };
+  });
 
-  const classroomsQuery = api.classroom.all.useQuery();
+  // const [filteredData, setFilteredData] = React.useState<
+  //   { name: string; maxSize: number; size: number }[]
+  // >([]);
 
-  const [filteredData, setFilteredData] = React.useState<
-    { name: string; maxSize: number; size: number }[]
-  >([]);
+  // useEffect(() => {
 
-  useEffect(() => {
-    const data = classroomsQuery.data?.map((classroom) => {
-      return {
-        name: classroom.name,
-        maxSize: classroom.maxSize || 0,
-        size: classroom.size,
-        difference: (classroom.maxSize || 0) - classroom.size,
-      };
-    });
-    setFilteredData(data ?? []);
-  }, [classroomsQuery.data]);
+  //   setFilteredData(data ?? []);
+  // }, [classroomsQuery.data]);
 
-  if (classroomsQuery.isPending) {
-    return (
-      <div className="col-span-full flex w-full flex-col">
-        <div className="flex w-full flex-row gap-4 p-2">
-          <Skeleton className="h-[200px] w-1/3" />
-          <Skeleton className="h-[200px] w-2/3" />
-        </div>
-        <div className="flex w-full flex-row gap-4 p-2">
-          <Skeleton className="h-[200px] w-1/3" />
-          <Skeleton className="h-[200px] w-2/3" />
-        </div>
-      </div>
-    );
-  }
-  if (classroomsQuery.isError) {
-    showErrorToast(classroomsQuery.error);
-    return;
-  }
+  // if (classroomsQuery.isPending) {
+  //   return (
+  //     <div className="col-span-full flex w-full flex-col">
+  //       <div className="flex w-full flex-row gap-4 p-2">
+  //         <Skeleton className="h-[200px] w-1/3" />
+  //         <Skeleton className="h-[200px] w-2/3" />
+  //       </div>
+  //       <div className="flex w-full flex-row gap-4 p-2">
+  //         <Skeleton className="h-[200px] w-1/3" />
+  //         <Skeleton className="h-[200px] w-2/3" />
+  //       </div>
+  //     </div>
+  //   );
+  // }
+  // if (classroomsQuery.isError) {
+  //   showErrorToast(classroomsQuery.error);
+  //   return;
+  // }
 
   return (
-    <Card className={cn("rounded-sm shadow-none", className)}>
-      <CardHeader className="p-0">
-        <div className="flex flex-1 flex-col px-6 py-2">
-          <CardTitle>{t("classroom_size_vs_max_size")}</CardTitle>
-          <CardDescription></CardDescription>
-        </div>
+    <Card className={cn(className)}>
+      <CardHeader>
+        <CardTitle>
+          {t("classrooms")} - {t("size")}
+        </CardTitle>
       </CardHeader>
-      <CardContent className="p-0">
-        <ChartContainer className="h-[300px] w-full p-0" config={chartConfig}>
+      <CardContent>
+        <ChartContainer className="h-60 w-full p-0" config={chartConfig}>
           <BarChart accessibilityLayer data={filteredData}>
             <CartesianGrid vertical={false} />
             <XAxis
