@@ -2,9 +2,16 @@
 
 import { useLocale } from "~/i18n";
 
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+import { CalendarDays } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { DatePicker } from "../DatePicker";
-
+import { CardAction } from "../ui/card";
 interface ScheduleItem {
   startTime: string;
   endTime: string;
@@ -61,20 +68,24 @@ export function ScheduleCard({ className }: { className?: string }) {
   const { t } = useLocale();
 
   return (
-    <div className={cn("w-full rounded-lg border overflow-hidden", className)}>
-      <div className="p-3.5 flex items-center border-b justify-between">
-        <h2 className="text-xl font-semibold">{t("timetable")}</h2>
-        <div className="flex items-center gap-2">
+    <Card className={cn(className)}>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <CalendarDays />
+          {t("timetable")}
+        </CardTitle>
+        {/* <CardDescription>Card Description</CardDescription> */}
+        <CardAction>
           <DatePicker
             defaultValue={new Date()}
             onChange={(e) => {
               console.log(e);
             }}
           />
-        </div>
-      </div>
+        </CardAction>
+      </CardHeader>
 
-      <div className="flex flex-col gap-4 py-2">
+      <CardContent className="space-y-2">
         {scheduleData.map((item, index) => {
           return (
             <div className="flex flex-row items-start gap-2" key={index}>
@@ -85,7 +96,7 @@ export function ScheduleCard({ className }: { className?: string }) {
                 className={cn(item.color, "h-[60px] w-[6px] rounded-md")}
               ></div>
               <div className="flex flex-col gap-0">
-                <span className="text-semibold text-sm">{item.subject}</span>
+                <span className="text-semibold text-xs">{item.subject}</span>
                 <span className="text-xs text-muted-foreground">
                   {item.teacher}
                 </span>
@@ -96,7 +107,7 @@ export function ScheduleCard({ className }: { className?: string }) {
             </div>
           );
         })}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

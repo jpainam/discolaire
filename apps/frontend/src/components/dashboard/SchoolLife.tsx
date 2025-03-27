@@ -1,6 +1,11 @@
 "use client";
-
 import { Badge } from "@repo/ui/components/badge";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
 import { Input } from "@repo/ui/components/input";
 import {
   Table,
@@ -18,6 +23,7 @@ import {
   AmbulanceIcon,
   ClockIcon,
   FileTextIcon,
+  LifeBuoy,
   ThumbsUp,
   UsersIcon,
 } from "lucide-react";
@@ -26,6 +32,7 @@ import { useState } from "react";
 import { useLocale } from "~/i18n";
 import type { ChangeEvent } from "~/types/event_type";
 import EyeIcon from "../icons/eye";
+import { CardAction } from "../ui/card";
 
 export function SchoolLife({ className }: { className?: string }) {
   const data = [
@@ -117,7 +124,7 @@ export function SchoolLife({ className }: { className?: string }) {
     const daysToAdd = (week - 1) * 7;
     const selectedWeekStart = startOfWeek(
       new Date(firstDayOfYear.setDate(firstDayOfYear.getDate() + daysToAdd)),
-      { weekStartsOn: 0 },
+      { weekStartsOn: 0 }
     );
 
     setSelectedDate(selectedWeekStart);
@@ -144,19 +151,22 @@ export function SchoolLife({ className }: { className?: string }) {
       format(date, "EEE d", {
         locale:
           i18n.language === "fr" ? fr : i18n.language === "es" ? es : enUS,
-      }),
+      })
     );
 
   return (
-    <div className={cn("w-full rounded-lg border overflow-hidden", className)}>
-      <div className="p-3.5 flex items-center justify-between">
-        <h2 className="text-xl font-semibold">{t("school_life")}</h2>
-        <div className="flex items-center gap-2">
+    <Card className={cn(className)}>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <LifeBuoy />
+          {t("school_life")}
+        </CardTitle>
+        {/* <CardDescription>Card Description</CardDescription> */}
+        <CardAction>
           <Input type="week" onChange={handleWeekChange} />
-        </div>
-      </div>
-
-      <div className="bg-background overflow-x-auto border-b">
+        </CardAction>
+      </CardHeader>
+      <CardContent>
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50 border-y">
@@ -240,7 +250,7 @@ export function SchoolLife({ className }: { className?: string }) {
             })}
           </TableBody>
         </Table>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
