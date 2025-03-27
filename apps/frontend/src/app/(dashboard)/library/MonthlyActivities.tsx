@@ -130,7 +130,7 @@ export function MonthlyActivities({ className }: { className?: string }) {
   const total = chartData.reduce(
     (acc, { borrowed, returned, overdue }) =>
       acc + borrowed + returned + overdue,
-    0
+    0,
   );
 
   return (
