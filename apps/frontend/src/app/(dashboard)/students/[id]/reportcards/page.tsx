@@ -49,10 +49,11 @@ export default async function Page(props: {
       termId: Number(termId),
     });
 
-  const discipline = await caller.discipline.student({
-    studentId: id,
+  const disciplines = await caller.discipline.sequence({
+    classroomId: student.classroom.id,
     termId: Number(termId),
   });
+  const disc = disciplines.get(params.id);
 
   const subjects = await api.classroom.subjects(student.classroom.id);
   const groups = _.groupBy(subjects, "subjectGroupId");
@@ -199,11 +200,11 @@ export default async function Page(props: {
       <div className="flex flex-row items-start gap-2 p-2">
         <ReportCardMention average={globalRank.average} id={params.id} />
         <ReportCardDiscipline
-          absence={discipline.absence}
-          lateness={discipline.lateness}
-          justifiedLateness={discipline.justifiedLateness}
-          consigne={discipline.consigne}
-          justifiedAbsence={discipline.justifiedAbsence}
+          absence={disc?.absence ?? 0}
+          lateness={disc?.lateness ?? 0}
+          justifiedLateness={disc?.justifiedLateness ?? 0}
+          consigne={disc?.consigne ?? 0}
+          justifiedAbsence={disc?.justifiedAbsence ?? 0}
           id={params.id}
         />
         <ReportCardPerformance

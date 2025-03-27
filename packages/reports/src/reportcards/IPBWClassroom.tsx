@@ -21,7 +21,7 @@ export function IPBWClassroom({
   report,
   contacts,
   schoolYear,
-  discipline,
+  disciplines,
 }: {
   subjects: RouterOutputs["classroom"]["subjects"];
   students: RouterOutputs["classroom"]["students"];
@@ -31,7 +31,7 @@ export function IPBWClassroom({
   schoolYear: RouterOutputs["schoolYear"]["get"];
   contacts: RouterOutputs["student"]["getPrimaryContacts"];
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
-  discipline: RouterOutputs["discipline"]["classroom"];
+  disciplines: RouterOutputs["discipline"]["sequence"];
 }) {
   const { studentsReport, summary, globalRanks } = report;
   const values = Array.from(globalRanks.values());
@@ -55,7 +55,7 @@ export function IPBWClassroom({
         if (!studentReport || !student) {
           return null;
         }
-        const disc = discipline.get(student.id);
+        const disc = disciplines.get(student.id);
         return (
           <Page
             size={"A4"}

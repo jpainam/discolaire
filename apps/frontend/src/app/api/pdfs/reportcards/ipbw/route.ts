@@ -67,7 +67,7 @@ async function classroomReportCard({
   const term = await api.term.get(termId);
   const classroom = await caller.classroom.get(classroomId);
 
-  const discipline = await caller.discipline.classroom({
+  const disciplines = await caller.discipline.sequence({
     classroomId: classroomId,
     termId: termId,
   });
@@ -76,7 +76,7 @@ async function classroomReportCard({
     IPBWClassroom({
       school,
       students,
-      discipline: discipline,
+      disciplines,
       classroom,
       title: `BULLETIN SCOLAIRE : ${term?.name}`,
       subjects,
@@ -123,21 +123,15 @@ async function indvidualReportCard({
   const school = await api.school.getSchool();
   const term = await caller.term.get(termId);
 
-  const discipline = await caller.discipline.student({
-    studentId: studentId,
+  const disciplines = await caller.discipline.sequence({
+    classroomId: classroom.id,
     termId: Number(termId),
   });
 
   const stream = await renderToStream(
     IPBW({
       school,
-      discipline: {
-        absence: discipline.absence,
-        lateness: discipline.lateness,
-        justifiedLateness: discipline.justifiedLateness,
-        consigne: discipline.consigne,
-        justifiedAbsence: discipline.justifiedAbsence,
-      },
+      disciplines: disciplines,
       student,
       classroom,
       title: `BULLETIN SCOLAIRE : ${term?.name}`,

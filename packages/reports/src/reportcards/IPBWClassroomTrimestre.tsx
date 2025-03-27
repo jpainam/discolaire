@@ -20,7 +20,7 @@ export function IPBWClassroomTrimestre({
   report,
   contacts,
   schoolYear,
-  discipline,
+  disciplines,
 }: {
   subjects: RouterOutputs["classroom"]["subjects"];
   students: RouterOutputs["classroom"]["students"];
@@ -30,10 +30,7 @@ export function IPBWClassroomTrimestre({
   schoolYear: RouterOutputs["schoolYear"]["get"];
   contacts: RouterOutputs["student"]["getPrimaryContacts"];
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
-  discipline: {
-    disc1: RouterOutputs["discipline"]["classroom"];
-    disc2: RouterOutputs["discipline"]["classroom"];
-  };
+  disciplines: RouterOutputs["discipline"]["trimestre"];
 }) {
   const { studentsReport, summary, globalRanks } = report;
   const values = Array.from(globalRanks.values());
@@ -58,8 +55,8 @@ export function IPBWClassroomTrimestre({
         if (!studentReport || !student) {
           return null;
         }
-        const disc1 = discipline.disc1.get(student.id);
-        const disc2 = discipline.disc2.get(student.id);
+        const disc = disciplines.get(student.id);
+
         return (
           <Page
             size={"A4"}
@@ -441,15 +438,11 @@ export function IPBWClassroomTrimestre({
               </View>
               <IPBWSummary
                 discipline={{
-                  absence: (disc1?.absence ?? 0) + (disc2?.absence ?? 0),
-                  lateness: (disc1?.lateness ?? 0) + (disc2?.lateness ?? 0),
-                  justifiedLateness:
-                    (disc1?.justifiedLateness ?? 0) +
-                    (disc2?.justifiedLateness ?? 0),
-                  consigne: (disc1?.consigne ?? 0) + (disc2?.consigne ?? 0),
-                  justifiedAbsence:
-                    (disc1?.justifiedAbsence ?? 0) +
-                    (disc2?.justifiedAbsence ?? 0),
+                  absence: disc?.absence ?? 0,
+                  justifiedAbsence: disc?.justifiedAbsence ?? 0,
+                  lateness: disc?.lateness ?? 0,
+                  justifiedLateness: disc?.justifiedLateness ?? 0,
+                  consigne: disc?.consigne ?? 0,
                 }}
                 effectif={classroom.size}
                 average={value.average}

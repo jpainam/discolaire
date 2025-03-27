@@ -16,31 +16,33 @@ export function IPBWAnnual({
   subjects,
   students,
   classroom,
-  studentId,
   report,
   contacts,
   schoolYear,
-  discipline,
+  disciplines,
 }: {
   subjects: RouterOutputs["classroom"]["subjects"];
   studentId?: string;
-  students?: RouterOutputs["classroom"]["students"];
+  students:
+    | RouterOutputs["classroom"]["students"]
+    | RouterOutputs["student"]["get"][];
   classroom: RouterOutputs["classroom"]["get"];
   report: RouterOutputs["reportCard"]["getAnnualReport"];
   schoolYear: RouterOutputs["schoolYear"]["get"];
-  contacts: RouterOutputs["student"]["getPrimaryContacts"];
+  contacts:
+    | RouterOutputs["student"]["getPrimaryContacts"]
+    | RouterOutputs["student"]["getPrimaryContact"][];
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
-  discipline: {
-    disc1: RouterOutputs["discipline"]["classroom"];
-    disc2: RouterOutputs["discipline"]["classroom"];
-  };
+  disciplines: RouterOutputs["discipline"]["annual"];
 }) {
   const { studentsReport, summary, globalRanks } = report;
   const values = Array.from(globalRanks.values());
   const studentsMap = new Map(students.map((s) => [s.id, s]));
   const primaryContactsMap = new Map(
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    contacts.filter((c) => c.studentId != null).map((c) => [c.studentId, c]),
+    contacts
+      .filter((c) => c?.studentId != null)
+      .filter((c) => c != null)
+      .map((c) => [c.studentId, c]),
   );
   const groups = _.groupBy(subjects, "subjectGroupId");
   const averages = values.map((g) => g.average);
@@ -57,8 +59,7 @@ export function IPBWAnnual({
         if (!studentReport || !student) {
           return null;
         }
-        const disc1 = discipline.disc1.get(student.id);
-        const disc2 = discipline.disc2.get(student.id);
+        const disc = disciplines.get(student.id);
         return (
           <Page
             size={"A4"}
@@ -171,6 +172,21 @@ export function IPBWAnnual({
                                 {subject.teacher?.lastName}
                               </Text>
                             </View>
+                            {grade?.grades.map((g, i) => {
+                              return (
+                                <View
+                                  key={`g-${subject.id}-${student.id}-${i}`}
+                                  style={{
+                                    width: W[1],
+                                    borderRight: "1px solid black",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  <Text> {g ?? ""}</Text>
+                                </View>
+                              );
+                            })}
 
                             <View
                               style={{
@@ -180,27 +196,10 @@ export function IPBWAnnual({
                                 justifyContent: "center",
                               }}
                             >
-                              <Text> {grade ? grade.grade1 : ""}</Text>
-                            </View>
-                            <View
-                              style={{
-                                width: W[1],
-                                borderRight: "1px solid black",
-                                alignItems: "center",
-                                justifyContent: "center",
-                              }}
-                            >
-                              <Text> {grade ? grade.grade2 : ""}</Text>
-                            </View>
-                            <View
-                              style={{
-                                width: W[1],
-                                borderRight: "1px solid black",
-                                alignItems: "center",
-                                justifyContent: "center",
-                              }}
-                            >
-                              <Text> {grade ? grade.average : ""}</Text>
+                              <Text>
+                                {" "}
+                                {grade ? grade.average?.toFixed(2) : ""}
+                              </Text>
                             </View>
                             <View
                               style={{
@@ -211,7 +210,6 @@ export function IPBWAnnual({
                               }}
                             >
                               <Text>
-                                {" "}
                                 {grade?.average != null
                                   ? subject.coefficient
                                   : ""}
@@ -243,7 +241,7 @@ export function IPBWAnnual({
                                 {grade?.average != null ? grade.rank : ""}
                               </Text>
                             </View>
-                            <View
+                            {/* <View
                               style={{
                                 width: W[5],
                                 alignItems: "center",
@@ -252,8 +250,8 @@ export function IPBWAnnual({
                               }}
                             >
                               <Text>{subjectSummary?.average.toFixed(2)}</Text>
-                            </View>
-                            <View
+                            </View> */}
+                            {/* <View
                               style={{
                                 width: W[6],
                                 alignItems: "center",
@@ -265,7 +263,7 @@ export function IPBWAnnual({
                                 {subjectSummary?.min.toFixed(2)}/
                                 {subjectSummary?.max.toFixed(2)}
                               </Text>
-                            </View>
+                            </View> */}
                             <View
                               style={{
                                 width: W[7],
@@ -374,26 +372,22 @@ export function IPBWAnnual({
                   >
                     <Text>MOY. MENSUELLES</Text>
                   </View>
-                  <View
-                    style={{
-                      width: W[1],
-                      padding: 2,
-                      borderRight: "1px solid black",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Text>{studentReport.global.grade1Average.toFixed(2)}</Text>
-                  </View>
-                  <View
-                    style={{
-                      width: W[1],
-                      borderRight: "1px solid black",
-                      alignItems: "center",
-                      padding: 2,
-                    }}
-                  >
-                    <Text>{studentReport.global.grade2Average.toFixed(2)}</Text>
-                  </View>
+                  {studentReport.global.periodAverages.map((avg, ii) => {
+                    return (
+                      <View
+                        key={`${student.id}-${ii}`}
+                        style={{
+                          width: W[1],
+                          padding: 2,
+                          borderRight: "1px solid black",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Text>{avg.toFixed(2)}</Text>
+                      </View>
+                    );
+                  })}
+
                   <View
                     style={{
                       width: W[1],
@@ -440,15 +434,11 @@ export function IPBWAnnual({
               </View>
               <IPBWSummary
                 discipline={{
-                  absence: (disc1?.absence ?? 0) + (disc2?.absence ?? 0),
-                  lateness: (disc1?.lateness ?? 0) + (disc2?.lateness ?? 0),
-                  justifiedLateness:
-                    (disc1?.justifiedLateness ?? 0) +
-                    (disc2?.justifiedLateness ?? 0),
-                  consigne: (disc1?.consigne ?? 0) + (disc2?.consigne ?? 0),
-                  justifiedAbsence:
-                    (disc1?.justifiedAbsence ?? 0) +
-                    (disc2?.justifiedAbsence ?? 0),
+                  absence: disc?.absence ?? 0,
+                  justifiedAbsence: disc?.justifiedAbsence ?? 0,
+                  lateness: disc?.lateness ?? 0,
+                  justifiedLateness: disc?.justifiedLateness ?? 0,
+                  consigne: disc?.consigne ?? 0,
                 }}
                 effectif={classroom.size}
                 average={value.average}
@@ -505,7 +495,7 @@ function IPBWTableHeader({ W }: { W: number[] | string[] }) {
           }}
           key={index}
         >
-          <Text>{`Seq.${index + 1}`}</Text>
+          <Text>{`S${index + 1}`}</Text>
         </View>
       ))}
 
@@ -553,7 +543,7 @@ function IPBWTableHeader({ W }: { W: number[] | string[] }) {
       >
         <Text> Rang</Text>
       </View>
-      <View
+      {/* <View
         style={{
           width: W[5],
           justifyContent: "center",
@@ -563,8 +553,8 @@ function IPBWTableHeader({ W }: { W: number[] | string[] }) {
         }}
       >
         <Text> Moy.C</Text>
-      </View>
-      <View
+      </View> */}
+      {/* <View
         style={{
           width: W[6],
           justifyContent: "center",
@@ -574,7 +564,7 @@ function IPBWTableHeader({ W }: { W: number[] | string[] }) {
         }}
       >
         <Text> Min/Max</Text>
-      </View>
+      </View> */}
       <View
         style={{
           width: W[7],

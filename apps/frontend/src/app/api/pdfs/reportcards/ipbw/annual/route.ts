@@ -2,7 +2,6 @@ import type { NextRequest } from "next/server";
 import { z } from "zod";
 
 import { auth } from "@repo/auth";
-import { db } from "@repo/db";
 import { renderToStream } from "@repo/reports";
 import { IPBWAnnual } from "@repo/reports/reportcards/IPBWAnnual";
 import { api, caller } from "~/trpc/server";
@@ -31,7 +30,7 @@ export async function GET(req: NextRequest) {
 
     return Response.json(
       { error: "Invalid request body", errors },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -53,56 +52,18 @@ async function classroomReportCard({ classroomId }: { classroomId: string }) {
 
   const subjects = await api.classroom.subjects(classroomId);
   const classroom = await caller.classroom.get(classroomId);
-
-  const terms = await db.term.findMany({
-    orderBy: { order: "asc" },
-    where: {
-      schoolYearId: classroom.schoolYearId,
-      schoolId: classroom.schoolId,
-    },
-  });
-  if (terms.length !== 6) {
-    return Response.json({ error: "Invalid number of terms" }, { status: 400 });
-  }
-  const disc1 = await caller.discipline.classroom({
-    classroomId: classroomId,
-    termId: terms[0]?.id ?? 0,
-  });
-  const disc2 = await caller.discipline.classroom({
-    classroomId: classroomId,
-    termId: terms[1]?.id ?? 0,
-  });
-  const disc3 = await caller.discipline.classroom({
-    classroomId: classroomId,
-    termId: terms[2]?.id ?? 0,
-  });
-  const disc4 = await caller.discipline.classroom({
-    classroomId: classroomId,
-    termId: terms[3]?.id ?? 0,
-  });
-  const disc5 = await caller.discipline.classroom({
-    classroomId: classroomId,
-    termId: terms[4]?.id ?? 0,
-  });
-  const disc6 = await caller.discipline.classroom({
-    classroomId: classroomId,
-    termId: terms[5]?.id ?? 0,
-  });
-
+  const disciplines = await caller.discipline.annual({ classroomId });
   const stream = await renderToStream(
     IPBWAnnual({
       school,
       students,
-      discipline: {
-        disc1,
-        disc2,
-      },
+      disciplines,
       classroom,
       subjects,
       report,
       contacts,
       schoolYear: classroom.schoolYear,
-    })
+    }),
   );
 
   const headers: Record<string, string> = {
@@ -134,26 +95,21 @@ async function indvidualReportCard({ studentId }: { studentId: string }) {
   const contact = await api.student.getPrimaryContact(student.id);
   const school = await api.school.getSchool();
 
-  const terms = await caller.term.fromTrimestre(trimestreId);
-  const disc1 = await caller.discipline.student({
-    studentId: studentId,
-    termId: terms.seq1?.id ?? 0,
-  });
-  const disc2 = await caller.discipline.student({
-    studentId: studentId,
-    termId: terms.seq2?.id ?? 0,
+  const disciplines = await caller.discipline.annual({
+    classroomId: student.classroom.id,
   });
 
   const stream = await renderToStream(
     IPBWAnnual({
       school,
-      studentId,
+      students: [student],
       classroom,
+      disciplines,
       subjects,
       report,
       contacts: [contact],
       schoolYear: classroom.schoolYear,
-    })
+    }),
   );
 
   const headers: Record<string, string> = {

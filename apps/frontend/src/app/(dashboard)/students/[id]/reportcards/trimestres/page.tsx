@@ -63,15 +63,13 @@ export default async function Page(props: {
   const successRate = successCount / averages.length;
   const rowClassName = "border text-center py-0";
   const average = averages.reduce((acc, val) => acc + val, 0) / averages.length;
-  const terms = await api.term.fromTrimestre(trimestreId);
-  const disc1 = await caller.discipline.student({
-    studentId: params.id,
-    termId: terms.seq1?.id ?? 0,
+
+  const disciplines = await caller.discipline.trimestre({
+    classroomId: classroom.id,
+    trimestreId: trimestreId,
   });
-  const disc2 = await caller.discipline.student({
-    studentId: params.id,
-    termId: terms.seq2?.id ?? 0,
-  });
+
+  const disc = disciplines.get(params.id);
 
   return (
     <div className="flex flex-col gap-2">
@@ -224,13 +222,11 @@ export default async function Page(props: {
         <div className="flex flex-row items-start gap-2 p-2">
           <ReportCardMention average={globalRank.average} id={params.id} />
           <ReportCardDiscipline
-            absence={disc1.absence + disc2.absence}
-            lateness={disc1.lateness + disc2.lateness}
-            justifiedLateness={
-              disc1.justifiedLateness + disc2.justifiedLateness
-            }
-            consigne={disc1.consigne + disc2.consigne}
-            justifiedAbsence={disc1.justifiedAbsence + disc2.justifiedAbsence}
+            absence={disc?.absence ?? 0}
+            lateness={disc?.lateness ?? 0}
+            justifiedLateness={disc?.justifiedLateness ?? 0}
+            consigne={disc?.consigne ?? 0}
+            justifiedAbsence={disc?.justifiedAbsence ?? 0}
             id={params.id}
           />
           <ReportCardPerformance
