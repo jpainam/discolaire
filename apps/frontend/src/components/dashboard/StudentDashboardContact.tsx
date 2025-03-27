@@ -23,7 +23,7 @@ export async function StudentDashboardContact({
         <CardTitle>{t("student_contacts")}</CardTitle>
         <CardDescription>{t("student_contact_description")}</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="text-xs">
         {studentContacts.map((stdc, index) => {
           const contact = stdc.contact;
           return (
@@ -34,11 +34,15 @@ export async function StudentDashboardContact({
               <div className="flex  flex-row gap-2 ">
                 <AvatarState
                   avatar={contact.avatar}
-                  className="w-[75px] h-[75px] "
                   pos={getFullName(contact).length}
                 />
-                <div className="flex  flex-col gap-3">
-                  <h2 className="font-semibold">{getFullName(contact)}</h2>
+                <div className="flex  flex-col gap-2">
+                  <Link
+                    href={`/contacts/${contact.id}`}
+                    className="font-semibold hover:underline"
+                  >
+                    {getFullName(contact)}
+                  </Link>
                   <div className="flex flex-row gap-2 text-muted-foreground">
                     <p>{contact.email}</p>
                     <p>

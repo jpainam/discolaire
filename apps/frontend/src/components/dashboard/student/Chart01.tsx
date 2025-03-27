@@ -70,7 +70,7 @@ export function Chart01() {
       <CardHeader>
         <div className="flex items-center justify-between gap-2">
           <div className="space-y-0.5">
-            <CardTitle>Recurring Revenue</CardTitle>
+            <CardTitle>Test 1 </CardTitle>
             <div className="flex items-start gap-2">
               <div className="font-semibold text-2xl">
                 {selectedValue === "off" ? "$1,439,346" : "$8,272,152"}

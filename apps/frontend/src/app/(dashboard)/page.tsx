@@ -65,9 +65,12 @@ export default async function Page() {
             name: g.subject.course.shortName,
             max: Math.max(...g.grades.map((grade) => grade.grade)),
             min: Math.min(...g.grades.map((grade) => grade.grade)),
-            average:
-              g.grades.reduce((acc, grade) => acc + grade.grade, 0) /
-              g.grades.length,
+            average: Number(
+              (
+                g.grades.reduce((acc, grade) => acc + grade.grade, 0) /
+                g.grades.length
+              ).toFixed(2)
+            ),
           };
         })}
       />

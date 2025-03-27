@@ -24,14 +24,12 @@ import {
   ClockIcon,
   FileTextIcon,
   LifeBuoy,
-  ThumbsUp,
   UsersIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useLocale } from "~/i18n";
 import type { ChangeEvent } from "~/types/event_type";
-import EyeIcon from "../icons/eye";
 import { CardAction } from "../ui/card";
 
 export function SchoolLife({ className }: { className?: string }) {
@@ -72,33 +70,33 @@ export function SchoolLife({ className }: { className?: string }) {
       thu: 0,
       fri: 1,
     },
-    {
-      category: "Punitions notifiées",
-      icon: <AlertTriangleIcon className="w-4 h-4 text-destructive" />,
-      mon: 4,
-      tue: 0,
-      wed: 0,
-      thu: 0,
-      fri: 5,
-    },
-    {
-      category: "Observations",
-      icon: <EyeIcon className="w-4 h-4 text-blue-500" />,
-      mon: 0,
-      tue: 0,
-      wed: 0,
-      thu: 0,
-      fri: 0,
-    },
-    {
-      category: "Encouragements",
-      icon: <ThumbsUp className="w-4 h-4 text-green-500" />,
-      mon: 0,
-      tue: 0,
-      wed: 0,
-      thu: 1,
-      fri: 0,
-    },
+    // {
+    //   category: "Punitions notifiées",
+    //   icon: <AlertTriangleIcon className="w-4 h-4 text-destructive" />,
+    //   mon: 4,
+    //   tue: 0,
+    //   wed: 0,
+    //   thu: 0,
+    //   fri: 5,
+    // },
+    // {
+    //   category: "Observations",
+    //   icon: <EyeIcon className="w-4 h-4 text-blue-500" />,
+    //   mon: 0,
+    //   tue: 0,
+    //   wed: 0,
+    //   thu: 0,
+    //   fri: 0,
+    // },
+    // {
+    //   category: "Encouragements",
+    //   icon: <ThumbsUp className="w-4 h-4 text-green-500" />,
+    //   mon: 0,
+    //   tue: 0,
+    //   wed: 0,
+    //   thu: 1,
+    //   fri: 0,
+    // },
     {
       category: "Convocations",
       icon: <FileTextIcon className="w-4 h-4 text-gray-500" />,
@@ -124,7 +122,7 @@ export function SchoolLife({ className }: { className?: string }) {
     const daysToAdd = (week - 1) * 7;
     const selectedWeekStart = startOfWeek(
       new Date(firstDayOfYear.setDate(firstDayOfYear.getDate() + daysToAdd)),
-      { weekStartsOn: 0 },
+      { weekStartsOn: 0 }
     );
 
     setSelectedDate(selectedWeekStart);
@@ -151,7 +149,7 @@ export function SchoolLife({ className }: { className?: string }) {
       format(date, "EEE d", {
         locale:
           i18n.language === "fr" ? fr : i18n.language === "es" ? es : enUS,
-      }),
+      })
     );
 
   return (

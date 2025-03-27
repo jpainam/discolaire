@@ -16,21 +16,6 @@ import {
 } from "@repo/ui/components/chart";
 import { useLocale } from "~/i18n";
 
-const chartConfig = {
-  min: {
-    label: "Min",
-    color: "var(--chart-1)",
-  },
-  max: {
-    label: "Max",
-    color: "var(--chart-2)",
-  },
-  average: {
-    label: "Average",
-    color: "var(--chart-3)",
-  },
-} satisfies ChartConfig;
-
 export function LatestGradesheet({
   grades,
 }: {
@@ -42,6 +27,20 @@ export function LatestGradesheet({
   }[];
 }) {
   const { t } = useLocale();
+  const chartConfig = {
+    min: {
+      label: "Min",
+      color: "var(--chart-1)",
+    },
+    max: {
+      label: "Max",
+      color: "var(--chart-2)",
+    },
+    average: {
+      label: "Moy.",
+      color: "var(--chart-3)",
+    },
+  } satisfies ChartConfig;
   return (
     <Card>
       <CardHeader>
@@ -51,7 +50,7 @@ export function LatestGradesheet({
         </CardDescription> */}
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
+        <ChartContainer className="h-60 w-full" config={chartConfig}>
           <BarChart accessibilityLayer data={grades}>
             <XAxis
               dataKey="name"
@@ -59,13 +58,13 @@ export function LatestGradesheet({
               tickMargin={10}
               axisLine={false}
               tickFormatter={(value: string) => {
-                return value.slice(0, 3);
+                return value.slice(0, 3).toUpperCase();
               }}
             />
             <Bar
-              dataKey="min"
+              dataKey="average"
               stackId="a"
-              fill="var(--color-min)"
+              fill="var(--color-average)"
               radius={[0, 0, 4, 4]}
             />
             <Bar
@@ -75,29 +74,12 @@ export function LatestGradesheet({
               radius={[0, 0, 0, 0]}
             />
             <Bar
-              dataKey="average"
+              dataKey="min"
               stackId="a"
-              fill="var(--color-average)"
+              fill="var(--color-min)"
               radius={[4, 4, 0, 0]}
             />
-            {/* <ChartTooltip
-              content={
-                <CustomTooltipContent
-                  colorMap={{
-                    min: "var(--chart-1)",
-                    max: "var(--chart-2)",
-                    average: "var(--chart-3)",
-                  }}
-                  labelMap={{
-                    min: "Actual",
-                    max: "Projected",
-                    average: "Projected",
-                  }}
-                  dataKeys={["min", "max", "average"]}
-                  valueFormatter={(value) => `${value.toLocaleString()}`}
-                />
-              }
-            /> */}
+
             <ChartTooltip
               content={<ChartTooltipContent />}
               cursor={false}

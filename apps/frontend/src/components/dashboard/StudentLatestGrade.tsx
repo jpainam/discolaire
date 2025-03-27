@@ -1,15 +1,14 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
 import i18next from "i18next";
-import { Calendar } from "lucide-react";
+import { CalendarDays } from "lucide-react";
 import { getServerTranslations } from "~/i18n/server";
 import { api } from "~/trpc/server";
-import { getAppreciations } from "~/utils/get-appreciation";
+import FlatBadge from "../FlatBadge";
 export async function StudentLatestGrade({
   studentId,
   name,
@@ -19,19 +18,14 @@ export async function StudentLatestGrade({
 }) {
   const { t } = await getServerTranslations();
   const grades = await api.student.grades({ id: studentId });
-  const getGradeColor = (grade: number) => {
-    if (grade >= 16) return "bg-green-100 text-green-800";
-    if (grade >= 14) return "bg-blue-100 text-blue-800";
-    if (grade >= 10) return "bg-amber-100 text-amber-800";
-    return "bg-red-100 text-red-800";
-  };
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>
           {t("latest_grades")} - {name}
         </CardTitle>
-        <CardDescription>Card Description</CardDescription>
+        {/* <CardDescription>Card Description</CardDescription> */}
       </CardHeader>
       <CardContent>
         {grades.slice(0, 5).map((grade, index) => {
@@ -39,13 +33,16 @@ export async function StudentLatestGrade({
             <div
               key={index}
               className="flex border-b justify-between py-2 items-center"
+              // style={{
+              //   backgroundColor: "red",
+              // }}
             >
               <div className="flex flex-col items-start gap-0">
-                <h2 className="font-semibold ">
+                <span className="font-semibold text-sm ">
                   {grade.gradeSheet.subject.course.name}
-                </h2>
-                <div className="flex items-center text-muted-foreground text-sm mt-1">
-                  <Calendar className="h-3.5 w-3.5 mr-1.5" />
+                </span>
+                <div className="flex items-center text-muted-foreground text-xs mt-1">
+                  <CalendarDays className="h-3.5 w-3.5 mr-1.5" />
                   <span>
                     le{" "}
                     {grade.gradeSheet.createdAt.toLocaleDateString(
@@ -54,22 +51,25 @@ export async function StudentLatestGrade({
                         year: "numeric",
                         month: "short",
                         day: "numeric",
-                      },
+                      }
                     )}
                   </span>
                 </div>
               </div>
-
-              <div className="flex flex-col items-end ">
-                <div
-                  className={`p-2 rounded-md text-sm font-bold ${getGradeColor(grade.grade)}`}
-                >
-                  {grade.grade.toFixed(2).replace(".", ",")}
-                </div>
-                <span className="text-xs mt-1 text-gray-500 font-medium">
-                  {getAppreciations(grade.grade)}
-                </span>
-              </div>
+              <FlatBadge
+                className="w-[50px] items-center flex justify-center"
+                variant={
+                  grade.grade < 8
+                    ? "red"
+                    : grade.grade < 10
+                      ? "blue"
+                      : grade.grade < 14
+                        ? "indigo"
+                        : "green"
+                }
+              >
+                {grade.grade}
+              </FlatBadge>
             </div>
           );
         })}
