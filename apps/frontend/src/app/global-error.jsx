@@ -1,13 +1,12 @@
-// @ts-nocheck
 "use client";
-
+import * as Sentry from "@sentry/nextjs";
 import Error from "next/error";
 import { useEffect } from "react";
 
 // @ts-ignore
 export default function GlobalError({ error }) {
   useEffect(() => {
-    //Sentry.captureException(error);
+    Sentry.captureException(error);
 
     console.error(error);
   }, [error]);
@@ -19,7 +18,7 @@ export default function GlobalError({ error }) {
         <meta name="google" content="notranslate" />
       </head>
       <body>
-        <Error error={error} />
+        <Error error={error} statusCode={500} />
       </body>
     </html>
   );
