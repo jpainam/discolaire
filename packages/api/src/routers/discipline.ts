@@ -1,94 +1,27 @@
-import { sum } from "lodash";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+
+import { db } from "@repo/db";
 
 import { classroomService } from "../services/classroom-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const disciplineRouter = createTRPCRouter({
-  student: protectedProcedure
-    .input(
-      z.object({
-        studentId: z.string().min(1),
-        termId: z.number().optional(),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      const absence = await ctx.db.absence.findMany({
-        include: {
-          justification: true,
-        },
-        where: {
-          studentId: input.studentId,
-          termId: input.termId,
-        },
-      });
-      const lateness = await ctx.db.lateness.findMany({
-        include: {
-          justification: true,
-        },
-        where: {
-          studentId: input.studentId,
-          termId: input.termId,
-        },
-      });
-      const consigne = await ctx.db.consigne.findMany({
-        where: {
-          studentId: input.studentId,
-          termId: input.termId,
-        },
-      });
-      return {
-        absence: absence.length,
-        justifiedAbsence: sum(
-          absence.filter((a) => a.justification).map((ab) => ab.value),
-        ),
-        lateness: lateness.length,
-        justifiedLateness: sum(
-          lateness.filter((a) => a.justification).map((ab) => ab.duration),
-        ),
-        consigne: consigne.length,
-      };
-    }),
-  classroom: protectedProcedure
+  annual: protectedProcedure
     .input(
       z.object({
         classroomId: z.string().min(1),
-        termId: z.coerce.number(),
       }),
     )
-    .mutation(async ({ input, ctx }) => {
+    .query(async ({ ctx, input }) => {
+      const terms = await ctx.db.term.findMany({
+        where: {
+          schoolId: ctx.schoolId,
+          schoolYearId: ctx.schoolYearId,
+        },
+      });
       const students = await classroomService.getStudents(input.classroomId);
       const studentIds = students.map((s) => s.id);
-      const absences = await ctx.db.absence.findMany({
-        include: {
-          justification: true,
-        },
-        where: {
-          studentId: {
-            in: studentIds,
-          },
-          termId: input.termId,
-        },
-      });
-      const lateness = await ctx.db.lateness.findMany({
-        include: {
-          justification: true,
-        },
-        where: {
-          studentId: {
-            in: studentIds,
-          },
-          termId: input.termId,
-        },
-      });
-      const consignes = await ctx.db.consigne.findMany({
-        where: {
-          studentId: {
-            in: studentIds,
-          },
-          termId: input.termId,
-        },
-      });
       const disciplines = new Map<
         string,
         {
@@ -100,46 +33,224 @@ export const disciplineRouter = createTRPCRouter({
           consigne: number;
         }
       >();
-      for (const student of students) {
-        disciplines.set(student.id, {
+      for (const studentId of studentIds) {
+        disciplines.set(studentId, {
           absence: 0,
-          studentId: student.id,
+          studentId: studentId,
           justifiedAbsence: 0,
           lateness: 0,
           justifiedLateness: 0,
           consigne: 0,
         });
       }
-      for (const absence of absences) {
-        const student = disciplines.get(absence.studentId);
-        if (student) {
-          student.absence++;
-          if (absence.justification) {
-            student.justifiedAbsence += absence.value;
+      await Promise.all(
+        terms.map(async (term) => {
+          const disc = await getDiscipline({
+            studentIds: studentIds,
+            termId: term.id,
+          });
+          for (const [studentId, discipline] of disc) {
+            const student = disciplines.get(studentId);
+            if (student) {
+              student.absence += discipline.absence;
+              student.justifiedAbsence += discipline.justifiedAbsence;
+              student.lateness += discipline.lateness;
+              student.justifiedLateness += discipline.justifiedLateness;
+              student.consigne += discipline.consigne;
+            }
           }
-        }
+        }),
+      );
+      return disciplines;
+    }),
+  sequence: protectedProcedure
+    .input(
+      z.object({
+        classroomId: z.string().min(1),
+        termId: z.coerce.number(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const students = await classroomService.getStudents(input.classroomId);
+      const studentIds = students.map((s) => s.id);
+      return getDiscipline({
+        studentIds,
+        termId: input.termId,
+      });
+    }),
+
+  trimestre: protectedProcedure
+    .input(
+      z.object({
+        classroomId: z.string().min(1),
+        trimestreId: z.string().min(1),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const terms = await ctx.db.term.findMany({
+        where: {
+          schoolId: ctx.schoolId,
+          schoolYearId: ctx.schoolYearId,
+        },
+      });
+
+      if (!["trim1", "trim2", "trim3"].includes(input.trimestreId)) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Trimestre not found",
+        });
       }
-      for (const late of lateness) {
-        const student = disciplines.get(late.studentId);
-        if (student) {
-          student.lateness++;
-          if (late.justification) {
-            student.justifiedLateness += late.duration;
+      let seq1: number | null;
+      let seq2: number | null;
+      if (input.trimestreId === "trim1") {
+        seq1 = terms.find((t) => t.order === 1)?.id ?? null;
+        seq2 = terms.find((t) => t.order === 2)?.id ?? null;
+      } else if (input.trimestreId === "trim2") {
+        seq1 = terms.find((t) => t.order === 3)?.id ?? null;
+        seq2 = terms.find((t) => t.order === 4)?.id ?? null;
+      } else {
+        seq1 = terms.find((t) => t.order === 5)?.id ?? null;
+        seq2 = terms.find((t) => t.order === 6)?.id ?? null;
+      }
+      if (!seq1 || !seq2) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Trimestre not found",
+        });
+      }
+      const students = await classroomService.getStudents(input.classroomId);
+      const studentIds = students.map((s) => s.id);
+      const disciplines = new Map<
+        string,
+        {
+          absence: number;
+          studentId: string;
+          justifiedAbsence: number;
+          lateness: number;
+          justifiedLateness: number;
+          consigne: number;
+        }
+      >();
+      for (const studentId of studentIds) {
+        disciplines.set(studentId, {
+          absence: 0,
+          studentId: studentId,
+          justifiedAbsence: 0,
+          lateness: 0,
+          justifiedLateness: 0,
+          consigne: 0,
+        });
+      }
+      await Promise.all(
+        [seq1, seq2].map(async (seq) => {
+          const disc = await getDiscipline({
+            studentIds: studentIds,
+            termId: seq,
+          });
+          for (const [studentId, discipline] of disc) {
+            const student = disciplines.get(studentId);
+            if (student) {
+              student.absence += discipline.absence;
+              student.justifiedAbsence += discipline.justifiedAbsence;
+              student.lateness += discipline.lateness;
+              student.justifiedLateness += discipline.justifiedLateness;
+              student.consigne += discipline.consigne;
+            }
           }
-        }
-      }
-      for (const consigne of consignes) {
-        const student = disciplines.get(consigne.studentId);
-        if (student) {
-          student.consigne++;
-        }
-      }
-      // return Array.from(disciplines.entries()).map(
-      //   ([studentId, discipline]) => ({
-      //     studentId,
-      //     ...discipline,
-      //   }),
-      // );
+        }),
+      );
+
       return disciplines;
     }),
 });
+
+async function getDiscipline({
+  studentIds,
+  termId,
+}: {
+  studentIds: string[];
+  termId: number;
+}) {
+  const absences = await db.absence.findMany({
+    include: {
+      justification: true,
+    },
+    where: {
+      studentId: {
+        in: studentIds,
+      },
+      termId: termId,
+    },
+  });
+  const lateness = await db.lateness.findMany({
+    include: {
+      justification: true,
+    },
+    where: {
+      studentId: {
+        in: studentIds,
+      },
+      termId: termId,
+    },
+  });
+  const consignes = await db.consigne.findMany({
+    where: {
+      studentId: {
+        in: studentIds,
+      },
+      termId: termId,
+    },
+  });
+  const disciplines = new Map<
+    string,
+    {
+      absence: number;
+      studentId: string;
+      justifiedAbsence: number;
+      lateness: number;
+      justifiedLateness: number;
+      consigne: number;
+    }
+  >();
+  for (const studentId of studentIds) {
+    disciplines.set(studentId, {
+      absence: 0,
+      studentId: studentId,
+      justifiedAbsence: 0,
+      lateness: 0,
+      justifiedLateness: 0,
+      consigne: 0,
+    });
+  }
+  for (const absence of absences) {
+    const student = disciplines.get(absence.studentId);
+    if (student) {
+      student.absence++;
+      if (absence.justification) {
+        student.justifiedAbsence += absence.value;
+      }
+    }
+  }
+  for (const late of lateness) {
+    const student = disciplines.get(late.studentId);
+    if (student) {
+      student.lateness++;
+      if (late.justification) {
+        student.justifiedLateness += late.duration;
+      }
+    }
+  }
+  for (const consigne of consignes) {
+    const student = disciplines.get(consigne.studentId);
+    if (student) {
+      student.consigne++;
+    }
+  }
+  // return Array.from(disciplines.entries()).map(
+  //   ([studentId, discipline]) => ({
+  //     studentId,
+  //     ...discipline,
+  //   }),
+  // );
+  return disciplines;
+}
