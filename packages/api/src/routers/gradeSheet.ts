@@ -36,6 +36,38 @@ export const gradeSheetRouter = createTRPCRouter({
       });
     }),
 
+  getLatestGradesheet: protectedProcedure
+    .input(
+      z.object({
+        limit: z.coerce.number().default(10),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.gradeSheet.findMany({
+        where: {
+          subject: {
+            classroom: {
+              schoolId: ctx.schoolId,
+              schoolYearId: ctx.schoolYearId,
+            },
+          },
+        },
+        include: {
+          grades: true,
+          subject: {
+            include: {
+              course: true,
+            },
+          },
+          term: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: input.limit,
+      });
+    }),
+
   create: protectedProcedure
     .input(createGradeSheetSchema)
     .mutation(async ({ ctx, input }) => {
