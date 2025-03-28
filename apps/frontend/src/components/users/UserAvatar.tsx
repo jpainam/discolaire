@@ -50,7 +50,7 @@ export function UserAvatar({
       setDialogOpen(true);
     },
 
-    []
+    [],
   );
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -86,7 +86,7 @@ export function UserAvatar({
 async function uploadToAWS(
   file: File,
   croppedImageUrl: string,
-  userId: string
+  userId: string,
 ) {
   const croppedBlob = await (await fetch(croppedImageUrl)).blob();
   //   const originalFormData = new FormData();

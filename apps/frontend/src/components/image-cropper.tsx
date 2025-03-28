@@ -92,7 +92,7 @@ export function ImageCropper({
         0,
         0,
         crop.width * scaleX,
-        crop.height * scaleY
+        crop.height * scaleY,
       );
     }
 
@@ -174,7 +174,7 @@ export function ImageCropper({
 export function centerAspectCrop(
   mediaWidth: number,
   mediaHeight: number,
-  aspect: number
+  aspect: number,
 ): Crop {
   return centerCrop(
     makeAspectCrop(
@@ -185,9 +185,9 @@ export function centerAspectCrop(
       },
       aspect,
       mediaWidth,
-      mediaHeight
+      mediaHeight,
     ),
     mediaWidth,
-    mediaHeight
+    mediaHeight,
   );
 }
