@@ -502,7 +502,6 @@ model Document {
 
 model Student {
     id                 String             @id @default(uuid())
-    avatar             String?
     registrationNumber String?
     isActive           Boolean            @default(true)
     email              String?
