@@ -72,9 +72,10 @@ export function fetchStaffColumns({
         <DataTableColumnHeader column={column} title={t("")} />
       ),
       cell: ({ row }) => {
+        const staff = row.original;
         return (
           <AvatarState
-            avatar={row.original.avatar}
+            avatar={staff.user?.avatar}
             pos={getFullName(row.original).length}
           />
         );
