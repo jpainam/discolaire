@@ -46,11 +46,11 @@ export function ClassroomHeader({
   const router = useRouter();
   const canDeleteClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const deleteClassroomMutation = api.classroom.delete.useMutation({
     onSuccess: () => {
@@ -77,7 +77,7 @@ export function ClassroomHeader({
   };
   const canCreateClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const { openSheet } = useSheet();
 
