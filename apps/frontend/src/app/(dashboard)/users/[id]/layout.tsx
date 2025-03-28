@@ -3,9 +3,9 @@ import { Separator } from "@repo/ui/components/separator";
 import { getServerTranslations } from "~/i18n/server";
 
 import { notFound } from "next/navigation";
-import { AvatarState } from "~/components/AvatarState";
 import { NoPermission } from "~/components/no-permission";
 import { api } from "~/trpc/server";
+import { UserAvatar } from "./UserAvatar";
 
 export default async function Layout(props: {
   params: Promise<{ id: string }>;
@@ -28,11 +28,12 @@ export default async function Layout(props: {
   return (
     <div className="">
       <div className="flex flex-row items-center gap-2 px-4 py-2">
-        <AvatarState
+        <UserAvatar userId={params.id} avatar={user.avatar} />
+        {/* <AvatarState
           pos={1}
           avatar={user.avatar}
           className="w-[100px] h-[100px]"
-        />
+        /> */}
 
         <div className="space-y-0.5">
           <h2 className=" font-bold tracking-tight">{t("user_management")}</h2>
