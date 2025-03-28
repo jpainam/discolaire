@@ -259,6 +259,7 @@ async function getStudents(classroomId: string) {
     },
     include: {
       formerSchool: true,
+      user: true,
       enrollments: {
         include: {
           classroom: true,
