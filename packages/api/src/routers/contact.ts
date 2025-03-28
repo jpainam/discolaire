@@ -13,7 +13,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 const createUpdateSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
-  email: z.string().email(),
+  email: z.string().optional().default(""),
   title: z.string().optional(),
   employer: z.string().optional(),
   gender: z.enum(["male", "female"]).default("male"),

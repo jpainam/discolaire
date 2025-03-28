@@ -23,7 +23,6 @@ import { useLocale } from "~/i18n";
 import { SheetClose, SheetFooter } from "@repo/ui/components/sheet";
 import { InputField } from "~/components/shared/forms/input-field";
 import PrefixSelector from "~/components/shared/forms/PrefixSelector";
-import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
@@ -35,7 +34,7 @@ const createEditContactSchema = z.object({
   employer: z.string().optional(),
   phoneNumber1: z.string().min(1),
   phoneNumber2: z.string().optional(),
-  email: z.string().email(),
+  email: z.string().optional().default(""),
   address: z.string().optional(),
   observation: z.string().optional(),
 });
@@ -75,10 +74,10 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
 
   const createContactMutation = api.contact.create.useMutation({
     onSettled: () => utils.contact.invalidate(),
-    onSuccess: (result) => {
+    onSuccess: () => {
       closeSheet();
       toast.success(t("created_successfully"), { id: 0 });
-      router.push(routes.contacts.details(result.id));
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -86,10 +85,10 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
   });
   const updateContactMutation = api.contact.update.useMutation({
     onSettled: () => utils.contact.invalidate(),
-    onSuccess: (result) => {
+    onSuccess: () => {
       closeSheet();
       toast.success(t("updated_successfully"), { id: 0 });
-      router.push(routes.contacts.details(result.id));
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -99,7 +98,7 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
   const onSubmit = (data: z.infer<typeof createEditContactSchema>) => {
     const values = {
       ...data,
-      email: data.email || "",
+      email: data.email,
     };
     if (contact) {
       toast.loading(t("updating"), { id: 0 });
@@ -116,7 +115,7 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
         className="flex flex-col flex-1 overflow-hidden"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="grid overflow-y-auto flex-1 auto-rows-min gap-6 px-4">
+        <div className="grid overflow-y-auto flex-1 auto-rows-min gap-4 px-4">
           <FormField
             control={form.control}
             name="prefix"

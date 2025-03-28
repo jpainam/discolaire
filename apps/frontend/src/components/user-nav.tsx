@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import {
@@ -15,6 +16,12 @@ import {
   AvatarImage,
 } from "@repo/ui/components/avatar";
 import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@repo/ui/components/dialog";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -24,8 +31,8 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { useLocale } from "~/i18n";
-
 //import { signinout } from "~/app/auth/login/signin";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Button } from "@repo/ui/components/button";
 import { useSidebar } from "@repo/ui/components/sidebar";
 import { signOut } from "~/actions/signin";
@@ -60,13 +67,29 @@ export function UserNav() {
       >
         <DropdownMenuLabel className="p-0 font-normal">
           <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-            <Avatar className="h-8 w-8 rounded-lg">
-              <AvatarImage
-                src={user.avatar ?? undefined}
-                alt={user.name ?? ""}
-              />
-              <AvatarFallback className="rounded-lg uppercase">{`${user.name?.charAt(0)}${user.name?.charAt(1)}`}</AvatarFallback>
-            </Avatar>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Avatar className="h-8 w-8 rounded-lg">
+                  <AvatarImage
+                    src={user.avatar ?? undefined}
+                    alt={user.name ?? ""}
+                  />
+                  <AvatarFallback className="rounded-lg uppercase">{`${user.name?.charAt(0)}${user.name?.charAt(1)}`}</AvatarFallback>
+                </Avatar>
+              </DialogTrigger>
+
+              <DialogContent className="max-w-[90%] sm:max-w-[600px] p-0">
+                <VisuallyHidden>
+                  <DialogTitle></DialogTitle>
+                </VisuallyHidden>
+                <img
+                  src={user.avatar ?? undefined}
+                  alt="Full Image"
+                  className="w-full h-auto rounded-lg"
+                />
+              </DialogContent>
+            </Dialog>
+
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-semibold">{user.name}</span>
               <span className="truncate text-xs">{user.email}</span>
