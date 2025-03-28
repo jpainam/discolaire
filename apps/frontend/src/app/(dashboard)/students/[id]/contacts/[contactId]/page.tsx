@@ -59,7 +59,7 @@ export default async function Page(props: {
             <AvatarState
               pos={0}
               className="h-16 w-16"
-              avatar={contact?.avatar}
+              avatar={contact?.user?.avatar}
             />
             <div className="flex flex-col gap-2">
               <Link

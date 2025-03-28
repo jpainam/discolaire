@@ -99,7 +99,7 @@ export const contactRouter = createTRPCRouter({
           lastAccessed: new Date(),
         },
       });
-      return ctx.db.contact.findUnique({
+      return ctx.db.contact.findUniqueOrThrow({
         include: {
           user: {
             include: {
