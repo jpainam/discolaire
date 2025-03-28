@@ -51,7 +51,7 @@ export function NotificationHeader() {
           router.push(
             routes.students.notifications(params.id) +
               "?" +
-              createQueryString({ to, from })
+              createQueryString({ to, from }),
           );
         }}
       />

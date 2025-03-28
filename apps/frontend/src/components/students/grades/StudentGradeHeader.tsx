@@ -108,7 +108,7 @@ export function StudentGradeHeader({
               "?" +
                 createQueryString({
                   term: val,
-                })
+                }),
             );
           }}
           defaultValue={term ? `${term}` : undefined}
@@ -158,7 +158,7 @@ export function StudentGradeHeader({
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/student/grades/?id=${student.id}&format=pdf`,
-                    "_blank"
+                    "_blank",
                   );
                 }}
               >
@@ -168,7 +168,7 @@ export function StudentGradeHeader({
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/student/grades/?id=${student.id}&format=csv`,
-                    "_blank"
+                    "_blank",
                   );
                 }}
               >
