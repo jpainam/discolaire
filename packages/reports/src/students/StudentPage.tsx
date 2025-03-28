@@ -48,7 +48,7 @@ export function StudentPage({
             Profil de l'élève
           </Text>
 
-          {student.avatar && (
+          {student.user?.avatar && (
             <Image
               style={{ width: 100, height: 100 }}
               // src={{
@@ -57,7 +57,7 @@ export function StudentPage({
               //   headers: { "Cache-Control": "no-cache" },
               //   body: "",
               // }}
-              src={student.avatar}
+              src={student.user.avatar}
             />
           )}
 

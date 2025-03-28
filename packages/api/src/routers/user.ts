@@ -229,12 +229,12 @@ export const userRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ input }) => {
-      const { email, avatar, name } = await attachUser({
+      const { email, name } = await attachUser({
         entityId: input.entityId,
         entityType: input.type,
         userId: input.userId,
       });
-      return userService.updateProfile(input.userId, name, email, avatar);
+      return userService.updateProfile(input.userId, name, email);
     }),
   updateMyPassword: protectedProcedure
     .input(

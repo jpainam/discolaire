@@ -158,7 +158,7 @@ export function CreateGradeSheet() {
                       <TableCell>{index + 1}.</TableCell>
                       <TableCell>
                         <AvatarState
-                          avatar={st.avatar}
+                          avatar={st.user?.avatar}
                           pos={getFullName(st).length}
                         />
                       </TableCell>

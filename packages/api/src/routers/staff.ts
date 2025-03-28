@@ -139,23 +139,22 @@ export const staffRouter = {
   create: protectedProcedure
     .input(createUpdateSchema)
     .mutation(async ({ ctx, input }) => {
-      const user = await userService.createAutoUser({
-        name: `${input.firstName} ${input.lastName}`,
-        profile: "staff",
-        schoolId: ctx.schoolId,
-      });
       const staff = await ctx.db.staff.create({
         data: {
           ...input,
-          userId: user.id,
+          //userId: user.id,
           dateOfBirth: input.dateOfBirth
             ? fromZonedTime(input.dateOfBirth, "UTC")
             : undefined,
           schoolId: ctx.schoolId,
         },
       });
-
-      void userService.sendWelcomeEmail({ email: input.email });
+      await userService.createAutoUser({
+        name: `${input.firstName} ${input.lastName}`,
+        profile: "staff",
+        schoolId: ctx.schoolId,
+        entityId: staff.id,
+      });
       return staff;
     }),
 

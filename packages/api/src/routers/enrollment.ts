@@ -122,6 +122,9 @@ export const enrollmentRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const qq = `%${input.q}%`;
       return ctx.db.student.findMany({
+        include: {
+          user: true,
+        },
         take: input.limit,
         orderBy: {
           lastName: "asc",

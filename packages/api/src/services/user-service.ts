@@ -13,10 +13,12 @@ export const userService = {
     schoolId,
     profile,
     name,
+    entityId,
   }: {
     schoolId: string;
     profile: string;
     name: string;
+    entityId: string;
   }) => {
     // create user
     const userData = {
@@ -27,9 +29,39 @@ export const userService = {
       isActive: false,
       name: name,
     };
-    return db.user.create({
+    const user = await db.user.create({
       data: userData,
     });
+    if (profile === "student") {
+      await db.student.update({
+        where: {
+          id: entityId,
+        },
+        data: {
+          userId: user.id,
+        },
+      });
+    } else if (profile === "staff") {
+      await db.staff.update({
+        where: {
+          id: entityId,
+        },
+        data: {
+          userId: user.id,
+        },
+      });
+    } else if (profile === "contact") {
+      await db.contact.update({
+        where: {
+          id: entityId,
+        },
+        data: {
+          userId: user.id,
+        },
+      });
+    }
+    // send email
+    return user;
   },
   sendWelcomeEmail: async ({
     userId,
@@ -55,18 +87,12 @@ export const userService = {
     );
   },
 
-  updateProfile: async (
-    userId: string,
-    name: string,
-    email: string | null,
-    avatar: string | null,
-  ) => {
+  updateProfile: async (userId: string, name: string, email: string | null) => {
     return db.user.update({
       where: { id: userId },
       data: {
         name,
         email,
-        avatar,
       },
     });
   },
@@ -200,7 +226,6 @@ export async function attachUser({
     return {
       email: d.email,
       name: `${d.lastName} ${d.firstName}`,
-      avatar: d.avatar,
     };
   }
 
@@ -220,7 +245,6 @@ export async function attachUser({
     return {
       email: dd.email,
       name: `${dd.lastName} ${dd.firstName}`,
-      avatar: dd.avatar,
     };
   }
 
@@ -239,6 +263,5 @@ export async function attachUser({
   return {
     email: ddd.email,
     name: `${ddd.lastName} ${ddd.firstName}`,
-    avatar: ddd.avatar,
   };
 }

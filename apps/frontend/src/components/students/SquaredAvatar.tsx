@@ -10,8 +10,8 @@ import { AvatarState } from "../AvatarState";
 import { SimpleTooltip } from "../simple-tooltip";
 import { ChangeAvatar } from "./ChangeAvatar";
 
-type Student = RouterOutputs["student"]["get"];
-export function SquaredAvatar({ student }: { student?: Student }) {
+type Student = NonNullable<RouterOutputs["student"]["get"]>;
+export function SquaredAvatar({ student }: { student: Student }) {
   const { t } = useLocale();
   const { openModal } = useModal();
 
@@ -20,13 +20,13 @@ export function SquaredAvatar({ student }: { student?: Student }) {
       <AvatarState
         className="my-0 h-full w-[100px] rounded-md"
         pos={getFullName(student).length}
-        avatar={student?.avatar}
+        avatar={student.user?.avatar}
       />
       <div className="absolute right-1 top-1 opacity-0 transition-opacity group-hover:opacity-100">
         <SimpleTooltip content={t("change_avatar")}>
           <Button
             onClick={() => {
-              if (!student?.id) return;
+              if (!student.id) return;
               openModal({
                 title: t("upload_files"),
                 className: "w-[500px]",

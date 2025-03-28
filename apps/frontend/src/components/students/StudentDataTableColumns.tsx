@@ -75,9 +75,10 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
         <DataTableColumnHeader column={column} title={t("")} />
       ),
       cell: ({ row }) => {
+        const student = row.original;
         return (
           <AvatarState
-            avatar={row.original.avatar}
+            avatar={student.user?.avatar}
             pos={getFullName(row.original).length}
           />
         );

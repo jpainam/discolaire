@@ -94,7 +94,10 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
                   }}
                 >
                   <Avatar className="h-6 w-6">
-                    <AvatarImage src={stud.avatar ?? undefined} alt="Image" />
+                    <AvatarImage
+                      src={stud.user?.avatar ?? undefined}
+                      alt="Image"
+                    />
                     <AvatarFallback>
                       <Image
                         width={50}
@@ -133,7 +136,10 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
                   key={`${studId}-selected`}
                   className="inline-block border-2 border-background"
                 >
-                  <AvatarImage src={stud?.avatar ?? undefined} alt="Image" />
+                  <AvatarImage
+                    src={stud?.user?.avatar ?? undefined}
+                    alt="Image"
+                  />
                   <AvatarFallback>
                     <Image
                       width={50}

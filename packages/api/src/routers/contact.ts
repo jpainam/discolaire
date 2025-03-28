@@ -276,16 +276,10 @@ export const contactRouter = createTRPCRouter({
   create: protectedProcedure
     .input(createUpdateSchema)
     .mutation(async ({ ctx, input }) => {
-      const user = await userService.createAutoUser({
-        name: `${input.firstName} ${input.lastName}`,
-        profile: "contact",
-        schoolId: ctx.schoolId,
-      });
       const contact = await ctx.db.contact.create({
         data: {
           firstName: input.firstName,
           lastName: input.lastName,
-          userId: user.id,
           email: input.email,
           title: input.title,
           gender: input.gender,
@@ -299,8 +293,13 @@ export const contactRouter = createTRPCRouter({
           schoolId: ctx.schoolId,
         },
       });
+      await userService.createAutoUser({
+        name: `${input.firstName} ${input.lastName}`,
+        profile: "contact",
+        schoolId: ctx.schoolId,
+        entityId: contact.id,
+      });
 
-      void userService.sendWelcomeEmail({ email: input.email });
       return contact;
     }),
   update: protectedProcedure
@@ -341,6 +340,9 @@ export const contactRouter = createTRPCRouter({
         take: input.limit,
         orderBy: {
           lastName: "asc",
+        },
+        include: {
+          user: true,
         },
         where: {
           schoolId: ctx.schoolId,

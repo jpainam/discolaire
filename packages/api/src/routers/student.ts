@@ -79,6 +79,7 @@ export const studentRouter = createTRPCRouter({
           formerSchool: true,
           religion: true,
           country: true,
+          user: true,
           enrollments: {
             include: {
               classroom: true,
@@ -141,6 +142,7 @@ export const studentRouter = createTRPCRouter({
       include: {
         formerSchool: true,
         religion: true,
+        user: true,
         country: true,
         enrollments: {
           include: {
@@ -230,17 +232,13 @@ export const studentRouter = createTRPCRouter({
         //   message: "Registration number already exists",
         // });
       }
-      const user = await userService.createAutoUser({
-        name: `${input.firstName} ${input.lastName}`,
-        profile: "student",
-        schoolId: ctx.schoolId,
-      });
+
       const student = await ctx.db.student.create({
         data: {
           registrationNumber: registrationNumber,
           firstName: input.firstName,
           lastName: input.lastName,
-          userId: user.id,
+          //userId: user.id,
           dateOfBirth: fromZonedTime(input.dateOfBirth, "UTC"),
           placeOfBirth: input.placeOfBirth,
           gender: input.gender,
@@ -268,6 +266,12 @@ export const studentRouter = createTRPCRouter({
           schoolId: ctx.schoolId,
         },
       });
+      await userService.createAutoUser({
+        name: `${input.firstName} ${input.lastName}`,
+        profile: "student",
+        entityId: student.id,
+        schoolId: ctx.schoolId,
+      });
       void studentService.addClubs(student.id, input.clubs ?? []);
       void studentService.addSports(student.id, input.sports ?? []);
 
@@ -286,8 +290,6 @@ export const studentRouter = createTRPCRouter({
           },
         });
       }
-
-      void userService.sendWelcomeEmail({ email: input.email });
       return student;
     }),
   update: protectedProcedure
@@ -511,16 +513,24 @@ export const studentRouter = createTRPCRouter({
   updateAvatar: protectedProcedure
     .input(z.object({ id: z.string(), avatar: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const student = await ctx.db.student.update({
-        data: {
-          avatar: input.avatar,
-        },
+      const student = await ctx.db.student.findFirstOrThrow({
         where: {
           id: input.id,
+          schoolId: ctx.schoolId,
         },
       });
+      let userId = student.userId;
+      if (!userId) {
+        const user = await userService.createAutoUser({
+          name: `${student.firstName} ${student.lastName}`,
+          profile: "student",
+          entityId: student.id,
+          schoolId: ctx.schoolId,
+        });
+        userId = user.id;
+      }
       await userService.updateAvatar({
-        userId: student.userId,
+        userId: userId,
         avatar: input.avatar,
       });
 
