@@ -452,7 +452,6 @@ model Staff {
     prefix                    String?
     firstName                 String?
     lastName                  String?
-    avatar                    String?
     isActive                  Boolean     @default(true)
     jobTitle                  String?
     employmentType            String?

@@ -21,7 +21,7 @@ export async function StaffProfile({ staffId }: { staffId: string }) {
       <CardHeader className="flex flex-row items-start gap-4 py-4 border-b bg-muted/50">
         <AvatarState
           className="h-[50px] w-[50px] xl:h-[100px] xl:w-[100px]"
-          avatar={staff.avatar}
+          avatar={staff.user?.avatar}
           pos={getFullName(staff).length}
         />
         <StaffProfileHeader staff={staff} />

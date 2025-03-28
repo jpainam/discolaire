@@ -123,7 +123,7 @@ export function CanReceiveTransactionSummary({
               return (
                 <TableRow key={index}>
                   <TableCell>
-                    <AvatarState avatar={staff.avatar} />
+                    <AvatarState avatar={staff.user?.avatar} />
                   </TableCell>
                   <TableCell>
                     {staff.prefix}

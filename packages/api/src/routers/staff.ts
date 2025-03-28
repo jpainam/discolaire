@@ -38,6 +38,7 @@ export const staffRouter = {
       include: {
         country: true,
         degree: true,
+        user: true,
       },
       orderBy: {
         lastName: "asc",
