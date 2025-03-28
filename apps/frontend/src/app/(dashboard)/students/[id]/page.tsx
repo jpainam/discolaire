@@ -6,7 +6,7 @@ import { checkPermission } from "@repo/api/permission";
 import { auth } from "@repo/auth";
 import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";
 import StudentDetails from "~/components/students/profile/StudentDetails";
-import { api } from "~/trpc/server";
+import { api, caller } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -20,7 +20,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   if (session?.user.profile === "staff") {
     const canReadStudent = await checkPermission(
       "student",
-      PermissionAction.READ,
+      PermissionAction.READ
     );
     if (!canReadStudent) {
       return <NoPermission className="my-8" />;
@@ -28,11 +28,18 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     canReadContacts = await checkPermission("student", PermissionAction.READ);
   }
 
+  const studentContacts = await caller.student.contacts(params.id);
+
   return (
     <div className="grid py-2 text-sm">
       <StudentDetails />
       <Separator className="my-2 w-full" />
-      {canReadContacts && <StudentContactTable studentId={params.id} />}
+      {canReadContacts && (
+        <StudentContactTable
+          studentContacts={studentContacts}
+          studentId={params.id}
+        />
+      )}
     </div>
   );
 }

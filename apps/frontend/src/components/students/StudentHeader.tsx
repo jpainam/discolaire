@@ -83,7 +83,7 @@ export function StudentHeader({
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
 
@@ -136,7 +136,7 @@ export function StudentHeader({
         status,
       });
     },
-    [studentStatusMutation, student.id],
+    [studentStatusMutation, student.id]
   );
 
   const navigateToStudent = (id: string) => {
@@ -155,7 +155,7 @@ export function StudentHeader({
 
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditStudent = useCheckPermission("student", PermissionAction.UPDATE);
   //const [open, setOpen] = React.useState(false);
@@ -212,6 +212,7 @@ export function StudentHeader({
 
         <div className="flex flex-row items-center gap-1">
           <FlatBadge
+            className="hidden md:block"
             variant={
               student.status == StudentStatus.ACTIVE
                 ? "green"
@@ -309,7 +310,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -516,13 +517,25 @@ export function StudentHeader({
           </DropdownMenu>
         </div>
 
-        <div className="grid grid-cols-2 flex-row items-center gap-4 text-sm font-semibold md:flex">
+        <div className="grid grid-cols-3 flex-row items-center gap-4 text-sm font-semibold md:flex">
           {student.registrationNumber && (
             <div className="flex flex-row items-center gap-2 rounded dark:bg-secondary">
               <NotebookTabs className="h-4 w-4 text-foreground" />
               <span> {student.registrationNumber}</span>
             </div>
           )}
+          <FlatBadge
+            className="md:hidden"
+            variant={
+              student.status == StudentStatus.ACTIVE
+                ? "green"
+                : student.status == StudentStatus.INACTIVE
+                  ? "yellow"
+                  : "red"
+            }
+          >
+            {t(`${student.status}`)}
+          </FlatBadge>
           {student.classroom && (
             <div className="flex flex-row items-center gap-2 rounded dark:bg-secondary">
               <SquareEqual className="h-4 w-4 text-foreground" />

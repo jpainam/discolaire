@@ -152,7 +152,7 @@ export function HealthHistory({
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg flex flex-row items-center gap-2">
+            <CardTitle className=" flex flex-row items-center gap-2">
               <Ambulance />
               {t("past_and_present_health_problems")}
               <div className="ml-auto flex flex-row items-center gap-2">
@@ -168,7 +168,7 @@ export function HealthHistory({
               {t("please_check_all_that_apply")}
             </CardDescription>
           </CardHeader>
-          <CardContent className="text-sm grid grid-cols-2 gap-8">
+          <CardContent className="text-sm grid lg:grid-cols-2 gap-8">
             <RadioFormItem
               title={t("attention_deficit_disorder")}
               name="hasAdd"

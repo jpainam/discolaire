@@ -34,14 +34,15 @@ export function NotificationHeader() {
   const router = useRouter();
   console.log(value);
   return (
-    <div className="flex flex-row items-center gap-2 border-b bg-secondary px-2 py-1 text-secondary-foreground">
-      {Icon && <Icon className="h-5 w-5" />}
-      <Label>{t("notifications")}</Label>
+    <div className="md:flex grid md:flex-row items-center gap-2 border-b bg-secondary px-2 py-1 text-secondary-foreground">
+      {Icon && <Icon className="h-4 w-4 hidden md:block" />}
+      <Label className="hidden md:block">{t("notifications")}</Label>
+
       <Input
         onChange={(event) => {
           setValue(event.target.value);
         }}
-        className="h-8 xl:w-1/4"
+        className="h-8 w-full md:w-[300px]"
       />
       <DateRangePicker
         onChange={(dateRange: DateRange | undefined) => {
@@ -50,10 +51,11 @@ export function NotificationHeader() {
           router.push(
             routes.students.notifications(params.id) +
               "?" +
-              createQueryString({ to, from }),
+              createQueryString({ to, from })
           );
         }}
       />
+
       <div className="ml-auto flex items-center gap-1">
         <Button size="sm" variant="outline" className="gap-1">
           <MailOpen className="h-4 w-4" />

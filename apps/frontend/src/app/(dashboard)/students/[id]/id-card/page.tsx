@@ -28,7 +28,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
       <IdCardHeader />
       <Separator />
       <div className="flex flex-col items-center p-4">
-        <div className="flex h-[350px] w-[550px] flex-col rounded-xl border-2 border-[#002D5D] bg-[url('/images/bg-idcard.webp')] bg-cover bg-scroll bg-no-repeat">
+        <div className="flex h-[350px] w-full md:w-[400px] xl:w-[500px] flex-col rounded-xl border-2 border-[#002D5D] bg-[url('/images/bg-idcard.webp')] bg-cover bg-scroll bg-no-repeat">
           <div className="relative">
             {student.avatar && (
               <Avatar className="absolute left-5 top-10 h-[150px] w-[150px] rounded-lg shadow-lg">

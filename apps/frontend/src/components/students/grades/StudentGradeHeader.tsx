@@ -96,85 +96,100 @@ export function StudentGradeHeader({
     );
   }
   return (
-    <div className="flex flex-row items-center gap-2 border-b  px-4 py-2 text-secondary-foreground">
-      <Label>{t("term")}</Label>
-      <TermSelector
-        className="w-[300px]"
-        showAllOption={true}
-        onChange={(val) => {
-          //void setTerm(Number(val));
-          router.push(
-            "?" +
-              createQueryString({
-                term: val,
-              }),
-          );
-        }}
-        defaultValue={term ? `${term}` : undefined}
-      />
-
-      {studentAvg && (
-        <FlatBadge variant={"yellow"}>
-          {t("student_general_avg")} : {studentAvg.toFixed(2)}
-        </FlatBadge>
-      )}
-
-      {classroomAvg && (
-        <FlatBadge variant={"blue"}>
-          {t("classroom_general_avg")} : {classroomAvg.toFixed(2)}
-        </FlatBadge>
-      )}
-      <div className="ml-auto flex flex-row items-center gap-2">
-        <ToggleGroup
-          defaultValue={view}
-          value={view}
-          size={"sm"}
-          className="*:data-[slot=toggle-group-item]:px-3 rounded-sm"
-          onValueChange={(v) => {
-            void setView(v);
+    <div>
+      <div className="flex flex-row items-center gap-2 border-b  px-4 py-2 text-secondary-foreground">
+        <Label className="hidden md:block">{t("term")}</Label>
+        <TermSelector
+          className="w-full md:w-[300px]"
+          showAllOption={true}
+          onChange={(val) => {
+            //void setTerm(Number(val));
+            router.push(
+              "?" +
+                createQueryString({
+                  term: val,
+                })
+            );
           }}
-          variant={"outline"}
-          type="single"
-        >
-          <ToggleGroupItem
-            value="by_chronological_order"
-            aria-label="Toggle by_chronological_order"
+          defaultValue={term ? `${term}` : undefined}
+        />
+
+        {studentAvg && (
+          <FlatBadge className="hidden md:block" variant={"yellow"}>
+            {t("student_general_avg")} : {studentAvg.toFixed(2)}
+          </FlatBadge>
+        )}
+
+        {classroomAvg && (
+          <FlatBadge className="hidden md:block" variant={"blue"}>
+            {t("classroom_general_avg")} : {classroomAvg.toFixed(2)}
+          </FlatBadge>
+        )}
+        <div className="ml-auto flex flex-row items-center gap-2">
+          <ToggleGroup
+            defaultValue={view}
+            value={view}
+            size={"sm"}
+            className="*:data-[slot=toggle-group-item]:px-3 rounded-sm"
+            onValueChange={(v) => {
+              void setView(v);
+            }}
+            variant={"outline"}
+            type="single"
           >
-            <ListIcon />
-          </ToggleGroupItem>
-          <ToggleGroupItem value="by_subject" aria-label="Toggle by_subject">
-            <LayoutGridIcon />
-          </ToggleGroupItem>
-        </ToggleGroup>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button size="icon" className="size-8" variant="outline">
-              <MoreVertical />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onSelect={() => {
-                window.open(
-                  `/api/pdfs/student/grades/?id=${student.id}&format=pdf`,
-                  "_blank",
-                );
-              }}
+            <ToggleGroupItem
+              value="by_chronological_order"
+              aria-label="Toggle by_chronological_order"
             >
-              <PDFIcon /> {t("pdf_export")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onSelect={() => {
-                window.open(
-                  `/api/pdfs/student/grades/?id=${student.id}&format=csv`,
-                  "_blank",
-                );
-              }}
-            >
-              <XMLIcon /> {t("xml_export")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <ListIcon />
+            </ToggleGroupItem>
+            <ToggleGroupItem value="by_subject" aria-label="Toggle by_subject">
+              <LayoutGridIcon />
+            </ToggleGroupItem>
+          </ToggleGroup>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size="icon" className="size-8" variant="outline">
+                <MoreVertical />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onSelect={() => {
+                  window.open(
+                    `/api/pdfs/student/grades/?id=${student.id}&format=pdf`,
+                    "_blank"
+                  );
+                }}
+              >
+                <PDFIcon /> {t("pdf_export")}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={() => {
+                  window.open(
+                    `/api/pdfs/student/grades/?id=${student.id}&format=csv`,
+                    "_blank"
+                  );
+                }}
+              >
+                <XMLIcon /> {t("xml_export")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+      <div className="md:hidden grid grid-cols-2 gap-2 px-4 pb-2">
+        {studentAvg && (
+          <FlatBadge variant={"yellow"}>
+            {t("student_general_avg")} : {studentAvg.toFixed(2)}
+          </FlatBadge>
+        )}
+
+        {classroomAvg && (
+          <FlatBadge variant={"blue"}>
+            {t("classroom_general_avg")} : {classroomAvg.toFixed(2)}
+          </FlatBadge>
+        )}
       </div>
     </div>
   );

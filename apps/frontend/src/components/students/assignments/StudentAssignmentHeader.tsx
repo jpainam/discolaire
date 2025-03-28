@@ -22,7 +22,7 @@ export function StudentAssignmentHeader() {
   const [_, setTerm] = useQueryState("term", parseAsInteger);
   return (
     <div className="flex flex-row items-center gap-2 bg-secondary px-2 py-1">
-      <Label>{t("assignments")}</Label>
+      <Label className="hidden md:block">{t("assignments")}</Label>
       <TermSelector
         onChange={(val) => {
           void setTerm(val ? Number(val) : null);

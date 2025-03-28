@@ -20,7 +20,7 @@ export default function Page() {
       {/* <ImmunizationHeader /> */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">
+          <CardTitle>
             Chers Parents - Votre enfant est-il entièrement immunisé
           </CardTitle>
           <CardDescription>

@@ -6,14 +6,14 @@ export default function Loading() {
       <DataTableSkeleton
         withPagination={false}
         showViewOptions={false}
-        columnCount={4}
-        rowCount={8}
+        columnCount={2}
+        rowCount={4}
       />
       <DataTableSkeleton
         withPagination={false}
         showViewOptions={false}
-        columnCount={4}
-        rowCount={8}
+        columnCount={2}
+        rowCount={4}
       />
     </div>
   );

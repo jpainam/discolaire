@@ -18,6 +18,7 @@ import {
 import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 
+import { decode } from "entities";
 import { routes } from "~/configs/routes";
 import { api } from "~/trpc/server";
 import { getFullName } from "~/utils/full-name";
@@ -49,13 +50,9 @@ export async function StudentSiblingTable({
           <Table>
             <TableHeader>
               <TableRow className="bg-muted font-semibold">
-                <TableHead className="font-semibold">{t("fullName")}</TableHead>
-                <TableHead className="font-semibold">
-                  {t("relationship")}
-                </TableHead>
-                <TableHead className="font-semibold">
-                  {t("classroom")}
-                </TableHead>
+                <TableHead>{t("fullName")}</TableHead>
+                <TableHead>{t("relationship")}</TableHead>
+                <TableHead>{t("classroom")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -70,7 +67,7 @@ export async function StudentSiblingTable({
                         className="justify-center hover:text-blue-600 hover:underline"
                         href={`${routes.students.contacts(linkedStd.studentId)}/${contact.id}`}
                       >
-                        {student.lastName}
+                        {decode(student.lastName ?? student.firstName ?? "")}
                       </Link>
                     </TableCell>
                     <TableCell>{linkedStd.relationship?.name}</TableCell>

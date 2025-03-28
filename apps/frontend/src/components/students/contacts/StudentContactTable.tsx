@@ -17,7 +17,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
-import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
   TableBody,
@@ -26,12 +25,12 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { EmptyState } from "~/components/EmptyState";
 import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import type { RouterOutputs } from "@repo/api";
 import { AvatarState } from "~/components/AvatarState";
 import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
@@ -42,8 +41,13 @@ import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 
-export function StudentContactTable({ studentId }: { studentId: string }) {
-  const studentContactsQuery = api.student.contacts.useQuery(studentId);
+export function StudentContactTable({
+  studentContacts,
+  studentId,
+}: {
+  studentId: string;
+  studentContacts: RouterOutputs["student"]["contacts"];
+}) {
   const { t } = useLocale();
   const confirm = useConfirm();
   const router = useRouter();
@@ -75,10 +79,9 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
   const utils = api.useUtils();
   const canDeleteStudentContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
 
-  const studentContacts = studentContactsQuery.data ?? [];
   return (
     <div className="px-4">
       <div className="bg-background overflow-hidden rounded-md border">
@@ -87,14 +90,14 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
             <TableRow className="bg-muted/50">
               <TableHead>{t("fullName")}</TableHead>
               <TableHead>{t("relationship")}</TableHead>
-              <TableHead>{t("email")}</TableHead>
+              {/* <TableHead>{t("email")}</TableHead> */}
               <TableHead>{t("phone")}</TableHead>
               <TableHead>{t("status")}</TableHead>
               <TableHead></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {studentContactsQuery.isPending && (
+            {/* {studentContactsQuery.isPending && (
               <TableRow>
                 <TableCell colSpan={6}>
                   <div className="grid grid-cols-6 gap-2">
@@ -104,15 +107,15 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
                   </div>
                 </TableCell>
               </TableRow>
-            )}
-            {!studentContactsQuery.isPending &&
+            )} */}
+            {/* {!studentContactsQuery.isPending &&
               studentContacts.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={6}>
                     <EmptyState />
                   </TableCell>
                 </TableRow>
-              )}
+              )} */}
             {studentContacts.map((c, index) => {
               const contact = c.contact;
               const relationship = c.relationship;
@@ -123,14 +126,14 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
                     <Link
                       href={`${routes.students.contacts(c.studentId)}/${contact.id}`}
                       className={cn(
-                        "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline",
+                        "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline"
                       )}
                     >
                       {getFullName(contact)}
                     </Link>
                   </TableCell>
                   <TableCell>{relationship?.name}</TableCell>
-                  <TableCell>{contact.email ?? "N/A"}</TableCell>
+                  {/* <TableCell>{contact.email ?? "N/A"}</TableCell> */}
                   <TableCell>{contact.phoneNumber1} </TableCell>
                   <TableCell>
                     {contact.userId ? (
@@ -176,7 +179,7 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
                           <DropdownMenuItem
                             onSelect={() => {
                               router.push(
-                                `${routes.students.contacts(c.studentId)}/${c.contactId}`,
+                                `${routes.students.contacts(c.studentId)}/${c.contactId}`
                               );
                             }}
                           >
