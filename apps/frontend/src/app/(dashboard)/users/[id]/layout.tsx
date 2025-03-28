@@ -4,8 +4,8 @@ import { getServerTranslations } from "~/i18n/server";
 
 import { notFound } from "next/navigation";
 import { NoPermission } from "~/components/no-permission";
+import { UserAvatar } from "~/components/users/UserAvatar";
 import { api } from "~/trpc/server";
-import { UserAvatar } from "../../../../components/users/UserAvatar";
 
 export default async function Layout(props: {
   params: Promise<{ id: string }>;
