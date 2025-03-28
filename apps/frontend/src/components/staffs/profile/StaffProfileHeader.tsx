@@ -98,13 +98,13 @@ export function StaffProfileHeader({
               <DropdownMenuItem
                 onSelect={() => {
                   openModal({
-                    title: t("attach_user"),
+                    title: t("create_a_user"),
                     view: <CreateEditUser entityId={params.id} type="staff" />,
                   });
                 }}
               >
                 <UserPlus2 />
-                {t("attach_user")}
+                {t("create_a_user")}
               </DropdownMenuItem>
             )}
             {staff.userId && (

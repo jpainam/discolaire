@@ -22,8 +22,9 @@ export function ChangeAvatar({ studentId }: { studentId: string }) {
     //data: uploadedFiles,
   } = useUpload();
   const utils = api.useUtils();
+
   //const router = useRouter();
-  const updateStudentAvatarMutation = api.student.updateAvatar.useMutation({
+  const updateStudentAvatarMutation = api.user.updateAvatar.useMutation({
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
       closeModal();
@@ -77,7 +78,7 @@ export function ChangeAvatar({ studentId }: { studentId: string }) {
               error: (err) => {
                 return getErrorMessage(err);
               },
-            },
+            }
           );
         }}
         //progresses={progresses}

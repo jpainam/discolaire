@@ -83,7 +83,7 @@ export function StudentHeader({
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
 
@@ -136,7 +136,7 @@ export function StudentHeader({
         status,
       });
     },
-    [studentStatusMutation, student.id],
+    [studentStatusMutation, student.id]
   );
 
   const navigateToStudent = (id: string) => {
@@ -155,7 +155,7 @@ export function StudentHeader({
 
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditStudent = useCheckPermission("student", PermissionAction.UPDATE);
   //const [open, setOpen] = React.useState(false);
@@ -310,7 +310,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -367,7 +367,7 @@ export function StudentHeader({
                 <DropdownMenuItem
                   onSelect={() => {
                     openModal({
-                      title: t("attach_user"),
+                      title: t("create_a_user"),
                       view: (
                         <CreateEditUser entityId={params.id} type="student" />
                       ),
@@ -375,7 +375,7 @@ export function StudentHeader({
                   }}
                 >
                   <UserPlus2 />
-                  {t("attach_user")}
+                  {t("create_a_user")}
                 </DropdownMenuItem>
               )}
               {student.userId && (

@@ -64,7 +64,7 @@ export function ContactDetailsHeader({
   });
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();
@@ -82,11 +82,11 @@ export function ContactDetailsHeader({
 
   const canUpdateContact = useCheckPermission(
     "contact",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (
@@ -142,7 +142,7 @@ export function ContactDetailsHeader({
                 <DropdownMenuItem
                   onSelect={() => {
                     openModal({
-                      title: t("attach_user"),
+                      title: t("create_a_user"),
                       view: (
                         <CreateEditUser entityId={contact.id} type="contact" />
                       ),
@@ -150,7 +150,7 @@ export function ContactDetailsHeader({
                   }}
                 >
                   <UserPlus2 />
-                  {t("attach_user")}
+                  {t("create_a_user")}
                 </DropdownMenuItem>
               )}
               {contact.userId && (

@@ -26,7 +26,6 @@ export function SquaredAvatar({ student }: { student: Student }) {
         <SimpleTooltip content={t("change_avatar")}>
           <Button
             onClick={() => {
-              if (!student.id) return;
               openModal({
                 title: t("upload_files"),
                 className: "w-[500px]",

@@ -137,6 +137,7 @@ export const userRouter = createTRPCRouter({
       z.object({
         username: z.string().min(1),
         password: z.string().min(1),
+        entityId: z.string().min(1),
         emailVerified: z.coerce.date().optional(),
         isActive: z.boolean().default(true),
         profile: z.enum(["staff", "contact", "student"]),
@@ -150,7 +151,7 @@ export const userRouter = createTRPCRouter({
           code: "FORBIDDEN",
         });
       }
-      return ctx.db.user.create({
+      const user = await ctx.db.user.create({
         data: {
           email: `${input.username}@discolaire.com`,
           username: input.username,
@@ -160,6 +161,18 @@ export const userRouter = createTRPCRouter({
           password: await hashPassword(input.password),
           emailVerified: input.emailVerified,
           isActive: input.isActive,
+        },
+      });
+      const { email, name } = await attachUser({
+        entityId: input.entityId,
+        entityType: input.profile,
+        userId: user.id,
+      });
+      return ctx.db.user.update({
+        where: { id: user.id },
+        data: {
+          name,
+          email,
         },
       });
     }),
@@ -204,6 +217,16 @@ export const userRouter = createTRPCRouter({
         },
       });
     }),
+  updateAvatar: protectedProcedure
+    .input(z.object({ id: z.string(), avatar: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.user.update({
+        where: { id: input.id, schoolId: ctx.schoolId },
+        data: {
+          avatar: input.avatar,
+        },
+      });
+    }),
   getPermissions: protectedProcedure
     .input(z.string().min(1))
     .query(({ input }) => {
@@ -220,22 +243,6 @@ export const userRouter = createTRPCRouter({
       return [];
     }),
 
-  attachUser: protectedProcedure
-    .input(
-      z.object({
-        userId: z.string(),
-        entityId: z.string(),
-        type: z.enum(["staff", "contact", "student"]),
-      }),
-    )
-    .mutation(async ({ input }) => {
-      const { email, name } = await attachUser({
-        entityId: input.entityId,
-        entityType: input.type,
-        userId: input.userId,
-      });
-      return userService.updateProfile(input.userId, name, email);
-    }),
   updateMyPassword: protectedProcedure
     .input(
       z.object({

@@ -46,26 +46,11 @@ export function CreateEditUser({
   const utils = api.useUtils();
   const router = useRouter();
 
-  const attachUserMutation = api.user.attachUser.useMutation({
-    onSuccess: () => {
-      toast.success(t("attached_successfully"), { id: 0 });
-    },
-    onError: (err) => {
-      toast.error(err.message, { id: 0 });
-    },
-  });
-
   const createUserMutation = api.user.create.useMutation({
-    onSuccess: (user) => {
-      toast.loading(t("attaching_user"), { id: 0 });
-      attachUserMutation.mutate({
-        userId: user.id,
-        entityId: entityId,
-        type: type,
-      });
-      router.refresh();
+    onSuccess: () => {
       toast.success(t("created_successfully"), { id: 0 });
       closeModal();
+      router.refresh();
     },
     onError: (err) => {
       toast.error(err.message, { id: 0 });
@@ -101,6 +86,7 @@ export function CreateEditUser({
       createUserMutation.mutate({
         username: data.username,
         password: data.password,
+        entityId: entityId,
         profile: type,
       });
     }

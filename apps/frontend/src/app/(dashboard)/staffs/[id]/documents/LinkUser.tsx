@@ -20,13 +20,13 @@ export function LinkUser({
       size={"sm"}
       onClick={() => {
         openModal({
-          title: t("attach_user"),
+          title: t("create_a_user"),
           view: <CreateEditUser entityId={entityId} type={type} />,
         });
       }}
     >
       <UserPlus2 />
-      {t("attach_user")}
+      {t("create_a_user")}
     </Button>
   );
 }

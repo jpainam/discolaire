@@ -21,7 +21,7 @@ export function SubjectJournalAttachment() {
   } = useUpload();
   //const utils = api.useUtils();
   //const router = useRouter();
-  //   const updateStudentAvatarMutation = api.student.updateAvatar.useMutation({
+
   //     onSuccess: () => {
   //       toast.success(t("updated_successfully"), { id: 0 });
   //       closeModal();
@@ -75,7 +75,7 @@ export function SubjectJournalAttachment() {
               error: (err) => {
                 return getErrorMessage(err);
               },
-            },
+            }
           );
         }}
         //progresses={progresses}

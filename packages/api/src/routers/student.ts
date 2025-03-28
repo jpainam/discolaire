@@ -513,32 +513,7 @@ export const studentRouter = createTRPCRouter({
         },
       });
     }),
-  updateAvatar: protectedProcedure
-    .input(z.object({ id: z.string(), avatar: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      const student = await ctx.db.student.findFirstOrThrow({
-        where: {
-          id: input.id,
-          schoolId: ctx.schoolId,
-        },
-      });
-      let userId = student.userId;
-      if (!userId) {
-        const user = await userService.createAutoUser({
-          name: `${student.firstName} ${student.lastName}`,
-          profile: "student",
-          entityId: student.id,
-          schoolId: ctx.schoolId,
-        });
-        userId = user.id;
-      }
-      await userService.updateAvatar({
-        userId: userId,
-        avatar: input.avatar,
-      });
 
-      return student;
-    }),
   transactions: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.transaction.findMany({
       where: {
