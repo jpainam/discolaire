@@ -33,7 +33,7 @@ const attendanceSchema = z.object({
       id: z.string().min(1),
       absence: z.coerce.number().nullish(),
       justify: z.coerce.number().nullable(),
-    }),
+    })
   ),
 });
 
@@ -67,7 +67,7 @@ export function CreateEditConsigne({
     onSuccess: () => {
       toast.success(t("added_successfully"), { id: 0 });
       router.push(
-        `${routes.classrooms.attendances.index(classroomId)}?type=absence&term=${termId}`,
+        `${routes.classrooms.attendances.index(classroomId)}?type=absence&term=${termId}`
       );
     },
     onError: (error) => {
@@ -90,7 +90,7 @@ export function CreateEditConsigne({
         toast.error(
           t("absence_cannot_be_less_than_justify_for", {
             name: getFullName(std),
-          }),
+          })
         );
         hasError = true;
         break;
@@ -179,7 +179,7 @@ export function CreateEditConsigne({
                       />
                     </TableCell>
                     <TableCell className="sm:table-cell">
-                      <AvatarState pos={index} avatar={student.avatar} />
+                      <AvatarState pos={index} avatar={student.user?.avatar} />
                     </TableCell>
                     <TableCell>
                       <Link

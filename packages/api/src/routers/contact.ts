@@ -172,7 +172,11 @@ export const contactRouter = createTRPCRouter({
           contactId: input,
         },
         include: {
-          contact: true,
+          contact: {
+            include: {
+              user: true,
+            },
+          },
           relationship: true,
         },
       });
@@ -185,6 +189,9 @@ export const contactRouter = createTRPCRouter({
       // );
 
       const students = await ctx.db.student.findMany({
+        include: {
+          user: true,
+        },
         where: {
           id: {
             in: studentIds,

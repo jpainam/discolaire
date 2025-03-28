@@ -40,7 +40,7 @@ const attendanceSchema = z.object({
       id: z.string().min(1),
       late: z.string().optional(),
       justify: z.string().optional(),
-    }),
+    })
   ),
 });
 
@@ -74,7 +74,7 @@ export function CreateEditLateness({
     onSuccess: () => {
       toast.success(t("added_successfully"), { id: 0 });
       router.push(
-        `/classrooms/${classroomId}/attendances?type=lateness&term=${termId}`,
+        `/classrooms/${classroomId}/attendances?type=lateness&term=${termId}`
       );
     },
     onError: (error) => {
@@ -131,7 +131,7 @@ export function CreateEditLateness({
                 <Button
                   onClick={() => {
                     router.push(
-                      routes.classrooms.attendances.index(classroomId),
+                      routes.classrooms.attendances.index(classroomId)
                     );
                   }}
                   size={"sm"}
@@ -191,7 +191,10 @@ export function CreateEditLateness({
                           />
                         </TableCell>
                         <TableCell className="sm:table-cell">
-                          <AvatarState pos={index} avatar={student.avatar} />
+                          <AvatarState
+                            pos={index}
+                            avatar={student.user?.avatar}
+                          />
                         </TableCell>
                         <TableCell className="py-0">
                           <Link

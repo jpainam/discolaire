@@ -79,7 +79,7 @@ export function fetchEnrollmentColumns({
           <div className="flex items-center gap-3">
             <AvatarState
               pos={getFullName(student).length}
-              avatar={student.avatar}
+              avatar={student.user?.avatar}
             />
             <Link
               href={`/students/${student.id}`}
@@ -191,7 +191,7 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
   const router = useRouter();
   const canDeleteEnrollment = useCheckPermission(
     "enrollment",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const utils = api.useUtils();
   const unenrollStudentsMutation =

@@ -597,7 +597,11 @@ export const studentRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const contacts = await ctx.db.studentContact.findMany({
         include: {
-          contact: true,
+          contact: {
+            include: {
+              user: true,
+            },
+          },
           relationship: true,
         },
         where: {
@@ -620,7 +624,11 @@ export const studentRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const contacts = await ctx.db.studentContact.findMany({
         include: {
-          contact: true,
+          contact: {
+            include: {
+              user: true,
+            },
+          },
           relationship: true,
         },
         where: {

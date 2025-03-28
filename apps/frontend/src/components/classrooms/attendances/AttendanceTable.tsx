@@ -82,7 +82,7 @@ export function AttendanceTable() {
                     />
                   </TableCell>
                   <TableCell className="py-0 sm:table-cell">
-                    <AvatarState pos={index} avatar={student.avatar} />
+                    <AvatarState pos={index} avatar={student.user?.avatar} />
                   </TableCell>
                   <TableCell className="py-0 font-medium">
                     <Link

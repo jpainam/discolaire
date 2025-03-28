@@ -35,7 +35,7 @@ const attendanceSchema = z.object({
       consigne: z.string().optional(),
       exclusion: z.string().optional(),
       chatter: z.string().optional(),
-    }),
+    })
   ),
 });
 type ClassroomStudent = RouterOutputs["classroom"]["students"][number];
@@ -70,7 +70,7 @@ export function CreateEditPeridicAttendance({
     onSuccess: () => {
       toast.success(t("added_successfully"), { id: 0 });
       router.push(
-        `${routes.classrooms.attendances.index(params.id)}/periodic?type=periodic`,
+        `${routes.classrooms.attendances.index(params.id)}/periodic?type=periodic`
       );
     },
     onError: (error) => {
@@ -124,7 +124,7 @@ export function CreateEditPeridicAttendance({
                       />
                     </TableCell>
                     <TableCell className="py-0 sm:table-cell">
-                      <AvatarState pos={index} avatar={student.avatar} />
+                      <AvatarState pos={index} avatar={student.user?.avatar} />
                     </TableCell>
                     <TableCell className="py-0">
                       <Link

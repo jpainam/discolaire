@@ -73,7 +73,7 @@ export function fetchGradeColumns({
         const student = row.original.student;
         return (
           <AvatarState
-            avatar={student.avatar}
+            avatar={student.user?.avatar}
             pos={student.firstName?.length}
           />
         );
@@ -203,7 +203,7 @@ function ActionCells({
   const markGradeAbsent = api.grade.update.useMutation();
   const canUpdateGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
 
   return (
@@ -272,7 +272,7 @@ function ActionCells({
                       error: (error) => {
                         return getErrorMessage(error);
                       },
-                    },
+                    }
                   );
                 }
               }}

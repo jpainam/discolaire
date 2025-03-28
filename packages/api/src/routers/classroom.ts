@@ -152,7 +152,11 @@ export const classroomRouter = createTRPCRouter({
               status: TransactionStatus.VALIDATED,
             },
           },
-          student: true,
+          student: {
+            include: {
+              user: true,
+            },
+          },
         },
       });
 

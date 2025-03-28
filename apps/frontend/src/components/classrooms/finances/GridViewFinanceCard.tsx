@@ -33,7 +33,7 @@ export function GridViewFinanceCard({
   studentBalance: StudentAccountWithBalance;
 }) {
   const [selectedStudents, setSelectedStudents] = useAtom(
-    selectedStudentIdsAtom,
+    selectedStudentIdsAtom
   );
 
   const student = studentBalance.student;
@@ -43,7 +43,7 @@ export function GridViewFinanceCard({
     setSelectedStudents((students) =>
       students.includes(student.id)
         ? students.filter((id) => id !== student.id)
-        : [...students, student.id],
+        : [...students, student.id]
     );
   }, [setSelectedStudents, student.id]);
 
@@ -61,14 +61,14 @@ export function GridViewFinanceCard({
     <Card
       className={cn(
         "rounded-sm p-2 shadow-none hover:bg-muted hover:shadow-md",
-        selectedStudents.includes(student.id) && "border-green-600 bg-muted",
+        selectedStudents.includes(student.id) && "border-green-600 bg-muted"
       )}
     >
       <CardContent className="flex flex-row items-start p-0">
         <AvatarState
           className="h-[25px] w-[25px]"
           pos={getFullName(student).length}
-          avatar={student.avatar}
+          avatar={student.user?.avatar}
         />
 
         <div className="flex w-full flex-col justify-between gap-2 px-2">

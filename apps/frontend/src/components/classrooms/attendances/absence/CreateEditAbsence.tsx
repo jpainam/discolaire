@@ -41,7 +41,7 @@ const attendanceSchema = z.object({
       id: z.string().min(1),
       absence: z.coerce.number().nullish(),
       justify: z.coerce.number().nullable(),
-    }),
+    })
   ),
   notifyParents: z.boolean().default(true),
   notifyStudents: z.boolean().default(true),
@@ -77,7 +77,7 @@ export function CreateEditAbsence({
     onSuccess: () => {
       toast.success(t("added_successfully"), { id: 0 });
       router.push(
-        `${routes.classrooms.attendances.index(classroomId)}?type=absence&term=${termId}`,
+        `${routes.classrooms.attendances.index(classroomId)}?type=absence&term=${termId}`
       );
     },
     onError: (error) => {
@@ -100,7 +100,7 @@ export function CreateEditAbsence({
         toast.error(
           t("absence_cannot_be_less_than_justify_for", {
             name: getFullName(std),
-          }),
+          })
         );
         hasError = true;
         break;
@@ -141,7 +141,7 @@ export function CreateEditAbsence({
             //     });
             // }
           },
-        },
+        }
       );
     }
   };
@@ -242,7 +242,7 @@ export function CreateEditAbsence({
                       />
                     </TableCell>
                     <TableCell className="sm:table-cell">
-                      <AvatarState pos={index} avatar={student.avatar} />
+                      <AvatarState pos={index} avatar={student.user?.avatar} />
                     </TableCell>
                     <TableCell>
                       <Link
