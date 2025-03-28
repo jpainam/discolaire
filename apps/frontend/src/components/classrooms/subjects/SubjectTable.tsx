@@ -44,11 +44,11 @@ export function SubjectTable({ classroomId }: { classroomId: string }) {
   const confirm = useConfirm();
   const canDeleteClassroomSubject = useCheckPermission(
     "subject",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const canEditClassroomSubject = useCheckPermission(
     "subject",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   const router = useRouter();
   const utils = api.useUtils();

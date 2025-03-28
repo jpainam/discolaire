@@ -52,7 +52,7 @@ export function SubjectHeader({
   const { openSheet } = useSheet();
   const canAddClassroomSubject = useCheckPermission(
     "subject",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
 
   const badgeVariants = [
@@ -122,7 +122,7 @@ export function SubjectHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/subjects?format=csv`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >
@@ -133,7 +133,7 @@ export function SubjectHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/subjects?format=pdf`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >
