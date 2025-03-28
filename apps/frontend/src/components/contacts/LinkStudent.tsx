@@ -28,7 +28,6 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
-import { getErrorMessage } from "~/lib/handle-error";
 import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
@@ -48,7 +47,19 @@ export function LinkStudent({ contactId }: { contactId: string }) {
   });
 
   const { closeModal } = useModal();
-  const createStudentContactMutation = api.studentContact.create.useMutation();
+  const createStudentContactMutation = api.studentContact.create.useMutation({
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+    onSuccess: () => {
+      toast.success(t("added_successfully"), { id: 0 });
+      closeModal();
+    },
+    onSettled: async () => {
+      await utils.contact.students.invalidate();
+      await utils.student.contacts.invalidate();
+    },
+  });
   const utils = api.useUtils();
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
@@ -97,15 +108,15 @@ export function LinkStudent({ contactId }: { contactId: string }) {
                     if (selectedStudents.includes(stud)) {
                       return setSelectedStudents(
                         selectedStudents.filter(
-                          (selectedStudent) => selectedStudent.id !== stud.id,
-                        ),
+                          (selectedStudent) => selectedStudent.id !== stud.id
+                        )
                       );
                     }
 
                     return setSelectedStudents(
                       [...contactUnLinkedStudent.data].filter((u) =>
-                        [...selectedStudents, stud].includes(u),
-                      ),
+                        [...selectedStudents, stud].includes(u)
+                      )
                     );
                   }}
                 >
@@ -161,32 +172,23 @@ export function LinkStudent({ contactId }: { contactId: string }) {
         )}
         <Button
           variant={"default"}
+          isLoading={createStudentContactMutation.isPending}
           disabled={selectedStudents.length === 0}
           onClick={() => {
             if (!relationship) {
               toast.error(t("please_select_relationship"));
               return;
             }
-            toast.promise(
-              createStudentContactMutation.mutateAsync({
-                studentId: selectedStudents.map((stud) => stud.id as string),
-                contactId: contactId,
-                data: {
-                  relationshipId: Number(relationship),
-                },
-              }),
-              {
-                success: async () => {
-                  await utils.contact.students.invalidate();
-                  await utils.student.contacts.invalidate();
-                  closeModal();
-                  return t("added_successfully");
-                },
-                error: (error) => {
-                  return getErrorMessage(error);
-                },
+            toast.loading(t("loading"), {
+              id: 0,
+            });
+            createStudentContactMutation.mutate({
+              studentId: selectedStudents.map((stud) => stud.id as string),
+              contactId: contactId,
+              data: {
+                relationshipId: Number(relationship),
               },
-            );
+            });
           }}
         >
           {t("link")}

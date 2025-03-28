@@ -25,6 +25,7 @@ import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import type { RouterOutputs } from "@repo/api";
+import { decode } from "entities";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
@@ -45,7 +46,7 @@ export function ContactStudentTable({
   const { t } = useLocale();
   const canUpdateContact = useCheckPermission(
     "contact",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const deleteStudentContactMutation = api.studentContact.delete.useMutation({
     onError: (error) => {
@@ -100,7 +101,7 @@ export function ContactStudentTable({
                       stc.contactId
                     }
                   >
-                    {student.lastName}
+                    {decode(student.lastName ?? "")}
                   </Link>
                 </TableCell>
                 <TableCell>
@@ -111,7 +112,7 @@ export function ContactStudentTable({
                       stc.contactId
                     }
                   >
-                    {student.firstName}
+                    {decode(student.firstName ?? "")}
                   </Link>
                 </TableCell>
                 <TableCell>{student.classroom?.name}</TableCell>
@@ -128,7 +129,7 @@ export function ContactStudentTable({
                         onSelect={() => {
                           if (!student.id) return;
                           router.push(
-                            `${routes.students.contacts(student.id)}/${stc.contactId}`,
+                            `${routes.students.contacts(student.id)}/${stc.contactId}`
                           );
                         }}
                       >
