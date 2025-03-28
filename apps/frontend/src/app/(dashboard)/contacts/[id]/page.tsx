@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader } from "@repo/ui/components/card";
-import { notFound } from "next/navigation";
 
 import { ContactDetails } from "~/components/contacts/ContactDetails";
 import { ContactDetailsHeader } from "~/components/contacts/ContactDetailsHeader";
@@ -12,9 +11,6 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const { id } = params;
 
   const contact = await api.contact.get(id);
-  if (!contact) {
-    notFound();
-  }
 
   const studentContacts = await api.contact.students(id);
 

@@ -59,11 +59,11 @@ export default function StudentContactList({
   });
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (
@@ -73,7 +73,7 @@ export default function StudentContactList({
           className="w-fit"
           onClick={() => {
             const contact = contactQuery.data;
-            if (!contact) return;
+
             openModal({
               className: "p-0 w-[600px]",
               title: <div className="px-4 pt-2">{t("link_students")}</div>,
@@ -120,7 +120,7 @@ export default function StudentContactList({
                       size="sm"
                       onClick={() => {
                         router.push(
-                          routes.students.details(studentcontact.studentId),
+                          routes.students.details(studentcontact.studentId)
                         );
                       }}
                       variant="outline"
@@ -199,7 +199,7 @@ export default function StudentContactList({
                                     error: (error) => {
                                       return getErrorMessage(error);
                                     },
-                                  },
+                                  }
                                 );
                               }
                             }}
@@ -217,7 +217,7 @@ export default function StudentContactList({
                 )}
               </Card>
             );
-          },
+          }
         )}
       </div>
     </div>

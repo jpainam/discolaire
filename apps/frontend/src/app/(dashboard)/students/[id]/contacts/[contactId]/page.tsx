@@ -59,12 +59,12 @@ export default async function Page(props: {
             <AvatarState
               pos={0}
               className="h-16 w-16"
-              avatar={contact?.user?.avatar}
+              avatar={contact.user?.avatar}
             />
             <div className="flex flex-col gap-2">
               <Link
                 className="flex flex-row items-center gap-2 hover:text-blue-600 hover:underline"
-                href={routes.contacts.details(contact?.id ?? "#")}
+                href={routes.contacts.details(contact.id)}
               >
                 <span className="text-md font-semibold">
                   {getFullName(contact)}
@@ -89,14 +89,14 @@ export default async function Page(props: {
               <Label className="flex flex-row items-center gap-1 text-muted-foreground">
                 <Briefcase className="h-4 w-4" /> {t("title")}
               </Label>
-              {contact?.title}
+              {contact.title}
             </div>
             <Separator />
             <div className="grid p-2 md:grid-cols-2">
               <Label className="flex flex-row items-center gap-1 text-muted-foreground">
                 <Mail className="h-4 w-4" /> {t("primaryEmail")}
               </Label>
-              {contact?.email}
+              {contact.email}
             </div>
             {/* <div className="grid p-2 md:grid-cols-2">
               <Label className="flex flex-row gap-1 items-center text-muted-foreground">
@@ -109,19 +109,19 @@ export default async function Page(props: {
               <Label className="flex flex-row items-center gap-1 text-muted-foreground">
                 <Phone className="h-4 w-4" /> {t("phone")} 1
               </Label>
-              {contact?.phoneNumber1}
+              {contact.phoneNumber1}
             </div>
             <div className="grid p-2 md:grid-cols-2">
               <Label className="flex flex-row items-center gap-1 text-muted-foreground">
                 <PhoneCall className="h-4 w-4" /> {t("phone")} 2
               </Label>
-              {contact?.phoneNumber2}
+              {contact.phoneNumber2}
             </div>
             <div className="grid p-2 md:grid-cols-2">
               <Label className="flex flex-row items-center gap-1 text-muted-foreground">
                 <MapPin className="h-4 w-4" /> {t("address")}
               </Label>
-              {contact?.address}
+              {contact.address}
             </div>
           </div>
         </div>

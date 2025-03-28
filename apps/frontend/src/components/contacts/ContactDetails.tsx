@@ -24,9 +24,6 @@ export function ContactDetails({ contactId }: { contactId: string }) {
     showErrorToast(contactQuery.error);
     return;
   }
-  if (!contactQuery.data) {
-    return null;
-  }
 
   const contact = contactQuery.data;
   return (

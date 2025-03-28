@@ -16,7 +16,7 @@ export default async function Layout({
     redirect("/auth/login");
   }
   const contact = await api.contact.get(id);
-  if (session.user.profile == "contact" && session.user.id != contact?.userId) {
+  if (session.user.profile == "contact" && session.user.id != contact.userId) {
     return <NoPermission className="my-8" />;
   }
   if (session.user.profile == "student") {
@@ -30,7 +30,7 @@ export default async function Layout({
   } else {
     const canReadContact = await checkPermission(
       "contact",
-      PermissionAction.READ,
+      PermissionAction.READ
     );
     if (!canReadContact) {
       return <NoPermission className="my-8" />;
