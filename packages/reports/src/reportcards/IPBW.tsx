@@ -88,6 +88,7 @@ export function IPBW({
           </View>
           <IPBWStudentInfo
             student={{
+              avatar: student.user?.avatar,
               firstName: student.firstName,
               lastName: student.lastName,
               gender: student.gender ?? "male",
