@@ -7,6 +7,7 @@ import { useUpload } from "~/hooks/use-upload";
 import { useLocale } from "~/i18n";
 import { FileUploader } from "~/uploads/file-uploader";
 
+import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { useSchool } from "~/providers/SchoolProvider";
 import { api } from "~/trpc/react";
@@ -23,12 +24,12 @@ export function ChangeAvatar({ studentId }: { studentId: string }) {
   } = useUpload();
   const utils = api.useUtils();
 
-  //const router = useRouter();
-  const updateStudentAvatarMutation = api.user.updateAvatar.useMutation({
+  const router = useRouter();
+  const updateStudentAvatarMutation = api.student.updateAvatar.useMutation({
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
       closeModal();
-      //router.refresh();
+      router.refresh();
     },
     onSettled: async () => {
       await utils.student.get.invalidate(studentId);
@@ -58,6 +59,8 @@ export function ChangeAvatar({ studentId }: { studentId: string }) {
             onUpload(file, {
               destination: `${school.code}/avatars`,
               bucket: "discolaire-public",
+              // TODO the key must be userId, and make sure this is called with the User,
+              // will allow use in contact/staff as well
               key: studentId,
             }),
             {
