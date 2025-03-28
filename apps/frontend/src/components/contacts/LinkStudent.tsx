@@ -27,6 +27,7 @@ import { useDebounce } from "~/hooks/use-debounce";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useRouter } from "next/navigation";
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";
@@ -47,6 +48,7 @@ export function LinkStudent({ contactId }: { contactId: string }) {
   });
 
   const { closeModal } = useModal();
+  const router = useRouter();
   const createStudentContactMutation = api.studentContact.create.useMutation({
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -54,6 +56,7 @@ export function LinkStudent({ contactId }: { contactId: string }) {
     onSuccess: () => {
       toast.success(t("added_successfully"), { id: 0 });
       closeModal();
+      router.refresh();
     },
     onSettled: async () => {
       await utils.contact.students.invalidate();
