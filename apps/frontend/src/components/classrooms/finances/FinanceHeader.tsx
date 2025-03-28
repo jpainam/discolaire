@@ -44,12 +44,12 @@ export function FinanceHeader() {
   const Icon = sidebarIcons.financial_situation;
   const ids = selectedStudents.join(",");
   return (
-    <div className="flex flex-row items-center gap-2 border-b  px-4 py-1 ">
-      {Icon && <Icon className="h-4 w-4" />}
-      <Label>{t("financial_situation")}</Label>
+    <div className="grid grid-cols-1 md:flex flex-row items-center gap-2 border-b  px-4 py-1 ">
+      {Icon && <Icon className="h-4 w-4 hidden md:block" />}
+      <Label className="hidden md:block">{t("financial_situation")}</Label>
       <Input
         onChange={(v) => setSearch(v.target.value, { shallow: false })}
-        className="w-64"
+        className="w-full md:w-64"
         defaultValue={search ?? ""}
         placeholder={t("search")}
       />
@@ -95,7 +95,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=all&ids=${ids}`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >
@@ -111,7 +111,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=debit&ids=${ids}`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >
@@ -126,7 +126,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=credit&ids=${ids}`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >
@@ -185,7 +185,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=csv&type=all&ids=${ids}`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >
@@ -200,7 +200,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=csv&type=debit&ids=${ids}`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >
@@ -215,7 +215,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=csv&type=credit&ids=${ids}`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >

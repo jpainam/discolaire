@@ -12,7 +12,6 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import { Separator } from "@repo/ui/components/separator";
 import type { FlatBadgeVariant } from "~/components/FlatBadge";
 import FlatBadge from "~/components/FlatBadge";
 import { useSheet } from "~/hooks/use-sheet";
@@ -53,7 +52,7 @@ export function SubjectHeader({
   const { openSheet } = useSheet();
   const canAddClassroomSubject = useCheckPermission(
     "subject",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   const badgeVariants = [
@@ -85,12 +84,12 @@ export function SubjectHeader({
             </FlatBadge>
           );
         })}
-        <Separator orientation="vertical" />
+
         <FlatBadge variant={"pink"}>
           {coeff} {t("coefficient")}
         </FlatBadge>
       </div>
-      <div className="grid flex-row items-center gap-1 md:ml-auto md:flex">
+      <div className=" flex-row items-center gap-2 ml-auto flex">
         {canAddClassroomSubject && (
           <Button
             size={"sm"}
@@ -123,7 +122,7 @@ export function SubjectHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/subjects?format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -134,7 +133,7 @@ export function SubjectHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/subjects?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

@@ -44,11 +44,11 @@ export function SubjectTable({ classroomId }: { classroomId: string }) {
   const confirm = useConfirm();
   const canDeleteClassroomSubject = useCheckPermission(
     "subject",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditClassroomSubject = useCheckPermission(
     "subject",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const router = useRouter();
   const utils = api.useUtils();
@@ -71,7 +71,7 @@ export function SubjectTable({ classroomId }: { classroomId: string }) {
             <TableRow className="bg-muted/50">
               <TableHead>{t("course")}</TableHead>
               <TableHead>{t("teacher")}</TableHead>
-              <TableHead>{t("coefficient")}</TableHead>
+              <TableHead>{t("coeff")}</TableHead>
               <TableHead>{t("group")}</TableHead>
               <TableHead>{t("order")}</TableHead>
               <TableHead className="text-right"></TableHead>

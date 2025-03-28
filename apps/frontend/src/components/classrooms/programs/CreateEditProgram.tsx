@@ -62,7 +62,7 @@ export function CreateEditProgram({
   const utils = api.useUtils();
   const canUpdateSubject = useCheckPermission(
     "subject",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const updateSubjectProgram = api.subject.updateProgram.useMutation({
     onSettled: () => utils.subject.invalidate(),
@@ -103,7 +103,7 @@ export function CreateEditProgram({
             <Skeleton className="w-96" />
           ) : (
             <div className="flex flex-row items-center gap-2">
-              <Label>{subject?.course.name}</Label>
+              <Label className="hidden md:block">{subject?.course.name}</Label>
               <FlatBadge variant={"green"}>
                 {t("coeff")}: {subject?.coefficient}
               </FlatBadge>
@@ -145,7 +145,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=pdf`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -156,7 +156,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=pdf&subjectId=${subjectId}`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -168,7 +168,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=csv`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -179,7 +179,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=csv&subjectId=${subjectId}`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >

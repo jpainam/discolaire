@@ -36,34 +36,38 @@ export function AssignmentHeader() {
   const Icon = sidebarIcons.assignments;
   const canCreateAssignment = useCheckPermission(
     "assignment",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   return (
     <div className="flex w-full flex-col">
-      <div className="flex flex-row items-center gap-6 border-b bg-secondary px-4 py-1 text-secondary-foreground">
-        {Icon && <Icon className="h-4 w-4" />}
-        <Label>{t("assignments")}</Label>
-        <div className="flex flex-row items-center gap-2">
-          <Label>{t("from")}</Label>
-          <DatePicker
-            defaultValue={from ? new Date(from) : undefined}
-            className="w-56"
-            onChange={(val) => {
-              router.push(
-                `?${createQueryString({ from: val?.toDateString() })}`,
-              );
-            }}
-          />
-        </div>
-        <div className="flex flex-row items-center gap-2">
-          <Label>{t("to")}</Label>
-          <DatePicker
-            defaultValue={to ? new Date(to) : undefined}
-            className="w-56"
-            onChange={(val) => {
-              router.push(`?${createQueryString({ to: val?.toDateString() })}`);
-            }}
-          />
+      <div className="grid md:flex flex-row items-center gap-2 md:gap-6 border-b bg-secondary px-4 py-1 text-secondary-foreground">
+        {Icon && <Icon className="h-4 w-4 hidden md:block" />}
+        <Label className="hidden md:block">{t("assignments")}</Label>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="flex flex-row items-center gap-2">
+            <Label>{t("from")}</Label>
+            <DatePicker
+              defaultValue={from ? new Date(from) : undefined}
+              className="w-56"
+              onChange={(val) => {
+                router.push(
+                  `?${createQueryString({ from: val?.toDateString() })}`
+                );
+              }}
+            />
+          </div>
+          <div className="flex flex-row items-center gap-2">
+            <Label>{t("to")}</Label>
+            <DatePicker
+              defaultValue={to ? new Date(to) : undefined}
+              className="w-56"
+              onChange={(val) => {
+                router.push(
+                  `?${createQueryString({ to: val?.toDateString() })}`
+                );
+              }}
+            />
+          </div>
         </div>
 
         <div className="ml-auto flex flex-row items-center gap-2">

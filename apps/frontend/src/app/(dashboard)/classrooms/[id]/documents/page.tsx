@@ -138,7 +138,7 @@ export default function Page() {
   return (
     <div className="flex flex-col mb-10">
       <div className="flex flex-col md:flex-row gap-2 px-4 py-2 border-b items-start md:items-center ">
-        <FolderOpen className="w-4 h-4" />
+        <FolderOpen className="w-4 h-4 hidden md:block" />
         <Label className="hidden md:block">{t("documents")}</Label>
         <div className="relative w-full md:w-64 md:ml-4">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
