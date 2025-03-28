@@ -40,6 +40,9 @@ export const contactRouter = createTRPCRouter({
       }
       return ctx.db.contact.findMany({
         take: input.limit,
+        include: {
+          user: true,
+        },
         where: {
           schoolId: ctx.schoolId,
         },
@@ -128,6 +131,9 @@ export const contactRouter = createTRPCRouter({
     if (ctx.session.user.profile == "contact") {
       const contact = await contactService.getFromUserId(ctx.session.user.id);
       const c = await ctx.db.contact.findUniqueOrThrow({
+        include: {
+          user: true,
+        },
         where: {
           id: contact.id,
         },
@@ -143,6 +149,9 @@ export const contactRouter = createTRPCRouter({
       });
       const contactIds = studentContacts.map((sc) => sc.contactId);
       return ctx.db.contact.findMany({
+        include: {
+          user: true,
+        },
         where: {
           id: {
             in: contactIds,
@@ -156,6 +165,9 @@ export const contactRouter = createTRPCRouter({
       return ctx.db.contact.findMany({
         where: {
           schoolId: ctx.schoolId,
+        },
+        include: {
+          user: true,
         },
         orderBy: {
           lastName: "asc",

@@ -482,6 +482,9 @@ export const studentRouter = createTRPCRouter({
       const qq = `%${input.q}%`;
       return ctx.db.contact.findMany({
         take: input.limit,
+        include: {
+          user: true,
+        },
         orderBy: {
           lastName: "asc",
         },

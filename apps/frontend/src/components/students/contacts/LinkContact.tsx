@@ -99,22 +99,21 @@ export function LinkContact({ studentId }: { studentId: string }) {
                     if (selectedContacts.includes(contact)) {
                       return setSelectedContacts(
                         selectedContacts.filter(
-                          (selectedContact) =>
-                            selectedContact.id !== contact.id,
-                        ),
+                          (selectedContact) => selectedContact.id !== contact.id
+                        )
                       );
                     }
 
                     return setSelectedContacts(
                       [...studentUnLinkedContact.data].filter((u) =>
-                        [...selectedContacts, contact].includes(u),
-                      ),
+                        [...selectedContacts, contact].includes(u)
+                      )
                     );
                   }}
                 >
                   <Avatar className="h-6 w-6">
                     <AvatarImage
-                      src={contact.avatar ?? undefined}
+                      src={contact.user?.avatar ?? undefined}
                       alt="Image"
                     />
                     <AvatarFallback>
@@ -146,7 +145,10 @@ export function LinkContact({ studentId }: { studentId: string }) {
                 key={`${contact.id}-selected`}
                 className="inline-block border-2 border-background"
               >
-                <AvatarImage src={contact.avatar ?? undefined} alt="Image" />
+                <AvatarImage
+                  src={contact.user?.avatar ?? undefined}
+                  alt="Image"
+                />
                 <AvatarFallback>
                   <Image
                     width={50}
@@ -192,7 +194,7 @@ export function LinkContact({ studentId }: { studentId: string }) {
                 error: (error) => {
                   return getErrorMessage(error);
                 },
-              },
+              }
             );
           }}
         >

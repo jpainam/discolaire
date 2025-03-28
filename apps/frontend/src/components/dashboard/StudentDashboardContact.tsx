@@ -33,7 +33,7 @@ export async function StudentDashboardContact({
             >
               <div className="flex  flex-row gap-2 ">
                 <AvatarState
-                  avatar={contact.avatar}
+                  avatar={contact.user?.avatar}
                   pos={getFullName(contact).length}
                 />
                 <div className="flex  flex-col gap-2">

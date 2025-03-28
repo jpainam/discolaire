@@ -79,7 +79,7 @@ export function StudentContactTable({
   const utils = api.useUtils();
   const canDeleteStudentContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
 
   return (
@@ -122,11 +122,11 @@ export function StudentContactTable({
               return (
                 <TableRow key={`${contact.id}-${index}`}>
                   <TableCell className="flex items-center justify-start gap-1">
-                    <AvatarState pos={index} avatar={contact.avatar} />
+                    <AvatarState pos={index} avatar={contact.user?.avatar} />
                     <Link
                       href={`${routes.students.contacts(c.studentId)}/${contact.id}`}
                       className={cn(
-                        "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline",
+                        "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline"
                       )}
                     >
                       {getFullName(contact)}
@@ -179,7 +179,7 @@ export function StudentContactTable({
                           <DropdownMenuItem
                             onSelect={() => {
                               router.push(
-                                `${routes.students.contacts(c.studentId)}/${c.contactId}`,
+                                `${routes.students.contacts(c.studentId)}/${c.contactId}`
                               );
                             }}
                           >
