@@ -75,7 +75,7 @@ export function SubjectJournalAttachment() {
               error: (err) => {
                 return getErrorMessage(err);
               },
-            },
+            }
           );
         }}
         //progresses={progresses}

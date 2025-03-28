@@ -203,7 +203,7 @@ export function SubjectJournalEditor({ subjectId }: { subjectId: number }) {
             onClick={() => {
               openModal({
                 title: t("upload_files"),
-                className: "w-[500px]",
+                //className: "w-[500px]",
                 description: t("upload_files_description"),
                 view: <SubjectJournalAttachment />,
               });
