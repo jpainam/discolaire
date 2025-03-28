@@ -177,7 +177,11 @@ export const gradeSheetRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       return ctx.db.grade.findMany({
         include: {
-          student: true,
+          student: {
+            include: {
+              user: true,
+            },
+          },
           gradeSheet: {
             include: {
               term: true,

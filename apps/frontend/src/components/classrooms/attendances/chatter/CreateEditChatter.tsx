@@ -40,7 +40,7 @@ const attendanceSchema = z.object({
       id: z.string().min(1),
       chatter: z.string().optional(),
       justify: z.string().optional(),
-    })
+    }),
   ),
 });
 
@@ -74,7 +74,7 @@ export function CreateEditChatter({
     onSuccess: () => {
       toast.success(t("added_successfully"), { id: 0 });
       router.push(
-        `/classrooms/${classroomId}/attendances?type=chatter&term=${termId}`
+        `/classrooms/${classroomId}/attendances?type=chatter&term=${termId}`,
       );
     },
     onError: (error) => {
@@ -130,7 +130,7 @@ export function CreateEditChatter({
                 <Button
                   onClick={() => {
                     router.push(
-                      routes.classrooms.attendances.index(classroomId)
+                      routes.classrooms.attendances.index(classroomId),
                     );
                   }}
                   size={"sm"}

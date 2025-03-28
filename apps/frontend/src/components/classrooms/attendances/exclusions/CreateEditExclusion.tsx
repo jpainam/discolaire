@@ -41,7 +41,7 @@ const attendanceSchema = z.object({
       from: z.coerce.date().nullish(),
       to: z.coerce.date().nullish(),
       reason: z.string().nullish(),
-    })
+    }),
   ),
 });
 
@@ -76,7 +76,7 @@ export function CreateEditExclusion({
     onSuccess: () => {
       toast.success(t("added_successfully"), { id: 0 });
       router.push(
-        `/classrooms/${classroomId}/attendances?type=exclusion&term=${termId}`
+        `/classrooms/${classroomId}/attendances?type=exclusion&term=${termId}`,
       );
     },
     onError: (error) => {
@@ -134,7 +134,7 @@ export function CreateEditExclusion({
                 <Button
                   onClick={() => {
                     router.push(
-                      routes.classrooms.attendances.index(classroomId)
+                      routes.classrooms.attendances.index(classroomId),
                     );
                   }}
                   size={"sm"}
