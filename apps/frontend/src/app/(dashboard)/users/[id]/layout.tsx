@@ -5,7 +5,7 @@ import { getServerTranslations } from "~/i18n/server";
 import { notFound } from "next/navigation";
 import { NoPermission } from "~/components/no-permission";
 import { api } from "~/trpc/server";
-import { UserAvatar } from "./UserAvatar";
+import { UserAvatar } from "../../../../components/users/UserAvatar";
 
 export default async function Layout(props: {
   params: Promise<{ id: string }>;
@@ -28,7 +28,11 @@ export default async function Layout(props: {
   return (
     <div className="">
       <div className="flex flex-row items-center gap-2 px-4 py-2">
-        <UserAvatar userId={params.id} avatar={user.avatar} />
+        <UserAvatar
+          className="size-20 ring-offset-2 ring-2 ring-slate-200"
+          userId={params.id}
+          avatar={user.avatar}
+        />
         {/* <AvatarState
           pos={1}
           avatar={user.avatar}

@@ -3,6 +3,7 @@ import { Separator } from "@repo/ui/components/separator";
 import { getServerTranslations } from "~/i18n/server";
 
 import { AvatarState } from "~/components/AvatarState";
+import { UserAvatar } from "~/components/users/UserAvatar";
 import { api } from "~/trpc/server";
 import { getFullName } from "~/utils/full-name";
 import { StaffProfileHeader } from "./StaffProfileHeader";
@@ -19,11 +20,19 @@ export async function StaffProfile({ staffId }: { staffId: string }) {
   return (
     <Card className="p-0">
       <CardHeader className="flex flex-row items-start gap-4 py-4 border-b bg-muted/50">
-        <AvatarState
-          className="h-[50px] w-[50px] xl:h-[100px] xl:w-[100px]"
-          avatar={staff.user?.avatar}
-          pos={getFullName(staff).length}
-        />
+        {staff.userId ? (
+          <UserAvatar
+            userId={staff.userId}
+            avatar={staff.user?.avatar}
+            className="h-[50px] w-[50px] xl:h-[100px] xl:w-[100px]"
+          />
+        ) : (
+          <AvatarState
+            className="h-[50px] w-[50px] xl:h-[100px] xl:w-[100px]"
+            avatar={staff.user?.avatar}
+            pos={getFullName(staff).length}
+          />
+        )}
         <StaffProfileHeader staff={staff} />
       </CardHeader>
       <CardContent className="p-2 text-sm">

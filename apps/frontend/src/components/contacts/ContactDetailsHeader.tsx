@@ -41,6 +41,7 @@ import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { SimpleTooltip } from "../simple-tooltip";
 import { CreateEditUser } from "../users/CreateEditUser";
+import { UserAvatar } from "../users/UserAvatar";
 import CreateEditContact from "./CreateEditContact";
 import { LinkStudent } from "./LinkStudent";
 
@@ -64,7 +65,7 @@ export function ContactDetailsHeader({
   });
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();
@@ -82,16 +83,24 @@ export function ContactDetailsHeader({
 
   const canUpdateContact = useCheckPermission(
     "contact",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (
     <div className="flex flex-row items-start gap-2">
-      <AvatarState pos={0} className="h-auto w-[100px]" />
+      {contact.userId ? (
+        <UserAvatar
+          avatar={contact.user?.avatar}
+          className="h-[100px] w-[100px]"
+          userId={contact.userId}
+        />
+      ) : (
+        <AvatarState pos={0} className="h-auto w-[100px]" />
+      )}
       <div className="flex flex-col gap-2">
         <div className="flex flex-row items-center gap-2">
           {canUpdateContact && (

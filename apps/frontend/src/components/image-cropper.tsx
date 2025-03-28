@@ -156,12 +156,12 @@ export function ImageCropper({
                 setSelectedFile?.(null);
               }}
             >
-              <Trash2Icon className="mr-1.5 size-4" />
+              <Trash2Icon className="size-4" />
               {t("cancel")}
             </Button>
           </DialogClose>
           <Button type="submit" size={"sm"} className="w-fit" onClick={onCrop}>
-            <CropIcon className="mr-1.5 size-4" />
+            <CropIcon className="size-4" />
             {t("crop")}
           </Button>
         </DialogFooter>

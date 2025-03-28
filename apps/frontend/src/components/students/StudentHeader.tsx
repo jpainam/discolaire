@@ -56,6 +56,7 @@ import { useCallback, useEffect, useState } from "react";
 import { SimpleTooltip } from "~/components/simple-tooltip";
 
 import { StudentSelector } from "~/components/shared/selects/StudentSelector";
+import { UserAvatar } from "~/components/users/UserAvatar";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
@@ -83,7 +84,7 @@ export function StudentHeader({
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
 
@@ -136,7 +137,7 @@ export function StudentHeader({
         status,
       });
     },
-    [studentStatusMutation, student.id],
+    [studentStatusMutation, student.id]
   );
 
   const navigateToStudent = (id: string) => {
@@ -155,7 +156,7 @@ export function StudentHeader({
 
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditStudent = useCheckPermission("student", PermissionAction.UPDATE);
   //const [open, setOpen] = React.useState(false);
@@ -170,8 +171,17 @@ export function StudentHeader({
   });
 
   return (
-    <div className="flex border-b bg-muted/50 py-1 px-4 w-full gap-1">
-      <SquaredAvatar student={student} />
+    <div className="flex border-b bg-muted/50 py-1 px-4 w-full gap-2">
+      {student.userId ? (
+        <UserAvatar
+          className="my-0 h-full w-[100px] rounded-md"
+          userId={student.userId}
+          avatar={student.user?.avatar}
+        />
+      ) : (
+        <SquaredAvatar student={student} />
+      )}
+
       <div className="flex w-full flex-col gap-1">
         {user?.profile == "student" ? (
           <span className="bg-background h-9 px-4 py-2 rounded-md font-semibold w-full text-sm 2xl:w-[450px]">
@@ -310,7 +320,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

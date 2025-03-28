@@ -5,6 +5,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@repo/ui/components/avatar";
+import { cn } from "@repo/ui/lib/utils";
 import React from "react";
 import type { FileWithPath } from "react-dropzone";
 import { useDropzone } from "react-dropzone";
@@ -23,9 +24,11 @@ const accept = {
 export function UserAvatar({
   userId,
   avatar,
+  className,
 }: {
   userId: string;
-  avatar: string | null;
+  className?: string;
+  avatar?: string | null;
 }) {
   const [selectedFile, setSelectedFile] =
     React.useState<FileWithPreview | null>(null);
@@ -70,13 +73,10 @@ export function UserAvatar({
           }}
         />
       ) : (
-        <Avatar
-          {...getRootProps()}
-          className="size-20 cursor-pointer ring-offset-2 ring-2 ring-slate-200"
-        >
+        <Avatar {...getRootProps()} className={cn("cursor-pointer", className)}>
           <input {...getInputProps()} />
           <AvatarImage src={avatar ?? "/avatars/avatar-01.webp"} alt="Avatar" />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarFallback className={className}>CN</AvatarFallback>
         </Avatar>
       )}
     </div>
