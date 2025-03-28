@@ -17,6 +17,7 @@ import {
 } from "@repo/ui/components/chart";
 
 import type { RouterOutputs } from "@repo/api";
+import { Warehouse } from "lucide-react";
 import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
@@ -86,7 +87,8 @@ export function DashboardClassroomSize({
   return (
     <Card className={cn(className)}>
       <CardHeader>
-        <CardTitle>
+        <CardTitle className="flex items-center gap-2">
+          <Warehouse className="h-4 w-4" />
           {t("classrooms")} - {t("size")}
         </CardTitle>
       </CardHeader>

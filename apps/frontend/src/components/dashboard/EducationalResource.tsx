@@ -12,7 +12,7 @@ import {
 import { cn } from "@repo/ui/lib/utils";
 import { format } from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
-import { DownloadIcon, FileIcon } from "lucide-react";
+import { DownloadIcon, FileIcon, RatioIcon } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 import i18next from "i18next";
@@ -60,8 +60,13 @@ export function EducationalResource({ className }: { className?: string }) {
   return (
     <Card className={cn(className)}>
       <CardHeader>
-        <CardTitle>{t("resources")}</CardTitle>
-        <CardDescription>{t("latest_educational_resources")}</CardDescription>
+        <CardTitle className="flex items-center gap-2">
+          <RatioIcon className="w-4 h-4" />
+          {t("resources")}
+        </CardTitle>
+        <CardDescription className="text-xs">
+          {t("latest_educational_resources")}
+        </CardDescription>
         <CardAction>
           <DatePicker
             defaultValue={new Date()}

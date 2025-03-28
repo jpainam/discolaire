@@ -14,6 +14,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
+import { Rows3Icon } from "lucide-react";
 import { useLocale } from "~/i18n";
 
 export function LatestGradesheet({
@@ -44,7 +45,10 @@ export function LatestGradesheet({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t("latest_grades")}</CardTitle>
+        <CardTitle className="flex items-center gap-2">
+          <Rows3Icon className="h-4 w-4" />
+          {t("latest_grades")}
+        </CardTitle>
         {/* <CardDescription>
           Default tooltip with ChartTooltipContent.
         </CardDescription> */}

@@ -71,7 +71,7 @@ export function ScheduleCard({ className }: { className?: string }) {
     <Card className={cn(className)}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <CalendarDays />
+          <CalendarDays className="h-4 w-4" />
           {t("timetable")}
         </CardTitle>
         {/* <CardDescription>Card Description</CardDescription> */}
