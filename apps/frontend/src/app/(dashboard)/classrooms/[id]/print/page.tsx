@@ -1,7 +1,7 @@
 "use client";
 
+import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
-import { Card, CardContent } from "@repo/ui/components/card";
 import { Input } from "@repo/ui/components/input";
 import {
   Select,
@@ -16,8 +16,11 @@ import {
   TabsList,
   TabsTrigger,
 } from "@repo/ui/components/tabs";
-import { Download, Filter, Search } from "lucide-react";
+import { Download, Search } from "lucide-react";
+import { useQueryState } from "nuqs";
 import { useState } from "react";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { useLocale } from "~/i18n";
 
 export default function DataExportPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -74,7 +77,7 @@ export default function DataExportPage() {
 
   // Filter export options based on search query
   const filteredOptions = exportOptions.filter((option) =>
-    option.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    option.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // Function to get options by category
@@ -88,42 +91,46 @@ export default function DataExportPage() {
     // Implementation would connect to the actual export functionality
   };
 
-  return (
-    <div className="container mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-6">Data Export Center</h1>
+  const [format, setFormat] = useQueryState("format", {
+    defaultValue: "csv",
+  });
+  const { t } = useLocale();
 
-      <div className="flex flex-col md:flex-row gap-4 mb-6">
+  return (
+    <div className="container mx-auto py-3 px-4">
+      <div className="flex flex-col md:flex-row gap-4 mb-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search exports..."
+            placeholder={t("search") + "..."}
             className="pl-10"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
+        <TermSelector className="w-full md:w-[250px]" />
 
-        <Select defaultValue="csv">
+        <Select defaultValue={format} onValueChange={setFormat}>
           <SelectTrigger className="w-full md:w-[180px]">
             <SelectValue placeholder="Export format" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="csv">CSV</SelectItem>
-            <SelectItem value="excel">Excel</SelectItem>
             <SelectItem value="pdf">PDF</SelectItem>
-            <SelectItem value="json">JSON</SelectItem>
+            <SelectItem value="csv">Excel</SelectItem>
           </SelectContent>
         </Select>
 
-        <Button variant="outline" className="flex items-center gap-2">
+        {/* <Button variant="outline" className="flex items-center gap-2">
           <Filter className="h-4 w-4" />
           Filters
-        </Button>
+        </Button> */}
       </div>
 
       <Tabs defaultValue="all" className="w-full">
-        <TabsList className="mb-4 flex flex-wrap">
-          <TabsTrigger value="all">All</TabsTrigger>
+        <TabsList className="**:data-[slot=badge]:bg-muted-foreground/30 **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:px-1 @4xl/main:flex">
+          <TabsTrigger value="all">
+            All <Badge variant="secondary">{filteredOptions.length}</Badge>
+          </TabsTrigger>
           {categories.map((category) => (
             <TabsTrigger key={category.id} value={category.id}>
               {category.name}
@@ -134,25 +141,23 @@ export default function DataExportPage() {
         <TabsContent value="all" className="mt-0">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredOptions.map((option) => (
-              <Card key={option.id} className="overflow-hidden">
-                <CardContent className="p-0">
-                  <div className="p-4 flex justify-between items-center">
-                    <div>
-                      <p className="text-sm text-muted-foreground">
-                        #{option.id}
-                      </p>
-                      <h3 className="font-medium">{option.name}</h3>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleExport(option.id, option.name)}
-                    >
-                      <Download className="h-5 w-5" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+              <div
+                key={option.id}
+                className="p-2 border rounded-md bg-muted flex overflow-hidden justify-between items-center"
+              >
+                <div>
+                  <p className="text-sm text-muted-foreground">#{option.id}</p>
+                  <p className="text-sm">{option.name}</p>
+                </div>
+                <Button
+                  variant="ghost"
+                  className="size-8"
+                  size="icon"
+                  onClick={() => handleExport(option.id, option.name)}
+                >
+                  <Download className="h-4 w-4" />
+                </Button>
+              </div>
             ))}
           </div>
         </TabsContent>
@@ -161,25 +166,25 @@ export default function DataExportPage() {
           <TabsContent key={category.id} value={category.id} className="mt-0">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {getOptionsByCategory(category.id).map((option) => (
-                <Card key={option.id} className="overflow-hidden">
-                  <CardContent className="p-0">
-                    <div className="p-4 flex justify-between items-center">
-                      <div>
-                        <p className="text-sm text-muted-foreground">
-                          #{option.id}
-                        </p>
-                        <h3 className="font-medium">{option.name}</h3>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleExport(option.id, option.name)}
-                      >
-                        <Download className="h-5 w-5" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                <div
+                  key={option.id}
+                  className="border rounded-md p-2 bg-muted flex justify-between items-center overflow-hidden"
+                >
+                  <div>
+                    <p className="text-sm text-muted-foreground">
+                      #{option.id}
+                    </p>
+                    <p className="text-sm">{option.name}</p>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-8"
+                    onClick={() => handleExport(option.id, option.name)}
+                  >
+                    <Download className="h-4 w-4" />
+                  </Button>
+                </div>
               ))}
             </div>
           </TabsContent>
