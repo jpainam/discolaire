@@ -80,7 +80,9 @@ const handler = async (req: NextRequest) => {
       onError({ error, path }) {
         console.error(`>>> tRPC Error on '${path}'`);
         console.error(error.stack);
+        console.log(">>> This error is supposed to redirect", error.code);
         if (error.code == "UNAUTHORIZED") {
+          console.log("Redirecting to login");
           return Response.redirect(new URL("/auth/login", req.url));
         }
       },
