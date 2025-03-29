@@ -133,7 +133,7 @@ export function CreateEditDocument({
         error: (err) => {
           return getErrorMessage(err);
         },
-      },
+      }
     );
   };
   return (
@@ -216,7 +216,7 @@ export function CreateEditDocument({
             type="button"
             variant={"outline"}
           >
-            <XIcon className="mr-2 h-4 w-4" />
+            <XIcon className="h-4 w-4" />
             {t("cancel")}
           </Button>
           <Button
@@ -229,7 +229,7 @@ export function CreateEditDocument({
             size={"sm"}
             type="submit"
           >
-            <UploadIcon className="mr-2 h-4 w-4" /> {t("submit")}
+            <UploadIcon className="h-4 w-4" /> {t("submit")}
           </Button>
         </div>
       </form>
