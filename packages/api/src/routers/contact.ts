@@ -34,7 +34,7 @@ export const contactRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       if (ctx.session.user.profile != "staff") {
         throw new TRPCError({
-          code: "UNAUTHORIZED",
+          code: "FORBIDDEN",
           message: "Unauthorized to access last contact as a non staff",
         });
       }
