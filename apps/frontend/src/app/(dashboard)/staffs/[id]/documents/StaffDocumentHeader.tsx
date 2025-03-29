@@ -13,7 +13,7 @@ export function StaffDocumentHeader({ userId }: { userId: string }) {
   const { t } = useLocale();
   const { openModal } = useModal();
   return (
-    <div className="flex flex-row items-center px-4 pt-2">
+    <div className="flex flex-row items-center px-2 gap-2 pt-2">
       <FolderOpen className="h-4 w-4" />
       <Label>{t("documents")}</Label>
       <div className="ml-auto flex items-center gap-2">
