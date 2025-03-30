@@ -15,6 +15,7 @@ export function LoginInfo({
   school: RouterOutputs["school"]["get"];
   contacts: RouterOutputs["student"]["contacts"];
 }) {
+  console.log(contacts);
   return (
     <Document>
       <Page

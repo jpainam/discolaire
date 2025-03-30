@@ -1,13 +1,14 @@
-import { render } from "@react-email/render";
 import type { NextRequest } from "next/server";
 
 import { auth } from "@repo/auth";
 import { InviteEmail } from "@repo/transactional";
 import { getServerTranslations } from "~/i18n/server";
 
-import { env } from "~/env";
-import { api } from "~/trpc/server";
+import { nanoid } from "nanoid";
 import { createUniqueInvite } from "~/actions/invite";
+import { env } from "~/env";
+import { resend } from "~/lib/resend";
+import { api } from "~/trpc/server";
 
 export async function GET(req: NextRequest) {
   try {
@@ -22,14 +23,21 @@ export async function GET(req: NextRequest) {
     }
     const user = session.user;
     const school = await api.school.getSchool();
-    const { t, i18n } = await getServerTranslations();
+    const { i18n } = await getServerTranslations();
     if (user.email) {
       const invitation = await createUniqueInvite({
         entityId: user.id,
         entityType: user.profile,
       });
-      const emailHtml = await render(
-        InviteEmail({
+
+      const { error } = await resend.emails.send({
+        from: "Invitation <no-reply@discolaire.com>",
+        to: [user.email],
+        subject: "Bienvenue sur " + school.name,
+        headers: {
+          "X-Entity-Ref-ID": nanoid(),
+        },
+        react: InviteEmail({
           invitedByEmail: user.email,
           invitedByName: user.name ?? "Admin",
           inviteLink: `${env.NEXT_PUBLIC_BASE_URL}/invite/${invitation}?email=${user.email}`,
@@ -39,13 +47,11 @@ export async function GET(req: NextRequest) {
             name: school.name,
             logo: school.logo,
           },
-        }),
-      );
-      await api.messaging.sendEmail({
-        subject: t("join", { school: school.name }),
-        to: email,
-        body: emailHtml,
+        }) as React.ReactElement,
       });
+      if (error) {
+        return Response.json({ error }, { status: 500 });
+      }
     }
     return Response.json({ success: true }, { status: 200 });
   } catch (e) {

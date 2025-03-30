@@ -63,6 +63,7 @@ export const userService = {
     // send email
     return user;
   },
+  // TODO: add email sending
   sendWelcomeEmail: async ({
     userId,
     email,
