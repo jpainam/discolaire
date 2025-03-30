@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
 
     return Response.json(
       { error: "Invalid request body", errors },
-      { status: 400 }
+      { status: 400 },
     );
   }
   const school = await api.school.getSchool();
@@ -78,7 +78,7 @@ export async function GET(req: NextRequest) {
 
 async function getNameEmail(
   entityId: string,
-  entityType: "staff" | "contact" | "student"
+  entityType: "staff" | "contact" | "student",
 ) {
   if (entityType == "staff") {
     const s = await caller.staff.get(entityId);
