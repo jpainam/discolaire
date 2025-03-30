@@ -2,7 +2,7 @@ import { render } from "@react-email/render";
 import type { NextRequest } from "next/server";
 
 import { auth } from "@repo/auth";
-import { WelcomeEmail } from "@repo/transactional";
+import { WelcomeEmail } from "@repo/transactional/emails/WelcomeEmail";
 import { getServerTranslations } from "~/i18n/server";
 
 import { api } from "~/trpc/server";
@@ -28,13 +28,13 @@ export async function GET(req: NextRequest) {
       WelcomeEmail({
         fullName: user.name ?? "N/A",
         locale: i18n.language,
-      }),
+      })
     );
-    await api.messaging.sendEmail({
-      subject: t("welcome_to_discolaire"),
-      to: email,
-      body: emailHtml,
-    });
+    // await api.messaging.sendEmail({
+    //   subject: t("welcome_to_discolaire"),
+    //   to: email,
+    //   body: emailHtml,
+    // });
 
     return Response.json({ success: true }, { status: 200 });
   } catch (e) {
