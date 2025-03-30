@@ -27,7 +27,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   return (
     <div className="flex flex-col text-sm">
       <LoginInfoHeader />
-      <div className="flex flex-col gap-2 px-2">
+      <div className="flex flex-col gap-2 px-4 mb-4">
         <Separator />
         <div className="font-bold">{t("loginInformation")}</div>
         <Separator />

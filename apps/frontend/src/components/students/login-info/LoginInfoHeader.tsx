@@ -1,6 +1,6 @@
 "use client";
 
-import { AtSign, MoreVertical, Printer } from "lucide-react";
+import { MailIcon, MoreVertical } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -12,14 +12,16 @@ import {
 import { Label } from "@repo/ui/components/label";
 import { useLocale } from "~/i18n";
 
+import PDFIcon from "~/components/icons/pdf-solid";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function LoginInfoHeader() {
   const { t } = useLocale();
   const Icon = sidebarIcons.login_info;
   return (
-    <div className="flex flex-row items-center bg-secondary px-2 py-1 text-secondary-foreground">
-      {Icon && <Icon className="mr-2 h-4 w-4" />}
+    <div className="flex flex-row gap-2 items-center bg-secondary px-4 py-1 text-secondary-foreground">
+      {Icon && <Icon className="h-4 w-4" />}
       <Label>{t("login_info")}</Label>
       <div className="ml-auto">
         <DropdownMenu>
@@ -29,12 +31,13 @@ export function LoginInfoHeader() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem className="flex flex-row items-center gap-2">
-              <Printer className="h-4 w-4" />
-              <span>{t("print")}</span>
+            <DropdownHelp />
+            <DropdownMenuItem>
+              <PDFIcon className="h-4 w-4" />
+              <span>{t("pdf_export")}</span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex flex-row items-center gap-2">
-              <AtSign className="h-4 w-4" />
+            <DropdownMenuItem>
+              <MailIcon className="h-4 w-4" />
               <span> {t("send_email")}</span>
             </DropdownMenuItem>
           </DropdownMenuContent>

@@ -25,8 +25,7 @@ export function AttachUserButton({
     <Button
       onClick={() => {
         openModal({
-          className: "w-[500px]",
-          title: userId ? t("change_password") : t("create_user"),
+          title: userId ? t("change_password") : t("create_a_user"),
           view: (
             <CreateEditUser
               userId={userId}
@@ -41,11 +40,11 @@ export function AttachUserButton({
       size={"sm"}
     >
       {userId ? (
-        <KeyRound className="mr-2 h-4 w-4" />
+        <KeyRound className="h-4 w-4" />
       ) : (
-        <UserPlus2 className="mr-2 h-4 w-4" />
+        <UserPlus2 className="h-4 w-4" />
       )}
-      {!userId ? t("create_user") : t("change_password")}
+      {!userId ? t("create_a_user") : t("change_password")}
     </Button>
   );
 }
