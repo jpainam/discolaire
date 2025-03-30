@@ -90,7 +90,7 @@ export function LinkStudent({ contactId }: { contactId: string }) {
           onValueChange={(val) => {
             setValue(val);
           }}
-          placeholder={t("search_a_student")}
+          placeholder={t("search")}
         />
         <CommandList>
           <CommandEmpty>{t("no_data")}</CommandEmpty>
@@ -111,15 +111,15 @@ export function LinkStudent({ contactId }: { contactId: string }) {
                     if (selectedStudents.includes(stud)) {
                       return setSelectedStudents(
                         selectedStudents.filter(
-                          (selectedStudent) => selectedStudent.id !== stud.id,
-                        ),
+                          (selectedStudent) => selectedStudent.id !== stud.id
+                        )
                       );
                     }
 
                     return setSelectedStudents(
                       [...contactUnLinkedStudent.data].filter((u) =>
-                        [...selectedStudents, stud].includes(u),
-                      ),
+                        [...selectedStudents, stud].includes(u)
+                      )
                     );
                   }}
                 >

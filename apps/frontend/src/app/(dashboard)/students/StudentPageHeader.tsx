@@ -35,11 +35,11 @@ export function StudentPageHeader() {
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   const [value, setValue] = useState("");
-  const [label, setLabel] = useState(t("search_a_student"));
+  const [label, setLabel] = useState(t("search"));
   const [search, setSearch] = useState("");
   const students = api.student.search.useQuery({
     query: search,
