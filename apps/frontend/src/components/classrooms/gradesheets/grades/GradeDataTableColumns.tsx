@@ -21,6 +21,7 @@ import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { Badge } from "@repo/ui/components/badge";
+import { decode } from "entities";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
@@ -113,7 +114,7 @@ export function fetchGradeColumns({
             className="hover:text-blue-600 hover:underline"
             href={routes.students.details(student.id)}
           >
-            {student.lastName}
+            {decode(student.lastName ?? "")}
           </Link>
         );
       },
@@ -131,7 +132,7 @@ export function fetchGradeColumns({
             className="hover:text-blue-600 hover:underline"
             href={routes.students.details(student.id)}
           >
-            {student.firstName}
+            {decode(student.firstName ?? "")}
           </Link>
         );
       },
@@ -203,7 +204,7 @@ function ActionCells({
   const markGradeAbsent = api.grade.update.useMutation();
   const canUpdateGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
 
   return (
@@ -272,7 +273,7 @@ function ActionCells({
                       error: (error) => {
                         return getErrorMessage(error);
                       },
-                    },
+                    }
                   );
                 }
               }}

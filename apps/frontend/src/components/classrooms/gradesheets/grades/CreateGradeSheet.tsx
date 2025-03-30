@@ -16,7 +16,6 @@ import {
   useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
   TableBody,
@@ -27,6 +26,7 @@ import {
 } from "@repo/ui/components/table";
 import { useLocale } from "~/i18n";
 
+import type { RouterOutputs } from "@repo/api";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
@@ -47,11 +47,15 @@ const createGradeSchema = z.object({
       studentId: z.string(),
       absent: z.boolean().default(false),
       grade: z.string().default(""),
-    }),
+    })
   ),
 });
 
-export function CreateGradeSheet() {
+export function CreateGradeSheet({
+  students,
+}: {
+  students: RouterOutputs["classroom"]["students"];
+}) {
   const { t } = useLocale();
   const inputRefs = useRef<HTMLInputElement[]>([]);
   const handleKeyDown = useCallback(
@@ -66,7 +70,7 @@ export function CreateGradeSheet() {
         }
       }
     },
-    [], // No dependencies, so this function is only created once
+    [] // No dependencies, so this function is only created once
   );
   const searchParams = useSearchParams();
   const form = useForm({
@@ -109,7 +113,6 @@ export function CreateGradeSheet() {
     createGradesheetMutation.mutate(values);
   };
   const params = useParams<{ id: string }>();
-  const classroomStudentsQuery = api.classroom.students.useQuery(params.id);
 
   return (
     <Form {...form}>
@@ -135,21 +138,7 @@ export function CreateGradeSheet() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {classroomStudentsQuery.isPending && (
-                  <TableRow>
-                    <TableCell colSpan={7}>
-                      <div className="grid w-full grid-cols-4 gap-4 px-2">
-                        {Array.from({ length: 40 }).map((_, index) => (
-                          <Skeleton
-                            key={`gradesheet-table-${index}`}
-                            className="h-8 w-full"
-                          />
-                        ))}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                )}
-                {classroomStudentsQuery.data?.map((st, index) => {
+                {students.map((st, index) => {
                   return (
                     <TableRow
                       key={st.id}
@@ -167,7 +156,7 @@ export function CreateGradeSheet() {
                           className="hover:text-blue-600 hover:underline"
                           href={routes.students.details(st.id)}
                         >
-                          {st.lastName}
+                          {getFullName(st)}
                         </Link>
                       </TableCell>
                       <TableCell>

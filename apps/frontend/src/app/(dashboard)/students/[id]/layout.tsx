@@ -9,6 +9,7 @@ import { StudentFooter } from "~/components/students/StudentFooter";
 import { StudentHeader } from "~/components/students/StudentHeader";
 import { api } from "~/trpc/server";
 
+import { decode } from "entities";
 import type { Metadata } from "next";
 
 interface Props {
@@ -17,15 +18,15 @@ interface Props {
 }
 
 export const generateMetadata = async (
-  { params }: Props,
+  { params }: Props
   // parent: ResolvingMetadata
 ): Promise<Metadata> => {
   const { id } = await params;
   const student = await api.student.get(id);
   return {
     title: {
-      template: `${student.lastName}-%s`,
-      default: `${student.lastName}`,
+      template: `${decode(student.lastName ?? "")}-%s`,
+      default: decode(student.lastName ?? ""),
     },
     // openGraph: {
     //   images: ["/some-specific-page-image.jpg", ...previousImages],
