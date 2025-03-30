@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  ImageUpIcon,
   KeyRound,
   MoreVertical,
   Pencil,
@@ -40,6 +39,7 @@ import { getFullName } from "~/utils/full-name";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { SimpleTooltip } from "../simple-tooltip";
+import { ChangeAvatarButton } from "../users/ChangeAvatarButton";
 import { CreateEditUser } from "../users/CreateEditUser";
 import { UserAvatar } from "../users/UserAvatar";
 import CreateEditContact from "./CreateEditContact";
@@ -65,7 +65,7 @@ export function ContactDetailsHeader({
   });
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();
@@ -83,11 +83,11 @@ export function ContactDetailsHeader({
 
   const canUpdateContact = useCheckPermission(
     "contact",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (
@@ -221,10 +221,11 @@ export function ContactDetailsHeader({
           </DropdownMenu>
         </div>
         <div className="grid flex-row gap-2 md:flex">
-          <Button variant={"outline"} size={"sm"}>
+          {contact.userId && <ChangeAvatarButton userId={contact.userId} />}
+          {/* <Button variant={"outline"} size={"sm"}>
             <ImageUpIcon />
             {t("change_avatar")}
-          </Button>
+          </Button> */}
           {canCreateContact && (
             <Button
               onClick={() => {

@@ -46,7 +46,7 @@ export function ContactStudentTable({
   const { t } = useLocale();
   const canUpdateContact = useCheckPermission(
     "contact",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const deleteStudentContactMutation = api.studentContact.delete.useMutation({
     onError: (error) => {
@@ -90,7 +90,7 @@ export function ContactStudentTable({
             const student = stc.student;
             return (
               <TableRow key={`${stc.contactId}-${index}`}>
-                <TableCell>
+                <TableCell className="w-[50px]">
                   <AvatarState pos={index} avatar={student.user?.avatar} />
                 </TableCell>
                 <TableCell>
@@ -107,7 +107,7 @@ export function ContactStudentTable({
                 </TableCell>
                 <TableCell>
                   <Link
-                    className="hover:underline"
+                    className="hover:underline text-muted-foreground"
                     href={
                       routes.students.contacts(student.id ?? "") +
                       "/" +
@@ -117,7 +117,9 @@ export function ContactStudentTable({
                     {decode(student.firstName ?? "")}
                   </Link>
                 </TableCell>
-                <TableCell>{student.classroom?.name}</TableCell>
+                <TableCell className="text-muted-foreground">
+                  {student.classroom?.name}
+                </TableCell>
 
                 <TableCell className=" text-right">
                   <DropdownMenu>
@@ -131,7 +133,7 @@ export function ContactStudentTable({
                         onSelect={() => {
                           if (!student.id) return;
                           router.push(
-                            `${routes.students.contacts(student.id)}/${stc.contactId}`,
+                            `${routes.students.contacts(student.id)}/${stc.contactId}`
                           );
                         }}
                       >
