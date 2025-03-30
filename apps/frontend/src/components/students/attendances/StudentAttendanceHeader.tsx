@@ -50,16 +50,17 @@ export function StudentAttendanceHeader({
 
   const canCreateAttendance = useCheckPermission(
     "attendance",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-muted/50 px-4 py-1">
-      <LineChart className="w-4 h-4" />
+      <LineChart className="hidden md:block w-4 h-4" />
       <Label className="hidden md:block">{t("attendances")}</Label>
-      <div className="w-[15px] hidden md:block"></div>
+      {/* <Label className="hidden md:block">{t("attendances")}</Label> */}
+      {/* <div className="w-[15px] hidden md:block"></div> */}
       {/* <FlatBadge>Total justified records: 2 out of 5</FlatBadge> */}
-      <Label className="hidden md:block">{t("terms")}</Label>
+
       <TermSelector
         defaultValue={searchParams.get("term")}
         className="md:w-[300px]"
@@ -72,12 +73,7 @@ export function StudentAttendanceHeader({
           <DropdownMenuTrigger asChild>
             <Button size={"sm"} variant={"outline"}>
               {t("prevent")}
-              <ChevronDown
-                className="-me-1 ms-2 opacity-60"
-                size={16}
-                strokeWidth={2}
-                aria-hidden="true"
-              />
+              <ChevronDown size={16} strokeWidth={2} aria-hidden="true" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -99,12 +95,7 @@ export function StudentAttendanceHeader({
               <DropdownMenuTrigger asChild>
                 <Button size={"sm"}>
                   {t("add")}
-                  <ChevronDown
-                    className="-me-1 ms-2 opacity-60"
-                    size={16}
-                    strokeWidth={2}
-                    aria-hidden="true"
-                  />
+                  <ChevronDown size={16} strokeWidth={2} aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">

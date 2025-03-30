@@ -32,7 +32,7 @@ export default async function Layout(props: {
   });
 
   const moyMinMaxGrades = await caller.classroom.getMinMaxMoyGrades(
-    classroom.id
+    classroom.id,
   );
 
   if (grades.length === 0) {

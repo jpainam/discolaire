@@ -34,7 +34,7 @@ export function StudentGrade({ grades, moyMinMaxGrades }: StudentGradeProps) {
     let filteredGrades = grades;
     if (term) {
       filteredGrades = grades.filter(
-        (g) => g.gradeSheet.termId === Number(term)
+        (g) => g.gradeSheet.termId === Number(term),
       );
     }
 
@@ -43,7 +43,7 @@ export function StudentGrade({ grades, moyMinMaxGrades }: StudentGradeProps) {
         ? _.sortBy(filteredGrades, (grade) => grade.grade)
         : _.sortBy(
             filteredGrades,
-            (grade) => grade.gradeSheet.subject.course.name
+            (grade) => grade.gradeSheet.subject.course.name,
           );
 
     return sortOrder === "desc" ? sorted.reverse() : sorted;
@@ -58,7 +58,7 @@ export function StudentGrade({ grades, moyMinMaxGrades }: StudentGradeProps) {
         setSortOrder("asc");
       }
     },
-    [orderBy, sortOrder, setOrderBy, setSortOrder]
+    [orderBy, sortOrder, setOrderBy, setSortOrder],
   );
 
   return (
