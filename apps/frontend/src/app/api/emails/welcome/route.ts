@@ -39,7 +39,7 @@
 //     const invitationLink = env.NEXT_PUBLIC_BASE_URL + "/invite/" + token;
 
 //     const { error } = await resend.emails.send({
-//       from: "Bienvenu <no-reply@discolaire.com>",
+//       from: "Bienvenu <contact@discolaire.com>",
 //       to: [email],
 //       subject: "Bienvenue sur " + school.name,
 //       headers: {

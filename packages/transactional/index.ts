@@ -3,7 +3,7 @@ export * from "./emails/ChatterEmail";
 export * from "./emails/ConsigneEmail";
 export * from "./emails/ExclusionEmail";
 export * from "./emails/FakeGradeReportEmail";
-export * from "./emails/InviteEmail";
+export * from "./emails/InvitationEmail";
 export * from "./emails/LatenessEmail";
 export * from "./emails/PasswordResetSuccess";
 export * from "./emails/ResetPassword";

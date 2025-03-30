@@ -9,7 +9,7 @@ import { caller } from "~/trpc/server";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await auth();
   if (!session) {
@@ -29,7 +29,7 @@ export async function POST(
         });
         const invitationLink = env.NEXT_PUBLIC_BASE_URL + "/invite/" + token;
         const { error } = await resend.emails.send({
-          from: "Feedback <no-reply@discolaire.com>",
+          from: "Feedback <contact@discolaire.com>",
           to: [contact.email],
           subject: "Bienvenue sur " + school.name,
           headers: {

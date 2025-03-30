@@ -30,7 +30,7 @@ export const messagingService = {
       const bodyContent = JSON.stringify({
         html: body,
         subject: subject,
-        from: "Discolaire <no-reply@discolaire.com>",
+        from: "Discolaire <contact@discolaire.com>",
         to: to,
       });
 

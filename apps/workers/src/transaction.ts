@@ -47,7 +47,7 @@ export const transactionWorker = {
       );
 
       const { error } = await resend.emails.send({
-        from: `${school.name} <no-reply@discolaire.com>`,
+        from: `${school.name} <contact@discolaire.com>`,
         to: destinationEmails,
         subject: "Confirmation de paiement scolaire",
         headers: {
