@@ -78,7 +78,7 @@ export default async function Layout({
                   defaultValue={schoolYear.id}
                 />
                 <ThemeSelector />
-                <div className="hidden md:flex items-center gap-4">
+                <div className="hidden md:flex items-center gap-2">
                   <TopRightButtons />
                   <Shortcut />
                   <ModeSwitcher />
