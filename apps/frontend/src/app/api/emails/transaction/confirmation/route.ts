@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { render } from "@react-email/render";
 import { z } from "zod";
 
 import { auth } from "@repo/auth";
-import { TransactionConfirmation } from "@repo/transactional/emails/TransactionConfirmation";
+import TransactionConfirmation from "@repo/transactional/emails/TransactionConfirmation";
 import { getServerTranslations } from "~/i18n/server";
 
+import { db } from "@repo/db";
+import { nanoid } from "nanoid";
+import { resend } from "~/lib/resend";
 import { api } from "~/trpc/server";
 import { getFullName } from "~/utils/full-name";
 
@@ -35,39 +37,44 @@ export async function POST(req: Request) {
 
     const student = await api.student.get(studentId);
 
-    const studentContacts = await api.student.contacts(
-      transaction.account.studentId
-    );
-    if (studentContacts.length === 0) {
-      return new Response("Student has no contact", { status: 404 });
-    }
-    let studentContact = studentContacts.find((std) => std.primaryContact);
-
-    if (!studentContact) {
-      studentContact = studentContacts[0];
-    }
-    const contact = studentContact?.contact;
+    const contacts = await db.studentContact.findMany({
+      include: {
+        contact: true,
+      },
+      where: {
+        studentId: transaction.account.studentId,
+      },
+    });
+    const destinationEmails = contacts
+      .map((c) => {
+        if (c.accessBilling || c.paysFee) {
+          return c.contact.email;
+        }
+      })
+      .filter((email) => email != null);
 
     const { t } = await getServerTranslations();
-    //const school = await api.school.getSchool();
+    const school = await api.school.getSchool();
 
-    if (contact?.email) {
-      const emailHtml = await render(
-        TransactionConfirmation({
-          name: getFullName(student),
-          amount: transaction.amount,
-          remaining: remaining,
-          createdBy: createdBy,
-          title: "",
-          status: t(status),
-        })
-      );
-      await api.messaging.sendEmail({
-        subject: t("transaction_confirmation"),
-        to: contact.email,
-        body: emailHtml,
-      });
+    const { error } = await resend.emails.send({
+      from: "Confirmation de Paiement <hi@discolaire.com>",
+      to: destinationEmails,
+      subject: "Paiement " + school.name,
+      headers: {
+        "X-Entity-Ref-ID": nanoid(),
+      },
+      react: TransactionConfirmation({
+        name: getFullName(student),
+        amount: transaction.amount,
+        remaining: remaining,
+        createdBy: createdBy,
+        status: t(status),
+      }) as React.ReactElement,
+    });
+    if (error) {
+      return Response.json({ error }, { status: 500 });
     }
+
     return Response.json({ success: true }, { status: 200 });
   } catch (e) {
     console.error(e);

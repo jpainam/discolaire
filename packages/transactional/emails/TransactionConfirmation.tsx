@@ -15,13 +15,15 @@ import {
 const TransactionConfirmation = ({
   name,
   amount,
-  remainding,
+  remaining,
   createdBy,
+  status,
 }: {
   name: string;
   amount: number;
   createdBy: string;
-  remainding: number;
+  remaining: number;
+  status: string;
 }) => {
   return (
     <Html>
@@ -67,7 +69,7 @@ const TransactionConfirmation = ({
                   Montant restant
                 </Text>
                 <Text className="m-0 text-[16px] font-bold text-gray-800">
-                  {remainding.toLocaleString("fr-FR", {
+                  {remaining.toLocaleString("fr-FR", {
                     style: "currency",
                     currency: "CFA",
                     minimumFractionDigits: 0,
@@ -90,7 +92,7 @@ const TransactionConfirmation = ({
                   Statut du paiement
                 </Text>
                 <Text className="m-0 text-[16px] font-bold text-green-600">
-                  Success
+                  {status}
                 </Text>
               </div>
             </Section>
@@ -139,7 +141,8 @@ const TransactionConfirmation = ({
 TransactionConfirmation.PreviewProps = {
   name: "Jean-Paul Ainam",
   amount: 5000,
-  remainding: 2000,
+  remaining: 2000,
   createdBy: "Jean-Paul Ainam",
+  status: "En attente",
 };
 export default TransactionConfirmation;

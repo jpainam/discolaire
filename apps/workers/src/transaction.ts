@@ -1,9 +1,8 @@
-import { render } from "@react-email/render";
 import { nanoid } from "nanoid";
 
 import { transactionService } from "@repo/api/services";
 import { db } from "@repo/db";
-import { TransactionConfirmation } from "@repo/transactional";
+import TransactionConfirmation from "@repo/transactional/emails/TransactionConfirmation";
 
 import { getFullName, resend } from "./utils";
 
@@ -30,22 +29,6 @@ export const transactionWorker = {
         })
         .filter((email) => email != null);
 
-      const body = await render(
-        TransactionConfirmation({
-          studentName: getFullName(student),
-          school: {
-            logo: school.logo ?? "",
-            name: school.name,
-            id: school.id,
-          },
-          paymentAmount: transaction.amount,
-          remainingBalance: remaining,
-          paymentRecorder: createdBy?.lastName ?? createdBy?.firstName ?? "N/A",
-          title: "Validation de paiement scolaire",
-          paymentStatus: transaction.status,
-        }),
-      );
-
       const { error } = await resend.emails.send({
         from: `${school.name} <hi@discolaire.com>`,
         to: destinationEmails,
@@ -53,7 +36,13 @@ export const transactionWorker = {
         headers: {
           "X-Entity-Ref-ID": nanoid(),
         },
-        html: body,
+        react: TransactionConfirmation({
+          name: getFullName(student),
+          amount: transaction.amount,
+          remaining: remaining,
+          createdBy: createdBy?.lastName ?? createdBy?.firstName ?? "N/A",
+          status: transaction.status,
+        }) as React.ReactElement,
       });
       if (error) {
         console.error(error);
