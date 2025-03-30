@@ -26,14 +26,14 @@ export async function POST(req: NextRequest) {
       console.error(errors);
       return NextResponse.json(
         { error: result.error.format() },
-        { status: 400 },
+        { status: 400 }
       );
     }
     const { content } = result.data;
     const { user } = session;
     const school = await api.school.getSchool();
     const { error } = await resend.emails.send({
-      from: "Feedback <contact@discolaire.com>",
+      from: "Feedback <hi@discolaire.com>",
       to: ["jpainam@gmail.com"],
       subject: "Feedback",
       headers: {
