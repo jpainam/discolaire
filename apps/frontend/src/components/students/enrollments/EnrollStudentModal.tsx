@@ -83,6 +83,7 @@ export function EnrollStudentModal({ studentId }: { studentId: string }) {
 
         <div className="ml-auto flex flex-row gap-4">
           <Button
+            size={"sm"}
             type="button"
             onClick={() => {
               closeModal();
@@ -91,7 +92,11 @@ export function EnrollStudentModal({ studentId }: { studentId: string }) {
           >
             {t("cancel")}
           </Button>
-          <Button isLoading={createEnrollmentMutation.isPending} type="submit">
+          <Button
+            size={"sm"}
+            isLoading={createEnrollmentMutation.isPending}
+            type="submit"
+          >
             {t("enroll")}
           </Button>
         </div>

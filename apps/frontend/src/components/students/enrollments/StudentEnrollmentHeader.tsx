@@ -25,12 +25,13 @@ export function StudentEnrollmentHeader({
   const canEnroll = useCheckPermission("enrollment", PermissionAction.CREATE);
 
   return (
-    <div className="flex flex-row items-center gap-2 border-b bg-secondary px-2 py-1">
-      {Icon && <Icon className="h-4 w-4" />}
-      <Label className="py-2.5">{t("enrollments")}</Label>
+    <div className="flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1">
+      {Icon && <Icon className="hidden md:block h-4 w-4" />}
+      <Label className="hidden md:block">{t("enrollments")}</Label>
       <div className="ml-auto flex flex-row items-center gap-2">
         {!isEnrolled && canEnroll && (
           <Button
+            size={"sm"}
             onClick={() => {
               openModal({
                 title: t("enrollment"),
@@ -41,7 +42,7 @@ export function StudentEnrollmentHeader({
             }}
             variant="outline"
           >
-            <ChevronRight className="mr-2 h-4 w-4" />
+            <ChevronRight />
             {t("enroll")}
           </Button>
         )}

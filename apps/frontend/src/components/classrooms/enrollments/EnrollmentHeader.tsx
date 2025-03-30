@@ -122,11 +122,8 @@ export function EnrollmentHeader({
             disabled={false}
             onClick={() => {
               openModal({
-                title: <p className="px-4 pt-4">{t("enroll_new_students")}</p>,
-                className: "w-[600px] p-0",
-                description: (
-                  <p className="px-4">{t("enroll_new_students_description")}</p>
-                ),
+                title: t("enroll_new_students"),
+                description: t("enroll_new_students_description"),
                 view: <EnrollStudent classroomId={classroom.id} />,
               });
             }}
@@ -147,7 +144,7 @@ export function EnrollmentHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -158,7 +155,7 @@ export function EnrollmentHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

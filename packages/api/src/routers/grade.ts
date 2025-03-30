@@ -6,13 +6,11 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const gradeRouter = createTRPCRouter({
   delete: protectedProcedure
-    .input(z.union([z.array(z.number()), z.number()]))
+    .input(z.number())
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.gradeSheet.deleteMany({
+      return ctx.db.grade.delete({
         where: {
-          id: {
-            in: Array.isArray(input) ? input : [input],
-          },
+          id: input,
         },
       });
     }),

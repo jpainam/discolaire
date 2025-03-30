@@ -1,6 +1,6 @@
 "use client";
 
-import { LayoutGridIcon, ListIcon, MoreVertical } from "lucide-react";
+import { LayoutGridIcon, ListIcon, MoreVertical, Trash2 } from "lucide-react";
 import { parseAsInteger, useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 
@@ -10,6 +10,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
@@ -19,11 +20,17 @@ import FlatBadge from "~/components/FlatBadge";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
+import { toast } from "sonner";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { PermissionAction } from "~/permissions";
+import { useConfirm } from "~/providers/confirm-dialog";
+import { api, useTRPC } from "~/trpc/react";
 
 export function StudentGradeHeader({
   student,
@@ -44,6 +51,30 @@ export function StudentGradeHeader({
   });
 
   // const router = useRouter();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const canDeleteGradesheet = useCheckPermission(
+    "gradesheet",
+    PermissionAction.DELETE
+  );
+  const confirm = useConfirm();
+  const deleteGradeMutation = useMutation(
+    trpc.grade.delete.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: () => {
+        toast.success(t("deleted_successfully"), { id: 0 });
+        // TODO: Fix this Do not refresh, and push, just invalidate the query
+        router.refresh();
+        router.push(`/students/${student.id}/grades`);
+      },
+      onSettled: async () => {
+        await queryClient.invalidateQueries(trpc.student.grades.pathFilter());
+      },
+    })
+  );
+  const params = useParams<{ gradeId: string; id: string }>();
 
   const [studentAvg, setStudentAvg] = useState<number | null>(null);
   const [classroomAvg, setClassroomAvg] = useState<number | null>(null);
@@ -97,7 +128,8 @@ export function StudentGradeHeader({
   }
   return (
     <div>
-      <div className="flex flex-row items-center gap-2 border-b  px-4 py-2 text-secondary-foreground">
+      <div className="flex flex-row items-center gap-2 border-b px-4 py-1 text-secondary-foreground">
+        <ListIcon className="hidden md:block h-4 w-4" />
         <Label className="hidden md:block">{t("term")}</Label>
         <TermSelector
           className="w-full md:w-[300px]"
@@ -108,7 +140,7 @@ export function StudentGradeHeader({
               "?" +
                 createQueryString({
                   term: val,
-                }),
+                })
             );
           }}
           defaultValue={term ? `${term}` : undefined}
@@ -158,7 +190,7 @@ export function StudentGradeHeader({
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/student/grades/?id=${student.id}&format=pdf`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >
@@ -168,12 +200,35 @@ export function StudentGradeHeader({
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/student/grades/?id=${student.id}&format=csv`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >
                 <XMLIcon /> {t("xml_export")}
               </DropdownMenuItem>
+              {canDeleteGradesheet && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    variant="destructive"
+                    disabled={!params.gradeId}
+                    onSelect={async () => {
+                      if (!params.gradeId) return;
+                      const isConfirmed = await confirm({
+                        title: t("delete"),
+                        description: t("delete_confirmation"),
+                      });
+                      if (isConfirmed) {
+                        toast.loading(t("deleting"), { id: 0 });
+                        deleteGradeMutation.mutate(Number(params.gradeId));
+                      }
+                    }}
+                  >
+                    <Trash2 />
+                    {t("delete")}
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
