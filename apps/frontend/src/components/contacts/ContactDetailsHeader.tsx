@@ -179,7 +179,7 @@ export function ContactDetailsHeader({
                     });
                   }}
                 >
-                  <KeyRound className="mr-2 h-4 w-4" />
+                  <KeyRound />
                   {t("change_password")}
                 </DropdownMenuItem>
               )}
