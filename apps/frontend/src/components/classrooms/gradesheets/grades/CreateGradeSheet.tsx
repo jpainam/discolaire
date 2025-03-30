@@ -47,7 +47,7 @@ const createGradeSchema = z.object({
       studentId: z.string(),
       absent: z.boolean().default(false),
       grade: z.string().default(""),
-    })
+    }),
   ),
 });
 
@@ -70,7 +70,7 @@ export function CreateGradeSheet({
         }
       }
     },
-    [] // No dependencies, so this function is only created once
+    [], // No dependencies, so this function is only created once
   );
   const searchParams = useSearchParams();
   const form = useForm({

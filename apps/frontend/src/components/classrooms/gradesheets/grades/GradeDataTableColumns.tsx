@@ -204,7 +204,7 @@ function ActionCells({
   const markGradeAbsent = api.grade.update.useMutation();
   const canUpdateGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
 
   return (
@@ -273,7 +273,7 @@ function ActionCells({
                       error: (error) => {
                         return getErrorMessage(error);
                       },
-                    }
+                    },
                   );
                 }
               }}
