@@ -1,7 +1,10 @@
 import {
   Body,
+  Button,
   Container,
   Head,
+  Heading,
+  Hr,
   Html,
   Preview,
   Section,
@@ -9,92 +12,134 @@ import {
   Text,
 } from "@react-email/components";
 
-import { Logo } from "../components/logo";
-import { getAssetUrl } from "../utils";
-
-interface School {
-  logo?: string | null;
-  name: string;
-  id: string;
-}
-
-const assetUrl = getAssetUrl();
-const defaultSchool = {
-  logo: `${assetUrl}/images/logo-round.png`,
-  name: "Institut Polyvalent Wague",
-  id: "1",
-};
-
-export function TransactionConfirmation({
-  studentName = "Doe John",
-  paymentAmount = 50000,
-  school = defaultSchool,
-  remainingBalance = 100000,
-  paymentRecorder = "Dupont Pierre",
-  paymentStatus = "Success",
-  title = "Confirmation de paiement scolaire",
+const TransactionConfirmation = ({
+  name,
+  amount,
+  remainding,
+  createdBy,
 }: {
-  studentName: string;
-  school: School;
-  paymentAmount: number;
-  remainingBalance: number;
-  paymentRecorder: string;
-  paymentStatus: string;
-  title: string;
-}) {
+  name: string;
+  amount: number;
+  createdBy: string;
+  remainding: number;
+}) => {
   return (
     <Html>
+      <Head />
+      <Preview>Confirmation de paiement des frais scolaires</Preview>
       <Tailwind>
-        <Head />
-        <Preview>{title}</Preview>
+        <Body className="bg-gray-100 py-[40px] font-sans">
+          <Container className="mx-auto my-0 max-w-[600px] rounded-[8px] bg-white p-[24px]">
+            <Heading className="m-0 mb-[16px] text-[24px] font-bold text-gray-800">
+              Confirmation de Paiement
+            </Heading>
 
-        <Body className="mx-auto my-auto bg-[#fff] font-sans">
-          <Container
-            className="mx-auto my-[40px] max-w-[600px] border-transparent p-[20px] md:border-[#E8E7E1]"
-            style={{ borderStyle: "solid", borderWidth: 1 }}
-          >
-            <Logo logoUrl={school.logo ?? defaultSchool.logo} />
-
-            <br />
-            <span className="font-medium">Madame/Monsieur</span>
-            <Text className="text-[#121212]">
-              Nous avons bien reçu le paiement pour les frais scolaires de{" "}
-              <strong>{studentName}</strong>.
+            <Text className="mb-[24px] text-[16px] text-gray-700">
+              Madame/Monsieur,
             </Text>
 
-            <Section>
-              <Text style={{ fontWeight: "bold" }}>Détails du paiement :</Text>
-              <Text style={{ margin: "5px 0" }}>
-                Montant payé : <strong>{paymentAmount} CFA</strong>
-              </Text>
-              <Text style={{ margin: "5px 0" }}>
-                Montant restant : <strong>{remainingBalance} CFA</strong>
-              </Text>
-              <Text style={{ fontSize: "14px", margin: "5px 0" }}>
-                Enregistré par : <strong>{paymentRecorder}</strong>
-              </Text>
-              <Text
-                style={{
-                  fontSize: "14px",
-                  margin: "5px 0",
-                  color: "green",
-                }}
-              >
-                Statut du paiement : <strong>{paymentStatus}</strong>
-              </Text>
+            <Text className="mb-[24px] text-[16px] text-gray-700">
+              Nous avons bien reçu le paiement pour les frais scolaires de{" "}
+              <span className="font-bold">{name}</span>.
+            </Text>
+
+            <Section className="mb-[24px] rounded-[8px] bg-gray-50 p-[24px]">
+              <Heading className="m-0 mb-[16px] text-[18px] font-bold text-gray-800">
+                Détails du paiement
+              </Heading>
+
+              <div className="mb-[12px]">
+                <Text className="m-0 text-[14px] text-gray-500">
+                  Montant payé
+                </Text>
+                <Text className="m-0 text-[16px] font-bold text-gray-800">
+                  {amount.toLocaleString("fr-FR", {
+                    style: "currency",
+                    currency: "CFA",
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                  })}
+                </Text>
+              </div>
+
+              <div className="mb-[12px]">
+                <Text className="m-0 text-[14px] text-gray-500">
+                  Montant restant
+                </Text>
+                <Text className="m-0 text-[16px] font-bold text-gray-800">
+                  {remainding.toLocaleString("fr-FR", {
+                    style: "currency",
+                    currency: "CFA",
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                  })}
+                </Text>
+              </div>
+
+              <div className="mb-[12px]">
+                <Text className="m-0 text-[14px] text-gray-500">
+                  Enregistré par
+                </Text>
+                <Text className="m-0 text-[16px] text-gray-800">
+                  {createdBy}
+                </Text>
+              </div>
+
+              <div>
+                <Text className="m-0 text-[14px] text-gray-500">
+                  Statut du paiement
+                </Text>
+                <Text className="m-0 text-[16px] font-bold text-green-600">
+                  Success
+                </Text>
+              </div>
             </Section>
 
-            <Text style={{ marginTop: "20px" }}>
+            <Text className="mb-[24px] text-[16px] text-gray-700">
               Merci de votre confiance et de votre engagement.
             </Text>
-            <Text style={{ margin: "10px 0" }}>
-              L'équipe de gestion scolaire
+
+            <Button
+              href="https://demo.discolaire.com"
+              className="box-border block rounded-[4px] bg-blue-600 px-[20px] py-[12px] text-center text-[16px] font-medium text-white no-underline"
+            >
+              Voir votre compte
+            </Button>
+
+            <Hr className="my-[32px] border-t border-gray-300" />
+
+            <Text className="m-0 text-[14px] text-gray-500">
+              Si vous avez des questions concernant ce paiement, veuillez
+              contacter notre service administratif.
+            </Text>
+
+            <Hr className="my-[32px] border-t border-gray-300" />
+
+            <Text className="m-0 text-[12px] text-gray-500">
+              © 2025 Discolaire. Tous droits réservés.
+            </Text>
+            <Text className="m-0 text-[12px] text-gray-500">
+              123 Rue de l'Éducation, New York, USA
+            </Text>
+            <Text className="m-0 text-[12px] text-gray-500">
+              <a
+                href="https://demo.discolaire.com/unsubscribe?type=transaction"
+                className="text-blue-600 no-underline"
+              >
+                Se désabonner
+              </a>
             </Text>
           </Container>
         </Body>
       </Tailwind>
     </Html>
   );
-}
+};
 
+TransactionConfirmation.PreviewProps = {
+  name: "Jean-Paul Ainam",
+  amount: 5000,
+  remainding: 2000,
+  createdBy: "Jean-Paul Ainam",
+};
 export default TransactionConfirmation;
