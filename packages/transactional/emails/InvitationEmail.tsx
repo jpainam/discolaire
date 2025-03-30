@@ -27,7 +27,7 @@ const InvitationEmail = ({
       <Tailwind>
         <Body className="bg-[#f5f5f7] py-[40px] font-sans">
           <Container className="mx-auto max-w-[600px] rounded-[12px] bg-white p-[32px] shadow-sm">
-            <Heading className="m-0 mb-[24px] text-[24px] font-bold text-black">
+            <Heading className="m-0 mb-[24px] text-[18px] font-bold text-black">
               Rejoindre {schoolName}
             </Heading>
 
@@ -36,10 +36,8 @@ const InvitationEmail = ({
             </Text>
 
             <Text className="mb-[32px] text-[16px] leading-[24px] text-[#333333]">
-              <strong>{inviterName}</strong> vous a invité à rejoindre{" "}
-              <strong>{schoolName}</strong>. Rejoignez notre plateforme de
-              gestion scolaire pour le suivi scolaire des élèves et la
-              communication entre les enseignants et les parents.
+              <strong>{inviterName}</strong> vous a invité à rejoindre la
+              plateforme de gestion scolaire de <strong>{schoolName}</strong>.
             </Text>
 
             <Button

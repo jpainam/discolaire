@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const { error } = await resend.emails.send({
-      from: "Invitation <hi@discolaire.com>",
+      from: `Rejoindre ${school.name} <hi@discolaire.com>`,
       to: [email],
       subject: "Bienvenue sur " + school.name,
       headers: {
