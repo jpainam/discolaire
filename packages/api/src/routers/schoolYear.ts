@@ -40,6 +40,13 @@ export const schoolYearRouter = createTRPCRouter({
       };
     });
   }),
+  getCurrent: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.db.schoolYear.findUniqueOrThrow({
+      where: {
+        id: ctx.schoolYearId,
+      },
+    });
+  }),
   update: protectedProcedure
     .input(
       z.object({

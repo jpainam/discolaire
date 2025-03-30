@@ -7,20 +7,22 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
 import { useLocale } from "~/i18n";
 
+import { toast } from "sonner";
+import PDFIcon from "~/components/icons/pdf-solid";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function IdCardHeader() {
   const { t } = useLocale();
   const Icon = sidebarIcons.id_card;
   return (
-    <div className="flex flex-row items-center gap-1 bg-secondary px-2 py-1 text-secondary-foreground">
+    <div className="flex border-b flex-row items-center gap-1 bg-secondary px-4 py-1 text-secondary-foreground">
       {Icon && <Icon className="h-4 w-4" />}
       <Label>{t("id_card")}</Label>
       <div className="ml-auto">
@@ -30,13 +32,17 @@ export function IdCardHeader() {
               <MoreVertical className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuContent align="end">
+            <DropdownHelp />
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Team</DropdownMenuItem>
-            <DropdownMenuItem>Subscription</DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                toast.warning("Not implemented yet");
+              }}
+            >
+              <PDFIcon />
+              {t("pdf_export")}
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
