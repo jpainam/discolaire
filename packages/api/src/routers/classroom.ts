@@ -174,6 +174,12 @@ export const classroomRouter = createTRPCRouter({
     .input(z.string())
     .query(async ({ ctx, input }) => {
       return ctx.db.staff.findMany({
+        orderBy: {
+          lastName: "asc",
+        },
+        include: {
+          user: true,
+        },
         where: {
           subjects: {
             some: {
