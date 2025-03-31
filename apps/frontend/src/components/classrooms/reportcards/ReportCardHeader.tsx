@@ -9,6 +9,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
@@ -17,6 +18,7 @@ import { useLocale } from "~/i18n";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { TrimestreSelector } from "~/components/shared/selects/TrimestreSelector";
 import { useRouter } from "~/hooks/use-router";
@@ -42,7 +44,7 @@ export function ReportCardHeader() {
         onChange={(val) => {
           router.push(
             `/classrooms/${params.id}/reportcards?` +
-              createQueryString({ termId: val, trimestreId: undefined }),
+              createQueryString({ termId: val, trimestreId: undefined })
           );
         }}
       />
@@ -68,6 +70,8 @@ export function ReportCardHeader() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
+            <DropdownHelp />
+            <DropdownMenuSeparator />
             <DropdownMenuItem
               disabled={!termId && !trimestreId}
               onSelect={() => {

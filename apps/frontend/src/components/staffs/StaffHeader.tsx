@@ -7,6 +7,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { useSheet } from "~/hooks/use-sheet";
@@ -24,6 +25,7 @@ import { breadcrumbAtom } from "~/lib/atoms";
 import { getFullName } from "~/utils/full-name";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
+import { DropdownHelp } from "../shared/DropdownHelp";
 import { StaffSelector } from "../shared/selects/StaffSelector";
 import { CreateEditStaff } from "./CreateEditStaff";
 import { StaffEffectif } from "./StaffEffectif";
@@ -88,6 +90,8 @@ export function StaffHeader({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
+            <DropdownHelp />
+            <DropdownMenuSeparator />
             <DropdownMenuItem>
               <PDFIcon />
               {t("pdf_export")}

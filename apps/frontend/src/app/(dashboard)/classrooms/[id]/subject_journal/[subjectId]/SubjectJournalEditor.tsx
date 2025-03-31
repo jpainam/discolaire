@@ -39,6 +39,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
+import { toast } from "sonner";
 import { TiptapEditor } from "~/components/tiptap-editor";
 import { api } from "~/trpc/react";
 import { SubjectJournalTemplate } from "./SubjectJournalTemplate";
@@ -46,7 +47,7 @@ import { SubjectJournalTemplate } from "./SubjectJournalTemplate";
 const createSubjectJournalSchema = z.object({
   title: z.string().min(1),
   content: z.string().min(1),
-  date: z.coerce.date().default(() => new Date()),
+  publishDate: z.coerce.date().default(() => new Date()),
 });
 export function SubjectJournalEditor({
   subject,
@@ -81,19 +82,45 @@ export function SubjectJournalEditor({
         date: dateFormat.format(new Date()),
       }),
       content: "",
-      date: new Date(),
+      publishDate: new Date(),
     },
   });
-  const handleSubmit = (data: z.infer<typeof createSubjectJournalSchema>) => {
-    const values = {
-      title: data.title,
-      content: data.content,
-      date: data.date,
-      subjectId: subject.id,
-      status: "PENDING" as const,
-      attachments: [],
-    };
-    createSubjectJournal.mutate(values);
+  const handleSubmit = async (
+    data: z.infer<typeof createSubjectJournalSchema>
+  ) => {
+    const response = await fetch("/api/upload/subject-journal", {
+      method: "POST",
+      body: JSON.stringify({
+        file: selectedFile,
+        subjectId: subject.id,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Failed to upload file");
+    }
+    const fileData = (await response.json()) as string | { error: string };
+    if (typeof fileData === "string") {
+      console.log("File uploaded successfully:", fileData);
+      setSelectedFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      const values = {
+        title: data.title,
+        content: data.content,
+        publishDate: data.publishDate,
+        subjectId: subject.id,
+        status: "PENDING" as const,
+        attachment: fileData,
+      };
+      createSubjectJournal.mutate(values);
+    } else if (fileData.error) {
+      toast.error(fileData.error);
+      return;
+    }
   };
 
   const { openModal } = useModal();
@@ -104,9 +131,9 @@ export function SubjectJournalEditor({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="mb-2 w-full flex-1 overflow-y-auto rounded-lg py-2 px-4"
+        className="w-full flex-col flex gap-2 flex-1 overflow-y-auto rounded-lg py-2 px-4"
       >
-        <div className="mb-2 flex items-center justify-between">
+        <div className="flex items-center justify-between">
           <div className="flex items-center">
             <div
               style={{ backgroundColor: subject.course.color }}
@@ -140,7 +167,7 @@ export function SubjectJournalEditor({
           control={form.control}
           name="content"
           render={({ field }) => (
-            <FormItem className="mb-4">
+            <FormItem>
               <FormControl>
                 {richText ? (
                   <TiptapEditor
@@ -151,7 +178,7 @@ export function SubjectJournalEditor({
                   <Textarea
                     placeholder={t("what_did_you_teach")}
                     {...field}
-                    className=" min-h-[100px] w-full"
+                    className="min-h-[100px] w-full"
                   />
                 )}
               </FormControl>
@@ -162,9 +189,9 @@ export function SubjectJournalEditor({
         />
 
         {/* <div className="mb-2 flex  items-center gap-2"> */}
-        <div className="mb-2 flex flex-row items-center gap-4 text-muted-foreground">
+        <div className="flex flex-row items-center gap-4 text-muted-foreground">
           <Select defaultValue="everyone">
-            <SelectTrigger className="mb-2 w-full md:w-[180px]">
+            <SelectTrigger className="w-full md:w-[180px]">
               <SelectValue placeholder={t("select_a_recipient")} />
             </SelectTrigger>
             <SelectContent>
@@ -206,7 +233,7 @@ export function SubjectJournalEditor({
           )}
         </div>
 
-        <div className="mb-2 flex flex-wrap items-center">
+        <div className="flex flex-wrap items-center">
           <input
             type="file"
             ref={fileInputRef}
@@ -225,7 +252,7 @@ export function SubjectJournalEditor({
           </Button>
           <FormField
             control={form.control}
-            name="date"
+            name="publishDate"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -285,10 +312,12 @@ export function SubjectJournalEditor({
             </SelectContent>
           </Select>
           <div className="ml-auto flex flex-row items-center gap-2">
-            <Button variant="outline" size={"sm"}>
+            <Button type="button" variant="outline" size={"sm"}>
               {t("cancel")}
             </Button>
-            <Button size={"sm"}>{t("submit")}</Button>
+            <Button isLoading={createSubjectJournal.isPending} size={"sm"}>
+              {t("submit")}
+            </Button>
           </div>
         </div>
       </form>

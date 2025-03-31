@@ -23,6 +23,7 @@ import XMLIcon from "../icons/xml-solid";
 import { ClassroomSelector } from "../shared/selects/ClassroomSelector";
 import { ClassroomStudentSelector } from "../shared/selects/ClassroomStudentSelector";
 import { TermSelector } from "../shared/selects/TermSelector";
+import { DropdownHelp } from "../shared/DropdownHelp";
 
 export function ReportCardHeader() {
   const { t } = useLocale();
@@ -49,7 +50,7 @@ export function ReportCardHeader() {
         className="w-[300px]"
         onChange={(val) => {
           router.push(
-            routes.reportcards.index + "/?" + createQueryString({ term: val }),
+            routes.reportcards.index + "/?" + createQueryString({ term: val })
           );
         }}
       />
@@ -61,7 +62,7 @@ export function ReportCardHeader() {
               router.push(
                 routes.reportcards.index +
                   "/?" +
-                  createQueryString({ student: val }),
+                  createQueryString({ student: val })
               );
             }}
             defaultValue={searchParams.get("student") ?? undefined}
@@ -79,6 +80,8 @@ export function ReportCardHeader() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
+            <DropdownHelp />
+            <DropdownMenuSeparator />
             <DropdownMenuItem>
               <PDFIcon />
               {t("pdf_export")}

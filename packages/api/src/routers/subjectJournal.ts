@@ -6,9 +6,9 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 const createSubjectJournalSchema = z.object({
   title: z.string().min(1),
   content: z.string().min(1),
-  date: z.coerce.date(),
+  publishDate: z.coerce.date(),
   subjectId: z.coerce.number(),
-  attachments: z.array(z.string()),
+  attachment: z.string().optional(),
   status: z.enum(["APPROVED", "PENDING", "REJECTED"]).default("PENDING"),
 });
 export const subjectJournalRouter = createTRPCRouter({

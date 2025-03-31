@@ -235,9 +235,9 @@ model SubjectJournal {
     content     String
     schoolId    String
     createdById String
-    attachments String[]
+    attachment  String?
     createdAt   DateTime @default(now()) @db.Timestamp(6)
-    date        DateTime @default(now()) @db.Timestamp(6)
+    publishDate DateTime @default(now()) @db.Timestamp(6)
     status      String   @default("PENDING")
     createdBy   User     @relation("createdBy", fields: [createdById], references: [id])
     subject     Subject  @relation("subject", fields: [subjectId], references: [id])
