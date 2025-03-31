@@ -86,7 +86,7 @@ export function SubjectJournalList({
   return (
     <div className="flex flex-col gap-2 px-4 py-2">
       {journals.map((journal) => (
-        <div key={journal.id} className="rounded-md border p-2 bg-muted">
+        <div key={journal.id} className="rounded-md border p-2 bg-muted/50">
           <div className="flex items-start justify-between">
             <span className="font-semibold text-sm">{journal.title}</span>
             <p className="text-xs text-muted-foreground">
