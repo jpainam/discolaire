@@ -73,12 +73,10 @@ export function SubjectJournalList({
   });
   return (
     <div className="mb-4 flex flex-col gap-2 p-4">
-      <h3 className="text-xl font-bold">Existing Posts</h3>
-
       {journals.map((journal) => (
-        <div key={journal.id} className="rounded-lg bg-white p-2 shadow">
+        <div key={journal.id} className="rounded-lg  p-2 shadow">
           <div className="mb-2 flex items-start justify-between">
-            <h4 className="text-lg font-semibold">{journal.title}</h4>
+            <h4 className="font-semibold">{journal.title}</h4>
             {getStatusBadge(journal.status)}
           </div>
           <p className="mb-2 text-sm text-gray-500">

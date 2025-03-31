@@ -111,39 +111,43 @@ export function SubjectJournalEditor({
   const handleSubmit = async (
     data: z.infer<typeof createSubjectJournalSchema>
   ) => {
-    const response = await fetch("/api/upload/subject-journal", {
-      method: "POST",
-      body: JSON.stringify({
-        file: selectedFile,
-        subjectId: subject.id,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!response.ok) {
-      throw new Error("Failed to upload file");
-    }
-    const fileData = (await response.json()) as string | { error: string };
-    if (typeof fileData === "string") {
-      console.log("File uploaded successfully:", fileData);
-      setSelectedFile(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+    let attachment = "";
+    if (selectedFile) {
+      const response = await fetch("/api/upload/subject-journal", {
+        method: "POST",
+        body: JSON.stringify({
+          file: selectedFile,
+          subjectId: subject.id,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to upload file");
       }
-      const values = {
-        title: data.title,
-        content: data.content,
-        publishDate: data.publishDate,
-        subjectId: subject.id,
-        status: "PENDING" as const,
-        attachment: fileData,
-      };
-      createSubjectJournal.mutate(values);
-    } else if (fileData.error) {
-      toast.error(fileData.error);
-      return;
+      const fileData = (await response.json()) as string | { error: string };
+      if (typeof fileData === "string") {
+        console.log("File uploaded successfully:", fileData);
+        setSelectedFile(null);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        attachment = fileData;
+      } else if (fileData.error) {
+        toast.error(fileData.error);
+        return;
+      }
     }
+    const values = {
+      title: data.title,
+      content: data.content,
+      publishDate: data.publishDate,
+      subjectId: subject.id,
+      status: "PENDING" as const,
+      attachment: attachment,
+    };
+    createSubjectJournal.mutate(values);
   };
 
   const { openModal } = useModal();
