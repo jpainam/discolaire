@@ -1,14 +1,7 @@
 "use client";
 
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  FileIcon,
-  ImageIcon,
-  LinkIcon,
-} from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, DownloadIcon } from "lucide-react";
 
-import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import { useLocale } from "~/i18n";
 
@@ -42,47 +35,37 @@ export function SubjectJournalList({
     );
   };
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "APPROVED":
-        return <Badge className="bg-green-500">{t("approved")}</Badge>;
-      case "PENDING":
-        return <Badge className="bg-yellow-500">{t("pending")}</Badge>;
-      case "REJECTED":
-        return <Badge className="bg-red-500">{t("rejected")}</Badge>;
-      default:
-        return null;
-    }
-  };
-  const getAttachmentIcon = (type: string) => {
-    switch (type) {
-      case "doc":
-        return <FileIcon className="h-4 w-4 text-blue-500" />;
-      case "image":
-        return <ImageIcon className="h-4 w-4 text-green-500" />;
-      case "link":
-        return <LinkIcon className="h-4 w-4 text-purple-500" />;
-      default:
-        return null;
-    }
-  };
+  // const getStatusBadge = (status: string) => {
+  //   switch (status) {
+  //     case "APPROVED":
+  //       return <Badge className="bg-green-500">{t("approved")}</Badge>;
+  //     case "PENDING":
+  //       return <Badge className="bg-yellow-500">{t("pending")}</Badge>;
+  //     case "REJECTED":
+  //       return <Badge className="bg-red-500">{t("rejected")}</Badge>;
+  //     default:
+  //       return null;
+  //   }
+  // };
+
   const dateFormat = new Intl.DateTimeFormat(i18n.language, {
     year: "numeric",
     month: "short",
     day: "numeric",
   });
   return (
-    <div className="mb-4 flex flex-col gap-2 p-4">
+    <div className="flex flex-col gap-2 px-4 py-2">
       {journals.map((journal) => (
-        <div key={journal.id} className="rounded-lg  p-2 shadow">
+        <div key={journal.id}>
           <div className="mb-2 flex items-start justify-between">
-            <h4 className="font-semibold">{journal.title}</h4>
-            {getStatusBadge(journal.status)}
+            <span className="font-semibold text-sm">{journal.title}</span>
+            <p className="text-xs text-muted-foreground">
+              {journal.createdBy.name} -{" "}
+              {dateFormat.format(journal.publishDate)}
+            </p>
+            {/* {getStatusBadge(journal.status)} */}
           </div>
-          <p className="mb-2 text-sm text-gray-500">
-            {t("by")} {journal.createdBy.name} on{" "}
-            {dateFormat.format(journal.publishDate)}
-          </p>
+
           {isRichText(journal.content) ? (
             <div
               className="prose prose-sm max-w-none"
@@ -91,14 +74,20 @@ export function SubjectJournalList({
               }}
             ></div>
           ) : (
-            <p className="text-xs text-muted-foreground">{journal.content}</p>
+            <p className="text-sm text-muted-foreground">{journal.content}</p>
           )}
 
-          <div className="flex items-center space-x-2">
-            <span title={journal.attachment ?? "No attachment"}>
-              {getAttachmentIcon(journal.attachment ?? "doc")}
-            </span>
-          </div>
+          {journal.attachment && (
+            <Button
+              variant={"link"}
+              onClick={() => {
+                window.open(journal.attachment ?? "#", "_blank");
+              }}
+            >
+              <DownloadIcon className="h-4 w-4" />
+              <span className="truncate max-w-[80%]">{journal.attachment}</span>
+            </Button>
+          )}
         </div>
       ))}
       <div className="flex items-center justify-between pb-4">

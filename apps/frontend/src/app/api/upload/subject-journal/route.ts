@@ -18,7 +18,7 @@ export async function POST(request: Request) {
   try {
     const formData = await request.formData();
     const file = formData.get("file");
-    const userId = formData.get("userId") as string;
+    const subjectId = formData.get("subjectId") as string;
 
     if (!file) {
       return Response.json({ error: "No file provided" }, { status: 400 });
@@ -30,22 +30,20 @@ export async function POST(request: Request) {
     //const isCropped = file.name.includes("cropped");
 
     const school = await caller.school.getSchool();
-    const key = `${school.code}/avatars/${userId}.png`;
+    const filename = crypto.randomUUID();
+    const key = `${school.code}/journals/${subjectId}/${file.name}_${filename}.${file.type.split("/")[1]}`;
+
     const command = new PutObjectCommand({
       Bucket: "discolaire-public",
       Key: key,
       Body: Buffer.from(fileBuffer),
       ContentType: file.type,
     });
-    const response = await client.send(command);
-    // Update the avatar in the database
-    await caller.user.updateAvatar({
-      id: userId,
-      avatar: `https://discolaire-public.s3.eu-central-1.amazonaws.com/${key}`,
+    await client.send(command);
+    return Response.json({
+      fileUrl: `https://discolaire-public.s3.eu-central-1.amazonaws.com/${key}`,
     });
-    // TODO Send an email to the user to confirm the change
-    return Response.json({ response });
   } catch (error) {
-    return Response.json({ error: (error as Error).message });
+    return Response.json({ error: (error as Error).message }, { status: 500 });
   }
 }

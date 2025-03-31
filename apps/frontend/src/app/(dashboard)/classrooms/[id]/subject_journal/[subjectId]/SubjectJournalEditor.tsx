@@ -126,14 +126,16 @@ export function SubjectJournalEditor({
       if (!response.ok) {
         throw new Error("Failed to upload file");
       }
-      const fileData = (await response.json()) as string | { error: string };
-      if (typeof fileData === "string") {
-        console.log("File uploaded successfully:", fileData);
+      const fileData = (await response.json()) as {
+        fileUrl?: string;
+        error?: string;
+      };
+      if (fileData.fileUrl) {
         setSelectedFile(null);
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
-        attachment = fileData;
+        attachment = fileData.fileUrl;
       } else if (fileData.error) {
         toast.error(fileData.error);
         return;
