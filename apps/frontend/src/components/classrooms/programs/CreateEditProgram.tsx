@@ -16,8 +16,7 @@ import {
   useForm,
 } from "@repo/ui/components/form";
 import { Label } from "@repo/ui/components/label";
-import { Skeleton } from "@repo/ui/components/skeleton";
-import dynamic from "next/dynamic";
+//import dynamic from "next/dynamic";
 import { useParams, usePathname } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -33,12 +32,14 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
-import { html_content } from "./editor-content";
+//import { html_content } from "./editor-content";
+import type { RouterOutputs } from "@repo/api";
+import { TiptapEditor } from "~/components/tiptap-editor";
 
-const QuillEditor = dynamic(() => import("~/components/quill-editor"), {
-  ssr: false,
-  loading: () => <Skeleton className="h-full w-48" />,
-});
+// const QuillEditor = dynamic(() => import("~/components/quill-editor"), {
+//   ssr: false,
+//   loading: () => <Skeleton className="h-full w-48" />,
+// });
 
 const programFormSchema = z.object({
   content: z.string().min(1, { message: "Content is required" }),
@@ -46,23 +47,23 @@ const programFormSchema = z.object({
 
 export function CreateEditProgram({
   defaultContent,
-  subjectId,
+  subject,
 }: {
   defaultContent?: string;
-  subjectId: number;
+  subject: RouterOutputs["subject"]["get"];
 }) {
   const router = useRouter();
   const pathname = usePathname();
   const params = useParams<{ id: string }>();
 
   const form = useForm({
-    defaultValues: { content: defaultContent },
+    defaultValues: { content: subject.program ?? defaultContent },
     schema: programFormSchema,
   });
   const utils = api.useUtils();
   const canUpdateSubject = useCheckPermission(
     "subject",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const updateSubjectProgram = api.subject.updateProgram.useMutation({
     onSettled: () => utils.subject.invalidate(),
@@ -79,39 +80,29 @@ export function CreateEditProgram({
     toast.loading(t("updating"), { id: 0 });
     updateSubjectProgram.mutate({
       content: data.content,
-      id: Number(subjectId),
+      id: subject.id,
     });
   };
 
-  const subjectQuery = api.subject.get.useQuery(subjectId);
-
   const { t } = useLocale();
 
-  if (subjectQuery.isError) {
-    toast.error(subjectQuery.error.message);
-    return;
-  }
-  const subject = subjectQuery.data;
   return (
     <Form {...form}>
       <form
         className="flex flex-col"
         onSubmit={form.handleSubmit(submitProgram)}
       >
-        <div className="flex flex-row justify-end gap-4 bg-muted/50 px-4 py-1">
-          {subjectQuery.isPending ? (
-            <Skeleton className="w-96" />
-          ) : (
-            <div className="flex flex-row items-center gap-2">
-              <Label className="hidden md:block">{subject?.course.name}</Label>
-              <FlatBadge variant={"green"}>
-                {t("coeff")}: {subject?.coefficient}
-              </FlatBadge>
-              <FlatBadge variant={"blue"}>
-                {t("teacher")}: {subject?.teacher?.lastName}
-              </FlatBadge>
-            </div>
-          )}
+        <div className="flex border-b flex-row justify-end gap-4 bg-muted/50 px-4 py-1">
+          <div className="flex flex-row items-center gap-2">
+            <Label className="hidden md:block">{subject.course.name}</Label>
+            <FlatBadge variant={"green"}>
+              {t("coeff")}: {subject.coefficient}
+            </FlatBadge>
+            <FlatBadge variant={"blue"}>
+              {t("teacher")}: {subject.teacher?.lastName}
+            </FlatBadge>
+          </div>
+
           <div className="ml-auto flex flex-row items-center gap-2">
             {canUpdateSubject && (
               <>
@@ -145,7 +136,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=pdf`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -155,8 +146,8 @@ export function CreateEditProgram({
                 <DropdownMenuItem
                   onSelect={() => {
                     window.open(
-                      `/api/pdfs/classroom/${params.id}/programs?format=pdf&subjectId=${subjectId}`,
-                      "_blank",
+                      `/api/pdfs/classroom/${params.id}/programs?format=pdf&subjectId=${subject.id}`,
+                      "_blank"
                     );
                   }}
                 >
@@ -168,7 +159,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=csv`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -178,8 +169,8 @@ export function CreateEditProgram({
                 <DropdownMenuItem
                   onSelect={() => {
                     window.open(
-                      `/api/pdfs/classroom/${params.id}/programs?format=csv&subjectId=${subjectId}`,
-                      "_blank",
+                      `/api/pdfs/classroom/${params.id}/programs?format=csv&subjectId=${subject.id}`,
+                      "_blank"
                     );
                   }}
                 >
@@ -195,10 +186,10 @@ export function CreateEditProgram({
             <div
               className="prose prose-sm max-w-none"
               dangerouslySetInnerHTML={{
-                __html: subject?.program ?? "",
+                __html: subject.program ?? "",
               }}
             ></div>
-            {!subject?.program && (
+            {!subject.program && (
               <EmptyState title={t("no_data")} className="my-8" />
             )}
           </>
@@ -207,7 +198,7 @@ export function CreateEditProgram({
           <FormField
             control={form.control}
             name="content"
-            render={({ field: { onChange } }) => (
+            render={({ field }) => (
               // <QuillEditor
               //   value={value}
               //   onChange={onChange}
@@ -216,11 +207,16 @@ export function CreateEditProgram({
               // />
               <FormItem className="">
                 <FormControl>
-                  <QuillEditor
+                  <TiptapEditor
+                    defaultContent={field.value}
+                    className="shadow-none rounded-none"
+                    onChange={field.onChange}
+                  />
+                  {/* <QuillEditor
                     className="h-[calc(100vh-15rem)]"
                     onChange={onChange}
                     defaultValue={subjectQuery.data?.program ?? html_content}
-                  />
+                  /> */}
                 </FormControl>
                 <FormMessage />
               </FormItem>

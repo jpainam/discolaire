@@ -17,61 +17,56 @@ import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
+import type { RouterOutputs } from "@repo/api";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { showErrorToast } from "~/lib/handle-error";
-import { api } from "~/trpc/react";
 
-export function ProgramHeader() {
+export function ProgramHeader({
+  subject,
+}: {
+  subject: RouterOutputs["subject"]["get"];
+}) {
   const { t } = useLocale();
   const params = useParams<{ id: string; subjectId: string }>();
-  const subjectQuery = api.subject.get.useQuery(Number(params.subjectId));
-  const subject = subjectQuery.data;
+
   const pathname = usePathname();
   const canEditSubjectProgram = useCheckPermission(
     "program",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   useEffect(() => {
-    if (subject) {
-      const breads = [
-        { label: t("programs"), href: routes.classrooms.programs(params.id) },
-        {
-          label: subject.course.name,
-          href: routes.classrooms.programs(params.id) + `/${subject.id}`,
-        },
-      ];
-      if (pathname.includes("create-or-edit")) {
-        breads.push({
-          label: `${t("create")}/${t("edit")}`,
-          href:
-            routes.classrooms.programs(params.id) +
-            `/${subject.id}/create-or-edit`,
-        });
-      }
-      // setBreadcrumbs(breads);
+    const breads = [
+      { label: t("programs"), href: routes.classrooms.programs(params.id) },
+      {
+        label: subject.course.name,
+        href: routes.classrooms.programs(params.id) + `/${subject.id}`,
+      },
+    ];
+    if (pathname.includes("create-or-edit")) {
+      breads.push({
+        label: `${t("create")}/${t("edit")}`,
+        href:
+          routes.classrooms.programs(params.id) +
+          `/${subject.id}/create-or-edit`,
+      });
     }
+    // setBreadcrumbs(breads);
   }, [params.id, pathname, subject, t]);
 
   const router = useRouter();
 
-  if (subjectQuery.isError) {
-    showErrorToast(subjectQuery.error);
-    return;
-  }
-
   return (
-    <div className="flex flex-row items-center gap-2 bg-secondary px-2 py-1 text-secondary-foreground">
+    <div className="flex flex-row border-b items-center gap-2 bg-secondary px-2 py-1 text-secondary-foreground">
       <div className="flex flex-row items-center gap-2">
-        <Label>{subject?.course.name}</Label>
+        <Label>{subject.course.name}</Label>
         <FlatBadge variant={"green"}>
-          {t("coeff")}: {subject?.coefficient}
+          {t("coeff")}: {subject.coefficient}
         </FlatBadge>
         <FlatBadge variant={"blue"}>
-          {t("teacher")}: {subject?.teacher?.lastName}
+          {t("teacher")}: {subject.teacher?.lastName}
         </FlatBadge>
       </div>
 
@@ -81,8 +76,8 @@ export function ProgramHeader() {
             onClick={() => {
               router.push(
                 routes.classrooms.programs(params.id) +
-                  `/${subject?.id}` +
-                  "/create-or-edit",
+                  `/${subject.id}` +
+                  "/create-or-edit"
               );
             }}
             size={"icon"}

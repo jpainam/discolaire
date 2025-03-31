@@ -1,4 +1,5 @@
 import { CreateEditProgram } from "~/components/classrooms/programs/CreateEditProgram";
+import { caller } from "~/trpc/server";
 
 export default async function Page(props: {
   params: Promise<{ subjectId: string }>;
@@ -6,12 +7,13 @@ export default async function Page(props: {
   const params = await props.params;
 
   const { subjectId } = params;
+  const subject = await caller.subject.get(Number(subjectId));
 
   return (
     <div className="flex flex-col">
       {/* <ProgramHeader />
       <Separator /> */}
-      <CreateEditProgram subjectId={Number(subjectId)} />
+      <CreateEditProgram subject={subject} />
       {/* {subject.program ? (
         <div
           className="p-4"

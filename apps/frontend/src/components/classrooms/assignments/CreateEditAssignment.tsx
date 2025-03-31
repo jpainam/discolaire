@@ -1,7 +1,6 @@
 "use client";
 
 import { X } from "lucide-react";
-import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -22,7 +21,6 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
-import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 import { FileUploader } from "~/uploads/file-uploader";
 
@@ -30,14 +28,15 @@ import { DateRangePicker } from "~/components/shared/DateRangePicker";
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { AssignmentCategorySelector } from "~/components/shared/selects/AssignmentCategorySelector";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
+import { TiptapEditor } from "~/components/tiptap-editor";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
-const QuillEditor = dynamic(() => import("~/components/quill-editor"), {
-  ssr: false,
-  loading: () => <Skeleton className="min-h-[200px] w-full" />,
-});
+// const QuillEditor = dynamic(() => import("~/components/quill-editor"), {
+//   ssr: false,
+//   loading: () => <Skeleton className="min-h-[200px] w-full" />,
+// });
 
 type AssignemntGetProcedureOutput = NonNullable<
   RouterOutputs["assignment"]["get"]
@@ -235,14 +234,20 @@ export function CreateEditAssignment({
           <FormField
             control={form.control}
             name="description"
-            render={({ field: { onChange, value } }) => (
+            render={({ field }) => (
               <FormItem className="col-span-2 mb-16">
                 <FormLabel>{t("Description")}</FormLabel>
-                <QuillEditor
+                <FormControl>
+                  <TiptapEditor
+                    defaultContent={field.value}
+                    onChange={field.onChange}
+                  />
+                </FormControl>
+                {/* <QuillEditor
                   className="h-full min-h-[200px]"
                   onChange={onChange}
                   value={value}
-                />
+                /> */}
               </FormItem>
             )}
           />
@@ -425,8 +430,8 @@ export function CreateEditAssignment({
                                     ])
                                   : field.onChange(
                                       field.value?.filter(
-                                        (value) => value !== item.value,
-                                      ),
+                                        (value) => value !== item.value
+                                      )
                                     );
                               }}
                             />
