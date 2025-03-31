@@ -41,6 +41,7 @@ import {
 } from "@repo/ui/components/popover";
 import { toast } from "sonner";
 import { TiptapEditor } from "~/components/tiptap-editor";
+import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { SubjectJournalTemplate } from "./SubjectJournalTemplate";
 
@@ -56,7 +57,29 @@ export function SubjectJournalEditor({
 }) {
   const { t, i18n } = useLocale();
 
-  const createSubjectJournal = api.subjectJournal.create.useMutation();
+  const utils = api.useUtils();
+  const router = useRouter();
+
+  const createSubjectJournal = api.subjectJournal.create.useMutation({
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+    onSuccess: () => {
+      toast.success(t("created_successfully"), { id: 0 });
+      setSelectedFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      setPostDate(null);
+      setRichText(false);
+      form.reset();
+      setOpen(false);
+      router.refresh();
+    },
+    onSettled: async () => {
+      await utils.subjectJournal.invalidate();
+    },
+  });
 
   const [richText, setRichText] = useState(false);
   const [open, setOpen] = useState(false);
@@ -86,7 +109,7 @@ export function SubjectJournalEditor({
     },
   });
   const handleSubmit = async (
-    data: z.infer<typeof createSubjectJournalSchema>,
+    data: z.infer<typeof createSubjectJournalSchema>
   ) => {
     const response = await fetch("/api/upload/subject-journal", {
       method: "POST",
@@ -312,10 +335,19 @@ export function SubjectJournalEditor({
             </SelectContent>
           </Select>
           <div className="ml-auto flex flex-row items-center gap-2">
-            <Button type="button" variant="outline" size={"sm"}>
+            <Button
+              disabled={!form.formState.isDirty}
+              type="button"
+              variant="outline"
+              size={"sm"}
+            >
               {t("cancel")}
             </Button>
-            <Button isLoading={createSubjectJournal.isPending} size={"sm"}>
+            <Button
+              disabled={!form.formState.isDirty}
+              isLoading={createSubjectJournal.isPending}
+              size={"sm"}
+            >
               {t("submit")}
             </Button>
           </div>

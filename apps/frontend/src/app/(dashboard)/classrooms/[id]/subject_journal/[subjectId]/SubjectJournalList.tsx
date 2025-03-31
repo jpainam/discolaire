@@ -16,6 +16,7 @@ import type { RouterOutputs } from "@repo/api";
 import { useParams, useSearchParams } from "next/navigation";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
+import { isRichText } from "~/lib/utils";
 
 export function SubjectJournalList({
   subject,
@@ -37,7 +38,7 @@ export function SubjectJournalList({
     : 10;
   const paginate = (page: number) => {
     router.push(
-      `/classrooms/${params.id}/subject_journal/${subject.id}?${createQueryString({ pageIndex: page, pageSize })}`,
+      `/classrooms/${params.id}/subject_journal/${subject.id}?${createQueryString({ pageIndex: page, pageSize })}`
     );
   };
 
@@ -84,7 +85,17 @@ export function SubjectJournalList({
             {t("by")} {journal.createdBy.name} on{" "}
             {dateFormat.format(journal.publishDate)}
           </p>
-          <p className="mb-2">{journal.content}</p>
+          {isRichText(journal.content) ? (
+            <div
+              className="prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{
+                __html: journal.content,
+              }}
+            ></div>
+          ) : (
+            <p className="text-xs text-muted-foreground">{journal.content}</p>
+          )}
+
           <div className="flex items-center space-x-2">
             <span title={journal.attachment ?? "No attachment"}>
               {getAttachmentIcon(journal.attachment ?? "doc")}
