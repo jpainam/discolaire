@@ -1,12 +1,12 @@
 "use client";
 
-import * as React from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import * as React from "react";
 import { DayPicker } from "react-day-picker";
 
 import { buttonVariants } from "@repo/ui/components/button";
 
-import { cn } from "../lib/utils";
+import { cn } from "@repo/ui/lib/utils";
 
 function Calendar({
   className,
@@ -24,11 +24,11 @@ function Calendar({
     nav: "absolute top-0 flex w-full justify-between z-10",
     button_previous: cn(
       buttonVariants({ variant: "ghost" }),
-      "text-muted-foreground/80 hover:text-foreground size-9 p-0",
+      "text-muted-foreground/80 hover:text-foreground size-9 p-0"
     ),
     button_next: cn(
       buttonVariants({ variant: "ghost" }),
-      "text-muted-foreground/80 hover:text-foreground size-9 p-0",
+      "text-muted-foreground/80 hover:text-foreground size-9 p-0"
     ),
     weekday: "size-9 p-0 text-xs font-medium text-muted-foreground/80",
     day_button:
@@ -46,18 +46,18 @@ function Calendar({
   };
 
   const mergedClassNames: typeof defaultClassNames = Object.keys(
-    defaultClassNames,
+    defaultClassNames
   ).reduce(
     (acc, key) => ({
       ...acc,
       [key]: classNames?.[key as keyof typeof classNames]
         ? cn(
             defaultClassNames[key as keyof typeof defaultClassNames],
-            classNames[key as keyof typeof classNames],
+            classNames[key as keyof typeof classNames]
           )
         : defaultClassNames[key as keyof typeof defaultClassNames],
     }),
-    {} as typeof defaultClassNames,
+    {} as typeof defaultClassNames
   );
 
   const defaultComponents = {

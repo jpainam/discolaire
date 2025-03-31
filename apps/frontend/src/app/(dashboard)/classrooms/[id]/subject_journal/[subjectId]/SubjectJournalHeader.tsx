@@ -15,6 +15,7 @@ import { Label } from "@repo/ui/components/label";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import type { RouterOutputs } from "@repo/api";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
@@ -25,7 +26,7 @@ import { api } from "~/trpc/react";
 export function SubjectJournalHeader({
   subject,
 }: {
-  subject: { name: string; id: number };
+  subject: RouterOutputs["subject"]["get"];
 }) {
   const { t } = useLocale();
   const confirm = useConfirm();
@@ -43,12 +44,12 @@ export function SubjectJournalHeader({
   });
   const canDeleteSubject = useCheckPermission(
     "subject",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   return (
     <div className="flex flex-row items-center justify-between border-b bg-muted/50 px-4 py-1">
       <Label>{t("subject_journal")}</Label>
-      <Label className="font-bold">{subject.name}</Label>
+      <Label className="font-bold">{subject.course.name}</Label>
       <div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

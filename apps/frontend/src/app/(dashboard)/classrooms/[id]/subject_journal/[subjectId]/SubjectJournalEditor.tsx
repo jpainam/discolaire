@@ -5,14 +5,12 @@ import {
   CalendarDaysIcon,
   NotepadText,
   PaperclipIcon,
-  PencilIcon,
   X,
 } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { z } from "zod";
 
 import { Button } from "@repo/ui/components/button";
-import { Calendar } from "@repo/ui/components/calendar";
 import {
   Form,
   FormControl,
@@ -23,25 +21,26 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@repo/ui/components/popover";
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import { Skeleton } from "@repo/ui/components/skeleton";
 import { Switch } from "@repo/ui/components/switch";
 import { Textarea } from "@repo/ui/components/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import type { RouterOutputs } from "@repo/api";
+import { Calendar } from "@repo/ui/components/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
+import { TiptapEditor } from "~/components/tiptap-editor";
 import { api } from "~/trpc/react";
-import { SubjectJournalAttachment } from "./SubjectJournalAttachment";
 import { SubjectJournalTemplate } from "./SubjectJournalTemplate";
 
 const createSubjectJournalSchema = z.object({
@@ -49,16 +48,25 @@ const createSubjectJournalSchema = z.object({
   content: z.string().min(1),
   date: z.coerce.date().default(() => new Date()),
 });
-export function SubjectJournalEditor({ subjectId }: { subjectId: number }) {
+export function SubjectJournalEditor({
+  subject,
+}: {
+  subject: RouterOutputs["subject"]["get"];
+}) {
   const { t, i18n } = useLocale();
-  const subjectQuery = api.subject.get.useQuery(subjectId);
+
   const createSubjectJournal = api.subjectJournal.create.useMutation();
 
   const [richText, setRichText] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleEditClick = () => {
-    setIsEditing(!isEditing);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      setSelectedFile(files[0] ?? null);
+    }
   };
 
   const dateFormat = new Intl.DateTimeFormat(i18n.language, {
@@ -81,7 +89,7 @@ export function SubjectJournalEditor({ subjectId }: { subjectId: number }) {
       title: data.title,
       content: data.content,
       date: data.date,
-      subjectId: subjectId,
+      subjectId: subject.id,
       status: "PENDING" as const,
       attachments: [],
     };
@@ -90,92 +98,71 @@ export function SubjectJournalEditor({ subjectId }: { subjectId: number }) {
 
   const { openModal } = useModal();
 
-  const [open, setOpen] = useState(false);
-  const [postDate, setPostDate] = useState<Date | undefined>(undefined);
+  const [postDate, setPostDate] = useState<Date | null>(null);
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="mb-2 w-full flex-1 overflow-y-auto rounded-lg p-2"
+        className="mb-2 w-full flex-1 overflow-y-auto rounded-lg py-2 px-4"
       >
-        {subjectQuery.isPending && (
-          <div className="mb-2 flex w-full flex-row gap-2">
-            <Skeleton className="h-8 rounded-full" />
-            <Skeleton className="h-8 w-1/4" />
-            <Skeleton className="h-8 rounded-full" />
-          </div>
-        )}
-        {!subjectQuery.isPending && (
-          <div className="mb-2 flex items-center justify-between">
+        <div className="mb-2 flex items-center justify-between">
+          <div className="flex items-center">
+            <div
+              style={{ backgroundColor: subject.course.color }}
+              className="mr-2 flex h-10 w-10 items-center justify-center rounded-full font-bold"
+            >
+              {subject.course.name.substring(0, 2).toUpperCase()}
+            </div>
             <div className="flex items-center">
-              <div
-                style={{ backgroundColor: subjectQuery.data?.course.color }}
-                className="mr-2 flex h-10 w-10 items-center justify-center rounded-full font-bold"
-              >
-                {subjectQuery.data?.course.name.substring(0, 2).toUpperCase()}
-              </div>
-              <div className="flex items-center">
-                {isEditing ? (
-                  <FormField
-                    control={form.control}
-                    name="title"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input className="w-96" {...field} />
-                        </FormControl>
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input className="w-96" {...field} />
+                    </FormControl>
 
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                ) : (
-                  <h2 className="text-md w-96 font-bold">
-                    {t("subject_journal_default_title", {
-                      date: dateFormat.format(new Date()),
-                    })}
-                  </h2>
+                    <FormMessage />
+                  </FormItem>
                 )}
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  type="button"
-                  onClick={handleEditClick}
-                  className="ml-2"
-                >
-                  {!isEditing ? (
-                    <PencilIcon className="h-4 w-4" />
-                  ) : (
-                    <X className="h-4 w-4" />
-                  )}
-                </Button>
-              </div>
-            </div>
-            <div className="flex items-center">
-              <span className="mr-2">Rich text</span>
-              <Switch checked={richText} onCheckedChange={setRichText} />
+              />
             </div>
           </div>
-        )}
+          <div className="flex items-center">
+            <span className="mr-2">Rich text</span>
+            <Switch checked={richText} onCheckedChange={setRichText} />
+          </div>
+        </div>
+
         <FormField
           control={form.control}
           name="content"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="mb-4">
               <FormControl>
-                <Textarea
-                  placeholder="What did  you teach?"
-                  {...field}
-                  className="mb-4 min-h-[100px] w-full"
-                />
+                {richText ? (
+                  <TiptapEditor
+                    defaultContent={field.value}
+                    onChange={field.onChange}
+                  />
+                ) : (
+                  <Textarea
+                    placeholder={t("what_did_you_teach")}
+                    {...field}
+                    className=" min-h-[100px] w-full"
+                  />
+                )}
               </FormControl>
 
               <FormMessage />
             </FormItem>
           )}
         />
-        <div className="mb-2 flex flex-wrap items-center gap-2">
+
+        {/* <div className="mb-2 flex  items-center gap-2"> */}
+        <div className="mb-2 flex flex-row items-center gap-4 text-muted-foreground">
           <Select defaultValue="everyone">
             <SelectTrigger className="mb-2 w-full md:w-[180px]">
               <SelectValue placeholder={t("select_a_recipient")} />
@@ -186,28 +173,49 @@ export function SubjectJournalEditor({ subjectId }: { subjectId: number }) {
               <SelectItem value="staffs">{t("staffs")}</SelectItem>
             </SelectContent>
           </Select>
-          <div className="mb-2 flex flex-row items-center text-muted-foreground">
-            {postDate && (
-              <>
-                <CalendarDays className="mr-2 h-4 w-4" />
-                <span className="text-xs">
-                  {t("will_post_on", { date: dateFormat.format(postDate) })}
-                </span>
-              </>
-            )}
-          </div>
+
+          {postDate && (
+            <div className="flex items-center gap-1">
+              <CalendarDays className="h-4 w-4" />
+              <span className="text-xs">
+                {t("will_post_on", {
+                  date: dateFormat.format(postDate),
+                })}
+              </span>
+            </div>
+          )}
+          {selectedFile && (
+            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+              <PaperclipIcon className="h-4 w-4" />
+              <span className="truncate max-w-[80%]">{selectedFile.name}</span>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-8"
+                onClick={() => {
+                  setSelectedFile(null);
+                  if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                  }
+                }}
+                aria-label="Delete file"
+              >
+                <X className="h-3 w-3" />
+              </Button>
+            </div>
+          )}
         </div>
 
         <div className="mb-2 flex flex-wrap items-center">
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            className="hidden"
+            accept="*/*"
+          />
           <Button
-            onClick={() => {
-              openModal({
-                title: t("upload_files"),
-                //className: "w-[500px]",
-                description: t("upload_files_description"),
-                view: <SubjectJournalAttachment />,
-              });
-            }}
+            onClick={() => fileInputRef.current?.click()}
             type="button"
             variant="outline"
             size="icon"
@@ -232,23 +240,19 @@ export function SubjectJournalEditor({ subjectId }: { subjectId: number }) {
                         <CalendarDaysIcon className="h-4 w-4" />
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
+                    <PopoverContent className="w-auto p-2" align="start">
                       <Calendar
                         mode="single"
                         selected={field.value}
                         onSelect={(date) => {
                           field.onChange(date);
-                          setPostDate(date);
+                          setPostDate(date ?? null);
                           setOpen(false);
                         }}
-                        startMonth={new Date(2010, 0)}
-                        endMonth={new Date(2050, 11)}
-                        autoFocus
                       />
                     </PopoverContent>
                   </Popover>
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}

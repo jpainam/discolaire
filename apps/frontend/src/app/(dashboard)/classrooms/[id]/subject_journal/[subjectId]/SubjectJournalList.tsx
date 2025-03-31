@@ -18,10 +18,10 @@ import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
 
 export function SubjectJournalList({
-  subjectId,
+  subject,
   journals,
 }: {
-  subjectId: number;
+  subject: RouterOutputs["subject"]["get"];
   journals: RouterOutputs["subjectJournal"]["bySubject"];
 }) {
   const { t, i18n } = useLocale();
@@ -37,7 +37,7 @@ export function SubjectJournalList({
     : 10;
   const paginate = (page: number) => {
     router.push(
-      `/classrooms/${params.id}/subject_journal/${subjectId}?${createQueryString({ pageIndex: page, pageSize })}`,
+      `/classrooms/${params.id}/subject_journal/${subject.id}?${createQueryString({ pageIndex: page, pageSize })}`
     );
   };
 

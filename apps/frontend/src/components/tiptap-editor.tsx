@@ -523,7 +523,7 @@ export function TiptapEditor({
   onChange?: (value: string) => void;
 }) {
   const [content, setContent] = useState(
-    defaultContent ?? "<p>Hello, start typing here...</p>"
+    defaultContent ?? "<p>Hello, start typing here...</p>",
   );
 
   const editor = useEditor({

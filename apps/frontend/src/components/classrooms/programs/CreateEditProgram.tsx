@@ -63,7 +63,7 @@ export function CreateEditProgram({
   const utils = api.useUtils();
   const canUpdateSubject = useCheckPermission(
     "subject",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   const updateSubjectProgram = api.subject.updateProgram.useMutation({
     onSettled: () => utils.subject.invalidate(),
@@ -136,7 +136,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=pdf`,
-                      "_blank"
+                      "_blank",
                     );
                   }}
                 >
@@ -147,7 +147,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=pdf&subjectId=${subject.id}`,
-                      "_blank"
+                      "_blank",
                     );
                   }}
                 >
@@ -159,7 +159,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=csv`,
-                      "_blank"
+                      "_blank",
                     );
                   }}
                 >
@@ -170,7 +170,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=csv&subjectId=${subject.id}`,
-                      "_blank"
+                      "_blank",
                     );
                   }}
                 >

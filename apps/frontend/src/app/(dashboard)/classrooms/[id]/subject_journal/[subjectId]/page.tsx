@@ -27,22 +27,17 @@ export default async function Page(props: {
 
   return (
     <div className="flex flex-col">
-      <SubjectJournalHeader
-        subject={{ name: subject.course.name, id: subject.id }}
-      />
+      <SubjectJournalHeader subject={subject} />
       {session?.user.profile == "staff" && (
         <>
-          <SubjectJournalEditor subjectId={Number(subjectId)} />
+          <SubjectJournalEditor subject={subject} />
           <Separator />
         </>
       )}
       {subjectJournals.length == 0 ? (
         <EmptyState className="my-8" title={t("no_data")} />
       ) : (
-        <SubjectJournalList
-          journals={subjectJournals}
-          subjectId={Number(subjectId)}
-        />
+        <SubjectJournalList journals={subjectJournals} subject={subject} />
       )}
     </div>
   );
