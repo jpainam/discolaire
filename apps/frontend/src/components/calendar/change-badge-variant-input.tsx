@@ -8,9 +8,11 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { useCalendar } from "~/components/calendar/calendar-context";
+import { useLocale } from "~/i18n";
 
 export function ChangeBadgeVariantInput() {
   const { badgeVariant, setBadgeVariant } = useCalendar();
+  const { t } = useLocale();
 
   return (
     // <div className="space-y-1 flex flex-row">
@@ -21,8 +23,8 @@ export function ChangeBadgeVariantInput() {
         <SelectValue />
       </SelectTrigger>
       <SelectContent align="end">
-        <SelectItem value="dot">Dot</SelectItem>
-        <SelectItem value="colored">Colored</SelectItem>
+        <SelectItem value="dot">{t("Dot")}</SelectItem>
+        <SelectItem value="colored">{t("Colored")}</SelectItem>
       </SelectContent>
     </Select>
     // </div>

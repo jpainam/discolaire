@@ -31,11 +31,13 @@ export function CalendarProvider({
   users: IUser[];
   events: IEvent[];
 }) {
-  const [badgeVariant, setBadgeVariant] = useState<"dot" | "colored">("dot");
+  const [badgeVariant, setBadgeVariant] = useState<"dot" | "colored">(
+    "colored"
+  );
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedUserId, setSelectedUserId] = useState<IUser["id"] | "all">(
-    "all",
+    "all"
   );
 
   const [view, setView] = useState<TCalendarView>("week");
