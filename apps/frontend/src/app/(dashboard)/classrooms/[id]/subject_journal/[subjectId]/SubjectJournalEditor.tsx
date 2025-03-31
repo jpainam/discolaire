@@ -109,7 +109,7 @@ export function SubjectJournalEditor({
     },
   });
   const handleSubmit = async (
-    data: z.infer<typeof createSubjectJournalSchema>,
+    data: z.infer<typeof createSubjectJournalSchema>
   ) => {
     let attachment = "";
     if (selectedFile) {
@@ -187,7 +187,7 @@ export function SubjectJournalEditor({
             </div>
           </div>
           <div className="flex items-center">
-            <span className="mr-2">Rich text</span>
+            <span className="mr-2">{t("rich_text")}</span>
             <Switch checked={richText} onCheckedChange={setRichText} />
           </div>
         </div>

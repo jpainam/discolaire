@@ -46,7 +46,7 @@ export function SubjectJournalList({
     onSuccess: () => {
       toast.success(t("deleted_successfully"), { id: 0 });
       router.push(
-        `/classrooms/${params.id}/subject_journal/${subject.id}?${createQueryString({ pageIndex: 1, pageSize: 10 })}`
+        `/classrooms/${params.id}/subject_journal/${subject.id}?${createQueryString({ pageIndex: 1, pageSize: 10 })}`,
       );
     },
     onSettled: async () => {
@@ -61,7 +61,7 @@ export function SubjectJournalList({
     : 10;
   const paginate = (page: number) => {
     router.push(
-      `/classrooms/${params.id}/subject_journal/${subject.id}?${createQueryString({ pageIndex: page, pageSize })}`
+      `/classrooms/${params.id}/subject_journal/${subject.id}?${createQueryString({ pageIndex: page, pageSize })}`,
     );
   };
 
