@@ -50,7 +50,7 @@ export function ReportCardHeader() {
         className="w-[300px]"
         onChange={(val) => {
           router.push(
-            routes.reportcards.index + "/?" + createQueryString({ term: val })
+            routes.reportcards.index + "/?" + createQueryString({ term: val }),
           );
         }}
       />
@@ -62,7 +62,7 @@ export function ReportCardHeader() {
               router.push(
                 routes.reportcards.index +
                   "/?" +
-                  createQueryString({ student: val })
+                  createQueryString({ student: val }),
               );
             }}
             defaultValue={searchParams.get("student") ?? undefined}

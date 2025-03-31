@@ -86,7 +86,7 @@ export function SubjectJournalEditor({
     },
   });
   const handleSubmit = async (
-    data: z.infer<typeof createSubjectJournalSchema>
+    data: z.infer<typeof createSubjectJournalSchema>,
   ) => {
     const response = await fetch("/api/upload/subject-journal", {
       method: "POST",

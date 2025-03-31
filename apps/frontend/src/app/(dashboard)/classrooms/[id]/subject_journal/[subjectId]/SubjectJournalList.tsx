@@ -82,18 +82,13 @@ export function SubjectJournalList({
           </div>
           <p className="mb-2 text-sm text-gray-500">
             {t("by")} {journal.createdBy.name} on{" "}
-            {dateFormat.format(journal.date)}
+            {dateFormat.format(journal.publishDate)}
           </p>
           <p className="mb-2">{journal.content}</p>
           <div className="flex items-center space-x-2">
-            {journal.attachments.map((attachment, index) => (
-              <span
-                key={`${index}-attachments`}
-                title={`${attachment} attachment`}
-              >
-                {getAttachmentIcon(attachment)}
-              </span>
-            ))}
+            <span title={journal.attachment ?? "No attachment"}>
+              {getAttachmentIcon(journal.attachment ?? "doc")}
+            </span>
           </div>
         </div>
       ))}
