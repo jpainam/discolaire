@@ -1,15 +1,29 @@
 "use client";
 
-import { ChevronLeftIcon, ChevronRightIcon, DownloadIcon } from "lucide-react";
-
-import { Button } from "@repo/ui/components/button";
-import { useLocale } from "~/i18n";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  DownloadIcon,
+  MoreHorizontal,
+  Trash2,
+} from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
+import { Button } from "@repo/ui/components/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
 import { useParams, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
-import { isRichText } from "~/lib/utils";
+import { useLocale } from "~/i18n";
+import { getFileBasename, isRichText } from "~/lib/utils";
+import { useConfirm } from "~/providers/confirm-dialog";
+import { api } from "~/trpc/react";
 
 export function SubjectJournalList({
   subject,
@@ -23,6 +37,22 @@ export function SubjectJournalList({
   const searchParams = useSearchParams();
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
+  const confirm = useConfirm();
+  const utils = api.useUtils();
+  const deleteSubjectJournal = api.subjectJournal.delete.useMutation({
+    onError: (error) => {
+      toast.error(error.message, { id: 0 });
+    },
+    onSuccess: () => {
+      toast.success(t("deleted_successfully"), { id: 0 });
+      router.push(
+        `/classrooms/${params.id}/subject_journal/${subject.id}?${createQueryString({ pageIndex: 1, pageSize: 10 })}`
+      );
+    },
+    onSettled: async () => {
+      await utils.subjectJournal.invalidate();
+    },
+  });
   const pageIndex = searchParams.get("pageIndex")
     ? Number(searchParams.get("pageIndex"))
     : 1;
@@ -56,13 +86,38 @@ export function SubjectJournalList({
   return (
     <div className="flex flex-col gap-2 px-4 py-2">
       {journals.map((journal) => (
-        <div key={journal.id}>
-          <div className="mb-2 flex items-start justify-between">
+        <div key={journal.id} className="rounded-md border p-2 bg-muted">
+          <div className="flex items-start justify-between">
             <span className="font-semibold text-sm">{journal.title}</span>
             <p className="text-xs text-muted-foreground">
               {journal.createdBy.name} -{" "}
               {dateFormat.format(journal.publishDate)}
             </p>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant={"ghost"} size={"icon"} className="size-8">
+                  <MoreHorizontal />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  variant="destructive"
+                  onSelect={async () => {
+                    const isConfirmed = await confirm({
+                      title: t("delete"),
+                      description: t("delete_confirmation"),
+                    });
+                    if (isConfirmed) {
+                      toast.loading(t("deleting"), { id: 0 });
+                      deleteSubjectJournal.mutate(journal.id);
+                    }
+                  }}
+                >
+                  <Trash2 />
+                  {t("delete")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             {/* {getStatusBadge(journal.status)} */}
           </div>
 
@@ -74,18 +129,21 @@ export function SubjectJournalList({
               }}
             ></div>
           ) : (
-            <p className="text-sm text-muted-foreground">{journal.content}</p>
+            <p className="text-sm">{journal.content}</p>
           )}
 
           {journal.attachment && (
             <Button
               variant={"link"}
               onClick={() => {
-                window.open(journal.attachment ?? "#", "_blank");
+                if (journal.attachment)
+                  window.open(journal.attachment, "_blank");
               }}
             >
+              <span className="truncate max-w-[80%]">
+                {getFileBasename(journal.attachment)}
+              </span>
               <DownloadIcon className="h-4 w-4" />
-              <span className="truncate max-w-[80%]">{journal.attachment}</span>
             </Button>
           )}
         </div>

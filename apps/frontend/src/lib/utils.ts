@@ -13,7 +13,7 @@ export function formatBytes(
   opts: {
     decimals?: number;
     sizeType?: "accurate" | "normal";
-  } = {},
+  } = {}
 ) {
   const { decimals = 0, sizeType = "normal" } = opts;
 
@@ -31,13 +31,13 @@ export function formatBytes(
 export function generateId({ length = 8, prefix = "" } = {}) {
   return `${prefix}${customAlphabet(
     "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
-    length,
+    length
   )()}`;
 }
 
 export function formatDate(
   date: Date | string | number,
-  opts: Intl.DateTimeFormatOptions = {},
+  opts: Intl.DateTimeFormatOptions = {}
 ) {
   return new Intl.DateTimeFormat(i18next.language, {
     month: opts.month ?? "long",
@@ -54,7 +54,7 @@ export function formatDate(
 export function composeEventHandlers<E>(
   originalEventHandler?: (event: E) => void,
   ourEventHandler?: (event: E) => void,
-  { checkForDefaultPrevented = true } = {},
+  { checkForDefaultPrevented = true } = {}
 ) {
   return function handleEvent(event: E) {
     originalEventHandler?.(event);
@@ -77,4 +77,9 @@ export function isRichText(htmlText: string): boolean {
     /<(b|i|u|strong|em|p|h[1-6]|ul|ol|li|a|img|video|table|tr|td|th|br|blockquote|span|div|style|font)[^>]*>/i;
 
   return richTextTags.test(htmlText);
+}
+export function getFileBasename(url: string): string {
+  const parsedUrl = new URL(url);
+  const pathParts = parsedUrl.pathname.split("/");
+  return pathParts.pop() ?? url;
 }

@@ -64,17 +64,13 @@ export const subjectJournalRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.coerce.number())
     .mutation(async ({ ctx, input }) => {
-      const s = await ctx.db.subjectJournal.findUnique({
+      await ctx.db.subjectJournal.findUniqueOrThrow({
         where: {
           id: input,
+          schoolId: ctx.schoolId,
         },
       });
-      if (!s || s.schoolId !== ctx.schoolId) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Subject journal not found",
-        });
-      }
+
       return ctx.db.subjectJournal.delete({
         where: {
           id: input,

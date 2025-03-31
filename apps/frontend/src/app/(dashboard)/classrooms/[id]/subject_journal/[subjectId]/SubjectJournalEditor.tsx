@@ -113,18 +113,18 @@ export function SubjectJournalEditor({
   ) => {
     let attachment = "";
     if (selectedFile) {
+      const formData = new FormData();
+      formData.append("file", selectedFile, selectedFile.name);
+      formData.append("subjectId", `${subject.id}`);
       const response = await fetch("/api/upload/subject-journal", {
         method: "POST",
-        body: JSON.stringify({
-          file: selectedFile,
-          subjectId: subject.id,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
+        body: formData,
       });
       if (!response.ok) {
-        throw new Error("Failed to upload file");
+        const error = await response.text();
+        console.error(error);
+        toast.error(error);
+        return;
       }
       const fileData = (await response.json()) as {
         fileUrl?: string;
