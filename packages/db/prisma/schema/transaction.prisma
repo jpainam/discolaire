@@ -144,11 +144,20 @@ model HealthDrug {
 }
 
 model LogActivity {
-    id        Int      @id @default(autoincrement())
-    message   String
+    id        Int          @id @default(autoincrement())
+    event     String
+    ipAddress String?
+    userAgent String?
     userId    String
-    level     String   @default("info")
-    action    String   @default("read")
-    createdAt DateTime @default(now())
+    source    String       @default("info")
+    eventType LogEventType @default(READ)
+    createdAt DateTime     @default(now())
     data      Json?
+}
+
+enum LogEventType {
+    UPDATE
+    DELETE
+    CREATE
+    READ
 }

@@ -60,6 +60,8 @@ export const createTRPCContext = async (opts: {
   return {
     session,
     db,
+    ipAddress: opts.headers.get("x-forwarded-for") ?? "127.0.0.1",
+    userAgent: opts.headers.get("user-agent") ?? "desktop",
     schoolYearId,
     token: authToken,
   };
@@ -151,6 +153,7 @@ export const protectedProcedure = t.procedure
     }
 
     const permissions = await getPermissions(ctx.session.user.id);
+    console.log(">>>>>>>>>[TRPC] Ip Address", ctx.ipAddress);
     return next({
       ctx: {
         // infers the `session` as non-nullable

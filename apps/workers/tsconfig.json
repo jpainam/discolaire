@@ -1,10 +1,15 @@
 {
-  "extends": "@repo/typescript-config/internal-package.json",
+  "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
     "lib": ["ES2022", "dom", "dom.iterable"],
-    "jsx": "react-jsx",
-    "rootDir": "."
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./src/*"]
+    },
+    "plugins": [{ "name": "next" }],
+    "module": "esnext"
   },
-  "include": ["src"],
+  "include": [".", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
