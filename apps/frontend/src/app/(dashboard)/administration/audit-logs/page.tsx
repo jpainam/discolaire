@@ -164,7 +164,7 @@ export default function Page() {
     defaultValue: "",
   });
   const [selectedLog, setSelectedLog] = useState<(typeof auditLogs)[0] | null>(
-    null
+    null,
   );
 
   // Filter logs based on search query, date, event type, and source
@@ -441,7 +441,7 @@ export default function Page() {
                                     selectedLog.details.oldValue,
                                 },
                                 null,
-                                2
+                                2,
                               )}
                             </pre>
                           </div>
@@ -455,7 +455,7 @@ export default function Page() {
                                     selectedLog.details.newValue,
                                 },
                                 null,
-                                2
+                                2,
                               )}
                             </pre>
                           </div>
