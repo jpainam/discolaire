@@ -2,13 +2,15 @@
 import { decode } from "entities";
 import { Resend } from "resend";
 
+import { env } from "./env";
+
 type Person = {
   firstName?: string | null;
   lastName?: string | null;
   middleName?: string | null;
 } & Record<string, any>;
 
-export const resend = new Resend(process.env.RESEND_API_KEY);
+export const resend = new Resend(env.RESEND_API_KEY);
 
 export function getFullName(pperson?: any): string {
   if (!pperson) {

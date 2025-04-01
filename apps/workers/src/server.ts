@@ -4,8 +4,10 @@
 import { Queue } from "bullmq";
 import IORedis from "ioredis";
 
+import { env } from "./env";
+
 // Redis connection
-const connection = new IORedis(`${process.env.REDIS_URL}?family=0`, {
+const connection = new IORedis(`${env.REDIS_URL}?family=0`, {
   maxRetriesPerRequest: null,
   enableReadyCheck: false,
 });

@@ -4,14 +4,13 @@ import { Worker } from "bullmq";
 import IORedis from "ioredis";
 import * as z from "zod";
 
-import { db } from "@repo/db";
-
+import { env } from "./env";
 import { transactionWorker } from "./transaction";
 
 // const connection = new IORedis(
 //   process.env.REDIS_URL ?? "redis://localhost:6379",
 // );
-const connection = new IORedis(`${process.env.REDIS_URL}?family=0`, {
+const connection = new IORedis(`${env.REDIS_URL}?family=0`, {
   maxRetriesPerRequest: null,
   enableReadyCheck: false,
 });
@@ -76,16 +75,16 @@ new Worker(
       console.error(errors);
       return;
     }
-    const { message, action, level, userId, data } = result.data;
-    await db.logActivity.create({
-      data: {
-        message,
-        level,
-        action,
-        userId,
-        data: JSON.stringify(data),
-      },
-    });
+    //const { message, action, level, userId, data } = result.data;
+    // await db.logActivity.create({
+    //   data: {
+    //     event: message,
+    //     ac,
+    //     action,
+    //     userId,
+    //     data: JSON.stringify(data),
+    //   },
+    // });
   },
   { connection },
 );
