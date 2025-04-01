@@ -96,7 +96,7 @@ export function fetchAssignmentTableColumns({
             className="truncate hover:text-blue-600 hover:underline"
             href={routes.classrooms.assignments.details(
               row.original.classroomId,
-              row.original.id
+              row.original.id,
             )}
           >
             {row.original.title}
@@ -177,23 +177,23 @@ function ActionsCell({
       onSuccess: async () => {
         //await queryClient.invalidateQueries(trpc.assignment.pathFilter())
         await queryClient.invalidateQueries(
-          trpc.classroom.assignments.pathFilter()
+          trpc.classroom.assignments.pathFilter(),
         );
         toast.success(t("deleted_successfully"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const router = useRouter();
   const canDeleteAssignment = useCheckPermission(
     "assignment",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const canUpdateAssignment = useCheckPermission(
     "assignment",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   const confirm = useConfirm();
   const params = useParams<{ id: string }>();
@@ -213,7 +213,7 @@ function ActionsCell({
         <DropdownMenuItem
           onSelect={() => {
             router.push(
-              `/classrooms/${params.id}/assignments/${assignment.id}`
+              `/classrooms/${params.id}/assignments/${assignment.id}`,
             );
           }}
         >
@@ -224,7 +224,7 @@ function ActionsCell({
           <DropdownMenuItem
             onSelect={() => {
               router.push(
-                `/classrooms/${params.id}/assignments/${assignment.id}/edit`
+                `/classrooms/${params.id}/assignments/${assignment.id}/edit`,
               );
             }}
           >

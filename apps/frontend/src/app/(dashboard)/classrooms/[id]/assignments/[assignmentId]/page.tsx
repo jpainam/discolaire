@@ -1,135 +1,174 @@
+import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+import { Separator } from "@repo/ui/components/separator";
+import i18next from "i18next";
 import {
   BookOpen,
   Calendar,
   Clock,
+  Download,
   FileText,
-  GraduationCap,
-  Link,
+  Info,
+  LinkIcon,
 } from "lucide-react";
-import { notFound } from "next/navigation";
-
-import { Badge } from "@repo/ui/components/badge";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@repo/ui/components/card";
-import { Separator } from "@repo/ui/components/separator";
-import { getServerTranslations } from "~/i18n/server";
-
+import Link from "next/link";
 import { AssignmentDetailsHeader } from "~/components/classrooms/assignments/AssignmentDetailsHeader";
-import { api } from "~/trpc/server";
+import { getServerTranslations } from "~/i18n/server";
+import { caller } from "~/trpc/server";
 
 export default async function Page(props: {
-  params: Promise<{ assignmentId: string }>;
+  params: Promise<{ id: string; assignmentId: string }>;
 }) {
   const params = await props.params;
-
-  const { assignmentId } = params;
-
-  const assignment = await api.assignment.get(assignmentId);
-  const { t, i18n } = await getServerTranslations();
-  if (!assignment) {
-    notFound();
-  }
+  const assignment = await caller.assignment.get(params.assignmentId);
+  const { t } = await getServerTranslations();
   return (
-    <Card className="overflow-hidden rounded-none border-none shadow-none">
-      <CardHeader className="border-b bg-muted/50 px-4 py-1">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="mb-1 text-xl font-semibold">{assignment.title}</h1>
-            <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
-              <span className="flex items-center gap-1">
-                <BookOpen className="h-4 w-4" />
-                {assignment.category.name}
-              </span>
-              <span className="flex items-center gap-1">
-                <GraduationCap className="h-4 w-4" />
-                {assignment.subject.course.name}
-              </span>
-            </div>
-          </div>
-          <div className="flex flex-col items-end justify-end gap-2">
-            <Badge variant="default" className="text-xs">
-              {assignment.dueDate.toLocaleDateString(i18n.language, {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col px-4 border-b md:flex-row justify-between items-start md:items-center py-2">
+        <div>
+          <h1 className="text-lg font-bold tracking-tight">
+            {assignment.title}
+          </h1>
+          <div className="flex items-center gap-2 mt-2">
+            <Badge variant="outline" className="text-sm">
+              <BookOpen className="h-3 w-3 mr-1" />
+              {assignment?.category.name}
             </Badge>
-            <AssignmentDetailsHeader assignmentId={assignmentId} />
+            <Badge variant="outline" className="text-sm">
+              <Info className="h-3 w-3 mr-1" />
+              {assignment?.subject.course.name}
+            </Badge>
           </div>
         </div>
-      </CardHeader>
-      <CardContent className="p-0">
-        <div className="p-4">
-          <h2 className="mb-2 text-sm font-semibold">{t("description")}</h2>
-          <div
-            className="prose prose-sm max-w-none"
-            dangerouslySetInnerHTML={{
-              __html: assignment.description ?? "",
-            }}
-          ></div>
+        <div className="mt-4 md:mt-0 gap-2 flex items-center">
+          <Badge variant="secondary" className="text-sm">
+            <Calendar className="h-3 w-3 mr-1" />
+            {assignment?.dueDate.toLocaleDateString(i18next.language, {
+              year: "numeric",
+              month: "short",
+              day: "2-digit",
+            })}
+          </Badge>
+          <AssignmentDetailsHeader assignmentId={params.assignmentId} />
         </div>
-        <Separator />
-        <div className="grid gap-4 p-4 sm:grid-cols-2">
-          <div>
-            <h2 className="mb-2 text-sm font-semibold">{t("attachments")}</h2>
-            <ul className="space-y-1 text-sm">
-              <li className="flex items-center gap-2">
-                <FileText className="h-4 w-4 text-muted-foreground" />
-                <span className="cursor-pointer text-blue-600 hover:underline">
-                  assignment_instructions.pdf
-                </span>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Info className="h-5 w-5 mr-2" />
+              {t("description")}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="prose text-sm text-muted-foreground prose-sm dark:prose-invert">
+              No description provided. Add a description to help students
+              understand the assignment requirements.
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Clock className="h-5 w-5 mr-2" />
+              Timeline
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center">
+                  <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
+                  <span className="text-sm font-medium">Visible Period</span>
+                </div>
+                <span className="text-sm">Oct 26, 2024 - Nov 02, 2024</span>
+              </div>
+              <Separator />
+              <div className="flex justify-between items-center">
+                <div className="flex items-center">
+                  <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
+                  <span className="text-sm font-medium">
+                    Posted on Calendar
+                  </span>
+                </div>
+                <Badge variant="outline" className="text-xs">
+                  Yes
+                </Badge>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-2 mt-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <FileText className="h-5 w-5 mr-2" />
+              Attachments
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-3">
+              <li>
+                <Button variant="outline" className="w-full justify-start">
+                  <Link href="#" className="flex items-center">
+                    <FileText className="h-4 w-4 mr-2 text-blue-500" />
+                    <span className="text-sm">assignment_instructions.pdf</span>
+                    <Download className="h-4 w-4 ml-auto text-muted-foreground" />
+                  </Link>
+                </Button>
               </li>
-              <li className="flex items-center gap-2">
-                <FileText className="h-4 w-4 text-muted-foreground" />
-                <span className="cursor-pointer text-blue-600 hover:underline">
-                  reference_material.docx
-                </span>
+              <li>
+                <Button variant="outline" className="w-full justify-start">
+                  <Link href="#" className="flex items-center">
+                    <FileText className="h-4 w-4 mr-2 text-blue-500" />
+                    <span className="text-sm">reference_material.docx</span>
+                    <Download className="h-4 w-4 ml-auto text-muted-foreground" />
+                  </Link>
+                </Button>
               </li>
             </ul>
-          </div>
-          <div>
-            <h2 className="mb-2 text-sm font-semibold">{t("links")}</h2>
-            <ul className="space-y-1 text-sm">
-              <li className="flex items-center gap-2">
-                <Link className="h-4 w-4 text-muted-foreground" />
-                <a href="#" className="text-blue-600 hover:underline">
-                  Research Resource 1
-                </a>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <LinkIcon className="h-5 w-5 mr-2" />
+              Resources
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-3">
+              <li>
+                <Button variant="outline" className="w-full justify-start">
+                  <Link href="#" className="flex items-center">
+                    <LinkIcon className="h-4 w-4 mr-2 text-blue-500" />
+                    <span className="text-sm">Research Resource 1</span>
+                  </Link>
+                </Button>
               </li>
-              <li className="flex items-center gap-2">
-                <Link className="h-4 w-4 text-muted-foreground" />
-                <a href="#" className="text-blue-600 hover:underline">
-                  Additional Reading
-                </a>
+              <li>
+                <Button variant="outline" className="w-full justify-start">
+                  <Link href="#" className="flex items-center">
+                    <LinkIcon className="h-4 w-4 mr-2 text-blue-500" />
+                    <span className="text-sm">Additional Reading</span>
+                  </Link>
+                </Button>
               </li>
             </ul>
-          </div>
-        </div>
-      </CardContent>
-      <CardFooter className="w-full border-y bg-secondary/50 p-4 text-xs">
-        <dl className="grid w-full gap-2 sm:grid-cols-2">
-          <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-            <div>
-              <dt className="font-medium">Visible Period</dt>
-              <dd className="text-muted-foreground">
-                Oct 26, 2024 - Nov 02, 2024
-              </dd>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Clock className="h-4 w-4 text-muted-foreground" />
-            <div>
-              <dt className="font-medium">Posted on Calendar</dt>
-              <dd className="text-muted-foreground">Yes</dd>
-            </div>
-          </div>
-        </dl>
-      </CardFooter>
-    </Card>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 }

@@ -32,9 +32,10 @@ export const assignmentRouter = createTRPCRouter({
     });
   }),
   get: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
-    return ctx.db.assignment.findUnique({
+    return ctx.db.assignment.findUniqueOrThrow({
       include: {
         classroom: true,
+        term: true,
         category: true,
         subject: {
           include: {
