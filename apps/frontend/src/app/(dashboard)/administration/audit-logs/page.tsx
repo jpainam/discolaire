@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { Download, Search, User } from "lucide-react";
 import { useState } from "react";
 
+import type { RouterOutputs } from "@repo/api";
 import {
   Accordion,
   AccordionContent,
@@ -49,103 +50,105 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import { useQuery } from "@tanstack/react-query";
 import { parseAsIsoDate, useQueryState } from "nuqs";
 import { useDebouncedCallback } from "use-debounce";
 import { DatePicker } from "~/components/DatePicker";
 import { useLocale } from "~/i18n";
+import { useTRPC } from "~/trpc/react";
 
 // Sample audit log data
-const auditLogs = [
-  {
-    id: "1",
-    timestamp: new Date("2023-04-01T10:30:00"),
-    user: {
-      id: "user-123",
-      name: "John Smith",
-      role: "Admin",
-    },
-    source: "User Management",
-    event: "Updated Student X's email from abc@example.com to xyz@example.com",
-    eventType: "update",
-    details: {
-      entity: "Student",
-      entityId: "student-456",
-      field: "email",
-      oldValue: "abc@example.com",
-      newValue: "xyz@example.com",
-    },
-  },
-  {
-    id: "2",
-    timestamp: new Date("2023-04-01T11:15:00"),
-    user: {
-      id: "user-456",
-      name: "Sarah Johnson",
-      role: "Admin",
-    },
-    source: "Billing",
-    event: "Deleted fee rule for 2024 term",
-    eventType: "delete",
-    details: {
-      entity: "Fee Rule",
-      entityId: "fee-789",
-      term: "2024",
-    },
-  },
-  {
-    id: "3",
-    timestamp: new Date("2023-04-01T14:45:00"),
-    user: {
-      id: "user-789",
-      name: "Michael Brown",
-      role: "Teacher",
-    },
-    source: "Grading",
-    event: "Added grades to class Y",
-    eventType: "create",
-    details: {
-      entity: "Grades",
-      entityId: "class-123",
-      className: "Mathematics 101",
-    },
-  },
-  {
-    id: "4",
-    timestamp: new Date("2023-04-01T16:20:00"),
-    user: {
-      id: "user-123",
-      name: "John Smith",
-      role: "Admin",
-    },
-    source: "System",
-    event: "Changed system settings for notification delivery",
-    eventType: "update",
-    details: {
-      entity: "System Settings",
-      field: "notification_delivery",
-      oldValue: "immediate",
-      newValue: "batched",
-    },
-  },
-  {
-    id: "5",
-    timestamp: new Date("2023-04-02T09:10:00"),
-    user: {
-      id: "user-456",
-      name: "Sarah Johnson",
-      role: "Admin",
-    },
-    source: "User Management",
-    event: "Created new user account for David Wilson",
-    eventType: "create",
-    details: {
-      entity: "User",
-      entityId: "user-999",
-      email: "david.wilson@example.com",
-      role: "Teacher",
-    },
-  },
-];
+// const auditLogs = [
+//   {
+//     id: "1",
+//     timestamp: new Date("2023-04-01T10:30:00"),
+//     user: {
+//       id: "user-123",
+//       name: "John Smith",
+//       role: "Admin",
+//     },
+//     source: "User Management",
+//     event: "Updated Student X's email from abc@example.com to xyz@example.com",
+//     eventType: "update",
+//     details: {
+//       entity: "Student",
+//       entityId: "student-456",
+//       field: "email",
+//       oldValue: "abc@example.com",
+//       newValue: "xyz@example.com",
+//     },
+//   },
+//   {
+//     id: "2",
+//     timestamp: new Date("2023-04-01T11:15:00"),
+//     user: {
+//       id: "user-456",
+//       name: "Sarah Johnson",
+//       role: "Admin",
+//     },
+//     source: "Billing",
+//     event: "Deleted fee rule for 2024 term",
+//     eventType: "delete",
+//     details: {
+//       entity: "Fee Rule",
+//       entityId: "fee-789",
+//       term: "2024",
+//     },
+//   },
+//   {
+//     id: "3",
+//     timestamp: new Date("2023-04-01T14:45:00"),
+//     user: {
+//       id: "user-789",
+//       name: "Michael Brown",
+//       role: "Teacher",
+//     },
+//     source: "Grading",
+//     event: "Added grades to class Y",
+//     eventType: "create",
+//     details: {
+//       entity: "Grades",
+//       entityId: "class-123",
+//       className: "Mathematics 101",
+//     },
+//   },
+//   {
+//     id: "4",
+//     timestamp: new Date("2023-04-01T16:20:00"),
+//     user: {
+//       id: "user-123",
+//       name: "John Smith",
+//       role: "Admin",
+//     },
+//     source: "System",
+//     event: "Changed system settings for notification delivery",
+//     eventType: "update",
+//     details: {
+//       entity: "System Settings",
+//       field: "notification_delivery",
+//       oldValue: "immediate",
+//       newValue: "batched",
+//     },
+//   },
+//   {
+//     id: "5",
+//     timestamp: new Date("2023-04-02T09:10:00"),
+//     user: {
+//       id: "user-456",
+//       name: "Sarah Johnson",
+//       role: "Admin",
+//     },
+//     source: "User Management",
+//     event: "Created new user account for David Wilson",
+//     eventType: "create",
+//     details: {
+//       entity: "User",
+//       entityId: "user-999",
+//       email: "david.wilson@example.com",
+//       role: "Teacher",
+//     },
+//   },
+// ];
 
 export default function Page() {
   const [date, setDate] = useQueryState("date", parseAsIsoDate);
@@ -163,29 +166,26 @@ export default function Page() {
   const [sourceFilter, setSourceFilter] = useQueryState("source", {
     defaultValue: "",
   });
-  const [selectedLog, setSelectedLog] = useState<(typeof auditLogs)[0] | null>(
-    null,
+  const [selectedLog, setSelectedLog] = useState<
+    RouterOutputs["logActivity"]["search"][number] | null
+  >(null);
+
+  const trpc = useTRPC();
+  const auditLogQuery = useQuery(
+    trpc.logActivity.search.queryOptions({
+      query: searchQuery,
+      eventType: eventTypeFilter as
+        | "CREATE"
+        | "UPDATE"
+        | "DELETE"
+        | "READ"
+        | undefined,
+      source: sourceFilter,
+      from: date ?? undefined,
+    })
   );
 
-  // Filter logs based on search query, date, event type, and source
-  const filteredLogs = auditLogs.filter((log) => {
-    const matchesSearch =
-      searchQuery === "" ||
-      log.event.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      log.user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      log.source.toLowerCase().includes(searchQuery.toLowerCase());
-
-    const matchesDate =
-      !date ||
-      format(log.timestamp, "yyyy-MM-dd") === format(date, "yyyy-MM-dd");
-
-    const matchesEventType =
-      !eventTypeFilter || log.eventType === eventTypeFilter;
-
-    const matchesSource = !sourceFilter || log.source === sourceFilter;
-
-    return matchesSearch && matchesDate && matchesEventType && matchesSource;
-  });
+  const auditLogs = auditLogQuery.data ?? [];
 
   // Get unique sources for filter dropdown
   const sources = Array.from(new Set(auditLogs.map((log) => log.source)));
@@ -305,23 +305,23 @@ export default function Page() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredLogs.length === 0 ? (
+            {auditLogs.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} className="h-24 text-center">
                   No audit logs found.
                 </TableCell>
               </TableRow>
             ) : (
-              filteredLogs.map((log) => (
+              auditLogs.map((log) => (
                 <TableRow
                   key={log.id}
                   className="group cursor-pointer hover:bg-muted/50"
                   onClick={() => setSelectedLog(log)}
                 >
                   <TableCell className="font-medium py-0">
-                    {format(log.timestamp, "MMM d, yyyy")}
+                    {format(log.createdAt, "MMM d, yyyy")}
                     <div className="text-xs text-muted-foreground">
-                      {format(log.timestamp, "h:mm a")}
+                      {format(log.createdAt, "h:mm a")}
                     </div>
                   </TableCell>
                   <TableCell className="py-0">
@@ -332,7 +332,7 @@ export default function Page() {
                       <div>
                         <div>{log.user.name}</div>
                         <div className="text-xs text-muted-foreground">
-                          {log.user.role}
+                          {log.user.profile}
                         </div>
                       </div>
                     </div>
@@ -380,8 +380,8 @@ export default function Page() {
           <SheetHeader>
             <SheetTitle>Audit Log Details</SheetTitle>
             <SheetDescription>
-              {selectedLog?.timestamp
-                ? format(selectedLog.timestamp, "PPP 'at' h:mm a")
+              {selectedLog?.createdAt
+                ? format(selectedLog.createdAt, "PPP 'at' h:mm a")
                 : ""}
             </SheetDescription>
           </SheetHeader>
@@ -399,7 +399,7 @@ export default function Page() {
                   <div>
                     <div className="font-medium">{selectedLog.user.name}</div>
                     <div className="text-sm text-muted-foreground">
-                      {selectedLog.user.role} (ID: {selectedLog.user.id})
+                      {selectedLog.user.profile} (ID: {selectedLog.userId})
                     </div>
                   </div>
                 </div>
@@ -423,7 +423,7 @@ export default function Page() {
                   Details
                 </h3>
 
-                {selectedLog.eventType === "update" ? (
+                {selectedLog?.eventType === "UPDATE" ? (
                   <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="changes">
                       <AccordionTrigger>Changes</AccordionTrigger>
@@ -437,11 +437,10 @@ export default function Page() {
                               {JSON.stringify(
                                 {
                                   // @ts-expect-error TODO fix it
-                                  [selectedLog.details.field]:
-                                    selectedLog.details.oldValue,
+                                  [selectedLog.data]: selectedLog.data,
                                 },
                                 null,
-                                2,
+                                2
                               )}
                             </pre>
                           </div>
@@ -451,11 +450,10 @@ export default function Page() {
                               {JSON.stringify(
                                 {
                                   // @ts-expect-error TODO fix it
-                                  [selectedLog.details.field]:
-                                    selectedLog.details.newValue,
+                                  [selectedLog.data]: selectedLog.data,
                                 },
                                 null,
-                                2,
+                                2
                               )}
                             </pre>
                           </div>
@@ -465,7 +463,7 @@ export default function Page() {
                   </Accordion>
                 ) : (
                   <pre className="rounded-md bg-muted p-4 text-xs overflow-auto">
-                    {JSON.stringify(selectedLog.details, null, 2)}
+                    {JSON.stringify(selectedLog.data, null, 2)}
                   </pre>
                 )}
               </div>

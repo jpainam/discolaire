@@ -155,6 +155,7 @@ model LogActivity {
     eventType    LogEventType @default(READ)
     createdAt    DateTime     @default(now())
     data         Json?
+    user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum LogEventType {

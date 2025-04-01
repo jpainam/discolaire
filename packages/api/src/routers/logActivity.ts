@@ -21,6 +21,9 @@ export const logActivityRouter = {
         orderBy: {
           createdAt: "desc",
         },
+        include: {
+          user: true,
+        },
         where: {
           schoolYearId: ctx.schoolYearId,
           schoolId: ctx.schoolId,
