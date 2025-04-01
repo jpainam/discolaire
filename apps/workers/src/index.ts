@@ -56,7 +56,6 @@ new Worker(
         await transactionWorker.create(Number(id));
         break;
     }
-    console.log("Sending SMS...", job.data);
   },
   { connection },
 );
@@ -66,9 +65,9 @@ const logSchema = z.object({
   event: z.string().min(1),
   ipAddress: z.string().optional(),
   userAgent: z.string().optional(),
-  source: z
-    .enum(["gradesheet", "course", "student", "contact"])
-    .default("gradesheet"),
+  source: z.string().min(1),
+  schoolId: z.string().min(1),
+  schoolYearId: z.string().min(1),
   eventType: z.enum(["CREATE", "UPDATE", "DELETE", "READ"]).default("READ"),
   data: z.any().optional(),
 });

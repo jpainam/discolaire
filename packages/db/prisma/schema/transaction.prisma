@@ -144,15 +144,17 @@ model HealthDrug {
 }
 
 model LogActivity {
-    id        Int          @id @default(autoincrement())
-    event     String
-    ipAddress String?
-    userAgent String?
-    userId    String
-    source    String       @default("info")
-    eventType LogEventType @default(READ)
-    createdAt DateTime     @default(now())
-    data      Json?
+    id           Int          @id @default(autoincrement())
+    event        String
+    ipAddress    String?
+    userAgent    String?
+    userId       String
+    schoolId     String
+    schoolYearId String
+    source       String       @default("info")
+    eventType    LogEventType @default(READ)
+    createdAt    DateTime     @default(now())
+    data         Json?
 }
 
 enum LogEventType {

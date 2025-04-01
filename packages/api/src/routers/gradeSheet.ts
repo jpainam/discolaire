@@ -48,6 +48,8 @@ export const gradeSheetRouter = createTRPCRouter({
         event: `Deleted gradesheets ${g.map((g) => g.id).join(", ")} for ${g.map((g) => g.subject.course.name).join(", ")}`,
         ipAddress: ctx.ipAddress,
         userAgent: ctx.userAgent,
+        schoolId: ctx.schoolId,
+        schoolYearId: ctx.schoolYearId,
         source: "gradesheet",
         eventType: "DELETE",
         data: { id: g.map((g) => g.id), name: g.map((g) => g.name) },

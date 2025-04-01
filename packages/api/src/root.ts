@@ -32,6 +32,7 @@ import { journalRouter } from "./routers/journal";
 import { latenessRouter } from "./routers/lateness";
 import { lessonRouter } from "./routers/lesson";
 import { libraryRouter } from "./routers/library";
+import { logActivityRouter } from "./routers/logActivity";
 import { menuRouter } from "./routers/menu";
 import { messagingRouter } from "./routers/messaging";
 import { passwordResetRouter } from "./routers/passwordReset";
@@ -113,6 +114,7 @@ export const appRouter = createTRPCRouter({
   reportCard: reportCardRouter,
   accounting: accountingRouter,
   announcement: announcementRouter,
+  logActivity: logActivityRouter,
   recipient: recipientRouter,
   schoolYear: schoolYearRouter,
   program: programRouter,

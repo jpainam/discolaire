@@ -10,15 +10,11 @@ import { Chart01 } from "~/components/dashboard/student/Chart01";
 import { StudentGradeTrend } from "~/components/dashboard/student/StudentGradeTrend";
 import { StudentDashboardContact } from "~/components/dashboard/StudentDashboardContact";
 import { StudentLatestGrade } from "~/components/dashboard/StudentLatestGrade";
-import { logQueue } from "~/lib/queue";
 import { api, caller } from "~/trpc/server";
 
 export default async function Page() {
   const session = await auth();
-  void logQueue.add("log", {
-    message: "User logged in",
-    userId: session?.user.id,
-  });
+
   if (session?.user.profile === "student") {
     const student = await api.student.getFromUserId(session.user.id);
     const grades = await caller.student.gradeTrends(student.id);
@@ -69,7 +65,7 @@ export default async function Page() {
               (
                 g.grades.reduce((acc, grade) => acc + grade.grade, 0) /
                 g.grades.length
-              ).toFixed(2),
+              ).toFixed(2)
             ),
           };
         })}

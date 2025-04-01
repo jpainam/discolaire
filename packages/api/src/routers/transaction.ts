@@ -347,12 +347,19 @@ export const transactionRouter = createTRPCRouter({
         type: "transaction",
         id: result.id,
       });
+
       void logQueue.add("log", {
-        message: `Transaction created`,
-        action: "create",
         userId: ctx.session.user.id,
+        event: `Create transaction ${result.id} for ${result.accountId}`,
+        ipAddress: ctx.ipAddress,
+        schoolId: ctx.schoolId,
+        schoolYearId: ctx.schoolYearId,
+        userAgent: ctx.userAgent,
+        source: "transaction",
+        eventType: "CREATE",
         data: result,
       });
+
       return result;
     }),
   trends: protectedProcedure.query(async ({ ctx }) => {
