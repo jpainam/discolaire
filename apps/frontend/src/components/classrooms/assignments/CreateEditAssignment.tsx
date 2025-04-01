@@ -438,8 +438,8 @@ export function CreateEditAssignment({
                                     ])
                                   : field.onChange(
                                       field.value?.filter(
-                                        (value) => value !== item.value
-                                      )
+                                        (value) => value !== item.value,
+                                      ),
                                     );
                               }}
                             />
