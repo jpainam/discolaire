@@ -38,18 +38,18 @@ export default async function Page(props: {
           <div className="flex items-center gap-2 mt-2">
             <Badge variant="outline" className="text-sm">
               <BookOpen className="h-3 w-3 mr-1" />
-              {assignment?.category.name}
+              {assignment.category.name}
             </Badge>
             <Badge variant="outline" className="text-sm">
               <Info className="h-3 w-3 mr-1" />
-              {assignment?.subject.course.name}
+              {assignment.subject.course.name}
             </Badge>
           </div>
         </div>
-        <div className="mt-4 md:mt-0 gap-2 flex items-center">
+        <div className="gap-2 flex items-center">
           <Badge variant="secondary" className="text-sm">
             <Calendar className="h-3 w-3 mr-1" />
-            {assignment?.dueDate.toLocaleDateString(i18next.language, {
+            {assignment.dueDate.toLocaleDateString(i18next.language, {
               year: "numeric",
               month: "short",
               day: "2-digit",
@@ -59,7 +59,7 @@ export default async function Page(props: {
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2 px-4">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
@@ -68,10 +68,12 @@ export default async function Page(props: {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="prose text-sm text-muted-foreground prose-sm dark:prose-invert">
-              No description provided. Add a description to help students
-              understand the assignment requirements.
-            </div>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: assignment.description ?? `<p>${t("no_data")}</p>`,
+              }}
+              className="prose text-sm text-muted-foreground prose-sm dark:prose-invert"
+            ></div>
           </CardContent>
         </Card>
 
@@ -108,7 +110,7 @@ export default async function Page(props: {
         </Card>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 mt-6">
+      <div className="grid gap-6 md:grid-cols-2 px-4">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
