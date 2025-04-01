@@ -5,6 +5,7 @@ import type { Prisma } from "@repo/db";
 
 import { gradeSheetService } from "../services/gradesheet-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { logQueue } from "../utils";
 
 const createGradeSheetSchema = z.object({
   notifyParents: z.boolean().default(true),
@@ -27,6 +28,30 @@ export const gradeSheetRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.union([z.array(z.coerce.number()), z.coerce.number()]))
     .mutation(async ({ ctx, input }) => {
+      const g = await ctx.db.gradeSheet.findMany({
+        include: {
+          subject: {
+            include: {
+              course: true,
+            },
+          },
+        },
+        where: {
+          id: {
+            in: Array.isArray(input) ? input : [input],
+          },
+        },
+      });
+
+      void logQueue.add("log", {
+        userId: ctx.session.user.id,
+        event: `Deleted gradesheets ${g.map((g) => g.id).join(", ")} for ${g.map((g) => g.subject.course.name).join(", ")}`,
+        ipAddress: ctx.ipAddress,
+        userAgent: ctx.userAgent,
+        source: "gradesheet",
+        eventType: "DELETE",
+        data: { id: g.map((g) => g.id), name: g.map((g) => g.name) },
+      });
       return ctx.db.gradeSheet.deleteMany({
         where: {
           id: {

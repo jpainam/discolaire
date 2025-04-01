@@ -9,11 +9,12 @@ export default async function Page(props: {
   const params = await props.params;
 
   const { gradesheetId } = params;
+  const session = await auth();
+  const gradesheet = await api.gradeSheet.get(Number(gradesheetId));
 
   let grades = await api.gradeSheet.grades(Number(gradesheetId));
   const allGrades = [...grades];
-  const gradesheet = await api.gradeSheet.get(Number(gradesheetId));
-  const session = await auth();
+
   if (session?.user.profile === "student") {
     const student = await api.student.getFromUserId(session.user.id);
     grades = grades.filter((g) => g.studentId === student.id);

@@ -153,7 +153,6 @@ export const protectedProcedure = t.procedure
     }
 
     const permissions = await getPermissions(ctx.session.user.id);
-    console.log(">>>>>>>>>[TRPC] Ip Address", ctx.ipAddress);
     return next({
       ctx: {
         // infers the `session` as non-nullable

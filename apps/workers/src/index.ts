@@ -4,6 +4,8 @@ import { Worker } from "bullmq";
 import IORedis from "ioredis";
 import * as z from "zod";
 
+import { db } from "@repo/db";
+
 import { env } from "./env";
 import { transactionWorker } from "./transaction";
 
@@ -60,31 +62,37 @@ new Worker(
 );
 
 const logSchema = z.object({
-  message: z.string().min(1),
-  level: z.enum(["info", "warn", "error"]).default("info"),
-  action: z.enum(["create", "update", "delete", "read"]).default("read"),
   userId: z.string().min(1),
-  data: z.record(z.unknown()).default({}),
+  event: z.string().min(1),
+  ipAddress: z.string().optional(),
+  userAgent: z.string().optional(),
+  source: z
+    .enum(["gradesheet", "course", "student", "contact"])
+    .default("gradesheet"),
+  eventType: z.enum(["CREATE", "UPDATE", "DELETE", "READ"]).default("READ"),
+  data: z.any().optional(),
 });
+
 new Worker(
   "log",
   async (job) => {
     const result = logSchema.safeParse(job.data);
+
     if (!result.success) {
+      console.error(result.error);
       const errors = result.error.format();
       console.error(errors);
       return;
     }
-    //const { message, action, level, userId, data } = result.data;
-    // await db.logActivity.create({
-    //   data: {
-    //     event: message,
-    //     ac,
-    //     action,
-    //     userId,
-    //     data: JSON.stringify(data),
-    //   },
-    // });
+    const { event } = result.data;
+    console.log("Logging", event);
+
+    await db.logActivity.create({
+      data: {
+        ...result.data,
+        data: JSON.stringify(result.data.data),
+      },
+    });
   },
   { connection },
 );
