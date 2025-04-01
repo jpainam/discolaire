@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  BlindsIcon,
   BrickWall,
   CircleArrowOutUpRight,
   Frame,
@@ -204,6 +205,11 @@ export function AdminSidebar({
       name: "subscriptions",
       url: "/administration/subscriptions",
       icon: CircleArrowOutUpRight,
+    },
+    {
+      name: "audit_logs",
+      url: "/administration/audit-logs",
+      icon: BlindsIcon,
     },
   ];
   const pathname = usePathname();
