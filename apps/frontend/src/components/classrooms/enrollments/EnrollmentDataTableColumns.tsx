@@ -22,12 +22,13 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { Badge } from "@repo/ui/components/badge";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils/full-name";
 
 type ClassroomStudentProcedureOutput =
@@ -191,19 +192,23 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
   const router = useRouter();
   const canDeleteEnrollment = useCheckPermission(
     "enrollment",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
-  const utils = api.useUtils();
-  const unenrollStudentsMutation =
-    api.enrollment.deleteByStudentIdClassroomId.useMutation({
-      onSettled: () => utils.classroom.students.invalidate(params.id),
-      onSuccess: () => {
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
+  const unenrollStudentsMutation = useMutation(
+    trpc.enrollment.deleteByStudentIdClassroomId.mutationOptions({
+      onSuccess: async () => {
         toast.success(t("unenrolled_successfully"), { id: 0 });
+        await queryClient.invalidateQueries(
+          trpc.classroom.students.pathFilter()
+        );
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    });
+    })
+  );
 
   const confirm = useConfirm();
   return (

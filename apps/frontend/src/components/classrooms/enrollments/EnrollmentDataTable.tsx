@@ -5,15 +5,16 @@ import { useMemo } from "react";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { useLocale } from "~/i18n";
 
-import type { RouterOutputs } from "@repo/api";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 import { EnrollmentDataTableActions } from "./EnrollmentDataTableActions";
 import { fetchEnrollmentColumns } from "./EnrollmentDataTableColumns";
 
-export function EnrollmentDataTable({
-  students,
-}: {
-  students: RouterOutputs["classroom"]["students"];
-}) {
+export function EnrollmentDataTable({ classroomId }: { classroomId: string }) {
+  const trpc = useTRPC();
+  const { data: students } = useSuspenseQuery(
+    trpc.classroom.students.queryOptions(classroomId)
+  );
   const { t } = useLocale();
 
   const columns = useMemo(() => {

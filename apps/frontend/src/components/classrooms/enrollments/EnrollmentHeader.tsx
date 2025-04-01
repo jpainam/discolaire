@@ -18,23 +18,27 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
 import type { RouterOutputs } from "@repo/api";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSession } from "~/providers/AuthProvider";
+import { useTRPC } from "~/trpc/react";
 import { getAge } from "~/utils/student-utils";
 import { EnrollStudent } from "./EnrollStudent";
 
 export function EnrollmentHeader({
   classroom,
-  students,
 }: {
   classroom: RouterOutputs["classroom"]["get"];
-  students: RouterOutputs["classroom"]["students"];
 }) {
   const { t } = useLocale();
   const { openModal } = useModal();
+  const trpc = useTRPC();
+  const { data: students } = useSuspenseQuery(
+    trpc.classroom.students.queryOptions(classroom.id)
+  );
   const session = useSession();
 
   const canEnroll = useCheckPermission("enrollment", PermissionAction.CREATE);
@@ -124,8 +128,11 @@ export function EnrollmentHeader({
             disabled={false}
             onClick={() => {
               openModal({
-                title: t("enroll_new_students"),
-                description: t("enroll_new_students_description"),
+                title: <p className="px-4 pt-4">{t("enroll_new_students")}</p>,
+                className: "p-0",
+                description: (
+                  <p className="px-4">{t("enroll_new_students_description")}</p>
+                ),
                 view: <EnrollStudent classroomId={classroom.id} />,
               });
             }}
@@ -148,7 +155,7 @@ export function EnrollmentHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -159,7 +166,7 @@ export function EnrollmentHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

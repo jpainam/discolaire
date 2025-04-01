@@ -20,7 +20,7 @@ import FlatBadge from "~/components/FlatBadge";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import PDFIcon from "~/components/icons/pdf-solid";
@@ -40,22 +40,24 @@ export function StudentGradeHeader({
   classroomId: string;
 }) {
   const { t } = useLocale();
+  const trpc = useTRPC();
   // const searchParams = useSearchParams();
   const [term] = useQueryState("term", parseAsInteger);
   const [view, setView] = useQueryState("view", {
     defaultValue: "by_chronological_order",
   });
-  const studentGradesQuery = api.student.grades.useQuery({
-    id: student.id,
-    termId: term ? Number(term) : undefined,
-  });
+  const router = useRouter();
+  const studentGradesQuery = useQuery(
+    trpc.student.grades.queryOptions({
+      id: student.id,
+      termId: term ? Number(term) : undefined,
+    })
+  );
 
-  // const router = useRouter();
-  const trpc = useTRPC();
   const queryClient = useQueryClient();
   const canDeleteGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const confirm = useConfirm();
   const deleteGradeMutation = useMutation(
@@ -63,16 +65,12 @@ export function StudentGradeHeader({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-      onSuccess: () => {
+      onSuccess: async () => {
         toast.success(t("deleted_successfully"), { id: 0 });
-        // TODO: Fix this Do not refresh, and push, just invalidate the query
-        router.refresh();
+        await queryClient.invalidateQueries(trpc.student.grades.pathFilter());
         router.push(`/students/${student.id}/grades`);
       },
-      onSettled: async () => {
-        await queryClient.invalidateQueries(trpc.student.grades.pathFilter());
-      },
-    }),
+    })
   );
   const params = useParams<{ gradeId: string; id: string }>();
 
@@ -117,7 +115,6 @@ export function StudentGradeHeader({
   }, [studentGradesQuery.data, term]);
 
   const { createQueryString } = useCreateQueryString();
-  const router = useRouter();
 
   if (classroomMinMaxMoyGrades.isPending) {
     return (
@@ -140,7 +137,7 @@ export function StudentGradeHeader({
               "?" +
                 createQueryString({
                   term: val,
-                }),
+                })
             );
           }}
           defaultValue={term ? `${term}` : undefined}
@@ -190,7 +187,7 @@ export function StudentGradeHeader({
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/student/grades/?id=${student.id}&format=pdf`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >
@@ -200,7 +197,7 @@ export function StudentGradeHeader({
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/student/grades/?id=${student.id}&format=csv`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >

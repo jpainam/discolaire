@@ -12,8 +12,9 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 type ClassroomStudentProcedureOutput = NonNullable<
   RouterOutputs["classroom"]["students"]
@@ -29,26 +30,32 @@ export function EnrollmentDataTableActions({
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
   const confirm = useConfirm();
-  const utils = api.useUtils();
+
   //const rows = table.getFilteredSelectedRowModel().rows;
   const canUnEnrollStudent = useCheckPermission(
     "enrollment",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const selectedIds = table
     .getFilteredSelectedRowModel()
     .rows.map((row) => row.original.id);
 
-  const unenrollStudentsMutation =
-    api.enrollment.deleteByStudentIdClassroomId.useMutation({
-      onSettled: () => utils.classroom.students.invalidate(params.id),
-      onSuccess: () => {
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
+
+  const unenrollStudentsMutation = useMutation(
+    trpc.enrollment.deleteByStudentIdClassroomId.mutationOptions({
+      onSuccess: async () => {
         toast.success(t("unenrolled_successfully"), { id: 0 });
+        await queryClient.invalidateQueries(
+          trpc.classroom.students.pathFilter()
+        );
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    });
+    })
+  );
 
   // Clear selection on Escape key press
   React.useEffect(() => {

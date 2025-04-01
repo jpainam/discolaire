@@ -83,7 +83,7 @@ export function CreateEditFee({
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof createEditFeeSchema>> = (
-    data: z.infer<typeof createEditFeeSchema>,
+    data: z.infer<typeof createEditFeeSchema>
   ) => {
     const values = {
       code: data.code,
@@ -185,7 +185,7 @@ export function CreateEditFee({
             variant="outline"
             type="button"
           >
-            <X size={15} className={"mr-2"} />
+            <X className="w-4 h-4" />
             {t("cancel")}
           </Button>
 
@@ -196,7 +196,7 @@ export function CreateEditFee({
             size={"sm"}
             type="submit"
           >
-            <Save size={15} className={"mr-2"} />
+            <Save className="h-4 w-4" />
             {fee ? t("edit") : t("submit")}
           </Button>
         </div>

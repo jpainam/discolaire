@@ -76,6 +76,9 @@ const handler = async (req: NextRequest) => {
     onError({ error, path }) {
       console.error(`>>> tRPC Error on '${path}'`);
       console.error(error.stack);
+      if (error.code == "UNAUTHORIZED") {
+        return Response.redirect(new URL("/auth/login", req.url));
+      }
     },
   });
   setCorsHeaders(response);

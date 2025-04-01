@@ -22,60 +22,56 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { CURRENCY } from "~/lib/constants";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { useDateFormat } from "~/utils/date-format";
 import { CreateEditFee } from "./CreateEditFee";
 
 export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
-  const feesQuery = api.classroom.fees.useQuery(classroomId);
+  const trpc = useTRPC();
+  const { data: fees } = useSuspenseQuery(
+    trpc.classroom.fees.queryOptions(classroomId)
+  );
   const { t, i18n } = useLocale();
+  const queryClient = useQueryClient();
 
   const { fullDateFormatter } = useDateFormat();
   const canDeleteClassroomFee = useCheckPermission(
     "fee",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateClassroomFee = useCheckPermission(
     "fee",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
-  const utils = api.useUtils();
 
-  const deleteFeeMutation = api.fee.delete.useMutation({
-    onSettled: async () => {
-      await utils.classroom.fees.invalidate(classroomId);
-      await utils.fee.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const deleteFeeMutation = useMutation(
+    trpc.fee.delete.mutationOptions({
+      onSuccess: async () => {
+        toast.success(t("deleted_successfully"), { id: 0 });
+        await queryClient.invalidateQueries(trpc.classroom.fees.pathFilter());
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+
   const { openModal } = useModal();
   const confirm = useConfirm();
-  if (feesQuery.isPending) {
-    return (
-      <DataTableSkeleton
-        className="m-2"
-        withPagination={false}
-        showViewOptions={false}
-        columnCount={6}
-        rowCount={15}
-      />
-    );
-  }
-  const fees = feesQuery.data;
+
   return (
     <div className="px-4">
       <div className="bg-background overflow-hidden rounded-md border">
@@ -91,7 +87,7 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {fees?.map((fee) => {
+            {fees.map((fee) => {
               return (
                 <TableRow key={fee.id}>
                   <TableCell className="">{fee.description}</TableCell>
