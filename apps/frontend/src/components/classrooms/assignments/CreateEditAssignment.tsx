@@ -24,8 +24,8 @@ import { Label } from "@repo/ui/components/label";
 import { useLocale } from "~/i18n";
 import { FileUploader } from "~/uploads/file-uploader";
 
+import { DatePicker } from "~/components/DatePicker";
 import { DateRangePicker } from "~/components/shared/DateRangePicker";
-import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { AssignmentCategorySelector } from "~/components/shared/selects/AssignmentCategorySelector";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { TiptapEditor } from "~/components/tiptap-editor";
@@ -170,7 +170,7 @@ export function CreateEditAssignment({
         className="flex flex-col gap-4"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="flex items-center justify-end gap-2 border-b bg-muted/50 px-2 py-1">
+        <div className="flex items-center justify-end gap-2 border-b bg-muted/50 px-4 py-1">
           <Button
             onClick={() => {
               router.push(routes.classrooms.assignments.index(params.id));
@@ -185,7 +185,7 @@ export function CreateEditAssignment({
             {t("submit")}
           </Button>
         </div>
-        <div className="grid grid-cols-1 gap-x-8 gap-y-4 px-2 md:grid-cols-3">
+        <div className="grid px-4 grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-3">
           <FormField
             control={form.control}
             name="title"
@@ -230,12 +230,12 @@ export function CreateEditAssignment({
             )}
           />
         </div>
-        <div className="grid grid-cols-1 gap-x-8 px-2 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-x-8 px-4 md:grid-cols-3">
           <FormField
             control={form.control}
             name="description"
             render={({ field }) => (
-              <FormItem className="col-span-2 mb-16">
+              <FormItem className="col-span-2">
                 <FormLabel>{t("Description")}</FormLabel>
                 <FormControl>
                   <TiptapEditor
@@ -276,12 +276,12 @@ export function CreateEditAssignment({
             />
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-x-8 gap-y-4 px-2 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-x-8 gap-y-4 px-4 md:grid-cols-3">
           <FormField
             control={form.control}
             name="links"
             render={() => (
-              <FormItem className="space-y-0">
+              <FormItem>
                 <FormLabel>{t("links")}</FormLabel>
                 <div className="flex gap-2">
                   <Input
@@ -338,8 +338,16 @@ export function CreateEditAssignment({
             control={form.control}
             name="dueDate"
             render={({ field }) => (
-              <FormItem className="space-y-0">
-                <DatePickerField label={t("due_date")} {...field} />
+              <FormItem>
+                <FormLabel>{t("due_date")}</FormLabel>
+                <FormControl>
+                  <DatePicker
+                    onChange={(val) => field.onChange(val)}
+                    defaultValue={field.value}
+                  />
+                </FormControl>
+
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -348,7 +356,7 @@ export function CreateEditAssignment({
             control={form.control}
             name="from"
             render={() => (
-              <FormItem className="space-y-0">
+              <FormItem>
                 <FormLabel>{t("visble_from_to")}</FormLabel>
                 <DateRangePicker
                   className="w-full"
@@ -430,8 +438,8 @@ export function CreateEditAssignment({
                                     ])
                                   : field.onChange(
                                       field.value?.filter(
-                                        (value) => value !== item.value,
-                                      ),
+                                        (value) => value !== item.value
+                                      )
                                     );
                               }}
                             />

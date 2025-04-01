@@ -37,7 +37,7 @@ export function EnrollmentHeader({
   const { openModal } = useModal();
   const trpc = useTRPC();
   const { data: students } = useSuspenseQuery(
-    trpc.classroom.students.queryOptions(classroom.id),
+    trpc.classroom.students.queryOptions(classroom.id)
   );
   const session = useSession();
 
@@ -131,7 +131,9 @@ export function EnrollmentHeader({
                 title: <p className="px-4 pt-4">{t("enroll_new_students")}</p>,
                 className: "p-0",
                 description: (
-                  <p className="px-4">{t("enroll_new_students_description")}</p>
+                  <span className="px-4">
+                    {t("enroll_new_students_description")}
+                  </span>
                 ),
                 view: <EnrollStudent classroomId={classroom.id} />,
               });
@@ -155,7 +157,7 @@ export function EnrollmentHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -166,7 +168,7 @@ export function EnrollmentHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
