@@ -182,7 +182,7 @@ export default function Page() {
         | undefined,
       source: sourceFilter,
       from: date ?? undefined,
-    })
+    }),
   );
 
   const auditLogs = auditLogQuery.data ?? [];
@@ -423,7 +423,7 @@ export default function Page() {
                   Details
                 </h3>
 
-                {selectedLog?.eventType === "UPDATE" ? (
+                {selectedLog.eventType === "UPDATE" ? (
                   <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="changes">
                       <AccordionTrigger>Changes</AccordionTrigger>
@@ -440,7 +440,7 @@ export default function Page() {
                                   [selectedLog.data]: selectedLog.data,
                                 },
                                 null,
-                                2
+                                2,
                               )}
                             </pre>
                           </div>
@@ -453,7 +453,7 @@ export default function Page() {
                                   [selectedLog.data]: selectedLog.data,
                                 },
                                 null,
-                                2
+                                2,
                               )}
                             </pre>
                           </div>
