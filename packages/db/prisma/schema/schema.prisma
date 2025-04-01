@@ -367,7 +367,6 @@ model Assignment {
     from        DateTime? @default(now()) @db.Timestamp(6)
     to          DateTime? @default(now()) @db.Timestamp(6)
     visibles    String[]
-    links       String[]
     attachments String[]
     sections    String[]
     subject     Subject   @relation(fields: [subjectId], references: [id], onDelete: Cascade)

@@ -16,7 +16,6 @@ const createUpdateSchema = z.object({
   from: z.coerce.date(),
   termId: z.coerce.number(),
   to: z.coerce.date(),
-  links: z.array(z.string()).optional(),
   notify: z.boolean().optional().default(false),
   visibles: z.array(z.string()).optional(),
 });

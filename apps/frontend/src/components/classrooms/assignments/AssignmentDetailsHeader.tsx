@@ -59,7 +59,7 @@ export function AssignmentDetailsHeader({
           {t("xml_export")}
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <MailIcon className="mr-2 h-4 w-4" />
+          <MailIcon />
           {t("notify")} {t("SMS")}/{t("email")}
         </DropdownMenuItem>
         {canDelete && (

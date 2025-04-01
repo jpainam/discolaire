@@ -31,7 +31,11 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           <CreditDebitPie />
         </div> */}
       {/* {timetables.length != 0 && <TopTimetable />} */}
-
+      <HydrateClient>
+        <Suspense fallback={<div>Loading...</div>}>
+          <EnrollmentHeader classroom={classroom} />
+        </Suspense>
+      </HydrateClient>
       {/* <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-2 p-2 ">
         <GenderPie classroom={classroom} />
         <RepeatingPie students={students} />
@@ -47,7 +51,6 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </div>
           }
         >
-          <EnrollmentHeader classroom={classroom} />
           <div className="py-2 px-4">
             <EnrollmentDataTable classroomId={params.id} />{" "}
           </div>

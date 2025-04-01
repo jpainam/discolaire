@@ -6,6 +6,7 @@ interface AssignmentPageProps {
   params: Promise<{
     id: string;
   }>;
+  searchParams: Promise<{ termId?: string; from?: string; to?: string }>;
 }
 export default async function Page(props: AssignmentPageProps) {
   const params = await props.params;

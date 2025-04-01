@@ -42,7 +42,7 @@ import { CreateEditFee } from "./CreateEditFee";
 export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
   const trpc = useTRPC();
   const { data: fees } = useSuspenseQuery(
-    trpc.classroom.fees.queryOptions(classroomId),
+    trpc.classroom.fees.queryOptions(classroomId)
   );
   const { t, i18n } = useLocale();
   const queryClient = useQueryClient();
@@ -50,11 +50,11 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
   const { fullDateFormatter } = useDateFormat();
   const canDeleteClassroomFee = useCheckPermission(
     "fee",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateClassroomFee = useCheckPermission(
     "fee",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
 
   const deleteFeeMutation = useMutation(
@@ -66,7 +66,7 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const { openModal } = useModal();
@@ -91,7 +91,7 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
               return (
                 <TableRow key={fee.id}>
                   <TableCell className="">{fee.description}</TableCell>
-                  <TableCell className="">
+                  <TableCell className="text-muted-foreground">
                     {fee.amount.toLocaleString(i18n.language, {
                       currency: CURRENCY,
                       maximumFractionDigits: 0,
@@ -99,7 +99,7 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
                     })}{" "}
                     {CURRENCY}
                   </TableCell>
-                  <TableCell className="">
+                  <TableCell className="text-muted-foreground">
                     {fullDateFormatter.format(fee.dueDate)}
                   </TableCell>
                   <TableCell className="">
@@ -111,12 +111,12 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
                       <FlatBadge variant={"yellow"}>{t("current")}</FlatBadge>
                     )}
                   </TableCell>
-                  <TableCell className="">
+                  <TableCell className="w-[150px] text-center">
                     <FlatBadge variant={fee.isRequired ? "red" : "green"}>
                       {fee.isRequired ? t("yes") : t("no")}
                     </FlatBadge>
                   </TableCell>
-                  <TableCell className="">
+                  <TableCell className="w-[50px]">
                     {canUpdateClassroomFee || canDeleteClassroomFee ? (
                       <div className="flex flex-row items-center justify-end gap-0">
                         <DropdownMenu>

@@ -3,7 +3,6 @@ import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
 import i18next from "i18next";
 import Link from "next/link";
-import { useTransition } from "react";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -12,17 +11,21 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Eye, Pencil, Trash2 } from "lucide-react";
+import { useParams } from "next/navigation";
+import { toast } from "sonner";
 import { routes } from "~/configs/routes";
+import { useCheckPermission } from "~/hooks/use-permission";
+import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
+import { useConfirm } from "~/providers/confirm-dialog";
+import { useTRPC } from "~/trpc/react";
 
 type ClassroomGetAssignemntProcedureOutput = NonNullable<
   RouterOutputs["classroom"]["assignments"][number]
@@ -75,7 +78,11 @@ export function fetchAssignmentTableColumns({
       ),
       cell: ({ row }) => {
         const subject = row.original.subject;
-        return <div>{subject.course.shortName}</div>;
+        return (
+          <div className="text-muted-foreground">
+            {subject.course.shortName}
+          </div>
+        );
       },
     },
     {
@@ -89,7 +96,7 @@ export function fetchAssignmentTableColumns({
             className="truncate hover:text-blue-600 hover:underline"
             href={routes.classrooms.assignments.details(
               row.original.classroomId,
-              row.original.id,
+              row.original.id
             )}
           >
             {row.original.title}
@@ -97,16 +104,16 @@ export function fetchAssignmentTableColumns({
         );
       },
     },
-    {
-      accessorKey: "description",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("description")} />
-      ),
-      cell: ({ row }) => {
-        const description = row.original.description;
-        return <div className="truncate">{description}</div>;
-      },
-    },
+    // {
+    //   accessorKey: "description",
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title={t("description")} />
+    //   ),
+    //   cell: ({ row }) => {
+    //     const description = row.original.description;
+    //     return <div className="truncate">{description}</div>;
+    //   },
+    // },
     {
       accessorKey: "createdAt",
       header: ({ column }) => (
@@ -114,7 +121,11 @@ export function fetchAssignmentTableColumns({
       ),
       cell: ({ row }) => {
         const createdAt = row.original.createdAt;
-        return <div>{dateFormatter.format(createdAt)}</div>;
+        return (
+          <div className="text-muted-foreground">
+            {dateFormatter.format(createdAt)}
+          </div>
+        );
       },
     },
     {
@@ -126,7 +137,7 @@ export function fetchAssignmentTableColumns({
         const visibleFrom = row.original.from;
         const visibleTo = row.original.to;
         return (
-          <div>
+          <div className="text-muted-foreground">
             {visibleFrom && shortDateFormatter.format(visibleFrom)} -{" "}
             {visibleTo && shortDateFormatter.format(visibleTo)}
           </div>
@@ -134,19 +145,19 @@ export function fetchAssignmentTableColumns({
       },
     },
     {
-      accessorKey: "isActive",
+      accessorKey: "term.name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("is_active")} />
+        <DataTableColumnHeader column={column} title={t("term")} />
       ),
       cell: ({ row }) => {
-        const isActive = row.original.isActive;
-        return <div>{isActive ? "YES" : "NON"}</div>;
+        const ass = row.original;
+        return <div className="text-muted-foreground">{ass.term.name}</div>;
       },
     },
     {
       id: "actions",
       cell: ({ row }) => <ActionsCell assignment={row.original} />,
-      size: 60,
+      size: 58,
       enableSorting: false,
       enableHiding: false,
     },
@@ -158,11 +169,34 @@ function ActionsCell({
 }: {
   assignment: ClassroomGetAssignemntProcedureOutput;
 }) {
-  const [isUpdatePending, startUpdateTransition] = useTransition();
-  // const canDeleteAssignment = useCheckPermission(
-  //   "assignment",
-  //   PermissionAction.DELETE
-  // );
+  const queryClient = useQueryClient();
+  const { t } = useLocale();
+  const trpc = useTRPC();
+  const deleteAssignment = useMutation(
+    trpc.assignment.delete.mutationOptions({
+      onSuccess: async () => {
+        //await queryClient.invalidateQueries(trpc.assignment.pathFilter())
+        await queryClient.invalidateQueries(
+          trpc.classroom.assignments.pathFilter()
+        );
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const router = useRouter();
+  const canDeleteAssignment = useCheckPermission(
+    "assignment",
+    PermissionAction.DELETE
+  );
+  const canUpdateAssignment = useCheckPermission(
+    "assignment",
+    PermissionAction.UPDATE
+  );
+  const confirm = useConfirm();
+  const params = useParams<{ id: string }>();
 
   return (
     <DropdownMenu>
@@ -175,64 +209,47 @@ function ActionsCell({
           <DotsHorizontalIcon className="size-4" aria-hidden="true" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
-          <DropdownMenuSubContent>
-            <DropdownMenuRadioGroup
-              value={assignment.title}
-              onValueChange={(_value) => {
-                startUpdateTransition(() => {
-                  //   toast.promise(
-                  //     new Promise((resolve) => setTimeout(resolve, 5000)),
-                  //     /*updateTaskLabel({
-                  //                             id: row.original.id,
-                  //                             label: value as Task["label"],
-                  //                         }),*/
-                  //     {
-                  //       loading: "Updating...",
-                  //       success: "Label updated",
-                  //       error: (err) => getErrorMessage(err),
-                  //     }
-                  //   );
-                });
-              }}
-            >
-              {["bug", "feature", "enhancement", "documentation"].map(
-                (label) => (
-                  <DropdownMenuRadioItem
-                    key={label}
-                    value={label}
-                    className="capitalize"
-                    disabled={isUpdatePending}
-                  >
-                    {label}
-                  </DropdownMenuRadioItem>
-                ),
-              )}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
-        <DropdownMenuSeparator />
+      <DropdownMenuContent align="end">
         <DropdownMenuItem
-          onClick={() => {
-            // startDeleteTransition(() => {
-            //   row.toggleSelected(false);
-            //   toast.promise(
-            //     deleteTask({
-            //       id: row.original.id,
-            //     }),
-            //     {
-            //       loading: "Deleting...",
-            //       success: () => "Task deleted",
-            //       error: (err: unknown) => getErrorMessage(err),
-            //     }
-            //   );
-            // });
+          onSelect={() => {
+            router.push(
+              `/classrooms/${params.id}/assignments/${assignment.id}`
+            );
           }}
         >
-          Delete
+          <Eye />
+          {t("details")}
         </DropdownMenuItem>
+        {canUpdateAssignment && (
+          <DropdownMenuItem
+            onSelect={() => {
+              router.push(
+                `/classrooms/${params.id}/assignments/${assignment.id}/edit`
+              );
+            }}
+          >
+            <Pencil />
+            {t("edit")}
+          </DropdownMenuItem>
+        )}
+        {canDeleteAssignment && (
+          <DropdownMenuItem
+            variant="destructive"
+            onClick={async () => {
+              const isConfirmed = await confirm({
+                title: t("delete"),
+                description: t("delete_confirmation"),
+              });
+              if (isConfirmed) {
+                toast.loading(t("deleting"), { id: 0 });
+                deleteAssignment.mutate(assignment.id);
+              }
+            }}
+          >
+            <Trash2 />
+            {t("delete")}
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
