@@ -37,7 +37,7 @@ export function EnrollmentHeader({
   const { openModal } = useModal();
   const trpc = useTRPC();
   const { data: students } = useSuspenseQuery(
-    trpc.classroom.students.queryOptions(classroom.id)
+    trpc.classroom.students.queryOptions(classroom.id),
   );
   const session = useSession();
 
@@ -155,7 +155,7 @@ export function EnrollmentHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=csv`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >
@@ -166,7 +166,7 @@ export function EnrollmentHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=pdf`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >

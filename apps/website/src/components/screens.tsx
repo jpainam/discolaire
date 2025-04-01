@@ -4,7 +4,7 @@ import { CardStack } from "./card-stack";
 
 export function Screens() {
   return (
-    <div className="relative mt-[50px] pb-16 pt-12 md:mt-[180px]">
+    <div className="relative mt-[50px] pt-12 pb-16 md:mt-[180px]">
       <div className="relative z-10 flex flex-col items-center">
         <div className="pb-14 text-center">
           <h3 className="text-4xl font-medium md:text-6xl">
@@ -87,7 +87,7 @@ export function Screens() {
         />
       </div>
 
-      <div className="dotted-bg absolute -left-[5000px] top-0 h-full w-[10000px]" />
+      <div className="dotted-bg absolute top-0 -left-[5000px] h-full w-[10000px]" />
     </div>
   );
 }

@@ -11,7 +11,7 @@ export function Hero() {
   return (
     <section className="relative md:mt-[250px] md:min-h-[375px]">
       <div className="hero-slide-up mt-[240px] flex flex-col">
-        <h1 className="mt-6 text-[28px] font-medium leading-none md:text-[80px]">
+        <h1 className="mt-6 text-[28px] leading-none font-medium md:text-[80px]">
           Gestion
           <br />
           scolaire simplifiée
@@ -42,7 +42,7 @@ export function Hero() {
           écoles.
         </p>
       </div>
-      <div className="pointer-events-none absolute -right-[380px] -top-[500px] h-auto w-auto scale-50 transform-gpu grayscale sm:flex md:-right-[200px] md:-top-[200px] lg:scale-[0.50] lg:animate-[open-scale-up-fade_1.5s_ease-in-out] xl:-right-[100px] xl:flex xl:scale-100">
+      <div className="pointer-events-none absolute -top-[500px] -right-[380px] h-auto w-auto scale-50 transform-gpu grayscale sm:flex md:-top-[200px] md:-right-[200px] lg:scale-[0.50] lg:animate-[open-scale-up-fade_1.5s_ease-in-out] xl:-right-[100px] xl:flex xl:scale-100">
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense>
             <Donut />

@@ -62,7 +62,7 @@ export const ResetPassword = ({
               {t("reinitialize_password_text")}
             </Text>
 
-            <Section className="mb-[32px] mt-[32px] text-center">
+            <Section className="mt-[32px] mb-[32px] text-center">
               <Button
                 style={{
                   ...button,

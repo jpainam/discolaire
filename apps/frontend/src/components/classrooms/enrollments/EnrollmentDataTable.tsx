@@ -13,7 +13,7 @@ import { fetchEnrollmentColumns } from "./EnrollmentDataTableColumns";
 export function EnrollmentDataTable({ classroomId }: { classroomId: string }) {
   const trpc = useTRPC();
   const { data: students } = useSuspenseQuery(
-    trpc.classroom.students.queryOptions(classroomId)
+    trpc.classroom.students.queryOptions(classroomId),
   );
   const { t } = useLocale();
 

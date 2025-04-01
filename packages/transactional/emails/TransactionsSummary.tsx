@@ -149,7 +149,7 @@ export const TransactionsSummary = ({
               className="w-full border-collapse"
             >
               <thead style={{ width: "100%" }}>
-                <tr className="h-[45px] border-0 border-b-[1px] border-t-[1px] border-solid border-[#E8E7E1]">
+                <tr className="h-[45px] border-0 border-t-[1px] border-b-[1px] border-solid border-[#E8E7E1]">
                   <th align="left">
                     <Text className="m-0 p-0 text-[14px] font-semibold">
                       {t("date")}
@@ -235,7 +235,7 @@ export const TransactionsSummary = ({
 
             <br />
 
-            <Section className="mb-[32px] mt-[32px] text-center">
+            <Section className="mt-[32px] mb-[32px] text-center">
               <Button
                 style={{
                   ...button,

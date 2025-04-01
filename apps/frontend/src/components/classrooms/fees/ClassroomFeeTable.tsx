@@ -42,7 +42,7 @@ import { CreateEditFee } from "./CreateEditFee";
 export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
   const trpc = useTRPC();
   const { data: fees } = useSuspenseQuery(
-    trpc.classroom.fees.queryOptions(classroomId)
+    trpc.classroom.fees.queryOptions(classroomId),
   );
   const { t, i18n } = useLocale();
   const queryClient = useQueryClient();
@@ -50,11 +50,11 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
   const { fullDateFormatter } = useDateFormat();
   const canDeleteClassroomFee = useCheckPermission(
     "fee",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const canUpdateClassroomFee = useCheckPermission(
     "fee",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
 
   const deleteFeeMutation = useMutation(
@@ -66,7 +66,7 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const { openModal } = useModal();
