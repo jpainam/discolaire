@@ -33,10 +33,10 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
+import i18next from "i18next";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { CURRENCY } from "~/lib/constants";
 import { useTRPC } from "~/trpc/react";
-import { useDateFormat } from "~/utils/date-format";
 import { CreateEditFee } from "./CreateEditFee";
 
 export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
@@ -47,7 +47,6 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
   const { t, i18n } = useLocale();
   const queryClient = useQueryClient();
 
-  const { fullDateFormatter } = useDateFormat();
   const canDeleteClassroomFee = useCheckPermission(
     "fee",
     PermissionAction.DELETE,
@@ -100,7 +99,11 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
                     {CURRENCY}
                   </TableCell>
                   <TableCell className="text-muted-foreground">
-                    {fullDateFormatter.format(fee.dueDate)}
+                    {fee.dueDate.toLocaleDateString(i18next.language, {
+                      month: "short",
+                      year: "numeric",
+                      day: "2-digit",
+                    })}
                   </TableCell>
                   <TableCell className="">
                     {fee.dueDate < subDays(new Date(), 1) ? (

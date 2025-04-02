@@ -10,7 +10,7 @@ import { z } from "zod";
 import { getServerTranslations } from "~/i18n/server";
 import { getSheetName } from "~/lib/utils";
 import { api } from "~/trpc/server";
-import { xlsxType } from "~/utils/file-type";
+import { xlsxType } from "~/utils";
 
 const querySchema = z.object({
   format: z.enum(["pdf", "csv"]).optional(),

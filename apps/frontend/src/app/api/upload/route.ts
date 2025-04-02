@@ -1,9 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import {
-  DeleteObjectCommand,
-  GetObjectCommand,
-  S3Client,
-} from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import type { NextRequest } from "next/server";
@@ -11,14 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { auth } from "@repo/auth";
 import { env } from "~/env";
-
-const client = new S3Client({
-  region: env.AWS_S3_REGION,
-  credentials: {
-    accessKeyId: env.AWS_S3_ACCESS_KEY_ID,
-    secretAccessKey: env.AWS_S3_SECRET_ACCESS_KEY,
-  },
-});
+import { s3client } from "~/lib/aws-client";
 
 export async function POST(request: Request) {
   const session = await auth();
@@ -29,12 +18,12 @@ export async function POST(request: Request) {
   if (typeof destination !== "string" || destination.length === 0) {
     return Response.json(
       { error: "Invalid dest " + destination },
-      { status: 400 },
+      { status: 400 }
     );
   }
   const fileKey = key ? `${destination}/${key}` : `${destination}/${uuidv4()}`;
   try {
-    const { url, fields } = await createPresignedPost(client, {
+    const { url, fields } = await createPresignedPost(s3client, {
       Bucket: bucket ?? env.AWS_S3_BUCKET_NAME,
       Key: fileKey,
       Conditions: [
@@ -56,7 +45,7 @@ export async function POST(request: Request) {
 
 export async function GET(
   request: NextRequest,
-  props: { params: Promise<{ key: string }> },
+  props: { params: Promise<{ key: string }> }
 ) {
   const params = await props.params;
   const searchParams = request.nextUrl.searchParams;
@@ -70,13 +59,13 @@ export async function GET(
     Bucket: bucket,
     Key: key,
   });
-  const signedUrl = await getSignedUrl(client, command, { expiresIn: 3600 });
+  const signedUrl = await getSignedUrl(s3client, command, { expiresIn: 3600 });
   return Response.json(signedUrl);
 }
 
 export async function DELETE(
   request: NextRequest,
-  props: { params: Promise<{ key: string }> },
+  props: { params: Promise<{ key: string }> }
 ) {
   const params = await props.params;
   const searchParams = request.nextUrl.searchParams;
@@ -92,7 +81,7 @@ export async function DELETE(
     Key: key,
   });
 
-  await client.send(deleteCommand);
+  await s3client.send(deleteCommand);
   //console.log("File deleted successfully", response);
   return Response.json({ message: "File deleted successfully" });
 }

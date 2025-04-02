@@ -19,9 +19,9 @@ import { EmptyState } from "~/components/EmptyState";
 import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 
+import i18next from "i18next";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { useDateFormat } from "~/utils/date-format";
 
 type StudentAssignment = RouterOutputs["classroom"]["assignments"][number];
 export function StudentAssignmentTable({
@@ -40,7 +40,7 @@ export function StudentAssignmentTable({
   }, [assignments, term]);
 
   const { t } = useLocale();
-  const { fullDateFormatter } = useDateFormat();
+
   const router = useRouter();
   return (
     <div className="rounded-lg border">
@@ -70,7 +70,11 @@ export function StudentAssignmentTable({
             return (
               <TableRow key={item.id}>
                 <TableCell className="py-0">
-                  {fullDateFormatter.format(item.dueDate)}
+                  {item.dueDate.toLocaleDateString(i18next.language, {
+                    month: "short",
+                    year: "numeric",
+                    day: "2-digit",
+                  })}
                 </TableCell>
                 <TableCell className="py-0">{item.title}</TableCell>
                 <TableCell className="py-0">

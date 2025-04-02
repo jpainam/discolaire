@@ -33,15 +33,15 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import i18next from "i18next";
 import { api } from "~/trpc/react";
-import { useDateFormat } from "~/utils/date-format";
 import { CreateEditSchoolYear } from "./CreateEditSchoolYear";
 
 export function SchoolYearTable() {
   const schoolYearsQuery = api.schoolYear.all.useQuery();
   const { t } = useLocale();
   const { openModal } = useModal();
-  const { fullDateFormatter } = useDateFormat();
+
   const utils = api.useUtils();
   const confirm = useConfirm();
   const deleteSchoolYearMutation = api.schoolYear.delete.useMutation({
@@ -99,13 +99,24 @@ export function SchoolYearTable() {
                   <TableCell>
                     <div className="flex flex-row items-center gap-2">
                       <CalendarDays className="h-4 w-4" />
-                      {fullDateFormatter.format(schoolYear.startDate)}
+                      {schoolYear.startDate.toLocaleDateString(
+                        i18next.language,
+                        {
+                          month: "short",
+                          year: "numeric",
+                          day: "2-digit",
+                        },
+                      )}
                     </div>
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-row items-center gap-2">
                       <CalendarClock className="h-4 w-4" />
-                      {fullDateFormatter.format(schoolYear.endDate)}
+                      {schoolYear.endDate.toLocaleDateString(i18next.language, {
+                        month: "short",
+                        year: "numeric",
+                        day: "2-digit",
+                      })}
                     </div>
                   </TableCell>
                   <TableCell>

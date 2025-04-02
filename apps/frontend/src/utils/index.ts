@@ -25,6 +25,10 @@ export function getFullName(pperson?: any): string {
   return decode(fullName);
 }
 
+export function addSpacesToCamelCase(str: string) {
+  return str.replace(/([a-z])([A-Z])/g, "$1 $2");
+}
+
 /**
  *
  * @param person
@@ -58,3 +62,6 @@ export function isAnniversary(dateOfBirth: Date): boolean {
     dateOfBirth.getDate() === currentDate.getDate()
   );
 }
+
+export const xlsxType =
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";

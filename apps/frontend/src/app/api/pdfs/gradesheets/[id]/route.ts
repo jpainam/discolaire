@@ -8,8 +8,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getSheetName } from "~/lib/utils";
 import { api } from "~/trpc/server";
-import { getFullName } from "~/utils";
-import { xlsxType } from "~/utils/file-type";
+import { getFullName, xlsxType } from "~/utils";
 import { getAppreciations } from "~/utils/get-appreciation";
 
 const querySchema = z.object({

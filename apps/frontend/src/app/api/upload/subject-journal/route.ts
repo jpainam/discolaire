@@ -1,15 +1,8 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { auth } from "@repo/auth";
-import { env } from "~/env";
+import { s3client } from "~/lib/aws-client";
 import { caller } from "~/trpc/server";
 
-const client = new S3Client({
-  region: env.AWS_S3_REGION,
-  credentials: {
-    accessKeyId: env.AWS_S3_ACCESS_KEY_ID,
-    secretAccessKey: env.AWS_S3_SECRET_ACCESS_KEY,
-  },
-});
 export async function POST(request: Request) {
   const session = await auth();
   if (!session) {
@@ -39,7 +32,7 @@ export async function POST(request: Request) {
       Body: Buffer.from(fileBuffer),
       ContentType: file.type,
     });
-    await client.send(command);
+    await s3client.send(command);
     return Response.json({
       fileUrl: `https://discolaire-public.s3.eu-central-1.amazonaws.com/${key}`,
     });

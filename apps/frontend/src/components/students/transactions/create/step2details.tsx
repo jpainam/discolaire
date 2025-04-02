@@ -19,7 +19,6 @@ import { useLocale } from "~/i18n";
 import { Label } from "@repo/ui/components/label";
 import { CURRENCY } from "~/lib/constants";
 import { getFullName } from "~/utils";
-import { useDateFormat } from "~/utils/date-format";
 import { useCreateTransaction } from "./CreateTransactionContextProvider";
 
 export default function Step2Details() {
@@ -47,7 +46,14 @@ export default function Step2Details() {
   const [transactionDate, _setTransactionDate] = useState<Date>(new Date());
 
   const { t, i18n } = useLocale();
-  const { fullDateTimeFormatter } = useDateFormat();
+  const fullDateTimeFormatter = new Intl.DateTimeFormat(i18n.language, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+  });
 
   return (
     <Card>

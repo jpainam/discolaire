@@ -58,15 +58,15 @@ export function TransactionTable() {
   const utils = api.useUtils();
   const canDeleteTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const canUpdateTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   const canReadTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.READ
+    PermissionAction.READ,
   );
 
   const updateTransactionMutation = api.transaction.updateStatus.useMutation({
@@ -126,7 +126,7 @@ export function TransactionTable() {
                         className="hover:text-blue-600 hover:underline"
                         href={routes.students.transactions.details(
                           params.id,
-                          transaction.id
+                          transaction.id,
                         )}
                       >
                         {transaction.transactionRef}
@@ -145,7 +145,7 @@ export function TransactionTable() {
                         className="hover:text-blue-600 hover:underline"
                         href={routes.students.transactions.details(
                           params.id,
-                          transaction.id
+                          transaction.id,
                         )}
                       >
                         {transaction.description}

@@ -16,14 +16,13 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
+import i18next from "i18next";
 import type { Assignment } from "./transcript-content";
-import { useDateFormat } from "~/utils/date-format";
 
 interface TranscriptItemProps {
   assignment: Assignment;
 }
 export function TranscriptItem({ assignment }: TranscriptItemProps) {
-  const { fullDateFormatter } = useDateFormat();
   return (
     <AccordionItem data-state="open" value={`${assignment.id}`}>
       <AccordionTrigger className="py-1 font-semibold">
@@ -51,8 +50,19 @@ export function TranscriptItem({ assignment }: TranscriptItemProps) {
           </TableHeader>
           <TableBody>
             {assignment.assignments.map((ass, index) => {
-              const assDate = fullDateFormatter.format(ass.assignmentDate);
-              const dueDate = fullDateFormatter.format(ass.dueDate);
+              const assDate = ass.assignmentDate.toLocaleDateString(
+                i18next.language,
+                {
+                  month: "short",
+                  year: "numeric",
+                  day: "2-digit",
+                },
+              );
+              const dueDate = ass.dueDate.toLocaleDateString(i18next.language, {
+                month: "short",
+                year: "numeric",
+                day: "2-digit",
+              });
               return (
                 <TableRow
                   className="border-none"

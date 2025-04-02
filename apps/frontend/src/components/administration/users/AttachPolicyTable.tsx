@@ -29,16 +29,16 @@ import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import i18next from "i18next";
 import { attachPolicyAtom } from "~/atoms/permission-atom";
 import { api } from "~/trpc/react";
-import { useDateFormat } from "~/utils/date-format";
 import { CreateUserPolicy } from "./CreateUserPolicy";
 
 export function AttachPolicyTable() {
   const { t } = useLocale();
   const policiesQuery = api.permission.policies.useQuery();
   const [attachPolicyValue, setAttachPolicyValue] = useAtom(attachPolicyAtom);
-  const { fullDateFormatter } = useDateFormat();
+
   const { openModal } = useModal();
   const [filter, setFilter] = useQueryState("filter");
   const [_, setSearchText] = useQueryState("q");
@@ -144,7 +144,11 @@ export function AttachPolicyTable() {
                   <TableCell>{policy.users}</TableCell>
                   <TableCell>{policy.roles}</TableCell>
                   <TableCell>
-                    {fullDateFormatter.format(policy.createdAt)}
+                    {policy.createdAt.toLocaleDateString(i18next.language, {
+                      month: "short",
+                      year: "numeric",
+                      day: "2-digit",
+                    })}
                   </TableCell>
                 </TableRow>
               );

@@ -10,7 +10,7 @@ import { getServerTranslations } from "~/i18n/server";
 import { auth } from "@repo/auth";
 import { getSheetName } from "~/lib/utils";
 import { api } from "~/trpc/server";
-import { xlsxType } from "~/utils/file-type";
+import { xlsxType } from "~/utils";
 
 const searchSchema = z.object({
   preview: z.coerce.boolean().default(true),

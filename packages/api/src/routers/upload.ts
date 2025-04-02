@@ -1,19 +1,12 @@
-import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
+import { s3client } from "~/lib/aws-client";
 import { env } from "../env";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-
-const client = new S3Client({
-  region: env.AWS_S3_REGION,
-  credentials: {
-    accessKeyId: env.AWS_S3_ACCESS_KEY_ID,
-    secretAccessKey: env.AWS_S3_SECRET_ACCESS_KEY,
-  },
-});
 
 export const uploadRouter = createTRPCRouter({
   getSignedUrl: protectedProcedure
@@ -24,7 +17,7 @@ export const uploadRouter = createTRPCRouter({
         Bucket: bucket,
         Key: input.key,
       });
-      return getSignedUrl(client, command, {
+      return getSignedUrl(s3client, command, {
         expiresIn: 3600,
       });
     }),
@@ -36,7 +29,7 @@ export const uploadRouter = createTRPCRouter({
     )
     .query(async ({ input }) => {
       const contentType = "application/json";
-      const { url, fields } = await createPresignedPost(client, {
+      const { url, fields } = await createPresignedPost(s3client, {
         Bucket: env.AWS_S3_BUCKET_NAME,
         Key: `${input.destination}/${uuidv4()}`,
         Conditions: [

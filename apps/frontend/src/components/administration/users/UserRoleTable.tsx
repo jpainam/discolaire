@@ -19,13 +19,13 @@ import {
 } from "@repo/ui/components/table";
 import { useLocale } from "~/i18n";
 
+import i18next from "i18next";
 import { api } from "~/trpc/react";
-import { useDateFormat } from "~/utils/date-format";
 
 export function UserRoleTable() {
   const { t } = useLocale();
   const rolesQuery = api.role.all.useQuery();
-  const { fullDateFormatter } = useDateFormat();
+
   const params = useParams<{ id: string }>();
   const utils = api.useUtils();
   const userRolesQuery = api.user.roles.useQuery({ userId: params.id });
@@ -115,7 +115,11 @@ export function UserRoleTable() {
                 <TableCell>{role.users}</TableCell>
                 <TableCell>Attach policy</TableCell>
                 <TableCell>
-                  {fullDateFormatter.format(role.createdAt)}
+                  {role.createdAt.toLocaleDateString(i18next.language, {
+                    month: "short",
+                    year: "numeric",
+                    day: "2-digit",
+                  })}
                 </TableCell>
               </TableRow>
             );

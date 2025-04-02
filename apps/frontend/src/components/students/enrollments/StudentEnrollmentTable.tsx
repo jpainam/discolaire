@@ -53,7 +53,7 @@ export function StudentEnrollmentTable({
   const router = useRouter();
   const canDeleteEnrollment = useCheckPermission(
     "enrollment",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const deleteEnrollmentMutation = api.enrollment.delete.useMutation({
     onSettled: async () => {
@@ -89,13 +89,13 @@ export function StudentEnrollmentTable({
         <TableBody>
           {enrollments.map((c) => {
             const createdAt = fullDateFormatter.format(
-              c.createdAt ?? new Date()
+              c.createdAt ?? new Date(),
             );
             const enrollmentStartDate = fullDateFormatter.format(
-              c.schoolYear?.enrollmentStartDate ?? new Date()
+              c.schoolYear?.enrollmentStartDate ?? new Date(),
             );
             const enrolmmentEndDate = fullDateFormatter.format(
-              c.schoolYear?.enrollmentEndDate ?? new Date()
+              c.schoolYear?.enrollmentEndDate ?? new Date(),
             );
 
             return (
