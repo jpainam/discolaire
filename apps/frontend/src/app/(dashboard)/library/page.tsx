@@ -21,11 +21,16 @@ import { LibraryDashboard } from "./LibraryDashboard";
 import { LibrarySetting } from "./LibrarySetting";
 import { BorrowBookDataTable } from "./loans/LoanDataTable";
 import { LoanHeader } from "./loans/LoanHeader";
+import { ReservationDataTable } from "./reservations/ReservationDataTable";
 
 export default async function Page() {
   const { t } = await getServerTranslations();
   const books = await api.book.all();
   const borrowBooks = await api.library.borrowBooks({ limit: 2000 });
+  const reservations = await api.library.borrowBooks({
+    limit: 2000,
+    reserved: true,
+  });
   return (
     <Tabs defaultValue="tab-1">
       <ScrollArea>
@@ -119,9 +124,7 @@ export default async function Page() {
         </div>
       </TabsContent>
       <TabsContent value="tab-4">
-        <p className="text-muted-foreground pt-1 text-center text-xs">
-          Encours d'implementation
-        </p>
+        <ReservationDataTable books={reservations} />
       </TabsContent>
       <TabsContent value="tab-5">
         <p className="text-muted-foreground pt-1 text-center text-xs">

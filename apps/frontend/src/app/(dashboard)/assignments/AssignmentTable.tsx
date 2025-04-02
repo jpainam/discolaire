@@ -95,11 +95,11 @@ export function AssignmentTable() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem>
-                      <Eye className="mr-2 h-4 w-4" />
+                      <Eye className="h-4 w-4" />
                       {t("details")}
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <Pencil className="mr-2 h-4 w-4" />
+                      <Pencil className="h-4 w-4" />
                       {t("edit")}
                     </DropdownMenuItem>
                     {canDelete && (
@@ -124,7 +124,7 @@ export function AssignmentTable() {
                             }
                           }}
                         >
-                          <Trash2 className="mr-2 h-4 w-4" />
+                          <Trash2 className="h-4 w-4" />
                           {t("delete")}
                         </DropdownMenuItem>
                       </>

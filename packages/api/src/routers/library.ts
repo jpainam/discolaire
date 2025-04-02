@@ -113,6 +113,7 @@ export const libraryRouter = createTRPCRouter({
     .input(
       z.object({
         limit: z.number().default(10),
+        reserved: z.boolean().default(false),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -126,6 +127,7 @@ export const libraryRouter = createTRPCRouter({
           borrowed: "desc",
         },
         where: {
+          ...(input.reserved ? { borrowed: { gt: new Date() } } : {}),
           book: {
             schoolId: ctx.schoolId,
           },
@@ -135,6 +137,7 @@ export const libraryRouter = createTRPCRouter({
         },
       });
     }),
+
   updateBorrowedStatus: protectedProcedure
     .input(
       z.object({

@@ -386,15 +386,15 @@ export function Dashboard() {
                 Manage Students
               </Button>
               <Button className="w-full justify-start">
-                <BookOpen className="mr-2 h-4 w-4" />
+                <BookOpen className="h-4 w-4" />
                 Schedule Classes
               </Button>
               <Button className="w-full justify-start">
-                <Clock className="mr-2 h-4 w-4" />
+                <Clock className="h-4 w-4" />
                 Take Attendance
               </Button>
               <Button className="w-full justify-start">
-                <GraduationCap className="mr-2 h-4 w-4" />
+                <GraduationCap className="h-4 w-4" />
                 Enter Grades
               </Button>
             </CardContent>
