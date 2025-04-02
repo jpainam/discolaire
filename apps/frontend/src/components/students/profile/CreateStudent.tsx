@@ -82,7 +82,7 @@ export function CreateStudent() {
             disabled={!form.formState.isDirty}
             type="submit"
           >
-            <SaveIcon className="mr-2 h-4 w-4" />
+            <SaveIcon className="h-4 w-4" />
             {t("submit")}
           </Button>
           <Button
@@ -93,7 +93,7 @@ export function CreateStudent() {
             type="button"
             variant={"outline"}
           >
-            <XIcon className="mr-2 h-4 w-4" />
+            <XIcon className="h-4 w-4" />
             {t("cancel")}
           </Button>
         </div>

@@ -1,5 +1,3 @@
-import { notFound } from "next/navigation";
-
 import { checkPermission } from "@repo/api/permission";
 import { NoPermission } from "~/components/no-permission";
 import { PermissionAction } from "~/permissions";
@@ -15,14 +13,11 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const student = await api.student.get(id);
   const canEditStudent = await checkPermission(
     "student",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   if (!canEditStudent) {
     return <NoPermission className="my-8" />;
   }
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  if (!student) {
-    notFound();
-  }
+
   return <UpdateStudent student={student} />;
 }
