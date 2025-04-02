@@ -29,6 +29,7 @@
     "next-themes": "^0.4.6",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "react-responsive-carousel": "^3.2.23",
     "simplex-noise": "^4.0.3"
   },
   "devDependencies": {
