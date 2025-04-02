@@ -182,11 +182,11 @@ export function getColumns({
         const utils = api.useUtils();
         const canDeleteContact = useCheckPermission(
           "contact",
-          PermissionAction.DELETE
+          PermissionAction.DELETE,
         );
         const canUpdateContact = useCheckPermission(
           "contact",
-          PermissionAction.UPDATE
+          PermissionAction.UPDATE,
         );
         const deleteContactMutation = api.contact.delete.useMutation({
           onSettled: () => utils.contact.all.invalidate(),

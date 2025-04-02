@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { decode } from "entities";
 /**
  * Formats a number to a string representation with support for million (M) and billion (B) abbreviations.
  * @param {number} value - The number to be formatted.
@@ -29,8 +31,6 @@ export function formatNumber(value: number): string {
   }
 }
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { decode } from "entities";
 type Person = {
   firstName?: string | null;
   lastName?: string | null;
@@ -68,4 +68,23 @@ export function getNameParts(person: Person, part: number) {
     return tabs[part - 1] ?? "";
   }
   return v;
+}
+
+export function getAge(date: string | Date | null | undefined) {
+  if (!date) {
+    return "";
+  }
+  const dob = typeof date === "string" ? new Date(date) : date;
+  const now = new Date();
+  const diff = now.getTime() - dob.getTime();
+  const age = new Date(diff);
+  return Math.abs(age.getUTCFullYear() - 1970);
+}
+
+export function isAnniversary(dateOfBirth: Date): boolean {
+  const currentDate = new Date();
+  return (
+    dateOfBirth.getMonth() === currentDate.getMonth() &&
+    dateOfBirth.getDate() === currentDate.getDate()
+  );
 }

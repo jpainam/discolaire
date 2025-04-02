@@ -41,7 +41,7 @@ export default function Step2Details() {
     .reduce(
       (acc, curr) =>
         acc + (curr.transactionType == "DEBIT" ? -curr.amount : curr.amount),
-      0
+      0,
     );
 
   const [transactionDate, _setTransactionDate] = useState<Date>(new Date());
@@ -136,7 +136,7 @@ export default function Step2Details() {
                       setNotifications([...notifications, item.contactId]);
                     } else {
                       setNotifications(
-                        notifications.filter((i) => i !== item.contactId)
+                        notifications.filter((i) => i !== item.contactId),
                       );
                     }
                   }}
