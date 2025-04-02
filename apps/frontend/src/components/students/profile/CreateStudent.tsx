@@ -75,7 +75,7 @@ export function CreateStudent() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-row items-center justify-end gap-4 border-b bg-muted/50 px-3 py-1">
+        <div className="flex flex-row items-center justify-end gap-4 border-b bg-muted/50 px-4 py-1">
           <Button
             isLoading={createStudentMutation.isPending}
             size={"sm"}
