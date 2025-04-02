@@ -40,7 +40,7 @@ export function ContactPage() {
 
         {/* Contact Information */}
         <hr />
-        <section className="md:py-25 py-12">
+        <section className="py-12 md:py-25">
           <div className="container px-4 md:px-6">
             <h2 className="mb-6 text-center text-3xl font-bold">
               Contact Information
