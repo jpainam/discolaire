@@ -58,7 +58,7 @@ export function DashboardTransactionTrend({
   // const status = searchParams.get("status");
   // const from = searchParams.get("from");
   // const to = searchParams.get("to");
-  //const { moneyFormatter } = useMoneyFormat();
+
   const transactionsTrendQuery = api.transaction.trends.useQuery();
 
   const [filteredData, setFilteredData] = React.useState<
@@ -146,7 +146,7 @@ export function DashboardTransactionTrend({
                   "?" +
                     createQueryString({
                       timeRange: val == "All" ? undefined : val,
-                    }),
+                    })
                 );
               }}
             >

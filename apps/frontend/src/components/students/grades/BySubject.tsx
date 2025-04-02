@@ -14,9 +14,9 @@ import { Separator } from "@repo/ui/components/separator";
 import FlatBadge from "~/components/FlatBadge";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 
+import i18next from "i18next";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { useDateFormat } from "~/utils/date-format";
 
 interface BySubjectProps {
   grades: RouterOutputs["student"]["grades"][number][];
@@ -29,7 +29,7 @@ export function BySubject({ grades, minMaxMoy }: BySubjectProps) {
   const [subjectSums, setSubjectSums] = useState<Record<string, number>>({});
   useEffect(() => {
     const t = Array.from(
-      new Set(grades.map((grade) => grade.gradeSheet.subject)),
+      new Set(grades.map((grade) => grade.gradeSheet.subject))
     );
     setSubjects(t);
     // Compute the average of each subject
@@ -54,7 +54,7 @@ export function BySubject({ grades, minMaxMoy }: BySubjectProps) {
         if (uniqueSubjectTitles.includes(subject.id)) return null;
         uniqueSubjectTitles.push(subject.id);
         const filteredGrades = grades.filter(
-          (grade) => grade.gradeSheet.subject.id === subject.id,
+          (grade) => grade.gradeSheet.subject.id === subject.id
         );
         const subjectAvg =
           (subjectSums[subject.id] ?? 0) / (filteredGrades.length || 1e9);
@@ -108,9 +108,12 @@ function BySubjectItem({
   grade: RouterOutputs["student"]["grades"][number];
   minMaxMoy: RouterOutputs["classroom"]["getMinMaxMoyGrades"][number][];
 }) {
-  const { monthFormatter, dayFormatter } = useDateFormat();
-  const m = monthFormatter.format(grade.gradeSheet.createdAt);
-  const d = dayFormatter.format(grade.gradeSheet.createdAt);
+  const m = grade.gradeSheet.createdAt.toLocaleDateString(i18next.language, {
+    month: "short",
+  });
+  const d = grade.gradeSheet.createdAt.toLocaleDateString(i18next.language, {
+    day: "numeric",
+  });
   const params = useParams<{ id: string }>();
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
@@ -138,7 +141,7 @@ function BySubjectItem({
           coef: grade.gradeSheet.subject.coefficient.toString(),
         };
         router.push(
-          `${routes.students.grades(params.id)}/${grade.id}/?${createQueryString({ ...query })}`,
+          `${routes.students.grades(params.id)}/${grade.id}/?${createQueryString({ ...query })}`
         );
       }}
     >

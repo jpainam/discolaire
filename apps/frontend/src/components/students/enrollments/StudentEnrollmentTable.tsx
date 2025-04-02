@@ -26,12 +26,12 @@ import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import i18next from "i18next";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
-import { useDateFormat } from "~/utils/date-format";
 
 type StudentEnrollmentProcedureOutput = NonNullable<
   RouterOutputs["student"]["enrollments"]
@@ -44,12 +44,16 @@ export function StudentEnrollmentTable({
 }) {
   const { t } = useLocale();
   const confirm = useConfirm();
-  const { fullDateFormatter } = useDateFormat();
+  const fullDateFormatter = new Intl.DateTimeFormat(i18next.language, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
   const utils = api.useUtils();
   const router = useRouter();
   const canDeleteEnrollment = useCheckPermission(
     "enrollment",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const deleteEnrollmentMutation = api.enrollment.delete.useMutation({
     onSettled: async () => {
@@ -85,13 +89,13 @@ export function StudentEnrollmentTable({
         <TableBody>
           {enrollments.map((c) => {
             const createdAt = fullDateFormatter.format(
-              c.createdAt ?? new Date(),
+              c.createdAt ?? new Date()
             );
             const enrollmentStartDate = fullDateFormatter.format(
-              c.schoolYear?.enrollmentStartDate ?? new Date(),
+              c.schoolYear?.enrollmentStartDate ?? new Date()
             );
             const enrolmmentEndDate = fullDateFormatter.format(
-              c.schoolYear?.enrollmentEndDate ?? new Date(),
+              c.schoolYear?.enrollmentEndDate ?? new Date()
             );
 
             return (

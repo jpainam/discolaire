@@ -25,10 +25,9 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { Label } from "@repo/ui/components/label";
+import i18next from "i18next";
 import { api } from "~/trpc/react";
 import { getFullName } from "~/utils";
-import { useDateFormat } from "~/utils/date-format";
-import { useMoneyFormat } from "~/utils/money-format";
 
 export function TransactionDetails({
   transactionId,
@@ -36,8 +35,12 @@ export function TransactionDetails({
   transactionId: number;
 }) {
   const { t } = useLocale();
-  const { moneyFormatter } = useMoneyFormat();
-  const { fullDateFormatter } = useDateFormat();
+
+  const fullDateFormatter = new Intl.DateTimeFormat(i18next.language, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
   const { closeModal } = useModal();
 
   const transactionQuery = api.transaction.get.useQuery(transactionId);
@@ -74,7 +77,12 @@ export function TransactionDetails({
       <div className="flex flex-row items-center gap-1">
         <DollarSign className="w-4 h-4" />
         {/* <Label>{t("amount")}:</Label> */}
-        {moneyFormatter.format(transactionQuery.data.amount)}
+        {transactionQuery.data.amount.toLocaleString(i18next.language, {
+          maximumFractionDigits: 0,
+          minimumFractionDigits: 0,
+          currency: "CFA",
+          style: "currency",
+        })}
       </div>
       <div className="flex flex-row items-center gap-1">
         <File className="w-4 h-4" />

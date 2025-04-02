@@ -8,7 +8,6 @@ import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
 import { useLocale } from "~/i18n";
 
 import type { SMSHistory } from "~/types/sms";
-import { useDateFormat } from "~/utils/date-format";
 import { SMSHistoryDataTableActions } from "./SMSHistoryActions";
 import { fetchSmsHistoryColumns } from "./SMSHistoryColumns";
 import { SMSHistoryFloatingBar } from "./SMSHistoryFloatingBar";
@@ -21,14 +20,13 @@ export function SMSHistoryDataTable({
   smsHistory: SMSHistory[];
 }) {
   const { t } = useLocale();
-  const { fullDateFormatter } = useDateFormat();
+
   const columns = useMemo(() => {
     const columns = fetchSmsHistoryColumns({
       t: t,
-      dateFormatter: fullDateFormatter,
     });
     return columns;
-  }, [t, fullDateFormatter]);
+  }, [t]);
   //const pageCount = Math.ceil(count / smsHistory.length);
 
   const filterFields: DataTableFilterField<SMSHistory>[] = [

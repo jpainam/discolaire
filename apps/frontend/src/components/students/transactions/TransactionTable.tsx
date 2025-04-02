@@ -39,30 +39,34 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
+import i18next from "i18next";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/react";
-import { useDateFormat } from "~/utils/date-format";
 import { DeleteTransaction } from "./DeleteTransaction";
 
 export function TransactionTable() {
   const params = useParams<{ id: string }>();
   const { t, i18n } = useLocale();
-  const { fullDateFormatter } = useDateFormat();
+  const fullDateFormatter = new Intl.DateTimeFormat(i18next.language, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
   const transactionsQuery = api.student.transactions.useQuery(params.id);
   const utils = api.useUtils();
   const canDeleteTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const canReadTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
 
   const updateTransactionMutation = api.transaction.updateStatus.useMutation({
@@ -122,7 +126,7 @@ export function TransactionTable() {
                         className="hover:text-blue-600 hover:underline"
                         href={routes.students.transactions.details(
                           params.id,
-                          transaction.id,
+                          transaction.id
                         )}
                       >
                         {transaction.transactionRef}
@@ -141,7 +145,7 @@ export function TransactionTable() {
                         className="hover:text-blue-600 hover:underline"
                         href={routes.students.transactions.details(
                           params.id,
-                          transaction.id,
+                          transaction.id
                         )}
                       >
                         {transaction.description}

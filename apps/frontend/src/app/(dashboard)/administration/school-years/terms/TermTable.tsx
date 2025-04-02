@@ -25,14 +25,14 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import i18next from "i18next";
 import { api } from "~/trpc/react";
-import { useDateFormat } from "~/utils/date-format";
 import { CreateEditTerm } from "./CreateEditTerm";
 
 export function TermTable() {
   const termsQuery = api.term.all.useQuery();
   const { t } = useLocale();
-  const { fullDateFormatter } = useDateFormat();
+
   const { openModal } = useModal();
   const confirm = useConfirm();
   const utils = api.useUtils();
@@ -77,10 +77,18 @@ export function TermTable() {
                 <TableRow key={term.id}>
                   <TableCell className="py-0">{term.name}</TableCell>
                   <TableCell className="py-0">
-                    {term.startDate && fullDateFormatter.format(term.startDate)}
+                    {term.startDate?.toLocaleDateString(i18next.language, {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
                   </TableCell>
                   <TableCell className="py-0">
-                    {term.endDate && fullDateFormatter.format(term.endDate)}
+                    {term.endDate?.toLocaleDateString(i18next.language, {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
                   </TableCell>
                   <TableCell className="py-0">
                     <FlatBadge variant={term.isActive ? "green" : "gray"}>

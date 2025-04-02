@@ -14,16 +14,20 @@ import {
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 import { useLocale } from "~/i18n";
 
+import i18next from "i18next";
 import { routes } from "~/configs/routes";
 import type { SMSHistory } from "~/types/sms";
 
 export function fetchSmsHistoryColumns({
   t,
-  dateFormatter,
 }: {
   t: TFunction<string, unknown>;
-  dateFormatter: Intl.DateTimeFormat;
 }) {
+  const dateFormatter = new Intl.DateTimeFormat(i18next.language, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
   const columns = [
     {
       id: "select",

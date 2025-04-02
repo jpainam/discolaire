@@ -6,10 +6,11 @@ import type { RouterOutputs } from "@repo/api";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
+import i18next from "i18next";
+import { useParams } from "next/navigation";
 import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";
 import { useDateFormat } from "~/utils/date-format";
-import { useParams } from "next/navigation";
 
 interface ByChronologicalOrderProps {
   grades: RouterOutputs["student"]["grades"][number][];
@@ -22,14 +23,23 @@ export function ByChronologicalOrder({
   const router = useRouter();
   const params = useParams<{ id: string; gradeId: string }>();
   const { createQueryString } = useCreateQueryString();
-  const { monthFormatter, dayFormatter } = useDateFormat();
 
   const { t } = useLocale();
   return (
     <div>
       {grades.map((grade) => {
-        const m = monthFormatter.format(grade.gradeSheet.createdAt);
-        const d = dayFormatter.format(grade.gradeSheet.createdAt);
+        const m = grade.gradeSheet.createdAt.toLocaleDateString(
+          i18next.language,
+          {
+            month: "short",
+          }
+        );
+        const d = grade.gradeSheet.createdAt.toLocaleDateString(
+          i18next.language,
+          {
+            day: "numeric",
+          }
+        );
         return (
           <div
             onClick={() => {
@@ -53,13 +63,13 @@ export function ByChronologicalOrder({
                 coef: grade.gradeSheet.subject.coefficient.toString(),
               };
               router.push(
-                `${routes.students.grades(params.id)}/${grade.id}/?${createQueryString({ ...query })}`,
+                `${routes.students.grades(params.id)}/${grade.id}/?${createQueryString({ ...query })}`
               );
             }}
             key={grade.id}
             className={cn(
               "flex cursor-pointer flex-row items-center gap-4 border-b border-accent px-4 py-2",
-              grade.id === Number(params.gradeId) ? "bg-accent" : "bg-none",
+              grade.id === Number(params.gradeId) ? "bg-accent" : "bg-none"
             )}
           >
             <div className="flex w-[50px] flex-col justify-center">
