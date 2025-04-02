@@ -1,53 +1,100 @@
-import { Suspense } from "react";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import Link from "next/link";
+import { CheckCircle } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 
-import { Donut } from "./donut";
-import { ErrorFallback } from "./error-fallback";
-
 export function Hero() {
   return (
-    <section className="relative md:mt-[250px] md:min-h-[375px]">
-      <div className="hero-slide-up mt-[240px] flex flex-col">
-        <h1 className="mt-6 text-[28px] leading-none font-medium md:text-[80px]">
-          Gestion
-          <br />
-          scolaire simplifiée
-        </h1>
+    <section
+      id="home"
+      className="relative -mx-4 overflow-hidden px-4 py-20 md:mx-0 md:py-28 lg:py-36"
+    >
+      {/* Background decorative elements */}
+      <div className="absolute top-0 left-0 z-0 h-full w-full overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl"></div>
+        <div className="absolute right-1/3 bottom-1/3 h-96 w-96 rounded-full bg-purple-500/10 blur-3xl"></div>
+      </div>
 
-        <p className="mt-4 max-w-[600px] text-[#878787] md:mt-6">
-          Une solution complète pour automatiser les tâches administratives,
-          améliorer la communication et suivre facilement la progression des
-          élèves.
-        </p>
-        <div className="mt-8">
-          <div className="flex items-center space-x-4">
-            <Link href="/signup">
-              <Button variant={"default"}>Nous contacter</Button>
-            </Link>
-            <a href="https://demo.discolaire.com">
-              <Button className="h-10" variant={"secondary"}>
-                Plateforme démo
+      <div className="relative z-10">
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <div className="flex flex-col justify-center space-y-8">
+            <div className="space-y-6">
+              <div className="inline-block rounded-full border border-blue-500/20 bg-gradient-to-r from-blue-500/20 to-purple-500/20 px-4 py-1.5 text-sm font-medium text-blue-400 backdrop-blur-sm">
+                Used by over 30 schools
+              </div>
+              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+                Revolutionize{" "}
+                <span className="relative">
+                  <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+                    Education and
+                  </span>
+                  <svg
+                    className="absolute -bottom-2 left-0 w-full"
+                    height="8"
+                    viewBox="0 0 100 8"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M0.5 4C25 4 25 1 50 1C75 1 75 7 100 7"
+                      stroke="url(#paint0_linear)"
+                      strokeWidth="2"
+                    />
+                    <defs>
+                      <linearGradient
+                        id="paint0_linear"
+                        x1="0"
+                        y1="4"
+                        x2="100"
+                        y2="4"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop stopColor="#3B82F6" />
+                        <stop offset="1" stopColor="#8B5CF6" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </span>{" "}
+                <br className="hidden sm:block" />
+                <span className="text-zinc-300">Schooling</span>
+              </h1>
+              <p className="max-w-[600px] leading-relaxed text-zinc-400 md:text-xl">
+                Discolaire helps schools simplify their administrative
+                processes, improve communication, and optimize learning outcomes
+                with our all-in-one platform.
+              </p>
+            </div>
+            <div className="flex flex-col gap-4 sm:flex-row">
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-blue-500 to-purple-500 text-white transition-all duration-300 hover:opacity-90"
+              >
+                Get Started
               </Button>
-            </a>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-zinc-700 text-zinc-300 transition-all duration-300 hover:bg-zinc-800 hover:text-white"
+              >
+                Learn More
+              </Button>
+            </div>
+            <div className="mt-2 flex flex-wrap items-center gap-6 text-sm text-zinc-400">
+              {[
+                "Easy Installation",
+                "24/7 Support",
+                "No Credit Card Required",
+              ].map((feature) => (
+                <div
+                  key={feature}
+                  className="flex items-center gap-2 rounded-full bg-zinc-800/50 px-3 py-1.5 backdrop-blur-sm"
+                >
+                  <CheckCircle className="h-4 w-4 text-blue-400" />
+                  <span>{feature}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-        <p className="mt-8 font-mono text-xs text-[#707070]">
-          Utilisé par{" "}
-          <Link href="/open-startup" prefetch>
-            <span className="underline">30+</span>
-          </Link>{" "}
-          écoles.
-        </p>
-      </div>
-      <div className="pointer-events-none absolute -top-[500px] -right-[380px] h-auto w-auto scale-50 transform-gpu grayscale sm:flex md:-top-[200px] md:-right-[200px] lg:scale-[0.50] lg:animate-[open-scale-up-fade_1.5s_ease-in-out] xl:-right-[100px] xl:flex xl:scale-100">
-        <ErrorBoundary errorComponent={ErrorFallback}>
-          <Suspense>
-            <Donut />
-          </Suspense>
-        </ErrorBoundary>
       </div>
     </section>
   );
