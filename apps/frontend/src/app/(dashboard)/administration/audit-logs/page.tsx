@@ -54,101 +54,9 @@ import { useQuery } from "@tanstack/react-query";
 import { parseAsIsoDate, useQueryState } from "nuqs";
 import { useDebouncedCallback } from "use-debounce";
 import { DatePicker } from "~/components/DatePicker";
+import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
-
-// Sample audit log data
-// const auditLogs = [
-//   {
-//     id: "1",
-//     timestamp: new Date("2023-04-01T10:30:00"),
-//     user: {
-//       id: "user-123",
-//       name: "John Smith",
-//       role: "Admin",
-//     },
-//     source: "User Management",
-//     event: "Updated Student X's email from abc@example.com to xyz@example.com",
-//     eventType: "update",
-//     details: {
-//       entity: "Student",
-//       entityId: "student-456",
-//       field: "email",
-//       oldValue: "abc@example.com",
-//       newValue: "xyz@example.com",
-//     },
-//   },
-//   {
-//     id: "2",
-//     timestamp: new Date("2023-04-01T11:15:00"),
-//     user: {
-//       id: "user-456",
-//       name: "Sarah Johnson",
-//       role: "Admin",
-//     },
-//     source: "Billing",
-//     event: "Deleted fee rule for 2024 term",
-//     eventType: "delete",
-//     details: {
-//       entity: "Fee Rule",
-//       entityId: "fee-789",
-//       term: "2024",
-//     },
-//   },
-//   {
-//     id: "3",
-//     timestamp: new Date("2023-04-01T14:45:00"),
-//     user: {
-//       id: "user-789",
-//       name: "Michael Brown",
-//       role: "Teacher",
-//     },
-//     source: "Grading",
-//     event: "Added grades to class Y",
-//     eventType: "create",
-//     details: {
-//       entity: "Grades",
-//       entityId: "class-123",
-//       className: "Mathematics 101",
-//     },
-//   },
-//   {
-//     id: "4",
-//     timestamp: new Date("2023-04-01T16:20:00"),
-//     user: {
-//       id: "user-123",
-//       name: "John Smith",
-//       role: "Admin",
-//     },
-//     source: "System",
-//     event: "Changed system settings for notification delivery",
-//     eventType: "update",
-//     details: {
-//       entity: "System Settings",
-//       field: "notification_delivery",
-//       oldValue: "immediate",
-//       newValue: "batched",
-//     },
-//   },
-//   {
-//     id: "5",
-//     timestamp: new Date("2023-04-02T09:10:00"),
-//     user: {
-//       id: "user-456",
-//       name: "Sarah Johnson",
-//       role: "Admin",
-//     },
-//     source: "User Management",
-//     event: "Created new user account for David Wilson",
-//     eventType: "create",
-//     details: {
-//       entity: "User",
-//       entityId: "user-999",
-//       email: "david.wilson@example.com",
-//       role: "Teacher",
-//     },
-//   },
-// ];
 
 export default function Page() {
   const [date, setDate] = useQueryState("date", parseAsIsoDate);
@@ -174,15 +82,17 @@ export default function Page() {
   const auditLogQuery = useQuery(
     trpc.logActivity.search.queryOptions({
       query: searchQuery,
-      eventType: eventTypeFilter as
-        | "CREATE"
-        | "UPDATE"
-        | "DELETE"
-        | "READ"
-        | undefined,
+      eventType: eventTypeFilter
+        ? (eventTypeFilter as
+            | "CREATE"
+            | "UPDATE"
+            | "DELETE"
+            | "READ"
+            | undefined)
+        : undefined,
       source: sourceFilter,
       from: date ?? undefined,
-    }),
+    })
   );
 
   const auditLogs = auditLogQuery.data ?? [];
@@ -192,15 +102,13 @@ export default function Page() {
 
   // Get event type badge color
   const getEventTypeBadge = (eventType: string) => {
-    switch (eventType) {
+    switch (eventType.toLowerCase()) {
       case "create":
-        return (
-          <Badge className="bg-green-500 hover:bg-green-600">Create</Badge>
-        );
+        return <FlatBadge variant={"green"}>Create</FlatBadge>;
       case "update":
-        return <Badge className="bg-blue-500 hover:bg-blue-600">Update</Badge>;
+        return <FlatBadge variant={"blue"}>Update</FlatBadge>;
       case "delete":
-        return <Badge className="bg-red-500 hover:bg-red-600">Delete</Badge>;
+        return <FlatBadge variant={"red"}>Delete</FlatBadge>;
       default:
         return <Badge>{eventType}</Badge>;
     }
@@ -261,9 +169,9 @@ export default function Page() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value={"all"}>All event types</SelectItem>
-                  <SelectItem value="create">Create</SelectItem>
-                  <SelectItem value="update">Update</SelectItem>
-                  <SelectItem value="delete">Delete</SelectItem>
+                  <SelectItem value="CREATE">Create</SelectItem>
+                  <SelectItem value="UPDATE">Update</SelectItem>
+                  <SelectItem value="DELETE">Delete</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -387,7 +295,7 @@ export default function Page() {
           </SheetHeader>
 
           {selectedLog && (
-            <div className="mt-6 space-y-6">
+            <div className="mt-6 space-y-6 px-4">
               <div className="space-y-2">
                 <h3 className="text-sm font-medium text-muted-foreground">
                   User
@@ -440,7 +348,7 @@ export default function Page() {
                                   [selectedLog.data]: selectedLog.data,
                                 },
                                 null,
-                                2,
+                                2
                               )}
                             </pre>
                           </div>
@@ -453,7 +361,7 @@ export default function Page() {
                                   [selectedLog.data]: selectedLog.data,
                                 },
                                 null,
-                                2,
+                                2
                               )}
                             </pre>
                           </div>

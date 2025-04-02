@@ -13,6 +13,7 @@ export const logActivityRouter = {
         userId: z.string().optional(),
         from: z.coerce.date().optional(),
         to: z.coerce.date().optional(),
+        limit: z.coerce.number().optional().default(20),
       }),
     )
     .query(({ ctx, input }) => {
@@ -21,6 +22,7 @@ export const logActivityRouter = {
         orderBy: {
           createdAt: "desc",
         },
+        take: input.limit,
         include: {
           user: true,
         },
