@@ -1,110 +1,122 @@
 import {
-  IconAdjustmentsBolt,
-  IconCloud,
-  IconCurrencyDollar,
-  IconEaseInOut,
-  IconHeart,
-  IconHelp,
-  IconRouteAltLeft,
-  IconTerminal2,
-} from "@tabler/icons-react";
-
-import { cn } from "~/lib/utils";
+  Captions,
+  ChartArea,
+  ClipboardPen,
+  ClipboardPlus,
+  CreditCard,
+  FolderDot,
+  GraduationCap,
+  ListPlus,
+} from "lucide-react";
 
 export function FeaturesSection3() {
   const features = [
     {
-      title: "Built for developers",
+      title: "ADMISSION AND ENROLLMENT",
       description:
-        "Built for engineers, developers, dreamers, thinkers and doers.",
-      icon: <IconTerminal2 />,
+        "Minimize registrar data entry with applications, Payment intergration, and more.",
+      icon: <ClipboardPen />,
     },
     {
-      title: "Ease of use",
+      title: "TUITION & INVOICING",
       description:
-        "It's as easy as using an Apple, and as expensive as buying one.",
-      icon: <IconEaseInOut />,
+        "Online Tuition Management offers full-service options for managers, registrars, and guardians all in one.",
+      icon: <CreditCard />,
     },
     {
-      title: "Pricing like no other",
+      title: "Analytics",
       description:
-        "Our prices are best in the market. No cap, no lock, no credit card required.",
-      icon: <IconCurrencyDollar />,
+        "Identify areas for improvement, visualize school data, and enhance student outcomes.",
+      icon: <ChartArea />,
     },
     {
-      title: "100% Uptime guarantee",
-      description: "We just cannot be taken down by anyone.",
-      icon: <IconCloud />,
-    },
-    {
-      title: "Multi-tenant Architecture",
-      description: "You can simply share passwords instead of buying new seats",
-      icon: <IconRouteAltLeft />,
-    },
-    {
-      title: "24/7 Customer Support",
+      title: "REPORTING",
       description:
-        "We are available a 100% of the time. Atleast our AI Agents are.",
-      icon: <IconHelp />,
+        "Reporting options such as templates, configurable data fields, advanced filters, printing, and export capabilities.",
+      icon: <ClipboardPlus />,
     },
     {
-      title: "Money back guarantee",
+      title: "TRANSCRIPTS",
       description:
-        "If you donot like EveryAI, we will convince you to like us.",
-      icon: <IconAdjustmentsBolt />,
+        "Simplify your workload with bulk transcript printing, student transfers, and GPA calculation settings",
+      icon: <Captions />,
     },
     {
-      title: "And everything else",
-      description: "I just ran out of copy ideas. Accept my sincere apologies",
-      icon: <IconHeart />,
+      title: "ADMIN FORMS",
+      description:
+        "Eliminate the hassle of collecting physical forms with secure online submissions, configurable templates, and more.",
+      icon: <FolderDot />,
+    },
+    {
+      title: "ATTENDANCE TRACKING",
+      description:
+        "Record attendance in real-time with configurable markings and notification settings that are viewable by guardians.",
+      icon: <ListPlus />,
+    },
+    {
+      title: "GRADE BOOK",
+      description:
+        "Configurable grade book, featuring cumulative averages, grade weighting, attendance tracking, and more",
+      icon: <GraduationCap />,
     },
   ];
+
   return (
-    <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 py-10 md:grid-cols-2 lg:grid-cols-4">
-      {features.map((feature, index) => (
-        <Feature key={feature.title} {...feature} index={index} />
-      ))}
+    <div className="relative z-10 mx-auto max-w-7xl py-7">
+      {/* Hero Section */}
+      <section className="py-16 text-center text-white">
+        <h1 className="mb-4 bg-gradient-to-r from-green-500 to-purple-500 bg-clip-text text-4xl font-bold uppercase text-transparent">
+          Discolaire School Management System
+        </h1>
+        <p className="mt-2 text-lg font-bold text-zinc-400">
+          The ultimate solution for managing school operations efficiently.
+        </p>
+        <div className="mt-6">
+          <a
+            href="/ContactUs"
+            className="hover: inline-block rounded-lg bg-green-500 bg-gradient-to-r from-green-500 to-teal-500 px-6 py-3 text-lg font-semibold text-white shadow-md transition duration-300 hover:from-green-600 hover:to-teal-600"
+          >
+            Talk to Our Experts
+          </a>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-10">
+        <h2 className="mb-10 text-center text-3xl font-bold uppercase italic">
+          Our Discolaire Solutions
+        </h2>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {features.map((feature, _index) => (
+            <div
+              key={feature.title}
+              className="rounded-lg border p-4 shadow-md"
+            >
+              <div className="mb-4 flex text-4xl">{feature.icon}</div>
+              <h3 className="mb-2 mb-4 bg-gradient-to-r from-green-500 to-purple-500 bg-clip-text text-xl font-bold text-transparent">
+                {feature.title}
+              </h3>
+              <p className="text-zinc-600">{feature.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+      <section className="flex flex-col items-center space-y-4 py-10 text-center text-lg text-neutral-600 dark:text-neutral-400">
+        <p>
+          From powerful automation to flexible configurability settings, there’s
+          so much more
+          <br />
+          to explore. See how our features can support your school.
+        </p>
+        <p>
+          <a
+            href="/ContactUs"
+            className="mb-4 bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text font-semibold text-transparent hover:underline"
+          >
+            Contact Us Today
+          </a>
+        </p>
+      </section>
     </div>
   );
 }
-
-const Feature = ({
-  title,
-  description,
-  icon,
-  index,
-}: {
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  index: number;
-}) => {
-  return (
-    <div
-      className={cn(
-        "group/feature relative flex flex-col py-10 lg:border-r dark:border-neutral-800",
-        (index === 0 || index === 4) && "lg:border-l dark:border-neutral-800",
-        index < 4 && "lg:border-b dark:border-neutral-800",
-      )}
-    >
-      {index < 4 && (
-        <div className="pointer-events-none absolute inset-0 h-full w-full bg-gradient-to-t from-neutral-100 to-transparent opacity-0 transition duration-200 group-hover/feature:opacity-100 dark:from-neutral-800" />
-      )}
-      {index >= 4 && (
-        <div className="pointer-events-none absolute inset-0 h-full w-full bg-gradient-to-b from-neutral-100 to-transparent opacity-0 transition duration-200 group-hover/feature:opacity-100 dark:from-neutral-800" />
-      )}
-      <div className="relative z-10 mb-4 px-10 text-neutral-600 dark:text-neutral-400">
-        {icon}
-      </div>
-      <div className="relative z-10 mb-2 px-10 text-lg font-bold">
-        <div className="absolute inset-y-0 left-0 h-6 w-1 origin-center rounded-tr-full rounded-br-full bg-neutral-300 transition-all duration-200 group-hover/feature:h-8 group-hover/feature:bg-blue-500 dark:bg-neutral-700" />
-        <span className="inline-block text-neutral-800 transition duration-200 group-hover/feature:translate-x-2 dark:text-neutral-100">
-          {title}
-        </span>
-      </div>
-      <p className="relative z-10 max-w-xs px-10 text-sm text-neutral-600 dark:text-neutral-300">
-        {description}
-      </p>
-    </div>
-  );
-};

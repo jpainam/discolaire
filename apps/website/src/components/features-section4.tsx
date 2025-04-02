@@ -3,15 +3,28 @@ import { useId } from "react";
 
 export function FeaturesSection4() {
   return (
-    <div className="py-20 lg:py-40">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 md:gap-2 lg:grid-cols-4">
+    <div className="py-20 lg:py-10">
+      {/* Heading Section */}
+      <div className="mb-10 text-center">
+        <h2 className="text-2xl uppercase italic">
+          Explore DISCOLAIRE FEATURES BY SYSTEM
+        </h2>
+        <p className="mt-2 py-5 text-lg text-neutral-600 dark:text-neutral-400">
+          Discolaire combines school management, student information, and
+          learning management features into one powerful, <br />
+          comprehensive, and affordable platform.
+        </p>
+      </div>
+
+      {/* Centered Features Grid */}
+      <div className="mx-auto grid max-w-7xl grid-cols-1 justify-center gap-10 sm:grid-cols-2 md:grid-cols-3">
         {grid.map((feature) => (
           <div
             key={feature.title}
             className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-neutral-100 to-white p-6 dark:from-neutral-900 dark:to-neutral-950"
           >
             <Grid size={20} />
-            <p className="relative z-20 text-base font-bold text-neutral-800 dark:text-white">
+            <p className="relative z-20 mb-4 bg-gradient-to-r from-green-500 to-purple-500 bg-clip-text text-base font-bold text-transparent">
               {feature.title}
             </p>
             <p className="relative z-20 mt-4 text-base font-normal text-neutral-600 dark:text-neutral-400">
@@ -20,50 +33,33 @@ export function FeaturesSection4() {
           </div>
         ))}
       </div>
+      <div className="mt-10 mt-2 flex justify-center py-5 text-center text-lg text-neutral-600 dark:text-neutral-400">
+        <p>
+          Want to learn more? Dive into our extensive collection of guides
+          covering a wide array of topics, providing in-depth insights and{" "}
+          <br />
+          practical advice.{" "}
+        </p>
+      </div>
     </div>
   );
 }
 
 const grid = [
   {
-    title: "HIPAA and SOC2 Compliant",
+    title: "SCHOOL MANAGEMENT",
     description:
-      "Our applications are HIPAA and SOC2 compliant, your data is safe with us, always.",
+      "With DISCOLAIRE, administrators have access to a range of proactive features that contribute to streamlining school operations.",
   },
   {
-    title: "Automated Social Media Posting",
+    title: "LEARNING MANAGEMENT",
     description:
-      "Schedule and automate your social media posts across multiple platforms to save time and maintain a consistent online presence.",
+      "Transform your classroom experience with powerful and user-friendly Learning Management Features.",
   },
   {
-    title: "Advanced Analytics",
+    title: "STUDENT INFORMATION",
     description:
-      "Gain insights into your social media performance with detailed analytics and reporting tools to measure engagement and ROI.",
-  },
-  {
-    title: "Content Calendar",
-    description:
-      "Plan and organize your social media content with an intuitive calendar view, ensuring you never miss a post.",
-  },
-  {
-    title: "Audience Targeting",
-    description:
-      "Reach the right audience with advanced targeting options, including demographics, interests, and behaviors.",
-  },
-  {
-    title: "Social Listening",
-    description:
-      "Monitor social media conversations and trends to stay informed about what your audience is saying and respond in real-time.",
-  },
-  {
-    title: "Customizable Templates",
-    description:
-      "Create stunning social media posts with our customizable templates, designed to fit your brand's unique style and voice.",
-  },
-  {
-    title: "Collaboration Tools",
-    description:
-      "Work seamlessly with your team using our collaboration tools, allowing you to assign tasks, share drafts, and provide feedback in real-time.",
+      "Tired of manual data entry? Embrace a new era in school data management with the ClassReach Student Information System Features.",
   },
 ];
 
@@ -82,7 +78,7 @@ export const Grid = ({
     [Math.floor(Math.random() * 4) + 7, Math.floor(Math.random() * 6) + 1],
   ];
   return (
-    <div className="pointer-events-none absolute top-0 left-1/2 -mt-2 -ml-20 h-full w-full [mask-image:linear-gradient(white,transparent)]">
+    <div className="pointer-events-none absolute left-1/2 top-0 -ml-20 -mt-2 h-full w-full [mask-image:linear-gradient(white,transparent)]">
       <div className="absolute inset-0 bg-gradient-to-r from-zinc-100/30 to-zinc-300/30 opacity-100 [mask-image:radial-gradient(farthest-side_at_top,white,transparent)] dark:from-zinc-900/30 dark:to-zinc-900/30">
         <GridPattern
           width={size ?? 20}
