@@ -35,7 +35,7 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 import { CreateEditStaff } from "../CreateEditStaff";
 
 export function StaffProfileHeader({

@@ -23,7 +23,7 @@ import { StudentContactRelationship } from "~/components/students/contacts/Stude
 import { StudentSiblingTable } from "~/components/students/contacts/StudentSiblingTable";
 import { routes } from "~/configs/routes";
 import { api } from "~/trpc/server";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 
 export default async function Page(props: {
   params: Promise<{ id: string; contactId: string }>;

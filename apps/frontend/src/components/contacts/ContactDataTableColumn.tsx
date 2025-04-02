@@ -29,7 +29,7 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 import { AvatarState } from "../AvatarState";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import CreateEditContact from "./CreateEditContact";
@@ -182,11 +182,11 @@ export function getColumns({
         const utils = api.useUtils();
         const canDeleteContact = useCheckPermission(
           "contact",
-          PermissionAction.DELETE,
+          PermissionAction.DELETE
         );
         const canUpdateContact = useCheckPermission(
           "contact",
-          PermissionAction.UPDATE,
+          PermissionAction.UPDATE
         );
         const deleteContactMutation = api.contact.delete.useMutation({
           onSettled: () => utils.contact.all.invalidate(),

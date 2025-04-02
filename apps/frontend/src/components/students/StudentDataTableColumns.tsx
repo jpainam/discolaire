@@ -29,7 +29,7 @@ import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 import { getAge } from "~/utils/student-utils";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { SimpleTooltip } from "../simple-tooltip";
@@ -250,7 +250,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
             year: "numeric",
             month: "short",
             day: "numeric",
-          },
+          }
         );
         return (
           <SimpleTooltip

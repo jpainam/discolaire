@@ -31,7 +31,7 @@ import { RelationshipSelector } from "~/components/shared/selects/RelationshipSe
 import { getErrorMessage } from "~/lib/handle-error";
 import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 
 type Contact = NonNullable<
   RouterOutputs["student"]["unlinkedContacts"]
@@ -99,16 +99,15 @@ export function LinkContact({ studentId }: { studentId: string }) {
                     if (selectedContacts.includes(contact)) {
                       return setSelectedContacts(
                         selectedContacts.filter(
-                          (selectedContact) =>
-                            selectedContact.id !== contact.id,
-                        ),
+                          (selectedContact) => selectedContact.id !== contact.id
+                        )
                       );
                     }
 
                     return setSelectedContacts(
                       [...studentUnLinkedContact.data].filter((u) =>
-                        [...selectedContacts, contact].includes(u),
-                      ),
+                        [...selectedContacts, contact].includes(u)
+                      )
                     );
                   }}
                 >
@@ -195,7 +194,7 @@ export function LinkContact({ studentId }: { studentId: string }) {
                 error: (error) => {
                   return getErrorMessage(error);
                 },
-              },
+              }
             );
           }}
         >

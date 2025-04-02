@@ -22,7 +22,7 @@ import { useEffect } from "react";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
 import { DropdownHelp } from "../shared/DropdownHelp";

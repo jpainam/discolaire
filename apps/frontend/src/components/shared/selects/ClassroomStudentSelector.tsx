@@ -25,7 +25,7 @@ import { useLocale } from "~/i18n";
 import { AvatarState } from "~/components/AvatarState";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 
 // https://github.com/oaarnikoivu/shadcn-virtualized-combobox
 interface Option {
@@ -66,8 +66,8 @@ const VirtualizedCommand = ({
   const handleSearch = (search: string) => {
     setFilteredOptions(
       options.filter((option) =>
-        option.label.toLowerCase().includes(search.toLowerCase()),
-      ),
+        option.label.toLowerCase().includes(search.toLowerCase())
+      )
     );
   };
 
@@ -131,7 +131,7 @@ const VirtualizedCommand = ({
                       selectedOption ===
                         filteredOptions[virtualOption.index]?.value
                         ? "opacity-100"
-                        : "opacity-0",
+                        : "opacity-0"
                     )}
                   />
                 </CommandItem>
@@ -178,7 +178,7 @@ export function ClassroomStudentSelector({
     if (classroomStudentsQuery.data) {
       if (defaultValue) {
         const dValue = classroomStudentsQuery.data.find(
-          (item) => item.id === defaultValue,
+          (item) => item.id === defaultValue
         );
         if (dValue)
           setSelectedOption({ label: getFullName(dValue), value: dValue.id });
@@ -188,7 +188,7 @@ export function ClassroomStudentSelector({
           label: getFullName(student),
           value: student.id,
           avatar: student.user?.avatar ?? undefined,
-        })),
+        }))
       );
     }
   }, [defaultValue, classroomStudentsQuery.data]);
@@ -224,7 +224,7 @@ export function ClassroomStudentSelector({
           selectedOption={selectedOption.value}
           onSelectOption={(currentValue) => {
             onChange?.(
-              currentValue === selectedOption.value ? null : currentValue,
+              currentValue === selectedOption.value ? null : currentValue
             );
             setSelectedOption({
               value: currentValue === selectedOption.value ? "" : currentValue,

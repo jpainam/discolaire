@@ -10,7 +10,7 @@ import { CURRENCY } from "~/lib/constants";
 import { notificationQueue } from "~/lib/queue";
 import { numberToWords } from "~/lib/toword";
 import { api } from "~/trpc/server";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 
 export default async function Page(props: {
   params: Promise<{ id: string; transactionId: number }>;

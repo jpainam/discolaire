@@ -25,7 +25,7 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 import { AvatarState } from "../AvatarState";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { CreateEditStaff } from "./CreateEditStaff";

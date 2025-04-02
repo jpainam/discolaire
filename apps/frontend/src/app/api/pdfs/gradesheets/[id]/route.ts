@@ -8,8 +8,8 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getSheetName } from "~/lib/utils";
 import { api } from "~/trpc/server";
+import { getFullName } from "~/utils";
 import { xlsxType } from "~/utils/file-type";
-import { getFullName } from "~/utils/full-name";
 import { getAppreciations } from "~/utils/get-appreciation";
 
 const querySchema = z.object({
@@ -19,7 +19,7 @@ const querySchema = z.object({
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: number } },
+  { params }: { params: { id: number } }
 ) {
   const session = await auth();
   if (!session) {
@@ -34,7 +34,7 @@ export async function GET(
   if (!parsedQuery.success) {
     return NextResponse.json(
       { error: parsedQuery.error.format() },
-      { status: 400 },
+      { status: 400 }
     );
   }
   try {
@@ -72,7 +72,7 @@ export async function GET(
           allGrades: allGrades,
           gradesheet: gradesheet,
           school: school,
-        }),
+        })
       );
 
       //const blob = await new Response(stream).blob();

@@ -9,7 +9,7 @@ import { db } from "@repo/db";
 import { nanoid } from "nanoid";
 import { resend } from "~/lib/resend";
 import { api } from "~/trpc/server";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 
 const schema = z.object({
   transactionId: z.coerce.number(),

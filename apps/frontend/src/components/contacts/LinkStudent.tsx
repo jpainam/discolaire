@@ -31,7 +31,7 @@ import { useRouter } from "next/navigation";
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import rangeMap from "~/lib/range-map";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 import { randomAvatar } from "../raw-images";
 
 export function LinkStudent({ contactId }: { contactId: string }) {
@@ -111,15 +111,15 @@ export function LinkStudent({ contactId }: { contactId: string }) {
                     if (selectedStudents.includes(stud)) {
                       return setSelectedStudents(
                         selectedStudents.filter(
-                          (selectedStudent) => selectedStudent.id !== stud.id,
-                        ),
+                          (selectedStudent) => selectedStudent.id !== stud.id
+                        )
                       );
                     }
 
                     return setSelectedStudents(
                       [...contactUnLinkedStudent.data].filter((u) =>
-                        [...selectedStudents, stud].includes(u),
-                      ),
+                        [...selectedStudents, stud].includes(u)
+                      )
                     );
                   }}
                 >

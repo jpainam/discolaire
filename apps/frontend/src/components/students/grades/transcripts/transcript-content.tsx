@@ -11,7 +11,7 @@ import { useLocale } from "~/i18n";
 import { ExportButton } from "~/components/shared/buttons/export-button";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 import { TranscriptItem } from "./transcript-item";
 
 export function TranscriptContent() {

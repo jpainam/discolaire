@@ -24,7 +24,7 @@ import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { CURRENCY } from "~/lib/constants";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 
 type StudentAccountWithBalance = NonNullable<
   RouterOutputs["classroom"]["studentsBalance"]
@@ -39,14 +39,14 @@ export function ListViewFinance({
 }) {
   const { t, i18n } = useLocale();
   const [selectedStudents, setSelectedStudents] = useAtom(
-    selectedStudentIdsAtom,
+    selectedStudentIdsAtom
   );
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
 
   const total = students.reduce(
     (acc, stud) => acc + (stud.balance - amountDue),
-    0,
+    0
   );
   return (
     <div className="px-4">
@@ -58,7 +58,7 @@ export function ListViewFinance({
                 <Checkbox
                   onCheckedChange={(checked) => {
                     setSelectedStudents((_stds) =>
-                      checked ? students.map((stud) => stud.student.id) : [],
+                      checked ? students.map((stud) => stud.student.id) : []
                     );
                   }}
                 />
@@ -89,7 +89,7 @@ export function ListViewFinance({
                         setSelectedStudents((students) =>
                           checked
                             ? [...students, stud.student.id]
-                            : students.filter((id) => id !== stud.student.id),
+                            : students.filter((id) => id !== stud.student.id)
                         );
                       }}
                       checked={selectedStudents.includes(stud.student.id)}
@@ -129,7 +129,7 @@ export function ListViewFinance({
                     <div
                       className={cn(
                         "w-fit px-2 text-center text-primary-foreground rounded-sm",
-                        remaining < 0 ? "bg-red-500" : "bg-green-500",
+                        remaining < 0 ? "bg-red-500" : "bg-green-500"
                       )}
                     >
                       {remaining < 0 ? "#D#" : "#C#"}

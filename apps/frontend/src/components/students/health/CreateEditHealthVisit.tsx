@@ -38,7 +38,7 @@ import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { useSchool } from "~/providers/SchoolProvider";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 
 const createEditVisitSchema = z.object({
   date: z.coerce.date().default(() => new Date()),
@@ -108,7 +108,7 @@ export function CreateEditHealthVisit({
         error: (err) => {
           return getErrorMessage(err);
         },
-      },
+      }
     );
   };
 

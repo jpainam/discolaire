@@ -11,7 +11,7 @@ import { getServerTranslations } from "~/i18n/server";
 
 import { LoginInfoHeader } from "~/components/students/login-info/LoginInfoHeader";
 import { api } from "~/trpc/server";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 import { AttachUserButton } from "./AttachUserButton";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {

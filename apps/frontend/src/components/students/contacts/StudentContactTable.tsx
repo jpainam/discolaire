@@ -39,7 +39,7 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 
 export function StudentContactTable({
   studentContacts,
@@ -79,7 +79,7 @@ export function StudentContactTable({
   const utils = api.useUtils();
   const canDeleteStudentContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
 
   return (
@@ -126,7 +126,7 @@ export function StudentContactTable({
                     <Link
                       href={`${routes.students.contacts(c.studentId)}/${contact.id}`}
                       className={cn(
-                        "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline",
+                        "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline"
                       )}
                     >
                       {getFullName(contact)}
@@ -179,7 +179,7 @@ export function StudentContactTable({
                           <DropdownMenuItem
                             onSelect={() => {
                               router.push(
-                                `${routes.students.contacts(c.studentId)}/${c.contactId}`,
+                                `${routes.students.contacts(c.studentId)}/${c.contactId}`
                               );
                             }}
                           >

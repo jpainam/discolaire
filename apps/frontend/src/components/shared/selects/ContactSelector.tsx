@@ -23,7 +23,7 @@ import { useLocale } from "~/i18n";
 
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 
 interface SelectorProps {
   className?: string;

@@ -26,7 +26,7 @@ import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { useSession } from "~/providers/AuthProvider";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 
 export function StudentPageHeader() {
   const { t } = useLocale();
@@ -35,7 +35,7 @@ export function StudentPageHeader() {
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   const [value, setValue] = useState("");

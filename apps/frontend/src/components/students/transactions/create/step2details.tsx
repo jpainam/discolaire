@@ -18,8 +18,8 @@ import { useLocale } from "~/i18n";
 
 import { Label } from "@repo/ui/components/label";
 import { CURRENCY } from "~/lib/constants";
+import { getFullName } from "~/utils";
 import { useDateFormat } from "~/utils/date-format";
-import { getFullName } from "~/utils/full-name";
 import { useCreateTransaction } from "./CreateTransactionContextProvider";
 
 export default function Step2Details() {
@@ -41,7 +41,7 @@ export default function Step2Details() {
     .reduce(
       (acc, curr) =>
         acc + (curr.transactionType == "DEBIT" ? -curr.amount : curr.amount),
-      0,
+      0
     );
 
   const [transactionDate, _setTransactionDate] = useState<Date>(new Date());
@@ -136,7 +136,7 @@ export default function Step2Details() {
                       setNotifications([...notifications, item.contactId]);
                     } else {
                       setNotifications(
-                        notifications.filter((i) => i !== item.contactId),
+                        notifications.filter((i) => i !== item.contactId)
                       );
                     }
                   }}

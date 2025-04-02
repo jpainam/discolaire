@@ -5,7 +5,7 @@ import { Button } from "@repo/ui/components/button";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 import { AvatarState } from "../AvatarState";
 import { SimpleTooltip } from "../simple-tooltip";
 import { ChangeAvatar } from "./ChangeAvatar";

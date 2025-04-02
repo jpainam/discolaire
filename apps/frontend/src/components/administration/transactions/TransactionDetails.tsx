@@ -26,8 +26,8 @@ import { useLocale } from "~/i18n";
 
 import { Label } from "@repo/ui/components/label";
 import { api } from "~/trpc/react";
+import { getFullName } from "~/utils";
 import { useDateFormat } from "~/utils/date-format";
-import { getFullName } from "~/utils/full-name";
 import { useMoneyFormat } from "~/utils/money-format";
 
 export function TransactionDetails({

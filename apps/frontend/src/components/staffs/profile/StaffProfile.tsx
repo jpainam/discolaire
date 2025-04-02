@@ -5,7 +5,7 @@ import { getServerTranslations } from "~/i18n/server";
 import { AvatarState } from "~/components/AvatarState";
 import { UserAvatar } from "~/components/users/UserAvatar";
 import { api } from "~/trpc/server";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 import { StaffProfileHeader } from "./StaffProfileHeader";
 
 export async function StaffProfile({ staffId }: { staffId: string }) {

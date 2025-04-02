@@ -8,7 +8,7 @@ import { IdCardBarCode } from "~/components/students/idcard/id-barcode";
 import { IdCardHeader } from "~/components/students/idcard/IdCardHeader";
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;

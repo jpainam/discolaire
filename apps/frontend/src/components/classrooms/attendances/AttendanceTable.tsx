@@ -21,7 +21,7 @@ import { useLocale } from "~/i18n";
 import { AvatarState } from "~/components/AvatarState";
 import { showErrorToast } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 import { routes } from "../../../configs/routes";
 
 export function AttendanceTable() {

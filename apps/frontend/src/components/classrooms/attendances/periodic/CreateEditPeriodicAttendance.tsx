@@ -23,7 +23,7 @@ import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 import { PeriodicAttendanceHeader } from "./PeriodicAttendanceHeader";
 
 const attendanceSchema = z.object({
@@ -35,7 +35,7 @@ const attendanceSchema = z.object({
       consigne: z.string().optional(),
       exclusion: z.string().optional(),
       chatter: z.string().optional(),
-    }),
+    })
   ),
 });
 type ClassroomStudent = RouterOutputs["classroom"]["students"][number];
@@ -70,7 +70,7 @@ export function CreateEditPeridicAttendance({
     onSuccess: () => {
       toast.success(t("added_successfully"), { id: 0 });
       router.push(
-        `${routes.classrooms.attendances.index(params.id)}/periodic?type=periodic`,
+        `${routes.classrooms.attendances.index(params.id)}/periodic?type=periodic`
       );
     },
     onError: (error) => {

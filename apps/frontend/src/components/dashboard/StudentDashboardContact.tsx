@@ -8,7 +8,7 @@ import {
 import Link from "next/link";
 import { getServerTranslations } from "~/i18n/server";
 import { api } from "~/trpc/server";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 import { AvatarState } from "../AvatarState";
 export async function StudentDashboardContact({
   studentId,

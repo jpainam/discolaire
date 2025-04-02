@@ -31,7 +31,7 @@ import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 import { CreateGradeSheetHeader } from "./CreateGradeSheetHeader";
 
 const createGradeSchema = z.object({
@@ -47,7 +47,7 @@ const createGradeSchema = z.object({
       studentId: z.string(),
       absent: z.boolean().default(false),
       grade: z.string().default(""),
-    }),
+    })
   ),
 });
 
@@ -70,7 +70,7 @@ export function CreateGradeSheet({
         }
       }
     },
-    [], // No dependencies, so this function is only created once
+    [] // No dependencies, so this function is only created once
   );
   const searchParams = useSearchParams();
   const form = useForm({

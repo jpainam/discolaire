@@ -21,7 +21,7 @@ import { getServerTranslations } from "~/i18n/server";
 import { decode } from "entities";
 import { routes } from "~/configs/routes";
 import { api } from "~/trpc/server";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 
 type StudentContactGetProcedureOutput = RouterOutputs["studentContact"]["get"];
 

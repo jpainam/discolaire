@@ -29,7 +29,7 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 
 type ClassroomStudentProcedureOutput =
   RouterOutputs["classroom"]["students"][number];
@@ -192,7 +192,7 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
   const router = useRouter();
   const canDeleteEnrollment = useCheckPermission(
     "enrollment",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const queryClient = useQueryClient();
   const trpc = useTRPC();
@@ -201,13 +201,13 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
       onSuccess: async () => {
         toast.success(t("unenrolled_successfully"), { id: 0 });
         await queryClient.invalidateQueries(
-          trpc.classroom.students.pathFilter(),
+          trpc.classroom.students.pathFilter()
         );
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const confirm = useConfirm();

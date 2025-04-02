@@ -23,7 +23,7 @@ import { breadcrumbAtom } from "~/lib/atoms";
 import { PermissionAction } from "~/permissions";
 import { useSession } from "~/providers/AuthProvider";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 import { SearchCombobox } from "../SearchCombobox";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import CreateEditContact from "./CreateEditContact";
@@ -56,7 +56,7 @@ export function ContactHeader() {
 
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (

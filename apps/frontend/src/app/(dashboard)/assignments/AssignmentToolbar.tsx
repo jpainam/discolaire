@@ -22,7 +22,7 @@ export function AssignmentToolbar() {
   const { openModal } = useModal();
   const canCreateAssignment = useCheckPermission(
     "assignment",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
   return (
     <header className="flex items-center justify-between border-b bg-muted/50 px-4 py-1">

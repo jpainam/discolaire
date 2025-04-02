@@ -32,7 +32,7 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSession } from "~/providers/AuthProvider";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 import { CreateEditSubject } from "./CreateEditSubject";
 
 //type ClassroomSubject = RouterOutputs["classroom"]["subjects"][number];
@@ -44,11 +44,11 @@ export function SubjectTable({ classroomId }: { classroomId: string }) {
   const confirm = useConfirm();
   const canDeleteClassroomSubject = useCheckPermission(
     "subject",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditClassroomSubject = useCheckPermission(
     "subject",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const router = useRouter();
   const utils = api.useUtils();

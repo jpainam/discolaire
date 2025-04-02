@@ -27,7 +27,7 @@ import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
-import { getFullName } from "~/utils/full-name";
+import { getFullName } from "~/utils";
 import { routes } from "../../configs/routes";
 import { AvatarState } from "../AvatarState";
 import { LinkStudent } from "./LinkStudent";
@@ -59,11 +59,11 @@ export default function StudentContactList({
   });
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (
@@ -120,7 +120,7 @@ export default function StudentContactList({
                       size="sm"
                       onClick={() => {
                         router.push(
-                          routes.students.details(studentcontact.studentId),
+                          routes.students.details(studentcontact.studentId)
                         );
                       }}
                       variant="outline"
@@ -199,7 +199,7 @@ export default function StudentContactList({
                                     error: (error) => {
                                       return getErrorMessage(error);
                                     },
-                                  },
+                                  }
                                 );
                               }
                             }}
@@ -217,7 +217,7 @@ export default function StudentContactList({
                 )}
               </Card>
             );
-          },
+          }
         )}
       </div>
     </div>
