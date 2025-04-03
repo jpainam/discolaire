@@ -23,6 +23,7 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import i18next from "i18next";
+import FlatBadge from "~/components/FlatBadge";
 import { useCheckPermission } from "~/hooks/use-permission";
 
 type RequiredTransactionOutput =
@@ -95,6 +96,21 @@ export function getRequiredColumns({
         );
       },
     },
+    {
+      accessorKey: "classroom",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("classroom")} />
+      ),
+      cell: ({ row }) => {
+        const transaction = row.original;
+
+        return (
+          <div className="text-muted-foreground">
+            {transaction.fee.classroom.reportName}
+          </div>
+        );
+      },
+    },
 
     {
       accessorKey: "fee",
@@ -104,7 +120,11 @@ export function getRequiredColumns({
       cell: ({ row }) => {
         const transaction = row.original;
 
-        return <div>{transaction.fee.description}</div>;
+        return (
+          <div className="text-muted-foreground">
+            {transaction.fee.description}
+          </div>
+        );
       },
     },
     {
@@ -135,11 +155,21 @@ export function getRequiredColumns({
       size: 60,
       cell: ({ row }) => {
         const transaction = row.original;
+        const status = transaction.status;
 
         return (
-          <div className="flex flex-row items-center gap-1">
-            {transaction.status}
-          </div>
+          <FlatBadge
+            variant={
+              status == "PENDING"
+                ? "yellow"
+                : status == "VALIDATED"
+                  ? "green"
+                  : "red"
+            }
+            className="text-xs capitalize"
+          >
+            {t(transaction.status)}
+          </FlatBadge>
         );
       },
     },
@@ -169,7 +199,7 @@ function ActionCells({
   //const utils = api.useUtils();
   const canDeleteClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   // const canUpdateClassroom = useCheckPermission(
   //   "classroom",
