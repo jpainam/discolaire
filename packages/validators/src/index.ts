@@ -7,6 +7,7 @@ export const unused = z.string().describe(
   `,
 );
 
+// TODO remove, it's unused
 export const createUpdateStudentSchema = z.object({
   id: z.string().optional(),
   registrationNumber: z.string().optional(),

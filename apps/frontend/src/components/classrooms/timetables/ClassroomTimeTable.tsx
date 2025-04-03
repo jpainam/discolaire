@@ -86,7 +86,7 @@ export function ClassroomTimeTable() {
         ),
       });
     },
-    [openModal, params.id, t],
+    [openModal, params.id, t]
   );
 
   const handleSelectEvent = useCallback(
@@ -106,7 +106,7 @@ export function ClassroomTimeTable() {
         ),
       });
     },
-    [openModal, params.id, t],
+    [openModal, params.id, t]
   );
 
   const { _views, _scrollToTime, formats } = useMemo(
@@ -123,18 +123,18 @@ export function ClassroomTimeTable() {
         weekdayFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer,
+          localizer?: DateLocalizer
         ) => localizer?.format(date, "EEE", culture),
         dayFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) =>
           localizer?.format(date, "EEE M/d", culture),
         timeGutterFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer,
+          localizer?: DateLocalizer
         ) => localizer?.format(date, "HH:mm", culture),
       } as Formats,
     }),
-    [],
+    []
   );
 
   const handleViewChange = (view: RbcView) => {
@@ -231,8 +231,8 @@ export function ClassroomTimeTable() {
 
 const getUniqueWeekdaysBetweenDates = (
   startDate: Date,
-  endDate: Date,
-): string[] => {
+  endDate: Date
+): { label: string; value: string }[] => {
   const dayNames = ["0", "1", "2", "3", "4", "5", "6"];
   const uniqueWeekdays = new Set<string>();
 
@@ -246,5 +246,10 @@ const getUniqueWeekdaysBetweenDates = (
     // Increment the date by 1 day
     currentDate.setDate(currentDate.getDate() + 1);
   }
-  return Array.from(uniqueWeekdays); // Convert the Set back to an array
+  return Array.from(uniqueWeekdays).map((v) => {
+    return {
+      label: v,
+      value: v,
+    };
+  }); // Convert the Set back to an array
 };

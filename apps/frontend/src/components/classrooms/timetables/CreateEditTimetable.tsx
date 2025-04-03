@@ -21,8 +21,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import type { Option } from "~/components/students/multiple-selector";
-import MultipleSelector from "~/components/students/multiple-selector";
+import type { Option } from "~/components/multiselect";
+import MultipleSelector from "~/components/multiselect";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
@@ -33,7 +33,14 @@ const createEditTimetable = z.object({
   startTime: z.string().min(1),
   endTime: z.string().min(1),
   description: z.string().optional(),
-  days: z.array(z.string()).default([]),
+  days: z
+    .array(
+      z.object({
+        label: z.string(),
+        value: z.string(),
+      })
+    )
+    .default([]),
   repeat: z
     .enum(["daily", "weekly", "biweekly", "monthly", "yearly"])
     .default("weekly"),
@@ -51,7 +58,7 @@ export function CreateEditTimetable({
   timetableId?: string;
   start?: Date;
   end?: Date;
-  days?: string[];
+  days?: { label: string; value: string }[];
   description?: string | null;
   subjectId?: number;
   classroomId: string;
@@ -139,7 +146,7 @@ export function CreateEditTimetable({
       description: data.description,
       subjectId: Number(data.subjectId),
       repeat: data.repeat,
-      daysOfWeek: data.days,
+      daysOfWeek: data.days.map((day) => day.value),
       startDate: start ?? new Date(),
     };
     if (timetableId) {
@@ -226,10 +233,15 @@ export function CreateEditTimetable({
               <FormLabel>{t("week_days")}</FormLabel>
               <FormControl>
                 <MultipleSelector
-                  {...field}
-                  // @ts-expect-error TODO: fix this
-                  defaultOptions={form.getValues("days")}
-                  options={daysOptions}
+                  commandProps={{
+                    label: t("select_options"),
+                  }}
+                  value={field.value}
+                  defaultOptions={daysOptions}
+                  onChange={(values) => {
+                    field.onChange(values);
+                  }}
+                  //options={daysOptions}
                   hidePlaceholderWhenSelected
                 />
               </FormControl>

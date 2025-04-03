@@ -3,12 +3,11 @@
 import { toZonedTime } from "date-fns-tz";
 import { SaveIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
-import type { z } from "zod";
+import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import { Form, useForm } from "@repo/ui/components/form";
-import { createUpdateStudentSchema } from "@repo/validators";
 import { useLocale } from "~/i18n";
 
 import { routes } from "~/configs/routes";
@@ -18,6 +17,50 @@ import { CreateUpdateAddress } from "./CreateUpdateAddress";
 import { CreateUpdateDenom } from "./CreateUpdateDenom";
 import { CreateUpdateExtra } from "./CreateUpdateExtra";
 import { CreateUpdateProfile } from "./CreateUpdateProfile";
+
+const createUpdateStudentSchema = z.object({
+  id: z.string().optional(),
+  registrationNumber: z.string().optional(),
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
+  religionId: z.string().min(1),
+  dateOfBirth: z.coerce.date(),
+  placeOfBirth: z.string().min(1),
+  sunPlusNo: z.string().optional(),
+  isBaptized: z.boolean().optional().default(false),
+  isNew: z.boolean().optional().default(true),
+  gender: z.string().min(1),
+  email: z.string().email().optional().or(z.literal("")),
+  residence: z.string().optional(),
+  phoneNumber: z.string().optional(),
+  formerSchoolId: z.string().min(1),
+  countryId: z.string().min(1),
+  dateOfEntry: z.coerce.date().optional(),
+  dateOfExit: z.coerce.date().optional(),
+  tags: z.array(z.string()).optional(),
+  isRepeating: z.enum(["yes", "no"]).optional().default("no"),
+  observation: z.string().optional(),
+  status: z
+    .enum(["ACTIVE", "GRADUATED", "INACTIVE", "EXPELLED"])
+    .default("ACTIVE"),
+  clubs: z
+    .array(
+      z.object({
+        label: z.string(),
+        value: z.string(),
+      })
+    )
+    .optional(),
+  sports: z
+    .array(
+      z.object({
+        label: z.string(),
+        value: z.string(),
+      })
+    )
+    .optional(),
+  classroom: z.string().optional(),
+});
 
 type UpdateGetStudent = RouterOutputs["student"]["get"];
 export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
@@ -51,8 +94,18 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
       religionId: student.religionId ?? "",
       isBaptized: student.isBaptized,
       status: student.status,
-      clubs: student.clubs.map((cl) => cl.clubId),
-      sports: student.sports.map((sp) => sp.sportId),
+      clubs: student.clubs.map((cl) => {
+        return {
+          label: cl.club.name,
+          value: cl.club.id,
+        };
+      }),
+      sports: student.sports.map((sp) => {
+        return {
+          label: sp.sport.name,
+          value: sp.sport.id,
+        };
+      }),
     },
   });
 
@@ -75,6 +128,8 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
       ...data,
       id: student.id,
       isRepeating: data.isRepeating === "yes",
+      clubs: data.clubs?.map((cl) => cl.value) ?? [],
+      sports: data.sports?.map((sp) => sp.value) ?? [],
     });
   };
   const router = useRouter();

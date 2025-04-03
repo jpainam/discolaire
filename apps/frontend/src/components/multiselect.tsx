@@ -128,7 +128,7 @@ function removePickedOption(groupOption: GroupOption, picked: Option[]) {
 
   for (const [key, value] of Object.entries(cloneOption)) {
     cloneOption[key] = value.filter(
-      (val) => !picked.find((p) => p.value === val.value),
+      (val) => !picked.find((p) => p.value === val.value)
     );
   }
   return cloneOption;
@@ -198,7 +198,7 @@ const MultipleSelector = ({
 
   const [selected, setSelected] = React.useState<Option[]>(value ?? []);
   const [options, setOptions] = React.useState<GroupOption>(
-    transToGroupOption(arrayDefaultOptions, groupBy),
+    transToGroupOption(arrayDefaultOptions, groupBy)
   );
   const [inputValue, setInputValue] = React.useState("");
   const debouncedSearchTerm = useDebounce(inputValue, delay ?? 500);
@@ -221,7 +221,7 @@ const MultipleSelector = ({
       setSelected(newOptions);
       onChange?.(newOptions);
     },
-    [onChange, selected],
+    [onChange, selected]
   );
 
   const handleKeyDown = React.useCallback(
@@ -232,9 +232,9 @@ const MultipleSelector = ({
           if (input.value === "" && selected.length > 0) {
             const lastSelectOption = selected[selected.length - 1];
             // If last item is fixed, we should not remove it.
-            if (lastSelectOption && !lastSelectOption.fixed) {
-              //@ts-expect-error Nothing to do with this.
-              handleUnselect(selected[selected.length - 1]);
+            if (!lastSelectOption?.fixed) {
+              const sel = selected[selected.length - 1];
+              if (sel) handleUnselect(sel);
             }
           }
         }
@@ -244,7 +244,7 @@ const MultipleSelector = ({
         }
       }
     },
-    [handleUnselect, selected],
+    [handleUnselect, selected]
   );
 
   useEffect(() => {
@@ -273,8 +273,7 @@ const MultipleSelector = ({
     if (!arrayOptions || onSearch) {
       return;
     }
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    const newOption = transToGroupOption(arrayOptions ?? [], groupBy);
+    const newOption = transToGroupOption(arrayOptions, groupBy);
     if (JSON.stringify(newOption) !== JSON.stringify(options)) {
       setOptions(newOption);
     }
@@ -392,7 +391,7 @@ const MultipleSelector = ({
 
   const selectables = React.useMemo<GroupOption>(
     () => removePickedOption(options, selected),
-    [options, selected],
+    [options, selected]
   );
 
   /** Avoid Creatable Selector freezing or lagging when paste a long string. */
@@ -420,7 +419,7 @@ const MultipleSelector = ({
       }}
       className={cn(
         "h-auto overflow-visible bg-transparent",
-        commandProps?.className,
+        commandProps?.className
       )}
       shouldFilter={commandProps?.shouldFilter ?? !onSearch} // When onSearch is provided, we don&lsquo;t want to filter the options. You can still override it.
       filter={commandFilter()}
@@ -433,7 +432,7 @@ const MultipleSelector = ({
             "cursor-text": !disabled && selected.length !== 0,
           },
           !hideClearAllButton && "pe-9",
-          className,
+          className
         )}
         onClick={() => {
           if (disabled) return;
@@ -447,7 +446,7 @@ const MultipleSelector = ({
                 key={option.value}
                 className={cn(
                   "animate-fadeIn bg-background text-secondary-foreground hover:bg-background relative inline-flex h-7 cursor-default items-center rounded-md border ps-2 pe-7 pl-2 text-xs font-medium transition-all disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 data-fixed:pe-2",
-                  badgeClassName,
+                  badgeClassName
                 )}
                 data-fixed={option.fixed}
                 data-disabled={disabled ?? undefined}
@@ -507,7 +506,7 @@ const MultipleSelector = ({
                 "px-3 py-2": selected.length === 0,
                 "ml-1": selected.length !== 0,
               },
-              inputProps?.className,
+              inputProps?.className
             )}
           />
           <button
@@ -518,11 +517,11 @@ const MultipleSelector = ({
             }}
             className={cn(
               "text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute end-0 top-0 flex size-9 items-center justify-center rounded-md border border-transparent transition-[color,box-shadow] outline-none focus-visible:ring-[3px]",
-              ((hideClearAllButton || disabled) ??
-                (selected.length < 1 ||
-                  selected.filter((s) => s.fixed).length ===
-                    selected.length)) &&
-                "hidden",
+              (hideClearAllButton ||
+                (disabled ?? false) ||
+                selected.length < 1 ||
+                selected.filter((s) => s.fixed).length === selected.length) &&
+                "hidden"
             )}
             aria-label="Clear all"
           >
@@ -535,7 +534,7 @@ const MultipleSelector = ({
           className={cn(
             "border-input absolute top-2 z-10 w-full overflow-hidden rounded-md border",
             "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
-            !open && "hidden",
+            !open && "hidden"
           )}
           data-state={open ? "open" : "closed"}
         >
@@ -591,7 +590,7 @@ const MultipleSelector = ({
                               className={cn(
                                 "cursor-pointer",
                                 option.disable &&
-                                  "pointer-events-none cursor-not-allowed opacity-50",
+                                  "pointer-events-none cursor-not-allowed opacity-50"
                               )}
                             >
                               {option.label}

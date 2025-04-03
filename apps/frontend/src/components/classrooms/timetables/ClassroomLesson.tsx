@@ -41,7 +41,7 @@ export function ClassroomLesson() {
   const params = useParams<{ id: string }>();
   const [_currentDate, _] = useQueryState(
     "date",
-    parseAsIsoDateTime.withDefault(new Date()),
+    parseAsIsoDateTime.withDefault(new Date())
   );
   const calendarEventsQuery = api.lesson.byClassroom.useQuery({
     classroomId: params.id,
@@ -91,7 +91,7 @@ export function ClassroomLesson() {
         view: <CreateEditLesson days={days} />,
       });
     },
-    [openModal, t],
+    [openModal, t]
   );
 
   const handleSelectEvent = useCallback(
@@ -101,7 +101,7 @@ export function ClassroomLesson() {
         view: <LessonDetails event={event} />,
       });
     },
-    [openModal, t],
+    [openModal, t]
   );
 
   const { _views, _scrollToTime, formats } = useMemo(
@@ -118,18 +118,18 @@ export function ClassroomLesson() {
         weekdayFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer,
+          localizer?: DateLocalizer
         ) => localizer?.format(date, "EEE", culture),
         dayFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) =>
           localizer?.format(date, "EEE M/d", culture),
         timeGutterFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer,
+          localizer?: DateLocalizer
         ) => localizer?.format(date, "HH:mm", culture),
       } as Formats,
     }),
-    [],
+    []
   );
 
   const handleViewChange = (view: RbcView) => {
@@ -230,8 +230,8 @@ export function ClassroomLesson() {
 
 const getUniqueWeekdaysBetweenDates = (
   startDate: Date,
-  endDate: Date,
-): string[] => {
+  endDate: Date
+): { label: string; value: string }[] => {
   const dayNames = ["0", "1", "2", "3", "4", "5", "6"];
   const uniqueWeekdays = new Set<string>();
 
@@ -245,5 +245,10 @@ const getUniqueWeekdaysBetweenDates = (
     // Increment the date by 1 day
     currentDate.setDate(currentDate.getDate() + 1);
   }
-  return Array.from(uniqueWeekdays); // Convert the Set back to an array
+  return Array.from(uniqueWeekdays).map((v) => {
+    return {
+      label: v,
+      value: v,
+    };
+  }); // Convert the Set back to an array
 };

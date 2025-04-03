@@ -2,7 +2,6 @@
 "use client";
 
 import { ActivitySquare } from "lucide-react";
-import { toast } from "sonner";
 
 import {
   Card,
@@ -20,8 +19,8 @@ import {
 } from "@repo/ui/components/form";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { Textarea } from "@repo/ui/components/textarea";
-import type { Option } from "~/components/students/multiple-selector";
-import MultipleSelector from "~/components/students/multiple-selector";
+import type { Option } from "~/components/multiselect";
+import MultipleSelector from "~/components/multiselect";
 import { useLocale } from "~/i18n";
 
 import { api } from "~/trpc/react";
@@ -45,11 +44,6 @@ export function CreateUpdateExtra() {
     : [];
 
   const form = useFormContext();
-
-  if (sportsQuery.error || clubsQuery.error) {
-    toast.error(sportsQuery.error?.message ?? clubsQuery.error?.message);
-    return;
-  }
 
   return (
     <Card>
@@ -80,29 +74,27 @@ export function CreateUpdateExtra() {
                 <FormItem className="flex-1">
                   <FormLabel>{t("sports")}</FormLabel>
                   <FormControl>
-                    {/* <MultipleSelector
-                  commandProps={{
-                    label: "Select frameworks",
-                  }}
-                  //value={frameworks.slice(0, 2)}
-                  defaultOptions={sportOptions}
-                  options={sportOptions}
-                  placeholder="Select frameworks"
-                  hideClearAllButton
-                  hidePlaceholderWhenSelected
-                  emptyIndicator={
-                    <p className="text-center text-sm">No results found</p>
-                  }
-                /> */}
-                    <MultipleSelector
-                      {...field}
-                      defaultOptions={form.getValues("sports")}
-                      options={sportOptions}
-                      hidePlaceholderWhenSelected
-                      emptyIndicator={
-                        <p className="text-center text-sm">{t("no_results")}</p>
-                      }
-                    />
+                    {sportsQuery.isPending ? (
+                      <Skeleton className="w-full h-8" />
+                    ) : (
+                      <MultipleSelector
+                        commandProps={{
+                          label: t("select_options"),
+                        }}
+                        value={field.value}
+                        defaultOptions={sportOptions}
+                        //options={sportOptions}
+                        onChange={(values) => {
+                          field.onChange(values);
+                        }}
+                        hidePlaceholderWhenSelected
+                        emptyIndicator={
+                          <p className="text-center text-sm">
+                            {t("no_results")}
+                          </p>
+                        }
+                      />
+                    )}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -115,15 +107,27 @@ export function CreateUpdateExtra() {
                 <FormItem className="flex-1">
                   <FormLabel>{t("clubs")}</FormLabel>
                   <FormControl>
-                    <MultipleSelector
-                      {...field}
-                      defaultOptions={form.getValues("clubs")}
-                      options={clubOptions}
-                      hidePlaceholderWhenSelected
-                      emptyIndicator={
-                        <p className="text-center text-sm">{t("no_results")}</p>
-                      }
-                    />
+                    {clubsQuery.isPending ? (
+                      <Skeleton className="w-full h-8" />
+                    ) : (
+                      <MultipleSelector
+                        commandProps={{
+                          label: t("select_options"),
+                        }}
+                        value={field.value}
+                        defaultOptions={clubOptions}
+                        //options={clubOptions}
+                        onChange={(values) => {
+                          field.onChange(values);
+                        }}
+                        hidePlaceholderWhenSelected
+                        emptyIndicator={
+                          <p className="text-center text-sm">
+                            {t("no_results")}
+                          </p>
+                        }
+                      />
+                    )}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
