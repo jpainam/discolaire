@@ -218,7 +218,7 @@ export const userRouter = createTRPCRouter({
       });
     }),
   updateAvatar: protectedProcedure
-    .input(z.object({ id: z.string(), avatar: z.string() }))
+    .input(z.object({ id: z.string(), avatar: z.string().nullable() }))
     .mutation(async ({ ctx, input }) => {
       return ctx.db.user.update({
         where: { id: input.id, schoolId: ctx.schoolId },
