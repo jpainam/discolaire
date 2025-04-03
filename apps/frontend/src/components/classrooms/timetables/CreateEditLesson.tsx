@@ -15,7 +15,6 @@ import {
   useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import type { Option } from "~/components/multiselect";
 import MultipleSelector from "~/components/multiselect";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
@@ -33,14 +32,7 @@ import { api } from "~/trpc/react";
 const createEditTimetable = z.object({
   startTime: z.string().min(1),
   endTime: z.string().min(1),
-  days: z
-    .array(
-      z.object({
-        label: z.string(),
-        value: z.string(),
-      }),
-    )
-    .default([]),
+  daysOfWeek: z.array(z.number()).default([]), // 0-6 (Sunday-Saturday)
   subjectId: z.string().min(1),
   repeat: z
     .enum(["daily", "weekly", "biweekly", "monthly", "yearly"])
@@ -50,14 +42,14 @@ export function CreateEditLesson({
   lessonId,
   startTime,
   endTime,
-  days,
+  daysOfWeek,
   start,
   subjectId,
 }: {
   lessonId?: string;
   startTime?: string;
   endTime?: string;
-  days?: { label: string; value: string }[];
+  daysOfWeek?: number[];
   start?: Date;
   subjectId?: number;
 }) {
@@ -68,7 +60,7 @@ export function CreateEditLesson({
       startTime: startTime ?? "08:00",
       endTime: endTime ?? "09:00",
       subjectId: subjectId ? `${subjectId}` : "",
-      days: days ?? [],
+      daysOfWeek: daysOfWeek ?? [],
       repeat: "weekly",
     },
   });
@@ -89,37 +81,19 @@ export function CreateEditLesson({
       toast.error(error.message, { id: 0 });
     },
   });
-
-  const daysOptions: Option[] = [
-    {
-      label: t("monday"),
-      value: "monday",
-    },
-    {
-      label: t("tuesday"),
-      value: "tuesday",
-    },
-    {
-      label: t("wednesday"),
-      value: "wednesday",
-    },
-    {
-      label: t("thursday"),
-      value: "thursday",
-    },
-    {
-      label: t("friday"),
-      value: "friday",
-    },
-    {
-      label: t("saturday"),
-      value: "saturday",
-    },
-    {
-      label: t("sunday"),
-      value: "sunday",
-    },
+  const dayNames = [
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
   ];
+
+  const getDayOfWeek = (dayNumber: number): string => {
+    return dayNames[dayNumber] ?? "";
+  };
 
   const handleSubmit = (data: z.infer<typeof createEditTimetable>) => {
     if (!data.subjectId) {
@@ -132,7 +106,7 @@ export function CreateEditLesson({
       endTime: data.endTime,
       subjectId: Number(data.subjectId),
       repeat: data.repeat,
-      daysOfWeek: data.days.map((day) => day.value),
+      daysOfWeek: data.daysOfWeek.map((day) => Number(day)),
       startDate: start ?? new Date(),
     };
     if (lessonId) {
@@ -202,7 +176,7 @@ export function CreateEditLesson({
 
         <FormField
           control={form.control}
-          name="days"
+          name="daysOfWeek"
           render={({ field }) => (
             <FormItem className="space-y-0">
               <FormLabel>{t("week_days")}</FormLabel>
@@ -211,8 +185,18 @@ export function CreateEditLesson({
                   commandProps={{
                     label: t("select_options"),
                   }}
-                  value={field.value}
-                  defaultOptions={daysOptions}
+                  value={field.value?.map((day) => {
+                    return {
+                      label: getDayOfWeek(day),
+                      value: `${day}`,
+                    };
+                  })}
+                  defaultOptions={dayNames.map((day, index) => {
+                    return {
+                      label: t(day),
+                      value: `${index}`,
+                    };
+                  })}
                   onChange={(values) => {
                     field.onChange(values);
                   }}

@@ -11,15 +11,6 @@ interface Event {
   end: Date;
 }
 
-const dayOfWeekMap: Record<string, number> = {
-  monday: 1,
-  tuesday: 2,
-  wednesday: 3,
-  thursday: 4,
-  friday: 5,
-  saturday: 6,
-  sunday: 0,
-};
 export const timetableService = {
   generateRange: ({
     startTime,
@@ -32,7 +23,7 @@ export const timetableService = {
     startDate: Date;
     finalDate: Date;
     endTime: string;
-    daysOfWeek: string[];
+    daysOfWeek: number[];
   }) => {
     const events: Event[] = [];
     const weekRange = eachWeekOfInterval({ start: startDate, end: finalDate });
@@ -50,14 +41,7 @@ export const timetableService = {
 
     for (const week of weekRange) {
       for (const day of daysOfWeek) {
-        const dayOfWeek = dayOfWeekMap[day];
-        if (dayOfWeek === undefined) {
-          throw new Error(`Invalid day of week: ${day}`);
-        }
-        const eventDay = addDays(
-          startOfWeek(week, { weekStartsOn: 0 }),
-          dayOfWeek,
-        );
+        const eventDay = addDays(startOfWeek(week, { weekStartsOn: 0 }), day);
         if (eventDay >= startDate && eventDay <= finalDate) {
           const eventStartDateTime = setMinutes(
             setHours(eventDay, startHour),
