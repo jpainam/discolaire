@@ -37,6 +37,6 @@
   },
   "prisma": {
     "schema": "packages/db/prisma/schema",
-    "seed": "tsx packages/db/src/seed.ts"
+    "seed": "ts-node packages/db/src/seed.ts"
   }
 }
