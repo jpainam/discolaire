@@ -120,7 +120,8 @@ export function LessonDetails({
             title: t("update"),
             view: (
               <CreateEditLesson
-                days={[event.startTime.getDay().toString()]}
+                //days={[event.startTime.getDay().toString()]}
+                days={[]}
                 startTime={`${startHours}:${startMinutes}`}
                 endTime={`${endHours}:${endMinutes}`}
                 subjectId={event.subjectId}

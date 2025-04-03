@@ -295,7 +295,6 @@ export const studentRouter = createTRPCRouter({
   update: protectedProcedure
     .input(createUpdateSchema.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      console.log("Creating student", input);
       void studentService.addClubs(input.id, input.clubs ?? []);
       void studentService.addSports(input.id, input.sports ?? []);
       void accountService.attachAccount(

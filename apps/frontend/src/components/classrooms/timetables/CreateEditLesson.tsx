@@ -38,7 +38,7 @@ const createEditTimetable = z.object({
       z.object({
         label: z.string(),
         value: z.string(),
-      })
+      }),
     )
     .default([]),
   subjectId: z.string().min(1),

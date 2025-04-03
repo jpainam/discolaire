@@ -38,7 +38,7 @@ const createEditTimetable = z.object({
       z.object({
         label: z.string(),
         value: z.string(),
-      })
+      }),
     )
     .default([]),
   repeat: z
