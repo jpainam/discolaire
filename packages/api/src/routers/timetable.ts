@@ -85,7 +85,7 @@ export const timetableRouter = createTRPCRouter({
         startTime: z.string().min(1),
         endTime: z.string().min(1),
         subjectId: z.coerce.number(),
-        daysOfWeek: z.array(z.string()).default([]),
+        daysOfWeek: z.array(z.coerce.number()).default([]),
         startDate: z.coerce.date(),
       }),
     )

@@ -85,10 +85,10 @@ export function ClassroomLesson() {
 
   const handleSelectSlot = useCallback(
     ({ start, end }: { start: Date; end: Date }) => {
-      const days = getUniqueWeekdaysBetweenDates(start, end);
+      const days = getWeekdayNumbersBetweenDates(start, end);
       openModal({
         title: t("create_timetable"),
-        view: <CreateEditLesson days={days} />,
+        view: <CreateEditLesson daysOfWeek={days} />,
       });
     },
     [openModal, t],
@@ -228,27 +228,18 @@ export function ClassroomLesson() {
   );
 }
 
-const getUniqueWeekdaysBetweenDates = (
+const getWeekdayNumbersBetweenDates = (
   startDate: Date,
   endDate: Date,
-): { label: string; value: string }[] => {
-  const dayNames = ["0", "1", "2", "3", "4", "5", "6"];
-  const uniqueWeekdays = new Set<string>();
+): number[] => {
+  const uniqueDays = new Set<number>();
+  const current = new Date(startDate);
 
-  const currentDate = new Date(startDate);
-
-  while (currentDate < endDate) {
-    const dayIndex = currentDate.getDay(); // Get day index (0 for Sunday, 1 for Monday, etc.)
-    // @ts-expect-error TODO: fix this
-    uniqueWeekdays.add(dayNames[dayIndex]); // Add to Set for uniqueness
-
-    // Increment the date by 1 day
-    currentDate.setDate(currentDate.getDate() + 1);
+  // Ensure we include the endDate itself
+  while (current <= endDate) {
+    uniqueDays.add(current.getDay()); // getDay returns 0 (Sun) to 6 (Sat)
+    current.setDate(current.getDate() + 1);
   }
-  return Array.from(uniqueWeekdays).map((v) => {
-    return {
-      label: v,
-      value: v,
-    };
-  }); // Convert the Set back to an array
+
+  return Array.from(uniqueDays).sort((a, b) => a - b);
 };

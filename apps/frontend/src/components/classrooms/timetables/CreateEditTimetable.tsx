@@ -21,7 +21,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import type { Option } from "~/components/multiselect";
 import MultipleSelector from "~/components/multiselect";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
@@ -33,14 +32,7 @@ const createEditTimetable = z.object({
   startTime: z.string().min(1),
   endTime: z.string().min(1),
   description: z.string().optional(),
-  days: z
-    .array(
-      z.object({
-        label: z.string(),
-        value: z.string(),
-      }),
-    )
-    .default([]),
+  daysOfWeek: z.array(z.coerce.number()).default([]),
   repeat: z
     .enum(["daily", "weekly", "biweekly", "monthly", "yearly"])
     .default("weekly"),
@@ -50,7 +42,7 @@ export function CreateEditTimetable({
   timetableId,
   start,
   end,
-  days,
+  daysOfWeek,
   description,
   subjectId,
   classroomId,
@@ -58,7 +50,7 @@ export function CreateEditTimetable({
   timetableId?: string;
   start?: Date;
   end?: Date;
-  days?: { label: string; value: string }[];
+  daysOfWeek?: number[]; // 0..6 Sundays .. Saturday
   description?: string | null;
   subjectId?: number;
   classroomId: string;
@@ -84,7 +76,7 @@ export function CreateEditTimetable({
       endTime: endTimeString,
       description: description ?? "",
       subjectId: subjectId ? `${subjectId}` : "",
-      days: days ?? [],
+      daysOfWeek: daysOfWeek ?? [],
     },
   });
   const { t } = useLocale();
@@ -104,36 +96,19 @@ export function CreateEditTimetable({
     },
   });
 
-  const daysOptions: Option[] = [
-    {
-      label: t("monday"),
-      value: "monday",
-    },
-    {
-      label: t("tuesday"),
-      value: "tuesday",
-    },
-    {
-      label: t("wednesday"),
-      value: "wednesday",
-    },
-    {
-      label: t("thursday"),
-      value: "thursday",
-    },
-    {
-      label: t("friday"),
-      value: "friday",
-    },
-    {
-      label: t("saturday"),
-      value: "saturday",
-    },
-    {
-      label: t("sunday"),
-      value: "sunday",
-    },
+  const dayNames = [
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
   ];
+
+  const getDayOfWeek = (dayNumber: number): string => {
+    return dayNames[dayNumber] ?? "";
+  };
 
   const handleSubmit = (data: z.infer<typeof createEditTimetable>) => {
     if (!data.subjectId) {
@@ -146,7 +121,7 @@ export function CreateEditTimetable({
       description: data.description,
       subjectId: Number(data.subjectId),
       repeat: data.repeat,
-      daysOfWeek: data.days.map((day) => day.value),
+      daysOfWeek: data.daysOfWeek,
       startDate: start ?? new Date(),
     };
     if (timetableId) {
@@ -227,7 +202,7 @@ export function CreateEditTimetable({
         /> */}
         <FormField
           control={form.control}
-          name="days"
+          name="daysOfWeek"
           render={({ field }) => (
             <FormItem className="space-y-0">
               <FormLabel>{t("week_days")}</FormLabel>
@@ -236,12 +211,21 @@ export function CreateEditTimetable({
                   commandProps={{
                     label: t("select_options"),
                   }}
-                  value={field.value}
-                  defaultOptions={daysOptions}
+                  value={field.value?.map((day) => {
+                    return {
+                      label: getDayOfWeek(day),
+                      value: `${day}`,
+                    };
+                  })}
+                  defaultOptions={dayNames.map((day, index) => {
+                    return {
+                      label: t(day),
+                      value: `${index}`,
+                    };
+                  })}
                   onChange={(values) => {
                     field.onChange(values);
                   }}
-                  //options={daysOptions}
                   hidePlaceholderWhenSelected
                 />
               </FormControl>

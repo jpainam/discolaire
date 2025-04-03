@@ -5,7 +5,7 @@ import { timetableService } from "../services/timetable-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const createEditLessonSchema = z.object({
-  daysOfWeek: z.array(z.number()).default([]),
+  daysOfWeek: z.array(z.coerce.number()).default([]),
   startTime: z.string().min(1),
   subjectId: z.coerce.number().nonnegative(),
   endTime: z.string().min(1),
