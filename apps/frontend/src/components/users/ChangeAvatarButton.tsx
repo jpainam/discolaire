@@ -45,7 +45,7 @@ export function ChangeAvatarButton({
       setDialogOpen(true);
     },
 
-    [],
+    []
   );
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -57,6 +57,9 @@ export function ChangeAvatarButton({
     <div>
       {selectedFile ? (
         <ImageCropper
+          className={
+            "size-36 cursor-pointer ring-offset-2 ring-2 ring-slate-200"
+          }
           dialogOpen={isDialogOpen}
           setDialogOpen={setDialogOpen}
           selectedFile={selectedFile}
@@ -86,7 +89,7 @@ export function ChangeAvatarButton({
 async function uploadToAWS(
   file: File,
   croppedImageUrl: string,
-  userId: string,
+  userId: string
 ) {
   const croppedBlob = await (await fetch(croppedImageUrl)).blob();
   //   const originalFormData = new FormData();

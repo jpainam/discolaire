@@ -23,6 +23,7 @@ import {
   DialogTrigger,
 } from "@repo/ui/components/dialog";
 
+import { cn } from "@repo/ui/lib/utils";
 import { CropIcon, Trash2Icon } from "lucide-react";
 import type { FileWithPath } from "react-dropzone";
 import "react-image-crop/dist/ReactCrop.css";
@@ -33,6 +34,7 @@ type FileWithPreview = FileWithPath & {
 
 interface ImageCropperProps {
   dialogOpen: boolean;
+  className?: string;
   setDialogOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   onComplete?: (croppedImage: string) => void;
   selectedFile: FileWithPreview | null;
@@ -43,6 +45,7 @@ interface ImageCropperProps {
 
 export function ImageCropper({
   dialogOpen,
+  className,
   setDialogOpen,
   onComplete,
   selectedFile,
@@ -92,7 +95,7 @@ export function ImageCropper({
         0,
         0,
         crop.width * scaleX,
-        crop.height * scaleY,
+        crop.height * scaleY
       );
     }
 
@@ -110,7 +113,7 @@ export function ImageCropper({
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger>
-        <Avatar className="size-36 cursor-pointer ring-offset-2 ring-2 ring-slate-200">
+        <Avatar className={cn("", className)}>
           <AvatarImage
             src={croppedImage ? croppedImage : selectedFile?.preview}
             alt="Image"
@@ -123,7 +126,7 @@ export function ImageCropper({
           <DialogTitle></DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        <div className="p-6 size-full">
+        <div className="p-2 size-full">
           <ReactCrop
             crop={crop}
             onChange={(_, percentCrop) => setCrop(percentCrop)}
@@ -145,7 +148,7 @@ export function ImageCropper({
             </Avatar>
           </ReactCrop>
         </div>
-        <DialogFooter className="p-6 pt-0 justify-center ">
+        <DialogFooter className="p-4 pt-0 justify-center ">
           <DialogClose asChild>
             <Button
               size={"sm"}
@@ -174,7 +177,7 @@ export function ImageCropper({
 export function centerAspectCrop(
   mediaWidth: number,
   mediaHeight: number,
-  aspect: number,
+  aspect: number
 ): Crop {
   return centerCrop(
     makeAspectCrop(
@@ -185,9 +188,9 @@ export function centerAspectCrop(
       },
       aspect,
       mediaWidth,
-      mediaHeight,
+      mediaHeight
     ),
     mediaWidth,
-    mediaHeight,
+    mediaHeight
   );
 }

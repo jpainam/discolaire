@@ -84,7 +84,7 @@ export function StudentHeader({
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
 
@@ -137,7 +137,7 @@ export function StudentHeader({
         status,
       });
     },
-    [studentStatusMutation, student.id],
+    [studentStatusMutation, student.id]
   );
 
   const navigateToStudent = (id: string) => {
@@ -156,7 +156,7 @@ export function StudentHeader({
 
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditStudent = useCheckPermission("student", PermissionAction.UPDATE);
   //const [open, setOpen] = React.useState(false);
@@ -320,7 +320,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -494,6 +494,33 @@ export function StudentHeader({
                 >
                   <PencilIcon />
                   {t("edit")}
+                </DropdownMenuItem>
+              )}
+              {student.user?.avatar && (
+                <DropdownMenuItem
+                  onSelect={async () => {
+                    toast.loading(t("deleting"), { id: 0 });
+                    await fetch(`/api/upload/avatars`, {
+                      method: "DELETE",
+                      body: JSON.stringify({
+                        userId: student.userId,
+                      }),
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                    })
+                      .then(() => {
+                        toast.success(t("deleted_successfully"), {
+                          id: 0,
+                        });
+                      })
+                      .catch((err) => {
+                        toast.error((err as Error).message, { id: 0 });
+                      });
+                  }}
+                >
+                  <Trash2 />
+                  {t("photos")} - {t("delete")}
                 </DropdownMenuItem>
               )}
               {canDeleteStudent && (
