@@ -64,6 +64,7 @@ export function getRequiredColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("createdAt")} />
       ),
+      size: 60,
       cell: ({ row }) => {
         const transaction = row.original;
         return (
@@ -131,6 +132,7 @@ export function getRequiredColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("status")} />
       ),
+      size: 60,
       cell: ({ row }) => {
         const transaction = row.original;
 
