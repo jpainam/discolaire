@@ -117,6 +117,11 @@ export const studentService = {
     return classroomService.get(classroom.id, classroom.schoolId);
   },
   addClubs: async (studentId: string, clubs: string[]) => {
+    await db.studentClub.deleteMany({
+      where: {
+        studentId: studentId,
+      },
+    });
     const studentClubs = clubs.map((clubId) => {
       return {
         clubId: clubId,
@@ -125,10 +130,14 @@ export const studentService = {
     });
     return db.studentClub.createMany({
       data: studentClubs,
-      skipDuplicates: true,
     });
   },
   addSports: async (studentId: string, sports: string[]) => {
+    await db.studentSport.deleteMany({
+      where: {
+        studentId: studentId,
+      },
+    });
     const studentSports = sports.map((sportId) => {
       return {
         sportId: sportId,
