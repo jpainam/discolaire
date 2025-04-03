@@ -1,45 +1,59 @@
 "use client";
 
+import type { RouterOutputs } from "@repo/api";
 import { useParams } from "next/navigation";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
 
-export function SubjectList({ classroomId }: { classroomId: string }) {
-  const subjectsQuery = api.classroom.subjects.useQuery(classroomId);
+export function SubjectList({
+  classroomId,
+  subjects,
+}: {
+  classroomId: string;
+  subjects: RouterOutputs["classroom"]["subjects"];
+}) {
   const router = useRouter();
+  const { t } = useLocale();
   const params = useParams<{ subjectId: string }>();
-  if (subjectsQuery.isPending) {
-    return (
-      <div className="flex w-[350px] flex-col gap-2 p-2">
-        {Array.from({ length: 16 }).map((_, index) => (
-          <Skeleton key={index} className="h-8 w-full" />
-        ))}
-      </div>
-    );
-  }
 
-  const subjects = subjectsQuery.data ?? [];
   return (
     <div className="overflow-y-auto border-r text-sm">
       {/* <h2 className="mb-4 text-xl font-bold">{t("courses")}</h2> */}
       <ul>
+        <li
+          onClick={() => {
+            router.push(`/classrooms/${classroomId}/subject_journal`);
+          }}
+          className={cn(
+            `flex cursor-pointer flex-row items-center gap-2 border-b p-2 hover:bg-secondary`,
+            !params.subjectId
+              ? "bg-secondary font-bold text-secondary-foreground"
+              : "text-secondary-foreground/80 hover:bg-secondary/10"
+          )}
+        >
+          <div
+            className="h-6 w-1 rounded-lg"
+            style={{
+              backgroundColor: "red",
+            }}
+          ></div>
+          <span>{t("all")}</span>
+        </li>
         {subjects.map((subject, index) => (
           <li
             key={index}
             onClick={() => {
               router.push(
-                `/classrooms/${classroomId}/subject_journal/${subject.id}`,
+                `/classrooms/${classroomId}/subject_journal/${subject.id}`
               );
             }}
             className={cn(
               `flex cursor-pointer flex-row items-center gap-2 border-b p-2 hover:bg-secondary`,
               subject.id === Number(params.subjectId)
                 ? "bg-secondary font-bold text-secondary-foreground"
-                : "text-secondary-foreground/80 hover:bg-secondary/10",
+                : "text-secondary-foreground/80 hover:bg-secondary/10"
             )}
           >
             <div

@@ -26,7 +26,12 @@ export const subjectJournalRouter = createTRPCRouter({
         take: input.limit,
         include: {
           createdBy: true,
-          subject: true,
+          subject: {
+            include: {
+              course: true,
+              teacher: true,
+            },
+          },
         },
         where: {
           schoolId: ctx.schoolId,
