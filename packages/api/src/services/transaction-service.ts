@@ -91,4 +91,35 @@ export const transactionService = {
       receivedBy,
     };
   },
+
+  createRequiredFee: async ({
+    studentId,
+    createdById,
+    feeIds,
+  }: {
+    studentId: string;
+    createdById: string;
+    feeIds: number[];
+  }) => {
+    const existingRequiredFees = await db.requiredFeeTransaction.findMany({
+      where: {
+        studentId: studentId,
+        feeId: {
+          in: feeIds,
+        },
+      },
+    });
+    const existingFeeIds = existingRequiredFees.map((fee) => fee.feeId);
+    const newFeeIds = feeIds.filter((feeId) => !existingFeeIds.includes(feeId));
+    if (newFeeIds.length === 0) {
+      return existingRequiredFees;
+    }
+    return await db.requiredFeeTransaction.createMany({
+      data: newFeeIds.map((feeId) => ({
+        feeId: feeId,
+        studentId: studentId,
+        createdById: createdById,
+      })),
+    });
+  },
 };

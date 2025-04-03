@@ -345,6 +345,12 @@ export const transactionRouter = createTRPCRouter({
           receivedById: ctx.session.user.id,
         },
       });
+      if (input.requiredFeeIds)
+        await transactionService.createRequiredFee({
+          studentId: input.studentId,
+          createdById: ctx.session.user.id,
+          feeIds: input.requiredFeeIds,
+        });
       void notificationQueue.add("notification", {
         type: "transaction",
         id: result.id,

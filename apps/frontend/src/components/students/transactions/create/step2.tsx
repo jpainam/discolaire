@@ -51,7 +51,7 @@ export function Step2() {
     onSuccess: (transaction) => {
       toast.success(t("created_successfully"), { id: 0 });
       router.push(
-        routes.students.transactions.details(params.id, transaction.id)
+        routes.students.transactions.details(params.id, transaction.id),
       );
     },
     onError: (error) => {
