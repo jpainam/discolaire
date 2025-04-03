@@ -63,11 +63,11 @@ export function GroupTableAction({
         {canAdd && (
           <>
             <DropdownMenuItem>
-              <UserRoundPlus className="mr-2 h-4 w-4" />
+              <UserRoundPlus className="h-4 w-4" />
               {t("students")}
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <FaUserPlus className="mr-2 h-4 w-4" />
+              <FaUserPlus className="h-4 w-4" />
               {t("staffs")}
             </DropdownMenuItem>
           </>

@@ -219,7 +219,7 @@ export function Dashboard() {
             </CardContent>
             <CardFooter>
               <Button variant="outline" className="w-full">
-                <Calendar className="mr-2 h-4 w-4" />
+                <Calendar className="h-4 w-4" />
                 View Calendar
               </Button>
             </CardFooter>
@@ -382,7 +382,7 @@ export function Dashboard() {
             </CardHeader>
             <CardContent className="flex flex-col gap-2">
               <Button className="w-full justify-start">
-                <Users className="mr-2 h-4 w-4" />
+                <Users className="h-4 w-4" />
                 Manage Students
               </Button>
               <Button className="w-full justify-start">

@@ -18,6 +18,7 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
 import type { RouterOutputs } from "@repo/api";
+import { useMemo } from "react";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
@@ -40,19 +41,31 @@ export function EnrollmentHeader({
 
   const canEnroll = useCheckPermission("enrollment", PermissionAction.CREATE);
 
-  const male = students.filter((student) => student.gender == "male").length;
-  const total = students.length || 1e9;
-  const female = students.length - male;
+  const { male, female, total } = useMemo(() => {
+    const male = students.filter((student) => student.gender == "male").length;
+    const total = students.length || 1e9;
+    const female = students.length - male;
 
-  const repeating = students.filter((student) => student.isRepeating).length;
-  const oldest =
-    students.length > 0
-      ? Math.max(...students.map((student) => getAge(student.dateOfBirth) || 0))
-      : 0;
-  const youngest =
-    students.length > 0
-      ? Math.min(...students.map((student) => getAge(student.dateOfBirth) || 0))
-      : 0;
+    return { male, female, total };
+  }, [students]);
+
+  const { repeating, oldest, youngest } = useMemo(() => {
+    const repeating = students.filter((student) => student.isRepeating).length;
+    const oldest =
+      students.length > 0
+        ? Math.max(
+            ...students.map((student) => getAge(student.dateOfBirth) || 0)
+          )
+        : 0;
+    const youngest =
+      students.length > 0
+        ? Math.min(
+            ...students.map((student) => getAge(student.dateOfBirth) || 0)
+          )
+        : 0;
+
+    return { repeating, oldest, youngest };
+  }, [students]);
 
   return (
     <div className="grid grid-cols-3 items-center gap-2 border-y bg-secondary px-4 py-1 text-secondary-foreground md:flex md:flex-row">
@@ -154,7 +167,7 @@ export function EnrollmentHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -165,7 +178,7 @@ export function EnrollmentHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
