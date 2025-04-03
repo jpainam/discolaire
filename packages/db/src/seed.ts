@@ -6,7 +6,15 @@
 
 // // npx prisma db seed --preview-feature
 // async function updateStudents() {
-//   const students = await client.student.findMany({});
+//   const limit = 1000;
+//   const offset = 1500;
+//   const students = await client.student.findMany({
+//     orderBy: {
+//       id: "asc",
+//     },
+//     take: limit,
+//     skip: offset,
+//   });
 //   const data = await Promise.all(
 //     students.map(async (student) => {
 //       const firstName = faker.person.firstName(
@@ -68,9 +76,9 @@
 //   //     `Updated student ${student.id} ${student.firstName} ${student.lastName} ${student.email}`,
 //   //   );
 // }
-// function main() {
+// async function main() {
 //   console.log("Seeding database...");
-//   //await updateStudents();
+//   await updateStudents();
 //   return new Promise((resolve, _reject) => {
 //     resolve(true);
 //   });
