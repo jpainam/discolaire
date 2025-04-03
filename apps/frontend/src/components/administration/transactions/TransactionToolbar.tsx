@@ -3,7 +3,7 @@
 import {
   ArrowLeftRight,
   Euro,
-  HandCoins,
+  //HandCoins,
   Percent,
   Sigma,
   Trash2,
@@ -57,14 +57,14 @@ export function TransactionToolbar() {
         "/deleted?" +
         createQueryString({}),
     },
-    {
-      icon: <HandCoins className="h-4 w-4" />,
-      name: t("moratoriums"),
-      href:
-        routes.administration.transactions +
-        "/moratoriums?" +
-        createQueryString({}),
-    },
+    // {
+    //   icon: <HandCoins className="h-4 w-4" />,
+    //   name: t("moratoriums"),
+    //   href:
+    //     routes.administration.transactions +
+    //     "/moratoriums?" +
+    //     createQueryString({}),
+    // },
   ];
 
   return (

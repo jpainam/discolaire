@@ -9,7 +9,7 @@ import { transactionService } from "../services/transaction-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { logQueue, notificationQueue } from "../utils";
 
-const createUpdateSchema = z.object({
+const createSchema = z.object({
   amount: z.number(),
   studentId: z.string(),
   description: z.string().optional(),
@@ -18,8 +18,10 @@ const createUpdateSchema = z.object({
     .enum(["PENDING", "CANCELED", "VALIDATED"])
     .optional()
     .default("PENDING"),
+
   transactionType: z.string().optional().default("CREDIT"),
   observation: z.string().optional(),
+  requiredFeeIds: z.array(z.coerce.number()).optional(),
 });
 
 export const transactionRouter = createTRPCRouter({
@@ -316,7 +318,7 @@ export const transactionRouter = createTRPCRouter({
     return finalResult;
   }),
   create: protectedProcedure
-    .input(createUpdateSchema)
+    .input(createSchema)
     .mutation(async ({ ctx, input }) => {
       const currentDate = Date.now();
       const transactionRef = `${input.transactionType.substring(0, 2)}000${currentDate}`;

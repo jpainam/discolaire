@@ -37,11 +37,13 @@ export function Step2() {
     transactionType,
     paymentMethod,
     studentContacts,
+    requiredFeeIds,
   } = useCreateTransaction();
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const studentId = params.id;
   const utils = api.useUtils();
+
   const createTransactionMutation = api.transaction.create.useMutation({
     onSettled: async () => {
       await utils.student.transactions.invalidate(studentId);
@@ -49,7 +51,7 @@ export function Step2() {
     onSuccess: (transaction) => {
       toast.success(t("created_successfully"), { id: 0 });
       router.push(
-        routes.students.transactions.details(params.id, transaction.id),
+        routes.students.transactions.details(params.id, transaction.id)
       );
     },
     onError: (error) => {
@@ -85,6 +87,7 @@ export function Step2() {
       description: description,
       studentId: studentId,
       transactionType: transactionType,
+      requiredFeeIds: requiredFeeIds,
       amount: Number(amount),
     });
   }
