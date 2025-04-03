@@ -1,5 +1,7 @@
+import i18next from "i18next";
 import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
+import { isRichText } from "~/lib/utils";
 
 import { api, caller } from "~/trpc/server";
 
@@ -26,39 +28,41 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           <div key={index}>
             <div className="flex justify-between items-start ">
               <div className="flex">
-                <div className="w-1 bg-orange-400 mr-4 rounded-full"></div>
+                <div
+                  className="w-1.5 rounded-full mr-1"
+                  style={{
+                    backgroundColor: journal.subject.course.color,
+                  }}
+                ></div>
+                {/* <div className="w-1 bg-orange-400 mr-4 rounded-full"></div> */}
                 <div>
-                  <h3 className="font-bold  uppercase">
+                  <p className="font-bold text-lg uppercase">
                     {journal.subject.course.name}
-                  </h3>
-                  <p className="text-muted-foreground text-xs">M. DEJEAN Y.</p>
+                  </p>
+                  <p className="text-muted-foreground text-xs">
+                    {journal.subject.teacher?.prefix}{" "}
+                    {journal.subject.teacher?.lastName}
+                  </p>
                 </div>
               </div>
-              <div className="text-muted-foreground text-xs">
-                {" "}
-                15 Jan 2025 13h30 à 14h30
+              <div className="text-muted-foreground text-sm">
+                {journal.createdAt.toLocaleTimeString(i18next.language, {
+                  month: "long",
+                  day: "2-digit",
+                  year: "numeric",
+                })}
               </div>
             </div>
             <div className="flex justify-between ml-6">
-              <div>
-                <p className="text-md">
-                  Identifier le(s) matériau(x), les flux d'énergie et
-                  d'information sur un objet et décrire les transformations qui
-                  s'opèrent
-                </p>
-                <p className="text-muted-foreground text-sm">
-                  Familles de matériaux avec leurs principales caractéristiques
-                </p>
-                <p className="text-muted-foreground text-sm">
-                  Sources d'énergies
-                </p>
-                <p className="text-muted-foreground text-sm">
-                  Chaîne d'énergie
-                </p>
-                <p className="text-muted-foreground text-sm">
-                  Chaîne d'information
-                </p>
-              </div>
+              {isRichText(journal.content) ? (
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: journal.content,
+                  }}
+                ></div>
+              ) : (
+                <div className="">{journal.content}</div>
+              )}
               <div className="bg-secondary px-4 py-1 text-sm rounded-xl border text-secondary-foreground h-fit">
                 Cours
               </div>
