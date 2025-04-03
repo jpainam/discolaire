@@ -12,20 +12,32 @@ const createSubjectJournalSchema = z.object({
   status: z.enum(["APPROVED", "PENDING", "REJECTED"]).default("PENDING"),
 });
 export const subjectJournalRouter = createTRPCRouter({
-  all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.subjectJournal.findMany({
-      orderBy: {
-        createdAt: "asc",
-      },
-      include: {
-        createdBy: true,
-        subject: true,
-      },
-      where: {
-        schoolId: ctx.schoolId,
-      },
-    });
-  }),
+  all: protectedProcedure
+    .input(
+      z.object({
+        limit: z.coerce.number().default(10),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.subjectJournal.findMany({
+        orderBy: {
+          createdAt: "asc",
+        },
+        take: input.limit,
+        include: {
+          createdBy: true,
+          subject: true,
+        },
+        where: {
+          schoolId: ctx.schoolId,
+          subject: {
+            classroom: {
+              schoolYearId: ctx.schoolYearId,
+            },
+          },
+        },
+      });
+    }),
   clearAll: protectedProcedure
     .input(z.object({ subjectId: z.coerce.number() }))
     .mutation(({ ctx, input }) => {
