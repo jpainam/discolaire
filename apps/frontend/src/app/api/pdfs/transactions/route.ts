@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
     status: status,
     from: from,
     to: to,
-    classroom: classroom,
+    classroomId: classroom,
   });
 
   const school = await api.school.getSchool();
@@ -61,7 +61,7 @@ export async function GET(req: NextRequest) {
       TransactionList({
         transactions: transactions,
         school: school,
-      }),
+      })
     );
 
     //const blob = await new Response(stream).blob();

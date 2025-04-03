@@ -96,9 +96,9 @@ export const transactionRouter = createTRPCRouter({
     .input(
       z.object({
         from: z.coerce.date().optional(),
-        to: z.coerce.date().optional(),
+        to: z.coerce.date().optional().default(new Date()),
         status: z.string().optional(),
-        classroom: z.string().optional(),
+        classroomId: z.string().optional(),
         transactionType: z.enum(["CREDIT", "DEBIT", "DISCOUNT"]).optional(),
       }),
     )
@@ -107,10 +107,6 @@ export const transactionRouter = createTRPCRouter({
         ? (input.status as TransactionStatus)
         : undefined;
 
-      const students = input.classroom
-        ? await classroomService.getStudents(input.classroom)
-        : [];
-      const studentIds: string[] = students.map((stud) => stud.id);
       return ctx.db.transaction.findMany({
         take: 50,
         include: {
@@ -127,7 +123,7 @@ export const transactionRouter = createTRPCRouter({
             ...(input.transactionType
               ? [{ transactionType: { equals: input.transactionType } }]
               : [{}]),
-            ...(input.from && input.to
+            ...(input.from
               ? [
                   {
                     createdAt: {
@@ -138,12 +134,16 @@ export const transactionRouter = createTRPCRouter({
                 ]
               : [{}]),
             ...(status ? [{ status: { equals: status } }] : [{}]),
-            ...(input.classroom
+            ...(input.classroomId
               ? [
                   {
                     account: {
-                      studentId: {
-                        in: studentIds,
+                      student: {
+                        enrollments: {
+                          some: {
+                            classroomId: input.classroomId,
+                          },
+                        },
                       },
                     },
                   },
@@ -452,5 +452,59 @@ export const transactionRouter = createTRPCRouter({
         increased: true,
         percentage: 4.4,
       };
+    }),
+
+  required: protectedProcedure
+    .input(
+      z.object({
+        limit: z.number().optional().default(20),
+        classroomId: z.string().optional(),
+        from: z.coerce.date().optional(),
+        to: z.coerce.date().optional().default(new Date()),
+        status: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.requiredFeeTransaction.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: input.limit,
+        where: {
+          fee: {
+            classroom: {
+              schoolYearId: ctx.schoolYearId,
+              ...(input.classroomId
+                ? {
+                    id: input.classroomId,
+                  }
+                : {}),
+            },
+          },
+          ...(input.from
+            ? {
+                createdAt: {
+                  gte: input.from,
+                  lte: input.to,
+                },
+              }
+            : {}),
+          ...(input.status
+            ? {
+                status: {
+                  equals: input.status as TransactionStatus,
+                },
+              }
+            : {}),
+        },
+        include: {
+          student: true,
+          fee: {
+            include: {
+              classroom: true,
+            },
+          },
+        },
+      });
     }),
 });

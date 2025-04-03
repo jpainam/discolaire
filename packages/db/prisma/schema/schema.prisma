@@ -499,64 +499,65 @@ model Document {
 }
 
 model Student {
-    id                 String             @id @default(uuid())
+    id                 String                   @id @default(uuid())
     registrationNumber String?
-    isActive           Boolean            @default(true)
+    isActive           Boolean                  @default(true)
     email              String?
     firstName          String?
     lastName           String?
-    dateOfBirth        DateTime?          @db.Date
+    dateOfBirth        DateTime?                @db.Date
     bloodType          String?
     placeOfBirth       String?
-    photos             String[]           @default([])
+    photos             String[]                 @default([])
     residence          String?
-    status             StudentStatus      @default(ACTIVE)
+    status             StudentStatus            @default(ACTIVE)
     gender             String?
     religionId         String?
-    isBaptized         Boolean            @default(false)
-    isRepeating        Boolean            @default(false)
-    isNew              Boolean            @default(false)
+    isBaptized         Boolean                  @default(false)
+    isRepeating        Boolean                  @default(false)
+    isNew              Boolean                  @default(false)
     phoneNumber        String?
-    parentDivorced     Boolean            @default(false)
-    dateOfEntry        DateTime?          @db.Date
-    dateOfExit         DateTime?          @db.Date
-    dateOfWithdraw     DateTime?          @db.Date
-    lastAccessed       DateTime           @default(now()) @db.Timestamp(6)
+    parentDivorced     Boolean                  @default(false)
+    dateOfEntry        DateTime?                @db.Date
+    dateOfExit         DateTime?                @db.Date
+    dateOfWithdraw     DateTime?                @db.Date
+    lastAccessed       DateTime                 @default(now()) @db.Timestamp(6)
     observation        String?
     sunPlusNo          String?
     countryId          String?
     userId             String?
     tags               Json?
-    createdAt          DateTime           @default(now()) @db.Timestamp(6)
-    updatedAt          DateTime           @updatedAt
+    createdAt          DateTime                 @default(now()) @db.Timestamp(6)
+    updatedAt          DateTime                 @updatedAt
     createdById        String?
     formerSchoolId     String?
-    achievements       String[]           @default([])
-    hobbies            String[]           @default([])
-    socialMedias       String[]           @default([])
+    achievements       String[]                 @default([])
+    hobbies            String[]                 @default([])
+    socialMedias       String[]                 @default([])
     enrollments        Enrollment[]
     grades             Grade[]
-    country            Country?           @relation(fields: [countryId], references: [id])
-    formerSchool       FormerSchool?      @relation(fields: [formerSchoolId], references: [id])
-    user               User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
+    country            Country?                 @relation(fields: [countryId], references: [id])
+    formerSchool       FormerSchool?            @relation(fields: [formerSchoolId], references: [id])
+    user               User?                    @relation(fields: [userId], references: [id], onDelete: SetNull)
     accounts           StudentAccount[]
     studentContacts    StudentContact[]
-    siblings           StudentSibling[]   @relation("sibling")
-    siblings2          StudentSibling[]   @relation("student")
+    siblings           StudentSibling[]         @relation("sibling")
+    siblings2          StudentSibling[]         @relation("student")
     attendances        Attendance[]
-    classrooms         Classroom[]        @relation("classroomLeader")
+    classrooms         Classroom[]              @relation("classroomLeader")
     reportCards        ReportCard[]
-    religion           Religion?          @relation(fields: [religionId], references: [id])
+    religion           Religion?                @relation(fields: [religionId], references: [id])
     sports             StudentSport[]
     clubs              StudentClub[]
     preventedAbsences  PreventedAbsence[]
-    school             School             @relation(fields: [schoolId], references: [id])
+    school             School                   @relation(fields: [schoolId], references: [id])
     schoolId           String
     absences           Absence[]
     latenesses         Lateness[]
     consignes          Consigne[]
     chatters           Chatter[]
     exclusions         Exclusion[]
+    requiredFees       RequiredFeeTransaction[]
 }
 
 model StudentSibling {
@@ -581,15 +582,18 @@ model StudentAccount {
 }
 
 model RequiredFeeTransaction {
+    id          Int      @id @default(autoincrement())
     studentId   String
     feeId       Int
+    fee         Fee      @relation(fields: [feeId], references: [id], onDelete: Cascade)
+    student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
     createdAt   DateTime @default(now()) @db.Timestamp(6)
     updatedAt   DateTime @updatedAt
     createdById String
     status      String   @default("PENDING")
     updatedById String?
 
-    @@id([studentId, feeId])
+    @@unique([studentId, feeId])
 }
 
 model Journal {
@@ -599,18 +603,19 @@ model Journal {
 }
 
 model Fee {
-    id          Int       @id @default(autoincrement())
+    id          Int                      @id @default(autoincrement())
     description String?
     code        String?
     amount      Float
-    dueDate     DateTime  @default(now()) @db.Timestamp(6)
-    createdAt   DateTime  @default(now()) @db.Timestamp(6)
-    updatedAt   DateTime  @updatedAt
+    dueDate     DateTime                 @default(now()) @db.Timestamp(6)
+    createdAt   DateTime                 @default(now()) @db.Timestamp(6)
+    updatedAt   DateTime                 @updatedAt
     createdBy   String?
     updatedBy   String?
     classroomId String
-    isRequired  Boolean?  @default(false)
-    classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+    isRequired  Boolean?                 @default(false)
+    classroom   Classroom                @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+    requires    RequiredFeeTransaction[]
 }
 
 model FeeType {

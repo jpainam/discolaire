@@ -20,7 +20,7 @@ export default async function Page(props: {
     status: searchParams.status,
     from: searchParams.from ? new Date(searchParams.from) : undefined,
     to: searchParams.to ? new Date(searchParams.to) : undefined,
-    classroom: searchParams.classroom,
+    classroomId: searchParams.classroom,
     transactionType: "DISCOUNT",
   });
 
@@ -34,15 +34,15 @@ export default async function Page(props: {
   const totals = transactions.reduce((acc, curr) => acc + curr.amount, 0);
   const validated = transactions.reduce(
     (acc, curr) => acc + (curr.status == "VALIDATED" ? curr.amount : 0),
-    0,
+    0
   );
   const canceled = transactions.reduce(
     (acc, curr) => acc + (curr.status == "CANCELED" ? curr.amount : 0),
-    0,
+    0
   );
   const pending = transactions.reduce(
     (acc, curr) => acc + (curr.status == "PENDING" ? curr.amount : 0),
-    0,
+    0
   );
 
   return (
