@@ -1,8 +1,11 @@
-import type { ColumnDef, Row } from "@tanstack/react-table";
-import { createColumnHelper } from "@tanstack/react-table";
+"use client";
+
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
-import i18next from "i18next";
-import { Eye, MoreHorizontal } from "lucide-react";
+import { Eye, Trash2 } from "lucide-react";
+import Link from "next/link";
+import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -11,31 +14,30 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
+import { useConfirm } from "~/providers/confirm-dialog";
 
-import { CrossCircledIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
-import FlatBadge from "~/components/FlatBadge";
+import i18next from "i18next";
+import { useCheckPermission } from "~/hooks/use-permission";
 
-type RequiredTransactionOutput = NonNullable<
-  RouterOutputs["transaction"]["required"]
->[number];
+type RequiredTransactionOutput =
+  RouterOutputs["transaction"]["required"][number];
 
-const columnHelper = createColumnHelper<RequiredTransactionOutput>();
-
-export const getRequiredColumns = ({
+export function getRequiredColumns({
   t,
   currency,
 }: {
   t: TFunction<string, unknown>;
   currency: string;
-}): ColumnDef<RequiredTransactionOutput, unknown>[] => {
+}): ColumnDef<RequiredTransactionOutput, unknown>[] {
   return [
-    columnHelper.accessor("id", {
+    {
+      id: "select",
       header: ({ table }) => (
         <Checkbox
           checked={
@@ -56,159 +58,179 @@ export const getRequiredColumns = ({
       size: 28,
       enableSorting: false,
       enableHiding: false,
-    }),
-    columnHelper.accessor("createdAt", {
+    },
+    {
+      accessorKey: "createdAt",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("createdAt")} />
       ),
       cell: ({ row }) => {
         const transaction = row.original;
-
         return (
-          <div>
+          <div className="text-sm text-muted-foreground">
             {transaction.createdAt.toLocaleDateString(i18next.language, {
-              year: "numeric",
+              year: "2-digit",
               month: "short",
-              day: "numeric",
+              day: "2-digit",
             })}
           </div>
         );
       },
-    }),
-    columnHelper.accessor("account", {
+    },
+    {
+      accessorKey: "student",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("account")} />
+        <DataTableColumnHeader column={column} title={t("fullName")} />
       ),
       cell: ({ row }) => {
         const transaction = row.original;
         return (
           <Link
-            className="hover:underline hover:text-blue-600"
-            href={`/students/${transaction.account.studentId}/transactions`}
+            className="hover:text-blue-600 hover:underline"
+            href={`/students/${transaction.student.id}/transactions`}
           >
-            {transaction.account.student.lastName}
+            {transaction.student.lastName}
           </Link>
         );
       },
-    }),
-    columnHelper.accessor("transactionRef", {
+    },
+
+    {
+      accessorKey: "fee",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("transactionRef")} />
+        <DataTableColumnHeader column={column} title={t("fees")} />
       ),
       cell: ({ row }) => {
         const transaction = row.original;
 
-        return (
-          <Link
-            className="hover:underline hover:text-blue-600"
-            href={`/students/${transaction.account.studentId}/transactions/${transaction.id}`}
-          >
-            {transaction.transactionRef}
-          </Link>
-        );
+        return <div>{transaction.fee.description}</div>;
       },
-    }),
-    columnHelper.accessor("description", {
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("description")} />
-      ),
-      cell: ({ row }) => {
-        return <div>{row.original.description}</div>;
-      },
-    }),
-    columnHelper.accessor("status", {
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("status")} />
-      ),
-      cell: () => {
-        return (
-          <FlatBadge className="gap-2" variant={"red"}>
-            <CrossCircledIcon
-              className="size-4 text-muted-foreground"
-              aria-hidden="true"
-            />
-            <span className="capitalize">{t("deleted")}</span>
-          </FlatBadge>
-        );
-      },
-    }),
-    columnHelper.accessor("deletedAt", {
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("deletedAt")} />
-      ),
-      cell: ({ row }) => {
-        const transaction = row.original;
-
-        return (
-          <div>
-            {transaction.deletedAt?.toLocaleDateString(i18next.language, {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            })}
-          </div>
-        );
-      },
-    }),
-    columnHelper.accessor("amount", {
+    },
+    {
+      accessorKey: "fee.amount",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("amount")} />
       ),
       cell: ({ row }) => {
-        const amount = row.original.amount;
+        const transaction = row.original;
+
         return (
           <div>
-            {amount.toLocaleString(i18next.language, {
+            {transaction.fee.amount.toLocaleString(i18next.language, {
               style: "currency",
-              currency: currency,
-              minimumFractionDigits: 0,
               maximumFractionDigits: 0,
+              minimumFractionDigits: 0,
+              currency: currency,
             })}
           </div>
         );
       },
-    }),
+    },
+    {
+      accessorKey: "status",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("status")} />
+      ),
+      cell: ({ row }) => {
+        const transaction = row.original;
 
+        return (
+          <div className="flex flex-row items-center gap-1">
+            {transaction.status}
+          </div>
+        );
+      },
+    },
     {
       id: "actions",
-      cell: ({ row }: { row: Row<TransactionAllProcedureOutput> }) => (
-        <ActionCell transaction={row.original} />
-      ),
+      header: () => <span className="sr-only">Actions</span>,
+      cell: function Cell({ row }) {
+        return <ActionCells transaction={row.original} />;
+      },
       size: 60,
       enableSorting: false,
       enableHiding: false,
     },
-  ] as ColumnDef<TransactionAllProcedureOutput, unknown>[];
-};
+  ];
+}
 
-function ActionCell({
+function ActionCells({
   transaction,
 }: {
-  transaction: TransactionAllProcedureOutput;
+  transaction: RequiredTransactionOutput;
 }) {
+  //const { openSheet } = useSheet();
+  console.log("transaction", transaction);
+  const confirm = useConfirm();
   const { t } = useLocale();
+  //const router = useRouter();
+  //const utils = api.useUtils();
+  const canDeleteClassroom = useCheckPermission(
+    "classroom",
+    PermissionAction.DELETE
+  );
+  // const canUpdateClassroom = useCheckPermission(
+  //   "classroom",
+  //   PermissionAction.UPDATE
+  // );
+  // const deleteClassroomMutation = api.classroom.delete.useMutation({
+  //   onSettled: () => utils.classroom.invalidate(),
+  //   onSuccess: () => {
+  //     toast.success(t("deleted_successfully"), { id: 0 });
+  //     router.refresh();
+  //   },
+  //   onError: (error) => {
+  //     toast.error(error.message, { id: 0 });
+  //   },
+  // });
 
-  const { openModal } = useModal();
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant={"ghost"} size={"icon"}>
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem
-          onSelect={() => {
-            openModal({
-              title: t("details"),
-              view: <TransactionDetails transactionId={transaction.id} />,
-            });
-          }}
-        >
-          <Eye />
-          {t("details")}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="flex justify-end">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            aria-label="Open menu"
+            variant="ghost"
+            className="flex size-8 p-0 data-[state=open]:bg-muted"
+          >
+            <DotsHorizontalIcon className="size-4" aria-hidden="true" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem
+            onSelect={() => {
+              //router.push(routes.classrooms.details(classroom.id));
+            }}
+          >
+            <Eye />
+            {t("details")}
+          </DropdownMenuItem>
+
+          {canDeleteClassroom && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                disabled={!canDeleteClassroom}
+                variant="destructive"
+                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+                onSelect={async () => {
+                  const isConfirmed = await confirm({
+                    title: t("delete"),
+                    description: t("delete_confirmation"),
+                  });
+                  if (isConfirmed) {
+                    toast.loading(t("deleting"), { id: 0 });
+                    //deleteClassroomMutation.mutate(classroom.id);
+                  }
+                }}
+              >
+                <Trash2 />
+                {t("delete")}
+              </DropdownMenuItem>
+            </>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 }

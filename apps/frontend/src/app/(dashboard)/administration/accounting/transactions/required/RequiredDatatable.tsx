@@ -11,14 +11,14 @@ import { getRequiredColumns } from "./RequiredDatatableColumn";
 export function RequiredDatatable() {
   const trpc = useTRPC();
   const { data: transactions } = useSuspenseQuery(
-    trpc.transaction.required.queryOptions({})
+    trpc.transaction.required.queryOptions({}),
   );
   const { t } = useLocale();
   const { school } = useSchool();
 
   const columns = useMemo(
     () => getRequiredColumns({ t, currency: school.currency }),
-    [school.currency, t]
+    [school.currency, t],
   );
 
   const { table } = useDataTable({
