@@ -211,10 +211,10 @@ export function CreateEditTimetable({
                   commandProps={{
                     label: t("select_options"),
                   }}
-                  value={field.value?.map((day) => {
+                  value={field.value?.map((day, index) => {
                     return {
-                      label: getDayOfWeek(day),
-                      value: `${day}`,
+                      label: t(getDayOfWeek(day)),
+                      value: `${index}`,
                     };
                   })}
                   defaultOptions={dayNames.map((day, index) => {
@@ -224,7 +224,7 @@ export function CreateEditTimetable({
                     };
                   })}
                   onChange={(values) => {
-                    field.onChange(values);
+                    field.onChange(values.map((val) => Number(val.value)));
                   }}
                   hidePlaceholderWhenSelected
                 />

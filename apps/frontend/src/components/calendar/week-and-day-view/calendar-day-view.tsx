@@ -18,6 +18,7 @@ import { getEventBlockStyle, groupEvents } from "~/components/calendar/helpers";
 
 import { Calendar } from "@repo/ui/components/calendar";
 import type { IEvent } from "~/components/calendar/interfaces";
+import { useLocale } from "~/i18n";
 
 interface IProps {
   singleDayEvents: IEvent[];
@@ -26,6 +27,7 @@ interface IProps {
 
 export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
   const { selectedDate, setSelectedDate, users } = useCalendar();
+  const { t } = useLocale();
 
   const hours = Array.from({ length: 24 }, (_, i) => i);
 
@@ -37,7 +39,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
         isWithinInterval(now, {
           start: parseISO(event.startDate),
           end: parseISO(event.endDate),
-        }),
+        })
       ) || null
     );
   };
@@ -134,7 +136,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                       event,
                       selectedDate,
                       groupIndex,
-                      groupedEvents.length,
+                      groupedEvents.length
                     );
                     const hasOverlap = groupedEvents.some(
                       (otherGroup, otherIndex) =>
@@ -148,9 +150,9 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                             {
                               start: parseISO(otherEvent.startDate),
                               end: parseISO(otherEvent.endDate),
-                            },
-                          ),
-                        ),
+                            }
+                          )
+                        )
                     );
 
                     if (!hasOverlap)
@@ -165,7 +167,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                         <EventBlock event={event} />
                       </div>
                     );
-                  }),
+                  })
                 )}
               </div>
 
@@ -181,7 +183,6 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
           mode="single"
           selected={selectedDate}
           onSelect={setSelectedDate}
-          initialFocus
         />
 
         <div className="flex-1 space-y-3">
@@ -193,12 +194,12 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
               </span>
 
               <p className="text-sm font-semibold text-t-secondary">
-                Happening now
+                {t("Happening now")}
               </p>
             </div>
           ) : (
             <p className="p-4 text-center text-sm italic text-t-tertiary">
-              No appointments or consultations at the moment
+              {t("No appointments or consultations at the moment")}
             </p>
           )}
 
