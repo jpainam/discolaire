@@ -68,7 +68,7 @@ export function CalendarDndProvider({
   const [activeEvent, setActiveEvent] = useState<CalendarEvent | null>(null);
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const [activeView, setActiveView] = useState<"month" | "week" | "day" | null>(
-    null
+    null,
   );
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
   const [eventHeight, setEventHeight] = useState<number | null>(null);
@@ -106,7 +106,7 @@ export function CalendarDndProvider({
       activationConstraint: {
         distance: 5,
       },
-    })
+    }),
   );
 
   // Generate a stable ID for the DndContext
@@ -201,7 +201,7 @@ export function CalendarDndProvider({
             currentTime.getHours(),
             currentTime.getMinutes(),
             currentTime.getSeconds(),
-            currentTime.getMilliseconds()
+            currentTime.getMilliseconds(),
           );
         }
 
@@ -278,7 +278,7 @@ export function CalendarDndProvider({
           currentTime.getHours(),
           currentTime.getMinutes(),
           currentTime.getSeconds(),
-          currentTime.getMilliseconds()
+          currentTime.getMilliseconds(),
         );
       }
 
