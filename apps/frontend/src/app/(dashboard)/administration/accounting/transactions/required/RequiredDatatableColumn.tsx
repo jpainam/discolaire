@@ -199,7 +199,7 @@ function ActionCells({
   //const utils = api.useUtils();
   const canDeleteClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   // const canUpdateClassroom = useCheckPermission(
   //   "classroom",
