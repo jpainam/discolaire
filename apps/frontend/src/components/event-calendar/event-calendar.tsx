@@ -16,7 +16,6 @@ import {
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  PlusIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -66,7 +65,7 @@ export function EventCalendar({
   const [view, setView] = useState<CalendarView>(initialView);
   const [isEventDialogOpen, setIsEventDialogOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
-    null,
+    null
   );
 
   // Add keyboard shortcuts for view switching
@@ -272,7 +271,7 @@ export function EventCalendar({
         <div
           className={cn(
             "flex items-center justify-between p-2 sm:p-4",
-            className,
+            className
           )}
         >
           <div className="flex items-center gap-1 sm:gap-4">
@@ -344,7 +343,7 @@ export function EventCalendar({
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button
+            {/* <Button
               className="aspect-square max-[479px]:p-0!"
               onClick={() => {
                 setSelectedEvent(null); // Ensure we're creating a new event
@@ -357,7 +356,7 @@ export function EventCalendar({
                 aria-hidden="true"
               />
               <span className="max-sm:sr-only">New event</span>
-            </Button>
+            </Button> */}
           </div>
         </div>
 
