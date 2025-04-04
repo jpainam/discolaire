@@ -65,7 +65,7 @@ export function EventCalendar({
   const [view, setView] = useState<CalendarView>(initialView);
   const [isEventDialogOpen, setIsEventDialogOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
-    null
+    null,
   );
 
   // Add keyboard shortcuts for view switching
@@ -271,7 +271,7 @@ export function EventCalendar({
         <div
           className={cn(
             "flex items-center justify-between p-2 sm:p-4",
-            className
+            className,
           )}
         >
           <div className="flex items-center gap-1 sm:gap-4">
