@@ -227,6 +227,22 @@ export const userRouter = createTRPCRouter({
         },
       });
     }),
+  createAutoUser: protectedProcedure
+    .input(
+      z.object({
+        entityId: z.string().min(1),
+        entityType: z.enum(["staff", "contact", "student"]),
+        name: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return userService.createAutoUser({
+        schoolId: ctx.schoolId,
+        profile: input.entityType,
+        name: input.name,
+        entityId: input.entityId,
+      });
+    }),
   getPermissions: protectedProcedure
     .input(z.string().min(1))
     .query(({ input }) => {

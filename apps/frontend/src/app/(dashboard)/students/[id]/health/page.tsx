@@ -9,8 +9,9 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   return (
     <div className="flex w-full flex-col">
-      <HealthVisitHeader />
-      <HealthVisitTable userId={student.userId} />
+      <HealthVisitHeader userId={student.userId} />
+
+      <HealthVisitTable userId={student.userId ?? "N/A"} />
     </div>
   );
 }
