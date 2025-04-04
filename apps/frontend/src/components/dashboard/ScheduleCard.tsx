@@ -4,6 +4,7 @@ import { useLocale } from "~/i18n";
 
 import {
   Card,
+  CardAction,
   CardContent,
   CardHeader,
   CardTitle,
@@ -11,7 +12,6 @@ import {
 import { CalendarDays } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { DatePicker } from "../DatePicker";
-import { CardAction } from "../ui/card";
 interface ScheduleItem {
   startTime: string;
   endTime: string;

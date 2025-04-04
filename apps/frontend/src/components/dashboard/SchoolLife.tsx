@@ -2,6 +2,7 @@
 import { Badge } from "@repo/ui/components/badge";
 import {
   Card,
+  CardAction,
   CardContent,
   CardHeader,
   CardTitle,
@@ -30,7 +31,6 @@ import Link from "next/link";
 import { useState } from "react";
 import { useLocale } from "~/i18n";
 import type { ChangeEvent } from "~/types/event_type";
-import { CardAction } from "../ui/card";
 
 export function SchoolLife({ className }: { className?: string }) {
   const data = [
@@ -122,7 +122,7 @@ export function SchoolLife({ className }: { className?: string }) {
     const daysToAdd = (week - 1) * 7;
     const selectedWeekStart = startOfWeek(
       new Date(firstDayOfYear.setDate(firstDayOfYear.getDate() + daysToAdd)),
-      { weekStartsOn: 0 },
+      { weekStartsOn: 0 }
     );
 
     setSelectedDate(selectedWeekStart);
@@ -149,7 +149,7 @@ export function SchoolLife({ className }: { className?: string }) {
       format(date, "EEE d", {
         locale:
           i18n.language === "fr" ? fr : i18n.language === "es" ? es : enUS,
-      }),
+      })
     );
 
   return (
