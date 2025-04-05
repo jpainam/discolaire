@@ -1,3 +1,4 @@
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { Suspense } from "react";
 import { ClassroomDetails } from "~/components/classrooms/ClassroomDetails";
 import { EnrollmentDataTable } from "~/components/classrooms/enrollments/EnrollmentDataTable";
@@ -46,8 +47,10 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
       <HydrateClient>
         <Suspense
           fallback={
-            <div className="flex h-full w-full items-center justify-center">
-              Loading...
+            <div className="grid grid-cols-4 gap-4">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <Skeleton key={i} className="h-8 w-full " />
+              ))}
             </div>
           }
         >
