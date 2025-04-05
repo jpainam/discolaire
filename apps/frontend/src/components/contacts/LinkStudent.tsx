@@ -111,15 +111,15 @@ export function LinkStudent({ contactId }: { contactId: string }) {
                     if (selectedStudents.includes(stud)) {
                       return setSelectedStudents(
                         selectedStudents.filter(
-                          (selectedStudent) => selectedStudent.id !== stud.id,
-                        ),
+                          (selectedStudent) => selectedStudent.id !== stud.id
+                        )
                       );
                     }
 
                     return setSelectedStudents(
                       [...contactUnLinkedStudent.data].filter((u) =>
-                        [...selectedStudents, stud].includes(u),
-                      ),
+                        [...selectedStudents, stud].includes(u)
+                      )
                     );
                   }}
                 >
@@ -177,6 +177,7 @@ export function LinkStudent({ contactId }: { contactId: string }) {
           </span>
         )}
         <Button
+          size={"sm"}
           variant={"default"}
           isLoading={createStudentContactMutation.isPending}
           disabled={selectedStudents.length === 0}

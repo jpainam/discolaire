@@ -7,6 +7,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { useModal } from "~/hooks/use-modal";
@@ -26,7 +27,6 @@ export function TermHeader() {
         onClick={() => {
           openModal({
             title: t("add"),
-            className: "w-96",
             view: <CreateEditTerm />,
           });
         }}
@@ -44,6 +44,7 @@ export function TermHeader() {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownHelp />
+          <DropdownMenuSeparator />
           <DropdownMenuItem>
             <XMLIcon />
             {t("xml_export")}

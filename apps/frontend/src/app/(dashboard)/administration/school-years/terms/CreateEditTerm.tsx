@@ -82,9 +82,7 @@ export function CreateEditTerm({ term }: { term?: Term }) {
           name="name"
           render={({ field }) => (
             <FormItem className="col-span-3">
-              <FormLabel htmlFor="name" className="text-right">
-                {t("name")}
-              </FormLabel>
+              <FormLabel htmlFor="name">{t("name")}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -99,9 +97,7 @@ export function CreateEditTerm({ term }: { term?: Term }) {
           name="startDate"
           render={({ field }) => (
             <FormItem className="col-span-3">
-              <FormLabel htmlFor="startDate" className="text-right">
-                {t("start_date")}
-              </FormLabel>
+              <FormLabel htmlFor="startDate">{t("start_date")}</FormLabel>
               <FormControl>
                 <DatePicker
                   defaultValue={field.value}
@@ -118,9 +114,7 @@ export function CreateEditTerm({ term }: { term?: Term }) {
           name="endDate"
           render={({ field }) => (
             <FormItem className="col-span-3">
-              <FormLabel htmlFor="endDate" className="text-right">
-                {t("end_date")}
-              </FormLabel>
+              <FormLabel htmlFor="endDate">{t("end_date")}</FormLabel>
               <FormControl>
                 <DatePicker
                   defaultValue={field.value}
@@ -137,9 +131,7 @@ export function CreateEditTerm({ term }: { term?: Term }) {
           name="isActive"
           render={({ field }) => (
             <FormItem className="flex flex-row items-center gap-4 space-y-0">
-              <FormLabel htmlFor="isActive" className="text-right">
-                {t("active")}
-              </FormLabel>
+              <FormLabel htmlFor="isActive">{t("active")}</FormLabel>
               <FormControl>
                 <Switch
                   id="isActive"
