@@ -6,7 +6,7 @@ import { checkPermission } from "@repo/api/permission";
 import { auth } from "@repo/auth";
 import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";
 import StudentDetails from "~/components/students/profile/StudentDetails";
-import { api, caller } from "~/trpc/server";
+import { api, prefetch, trpc } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -20,7 +20,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   if (session?.user.profile === "staff") {
     const canReadStudent = await checkPermission(
       "student",
-      PermissionAction.READ,
+      PermissionAction.READ
     );
     if (!canReadStudent) {
       return <NoPermission className="my-8" />;
@@ -28,7 +28,8 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     canReadContacts = await checkPermission("student", PermissionAction.READ);
   }
 
-  const studentContacts = await caller.student.contacts(params.id);
+  //const studentContacts = await caller.student.contacts(params.id);
+  prefetch(trpc.student.contacts.queryOptions(params.id));
 
   return (
     <div className="grid py-2 text-sm">
@@ -36,7 +37,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
       <Separator className="my-2 w-full" />
       {canReadContacts && (
         <StudentContactTable
-          studentContacts={studentContacts}
+          //studentContacts={studentContacts}
           studentId={params.id}
         />
       )}

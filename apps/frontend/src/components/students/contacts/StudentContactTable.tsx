@@ -30,7 +30,11 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import type { RouterOutputs } from "@repo/api";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { AvatarState } from "~/components/AvatarState";
 import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
@@ -38,48 +42,58 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
 export function StudentContactTable({
-  studentContacts,
+  //studentContacts,
   studentId,
 }: {
   studentId: string;
-  studentContacts: RouterOutputs["student"]["contacts"];
+  //studentContacts: RouterOutputs["student"]["contacts"];
 }) {
   const { t } = useLocale();
   const confirm = useConfirm();
   const router = useRouter();
+  const trpc = useTRPC();
+  const { data: studentContacts } = useSuspenseQuery(
+    trpc.student.contacts.queryOptions(studentId)
+  );
 
-  const updateStudentContactMutation = api.studentContact.update.useMutation({
-    onSettled: async () => {
-      await utils.contact.students.invalidate();
-      await utils.student.contacts.invalidate(studentId);
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"));
-    },
-  });
-  const deleteStudentContactMutation = api.studentContact.delete.useMutation({
-    onSettled: async () => {
-      await utils.student.contacts.invalidate();
-      await utils.contact.students.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"));
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const utils = api.useUtils();
+  const queryClient = useQueryClient();
+
+  const updateStudentContactMutation = useMutation(
+    trpc.studentContact.update.mutationOptions({
+      onSettled: async () => {
+        await queryClient.invalidateQueries(trpc.contact.students.pathFilter());
+        await queryClient.invalidateQueries(trpc.student.contacts.pathFilter());
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: () => {
+        toast.success(t("updated_successfully"), { id: 0 });
+      },
+    })
+  );
+  const deleteStudentContactMutation = useMutation(
+    trpc.studentContact.delete.mutationOptions({
+      onSettled: async () => {
+        await queryClient.invalidateQueries(trpc.student.contacts.pathFilter());
+        await queryClient.invalidateQueries(trpc.contact.students.pathFilter());
+      },
+      onSuccess: () => {
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+
   const canDeleteStudentContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
 
   return (
@@ -126,7 +140,7 @@ export function StudentContactTable({
                     <Link
                       href={`${routes.students.contacts(c.studentId)}/${contact.id}`}
                       className={cn(
-                        "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline",
+                        "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline"
                       )}
                     >
                       {getFullName(contact)}
@@ -179,7 +193,7 @@ export function StudentContactTable({
                           <DropdownMenuItem
                             onSelect={() => {
                               router.push(
-                                `${routes.students.contacts(c.studentId)}/${c.contactId}`,
+                                `${routes.students.contacts(c.studentId)}/${c.contactId}`
                               );
                             }}
                           >
