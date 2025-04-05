@@ -52,15 +52,15 @@ export function BookCategory() {
   const { openModal } = useModal();
   const canUpdateCategory = useCheckPermission(
     "library",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   const canCreateCategory = useCheckPermission(
     "library",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
   const canDeleteCategory = useCheckPermission(
     "library",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
 
   return (

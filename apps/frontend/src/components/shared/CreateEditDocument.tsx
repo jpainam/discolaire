@@ -135,7 +135,7 @@ export function CreateEditDocument({
         error: (err) => {
           return getErrorMessage(err);
         },
-      }
+      },
     );
   };
   return (

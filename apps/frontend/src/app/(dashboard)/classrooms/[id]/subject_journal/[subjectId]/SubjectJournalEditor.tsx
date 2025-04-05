@@ -110,7 +110,7 @@ export function SubjectJournalEditor({
     },
   });
   const handleSubmit = async (
-    data: z.infer<typeof createSubjectJournalSchema>
+    data: z.infer<typeof createSubjectJournalSchema>,
   ) => {
     let attachment = "";
     if (selectedFile) {

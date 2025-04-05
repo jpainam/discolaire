@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -150,7 +151,7 @@ export function CreateEditLoan({
                   <FormLabel>{t("borrow_to")}</FormLabel>
                   <FormControl>
                     <DatePicker
-                      defaultValue={field.value}
+                      defaultValue={field.value ?? undefined}
                       onChange={(val) => field.onChange(val)}
                     />
                   </FormControl>
