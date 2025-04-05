@@ -23,14 +23,13 @@ export function GradeSheetTable({ studentId }: { studentId: string }) {
     if (!studentGradesQuery.data) return;
     studentGradesQuery.data.forEach((grade) => {
       if (grade.gradeSheet.subjectId) {
-        if (!vv[grade.gradeSheet.subjectId]) {
-          vv[grade.gradeSheet.subjectId] = {
-            id: grade.gradeSheet.subjectId,
-            subject: grade.gradeSheet.subject.course.name,
-            observation: grade.observation ?? "",
-            grades: [],
-          };
-        }
+        vv[grade.gradeSheet.subjectId] ??= {
+          id: grade.gradeSheet.subjectId,
+          subject: grade.gradeSheet.subject.course.name,
+          observation: grade.observation ?? "",
+          grades: [],
+        };
+
         vv[grade.gradeSheet.subjectId]?.grades.push(grade.grade);
       }
     });
