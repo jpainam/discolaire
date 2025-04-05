@@ -16,7 +16,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import Link from "next/link";
@@ -24,6 +23,8 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
@@ -33,15 +34,13 @@ const passwordFormSchema = z.object({
   newPassword: z.string().min(1),
 });
 
-const defaultValues: Partial<z.infer<typeof passwordFormSchema>> = {
-  oldPassword: "",
-  newPassword: "",
-};
-
 export function ReinitializePassword() {
   const form = useForm({
-    schema: passwordFormSchema,
-    defaultValues,
+    resolver: zodResolver(passwordFormSchema),
+    defaultValues: {
+      oldPassword: "",
+      newPassword: "",
+    },
     mode: "onChange",
   });
   const utils = api.useUtils();

@@ -1,4 +1,5 @@
 "use client";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -13,7 +14,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import {
@@ -25,6 +25,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 import { Pencil, PlusIcon, TrashIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useModal } from "~/hooks/use-modal";
@@ -51,15 +52,15 @@ export function BookCategory() {
   const { openModal } = useModal();
   const canUpdateCategory = useCheckPermission(
     "library",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const canCreateCategory = useCheckPermission(
     "library",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const canDeleteCategory = useCheckPermission(
     "library",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
 
   return (
@@ -165,7 +166,7 @@ function CreateEditCategory({
   category?: { name: string; id: string };
 }) {
   const form = useForm({
-    schema: createEditCategorySchema,
+    resolver: zodResolver(createEditCategorySchema),
     defaultValues: {
       name: category?.name ?? "",
     },

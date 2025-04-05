@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -13,9 +14,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { useForm } from "react-hook-form";
 import { DatePicker } from "~/components/DatePicker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useModal } from "~/hooks/use-modal";
@@ -36,9 +37,10 @@ export function CreateEditLateness({
   lateness?: RouterOutputs["lateness"]["all"][number];
 }) {
   const form = useForm({
-    schema: schema,
+    resolver: zodResolver(schema),
     defaultValues: {
       date: lateness?.date ?? new Date(),
+      termId: lateness?.termId ? `${lateness.termId}` : "",
       duration: lateness?.duration ?? 0,
       // hours: lateness?.duration
       //   ? Math.floor(lateness.duration / 60).toString()

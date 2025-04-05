@@ -9,7 +9,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Label } from "@repo/ui/components/label";
 import { Skeleton } from "@repo/ui/components/skeleton";
@@ -17,6 +16,8 @@ import { Textarea } from "@repo/ui/components/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { useRouter } from "~/hooks/use-router";
 import { CURRENCY } from "~/lib/constants";
 import { api } from "~/trpc/react";
@@ -30,7 +31,7 @@ export function DeleteTransaction({
   transactionId: number | number[];
 }) {
   const form = useForm({
-    schema: deleteTransactionSchema,
+    resolver: zodResolver(deleteTransactionSchema),
     defaultValues: {
       observation: "",
     },
@@ -41,7 +42,7 @@ export function DeleteTransaction({
   const router = useRouter();
   const transactionQuery = api.transaction.get.useQuery(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    Array.isArray(transactionId) ? transactionId[0]! : transactionId,
+    Array.isArray(transactionId) ? transactionId[0]! : transactionId
   );
   const deleteTransactionMutation = api.transaction.delete.useMutation({
     onSuccess: () => {

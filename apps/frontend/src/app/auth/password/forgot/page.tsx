@@ -22,11 +22,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 
@@ -40,7 +41,7 @@ export default function Paage() {
   const router = useRouter();
 
   const form = useForm({
-    schema: formSchema,
+    resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
     },

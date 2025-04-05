@@ -20,7 +20,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import {
@@ -33,6 +32,8 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
@@ -142,7 +143,7 @@ const createLevelSchema = z.object({
 });
 function CreateStaffLevel() {
   const form = useForm({
-    schema: createLevelSchema,
+    resolver: zodResolver(createLevelSchema),
     defaultValues: {
       name: "",
     },

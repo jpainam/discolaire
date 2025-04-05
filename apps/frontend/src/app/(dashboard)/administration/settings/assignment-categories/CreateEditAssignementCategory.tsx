@@ -11,12 +11,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { api } from "~/trpc/react";
 
 const createAssignmentCategorySchema = z.object({
@@ -30,7 +31,7 @@ export function CreateEditAssignmentCategory({
   name?: string;
 }) {
   const form = useForm({
-    schema: createAssignmentCategorySchema,
+    resolver: zodResolver(createAssignmentCategorySchema),
     defaultValues: {
       name: name ?? "",
     },

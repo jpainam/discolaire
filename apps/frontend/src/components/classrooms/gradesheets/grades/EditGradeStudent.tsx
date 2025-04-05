@@ -4,10 +4,12 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@repo/ui/components/button";
-import { Form, useForm } from "@repo/ui/components/form";
+import { Form } from "@repo/ui/components/form";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
 import { InputField } from "~/components/shared/forms/input-field";
 import { api } from "~/trpc/react";
@@ -29,8 +31,9 @@ export function EditGradeStudent({
   gradeId: number;
 }) {
   const form = useForm({
-    schema: editGradeStudentSchema,
+    resolver: zodResolver(editGradeStudentSchema),
     defaultValues: {
+      isAbsent: false,
       studentId: studentId,
       grade: grade,
       gradeId: gradeId,

@@ -15,7 +15,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
@@ -29,6 +28,8 @@ import {
 } from "@repo/ui/components/table";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
@@ -41,7 +42,7 @@ const attendanceSchema = z.object({
       id: z.string().min(1),
       absence: z.coerce.number().nullish(),
       justify: z.coerce.number().nullable(),
-    }),
+    })
   ),
   notifyParents: z.boolean().default(true),
   notifyStudents: z.boolean().default(true),
@@ -59,8 +60,10 @@ export function CreateEditAbsence({
   const { t } = useLocale();
 
   const form = useForm({
-    schema: attendanceSchema,
+    resolver: zodResolver(attendanceSchema),
     defaultValues: {
+      notifyParents: true,
+      notifyStudents: true,
       students: students.map((student) => ({
         id: student.id,
         absence: null,
@@ -77,7 +80,7 @@ export function CreateEditAbsence({
     onSuccess: () => {
       toast.success(t("added_successfully"), { id: 0 });
       router.push(
-        `${routes.classrooms.attendances.index(classroomId)}?type=absence&term=${termId}`,
+        `${routes.classrooms.attendances.index(classroomId)}?type=absence&term=${termId}`
       );
     },
     onError: (error) => {
@@ -100,7 +103,7 @@ export function CreateEditAbsence({
         toast.error(
           t("absence_cannot_be_less_than_justify_for", {
             name: getFullName(std),
-          }),
+          })
         );
         hasError = true;
         break;
@@ -141,7 +144,7 @@ export function CreateEditAbsence({
             //     });
             // }
           },
-        },
+        }
       );
     }
   };

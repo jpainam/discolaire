@@ -13,7 +13,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import {
   Select,
@@ -25,6 +24,8 @@ import {
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { StaffSelector } from "~/components/shared/selects/StaffSelector";
 import { api } from "~/trpc/react";
 import { cronValues } from "./cron-values";
@@ -42,7 +43,7 @@ export function AddStaffSchedule({
 }) {
   const { closeModal } = useModal();
   const form = useForm({
-    schema: addStaffScheduleSchema,
+    resolver: zodResolver(addStaffScheduleSchema),
     defaultValues: {
       cron: scheduleTask?.cron ?? "0 18 * * *",
       staffId: staffId ?? "",

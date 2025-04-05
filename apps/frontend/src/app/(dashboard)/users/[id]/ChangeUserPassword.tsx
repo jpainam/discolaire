@@ -1,4 +1,5 @@
 "use client";
+import { zodResolver } from "@hookform/resolvers/zod";
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -15,9 +16,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useLocale } from "~/i18n";
@@ -32,7 +33,7 @@ export function ChangeUserPassword({
   user: NonNullable<RouterOutputs["user"]["get"]>;
 }) {
   const form = useForm({
-    schema: updateUserPasswordSchema,
+    resolver: zodResolver(updateUserPasswordSchema),
     defaultValues: {
       new_password: "",
       confirm_password: "",

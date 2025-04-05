@@ -8,7 +8,7 @@ import { z } from "zod";
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
-import { Form, useForm } from "@repo/ui/components/form";
+import { Form } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import {
@@ -21,6 +21,7 @@ import {
 } from "@repo/ui/components/table";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Card,
   CardContent,
@@ -28,6 +29,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
+import { useForm } from "react-hook-form";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
@@ -41,7 +43,7 @@ const attendanceSchema = z.object({
       from: z.coerce.date().nullish(),
       to: z.coerce.date().nullish(),
       reason: z.string().nullish(),
-    }),
+    })
   ),
 });
 
@@ -57,7 +59,7 @@ export function CreateEditExclusion({
   const { t } = useLocale();
 
   const form = useForm({
-    schema: attendanceSchema,
+    resolver: zodResolver(attendanceSchema),
     defaultValues: {
       students: students.map((student) => ({
         id: student.id,
@@ -76,7 +78,7 @@ export function CreateEditExclusion({
     onSuccess: () => {
       toast.success(t("added_successfully"), { id: 0 });
       router.push(
-        `/classrooms/${classroomId}/attendances?type=exclusion&term=${termId}`,
+        `/classrooms/${classroomId}/attendances?type=exclusion&term=${termId}`
       );
     },
     onError: (error) => {
@@ -134,7 +136,7 @@ export function CreateEditExclusion({
                 <Button
                   onClick={() => {
                     router.push(
-                      routes.classrooms.attendances.index(classroomId),
+                      routes.classrooms.attendances.index(classroomId)
                     );
                   }}
                   size={"sm"}

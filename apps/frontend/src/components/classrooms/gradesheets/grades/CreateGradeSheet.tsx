@@ -13,7 +13,6 @@ import {
   FormField,
   FormItem,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import {
@@ -26,7 +25,9 @@ import {
 } from "@repo/ui/components/table";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import type { RouterOutputs } from "@repo/api";
+import { useForm } from "react-hook-form";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
@@ -47,7 +48,7 @@ const createGradeSchema = z.object({
       studentId: z.string(),
       absent: z.boolean().default(false),
       grade: z.string().default(""),
-    }),
+    })
   ),
 });
 
@@ -70,11 +71,11 @@ export function CreateGradeSheet({
         }
       }
     },
-    [], // No dependencies, so this function is only created once
+    [] // No dependencies, so this function is only created once
   );
   const searchParams = useSearchParams();
   const form = useForm({
-    schema: createGradeSchema,
+    resolver: zodResolver(createGradeSchema),
     defaultValues: {
       notifyParents: true,
       notifyStudents: true,
@@ -83,6 +84,11 @@ export function CreateGradeSheet({
       weight: 100,
       name: t("harmonized_grade"),
       scale: 20,
+      grades: students.map((student) => ({
+        studentId: student.id,
+        absent: false,
+        grade: "",
+      })),
     },
   });
   const router = useRouter();

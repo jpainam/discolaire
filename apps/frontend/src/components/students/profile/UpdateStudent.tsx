@@ -7,9 +7,11 @@ import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
-import { Form, useForm } from "@repo/ui/components/form";
+import { Form } from "@repo/ui/components/form";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
@@ -37,7 +39,7 @@ const createUpdateStudentSchema = z.object({
   countryId: z.string().min(1),
   dateOfEntry: z.coerce.date().optional(),
   dateOfExit: z.coerce.date().optional(),
-  tags: z.array(z.string()).optional(),
+  //tags: z.array(z.string()).optional(),
   isRepeating: z.enum(["yes", "no"]).optional().default("no"),
   observation: z.string().optional(),
   status: z
@@ -48,7 +50,7 @@ const createUpdateStudentSchema = z.object({
       z.object({
         label: z.string(),
         value: z.string(),
-      }),
+      })
     )
     .optional(),
   sports: z
@@ -56,7 +58,7 @@ const createUpdateStudentSchema = z.object({
       z.object({
         label: z.string(),
         value: z.string(),
-      }),
+      })
     )
     .optional(),
   classroom: z.string().optional(),
@@ -67,9 +69,10 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
   const { t } = useLocale();
 
   const form = useForm({
-    schema: createUpdateStudentSchema,
+    resolver: zodResolver(createUpdateStudentSchema),
     defaultValues: {
       id: student.id,
+      //tags: student.tags ?? [],
       registrationNumber: student.registrationNumber ?? "",
       firstName: student.firstName ?? "",
       lastName: student.lastName ?? "",
@@ -79,7 +82,7 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
       residence: student.residence ?? "",
       phoneNumber: student.phoneNumber ?? "",
       email: student.email ?? "",
-      isRepeating: student.isRepeating ? "yes" : "no",
+      isRepeating: student.isRepeating ? ("yes" as const) : ("no" as const),
       isNew: student.isNew,
       sunPlusNo: student.sunPlusNo ?? "",
       countryId: student.countryId ?? "",

@@ -1,5 +1,6 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -9,10 +10,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { SheetFooter } from "@repo/ui/components/sheet";
 import { addDays } from "date-fns";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { DatePicker } from "~/components/DatePicker";
@@ -35,7 +36,7 @@ export function CreateEditLoan({
   borrow?: RouterOutputs["library"]["borrowBooks"][number];
 }) {
   const form = useForm({
-    schema: formSchema,
+    resolver: zodResolver(formSchema),
     defaultValues: {
       bookId: 0,
       userId: "",
@@ -149,7 +150,7 @@ export function CreateEditLoan({
                   <FormLabel>{t("borrow_to")}</FormLabel>
                   <FormControl>
                     <DatePicker
-                      defaultValue={field.value ?? addDays(new Date(), 14)}
+                      defaultValue={field.value}
                       onChange={(val) => field.onChange(val)}
                     />
                   </FormControl>

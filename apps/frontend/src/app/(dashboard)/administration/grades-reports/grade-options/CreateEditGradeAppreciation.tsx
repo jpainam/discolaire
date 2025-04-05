@@ -13,12 +13,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { api } from "~/trpc/react";
 
 const createEditAppreciationSchema = z.object({
@@ -32,7 +33,7 @@ export function CreateEditGradeAppreciation({
   gradeAppreciation?: RouterOutputs["gradeAppreciation"]["all"][number];
 }) {
   const form = useForm({
-    schema: createEditAppreciationSchema,
+    resolver: zodResolver(createEditAppreciationSchema),
     defaultValues: {
       min: gradeAppreciation?.minGrade ?? 0,
       max: gradeAppreciation?.maxGrade ?? 0,

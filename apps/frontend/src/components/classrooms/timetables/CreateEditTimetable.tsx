@@ -11,7 +11,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import {
@@ -25,6 +24,8 @@ import MultipleSelector from "~/components/multiselect";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { api } from "~/trpc/react";
 
@@ -70,10 +71,12 @@ export function CreateEditTimetable({
       })
     : "09:00";
   const form = useForm({
-    schema: createEditTimetable,
+    resolver: zodResolver(createEditTimetable),
     defaultValues: {
       startTime: startTimeString,
+
       endTime: endTimeString,
+      repeat: "weekly" as const,
       description: description ?? "",
       subjectId: subjectId ? `${subjectId}` : "",
       daysOfWeek: daysOfWeek ?? [],
@@ -211,7 +214,7 @@ export function CreateEditTimetable({
                   commandProps={{
                     label: t("select_options"),
                   }}
-                  value={field.value?.map((day, index) => {
+                  value={field.value.map((day, index) => {
                     return {
                       label: t(getDayOfWeek(day)),
                       value: `${index}`,

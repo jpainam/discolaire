@@ -13,13 +13,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Textarea } from "@repo/ui/components/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@repo/ui/components/input";
+import { useForm } from "react-hook-form";
 import { DatePicker } from "~/components/DatePicker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useRouter } from "~/hooks/use-router";
@@ -37,9 +38,10 @@ export function CreateEditConsigne({
   consigne?: RouterOutputs["consigne"]["all"][number];
 }) {
   const form = useForm({
-    schema: schema,
+    resolver: zodResolver(schema),
     defaultValues: {
       date: consigne?.date ?? new Date(),
+      termId: consigne?.termId ? `${consigne.termId}` : "",
       duration: consigne?.duration ?? 0,
       // hours: consigne?.duration
       //   ? Math.floor(consigne.duration / 60).toString()

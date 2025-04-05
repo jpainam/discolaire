@@ -14,10 +14,11 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  useForm,
 } from "@repo/ui/components/form";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
@@ -51,7 +52,7 @@ export function Step2() {
     onSuccess: (transaction) => {
       toast.success(t("created_successfully"), { id: 0 });
       router.push(
-        routes.students.transactions.details(params.id, transaction.id),
+        routes.students.transactions.details(params.id, transaction.id)
       );
     },
     onError: (error) => {
@@ -60,7 +61,7 @@ export function Step2() {
   });
 
   const form = useForm({
-    schema: step2Schema,
+    resolver: zodResolver(step2Schema),
     defaultValues: {
       paymentReceived: false,
       paymentCorrectness: false,

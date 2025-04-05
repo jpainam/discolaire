@@ -1,4 +1,5 @@
 "use client";
+import { zodResolver } from "@hookform/resolvers/zod";
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -16,10 +17,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { SettingsIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { DatePicker } from "~/components/DatePicker";
 import { useLocale } from "~/i18n";
@@ -31,7 +32,7 @@ const formSchema = z.object({
       termId: z.string(),
       date: z.coerce.date(),
       observation: z.string().default(""),
-    }),
+    })
   ),
 });
 export function GradeReportSettings({
@@ -51,7 +52,7 @@ export function GradeReportSettings({
   });
 
   const form = useForm({
-    schema: formSchema,
+    resolver: zodResolver(formSchema),
     defaultValues: {
       options: periodes.map((p) => ({
         termId: p.id,

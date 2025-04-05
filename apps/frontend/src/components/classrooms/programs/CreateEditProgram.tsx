@@ -13,7 +13,6 @@ import {
   FormField,
   FormItem,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Label } from "@repo/ui/components/label";
 //import dynamic from "next/dynamic";
@@ -33,7 +32,9 @@ import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
 import { api } from "~/trpc/react";
 //import { html_content } from "./editor-content";
+import { zodResolver } from "@hookform/resolvers/zod";
 import type { RouterOutputs } from "@repo/api";
+import { useForm } from "react-hook-form";
 import { TiptapEditor } from "~/components/tiptap-editor";
 
 // const QuillEditor = dynamic(() => import("~/components/quill-editor"), {
@@ -57,13 +58,16 @@ export function CreateEditProgram({
   const params = useParams<{ id: string }>();
 
   const form = useForm({
-    defaultValues: { content: subject.program ?? defaultContent },
-    schema: programFormSchema,
+    defaultValues: {
+      content: subject.program ?? defaultContent ?? "",
+      id: subject.id,
+    },
+    resolver: zodResolver(programFormSchema),
   });
   const utils = api.useUtils();
   const canUpdateSubject = useCheckPermission(
     "subject",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const updateSubjectProgram = api.subject.updateProgram.useMutation({
     onSettled: () => utils.subject.invalidate(),
@@ -136,7 +140,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=pdf`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -147,7 +151,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=pdf&subjectId=${subject.id}`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -159,7 +163,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=csv`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -170,7 +174,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=csv&subjectId=${subject.id}`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >

@@ -1,6 +1,7 @@
 "use client";
 import { Textarea } from "@repo/ui/components/textarea";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -18,11 +19,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
   useFormContext,
 } from "@repo/ui/components/form";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
 import { Ambulance } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useRouter } from "~/hooks/use-router";
@@ -100,10 +101,16 @@ export function HealthHistory({
     },
   });
   const form = useForm({
-    schema: schemaForm,
+    resolver: zodResolver(schemaForm),
     defaultValues: {
       hasAdd: issue?.hasAdd ?? false,
       addNotes: issue?.addNotes ?? "",
+      hospitalizationIssues: issue?.hospitalizationIssues ?? false,
+      hospitalizationNotes: issue?.hospitalizationNotes ?? "",
+      internalObservations: issue?.internalObservations ?? "",
+      observations: issue?.observations ?? "",
+      hasVisionProblems: issue?.hasVisionProblems ?? false,
+      visionProblemsNotes: issue?.visionProblemsNotes ?? "",
       hasAllergies: issue?.hasAllergies ?? false,
       frequentHeadaches: issue?.frequentHeadaches ?? false,
       frequentHeadachesNotes: issue?.frequentHeadachesNotes ?? "",

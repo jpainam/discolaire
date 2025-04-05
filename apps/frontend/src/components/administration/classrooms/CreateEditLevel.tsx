@@ -10,12 +10,13 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { api } from "~/trpc/react";
 
 const createLevelSchema = z.object({
@@ -32,7 +33,7 @@ export function CreateEditLevel({
   order?: number;
 }) {
   const form = useForm({
-    schema: createLevelSchema,
+    resolver: zodResolver(createLevelSchema),
     defaultValues: {
       name: name ?? "",
       order: order ? `${order}` : "0",

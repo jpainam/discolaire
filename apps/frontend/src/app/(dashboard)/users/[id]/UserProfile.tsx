@@ -1,4 +1,5 @@
 "use client";
+import { zodResolver } from "@hookform/resolvers/zod";
 import type { RouterOutputs } from "@repo/api";
 import {
   Avatar,
@@ -21,10 +22,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { t } from "i18next";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { api } from "~/trpc/react";
@@ -40,7 +41,7 @@ export function UserProfile({
   user: NonNullable<RouterOutputs["user"]["get"]>;
 }) {
   const form = useForm({
-    schema: usernameSchema,
+    resolver: zodResolver(usernameSchema),
     defaultValues: {
       name: user.name ?? "",
       email: user.email ?? "",

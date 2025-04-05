@@ -14,13 +14,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Textarea } from "@repo/ui/components/textarea";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { SheetClose, SheetFooter } from "@repo/ui/components/sheet";
+import { useForm } from "react-hook-form";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { DatePicker } from "../DatePicker";
@@ -62,7 +63,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
   const { closeSheet } = useSheet();
 
   const form = useForm({
-    schema: staffCreateEditSchema,
+    resolver: zodResolver(staffCreateEditSchema),
     defaultValues: {
       prefix: staff?.prefix ?? "",
       firstName: staff?.firstName ?? "",

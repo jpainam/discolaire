@@ -11,13 +11,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Textarea } from "@repo/ui/components/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
@@ -38,7 +39,7 @@ export function JustifyAbsence({
 
   const utils = api.useUtils();
   const form = useForm({
-    schema: justifySchema,
+    resolver: zodResolver(justifySchema),
     defaultValues: {
       reason: "",
       comment: "",

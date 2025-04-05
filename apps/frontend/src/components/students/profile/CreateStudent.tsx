@@ -6,10 +6,12 @@ import { z } from "zod";
 
 import { StudentStatus } from "@repo/db";
 import { Button } from "@repo/ui/components/button";
-import { Form, useForm } from "@repo/ui/components/form";
+import { Form } from "@repo/ui/components/form";
 
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
@@ -48,7 +50,7 @@ const createUpdateStudentSchema = z.object({
       z.object({
         label: z.string(),
         value: z.string(),
-      }),
+      })
     )
     .optional(),
   sports: z
@@ -56,7 +58,7 @@ const createUpdateStudentSchema = z.object({
       z.object({
         label: z.string(),
         value: z.string(),
-      }),
+      })
     )
     .optional(),
   classroom: z.string().optional(),
@@ -66,9 +68,11 @@ export function CreateStudent() {
   const { t } = useLocale();
 
   const form = useForm({
-    schema: createUpdateStudentSchema,
+    resolver: zodResolver(createUpdateStudentSchema),
     defaultValues: {
       registrationNumber: "",
+      id: "",
+      tags: [],
       firstName: "",
       lastName: "",
       dateOfBirth: new Date(),
@@ -76,7 +80,7 @@ export function CreateStudent() {
       gender: "male",
       residence: "",
       phoneNumber: "",
-      isRepeating: "no",
+      isRepeating: "no" as const,
       isNew: true,
       email: "",
       countryId: "",

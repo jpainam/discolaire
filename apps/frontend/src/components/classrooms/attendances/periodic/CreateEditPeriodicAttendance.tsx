@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { Form, useForm, useFormContext } from "@repo/ui/components/form";
+import { Form, useFormContext } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import {
   Table,
@@ -19,6 +19,8 @@ import {
 } from "@repo/ui/components/table";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
@@ -35,7 +37,7 @@ const attendanceSchema = z.object({
       consigne: z.string().optional(),
       exclusion: z.string().optional(),
       chatter: z.string().optional(),
-    }),
+    })
   ),
 });
 type ClassroomStudent = RouterOutputs["classroom"]["students"][number];
@@ -49,7 +51,7 @@ export function CreateEditPeridicAttendance({
   const [termId] = useQueryState("term", parseAsInteger);
 
   const form = useForm({
-    schema: attendanceSchema,
+    resolver: zodResolver(attendanceSchema),
     defaultValues: {
       students: students.map((student) => ({
         id: student.id,
@@ -70,7 +72,7 @@ export function CreateEditPeridicAttendance({
     onSuccess: () => {
       toast.success(t("added_successfully"), { id: 0 });
       router.push(
-        `${routes.classrooms.attendances.index(params.id)}/periodic?type=periodic`,
+        `${routes.classrooms.attendances.index(params.id)}/periodic?type=periodic`
       );
     },
     onError: (error) => {

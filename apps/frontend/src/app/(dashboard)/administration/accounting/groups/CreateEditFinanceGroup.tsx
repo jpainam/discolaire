@@ -11,13 +11,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
@@ -38,7 +39,7 @@ export function CreateEditFinanceGroup({
   value?: number;
 }) {
   const form = useForm({
-    schema: createFinanceGroupSchema,
+    resolver: zodResolver(createFinanceGroupSchema),
     defaultValues: {
       name: name ?? "",
       type: type ?? ("AMOUNT" as const),

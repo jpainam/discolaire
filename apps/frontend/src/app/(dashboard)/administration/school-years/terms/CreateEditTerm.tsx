@@ -12,17 +12,19 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Switch } from "@repo/ui/components/switch";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { DatePicker } from "~/components/DatePicker";
 import { api } from "~/trpc/react";
 
 type Term = RouterOutputs["term"]["all"][number];
+
 const createEditTermSchema = z.object({
   name: z.string().min(1),
   startDate: z.coerce.date(),
@@ -31,12 +33,12 @@ const createEditTermSchema = z.object({
 });
 export function CreateEditTerm({ term }: { term?: Term }) {
   const form = useForm({
-    schema: createEditTermSchema,
+    resolver: zodResolver(createEditTermSchema),
     defaultValues: {
-      name: term?.name,
+      name: term?.name ?? "",
       startDate: term?.startDate ?? new Date(),
       endDate: term?.endDate ?? new Date(),
-      isActive: term?.isActive,
+      isActive: term?.isActive ?? true,
     },
   });
   const utils = api.useUtils();
@@ -137,7 +139,7 @@ export function CreateEditTerm({ term }: { term?: Term }) {
                   id="isActive"
                   name="isActive"
                   onCheckedChange={field.onChange}
-                  defaultChecked={form.getValues("isActive") ?? false}
+                  defaultChecked={form.getValues("isActive")}
                 />
               </FormControl>
 

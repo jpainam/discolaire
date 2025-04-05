@@ -14,13 +14,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { CourseSelector } from "~/components/shared/selects/CourseSelector";
 import { StaffSelector } from "~/components/shared/selects/StaffSelector";
 import rangeMap from "~/lib/range-map";
@@ -44,7 +45,7 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
   const utils = api.useUtils();
 
   const form = useForm({
-    schema: createEditSubjectSchema,
+    resolver: zodResolver(createEditSubjectSchema),
     defaultValues: {
       courseId: subject?.courseId.toString() ?? "",
       teacherId: subject?.teacherId?.toString() ?? "",

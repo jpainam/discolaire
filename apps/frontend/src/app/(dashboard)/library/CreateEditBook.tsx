@@ -8,6 +8,7 @@ import { Button } from "@repo/ui/components/button";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -15,7 +16,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import {
@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { SheetClose, SheetFooter } from "@repo/ui/components/sheet";
+import { useForm } from "react-hook-form";
 import { api } from "~/trpc/react";
 const updateBookSchema = z.object({
   title: z.string().trim().min(1),
@@ -46,7 +47,7 @@ export function CreateEditBook({
   const { t } = useLocale();
 
   const form = useForm({
-    schema: updateBookSchema,
+    resolver: zodResolver(updateBookSchema),
     defaultValues: {
       title: book?.title ?? "",
       description: book?.description ?? "",

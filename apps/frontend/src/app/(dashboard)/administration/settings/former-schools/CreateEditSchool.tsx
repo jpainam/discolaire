@@ -11,13 +11,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { decode } from "entities";
+import { useForm } from "react-hook-form";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 
@@ -26,7 +27,7 @@ const createSchoolSchema = z.object({
 });
 export function CreateEditSchool({ id, name }: { id?: string; name?: string }) {
   const form = useForm({
-    schema: createSchoolSchema,
+    resolver: zodResolver(createSchoolSchema),
     defaultValues: {
       name: name ? decode(name) : "",
     },

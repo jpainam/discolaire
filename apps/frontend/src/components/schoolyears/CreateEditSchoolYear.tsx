@@ -12,12 +12,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { DatePicker } from "~/components/DatePicker";
 import { api } from "~/trpc/react";
 
@@ -43,7 +44,7 @@ export function CreateEditSchoolYear({
 }: CreateEditSchoolYearProps) {
   const { t } = useLocale();
   const form = useForm({
-    schema: schoolYearSchema,
+    resolver: zodResolver(schoolYearSchema),
     defaultValues: {
       start: startDate ?? new Date(),
       end: endDate ?? new Date(),

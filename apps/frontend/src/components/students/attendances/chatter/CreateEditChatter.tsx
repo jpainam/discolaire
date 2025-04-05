@@ -14,12 +14,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { DatePicker } from "~/components/DatePicker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { api } from "~/trpc/react";
@@ -35,10 +36,11 @@ export function CreateEditChatter({
   chatter?: RouterOutputs["chatter"]["all"][number];
 }) {
   const form = useForm({
-    schema: schema,
+    resolver: zodResolver(schema),
     defaultValues: {
       date: chatter?.date ?? new Date(),
       value: chatter?.value ?? 1,
+      termId: chatter?.termId ? `${chatter.termId}` : "",
     },
   });
   const utils = api.useUtils();

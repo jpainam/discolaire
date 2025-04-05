@@ -22,7 +22,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
@@ -32,6 +31,8 @@ import { useUpload } from "~/hooks/use-upload";
 import { useLocale } from "~/i18n";
 import { FileUploader } from "~/uploads/file-uploader";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { DatePicker } from "~/components/DatePicker";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
@@ -64,9 +65,11 @@ export function CreateEditHealthVisit({
   const studentQuery = api.student.get.useQuery(params.id);
   const student = studentQuery.data;
   const form = useForm({
-    schema: createEditVisitSchema,
+    resolver: zodResolver(createEditVisitSchema),
     defaultValues: {
       date: healthVisit?.date ?? new Date(),
+      notify: true,
+
       complaint: healthVisit?.complaint ?? "",
       signs: healthVisit?.signs ?? "",
       examination: healthVisit?.examination ?? "",
@@ -84,11 +87,11 @@ export function CreateEditHealthVisit({
 
   useEffect(() => {
     if (uploadedFiles.length > 0) {
-      const urls = uploadedFiles
+      const urls: string[] = uploadedFiles
         .map((file) => file.data?.id)
         .filter((url) => url !== undefined);
       //console.log("The attachments", urls);
-      form.setValue("attachments", urls);
+      form.setValue("attachments", urls as never);
     }
   }, [form, uploadedFiles]);
 
@@ -108,7 +111,7 @@ export function CreateEditHealthVisit({
         error: (err) => {
           return getErrorMessage(err);
         },
-      },
+      }
     );
   };
 

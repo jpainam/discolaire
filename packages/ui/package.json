@@ -20,7 +20,7 @@
   },
   "prettier": "@repo/prettier-config",
   "dependencies": {
-    "@hookform/resolvers": "^3.10.0",
+    "@hookform/resolvers": "^5.0.1",
     "@radix-ui/react-accessible-icon": "^1.1.2",
     "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-alert-dialog": "^1.1.6",
@@ -61,7 +61,7 @@
     "react": "catalog:",
     "react-day-picker": "^9.6.3",
     "react-dom": "catalog:",
-    "react-hook-form": "^7.54.2",
+    "react-hook-form": "^7.55.0",
     "react-resizable-panels": "^2.1.7",
     "recharts": "^2.15.1",
     "remixicons": "^4.6.1",

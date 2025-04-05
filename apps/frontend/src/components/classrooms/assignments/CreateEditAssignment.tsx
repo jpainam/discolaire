@@ -14,13 +14,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { useLocale } from "~/i18n";
 import { FileUploader } from "~/uploads/file-uploader";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { DatePicker } from "~/components/DatePicker";
 import { DateRangePicker } from "~/components/shared/DateRangePicker";
 import { AssignmentCategorySelector } from "~/components/shared/selects/AssignmentCategorySelector";
@@ -64,8 +65,11 @@ export function CreateEditAssignment({
 }) {
   const params = useParams<{ id: string }>();
   const form = useForm({
-    schema: assignmentSchema,
+    resolver: zodResolver(assignmentSchema),
     defaultValues: {
+      id: assignment?.id ?? "",
+      subjectId: assignment?.subjectId ?? 0,
+      attachments: assignment?.attachments ?? [],
       title: assignment?.title ?? "",
       termId: `${assignment?.termId}`,
       categoryId: assignment?.categoryId ?? "",
@@ -374,17 +378,14 @@ export function CreateEditAssignment({
                         >
                           <FormControl>
                             <Checkbox
-                              checked={field.value?.includes(item.value)}
+                              checked={field.value.includes(item.value)}
                               onCheckedChange={(checked) => {
                                 return checked
-                                  ? field.onChange([
-                                      ...(field.value ?? []),
-                                      item.value,
-                                    ])
+                                  ? field.onChange([...field.value, item.value])
                                   : field.onChange(
-                                      field.value?.filter(
-                                        (value) => value !== item.value,
-                                      ),
+                                      field.value.filter(
+                                        (value) => value !== item.value
+                                      )
                                     );
                               }}
                             />

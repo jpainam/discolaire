@@ -19,7 +19,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Textarea } from "@repo/ui/components/textarea";
@@ -28,6 +27,8 @@ import { useUpload } from "~/hooks/use-upload";
 import { useLocale } from "~/i18n";
 import { FileUploader } from "~/uploads/file-uploader";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { api } from "~/trpc/react";
 
 const preventSchema = z.object({
@@ -40,12 +41,13 @@ const preventSchema = z.object({
 export function PreventAbsence({ studentId }: { studentId: string }) {
   const { closeModal } = useModal();
   const form = useForm({
-    schema: preventSchema,
+    resolver: zodResolver(preventSchema),
     defaultValues: {
       from: new Date().toISOString(),
       to: new Date().toISOString(),
       attachment: "",
       observation: "",
+      reason: "",
     },
   });
 

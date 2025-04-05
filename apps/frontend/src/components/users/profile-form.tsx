@@ -13,7 +13,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import {
@@ -25,6 +24,8 @@ import {
 } from "@repo/ui/components/select";
 import { Textarea } from "@repo/ui/components/textarea";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { useSession } from "~/providers/AuthProvider";
 
 //import { toast } from "~/registry/new-york/ui/use-toast";
@@ -48,26 +49,25 @@ const profileFormSchema = z.object({
     .array(
       z.object({
         value: z.string().url({ message: "Please enter a valid URL." }),
-      }),
+      })
     )
     .optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
-// This can come from your database or API.
-const defaultValues: Partial<ProfileFormValues> = {
-  bio: "I own a computer.",
-  urls: [
-    { value: "https://shadcn.com" },
-    { value: "http://twitter.com/shadcn" },
-  ],
-};
-
 export function ProfileForm() {
   const form = useForm({
-    schema: profileFormSchema,
-    defaultValues,
+    resolver: zodResolver(profileFormSchema),
+    defaultValues: {
+      bio: "I own a computer.",
+      username: "shadcn",
+      email: "",
+      urls: [
+        { value: "https://shadcn.com" },
+        { value: "http://twitter.com/shadcn" },
+      ],
+    },
     mode: "onChange",
   });
 

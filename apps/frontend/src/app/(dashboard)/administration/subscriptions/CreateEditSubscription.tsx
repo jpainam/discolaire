@@ -1,5 +1,6 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import {
@@ -9,9 +10,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { UserSelector } from "~/components/shared/selects/UserSelector";
 import { useModal } from "~/hooks/use-modal";
@@ -27,8 +28,16 @@ const formSchema = z.object({
 });
 export function CreateEditSubscription() {
   const form = useForm({
-    schema: formSchema,
-    defaultValues: {},
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      userId: "",
+      emails: 0,
+      unlimitedEmails: false,
+      sms: 0,
+      unlimitedSms: false,
+      whatsapp: 0,
+      unlimitedWhatsapp: false,
+    },
   });
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     console.log(data);

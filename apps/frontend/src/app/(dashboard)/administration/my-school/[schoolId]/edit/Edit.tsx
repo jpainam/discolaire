@@ -5,9 +5,11 @@ import * as z from "zod";
 
 import type { School } from "@repo/db";
 import { Button } from "@repo/ui/components/button";
-import { Form, useForm } from "@repo/ui/components/form";
+import { Form } from "@repo/ui/components/form";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { useRouter } from "~/hooks/use-router";
 import { api } from "~/trpc/react";
 import { CreateEditSchoolForm } from "./CreateEditSchoolForm";
@@ -46,7 +48,7 @@ export default function Edit({ school }: { school: School }) {
   });
 
   const form = useForm({
-    schema: formSchema,
+    resolver: zodResolver(formSchema),
     defaultValues: {
       name: school.name,
       authorization: school.authorization ?? "",

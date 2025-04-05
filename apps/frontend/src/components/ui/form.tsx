@@ -1,43 +1,18 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import type * as LabelPrimitive from "@radix-ui/react-label";
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
-import type {
-  ControllerProps,
-  FieldPath,
-  FieldValues,
-  UseFormProps,
-} from "react-hook-form";
+import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form";
 import {
-  useForm as __useForm,
   Controller,
   FormProvider,
   useFormContext,
   useFormState,
 } from "react-hook-form";
-import type { ZodType, ZodTypeDef } from "zod";
 
 import { cn } from "@repo/ui/lib/utils";
 import { Label } from "./label";
-
-const useForm = <
-  TOut extends FieldValues,
-  TDef extends ZodTypeDef,
-  TIn extends FieldValues,
->(
-  props: Omit<UseFormProps<TIn>, "resolver"> & {
-    schema: ZodType<TOut, TDef, TIn>;
-  },
-) => {
-  const form = __useForm<TIn, unknown, TOut>({
-    ...props,
-    resolver: zodResolver(props.schema, undefined),
-  });
-
-  return form;
-};
 
 const Form = FormProvider;
 
@@ -49,7 +24,7 @@ interface FormFieldContextValue<
 }
 
 const FormFieldContext = React.createContext<FormFieldContextValue>(
-  {} as FormFieldContextValue,
+  {} as FormFieldContextValue
 );
 
 const FormField = <
@@ -94,7 +69,7 @@ interface FormItemContextValue {
 }
 
 const FormItemContext = React.createContext<FormItemContextValue>(
-  {} as FormItemContextValue,
+  {} as FormItemContextValue
 );
 
 function FormItem({ className, ...props }: React.ComponentProps<"div">) {
@@ -188,7 +163,6 @@ export {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
   useFormContext,
   useFormField,
 };

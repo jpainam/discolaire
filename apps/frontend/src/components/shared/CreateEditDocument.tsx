@@ -13,7 +13,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Textarea } from "@repo/ui/components/textarea";
@@ -22,6 +21,8 @@ import { useUpload } from "~/hooks/use-upload";
 import { useLocale } from "~/i18n";
 import { FileUploader } from "~/uploads/file-uploader";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { useSchool } from "~/providers/SchoolProvider";
@@ -46,9 +47,10 @@ export function CreateEditDocument({
   ownerId: string;
 }) {
   const form = useForm({
-    schema: createEditDocumentSchema,
+    resolver: zodResolver(createEditDocumentSchema),
     defaultValues: {
       title: title ?? "",
+
       description: description ?? "",
       url: url ?? "",
     },
@@ -114,7 +116,7 @@ export function CreateEditDocument({
     if (uploadedFiles.length > 0) {
       const uploadedFile = uploadedFiles[0];
       const url = uploadedFile?.data?.id;
-      form.setValue("url", url);
+      form.setValue("url", url ?? "");
     }
   }, [form, uploadedFiles]);
 
@@ -133,7 +135,7 @@ export function CreateEditDocument({
         error: (err) => {
           return getErrorMessage(err);
         },
-      },
+      }
     );
   };
   return (

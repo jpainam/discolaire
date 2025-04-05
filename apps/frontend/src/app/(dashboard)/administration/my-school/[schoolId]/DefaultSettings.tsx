@@ -13,7 +13,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import {
@@ -26,6 +25,8 @@ import {
 import { Switch } from "@repo/ui/components/switch";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { CountryPicker } from "~/components/shared/CountryPicker";
 import { routes } from "~/configs/routes";
 import { timezones } from "~/data/timezones";
@@ -49,7 +50,7 @@ export function DefaultSettings({
   const params = useParams<{ schoolId: string }>();
   const utils = api.useUtils();
   const form = useForm({
-    schema: defaultSettingsSchema,
+    resolver: zodResolver(defaultSettingsSchema),
     defaultValues: {
       defaultCountryId: school.defaultCountryId ?? "",
       applyRequiredFee: school.applyRequiredFee,

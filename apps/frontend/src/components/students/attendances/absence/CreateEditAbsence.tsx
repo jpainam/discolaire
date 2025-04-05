@@ -14,13 +14,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams } from "next/navigation";
+import { useForm } from "react-hook-form";
 import { DatePicker } from "~/components/DatePicker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { getErrorMessage } from "~/lib/handle-error";
@@ -41,10 +42,11 @@ export function CreateEditAbsence({
   classroomId: string;
 }) {
   const form = useForm({
-    schema: schema,
+    resolver: zodResolver(schema),
     defaultValues: {
       date: absence?.date ?? new Date(),
       value: absence?.value ?? 1,
+      termId: absence?.termId ? `${absence.termId}` : "",
       justify: absence?.justification?.value ?? 0,
       notify: true,
     },
@@ -113,7 +115,7 @@ export function CreateEditAbsence({
                 });
             }
           },
-        },
+        }
       );
     }
   };

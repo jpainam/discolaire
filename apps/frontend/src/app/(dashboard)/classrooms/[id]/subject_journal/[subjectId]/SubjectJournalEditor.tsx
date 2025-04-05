@@ -17,7 +17,6 @@ import {
   FormField,
   FormItem,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import {
@@ -32,6 +31,7 @@ import { Textarea } from "@repo/ui/components/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import type { RouterOutputs } from "@repo/api";
 import { Calendar } from "@repo/ui/components/calendar";
 import {
@@ -39,6 +39,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { TiptapEditor } from "~/components/tiptap-editor";
 import { useRouter } from "~/hooks/use-router";
@@ -99,7 +100,7 @@ export function SubjectJournalEditor({
     day: "numeric",
   });
   const form = useForm({
-    schema: createSubjectJournalSchema,
+    resolver: zodResolver(createSubjectJournalSchema),
     defaultValues: {
       title: t("subject_journal_default_title", {
         date: dateFormat.format(new Date()),
@@ -109,7 +110,7 @@ export function SubjectJournalEditor({
     },
   });
   const handleSubmit = async (
-    data: z.infer<typeof createSubjectJournalSchema>,
+    data: z.infer<typeof createSubjectJournalSchema>
   ) => {
     let attachment = "";
     if (selectedFile) {

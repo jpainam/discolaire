@@ -3,10 +3,12 @@
 import { z } from "zod";
 
 import { Button } from "@repo/ui/components/button";
-import { Form, useForm } from "@repo/ui/components/form";
+import { Form } from "@repo/ui/components/form";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import PrintSelector from "./print-selector";
@@ -45,11 +47,16 @@ export default function PrintForm() {
   const { t } = useLocale();
 
   const form = useForm({
-    schema: printFormSchema,
+    resolver: zodResolver(printFormSchema),
     defaultValues: {
-      type: "pdf",
+      type: "pdf" as const,
+      print: "absences",
+      start_date: new Date(),
+      end_date: new Date(),
+      // start: "Maintenant",
+      // start_date: new Date(),
       date: new Date(),
-      start: "Maintenant",
+      start: "Maintenant" as const,
       school_year: "2022-2023",
     },
   });

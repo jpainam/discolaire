@@ -12,7 +12,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import {
@@ -24,9 +23,11 @@ import {
 } from "@repo/ui/components/select";
 import { useLocale } from "~/i18n";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import { Label } from "@repo/ui/components/label";
 import i18next from "i18next";
+import { useForm } from "react-hook-form";
 import { CURRENCY } from "~/lib/constants";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useCreateTransaction } from "./CreateTransactionContextProvider";
@@ -62,14 +63,14 @@ export function Step1() {
       transactionType: transactionType ?? "",
       paymentMethod: paymentMethod ?? "",
     },
-    schema: makePaymentFormSchema,
+    resolver: zodResolver(makePaymentFormSchema),
   });
   const { t } = useLocale();
 
   function onSubmit(data: z.infer<typeof makePaymentFormSchema>) {
     if (school.applyRequiredFee === "YES") {
       const missingFees = unpaidRequiredFees.filter(
-        (fee) => !requiredFeeIds.includes(fee.id),
+        (fee) => !requiredFeeIds.includes(fee.id)
       );
       if (missingFees.length !== 0) {
         toast.error(t("required_fee_warning"));
@@ -106,7 +107,7 @@ export function Step1() {
                       setRequiredFeeIds([...requiredFeeIds, fee.id]);
                     } else {
                       setRequiredFeeIds(
-                        requiredFeeIds.filter((i) => i !== fee.id),
+                        requiredFeeIds.filter((i) => i !== fee.id)
                       );
                     }
                   }}

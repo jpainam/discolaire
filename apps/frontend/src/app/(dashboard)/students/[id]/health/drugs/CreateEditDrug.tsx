@@ -1,5 +1,6 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -9,9 +10,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useModal } from "~/hooks/use-modal";
@@ -32,7 +33,7 @@ export function CreateEditDrug({
   studentId: string;
 }) {
   const form = useForm({
-    schema: formSchema,
+    resolver: zodResolver(formSchema),
     defaultValues: {
       name: drug?.name ?? "",
       description: drug?.description ?? "",
