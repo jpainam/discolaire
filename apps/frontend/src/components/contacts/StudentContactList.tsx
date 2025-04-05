@@ -71,6 +71,7 @@ export default function StudentContactList({
       {contactQuery.data && canCreateContact && (
         <Button
           className="w-fit"
+          size={"sm"}
           onClick={() => {
             const contact = contactQuery.data;
 
