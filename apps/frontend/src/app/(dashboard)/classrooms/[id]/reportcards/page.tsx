@@ -11,12 +11,15 @@ import { EmptyState } from "~/components/EmptyState";
 import FlatBadge from "~/components/FlatBadge";
 import { getServerTranslations } from "~/i18n/server";
 //import { ReportCardTable } from "~/components/classrooms/reportcards/ReportCardTable2";
+import { Button } from "@repo/ui/components/button";
+import { Label } from "@repo/ui/components/label";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
 import { cn } from "@repo/ui/lib/utils";
+import { Printer } from "lucide-react";
 import Link from "next/link";
 import { AvatarState } from "~/components/AvatarState";
 import { api, caller } from "~/trpc/server";
@@ -44,6 +47,7 @@ export default async function Page(props: {
   });
 
   const classroom = await caller.classroom.get(params.id);
+  const term = await caller.term.get(Number(termId));
   const subjects = await api.classroom.subjects(params.id);
   const students = await api.classroom.students(params.id);
   const studentsMap = new Map(students.map((s) => [s.id, s]));
@@ -63,7 +67,10 @@ export default async function Page(props: {
   const { t } = await getServerTranslations();
   return (
     <div className="flex w-full flex-col gap-2 text-sm mb-10">
-      <div className="grid flex-row items-center gap-4 px-2 md:flex">
+      <div className="grid flex-row items-center gap-4 px-4 md:flex">
+        <Label className="uppercase font-bold">
+          BULLETIN SCOLAIRE : {term?.name}
+        </Label>
         <FlatBadge variant={"green"}>
           {t("Moy.Max")} :{Math.max(...averages).toFixed(2)}
         </FlatBadge>
@@ -82,6 +89,16 @@ export default async function Page(props: {
         <FlatBadge variant={"gray"}>
           {t("appreciation")} : {getAppreciations(average)}
         </FlatBadge>
+        <Link
+          className="ml-auto"
+          href={`/api/pdfs/reportcards/ipbw?classroomId=${params.id}&termId=${termId}`}
+          target="_blank"
+        >
+          <Button size={"sm"}>
+            <Printer />
+            {t("print")}
+          </Button>
+        </Link>
       </div>
       <Separator />
       <div className="px-4">
@@ -153,7 +170,7 @@ export default async function Page(props: {
                       .sort((a, b) => a.order - b.order)
                       .map((subject, index) => {
                         const g = studentReport.studentCourses.find(
-                          (c) => c.subjectId === subject.id,
+                          (c) => c.subjectId === subject.id
                         )?.average;
                         return (
                           <TableCell
@@ -164,7 +181,7 @@ export default async function Page(props: {
                                 ? "!bg-red-50 dark:!bg-red-800"
                                 : (g ?? 0) < 15
                                   ? "!bg-yellow-50 dark:!bg-yellow-800"
-                                  : "!bg-green-50 dark:!bg-green-800",
+                                  : "!bg-green-50 dark:!bg-green-800"
                             )}
                           >
                             {g ? g.toFixed(2) : "-"}
