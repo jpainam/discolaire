@@ -20,12 +20,12 @@ export function StudentGrade({ classroomId }: { classroomId: string }) {
   const params = useParams<{ id: string }>();
   const trpc = useTRPC();
   const { data: moyMinMaxGrades } = useSuspenseQuery(
-    trpc.classroom.getMinMaxMoyGrades.queryOptions(classroomId)
+    trpc.classroom.getMinMaxMoyGrades.queryOptions(classroomId),
   );
   const { data: grades } = useSuspenseQuery(
     trpc.student.grades.queryOptions({
       id: params.id,
-    })
+    }),
   );
 
   const [term] = useQueryState("term", parseAsInteger);
@@ -43,7 +43,7 @@ export function StudentGrade({ classroomId }: { classroomId: string }) {
     let filteredGrades = grades;
     if (term) {
       filteredGrades = grades.filter(
-        (g) => g.gradeSheet.termId === Number(term)
+        (g) => g.gradeSheet.termId === Number(term),
       );
     }
 
@@ -52,7 +52,7 @@ export function StudentGrade({ classroomId }: { classroomId: string }) {
         ? _.sortBy(filteredGrades, (grade) => grade.grade)
         : _.sortBy(
             filteredGrades,
-            (grade) => grade.gradeSheet.subject.course.name
+            (grade) => grade.gradeSheet.subject.course.name,
           );
 
     return sortOrder === "desc" ? sorted.reverse() : sorted;
@@ -67,7 +67,7 @@ export function StudentGrade({ classroomId }: { classroomId: string }) {
         setSortOrder("asc");
       }
     },
-    [orderBy, sortOrder, setOrderBy, setSortOrder]
+    [orderBy, sortOrder, setOrderBy, setSortOrder],
   );
 
   return (
