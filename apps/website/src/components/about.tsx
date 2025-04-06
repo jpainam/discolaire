@@ -131,7 +131,7 @@ export default function AboutPage() {
                       alt={testimonials[activeTestimonial]?.name ?? "Unknown"}
                     />
                     <AvatarFallback className="bg-zinc-800 text-zinc-300">
-                      {testimonials[activeTestimonial]?.name?.charAt(0) ?? ""}
+                      {testimonials[activeTestimonial]?.name.charAt(0) ?? ""}
                     </AvatarFallback>
                   </Avatar>
                   <div>

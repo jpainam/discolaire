@@ -74,9 +74,8 @@ export const transactionService = {
       },
     });
     let contact = studentContact.find((c) => c.primaryContact)?.contact;
-    if (!contact) {
-      contact = studentContact[0]?.contact;
-    }
+
+    contact ??= studentContact[0]?.contact;
 
     return {
       student: transaction.account.student,
