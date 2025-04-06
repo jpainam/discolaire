@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import { cn } from "@repo/ui/lib/utils";
 import { Suspense } from "react";
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
@@ -100,24 +101,12 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                 return (
                   <TableRow key={index}>
                     <TableCell className="font-medium">{row.subject}</TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {row.grade1?.toFixed(2)}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {row.grade2?.toFixed(2)}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {row.grade3?.toFixed(2)}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {row.grade4?.toFixed(2)}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {row.grade5?.toFixed(2)}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {row.grade6?.toFixed(2)}
-                    </TableCell>
+                    <Cell grade={row.grade1} />
+                    <Cell grade={row.grade2} />
+                    <Cell grade={row.grade3} />
+                    <Cell grade={row.grade4} />
+                    <Cell grade={row.grade5} />
+                    <Cell grade={row.grade6} />
                     <TableCell className="text-muted-foreground">
                       {avgText}
                     </TableCell>
@@ -132,5 +121,21 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         </div>
       </Suspense>
     </div>
+  );
+}
+
+function Cell({ grade }: { grade?: number | null }) {
+  const g = grade ?? 0;
+  const gradeText = g > 0 ? g.toFixed(2) : "";
+  return (
+    <TableCell
+      className={cn(
+        "text-muted-foreground",
+        g >= 18 ? "text-green-500" : "",
+        g < 10 ? "text-red-500" : ""
+      )}
+    >
+      {gradeText}
+    </TableCell>
   );
 }

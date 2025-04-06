@@ -4,7 +4,6 @@ import { LayoutGridIcon, ListIcon, MoreVertical, Trash2 } from "lucide-react";
 import { parseAsInteger, useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 
-import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -20,7 +19,11 @@ import FlatBadge from "~/components/FlatBadge";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import PDFIcon from "~/components/icons/pdf-solid";
@@ -32,32 +35,30 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { api, useTRPC } from "~/trpc/react";
 
-export function StudentGradeHeader({
-  student,
-  classroomId,
-}: {
-  student: RouterOutputs["student"]["get"];
-  classroomId: string;
-}) {
+export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
   const { t } = useLocale();
   const trpc = useTRPC();
+  const params = useParams<{ gradeId: string; id: string }>();
+  const { data: student } = useSuspenseQuery(
+    trpc.student.get.queryOptions(params.id)
+  );
   // const searchParams = useSearchParams();
   const [term] = useQueryState("term", parseAsInteger);
   const [view, setView] = useQueryState("view", {
     defaultValue: "by_chronological_order",
   });
   const router = useRouter();
-  const studentGradesQuery = useQuery(
+  const { data: grades } = useSuspenseQuery(
     trpc.student.grades.queryOptions({
       id: student.id,
       termId: term ? Number(term) : undefined,
-    }),
+    })
   );
 
   const queryClient = useQueryClient();
   const canDeleteGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const confirm = useConfirm();
   const deleteGradeMutation = useMutation(
@@ -70,9 +71,8 @@ export function StudentGradeHeader({
         await queryClient.invalidateQueries(trpc.student.grades.pathFilter());
         router.push(`/students/${student.id}/grades`);
       },
-    }),
+    })
   );
-  const params = useParams<{ gradeId: string; id: string }>();
 
   const [studentAvg, setStudentAvg] = useState<number | null>(null);
   const [classroomAvg, setClassroomAvg] = useState<number | null>(null);
@@ -100,9 +100,9 @@ export function StudentGradeHeader({
   useEffect(() => {
     let gradeSum = 0;
     let coeffSum = 0;
-    if (!studentGradesQuery.data) return;
+
     if (term) {
-      studentGradesQuery.data.forEach((grade) => {
+      grades.forEach((grade) => {
         if (grade.gradeSheet.termId == Number(term)) {
           gradeSum += grade.grade * grade.gradeSheet.subject.coefficient;
           coeffSum += grade.gradeSheet.subject.coefficient;
@@ -112,7 +112,7 @@ export function StudentGradeHeader({
     } else {
       setStudentAvg(null);
     }
-  }, [studentGradesQuery.data, term]);
+  }, [grades, term]);
 
   const { createQueryString } = useCreateQueryString();
 
@@ -137,7 +137,7 @@ export function StudentGradeHeader({
               "?" +
                 createQueryString({
                   term: val,
-                }),
+                })
             );
           }}
           defaultValue={term ? `${term}` : undefined}
@@ -187,7 +187,7 @@ export function StudentGradeHeader({
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/student/grades/?id=${student.id}&format=pdf`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >
@@ -197,7 +197,7 @@ export function StudentGradeHeader({
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/student/grades/?id=${student.id}&format=csv`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >

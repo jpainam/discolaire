@@ -10,15 +10,24 @@ import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { EmptyState } from "~/components/EmptyState";
 import { useLocale } from "~/i18n";
 
-import type { RouterOutputs } from "@repo/api";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
+import { useTRPC } from "~/trpc/react";
 import { ByChronologicalOrder } from "./ByChronologicalOrder";
 import { BySubject } from "./BySubject";
 
-interface StudentGradeProps {
-  moyMinMaxGrades: RouterOutputs["classroom"]["getMinMaxMoyGrades"];
-  grades: RouterOutputs["student"]["grades"];
-}
-export function StudentGrade({ grades, moyMinMaxGrades }: StudentGradeProps) {
+export function StudentGrade({ classroomId }: { classroomId: string }) {
+  const params = useParams<{ id: string }>();
+  const trpc = useTRPC();
+  const { data: moyMinMaxGrades } = useSuspenseQuery(
+    trpc.classroom.getMinMaxMoyGrades.queryOptions(classroomId)
+  );
+  const { data: grades } = useSuspenseQuery(
+    trpc.student.grades.queryOptions({
+      id: params.id,
+    })
+  );
+
   const [term] = useQueryState("term", parseAsInteger);
 
   const [view] = useQueryState("view", {
@@ -34,7 +43,7 @@ export function StudentGrade({ grades, moyMinMaxGrades }: StudentGradeProps) {
     let filteredGrades = grades;
     if (term) {
       filteredGrades = grades.filter(
-        (g) => g.gradeSheet.termId === Number(term),
+        (g) => g.gradeSheet.termId === Number(term)
       );
     }
 
@@ -43,7 +52,7 @@ export function StudentGrade({ grades, moyMinMaxGrades }: StudentGradeProps) {
         ? _.sortBy(filteredGrades, (grade) => grade.grade)
         : _.sortBy(
             filteredGrades,
-            (grade) => grade.gradeSheet.subject.course.name,
+            (grade) => grade.gradeSheet.subject.course.name
           );
 
     return sortOrder === "desc" ? sorted.reverse() : sorted;
@@ -58,7 +67,7 @@ export function StudentGrade({ grades, moyMinMaxGrades }: StudentGradeProps) {
         setSortOrder("asc");
       }
     },
-    [orderBy, sortOrder, setOrderBy, setSortOrder],
+    [orderBy, sortOrder, setOrderBy, setSortOrder]
   );
 
   return (
