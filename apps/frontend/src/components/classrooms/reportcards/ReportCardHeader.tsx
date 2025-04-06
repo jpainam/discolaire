@@ -44,10 +44,11 @@ export function ReportCardHeader() {
         onChange={(val) => {
           router.push(
             `/classrooms/${params.id}/reportcards?` +
-              createQueryString({ termId: val, trimestreId: undefined }),
+              createQueryString({ termId: val, trimestreId: undefined })
           );
         }}
       />
+      <Label className="hidden md:block">{t("Trimestre")}</Label>
       <TrimestreSelector
         className="w-[300px]"
         defaultValue={searchParams.get("trimestreId") ?? undefined}

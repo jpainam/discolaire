@@ -25,7 +25,7 @@ export function TrimestreSelector({
       defaultValue={defaultValue}
     >
       <SelectTrigger className={cn("w-full", className)}>
-        <SelectValue placeholder="Choisir un trimestre/Annuell" />
+        <SelectValue placeholder="Choisir un Trimestre/Annuelle" />
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="trim1">Trimestre 1</SelectItem>
