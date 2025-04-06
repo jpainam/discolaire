@@ -1,4 +1,3 @@
-import { TRPCError } from "@trpc/server";
 import { subMonths } from "date-fns";
 import { z } from "zod";
 
@@ -25,32 +24,6 @@ const createUpdateSchema = z.object({
   phoneNumber2: z.string().optional(),
 });
 export const contactRouter = createTRPCRouter({
-  lastAccessed: protectedProcedure
-    .input(
-      z.object({
-        limit: z.number().optional().default(10),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      if (ctx.session.user.profile != "staff") {
-        throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "Unauthorized to access last contact as a non staff",
-        });
-      }
-      return ctx.db.contact.findMany({
-        take: input.limit,
-        include: {
-          user: true,
-        },
-        where: {
-          schoolId: ctx.schoolId,
-        },
-        orderBy: {
-          lastAccessed: "desc",
-        },
-      });
-    }),
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(async ({ ctx, input }) => {
@@ -127,55 +100,65 @@ export const contactRouter = createTRPCRouter({
     .query(async ({ input }) => {
       return contactService.getFromUserId(input);
     }),
-  all: protectedProcedure.query(async ({ ctx }) => {
-    if (ctx.session.user.profile == "contact") {
-      const contact = await contactService.getFromUserId(ctx.session.user.id);
-      const c = await ctx.db.contact.findUniqueOrThrow({
-        include: {
-          user: true,
-        },
-        where: {
-          id: contact.id,
-        },
-      });
-      return [c];
-    }
-    if (ctx.session.user.profile == "student") {
-      const student = await studentService.getFromUserId(ctx.session.user.id);
-      const studentContacts = await ctx.db.studentContact.findMany({
-        where: {
-          studentId: student.id,
-        },
-      });
-      const contactIds = studentContacts.map((sc) => sc.contactId);
-      return ctx.db.contact.findMany({
-        include: {
-          user: true,
-        },
-        where: {
-          id: {
-            in: contactIds,
+  all: protectedProcedure
+    .input(
+      z
+        .object({
+          limit: z.number().optional().default(50),
+        })
+        .optional(),
+    )
+    .query(async ({ ctx, input }) => {
+      if (ctx.session.user.profile == "contact") {
+        const contact = await contactService.getFromUserId(ctx.session.user.id);
+        const c = await ctx.db.contact.findUniqueOrThrow({
+          include: {
+            user: true,
           },
-        },
-      });
-    }
+          where: {
+            id: contact.id,
+          },
+        });
+        return [c];
+      }
+      if (ctx.session.user.profile == "student") {
+        const student = await studentService.getFromUserId(ctx.session.user.id);
+        const studentContacts = await ctx.db.studentContact.findMany({
+          where: {
+            studentId: student.id,
+          },
+        });
+        const contactIds = studentContacts.map((sc) => sc.contactId);
+        return ctx.db.contact.findMany({
+          include: {
+            user: true,
+          },
+          where: {
+            id: {
+              in: contactIds,
+            },
+          },
+        });
+      }
 
-    const canReadStaff = await checkPermission("staff", "Read");
-    if (!canReadStaff) {
-      return ctx.db.contact.findMany({
-        where: {
-          schoolId: ctx.schoolId,
-        },
-        include: {
-          user: true,
-        },
-        orderBy: {
-          lastName: "asc",
-        },
-      });
-    }
-    return [];
-  }),
+      const canReadStaff = await checkPermission("staff", "Read");
+      if (canReadStaff) {
+        return ctx.db.contact.findMany({
+          take: input?.limit ?? 50,
+          include: {
+            user: true,
+          },
+          where: {
+            schoolId: ctx.schoolId,
+          },
+          orderBy: {
+            lastAccessed: "desc",
+            //lastName: "asc",
+          },
+        });
+      }
+      return [];
+    }),
   students: protectedProcedure
     .input(z.string().min(1))
     .query(async ({ ctx, input }) => {
