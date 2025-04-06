@@ -28,7 +28,7 @@ export function ClassroomLevelHeader() {
   const { t } = useLocale();
   const { openModal } = useModal();
   const [selectedLevels, setSelectedLevels] = useAtom(
-    selectedClassroomLevelAtom
+    selectedClassroomLevelAtom,
   );
 
   const utils = api.useUtils();

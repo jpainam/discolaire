@@ -44,7 +44,7 @@ export function SubjectJournalHeader({
   });
   const canDeleteSubject = useCheckPermission(
     "subject",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   return (
     <div className="flex flex-row items-center justify-between border-b bg-muted/50 px-4 py-1">

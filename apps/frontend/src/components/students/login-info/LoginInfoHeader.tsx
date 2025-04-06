@@ -40,7 +40,7 @@ export function LoginInfoHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}/login-info`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >
