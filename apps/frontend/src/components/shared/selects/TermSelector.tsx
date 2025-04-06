@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { useCallback } from "react";
 import { useLocale } from "~/i18n";
 
 import { cn } from "~/lib/utils";
@@ -30,12 +31,18 @@ export function TermSelector({
   const { t } = useLocale();
 
   const termsQuery = api.term.all.useQuery();
+  const handleChange = useCallback(
+    (value: string | null) => {
+      onChange?.(value == "all" ? undefined : value);
+    },
+    [onChange]
+  );
 
   return (
     <Select
       defaultValue={defaultValue ?? undefined}
       onValueChange={(value) => {
-        onChange?.(value == "all" ? undefined : value);
+        handleChange(value);
       }}
     >
       {!termsQuery.isPending ? (

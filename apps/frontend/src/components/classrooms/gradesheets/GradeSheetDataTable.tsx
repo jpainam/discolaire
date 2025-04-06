@@ -3,24 +3,39 @@
 import { useParams } from "next/navigation";
 import { useMemo } from "react";
 
-import type { RouterOutputs } from "@repo/api";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { useLocale } from "~/i18n";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { parseAsInteger, useQueryState } from "nuqs";
+import { useTRPC } from "~/trpc/react";
 import { GradeSheetDataTableActions } from "./GradeSheetDataTableActions";
 import { fetchGradeSheetColumns } from "./GradeSheetDataTableColumns";
 
-type ClassroomGradeSheetProcedureOutput = NonNullable<
-  RouterOutputs["classroom"]["gradesheets"]
->[number];
-
-export function GradeSheetDataTable({
-  gradesheets,
-}: {
-  gradesheets: ClassroomGradeSheetProcedureOutput[];
-}) {
-  const { t } = useLocale();
+export function GradeSheetDataTable() {
+  const trpc = useTRPC();
   const params = useParams<{ id: string }>();
+  const { data: gradesheets } = useSuspenseQuery(
+    trpc.classroom.gradesheets.queryOptions(params.id)
+  );
+
+  const [termId] = useQueryState("term", parseAsInteger);
+  const [subjectId] = useQueryState("subject", parseAsInteger);
+
+  const filteredGradesheets = useMemo(() => {
+    let result = gradesheets;
+
+    if (subjectId && isFinite(subjectId)) {
+      result = result.filter((g) => g.subjectId == subjectId);
+    }
+    if (termId && isFinite(termId)) {
+      result = result.filter((g) => g.termId == termId);
+    }
+    return result;
+  }, [gradesheets, subjectId, termId]);
+
+  const { t } = useLocale();
+
   const columns = useMemo(() => {
     return fetchGradeSheetColumns({
       t: t,
@@ -30,8 +45,8 @@ export function GradeSheetDataTable({
 
   const { table } = useDataTable({
     columns: columns,
-    data: gradesheets,
-    rowCount: gradesheets.length,
+    data: filteredGradesheets,
+    rowCount: filteredGradesheets.length,
   });
   return (
     <div className="w-full px-4">

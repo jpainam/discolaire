@@ -26,13 +26,13 @@ import { PermissionAction } from "~/permissions";
 export function GradeSheetHeader() {
   const params = useParams<{ id: string }>();
 
-  const [term, setTerm] = useQueryState("term", { shallow: false });
-  const [subject, setSubject] = useQueryState("subject", { shallow: false });
+  const [term, setTerm] = useQueryState("term");
+  const [subject, setSubject] = useQueryState("subject");
   const { t } = useLocale();
   const router = useRouter();
   const canCreateGradeSheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (
@@ -85,7 +85,7 @@ export function GradeSheetHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/gradesheets?termId=${term ?? 0}&subjectId=${subject ?? 0}&format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -96,7 +96,7 @@ export function GradeSheetHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/gradesheets?termId=${term ?? 0}&subjectId=${subject ?? 0}&format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
