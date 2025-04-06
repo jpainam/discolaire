@@ -71,7 +71,7 @@ export function CreateEditAnnouncement({
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) =>
-      console.log(value, name, type),
+      console.log(value, name, type)
     );
     return () => subscription.unsubscribe();
   }, [watch]);
@@ -103,7 +103,7 @@ export function CreateEditAnnouncement({
           error: (error) => {
             return getErrorMessage(error);
           },
-        },
+        }
       );
     } else {
       toast.promise(
@@ -118,7 +118,7 @@ export function CreateEditAnnouncement({
           error: (error) => {
             return getErrorMessage(error);
           },
-        },
+        }
       );
     }
   }
@@ -252,7 +252,7 @@ export function CreateEditAnnouncement({
             type="submit"
           >
             {form.formState.isSubmitting && (
-              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              <ReloadIcon className="h-4 w-4 animate-spin" />
             )}{" "}
             {noticeBoard ? t("edit") : t("submit")}
           </Button>

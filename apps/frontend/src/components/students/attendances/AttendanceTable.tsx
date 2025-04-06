@@ -68,12 +68,12 @@ export default function AttendanceTable() {
                       {t("details")}
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <RatioIcon className="mr-2 h-4 w-4" />
+                      <RatioIcon />
                       {t("justified")}
                     </DropdownMenuItem>
 
                     <DropdownMenuItem>
-                      <MailIcon className="mr-2 h-4 w-4" />
+                      <MailIcon />
                       {t("notify_parents")}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />

@@ -46,7 +46,7 @@ export const NoPermission = ({
       </CardContent>
       <CardFooter className="flex justify-center">
         <Button size={"sm"} className="flex items-center">
-          <Mail className="mr-2 h-4 w-4" />
+          <Mail className="h-4 w-4" />
           Contact Administration
         </Button>
       </CardFooter>
@@ -58,7 +58,7 @@ export const NoPermission = ({
       <div
         className={cn(
           "flex h-full w-full items-center justify-center",
-          className,
+          className
         )}
       >
         <NoPermissionMessage />

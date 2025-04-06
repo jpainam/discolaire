@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   Calendar as CalendarIcon,
   Layout,
@@ -6,6 +5,7 @@ import {
   PieChart,
   Users,
 } from "lucide-react";
+import Link from "next/link";
 
 export function AssignmentSidebar() {
   const menuItems = [
@@ -26,7 +26,7 @@ export function AssignmentSidebar() {
                 href="#"
                 className="flex w-full flex-row items-center justify-start gap-2 rounded-md p-2 hover:bg-secondary"
               >
-                <Icon className="mr-2 h-4 w-4" />
+                <Icon className="h-4 w-4" />
                 {item.label}
               </Link>
             </li>

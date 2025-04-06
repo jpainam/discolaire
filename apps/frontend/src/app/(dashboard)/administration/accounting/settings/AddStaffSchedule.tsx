@@ -153,7 +153,7 @@ export function AddStaffSchedule({
               closeModal();
             }}
           >
-            <XIcon className="mr-2 h-4 w-4" />
+            <XIcon />
             {t("cancel")}
           </Button>
           <Button
@@ -162,7 +162,7 @@ export function AddStaffSchedule({
             }
             type="submit"
           >
-            <SaveIcon className="mr-2 h-4 w-4" />
+            <SaveIcon />
             {t("submit")}
           </Button>
         </div>

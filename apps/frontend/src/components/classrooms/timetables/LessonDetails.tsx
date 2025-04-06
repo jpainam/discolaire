@@ -41,20 +41,20 @@ export function LessonDetails({
   });
   return (
     <div className="grid grid-cols-2 gap-4 text-sm">
-      <div className="flex flex-row items-center text-muted-foreground">
-        <User2Icon className="mr-2 h-4 w-4" />
+      <div className="flex flex-row gap-2 items-center text-muted-foreground">
+        <User2Icon className="h-4 w-4" />
         {t("teacher")}
       </div>
       <div className="font-bold">
         {event.subject.teacher?.prefix} {event.subject.teacher?.lastName}
       </div>
-      <div className="flex flex-row items-center text-muted-foreground">
-        <BookOpenText className="mr-2 h-4 w-4" />
+      <div className="flex flex-row gap-2 items-center text-muted-foreground">
+        <BookOpenText className="h-4 w-4" />
         {t("subject")}
       </div>
       <div className="font-bold">{event.subject.course.name}</div>
-      <div className="flex flex-row items-center text-muted-foreground">
-        <CalendarDays className="mr-2 h-4 w-4" />
+      <div className="flex flex-row gap-2 items-center text-muted-foreground">
+        <CalendarDays className="h-4 w-4" />
         {t("start_time")}
       </div>
       <div>
@@ -102,16 +102,16 @@ export function LessonDetails({
         onClick={() => {
           const startHours = String(event.startTime.getHours()).padStart(
             2,
-            "0",
+            "0"
           );
           const startMinutes = String(event.startTime.getMinutes()).padStart(
             2,
-            "0",
+            "0"
           );
           const endHours = String(event.endTime.getHours()).padStart(2, "0");
           const endMinutes = String(event.endTime.getMinutes()).padStart(
             2,
-            "0",
+            "0"
           );
 
           closeModal();

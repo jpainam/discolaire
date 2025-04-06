@@ -59,7 +59,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             <div className="text-sm text-red-500">{t(state.error)}</div>
           )}
           <Button disabled={isPending}>
-            {isPending && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+            {isPending && <ReloadIcon className="h-4 w-4 animate-spin" />}
             {t("signin_with_email")}
           </Button>
           <Link

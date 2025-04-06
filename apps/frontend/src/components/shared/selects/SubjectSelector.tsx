@@ -62,20 +62,20 @@ export function SubjectSelector({
       subjects?.map((it) => ({
         label: it.course.name,
         value: it.id.toString(),
-      })) ?? [],
+      })) ?? []
     );
   }, [subjects]);
 
   const handleSearch = (search: string) => {
     if (!subjects) return;
     const filteredItems = subjects.filter((it) =>
-      it.course.name.toLowerCase().includes(search.toLowerCase()),
+      it.course.name.toLowerCase().includes(search.toLowerCase())
     );
     setItems(
       filteredItems.map((it) => ({
         label: it.course.name,
         value: it.id.toString(),
-      })),
+      }))
     );
   };
   if (subjectsQuery.isPending) {
@@ -123,8 +123,8 @@ export function SubjectSelector({
                 >
                   <Check
                     className={cn(
-                      "mr-2 h-4 w-4",
-                      value === item.value ? "opacity-100" : "opacity-0",
+                      "h-4 w-4",
+                      value === item.value ? "opacity-100" : "opacity-0"
                     )}
                   />
                   {item.label}

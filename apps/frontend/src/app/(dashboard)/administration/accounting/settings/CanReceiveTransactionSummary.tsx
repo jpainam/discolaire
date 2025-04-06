@@ -135,7 +135,6 @@ export function CanReceiveTransactionSummary({
                       <Button
                         onClick={() => {
                           openModal({
-                            className: "w-[500px]",
                             title: t("destinations"),
                             view: (
                               <AddStaffSchedule

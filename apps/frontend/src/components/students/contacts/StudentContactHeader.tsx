@@ -66,7 +66,7 @@ export function StudentContactHeader() {
                     });
                   }}
                 >
-                  <UserSearch className="mr-2 h-4 w-4" />
+                  <UserSearch />
                   {t("add_from_existing")}
                 </DropdownMenuItem>
                 <DropdownMenuItem
@@ -77,7 +77,7 @@ export function StudentContactHeader() {
                     });
                   }}
                 >
-                  <UserPlus className="mr-2 h-4 w-4" />
+                  <UserPlus />
                   {t("new")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -98,7 +98,7 @@ export function StudentContactHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -109,7 +109,7 @@ export function StudentContactHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

@@ -96,32 +96,32 @@ async function UserActivityTable({
       <TableHeader>
         <TableRow className="bg-muted/50">
           <TableHead>
-            <div className="flex flex-row items-center">
-              <LogInIcon className="mr-2 h-4 w-4" />
+            <div className="flex gap-2 flex-row items-center">
+              <LogInIcon className="h-4 w-4" />
               {t("login_date")}
             </div>
           </TableHead>
           <TableHead>
-            <div className="flex flex-row items-center">
-              <LogOutIcon className="mr-2 h-4 w-4" />
+            <div className="flex flex-row gap-2 items-center">
+              <LogOutIcon className="h-4 w-4" />
               {t("logout_date")}
             </div>
           </TableHead>
           <TableHead>
-            <div className="flex flex-row items-center">
-              <MapPinIcon className="mr-2 h-4 w-4" />
+            <div className="flex gap-2 flex-row items-center">
+              <MapPinIcon className="h-4 w-4" />
               {t("ip_address")}
             </div>
           </TableHead>
           <TableHead>
-            <div className="flex flex-row items-center">
-              <MonitorSmartphoneIcon className="mr-2 h-4 w-4" />
+            <div className="flex flex-row gap-2 items-center">
+              <MonitorSmartphoneIcon className="h-4 w-4" />
               {t("device")}
             </div>
           </TableHead>
           <TableHead className="text-right">
-            <div className="flex flex-row items-center">
-              <Clock4 className="mr-2 h-4 w-4" />
+            <div className="flex gap-2 flex-row items-center">
+              <Clock4 className="h-4 w-4" />
               {t("duration")}
             </div>
           </TableHead>

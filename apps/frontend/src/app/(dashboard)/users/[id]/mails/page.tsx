@@ -185,12 +185,12 @@ export default function EmailClient() {
                 <Button type="submit" disabled={loading}>
                   {loading ? (
                     <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin" />
                       Sending
                     </>
                   ) : (
                     <>
-                      <Send className="mr-2 h-4 w-4" />
+                      <Send className="h-4 w-4" />
                       Send
                     </>
                   )}

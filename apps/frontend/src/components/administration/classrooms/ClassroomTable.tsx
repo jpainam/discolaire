@@ -47,11 +47,11 @@ export default function ClassroomTable() {
   });
   const canDeleteClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const confirm = useConfirm();
   return (
@@ -100,7 +100,7 @@ export default function ClassroomTable() {
                           router.push(`/classrooms/${classroom.id}`);
                         }}
                       >
-                        <EyeIcon className="mr-2 h-4 w-4" />
+                        <EyeIcon className="h-4 w-4" />
                         {t("details")}
                       </DropdownMenuItem>
                       {canEditClassroom && (

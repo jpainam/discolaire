@@ -18,20 +18,20 @@ export function StaffTimetableDetails({
 
   return (
     <div className="grid grid-cols-2 gap-4 text-sm">
-      <div className="flex flex-row items-center text-muted-foreground">
-        <User2Icon className="mr-2 h-4 w-4" />
+      <div className="flex gap-2 flex-row items-center text-muted-foreground">
+        <User2Icon className="h-4 w-4" />
         {t("teacher")}
       </div>
       <div className="font-bold">
         {event.subject.teacher?.prefix} {event.subject.teacher?.lastName}
       </div>
-      <div className="flex flex-row items-center text-muted-foreground">
-        <BookOpenText className="mr-2 h-4 w-4" />
+      <div className="flex flex-row gap-2 items-center text-muted-foreground">
+        <BookOpenText className="h-4 w-4" />
         {t("subject")}
       </div>
       <div className="font-bold">{event.subject.course.name}</div>
-      <div className="flex flex-row items-center text-muted-foreground">
-        <CalendarDays className="mr-2 h-4 w-4" />
+      <div className="flex flex-row gap-2 items-center text-muted-foreground">
+        <CalendarDays className="h-4 w-4" />
         {t("start_time")}
       </div>
       <div>
@@ -40,8 +40,8 @@ export function StaffTimetableDetails({
         })}{" "}
         - {event.startTime.toLocaleTimeString(i18n.language)}
       </div>
-      <div className="flex flex-row items-center text-muted-foreground">
-        <CalendarDays className="mr-2 h-4 w-4" />
+      <div className="flex flex-row gap-2 items-center text-muted-foreground">
+        <CalendarDays className="h-4 w-4" />
         {t("end_time")}
       </div>
       <div>

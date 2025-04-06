@@ -112,7 +112,7 @@ export default function Paage() {
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? (
                     <>
-                      <Loader className="mr-2 h-4 w-4 animate-spin" />
+                      <Loader className="h-4 w-4 animate-spin" />
                       {t("sending")}
                     </>
                   ) : (

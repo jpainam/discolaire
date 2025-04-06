@@ -46,7 +46,7 @@ export function SubjectJournalList({
     onSuccess: () => {
       toast.success(t("deleted_successfully"), { id: 0 });
       router.push(
-        `/classrooms/${params.id}/subject_journal/${subject.id}?${createQueryString({ pageIndex: 1, pageSize: 10 })}`,
+        `/classrooms/${params.id}/subject_journal/${subject.id}?${createQueryString({ pageIndex: 1, pageSize: 10 })}`
       );
     },
     onSettled: async () => {
@@ -61,7 +61,7 @@ export function SubjectJournalList({
     : 10;
   const paginate = (page: number) => {
     router.push(
-      `/classrooms/${params.id}/subject_journal/${subject.id}?${createQueryString({ pageIndex: page, pageSize })}`,
+      `/classrooms/${params.id}/subject_journal/${subject.id}?${createQueryString({ pageIndex: page, pageSize })}`
     );
   };
 
@@ -157,7 +157,7 @@ export function SubjectJournalList({
           disabled={pageIndex === 1}
           variant="outline"
         >
-          <ChevronLeftIcon className="mr-2 h-4 w-4" />
+          <ChevronLeftIcon className="h-4 w-4" />
           {t("previous")}
         </Button>
         <span className="text-xs">

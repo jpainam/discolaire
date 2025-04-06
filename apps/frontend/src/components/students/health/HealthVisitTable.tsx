@@ -120,7 +120,7 @@ export function HealthVisitTable({ userId }: { userId: string }) {
                             {t("Details")}
                           </DropdownMenuItem>
                           <DropdownMenuItem>
-                            <MailIcon className="mr-2 h-4 w-4" />
+                            <MailIcon className="h-4 w-4" />
                             {t("send_message")}
                           </DropdownMenuItem>
                           <DropdownMenuItem
