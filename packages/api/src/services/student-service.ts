@@ -17,7 +17,7 @@ export const studentService = {
     const student = await db.student.findUniqueOrThrow({
       where: {
         id: studentId,
-        schoolId: schoolId,
+        schoolId,
       },
       include: {
         formerSchool: true,
@@ -52,24 +52,22 @@ export const studentService = {
       },
     });
 
-    let isRepeating = student.isRepeating;
-    const curEnrollement = student.enrollments.find(
+    const currentEnrollment = student.enrollments.find(
       (enr) => enr.classroom.schoolYearId === schoolYearId,
     );
-    if (student.enrollments.length > 1) {
-      const prevEnrollments = student.enrollments.filter(
-        (enr) => enr.classroom.schoolYearId !== schoolYearId,
+
+    const isRepeating =
+      student.enrollments.length > 1 &&
+      student.enrollments.some(
+        (enr) =>
+          enr.classroom.schoolYearId !== schoolYearId &&
+          enr.classroom.levelId === currentEnrollment?.classroom.levelId,
       );
-      isRepeating =
-        prevEnrollments.filter(
-          (prev) =>
-            prev.classroom.levelId === curEnrollement?.classroom.levelId,
-        ).length > 0;
-    }
+
     return {
       ...student,
-      isRepeating: isRepeating,
-      classroom: curEnrollement?.classroom,
+      isRepeating,
+      classroom: currentEnrollment?.classroom,
     };
   },
   getFromUserId: async (userId: string) => {

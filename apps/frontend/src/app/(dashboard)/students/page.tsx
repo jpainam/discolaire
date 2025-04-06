@@ -1,4 +1,3 @@
-import type { RouterOutputs } from "@repo/api";
 import { auth } from "@repo/auth";
 import { redirect } from "next/navigation";
 import { StudentDataTable } from "~/components/students/StudentDataTable";
@@ -20,16 +19,10 @@ export default async function Page() {
   const { t } = await getServerTranslations();
   const effectif = await api.enrollment.count({});
   let repeating = 0;
-  let students:
-    | RouterOutputs["student"]["lastAccessed"]
-    | RouterOutputs["student"]["all"];
-  if (session.user.profile === "staff") {
-    students = await api.student.lastAccessed({ limit: 50 });
-    repeating = students.filter((student) => student.isRepeating).length;
-  } else {
-    students = await api.student.all();
-    repeating = students.filter((student) => student.isRepeating).length;
-  }
+
+  const students = await api.student.all();
+  repeating = students.filter((student) => student.isRepeating).length;
+
   // count repeating students
 
   return (

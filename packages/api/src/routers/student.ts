@@ -63,120 +63,71 @@ const createUpdateSchema = z.object({
   classroom: z.string().optional(),
 });
 export const studentRouter = createTRPCRouter({
-  lastAccessed: protectedProcedure
+  all: protectedProcedure
     .input(
-      z.object({
-        limit: z.number().optional().default(10),
-      }),
+      z
+        .object({
+          limit: z.number().optional().default(10),
+        })
+        .optional(),
     )
     .query(async ({ ctx, input }) => {
+      if (ctx.session.user.profile === "student") {
+        const student = await studentService.getFromUserId(ctx.session.user.id);
+        const stud = await studentService.get(
+          student.id,
+          ctx.schoolYearId,
+          ctx.schoolId,
+        );
+        return [stud];
+      }
+      const studentIds: string[] = [];
+      if (ctx.session.user.profile === "contact") {
+        const contact = await contactService.getFromUserId(ctx.session.user.id);
+        const studentContacts = await contactService.getStudents(contact.id);
+        studentIds.push(...studentContacts.map((sc) => sc.studentId));
+      }
       const data = await ctx.db.student.findMany({
-        take: input.limit,
+        take: input?.limit ?? 50,
         orderBy: {
           lastAccessed: "desc",
+        },
+        where: {
+          schoolId: ctx.schoolId,
+          ...(studentIds.length > 0 ? { id: { in: studentIds } } : {}),
         },
         include: {
           formerSchool: true,
           religion: true,
-          country: true,
           user: true,
+          country: true,
           enrollments: {
             include: {
               classroom: true,
             },
           },
         },
-        where: {
-          schoolId: ctx.schoolId,
-        },
       });
-      const students = await Promise.all(
-        data.map((student) => {
-          let isRepeating = student.isRepeating;
-          const curEnrollement = student.enrollments.find(
-            (enr) => enr.classroom.schoolYearId === ctx.schoolYearId,
-          );
-          if (student.enrollments.length > 1) {
-            const prevEnrollments = student.enrollments.filter(
-              (enr) => enr.classroom.schoolYearId !== ctx.schoolYearId,
-            );
-            isRepeating =
-              prevEnrollments.filter(
-                (prev) =>
-                  prev.classroom.levelId === curEnrollement?.classroom.levelId,
-              ).length > 0;
-          }
-          return {
-            ...student,
-            isRepeating: isRepeating,
-            classroom: curEnrollement?.classroom,
-          };
-        }),
-      );
-      return students;
-    }),
-  all: protectedProcedure.query(async ({ ctx }) => {
-    if (ctx.session.user.profile === "student") {
-      const student = await studentService.getFromUserId(ctx.session.user.id);
-      const stud = await studentService.get(
-        student.id,
-        ctx.schoolYearId,
-        ctx.schoolId,
-      );
-      return [stud];
-    }
-    const studentIds: string[] = [];
-    if (ctx.session.user.profile === "contact") {
-      const contact = await contactService.getFromUserId(ctx.session.user.id);
-      const studentContacts = await contactService.getStudents(contact.id);
-      studentIds.push(...studentContacts.map((sc) => sc.studentId));
-    }
-    const data = await ctx.db.student.findMany({
-      orderBy: {
-        lastName: "asc",
-      },
-      where: {
-        schoolId: ctx.schoolId,
-        ...(studentIds.length > 0 ? { id: { in: studentIds } } : {}),
-      },
-      include: {
-        formerSchool: true,
-        religion: true,
-        user: true,
-        country: true,
-        enrollments: {
-          include: {
-            classroom: true,
-          },
-        },
-      },
-    });
 
-    const students = await Promise.all(
-      data.map((student) => {
-        let isRepeating = student.isRepeating;
-        const curEnrollement = student.enrollments.find(
+      const students = data.map((student) => {
+        const currentEnrollment = student.enrollments.find(
           (enr) => enr.classroom.schoolYearId === ctx.schoolYearId,
         );
-        if (student.enrollments.length > 1) {
-          const prevEnrollments = student.enrollments.filter(
-            (enr) => enr.classroom.schoolYearId !== ctx.schoolYearId,
-          );
-          isRepeating =
-            prevEnrollments.filter(
-              (prev) =>
-                prev.classroom.levelId === curEnrollement?.classroom.levelId,
-            ).length > 0;
-        }
+
+        const previousSameLevel = student.enrollments.some(
+          (enr) =>
+            enr.classroom.schoolYearId !== ctx.schoolYearId &&
+            enr.classroom.levelId === currentEnrollment?.classroom.levelId,
+        );
+
         return {
           ...student,
-          isRepeating: isRepeating,
-          classroom: curEnrollement?.classroom,
+          isRepeating: previousSameLevel,
+          classroom: currentEnrollment?.classroom,
         };
-      }),
-    );
-    return students;
-  }),
+      });
+      return students;
+    }),
   search: protectedProcedure
     .input(
       z.object({

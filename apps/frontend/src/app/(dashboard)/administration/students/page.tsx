@@ -12,7 +12,7 @@ import { StudentPageHeader } from "../../students/StudentPageHeader";
 
 export default async function Page() {
   const { t } = await getServerTranslations();
-  const students = await api.student.lastAccessed({ limit: 50 });
+  const students = await api.student.all({ limit: 50 });
   return (
     <Tabs defaultValue="tab-1">
       <TabsList className="h-auto justify-start w-full rounded-none border-b bg-transparent p-0">
