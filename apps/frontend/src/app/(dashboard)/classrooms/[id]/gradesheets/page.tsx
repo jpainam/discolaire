@@ -1,3 +1,4 @@
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
 import { GradeSheetDataTable } from "~/components/classrooms/gradesheets/GradeSheetDataTable";
@@ -24,7 +25,16 @@ export default async function Page(props: {
       <GradeSheetHeader />
       <HydrateClient>
         <ErrorBoundary errorComponent={ErrorFallback}>
-          <Suspense key={id} fallback={<div className="h-4" />}>
+          <Suspense
+            key={id}
+            fallback={
+              <div className="grid grid-cols-4 gap-4 p-4">
+                {Array.from({ length: 16 }).map((_, i) => (
+                  <Skeleton key={i} className="h-8 " />
+                ))}
+              </div>
+            }
+          >
             <GradeSheetDataTable />
           </Suspense>
         </ErrorBoundary>
