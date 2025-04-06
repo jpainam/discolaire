@@ -3,8 +3,7 @@
 import type { Style } from "@react-pdf/types";
 import React, { useMemo } from "react";
 import { View } from "@react-pdf/renderer";
-
-import { flatten } from "../utils";
+import { flatten } from "@react-pdf/stylesheet";
 
 export interface TableProps
   extends Omit<React.ComponentProps<typeof View>, "children"> {
@@ -44,6 +43,7 @@ export default function Table({
         borderWidth: 1,
         borderStyle: "solid",
       },
+      // @ts-expect-error TODO FIX THIS
       ...(Array.isArray(styleProps) ? styleProps : [styleProps]),
     ]) as TableContextType["style"];
 

@@ -1,29 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { StyleSheet, Text, View } from "@react-pdf/renderer";
-import { toJsxRuntime } from "hast-util-to-jsx-runtime";
-import { Fragment, jsx, jsxs } from "preact/jsx-runtime";
-import rehypeParse from "rehype-parse";
-import { unified } from "unified";
-
-export function flatten({ values }: { values: any }) {
-  const styles = Array.isArray(values) ? values : [values];
-
-  const mergeStyles = styles.reduce((acc, style) => {
-    const s = Array.isArray(style) ? flatten(style) : style;
-    Object.keys(s).forEach((key) => {
-      if (s[key] !== null && s[key] !== undefined) {
-        acc[key] = s[key];
-      }
-    });
-    return acc;
-  }, {});
-  return mergeStyles;
-}
-
 export function getCdnUrl() {
   if (process.env.NODE_ENV == "production") {
     return "https://discolaire-public.s3.eu-central-1.amazonaws.com";
@@ -58,63 +32,6 @@ export function getAppreciations(grade?: number | null) {
   }
   return "Pas definie";
 }
-// Define styles
-const styles = StyleSheet.create({
-  paragraph: { marginBottom: 4 },
-  bold: { fontWeight: "bold" },
-  italic: { fontStyle: "italic" },
-  underline: { textDecoration: "underline" },
-  heading1: { fontSize: 20, fontWeight: "bold", marginBottom: 6 },
-  heading2: { fontSize: 16, fontWeight: "bold", marginBottom: 4 },
-  list: { marginLeft: 10 },
-  listItem: { marginBottom: 2 },
-});
-
-export const renderHtml = (html: string) => {
-  const hastTree = unified().use(rehypeParse, { fragment: true }).parse(html);
-
-  return toJsxRuntime(hastTree, {
-    Fragment,
-    jsx,
-    jsxs,
-    jsxDEV: jsx, // Add jsxDEV for development mode
-    components: {
-      p: (props: any) => (
-        <Text style={styles.paragraph}>{props?.children ?? null}</Text>
-      ),
-      strong: (props: any) => (
-        <Text style={styles.bold}>{props?.children ?? null}</Text>
-      ),
-      b: (props: any) => (
-        <Text style={styles.bold}>{props?.children ?? null}</Text>
-      ),
-      i: (props: any) => (
-        <Text style={styles.italic}>{props?.children ?? null}</Text>
-      ),
-      em: (props: any) => (
-        <Text style={styles.italic}>{props?.children ?? null}</Text>
-      ),
-      u: (props: any) => (
-        <Text style={styles.underline}>{props?.children ?? null}</Text>
-      ),
-      h1: (props: any) => (
-        <Text style={styles.heading1}>{props?.children ?? null}</Text>
-      ),
-      h2: (props: any) => (
-        <Text style={styles.heading2}>{props?.children ?? null}</Text>
-      ),
-      br: () => <Text>{"\n"}</Text>,
-      ul: (props: any) => (
-        <View style={styles.list}>{props?.children ?? null}</View>
-      ),
-      li: (props: any) => (
-        <Text style={styles.listItem}>{props?.children ?? null}</Text>
-      ),
-    },
-    elementAttributeNameCase: "html",
-    development: process.env.NODE_ENV !== "production",
-  });
-};
 
 export function getTitle({ trimestreId }: { trimestreId: string }) {
   if (trimestreId == "trim1") {
