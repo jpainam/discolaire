@@ -1,6 +1,7 @@
+"use client";
 import { RiArrowRightUpLine } from "@remixicon/react";
 import { cn } from "@repo/ui/lib/utils";
-import { getServerTranslations } from "~/i18n/server";
+import { useLocale } from "~/i18n";
 
 interface StatsCardProps {
   title: string;
@@ -12,15 +13,10 @@ interface StatsCardProps {
   icon: React.ReactNode;
 }
 
-export async function StatsCard({
-  title,
-  value,
-  change,
-  icon,
-}: StatsCardProps) {
+export function StatsCard({ title, value, change, icon }: StatsCardProps) {
   const isPositive = change.trend === "up";
   const trendColor = isPositive ? "text-emerald-500" : "text-red-500";
-  const { t } = await getServerTranslations();
+  const { t } = useLocale();
 
   return (
     <div className="relative p-4 lg:p-5 group before:absolute before:inset-y-8 before:right-0 before:w-px before:bg-gradient-to-b before:from-input/30 before:via-input before:to-input/30 last:before:hidden">
@@ -65,7 +61,7 @@ export function StatsGrid({ stats, className }: StatsGridProps) {
     <div
       className={cn(
         "grid grid-cols-2 min-[1200px]:grid-cols-4 border border-border rounded-xl bg-gradient-to-br from-sidebar/60 to-sidebar",
-        className,
+        className
       )}
     >
       {stats.map((stat) => (

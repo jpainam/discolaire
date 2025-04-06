@@ -6,7 +6,7 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
 import { ErrorFallback } from "~/components/error-fallback";
-import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
+import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 import { StudentPageHeader } from "./StudentPageHeader";
 import { StudentStats } from "./StudentStats";
 
@@ -16,7 +16,7 @@ export default async function Page() {
     redirect("/auth/login");
   }
 
-  void batchPrefetch([trpc.student.all.queryOptions()]);
+  void prefetch(trpc.student.all.queryOptions());
 
   return (
     <HydrateClient>
