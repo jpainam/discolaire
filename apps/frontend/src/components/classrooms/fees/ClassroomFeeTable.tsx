@@ -34,26 +34,28 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import i18next from "i18next";
+import { useParams } from "next/navigation";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { CURRENCY } from "~/lib/constants";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditFee } from "./CreateEditFee";
 
-export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
+export function ClassroomFeeTable() {
+  const params = useParams<{ id: string }>();
   const trpc = useTRPC();
   const { data: fees } = useSuspenseQuery(
-    trpc.classroom.fees.queryOptions(classroomId),
+    trpc.classroom.fees.queryOptions(params.id)
   );
   const { t, i18n } = useLocale();
   const queryClient = useQueryClient();
 
   const canDeleteClassroomFee = useCheckPermission(
     "fee",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateClassroomFee = useCheckPermission(
     "fee",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
 
   const deleteFeeMutation = useMutation(
@@ -65,7 +67,7 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const { openModal } = useModal();
@@ -136,7 +138,7 @@ export function ClassroomFeeTable({ classroomId }: { classroomId: string }) {
                                     title: t("edit"),
                                     view: (
                                       <CreateEditFee
-                                        classroomId={classroomId}
+                                        classroomId={params.id}
                                         fee={fee}
                                       />
                                     ),

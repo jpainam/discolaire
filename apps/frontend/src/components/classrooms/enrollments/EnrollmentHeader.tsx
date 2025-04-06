@@ -33,10 +33,10 @@ export function EnrollmentHeader() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: students } = useSuspenseQuery(
-    trpc.classroom.students.queryOptions(params.id)
+    trpc.classroom.students.queryOptions(params.id),
   );
   const { data: classroom } = useSuspenseQuery(
-    trpc.classroom.get.queryOptions(params.id)
+    trpc.classroom.get.queryOptions(params.id),
   );
   const { t } = useLocale();
   const { openModal } = useModal();
@@ -58,13 +58,13 @@ export function EnrollmentHeader() {
     const oldest =
       students.length > 0
         ? Math.max(
-            ...students.map((student) => getAge(student.dateOfBirth) || 0)
+            ...students.map((student) => getAge(student.dateOfBirth) || 0),
           )
         : 0;
     const youngest =
       students.length > 0
         ? Math.min(
-            ...students.map((student) => getAge(student.dateOfBirth) || 0)
+            ...students.map((student) => getAge(student.dateOfBirth) || 0),
           )
         : 0;
 
@@ -171,7 +171,7 @@ export function EnrollmentHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=csv`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >
@@ -182,7 +182,7 @@ export function EnrollmentHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=pdf`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >

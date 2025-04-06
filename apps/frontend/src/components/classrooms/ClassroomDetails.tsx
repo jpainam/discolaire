@@ -24,10 +24,10 @@ export function ClassroomDetails() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: fees } = useSuspenseQuery(
-    trpc.classroom.fees.queryOptions(params.id)
+    trpc.classroom.fees.queryOptions(params.id),
   );
   const { data: classroom } = useSuspenseQuery(
-    trpc.classroom.get.queryOptions(params.id)
+    trpc.classroom.get.queryOptions(params.id),
   );
   return (
     <div className="grid w-full px-4 gap-4 divide-x md:grid-cols-2 lg:grid-cols-3">

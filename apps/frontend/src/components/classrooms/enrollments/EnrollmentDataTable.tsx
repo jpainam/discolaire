@@ -15,7 +15,7 @@ export function EnrollmentDataTable() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: students } = useSuspenseQuery(
-    trpc.classroom.students.queryOptions(params.id)
+    trpc.classroom.students.queryOptions(params.id),
   );
   const { t } = useLocale();
 
