@@ -41,7 +41,7 @@ import { CreateEditClassroom } from "./CreateEditClassroom";
 export function ClassroomHeader() {
   const trpc = useTRPC();
   const { data: classrooms } = useSuspenseQuery(
-    trpc.classroom.all.queryOptions()
+    trpc.classroom.all.queryOptions(),
   );
   const { t } = useLocale();
   const { createQueryString } = useCreateQueryString();
@@ -51,11 +51,11 @@ export function ClassroomHeader() {
   const router = useRouter();
   const canDeleteClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const canUpdateClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   const deleteClassroomMutation = useMutation(
     trpc.classroom.delete.mutationOptions({
@@ -66,7 +66,7 @@ export function ClassroomHeader() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const confirm = useConfirm();
@@ -85,7 +85,7 @@ export function ClassroomHeader() {
   };
   const canCreateClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
   const { openSheet } = useSheet();
 

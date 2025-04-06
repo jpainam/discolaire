@@ -2,7 +2,7 @@
 
 import { MoreVertical, PlusIcon, SettingsIcon } from "lucide-react";
 import { useParams } from "next/navigation";
-import { parseAsInteger, useQueryState } from "nuqs";
+import { useQueryState } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -26,13 +26,13 @@ import { PermissionAction } from "~/permissions";
 export function GradeSheetHeader() {
   const params = useParams<{ id: string }>();
 
-  const [term, setTerm] = useQueryState("term", parseAsInteger);
+  const [term, setTerm] = useQueryState("term");
   const [subject, setSubject] = useQueryState("subject");
   const { t } = useLocale();
   const router = useRouter();
   const canCreateGradeSheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
 
   return (
@@ -40,7 +40,7 @@ export function GradeSheetHeader() {
       <Label className="hidden md:flex">{t("term")}</Label>
       <TermSelector
         showAllOption={true}
-        value={term}
+        defaultValue={term}
         onChange={(val) => {
           void setTerm(val ?? null);
         }}
@@ -85,7 +85,7 @@ export function GradeSheetHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/gradesheets?termId=${term ?? 0}&subjectId=${subject ?? 0}&format=pdf`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >
@@ -96,7 +96,7 @@ export function GradeSheetHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/gradesheets?termId=${term ?? 0}&subjectId=${subject ?? 0}&format=csv`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >

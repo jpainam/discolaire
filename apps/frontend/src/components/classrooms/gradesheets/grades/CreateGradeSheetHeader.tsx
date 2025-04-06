@@ -44,7 +44,7 @@ export function CreateGradeSheetHeader({
             <FormItem className="space-y-0">
               <FormLabel>{t("term")} </FormLabel>
               <FormControl>
-                <TermSelector onChange={field.onChange} />
+                <TermSelector {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

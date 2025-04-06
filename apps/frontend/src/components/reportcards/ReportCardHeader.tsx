@@ -46,11 +46,11 @@ export function ReportCardHeader() {
       />
       <Label className="hidden md:flex">{t("terms")}</Label>
       <TermSelector
-        value={termId ? Number(termId) : undefined}
+        defaultValue={termId}
         className="w-[300px]"
         onChange={(val) => {
           router.push(
-            routes.reportcards.index + "/?" + createQueryString({ term: val })
+            routes.reportcards.index + "/?" + createQueryString({ term: val }),
           );
         }}
       />
@@ -62,7 +62,7 @@ export function ReportCardHeader() {
               router.push(
                 routes.reportcards.index +
                   "/?" +
-                  createQueryString({ student: val })
+                  createQueryString({ student: val }),
               );
             }}
             defaultValue={searchParams.get("student") ?? undefined}

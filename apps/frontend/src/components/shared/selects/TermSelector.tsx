@@ -7,12 +7,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import { Skeleton } from "@repo/ui/components/skeleton";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { useLocale } from "~/i18n";
-
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 interface TermSelectorProps {
   onChange?: (value?: string | null) => void;
@@ -21,6 +20,7 @@ interface TermSelectorProps {
   defaultValue?: string | null;
   showAllOption?: boolean;
 }
+
 export function TermSelector({
   onChange,
   placeholder,
@@ -29,8 +29,9 @@ export function TermSelector({
   showAllOption = true,
 }: TermSelectorProps) {
   const { t } = useLocale();
+  const trpc = useTRPC();
+  const { data: terms } = useSuspenseQuery(trpc.term.all.queryOptions());
 
-  const termsQuery = api.term.all.useQuery();
   const handleChange = useCallback(
     (value: string | null) => {
       onChange?.(value == "all" ? undefined : value);
@@ -45,31 +46,20 @@ export function TermSelector({
         handleChange(value);
       }}
     >
-      {!termsQuery.isPending ? (
-        <SelectTrigger className={cn("w-full", className)}>
-          <SelectValue placeholder={placeholder ?? t("select_terms")} />
-        </SelectTrigger>
-      ) : (
-        <Skeleton className={cn("h-8 w-full", className)} />
-      )}
+      <SelectTrigger className={cn("w-full", className)}>
+        <SelectValue placeholder={placeholder ?? t("select_terms")} />
+      </SelectTrigger>
       <SelectContent>
-        {termsQuery.isPending && (
-          <SelectItem disabled value={"loading"}>
-            <Skeleton className="h-8 w-full" />
-          </SelectItem>
-        )}
         {showAllOption && (
-          <SelectItem key={"terms-all-key"} value="all">
+          <SelectItem key="terms-all-key" value="all">
             {t("all_terms")}
           </SelectItem>
         )}
-        {termsQuery.data?.map((term) => {
-          return (
-            <SelectItem key={term.id} value={term.id.toString()}>
-              {term.name}
-            </SelectItem>
-          );
-        })}
+        {terms.map((term) => (
+          <SelectItem key={term.id} value={term.id.toString()}>
+            {term.name}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );

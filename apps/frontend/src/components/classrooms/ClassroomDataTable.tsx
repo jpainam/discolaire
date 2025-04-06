@@ -14,7 +14,7 @@ export function ClassroomDataTable() {
   const { t } = useLocale();
   const trpc = useTRPC();
   const { data: classrooms } = useSuspenseQuery(
-    trpc.classroom.all.queryOptions()
+    trpc.classroom.all.queryOptions(),
   );
 
   const columns = React.useMemo(() => getColumns({ t: t }), [t]);

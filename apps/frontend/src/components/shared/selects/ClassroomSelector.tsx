@@ -48,7 +48,7 @@ export function ClassroomSelector({
   const { t } = useLocale();
   const trpc = useTRPC();
   const { data: classrooms } = useSuspenseQuery(
-    trpc.classroom.all.queryOptions()
+    trpc.classroom.all.queryOptions(),
   );
 
   return (

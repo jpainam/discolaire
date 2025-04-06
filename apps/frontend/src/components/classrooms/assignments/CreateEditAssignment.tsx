@@ -48,7 +48,7 @@ const assignmentSchema = z.object({
   categoryId: z.string().min(1),
   description: z.string().optional(),
   dueDate: z.date(),
-  termId: z.string().min(1),
+  termId: z.number().nullable(),
   post: z.boolean().default(true),
   notify: z.boolean(),
   subjectId: z.coerce.number(),
@@ -72,7 +72,7 @@ export function CreateEditAssignment({
       subjectId: assignment?.subjectId ?? 0,
       attachments: assignment?.attachments ?? [],
       title: assignment?.title ?? "",
-      termId: `${assignment?.termId}`,
+      termId: assignment?.termId ?? null,
       categoryId: assignment?.categoryId ?? "",
       description: assignment?.description ?? "",
       dueDate: assignment?.dueDate ? new Date(assignment.dueDate) : new Date(),
@@ -166,11 +166,7 @@ export function CreateEditAssignment({
               <FormItem className="flex flex-row gap-2 items-center">
                 <FormLabel>{t("terms")}</FormLabel>
                 <FormControl>
-                  <TermSelector
-                    className="md:w-64 w-full"
-                    defaultValue={field.value}
-                    onChange={field.onChange}
-                  />
+                  <TermSelector className="md:w-64 w-full" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

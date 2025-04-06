@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { FinanceHeader } from "~/components/classrooms/finances/FinanceHeader";
 
 export default async function Layout(
-  props: PropsWithChildren<{ params: Promise<{ id: string }> }>
+  props: PropsWithChildren<{ params: Promise<{ id: string }> }>,
 ) {
   const params = await props.params;
   return (

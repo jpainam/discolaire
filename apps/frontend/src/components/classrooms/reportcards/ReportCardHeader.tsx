@@ -2,7 +2,7 @@
 
 import { MoreVertical } from "lucide-react";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
-import { parseAsInteger, useQueryState } from "nuqs";
+import { useQueryState } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -28,7 +28,7 @@ export function ReportCardHeader() {
   const { t } = useLocale();
   const { createQueryString } = useCreateQueryString();
   const searchParams = useSearchParams();
-  const [termId] = useQueryState("termId", parseAsInteger);
+  const [termId] = useQueryState("termId");
   const pathname = usePathname();
   const [trimestreId] = useQueryState("trimestreId");
   const router = useRouter();
@@ -40,7 +40,7 @@ export function ReportCardHeader() {
       <Label className="hidden md:block">{t("term")}</Label>
       <TermSelector
         className="md:w-[350px]"
-        defaultValue={termId?.toString()}
+        defaultValue={termId}
         onChange={(val) => {
           router.push(
             `/classrooms/${params.id}/reportcards?` +

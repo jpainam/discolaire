@@ -1,4 +1,5 @@
 import { ScrollArea, ScrollBar } from "@repo/ui/components/scroll-area";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Tabs,
   TabsContent,
@@ -11,13 +12,16 @@ import {
   LayoutPanelTopIcon,
   PanelsTopLeftIcon,
 } from "lucide-react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { Suspense } from "react";
 import { ClassroomLevelChart } from "~/components/administration/classrooms/ClassroomLevelChart";
 import { ClassroomLevelEffectif } from "~/components/administration/classrooms/ClassroomLevelEffectif";
 import { ClassroomLevelHeader } from "~/components/administration/classrooms/ClassroomLevelHeader";
 import { ClassroomLevelTable } from "~/components/administration/classrooms/ClassroomLevelTable";
 import { ClassroomDataTable } from "~/components/classrooms/ClassroomDataTable";
+import { ErrorFallback } from "~/components/error-fallback";
 import { getServerTranslations } from "~/i18n/server";
-import { api } from "~/trpc/server";
+import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 import { CycleHeader } from "./cycles/CycleHeader";
 import { CycleTable } from "./cycles/CycleTable";
 import { SectionHeader } from "./sections/SectionHeader";
@@ -25,7 +29,7 @@ import { SectionTable } from "./sections/SectionTable";
 
 export default async function Page() {
   const { t } = await getServerTranslations();
-  const classrooms = await api.classroom.all();
+  void prefetch(trpc.classroom.all.queryOptions());
   return (
     <Tabs defaultValue="tab-1" className="pt-2">
       <ScrollArea>
@@ -78,8 +82,22 @@ export default async function Page() {
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
       <TabsContent value="tab-1">
-        {/* <ClassroomHeader /> */}
-        <ClassroomDataTable classrooms={classrooms} />
+        <HydrateClient>
+          <ErrorBoundary errorComponent={ErrorFallback}>
+            <Suspense
+              key={"classroom-table"}
+              fallback={
+                <div className="grid grid-cols-4 p-4 gap-4">
+                  {Array.from({ length: 16 }).map((_, i) => (
+                    <Skeleton key={i} className="h-8 " />
+                  ))}
+                </div>
+              }
+            >
+              <ClassroomDataTable />
+            </Suspense>
+          </ErrorBoundary>
+        </HydrateClient>
       </TabsContent>
       <TabsContent value="tab-2">
         <div className="flex flex-col gap-2 px-4">
