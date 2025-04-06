@@ -11,7 +11,7 @@ export function ErrorFallback() {
       <div>
         <h2 className="text-md">Something went wrong</h2>
       </div>
-      <Button onClick={() => router.refresh()} variant="outline">
+      <Button size={"sm"} onClick={() => router.refresh()} variant="outline">
         Try again
       </Button>
     </div>

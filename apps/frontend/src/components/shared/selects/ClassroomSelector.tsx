@@ -2,7 +2,6 @@
 
 import { Check, ChevronsUpDown } from "lucide-react";
 import * as React from "react";
-import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -18,11 +17,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
-import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 interface ClassroomSelectorProps {
   searchPlaceholder?: string;
@@ -47,17 +46,10 @@ export function ClassroomSelector({
   const [value, setValue] = React.useState(defaultValue);
 
   const { t } = useLocale();
-  const classroomsQuery = api.classroom.all.useQuery();
-
-  if (classroomsQuery.isPending) {
-    return <Skeleton className={cn("h-8 w-full", className)} />;
-  }
-  if (classroomsQuery.isError) {
-    toast.error(classroomsQuery.error.message);
-    return null;
-  }
-
-  const data = classroomsQuery.data;
+  const trpc = useTRPC();
+  const { data: classrooms } = useSuspenseQuery(
+    trpc.classroom.all.queryOptions()
+  );
 
   return (
     <Popover open={open} onOpenChange={setOpen} modal={false}>
@@ -69,7 +61,7 @@ export function ClassroomSelector({
           aria-expanded={open}
           className={cn("justify-between", className)}
         >
-          {data.find((it) => it.id === value)?.name ??
+          {classrooms.find((it) => it.id === value)?.name ??
             placeholder ??
             t("select_an_option")}{" "}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 justify-end opacity-50" />
@@ -84,7 +76,7 @@ export function ClassroomSelector({
         <Command
           //className="rounded-lg border shadow-md"
           filter={(value, search) => {
-            const item = data.find((it) => it.id === value);
+            const item = classrooms.find((it) => it.id === value);
             if (item?.name.toLowerCase().includes(search.toLowerCase())) {
               return 1;
             }
@@ -97,7 +89,7 @@ export function ClassroomSelector({
           <CommandList className="max-h-[300px] overflow-y-auto">
             <CommandEmpty>{t("select_an_option")}</CommandEmpty>
             <CommandGroup>
-              {classroomsQuery.data.map((item) => (
+              {classrooms.map((item) => (
                 <CommandItem
                   key={item.id}
                   className="flex w-full cursor-pointer items-center justify-between space-x-2"

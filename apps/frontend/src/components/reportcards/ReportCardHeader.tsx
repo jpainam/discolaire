@@ -20,10 +20,10 @@ import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
+import { DropdownHelp } from "../shared/DropdownHelp";
 import { ClassroomSelector } from "../shared/selects/ClassroomSelector";
 import { ClassroomStudentSelector } from "../shared/selects/ClassroomStudentSelector";
 import { TermSelector } from "../shared/selects/TermSelector";
-import { DropdownHelp } from "../shared/DropdownHelp";
 
 export function ReportCardHeader() {
   const { t } = useLocale();
@@ -33,7 +33,7 @@ export function ReportCardHeader() {
   const [classroomId, setClassroomId] = useQueryState("classroom", {
     defaultValue: "",
   });
-
+  const termId = searchParams.get("termId");
   return (
     <div className="grid grid-cols-1 flex-row items-center gap-4 bg-muted/40 px-4 py-1 md:flex">
       <Label className="hidden md:flex">{t("classrooms")}</Label>
@@ -46,11 +46,11 @@ export function ReportCardHeader() {
       />
       <Label className="hidden md:flex">{t("terms")}</Label>
       <TermSelector
-        defaultValue={searchParams.get("termId") ?? undefined}
+        value={termId ? Number(termId) : undefined}
         className="w-[300px]"
         onChange={(val) => {
           router.push(
-            routes.reportcards.index + "/?" + createQueryString({ term: val }),
+            routes.reportcards.index + "/?" + createQueryString({ term: val })
           );
         }}
       />
@@ -62,7 +62,7 @@ export function ReportCardHeader() {
               router.push(
                 routes.reportcards.index +
                   "/?" +
-                  createQueryString({ student: val }),
+                  createQueryString({ student: val })
               );
             }}
             defaultValue={searchParams.get("student") ?? undefined}

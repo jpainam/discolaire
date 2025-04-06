@@ -1,12 +1,13 @@
 import { auth } from "@repo/auth";
 import { sumBy } from "lodash";
 
-import { FinanceContentView } from "~/components/classrooms/finances/FinanceContentView";
+import { GridViewFinanceCard } from "~/components/classrooms/finances/GridViewFinanceCard";
+import { ListViewFinance } from "~/components/classrooms/finances/ListViewFinance";
 import { api } from "~/trpc/server";
 
 export default async function Page(props: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ query: string }>;
+  searchParams: Promise<{ query?: string; view?: string }>;
 }) {
   const searchParams = await props.searchParams;
 
@@ -27,7 +28,7 @@ export default async function Page(props: {
     const students = await api.contact.students(contact.id);
     const studentIds = students.map((student) => student.studentId);
     balances = balances.filter((balance) =>
-      studentIds.includes(balance.student.id),
+      studentIds.includes(balance.student.id)
     );
   }
 
@@ -42,12 +43,31 @@ export default async function Page(props: {
             ?.toLowerCase()
             .includes(query.toLowerCase()) ??
           balance.student.email?.toLowerCase().includes(query.toLowerCase()) ??
-          (!isNaN(Number(query)) && balance.balance >= Number(query)),
+          (!isNaN(Number(query)) && balance.balance >= Number(query))
       );
 
   const amountDue = sumBy(
     fees.filter((fee) => fee.dueDate <= new Date()),
-    "amount",
+    "amount"
   );
-  return <FinanceContentView amountDue={amountDue} students={students} />;
+  const view = searchParams.view ?? "grid";
+  return (
+    <div>
+      {view === "list" ? (
+        <ListViewFinance amountDue={amountDue} students={students} />
+      ) : (
+        <div className="grid gap-4 p-2 text-sm md:grid-cols-2 xl:md:grid-cols-3">
+          {students.map((balance) => {
+            return (
+              <GridViewFinanceCard
+                amountDue={amountDue}
+                studentBalance={balance}
+                key={balance.id}
+              />
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
 }

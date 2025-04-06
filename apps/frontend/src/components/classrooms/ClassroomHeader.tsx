@@ -20,46 +20,54 @@ import { useConfirm } from "~/providers/confirm-dialog";
 
 import { Label } from "@repo/ui/components/label";
 
-import type { RouterOutputs } from "@repo/api";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { ClassroomSelector } from "../shared/selects/ClassroomSelector";
 import { CreateEditClassroom } from "./CreateEditClassroom";
 
-export function ClassroomHeader({
-  classrooms,
-}: {
-  classrooms: RouterOutputs["classroom"]["all"];
-}) {
+export function ClassroomHeader() {
+  const trpc = useTRPC();
+  const { data: classrooms } = useSuspenseQuery(
+    trpc.classroom.all.queryOptions()
+  );
   const { t } = useLocale();
   const { createQueryString } = useCreateQueryString();
+  const queryClient = useQueryClient();
   const params = useParams<{ id: string }>();
   const pathname = usePathname();
   const router = useRouter();
   const canDeleteClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
-  const deleteClassroomMutation = api.classroom.delete.useMutation({
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const deleteClassroomMutation = useMutation(
+    trpc.classroom.delete.mutationOptions({
+      onSuccess: async () => {
+        toast.success(t("deleted_successfully"), { id: 0 });
+        await queryClient.invalidateQueries(trpc.classroom.all.pathFilter());
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const confirm = useConfirm();
 
@@ -77,7 +85,7 @@ export function ClassroomHeader({
   };
   const canCreateClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const { openSheet } = useSheet();
 

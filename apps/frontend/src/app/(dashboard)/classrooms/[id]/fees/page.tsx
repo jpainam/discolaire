@@ -23,7 +23,11 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     <div className="flex flex-col gap-2">
       <Suspense
         key={params.id}
-        fallback={<Skeleton className="h-8 w-full px-4" />}
+        fallback={
+          <div className="py-2 px-4">
+            <Skeleton className="h-8 w-full" />
+          </div>
+        }
       >
         <ClassroomFeeHeader />
       </Suspense>
@@ -32,7 +36,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense
             fallback={
-              <div className="grid grid-cols-4 gap-4">
+              <div className="grid grid-cols-4 gap-4 p-4">
                 {Array.from({ length: 12 }).map((_, i) => (
                   <Skeleton key={i} className="h-8 w-full " />
                 ))}
