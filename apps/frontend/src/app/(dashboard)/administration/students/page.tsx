@@ -5,14 +5,15 @@ import {
   TabsTrigger,
 } from "@repo/ui/components/tabs";
 import { ChartSpline, SquareArrowLeft, Upload, Users } from "lucide-react";
+import { Suspense } from "react";
 import { StudentDataTable } from "~/components/students/StudentDataTable";
 import { getServerTranslations } from "~/i18n/server";
-import { api } from "~/trpc/server";
+import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 import { StudentPageHeader } from "../../students/StudentPageHeader";
 
 export default async function Page() {
   const { t } = await getServerTranslations();
-  const students = await api.student.all({ limit: 50 });
+  prefetch(trpc.student.all.queryOptions());
   return (
     <Tabs defaultValue="tab-1">
       <TabsList className="h-auto justify-start w-full rounded-none border-b bg-transparent p-0">
@@ -56,7 +57,11 @@ export default async function Page() {
       <TabsContent value="tab-1">
         <div className="flex flex-col gap-2">
           <StudentPageHeader />
-          <StudentDataTable students={students} />
+          <HydrateClient>
+            <Suspense fallback={<div className="px-4 py-2">Loading...</div>}>
+              <StudentDataTable />
+            </Suspense>
+          </HydrateClient>
         </div>
       </TabsContent>
       <TabsContent value="tab-2">

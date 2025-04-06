@@ -5,17 +5,14 @@ import { useMemo } from "react";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { useLocale } from "~/i18n";
 
-import type { RouterOutputs } from "@repo/api";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 import { StudentDataTableActions } from "./StudentDataTableActions";
 import { fetchStudentColumns } from "./StudentDataTableColumns";
 
-export function StudentDataTable({
-  students,
-}: {
-  students:
-    | RouterOutputs["student"]["lastAccessed"]
-    | RouterOutputs["student"]["all"];
-}) {
+export function StudentDataTable() {
+  const trpc = useTRPC();
+  const { data: students } = useSuspenseQuery(trpc.student.all.queryOptions());
   const { t } = useLocale();
 
   const columns = useMemo(() => {
