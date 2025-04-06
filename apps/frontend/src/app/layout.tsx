@@ -17,7 +17,7 @@ import { getUser } from "@repo/auth/session";
 import { detectLanguage } from "~/i18n/server";
 
 import { cookies } from "next/headers";
-import ProgressBarProvider from "~/components/next-progress";
+//import ProgressBarProvider from "~/components/next-progress";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { ThemeProvider } from "~/components/theme-provider";
 import { env } from "~/env";
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     env.VERCEL_ENV === "production"
       ? "https://school.discolaire.com"
-      : "http://localhost:3000",
+      : "http://localhost:3000"
   ),
   title: "Gestion Scolaire",
   description: "Gestion scolaire pour les écoles",
@@ -97,7 +97,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
             "bg-background overscroll-none font-sans antialiased",
             activeThemeValue ? `theme-${activeThemeValue}` : "",
             isScaled ? "theme-scaled" : "",
-            fontVariables,
+            fontVariables
           )}
         >
           <ThemeProvider
@@ -112,9 +112,9 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
                 <TRPCReactProvider>
                   <AuthProvider userPromise={userPromise}>
                     <ConfirmDialogProvider>
-                      <ProgressBarProvider>
-                        {props.children}
-                      </ProgressBarProvider>
+                      {/* <ProgressBarProvider> */}
+                      {props.children}
+                      {/* </ProgressBarProvider> */}
                     </ConfirmDialogProvider>
                     {/* <ReactQueryDevtools initialIsOpen={false} /> */}
                   </AuthProvider>

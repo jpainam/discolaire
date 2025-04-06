@@ -21,13 +21,13 @@ import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { Badge } from "@repo/ui/components/badge";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { getErrorMessage } from "~/lib/handle-error";
 import { PermissionAction } from "~/permissions";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getAppreciations } from "~/utils/get-appreciation";
 import { EditGradeStudent } from "./EditGradeStudent";
 
@@ -37,10 +37,8 @@ type GradeSheetGetGradeProcedureOutput = NonNullable<
 
 export function fetchGradeColumns({
   t,
-  classroomId,
 }: {
   t: TFunction<string, unknown>;
-  classroomId: string;
 }): ColumnDef<GradeSheetGetGradeProcedureOutput, unknown>[] {
   return [
     {
@@ -176,9 +174,7 @@ export function fetchGradeColumns({
     },
     {
       id: "actions",
-      cell: ({ row }) => (
-        <ActionCells classroomId={classroomId} grade={row.original} />
-      ),
+      cell: ({ row }) => <ActionCells grade={row.original} />,
       size: 60,
       enableSorting: false,
       enableHiding: false,
@@ -186,25 +182,33 @@ export function fetchGradeColumns({
   ];
 }
 
-function ActionCells({
-  grade,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  classroomId,
-}: {
-  classroomId: string;
-  grade: GradeSheetGetGradeProcedureOutput;
-}) {
+function ActionCells({ grade }: { grade: GradeSheetGetGradeProcedureOutput }) {
   const confirm = useConfirm();
   const { t } = useLocale();
   const { openModal } = useModal();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
   const isClosed = grade.gradeSheet.term.endDate
     ? grade.gradeSheet.term.endDate < new Date()
     : false;
 
-  const markGradeAbsent = api.grade.update.useMutation();
+  const markGradeAbsent = useMutation(
+    trpc.grade.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.classroom.gradesheets.pathFilter()
+        );
+        toast.success(t("marked_absent_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const canUpdateGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
 
   return (
@@ -252,33 +256,22 @@ function ActionCells({
             <DropdownMenuItem
               disabled={isClosed}
               variant="destructive"
-              className="dark:data-[variant=destructive]:focus:bg-destructive/10"
               onSelect={async () => {
                 const isConfirmed = await confirm({
                   title: t("delete"),
                   description: t("delete_confirmation"),
                 });
                 if (isConfirmed) {
-                  toast.promise(
-                    markGradeAbsent.mutateAsync({
-                      id: grade.id,
-                      grade: 0,
-                      isAbsent: true,
-                    }),
-                    {
-                      loading: t("mark_absent") + "...",
-                      success: () => {
-                        return t("marked_absent_successfully");
-                      },
-                      error: (error) => {
-                        return getErrorMessage(error);
-                      },
-                    },
-                  );
+                  toast.loading(t("deleting"), { id: 0 });
+                  markGradeAbsent.mutate({
+                    id: grade.id,
+                    grade: 0,
+                    isAbsent: true,
+                  });
                 }
               }}
             >
-              <FlagOff className="mr-2 size-4" />
+              <FlagOff className="size-4" />
               {t("mark_absent")}
             </DropdownMenuItem>
           </DropdownMenuContent>

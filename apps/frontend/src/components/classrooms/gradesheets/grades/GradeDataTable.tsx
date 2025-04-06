@@ -1,6 +1,5 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { useMemo } from "react";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
@@ -15,10 +14,10 @@ export function GradeDataTable({
   grades: RouterOutputs["gradeSheet"]["grades"];
 }) {
   const { t } = useLocale();
-  const params = useParams<{ id: string }>();
+  //const params = useParams<{ id: string }>();
   const columns = useMemo(() => {
-    return fetchGradeColumns({ t: t, classroomId: params.id });
-  }, [t, params.id]);
+    return fetchGradeColumns({ t: t });
+  }, [t]);
 
   const { table } = useDataTable({
     columns: columns,

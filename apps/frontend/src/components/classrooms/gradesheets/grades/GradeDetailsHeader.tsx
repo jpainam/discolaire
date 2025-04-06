@@ -24,6 +24,7 @@ import {
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
@@ -33,7 +34,7 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getAppreciations } from "~/utils/get-appreciation";
 import { ReportFalseGrade } from "./ReportFalseGrade";
 
@@ -63,12 +64,12 @@ export function GradeDetailsHeader({
 
   const males10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "male",
+      (grade) => grade.grade >= 10 && grade.student.gender == "male"
     ).length / len;
 
   const females10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "female",
+      (grade) => grade.grade >= 10 && grade.student.gender == "female"
     ).length / len;
 
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
@@ -81,31 +82,39 @@ export function GradeDetailsHeader({
 
   const confirm = useConfirm();
   const router = useRouter();
-  const utils = api.useUtils();
-  useEffect(() => {
-    toast.warning(t("this_term_is_closed"), { id: 0 });
-  }, [t]);
-  const deleteGradeSheetMutation = api.gradeSheet.delete.useMutation({
-    onSettled: async () => {
-      await utils.gradeSheet.invalidate();
-      await utils.grade.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.push(routes.classrooms.gradesheets.index(params.id));
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-
-  const canDeleteGradesheet = useCheckPermission(
-    "gradesheet",
-    PermissionAction.DELETE,
-  );
   const isClosed = gradesheet.term.endDate
     ? gradesheet.term.endDate < new Date()
     : false;
+
+  useEffect(() => {
+    if (isClosed) {
+      toast.warning(t("this_term_is_closed"), { id: 0 });
+    }
+  }, [isClosed, t]);
+
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const deleteGradeSheetMutation = useMutation(
+    trpc.gradeSheet.delete.mutationOptions({
+      onSettled: async () => {
+        await queryClient.invalidateQueries(trpc.gradeSheet.pathFilter());
+        await queryClient.invalidateQueries(trpc.grade.pathFilter());
+      },
+      onSuccess: () => {
+        toast.success(t("deleted_successfully"), { id: 0 });
+        router.push(routes.classrooms.gradesheets.index(params.id));
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+
+  const canDeleteGradesheet = useCheckPermission(
+    "gradesheet",
+    PermissionAction.DELETE
+  );
 
   return (
     <div className="flex flex-col gap-2 border-b">
@@ -228,7 +237,7 @@ export function GradeDetailsHeader({
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/gradesheets/${gradesheet.id}?format=pdf&classroomId=${params.id}`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >
@@ -239,7 +248,7 @@ export function GradeDetailsHeader({
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/gradesheets/${gradesheet.id}?format=csv&classroomId=${params.id}`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >
