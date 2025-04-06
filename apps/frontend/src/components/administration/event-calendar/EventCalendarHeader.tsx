@@ -38,7 +38,8 @@ export function EventCalendarHeader() {
 
   const handleFilterChange = (category: string) => {
     router.push(
-      "?" + createQueryString({ category: category == "All" ? null : category })
+      "?" +
+        createQueryString({ category: category == "All" ? null : category }),
     );
   };
 
