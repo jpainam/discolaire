@@ -147,6 +147,7 @@ async function getGradeSheets(classroomId: string) {
     const grades = gradesheet.grades.filter((grade) => !grade.isAbsent);
     return {
       ...gradesheet,
+      grades: [], // Omit grades from the response, not needed in the frontend
       num_grades: grades.length,
       num_is_absent: gradesheet.grades.filter((grade) => grade.isAbsent).length,
       max: Math.max(...grades.map((g) => g.grade)),

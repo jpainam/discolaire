@@ -44,18 +44,18 @@ export function ClassroomFeeTable() {
   const params = useParams<{ id: string }>();
   const trpc = useTRPC();
   const { data: fees } = useSuspenseQuery(
-    trpc.classroom.fees.queryOptions(params.id)
+    trpc.classroom.fees.queryOptions(params.id),
   );
   const { t, i18n } = useLocale();
   const queryClient = useQueryClient();
 
   const canDeleteClassroomFee = useCheckPermission(
     "fee",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const canUpdateClassroomFee = useCheckPermission(
     "fee",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
 
   const deleteFeeMutation = useMutation(
@@ -67,7 +67,7 @@ export function ClassroomFeeTable() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const { openModal } = useModal();
