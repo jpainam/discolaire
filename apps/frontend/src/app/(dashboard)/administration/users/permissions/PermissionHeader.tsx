@@ -5,6 +5,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
@@ -43,6 +44,7 @@ export function PermissionHeader({ defaultValue }: { defaultValue: string }) {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownHelp />
+            <DropdownMenuSeparator />
             <DropdownMenuItem>
               <PDFIcon />
               {t("pdf_export")}

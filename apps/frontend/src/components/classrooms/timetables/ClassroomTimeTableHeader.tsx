@@ -33,11 +33,11 @@ export function ClassroomTimeTableHeader() {
   const { openModal } = useModal();
   const canDeleteTimetable = useCheckPermission(
     "timetable",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canCreateTimetable = useCheckPermission(
     "timetable",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const clearClassroomLessonMutation = api.lesson.clearByClassroom.useMutation({
     onSettled: async () => {
@@ -78,6 +78,7 @@ export function ClassroomTimeTableHeader() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownHelp />
+            <DropdownMenuSeparator />
             <DropdownMenuItem>
               <PDFIcon />
               {t("pdf_export")}

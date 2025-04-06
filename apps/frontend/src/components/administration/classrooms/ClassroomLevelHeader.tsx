@@ -9,6 +9,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
@@ -27,7 +28,7 @@ export function ClassroomLevelHeader() {
   const { t } = useLocale();
   const { openModal } = useModal();
   const [selectedLevels, setSelectedLevels] = useAtom(
-    selectedClassroomLevelAtom,
+    selectedClassroomLevelAtom
   );
 
   const utils = api.useUtils();
@@ -92,6 +93,7 @@ export function ClassroomLevelHeader() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownHelp />
+            <DropdownMenuSeparator />
             <DropdownMenuItem>
               <PDFIcon />
               {t("pdf_export")}

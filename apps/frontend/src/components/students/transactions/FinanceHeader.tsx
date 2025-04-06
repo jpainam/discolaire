@@ -8,6 +8,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
@@ -56,6 +57,7 @@ export default function FinanceHeader() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownHelp />
+            <DropdownMenuSeparator />
             <DropdownMenuItem>
               <XMLIcon />
               {t("xml_export")}

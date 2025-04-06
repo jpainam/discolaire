@@ -7,6 +7,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
@@ -34,11 +35,12 @@ export function LoginInfoHeader() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownHelp />
+            <DropdownMenuSeparator />
             <DropdownMenuItem
               onSelect={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}/login-info`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
