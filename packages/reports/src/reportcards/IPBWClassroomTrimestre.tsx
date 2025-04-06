@@ -260,10 +260,12 @@ export function IPBWClassroomTrimestre({
                                 borderRight: "1px solid black",
                               }}
                             >
-                              <Text>
-                                {subjectSummary?.min.toFixed(2)}/
-                                {subjectSummary?.max.toFixed(2)}
-                              </Text>
+                              {subjectSummary && (
+                                <Text>
+                                  {subjectSummary.min.toFixed(2)}/
+                                  {subjectSummary.max.toFixed(2)}
+                                </Text>
+                              )}
                             </View>
                             <View
                               style={{

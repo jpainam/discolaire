@@ -49,7 +49,7 @@ export function IPBWSummary({
             paddingVertical: 1,
           }}
         >
-          <Text style={{ paddingLeft: 4 }}>Discipline</Text>
+          <Text style={{ paddingLeft: 4 }}>Performance</Text>
         </View>
         <SummaryItem name="Moy.Max" value={summary.max.toFixed(2)} />
         <SummaryItem name="Moy.Min" value={summary.min.toFixed(2)} />
