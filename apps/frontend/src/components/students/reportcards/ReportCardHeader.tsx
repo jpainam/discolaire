@@ -14,7 +14,6 @@ import { Label } from "@repo/ui/components/label";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
-import type { RouterOutputs } from "@repo/api";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
@@ -24,11 +23,7 @@ import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
 import { sidebarIcons } from "../sidebar-icons";
 
-export function ReportCardHeader({
-  classroom,
-}: {
-  classroom: NonNullable<RouterOutputs["student"]["classroom"]>;
-}) {
+export function ReportCardHeader({ classroomId }: { classroomId: string }) {
   const { t } = useLocale();
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
@@ -38,7 +33,7 @@ export function ReportCardHeader({
   const Icon = sidebarIcons.reportcards;
   const canPrintReportCard = useCheckPermission(
     "reportcard",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const termId = searchParams.get("termId");
   const trimestreId = searchParams.get("trimestreId");
@@ -64,7 +59,7 @@ export function ReportCardHeader({
               `/students/${params.id}/reportcards/trimestres?` +
               createQueryString({
                 trimestreId: val,
-                classroomId: classroom.id,
+                classroomId: classroomId,
                 studentId: params.id,
                 format: "pdf",
               });
