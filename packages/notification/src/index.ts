@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Novu } from "@novu/node";
-import { nanoid } from "nanoid";
+import { Novu } from "@novu/api";
 import { Resend } from "resend";
 
 import { env } from "./env";
 
 export const resend = new Resend(env.RESEND_API_KEY);
-const novu = new Novu(env.NOVU_API_KEY);
+const novu = new Novu({ secretKey: env.NOVU_API_KEY });
 export { novu };
 const API_ENDPOINT = "https://api.novu.co/v1";
 
@@ -49,25 +47,27 @@ interface TriggerPayload {
 
 export async function trigger(data: TriggerPayload) {
   try {
-    await novu.trigger(data.name, {
-      to: {
-        ...data.user,
-        //   Prefix subscriber id with team id
-        subscriberId: `${data.user.schoolId}_${data.user.subscriberId}`,
-      },
+    console.log("Triggering event", data.name, data.user);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // await novu.trigger(data.name, {
+    //   to: {
+    //     ...data.user,
+    //     //   Prefix subscriber id with team id
+    //     subscriberId: `${data.user.schoolId}_${data.user.subscriberId}`,
+    //   },
 
-      payload: data.payload,
-      tenant: data.tenant,
-      overrides: {
-        email: {
-          replyTo: data.replyTo,
+    //   payload: data.payload,
+    //   tenant: data.tenant,
+    //   overrides: {
+    //     email: {
+    //       replyTo: data.replyTo,
 
-          headers: {
-            "X-Entity-Ref-ID": nanoid(),
-          },
-        },
-      },
-    });
+    //       headers: {
+    //         "X-Entity-Ref-ID": nanoid(),
+    //       },
+    //     },
+    //   },
+    // });
   } catch (error) {
     console.log(error);
   }
@@ -75,26 +75,28 @@ export async function trigger(data: TriggerPayload) {
 
 export async function triggerBulk(events: TriggerPayload[]) {
   try {
-    await novu.bulkTrigger(
-      events.map((data) => ({
-        name: data.name,
-        to: {
-          ...data.user,
-          //   Prefix subscriber id with team id
-          subscriberId: `${data.user.schoolId}_${data.user.subscriberId}`,
-        },
-        payload: data.payload,
-        tenant: data.tenant,
-        overrides: {
-          email: {
-            replyTo: data.replyTo,
-            headers: {
-              "X-Entity-Ref-ID": nanoid(),
-            },
-          },
-        },
-      })),
-    );
+    console.log("Triggering event", events);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // await novu.bulkTrigger(
+    //   events.map((data) => ({
+    //     name: data.name,
+    //     to: {
+    //       ...data.user,
+    //       //   Prefix subscriber id with team id
+    //       subscriberId: `${data.user.schoolId}_${data.user.subscriberId}`,
+    //     },
+    //     payload: data.payload,
+    //     tenant: data.tenant,
+    //     overrides: {
+    //       email: {
+    //         replyTo: data.replyTo,
+    //         headers: {
+    //           "X-Entity-Ref-ID": nanoid(),
+    //         },
+    //       },
+    //     },
+    //   })),
+    // );
   } catch (error) {
     console.log(error);
   }

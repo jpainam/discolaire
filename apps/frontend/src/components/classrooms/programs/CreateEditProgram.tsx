@@ -67,7 +67,7 @@ export function CreateEditProgram({
   const utils = api.useUtils();
   const canUpdateSubject = useCheckPermission(
     "subject",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const updateSubjectProgram = api.subject.updateProgram.useMutation({
     onSettled: () => utils.subject.invalidate(),
@@ -140,7 +140,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=pdf`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -151,7 +151,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=pdf&subjectId=${subject.id}`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -163,7 +163,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=csv`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -174,7 +174,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=csv&subjectId=${subject.id}`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -203,12 +203,6 @@ export function CreateEditProgram({
             control={form.control}
             name="content"
             render={({ field }) => (
-              // <QuillEditor
-              //   value={value}
-              //   onChange={onChange}
-              //   className="col-span-full [&_.ql-editor]:min-h-[calc(100vh-15rem)]"
-              //   labelClassName="font-medium text-gray-700 dark:text-gray-600 mb-1.5"
-              // />
               <FormItem className="">
                 <FormControl>
                   <TiptapEditor
@@ -216,11 +210,6 @@ export function CreateEditProgram({
                     className="shadow-none rounded-none"
                     onChange={field.onChange}
                   />
-                  {/* <QuillEditor
-                    className="h-[calc(100vh-15rem)]"
-                    onChange={onChange}
-                    defaultValue={subjectQuery.data?.program ?? html_content}
-                  /> */}
                 </FormControl>
                 <FormMessage />
               </FormItem>
