@@ -40,7 +40,7 @@ export function ReportCardHeader({ classroomId }: { classroomId: string }) {
   return (
     <div className="grid md:flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1 text-secondary-foreground">
       {Icon && <Icon className="h-4 w-4" />}
-      <Label>{t("term")}</Label>
+      <Label className="hidden md:block">{t("term")}</Label>
       <TermSelector
         className="w-[300px]"
         defaultValue={searchParams.get("termId")}
@@ -71,7 +71,7 @@ export function ReportCardHeader({ classroomId }: { classroomId: string }) {
         <div className="ml-auto flex flex-row items-center gap-0">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button size={"icon"} variant={"outline"}>
+              <Button size={"icon"} className="size-8" variant={"outline"}>
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
