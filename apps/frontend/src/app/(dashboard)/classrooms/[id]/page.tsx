@@ -1,9 +1,11 @@
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
 import { ClassroomDetails } from "~/components/classrooms/ClassroomDetails";
 import { EnrollmentDataTable } from "~/components/classrooms/enrollments/EnrollmentDataTable";
 import { EnrollmentHeader } from "~/components/classrooms/enrollments/EnrollmentHeader";
-import { api, caller, HydrateClient, prefetch, trpc } from "~/trpc/server";
+import { ErrorFallback } from "~/components/error-fallback";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 //import TopTimetable from "~/components/classrooms/TopTimetable";
 //import { api } from "~/trpc/server";
 
@@ -19,32 +21,38 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   //   PermissionAction.READ,
   // );
 
-  const classroom = await api.classroom.get(params.id);
-  void prefetch(trpc.classroom.students.queryOptions(params.id));
-
-  const students = await caller.classroom.students(classroom.id);
+  void batchPrefetch([
+    trpc.classroom.get.queryOptions(params.id),
+    trpc.classroom.fees.queryOptions(params.id),
+    trpc.classroom.students.queryOptions(params.id),
+    trpc.classroom.students.queryOptions(params.id),
+  ]);
 
   return (
-    <>
-      <ClassroomDetails classroomId={params.id} />
-      {/* <div>
-          <GenderPie classroom={classroom} />
-        </div>
-        <div>
-          <CreditDebitPie />
-        </div> */}
-      {/* {timetables.length != 0 && <TopTimetable />} */}
-
-      <EnrollmentHeader students={students} classroom={classroom} />
-
-      {/* <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-2 p-2 ">
-        <GenderPie classroom={classroom} />
-        <RepeatingPie students={students} />
-        <GenderPie classroom={classroom} />
-        <GenderPie classroom={classroom} />
-      </div> */}
-
-      <HydrateClient>
+    <HydrateClient>
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <Suspense
+          key={params.id}
+          fallback={
+            <div className="grid grid-cols-3 gap-4 p-4">
+              <Skeleton className="h-24 w-full" />
+              <Skeleton className="h-24 w-full" />
+              <Skeleton className="h-24 w-full" />
+            </div>
+          }
+        >
+          <ClassroomDetails />
+        </Suspense>
+      </ErrorBoundary>
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <Suspense
+          key={params.id}
+          fallback={<Skeleton className="h-8 w-full px-4" />}
+        >
+          <EnrollmentHeader />
+        </Suspense>
+      </ErrorBoundary>
+      <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
           fallback={
             <div className="grid grid-cols-4 gap-4">
@@ -55,10 +63,10 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           }
         >
           <div className="py-2 px-4">
-            <EnrollmentDataTable classroomId={params.id} />{" "}
+            <EnrollmentDataTable />{" "}
           </div>
         </Suspense>
-      </HydrateClient>
-    </>
+      </ErrorBoundary>
+    </HydrateClient>
   );
 }

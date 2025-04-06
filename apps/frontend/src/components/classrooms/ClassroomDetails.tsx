@@ -1,3 +1,4 @@
+"use client";
 import { sumBy } from "lodash";
 import {
   BookUser,
@@ -11,20 +12,23 @@ import {
   SquareUser,
   TableProperties,
 } from "lucide-react";
+import { useLocale } from "~/i18n";
 
-import { getServerTranslations } from "~/i18n/server";
-
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import { CURRENCY } from "~/lib/constants";
-import { api } from "~/trpc/server";
+import { useTRPC } from "~/trpc/react";
 
-export async function ClassroomDetails({
-  classroomId,
-}: {
-  classroomId: string;
-}) {
-  const { t, i18n } = await getServerTranslations();
-  const fees = await api.classroom.fees(classroomId);
-  const classroom = await api.classroom.get(classroomId);
+export function ClassroomDetails() {
+  const { t, i18n } = useLocale();
+  const trpc = useTRPC();
+  const params = useParams<{ id: string }>();
+  const { data: fees } = useSuspenseQuery(
+    trpc.classroom.fees.queryOptions(params.id)
+  );
+  const { data: classroom } = useSuspenseQuery(
+    trpc.classroom.get.queryOptions(params.id)
+  );
   return (
     <div className="grid w-full px-4 gap-4 divide-x md:grid-cols-2 lg:grid-cols-3">
       <ul className="grid gap-3 p-2 text-sm">

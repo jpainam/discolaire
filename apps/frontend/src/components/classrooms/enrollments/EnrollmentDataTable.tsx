@@ -6,14 +6,16 @@ import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { useLocale } from "~/i18n";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import { useTRPC } from "~/trpc/react";
 import { EnrollmentDataTableActions } from "./EnrollmentDataTableActions";
 import { fetchEnrollmentColumns } from "./EnrollmentDataTableColumns";
 
-export function EnrollmentDataTable({ classroomId }: { classroomId: string }) {
+export function EnrollmentDataTable() {
   const trpc = useTRPC();
+  const params = useParams<{ id: string }>();
   const { data: students } = useSuspenseQuery(
-    trpc.classroom.students.queryOptions(classroomId),
+    trpc.classroom.students.queryOptions(params.id)
   );
   const { t } = useLocale();
 

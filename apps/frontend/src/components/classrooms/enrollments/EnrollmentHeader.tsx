@@ -17,23 +17,27 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
-import type { RouterOutputs } from "@repo/api";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import { useMemo } from "react";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSession } from "~/providers/AuthProvider";
+import { useTRPC } from "~/trpc/react";
 import { getAge } from "~/utils";
 import { EnrollStudent } from "./EnrollStudent";
 
-export function EnrollmentHeader({
-  classroom,
-  students,
-}: {
-  classroom: RouterOutputs["classroom"]["get"];
-  students: RouterOutputs["classroom"]["students"];
-}) {
+export function EnrollmentHeader() {
+  const trpc = useTRPC();
+  const params = useParams<{ id: string }>();
+  const { data: students } = useSuspenseQuery(
+    trpc.classroom.students.queryOptions(params.id)
+  );
+  const { data: classroom } = useSuspenseQuery(
+    trpc.classroom.get.queryOptions(params.id)
+  );
   const { t } = useLocale();
   const { openModal } = useModal();
 
@@ -54,13 +58,13 @@ export function EnrollmentHeader({
     const oldest =
       students.length > 0
         ? Math.max(
-            ...students.map((student) => getAge(student.dateOfBirth) || 0),
+            ...students.map((student) => getAge(student.dateOfBirth) || 0)
           )
         : 0;
     const youngest =
       students.length > 0
         ? Math.min(
-            ...students.map((student) => getAge(student.dateOfBirth) || 0),
+            ...students.map((student) => getAge(student.dateOfBirth) || 0)
           )
         : 0;
 
@@ -167,7 +171,7 @@ export function EnrollmentHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -178,7 +182,7 @@ export function EnrollmentHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
