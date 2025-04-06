@@ -135,7 +135,7 @@ export default async function Page(props: {
                             value.average > 10 &&
                               "bg-green-600 text-green-100 p-1.5",
                             value.average < 10 &&
-                              "bg-red-600 text-red-100 p-1.5"
+                              "bg-red-600 text-red-100 p-1.5",
                           )}
                         >
                           {value.average.toFixed(2)}
@@ -153,7 +153,7 @@ export default async function Page(props: {
                       {Object.keys(groups).map(
                         (groupId: string, indexg: number) => {
                           const items = groups[Number(groupId)]?.sort(
-                            (a, b) => a.order - b.order
+                            (a, b) => a.order - b.order,
                           );
 
                           if (!items) return null;
@@ -164,7 +164,7 @@ export default async function Page(props: {
                             >
                               {items.map((subject, indexs) => {
                                 const grade = studentReport.studentCourses.find(
-                                  (c) => c.subjectId === subject.id
+                                  (c) => c.subjectId === subject.id,
                                 );
                                 const g = grade?.grade1 ?? 0;
                                 return (
@@ -175,7 +175,7 @@ export default async function Page(props: {
                                         ? "!bg-red-50 dark:!bg-red-800"
                                         : g < 15
                                           ? "!bg-yellow-50 dark:!bg-yellow-800"
-                                          : "!bg-green-50 dark:!bg-green-800"
+                                          : "!bg-green-50 dark:!bg-green-800",
                                     )}
                                     key={`${subject.id}-${student.id}-${groupId}-${indexs}`}
                                   >
@@ -185,7 +185,7 @@ export default async function Page(props: {
                               })}
                             </Fragment>
                           );
-                        }
+                        },
                       )}
                     </TableRow>
                     <TableRow
@@ -201,7 +201,7 @@ export default async function Page(props: {
                       {Object.keys(groups).map(
                         (groupId: string, indexg: number) => {
                           const items = groups[Number(groupId)]?.sort(
-                            (a, b) => a.order - b.order
+                            (a, b) => a.order - b.order,
                           );
 
                           if (!items) return null;
@@ -212,7 +212,7 @@ export default async function Page(props: {
                             >
                               {items.map((subject, indexs) => {
                                 const grade = studentReport.studentCourses.find(
-                                  (c) => c.subjectId === subject.id
+                                  (c) => c.subjectId === subject.id,
                                 );
                                 const g = grade?.grade2 ?? 0;
                                 return (
@@ -223,7 +223,7 @@ export default async function Page(props: {
                                         ? "!bg-red-50 dark:!bg-red-800"
                                         : g < 15
                                           ? "!bg-yellow-50 dark:!bg-yellow-800"
-                                          : "!bg-green-50 dark:!bg-green-800"
+                                          : "!bg-green-50 dark:!bg-green-800",
                                     )}
                                     key={`${subject.id}-${student.id}-${groupId}-${indexs}-2`}
                                   >
@@ -233,7 +233,7 @@ export default async function Page(props: {
                               })}
                             </Fragment>
                           );
-                        }
+                        },
                       )}
                     </TableRow>
                   </Fragment>
