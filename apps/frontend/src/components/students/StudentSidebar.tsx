@@ -16,6 +16,7 @@ import {
   ArrowRightLeft,
   BellRing,
   BookText,
+  CaptionsIcon,
   CircleDollarSign,
   CreditCard,
   FileText,
@@ -65,6 +66,11 @@ export function StudentSidebar({
         name: "grades",
         icon: NotepadTextDashed,
         url: `/students/${params.id}/grades`,
+      },
+      {
+        name: "transcripts",
+        icon: CaptionsIcon,
+        url: `/students/${params.id}/gradesheets`,
       },
       {
         name: "reportcards",

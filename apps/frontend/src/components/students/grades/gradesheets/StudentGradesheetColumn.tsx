@@ -42,6 +42,7 @@ export function fetchGradeSheetColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("grade1")} />
       ),
+      size: 60,
       cell: ({ row }) => (
         <div className="flex items-center justify-center">
           {row.original.grade1}
@@ -52,6 +53,7 @@ export function fetchGradeSheetColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("grade2")} />
       ),
+      size: 60,
       cell: ({ row }) => (
         <div className="flex items-center justify-center">
           {row.original.grade2}
@@ -62,6 +64,7 @@ export function fetchGradeSheetColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("grade3")} />
       ),
+      size: 60,
       cell: ({ row }) => (
         <div className="flex items-center justify-center">
           {row.original.grade3}
@@ -72,6 +75,7 @@ export function fetchGradeSheetColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("grade4")} />
       ),
+      size: 60,
       cell: ({ row }) => (
         <div className="flex items-center justify-center">
           {row.original.grade4}
@@ -82,6 +86,7 @@ export function fetchGradeSheetColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("grade5")} />
       ),
+      size: 60,
       cell: ({ row }) => (
         <div className="flex items-center justify-center">
           {row.original.grade5}
@@ -92,6 +97,7 @@ export function fetchGradeSheetColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("grade6")} />
       ),
+      size: 60,
       cell: ({ row }) => (
         <div className="flex items-center justify-center">
           {row.original.grade6}
