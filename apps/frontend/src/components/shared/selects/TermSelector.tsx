@@ -35,7 +35,7 @@ export function TermSelector({
     (value: string | null) => {
       onChange?.(value == "all" ? undefined : value);
     },
-    [onChange]
+    [onChange],
   );
 
   return (
