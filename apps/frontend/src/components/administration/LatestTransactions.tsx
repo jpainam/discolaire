@@ -45,7 +45,7 @@ export async function LatestTransactions({
               "group flex items-center gap-3",
               "p-2 rounded-lg",
               "hover:bg-zinc-100 dark:hover:bg-zinc-800/50",
-              "transition-all duration-200"
+              "transition-all duration-200",
             )}
           >
             <AvatarState
@@ -74,7 +74,7 @@ export async function LatestTransactions({
                     "text-xs font-medium",
                     transaction.transactionType === "incoming"
                       ? "text-emerald-600 dark:text-emerald-400"
-                      : "text-red-600 dark:text-red-400"
+                      : "text-red-600 dark:text-red-400",
                   )}
                 >
                   {transaction.transactionType === "CREDIT" ? "+" : "-"}
