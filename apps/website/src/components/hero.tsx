@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { CheckCircle } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
@@ -64,25 +65,23 @@ export function Hero() {
               </p>
             </div>
             <div className="flex flex-col gap-4 sm:flex-row">
-              <Button
-                onClick={() => {
-                  window.open("https://demo.discolaire.com", "_blank");
-                }}
-                size="lg"
-                className="bg-gradient-to-r from-blue-500 to-purple-500 text-white transition-all duration-300 hover:opacity-90"
-              >
-                Get Started
-              </Button>
-              <Button
-                onClick={() => {
-                  window.open("https://demo.discolaire.com", "_blank");
-                }}
-                size="lg"
-                variant="outline"
-                className="border-zinc-700 text-zinc-300 transition-all duration-300 hover:bg-zinc-800 hover:text-white"
-              >
-                Learn More
-              </Button>
+              <Link href="https://demo.discolaire.com" target="_blank">
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-blue-500 to-purple-500 text-white transition-all duration-300 hover:opacity-90"
+                >
+                  Get Started
+                </Button>
+              </Link>
+              <Link href="https://demo.discolaire.com" target="_blank">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-zinc-700 text-zinc-300 transition-all duration-300 hover:bg-zinc-800 hover:text-white"
+                >
+                  Learn More
+                </Button>
+              </Link>
             </div>
             <div className="mt-2 flex flex-wrap items-center gap-6 text-sm text-zinc-400">
               {[

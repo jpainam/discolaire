@@ -68,14 +68,11 @@ export function Header() {
             {item.name}
           </Link>
         ))}
-        <button
-          onClick={() => {
-            window.open("https://demo.discolaire.com", "_blank");
-          }}
-          className="rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 px-4 py-2 text-white transition duration-300 hover:bg-gradient-to-l"
-        >
-          Request Demo
-        </button>
+        <a href="https://demo.discolaire.com" target="_blank">
+          <button className="rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 px-4 py-2 text-white transition duration-300 hover:bg-gradient-to-l">
+            Request Demo
+          </button>
+        </a>
       </nav>
     </>
   );
