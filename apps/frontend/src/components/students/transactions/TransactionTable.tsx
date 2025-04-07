@@ -23,7 +23,6 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
   TableBody,
@@ -39,11 +38,16 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import i18next from "i18next";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { CURRENCY } from "~/lib/constants";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { DeleteTransaction } from "./DeleteTransaction";
 
 export function TransactionTable() {
@@ -54,34 +58,39 @@ export function TransactionTable() {
     month: "short",
     year: "numeric",
   });
-  const transactionsQuery = api.student.transactions.useQuery(params.id);
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const { data: transactions } = useSuspenseQuery(
+    trpc.student.transactions.queryOptions(params.id)
+  );
+  const queryClient = useQueryClient();
+
   const canDeleteTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const canReadTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
 
-  const updateTransactionMutation = api.transaction.updateStatus.useMutation({
-    onSettled: async () => {
-      await utils.transaction.invalidate();
-      await utils.student.transactions.invalidate();
-      await utils.studentAccount.invalidate();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-    },
-  });
+  const updateTransactionMutation = useMutation(
+    trpc.transaction.updateStatus.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.student.transactions.pathFilter()
+        );
+        await queryClient.invalidateQueries(trpc.studentAccount.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const { openModal } = useModal();
   return (
     <div className="px-4">
@@ -99,25 +108,15 @@ export function TransactionTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {transactionsQuery.data?.length === 0 && (
+            {transactions.length === 0 && (
               <TableRow>
                 <TableCell colSpan={7} className="text-center">
                   <EmptyState className="my-8" />
                 </TableCell>
               </TableRow>
             )}
-            {transactionsQuery.isPending && (
-              <TableRow>
-                <TableCell colSpan={7}>
-                  <div className="grid grid-cols-5 gap-2">
-                    {Array.from({ length: 30 }).map((_, i) => (
-                      <Skeleton key={i} className="h-8 w-full" />
-                    ))}
-                  </div>
-                </TableCell>
-              </TableRow>
-            )}
-            {transactionsQuery.data?.map((transaction) => {
+
+            {transactions.map((transaction) => {
               return (
                 <TableRow key={transaction.id}>
                   <TableCell>
@@ -126,7 +125,7 @@ export function TransactionTable() {
                         className="hover:text-blue-600 hover:underline"
                         href={routes.students.transactions.details(
                           params.id,
-                          transaction.id,
+                          transaction.id
                         )}
                       >
                         {transaction.transactionRef}
@@ -145,7 +144,7 @@ export function TransactionTable() {
                         className="hover:text-blue-600 hover:underline"
                         href={routes.students.transactions.details(
                           params.id,
-                          transaction.id,
+                          transaction.id
                         )}
                       >
                         {transaction.description}

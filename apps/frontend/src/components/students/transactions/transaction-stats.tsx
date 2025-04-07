@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { sumBy } from "lodash";
@@ -10,12 +9,13 @@ import {
   PiMoneyBold,
 } from "react-icons/pi";
 
-import type { RouterOutputs } from "@repo/api";
 import { useLocale } from "~/i18n";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import { CURRENCY } from "~/lib/constants";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 export interface TransactionType {
   icon: IconType;
@@ -25,20 +25,17 @@ export interface TransactionType {
   className?: string;
 }
 
-type StudentTransactionProcedureOutput = NonNullable<
-  RouterOutputs["student"]["transactions"]
->[number];
-
-export function TransactionStats({
-  transactions,
-  classroomId,
-}: {
-  transactions: StudentTransactionProcedureOutput[];
-  classroomId: string;
-}) {
+export function TransactionStats({ classroomId }: { classroomId: string }) {
   const { t, i18n } = useLocale();
-  const feesQuery = api.classroom.fees.useQuery(classroomId);
-  const fees = feesQuery.data ?? [];
+  const trpc = useTRPC();
+  const { data: fees } = useSuspenseQuery(
+    trpc.classroom.fees.queryOptions(classroomId)
+  );
+  const params = useParams<{ id: string }>();
+  const { data: transactions } = useSuspenseQuery(
+    trpc.student.transactions.queryOptions(params.id)
+  );
+
   const statData: TransactionType[] = [
     {
       title: t("total_fees"),
@@ -64,7 +61,7 @@ export function TransactionStats({
       title: t("transactionsCompleted"),
       amount: sumBy(
         transactions.filter((t) => t.status == "VALIDATED"),
-        "amount",
+        "amount"
       ).toLocaleString(i18n.language),
       icon: PiMoneyBold,
       iconWrapperFill: "#FF0000",
@@ -73,7 +70,7 @@ export function TransactionStats({
 
   return (
     <div className="grid-cols-1 px-4 mt-2 grid gap-2 2xl:grid-cols-4">
-      {statData.map((stat: any, index: number) => {
+      {statData.map((stat, index: number) => {
         return (
           <TransactionStatCard key={"transaction-card-" + index} {...stat} />
         );
@@ -102,7 +99,7 @@ function TransactionStatCard({
     <div
       className={cn(
         "rounded-md border p-2 bg-muted hover:bg-secondary",
-        className,
+        className
       )}
     >
       <div className="flex items-center gap-5">
