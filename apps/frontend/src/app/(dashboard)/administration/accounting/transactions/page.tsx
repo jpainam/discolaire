@@ -24,7 +24,7 @@ export default async function Page(props: {
       from: searchParams.from ? new Date(searchParams.from) : undefined,
       to: searchParams.to ? new Date(searchParams.to) : undefined,
       classroomId: searchParams.classroom,
-    })
+    }),
   );
 
   return (

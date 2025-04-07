@@ -42,7 +42,7 @@ export function TransactionDataTableAction({
 
   const canDeleteTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const { openModal } = useModal();
 
@@ -65,14 +65,14 @@ export function TransactionDataTableAction({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.transaction.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.student.transactions.pathFilter()
+          trpc.student.transactions.pathFilter(),
         );
         toast.success(t("updated_successfully"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const handleStatusChange = useCallback(
@@ -84,7 +84,7 @@ export function TransactionDataTableAction({
         status: v,
       });
     },
-    [rows, updateTransactionMutation]
+    [rows, updateTransactionMutation],
   );
 
   return (

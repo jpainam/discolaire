@@ -26,7 +26,7 @@ export function TransactionDataTable() {
       from: from ? new Date(from) : undefined,
       to: to ? new Date(to) : undefined,
       classroomId: classroom ?? undefined,
-    })
+    }),
   );
   const { t } = useLocale();
   const { school } = useSchool();
@@ -37,7 +37,7 @@ export function TransactionDataTable() {
         t: t,
         currency: school.currency,
       }),
-    [t, school.currency]
+    [t, school.currency],
   );
 
   const { table } = useDataTable({

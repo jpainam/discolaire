@@ -43,7 +43,7 @@ export function DeleteTransaction({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.transaction.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.student.transactions.pathFilter()
+          trpc.student.transactions.pathFilter(),
         );
         toast.success(t("deleted_successfully"), { id: 0 });
         closeModal();
@@ -51,7 +51,7 @@ export function DeleteTransaction({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const onSubmit = (data: z.infer<typeof deleteTransactionSchema>) => {
     toast.loading(t("deleting"), { id: 0 });
