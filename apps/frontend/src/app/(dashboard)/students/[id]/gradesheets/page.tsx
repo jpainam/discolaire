@@ -132,7 +132,7 @@ function Cell({ grade }: { grade?: number | null }) {
       className={cn(
         "text-muted-foreground",
         g >= 18 ? "text-green-500" : "",
-        g < 10 ? "text-red-500" : ""
+        g < 10 ? "text-red-500" : "",
       )}
     >
       {gradeText}

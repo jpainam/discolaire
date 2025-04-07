@@ -20,7 +20,7 @@ const searchSchema = z.object({
 });
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const session = await auth();
   if (!session) {
@@ -88,7 +88,7 @@ export async function GET(
         student: student,
         grades: data,
         school: school,
-      })
+      }),
     );
 
     //const blob = await new Response(stream).blob();
