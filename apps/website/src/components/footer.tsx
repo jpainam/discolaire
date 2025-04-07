@@ -18,8 +18,8 @@ export function Footer() {
       title: "Resources",
       links: [
         { name: "Solutions", href: "/solutions" },
-        { name: "Documentation", href: "/docs" },
-        { name: "Prices", href: "/prices" },
+        { name: "Documentation", href: "https://docs.discolaire.com" },
+        // { name: "Prices", href: "/prices" },
         { name: "Contacts", href: "/ContactUs" },
       ],
     },

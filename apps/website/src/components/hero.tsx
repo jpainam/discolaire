@@ -65,12 +65,18 @@ export function Hero() {
             </div>
             <div className="flex flex-col gap-4 sm:flex-row">
               <Button
+                onClick={() => {
+                  window.open("https://demo.discolaire.com", "_blank");
+                }}
                 size="lg"
                 className="bg-gradient-to-r from-blue-500 to-purple-500 text-white transition-all duration-300 hover:opacity-90"
               >
                 Get Started
               </Button>
               <Button
+                onClick={() => {
+                  window.open("https://demo.discolaire.com", "_blank");
+                }}
                 size="lg"
                 variant="outline"
                 className="border-zinc-700 text-zinc-300 transition-all duration-300 hover:bg-zinc-800 hover:text-white"

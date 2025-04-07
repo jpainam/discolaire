@@ -98,7 +98,12 @@ export default function FAQsection() {
             Our team is here to help. Contact us for more information about how
             Discolaire can transform your educational institution.
           </p>
-          <button className="rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 px-8 py-3 font-medium text-white transition duration-300 hover:bg-gradient-to-l">
+          <button
+            onClick={() => {
+              window.location.href = "https://discolaire.com/ContactUs";
+            }}
+            className="rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 px-8 py-3 font-medium text-white transition duration-300 hover:bg-gradient-to-l"
+          >
             Contact Support
           </button>
         </div>
