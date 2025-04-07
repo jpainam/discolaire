@@ -161,11 +161,30 @@ export const transactionRouter = createTRPCRouter({
   updateStatus: protectedProcedure
     .input(
       z.object({
-        transactionId: z.number(),
+        transactionId: z.coerce.number().optional(),
+        transactionIds: z.array(z.coerce.number()).optional(),
         status: z.enum(["PENDING", "VALIDATED", "CANCELED"]),
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      if (!input.transactionId && !input.transactionIds) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "transactionId or transactionIds is required",
+        });
+      }
+      if (input.transactionIds) {
+        return ctx.db.transaction.updateMany({
+          where: {
+            id: {
+              in: input.transactionIds,
+            },
+          },
+          data: {
+            status: input.status,
+          },
+        });
+      }
       return ctx.db.transaction.update({
         where: {
           id: input.transactionId,
