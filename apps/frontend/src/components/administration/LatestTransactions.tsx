@@ -10,115 +10,35 @@ import {
   CardTitle,
 } from "@repo/ui/components/card";
 import { cn } from "@repo/ui/lib/utils";
-import type { LucideIcon } from "lucide-react";
-import {
-  ArrowDownLeft,
-  ArrowRight,
-  ArrowUpRight,
-  CreditCard,
-  ShoppingCart,
-  Wallet,
-} from "lucide-react";
+import { subDays } from "date-fns";
+import { ArrowDownLeft, ArrowRight, ArrowUpRight } from "lucide-react";
+import Link from "next/link";
+import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
-import { getFullName } from "../../utils/index";
-
-interface Transaction {
-  id: string;
-  title: string;
-  amount: string;
-  type: "incoming" | "outgoing";
-  category: string;
-  icon: LucideIcon;
-  timestamp: string;
-  status: "completed" | "pending" | "failed";
-}
-
-// const categoryStyles = {
-//   shopping: "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100",
-//   food: "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100",
-//   transport: "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100",
-//   entertainment:
-//     "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100",
-// };
-
-const TRANSACTIONS: Transaction[] = [
-  {
-    id: "1",
-    title: "Apple Store Purchase",
-    amount: "$999.00",
-    type: "outgoing",
-    category: "shopping",
-    icon: ShoppingCart,
-    timestamp: "Today, 2:45 PM",
-    status: "completed",
-  },
-  {
-    id: "2",
-    title: "Salary Deposit",
-    amount: "$4,500.00",
-    type: "incoming",
-    category: "transport",
-    icon: Wallet,
-    timestamp: "Today, 9:00 AM",
-    status: "completed",
-  },
-  {
-    id: "3",
-    title: "Netflix Subscription",
-    amount: "$15.99",
-    type: "outgoing",
-    category: "entertainment",
-    icon: CreditCard,
-    timestamp: "Yesterday",
-    status: "pending",
-  },
-  {
-    id: "4",
-    title: "Apple Store Purchase",
-    amount: "$999.00",
-    type: "outgoing",
-    category: "shopping",
-    icon: ShoppingCart,
-    timestamp: "Today, 2:45 PM",
-    status: "completed",
-  },
-  {
-    id: "5",
-    title: "Supabase Subscription",
-    amount: "$15.99",
-    type: "outgoing",
-    category: "entertainment",
-    icon: CreditCard,
-    timestamp: "Yesterday",
-    status: "pending",
-  },
-  {
-    id: "6",
-    title: "Vercel Subscription",
-    amount: "$15.99",
-    type: "outgoing",
-    category: "entertainment",
-    icon: CreditCard,
-    timestamp: "Yesterday",
-    status: "pending",
-  },
-];
+import { getFullName } from "~/utils";
+import { AvatarState } from "../AvatarState";
 
 export async function LatestTransactions({
   className,
 }: {
   className?: string;
 }) {
-  const transactions = await caller.transaction.all({ limit: 6 });
+  const today = new Date();
+  const transactions = await caller.transaction.all({
+    from: subDays(today, 30),
+  });
+  const { t } = await getServerTranslations();
   return (
     <Card className={cn(className)}>
       <CardHeader>
-        <CardTitle>Recent Activity</CardTitle>
-        <CardDescription className="text-xs">(23 transactions)</CardDescription>
-        <CardAction className="text-xs"> This Month</CardAction>
+        <CardTitle>{t("Recent Transactions")}</CardTitle>
+        <CardDescription className="text-xs">
+          ({transactions.length} {t("transactions")})
+        </CardDescription>
+        <CardAction className="text-xs">{t("This Month")}</CardAction>
       </CardHeader>
       <CardContent className="p-4">
-        {transactions.map((transaction) => (
+        {transactions.slice(0, 6).map((transaction) => (
           <div
             key={transaction.id}
             className={cn(
@@ -128,15 +48,11 @@ export async function LatestTransactions({
               "transition-all duration-200"
             )}
           >
-            <div
-              className={cn(
-                "p-2 rounded-lg",
-                "bg-zinc-100 dark:bg-zinc-800",
-                "border border-zinc-200 dark:border-zinc-700"
-              )}
-            >
-              <CreditCard className="w-4 h-4 text-zinc-900 dark:text-zinc-100" />
-            </div>
+            <AvatarState
+              className="w-8 h-8 rounded-full"
+              pos={transaction.account.student.lastName?.length ?? 0}
+              avatar={transaction.account.student.user?.avatar}
+            />
 
             <div className="flex-1 flex items-center justify-between min-w-0">
               <div className="space-y-0.5">
@@ -175,10 +91,15 @@ export async function LatestTransactions({
         ))}
       </CardContent>
       <CardFooter>
-        <Button size={"sm"} className="w-full">
-          View All Transactions
-          <ArrowRight className="w-3.5 h-3.5" />
-        </Button>
+        <Link
+          className="w-full"
+          href={"/administration/accounting/transactions"}
+        >
+          <Button size={"sm"} className="w-full">
+            {t("View All Transactions")}
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Button>
+        </Link>
       </CardFooter>
     </Card>
   );

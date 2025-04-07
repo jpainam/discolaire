@@ -115,7 +115,11 @@ export const transactionRouter = createTRPCRouter({
         include: {
           account: {
             include: {
-              student: true,
+              student: {
+                include: {
+                  user: true,
+                },
+              },
             },
           },
         },
