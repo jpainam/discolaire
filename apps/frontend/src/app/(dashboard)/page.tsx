@@ -1,5 +1,8 @@
 import { auth } from "@repo/auth";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { decode } from "entities";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { Suspense } from "react";
 import { DashboardClassroomSize } from "~/components/dashboard/DashboardClassroomSize";
 import { EducationalResource } from "~/components/dashboard/EducationalResource";
 import { LatestGradesheet } from "~/components/dashboard/LatestGradesheet";
@@ -10,7 +13,8 @@ import { Chart01 } from "~/components/dashboard/student/Chart01";
 import { StudentGradeTrend } from "~/components/dashboard/student/StudentGradeTrend";
 import { StudentDashboardContact } from "~/components/dashboard/StudentDashboardContact";
 import { StudentLatestGrade } from "~/components/dashboard/StudentLatestGrade";
-import { api, caller } from "~/trpc/server";
+import { ErrorFallback } from "~/components/error-fallback";
+import { api, batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
 
 export default async function Page() {
   const session = await auth();
@@ -47,45 +51,60 @@ export default async function Page() {
     );
   }
 
-  const latestGrades = await caller.gradeSheet.getLatestGradesheet({
-    limit: 15,
-  });
-  const classrooms = await caller.classroom.all();
+  batchPrefetch([
+    trpc.gradeSheet.getLatestGradesheet.queryOptions({ limit: 15 }),
+    trpc.classroom.all.queryOptions(),
+  ]);
+
   return (
     <div className="lg:grid flex flex-col grid-cols-2 gap-4 p-4">
-      <QuickStatistics className="col-span-full" />
+      <Suspense
+        key={"quick-statistics"}
+        fallback={
+          <div className="col-span-full grid lg:grid-cols-4 gap-4">
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+          </div>
+        }
+      >
+        <QuickStatistics className="col-span-full" />
+      </Suspense>
       {/* <SearchBlock className="col-span-full md:col-span-6" /> */}
-      <LatestGradesheet
-        grades={latestGrades.map((g) => {
-          return {
-            name: g.subject.course.shortName,
-            max: Math.max(...g.grades.map((grade) => grade.grade)),
-            min: Math.min(...g.grades.map((grade) => grade.grade)),
-            average: Number(
-              (
-                g.grades.reduce((acc, grade) => acc + grade.grade, 0) /
-                g.grades.length
-              ).toFixed(2),
-            ),
-          };
-        })}
-      />
-
-      <SchoolLife />
-      <ScheduleCard />
-      <EducationalResource />
-
-      {/* <EffectiveStat className="col-span-full" />
+      <HydrateClient>
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense fallback={<Skeleton className="h-60 w-full" />}>
+            <LatestGradesheet />
+          </Suspense>
+        </ErrorBoundary>
+        <Suspense fallback={<Skeleton className="h-60 w-full" />}>
+          <SchoolLife />
+        </Suspense>
+        <Suspense fallback={<Skeleton className="h-60 w-full" />}>
+          <ScheduleCard />
+        </Suspense>
+        <Suspense fallback={<Skeleton className="h-60 w-full" />}>
+          <EducationalResource />
+        </Suspense>
+        {/* <EffectiveStat className="col-span-full" />
 
       <ContactCard className="col-span-4" />
 
       {/* <Suspense>
         <TransactionStat className="col-span-full" />
       </Suspense> */}
-      <DashboardClassroomSize
-        classrooms={classrooms}
-        className="col-span-full hidden md:block"
-      />
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense
+            key={"classroom-size"}
+            fallback={
+              <Skeleton className="h-60 w-full col-span-full hidden md:block" />
+            }
+          >
+            <DashboardClassroomSize className="col-span-full hidden md:block" />
+          </Suspense>
+        </ErrorBoundary>
+      </HydrateClient>
       {/* <DashboardTransactionTrend className="col-span-full hidden md:block" /> */}
     </div>
   );

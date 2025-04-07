@@ -2,17 +2,18 @@
 
 import { useMemo } from "react";
 
-import type { RouterOutputs } from "@repo/api";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { useLocale } from "~/i18n";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 import { StaffDataTableActions } from "./StaffDataTableActions";
 import { fetchStaffColumns } from "./StaffDataTableColumns";
 
-type StaffProcedureOutput = NonNullable<RouterOutputs["staff"]["all"]>[number];
-
-export function StaffDataTable({ staffs }: { staffs: StaffProcedureOutput[] }) {
+export function StaffDataTable() {
   const { t } = useLocale();
+  const trpc = useTRPC();
+  const { data: staffs } = useSuspenseQuery(trpc.staff.all.queryOptions());
 
   const columns = useMemo(() => {
     const defaultVisibles = [

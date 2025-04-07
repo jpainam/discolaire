@@ -16,22 +16,21 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 
-import type { RouterOutputs } from "@repo/api";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { Warehouse } from "lucide-react";
 import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
+import { useTRPC } from "~/trpc/react";
 
-export function DashboardClassroomSize({
-  className,
-  classrooms,
-}: {
-  className?: string;
-  classrooms: RouterOutputs["classroom"]["all"];
-}) {
+export function DashboardClassroomSize({ className }: { className?: string }) {
   const { t } = useLocale();
   // useEffect(() => {
   //   void captureException(new Error("DashboardClassroomSize").stack ?? "");
   // }, []);
+  const trpc = useTRPC();
+  const { data: classrooms } = useSuspenseQuery(
+    trpc.classroom.all.queryOptions()
+  );
   const chartConfig = {
     maxSize: {
       label: t("max_size"),

@@ -14,14 +14,15 @@ import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
-import type { RouterOutputs } from "@repo/api";
 import { Label } from "@repo/ui/components/label";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
@@ -30,12 +31,10 @@ import { StaffSelector } from "../shared/selects/StaffSelector";
 import { CreateEditStaff } from "./CreateEditStaff";
 import { StaffEffectif } from "./StaffEffectif";
 
-export function StaffHeader({
-  staffs,
-}: {
-  staffs: RouterOutputs["staff"]["all"];
-}) {
+export function StaffHeader() {
   const { t } = useLocale();
+  const trpc = useTRPC();
+  const { data: staffs } = useSuspenseQuery(trpc.staff.all.queryOptions());
   const params = useParams<{ id: string }>();
 
   const canCreateStaff = useCheckPermission("staff", PermissionAction.CREATE);

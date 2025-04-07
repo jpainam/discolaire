@@ -14,19 +14,30 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { Rows3Icon } from "lucide-react";
 import { useLocale } from "~/i18n";
+import { useTRPC } from "~/trpc/react";
 
-export function LatestGradesheet({
-  grades,
-}: {
-  grades?: {
-    name: string;
-    min: number;
-    max: number;
-    average: number;
-  }[];
-}) {
+export function LatestGradesheet() {
+  const trpc = useTRPC();
+  const { data: latestGradesheet } = useSuspenseQuery(
+    trpc.gradeSheet.getLatestGradesheet.queryOptions({ limit: 15 })
+  );
+
+  const grades = latestGradesheet.map((g) => {
+    return {
+      name: g.subject.course.shortName,
+      max: Math.max(...g.grades.map((grade) => grade.grade)),
+      min: Math.min(...g.grades.map((grade) => grade.grade)),
+      average: Number(
+        (
+          g.grades.reduce((acc, grade) => acc + grade.grade, 0) /
+          g.grades.length
+        ).toFixed(2)
+      ),
+    };
+  });
   const { t } = useLocale();
   const chartConfig = {
     min: {

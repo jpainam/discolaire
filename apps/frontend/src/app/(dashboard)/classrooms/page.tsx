@@ -16,7 +16,7 @@ export default function Page() {
           fallback={
             <div className="grid grid-cols-4 gap-4 p-4">
               {Array.from({ length: 16 }).map((_, i) => (
-                <Skeleton key={i} className="col-span-1" />
+                <Skeleton key={i} className="h-8" />
               ))}
             </div>
           }
