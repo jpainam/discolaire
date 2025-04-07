@@ -10,25 +10,22 @@ import {
   FormLabel,
   FormMessage,
 } from "@repo/ui/components/form";
-import { Label } from "@repo/ui/components/label";
-import { Skeleton } from "@repo/ui/components/skeleton";
 import { Textarea } from "@repo/ui/components/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { useRouter } from "~/hooks/use-router";
-import { CURRENCY } from "~/lib/constants";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const deleteTransactionSchema = z.object({
   observation: z.string().min(1),
 });
 export function DeleteTransaction({
-  transactionId,
+  transactionIds,
 }: {
-  transactionId: number | number[];
+  transactionIds: number[];
 }) {
   const form = useForm({
     resolver: zodResolver(deleteTransactionSchema),
@@ -37,70 +34,52 @@ export function DeleteTransaction({
     },
   });
   const { t } = useLocale();
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const { closeModal } = useModal();
-  const router = useRouter();
-  const transactionQuery = api.transaction.get.useQuery(
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    Array.isArray(transactionId) ? transactionId[0]! : transactionId,
+
+  const deleteTransactionMutation = useMutation(
+    trpc.transaction.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.transaction.pathFilter());
+        await queryClient.invalidateQueries(
+          trpc.student.transactions.pathFilter()
+        );
+        toast.success(t("deleted_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
   );
-  const deleteTransactionMutation = api.transaction.delete.useMutation({
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-      closeModal();
-      router.refresh();
-    },
-    onSettled: async () => {
-      await utils.transaction.invalidate();
-      await utils.student.transactions.invalidate();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
   const onSubmit = (data: z.infer<typeof deleteTransactionSchema>) => {
     toast.loading(t("deleting"), { id: 0 });
     deleteTransactionMutation.mutate({
-      ids: transactionId,
+      ids: transactionIds,
       observation: data.observation,
     });
   };
-  const transaction = transactionQuery.data;
+
   return (
     <Form {...form}>
-      <form className="grid gap-2" onSubmit={form.handleSubmit(onSubmit)}>
-        {transactionQuery.isPending ? (
-          <div className="grid grid-cols-2 gap-2">
-            {Array.from({ length: 4 }, (_, i) => (
-              <Skeleton key={i} className="h-8 w-full" />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-2">
-            <Label>{t("account")}</Label>
-            <span className="text-sm text-muted-foreground">
-              {transaction?.account.student.lastName}
-            </span>
-            <Label>{t("amount")}</Label>
-            <span className="text-sm text-muted-foreground">
-              {transaction?.amount} {CURRENCY}
-            </span>
-          </div>
-        )}
+      <form className="grid gap-6" onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="observation"
           render={({ field }) => (
-            <FormItem className="space-y-0">
-              <FormLabel>{t("observation")}</FormLabel>
+            <FormItem>
+              <FormLabel>
+                {t("Explain why you are deleting these transactions")}
+              </FormLabel>
               <FormControl>
-                <Textarea {...field} />
+                <Textarea className="resize-none" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <div className="flex flex-row items-end justify-end gap-2">
+        <div className="flex flex-row items-end justify-end gap-4">
           <Button
             size={"sm"}
             onClick={() => {

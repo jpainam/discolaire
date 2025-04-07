@@ -18,14 +18,14 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ChevronDown, Trash2 } from "lucide-react";
+import { ChevronDown, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import FlatBadge from "~/components/FlatBadge";
 import { DeleteTransaction } from "~/components/students/transactions/DeleteTransaction";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
-import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
 type TransactionAllProcedureOutput = NonNullable<
@@ -39,7 +39,6 @@ export function TransactionDataTableAction({
 }) {
   const { t } = useLocale();
   const rows = table.getFilteredSelectedRowModel().rows;
-  const confirm = useConfirm();
 
   const canDeleteTransaction = useCheckPermission(
     "transaction",
@@ -60,6 +59,7 @@ export function TransactionDataTableAction({
   }, [table]);
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+
   const updateTransactionMutation = useMutation(
     trpc.transaction.updateStatus.mutationOptions({
       onSuccess: async () => {
@@ -94,8 +94,12 @@ export function TransactionDataTableAction({
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size={"sm"} variant={"outline"}>
-                {t("status")}
-                <ChevronDown size={16} strokeWidth={2} aria-hidden="true" />
+                {t("Change status")}
+                {updateTransactionMutation.isPending ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <ChevronDown size={16} strokeWidth={2} aria-hidden="true" />
+                )}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
@@ -105,8 +109,13 @@ export function TransactionDataTableAction({
                   handleStatusChange("VALIDATED");
                 }}
               >
-                <CheckCircledIcon />
-                {t("validate")}
+                <FlatBadge
+                  variant={"green"}
+                  className="flex items-center gap-2"
+                >
+                  <CheckCircledIcon />
+                  {t("validate")}
+                </FlatBadge>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onSelect={() => {
@@ -114,8 +123,10 @@ export function TransactionDataTableAction({
                   handleStatusChange("CANCELED");
                 }}
               >
-                <CrossCircledIcon />
-                {t("cancel")}
+                <FlatBadge variant={"red"} className="flex items-center gap-2">
+                  <CrossCircledIcon />
+                  {t("cancel")}
+                </FlatBadge>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onSelect={() => {
@@ -123,28 +134,23 @@ export function TransactionDataTableAction({
                   handleStatusChange("PENDING");
                 }}
               >
-                <StopwatchIcon /> {t("pending")}
+                <FlatBadge
+                  variant={"yellow"}
+                  className="flex items-center gap-2"
+                >
+                  <StopwatchIcon /> {t("pending")}
+                </FlatBadge>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           <Button
             size={"sm"}
-            onClick={async () => {
+            onClick={() => {
               const selectedIds = rows.map((row) => row.original.id);
-              const isConfirmed = await confirm({
+              openModal({
                 title: t("delete"),
-                description: t("delete_confirmation"),
-                // icon: <Trash2 className="text-destructive" />,
-                // alertDialogTitle: {
-                //   className: "flex items-center gap-2",
-                // },
+                view: <DeleteTransaction transactionIds={selectedIds} />,
               });
-              if (isConfirmed) {
-                openModal({
-                  title: t("delete"),
-                  view: <DeleteTransaction transactionId={selectedIds} />,
-                });
-              }
             }}
             variant="destructive"
           >

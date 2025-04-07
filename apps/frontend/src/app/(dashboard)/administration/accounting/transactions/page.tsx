@@ -1,9 +1,10 @@
-import FlatBadge from "~/components/FlatBadge";
-import { getServerTranslations } from "~/i18n/server";
-
+import { Skeleton } from "@repo/ui/components/skeleton";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { Suspense } from "react";
 import { TransactionDataTable } from "~/components/administration/transactions/TransactionDataTable";
-import { CURRENCY } from "~/lib/constants";
-import { api } from "~/trpc/server";
+import { ErrorFallback } from "~/components/error-fallback";
+import { HydrateClient, prefetch, trpc } from "~/trpc/server";
+import { TransactionHeader } from "./TransactionHeader";
 
 export default async function Page(props: {
   searchParams: Promise<{
@@ -14,53 +15,46 @@ export default async function Page(props: {
   }>;
 }) {
   const searchParams = await props.searchParams;
-  const { t, i18n } = await getServerTranslations();
+
   //const school = await api.school.getSchool();
-  const transactions = await api.transaction.all({
-    status: searchParams.status,
-    from: searchParams.from ? new Date(searchParams.from) : undefined,
-    to: searchParams.to ? new Date(searchParams.to) : undefined,
-    classroomId: searchParams.classroom,
-  });
 
-  const moneyFormatter = new Intl.NumberFormat(i18n.language, {
-    style: "currency",
-    currency: CURRENCY,
-    maximumFractionDigits: 0,
-    minimumFractionDigits: 0,
-  });
-
-  const totals = transactions.reduce((acc, curr) => acc + curr.amount, 0);
-  const validated = transactions.reduce(
-    (acc, curr) => acc + (curr.status == "VALIDATED" ? curr.amount : 0),
-    0,
-  );
-  const canceled = transactions.reduce(
-    (acc, curr) => acc + (curr.status == "CANCELED" ? curr.amount : 0),
-    0,
-  );
-  const pending = transactions.reduce(
-    (acc, curr) => acc + (curr.status == "PENDING" ? curr.amount : 0),
-    0,
+  prefetch(
+    trpc.transaction.all.queryOptions({
+      status: searchParams.status,
+      from: searchParams.from ? new Date(searchParams.from) : undefined,
+      to: searchParams.to ? new Date(searchParams.to) : undefined,
+      classroomId: searchParams.classroom,
+    })
   );
 
   return (
     <div className="flex flex-col px-4">
-      <div className="grid flex-row items-center gap-4 py-2 md:flex">
-        <FlatBadge variant={"indigo"}>
-          {t("totals")} : {moneyFormatter.format(totals)}
-        </FlatBadge>
-        <FlatBadge variant={"green"}>
-          {t("validated")} : {moneyFormatter.format(validated)}
-        </FlatBadge>
-        <FlatBadge variant={"blue"}>
-          {t("pending")} : {moneyFormatter.format(pending)}
-        </FlatBadge>
-        <FlatBadge variant={"red"}>
-          {t("canceled")} : {moneyFormatter.format(canceled)}
-        </FlatBadge>
-      </div>
-      <TransactionDataTable transactions={transactions} />
+      <HydrateClient>
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense
+            fallback={
+              <div className="py-2 px-4">
+                <Skeleton className="h-8 w-1/2" />
+              </div>
+            }
+          >
+            <TransactionHeader />
+          </Suspense>
+        </ErrorBoundary>
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense
+            fallback={
+              <div className="grid grid-cols-4 gap-4 ">
+                {Array.from({ length: 16 }).map((_, i) => (
+                  <Skeleton key={i} className="h-8" />
+                ))}
+              </div>
+            }
+          >
+            <TransactionDataTable />
+          </Suspense>
+        </ErrorBoundary>
+      </HydrateClient>
     </div>
   );
 }

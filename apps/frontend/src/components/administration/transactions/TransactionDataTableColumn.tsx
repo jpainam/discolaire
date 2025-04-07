@@ -31,12 +31,12 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { DeleteTransaction } from "~/components/students/transactions/DeleteTransaction";
 import { TransactionStatus } from "~/components/students/transactions/TransactionTable";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { TransactionDetails } from "./TransactionDetails";
 
 type TransactionAllProcedureOutput = NonNullable<
@@ -179,29 +179,31 @@ function ActionCell({
   transaction: TransactionAllProcedureOutput;
 }) {
   const { t } = useLocale();
-  const utils = api.useUtils();
-  const router = useRouter();
-  const updateTransactionMutation = api.transaction.updateStatus.useMutation({
-    onSettled: async () => {
-      await utils.transaction.invalidate();
-      await utils.student.transactions.invalidate();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      router.refresh();
-    },
-  });
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
+
+  const updateTransactionMutation = useMutation(
+    trpc.transaction.updateStatus.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.transaction.pathFilter());
+        await queryClient.invalidateQueries(
+          trpc.student.transactions.pathFilter()
+        );
+        toast.success(t("updated_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const canDeleteTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
 
   const { openModal } = useModal();
@@ -291,7 +293,7 @@ function ActionCell({
               onClick={() => {
                 openModal({
                   title: t("delete"),
-                  view: <DeleteTransaction transactionId={transaction.id} />,
+                  view: <DeleteTransaction transactionIds={[transaction.id]} />,
                 });
               }}
               variant="destructive"

@@ -19,7 +19,6 @@ import { notFound } from "next/navigation";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
-import { Separator } from "@repo/ui/components/separator";
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
@@ -140,9 +139,10 @@ export function TransactionDetails({
       </div>
 
       <div className="col-span-full">{transaction.observation ?? "N/A"}</div>
-      <Separator className="col-span-full" />
+
       <div className="col-span-full ml-auto flex flex-row gap-4">
         <Button
+          className="size-8"
           onClick={() => {
             window.open(`/api/pdfs/receipts?id=${transaction.id}`, "_blank");
             closeModal();
@@ -153,12 +153,13 @@ export function TransactionDetails({
           <Printer className="h-4 w-4" />
         </Button>
         <Button
+          size={"sm"}
           onClick={() => {
             closeModal();
           }}
           variant={"default"}
         >
-          <X className="mr-2 h-4 w-4 stroke-1" />
+          <X className="h-4 w-4" />
           {t("close")}
         </Button>
       </div>

@@ -58,15 +58,15 @@ export function TransactionTable() {
   const utils = api.useUtils();
   const canDeleteTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const canReadTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
 
   const updateTransactionMutation = api.transaction.updateStatus.useMutation({
@@ -126,7 +126,7 @@ export function TransactionTable() {
                         className="hover:text-blue-600 hover:underline"
                         href={routes.students.transactions.details(
                           params.id,
-                          transaction.id,
+                          transaction.id
                         )}
                       >
                         {transaction.transactionRef}
@@ -145,7 +145,7 @@ export function TransactionTable() {
                         className="hover:text-blue-600 hover:underline"
                         href={routes.students.transactions.details(
                           params.id,
-                          transaction.id,
+                          transaction.id
                         )}
                       >
                         {transaction.description}
@@ -259,23 +259,19 @@ export function TransactionTable() {
                               <DropdownMenuSeparator />
                               <DropdownMenuItem
                                 variant="destructive"
-                                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                                 onSelect={() => {
                                   openModal({
                                     title: t("delete"),
 
                                     view: (
                                       <DeleteTransaction
-                                        transactionId={transaction.id}
+                                        transactionIds={[transaction.id]}
                                       />
                                     ),
                                   });
                                 }}
                               >
-                                <Trash2
-                                  className="mr-2 size-4"
-                                  aria-hidden="true"
-                                />
+                                <Trash2 className="size-4" aria-hidden="true" />
                                 {t("delete")}
                               </DropdownMenuItem>
                             </>
