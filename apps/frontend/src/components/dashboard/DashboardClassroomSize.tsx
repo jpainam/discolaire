@@ -29,7 +29,7 @@ export function DashboardClassroomSize({ className }: { className?: string }) {
   // }, []);
   const trpc = useTRPC();
   const { data: classrooms } = useSuspenseQuery(
-    trpc.classroom.all.queryOptions()
+    trpc.classroom.all.queryOptions(),
   );
   const chartConfig = {
     maxSize: {

@@ -17,7 +17,7 @@ import { StaffProfile } from "~/components/staffs/profile/StaffProfile";
 import { StaffTabMenu } from "~/components/staffs/profile/StaffTabMenu";
 import { StaffHeader } from "~/components/staffs/StaffHeader";
 import { routes } from "~/configs/routes";
-import { api } from "~/trpc/server";
+import { api, prefetch, trpc } from "~/trpc/server";
 
 interface UserLink {
   icon: React.ReactNode;
@@ -49,7 +49,7 @@ export default async function Layout(props: {
   }
 
   const { t } = await getServerTranslations();
-  const staffs = await api.staff.all();
+  prefetch(trpc.staff.all.queryOptions());
 
   const userLinks: UserLink[] = [
     {
@@ -86,7 +86,7 @@ export default async function Layout(props: {
   ];
   return (
     <div className="flex flex-col gap-2 ">
-      <StaffHeader staffs={staffs} />
+      <StaffHeader />
       <div className="grid 2xl:grid-cols-[30%_70%] gap-2 px-4">
         <StaffProfile staffId={id} />
 
