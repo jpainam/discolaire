@@ -87,6 +87,7 @@ export function FeeHeader({ fees }: { fees: RouterOutputs["fee"]["all"] }) {
       <div className="ml-auto flex items-center gap-2">
         {classroomId && (
           <Button
+            size={"sm"}
             onClick={() => {
               if (!classroomId) return;
               openModal({

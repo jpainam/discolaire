@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { HelpCircle, Mail, MapPin, Phone } from "lucide-react";
 
 export function ContactPage() {
@@ -8,12 +7,12 @@ export function ContactPage() {
     {
       icon: <MapPin className="h-8 w-8 text-white" />, // Smaller icon
       title: "Address",
-      details: "123 Business Street, Tech City, TC 12345",
+      details: "2257 Burdett Ave, Troy, NY 12180, USA",
     },
     {
       icon: <Phone className="h-8 w-8 text-white" />, // Smaller icon
       title: "Phone",
-      details: "+1 (555) 123-4567",
+      details: "+1 (518) 368-9728",
     },
     {
       icon: <Mail className="h-8 w-8 text-white" />, // Smaller icon
@@ -63,7 +62,7 @@ export function ContactPage() {
             {/* Contact Support Button */}
             <div className="mt-8 text-center">
               <a
-                href="mailto:support@discolaire.com?subject=Support Request"
+                href="mailto:support@discolaire.com?subject=SupportRequest"
                 className="-lg inline-flex h-16 w-1/4 items-center justify-center bg-gradient-to-r from-green-500 to-teal-500 px-6 py-3 text-white shadow-md transition duration-300 hover:from-green-600 hover:to-teal-600"
               >
                 <HelpCircle className="mr-2 h-5 w-5" />
