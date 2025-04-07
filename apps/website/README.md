@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Useful links
+https://www.shadcntemplates.com/
 
-## Getting Started
+https://21st.dev/?tab=components&sort=recommended
 
-First, run the development server:
+https://docs.stack-auth.com/next/getting-started/components
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+https://app.stack-auth.com/projects/257c3eb6-1953-48c6-a157-a257731ac735/auth-methods
+https://github.com/stack-auth/stack-auth/tree/dev/packages/stack-ui/src/components
+https://skateshop.sadmn.com/signin
+https://skateshop.sadmn.com/
+https://streamline-nextjs-template.vercel.app/?ref=builtatlightspeed
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+https://charter-nextjs-template.vercel.app/
+https://www.cult-ui.com/
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+https://pro.cult-ui.com/templates
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+https://pro.cult-ui.com/sections/marketing-heroes
 
-## Learn More
+https://pro.cult-ui.com/?ref=newcult.co
+https://relative-nextjs-template.vercel.app/?ref=builtatlightspeed
 
-To learn more about Next.js, take a look at the following resources:
+https://mainline-nextjs-template.vercel.app/?ref=builtatlightspeed
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+https://show.saasfly.io/en#features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+https://www.shadcnui-blocks.com/blocks/navbar-04
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+https://us.posthog.com/project/142958/onboarding/product_analytics?step=install
