@@ -49,7 +49,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   }));
 
   return (
-    <div className="p-4">
+    <div className="px-4 py-2">
       <Suspense
         key={id}
         fallback={
@@ -132,7 +132,7 @@ function Cell({ grade }: { grade?: number | null }) {
       className={cn(
         "text-muted-foreground",
         g >= 18 ? "text-green-500" : "",
-        g < 10 ? "text-red-500" : "",
+        g < 10 ? "text-red-500" : ""
       )}
     >
       {gradeText}

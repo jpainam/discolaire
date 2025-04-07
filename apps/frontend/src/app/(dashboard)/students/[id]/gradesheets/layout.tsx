@@ -2,6 +2,7 @@ import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 
 import { api } from "~/trpc/server";
+import { StudentGradesheetHeader } from "./StudentGradesheetHeader";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -20,5 +21,10 @@ export default async function Layout(props: {
       <EmptyState className="my-8" title={t("student_not_registered_yet")} />
     );
   }
-  return <>{children}</>;
+  return (
+    <div className="flex flex-col gap-2">
+      <StudentGradesheetHeader />
+      {children}
+    </div>
+  );
 }
