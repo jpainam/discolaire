@@ -98,6 +98,7 @@ export const transactionRouter = createTRPCRouter({
     .input(
       z.object({
         from: z.coerce.date().optional(),
+        limit: z.number().optional().default(50),
         to: z.coerce.date().optional().default(new Date()),
         status: z.string().optional(),
         classroomId: z.string().optional(),
@@ -110,7 +111,7 @@ export const transactionRouter = createTRPCRouter({
         : undefined;
 
       return ctx.db.transaction.findMany({
-        take: 50,
+        take: input.limit,
         include: {
           account: {
             include: {
