@@ -82,7 +82,7 @@ export function CreateEditSport({ id, name }: { id?: string; name?: string }) {
           name="name"
           render={({ field }) => (
             <FormItem className="space-y-0">
-              <FormLabel>{t("name")}</FormLabel>
+              <FormLabel>{t("sports")}</FormLabel>
               <FormControl>
                 <Input placeholder={t("name")} {...field} />
               </FormControl>

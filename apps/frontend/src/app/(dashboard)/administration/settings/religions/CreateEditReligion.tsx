@@ -88,7 +88,7 @@ export function CreateEditReligion({
           name="name"
           render={({ field }) => (
             <FormItem className="space-y-0">
-              <FormLabel>{t("name")}</FormLabel>
+              <FormLabel>{t("religion")}</FormLabel>
               <FormControl>
                 <Input placeholder={t("name")} {...field} />
               </FormControl>

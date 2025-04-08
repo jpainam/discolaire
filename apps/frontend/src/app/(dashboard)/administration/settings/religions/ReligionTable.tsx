@@ -11,48 +11,146 @@ import {
 import { EmptyState } from "~/components/EmptyState";
 import { useLocale } from "~/i18n";
 
-import { api } from "~/trpc/react";
-import { ReligionTableAction } from "./ReligionTableAction";
+import { MoreHorizontal, Pencil, PlusCircleIcon, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+
+import { Button } from "@repo/ui/components/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
+import { useModal } from "~/hooks/use-modal";
+import { useConfirm } from "~/providers/confirm-dialog";
+
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "~/hooks/use-router";
+import { useTRPC } from "~/trpc/react";
+import { CreateEditReligion } from "./CreateEditReligion";
 
 export function ReligionTable() {
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const { t } = useLocale();
 
-  const religionsQuery = api.religion.all.useQuery();
+  const confirm = useConfirm();
+  const router = useRouter();
+
+  const { openModal } = useModal();
+  const deleteReligion = useMutation(
+    trpc.religion.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.religion.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+        router.refresh();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const religionsQuery = useQuery(trpc.religion.all.queryOptions());
   const religions = religionsQuery.data ?? [];
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>{t("name")}</TableHead>
-          {/* <TableHead>{t("createdAt")}</TableHead>
-          <TableHead>{t("created_by")}</TableHead> */}
-          <TableHead className="text-right"></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {religions.length === 0 && (
-          <TableRow>
-            <TableCell colSpan={2}>
-              <EmptyState />
-            </TableCell>
-          </TableRow>
-        )}
-        {religions.map((denom) => {
-          return (
-            <TableRow key={denom.id}>
-              <TableCell className="py-0">{denom.name}</TableCell>
+    <div>
+      <div className="bg-background overflow-hidden rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow className="hover:bg-transparent">
+              <TableHead>{t("religions")}</TableHead>
 
-              {/* <TableCell className="py-0">
+              <TableHead className="text-right">
+                <Button
+                  onClick={() => {
+                    openModal({
+                      title: t("create"),
+                      view: <CreateEditReligion />,
+                    });
+                  }}
+                  variant={"default"}
+                  className="size-8"
+                  size={"icon"}
+                >
+                  <PlusCircleIcon />
+                </Button>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {religions.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={2}>
+                  <EmptyState />
+                </TableCell>
+              </TableRow>
+            )}
+            {religions.map((denom) => {
+              return (
+                <TableRow key={denom.id}>
+                  <TableCell className="py-0">{denom.name}</TableCell>
+
+                  {/* <TableCell className="py-0">
                 {dateFormatter.format(new Date(denom.createdAt))}
               </TableCell> */}
-              {/* <TableCell className="py-0">{denom.createdBy.name}</TableCell> */}
-              <TableCell className="py-0 text-right">
-                <ReligionTableAction name={denom.name} id={denom.id} />
-              </TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+                  {/* <TableCell className="py-0">{denom.createdBy.name}</TableCell> */}
+                  <TableCell className="py-0 text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger className="ml-auto" asChild>
+                        <Button variant={"ghost"} size={"icon"}>
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          onClick={() => {
+                            openModal({
+                              title: t("edit"),
+                              view: (
+                                <CreateEditReligion
+                                  id={denom.id}
+                                  name={denom.name}
+                                />
+                              ),
+                            });
+                          }}
+                        >
+                          <Pencil />
+                          {t("edit")}
+                        </DropdownMenuItem>
+
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          variant="destructive"
+                          className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+                          onSelect={async () => {
+                            const isConfirmed = await confirm({
+                              title: t("delete"),
+                              description: t("delete_confirmation"),
+                              icon: <Trash2 className="text-destructive" />,
+                              alertDialogTitle: {
+                                className: "flex items-center gap-1",
+                              },
+                            });
+                            if (isConfirmed) {
+                              toast.loading(t("deleting"), { id: 0 });
+                              deleteReligion.mutate(denom.id);
+                            }
+                          }}
+                        >
+                          <Trash2 />
+                          {t("delete")}
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
   );
 }

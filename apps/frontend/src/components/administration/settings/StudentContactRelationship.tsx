@@ -1,16 +1,15 @@
 "use client";
 
-import { Pencil, PlusIcon, Trash2 } from "lucide-react";
+import { CirclePlusIcon, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
@@ -20,56 +19,59 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditRelationship } from "./CreateEditRelationship";
 
 export function StudentContactRelationship() {
-  const relationshipsQuery = api.studentContact.relationships.useQuery();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const relationshipsQuery = useQuery(
+    trpc.studentContact.relationships.queryOptions()
+  );
   const { t } = useLocale();
-  const utils = api.useUtils();
-  const deleteRelationship = api.studentContact.deleteRelationship.useMutation({
-    onSettled: () => utils.studentContact.relationships.invalidate(),
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+
+  const deleteRelationship = useMutation(
+    trpc.studentContact.deleteRelationship.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.studentContact.relationships.pathFilter()
+        );
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const { openModal } = useModal();
   const confirm = useConfirm();
   const data = relationshipsQuery.data ?? [];
   return (
-    <Card className="p-0 gap-0">
-      <CardHeader className="flex flex-row items-center border-b bg-muted/50 p-2">
-        <CardTitle>{t("parent_relationships")}</CardTitle>
-        <CardDescription></CardDescription>
-        <div className="ml-auto">
-          <Button
-            onClick={() => {
-              openModal({
-                title: t("add_relationship"),
-                view: <CreateEditRelationship />,
-              });
-            }}
-            variant={"default"}
-            size={"sm"}
-          >
-            <PlusIcon />
-            {t("add")}
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent className="p-0">
+    <div>
+      <div className="bg-background overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>{t("label")}</TableHead>
-              <TableHead className="text-right"></TableHead>
+            <TableRow className="hover:bg-transparent">
+              <TableHead>{t("parent_relationships")}</TableHead>
+              <TableHead className="text-right">
+                <Button
+                  onClick={() => {
+                    openModal({
+                      title: t("add_relationship"),
+                      view: <CreateEditRelationship />,
+                    });
+                  }}
+                  className="size-8"
+                  //variant={"ghost"}
+                  size={"icon"}
+                >
+                  <CirclePlusIcon />
+                </Button>
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -89,54 +91,58 @@ export function StudentContactRelationship() {
                 <TableRow key={`${relationship.id}-${index}`}>
                   <TableCell className="py-0">{relationship.name}</TableCell>
                   <TableCell className="py-0 text-right">
-                    <div className="flex flex-row items-center justify-end gap-1">
-                      <Button
-                        onClick={() => {
-                          openModal({
-                            title: t("edit_relationship"),
-                            view: (
-                              <CreateEditRelationship
-                                id={relationship.id}
-                                name={relationship.name}
-                              />
-                            ),
-                          });
-                        }}
-                        variant={"ghost"}
-                        size={"icon"}
-                        className="h-7 w-7"
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        onClick={async () => {
-                          const isConfirm = await confirm({
-                            title: t("delete"),
-                            description: t("delete_confirmation"),
-                            icon: <Trash2 className="text-destructive" />,
-                            alertDialogTitle: {
-                              className: "flex items-center gap-2",
-                            },
-                          });
-                          if (isConfirm) {
-                            toast.loading(t("deleting"), { id: 0 });
-                            deleteRelationship.mutate(relationship.id);
-                          }
-                        }}
-                        variant={"ghost"}
-                        size={"icon"}
-                        className="h-7 w-7 text-destructive"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild className="ml-auto">
+                        <Button variant={"ghost"} size={"icon"}>
+                          <MoreHorizontal />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          onSelect={() => {
+                            openModal({
+                              title: t("edit_relationship"),
+                              view: (
+                                <CreateEditRelationship
+                                  id={relationship.id}
+                                  name={relationship.name}
+                                />
+                              ),
+                            });
+                          }}
+                        >
+                          <Pencil />
+                          {t("edit")}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          variant="destructive"
+                          onSelect={async () => {
+                            const isConfirm = await confirm({
+                              title: t("delete"),
+                              description: t("delete_confirmation"),
+                              icon: <Trash2 className="text-destructive" />,
+                              alertDialogTitle: {
+                                className: "flex items-center gap-2",
+                              },
+                            });
+                            if (isConfirm) {
+                              toast.loading(t("deleting"), { id: 0 });
+                              deleteRelationship.mutate(relationship.id);
+                            }
+                          }}
+                        >
+                          <Trash2 />
+                          {t("delete")}
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

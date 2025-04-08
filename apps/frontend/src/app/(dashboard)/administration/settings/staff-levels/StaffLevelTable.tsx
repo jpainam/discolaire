@@ -9,7 +9,7 @@ import {
 } from "@repo/ui/components/table";
 import { EmptyState } from "~/components/EmptyState";
 
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { MoreHorizontal, Pencil, PlusCircleIcon, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -47,8 +47,23 @@ export function StaffLevelTable() {
     <Table>
       <TableHeader>
         <TableRow className="bg-muted/50">
-          <TableHead>{t("name")}</TableHead>
-          <TableHead className="text-right"></TableHead>
+          <TableHead>{t("staff_level")}</TableHead>
+          <TableHead className="text-right">
+            {" "}
+            <Button
+              onClick={() => {
+                openModal({
+                  title: t("create"),
+                  view: <CreateEditStaffLevel />,
+                });
+              }}
+              variant={"default"}
+              size={"icon"}
+              className="size-8"
+            >
+              <PlusCircleIcon />
+            </Button>
+          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -65,7 +80,7 @@ export function StaffLevelTable() {
               <TableCell className="py-0">{degree.name}</TableCell>
               <TableCell className="py-0 text-right">
                 <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
+                  <DropdownMenuTrigger className="ml-auto" asChild>
                     <Button variant={"ghost"} size={"icon"}>
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>

@@ -79,14 +79,14 @@ export function CreateEditRelationship({
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-2"
+        className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
-            <FormItem className="space-y-0">
+            <FormItem>
               <FormLabel>{t("name")}</FormLabel>
               <FormControl>
                 <Input placeholder={t("name")} {...field} />
@@ -95,7 +95,7 @@ export function CreateEditRelationship({
             </FormItem>
           )}
         />
-        <div className="my-2 flex flex-row items-center justify-end gap-4">
+        <div className="flex flex-row items-center justify-end gap-4">
           <Button
             variant={"outline"}
             onClick={() => {
