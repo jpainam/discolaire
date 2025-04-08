@@ -118,12 +118,6 @@ export function StaffLevelTable() {
                             const isConfirmed = await confirm({
                               title: t("delete"),
                               description: t("delete_confirmation"),
-                              icon: (
-                                <Trash2 className="h-5 w-5 text-destructive" />
-                              ),
-                              alertDialogTitle: {
-                                className: "flex items-center gap-1",
-                              },
                             });
                             if (isConfirmed) {
                               toast.loading(t("deleting"), { id: 0 });
