@@ -50,7 +50,7 @@ export function SportTable() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   return (
     <div>

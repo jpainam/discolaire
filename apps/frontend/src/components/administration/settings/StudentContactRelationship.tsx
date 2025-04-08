@@ -30,7 +30,7 @@ export function StudentContactRelationship() {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const relationshipsQuery = useQuery(
-    trpc.studentContact.relationships.queryOptions()
+    trpc.studentContact.relationships.queryOptions(),
   );
   const { t } = useLocale();
 
@@ -38,14 +38,14 @@ export function StudentContactRelationship() {
     trpc.studentContact.deleteRelationship.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.studentContact.relationships.pathFilter()
+          trpc.studentContact.relationships.pathFilter(),
         );
         toast.success(t("deleted_successfully"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const { openModal } = useModal();
   const confirm = useConfirm();

@@ -17,9 +17,9 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const createStaffLevelSchema = z.object({
   name: z.string().min(1),
@@ -38,32 +38,36 @@ export function CreateEditStaffLevel({
     },
   });
   const { closeModal } = useModal();
-  const utils = api.useUtils();
-  const { t } = useLocale();
-  const router = useRouter();
-  const createStaffLevelMutation = api.degree.create.useMutation({
-    onSettled: () => utils.degree.invalidate(),
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      router.refresh();
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
 
-  const updateStaffLevelMutation = api.degree.update.useMutation({
-    onSettled: () => utils.degree.invalidate(),
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      router.refresh();
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const { t } = useLocale();
+
+  const createStaffLevelMutation = useMutation(
+    trpc.degree.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.degree.all.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+
+  const updateStaffLevelMutation = useMutation(
+    trpc.degree.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.degree.all.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const onSubmit = (data: z.infer<typeof createStaffLevelSchema>) => {
     if (id) {
       toast.loading(t("updating"), { id: 0 });

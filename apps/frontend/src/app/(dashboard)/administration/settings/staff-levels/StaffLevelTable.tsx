@@ -24,24 +24,29 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { api } from "~/trpc/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditStaffLevel } from "./CreateEditStaffLevel";
 
 export function StaffLevelTable() {
-  const degreesQuery = api.degree.all.useQuery();
+  const trpc = useTRPC();
+  const degreesQuery = useQuery(trpc.degree.all.queryOptions());
   const { t } = useLocale();
+  const queryClient = useQueryClient();
   const confirm = useConfirm();
-  const utils = api.useUtils();
+
   const { openModal } = useModal();
-  const deleteDegreeMutation = api.degree.delete.useMutation({
-    onSettled: () => utils.degree.invalidate(),
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const deleteDegreeMutation = useMutation(
+    trpc.degree.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.degree.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   return (
     <Table>
