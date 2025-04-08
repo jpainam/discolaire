@@ -92,7 +92,7 @@ export default function Page() {
         : undefined,
       source: sourceFilter,
       from: date ?? undefined,
-    }),
+    })
   );
 
   const auditLogs = auditLogQuery.data ?? [];
@@ -116,7 +116,7 @@ export default function Page() {
   const { t } = useLocale();
 
   return (
-    <div className="container mx-auto ">
+    <div className="">
       <Card className="shadow-none rounded-none border-none">
         <CardHeader>
           <CardTitle>{t("audit_logs")}</CardTitle>
@@ -348,7 +348,7 @@ export default function Page() {
                                   [selectedLog.data]: selectedLog.data,
                                 },
                                 null,
-                                2,
+                                2
                               )}
                             </pre>
                           </div>
@@ -361,7 +361,7 @@ export default function Page() {
                                   [selectedLog.data]: selectedLog.data,
                                 },
                                 null,
-                                2,
+                                2
                               )}
                             </pre>
                           </div>

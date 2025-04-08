@@ -13,14 +13,20 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { useLocale } from "~/i18n";
 
+import {
+  Card,
+  CardAction,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
 import FolderIcon from "~/components/icons/folder-solid";
-import Favorite from "~/components/shared/favorite";
-
 interface PhotoCardProps {
   title: string;
   size: string;
   totalFiles: number;
-  href?: string;
+  href: string;
 }
 
 export function PhotoListItem({
@@ -31,45 +37,44 @@ export function PhotoListItem({
 }: PhotoCardProps) {
   const { t } = useLocale();
   return (
-    <div className=" rounded-lg border border-muted p-5 shadow-sm hover:shadow-lg">
-      <div className="flex items-start justify-between">
-        <Link
-          className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl"
-          href={href ?? "#"}
-        >
-          <FolderIcon className="h-7 w-7" />
-        </Link>
-        <div className="flex gap-0 items-center">
-          <Favorite />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant={"ghost"} size={"icon"}>
-                <MoreVertical />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>
-                <Pencil />
-                {t("edit")}
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem variant="destructive">
-                <Trash2 />
-                {t("delete")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
-      <Link href={href ?? "#"}>
-        <h4 className="mb-1 truncate text-sm font-medium ">{title}</h4>
-        <ul className="flex list-inside list-disc gap-3.5">
-          <li className="list-none text-sm ">{size}</li>
-          <li className="text-sm ">
-            {totalFiles} {t("files")}
-          </li>
-        </ul>
-      </Link>
-    </div>
+    <Link href={href}>
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            <FolderIcon className="h-7 w-7" />
+          </CardTitle>
+          <CardDescription>{title}</CardDescription>
+          <CardAction>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant={"ghost"} size={"icon"}>
+                  <MoreVertical />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem>
+                  <Pencil />
+                  {t("edit")}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem variant="destructive">
+                  <Trash2 />
+                  {t("delete")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </CardAction>
+        </CardHeader>
+        {/* <CardContent></CardContent> */}
+        <CardFooter>
+          <ul className="flex list-inside list-disc gap-3.5">
+            <li className="list-none text-sm ">{size}</li>
+            <li className="text-sm ">
+              {totalFiles} {t("files")}
+            </li>
+          </ul>
+        </CardFooter>
+      </Card>
+    </Link>
   );
 }
