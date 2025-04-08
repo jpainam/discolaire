@@ -53,6 +53,7 @@ export function SubjectJournalTemplate() {
       </Select>
       <div className="flex flex-row items-center justify-end gap-2">
         <Button
+          type="button"
           variant={"outline"}
           onClick={() => {
             closeModal();

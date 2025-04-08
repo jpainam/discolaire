@@ -153,6 +153,8 @@ export function ChurchDetailsForm() {
         </fieldset>
         <div className="my-4 flex flex-row justify-end gap-4">
           <Button
+            type="button"
+            size={"sm"}
             onClick={() => {
               closeModal();
             }}
@@ -160,7 +162,9 @@ export function ChurchDetailsForm() {
           >
             {t("cancel")}
           </Button>
-          <Button type="submit">{t("submit")}</Button>
+          <Button size={"sm"} type="submit">
+            {t("submit")}
+          </Button>
         </div>
       </form>
     </Form>

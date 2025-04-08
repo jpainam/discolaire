@@ -200,7 +200,7 @@ export function CreateEditClassroom({
             {classroom ? t("edit") : t("submit")}
           </Button>
           <SheetClose asChild>
-            <Button variant="outline" size={"sm"}>
+            <Button type="button" variant="outline" size={"sm"}>
               {t("cancel")}
             </Button>
           </SheetClose>

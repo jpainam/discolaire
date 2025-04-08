@@ -27,6 +27,7 @@ export function CreateAssignment() {
       />
       <div className="col-span-2 h-4"></div>
       <Button
+        type="button"
         variant={"outline"}
         onClick={() => {
           closeModal();

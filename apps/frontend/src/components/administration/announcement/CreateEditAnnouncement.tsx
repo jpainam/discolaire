@@ -71,7 +71,7 @@ export function CreateEditAnnouncement({
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) =>
-      console.log(value, name, type),
+      console.log(value, name, type)
     );
     return () => subscription.unsubscribe();
   }, [watch]);
@@ -103,7 +103,7 @@ export function CreateEditAnnouncement({
           error: (error) => {
             return getErrorMessage(error);
           },
-        },
+        }
       );
     } else {
       toast.promise(
@@ -118,7 +118,7 @@ export function CreateEditAnnouncement({
           error: (error) => {
             return getErrorMessage(error);
           },
-        },
+        }
       );
     }
   }
@@ -238,6 +238,7 @@ export function CreateEditAnnouncement({
         <div className="flex flex-row justify-end gap-4 p-2">
           <Button
             size={"sm"}
+            type="button"
             variant={"outline"}
             onClick={() => {
               closeSheet();

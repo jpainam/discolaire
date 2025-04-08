@@ -85,6 +85,8 @@ export default function SendNotificationDialog() {
       </div>
       <div className="flex justify-between">
         <Button
+          type="button"
+          size={"sm"}
           variant="outline"
           onClick={() => {
             closeModal();
@@ -94,6 +96,7 @@ export default function SendNotificationDialog() {
         </Button>
         <Button
           type="button"
+          size={"sm"}
           onClick={() => {
             toast.promise(
               sendEmailMutation.mutateAsync({
@@ -112,7 +115,7 @@ export default function SendNotificationDialog() {
                   closeModal();
                   return t("sent_successfully");
                 },
-              },
+              }
             );
           }}
         >
