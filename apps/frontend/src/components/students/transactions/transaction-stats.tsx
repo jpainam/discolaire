@@ -29,11 +29,11 @@ export function TransactionStats({ classroomId }: { classroomId: string }) {
   const { t, i18n } = useLocale();
   const trpc = useTRPC();
   const { data: fees } = useSuspenseQuery(
-    trpc.classroom.fees.queryOptions(classroomId),
+    trpc.classroom.fees.queryOptions(classroomId)
   );
   const params = useParams<{ id: string }>();
   const { data: transactions } = useSuspenseQuery(
-    trpc.student.transactions.queryOptions(params.id),
+    trpc.student.transactions.queryOptions(params.id)
   );
 
   const statData: TransactionType[] = [
@@ -61,7 +61,7 @@ export function TransactionStats({ classroomId }: { classroomId: string }) {
       title: t("transactionsCompleted"),
       amount: sumBy(
         transactions.filter((t) => t.status == "VALIDATED"),
-        "amount",
+        "amount"
       ).toLocaleString(i18n.language),
       icon: PiMoneyBold,
       iconWrapperFill: "#FF0000",
@@ -99,7 +99,7 @@ function TransactionStatCard({
     <div
       className={cn(
         "rounded-md border p-2 bg-muted hover:bg-secondary",
-        className,
+        className
       )}
     >
       <div className="flex items-center gap-5">

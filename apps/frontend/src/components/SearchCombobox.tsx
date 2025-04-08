@@ -29,7 +29,7 @@ export interface ComboBoxItemType {
 interface ComboboxProps {
   value?: string;
   label?: string;
-  onSelect: (value: string, label?: string) => void;
+  onSelect?: (value: string, label?: string) => void;
   items: ComboBoxItemType[];
   searchPlaceholder?: string;
   noResultsMsg?: string;
@@ -123,14 +123,14 @@ export function SearchCombobox({
                     key="unselect"
                     value=""
                     onSelect={() => {
-                      onSelect("");
+                      onSelect?.("");
                       setOpen(false);
                     }}
                   >
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4",
-                        value === "" ? "opacity-100" : "opacity-0",
+                        value === "" ? "opacity-100" : "opacity-0"
                       )}
                     />
                     {unselectMsg}
@@ -145,7 +145,7 @@ export function SearchCombobox({
                       value={item.value}
                       keywords={[item.label]}
                       onSelect={(value) => {
-                        onSelect(value, item.label);
+                        onSelect?.(value, item.label);
                         setOpen(false);
                       }}
                       disabled={isSelected}
@@ -154,7 +154,7 @@ export function SearchCombobox({
                       <Check
                         className={cn(
                           "ml-auto h-4 w-4",
-                          isSelected ? "opacity-100" : "opacity-0",
+                          isSelected ? "opacity-100" : "opacity-0"
                         )}
                       />
                     </CommandItem>

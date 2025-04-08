@@ -11,6 +11,7 @@ import { ScheduleCard } from "~/components/dashboard/ScheduleCard";
 import { SchoolLife } from "~/components/dashboard/SchoolLife";
 import { Chart01 } from "~/components/dashboard/student/Chart01";
 import { StudentGradeTrend } from "~/components/dashboard/student/StudentGradeTrend";
+import { StudentTransactionStat } from "~/components/dashboard/student/StudentTransactionStats";
 import { StudentDashboardContact } from "~/components/dashboard/StudentDashboardContact";
 import { StudentLatestGrade } from "~/components/dashboard/StudentLatestGrade";
 import { ErrorFallback } from "~/components/error-fallback";
@@ -29,6 +30,10 @@ export default async function Page() {
 
     return (
       <div className="overflow-hidden grid lg:grid-cols-2 w-full gap-4 p-4">
+        <StudentTransactionStat
+          studentId={student.id}
+          className="col-span-full"
+        />
         <StudentLatestGrade
           studentId={student.id}
           name={decode(student.lastName ?? "")}
@@ -105,6 +110,8 @@ export default async function Page() {
           </Suspense>
         </ErrorBoundary>
       </HydrateClient>
+      {/* <UpcomingAssignment /> */}
+      {/* <TransactionStat /> */}
       {/* <DashboardTransactionTrend className="col-span-full hidden md:block" /> */}
     </div>
   );
