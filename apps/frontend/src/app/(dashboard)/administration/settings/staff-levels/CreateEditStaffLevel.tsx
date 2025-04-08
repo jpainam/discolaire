@@ -53,7 +53,7 @@ export function CreateEditStaffLevel({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const updateStaffLevelMutation = useMutation(
@@ -66,7 +66,7 @@ export function CreateEditStaffLevel({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const onSubmit = (data: z.infer<typeof createStaffLevelSchema>) => {
     if (id) {

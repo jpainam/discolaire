@@ -48,7 +48,7 @@ export function ClubTable() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   return (
@@ -79,7 +79,7 @@ export function ClubTable() {
             {clubs.length === 0 && (
               <TableRow>
                 <TableCell colSpan={2}>
-                  <EmptyState />
+                  <EmptyState iconClassName="w-[100px] h-auto" />
                 </TableCell>
               </TableRow>
             )}

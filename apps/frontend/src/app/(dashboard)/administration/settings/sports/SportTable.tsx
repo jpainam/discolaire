@@ -50,7 +50,7 @@ export function SportTable() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   return (
     <div>
@@ -80,7 +80,7 @@ export function SportTable() {
             {sports.length === 0 && (
               <TableRow>
                 <TableCell colSpan={2}>
-                  <EmptyState />
+                  <EmptyState iconClassName="w-[100px] h-auto" />
                 </TableCell>
               </TableRow>
             )}

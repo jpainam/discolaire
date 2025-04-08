@@ -49,7 +49,7 @@ export function ReligionTable() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const religionsQuery = useQuery(trpc.religion.all.queryOptions());
   const religions = religionsQuery.data ?? [];
@@ -82,7 +82,7 @@ export function ReligionTable() {
             {religions.length === 0 && (
               <TableRow>
                 <TableCell colSpan={2}>
-                  <EmptyState />
+                  <EmptyState iconClassName="w-[100px] h-auto" />
                 </TableCell>
               </TableRow>
             )}
