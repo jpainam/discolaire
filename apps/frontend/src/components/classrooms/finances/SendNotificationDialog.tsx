@@ -115,7 +115,7 @@ export default function SendNotificationDialog() {
                   closeModal();
                   return t("sent_successfully");
                 },
-              }
+              },
             );
           }}
         >
