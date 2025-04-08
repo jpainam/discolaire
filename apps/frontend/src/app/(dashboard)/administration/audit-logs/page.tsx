@@ -92,7 +92,7 @@ export default function Page() {
         : undefined,
       source: sourceFilter,
       from: date ?? undefined,
-    })
+    }),
   );
 
   const auditLogs = auditLogQuery.data ?? [];
@@ -348,7 +348,7 @@ export default function Page() {
                                   [selectedLog.data]: selectedLog.data,
                                 },
                                 null,
-                                2
+                                2,
                               )}
                             </pre>
                           </div>
@@ -361,7 +361,7 @@ export default function Page() {
                                   [selectedLog.data]: selectedLog.data,
                                 },
                                 null,
-                                2
+                                2,
                               )}
                             </pre>
                           </div>

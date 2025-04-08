@@ -92,7 +92,7 @@ export function ZipImageMatcher() {
 
       // Get all file entries (excluding directories)
       const fileEntries = Object.keys(contents.files).filter(
-        (fileName) => !contents.files[fileName]?.dir
+        (fileName) => !contents.files[fileName]?.dir,
       );
 
       // Filter for image files (common image extensions)
@@ -129,7 +129,7 @@ export function ZipImageMatcher() {
         // Update progress
         processedCount++;
         setProgress(
-          Math.round((processedCount / imageFileEntries.length) * 100)
+          Math.round((processedCount / imageFileEntries.length) * 100),
         );
         return baseName;
       });
@@ -162,7 +162,7 @@ export function ZipImageMatcher() {
             setFileResults(results);
             console.log(results);
           },
-        }
+        },
       );
     } catch (error) {
       toast.error((error as Error).message);
@@ -188,7 +188,7 @@ export function ZipImageMatcher() {
           formData.append(
             `id_${result.matchedId}`,
             result.fileData,
-            result.fileName
+            result.fileName,
           );
         }
       });
@@ -197,8 +197,8 @@ export function ZipImageMatcher() {
       formData.append(
         "matchedIds",
         JSON.stringify(
-          fileResults.filter((r) => r.matched).map((r) => r.matchedId)
-        )
+          fileResults.filter((r) => r.matched).map((r) => r.matchedId),
+        ),
       );
 
       // Here you would replace with your actual API endpoint
@@ -217,7 +217,7 @@ export function ZipImageMatcher() {
     } catch (error) {
       setSubmitStatus("error");
       setSubmitMessage(
-        "Failed to submit files to the backend. Please try again."
+        "Failed to submit files to the backend. Please try again.",
       );
       console.error("Submission error:", error);
     } finally {
@@ -239,7 +239,7 @@ export function ZipImageMatcher() {
   const { t } = useLocale();
   const trpc = useTRPC();
   const matchIdsMutation = useMutation(
-    trpc.upload.matchedIds.mutationOptions()
+    trpc.upload.matchedIds.mutationOptions(),
   );
 
   return (
