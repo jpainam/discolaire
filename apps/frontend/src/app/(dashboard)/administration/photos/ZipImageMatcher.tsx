@@ -1,6 +1,5 @@
 "use client";
 
-import { Alert, AlertDescription, AlertTitle } from "@repo/ui/components/alert";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -24,7 +23,6 @@ import { Separator } from "@repo/ui/components/separator";
 import { useMutation } from "@tanstack/react-query";
 import JSZip from "jszip";
 import {
-  AlertCircle,
   CheckCircle2,
   FileIcon,
   FileArchiveIcon as FileZip,
@@ -34,6 +32,7 @@ import {
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
+import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
@@ -55,11 +54,6 @@ export function ZipImageMatcher() {
   const [zipFile, setZipFile] = useState<File | null>(null);
 
   const [fileResults, setFileResults] = useState<FileMatchResult[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<
-    "idle" | "success" | "error"
-  >("idle");
-  const [submitMessage, setSubmitMessage] = useState("");
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
@@ -141,10 +135,9 @@ export function ZipImageMatcher() {
     }
   };
 
-  const handleSubmit = () => {
-    setIsSubmitting(true);
-    setSubmitStatus("idle");
-    setSubmitMessage("");
+  const router = useRouter();
+  const handleSubmit = async () => {
+    toast.loading("Submitting files...", { id: 0 });
     const formData = new FormData();
     const matchedFiles = fileResults.filter((result) => result.matched);
     matchedFiles.forEach((result) => {
@@ -162,27 +155,23 @@ export function ZipImageMatcher() {
     formData.append("entityType", entityType);
 
     try {
-      // Here you would replace with your actual API endpoint
-      // const response = await fetch('/api/submit-images', {
-      //   method: 'POST',
-      //   body: formData
-      // })
-
+      //Here you would replace with your actual API endpoint
+      const response = await fetch("/api/photos", {
+        method: "POST",
+        body: formData,
+      });
       // Simulate a successful response
-      // if (response.ok) {
-      setSubmitStatus("success");
-      setSubmitMessage("Files successfully submitted to the backend!");
-      // } else {
-      //   throw new Error('Failed to submit files')
-      // }
+      if (response.ok) {
+        toast.success("Files submitted successfully!", { id: 0 });
+        router.push(`/administration/photos/${entityType}`);
+      } else {
+        throw new Error(response.statusText);
+      }
     } catch (error) {
-      setSubmitStatus("error");
-      setSubmitMessage(
-        "Failed to submit files to the backend. Please try again."
-      );
+      toast.error((error as Error).message, { id: 0 });
       console.error("Submission error:", error);
     } finally {
-      setIsSubmitting(false);
+      toast.dismiss(0);
     }
   };
 
@@ -190,8 +179,6 @@ export function ZipImageMatcher() {
     setIds([]);
     setZipFile(null);
     setFileResults([]);
-    setSubmitStatus("idle");
-    setSubmitMessage("");
   };
 
   const matchedCount = fileResults.filter((r) => r.matched).length;
@@ -285,18 +272,6 @@ export function ZipImageMatcher() {
                 <Upload className="ml-2 h-4 w-4" />
               )}
             </Button>
-
-            {submitStatus !== "idle" && (
-              <Alert
-                variant={submitStatus === "success" ? "default" : "destructive"}
-              >
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>
-                  {submitStatus === "success" ? "Success" : "Error"}
-                </AlertTitle>
-                <AlertDescription>{submitMessage}</AlertDescription>
-              </Alert>
-            )}
           </div>
 
           {/* Right Column - Results */}
@@ -380,16 +355,22 @@ export function ZipImageMatcher() {
         </div>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button variant="outline" onClick={resetForm}>
+        <Button size={"sm"} variant="outline" onClick={resetForm}>
           Reset
         </Button>
         <Button
+          size={"sm"}
+          isLoading={matchIdsMutation.isPending}
           onClick={handleSubmit}
           disabled={
-            fileResults.length === 0 || isSubmitting || matchedCount === 0
+            fileResults.length === 0 ||
+            matchIdsMutation.isPending ||
+            matchedCount === 0
           }
         >
-          {isSubmitting ? "Submitting..." : "Submit Matched Files"}
+          {matchIdsMutation.isPending
+            ? "Submitting..."
+            : "Submit Matched Files"}
         </Button>
       </CardFooter>
     </Card>

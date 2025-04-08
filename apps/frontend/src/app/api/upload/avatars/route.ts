@@ -19,15 +19,15 @@ export async function POST(request: Request) {
     if (!(file instanceof File)) {
       return Response.json({ error: "Invalid file type" }, { status: 400 });
     }
-    const fileBuffer = await file.arrayBuffer();
-    //const isCropped = file.name.includes("cropped");
 
     const school = await caller.school.getSchool();
-    const key = `${school.code}/avatars/${userId}.png`;
+    const ext = file.name.split(".").pop();
+
+    const key = `${school.code}/avatars/${userId}.${ext}`;
     const command = new PutObjectCommand({
       Bucket: "discolaire-public",
       Key: key,
-      Body: Buffer.from(fileBuffer),
+      Body: Buffer.from(await file.arrayBuffer()),
       ContentType: file.type,
     });
     const response = await s3client.send(command);
@@ -64,7 +64,7 @@ export async function DELETE(request: Request) {
     //const school = await caller.school.getSchool();
 
     const key = avatar.split(
-      "https://discolaire-public.s3.eu-central-1.amazonaws.com/",
+      "https://discolaire-public.s3.eu-central-1.amazonaws.com/"
     )[1];
     //const key = `${school.code}/avatars/${userId}.png`;
     const command = new DeleteObjectCommand({
