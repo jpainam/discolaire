@@ -10,16 +10,20 @@ import {
   PaginationContent,
   PaginationItem,
 } from "@repo/ui/components/pagination";
-import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
 import type { RouterOutputs } from "@repo/api";
-import { api } from "~/trpc/react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 type Student = RouterOutputs["student"]["all"][number];
+
 export function StudentFooter() {
   const { t, i18n } = useLocale();
   const params = useParams<{ id: string }>();
-  const studentQuery = api.student.get.useQuery(params.id);
+  const trpc = useTRPC();
+  const { data: student } = useSuspenseQuery(
+    trpc.student.get.queryOptions(params.id)
+  );
 
   const [prevStudent, _setPrevStudent] = useState<Student | null>(null);
   const [nextStudent, _setNextStudent] = useState<Student | null>(null);
@@ -35,26 +39,23 @@ export function StudentFooter() {
     //   //   studentsQuery.data ? studentsQuery.data[currentIndex + 1] : null
     //   // );
     // }
-  }, [studentQuery.data]);
+  }, [student]);
 
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
     year: "numeric",
     month: "long",
     day: "numeric",
   });
-  if (studentQuery.isPending) {
-    return <Skeleton className="h-full w-full" />;
-  }
-  const student = studentQuery.data;
+
   return (
     <>
       <div className="text-xs text-muted-foreground">
-        {student?.updatedAt && t("lastUpdatedAt")}{" "}
-        {student?.updatedAt && (
+        {t("lastUpdatedAt")}{" "}
+        {
           <time dateTime={new Date(student.updatedAt).toISOString()}>
             {dateFormatter.format(new Date(student.updatedAt))}
           </time>
-        )}
+        }
       </div>
       <Pagination className="ml-auto mr-0 w-auto">
         <PaginationContent className="gap-4">

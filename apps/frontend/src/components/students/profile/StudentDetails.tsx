@@ -20,33 +20,25 @@ import { useParams } from "next/navigation";
 import { PiChurchDuotone } from "react-icons/pi";
 
 import { Separator } from "@repo/ui/components/separator";
-import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { decode } from "entities";
 import House from "~/components/icons/house";
 import { routes } from "~/configs/routes";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 export default function StudentDetails() {
   const params = useParams<{ id: string }>();
   const { t, i18n } = useLocale();
+  const trpc = useTRPC();
+  const { data: siblings } = useSuspenseQuery(
+    trpc.student.siblings.queryOptions(params.id)
+  );
+  const { data: student } = useSuspenseQuery(
+    trpc.student.get.queryOptions(params.id)
+  );
 
-  const siblingsQuery = api.student.siblings.useQuery(params.id);
-  const studentQuery = api.student.get.useQuery(params.id);
-
-  if (studentQuery.isPending) {
-    return (
-      <div className="grid grid-cols-4 gap-2 p-2">
-        {Array.from({ length: 32 }).map((_, index) => (
-          <Skeleton className="h-8" key={`student-profile-${index}`} />
-        ))}
-      </div>
-    );
-  }
-  const student = studentQuery.data;
-  if (!student) return null;
-  const siblings = siblingsQuery.data ?? [];
   const dateFormat = Intl.DateTimeFormat(i18n.language, {
     timeZone: "UTC",
     year: "numeric",
@@ -55,7 +47,7 @@ export default function StudentDetails() {
   });
 
   return (
-    <>
+    <div className="flex gap-2 flex-col">
       <div className="grid grid-cols-2 gap-y-3 px-4 xl:grid-cols-4">
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <SquareUserRound className="h-4 w-4 stroke-1" /> {t("lastName")}
@@ -205,11 +197,10 @@ export default function StudentDetails() {
           })}
         </ul>
       </div>
-      <Separator className="my-2 w-full" />
-      <div className="flex w-full flex-col items-start px-4">
-        <span className="font-semibold">{t("observation")}</span>
-        <span>{student.observation ?? "N/A"}</span>
-      </div>
-    </>
+
+      {student.observation && (
+        <div className="px-4 text-muted-foreground">{student.observation}</div>
+      )}
+    </div>
   );
 }

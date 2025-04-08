@@ -55,6 +55,7 @@ import { useSetAtom } from "jotai";
 import { useCallback, useEffect, useState } from "react";
 import { SimpleTooltip } from "~/components/simple-tooltip";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { StudentSelector } from "~/components/shared/selects/StudentSelector";
 import { UserAvatar } from "~/components/users/UserAvatar";
 import { routes } from "~/configs/routes";
@@ -62,7 +63,7 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { useSession } from "~/providers/AuthProvider";
-import { api } from "~/trpc/react";
+import { api, useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { SearchCombobox } from "../SearchCombobox";
 import { CountryComponent } from "../shared/CountryPicker";
@@ -79,12 +80,12 @@ export function StudentHeader({
   const router = useRouter();
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
-  //const studentQuery = api.student.get.useQuery(params.id);
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
 
@@ -99,36 +100,35 @@ export function StudentHeader({
     ]);
   }, [student, setBreadcrumbs, t]);
 
-  const deleteStudentMutation = api.student.delete.useMutation({
-    onSettled: async () => {
-      await utils.student.invalidate();
-    },
-    onSuccess: () => {
-      router.push(routes.students.index);
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const deleteStudentMutation = useMutation(
+    trpc.student.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.student.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+        router.push(routes.students.index);
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const { openModal } = useModal();
 
   const { createQueryString } = useCreateQueryString();
   const pathname = usePathname();
 
-  const studentStatusMutation = api.student.updateStatus.useMutation({
-    onSettled: () => {
-      void utils.student.invalidate();
-      router.refresh();
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const studentStatusMutation = useMutation(
+    trpc.student.updateStatus.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.student.get.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const changeStudentStatus = useCallback(
     (status: StudentStatus) => {
@@ -137,7 +137,7 @@ export function StudentHeader({
         status,
       });
     },
-    [studentStatusMutation, student.id],
+    [studentStatusMutation, student.id]
   );
 
   const navigateToStudent = (id: string) => {
@@ -156,7 +156,7 @@ export function StudentHeader({
 
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditStudent = useCheckPermission("student", PermissionAction.UPDATE);
   //const [open, setOpen] = React.useState(false);
@@ -320,7 +320,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
