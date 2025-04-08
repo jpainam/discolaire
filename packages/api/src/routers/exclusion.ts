@@ -1,7 +1,5 @@
-import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const exclusionRouter = createTRPCRouter({
@@ -16,7 +14,6 @@ export const exclusionRouter = createTRPCRouter({
     .input(
       z.object({
         termId: z.coerce.number(),
-        classroomId: z.string().min(1),
         students: z.array(
           z.object({
             id: z.string().min(1),
@@ -32,12 +29,10 @@ export const exclusionRouter = createTRPCRouter({
         if (!student.from || !student.to) {
           continue;
         }
-
         await ctx.db.exclusion.create({
           data: {
             termId: input.termId,
             studentId: student.id,
-            classroomId: input.classroomId,
             startDate: student.from,
             endDate: student.to,
             reason: student.reason ?? "",
@@ -79,9 +74,15 @@ export const exclusionRouter = createTRPCRouter({
           student: true,
         },
         where: {
-          classroomId: input.classroomId,
+          student: {
+            enrollments: {
+              some: {
+                classroomId: input.classroomId,
+              },
+            },
+          },
+          ...(input.termId && { termId: input.termId }),
           term: {
-            ...(input.termId && { id: input.termId }),
             schoolId: ctx.schoolId,
             schoolYearId: ctx.schoolYearId,
           },
@@ -97,7 +98,7 @@ export const exclusionRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const exclusion = await ctx.db.exclusion.findMany({
         where: {
-          classroom: {
+          term: {
             schoolId: ctx.schoolId,
             schoolYearId: ctx.schoolYearId,
           },
@@ -143,21 +144,10 @@ export const exclusionRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const classroom = await studentService.getClassroom(
-        input.studentId,
-        ctx.schoolYearId,
-      );
-      if (!classroom) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Student not registered in any classroom",
-        });
-      }
       return ctx.db.exclusion.create({
         data: {
           termId: input.termId,
           studentId: input.studentId,
-          classroomId: classroom.id,
           reason: input.reason,
           startDate: input.startDate,
           endDate: input.endDate,

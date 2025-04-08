@@ -1,103 +1,71 @@
 model Absence {
-    id            Int                   @id @default(autoincrement())
-    date          DateTime
-    value         Int
-    termId        Int
-    term          Term                  @relation(fields: [termId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    studentId     String
-    student       Student               @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    classroomId   String
-    classroom     Classroom             @relation(fields: [classroomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    type          String                @default("daily") // daily, hourly, periodically, weekly, monthly
-    createdAt     DateTime              @default(now())
-    createdById   String
-    justification AbsenceJustification?
-}
-
-model AbsenceJustification {
     id          Int      @id @default(autoincrement())
-    absenceId   Int      @unique
-    absence     Absence  @relation(fields: [absenceId], references: [id], onDelete: Cascade)
-    attachments String[]
-    createdById String
-    value       Int
-    reason      String?
-    comment     String?
-    status      String   @default("pending") // pending, approved, rejected
-    approvedBy  String?
-    createdAt   DateTime @default(now())
-}
-
-model Lateness {
-    id            Int                    @id @default(autoincrement())
-    studentId     String
-    student       Student                @relation(fields: [studentId], references: [id], onDelete: Cascade)
-    date          DateTime
-    termId        Int
-    duration      Int
-    classroomId   String
-    classroom     Classroom              @relation(fields: [classroomId], references: [id], onDelete: Cascade)
-    createdAt     DateTime               @default(now())
-    createdById   String
-    term          Term                   @relation(fields: [termId], references: [id], onDelete: Cascade)
-    justification LatenessJustification?
-}
-
-model LatenessJustification {
-    id          Int      @id @default(autoincrement())
-    latenessId  Int      @unique
-    late        Lateness @relation(fields: [latenessId], references: [id], onDelete: Cascade)
-    attachments String[]
-    createdById String
-    status      String   @default("pending") // pending, accepted, rejected
-    approvedBy  String?
-    reason      String?
-    duration    Int
-    createdAt   DateTime @default(now())
-}
-
-model Chatter {
-    id          Int       @id @default(autoincrement())
     date        DateTime
     value       Int
     termId      Int
-    term        Term      @relation(fields: [termId], references: [id], onDelete: Cascade)
+    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     studentId   String
-    student     Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
-    classroomId String
-    classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
-    type        String    @default("daily") // daily, hourly, periodically, weekly, monthly
-    createdAt   DateTime  @default(now())
+    student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    type        String   @default("daily") // daily, hourly, periodically, weekly, monthly
+    createdAt   DateTime @default(now())
+    createdById String
+    justified   Int?     @default(0) // 0: number of absences justified
+    attachments String[]
+    reason      String?
+}
+
+model Lateness {
+    id          Int      @id @default(autoincrement())
+    studentId   String
+    student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+    date        DateTime
+    termId      Int
+    duration    Int
+    createdAt   DateTime @default(now())
+    createdById String
+    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
+    justified   Int?     @default(0) // 0: number of lateness justified
+    attachments String[]
+    reason      String?
+}
+
+model Chatter {
+    id          Int      @id @default(autoincrement())
+    date        DateTime
+    value       Int
+    termId      Int
+    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
+    studentId   String
+    student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+    type        String   @default("daily") // daily, hourly, periodically, weekly, monthly
+    createdAt   DateTime @default(now())
     createdById String
 }
 
 model Consigne {
-    id          Int       @id @default(autoincrement())
+    id          Int      @id @default(autoincrement())
     studentId   String
-    student     Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+    student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
     termId      Int
-    classroomId String
-    classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
     date        DateTime
     task        String
     duration    Int
-    term        Term      @relation(fields: [termId], references: [id], onDelete: Cascade)
+    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
     createdById String
+    createdAt   DateTime @default(now())
 }
 
 model Exclusion {
-    id          Int       @id @default(autoincrement())
+    id          Int      @id @default(autoincrement())
     studentId   String
-    student     Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+    student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
     termId      Int
     startDate   DateTime
     endDate     DateTime
     reason      String
-    createdAt   DateTime  @default(now())
+    createdAt   DateTime @default(now())
     createdById String
-    classroomId String
-    classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
-    term        Term      @relation(fields: [termId], references: [id], onDelete: Cascade)
+    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
 }
 
 model PreventedAbsence {

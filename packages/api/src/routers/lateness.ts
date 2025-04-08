@@ -1,7 +1,5 @@
-import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const latenessRouter = createTRPCRouter({
@@ -9,7 +7,6 @@ export const latenessRouter = createTRPCRouter({
     return ctx.db.lateness.findUniqueOrThrow({
       include: {
         student: true,
-        justification: true,
       },
       where: {
         id: input,
@@ -39,10 +36,12 @@ export const latenessRouter = createTRPCRouter({
       }),
     )
     .mutation(({ ctx, input }) => {
-      return ctx.db.latenessJustification.create({
+      return ctx.db.lateness.update({
+        where: {
+          id: input.latenessId,
+        },
         data: {
           reason: input.reason,
-          latenessId: input.latenessId,
           createdById: ctx.session.user.id,
           duration: input.duration,
         },
@@ -57,27 +56,24 @@ export const latenessRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const lateness = await ctx.db.lateness.findMany({
         include: {
-          justification: true,
+          student: true,
         },
         where: {
           studentId: input.studentId,
-          classroom: {
+          term: {
             schoolId: ctx.schoolId,
             schoolYearId: ctx.schoolYearId,
           },
         },
       });
-      const duration = lateness.reduce((acc, curr) => acc + curr.duration, 0);
 
-      const justifications = lateness.filter((l) => l.justification);
-      const justificationDuration = justifications.reduce(
-        (acc, curr) => acc + (curr.justification?.duration ?? 0),
-        0,
-      );
       return {
-        value: duration,
+        value: lateness.reduce((acc, curr) => acc + curr.duration, 0),
         total: lateness.length,
-        justified: justificationDuration,
+        justified: lateness.reduce(
+          (acc, curr) => acc + (curr.justified ?? 0),
+          0,
+        ),
       };
     }),
   byClassroom: protectedProcedure
@@ -93,13 +89,18 @@ export const latenessRouter = createTRPCRouter({
           date: "desc",
         },
         include: {
-          justification: true,
           student: true,
         },
         where: {
-          classroomId: input.classroomId,
+          student: {
+            enrollments: {
+              some: {
+                classroomId: input.classroomId,
+              },
+            },
+          },
+          ...(input.termId && { termId: input.termId }),
           term: {
-            ...(input.termId && { id: input.termId }),
             schoolId: ctx.schoolId,
             schoolYearId: ctx.schoolYearId,
           },
@@ -110,12 +111,12 @@ export const latenessRouter = createTRPCRouter({
     .input(
       z.object({
         termId: z.coerce.number(),
-        classroomId: z.string().min(1),
+        date: z.coerce.date().default(() => new Date()),
         students: z.array(
           z.object({
             id: z.string().min(1),
             late: z.string().optional(),
-            justify: z.string().optional(),
+            justify: z.coerce.number().optional(),
           }),
         ),
       }),
@@ -125,28 +126,16 @@ export const latenessRouter = createTRPCRouter({
         if (!student.late) {
           continue;
         }
-        // convert student.late and student.justify into duration
-
-        const late = await ctx.db.lateness.create({
+        return ctx.db.lateness.create({
           data: {
             termId: input.termId,
             studentId: student.id,
-            classroomId: input.classroomId,
-            date: new Date(),
+            date: input.date,
+            justified: student.justify ?? 0,
             createdById: ctx.session.user.id,
             duration: Number(student.late),
           },
         });
-        if (student.justify)
-          await ctx.db.latenessJustification.create({
-            data: {
-              latenessId: late.id,
-              status: "approved",
-              duration: Number(student.justify),
-              approvedBy: ctx.session.user.id,
-              createdById: ctx.session.user.id,
-            },
-          });
       }
     }),
   byStudent: protectedProcedure
@@ -163,12 +152,11 @@ export const latenessRouter = createTRPCRouter({
         },
         include: {
           student: true,
-          justification: true,
         },
         where: {
           studentId: input.studentId,
+          ...(input.termId && { termId: input.termId }),
           term: {
-            ...(input.termId && { id: input.termId }),
             schoolId: ctx.schoolId,
             schoolYearId: ctx.schoolYearId,
           },
@@ -185,21 +173,10 @@ export const latenessRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const classroom = await studentService.getClassroom(
-        input.studentId,
-        ctx.schoolYearId,
-      );
-      if (!classroom) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Student not registered in any classroom",
-        });
-      }
       return ctx.db.lateness.create({
         data: {
           termId: input.termId,
           studentId: input.studentId,
-          classroomId: classroom.id,
           date: input.date,
           createdById: ctx.session.user.id,
           duration: input.duration,
@@ -231,48 +208,6 @@ export const latenessRouter = createTRPCRouter({
       return ctx.db.lateness.delete({
         where: {
           id: input,
-        },
-      });
-    }),
-  studentJustifications: protectedProcedure
-    .input(
-      z.object({
-        studentId: z.string().min(1),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      return ctx.db.lateness.findMany({
-        where: {
-          studentId: input.studentId,
-          term: {
-            schoolId: ctx.schoolId,
-            schoolYearId: ctx.schoolYearId,
-          },
-        },
-        include: {
-          justification: true,
-          term: true,
-        },
-      });
-    }),
-  classroomJustifications: protectedProcedure
-    .input(
-      z.object({
-        classroomId: z.string().min(1),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      return ctx.db.lateness.findMany({
-        where: {
-          classroomId: input.classroomId,
-          term: {
-            schoolId: ctx.schoolId,
-            schoolYearId: ctx.schoolYearId,
-          },
-        },
-        include: {
-          justification: true,
-          term: true,
         },
       });
     }),

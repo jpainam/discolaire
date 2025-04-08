@@ -1,7 +1,5 @@
-import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { studentService } from "../services/student-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const chatterRouter = createTRPCRouter({
@@ -19,7 +17,6 @@ export const chatterRouter = createTRPCRouter({
     .input(
       z.object({
         termId: z.coerce.number(),
-        classroomId: z.string().min(1),
         students: z.array(
           z.object({
             id: z.string().min(1),
@@ -37,7 +34,6 @@ export const chatterRouter = createTRPCRouter({
           data: {
             termId: input.termId,
             studentId: student.id,
-            classroomId: input.classroomId,
             date: new Date(),
             type: "periodically",
             createdById: ctx.session.user.id,
@@ -79,9 +75,15 @@ export const chatterRouter = createTRPCRouter({
           student: true,
         },
         where: {
-          classroomId: input.classroomId,
+          student: {
+            enrollments: {
+              some: {
+                classroomId: input.classroomId,
+              },
+            },
+          },
+          ...(input.termId && { termId: input.termId }),
           term: {
-            ...(input.termId && { id: input.termId }),
             schoolId: ctx.schoolId,
             schoolYearId: ctx.schoolYearId,
           },
@@ -98,7 +100,7 @@ export const chatterRouter = createTRPCRouter({
       const chatters = await ctx.db.chatter.findMany({
         where: {
           studentId: input.studentId,
-          classroom: {
+          term: {
             schoolId: ctx.schoolId,
             schoolYearId: ctx.schoolYearId,
           },
@@ -124,8 +126,8 @@ export const chatterRouter = createTRPCRouter({
         },
         where: {
           studentId: input.studentId,
+          ...(input.termId && { termId: input.termId }),
           term: {
-            ...(input.termId && { id: input.termId }),
             schoolId: ctx.schoolId,
             schoolYearId: ctx.schoolYearId,
           },
@@ -142,21 +144,10 @@ export const chatterRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const classroom = await studentService.getClassroom(
-        input.studentId,
-        ctx.schoolYearId,
-      );
-      if (!classroom) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Student not registered in any classroom",
-        });
-      }
       return ctx.db.chatter.create({
         data: {
           termId: input.termId,
           studentId: input.studentId,
-          classroomId: classroom.id,
           date: input.date,
           createdById: ctx.session.user.id,
           value: input.value,

@@ -7,7 +7,7 @@ export const absenceRouter = {
   get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
     return ctx.db.absence.findUniqueOrThrow({
       include: {
-        justification: true,
+        student: true,
       },
       where: {
         id: input,
@@ -20,7 +20,6 @@ export const absenceRouter = {
         date: "desc",
       },
       include: {
-        justification: true,
         student: true,
       },
       where: {
@@ -31,25 +30,6 @@ export const absenceRouter = {
       },
     });
   }),
-  justify: protectedProcedure
-    .input(
-      z.object({
-        absenceId: z.coerce.number(),
-        reason: z.string().min(1),
-        comment: z.string().optional(),
-        value: z.coerce.number(),
-      }),
-    )
-    .mutation(({ ctx, input }) => {
-      return ctx.db.absenceJustification.create({
-        data: {
-          reason: input.reason,
-          absenceId: input.absenceId,
-          createdById: ctx.session.user.id,
-          value: input.value,
-        },
-      });
-    }),
   studentSummary: protectedProcedure
     .input(
       z.object({
@@ -59,24 +39,22 @@ export const absenceRouter = {
     .query(async ({ ctx, input }) => {
       const absences = await ctx.db.absence.findMany({
         include: {
-          justification: true,
+          student: true,
         },
         where: {
           studentId: input.studentId,
-          classroom: {
+          term: {
             schoolId: ctx.schoolId,
             schoolYearId: ctx.schoolYearId,
           },
         },
       });
-      const justifications = absences.filter(
-        (absence) => absence.justification,
-      );
+
       return {
         total: absences.reduce((acc, curr) => acc + curr.value, 0),
         value: absences.reduce((acc, curr) => acc + curr.value, 0),
-        justified: justifications.reduce(
-          (acc, curr) => acc + (curr.justification?.value ?? 0),
+        justified: absences.reduce(
+          (acc, curr) => acc + (curr.justified ?? 0),
           0,
         ),
       };
@@ -94,16 +72,17 @@ export const absenceRouter = {
           date: "desc",
         },
         include: {
-          justification: true,
           student: true,
         },
         where: {
-          classroomId: input.classroomId,
-          term: {
-            ...(input.termId && { id: input.termId }),
-            schoolId: ctx.schoolId,
-            schoolYearId: ctx.schoolYearId,
+          student: {
+            enrollments: {
+              some: {
+                classroomId: input.classroomId,
+              },
+            },
           },
+          ...(input.termId && { termId: input.termId }),
         },
       });
     }),
@@ -117,12 +96,12 @@ export const absenceRouter = {
           date: "desc",
         },
         include: {
-          justification: true,
+          student: true,
         },
         where: {
           studentId: input.studentId,
+          ...(input.termId && { termId: input.termId }),
           term: {
-            ...(input.termId && { id: input.termId }),
             schoolId: ctx.schoolId,
             schoolYearId: ctx.schoolYearId,
           },
@@ -130,36 +109,22 @@ export const absenceRouter = {
       });
     }),
   deleteJustification: protectedProcedure
-    .input(z.number())
+    .input(z.coerce.number())
     .mutation(({ ctx, input }) => {
-      return ctx.db.absenceJustification.delete({
+      return ctx.db.absence.update({
+        data: {
+          justified: null,
+        },
         where: {
           id: input,
         },
       });
     }),
-  updateStatus: protectedProcedure
-    .input(
-      z.object({
-        id: z.coerce.number(),
-        status: z.enum(["approved", "rejected", "pending"]),
-      }),
-    )
-    .mutation(({ ctx, input }) => {
-      return ctx.db.absenceJustification.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          status: input.status,
-        },
-      });
-    }),
+
   createClassroom: protectedProcedure
     .input(
       z.object({
         termId: z.coerce.number(),
-        classroomId: z.string().min(1),
         students: z.array(
           z.object({
             id: z.string().min(1),
@@ -179,23 +144,13 @@ export const absenceRouter = {
           data: {
             termId: input.termId,
             studentId: student.id,
-            classroomId: input.classroomId,
             date: new Date(),
             createdById: ctx.session.user.id,
             value: student.absence,
+            justified: student.justify ?? 0,
           },
         });
         absences.push(absence);
-        if (student.justify)
-          await ctx.db.absenceJustification.create({
-            data: {
-              absenceId: absence.id,
-              status: "approved",
-              value: student.justify,
-              approvedBy: ctx.session.user.id,
-              createdById: ctx.session.user.id,
-            },
-          });
       }
       return absences;
     }),
@@ -203,7 +158,6 @@ export const absenceRouter = {
     .input(
       z.object({
         termId: z.coerce.number(),
-        classroomId: z.string().min(1),
         date: z.coerce.date().default(() => new Date()),
         value: z.coerce.number(),
         justify: z.coerce.number().optional(),
@@ -211,28 +165,16 @@ export const absenceRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const absence = await ctx.db.absence.create({
+      return ctx.db.absence.create({
         data: {
           termId: input.termId,
           studentId: input.studentId,
-          classroomId: input.classroomId,
           date: input.date,
           createdById: ctx.session.user.id,
           value: input.value,
+          justified: input.justify ?? 0,
         },
       });
-      if (input.justify) {
-        await ctx.db.absenceJustification.create({
-          data: {
-            absenceId: absence.id,
-            status: "approved",
-            value: input.justify,
-            approvedBy: ctx.session.user.id,
-            createdById: ctx.session.user.id,
-          },
-        });
-      }
-      return absence;
     }),
   update: protectedProcedure
     .input(
@@ -244,27 +186,16 @@ export const absenceRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const absence = await ctx.db.absence.update({
+      return ctx.db.absence.update({
         where: {
           id: input.id,
         },
         data: {
           termId: input.termId,
           value: input.value,
+          justified: input.justify,
         },
       });
-      if (input.justify) {
-        await ctx.db.absenceJustification.create({
-          data: {
-            absenceId: absence.id,
-            status: "approved",
-            value: input.justify,
-            approvedBy: ctx.session.user.id,
-            createdById: ctx.session.user.id,
-          },
-        });
-      }
-      return absence;
     }),
   delete: protectedProcedure
     .input(z.number())
@@ -275,48 +206,7 @@ export const absenceRouter = {
         },
       });
     }),
-  studentJustifications: protectedProcedure
-    .input(
-      z.object({
-        studentId: z.string().min(1),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      return ctx.db.absence.findMany({
-        where: {
-          studentId: input.studentId,
-          term: {
-            schoolId: ctx.schoolId,
-            schoolYearId: ctx.schoolYearId,
-          },
-        },
-        include: {
-          justification: true,
-          term: true,
-        },
-      });
-    }),
-  classroomJustifications: protectedProcedure
-    .input(
-      z.object({
-        classroomId: z.string().min(1),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      return ctx.db.absence.findMany({
-        where: {
-          classroomId: input.classroomId,
-          term: {
-            schoolId: ctx.schoolId,
-            schoolYearId: ctx.schoolYearId,
-          },
-        },
-        include: {
-          justification: true,
-          term: true,
-        },
-      });
-    }),
+
   createPreventAbsence: protectedProcedure
     .input(
       z.object({

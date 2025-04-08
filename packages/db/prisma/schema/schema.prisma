@@ -134,32 +134,14 @@ model ReportCard {
     classroomId String
     termId      Int
     remark      String?
-    createdBy   User     @relation(fields: [createdById], references: [id])
+    createdBy   User      @relation(fields: [createdById], references: [id])
     createdById String
-    remarkAt    DateTime @default(now()) @db.Timestamp(6)
-
-    classroom Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    student   Student   @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    term      Term      @relation(fields: [termId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    remarkAt    DateTime  @default(now()) @db.Timestamp(6)
+    classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    student     Student   @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    term        Term      @relation(fields: [termId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
     @@id([studentId, classroomId, termId])
-}
-
-model Attendance {
-    id           Int            @id @default(autoincrement())
-    date         DateTime       @default(now()) @db.Timestamp(6)
-    type         AttendanceType @default(DAILY)
-    data         Json?
-    termId       Int?
-    classroomId  String
-    createdAt    DateTime       @default(now()) @db.Timestamp(6)
-    updatedAt    DateTime       @updatedAt
-    studentId    String
-    schoolYearId String
-    classroom    Classroom      @relation(fields: [classroomId], references: [id], onDelete: Cascade)
-    term         Term?          @relation(fields: [termId], references: [id], onDelete: SetNull)
-    schoolYear   SchoolYear     @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
-    student      Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
 }
 
 model Report {
@@ -218,14 +200,8 @@ model Classroom {
     subjects          Subject[]
     assignments       Assignment[]
     reportCards       ReportCard[]
-    Attendance        Attendance[]
     school            School         @relation(fields: [schoolId], references: [id])
     schoolId          String
-    absences          Absence[]
-    chatters          Chatter[]
-    exclusions        Exclusion[]
-    consignes         Consigne[]
-    lates             Lateness[]
 }
 
 model SubjectJournal {
@@ -397,7 +373,6 @@ model Term {
     observation  String?
     gradeSheets  GradeSheet[]
     schoolYear   SchoolYear   @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
-    attendances  Attendance[]
     reportCards  ReportCard[]
     assignments  Assignment[]
     School       School       @relation(fields: [schoolId], references: [id])
@@ -543,7 +518,6 @@ model Student {
     studentContacts    StudentContact[]
     siblings           StudentSibling[]         @relation("sibling")
     siblings2          StudentSibling[]         @relation("student")
-    attendances        Attendance[]
     classrooms         Classroom[]              @relation("classroomLeader")
     reportCards        ReportCard[]
     religion           Religion?                @relation(fields: [religionId], references: [id])
@@ -833,7 +807,6 @@ model SchoolYear {
     ProgramTheme        ProgramTheme[]
     terms               Term[]
     transactions        Transaction[]
-    attendances         Attendance[]
     school              School            @relation(fields: [schoolId], references: [id])
     schoolId            String
 }
@@ -1116,13 +1089,6 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
-}
-
-enum AttendanceType {
-    DAILY
-    WEEKLY
-    MONTHLY
-    PERIODICALLY
 }
 
 model Religion {
