@@ -22,7 +22,7 @@ export function StudentFooter() {
   const params = useParams<{ id: string }>();
   const trpc = useTRPC();
   const { data: student } = useSuspenseQuery(
-    trpc.student.get.queryOptions(params.id)
+    trpc.student.get.queryOptions(params.id),
   );
 
   const [prevStudent, _setPrevStudent] = useState<Student | null>(null);

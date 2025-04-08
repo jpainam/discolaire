@@ -9,12 +9,17 @@ import { Suspense } from "react";
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";
 import StudentDetails from "~/components/students/profile/StudentDetails";
-import { api, batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
+import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
+  //const queryClient = getQueryClient();
 
-  const student = await api.student.get(params.id);
+  const student = await caller.student.get(params.id);
+  // https://trpc.io/docs/client/tanstack-react-query/server-components
+  // const student = await queryClient.fetchQuery(
+  //   trpc.student.get.queryOptions(params.id)
+  // );
 
   const session = await auth();
   let canReadContacts =
