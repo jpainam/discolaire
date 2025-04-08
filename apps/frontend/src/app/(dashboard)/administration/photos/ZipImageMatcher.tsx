@@ -12,7 +12,6 @@ import {
   CardTitle,
 } from "@repo/ui/components/card";
 import { Label } from "@repo/ui/components/label";
-import { Progress } from "@repo/ui/components/progress";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import {
   Select,
@@ -47,17 +46,20 @@ interface FileMatchResult {
 }
 
 export function ZipImageMatcher() {
+  const trpc = useTRPC();
+  const matchIdsMutation = useMutation(
+    trpc.upload.matchedIds.mutationOptions()
+  );
   const [ids, setIds] = useState<string[]>([]);
   const [entityType, setEntityType] = useState<string>("student");
   const [zipFile, setZipFile] = useState<File | null>(null);
-  const [isProcessing, setIsProcessing] = useState(false);
+
   const [fileResults, setFileResults] = useState<FileMatchResult[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
   const [submitMessage, setSubmitMessage] = useState("");
-  const [progress, setProgress] = useState(0);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
@@ -81,95 +83,61 @@ export function ZipImageMatcher() {
 
   const processZipFile = async () => {
     if (!zipFile) return;
-
-    setIsProcessing(true);
+    toast.loading("Processing zip file...", { id: 0 });
     setFileResults([]);
-    setProgress(0);
 
     try {
-      const zip = new JSZip();
-      const contents = await zip.loadAsync(zipFile);
+      const zip = await JSZip.loadAsync(zipFile);
+      const imageFileEntries = Object.entries(zip.files)
+        .filter(([_, entry]) => !entry.dir)
+        .filter(([name]) =>
+          /\.(jpg|jpeg|png|gif|bmp|webp|tiff|svg)$/i.test(name)
+        );
 
-      // Get all file entries (excluding directories)
-      const fileEntries = Object.keys(contents.files).filter(
-        (fileName) => !contents.files[fileName]?.dir,
+      const results: FileMatchResult[] = [];
+
+      const baseNames = await Promise.all(
+        imageFileEntries.map(async ([fileName, entry]) => {
+          const baseName = fileName.split("/").pop()?.split(".")[0] ?? "";
+          const fileData = await entry.async("blob");
+          results.push({
+            fileName,
+            baseName,
+            fileData,
+            matched: false,
+          });
+          return baseName;
+        })
       );
 
-      // Filter for image files (common image extensions)
-      const imageFileEntries = fileEntries.filter((fileName) => {
-        const ext = fileName.split(".").pop()?.toLowerCase();
-        return [
-          "jpg",
-          "jpeg",
-          "png",
-          "gif",
-          "bmp",
-          "webp",
-          "tiff",
-          "svg",
-        ].includes(ext ?? "");
-      });
-
-      // Process each file in the zip
-      let processedCount = 0;
-
-      const matchResults: Omit<FileMatchResult, "matched" | "matchedId">[] = [];
-      const filePromises = imageFileEntries.map(async (fileName) => {
-        // Get the file name without extension and path
-        const baseName = fileName.split("/").pop()?.split(".")[0] ?? "";
-        if (!contents.files[fileName]) return;
-        // Get file data as blob
-        const fileData = await contents.files[fileName].async("blob");
-        matchResults.push({
-          fileName,
-          baseName,
-          fileData,
-        });
-
-        // Update progress
-        processedCount++;
-        setProgress(
-          Math.round((processedCount / imageFileEntries.length) * 100),
-        );
-        return baseName;
-      });
-
-      const baseNames = await Promise.all(filePromises);
-      const results: FileMatchResult[] = [];
       matchIdsMutation.mutate(
         {
           entityType: entityType as "student" | "staff" | "contact",
-          entityIds: baseNames.filter((b) => b !== undefined),
+          entityIds: baseNames,
         },
-
         {
+          onSuccess: (data) => {
+            const updated = results.map((file) => {
+              const match = data.find((d) => d.name === file.baseName);
+              return {
+                ...file,
+                matched: !!match,
+                matchedId: match ? match.id : undefined,
+              };
+            });
+            setFileResults(updated);
+            setIds(data.map((d) => d.id));
+          },
           onError: (error) => {
             toast.error(error.message);
           },
-          onSuccess: (data) => {
-            matchResults.map((result) => {
-              // Check if there's a matching ID
-              const found = data.find((d) => d.name === result.baseName);
-              results.push({
-                baseName: result.baseName,
-                fileName: result.fileName,
-                fileData: result.fileData,
-                matched: !!found,
-                matchedId: found ? found.id : undefined,
-              });
-            });
-            setIds(data.map((item) => item.id));
-            setFileResults(results);
-            console.log(results);
-          },
-        },
+        }
       );
     } catch (error) {
-      toast.error((error as Error).message);
       console.error("Error processing zip file:", error);
+      toast.error((error as Error).message);
     } finally {
-      setIsProcessing(false);
-      setProgress(100);
+      toast.dismiss(0);
     }
   };
 
@@ -177,30 +145,23 @@ export function ZipImageMatcher() {
     setIsSubmitting(true);
     setSubmitStatus("idle");
     setSubmitMessage("");
+    const formData = new FormData();
+    const matchedFiles = fileResults.filter((result) => result.matched);
+    matchedFiles.forEach((result) => {
+      formData.append(
+        `id_${result.matchedId}`,
+        result.fileData,
+        result.fileName
+      );
+    });
+
+    formData.append(
+      "matchedIds",
+      JSON.stringify(matchedFiles.map((r) => r.matchedId))
+    );
+    formData.append("entityType", entityType);
 
     try {
-      // Create a FormData object to send files
-      const formData = new FormData();
-
-      // Add only matched files to the form data
-      fileResults.forEach((result) => {
-        if (result.matched) {
-          formData.append(
-            `id_${result.matchedId}`,
-            result.fileData,
-            result.fileName,
-          );
-        }
-      });
-
-      // Add the list of IDs that were matched
-      formData.append(
-        "matchedIds",
-        JSON.stringify(
-          fileResults.filter((r) => r.matched).map((r) => r.matchedId),
-        ),
-      );
-
       // Here you would replace with your actual API endpoint
       // const response = await fetch('/api/submit-images', {
       //   method: 'POST',
@@ -217,7 +178,7 @@ export function ZipImageMatcher() {
     } catch (error) {
       setSubmitStatus("error");
       setSubmitMessage(
-        "Failed to submit files to the backend. Please try again.",
+        "Failed to submit files to the backend. Please try again."
       );
       console.error("Submission error:", error);
     } finally {
@@ -231,16 +192,11 @@ export function ZipImageMatcher() {
     setFileResults([]);
     setSubmitStatus("idle");
     setSubmitMessage("");
-    setProgress(0);
   };
 
   const matchedCount = fileResults.filter((r) => r.matched).length;
   const unmatchedCount = fileResults.filter((r) => !r.matched).length;
   const { t } = useLocale();
-  const trpc = useTRPC();
-  const matchIdsMutation = useMutation(
-    trpc.upload.matchedIds.mutationOptions(),
-  );
 
   return (
     <Card className="w-full">
@@ -319,21 +275,16 @@ export function ZipImageMatcher() {
             <Button
               size={"sm"}
               onClick={processZipFile}
-              disabled={!zipFile || isProcessing}
+              disabled={!zipFile || matchIdsMutation.isPending}
               className="w-full"
             >
-              {isProcessing ? "Processing..." : "Match Files with IDs"}
-              {!isProcessing && <Upload className="ml-2 h-4 w-4" />}
+              {matchIdsMutation.isPending
+                ? "Processing..."
+                : "Match Files with IDs"}
+              {!matchIdsMutation.isPending && (
+                <Upload className="ml-2 h-4 w-4" />
+              )}
             </Button>
-
-            {isProcessing && (
-              <div className="space-y-2">
-                <Progress value={progress} />
-                <p className="text-sm text-center text-muted-foreground">
-                  {progress}% complete
-                </p>
-              </div>
-            )}
 
             {submitStatus !== "idle" && (
               <Alert
@@ -353,12 +304,18 @@ export function ZipImageMatcher() {
             {fileResults.length > 0 ? (
               <>
                 <div className="flex flex-wrap gap-2">
-                  <Badge variant="outline" className="bg-green-50">
-                    <CheckCircle2 className="mr-1 h-3 w-3 text-green-500" />
+                  <Badge
+                    variant="outline"
+                    className="bg-green-50 dark:bg-green-900"
+                  >
+                    <CheckCircle2 className="mr-1 h-3 w-3 text-green-500 dark:text-green-50" />
                     {matchedCount} Files Matched
                   </Badge>
-                  <Badge variant="outline" className="bg-red-50">
-                    <XCircle className="mr-1 h-3 w-3 text-red-500" />
+                  <Badge
+                    variant="outline"
+                    className="bg-red-50 dark:bg-red-900"
+                  >
+                    <XCircle className="mr-1 h-3 w-3 text-red-500 dark:text-red-50" />
                     {unmatchedCount} Files Unmatched
                   </Badge>
                 </div>
@@ -372,29 +329,31 @@ export function ZipImageMatcher() {
                       {fileResults.map((result, index) => (
                         <div
                           key={index}
-                          className={`p-2 rounded-md flex items-center justify-between ${
-                            result.matched ? "bg-green-50" : "bg-red-50"
+                          className={`p-1 rounded-md flex items-center justify-between ${
+                            result.matched
+                              ? "bg-green-50 dark:bg-green-900"
+                              : "bg-red-50 dark:bg-red-900"
                           }`}
                         >
                           <div className="flex items-center">
                             {result.matched ? (
-                              <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" />
+                              <CheckCircle2 className="mr-2 h-4 w-4 text-green-500 dark:text-green-50" />
                             ) : (
-                              <XCircle className="mr-2 h-4 w-4 text-red-500" />
+                              <XCircle className="mr-2 h-4 w-4 text-red-500 dark:text-red-50" />
                             )}
                             <FileIcon className="mr-2 h-4 w-4" />
-                            <span className="font-medium truncate max-w-[150px]">
+                            <span className="font-medium text-xs truncate max-w-[150px]">
                               {result.fileName}
                             </span>
                           </div>
-                          <div className="text-sm text-muted-foreground">
+                          <div className="text-sm ">
                             {result.matched ? (
                               <span>
                                 Matched with ID:{" "}
                                 <strong>{result.matchedId}</strong>
                               </span>
                             ) : (
-                              <span className="text-red-500">
+                              <span className="text-red-500 dark:text-red-50">
                                 No matching ID
                               </span>
                             )}
