@@ -24,7 +24,7 @@ export function PrintAction() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size={"icon"} variant={"outline"}>
+        <Button size={"icon"} className="size-8" variant={"outline"}>
           <MoreVertical className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
@@ -47,7 +47,7 @@ export function PrintAction() {
           onSelect={() => {
             window.open(
               `/api/pdfs/student/${params.id}/transactions?format=csv`,
-              "_blank",
+              "_blank"
             );
           }}
         >
