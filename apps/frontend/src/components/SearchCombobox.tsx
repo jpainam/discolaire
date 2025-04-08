@@ -130,7 +130,7 @@ export function SearchCombobox({
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4",
-                        value === "" ? "opacity-100" : "opacity-0"
+                        value === "" ? "opacity-100" : "opacity-0",
                       )}
                     />
                     {unselectMsg}
@@ -154,7 +154,7 @@ export function SearchCombobox({
                       <Check
                         className={cn(
                           "ml-auto h-4 w-4",
-                          isSelected ? "opacity-100" : "opacity-0"
+                          isSelected ? "opacity-100" : "opacity-0",
                         )}
                       />
                     </CommandItem>

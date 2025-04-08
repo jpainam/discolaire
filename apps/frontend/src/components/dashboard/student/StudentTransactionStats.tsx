@@ -36,7 +36,7 @@ export async function StudentTransactionStat({
       transaction.transactionType != "DEBIT"
         ? transaction.amount
         : 0),
-    0
+    0,
   );
   const { t } = await getServerTranslations();
   return (
@@ -67,7 +67,7 @@ export async function StudentTransactionStat({
         title={transactions.reduce(
           (acc, transaction) =>
             acc + (transaction.status == "VALIDATED" ? transaction.amount : 0),
-          0
+          0,
         )}
         icon={<PiChartBarHorizontal className="h-24 w-24 text-amber-100/10" />}
         subtitle={t("transactionsCompleted")}
