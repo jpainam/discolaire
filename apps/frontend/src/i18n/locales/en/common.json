@@ -136,7 +136,6 @@
   "active_notice": "Active notice",
   "add": "Add",
   "add_from_existing": "Add from existing",
-  "add_periodic_attendance": "Add Periodic Attendance",
   "add_permissions": "Add Permissions",
   "add_user_to_group": "Add User to Group",
   "add_user_to_group_description": "Add user to an existing group, or create a new group. We recommend using groups to manage user permissions by job function.",

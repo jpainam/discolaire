@@ -73,9 +73,7 @@ export function AbsenceTable() {
                     </Link>
                   </TableCell>
                   <TableCell className="py-0">{absence.value}</TableCell>
-                  <TableCell className="py-0">
-                    {absence.justification?.value}
-                  </TableCell>
+                  <TableCell className="py-0">{absence.justified}</TableCell>
                   <TableCell className="text-right py-0">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

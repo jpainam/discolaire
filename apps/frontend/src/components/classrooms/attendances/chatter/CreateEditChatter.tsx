@@ -113,7 +113,6 @@ export function CreateEditChatter({
         .filter((student) => student.chatter != "");
       createChatter.mutate({
         termId: termId,
-        classroomId: classroomId,
         students: lates,
       });
     }

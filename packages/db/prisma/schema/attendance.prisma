@@ -22,11 +22,13 @@ model Lateness {
     termId      Int
     duration    Int
     createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
     createdById String
     term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
     justified   Int?     @default(0) // 0: number of lateness justified
     attachments String[]
     reason      String?
+    updatedById String?
 }
 
 model Chatter {

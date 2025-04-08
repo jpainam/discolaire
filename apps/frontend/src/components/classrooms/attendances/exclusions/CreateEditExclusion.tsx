@@ -117,7 +117,6 @@ export function CreateEditExclusion({
         .filter((student) => student.from && student.to);
       createExclusion.mutate({
         termId: termId,
-        classroomId: classroomId,
         students: exclusions,
       });
     }

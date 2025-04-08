@@ -28,8 +28,8 @@ const schema = z.object({
   termId: z.string().min(1),
   date: z.coerce.date().default(() => new Date()),
   duration: z.coerce.number(),
-  // hours: z.string().min(1),
-  // minutes: z.string().min(1),
+  justify: z.coerce.number().optional(),
+  reason: z.string().optional(),
 });
 export function CreateEditLateness({
   lateness,
@@ -42,10 +42,8 @@ export function CreateEditLateness({
       date: lateness?.date ?? new Date(),
       termId: lateness?.termId ? `${lateness.termId}` : "",
       duration: lateness?.duration ?? 0,
-      // hours: lateness?.duration
-      //   ? Math.floor(lateness.duration / 60).toString()
-      //   : "0",
-      // minutes: lateness?.duration ? (lateness.duration % 60).toString() : "0",
+      justify: lateness?.justified ?? 0,
+      reason: lateness?.reason ?? "",
     },
   });
   const utils = api.useUtils();
@@ -84,6 +82,9 @@ export function CreateEditLateness({
       studentId: params.id,
       duration: Number(data.duration), //parseInt(data.hours) * 60 + parseInt(data.minutes),
       termId: parseInt(data.termId),
+      date: data.date,
+      reason: data.reason,
+      justify: data.justify,
     };
     if (lateness) {
       toast.loading(t("updating"), { id: 0 });

@@ -105,7 +105,7 @@ export function StudentAttendanceHeader({
                     if (!classroomId) return;
                     openModal({
                       title: `${t("add")} - ${t("absence")}`,
-                      view: <CreateEditAbsence classroomId={classroomId} />,
+                      view: <CreateEditAbsence />,
                     });
                   }}
                 >

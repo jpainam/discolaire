@@ -14,12 +14,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { JustifyAbsence } from "~/components/attendances/JustifyAbsence";
-import { JustifyLateness } from "~/components/attendances/JustifyLateness";
 import { api } from "~/trpc/react";
 
 type AbsenceType = RouterOutputs["absence"]["get"];
@@ -43,6 +40,7 @@ export function StudentAttendanceAction({
     | ExclusionType;
 }) {
   const { t } = useLocale();
+  console.log(attendance);
   const router = useRouter();
   const deleteAttendance = api.attendance.delete.useMutation({
     onSuccess: () => {
@@ -54,7 +52,7 @@ export function StudentAttendanceAction({
     },
   });
   const confirm = useConfirm();
-  const { openModal } = useModal();
+  //const { openModal } = useModal();
 
   return (
     <DropdownMenu>
@@ -66,31 +64,31 @@ export function StudentAttendanceAction({
       <DropdownMenuContent align="end">
         {(type == "lateness" || type == "absence") && (
           <DropdownMenuItem
-            onSelect={() => {
-              if (type == "lateness") {
-                const lateness = attendance as LatenessType;
-                openModal({
-                  title: t("justify_lateness"),
-                  description: (
-                    <>
-                      {t("lateness")}: {lateness.duration.toString()}
-                    </>
-                  ),
-                  view: <JustifyLateness lateness={lateness} />,
-                });
-              } else {
-                const absence = attendance as AbsenceType;
-                openModal({
-                  title: t("justify_absence"),
-                  description: (
-                    <>
-                      {t("absence")}: {absence.date.toString()}
-                    </>
-                  ),
-                  view: <JustifyAbsence absence={absence} />,
-                });
-              }
-            }}
+          // onSelect={() => {
+          //   if (type == "lateness") {
+          //     const lateness = attendance as LatenessType;
+          //     openModal({
+          //       title: t("justify_lateness"),
+          //       description: (
+          //         <>
+          //           {t("lateness")}: {lateness.duration.toString()}
+          //         </>
+          //       ),
+          //       view: <JustifyLateness lateness={lateness} />,
+          //     });
+          //   } else {
+          //     const absence = attendance as AbsenceType;
+          //     openModal({
+          //       title: t("justify_absence"),
+          //       description: (
+          //         <>
+          //           {t("absence")}: {absence.date.toString()}
+          //         </>
+          //       ),
+          //       view: <JustifyAbsence absence={absence} />,
+          //     });
+          //   }
+          // }}
           >
             <Columns4Icon />
             {t("justify")}

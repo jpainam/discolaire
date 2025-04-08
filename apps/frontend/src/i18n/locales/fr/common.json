@@ -98,7 +98,6 @@
   "active_notice": "Notice active",
   "add": "Ajouter",
   "add_from_existing": "Contact existant",
-  "add_periodic_attendance": "Ajouter une présence périodique",
   "add_permissions": "Ajouter des permissions",
   "add_user_to_group": "Ajouter l'utilisateur au groupe",
   "add_user_to_group_description": "Ajoutez un utilisateur à un groupe existant ou créez un nouveau groupe. Nous vous recommandons d'utiliser des groupes pour gérer les autorisations des utilisateurs par fonction professionnelle.",

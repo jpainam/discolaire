@@ -110,7 +110,6 @@ export function CreateEditConsigne({
         .filter((student) => student.absence > 0);
       createAbsence.mutate({
         termId: termId,
-        classroomId: classroomId,
         students: absences,
       });
     }

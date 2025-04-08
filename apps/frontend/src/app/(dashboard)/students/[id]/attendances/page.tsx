@@ -94,11 +94,9 @@ async function LateItem({
                 <div className="text-xs text-muted-foreground">
                   {t("duration")}: {item.duration.toString()}
                 </div>
-                {item.justification && (
+                {item.justified && (
                   <div className="flex flex-row items-center gap-2">
-                    <Badge variant={"default"}>
-                      {item.justification.reason}
-                    </Badge>
+                    <Badge variant={"default"}>{item.reason}</Badge>
                   </div>
                 )}
               </div>
@@ -328,7 +326,7 @@ async function AbsenceItem({
             <BaselineIcon
               className={cn(
                 "h-6 w-6",
-                !item.justification ? "text-destructive" : "text-green-700",
+                !item.justified ? "text-destructive" : "text-green-700",
               )}
             />
             <div className="flex-1 items-start justify-start">
@@ -340,10 +338,10 @@ async function AbsenceItem({
                 <div className="text-xs text-muted-foreground">
                   {t("total_absences") + ": " + item.value.toString()}
                 </div>
-                {item.justification && (
+                {item.justified && (
                   <div className="flex flex-row items-center gap-2">
                     <Badge variant={"default"}>
-                      {item.justification.value.toString()} {t("justified")}
+                      {item.reason} {t("justified")}
                     </Badge>
                     <Badge variant={"outline"}>
                       {item.value.toString()} {t("non_justified")}

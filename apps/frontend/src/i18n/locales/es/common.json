@@ -200,7 +200,6 @@
   "active_notice": "Aviso activo",
   "add": "Agregar",
   "add_from_existing": "Agregar desde existente",
-  "add_periodic_attendance": "Agregar asistencia periódica",
   "add_permissions": "Agregar permisos",
   "add_user_to_group": "Agregar usuario al grupo",
   "add_user_to_group_description": "Agregar usuario a un grupo existente o crear uno nuevo. Recomendamos usar grupos para gestionar los permisos de los usuarios según su función laboral.",

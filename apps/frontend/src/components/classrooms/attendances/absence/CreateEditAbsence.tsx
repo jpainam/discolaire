@@ -119,33 +119,10 @@ export function CreateEditAbsence({
           };
         })
         .filter((student) => student.absence > 0);
-      createAbsence.mutate(
-        {
-          termId: termId,
-          classroomId: classroomId,
-          students: absences,
-        },
-        {
-          onSuccess: (_absences) => {
-            // if (data.notifyParents) {
-            //   fetch("/api/emails/attendance", {
-            //     method: "POST",
-            //     body: JSON.stringify({ id: att.id, type: "absence" }),
-            //   })
-            //     .then((res) => {
-            //       if (res.ok) {
-            //         toast.success(t("sent_successfully"), { id: 0 });
-            //       } else {
-            //         toast.error(t("error_sending"), { id: 0 });
-            //       }
-            //     })
-            //     .catch((error) => {
-            //       toast.error(error.message, { id: 0 });
-            //     });
-            // }
-          },
-        },
-      );
+      createAbsence.mutate({
+        termId: termId,
+        students: absences,
+      });
     }
   };
   return (

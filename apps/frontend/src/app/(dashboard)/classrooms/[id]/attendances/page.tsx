@@ -48,7 +48,7 @@ export default async function Page(props: {
     name?: string | null;
     studentId: string;
     type: "absence" | "lateness" | "chatter" | "consigne" | "exclusion";
-    justification?: string;
+    justification?: number | null;
     description: string;
     date: Date;
     attendance?: AbsenceType | LatenessType;
@@ -58,7 +58,7 @@ export default async function Page(props: {
       name: absence.student.lastName,
       studentId: absence.studentId,
       type: "absence" as const,
-      justification: absence.justification?.value.toString() ?? "",
+      justification: absence.justified,
       description: absence.value.toString(),
       date: absence.date,
       attendance: absence,
@@ -68,7 +68,7 @@ export default async function Page(props: {
       name: late.student.lastName,
       studentId: late.studentId,
       type: "lateness" as const,
-      justification: late.justification?.reason ?? "",
+      justification: late.justified,
       description: late.duration.toString(),
       date: late.date,
       attendance: late,

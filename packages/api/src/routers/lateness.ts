@@ -26,27 +26,7 @@ export const latenessRouter = createTRPCRouter({
       },
     });
   }),
-  justify: protectedProcedure
-    .input(
-      z.object({
-        latenessId: z.coerce.number(),
-        reason: z.string().min(1),
-        comment: z.string().optional(),
-        duration: z.coerce.number(),
-      }),
-    )
-    .mutation(({ ctx, input }) => {
-      return ctx.db.lateness.update({
-        where: {
-          id: input.latenessId,
-        },
-        data: {
-          reason: input.reason,
-          createdById: ctx.session.user.id,
-          duration: input.duration,
-        },
-      });
-    }),
+
   studentSummary: protectedProcedure
     .input(
       z.object({
@@ -183,12 +163,15 @@ export const latenessRouter = createTRPCRouter({
         },
       });
     }),
+
   update: protectedProcedure
     .input(
       z.object({
         id: z.coerce.number(),
         termId: z.coerce.number(),
         duration: z.coerce.number(),
+        justify: z.coerce.number().optional(),
+        reason: z.string().optional().default(""),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -199,6 +182,9 @@ export const latenessRouter = createTRPCRouter({
         data: {
           termId: input.termId,
           duration: input.duration,
+          reason: input.reason,
+          justified: input.justify ?? 0,
+          updatedById: ctx.session.user.id,
         },
       });
     }),

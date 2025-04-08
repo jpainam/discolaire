@@ -172,9 +172,6 @@ async function getDiscipline({
   termId: number;
 }) {
   const absences = await db.absence.findMany({
-    include: {
-      justification: true,
-    },
     where: {
       studentId: {
         in: studentIds,
@@ -183,9 +180,6 @@ async function getDiscipline({
     },
   });
   const lateness = await db.lateness.findMany({
-    include: {
-      justification: true,
-    },
     where: {
       studentId: {
         in: studentIds,
@@ -226,8 +220,8 @@ async function getDiscipline({
     const student = disciplines.get(absence.studentId);
     if (student) {
       student.absence++;
-      if (absence.justification) {
-        student.justifiedAbsence += absence.value;
+      if (absence.justified) {
+        student.justifiedAbsence += absence.justified;
       }
     }
   }
@@ -235,8 +229,8 @@ async function getDiscipline({
     const student = disciplines.get(late.studentId);
     if (student) {
       student.lateness++;
-      if (late.justification) {
-        student.justifiedLateness += late.duration;
+      if (late.justified) {
+        student.justifiedLateness += late.justified;
       }
     }
   }
@@ -246,11 +240,5 @@ async function getDiscipline({
       student.consigne++;
     }
   }
-  // return Array.from(disciplines.entries()).map(
-  //   ([studentId, discipline]) => ({
-  //     studentId,
-  //     ...discipline,
-  //   }),
-  // );
   return disciplines;
 }

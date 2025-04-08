@@ -41,7 +41,7 @@ const attendanceSchema = z.object({
     z.object({
       id: z.string().min(1),
       late: z.string().optional(),
-      justify: z.string().optional(),
+      justify: z.coerce.number().optional(),
     }),
   ),
 });
@@ -63,7 +63,7 @@ export function CreateEditLateness({
       students: students.map((student) => ({
         id: student.id,
         late: "",
-        justify: "",
+        justify: 0,
       })),
     },
   });
@@ -108,13 +108,13 @@ export function CreateEditLateness({
           return {
             id: student.id,
             late: student.late ?? "",
-            justify: student.justify ?? "",
+            date: new Date(),
+            justify: student.justify ?? undefined,
           };
         })
         .filter((student) => student.late != "");
       createLateness.mutate({
         termId: termId,
-        classroomId: classroomId,
         students: lates,
       });
     }

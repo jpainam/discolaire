@@ -9,6 +9,7 @@ import {
 import { toast } from "sonner";
 import { useRouter } from "~/hooks/use-router";
 
+import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -19,11 +20,6 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import type { RouterOutputs } from "@repo/api";
-import { JustifyAbsence } from "~/components/attendances/JustifyAbsence";
-import { JustifyLateness } from "~/components/attendances/JustifyLateness";
-import { useModal } from "~/hooks/use-modal";
 import { api } from "~/trpc/react";
 
 type LatenessType = RouterOutputs["lateness"]["byClassroom"][number];
@@ -41,7 +37,7 @@ export function AttendanceAction({
   const { t } = useLocale();
   const confirm = useConfirm();
   const router = useRouter();
-  const { openModal } = useModal();
+  //const { openModal } = useModal();
   const deleteAttendance = api.attendance.delete.useMutation({
     onSuccess: () => {
       toast.success(t("deleted_successfully"), { id: 0 });
@@ -60,7 +56,7 @@ export function AttendanceAction({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {attendance && attendance.justification && (
+        {attendance && attendance.justified && (
           <DropdownMenuItem
             variant="destructive"
             className="dark:data-[variant=destructive]:focus:bg-destructive/10"
@@ -73,33 +69,33 @@ export function AttendanceAction({
           </DropdownMenuItem>
         )}
         {(type == "lateness" || type == "absence") &&
-          !attendance?.justification && (
+          !attendance?.justified && (
             <DropdownMenuItem
-              onSelect={() => {
-                if (type == "lateness" && attendance) {
-                  const lateness = attendance as LatenessType;
-                  openModal({
-                    title: t("justify_lateness"),
-                    description: (
-                      <>
-                        {t("lateness")}: {lateness.duration.toString()}
-                      </>
-                    ),
-                    view: <JustifyLateness lateness={lateness} />,
-                  });
-                } else if (type == "absence" && attendance) {
-                  const absence = attendance as AbsenceType;
-                  openModal({
-                    title: t("justify_absence"),
-                    description: (
-                      <>
-                        {t("absence")}: {absence.value.toString()}
-                      </>
-                    ),
-                    view: <JustifyAbsence absence={absence} />,
-                  });
-                }
-              }}
+            // onSelect={() => {
+            //   if (type == "lateness" && attendance) {
+            //     const lateness = attendance as LatenessType;
+            //     openModal({
+            //       title: t("justify_lateness"),
+            //       description: (
+            //         <>
+            //           {t("lateness")}: {lateness.duration.toString()}
+            //         </>
+            //       ),
+            //       view: <CreateEditLateness lateness={lateness} />,
+            //     });
+            //   } else if (type == "absence" && attendance) {
+            //     const absence = attendance as AbsenceType;
+            //     openModal({
+            //       title: t("justify_absence"),
+            //       description: (
+            //         <>
+            //           {t("absence")}: {absence.value.toString()}
+            //         </>
+            //       ),
+            //       view: <JustifyAbsence absence={absence} />,
+            //     });
+            //   }
+            // }}
             >
               <Columns4 />
               {t("justify")}

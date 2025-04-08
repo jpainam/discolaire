@@ -36,10 +36,8 @@ const schema = z.object({
 });
 export function CreateEditAbsence({
   absence,
-  classroomId,
 }: {
   absence?: RouterOutputs["absence"]["all"][number];
-  classroomId: string;
 }) {
   const form = useForm({
     resolver: zodResolver(schema),
@@ -47,7 +45,7 @@ export function CreateEditAbsence({
       date: absence?.date ?? new Date(),
       value: absence?.value ?? 1,
       termId: absence?.termId ? `${absence.termId}` : "",
-      justify: absence?.justification?.value ?? 0,
+      justify: absence?.justified ?? 0,
       notify: true,
     },
   });
@@ -94,29 +92,26 @@ export function CreateEditAbsence({
       updateAbsenceMutation.mutate({ ...values, id: absence.id });
     } else {
       toast.loading(t("creating"), { id: 0 });
-      createAbsenceMutation.mutate(
-        { ...values, classroomId: classroomId },
-        {
-          onSuccess: (att) => {
-            if (data.notify) {
-              fetch("/api/emails/attendance", {
-                method: "POST",
-                body: JSON.stringify({ id: att.id, type: "absence" }),
+      createAbsenceMutation.mutate(values, {
+        onSuccess: (att) => {
+          if (data.notify) {
+            fetch("/api/emails/attendance", {
+              method: "POST",
+              body: JSON.stringify({ id: att.id, type: "absence" }),
+            })
+              .then((res) => {
+                if (res.ok) {
+                  toast.success(t("sent_successfully"), { id: 0 });
+                } else {
+                  toast.error(t("error_sending"), { id: 0 });
+                }
               })
-                .then((res) => {
-                  if (res.ok) {
-                    toast.success(t("sent_successfully"), { id: 0 });
-                  } else {
-                    toast.error(t("error_sending"), { id: 0 });
-                  }
-                })
-                .catch((error) => {
-                  toast.error(getErrorMessage(error), { id: 0 });
-                });
-            }
-          },
+              .catch((error) => {
+                toast.error(getErrorMessage(error), { id: 0 });
+              });
+          }
         },
-      );
+      });
     }
   };
   return (
