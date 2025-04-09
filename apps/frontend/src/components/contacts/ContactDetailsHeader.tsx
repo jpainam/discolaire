@@ -66,7 +66,7 @@ export function ContactDetailsHeader({
   });
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();
@@ -84,11 +84,11 @@ export function ContactDetailsHeader({
 
   const canUpdateContact = useCheckPermission(
     "contact",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
 
   const handleDeleteAvatar = useCallback(
@@ -109,7 +109,7 @@ export function ContactDetailsHeader({
         toast.error(response.statusText, { id: 0 });
       }
     },
-    [t, router]
+    [t, router],
   );
 
   return (

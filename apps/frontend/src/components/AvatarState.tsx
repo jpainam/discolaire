@@ -13,6 +13,7 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@repo/ui/components/dialog";
+import { env } from "~/env";
 import { cn } from "~/lib/utils";
 import { avatars, randomAvatar } from "./raw-images";
 interface AvatarStateProps {
@@ -28,11 +29,11 @@ export function AvatarState({ avatar, className, pos }: AvatarStateProps) {
   } else {
     generatedAvatar = randomAvatar();
   }
-  // const publicUrl =
-  //   env.IS_LOCAL == "true"
-  //     ? `http://${env.MINIO_ENDPOINT}`
-  //     : `https://${env.MINIO_ENDPOINT}`;
-  const publicUrl = "http://localhost:9310";
+  const publicUrl =
+    env.NODE_ENV === "development"
+      ? `http://${env.NEXT_PUBLIC_MINIO_ENDPOINT}`
+      : "https://discolaire-public.s3.eu-central-1.amazonaws.com";
+
   return (
     <Dialog>
       <DialogTrigger asChild>

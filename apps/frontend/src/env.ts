@@ -36,6 +36,7 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_BASE_URL: z.string().url(),
+    NEXT_PUBLIC_MINIO_ENDPOINT: z.string().url().optional(),
     NEXT_PUBLIC_PROSPECT_SERVICE_URL: z.string().url(),
     NEXT_PUBLIC_LIBRARY_SERVICE_URL: z.string().url(),
   },
@@ -45,6 +46,7 @@ export const env = createEnv({
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
     IS_LOCAL: process.env.IS_LOCAL,
+    NEXT_PUBLIC_MINIO_ENDPOINT: process.env.NEXT_PUBLIC_MINIO_ENDPOINT,
     MINIO_ENDPOINT: process.env.MINIO_ENDPOINT,
     S3_AVATAR_BUCKET_NAME: process.env.S3_AVATAR_BUCKET_NAME,
     SUPER_ADMIN_USERNAME: process.env.SUPER_ADMIN_USERNAME,

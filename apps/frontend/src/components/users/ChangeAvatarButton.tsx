@@ -23,7 +23,7 @@ export function ChangeAvatarButton(
     entityId: string;
     entityType: string;
     className?: string;
-  }>
+  }>,
 ) {
   const [selectedFile, setSelectedFile] =
     React.useState<FileWithPreview | null>(null);
@@ -45,7 +45,7 @@ export function ChangeAvatarButton(
       setDialogOpen(true);
     },
 
-    []
+    [],
   );
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -63,7 +63,7 @@ export function ChangeAvatarButton(
         formData.append(
           "file",
           croppedBlob,
-          selectedFile?.name ?? "avatar.png"
+          selectedFile?.name ?? "avatar.png",
         );
         formData.append("entityId", props.entityId);
         formData.append("entityType", props.entityType);
@@ -85,7 +85,7 @@ export function ChangeAvatarButton(
         console.error(error);
       }
     },
-    [props.entityId, props.entityType, router, selectedFile?.name, t]
+    [props.entityId, props.entityType, router, selectedFile?.name, t],
   );
 
   return (
