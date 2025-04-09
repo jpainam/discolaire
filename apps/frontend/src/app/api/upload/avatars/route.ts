@@ -41,7 +41,7 @@ export async function POST(request: Request) {
     // TODO Send an email to the user to confirm the change
     return Response.json(result);
   } catch (error) {
-    return Response.json({ error: (error as Error).message });
+    return Response.json({ error: (error as Error).message }, { status: 500 });
   }
 }
 

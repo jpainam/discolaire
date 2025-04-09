@@ -23,7 +23,7 @@ export function ChangeAvatarButton(
     entityId: string;
     entityType: string;
     className?: string;
-  }>,
+  }>
 ) {
   const [selectedFile, setSelectedFile] =
     React.useState<FileWithPreview | null>(null);
@@ -45,7 +45,7 @@ export function ChangeAvatarButton(
       setDialogOpen(true);
     },
 
-    [],
+    []
   );
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -60,7 +60,11 @@ export function ChangeAvatarButton(
       try {
         const croppedBlob = await (await fetch(croppedImageUrl)).blob();
         const formData = new FormData();
-        formData.append("file", croppedBlob);
+        formData.append(
+          "file",
+          croppedBlob,
+          selectedFile?.name ?? "avatar.png"
+        );
         formData.append("entityId", props.entityId);
         formData.append("entityType", props.entityType);
         const response = await fetch("/api/upload/avatars", {
@@ -72,16 +76,16 @@ export function ChangeAvatarButton(
           router.refresh();
         } else {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          const error = await response.json().catch(() => ({}));
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
-          toast.error(error?.message ?? response.statusText, { id: 0 });
+          const { error } = await response.json();
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          toast.error(error ?? response.statusText, { id: 0 });
         }
       } catch (error) {
         toast.error("Something went wrong while uploading", { id: 0 });
         console.error(error);
       }
     },
-    [props.entityId, props.entityType, router, t],
+    [props.entityId, props.entityType, router, selectedFile?.name, t]
   );
 
   return (
@@ -98,7 +102,9 @@ export function ChangeAvatarButton(
           onComplete={(croppedImage) => {
             void handleUpload(croppedImage);
           }}
-        />
+        >
+          {props.children}
+        </ImageCropper>
       ) : (
         <div
           {...getRootProps({})}

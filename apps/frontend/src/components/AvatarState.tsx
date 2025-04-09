@@ -28,11 +28,19 @@ export function AvatarState({ avatar, className, pos }: AvatarStateProps) {
   } else {
     generatedAvatar = randomAvatar();
   }
+  // const publicUrl =
+  //   env.IS_LOCAL == "true"
+  //     ? `http://${env.MINIO_ENDPOINT}`
+  //     : `https://${env.MINIO_ENDPOINT}`;
+  const publicUrl = "http://localhost:9310";
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Avatar className={cn("my-0 h-8 w-8 cursor-pointer", className)}>
-          <AvatarImage src={avatar ?? undefined} alt={"AV"} />
+          <AvatarImage
+            src={avatar ? `${publicUrl}/${avatar}` : undefined}
+            alt={"AV"}
+          />
           <AvatarFallback>
             {generatedAvatar && (
               <Image
@@ -51,7 +59,7 @@ export function AvatarState({ avatar, className, pos }: AvatarStateProps) {
           <DialogTitle></DialogTitle>
         </VisuallyHidden>
         <img
-          src={avatar ?? generatedAvatar}
+          src={avatar ? `${publicUrl}/${avatar}` : generatedAvatar}
           alt="Full Image"
           className="w-full h-auto rounded-lg"
         />

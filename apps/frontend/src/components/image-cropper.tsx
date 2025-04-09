@@ -23,7 +23,6 @@ import {
   DialogTrigger,
 } from "@repo/ui/components/dialog";
 
-import { cn } from "@repo/ui/lib/utils";
 import { CropIcon, Trash2Icon } from "lucide-react";
 import type { FileWithPath } from "react-dropzone";
 import "react-image-crop/dist/ReactCrop.css";
@@ -34,6 +33,7 @@ type FileWithPreview = FileWithPath & {
 
 interface ImageCropperProps {
   dialogOpen: boolean;
+  children: React.ReactNode;
   showPreview?: boolean;
   className?: string;
   setDialogOpen?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -46,10 +46,9 @@ interface ImageCropperProps {
 
 export function ImageCropper({
   dialogOpen,
-  className,
+  children,
   setDialogOpen,
   onComplete,
-  showPreview = false,
   selectedFile,
   setSelectedFile,
 }: ImageCropperProps) {
@@ -59,7 +58,7 @@ export function ImageCropper({
 
   const [crop, setCrop] = React.useState<Crop>();
   const [croppedImageUrl, setCroppedImageUrl] = React.useState<string>("");
-  const [croppedImage, setCroppedImage] = React.useState<string>("");
+  //const [croppedImage, setCroppedImage] = React.useState<string>("");
 
   function onImageLoad(e: SyntheticEvent<HTMLImageElement>) {
     //if (aspect) {
@@ -97,7 +96,7 @@ export function ImageCropper({
         0,
         0,
         crop.width * scaleX,
-        crop.height * scaleY,
+        crop.height * scaleY
       );
     }
 
@@ -105,7 +104,7 @@ export function ImageCropper({
   }
 
   function onCrop() {
-    setCroppedImage(croppedImageUrl);
+    //setCroppedImage(croppedImageUrl);
     setDialogOpen?.(false);
     onComplete?.(croppedImageUrl);
   }
@@ -114,17 +113,8 @@ export function ImageCropper({
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      {showPreview && (
-        <DialogTrigger>
-          <Avatar className={cn("", className)}>
-            <AvatarImage
-              src={croppedImage ? croppedImage : selectedFile?.preview}
-              alt="Image"
-            />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-        </DialogTrigger>
-      )}
+      <DialogTrigger>{children}</DialogTrigger>
+
       <DialogContent className="p-0 gap-0">
         <DialogHeader>
           <DialogTitle></DialogTitle>
@@ -181,7 +171,7 @@ export function ImageCropper({
 export function centerAspectCrop(
   mediaWidth: number,
   mediaHeight: number,
-  aspect: number,
+  aspect: number
 ): Crop {
   return centerCrop(
     makeAspectCrop(
@@ -192,9 +182,9 @@ export function centerAspectCrop(
       },
       aspect,
       mediaWidth,
-      mediaHeight,
+      mediaHeight
     ),
     mediaWidth,
-    mediaHeight,
+    mediaHeight
   );
 }

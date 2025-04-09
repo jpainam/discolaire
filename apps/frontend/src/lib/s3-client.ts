@@ -11,7 +11,7 @@ const IS_LOCAL = env.IS_LOCAL === "true";
 
 const minioClient = new Minio.Client({
   endPoint: "localhost",
-  port: 9000,
+  port: 9310,
   useSSL: false, // set to False when using localhost
   accessKey: env.S3_ACCESS_KEY_ID,
   secretKey: env.S3_SECRET_ACCESS_KEY,
@@ -60,7 +60,7 @@ export const uploadFile = async ({
       destination,
       Buffer.from(await file.arrayBuffer()),
       file.size,
-      metaData,
+      metaData
     );
     return {
       key: `${bucket}/${destination}`,
@@ -106,7 +106,7 @@ export async function uploadFiles({
 
 async function runWithConcurrency<T>(
   tasks: (() => Promise<T>)[],
-  concurrency: number,
+  concurrency: number
 ): Promise<T[]> {
   const results: T[] = [];
   const queue = [...tasks];

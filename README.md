@@ -44,8 +44,28 @@ pnpm db:push
 }
 ```
 
-- NB: On AWS, limit the ressources, for e.g., ``arn:aws:s3:::discolaire-avatars-f4a2c9/*`
-- Create
+- NB: On AWS, limit the ressources, for e.g., `arn:aws:s3:::discolaire-avatars-f4a2c9/*`
+- Create a policy for public bucket
+
+```bash
+{
+    "Version": "2012-10-17",
+    "Statement": [
+    {
+        "Effect": "Allow",
+        "Principal": {
+            "AWS": "*"
+        },
+        "Action": [
+            "s3:GetObject"
+        ],
+        "Resource": [
+            "arn:aws:s3:::avatars/*"
+        ]
+    }
+    ]
+}
+```
 
 ## Turborepo
 

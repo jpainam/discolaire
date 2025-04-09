@@ -88,7 +88,7 @@ export function StudentHeader({
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
 
@@ -113,7 +113,7 @@ export function StudentHeader({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const { openModal } = useModal();
@@ -130,7 +130,7 @@ export function StudentHeader({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const changeStudentStatus = useCallback(
@@ -140,7 +140,7 @@ export function StudentHeader({
         status,
       });
     },
-    [studentStatusMutation, student.id],
+    [studentStatusMutation, student.id]
   );
 
   const navigateToStudent = (id: string) => {
@@ -159,7 +159,7 @@ export function StudentHeader({
 
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditStudent = useCheckPermission("student", PermissionAction.UPDATE);
   //const [open, setOpen] = React.useState(false);
@@ -175,7 +175,7 @@ export function StudentHeader({
 
   const handleDeleteAvatar = useCallback(
     async (userId: string) => {
-      toast.loading(t("Processing..."), { id: 0 });
+      toast.loading(t("deleting"), { id: 0 });
       const response = await fetch("/api/upload/avatars", {
         method: "DELETE",
         body: JSON.stringify({
@@ -183,13 +183,15 @@ export function StudentHeader({
         }),
       });
       if (response.ok) {
-        toast.success(t("success"), { id: 0 });
+        toast.success(t("deleted_successfully"), {
+          id: 0,
+        });
         router.refresh();
       } else {
         toast.error(response.statusText, { id: 0 });
       }
     },
-    [t, router],
+    [t, router]
   );
 
   return (
@@ -347,7 +349,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -381,7 +383,7 @@ export function StudentHeader({
           )}
           <SimpleTooltip
             content={
-              student.user?.avatar ? t("remove_avatar") : t("change_avatar")
+              student.user?.avatar ? t("Remove avatar") : t("change_avatar")
             }
           >
             {student.user?.avatar ? (
@@ -546,33 +548,6 @@ export function StudentHeader({
                 >
                   <PencilIcon />
                   {t("edit")}
-                </DropdownMenuItem>
-              )}
-              {student.user?.avatar && (
-                <DropdownMenuItem
-                  onSelect={async () => {
-                    toast.loading(t("deleting"), { id: 0 });
-                    await fetch(`/api/upload/avatars`, {
-                      method: "DELETE",
-                      body: JSON.stringify({
-                        userId: student.userId,
-                      }),
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                    })
-                      .then(() => {
-                        toast.success(t("deleted_successfully"), {
-                          id: 0,
-                        });
-                      })
-                      .catch((err) => {
-                        toast.error((err as Error).message, { id: 0 });
-                      });
-                  }}
-                >
-                  <Trash2 />
-                  {t("photos")} - {t("delete")}
                 </DropdownMenuItem>
               )}
               {canDeleteStudent && (

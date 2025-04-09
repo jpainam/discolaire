@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ImageMinus,
   ImageUpIcon,
   KeyRound,
   MoreVertical,
@@ -29,7 +30,7 @@ import { useConfirm } from "~/providers/confirm-dialog";
 
 import type { RouterOutputs } from "@repo/api";
 import { useSetAtom } from "jotai";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
@@ -65,7 +66,7 @@ export function ContactDetailsHeader({
   });
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();
@@ -83,11 +84,32 @@ export function ContactDetailsHeader({
 
   const canUpdateContact = useCheckPermission(
     "contact",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
+  );
+
+  const handleDeleteAvatar = useCallback(
+    async (userId: string) => {
+      toast.loading(t("deleting"), { id: 0 });
+      const response = await fetch("/api/upload/avatars", {
+        method: "DELETE",
+        body: JSON.stringify({
+          userId: userId,
+        }),
+      });
+      if (response.ok) {
+        toast.success(t("deleted_successfully"), {
+          id: 0,
+        });
+        router.refresh();
+      } else {
+        toast.error(response.statusText, { id: 0 });
+      }
+    },
+    [t, router]
   );
 
   return (
@@ -219,12 +241,26 @@ export function ContactDetailsHeader({
           </DropdownMenu>
         </div>
         <div className="grid flex-row gap-2 md:flex">
-          <ChangeAvatarButton entityId={contact.id} entityType="contact">
-            <Button variant={"outline"} size={"sm"}>
-              <ImageUpIcon />
-              {t("change_avatar")}
+          {contact.user?.avatar ? (
+            <Button
+              onClick={() => {
+                if (!contact.userId) return;
+                void handleDeleteAvatar(contact.userId);
+              }}
+              variant={"outline"}
+              size={"sm"}
+            >
+              <ImageMinus />
+              {t("Remove avatar")}
             </Button>
-          </ChangeAvatarButton>
+          ) : (
+            <ChangeAvatarButton entityId={contact.id} entityType="contact">
+              <Button variant={"outline"} size={"sm"}>
+                <ImageUpIcon />
+                {t("change_avatar")}
+              </Button>
+            </ChangeAvatarButton>
+          )}
 
           {canCreateContact && (
             <Button
