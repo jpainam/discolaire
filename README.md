@@ -22,6 +22,31 @@ pnpm db:push
 
 ## Deployment
 
+### AWS S3 or MINIO
+
+- Create a public avatars bucket and set the env `S3_AVATAR_BUCKET_NAME`
+- Create a admin policy for readwrite on all bucket
+
+```bash
+{
+ "Version": "2012-10-17",
+ "Statement": [
+  {
+   "Effect": "Allow",
+   "Action": [
+    "s3:*"
+   ],
+   "Resource": [
+    "arn:aws:s3:::*"
+   ]
+  }
+ ]
+}
+```
+
+- NB: On AWS, limit the ressources, for e.g., ``arn:aws:s3:::discolaire-avatars-f4a2c9/*`
+- Create
+
 ## Turborepo
 
 https://github.com/vercel/turborepo/issues/9016
