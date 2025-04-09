@@ -25,6 +25,7 @@ export const env = createEnv({
     SUPER_ADMIN_USERNAME: z.string().min(1),
     RESEND_API_KEY: z.string().min(1),
     MINIO_ENDPOINT: z.string().url(),
+    MINIO_PORT: z.coerce.number(),
     REPORT_API_KEY: z.string().min(1),
     DISCORD_WEBHOOK_URL: z.string().url(),
   },
@@ -45,6 +46,7 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    MINIO_PORT: process.env.MINIO_PORT,
     NEXT_PUBLIC_DEPLOYMENT_ENV: process.env.NEXT_PUBLIC_DEPLOYMENT_ENV,
     NEXT_PUBLIC_MINIO_ENDPOINT: process.env.NEXT_PUBLIC_MINIO_ENDPOINT,
     MINIO_ENDPOINT: process.env.MINIO_ENDPOINT,
