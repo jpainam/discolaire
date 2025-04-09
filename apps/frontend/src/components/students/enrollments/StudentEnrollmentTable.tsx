@@ -5,7 +5,6 @@ import { MoreVertical, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 
-import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -26,47 +25,53 @@ import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import i18next from "i18next";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
-type StudentEnrollmentProcedureOutput = NonNullable<
-  RouterOutputs["student"]["enrollments"]
->[number];
-
-export function StudentEnrollmentTable({
-  enrollments,
-}: {
-  enrollments: StudentEnrollmentProcedureOutput[];
-}) {
+export function StudentEnrollmentTable({ studentId }: { studentId: string }) {
   const { t } = useLocale();
+  const trpc = useTRPC();
+  const { data: enrollments } = useSuspenseQuery(
+    trpc.student.enrollments.queryOptions(studentId)
+  );
   const confirm = useConfirm();
   const fullDateFormatter = new Intl.DateTimeFormat(i18next.language, {
     day: "numeric",
     month: "short",
     year: "numeric",
   });
-  const utils = api.useUtils();
-  const router = useRouter();
+
   const canDeleteEnrollment = useCheckPermission(
     "enrollment",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
-  const deleteEnrollmentMutation = api.enrollment.delete.useMutation({
-    onSettled: async () => {
-      await utils.student.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("unenrolled"), { id: 0 });
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+
+  const queryClient = useQueryClient();
+  const deleteEnrollmentMutation = useMutation(
+    trpc.enrollment.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.student.enrollments.pathFilter()
+        );
+        await queryClient.invalidateQueries(
+          trpc.classroom.students.pathFilter()
+        );
+        await queryClient.invalidateQueries(trpc.student.get.pathFilter());
+        toast.success(t("success"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   if (enrollments.length === 0) {
     return <EmptyState className="my-2" />;
@@ -89,13 +94,13 @@ export function StudentEnrollmentTable({
         <TableBody>
           {enrollments.map((c) => {
             const createdAt = fullDateFormatter.format(
-              c.createdAt ?? new Date(),
+              c.createdAt ?? new Date()
             );
             const enrollmentStartDate = fullDateFormatter.format(
-              c.schoolYear?.enrollmentStartDate ?? new Date(),
+              c.schoolYear?.enrollmentStartDate ?? new Date()
             );
             const enrolmmentEndDate = fullDateFormatter.format(
-              c.schoolYear?.enrollmentEndDate ?? new Date(),
+              c.schoolYear?.enrollmentEndDate ?? new Date()
             );
 
             return (
@@ -149,7 +154,7 @@ export function StudentEnrollmentTable({
                               },
                             });
                             if (isConfirmed) {
-                              toast.loading(t("unenrolling"));
+                              toast.loading(t("Processing..."), { id: 0 });
                               deleteEnrollmentMutation.mutate(c.id);
                             }
                           }}

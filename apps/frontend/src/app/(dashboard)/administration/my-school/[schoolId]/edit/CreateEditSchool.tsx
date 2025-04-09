@@ -45,6 +45,7 @@ export function CreateEditSchool({ school }: { school: School }) {
   const { t } = useLocale();
 
   const [file, setFile] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const utils = api.useUtils();
   const router = useRouter();
@@ -53,7 +54,7 @@ export function CreateEditSchool({ school }: { school: School }) {
     onSettled: () => utils.school.invalidate(),
     onSuccess: () => {
       toast.success(t("updated_successfully"), { id: 0 });
-      router.push("/administration/my-school");
+      //router.push("/administration/my-school");
     },
     onError: (error) => {
       toast.error(error.message, { id: 0 });
@@ -80,6 +81,7 @@ export function CreateEditSchool({ school }: { school: School }) {
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    setIsLoading(true);
     toast.loading(t("updating"), { id: 0 });
     if (!file) {
       updateSchoolMutation.mutate({ id: school.id, ...data });
@@ -95,7 +97,11 @@ export function CreateEditSchool({ school }: { school: School }) {
         body: formData,
       });
       if (response.ok) {
-        const { url } = (await response.json()) as { url: string };
+        const { url, fullPath } = (await response.json()) as {
+          url: string;
+          fullPath: string;
+        };
+        console.log("url", url, "fullPath", fullPath);
         updateSchoolMutation.mutate({ id: school.id, logo: url, ...data });
       } else {
         const status = response.statusText;
@@ -103,6 +109,8 @@ export function CreateEditSchool({ school }: { school: School }) {
       }
     } catch (error) {
       toast.error((error as Error).message, { id: 0 });
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -303,7 +311,10 @@ export function CreateEditSchool({ school }: { school: School }) {
             </FormItem>
           )}
         />
-        <Button isLoading={updateSchoolMutation.isPending} type="submit">
+        <Button
+          isLoading={updateSchoolMutation.isPending || isLoading}
+          type="submit"
+        >
           {t("submit")}
         </Button>
       </form>

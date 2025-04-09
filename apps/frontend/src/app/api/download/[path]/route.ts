@@ -7,7 +7,7 @@ import { s3client } from "~/lib/s3-client";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const { path: filePathArray } = req.query; // file path parts as an array
   if (!filePathArray || !Array.isArray(filePathArray)) {
@@ -27,7 +27,7 @@ export default async function handler(
       // Set content headers. You can determine the content type or set defaults.
       res.setHeader(
         "Content-Type",
-        data.ContentType ?? "application/octet-stream"
+        data.ContentType ?? "application/octet-stream",
       );
       // @ts-expect-error TODO: Fix type error
       data.Body.pipe(res);

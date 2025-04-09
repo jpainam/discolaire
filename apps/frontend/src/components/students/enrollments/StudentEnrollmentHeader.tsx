@@ -1,28 +1,36 @@
 "use client";
 
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, MoreVertical } from "lucide-react";
 import { useParams } from "next/navigation";
 
 import { Button } from "@repo/ui/components/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useModal } from "~/hooks/use-modal";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
-
-import { useCheckPermission } from "~/hooks/use-permission";
+import { useTRPC } from "~/trpc/react";
 import { sidebarIcons } from "../sidebar-icons";
 import { EnrollStudentModal } from "./EnrollStudentModal";
 
-export function StudentEnrollmentHeader({
-  isEnrolled,
-}: {
-  isEnrolled: boolean;
-}) {
+export function StudentEnrollmentHeader({ studentId }: { studentId: string }) {
   const { t } = useLocale();
+  const trpc = useTRPC();
+  const { data: student } = useSuspenseQuery(
+    trpc.student.get.queryOptions(studentId)
+  );
   const { openModal } = useModal();
   const params = useParams<{ id: string }>();
   const Icon = sidebarIcons.enrollments;
   const canEnroll = useCheckPermission("enrollment", PermissionAction.CREATE);
+  const isEnrolled = !!student.classroom;
 
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1">
@@ -46,6 +54,16 @@ export function StudentEnrollmentHeader({
             {t("enroll")}
           </Button>
         )}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button size={"icon"} className="size-8" variant={"outline"}>
+              <MoreVertical />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownHelp />
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );

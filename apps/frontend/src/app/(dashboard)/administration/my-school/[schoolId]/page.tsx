@@ -55,12 +55,9 @@ export default async function Page(props: {
     <div className="flex flex-col gap-2 text-sm">
       <Card className="p-0">
         <CardHeader className="flex flex-row items-center space-x-4 border-b bg-muted/50 p-2">
-          <Image
-            src={school.logo ?? ""}
-            alt={school.name}
-            width={80}
-            height={80}
-          />
+          {school.logo && (
+            <Image src={school.logo} alt={school.name} width={80} height={80} />
+          )}
 
           <div className="flex-1">
             <CardTitle className="text-xl">{school.name}</CardTitle>

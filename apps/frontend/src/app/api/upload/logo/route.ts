@@ -1,10 +1,11 @@
-import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { auth } from "@repo/auth";
 import { env } from "~/env";
-import { s3client } from "~/lib/s3-client";
+import { s3client, uploadFile } from "~/lib/s3-client";
 import { caller } from "~/trpc/server";
 
 export async function POST(request: Request) {
+  console.log("✅ POST /api/upload/logo");
   const session = await auth();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
@@ -24,18 +25,18 @@ export async function POST(request: Request) {
     const school = await caller.school.get(schoolId);
     const ext = file.name.split(".").pop();
 
-    const key = `${school.name}.${ext}`;
-    const command = new PutObjectCommand({
-      Bucket: env.S3_BUCKET_NAME,
-      Key: key,
-      Body: Buffer.from(await file.arrayBuffer()),
-      ContentType: file.type,
+    const { key, fullPath } = await uploadFile({
+      file: file,
+      destination: `${school.id}.${ext}`,
+      bucket: env.S3_BUCKET_NAME,
     });
-    await s3client.send(command);
+
     return Response.json({
       url: key,
+      fullPath: fullPath,
     });
   } catch (error) {
+    console.error(error);
     return Response.json({ error: (error as Error).message });
   }
 }

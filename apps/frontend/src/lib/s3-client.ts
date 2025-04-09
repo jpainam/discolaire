@@ -5,8 +5,9 @@ import * as Minio from "minio";
 const IS_LOCAL = env.IS_LOCAL === "true";
 
 const minioClient = new Minio.Client({
-  endPoint: env.MINIO_ENDPOINT,
-  useSSL: true,
+  endPoint: "localhost",
+  port: 9000,
+  useSSL: false, // set to False when using localhost
   accessKey: env.S3_ACCESS_KEY_ID,
   secretKey: env.S3_SECRET_ACCESS_KEY,
 });
@@ -35,13 +36,16 @@ export const uploadFile = async ({
   // Use MINIO to upload the file if running locally
   if (IS_LOCAL) {
     // Check if the bucket exists If it doesn't, create it
+    console.log(">>>>>>>>>I'm using local storage");
     const exists = await minioClient.bucketExists(bucket);
+    console.log(">>>>>>>>>Trying to create a bucket");
     if (exists) {
       console.log("Bucket " + bucket + " exists.");
     } else {
       await minioClient.makeBucket(bucket, "us-east-1"); // any region
       console.log("Bucket " + bucket + ' created in "us-east-1".');
     }
+    console.log(">>>>>>>>>Creation finished");
     // Set the object metadata
     const metaData = {
       "Content-Type": file.type,

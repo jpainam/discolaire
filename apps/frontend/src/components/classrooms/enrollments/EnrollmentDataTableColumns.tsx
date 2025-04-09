@@ -192,22 +192,22 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
   const router = useRouter();
   const canDeleteEnrollment = useCheckPermission(
     "enrollment",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const queryClient = useQueryClient();
   const trpc = useTRPC();
   const unenrollStudentsMutation = useMutation(
     trpc.enrollment.deleteByStudentIdClassroomId.mutationOptions({
       onSuccess: async () => {
-        toast.success(t("unenrolled_successfully"), { id: 0 });
+        toast.success(t("success"), { id: 0 });
         await queryClient.invalidateQueries(
-          trpc.classroom.students.pathFilter(),
+          trpc.classroom.students.pathFilter()
         );
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const confirm = useConfirm();
@@ -241,7 +241,7 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
                     description: t("delete_confirmation"),
                   });
                   if (isConfirmed) {
-                    toast.loading(t("unenrolling"), { id: 0 });
+                    toast.loading(t("Processing..."), { id: 0 });
                     unenrollStudentsMutation.mutate({
                       classroomId: params.id,
                       studentId: student.id,
