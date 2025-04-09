@@ -24,7 +24,6 @@ export const env = createEnv({
     REDIS_URL: z.string().min(1),
     SUPER_ADMIN_USERNAME: z.string().min(1),
     RESEND_API_KEY: z.string().min(1),
-    IS_LOCAL: z.string().default("false"),
     MINIO_ENDPOINT: z.string().url(),
     REPORT_API_KEY: z.string().min(1),
     DISCORD_WEBHOOK_URL: z.string().url(),
@@ -36,6 +35,7 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_BASE_URL: z.string().url(),
+    NEXT_PUBLIC_DEPLOYMENT_ENV: z.string().default("local"),
     NEXT_PUBLIC_MINIO_ENDPOINT: z.string().url().optional(),
     NEXT_PUBLIC_PROSPECT_SERVICE_URL: z.string().url(),
     NEXT_PUBLIC_LIBRARY_SERVICE_URL: z.string().url(),
@@ -45,7 +45,7 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
-    IS_LOCAL: process.env.IS_LOCAL,
+    NEXT_PUBLIC_DEPLOYMENT_ENV: process.env.NEXT_PUBLIC_DEPLOYMENT_ENV,
     NEXT_PUBLIC_MINIO_ENDPOINT: process.env.NEXT_PUBLIC_MINIO_ENDPOINT,
     MINIO_ENDPOINT: process.env.MINIO_ENDPOINT,
     S3_AVATAR_BUCKET_NAME: process.env.S3_AVATAR_BUCKET_NAME,

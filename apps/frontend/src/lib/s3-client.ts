@@ -7,7 +7,7 @@ import {
 import { env } from "~/env";
 
 import * as Minio from "minio";
-const IS_LOCAL = env.IS_LOCAL === "true";
+const isLocal = env.NEXT_PUBLIC_DEPLOYMENT_ENV == "local";
 
 const minioClient = new Minio.Client({
   endPoint: "localhost",
@@ -39,7 +39,7 @@ export const uploadFile = async ({
   destination: string;
 }) => {
   // Use MINIO to upload the file if running locally
-  if (IS_LOCAL) {
+  if (isLocal) {
     // Check if the bucket exists If it doesn't, create it
     const exists = await minioClient.bucketExists(bucket);
     if (exists) {
@@ -60,7 +60,7 @@ export const uploadFile = async ({
       destination,
       Buffer.from(await file.arrayBuffer()),
       file.size,
-      metaData,
+      metaData
     );
     return {
       key: `${bucket}/${destination}`,
@@ -106,7 +106,7 @@ export async function uploadFiles({
 
 async function runWithConcurrency<T>(
   tasks: (() => Promise<T>)[],
-  concurrency: number,
+  concurrency: number
 ): Promise<T[]> {
   const results: T[] = [];
   const queue = [...tasks];
@@ -137,7 +137,7 @@ export async function deleteFile({
   bucket: string;
   key: string;
 }) {
-  if (IS_LOCAL) {
+  if (isLocal) {
     await minioClient.removeObject(bucket, key);
   } else {
     const command = new DeleteObjectCommand({

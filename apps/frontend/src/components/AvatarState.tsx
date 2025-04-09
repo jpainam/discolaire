@@ -30,8 +30,8 @@ export function AvatarState({ avatar, className, pos }: AvatarStateProps) {
     generatedAvatar = randomAvatar();
   }
   const publicUrl =
-    env.NODE_ENV === "development"
-      ? `http://${env.NEXT_PUBLIC_MINIO_ENDPOINT}`
+    env.NEXT_PUBLIC_DEPLOYMENT_ENV == "local"
+      ? `${env.NEXT_PUBLIC_MINIO_ENDPOINT}`
       : "https://discolaire-public.s3.eu-central-1.amazonaws.com";
 
   return (

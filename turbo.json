@@ -68,7 +68,7 @@
   },
   "globalEnv": [
     "DATABASE_URL",
-    "IS_LOCAL",
+    "NEXT_PUBLIC_DEPLOYMENT_ENV",
     "MINIO_ENDPOINT",
     "AUTH_REDIRECT_PROXY_URL",
     "AUTH_SECRET",
