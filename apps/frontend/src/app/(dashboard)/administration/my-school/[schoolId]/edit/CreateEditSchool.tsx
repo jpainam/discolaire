@@ -60,7 +60,7 @@ export function CreateEditSchool({ school }: { school: School }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const form = useForm({
@@ -99,12 +99,11 @@ export function CreateEditSchool({ school }: { school: School }) {
         body: formData,
       });
       if (response.ok) {
-        const { url, fullPath } = (await response.json()) as {
-          url: string;
+        const { key } = (await response.json()) as {
+          key: string;
           fullPath: string;
         };
-        console.log("url", url, "fullPath", fullPath);
-        updateSchoolMutation.mutate({ id: school.id, logo: url, ...data });
+        updateSchoolMutation.mutate({ id: school.id, logo: key, ...data });
       } else {
         const status = response.statusText;
         toast.error(status, { id: 0 });

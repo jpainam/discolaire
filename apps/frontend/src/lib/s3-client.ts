@@ -1,4 +1,9 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+"server-only";
+import {
+  DeleteObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { env } from "~/env";
 
 import * as Minio from "minio";
@@ -36,21 +41,16 @@ export const uploadFile = async ({
   // Use MINIO to upload the file if running locally
   if (IS_LOCAL) {
     // Check if the bucket exists If it doesn't, create it
-    console.log(">>>>>>>>>I'm using local storage");
     const exists = await minioClient.bucketExists(bucket);
-    console.log(">>>>>>>>>Trying to create a bucket");
     if (exists) {
       console.log("Bucket " + bucket + " exists.");
     } else {
       await minioClient.makeBucket(bucket, "us-east-1"); // any region
       console.log("Bucket " + bucket + ' created in "us-east-1".');
     }
-    console.log(">>>>>>>>>Creation finished");
     // Set the object metadata
     const metaData = {
       "Content-Type": file.type,
-      "X-Amz-Meta-Testing": 1234,
-      example: 5678,
     };
 
     // Upload the file with fPutObject If an object with the same name exists,  it is updated with new data
@@ -60,7 +60,7 @@ export const uploadFile = async ({
       destination,
       Buffer.from(await file.arrayBuffer()),
       file.size,
-      metaData,
+      metaData
     );
     return {
       key: `${bucket}/${destination}`,
@@ -106,7 +106,7 @@ export async function uploadFiles({
 
 async function runWithConcurrency<T>(
   tasks: (() => Promise<T>)[],
-  concurrency: number,
+  concurrency: number
 ): Promise<T[]> {
   const results: T[] = [];
   const queue = [...tasks];
@@ -128,4 +128,22 @@ async function runWithConcurrency<T>(
   const workers = Array.from({ length: concurrency }, () => worker());
   await Promise.all(workers);
   return results;
+}
+
+export async function deleteFile({
+  bucket,
+  key,
+}: {
+  bucket: string;
+  key: string;
+}) {
+  if (IS_LOCAL) {
+    await minioClient.removeObject(bucket, key);
+  } else {
+    const command = new DeleteObjectCommand({
+      Bucket: bucket,
+      Key: key,
+    });
+    await s3client.send(command);
+  }
 }
