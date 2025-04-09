@@ -7,6 +7,7 @@ import type { FileWithPath } from "react-dropzone";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
 import { ImageCropper } from "~/components/image-cropper";
+import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 
 export type FileWithPreview = FileWithPath & {
@@ -22,12 +23,12 @@ export function ChangeAvatarButton(
     entityId: string;
     entityType: string;
     className?: string;
-  }>,
+  }>
 ) {
   const [selectedFile, setSelectedFile] =
     React.useState<FileWithPreview | null>(null);
   const [isDialogOpen, setDialogOpen] = React.useState(false);
-
+  const router = useRouter();
   const onDrop = React.useCallback(
     (acceptedFiles: FileWithPath[]) => {
       const file = acceptedFiles[0];
@@ -44,7 +45,7 @@ export function ChangeAvatarButton(
       setDialogOpen(true);
     },
 
-    [],
+    []
   );
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -68,6 +69,7 @@ export function ChangeAvatarButton(
         });
         if (response.ok) {
           toast.success(t("success"), { id: 0 });
+          router.refresh();
         } else {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           const error = await response.json().catch(() => ({}));
@@ -79,7 +81,7 @@ export function ChangeAvatarButton(
         console.error(error);
       }
     },
-    [props.entityId, props.entityType, t],
+    [props.entityId, props.entityType, router, t]
   );
 
   return (

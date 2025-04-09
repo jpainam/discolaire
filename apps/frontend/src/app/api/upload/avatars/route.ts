@@ -1,7 +1,6 @@
-import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { auth } from "@repo/auth";
 import { env } from "~/env";
-import { s3client, uploadFile } from "~/lib/s3-client";
+import { deleteFile, uploadFile } from "~/lib/s3-client";
 import { caller } from "~/trpc/server";
 
 export async function POST(request: Request) {
@@ -23,7 +22,7 @@ export async function POST(request: Request) {
     }
 
     const ext = file.name.split(".").pop();
-    const user = caller.user.getUserByEntity({
+    const user = await caller.user.getUserByEntity({
       entityId,
       entityType: entityType as "staff" | "contact" | "student",
     });
@@ -65,22 +64,17 @@ export async function DELETE(request: Request) {
       return Response.json({ error: "No avatar to delete" }, { status: 400 });
     }
     //const school = await caller.school.getSchool();
-
-    const key = avatar.split(
-      "https://discolaire-public.s3.eu-central-1.amazonaws.com/"
-    )[1];
-    //const key = `${school.code}/avatars/${userId}.png`;
-    const command = new DeleteObjectCommand({
-      Bucket: "discolaire-public",
-      Key: key,
+    await deleteFile({
+      bucket: env.S3_AVATAR_BUCKET_NAME,
+      key: avatar,
     });
-    const response = await s3client.send(command);
+
     // Update the avatar in the database
     await caller.user.updateAvatar({
       id: userId,
       avatar: null,
     });
-    return Response.json({ response });
+    return Response.json({});
   } catch (error) {
     return Response.json({ error: (error as Error).message });
   }

@@ -3,6 +3,7 @@
 import {
   BellRing,
   CheckIcon,
+  ImageMinusIcon,
   ImagePlusIcon,
   KeyRound,
   MessageCircleMore,
@@ -87,7 +88,7 @@ export function StudentHeader({
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
 
@@ -112,7 +113,7 @@ export function StudentHeader({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const { openModal } = useModal();
@@ -129,7 +130,7 @@ export function StudentHeader({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const changeStudentStatus = useCallback(
@@ -139,7 +140,7 @@ export function StudentHeader({
         status,
       });
     },
-    [studentStatusMutation, student.id],
+    [studentStatusMutation, student.id]
   );
 
   const navigateToStudent = (id: string) => {
@@ -158,7 +159,7 @@ export function StudentHeader({
 
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditStudent = useCheckPermission("student", PermissionAction.UPDATE);
   //const [open, setOpen] = React.useState(false);
@@ -171,6 +172,25 @@ export function StudentHeader({
   const students = api.student.search.useQuery({
     query: search,
   });
+
+  const handleDeleteAvatar = useCallback(
+    async (userId: string) => {
+      toast.loading(t("Processing..."), { id: 0 });
+      const response = await fetch("/api/upload/avatars", {
+        method: "DELETE",
+        body: JSON.stringify({
+          userId: userId,
+        }),
+      });
+      if (response.ok) {
+        toast.success(t("success"), { id: 0 });
+        router.refresh();
+      } else {
+        toast.error(response.statusText, { id: 0 });
+      }
+    },
+    [t, router]
+  );
 
   return (
     <div className="flex border-b bg-muted/50 py-1 px-4 w-full gap-2">
@@ -327,7 +347,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -359,8 +379,23 @@ export function StudentHeader({
               />
             </>
           )}
-          <SimpleTooltip content={t("change_avatar")}>
-            {student.userId && (
+          <SimpleTooltip
+            content={
+              student.user?.avatar ? t("remove_avatar") : t("change_avatar")
+            }
+          >
+            {student.user?.avatar ? (
+              <Button
+                onClick={() => {
+                  if (student.userId) void handleDeleteAvatar(student.userId);
+                }}
+                variant={"ghost"}
+                className="size-8"
+                size={"icon"}
+              >
+                <ImageMinusIcon />
+              </Button>
+            ) : (
               <ChangeAvatarButton entityId={student.id} entityType="student">
                 <Button size={"icon"} className="size-8" variant={"ghost"}>
                   <ImagePlusIcon />
