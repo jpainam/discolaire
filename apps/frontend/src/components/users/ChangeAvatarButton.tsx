@@ -23,7 +23,7 @@ export function ChangeAvatarButton(
     entityId: string;
     entityType: string;
     className?: string;
-  }>
+  }>,
 ) {
   const [selectedFile, setSelectedFile] =
     React.useState<FileWithPreview | null>(null);
@@ -45,7 +45,7 @@ export function ChangeAvatarButton(
       setDialogOpen(true);
     },
 
-    []
+    [],
   );
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -81,7 +81,7 @@ export function ChangeAvatarButton(
         console.error(error);
       }
     },
-    [props.entityId, props.entityType, router, t]
+    [props.entityId, props.entityType, router, t],
   );
 
   return (
