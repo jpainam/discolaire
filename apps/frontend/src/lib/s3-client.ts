@@ -11,7 +11,7 @@ const isLocal = env.NEXT_PUBLIC_DEPLOYMENT_ENV == "local";
 
 const minioClient = new Minio.Client({
   endPoint: "localhost",
-  port: env.MINIO_PORT,
+  port: 9310, //env.MINIO_PORT,
   useSSL: false, // set to False when using localhost
   accessKey: env.S3_ACCESS_KEY_ID,
   secretKey: env.S3_SECRET_ACCESS_KEY,
