@@ -81,7 +81,7 @@ export function ChangeAvatar({ studentId }: { studentId: string }) {
               error: (err) => {
                 return getErrorMessage(err);
               },
-            }
+            },
           );
         }}
         //progresses={progresses}

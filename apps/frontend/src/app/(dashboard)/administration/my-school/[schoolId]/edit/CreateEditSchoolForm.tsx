@@ -222,7 +222,7 @@ export function CreateEditSchoolForm({ school }: { school: School }) {
               error: (err) => {
                 return getErrorMessage(err);
               },
-            }
+            },
           );
         }}
         //progresses={progresses}

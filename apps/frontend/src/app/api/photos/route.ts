@@ -15,6 +15,7 @@ export async function POST(request: Request) {
     const matchedIdsRaw = formData.get("matchedIds");
     const school = await caller.school.getSchool();
     const schoolCode = school.code;
+    console.log("schoolCode", schoolCode);
 
     if (!matchedIdsRaw || typeof matchedIdsRaw !== "string") {
       return Response.json({ error: "Missing matchedIds" }, { status: 400 });
@@ -79,7 +80,7 @@ export async function DELETE(request: Request) {
     //const school = await caller.school.getSchool();
 
     const key = avatar.split(
-      "https://TODO-UPLOAD.s3.eu-central-1.amazonaws.com/"
+      "https://TODO-UPLOAD.s3.eu-central-1.amazonaws.com/",
     )[1];
     //const key = `${school.code}/avatars/${userId}.png`;
     const command = new DeleteObjectCommand({
@@ -100,7 +101,7 @@ export async function DELETE(request: Request) {
 
 async function runWithConcurrency<T>(
   tasks: (() => Promise<T>)[],
-  concurrency: number
+  concurrency: number,
 ): Promise<T[]> {
   const results: T[] = [];
   const queue = [...tasks];
