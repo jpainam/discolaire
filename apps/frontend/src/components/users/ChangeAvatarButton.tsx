@@ -2,7 +2,7 @@
 
 import { cn } from "@repo/ui/lib/utils";
 import type { PropsWithChildren } from "react";
-import React from "react";
+import React, { useCallback } from "react";
 import type { FileWithPath } from "react-dropzone";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
@@ -18,7 +18,11 @@ const accept = {
 };
 
 export function ChangeAvatarButton(
-  props: PropsWithChildren<{ userId: string; className?: string }>,
+  props: PropsWithChildren<{
+    entityId: string;
+    entityType: string;
+    className?: string;
+  }>
 ) {
   const [selectedFile, setSelectedFile] =
     React.useState<FileWithPreview | null>(null);
@@ -40,7 +44,7 @@ export function ChangeAvatarButton(
       setDialogOpen(true);
     },
 
-    [],
+    []
   );
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -48,6 +52,35 @@ export function ChangeAvatarButton(
     accept,
   });
   const { t } = useLocale();
+
+  const handleUpload = useCallback(
+    async (croppedImageUrl: string) => {
+      toast.loading(t("Processing..."), { id: 0 });
+      try {
+        const croppedBlob = await (await fetch(croppedImageUrl)).blob();
+        const formData = new FormData();
+        formData.append("file", croppedBlob);
+        formData.append("entityId", props.entityId);
+        formData.append("entityType", props.entityType);
+        const response = await fetch("/api/upload/avatars", {
+          method: "POST",
+          body: formData,
+        });
+        if (response.ok) {
+          toast.success(t("success"), { id: 0 });
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          const error = await response.json().catch(() => ({}));
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+          toast.error(error?.message ?? response.statusText, { id: 0 });
+        }
+      } catch (error) {
+        toast.error("Something went wrong while uploading", { id: 0 });
+        console.error(error);
+      }
+    },
+    [props.entityId, props.entityType, t]
+  );
 
   return (
     <div>
@@ -60,21 +93,13 @@ export function ChangeAvatarButton(
           setDialogOpen={setDialogOpen}
           selectedFile={selectedFile}
           setSelectedFile={setSelectedFile}
-          onComplete={async (croppedImage) => {
-            toast.loading(t("uploading", { id: 0 }));
-            await uploadToAWS(selectedFile, croppedImage, props.userId);
-            toast.dismiss();
+          onComplete={(croppedImage) => {
+            void handleUpload(croppedImage);
           }}
         />
       ) : (
         <div
-          {...getRootProps({
-            // onClick: (e) => {
-            //   // Prevent root's click from triggering child events
-            //   e.preventDefault();
-            //   e.stopPropagation();
-            // },
-          })}
+          {...getRootProps({})}
           className={cn("cursor-pointer", props.className)}
         >
           <input {...getInputProps()} />
@@ -83,29 +108,4 @@ export function ChangeAvatarButton(
       )}
     </div>
   );
-}
-
-async function uploadToAWS(
-  file: File,
-  croppedImageUrl: string,
-  userId: string,
-) {
-  const croppedBlob = await (await fetch(croppedImageUrl)).blob();
-  //   const originalFormData = new FormData();
-  //   originalFormData.append("file", file, "original.png");
-  //   originalFormData.append("userId", userId);
-
-  const croppedFormData = new FormData();
-  croppedFormData.append("file", croppedBlob, "cropped.png");
-  croppedFormData.append("userId", userId);
-
-  //   await fetch("/api/upload/avatars", {
-  //     method: "POST",
-  //     body: originalFormData,
-  //   });
-
-  await fetch("/api/upload/avatars", {
-    method: "POST",
-    body: croppedFormData,
-  });
 }
