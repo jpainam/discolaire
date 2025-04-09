@@ -16,14 +16,16 @@ export const env = createEnv({
    * This way you can ensure the app isn't built with invalid env vars.
    */
   server: {
-    AWS_S3_ACCESS_KEY_ID: z.string().min(10),
-    AWS_S3_REGION: z.string().min(2),
-    AWS_S3_BUCKET_NAME: z.string().min(2),
-    AWS_S3_SECRET_ACCESS_KEY: z.string().min(1),
+    S3_ACCESS_KEY_ID: z.string().min(10),
+    S3_REGION: z.string().min(2),
+    S3_BUCKET_NAME: z.string().min(2),
+    S3_SECRET_ACCESS_KEY: z.string().min(1),
+    S3_AVATAR_BUCKET_NAME: z.string().min(2),
     REDIS_URL: z.string().min(1),
     SUPER_ADMIN_USERNAME: z.string().min(1),
     RESEND_API_KEY: z.string().min(1),
-
+    IS_LOCAL: z.string().default("false"),
+    MINIO_ENDPOINT: z.string().url(),
     REPORT_API_KEY: z.string().min(1),
     DISCORD_WEBHOOK_URL: z.string().url(),
   },
@@ -42,6 +44,9 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    IS_LOCAL: process.env.IS_LOCAL,
+    MINIO_ENDPOINT: process.env.MINIO_ENDPOINT,
+    S3_AVATAR_BUCKET_NAME: process.env.S3_AVATAR_BUCKET_NAME,
     SUPER_ADMIN_USERNAME: process.env.SUPER_ADMIN_USERNAME,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
@@ -55,10 +60,10 @@ export const env = createEnv({
 
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
     // AWS S3
-    AWS_S3_ACCESS_KEY_ID: process.env.AWS_S3_ACCESS_KEY_ID,
-    AWS_S3_REGION: process.env.AWS_S3_REGION,
-    AWS_S3_BUCKET_NAME: process.env.AWS_S3_BUCKET_NAME,
-    AWS_S3_SECRET_ACCESS_KEY: process.env.AWS_S3_SECRET_ACCESS_KEY,
+    S3_ACCESS_KEY_ID: process.env.S3_ACCESS_KEY_ID,
+    S3_REGION: process.env.S3_REGION,
+    S3_BUCKET_NAME: process.env.S3_BUCKET_NAME,
+    S3_SECRET_ACCESS_KEY: process.env.S3_SECRET_ACCESS_KEY,
   },
   skipValidation:
     !!process.env.CI || process.env.npm_lifecycle_event === "lint",

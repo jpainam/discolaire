@@ -6,10 +6,10 @@ export const env = createEnv({
     MESSAGING_SERVICE_URL: z.string(),
     MESSAGING_SECRET_KEY: z.string(),
     // AWS S3
-    AWS_S3_ACCESS_KEY_ID: z.string().min(10),
-    AWS_S3_REGION: z.string().min(2),
-    AWS_S3_BUCKET_NAME: z.string().min(2),
-    AWS_S3_SECRET_ACCESS_KEY: z.string().min(1),
+    S3_ACCESS_KEY_ID: z.string().min(10),
+    S3_REGION: z.string().min(2),
+    S3_BUCKET_NAME: z.string().min(2),
+    S3_SECRET_ACCESS_KEY: z.string().min(1),
     REDIS_URL: z.string().min(1),
     REPORTING_URL: z.string().min(1).url(),
     UNKEY_ROOT_KEY: z.string().optional(),
@@ -28,10 +28,10 @@ export const env = createEnv({
     AUTH_SECRET: process.env.AUTH_SECRET,
 
     // AWS S3
-    AWS_S3_ACCESS_KEY_ID: process.env.AWS_S3_ACCESS_KEY_ID,
-    AWS_S3_REGION: process.env.AWS_S3_REGION,
-    AWS_S3_BUCKET_NAME: process.env.AWS_S3_BUCKET_NAME,
-    AWS_S3_SECRET_ACCESS_KEY: process.env.AWS_S3_SECRET_ACCESS_KEY,
+    S3_ACCESS_KEY_ID: process.env.S3_ACCESS_KEY_ID,
+    S3_REGION: process.env.S3_REGION,
+    S3_BUCKET_NAME: process.env.S3_BUCKET_NAME,
+    S3_SECRET_ACCESS_KEY: process.env.S3_SECRET_ACCESS_KEY,
   },
   //experimental__runtimeEnv: {},
   skipValidation:

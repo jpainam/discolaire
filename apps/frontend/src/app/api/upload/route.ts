@@ -18,13 +18,13 @@ export async function POST(request: Request) {
   if (typeof destination !== "string" || destination.length === 0) {
     return Response.json(
       { error: "Invalid dest " + destination },
-      { status: 400 },
+      { status: 400 }
     );
   }
   const fileKey = key ? `${destination}/${key}` : `${destination}/${uuidv4()}`;
   try {
     const { url, fields } = await createPresignedPost(s3client, {
-      Bucket: bucket ?? env.AWS_S3_BUCKET_NAME,
+      Bucket: bucket ?? env.S3_BUCKET_NAME,
       Key: fileKey,
       Conditions: [
         ["content-length-range", 0, 10485760], // up to 10 MB
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
 
 export async function GET(
   request: NextRequest,
-  props: { params: Promise<{ key: string }> },
+  props: { params: Promise<{ key: string }> }
 ) {
   const params = await props.params;
   const searchParams = request.nextUrl.searchParams;
@@ -54,7 +54,7 @@ export async function GET(
   if (!key) {
     throw new Error("File not found");
   }
-  const bucket = env.AWS_S3_BUCKET_NAME;
+  const bucket = env.S3_BUCKET_NAME;
   const command = new GetObjectCommand({
     Bucket: bucket,
     Key: key,
@@ -65,7 +65,7 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  props: { params: Promise<{ key: string }> },
+  props: { params: Promise<{ key: string }> }
 ) {
   const params = await props.params;
   const searchParams = request.nextUrl.searchParams;
@@ -74,7 +74,7 @@ export async function DELETE(
   if (!key) {
     throw new Error("File not found");
   }
-  const bucket = env.AWS_S3_BUCKET_NAME;
+  const bucket = env.S3_BUCKET_NAME;
 
   const deleteCommand = new DeleteObjectCommand({
     Bucket: bucket,

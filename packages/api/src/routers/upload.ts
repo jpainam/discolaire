@@ -8,10 +8,10 @@ import { env } from "../env";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const client = new S3Client({
-  region: env.AWS_S3_REGION,
+  region: env.S3_REGION,
   credentials: {
-    accessKeyId: env.AWS_S3_ACCESS_KEY_ID,
-    secretAccessKey: env.AWS_S3_SECRET_ACCESS_KEY,
+    accessKeyId: env.S3_ACCESS_KEY_ID,
+    secretAccessKey: env.S3_SECRET_ACCESS_KEY,
   },
 });
 
@@ -19,7 +19,7 @@ export const uploadRouter = createTRPCRouter({
   getSignedUrl: protectedProcedure
     .input(z.object({ key: z.string() }))
     .query(async ({ input }) => {
-      const bucket = env.AWS_S3_BUCKET_NAME;
+      const bucket = env.S3_BUCKET_NAME;
       const command = new GetObjectCommand({
         Bucket: bucket,
         Key: input.key,
@@ -37,7 +37,7 @@ export const uploadRouter = createTRPCRouter({
     .query(async ({ input }) => {
       const contentType = "application/json";
       const { url, fields } = await createPresignedPost(client, {
-        Bucket: env.AWS_S3_BUCKET_NAME,
+        Bucket: env.S3_BUCKET_NAME,
         Key: `${input.destination}/${uuidv4()}`,
         Conditions: [
           ["content-length-range", 0, 10485760], // up to 10 MB
