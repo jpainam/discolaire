@@ -73,7 +73,7 @@ export const enrollmentRouter = createTRPCRouter({
     .input(
       z.object({
         studentId: z.union([z.string(), z.array(z.string())]),
-        classroomId: z.string(),
+        classroomId: z.string().min(1),
         observation: z.string().optional(),
       }),
     )
@@ -130,24 +130,19 @@ export const enrollmentRouter = createTRPCRouter({
           lastName: "asc",
         },
         where: {
-          AND: [
-            {
-              OR: [
-                { firstName: { startsWith: qq, mode: "insensitive" } },
-                { lastName: { startsWith: qq, mode: "insensitive" } },
-                { residence: { startsWith: qq, mode: "insensitive" } },
-                { phoneNumber: { startsWith: qq, mode: "insensitive" } },
-                { email: { startsWith: qq, mode: "insensitive" } },
-                { registrationNumber: { startsWith: qq, mode: "insensitive" } },
-              ],
+          schoolId: ctx.schoolId,
+          enrollments: {
+            none: {
+              schoolYearId: ctx.schoolYearId,
             },
-            {
-              enrollments: {
-                none: {
-                  schoolYearId: ctx.schoolYearId,
-                },
-              },
-            },
+          },
+          OR: [
+            { firstName: { startsWith: qq, mode: "insensitive" } },
+            { lastName: { startsWith: qq, mode: "insensitive" } },
+            { residence: { startsWith: qq, mode: "insensitive" } },
+            { phoneNumber: { startsWith: qq, mode: "insensitive" } },
+            { email: { startsWith: qq, mode: "insensitive" } },
+            { registrationNumber: { startsWith: qq, mode: "insensitive" } },
           ],
         },
       });

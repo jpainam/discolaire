@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import type { School } from "@repo/db";
@@ -19,10 +18,12 @@ import { FileUploader } from "~/uploads/file-uploader";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/components/button";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { api } from "~/trpc/react";
+import { useRouter } from "~/hooks/use-router";
+import { useTRPC } from "~/trpc/react";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -43,23 +44,24 @@ const formSchema = z.object({
 
 export function CreateEditSchool({ school }: { school: School }) {
   const { t } = useLocale();
-
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const utils = api.useUtils();
-  const router = useRouter();
-
-  const updateSchoolMutation = api.school.update.useMutation({
-    onSettled: () => utils.school.invalidate(),
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      //router.push("/administration/my-school");
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const updateSchoolMutation = useMutation(
+    trpc.school.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.school.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        router.push("/administration/my-school");
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
 
   const form = useForm({
     resolver: zodResolver(formSchema),

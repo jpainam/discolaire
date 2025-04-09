@@ -7,10 +7,11 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 import { cn } from "@repo/ui/lib/utils";
+import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { getAppreciations } from "~/utils/get-appreciation";
-
+import { StudentGradesheetButton } from "./StudentGradesheetButton";
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
 
@@ -60,10 +61,18 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
               <TableHead>{t("grade5")}</TableHead>
               <TableHead>{t("grade6")}</TableHead>
               <TableHead>{t("average")}</TableHead>
-              <TableHead className="text-right">{t("appreciation")}</TableHead>
+              <TableHead>{t("appreciation")}</TableHead>
+              <TableHead className="w-[50px] text-right"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
+            {data.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={10} className="text-center">
+                  <EmptyState title={t("no_data")} className="my-8" />
+                </TableCell>
+              </TableRow>
+            )}
             {data.map((row, index) => {
               const totalGrades =
                 (row.grade1 ?? 0) +
@@ -96,8 +105,11 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                   <TableCell className="text-muted-foreground">
                     {avgText}
                   </TableCell>
-                  <TableCell className="text-right text-muted-foreground">
+                  <TableCell className="text-muted-foreground">
                     {getAppreciations(avg)}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <StudentGradesheetButton grade={row} />
                   </TableCell>
                 </TableRow>
               );
@@ -117,7 +129,7 @@ function Cell({ grade }: { grade?: number | null }) {
       className={cn(
         "text-muted-foreground",
         g >= 18 ? "text-green-500" : "",
-        g < 10 ? "text-red-500" : "",
+        g < 10 ? "text-red-500" : ""
       )}
     >
       {gradeText}
