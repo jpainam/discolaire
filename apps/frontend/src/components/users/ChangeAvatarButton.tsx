@@ -18,7 +18,7 @@ const accept = {
 };
 
 export function ChangeAvatarButton(
-  props: PropsWithChildren<{ userId: string; className?: string }>
+  props: PropsWithChildren<{ userId: string; className?: string }>,
 ) {
   const [selectedFile, setSelectedFile] =
     React.useState<FileWithPreview | null>(null);
@@ -40,7 +40,7 @@ export function ChangeAvatarButton(
       setDialogOpen(true);
     },
 
-    []
+    [],
   );
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -88,7 +88,7 @@ export function ChangeAvatarButton(
 async function uploadToAWS(
   file: File,
   croppedImageUrl: string,
-  userId: string
+  userId: string,
 ) {
   const croppedBlob = await (await fetch(croppedImageUrl)).blob();
   //   const originalFormData = new FormData();
