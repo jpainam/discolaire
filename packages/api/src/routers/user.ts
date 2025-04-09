@@ -243,6 +243,54 @@ export const userRouter = createTRPCRouter({
         entityId: input.entityId,
       });
     }),
+  getUserByEntity: protectedProcedure
+    .input(
+      z.object({
+        entityId: z.string(),
+        entityType: z.enum(["staff", "contact", "student"]),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      let userId, name;
+      if (input.entityType == "staff") {
+        const dd = await ctx.db.staff.findUniqueOrThrow({
+          where: {
+            id: input.entityId,
+          },
+        });
+        userId = dd.userId;
+        name = `${dd.lastName} ${dd.firstName}`;
+      } else if (input.entityType == "student") {
+        const dd = await ctx.db.student.findFirstOrThrow({
+          where: {
+            id: input.entityId,
+          },
+        });
+        userId = dd.userId;
+        name = `${dd.lastName} ${dd.firstName}`;
+      } else {
+        const dd = await ctx.db.contact.findFirstOrThrow({
+          where: {
+            id: input.entityId,
+          },
+        });
+        userId = dd.userId;
+        name = `${dd.lastName} ${dd.firstName}`;
+      }
+      if (!userId) {
+        return userService.createAutoUser({
+          schoolId: ctx.schoolId,
+          entityId: input.entityId,
+          profile: input.entityType,
+          name: name,
+        });
+      }
+      return ctx.db.user.findFirstOrThrow({
+        where: {
+          id: userId,
+        },
+      });
+    }),
   getPermissions: protectedProcedure
     .input(z.string().min(1))
     .query(({ input }) => {

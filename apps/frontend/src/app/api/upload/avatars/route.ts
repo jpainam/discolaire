@@ -1,7 +1,7 @@
-import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { auth } from "@repo/auth";
 import { env } from "~/env";
-import { s3client } from "~/lib/s3-client";
+import { s3client, uploadFile } from "~/lib/s3-client";
 import { caller } from "~/trpc/server";
 
 export async function POST(request: Request) {
@@ -12,33 +12,35 @@ export async function POST(request: Request) {
   try {
     const formData = await request.formData();
     const file = formData.get("file");
-    const userId = formData.get("userId") as string;
+    const entityId = formData.get("entityId") as string;
+    const entityType = formData.get("entityType") as string;
 
-    if (!file) {
-      return Response.json({ error: "No file provided" }, { status: 400 });
+    if (!file || !entityId || !entityType) {
+      return Response.json({ error: "Data missing" }, { status: 400 });
     }
     if (!(file instanceof File)) {
       return Response.json({ error: "Invalid file type" }, { status: 400 });
     }
 
-    const school = await caller.school.getSchool();
     const ext = file.name.split(".").pop();
-
-    const key = `${school.code}/avatars/${userId}.${ext}`;
-    const command = new PutObjectCommand({
-      Bucket: env.S3_AVATAR_BUCKET_NAME,
-      Key: key,
-      Body: Buffer.from(await file.arrayBuffer()),
-      ContentType: file.type,
+    const user = caller.user.getUserByEntity({
+      entityId,
+      entityType: entityType as "staff" | "contact" | "student",
     });
-    const response = await s3client.send(command);
+
+    const key = `${entityType}/${user.id}.${ext}`;
+    const result = await uploadFile({
+      file: file,
+      bucket: env.S3_AVATAR_BUCKET_NAME,
+      destination: key,
+    });
     // Update the avatar in the database
     await caller.user.updateAvatar({
-      id: userId,
-      avatar: `https://TODO-UPLOAD.s3.eu-central-1.amazonaws.com/${key}`,
+      id: user.id,
+      avatar: result.key,
     });
     // TODO Send an email to the user to confirm the change
-    return Response.json({ response });
+    return Response.json(result);
   } catch (error) {
     return Response.json({ error: (error as Error).message });
   }
@@ -65,7 +67,7 @@ export async function DELETE(request: Request) {
     //const school = await caller.school.getSchool();
 
     const key = avatar.split(
-      "https://discolaire-public.s3.eu-central-1.amazonaws.com/",
+      "https://discolaire-public.s3.eu-central-1.amazonaws.com/"
     )[1];
     //const key = `${school.code}/avatars/${userId}.png`;
     const command = new DeleteObjectCommand({
