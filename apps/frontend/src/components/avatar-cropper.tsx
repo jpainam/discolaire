@@ -70,7 +70,7 @@ export function ChangeAvatarDropdown({ userId }: { userId: string }) {
         0,
         0,
         crop.width * scaleX,
-        crop.height * scaleY
+        crop.height * scaleY,
       );
     }
 
@@ -191,7 +191,7 @@ async function uploadToAWS(croppedImageUrl: string, userId: string) {
 function centerAspectCrop(
   mediaWidth: number,
   mediaHeight: number,
-  aspect: number
+  aspect: number,
 ): Crop {
   return centerCrop(
     makeAspectCrop(
@@ -202,9 +202,9 @@ function centerAspectCrop(
       },
       aspect,
       mediaWidth,
-      mediaHeight
+      mediaHeight,
     ),
     mediaWidth,
-    mediaHeight
+    mediaHeight,
   );
 }
