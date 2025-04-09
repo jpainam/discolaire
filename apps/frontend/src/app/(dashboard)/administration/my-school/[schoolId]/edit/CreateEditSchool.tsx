@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import type { School } from "@repo/db";
@@ -41,10 +41,9 @@ const formSchema = z.object({
   isActive: z.boolean().default(true),
 });
 
-export function CreateEditSchoolForm({ school }: { school: School }) {
+export function CreateEditSchool({ school }: { school: School }) {
   const { t } = useLocale();
 
-  const params = useParams<{ schoolId: string }>();
   const [file, setFile] = useState<File | null>(null);
 
   const utils = api.useUtils();
@@ -88,7 +87,7 @@ export function CreateEditSchoolForm({ school }: { school: School }) {
     }
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("schoolId", params.schoolId);
+    formData.append("schoolId", school.id);
 
     try {
       const response = await fetch("/api/upload/logo", {
@@ -99,8 +98,8 @@ export function CreateEditSchoolForm({ school }: { school: School }) {
         const { url } = (await response.json()) as { url: string };
         updateSchoolMutation.mutate({ id: school.id, logo: url, ...data });
       } else {
-        const { message } = await response.json();
-        toast.error(message, { id: 0 });
+        const status = response.statusText;
+        toast.error(status, { id: 0 });
       }
     } catch (error) {
       toast.error((error as Error).message, { id: 0 });

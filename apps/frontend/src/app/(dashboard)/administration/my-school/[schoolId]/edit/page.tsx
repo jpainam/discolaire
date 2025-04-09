@@ -1,5 +1,5 @@
 import { api } from "~/trpc/server";
-import Edit from "./Edit";
+import { CreateEditSchool } from "./CreateEditSchool";
 
 export default async function Page(props: {
   params: Promise<{ schoolId: string }>;
@@ -10,5 +10,5 @@ export default async function Page(props: {
 
   const school = await api.school.get(schoolId);
 
-  return <Edit school={school} />;
+  return <CreateEditSchool school={school} />;
 }
