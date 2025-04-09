@@ -34,6 +34,7 @@ type FileWithPreview = FileWithPath & {
 
 interface ImageCropperProps {
   dialogOpen: boolean;
+  showPreview?: boolean;
   className?: string;
   setDialogOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   onComplete?: (croppedImage: string) => void;
@@ -48,6 +49,7 @@ export function ImageCropper({
   className,
   setDialogOpen,
   onComplete,
+  showPreview = false,
   selectedFile,
   setSelectedFile,
 }: ImageCropperProps) {
@@ -95,7 +97,7 @@ export function ImageCropper({
         0,
         0,
         crop.width * scaleX,
-        crop.height * scaleY,
+        crop.height * scaleY
       );
     }
 
@@ -112,15 +114,17 @@ export function ImageCropper({
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger>
-        <Avatar className={cn("", className)}>
-          <AvatarImage
-            src={croppedImage ? croppedImage : selectedFile?.preview}
-            alt="Image"
-          />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-      </DialogTrigger>
+      {showPreview && (
+        <DialogTrigger>
+          <Avatar className={cn("", className)}>
+            <AvatarImage
+              src={croppedImage ? croppedImage : selectedFile?.preview}
+              alt="Image"
+            />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+        </DialogTrigger>
+      )}
       <DialogContent className="p-0 gap-0">
         <DialogHeader>
           <DialogTitle></DialogTitle>
@@ -177,7 +181,7 @@ export function ImageCropper({
 export function centerAspectCrop(
   mediaWidth: number,
   mediaHeight: number,
-  aspect: number,
+  aspect: number
 ): Crop {
   return centerCrop(
     makeAspectCrop(
@@ -188,9 +192,9 @@ export function centerAspectCrop(
       },
       aspect,
       mediaWidth,
-      mediaHeight,
+      mediaHeight
     ),
     mediaWidth,
-    mediaHeight,
+    mediaHeight
   );
 }

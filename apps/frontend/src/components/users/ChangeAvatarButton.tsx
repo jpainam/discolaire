@@ -1,8 +1,7 @@
 "use client";
 
-import { Button } from "@repo/ui/components/button";
 import { cn } from "@repo/ui/lib/utils";
-import { ImageUpIcon } from "lucide-react";
+import type { PropsWithChildren } from "react";
 import React from "react";
 import type { FileWithPath } from "react-dropzone";
 import { useDropzone } from "react-dropzone";
@@ -18,13 +17,9 @@ const accept = {
   "image/*": [],
 };
 
-export function ChangeAvatarButton({
-  userId,
-  className,
-}: {
-  userId: string;
-  className?: string;
-}) {
+export function ChangeAvatarButton(
+  props: PropsWithChildren<{ userId: string; className?: string }>
+) {
   const [selectedFile, setSelectedFile] =
     React.useState<FileWithPreview | null>(null);
   const [isDialogOpen, setDialogOpen] = React.useState(false);
@@ -45,7 +40,7 @@ export function ChangeAvatarButton({
       setDialogOpen(true);
     },
 
-    [],
+    []
   );
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -53,6 +48,7 @@ export function ChangeAvatarButton({
     accept,
   });
   const { t } = useLocale();
+
   return (
     <div>
       {selectedFile ? (
@@ -66,21 +62,24 @@ export function ChangeAvatarButton({
           setSelectedFile={setSelectedFile}
           onComplete={async (croppedImage) => {
             toast.loading(t("uploading", { id: 0 }));
-            await uploadToAWS(selectedFile, croppedImage, userId);
+            await uploadToAWS(selectedFile, croppedImage, props.userId);
             toast.dismiss();
           }}
         />
       ) : (
-        <Button
-          variant={"outline"}
-          size={"sm"}
-          {...getRootProps()}
-          className={cn("cursor-pointer", className)}
+        <div
+          {...getRootProps({
+            // onClick: (e) => {
+            //   // Prevent root's click from triggering child events
+            //   e.preventDefault();
+            //   e.stopPropagation();
+            // },
+          })}
+          className={cn("cursor-pointer", props.className)}
         >
           <input {...getInputProps()} />
-          <ImageUpIcon />
-          {t("change_avatar")}
-        </Button>
+          {props.children}
+        </div>
       )}
     </div>
   );
@@ -89,7 +88,7 @@ export function ChangeAvatarButton({
 async function uploadToAWS(
   file: File,
   croppedImageUrl: string,
-  userId: string,
+  userId: string
 ) {
   const croppedBlob = await (await fetch(croppedImageUrl)).blob();
   //   const originalFormData = new FormData();

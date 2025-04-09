@@ -4,7 +4,8 @@ import { getServerTranslations } from "~/i18n/server";
 
 import { notFound } from "next/navigation";
 import { NoPermission } from "~/components/no-permission";
-import { UserAvatar } from "~/components/users/UserAvatar";
+
+import { AvatarState } from "~/components/AvatarState";
 import { api } from "~/trpc/server";
 
 export default async function Layout(props: {
@@ -28,16 +29,11 @@ export default async function Layout(props: {
   return (
     <div className="">
       <div className="flex flex-row items-center gap-2 px-4 py-2">
-        <UserAvatar
-          className="size-20 ring-offset-2 ring-2 ring-slate-200"
-          userId={params.id}
-          avatar={user.avatar}
-        />
-        {/* <AvatarState
+        <AvatarState
           pos={1}
           avatar={user.avatar}
           className="w-[100px] h-[100px]"
-        /> */}
+        />
 
         <div className="space-y-0.5">
           <h2 className=" font-bold tracking-tight">{t("user_management")}</h2>

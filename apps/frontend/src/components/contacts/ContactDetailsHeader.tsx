@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ImageUpIcon,
   KeyRound,
   MoreVertical,
   Pencil,
@@ -41,7 +42,6 @@ import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { SimpleTooltip } from "../simple-tooltip";
 import { ChangeAvatarButton } from "../users/ChangeAvatarButton";
 import { CreateEditUser } from "../users/CreateEditUser";
-import { UserAvatar } from "../users/UserAvatar";
 import CreateEditContact from "./CreateEditContact";
 import { LinkStudent } from "./LinkStudent";
 
@@ -65,7 +65,7 @@ export function ContactDetailsHeader({
   });
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();
@@ -83,24 +83,21 @@ export function ContactDetailsHeader({
 
   const canUpdateContact = useCheckPermission(
     "contact",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (
     <div className="flex flex-row items-start gap-2">
-      {contact.userId ? (
-        <UserAvatar
-          avatar={contact.user?.avatar}
-          className="h-[100px] w-[100px]"
-          userId={contact.userId}
-        />
-      ) : (
-        <AvatarState pos={0} className="h-auto w-[100px]" />
-      )}
+      <AvatarState
+        pos={contact.lastName?.length}
+        avatar={contact.user?.avatar}
+        className="h-auto w-[100px]"
+      />
+
       <div className="flex flex-col gap-2">
         <div className="flex flex-row items-center gap-2">
           {canUpdateContact && (
@@ -222,7 +219,14 @@ export function ContactDetailsHeader({
           </DropdownMenu>
         </div>
         <div className="grid flex-row gap-2 md:flex">
-          {contact.userId && <ChangeAvatarButton userId={contact.userId} />}
+          {contact.userId && (
+            <ChangeAvatarButton userId={contact.userId}>
+              <Button variant={"outline"} size={"sm"}>
+                <ImageUpIcon />
+                {t("change_avatar")}
+              </Button>
+            </ChangeAvatarButton>
+          )}
           {/* <Button variant={"outline"} size={"sm"}>
             <ImageUpIcon />
             {t("change_avatar")}

@@ -3,6 +3,7 @@
 import {
   BellRing,
   CheckIcon,
+  ImagePlusIcon,
   KeyRound,
   MessageCircleMore,
   MoreVertical,
@@ -57,7 +58,6 @@ import { SimpleTooltip } from "~/components/simple-tooltip";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { StudentSelector } from "~/components/shared/selects/StudentSelector";
-import { UserAvatar } from "~/components/users/UserAvatar";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
@@ -65,12 +65,14 @@ import { breadcrumbAtom } from "~/lib/atoms";
 import { useSession } from "~/providers/AuthProvider";
 import { api, useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
+
+import { AvatarState } from "../AvatarState";
 import { SearchCombobox } from "../SearchCombobox";
 import { CountryComponent } from "../shared/CountryPicker";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
+import { ChangeAvatarButton } from "../users/ChangeAvatarButton";
 import { CreateEditUser } from "../users/CreateEditUser";
-import { SquaredAvatar } from "./SquaredAvatar";
 
 export function StudentHeader({
   student,
@@ -85,7 +87,7 @@ export function StudentHeader({
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
 
@@ -110,7 +112,7 @@ export function StudentHeader({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const { openModal } = useModal();
@@ -127,7 +129,7 @@ export function StudentHeader({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const changeStudentStatus = useCallback(
@@ -137,7 +139,7 @@ export function StudentHeader({
         status,
       });
     },
-    [studentStatusMutation, student.id],
+    [studentStatusMutation, student.id]
   );
 
   const navigateToStudent = (id: string) => {
@@ -156,7 +158,7 @@ export function StudentHeader({
 
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditStudent = useCheckPermission("student", PermissionAction.UPDATE);
   //const [open, setOpen] = React.useState(false);
@@ -172,16 +174,11 @@ export function StudentHeader({
 
   return (
     <div className="flex border-b bg-muted/50 py-1 px-4 w-full gap-2">
-      {student.userId ? (
-        <UserAvatar
-          className="my-0 h-full w-[100px] rounded-md"
-          userId={student.userId}
-          avatar={student.user?.avatar}
-        />
-      ) : (
-        <SquaredAvatar student={student} />
-      )}
-
+      <AvatarState
+        className="my-0 h-full w-[100px] rounded-md"
+        pos={getFullName(student).length}
+        avatar={student.user?.avatar}
+      />
       <div className="flex w-full flex-col gap-1">
         {user?.profile == "student" ? (
           <span className="bg-background h-9 px-4 py-2 rounded-md font-semibold w-full text-sm 2xl:w-[450px]">
@@ -222,7 +219,7 @@ export function StudentHeader({
 
         <div className="flex flex-row items-center gap-1">
           <FlatBadge
-            className="hidden md:block"
+            className="hidden md:block text-xs"
             variant={
               student.status == StudentStatus.ACTIVE
                 ? "green"
@@ -243,6 +240,7 @@ export function StudentHeader({
               <Button
                 disabled={!canEditStudent}
                 size={"icon"}
+                className="size-8"
                 onClick={() => {
                   router.push(routes.students.edit(student.id));
                 }}
@@ -258,13 +256,19 @@ export function StudentHeader({
             className="data-[orientation=vertical]:h-4"
           />
           <SimpleTooltip content="Notification reçus">
-            <Button size={"icon"} aria-label="Notification" variant="ghost">
+            <Button
+              className="size-8"
+              size={"icon"}
+              aria-label="Notification"
+              variant="ghost"
+            >
               <BellRing className="h-4 w-4" />
             </Button>
           </SimpleTooltip>
           {student.userId && (
             <SimpleTooltip content={t("user")}>
               <Button
+                className="size-8"
                 onClick={() => {
                   router.push(`/users/${student.userId}`);
                 }}
@@ -283,6 +287,7 @@ export function StudentHeader({
           <SimpleTooltip content="Dialoguer">
             <Button
               size={"icon"}
+              className="size-8"
               aria-label="Notification"
               variant="ghost"
               onClick={() => {
@@ -299,6 +304,7 @@ export function StudentHeader({
           <SimpleTooltip content="Contacts et Responsables">
             <Button
               size={"icon"}
+              className="size-8"
               aria-label="Contacts"
               variant="ghost"
               onClick={() => {
@@ -315,12 +321,13 @@ export function StudentHeader({
           <SimpleTooltip content="Impressions">
             <Button
               size={"icon"}
+              className="size-8"
               aria-label="print"
               variant="ghost"
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -337,6 +344,7 @@ export function StudentHeader({
                 <Button
                   size={"icon"}
                   aria-label="add"
+                  className="size-8"
                   variant="ghost"
                   onClick={() => {
                     router.push(routes.students.create);
@@ -351,12 +359,21 @@ export function StudentHeader({
               />
             </>
           )}
-
+          <SimpleTooltip content={t("change_avatar")}>
+            {student.userId && (
+              <ChangeAvatarButton userId={student.userId}>
+                <Button size={"icon"} className="size-8" variant={"ghost"}>
+                  <ImagePlusIcon />
+                </Button>
+              </ChangeAvatarButton>
+            )}
+          </SimpleTooltip>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 size={"icon"}
                 variant="ghost"
+                className="size-8"
                 onClick={() => {
                   router.push(routes.students.contacts(params.id));
                 }}
