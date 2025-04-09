@@ -1,5 +1,6 @@
 import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { auth } from "@repo/auth";
+import { env } from "~/env";
 import { s3client } from "~/lib/aws-client";
 import { caller } from "~/trpc/server";
 
@@ -25,7 +26,7 @@ export async function POST(request: Request) {
 
     const key = `${school.code}/avatars/${userId}.${ext}`;
     const command = new PutObjectCommand({
-      Bucket: "discolaire-public",
+      Bucket: env.S3_AVATAR_BUCKET_NAME,
       Key: key,
       Body: Buffer.from(await file.arrayBuffer()),
       ContentType: file.type,
@@ -34,7 +35,7 @@ export async function POST(request: Request) {
     // Update the avatar in the database
     await caller.user.updateAvatar({
       id: userId,
-      avatar: `https://discolaire-public.s3.eu-central-1.amazonaws.com/${key}`,
+      avatar: `https://TODO-UPLOAD.s3.eu-central-1.amazonaws.com/${key}`,
     });
     // TODO Send an email to the user to confirm the change
     return Response.json({ response });
@@ -64,7 +65,7 @@ export async function DELETE(request: Request) {
     //const school = await caller.school.getSchool();
 
     const key = avatar.split(
-      "https://discolaire-public.s3.eu-central-1.amazonaws.com/",
+      "https://discolaire-public.s3.eu-central-1.amazonaws.com/"
     )[1];
     //const key = `${school.code}/avatars/${userId}.png`;
     const command = new DeleteObjectCommand({

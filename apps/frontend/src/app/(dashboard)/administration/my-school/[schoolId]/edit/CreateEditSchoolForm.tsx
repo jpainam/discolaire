@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 
 import type { School } from "@repo/db";
-import { useUpload } from "~/hooks/use-upload";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   FormControl,
@@ -16,8 +15,9 @@ import {
   useFormContext,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { FileUploader } from "~/uploads/file-uploader";
+import { useUpload } from "~/hooks/use-upload";
 import { useLocale } from "~/i18n";
+import { FileUploader } from "~/uploads/file-uploader";
 
 import { getErrorMessage } from "~/lib/handle-error";
 import { api } from "~/trpc/react";
@@ -212,7 +212,7 @@ export function CreateEditSchoolForm({ school }: { school: School }) {
           toast.promise(
             onUpload(file, {
               destination: `${school.code}`,
-              bucket: "discolaire-public",
+              bucket: "TODO-UPLOAD",
             }),
             {
               loading: t("uploading"),
@@ -222,7 +222,7 @@ export function CreateEditSchoolForm({ school }: { school: School }) {
               error: (err) => {
                 return getErrorMessage(err);
               },
-            },
+            }
           );
         }}
         //progresses={progresses}

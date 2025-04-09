@@ -1,5 +1,6 @@
 import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { auth } from "@repo/auth";
+import { env } from "~/env";
 import { s3client } from "~/lib/aws-client";
 import { caller } from "~/trpc/server";
 
@@ -32,10 +33,10 @@ export async function POST(request: Request) {
 
       const buffer = Buffer.from(await file.arrayBuffer());
       const ext = file.name.split(".").pop();
-      const key = `${schoolCode}/avatars/${id}.${ext}`;
+      const key = `${id}.${ext}`;
 
       const command = new PutObjectCommand({
-        Bucket: "discolaire-public",
+        Bucket: env.S3_AVATAR_BUCKET_NAME,
         Key: key,
         Body: buffer,
         ContentType: file.type,
@@ -78,11 +79,11 @@ export async function DELETE(request: Request) {
     //const school = await caller.school.getSchool();
 
     const key = avatar.split(
-      "https://discolaire-public.s3.eu-central-1.amazonaws.com/",
+      "https://TODO-UPLOAD.s3.eu-central-1.amazonaws.com/"
     )[1];
     //const key = `${school.code}/avatars/${userId}.png`;
     const command = new DeleteObjectCommand({
-      Bucket: "discolaire-public",
+      Bucket: env.S3_AVATAR_BUCKET_NAME,
       Key: key,
     });
     const response = await s3client.send(command);
@@ -99,7 +100,7 @@ export async function DELETE(request: Request) {
 
 async function runWithConcurrency<T>(
   tasks: (() => Promise<T>)[],
-  concurrency: number,
+  concurrency: number
 ): Promise<T[]> {
   const results: T[] = [];
   const queue = [...tasks];

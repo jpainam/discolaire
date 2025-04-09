@@ -58,7 +58,7 @@ export function ChangeAvatar({ studentId }: { studentId: string }) {
           toast.promise(
             onUpload(file, {
               destination: `${school.code}/avatars`,
-              bucket: "discolaire-public",
+              bucket: "TODO-UPLOAD",
               // TODO the key must be userId, and make sure this is called with the User,
               // will allow use in contact/staff as well
               key: studentId,
@@ -81,7 +81,7 @@ export function ChangeAvatar({ studentId }: { studentId: string }) {
               error: (err) => {
                 return getErrorMessage(err);
               },
-            },
+            }
           );
         }}
         //progresses={progresses}

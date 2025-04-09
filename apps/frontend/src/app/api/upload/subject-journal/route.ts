@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     const key = `${school.code}/journals/${subjectId}/${file.name}_${filename}.${file.type.split("/")[1]}`;
 
     const command = new PutObjectCommand({
-      Bucket: "discolaire-public",
+      Bucket: "TODO-UPLOAD",
       Key: key,
       Body: Buffer.from(fileBuffer),
       ContentType: file.type,
