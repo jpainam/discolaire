@@ -1,7 +1,7 @@
 import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { auth } from "@repo/auth";
 import { env } from "~/env";
-import { s3client } from "~/lib/aws-client";
+import { s3client } from "~/lib/s3-client";
 import { caller } from "~/trpc/server";
 
 export async function POST(request: Request) {
@@ -61,7 +61,7 @@ export async function DELETE(request: Request) {
     //const school = await caller.school.getSchool();
 
     const key = avatar.split(
-      "https://discolaire-public.s3.eu-central-1.amazonaws.com/",
+      "https://discolaire-public.s3.eu-central-1.amazonaws.com/"
     )[1];
     //const key = `${school.code}/avatars/${userId}.png`;
     const command = new DeleteObjectCommand({
