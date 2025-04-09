@@ -47,7 +47,7 @@ interface FileMatchResult {
 export function ZipImageMatcher() {
   const trpc = useTRPC();
   const matchIdsMutation = useMutation(
-    trpc.upload.matchedIds.mutationOptions()
+    trpc.upload.matchedIds.mutationOptions(),
   );
   const [ids, setIds] = useState<string[]>([]);
   const [entityType, setEntityType] = useState<string>("student");
@@ -85,7 +85,7 @@ export function ZipImageMatcher() {
       const imageFileEntries = Object.entries(zip.files)
         .filter(([_, entry]) => !entry.dir)
         .filter(([name]) =>
-          /\.(jpg|jpeg|png|gif|bmp|webp|tiff|svg)$/i.test(name)
+          /\.(jpg|jpeg|png|gif|bmp|webp|tiff|svg)$/i.test(name),
         );
 
       const results: FileMatchResult[] = [];
@@ -101,7 +101,7 @@ export function ZipImageMatcher() {
             matched: false,
           });
           return baseName;
-        })
+        }),
       );
 
       matchIdsMutation.mutate(
@@ -125,7 +125,7 @@ export function ZipImageMatcher() {
           onError: (error) => {
             toast.error(error.message);
           },
-        }
+        },
       );
     } catch (error) {
       console.error("Error processing zip file:", error);
@@ -144,13 +144,13 @@ export function ZipImageMatcher() {
       formData.append(
         `id_${result.matchedId}`,
         result.fileData,
-        result.fileName
+        result.fileName,
       );
     });
 
     formData.append(
       "matchedIds",
-      JSON.stringify(matchedFiles.map((r) => r.matchedId))
+      JSON.stringify(matchedFiles.map((r) => r.matchedId)),
     );
     formData.append("entityType", entityType);
 
