@@ -55,7 +55,7 @@ export function CreateEditLoan({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.book.all.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.library.borrowBooks.pathFilter()
+          trpc.library.borrowBooks.pathFilter(),
         );
         toast.success("Loan created successfully", { id: 0 });
         closeModal();
@@ -63,14 +63,14 @@ export function CreateEditLoan({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateMutation = useMutation(
     trpc.library.updateBorrow.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.book.all.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.library.borrowBooks.pathFilter()
+          trpc.library.borrowBooks.pathFilter(),
         );
         toast.success("Loan updated successfully", { id: 0 });
         closeModal();
@@ -78,7 +78,7 @@ export function CreateEditLoan({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     if (!borrow) {

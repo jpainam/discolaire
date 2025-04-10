@@ -52,7 +52,7 @@ export function StudentAttendanceAction({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const confirm = useConfirm();
 

@@ -55,7 +55,7 @@ export function CreateEditFinanceGroup({
     trpc.accounting.createGroup.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.accounting.groups.pathFilter()
+          trpc.accounting.groups.pathFilter(),
         );
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
@@ -63,14 +63,14 @@ export function CreateEditFinanceGroup({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const updateFinanceGroup = useMutation(
     trpc.accounting.updateGroup.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.accounting.groups.pathFilter()
+          trpc.accounting.groups.pathFilter(),
         );
         toast.success(t("updated_successfully"), { id: 0 });
         closeModal();
@@ -78,7 +78,7 @@ export function CreateEditFinanceGroup({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const onSubmit = (data: z.infer<typeof createFinanceGroupSchema>) => {
     const values = {

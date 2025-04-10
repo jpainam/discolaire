@@ -47,14 +47,14 @@ export function GroupTableAction({
     trpc.accounting.deleteGroup.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.accounting.groups.pathFilter()
+          trpc.accounting.groups.pathFilter(),
         );
         toast.success(t("deleted_successfully"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   return (
     <DropdownMenu>
