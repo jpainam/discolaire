@@ -5,16 +5,17 @@ import { useMemo } from "react";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { useLocale } from "~/i18n";
 
-import type { RouterOutputs } from "@repo/api";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 import { SchoolDataTableAction } from "./SchoolDataTableAction";
 import { getSchoolColumns } from "./SchoolDataTableColumn";
 
-export function SchoolDataTable({
-  schools,
-}: {
-  schools: RouterOutputs["formerSchool"]["all"];
-}) {
+export function SchoolDataTable() {
   const { t } = useLocale();
+  const trpc = useTRPC();
+  const { data: schools } = useSuspenseQuery(
+    trpc.formerSchool.all.queryOptions()
+  );
 
   const columns = useMemo(() => getSchoolColumns({ t }), [t]);
 

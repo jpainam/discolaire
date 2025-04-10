@@ -49,7 +49,7 @@ export function CourseTable() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   return (
     <div className="rounded-lg border">

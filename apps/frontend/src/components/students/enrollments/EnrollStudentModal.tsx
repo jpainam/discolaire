@@ -50,7 +50,7 @@ export function EnrollStudentModal({ studentId }: { studentId: string }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const onSubmitEnrollment = (data: z.infer<typeof enrollFormSchema>) => {

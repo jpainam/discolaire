@@ -83,7 +83,7 @@ export function CreateEditClassroom({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const createClassroomMutation = useMutation(
     trpc.classroom.create.mutationOptions({
@@ -95,7 +95,7 @@ export function CreateEditClassroom({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   function onSubmit(data: z.infer<typeof updateClassroomSchema>) {

@@ -62,7 +62,7 @@ export function CreateEditAbsence({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateAbsenceMutation = useMutation(
     trpc.absence.update.mutationOptions({
@@ -74,7 +74,7 @@ export function CreateEditAbsence({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const { t } = useLocale();
   const params = useParams<{ id: string }>();

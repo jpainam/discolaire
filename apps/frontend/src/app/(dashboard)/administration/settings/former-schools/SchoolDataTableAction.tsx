@@ -32,7 +32,7 @@ export function SchoolDataTableAction({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   // Clear selection on Escape key press

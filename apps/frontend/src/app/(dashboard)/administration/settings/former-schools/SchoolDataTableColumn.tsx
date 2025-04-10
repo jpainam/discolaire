@@ -82,7 +82,7 @@ function ActionCell({ school }: { school: FormerSchool }) {
   const queryClient = useQueryClient();
 
   const deleteSchoolMutation = useMutation(
-    trpc.user.delete.mutationOptions({
+    trpc.formerSchool.delete.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.formerSchool.all.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });

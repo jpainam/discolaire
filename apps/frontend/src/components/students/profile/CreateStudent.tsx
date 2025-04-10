@@ -51,7 +51,7 @@ const createUpdateStudentSchema = z.object({
       z.object({
         label: z.string(),
         value: z.string(),
-      })
+      }),
     )
     .optional(),
   sports: z
@@ -59,7 +59,7 @@ const createUpdateStudentSchema = z.object({
       z.object({
         label: z.string(),
         value: z.string(),
-      })
+      }),
     )
     .optional(),
   classroom: z.string().optional(),
@@ -112,7 +112,7 @@ export function CreateStudent() {
         router.push(routes.students.details(result.id));
         toast.success(t("created_successfully"), { id: 0 });
       },
-    })
+    }),
   );
 
   const onSubmit = (data: z.infer<typeof createUpdateStudentSchema>) => {

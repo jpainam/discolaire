@@ -47,7 +47,7 @@ export function CreateEditSchool({ id, name }: { id?: string; name?: string }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const updateSchoolMutation = useMutation(
@@ -60,7 +60,7 @@ export function CreateEditSchool({ id, name }: { id?: string; name?: string }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const onSubmit = (data: z.infer<typeof createSchoolSchema>) => {
     if (id) {

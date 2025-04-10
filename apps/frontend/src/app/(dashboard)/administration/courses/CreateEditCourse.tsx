@@ -59,7 +59,7 @@ export function CreateEditCourse({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const updateCourseMutation = useMutation(
@@ -72,7 +72,7 @@ export function CreateEditCourse({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const onSubmit = (data: z.infer<typeof createCourseSchema>) => {
     const values = {

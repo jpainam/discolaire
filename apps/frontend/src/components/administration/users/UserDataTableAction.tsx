@@ -32,7 +32,7 @@ export function UserDataTableAction({ table }: { table: Table<User> }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   // Clear selection on Escape key press

@@ -28,7 +28,7 @@ export function CourseDataTableActions({
 
   const canDeleteCourse = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -43,7 +43,7 @@ export function CourseDataTableActions({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   // Clear selection on Escape key press

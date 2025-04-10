@@ -55,7 +55,7 @@ export function SchoolYearTable() {
         await queryClient.invalidateQueries(trpc.schoolYear.all.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
-    })
+    }),
   );
 
   if (schoolYearsQuery.isPending) {
@@ -109,7 +109,7 @@ export function SchoolYearTable() {
                           month: "short",
                           year: "numeric",
                           day: "2-digit",
-                        }
+                        },
                       )}
                     </div>
                   </TableCell>

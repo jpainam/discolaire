@@ -24,12 +24,12 @@ export function PermissionTable({ userId }: { userId: string }) {
   const { t } = useLocale();
   const canUpdatePermission = useCheckPermission(
     "policy",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   const trpc = useTRPC();
   const canReadPermission = useCheckPermission("policy", PermissionAction.READ);
   const permissionsQuery = useQuery(
-    trpc.user.getPermissions.queryOptions(userId)
+    trpc.user.getPermissions.queryOptions(userId),
   );
 
   const queryClient = useQueryClient();
@@ -41,11 +41,11 @@ export function PermissionTable({ userId }: { userId: string }) {
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.user.getPermissions.pathFilter()
+          trpc.user.getPermissions.pathFilter(),
         );
         toast.success(t("updated_successfully"), { id: 0 });
       },
-    })
+    }),
   );
 
   const groups = _.groupBy(policies, "resource");
@@ -53,7 +53,7 @@ export function PermissionTable({ userId }: { userId: string }) {
     (
       resource: string,
       action: "Read" | "Update" | "Create" | "Delete",
-      checked: boolean
+      checked: boolean,
     ) => {
       permissionMutation.mutate({
         userId: userId,
@@ -62,7 +62,7 @@ export function PermissionTable({ userId }: { userId: string }) {
         effect: checked ? "Allow" : "Deny",
       });
     },
-    500
+    500,
   );
 
   if (!canReadPermission) {
@@ -103,25 +103,25 @@ export function PermissionTable({ userId }: { userId: string }) {
                 (p) =>
                   p.resource === perm.resource &&
                   p.action === "Read" &&
-                  p.effect === "Allow"
+                  p.effect === "Allow",
               );
               const canUpdate = permissions.find(
                 (p) =>
                   p.resource === perm.resource &&
                   p.action === "Update" &&
-                  p.effect === "Allow"
+                  p.effect === "Allow",
               );
               const canCreate = permissions.find(
                 (p) =>
                   p.resource === perm.resource &&
                   p.action === "Create" &&
-                  p.effect === "Allow"
+                  p.effect === "Allow",
               );
               const canDelete = permissions.find(
                 (p) =>
                   p.resource === perm.resource &&
                   p.action === "Delete" &&
-                  p.effect === "Allow"
+                  p.effect === "Allow",
               );
               return (
                 <TableRow key={index}>
@@ -182,7 +182,7 @@ export function PermissionTable({ userId }: { userId: string }) {
                 (p) =>
                   p.resource === menu.resource &&
                   p.action === "Read" &&
-                  p.effect === "Allow"
+                  p.effect === "Allow",
               );
               return (
                 <TableRow key={`menu-policy-${index}`}>
