@@ -56,7 +56,7 @@ export function CreateEditChatter({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateChatterMutation = useMutation(
     trpc.chatter.update.mutationOptions({
@@ -68,7 +68,7 @@ export function CreateEditChatter({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const { t } = useLocale();
   const params = useParams<{ id: string }>();

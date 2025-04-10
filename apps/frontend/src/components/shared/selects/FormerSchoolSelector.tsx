@@ -70,7 +70,7 @@ export function FormerSchoolSelector({
     if (formerSchoolsQuery.data) {
       if (defaultValue) {
         const dValue = formerSchoolsQuery.data.find(
-          (item) => item.id === defaultValue
+          (item) => item.id === defaultValue,
         );
         if (dValue) setSelectedOption({ label: dValue.name, value: dValue.id });
       }
@@ -79,7 +79,7 @@ export function FormerSchoolSelector({
           label: decode(item.name),
           value: item.id,
           avatar: undefined,
-        }))
+        })),
       );
     }
   }, [defaultValue, formerSchoolsQuery.data]);
@@ -116,7 +116,7 @@ export function FormerSchoolSelector({
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    isSelected ? "opacity-100" : "opacity-0"
+                    isSelected ? "opacity-100" : "opacity-0",
                   )}
                 />
               </>
@@ -131,7 +131,7 @@ export function FormerSchoolSelector({
           selectedOption={selectedOption.value}
           onSelectOption={(currentValue) => {
             onChange?.(
-              currentValue === selectedOption.value ? null : currentValue
+              currentValue === selectedOption.value ? null : currentValue,
             );
             setSelectedOption({
               value: currentValue === selectedOption.value ? "" : currentValue,
@@ -175,7 +175,7 @@ function CreateFormerSchool() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const onSubmit = (data: z.infer<typeof createSchoolSchema>) => {
     toast.loading(t("creating"), { id: 0 });
