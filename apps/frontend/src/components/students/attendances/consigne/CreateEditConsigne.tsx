@@ -60,7 +60,7 @@ export function CreateEditConsigne({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateConsigneMutation = useMutation(
     trpc.consigne.update.mutationOptions({
@@ -72,7 +72,7 @@ export function CreateEditConsigne({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const { t } = useLocale();
   const params = useParams<{ id: string }>();

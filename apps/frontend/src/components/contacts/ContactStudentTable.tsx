@@ -44,12 +44,12 @@ export function ContactStudentTable() {
   const { t } = useLocale();
   const canUpdateContact = useCheckPermission(
     "contact",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: studentContacts } = useSuspenseQuery(
-    trpc.contact.students.queryOptions(params.id)
+    trpc.contact.students.queryOptions(params.id),
   );
   const queryClient = useQueryClient();
   const deleteStudentContactMutation = useMutation(
@@ -62,7 +62,7 @@ export function ContactStudentTable() {
         await queryClient.invalidateQueries(trpc.student.contacts.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
-    })
+    }),
   );
   const router = useRouter();
 
@@ -137,7 +137,7 @@ export function ContactStudentTable() {
                         onSelect={() => {
                           if (!student.id) return;
                           router.push(
-                            `${routes.students.contacts(student.id)}/${stc.contactId}`
+                            `${routes.students.contacts(student.id)}/${stc.contactId}`,
                           );
                         }}
                       >

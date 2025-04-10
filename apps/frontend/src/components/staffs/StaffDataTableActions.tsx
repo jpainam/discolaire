@@ -37,7 +37,7 @@ export function StaffDataTableActions({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const rows = table.getFilteredSelectedRowModel().rows;

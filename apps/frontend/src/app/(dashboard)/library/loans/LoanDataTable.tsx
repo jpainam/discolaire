@@ -1,15 +1,16 @@
 "use client";
-import type { RouterOutputs } from "@repo/api";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import React from "react";
 import { useLocale } from "~/i18n";
+import { useTRPC } from "~/trpc/react";
 import { getBorrowBooksColumns } from "./LoanDataTableColumn";
 
-export function BorrowBookDataTable({
-  books,
-}: {
-  books: RouterOutputs["library"]["borrowBooks"];
-}) {
+export function BorrowBookDataTable() {
+  const trpc = useTRPC();
+  const { data: books } = useSuspenseQuery(
+    trpc.library.borrowBooks.queryOptions({ limit: 2000 })
+  );
   const { t } = useLocale();
   const columns = React.useMemo(() => getBorrowBooksColumns({ t: t }), [t]);
 

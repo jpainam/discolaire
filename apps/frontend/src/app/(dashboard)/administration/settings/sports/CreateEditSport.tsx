@@ -46,7 +46,7 @@ export function CreateEditSport({ id, name }: { id?: string; name?: string }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const updateSportMutation = useMutation(
@@ -59,7 +59,7 @@ export function CreateEditSport({ id, name }: { id?: string; name?: string }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const onSubmit = (data: z.infer<typeof createSportSchema>) => {
     if (id) {

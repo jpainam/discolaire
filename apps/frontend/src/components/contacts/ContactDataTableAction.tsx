@@ -20,7 +20,7 @@ export function ContactDataTableAction({ table }: { table: Table<Contact> }) {
   const { t } = useLocale();
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -34,7 +34,7 @@ export function ContactDataTableAction({ table }: { table: Table<Contact> }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   // Clear selection on Escape key press

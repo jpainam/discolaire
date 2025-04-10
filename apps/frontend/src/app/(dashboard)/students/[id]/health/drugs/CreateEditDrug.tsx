@@ -55,7 +55,7 @@ export function CreateEditDrug({
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
       },
-    })
+    }),
   );
   const updateDrug = useMutation(
     trpc.health.updateDrug.mutationOptions({
@@ -67,7 +67,7 @@ export function CreateEditDrug({
         toast.success(t("updated_successfully"), { id: 0 });
         closeModal();
       },
-    })
+    }),
   );
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     if (drug) {

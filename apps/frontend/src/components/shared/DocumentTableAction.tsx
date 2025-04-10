@@ -41,7 +41,7 @@ export function DocumentTableAction({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const confirm = useConfirm();
   return (

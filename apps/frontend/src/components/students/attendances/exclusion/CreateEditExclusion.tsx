@@ -58,7 +58,7 @@ export function CreateEditExclusion({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateExclusionMutation = useMutation(
     trpc.exclusion.update.mutationOptions({
@@ -70,7 +70,7 @@ export function CreateEditExclusion({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const { t } = useLocale();
   const params = useParams<{ id: string }>();

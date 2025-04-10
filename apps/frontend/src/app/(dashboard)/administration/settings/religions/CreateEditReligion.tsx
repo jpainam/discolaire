@@ -52,7 +52,7 @@ export function CreateEditReligion({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const updateReligionMutation = useMutation(
@@ -65,7 +65,7 @@ export function CreateEditReligion({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const onSubmit = (data: z.infer<typeof createReligionSchema>) => {
     if (id) {

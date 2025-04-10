@@ -27,7 +27,7 @@ export function DrugTable() {
   const params = useParams<{ id: string }>();
 
   const { data: drugs } = useSuspenseQuery(
-    trpc.health.drugs.queryOptions({ studentId: params.id })
+    trpc.health.drugs.queryOptions({ studentId: params.id }),
   );
   const { t } = useLocale();
 
@@ -43,7 +43,7 @@ export function DrugTable() {
         await queryClient.invalidateQueries(trpc.health.drugs.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
-    })
+    }),
   );
   const { openModal } = useModal();
   return (

@@ -32,7 +32,7 @@ export function SubjectJournalHeader() {
   const trpc = useTRPC();
   const params = useParams<{ subjectId: string }>();
   const { data: subject } = useSuspenseQuery(
-    trpc.subject.get.queryOptions(Number(params.subjectId))
+    trpc.subject.get.queryOptions(Number(params.subjectId)),
   );
 
   const { t } = useLocale();
@@ -43,7 +43,7 @@ export function SubjectJournalHeader() {
     trpc.subjectJournal.clearAll.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.subjectJournal.all.pathFilter()
+          trpc.subjectJournal.all.pathFilter(),
         );
         toast.success(t("deleted_successfully"), { id: 0 });
       },
@@ -51,11 +51,11 @@ export function SubjectJournalHeader() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const canDeleteSubject = useCheckPermission(
     "subject",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   return (
     <div className="flex flex-row items-center justify-between border-b bg-muted/50 px-4 py-1">

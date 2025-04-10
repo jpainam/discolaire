@@ -47,7 +47,7 @@ export function ReligionTable() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const religionsQuery = useQuery(trpc.religion.all.queryOptions());
   const religions = religionsQuery.data ?? [];

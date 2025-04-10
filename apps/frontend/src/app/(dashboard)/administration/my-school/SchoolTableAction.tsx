@@ -35,7 +35,7 @@ export function SchoolTableAction({ schoolId }: { schoolId: string }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   return (
     <DropdownMenu>

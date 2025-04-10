@@ -69,7 +69,7 @@ export function CreateEditDocument({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateDocumentMutation = useMutation(
     trpc.document.update.mutationOptions({
@@ -81,7 +81,7 @@ export function CreateEditDocument({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const { closeModal } = useModal();
   const handleSubmit = (data: z.infer<typeof createEditDocumentSchema>) => {
@@ -134,7 +134,7 @@ export function CreateEditDocument({
         error: (err) => {
           return getErrorMessage(err);
         },
-      }
+      },
     );
   };
   return (

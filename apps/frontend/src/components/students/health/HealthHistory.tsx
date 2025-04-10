@@ -86,7 +86,7 @@ export function HealthHistory({ studentId }: { studentId: string }) {
   //const params = useParams<{id: string}>();
   const trpc = useTRPC();
   const { data: issue } = useSuspenseQuery(
-    trpc.health.issues.queryOptions(studentId)
+    trpc.health.issues.queryOptions(studentId),
   );
   const queryClient = useQueryClient();
 
@@ -99,7 +99,7 @@ export function HealthHistory({ studentId }: { studentId: string }) {
         await queryClient.invalidateQueries(trpc.health.issues.pathFilter());
         toast.success(t("updated_successfully"), { id: 1 });
       },
-    })
+    }),
   );
   const form = useForm({
     resolver: zodResolver(schemaForm),

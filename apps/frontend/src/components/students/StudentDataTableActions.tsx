@@ -29,7 +29,7 @@ export function StudentDataTableActions({
 
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const queryClient = useQueryClient();
   const trpc = useTRPC();
@@ -44,7 +44,7 @@ export function StudentDataTableActions({
         table.toggleAllRowsSelected(false);
         toast.success(t("deleted_successfully"), { id: 0 });
       },
-    })
+    }),
   );
   const rows = table.getFilteredSelectedRowModel().rows;
 

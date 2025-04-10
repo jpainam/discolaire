@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ColumnDef } from "@tanstack/react-table";
 import { addDays } from "date-fns";
 import type { TFunction } from "i18next";
@@ -21,11 +22,10 @@ import i18next from "i18next";
 import { StampIcon, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 type BookProcedureOutput = RouterOutputs["library"]["borrowBooks"][number];
 export function getReservationColumns({
@@ -124,33 +124,37 @@ export function getReservationColumns({
 function ActionCells({ book }: { book: BookProcedureOutput }) {
   const confirm = useConfirm();
   const { t } = useLocale();
-  const router = useRouter();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
-  const bookMutation = api.library.deleteBorrow.useMutation({
-    onSettled: () => {
-      void utils.book.invalidate();
-      void utils.library.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const utils = api.useUtils();
-  const updateBookMutation = api.library.updateBorrowedStatus.useMutation({
-    onSettled: () => {
-      void utils.library.invalidate();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      router.refresh();
-    },
-  });
+  const bookMutation = useMutation(
+    trpc.library.deleteBorrow.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.library.borrowBooks.pathFilter()
+        );
+        await queryClient.invalidateQueries(trpc.book.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+
+  const updateBookMutation = useMutation(
+    trpc.library.updateBorrowedStatus.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.library.borrowBooks.pathFilter()
+        );
+        toast.success(t("updated_successfully"), { id: 0 });
+      },
+    })
+  );
 
   const canUpdateLoan = useCheckPermission("library", PermissionAction.UPDATE);
   const canDeleteLoan = useCheckPermission("library", PermissionAction.DELETE);
@@ -212,7 +216,6 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
             {canDeleteLoan && (
               <DropdownMenuItem
                 variant="destructive"
-                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                 onSelect={async () => {
                   const isConfirmed = await confirm({
                     title: t("delete"),

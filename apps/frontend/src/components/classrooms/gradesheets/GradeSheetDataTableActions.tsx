@@ -35,7 +35,7 @@ export function GradeSheetDataTableActions({
     trpc.gradeSheet.delete.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.classroom.gradesheets.pathFilter()
+          trpc.classroom.gradesheets.pathFilter(),
         );
         toast.success(t("deleted_successfully"), { id: 0 });
         table.toggleAllRowsSelected(false);
@@ -43,7 +43,7 @@ export function GradeSheetDataTableActions({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const rows = table.getFilteredSelectedRowModel().rows;
 
@@ -61,7 +61,7 @@ export function GradeSheetDataTableActions({
 
   const canDeleteGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
 
   return (

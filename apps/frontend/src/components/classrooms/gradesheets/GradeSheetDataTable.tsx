@@ -16,7 +16,7 @@ export function GradeSheetDataTable() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: gradesheets } = useSuspenseQuery(
-    trpc.classroom.gradesheets.queryOptions(params.id)
+    trpc.classroom.gradesheets.queryOptions(params.id),
   );
 
   const [termId] = useQueryState("term", parseAsInteger);

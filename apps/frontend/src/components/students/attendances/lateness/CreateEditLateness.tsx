@@ -59,7 +59,7 @@ export function CreateEditLateness({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateLatenessMutation = useMutation(
     trpc.lateness.update.mutationOptions({
@@ -71,7 +71,7 @@ export function CreateEditLateness({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const { t } = useLocale();
   const params = useParams<{ id: string }>();

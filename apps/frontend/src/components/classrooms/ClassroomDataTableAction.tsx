@@ -38,7 +38,7 @@ export function ClassroomDataTableAction({
   const { t } = useLocale();
   const canDeleteClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -52,7 +52,7 @@ export function ClassroomDataTableAction({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   // Clear selection on Escape key press
@@ -166,7 +166,7 @@ export function ClassroomDataTableAction({
                         }
                         const filterValues = Array.from(selectedStatuses);
                         cycleColumn?.setFilterValue(
-                          filterValues.length ? filterValues : undefined
+                          filterValues.length ? filterValues : undefined,
                         );
                         //handleStatusChange(checked, value)
                       }}
