@@ -32,18 +32,22 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { RouterOutputs } from "@repo/api";
 import { Calendar } from "@repo/ui/components/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { TiptapEditor } from "~/components/tiptap-editor";
-import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { SubjectJournalTemplate } from "./SubjectJournalTemplate";
 
 const createSubjectJournalSchema = z.object({
@@ -51,36 +55,37 @@ const createSubjectJournalSchema = z.object({
   content: z.string().min(1),
   publishDate: z.coerce.date().default(() => new Date()),
 });
-export function SubjectJournalEditor({
-  subject,
-}: {
-  subject: RouterOutputs["subject"]["get"];
-}) {
+export function SubjectJournalEditor() {
+  const trpc = useTRPC();
   const { t, i18n } = useLocale();
+  const params = useParams<{ subjectId: string }>();
+  const { data: subject } = useSuspenseQuery(
+    trpc.subject.get.queryOptions(Number(params.subjectId))
+  );
 
-  const utils = api.useUtils();
-  const router = useRouter();
+  const queryClient = useQueryClient();
 
-  const createSubjectJournal = api.subjectJournal.create.useMutation({
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      setSelectedFile(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-      setPostDate(null);
-      setRichText(false);
-      form.reset();
-      setOpen(false);
-      router.refresh();
-    },
-    onSettled: async () => {
-      await utils.subjectJournal.invalidate();
-    },
-  });
+  const createSubjectJournal = useMutation(
+    trpc.subjectJournal.create.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.subjectJournal.all.pathFilter()
+        );
+        toast.success(t("created_successfully"), { id: 0 });
+        setSelectedFile(null);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        setPostDate(null);
+        setRichText(false);
+        form.reset();
+        setOpen(false);
+      },
+    })
+  );
 
   const [richText, setRichText] = useState(false);
   const [open, setOpen] = useState(false);
@@ -110,7 +115,7 @@ export function SubjectJournalEditor({
     },
   });
   const handleSubmit = async (
-    data: z.infer<typeof createSubjectJournalSchema>,
+    data: z.infer<typeof createSubjectJournalSchema>
   ) => {
     let attachment = "";
     if (selectedFile) {

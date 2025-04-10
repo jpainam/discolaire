@@ -8,7 +8,6 @@ import {
   Trash2,
 } from "lucide-react";
 
-import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -16,6 +15,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { useParams, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { useCreateQueryString } from "~/hooks/create-query-string";
@@ -23,45 +27,51 @@ import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 import { getFileBasename, isRichText } from "~/lib/utils";
 import { useConfirm } from "~/providers/confirm-dialog";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
-export function SubjectJournalList({
-  subject,
-  journals,
-}: {
-  subject: RouterOutputs["subject"]["get"];
-  journals: RouterOutputs["subjectJournal"]["bySubject"];
-}) {
+export function SubjectJournalList() {
   const { t, i18n } = useLocale();
-  const params = useParams<{ id: string }>();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const params = useParams<{ id: string; subjectId: string }>();
+  const { data: subject } = useSuspenseQuery(
+    trpc.subject.get.queryOptions(Number(params.subjectId))
+  );
   const searchParams = useSearchParams();
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
   const confirm = useConfirm();
-  const utils = api.useUtils();
-  const deleteSubjectJournal = api.subjectJournal.delete.useMutation({
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.push(
-        `/classrooms/${params.id}/subject_journal/${subject.id}?${createQueryString({ pageIndex: 1, pageSize: 10 })}`,
-      );
-    },
-    onSettled: async () => {
-      await utils.subjectJournal.invalidate();
-    },
-  });
+
+  const deleteSubjectJournal = useMutation(
+    trpc.subjectJournal.delete.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.subjectJournal.all.pathFilter()
+        );
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+    })
+  );
   const pageIndex = searchParams.get("pageIndex")
     ? Number(searchParams.get("pageIndex"))
-    : 1;
+    : 0;
   const pageSize = searchParams.get("pageSize")
     ? Number(searchParams.get("pageSize"))
     : 10;
+
+  const { data: journals } = useSuspenseQuery(
+    trpc.subjectJournal.bySubject.queryOptions({
+      subjectId: Number(params.subjectId),
+      pageIndex,
+      pageSize,
+    })
+  );
   const paginate = (page: number) => {
     router.push(
-      `/classrooms/${params.id}/subject_journal/${subject.id}?${createQueryString({ pageIndex: page, pageSize })}`,
+      `/classrooms/${params.id}/subject_journal/${subject.id}?${createQueryString({ pageIndex: page, pageSize })}`
     );
   };
 

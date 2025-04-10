@@ -20,11 +20,11 @@ import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@repo/ui/components/input";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { DatePicker } from "~/components/DatePicker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
-import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const schema = z.object({
   termId: z.string().min(1),
@@ -43,41 +43,37 @@ export function CreateEditConsigne({
       date: consigne?.date ?? new Date(),
       termId: consigne?.termId ? `${consigne.termId}` : "",
       duration: consigne?.duration ?? 0,
-      // hours: consigne?.duration
-      //   ? Math.floor(consigne.duration / 60).toString()
-      //   : "0",
-      // minutes: consigne?.duration ? (consigne.duration % 60).toString() : "0",
       task: consigne?.task ?? "",
     },
   });
-  const utils = api.useUtils();
-  const router = useRouter();
-  const createConsigneMutation = api.consigne.create.useMutation({
-    onSettled: () => {
-      void utils.attendance.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeModal();
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const updateConsigneMutation = api.consigne.update.useMutation({
-    onSettled: () => {
-      void utils.attendance.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      closeModal();
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const createConsigneMutation = useMutation(
+    trpc.consigne.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.consigne.all.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const updateConsigneMutation = useMutation(
+    trpc.consigne.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.consigne.all.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
   const { closeModal } = useModal();

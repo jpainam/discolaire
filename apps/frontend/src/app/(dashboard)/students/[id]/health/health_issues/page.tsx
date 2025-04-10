@@ -1,12 +1,31 @@
+import { Skeleton } from "@repo/ui/components/skeleton";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { Suspense } from "react";
+import { ErrorFallback } from "~/components/error-fallback";
 import { HealthHistory } from "~/components/students/health/HealthHistory";
-import { api } from "~/trpc/server";
+import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
-  const issue = await api.health.issues(params.id);
+  prefetch(trpc.health.issues.queryOptions(params.id));
   return (
-    <div className="p-4">
-      <HealthHistory issue={issue} studentId={params.id} />
-    </div>
+    <HydrateClient>
+      <div className="p-4">
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense
+            key={params.id}
+            fallback={
+              <div className="grid grid-cols-2 gap-4">
+                {Array.from({ length: 4 }, (_, i) => (
+                  <Skeleton key={i} className="h-24 " />
+                ))}
+              </div>
+            }
+          >
+            <HealthHistory studentId={params.id} />
+          </Suspense>
+        </ErrorBoundary>
+      </div>
+    </HydrateClient>
   );
 }

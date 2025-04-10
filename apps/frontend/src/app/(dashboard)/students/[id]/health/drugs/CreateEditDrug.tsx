@@ -12,13 +12,13 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useModal } from "~/hooks/use-modal";
-import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -41,34 +41,34 @@ export function CreateEditDrug({
     },
   });
   const { closeModal } = useModal();
-  const router = useRouter();
-  const utils = api.useUtils();
-  const createDrug = api.health.createDrug.useMutation({
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeModal();
-      router.refresh();
-    },
-    onSettled: () => {
-      void utils.health.invalidate();
-    },
-  });
-  const updateDrug = api.health.updateDrug.useMutation({
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      closeModal();
-      router.refresh();
-    },
-    onSettled: () => {
-      void utils.health.invalidate();
-    },
-  });
+
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const createDrug = useMutation(
+    trpc.health.createDrug.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.health.drugs.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+    })
+  );
+  const updateDrug = useMutation(
+    trpc.health.updateDrug.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.health.drugs.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+    })
+  );
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     if (drug) {
       toast.loading(t("updating"), { id: 0 });

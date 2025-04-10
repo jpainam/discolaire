@@ -2,7 +2,6 @@
 import { Textarea } from "@repo/ui/components/textarea";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -22,13 +21,17 @@ import {
   useFormContext,
 } from "@repo/ui/components/form";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { Ambulance } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 const schemaForm = z.object({
   hasAdd: z.boolean().default(false),
   addNotes: z.string().optional(),
@@ -78,28 +81,26 @@ const schemaForm = z.object({
   observations: z.string().optional(),
 });
 
-export function HealthHistory({
-  issue,
-  studentId,
-}: {
-  issue: RouterOutputs["health"]["issues"];
-  studentId: string;
-}) {
+export function HealthHistory({ studentId }: { studentId: string }) {
   const { t } = useLocale();
-  const utils = api.useUtils();
-  const router = useRouter();
-  const updateIssueMutation = api.health.updateIssues.useMutation({
-    onSettled: () => {
-      void utils.health.invalidate();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 1 });
-      router.refresh();
-    },
-  });
+  //const params = useParams<{id: string}>();
+  const trpc = useTRPC();
+  const { data: issue } = useSuspenseQuery(
+    trpc.health.issues.queryOptions(studentId)
+  );
+  const queryClient = useQueryClient();
+
+  const updateIssueMutation = useMutation(
+    trpc.health.updateIssues.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.health.issues.pathFilter());
+        toast.success(t("updated_successfully"), { id: 1 });
+      },
+    })
+  );
   const form = useForm({
     resolver: zodResolver(schemaForm),
     defaultValues: {

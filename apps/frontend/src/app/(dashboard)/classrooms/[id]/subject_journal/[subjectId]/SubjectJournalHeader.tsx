@@ -15,36 +15,47 @@ import { Label } from "@repo/ui/components/label";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import type { RouterOutputs } from "@repo/api";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
-export function SubjectJournalHeader({
-  subject,
-}: {
-  subject: RouterOutputs["subject"]["get"];
-}) {
+export function SubjectJournalHeader() {
+  const trpc = useTRPC();
+  const params = useParams<{ subjectId: string }>();
+  const { data: subject } = useSuspenseQuery(
+    trpc.subject.get.queryOptions(Number(params.subjectId))
+  );
+
   const { t } = useLocale();
   const confirm = useConfirm();
-  const utils = api.useUtils();
-  const deleteSubjectJournal = api.subjectJournal.clearAll.useMutation({
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onSettled: () => {
-      void utils.subjectJournal.invalidate();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const queryClient = useQueryClient();
+
+  const deleteSubjectJournal = useMutation(
+    trpc.subjectJournal.clearAll.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.subjectJournal.all.pathFilter()
+        );
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const canDeleteSubject = useCheckPermission(
     "subject",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   return (
     <div className="flex flex-row items-center justify-between border-b bg-muted/50 px-4 py-1">

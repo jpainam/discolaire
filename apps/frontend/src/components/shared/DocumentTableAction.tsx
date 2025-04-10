@@ -14,10 +14,10 @@ import {
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteFileFromAws, downloadFileFromAws } from "~/actions/upload";
-import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 export function DocumentTableAction({
   documentId,
@@ -27,28 +27,22 @@ export function DocumentTableAction({
   url: string;
 }) {
   const { t } = useLocale();
-  const utils = api.useUtils();
-  const router = useRouter();
 
-  const deleteDocumentMutation = api.document.delete.useMutation({
-    onSettled: async () => {
-      await utils.document.invalidate();
-    },
-    onSuccess: async () => {
-      router.refresh();
-      toast.success(t("deleted_successfully"), { id: 0 });
-      try {
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const deleteDocumentMutation = useMutation(
+    trpc.document.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.document.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
         await deleteFileFromAws(url);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
-        toast.error(error?.message, { id: 0 });
-      }
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const confirm = useConfirm();
   return (
     <DropdownMenu>

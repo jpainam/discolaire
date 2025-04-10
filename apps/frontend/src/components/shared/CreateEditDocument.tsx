@@ -22,11 +22,11 @@ import { useLocale } from "~/i18n";
 import { FileUploader } from "~/uploads/file-uploader";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { useSchool } from "~/providers/SchoolProvider";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const createEditDocumentSchema = z.object({
   title: z.string().min(1),
@@ -55,35 +55,34 @@ export function CreateEditDocument({
       url: url ?? "",
     },
   });
-  const utils = api.useUtils();
-  const router = useRouter();
 
-  const createDocumentMutation = api.document.create.useMutation({
-    onSettled: async () => {
-      await utils.document.invalidate();
-    },
-    onSuccess: () => {
-      router.refresh();
-      toast.success(t("created_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const updateDocumentMutation = api.document.update.useMutation({
-    onSettled: async () => {
-      await utils.document.invalidate();
-    },
-    onSuccess: () => {
-      router.refresh();
-      toast.success(t("updated_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const createDocumentMutation = useMutation(
+    trpc.document.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.document.all.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const updateDocumentMutation = useMutation(
+    trpc.document.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.document.all.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const { closeModal } = useModal();
   const handleSubmit = (data: z.infer<typeof createEditDocumentSchema>) => {
     if (!data.url) {
@@ -135,7 +134,7 @@ export function CreateEditDocument({
         error: (err) => {
           return getErrorMessage(err);
         },
-      },
+      }
     );
   };
   return (

@@ -1,5 +1,4 @@
 "use client";
-import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   Table,
@@ -9,37 +8,43 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { Pencil, Trash2 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { useModal } from "~/hooks/use-modal";
-import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditDrug } from "./CreateEditDrug";
-export function DrugTable({
-  drugs,
-}: {
-  drugs: RouterOutputs["health"]["drugs"];
-}) {
-  const { t } = useLocale();
-  const router = useRouter();
+
+export function DrugTable() {
+  const trpc = useTRPC();
   const params = useParams<{ id: string }>();
-  const utils = api.useUtils();
+
+  const { data: drugs } = useSuspenseQuery(
+    trpc.health.drugs.queryOptions({ studentId: params.id })
+  );
+  const { t } = useLocale();
+
   const confirm = useConfirm();
-  const deleteDrug = api.health.deleteDrug.useMutation({
-    onSettled: () => {
-      void utils.health.invalidate();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.refresh();
-    },
-  });
+  const queryClient = useQueryClient();
+
+  const deleteDrug = useMutation(
+    trpc.health.deleteDrug.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.health.drugs.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+    })
+  );
   const { openModal } = useModal();
   return (
     <div className="px-4 py-2">

@@ -12,7 +12,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
   TableBody,
@@ -27,42 +26,53 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
 import { useSession } from "~/providers/AuthProvider";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { CreateEditSubject } from "./CreateEditSubject";
 
-//type ClassroomSubject = RouterOutputs["classroom"]["subjects"][number];
-export function SubjectTable({ classroomId }: { classroomId: string }) {
+export function SubjectTable() {
+  const params = useParams<{ id: string }>();
   const { t } = useLocale();
+  const trpc = useTRPC();
   const { openSheet } = useSheet();
   const session = useSession();
-  const subjectsQuery = api.classroom.subjects.useQuery(classroomId);
+  const { data: subjects } = useSuspenseQuery(
+    trpc.classroom.subjects.queryOptions(params.id)
+  );
   const confirm = useConfirm();
   const canDeleteClassroomSubject = useCheckPermission(
     "subject",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditClassroomSubject = useCheckPermission(
     "subject",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
-  const router = useRouter();
-  const utils = api.useUtils();
-  const deleteSubjectMutation = api.subject.delete.useMutation({
-    onSettled: () => utils.classroom.subjects.invalidate(classroomId),
-    onSuccess: () => {
-      router.refresh();
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onError: (err) => {
-      toast.error(err.message, { id: 0 });
-    },
-  });
-  const subjects = subjectsQuery.data ?? [];
+  const queryClient = useQueryClient();
+
+  const deleteSubjectMutation = useMutation(
+    trpc.subject.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.classroom.subjects.pathFilter()
+        );
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (err) => {
+        toast.error(err.message, { id: 0 });
+      },
+    })
+  );
+
   return (
     <div className="px-4">
       <div className="bg-background overflow-hidden rounded-md border">
@@ -78,27 +88,14 @@ export function SubjectTable({ classroomId }: { classroomId: string }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {!subjectsQuery.isPending && subjects.length == 0 && (
+            {subjects.length == 0 && (
               <TableRow>
                 <TableCell colSpan={6} className="text-center">
                   <EmptyState />
                 </TableCell>
               </TableRow>
             )}
-            {subjectsQuery.isPending && (
-              <TableRow>
-                <TableCell colSpan={6} className="text-center">
-                  <div className="grid w-full grid-cols-6 gap-2">
-                    {Array.from({ length: 30 }).map((_, index) => (
-                      <Skeleton
-                        key={`subject-table-${index}`}
-                        className="h-8"
-                      />
-                    ))}
-                  </div>
-                </TableCell>
-              </TableRow>
-            )}
+
             {subjects.map((subject, index) => (
               <TableRow key={`subject-${index}`}>
                 <TableCell>

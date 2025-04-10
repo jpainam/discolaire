@@ -21,9 +21,9 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { RiDeleteBinLine, RiFilter3Line } from "@remixicon/react";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import { Label } from "@repo/ui/components/label";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { api, useTRPC } from "~/trpc/react";
 
 type ClassroomProcedureOutput = NonNullable<
   RouterOutputs["classroom"]["all"]
@@ -35,24 +35,25 @@ export function ClassroomDataTableAction({
   table: Table<ClassroomProcedureOutput>;
 }) {
   const rows = table.getFilteredSelectedRowModel().rows;
-  const utils = api.useUtils();
   const { t } = useLocale();
-  const router = useRouter();
   const canDeleteClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
-  const classroomDeleteMutation = api.classroom.delete.useMutation({
-    onSettled: () => utils.classroom.invalidate(),
-    onSuccess: () => {
-      table.toggleAllRowsSelected(false);
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const classroomDeleteMutation = useMutation(
+    trpc.classroom.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.classroom.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+        table.toggleAllRowsSelected(false);
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   // Clear selection on Escape key press
   useEffect(() => {
@@ -165,7 +166,7 @@ export function ClassroomDataTableAction({
                         }
                         const filterValues = Array.from(selectedStatuses);
                         cycleColumn?.setFilterValue(
-                          filterValues.length ? filterValues : undefined,
+                          filterValues.length ? filterValues : undefined
                         );
                         //handleStatusChange(checked, value)
                       }}

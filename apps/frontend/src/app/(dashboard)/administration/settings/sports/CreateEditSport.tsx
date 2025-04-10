@@ -17,9 +17,9 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const createSportSchema = z.object({
   name: z.string().min(1),
@@ -32,32 +32,35 @@ export function CreateEditSport({ id, name }: { id?: string; name?: string }) {
     },
   });
   const { closeModal } = useModal();
-  const utils = api.useUtils();
   const { t } = useLocale();
-  const router = useRouter();
-  const createSportMutation = api.setting.createSport.useMutation({
-    onSettled: () => utils.setting.sports.invalidate(),
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      router.refresh();
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
-  const updateSportMutation = api.setting.updateSport.useMutation({
-    onSettled: () => utils.setting.sports.invalidate(),
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      router.refresh();
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const createSportMutation = useMutation(
+    trpc.setting.createSport.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.setting.sports.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+
+  const updateSportMutation = useMutation(
+    trpc.setting.updateSport.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.setting.sports.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const onSubmit = (data: z.infer<typeof createSportSchema>) => {
     if (id) {
       toast.loading(t("updating"), { id: 0 });

@@ -2,7 +2,6 @@
 
 import { MoreVertical, PlusIcon } from "lucide-react";
 
-import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -18,22 +17,26 @@ import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useTRPC } from "~/trpc/react";
 import { sidebarIcons } from "../sidebar-icons";
 import { CreateEditSubject } from "./CreateEditSubject";
 
-export function SubjectHeader({
-  subjects,
-}: {
-  subjects: RouterOutputs["classroom"]["subjects"];
-}) {
+export function SubjectHeader() {
+  const trpc = useTRPC();
+
+  const params = useParams<{ id: string }>();
+  const { data: subjects } = useSuspenseQuery(
+    trpc.classroom.subjects.queryOptions(params.id)
+  );
   const Icon = sidebarIcons.subjects;
   const { t } = useLocale();
-  const params = useParams<{ id: string }>();
+
   const v = new Set<string>(subjects.map((s) => s.teacherId ?? ""));
   const nbTeacher = v.size;
   const groups: Record<string, number> = {};
@@ -52,7 +55,7 @@ export function SubjectHeader({
   const { openSheet } = useSheet();
   const canAddClassroomSubject = useCheckPermission(
     "subject",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   const badgeVariants = [
@@ -122,7 +125,7 @@ export function SubjectHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/subjects?format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -133,7 +136,7 @@ export function SubjectHeader({
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/subjects?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

@@ -11,9 +11,9 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 type StudentGetAllProcedureOutput = NonNullable<
   RouterOutputs["student"]["all"]
@@ -26,23 +26,26 @@ export function StudentDataTableActions({
 }) {
   const confirm = useConfirm();
   const { t } = useLocale();
-  const router = useRouter();
-  const utils = api.useUtils();
+
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
-  const deleteStudentMutation = api.student.delete.useMutation({
-    onSettled: () => utils.student.invalidate(),
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      table.toggleAllRowsSelected(false);
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.refresh();
-    },
-  });
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
+
+  const deleteStudentMutation = useMutation(
+    trpc.student.delete.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.student.all.pathFilter());
+        table.toggleAllRowsSelected(false);
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+    })
+  );
   const rows = table.getFilteredSelectedRowModel().rows;
 
   // Clear selection on Escape key press

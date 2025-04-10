@@ -32,12 +32,12 @@ export function StaffDataTableActions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.staff.all.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
-        table.resetRowSelection();
+        table.toggleAllRowsSelected(false);
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const rows = table.getFilteredSelectedRowModel().rows;

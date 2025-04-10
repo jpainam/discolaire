@@ -214,7 +214,7 @@ function ActionCell({ fee }: { fee: Fee }) {
                   },
                   success: () => {
                     void utils.fee.all.invalidate();
-                    return t("delete_successfully");
+                    return t("deleted_successfully");
                   },
                 });
               }

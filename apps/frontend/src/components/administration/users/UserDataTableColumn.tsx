@@ -18,11 +18,12 @@ import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-head
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AvatarState } from "~/components/AvatarState";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 type User = RouterOutputs["user"]["all"][number];
 
@@ -148,20 +149,23 @@ export function getUserColumns({ t }: { t: TFunction<string, unknown> }) {
 function ActionCell({ user }: { user: User }) {
   const { t } = useLocale();
   const confirm = useConfirm();
-  const utils = api.useUtils();
   const router = useRouter();
-  // TODO fix permissions
+
   const canDeleteUser = useCheckPermission("user", PermissionAction.DELETE);
-  const deleteUserMutation = api.user.delete.useMutation({
-    onSettled: () => utils.user.invalidate(),
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const deleteUserMutation = useMutation(
+    trpc.user.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.user.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   return (
     <div className="flex justify-end">
       <DropdownMenu>
@@ -199,7 +203,6 @@ function ActionCell({ user }: { user: User }) {
                   }
                 }}
                 variant="destructive"
-                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
               >
                 <Trash2 />
                 {t("delete")}

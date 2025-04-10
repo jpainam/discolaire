@@ -16,13 +16,13 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { DatePicker } from "~/components/DatePicker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useModal } from "~/hooks/use-modal";
-import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const schema = z.object({
   termId: z.string().min(1),
@@ -46,34 +46,33 @@ export function CreateEditLateness({
       reason: lateness?.reason ?? "",
     },
   });
-  const utils = api.useUtils();
-  const router = useRouter();
-  const createLatenessMutation = api.lateness.create.useMutation({
-    onSettled: () => {
-      void utils.attendance.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeModal();
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const updateLatenessMutation = api.lateness.update.useMutation({
-    onSettled: () => {
-      void utils.attendance.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      closeModal();
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const createLatenessMutation = useMutation(
+    trpc.lateness.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.lateness.all.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const updateLatenessMutation = useMutation(
+    trpc.lateness.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.lateness.all.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
   const { closeModal } = useModal();

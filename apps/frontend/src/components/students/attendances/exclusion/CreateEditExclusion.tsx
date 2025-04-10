@@ -16,14 +16,14 @@ import {
 } from "@repo/ui/components/form";
 import { Textarea } from "@repo/ui/components/textarea";
 import { useModal } from "~/hooks/use-modal";
-import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { DatePicker } from "~/components/DatePicker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const schema = z.object({
   termId: z.string().min(1),
@@ -45,37 +45,37 @@ export function CreateEditExclusion({
       termId: exclusion?.termId ? `${exclusion.termId}` : "",
     },
   });
-  const utils = api.useUtils();
-  const router = useRouter();
-  const createExclusionMutation = api.exclusion.create.useMutation({
-    onSettled: () => {
-      void utils.attendance.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeModal();
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const updateExclusionMutation = api.exclusion.update.useMutation({
-    onSettled: () => {
-      void utils.attendance.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      closeModal();
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const createExclusionMutation = useMutation(
+    trpc.exclusion.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.exclusion.all.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const updateExclusionMutation = useMutation(
+    trpc.exclusion.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.exclusion.all.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
   const { closeModal } = useModal();
+
   const handleSubmit = (data: z.infer<typeof schema>) => {
     const values = {
       studentId: params.id,

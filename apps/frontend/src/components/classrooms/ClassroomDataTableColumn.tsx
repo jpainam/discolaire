@@ -31,10 +31,11 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditClassroom } from "./CreateEditClassroom";
 
 type ClassroomProcedureOutput = RouterOutputs["classroom"]["all"][number];
@@ -303,25 +304,29 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
   const confirm = useConfirm();
   const { t } = useLocale();
   const router = useRouter();
-  const utils = api.useUtils();
+
   const canDeleteClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
-  const deleteClassroomMutation = api.classroom.delete.useMutation({
-    onSettled: () => utils.classroom.invalidate(),
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const deleteClassroomMutation = useMutation(
+    trpc.classroom.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.classroom.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   return (
     <div className="flex justify-end">

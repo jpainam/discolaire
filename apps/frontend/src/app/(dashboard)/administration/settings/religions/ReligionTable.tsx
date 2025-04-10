@@ -26,7 +26,6 @@ import { useModal } from "~/hooks/use-modal";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditReligion } from "./CreateEditReligion";
 
@@ -36,20 +35,19 @@ export function ReligionTable() {
   const { t } = useLocale();
 
   const confirm = useConfirm();
-  const router = useRouter();
 
   const { openModal } = useModal();
+
   const deleteReligion = useMutation(
     trpc.religion.delete.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.religion.all.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
-        router.refresh();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const religionsQuery = useQuery(trpc.religion.all.queryOptions());
   const religions = religionsQuery.data ?? [];

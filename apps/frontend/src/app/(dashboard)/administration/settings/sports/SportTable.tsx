@@ -25,7 +25,6 @@ import { useModal } from "~/hooks/use-modal";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditSport } from "./CreateEditSport";
 
@@ -35,22 +34,20 @@ export function SportTable() {
   const sportsQuery = useQuery(trpc.setting.sports.queryOptions());
   const sports = sportsQuery.data ?? [];
   const { t } = useLocale();
-
   const confirm = useConfirm();
-  const router = useRouter();
 
   const { openModal } = useModal();
+
   const deleteSportMutation = useMutation(
     trpc.setting.deleteSport.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.setting.sports.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
-        router.refresh();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   return (
     <div>

@@ -8,33 +8,34 @@ import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { RiDeleteBinLine } from "@remixicon/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 type Contact = RouterOutputs["contact"]["all"][number];
 
 export function ContactDataTableAction({ table }: { table: Table<Contact> }) {
   const rows = table.getFilteredSelectedRowModel().rows;
-  const utils = api.useUtils();
   const { t } = useLocale();
-  const router = useRouter();
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
-  const deleteContactMutation = api.contact.delete.useMutation({
-    onSettled: () => utils.contact.invalidate(),
-    onSuccess: () => {
-      table.toggleAllRowsSelected(false);
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const deleteContactMutation = useMutation(
+    trpc.contact.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.contact.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+        table.toggleAllRowsSelected(false);
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   // Clear selection on Escape key press
   React.useEffect(() => {

@@ -1,9 +1,11 @@
 import { Separator } from "@repo/ui/components/separator";
 
 import { auth } from "@repo/auth";
-import { EmptyState } from "~/components/EmptyState";
-import { getServerTranslations } from "~/i18n/server";
-import { api } from "~/trpc/server";
+import { Skeleton } from "@repo/ui/components/skeleton";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { Suspense } from "react";
+import { ErrorFallback } from "~/components/error-fallback";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { SubjectJournalEditor } from "./SubjectJournalEditor";
 import { SubjectJournalHeader } from "./SubjectJournalHeader";
 import { SubjectJournalList } from "./SubjectJournalList";
@@ -12,33 +14,61 @@ export default async function Page(props: {
   params: Promise<{ subjectId: string; pageIndex?: string; pageSize?: string }>;
 }) {
   const params = await props.params;
-
   const { subjectId } = params;
-
-  const subject = await api.subject.get(Number(subjectId));
   const session = await auth();
-  const { t } = await getServerTranslations();
 
-  const subjectJournals = await api.subjectJournal.bySubject({
-    subjectId: Number(params.subjectId),
-    pageIndex: params.pageIndex ? Number(params.pageIndex) : 0,
-    pageSize: params.pageSize ? Number(params.pageSize) : 10,
-  });
+  batchPrefetch([
+    trpc.subjectJournal.bySubject.queryOptions({
+      subjectId: Number(params.subjectId),
+      pageIndex: params.pageIndex ? Number(params.pageIndex) : 0,
+      pageSize: params.pageSize ? Number(params.pageSize) : 10,
+    }),
+    trpc.subject.get.queryOptions(Number(subjectId)),
+  ]);
 
   return (
-    <div className="flex flex-col">
-      <SubjectJournalHeader subject={subject} />
+    <HydrateClient>
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <Suspense
+          fallback={
+            <div className="px-4 py-2">
+              <Skeleton className="h-8 w-full" />
+            </div>
+          }
+        >
+          <SubjectJournalHeader />
+        </Suspense>
+      </ErrorBoundary>
       {session?.user.profile == "staff" && (
-        <>
-          <SubjectJournalEditor subject={subject} />
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense
+            fallback={
+              <div className="grid grid-cols-2 gap-2 px-4 py-2">
+                {Array.from({ length: 2 }).map((_, i) => (
+                  <Skeleton key={i} className="h-10 " />
+                ))}
+              </div>
+            }
+          >
+            <SubjectJournalEditor />
+          </Suspense>
           <Separator />
-        </>
+        </ErrorBoundary>
       )}
-      {subjectJournals.length == 0 ? (
-        <EmptyState className="my-8" title={t("no_data")} />
-      ) : (
-        <SubjectJournalList journals={subjectJournals} subject={subject} />
-      )}
-    </div>
+
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <Suspense
+          fallback={
+            <div className="grid grid-cols-4 px-4 py-2 gap-4">
+              {Array.from({ length: 16 }).map((_, i) => (
+                <Skeleton key={i} className="h-10 " />
+              ))}
+            </div>
+          }
+        >
+          <SubjectJournalList />
+        </Suspense>
+      </ErrorBoundary>
+    </HydrateClient>
   );
 }

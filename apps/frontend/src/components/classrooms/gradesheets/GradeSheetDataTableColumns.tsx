@@ -21,12 +21,13 @@ import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { cn } from "@repo/ui/lib/utils";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { cn } from "~/lib/utils";
 import { PermissionAction } from "~/permissions";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 type ClassroomGradeSheetProcedureOutput = NonNullable<
   RouterOutputs["classroom"]["gradesheets"]
@@ -267,29 +268,32 @@ function ActionCells({
 }) {
   const confirm = useConfirm();
   const { t } = useLocale();
-  const utils = api.useUtils();
+
   const router = useRouter();
-  const deleteGradeSheetMutation = api.gradeSheet.delete.useMutation({
-    onSettled: async () => {
-      await utils.gradeSheet.invalidate();
-      await utils.grade.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const deleteGradeSheetMutation = useMutation(
+    trpc.gradeSheet.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.classroom.gradesheets.pathFilter()
+        );
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const canDeleteGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
 
   return (
@@ -306,8 +310,8 @@ function ActionCells({
               router.push(
                 routes.classrooms.gradesheets.details(
                   classroomId,
-                  gradesheet.id,
-                ),
+                  gradesheet.id
+                )
               );
             }}
           >
@@ -318,10 +322,7 @@ function ActionCells({
             <DropdownMenuItem
               onSelect={() => {
                 router.push(
-                  routes.classrooms.gradesheets.edit(
-                    classroomId,
-                    gradesheet.id,
-                  ),
+                  routes.classrooms.gradesheets.edit(classroomId, gradesheet.id)
                 );
               }}
             >

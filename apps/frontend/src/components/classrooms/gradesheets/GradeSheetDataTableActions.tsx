@@ -10,10 +10,10 @@ import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { RiDeleteBinLine } from "@remixicon/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 type ClassroomGradeSheetProcedureOutput = NonNullable<
   RouterOutputs["classroom"]["gradesheets"]
@@ -28,19 +28,23 @@ export function GradeSheetDataTableActions({
 }: GradeSheetToolbarActionsProps) {
   const { t } = useLocale();
   const confirm = useConfirm();
-  const utils = api.useUtils();
-  const router = useRouter();
-  const deleteGradeSheetMutation = api.gradeSheet.delete.useMutation({
-    onSettled: () => utils.gradeSheet.invalidate(),
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-      table.toggleAllRowsSelected(false);
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
+  const deleteGradeSheetMutation = useMutation(
+    trpc.gradeSheet.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.classroom.gradesheets.pathFilter()
+        );
+        toast.success(t("deleted_successfully"), { id: 0 });
+        table.toggleAllRowsSelected(false);
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const rows = table.getFilteredSelectedRowModel().rows;
 
   // Clear selection on Escape key press
@@ -57,7 +61,7 @@ export function GradeSheetDataTableActions({
 
   const canDeleteGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
 
   return (
