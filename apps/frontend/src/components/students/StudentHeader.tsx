@@ -51,22 +51,26 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import type { RouterOutputs } from "@repo/api";
 import { decode } from "entities";
 import { useSetAtom } from "jotai";
 import { useCallback, useEffect, useState } from "react";
 import { SimpleTooltip } from "~/components/simple-tooltip";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { StudentSelector } from "~/components/shared/selects/StudentSelector";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { useSession } from "~/providers/AuthProvider";
-import { api, useTRPC } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
+import { useQuery } from "@tanstack/react-query";
 import { AvatarState } from "../AvatarState";
 import { SearchCombobox } from "../SearchCombobox";
 import { CountryComponent } from "../shared/CountryPicker";
@@ -75,20 +79,20 @@ import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { ChangeAvatarButton } from "../users/ChangeAvatarButton";
 import { CreateEditUser } from "../users/CreateEditUser";
 
-export function StudentHeader({
-  student,
-}: {
-  student: RouterOutputs["student"]["get"];
-}) {
+export function StudentHeader() {
+  const trpc = useTRPC();
+  const params = useParams<{ id: string }>();
+  const { data: student } = useSuspenseQuery(
+    trpc.student.get.queryOptions(params.id)
+  );
   const router = useRouter();
   const { t } = useLocale();
-  const params = useParams<{ id: string }>();
-  const trpc = useTRPC();
+
   const queryClient = useQueryClient();
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
 
@@ -106,14 +110,14 @@ export function StudentHeader({
   const deleteStudentMutation = useMutation(
     trpc.student.delete.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.student.pathFilter());
+        await queryClient.invalidateQueries(trpc.student.all.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
         router.push(routes.students.index);
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const { openModal } = useModal();
@@ -130,17 +134,18 @@ export function StudentHeader({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const changeStudentStatus = useCallback(
     (status: StudentStatus) => {
+      toast.loading(t("Processing..."), { id: 0 });
       studentStatusMutation.mutate({
         studentId: student.id,
         status,
       });
     },
-    [studentStatusMutation, student.id],
+    [t, studentStatusMutation, student.id]
   );
 
   const navigateToStudent = (id: string) => {
@@ -153,25 +158,22 @@ export function StudentHeader({
   };
   const confirm = useConfirm();
 
-  //const student = studentQuery.data;
-
-  //const studentTags = JSON.stringify(student?.tags ?? []);
-
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditStudent = useCheckPermission("student", PermissionAction.UPDATE);
-  //const [open, setOpen] = React.useState(false);
 
   const { user } = useSession();
 
   const [value, setValue] = useState("");
   const [label, setLabel] = useState(getFullName(student));
   const [search, setSearch] = useState("");
-  const students = api.student.search.useQuery({
-    query: search,
-  });
+  const studentsQuery = useQuery(
+    trpc.student.search.queryOptions({
+      query: search,
+    })
+  );
 
   const handleDeleteAvatar = useCallback(
     async (userId: string) => {
@@ -191,7 +193,7 @@ export function StudentHeader({
         toast.error(response.statusText, { id: 0 });
       }
     },
-    [t, router],
+    [t, router]
   );
 
   return (
@@ -220,7 +222,7 @@ export function StudentHeader({
           <SearchCombobox
             className="w-full lg:w-1/3"
             items={
-              students.data?.map((stud) => ({
+              studentsQuery.data?.map((stud) => ({
                 value: stud.id,
                 label: getFullName(stud),
               })) ?? []
@@ -349,7 +351,7 @@ export function StudentHeader({
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

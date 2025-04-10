@@ -7,10 +7,12 @@ import { auth } from "@repo/auth";
 import { redirect } from "next/navigation";
 import { StudentFooter } from "~/components/students/StudentFooter";
 import { StudentHeader } from "~/components/students/StudentHeader";
-import { api } from "~/trpc/server";
+import { api, getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 
 import { decode } from "entities";
 import type { Metadata } from "next";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { ErrorFallback } from "~/components/error-fallback";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -18,7 +20,7 @@ interface Props {
 }
 
 export const generateMetadata = async (
-  { params }: Props,
+  { params }: Props
   // parent: ResolvingMetadata
 ): Promise<Metadata> => {
   const { id } = await params;
@@ -47,7 +49,10 @@ export default async function Layout(props: {
   const { user } = session;
 
   const { id } = params;
-  const student = await api.student.get(id);
+  const queryClient = getQueryClient();
+  const student = await queryClient.fetchQuery(
+    trpc.student.get.queryOptions(id)
+  );
 
   const { children } = props;
 
@@ -56,16 +61,28 @@ export default async function Layout(props: {
   }
 
   return (
-    <div className="flex flex-1 flex-col">
-      <StudentHeader student={student} />
+    <HydrateClient>
+      <div className="flex flex-1 flex-col">
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense
+            fallback={
+              <div className="px-4 py-2">
+                <Skeleton className="h-16 w-full" />
+              </div>
+            }
+          >
+            <StudentHeader />
+          </Suspense>
+        </ErrorBoundary>
 
-      {/* <CardContent className="flex h-[calc(100vh-20rem)] flex-1 w-full p-0"> */}
-      <main className="flex-1">{children}</main>
-      <div className="flex flex-row items-center border-y bg-muted/50 px-6 py-1">
-        <Suspense fallback={<Skeleton className="h-full w-full" />}>
-          <StudentFooter />
-        </Suspense>
+        {/* <CardContent className="flex h-[calc(100vh-20rem)] flex-1 w-full p-0"> */}
+        <main className="flex-1">{children}</main>
+        <div className="flex flex-row items-center border-y bg-muted/50 px-6 py-1">
+          <Suspense fallback={<Skeleton className="h-full w-full" />}>
+            <StudentFooter />
+          </Suspense>
+        </div>
       </div>
-    </div>
+    </HydrateClient>
   );
 }
