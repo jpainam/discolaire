@@ -7,7 +7,6 @@ import {
   Trash2,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useRouter } from "~/hooks/use-router";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -18,9 +17,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 type LatenessType = RouterOutputs["lateness"]["byClassroom"][number];
 type AbsenceType = RouterOutputs["absence"]["byClassroom"][number];
@@ -36,17 +36,20 @@ export function AttendanceAction({
 }) {
   const { t } = useLocale();
   const confirm = useConfirm();
-  const router = useRouter();
-  //const { openModal } = useModal();
-  const deleteAttendance = api.attendance.delete.useMutation({
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const deleteAttendance = useMutation(
+    trpc.attendance.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.attendance.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   return (
     <DropdownMenu>

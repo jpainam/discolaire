@@ -25,7 +25,6 @@ export function SubjectJournalAttachment() {
   //     onSuccess: () => {
   //       toast.success(t("updated_successfully"), { id: 0 });
   //       closeModal();
-  //       //router.refresh();
   //     },
   //     onSettled: async () => {
   //       //await utils.student.get.invalidate(studentId);
@@ -75,7 +74,7 @@ export function SubjectJournalAttachment() {
               error: (err) => {
                 return getErrorMessage(err);
               },
-            },
+            }
           );
         }}
         //progresses={progresses}

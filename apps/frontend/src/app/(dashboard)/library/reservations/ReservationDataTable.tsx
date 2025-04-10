@@ -9,7 +9,7 @@ import { getReservationColumns } from "./ReservationDataTableColumn";
 export function ReservationDataTable() {
   const trpc = useTRPC();
   const { data: books } = useSuspenseQuery(
-    trpc.library.borrowBooks.queryOptions({ limit: 2000 })
+    trpc.library.borrowBooks.queryOptions({ limit: 2000 }),
   );
   const today = new Date();
   const { t } = useLocale();

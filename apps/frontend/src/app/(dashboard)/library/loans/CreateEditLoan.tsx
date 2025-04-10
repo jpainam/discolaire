@@ -13,6 +13,7 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { SheetFooter } from "@repo/ui/components/sheet";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addDays } from "date-fns";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -20,9 +21,8 @@ import { z } from "zod";
 import { DatePicker } from "~/components/DatePicker";
 import { UserSelector } from "~/components/shared/selects/UserSelector";
 import { useModal } from "~/hooks/use-modal";
-import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { BookSelector } from "../BookSelector";
 const formSchema = z.object({
   bookId: z.coerce.number().positive(),
@@ -47,35 +47,39 @@ export function CreateEditLoan({
     },
   });
   const { closeModal } = useModal();
-  const utils = api.useUtils();
-  const router = useRouter();
-  const createMutation = api.library.createBorrow.useMutation({
-    onSettled: () => {
-      void utils.book.invalidate();
-      void utils.library.invalidate();
-    },
-    onSuccess: () => {
-      toast.success("Loan created successfully", { id: 0 });
-      closeModal();
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const updateMutation = api.library.updateBorrow.useMutation({
-    onSettled: () => {
-      void utils.book.invalidate();
-      void utils.library.invalidate();
-    },
-    onSuccess: () => {
-      toast.success("Loan updated successfully", { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const createMutation = useMutation(
+    trpc.library.createBorrow.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.book.all.pathFilter());
+        await queryClient.invalidateQueries(
+          trpc.library.borrowBooks.pathFilter()
+        );
+        toast.success("Loan created successfully", { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const updateMutation = useMutation(
+    trpc.library.updateBorrow.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.book.all.pathFilter());
+        await queryClient.invalidateQueries(
+          trpc.library.borrowBooks.pathFilter()
+        );
+        toast.success("Loan updated successfully", { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     if (!borrow) {
       createMutation.mutate(data);

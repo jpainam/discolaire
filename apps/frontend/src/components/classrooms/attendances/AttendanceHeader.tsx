@@ -37,6 +37,7 @@ import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
@@ -44,7 +45,7 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 export function AttendanceHeader() {
   const { t } = useLocale();
@@ -54,21 +55,26 @@ export function AttendanceHeader() {
   const confirm = useConfirm();
   const canDeleteAttendance = useCheckPermission(
     "attendance",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canCreateAttendance = useCheckPermission(
     "attendance",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
-  const deletePeriodictAttendance = api.attendance.deletePeriodic.useMutation({
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.refresh();
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const deletePeriodictAttendance = useMutation(
+    trpc.attendance.deletePeriodic.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.attendance.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+    })
+  );
 
   const router = useRouter();
   const { createQueryString } = useCreateQueryString();
@@ -84,7 +90,7 @@ export function AttendanceHeader() {
           router.push(
             routes.classrooms.attendances.index(params.id) +
               "?" +
-              createQueryString({ term: val }),
+              createQueryString({ term: val })
           );
         }}
       />
@@ -95,7 +101,7 @@ export function AttendanceHeader() {
           router.push(
             routes.classrooms.attendances.index(params.id) +
               "?" +
-              createQueryString({ type: val == "all" ? undefined : val }),
+              createQueryString({ type: val == "all" ? undefined : val })
           );
         }}
       >
@@ -119,7 +125,7 @@ export function AttendanceHeader() {
           router.push(
             routes.classrooms.attendances.index(params.id) +
               "?" +
-              createQueryString({ date: e.target.value }),
+              createQueryString({ date: e.target.value })
           );
         }}
       />
@@ -144,7 +150,7 @@ export function AttendanceHeader() {
                   router.push(
                     routes.classrooms.attendances.absences(params.id) +
                       "?" +
-                      createQueryString({ term: searchParams.get("term") }),
+                      createQueryString({ term: searchParams.get("term") })
                   );
                 }}
               >
@@ -156,7 +162,7 @@ export function AttendanceHeader() {
                   router.push(
                     routes.classrooms.attendances.lateness(params.id) +
                       "?" +
-                      createQueryString({ term: searchParams.get("term") }),
+                      createQueryString({ term: searchParams.get("term") })
                   );
                 }}
               >
@@ -168,7 +174,7 @@ export function AttendanceHeader() {
                   router.push(
                     routes.classrooms.attendances.chatters(params.id) +
                       "?" +
-                      createQueryString({ term: searchParams.get("term") }),
+                      createQueryString({ term: searchParams.get("term") })
                   );
                 }}
               >
@@ -180,7 +186,7 @@ export function AttendanceHeader() {
                   router.push(
                     routes.classrooms.attendances.consignes(params.id) +
                       "?" +
-                      createQueryString({ term: searchParams.get("term") }),
+                      createQueryString({ term: searchParams.get("term") })
                   );
                 }}
               >
@@ -192,7 +198,7 @@ export function AttendanceHeader() {
                   router.push(
                     routes.classrooms.attendances.exclusions(params.id) +
                       "?" +
-                      createQueryString({ term: searchParams.get("term") }),
+                      createQueryString({ term: searchParams.get("term") })
                   );
                 }}
               >
@@ -251,7 +257,7 @@ export function AttendanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/attendances?format=pdf&type=weekly`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >
@@ -261,7 +267,7 @@ export function AttendanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/attendances?format=pdf&type=periodic`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >
@@ -281,7 +287,7 @@ export function AttendanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/attendances?format=csv&type=weekly`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >
@@ -291,7 +297,7 @@ export function AttendanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/attendances?format=csv&type=periodic`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >

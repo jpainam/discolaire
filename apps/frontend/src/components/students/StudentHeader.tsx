@@ -83,7 +83,7 @@ export function StudentHeader() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: student } = useSuspenseQuery(
-    trpc.student.get.queryOptions(params.id),
+    trpc.student.get.queryOptions(params.id)
   );
   const router = useRouter();
   const { t } = useLocale();
@@ -92,7 +92,7 @@ export function StudentHeader() {
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
 
@@ -117,7 +117,7 @@ export function StudentHeader() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const { openModal } = useModal();
@@ -134,7 +134,7 @@ export function StudentHeader() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const changeStudentStatus = useCallback(
@@ -145,7 +145,7 @@ export function StudentHeader() {
         status,
       });
     },
-    [t, studentStatusMutation, student.id],
+    [t, studentStatusMutation, student.id]
   );
 
   const navigateToStudent = (id: string) => {
@@ -160,7 +160,7 @@ export function StudentHeader() {
 
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditStudent = useCheckPermission("student", PermissionAction.UPDATE);
 
@@ -172,29 +172,26 @@ export function StudentHeader() {
   const studentsQuery = useQuery(
     trpc.student.search.queryOptions({
       query: search,
-    }),
+    })
   );
 
-  const handleDeleteAvatar = useCallback(
-    async (userId: string) => {
-      toast.loading(t("deleting"), { id: 0 });
-      const response = await fetch("/api/upload/avatars", {
-        method: "DELETE",
-        body: JSON.stringify({
-          userId: userId,
-        }),
+  const handleDeleteAvatar = async (userId: string) => {
+    toast.loading(t("deleting"), { id: 0 });
+    const response = await fetch("/api/upload/avatars", {
+      method: "DELETE",
+      body: JSON.stringify({
+        userId: userId,
+      }),
+    });
+    if (response.ok) {
+      toast.success(t("deleted_successfully"), {
+        id: 0,
       });
-      if (response.ok) {
-        toast.success(t("deleted_successfully"), {
-          id: 0,
-        });
-        router.refresh();
-      } else {
-        toast.error(response.statusText, { id: 0 });
-      }
-    },
-    [t, router],
-  );
+      await queryClient.invalidateQueries(trpc.student.get.pathFilter());
+    } else {
+      toast.error(response.statusText, { id: 0 });
+    }
+  };
 
   return (
     <div className="flex border-b bg-muted/50 py-1 px-4 w-full gap-2">
@@ -351,7 +348,7 @@ export function StudentHeader() {
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

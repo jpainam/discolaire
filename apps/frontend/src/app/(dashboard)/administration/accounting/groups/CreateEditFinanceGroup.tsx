@@ -18,9 +18,9 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const createFinanceGroupSchema = z.object({
   name: z.string(),
@@ -47,32 +47,39 @@ export function CreateEditFinanceGroup({
     },
   });
   const { closeModal } = useModal();
-  const utils = api.useUtils();
   const { t } = useLocale();
-  const router = useRouter();
-  const createFinanceGroup = api.accounting.createGroup.useMutation({
-    onSettled: () => utils.accounting.groups.invalidate(),
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      router.refresh();
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
-  const updateFinanceGroup = api.accounting.updateGroup.useMutation({
-    onSettled: () => utils.accounting.groups.invalidate(),
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      router.refresh();
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const createFinanceGroup = useMutation(
+    trpc.accounting.createGroup.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.accounting.groups.pathFilter()
+        );
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+
+  const updateFinanceGroup = useMutation(
+    trpc.accounting.updateGroup.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.accounting.groups.pathFilter()
+        );
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const onSubmit = (data: z.infer<typeof createFinanceGroupSchema>) => {
     const values = {
       name: data.name,

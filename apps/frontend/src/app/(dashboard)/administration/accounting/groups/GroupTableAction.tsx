@@ -16,8 +16,8 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditFinanceGroup } from "./CreateEditFinanceGroup";
 
 export function GroupTableAction({
@@ -39,19 +39,23 @@ export function GroupTableAction({
 }) {
   const { t } = useLocale();
   const confirm = useConfirm();
-  const router = useRouter();
-  const utils = api.useUtils();
   const { openModal } = useModal();
-  const deleteFinanceGroup = api.accounting.deleteGroup.useMutation({
-    onSettled: () => utils.accounting.groups.invalidate(),
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const deleteFinanceGroup = useMutation(
+    trpc.accounting.deleteGroup.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.accounting.groups.pathFilter()
+        );
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

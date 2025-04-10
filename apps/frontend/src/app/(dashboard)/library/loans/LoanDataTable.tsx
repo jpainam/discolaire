@@ -9,7 +9,7 @@ import { getBorrowBooksColumns } from "./LoanDataTableColumn";
 export function BorrowBookDataTable() {
   const trpc = useTRPC();
   const { data: books } = useSuspenseQuery(
-    trpc.library.borrowBooks.queryOptions({ limit: 2000 })
+    trpc.library.borrowBooks.queryOptions({ limit: 2000 }),
   );
   const { t } = useLocale();
   const columns = React.useMemo(() => getBorrowBooksColumns({ t: t }), [t]);

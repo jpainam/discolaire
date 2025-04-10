@@ -35,7 +35,7 @@ import {
 } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { useParams } from "next/navigation";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
@@ -55,7 +55,7 @@ export function ContactDetailsHeader() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: contact } = useSuspenseQuery(
-    trpc.contact.get.queryOptions(params.id),
+    trpc.contact.get.queryOptions(params.id)
   );
 
   const router = useRouter();
@@ -72,11 +72,11 @@ export function ContactDetailsHeader() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();
@@ -94,33 +94,30 @@ export function ContactDetailsHeader() {
 
   const canUpdateContact = useCheckPermission(
     "contact",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
-  const handleDeleteAvatar = useCallback(
-    async (userId: string) => {
-      toast.loading(t("deleting"), { id: 0 });
-      const response = await fetch("/api/upload/avatars", {
-        method: "DELETE",
-        body: JSON.stringify({
-          userId: userId,
-        }),
+  const handleDeleteAvatar = async (userId: string) => {
+    toast.loading(t("deleting"), { id: 0 });
+    const response = await fetch("/api/upload/avatars", {
+      method: "DELETE",
+      body: JSON.stringify({
+        userId: userId,
+      }),
+    });
+    if (response.ok) {
+      toast.success(t("deleted_successfully"), {
+        id: 0,
       });
-      if (response.ok) {
-        toast.success(t("deleted_successfully"), {
-          id: 0,
-        });
-        router.refresh();
-      } else {
-        toast.error(response.statusText, { id: 0 });
-      }
-    },
-    [t, router],
-  );
+      await queryClient.invalidateQueries(trpc.contact.get.pathFilter());
+    } else {
+      toast.error(response.statusText, { id: 0 });
+    }
+  };
 
   return (
     <div className="flex flex-row items-start gap-2">
