@@ -15,7 +15,7 @@ export function StaffProfile() {
   const params = useParams<{ id: string }>();
   const trpc = useTRPC();
   const { data: staff } = useSuspenseQuery(
-    trpc.staff.get.queryOptions(params.id)
+    trpc.staff.get.queryOptions(params.id),
   );
 
   const { t, i18n } = useLocale();

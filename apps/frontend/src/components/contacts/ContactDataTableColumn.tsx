@@ -198,11 +198,11 @@ function ActionsCell({ contact }: { contact: ContactAllProcedureOutput }) {
 
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const canUpdateContact = useCheckPermission(
     "contact",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   const deleteContactMutation = useMutation(
     trpc.contact.delete.mutationOptions({
@@ -213,7 +213,7 @@ function ActionsCell({ contact }: { contact: ContactAllProcedureOutput }) {
         await queryClient.invalidateQueries(trpc.contact.all.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
-    })
+    }),
   );
   const router = useRouter();
   return (

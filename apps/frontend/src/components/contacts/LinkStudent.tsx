@@ -48,7 +48,7 @@ export function LinkStudent({ contactId }: { contactId: string }) {
     trpc.contact.unlinkedStudents.queryOptions({
       contactId: contactId,
       q: debounceValue,
-    })
+    }),
   );
 
   const { closeModal } = useModal();
@@ -64,7 +64,7 @@ export function LinkStudent({ contactId }: { contactId: string }) {
         toast.success(t("added_successfully"), { id: 0 });
         closeModal();
       },
-    })
+    }),
   );
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -114,15 +114,15 @@ export function LinkStudent({ contactId }: { contactId: string }) {
                     if (selectedStudents.includes(stud)) {
                       return setSelectedStudents(
                         selectedStudents.filter(
-                          (selectedStudent) => selectedStudent.id !== stud.id
-                        )
+                          (selectedStudent) => selectedStudent.id !== stud.id,
+                        ),
                       );
                     }
 
                     return setSelectedStudents(
                       [...contactUnLinkedStudent.data].filter((u) =>
-                        [...selectedStudents, stud].includes(u)
-                      )
+                        [...selectedStudents, stud].includes(u),
+                      ),
                     );
                   }}
                 >

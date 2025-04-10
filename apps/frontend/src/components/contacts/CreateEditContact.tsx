@@ -78,7 +78,7 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateContactMutation = useMutation(
     trpc.contact.update.mutationOptions({
@@ -90,7 +90,7 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const onSubmit = (data: z.infer<typeof createEditContactSchema>) => {
