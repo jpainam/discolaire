@@ -17,10 +17,10 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
 import { useForm } from "react-hook-form";
-import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const createSchoolSchema = z.object({
   name: z.string().min(1),
@@ -33,32 +33,35 @@ export function CreateEditSchool({ id, name }: { id?: string; name?: string }) {
     },
   });
   const { closeModal } = useModal();
-  const utils = api.useUtils();
   const { t } = useLocale();
-  const router = useRouter();
-  const createSchoolMutation = api.formerSchool.create.useMutation({
-    onSettled: () => utils.formerSchool.all.invalidate(),
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      router.refresh();
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
-  const updateSchoolMutation = api.formerSchool.update.useMutation({
-    onSettled: () => utils.formerSchool.all.invalidate(),
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      router.refresh();
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const createSchoolMutation = useMutation(
+    trpc.formerSchool.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.formerSchool.all.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+
+  const updateSchoolMutation = useMutation(
+    trpc.formerSchool.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.formerSchool.all.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const onSubmit = (data: z.infer<typeof createSchoolSchema>) => {
     if (id) {
       toast.loading(t("updating"), { id: 0 });

@@ -19,9 +19,9 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const createCourseSchema = z.object({
   name: z.string().min(1),
@@ -46,32 +46,34 @@ export function CreateEditCourse({
     },
   });
   const { closeModal } = useModal();
-  const utils = api.useUtils();
   const { t } = useLocale();
-  const router = useRouter();
-  const createCourseMutation = api.course.create.useMutation({
-    onSettled: () => utils.course.invalidate(),
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      router.refresh();
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const createCourseMutation = useMutation(
+    trpc.course.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.course.all.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
-  const updateCourseMutation = api.course.update.useMutation({
-    onSettled: () => utils.course.invalidate(),
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      router.refresh();
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const updateCourseMutation = useMutation(
+    trpc.course.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.course.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const onSubmit = (data: z.infer<typeof createCourseSchema>) => {
     const values = {
       name: data.name,

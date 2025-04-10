@@ -10,9 +10,9 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { RiDeleteBinLine } from "@remixicon/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 type CourseProcedureOutput = NonNullable<
   RouterOutputs["course"]["all"]
@@ -24,24 +24,27 @@ export function CourseDataTableActions({
   table: Table<CourseProcedureOutput>;
 }) {
   const rows = table.getFilteredSelectedRowModel().rows;
-  const utils = api.useUtils();
   const { t } = useLocale();
-  const router = useRouter();
+
   const canDeleteCourse = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
-  const courseDeleteMutation = api.course.deleteMany.useMutation({
-    onSettled: () => utils.course.invalidate(),
-    onSuccess: () => {
-      table.toggleAllRowsSelected(false);
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const courseDeleteMutation = useMutation(
+    trpc.course.deleteMany.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.course.all.pathFilter());
+        table.toggleAllRowsSelected(false);
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   // Clear selection on Escape key press
   useEffect(() => {

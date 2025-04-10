@@ -18,8 +18,8 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { SheetClose, SheetFooter } from "@repo/ui/components/sheet";
-import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 import { SelectField } from "../shared/forms/SelectField";
 import { InputField } from "../shared/forms/input-field";
 import { StaffSelector } from "../shared/selects/StaffSelector";
@@ -48,13 +48,13 @@ export function CreateEditClassroom({
     seniorAdvisorId: z.string().min(1),
     headTeacherId: z.string().min(1),
   });
-  type UpdateClassroomValues = z.infer<typeof updateClassroomSchema>;
 
-  const { data: levels } = api.classroomLevel.all.useQuery();
-  const { data: cycles } = api.classroomCycle.all.useQuery();
-  const { data: sections } = api.classroomSection.all.useQuery();
+  const trpc = useTRPC();
+  const { data: levels } = useQuery(trpc.classroomLevel.all.queryOptions());
+  const { data: cycles } = useQuery(trpc.classroomCycle.all.queryOptions());
+  const { data: sections } = useQuery(trpc.classroomSection.all.queryOptions());
 
-  const form = useForm<UpdateClassroomValues>({
+  const form = useForm({
     resolver: zodResolver(updateClassroomSchema),
     defaultValues: {
       name: classroom?.name ?? "",
@@ -69,37 +69,36 @@ export function CreateEditClassroom({
   });
 
   const { closeSheet } = useSheet();
-  const router = useRouter();
 
-  const updateClassroomMutation = api.classroom.update.useMutation({
-    onSettled: async () => {
-      await utils.classroom.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      closeSheet();
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const createClassroomMutation = api.classroom.create.useMutation({
-    onSettled: async () => {
-      await utils.classroom.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeSheet();
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const utils = api.useUtils();
+  const queryClient = useQueryClient();
 
-  function onSubmit(data: UpdateClassroomValues) {
+  const updateClassroomMutation = useMutation(
+    trpc.classroom.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.classroom.all.pathFilter());
+        await queryClient.invalidateQueries(trpc.classroom.get.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeSheet();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const createClassroomMutation = useMutation(
+    trpc.classroom.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.classroom.all.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeSheet();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+
+  function onSubmit(data: z.infer<typeof updateClassroomSchema>) {
     const values = {
       ...data,
       cycleId: data.cycleId,

@@ -15,9 +15,9 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const createEditUserSchema = z.object({
   username: z.string().min(1),
@@ -44,35 +44,33 @@ export function CreateEditUser({
   });
   const { closeModal } = useModal();
   const { t } = useLocale();
-  const utils = api.useUtils();
-  const router = useRouter();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
-  const createUserMutation = api.user.create.useMutation({
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeModal();
-      router.refresh();
-    },
-    onError: (err) => {
-      toast.error(err.message, { id: 0 });
-    },
-    onSettled: async () => {
-      await utils.user.invalidate();
-    },
-  });
-  const updateUserMutation = api.user.update.useMutation({
-    onSuccess: () => {
-      router.refresh();
-      toast.success(t("updated_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (err) => {
-      toast.error(err.message, { id: 0 });
-    },
-    onSettled: async () => {
-      await utils.user.invalidate();
-    },
-  });
+  const createUserMutation = useMutation(
+    trpc.user.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.user.all.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (err) => {
+        toast.error(err.message, { id: 0 });
+      },
+    })
+  );
+  const updateUserMutation = useMutation(
+    trpc.user.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.user.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (err) => {
+        toast.error(err.message, { id: 0 });
+      },
+    })
+  );
 
   const handleSubmit = (data: z.infer<typeof createEditUserSchema>) => {
     if (userId) {

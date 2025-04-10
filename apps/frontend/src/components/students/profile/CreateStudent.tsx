@@ -11,10 +11,11 @@ import { Form } from "@repo/ui/components/form";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { CreateUpdateAddress } from "./CreateUpdateAddress";
 import { CreateUpdateDenom } from "./CreateUpdateDenom";
 import { CreateUpdateExtra } from "./CreateUpdateExtra";
@@ -50,7 +51,7 @@ const createUpdateStudentSchema = z.object({
       z.object({
         label: z.string(),
         value: z.string(),
-      }),
+      })
     )
     .optional(),
   sports: z
@@ -58,7 +59,7 @@ const createUpdateStudentSchema = z.object({
       z.object({
         label: z.string(),
         value: z.string(),
-      }),
+      })
     )
     .optional(),
   classroom: z.string().optional(),
@@ -98,18 +99,21 @@ export function CreateStudent() {
     },
   });
 
-  const createStudentMutation = api.student.create.useMutation({
-    onSettled: () => utils.student.invalidate(),
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: (result) => {
-      router.refresh();
-      router.push(routes.students.details(result.id));
-      toast.success(t("created_successfully"), { id: 0 });
-    },
-  });
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const createStudentMutation = useMutation(
+    trpc.student.create.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async (result) => {
+        await queryClient.invalidateQueries(trpc.student.all.pathFilter());
+        router.push(routes.students.details(result.id));
+        toast.success(t("created_successfully"), { id: 0 });
+      },
+    })
+  );
 
   const onSubmit = (data: z.infer<typeof createUpdateStudentSchema>) => {
     toast.loading(t("creating"), { id: 0 });

@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
@@ -16,34 +17,43 @@ import { menuPolicies, policies } from "~/configs/policies";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
+import { NoPermission } from "../no-permission";
 
 export function PermissionTable({ userId }: { userId: string }) {
   const { t } = useLocale();
   const canUpdatePermission = useCheckPermission(
     "policy",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
-  //const canReadPermission = useCheckPermission("policy", PermissionAction.READ);
-  const permissionsQuery = api.user.getPermissions.useQuery(userId);
+  const trpc = useTRPC();
+  const canReadPermission = useCheckPermission("policy", PermissionAction.READ);
+  const permissionsQuery = useQuery(
+    trpc.user.getPermissions.queryOptions(userId)
+  );
 
-  //const router = useRouter();
-  const permissionMutation = api.user.updatePermission.useMutation({
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      //router.refresh();
-    },
-  });
+  const queryClient = useQueryClient();
+
+  const permissionMutation = useMutation(
+    trpc.user.updatePermission.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.user.getPermissions.pathFilter()
+        );
+        toast.success(t("updated_successfully"), { id: 0 });
+      },
+    })
+  );
 
   const groups = _.groupBy(policies, "resource");
   const debounced = useDebouncedCallback(
     (
       resource: string,
       action: "Read" | "Update" | "Create" | "Delete",
-      checked: boolean,
+      checked: boolean
     ) => {
       permissionMutation.mutate({
         userId: userId,
@@ -52,12 +62,12 @@ export function PermissionTable({ userId }: { userId: string }) {
         effect: checked ? "Allow" : "Deny",
       });
     },
-    500,
+    500
   );
-  // TODO REMOVE AFTER ADDING super-admin
-  // if (!canReadPermission) {
-  //   return <NoPermission className="py-8" />;
-  // }
+
+  if (!canReadPermission) {
+    return <NoPermission className="py-8" />;
+  }
   if (permissionsQuery.isPending) {
     return (
       <div className="w-full grid grid-cols-2 gap-4 p-2">
@@ -93,25 +103,25 @@ export function PermissionTable({ userId }: { userId: string }) {
                 (p) =>
                   p.resource === perm.resource &&
                   p.action === "Read" &&
-                  p.effect === "Allow",
+                  p.effect === "Allow"
               );
               const canUpdate = permissions.find(
                 (p) =>
                   p.resource === perm.resource &&
                   p.action === "Update" &&
-                  p.effect === "Allow",
+                  p.effect === "Allow"
               );
               const canCreate = permissions.find(
                 (p) =>
                   p.resource === perm.resource &&
                   p.action === "Create" &&
-                  p.effect === "Allow",
+                  p.effect === "Allow"
               );
               const canDelete = permissions.find(
                 (p) =>
                   p.resource === perm.resource &&
                   p.action === "Delete" &&
-                  p.effect === "Allow",
+                  p.effect === "Allow"
               );
               return (
                 <TableRow key={index}>
@@ -172,7 +182,7 @@ export function PermissionTable({ userId }: { userId: string }) {
                 (p) =>
                   p.resource === menu.resource &&
                   p.action === "Read" &&
-                  p.effect === "Allow",
+                  p.effect === "Allow"
               );
               return (
                 <TableRow key={`menu-policy-${index}`}>

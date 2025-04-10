@@ -5,16 +5,15 @@ import { useMemo } from "react";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { useLocale } from "~/i18n";
 
-import type { RouterOutputs } from "@repo/api";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 import { UserDataTableAction } from "./UserDataTableAction";
 import { getUserColumns } from "./UserDataTableColumn";
 
-export function UserDataTable({
-  users,
-}: {
-  users: RouterOutputs["user"]["all"];
-}) {
+export function UserDataTable() {
   const { t } = useLocale();
+  const trpc = useTRPC();
+  const { data: users } = useSuspenseQuery(trpc.user.all.queryOptions({}));
 
   const columns = useMemo(() => getUserColumns({ t: t }), [t]);
 

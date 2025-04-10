@@ -8,8 +8,8 @@ import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { RiDeleteBinLine } from "@remixicon/react";
-import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 
 type FormerSchool = RouterOutputs["formerSchool"]["all"][number];
 
@@ -19,20 +19,21 @@ export function SchoolDataTableAction({
   table: Table<FormerSchool>;
 }) {
   const rows = table.getFilteredSelectedRowModel().rows;
-  const utils = api.useUtils();
   const { t } = useLocale();
-  const router = useRouter();
-  const deleteSchoolsMutation = api.formerSchool.delete.useMutation({
-    onSettled: () => utils.user.invalidate(),
-    onSuccess: () => {
-      table.toggleAllRowsSelected(false);
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const deleteSchoolsMutation = useMutation(
+    trpc.formerSchool.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.formerSchool.all.pathFilter());
+        table.toggleAllRowsSelected(false);
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   // Clear selection on Escape key press
   React.useEffect(() => {

@@ -199,7 +199,7 @@ function ActionCells({
   //const utils = api.useUtils();
   const canDeleteClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   // const canUpdateClassroom = useCheckPermission(
   //   "classroom",
@@ -209,7 +209,6 @@ function ActionCells({
   //   onSettled: () => utils.classroom.invalidate(),
   //   onSuccess: () => {
   //     toast.success(t("deleted_successfully"), { id: 0 });
-  //     router.refresh();
   //   },
   //   onError: (error) => {
   //     toast.error(error.message, { id: 0 });

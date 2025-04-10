@@ -18,8 +18,9 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditSchool } from "./CreateEditSchool";
 
 type FormerSchool = RouterOutputs["formerSchool"]["all"][number];
@@ -75,18 +76,22 @@ export function getSchoolColumns({ t }: { t: TFunction<string, unknown> }) {
 function ActionCell({ school }: { school: FormerSchool }) {
   const { t } = useLocale();
   const confirm = useConfirm();
-  const utils = api.useUtils();
-  const { openModal } = useModal();
 
-  const deleteSchoolMutation = api.user.delete.useMutation({
-    onSettled: () => utils.formerSchool.invalidate(),
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const { openModal } = useModal();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const deleteSchoolMutation = useMutation(
+    trpc.user.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.formerSchool.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   return (
     <div className="flex justify-end">
       <DropdownMenu>

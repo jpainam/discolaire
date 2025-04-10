@@ -22,10 +22,10 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { Badge } from "@repo/ui/components/badge";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditCourse } from "./CreateEditCourse";
 
 type CourseProcedureOutput = RouterOutputs["course"]["all"][number];
@@ -144,27 +144,29 @@ export function getColumns({
 function ActionCells({ course }: { course: CourseProcedureOutput }) {
   const { t } = useLocale();
   const confirm = useConfirm();
-  const router = useRouter();
-  const utils = api.useUtils();
+
   const { openModal } = useModal();
-  const deleteCourseMutation = api.course.delete.useMutation({
-    onSettled: () => utils.course.invalidate(),
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const deleteCourseMutation = useMutation(
+    trpc.course.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.course.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const canDeleteCourse = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateCourse = useCheckPermission(
     "classroom",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
 
   return (

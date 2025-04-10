@@ -2,7 +2,6 @@
 
 import { toast } from "sonner";
 import { z } from "zod";
-import { useRouter } from "~/hooks/use-router";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -20,12 +19,13 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { DatePicker } from "~/components/DatePicker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { getErrorMessage } from "~/lib/handle-error";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const schema = z.object({
   termId: z.string().min(1),
@@ -49,34 +49,33 @@ export function CreateEditAbsence({
       notify: true,
     },
   });
-  const utils = api.useUtils();
-  const router = useRouter();
-  const createAbsenceMutation = api.absence.create.useMutation({
-    onSettled: () => {
-      void utils.attendance.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeModal();
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const updateAbsenceMutation = api.absence.update.useMutation({
-    onSettled: () => {
-      void utils.attendance.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      router.refresh();
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const createAbsenceMutation = useMutation(
+    trpc.absence.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.attendance.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const updateAbsenceMutation = useMutation(
+    trpc.absence.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.attendance.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
   const { closeModal } = useModal();

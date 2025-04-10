@@ -16,10 +16,10 @@ import {
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { InputField } from "~/components/shared/forms/input-field";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
-import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const enrollFormSchema = z.object({
   classroomId: z.string().min(1),
@@ -35,22 +35,23 @@ export function EnrollStudentModal({ studentId }: { studentId: string }) {
     resolver: zodResolver(enrollFormSchema),
   });
   const { t } = useLocale();
-  const utils = api.useUtils();
-  //const params = useParams<{ id: string }>();
-  const router = useRouter();
-  const createEnrollmentMutation = api.enrollment.create.useMutation({
-    onSettled: async () => {
-      await utils.student.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("enrolled_successfully"), { id: 0 });
-      router.refresh();
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const createEnrollmentMutation = useMutation(
+    trpc.enrollment.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.student.pathFilter());
+        toast.success(t("enrolled_successfully"), { id: 0 });
+
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const onSubmitEnrollment = (data: z.infer<typeof enrollFormSchema>) => {
     toast.loading(t("enrolling"), { id: 0 });

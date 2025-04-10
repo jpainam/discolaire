@@ -26,27 +26,31 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditCourse } from "./CreateEditCourse";
 
 export function CourseTable() {
   const { t } = useLocale();
-  const coursesQuery = api.course.all.useQuery();
+  const trpc = useTRPC();
+  const coursesQuery = useQuery(trpc.course.all.queryOptions());
   const confirm = useConfirm();
-  const router = useRouter();
-  const utils = api.useUtils();
+
   const { openModal } = useModal();
-  const deleteCourseMutation = api.course.delete.useMutation({
-    onSettled: () => utils.course.invalidate(),
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+
+  const queryClient = useQueryClient();
+
+  const deleteCourseMutation = useMutation(
+    trpc.course.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.course.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   return (
     <div className="rounded-lg border">
       <Table>

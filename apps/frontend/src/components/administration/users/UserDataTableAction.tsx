@@ -9,29 +9,31 @@ import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { RiDeleteBinLine } from "@remixicon/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 type User = RouterOutputs["user"]["all"][number];
 
 export function UserDataTableAction({ table }: { table: Table<User> }) {
   const rows = table.getFilteredSelectedRowModel().rows;
-  const utils = api.useUtils();
+
   const { t } = useLocale();
-  const router = useRouter();
-  const deleteUsersMutation = api.user.delete.useMutation({
-    onSettled: () => utils.user.invalidate(),
-    onSuccess: () => {
-      table.toggleAllRowsSelected(false);
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const deleteUsersMutation = useMutation(
+    trpc.user.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.user.all.pathFilter());
+        table.toggleAllRowsSelected(false);
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   // Clear selection on Escape key press
   React.useEffect(() => {

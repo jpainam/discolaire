@@ -33,26 +33,30 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import i18next from "i18next";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditSchoolYear } from "./CreateEditSchoolYear";
 
 export function SchoolYearTable() {
-  const schoolYearsQuery = api.schoolYear.all.useQuery();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const schoolYearsQuery = useQuery(trpc.schoolYear.all.queryOptions());
   const { t } = useLocale();
   const { openModal } = useModal();
 
-  const utils = api.useUtils();
   const confirm = useConfirm();
-  const deleteSchoolYearMutation = api.schoolYear.delete.useMutation({
-    onSettled: () => utils.schoolYear.invalidate(),
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-  });
+  const deleteSchoolYearMutation = useMutation(
+    trpc.schoolYear.delete.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.schoolYear.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+    })
+  );
 
   if (schoolYearsQuery.isPending) {
     return (
@@ -105,7 +109,7 @@ export function SchoolYearTable() {
                           month: "short",
                           year: "numeric",
                           day: "2-digit",
-                        },
+                        }
                       )}
                     </div>
                   </TableCell>
