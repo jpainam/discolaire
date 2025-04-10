@@ -3,7 +3,7 @@
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
-import { Pencil, Trash2, Users } from "lucide-react";
+import { Pencil, ReceiptText, Trash2, Users } from "lucide-react";
 import Link from "next/link";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import { toast } from "sonner";
@@ -23,12 +23,14 @@ import FlatBadge from "~/components/FlatBadge";
 import { useSheet } from "~/hooks/use-sheet";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { AvatarState } from "../AvatarState";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
@@ -122,7 +124,7 @@ export function getColumns({
         const v = row.original;
         return (
           <Link
-            className="hover:text-blue-600 hover:underline"
+            className="hover:text-blue-600 hover:underline text-muted-foreground"
             href={routes.contacts.details(v.id)}
           >
             {v.firstName && decode(v.firstName)}
@@ -159,7 +161,11 @@ export function getColumns({
         <DataTableColumnHeader column={column} title={t("phone")} />
       ),
       cell: ({ row }) => {
-        return <div>{row.getValue("phoneNumber1")}</div>;
+        return (
+          <div className="text-muted-foreground">
+            {row.getValue("phoneNumber1")}
+          </div>
+        );
       },
     },
     {
@@ -168,107 +174,122 @@ export function getColumns({
         <DataTableColumnHeader column={column} title={t("email")} />
       ),
       cell: ({ row }) => {
-        return <div>{row.getValue("email")}</div>;
+        return (
+          <div className="text-muted-foreground">{row.getValue("email")}</div>
+        );
       },
     },
     {
       id: "actions",
-
-      cell: function Cell({ row }) {
-        const { openSheet } = useSheet();
-        const confirm = useConfirm();
-        const router = useRouter();
-        const contact = row.original;
-        const utils = api.useUtils();
-        const canDeleteContact = useCheckPermission(
-          "contact",
-          PermissionAction.DELETE,
-        );
-        const canUpdateContact = useCheckPermission(
-          "contact",
-          PermissionAction.UPDATE,
-        );
-        const deleteContactMutation = api.contact.delete.useMutation({
-          onSettled: () => utils.contact.all.invalidate(),
-          onError: (error) => {
-            toast.error(error.message, { id: 0 });
-          },
-          onSuccess: () => {
-            toast.success(t("deleted_successfully"), { id: 0 });
-            router.refresh();
-          },
-        });
-
-        return (
-          <div className="justify-end flex">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button aria-label="Open menu" variant="ghost">
-                  <DotsHorizontalIcon className="size-4" aria-hidden="true" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownInvitation
-                  entityId={contact.id}
-                  entityType="contact"
-                  email={contact.email}
-                />
-                <DropdownMenuItem
-                  onSelect={() => {
-                    openSheet({
-                      title: t("students"),
-                      view: <StudentContactList contactId={contact.id} />,
-                    });
-                  }}
-                >
-                  <Users />
-                  <span className="text-sm">{t("students")}</span>
-                </DropdownMenuItem>
-                {canUpdateContact && (
-                  <>
-                    <DropdownMenuItem
-                      onSelect={() => {
-                        openSheet({
-                          placement: "right",
-                          view: <CreateEditContact contact={row.original} />,
-                        });
-                      }}
-                    >
-                      <Pencil />
-                      {t("edit")}
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                  </>
-                )}
-
-                {canDeleteContact && (
-                  <DropdownMenuItem
-                    disabled={deleteContactMutation.isPending}
-                    variant="destructive"
-                    className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-                    onSelect={async () => {
-                      const isConfirmed = await confirm({
-                        title: t("delete"),
-                        description: t("delete_confirmation"),
-                      });
-                      if (isConfirmed) {
-                        toast.loading(t("deleting"), { id: 0 });
-                        deleteContactMutation.mutate(contact.id);
-                      }
-                    }}
-                  >
-                    <Trash2 />
-                    {t("delete")}
-                  </DropdownMenuItem>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        );
-      },
+      cell: ({ row }) => <ActionsCell contact={row.original} />,
       size: 60,
       enableSorting: false,
       enableHiding: false,
     },
   ];
+}
+
+function ActionsCell({ contact }: { contact: ContactAllProcedureOutput }) {
+  const { openSheet } = useSheet();
+  const confirm = useConfirm();
+  const { t } = useLocale();
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
+
+  const canDeleteContact = useCheckPermission(
+    "contact",
+    PermissionAction.DELETE
+  );
+  const canUpdateContact = useCheckPermission(
+    "contact",
+    PermissionAction.UPDATE
+  );
+  const deleteContactMutation = useMutation(
+    trpc.contact.delete.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.contact.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+    })
+  );
+  const router = useRouter();
+  return (
+    <div className="justify-end flex">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button aria-label="Open menu" variant="ghost">
+            <DotsHorizontalIcon className="size-4" aria-hidden="true" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem
+            onSelect={() => {
+              router.push(`/contacts/${contact.id}`);
+            }}
+          >
+            <ReceiptText />
+            {t("details")}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => {
+              openSheet({
+                title: t("students"),
+                view: <StudentContactList contactId={contact.id} />,
+              });
+            }}
+          >
+            <Users />
+            <span className="text-sm">{t("students")}</span>
+          </DropdownMenuItem>
+          {canUpdateContact && (
+            <DropdownMenuItem
+              onSelect={() => {
+                openSheet({
+                  placement: "right",
+                  view: <CreateEditContact contact={contact} />,
+                });
+              }}
+            >
+              <Pencil />
+              {t("edit")}
+            </DropdownMenuItem>
+          )}
+          <DropdownMenuSeparator />
+          <DropdownInvitation
+            entityId={contact.id}
+            entityType="contact"
+            email={contact.email}
+          />
+
+          {canDeleteContact && (
+            <>
+              {" "}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                disabled={deleteContactMutation.isPending}
+                variant="destructive"
+                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+                onSelect={async () => {
+                  const isConfirmed = await confirm({
+                    title: t("delete"),
+                    description: t("delete_confirmation"),
+                  });
+                  if (isConfirmed) {
+                    toast.loading(t("deleting"), { id: 0 });
+                    deleteContactMutation.mutate(contact.id);
+                  }
+                }}
+              >
+                <Trash2 />
+                {t("delete")}
+              </DropdownMenuItem>
+            </>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  );
 }

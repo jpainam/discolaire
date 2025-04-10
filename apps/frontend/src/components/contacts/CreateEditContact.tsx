@@ -21,10 +21,10 @@ import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 
 import { SheetClose, SheetFooter } from "@repo/ui/components/sheet";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { InputField } from "~/components/shared/forms/input-field";
 import PrefixSelector from "~/components/shared/forms/PrefixSelector";
-import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const createEditContactSchema = z.object({
   prefix: z.string().optional(),
@@ -39,13 +39,9 @@ const createEditContactSchema = z.object({
   observation: z.string().optional(),
 });
 
-type CreateEditContactValues = z.infer<typeof createEditContactSchema>;
-
 type ContactAllProcedureOutput = NonNullable<
   RouterOutputs["contact"]["all"]
 >[number];
-
-//type ContactGetProcedureOutput = NonNullable<RouterOutputs["contact"]["get"]>;
 
 interface CreateEditContactProps {
   contact?: ContactAllProcedureOutput;
@@ -53,7 +49,7 @@ interface CreateEditContactProps {
 
 export default function CreateEditContact({ contact }: CreateEditContactProps) {
   const { closeSheet } = useSheet();
-  const form = useForm<CreateEditContactValues>({
+  const form = useForm({
     resolver: zodResolver(createEditContactSchema),
     defaultValues: {
       prefix: contact?.prefix ?? "",
@@ -69,31 +65,33 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
     },
   });
   const { t } = useLocale();
-  const utils = api.useUtils();
-  const router = useRouter();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
-  const createContactMutation = api.contact.create.useMutation({
-    onSettled: () => utils.contact.invalidate(),
-    onSuccess: () => {
-      closeSheet();
-      toast.success(t("created_successfully"), { id: 0 });
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const updateContactMutation = api.contact.update.useMutation({
-    onSettled: () => utils.contact.invalidate(),
-    onSuccess: () => {
-      closeSheet();
-      toast.success(t("updated_successfully"), { id: 0 });
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const createContactMutation = useMutation(
+    trpc.contact.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.contact.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeSheet();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const updateContactMutation = useMutation(
+    trpc.contact.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.contact.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeSheet();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const onSubmit = (data: z.infer<typeof createEditContactSchema>) => {
     const values = {

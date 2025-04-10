@@ -5,7 +5,7 @@ import {
   History,
   KeySquare,
 } from "lucide-react";
-import React from "react";
+import React, { Suspense } from "react";
 
 import { checkPermission } from "@repo/api/permission";
 import { auth } from "@repo/auth";
@@ -13,11 +13,14 @@ import { NoPermission } from "~/components/no-permission";
 import { getServerTranslations } from "~/i18n/server";
 import { PermissionAction } from "~/permissions";
 
+import { Skeleton } from "@repo/ui/components/skeleton";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { ErrorFallback } from "~/components/error-fallback";
 import { StaffProfile } from "~/components/staffs/profile/StaffProfile";
 import { StaffTabMenu } from "~/components/staffs/profile/StaffTabMenu";
 import { StaffHeader } from "~/components/staffs/StaffHeader";
 import { routes } from "~/configs/routes";
-import { api, prefetch, trpc } from "~/trpc/server";
+import { getQueryClient, HydrateClient, prefetch, trpc } from "~/trpc/server";
 
 interface UserLink {
   icon: React.ReactNode;
@@ -32,10 +35,12 @@ export default async function Layout(props: {
   const params = await props.params;
 
   const { id } = params;
+  const queryClient = getQueryClient();
 
   const { children } = props;
   const session = await auth();
-  const staff = await api.staff.get(id);
+  const staff = await queryClient.fetchQuery(trpc.staff.get.queryOptions(id));
+
   if (staff.userId !== session?.user.id) {
     const canReadStaff = await checkPermission("staff", PermissionAction.READ);
     if (!canReadStaff) {
@@ -85,10 +90,28 @@ export default async function Layout(props: {
     },
   ];
   return (
-    <div className="flex flex-col gap-2 ">
-      <StaffHeader />
+    <HydrateClient>
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <Suspense
+          key={params.id}
+          fallback={
+            <div className="px-4 py-2">
+              <Skeleton className="h-8 " />
+            </div>
+          }
+        >
+          <StaffHeader />
+        </Suspense>
+      </ErrorBoundary>
       <div className="grid 2xl:grid-cols-[30%_70%] gap-2 px-4">
-        <StaffProfile staffId={id} />
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense
+            key={params.id}
+            fallback={<Skeleton className="h-20 w-full" />}
+          >
+            <StaffProfile />
+          </Suspense>
+        </ErrorBoundary>
 
         <div className="w-full md:grid-cols-2 xl:grid-cols-3">
           <div className="flex max-w-fit items-center rounded-full bg-muted text-muted-foreground">
@@ -107,6 +130,6 @@ export default async function Layout(props: {
           {children}
         </div>
       </div>
-    </div>
+    </HydrateClient>
   );
 }

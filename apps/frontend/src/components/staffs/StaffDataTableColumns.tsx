@@ -22,9 +22,12 @@ import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { routes } from "~/configs/routes";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { PermissionAction } from "~/permissions";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { AvatarState } from "../AvatarState";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
@@ -174,7 +177,10 @@ export function fetchStaffColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("jobTitle")} />
       ),
-      cell: (info) => info.getValue(),
+      cell: ({ row }) => {
+        const c = row.original;
+        return <div className="text-muted-foreground">{c.jobTitle}</div>;
+      },
       enableSorting: true,
     },
     {
@@ -182,7 +188,10 @@ export function fetchStaffColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("phone")} />
       ),
-      cell: (info) => info.getValue(),
+      cell: ({ row }) => {
+        const c = row.original;
+        return <div className="text-muted-foreground">{c.phoneNumber1}</div>;
+      },
       enableSorting: true,
     },
     {
@@ -190,17 +199,20 @@ export function fetchStaffColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("email")} />
       ),
-      cell: (info) => info.getValue(),
+      cell: ({ row }) => {
+        const c = row.original;
+        return <div className="text-muted-foreground">{c.email}</div>;
+      },
       enableSorting: true,
     },
-    {
-      accessorKey: "isActive",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("active")} />
-      ),
-      cell: (info) => info.getValue(),
-      enableSorting: true,
-    },
+    // {
+    //   accessorKey: "isActive",
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title={t("active")} />
+    //   ),
+    //   cell: (info) => info.getValue(),
+    //   enableSorting: true,
+    // },
     {
       accessorKey: "degree",
       header: ({ column }) => (
@@ -208,7 +220,9 @@ export function fetchStaffColumns({
       ),
       cell: ({ row }) => {
         const staff = row.original;
-        return <div>{staff.degree?.name}</div>;
+        return (
+          <div className="text-muted-foreground">{staff.degree?.name}</div>
+        );
       },
       enableSorting: true,
     },
@@ -219,7 +233,11 @@ export function fetchStaffColumns({
       ),
       cell: ({ row }) => {
         const staff = row.original;
-        return <div>{t(staff.employmentType ?? "")}</div>;
+        return (
+          <div className="text-muted-foreground">
+            {t(staff.employmentType ?? "")}
+          </div>
+        );
       },
       enableSorting: true,
     },
@@ -247,21 +265,26 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
   const { t } = useLocale();
   const { openSheet } = useSheet();
   const confirm = useConfirm();
-  const utils = api.useUtils();
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
 
-  const deleteStaffMutation = api.staff.delete.useMutation({
-    onSettled: () => utils.staff.invalidate(),
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.refresh();
-    },
-  });
+  const deleteStaffMutation = useMutation(
+    trpc.staff.delete.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.staff.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+    })
+  );
   const router = useRouter();
+  const canDeleteStaff = useCheckPermission("staff", PermissionAction.DELETE);
+  const canUpdateStaff = useCheckPermission("staff", PermissionAction.UPDATE);
+
   return (
-    <>
+    <div className="justify-end flex">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button aria-label="Open menu" variant={"ghost"}>
@@ -277,45 +300,52 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
             <ReceiptText />
             <span className="text-sm">{t("details")}</span>
           </DropdownMenuItem>
+          {canUpdateStaff && (
+            <DropdownMenuItem
+              className=""
+              onClick={() => {
+                openSheet({
+                  view: <CreateEditStaff staff={staff} />,
+                  title: t("edit_staff"),
+                  description: `${getFullName(staff)}`,
+                });
+              }}
+            >
+              <Pencil /> {t("edit")}
+            </DropdownMenuItem>
+          )}
+          <DropdownMenuSeparator />
           <DropdownInvitation
             entityId={staff.id}
             entityType="staff"
             email={staff.email}
           />
-          <DropdownMenuItem
-            className=""
-            onClick={() => {
-              openSheet({
-                view: <CreateEditStaff staff={staff} />,
-                title: t("edit_staff"),
-                description: `${getFullName(staff)}`,
-              });
-            }}
-          >
-            <Pencil /> {t("edit")}
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            disabled={deleteStaffMutation.isPending}
-            variant="destructive"
-            className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-            onClick={async () => {
-              const isConfirmed = await confirm({
-                title: t("delete"),
-                description: t("delete_confirmation", {
-                  name: getFullName(staff),
-                }),
-              });
-              if (isConfirmed) {
-                toast.loading(t("deleting"), { id: 0 });
-                deleteStaffMutation.mutate(staff.id);
-              }
-            }}
-          >
-            <Trash2 /> {t("delete")}
-          </DropdownMenuItem>
+
+          {canDeleteStaff && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                disabled={deleteStaffMutation.isPending}
+                variant="destructive"
+                onClick={async () => {
+                  const isConfirmed = await confirm({
+                    title: t("delete"),
+                    description: t("delete_confirmation", {
+                      name: getFullName(staff),
+                    }),
+                  });
+                  if (isConfirmed) {
+                    toast.loading(t("deleting"), { id: 0 });
+                    deleteStaffMutation.mutate(staff.id);
+                  }
+                }}
+              >
+                <Trash2 /> {t("delete")}
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
-    </>
+    </div>
   );
 }

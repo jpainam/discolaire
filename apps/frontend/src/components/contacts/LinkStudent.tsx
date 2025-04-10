@@ -27,10 +27,10 @@ import { useDebounce } from "~/hooks/use-debounce";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
-import { useRouter } from "next/navigation";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import rangeMap from "~/lib/range-map";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { randomAvatar } from "../raw-images";
 
@@ -41,29 +41,32 @@ export function LinkStudent({ contactId }: { contactId: string }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectedStudents, setSelectedStudents] = React.useState<any[]>([]);
   const [relationship, setRelationship] = useState<string | null>(null);
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
-  const contactUnLinkedStudent = api.contact.unlinkedStudents.useQuery({
-    contactId: contactId,
-    q: debounceValue,
-  });
+  const contactUnLinkedStudent = useQuery(
+    trpc.contact.unlinkedStudents.queryOptions({
+      contactId: contactId,
+      q: debounceValue,
+    })
+  );
 
   const { closeModal } = useModal();
-  const router = useRouter();
-  const createStudentContactMutation = api.studentContact.create.useMutation({
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("added_successfully"), { id: 0 });
-      closeModal();
-      router.refresh();
-    },
-    onSettled: async () => {
-      await utils.contact.students.invalidate();
-      await utils.student.contacts.invalidate();
-    },
-  });
-  const utils = api.useUtils();
+
+  const createStudentContactMutation = useMutation(
+    trpc.studentContact.create.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.contact.students.pathFilter());
+        await queryClient.invalidateQueries(trpc.student.contacts.pathFilter());
+        toast.success(t("added_successfully"), { id: 0 });
+        closeModal();
+      },
+    })
+  );
+
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
@@ -111,15 +114,15 @@ export function LinkStudent({ contactId }: { contactId: string }) {
                     if (selectedStudents.includes(stud)) {
                       return setSelectedStudents(
                         selectedStudents.filter(
-                          (selectedStudent) => selectedStudent.id !== stud.id,
-                        ),
+                          (selectedStudent) => selectedStudent.id !== stud.id
+                        )
                       );
                     }
 
                     return setSelectedStudents(
                       [...contactUnLinkedStudent.data].filter((u) =>
-                        [...selectedStudents, stud].includes(u),
-                      ),
+                        [...selectedStudents, stud].includes(u)
+                      )
                     );
                   }}
                 >

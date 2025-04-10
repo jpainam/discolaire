@@ -7,26 +7,22 @@ import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
+  CardAction,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-} from "@repo/ui/components/pagination";
 import { EmptyState } from "~/components/EmptyState";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { getErrorMessage } from "~/lib/handle-error";
 import { PermissionAction } from "~/permissions";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { routes } from "../../configs/routes";
 import { AvatarState } from "../AvatarState";
@@ -41,16 +37,31 @@ export default function StudentContactList({
 }: {
   contactId: string;
 }) {
-  const contactStudentsQuery = api.contact.students.useQuery(contactId);
-  const contactQuery = api.contact.get.useQuery(contactId);
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const contactStudentsQuery = useQuery(
+    trpc.contact.students.queryOptions(contactId)
+  );
+  const contactQuery = useQuery(trpc.contact.get.queryOptions(contactId));
 
   const { openModal } = useModal();
   const { t, i18n } = useLocale();
   const router = useRouter();
   const confirm = useConfirm();
 
-  const deleteStudentContactMutation = api.studentContact.delete.useMutation();
-  const utils = api.useUtils();
+  const deleteStudentContactMutation = useMutation(
+    trpc.studentContact.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.student.contacts.pathFilter());
+        await queryClient.invalidateQueries(trpc.contact.students.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
     year: "numeric",
     month: "short",
@@ -59,11 +70,11 @@ export default function StudentContactList({
   });
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (
@@ -99,48 +110,38 @@ export default function StudentContactList({
             const contact = contactQuery.data;
 
             return (
-              <Card
-                key={index}
-                className="gap-0 p-0 shadow-none"
-                // style={{
-                //   borderTopColor: color,
-                // }}
-              >
-                <CardHeader className="flex w-full flex-row items-start gap-12 border-b bg-muted/50 p-2">
-                  <div className="grid gap-0.5">
-                    <CardTitle className="group flex items-center">
-                      <AvatarState
-                        avatar={student.user?.avatar}
-                        className="h-[60px] w-[60px]"
-                        pos={getFullName(student).length}
-                      />
-                    </CardTitle>
-                  </div>
-                  <div className="ml-auto flex flex-col gap-1">
+              <Card key={index} className="p-0 gap-0">
+                <CardHeader className="border-b gap-0 bg-muted/50 p-2">
+                  <CardTitle>
+                    <AvatarState
+                      avatar={student.user?.avatar}
+                      className="h-[60px] w-[60px]"
+                      pos={getFullName(student).length}
+                    />
+                  </CardTitle>
+                  <CardAction className="gap-2 flex flex-col">
                     <Button
                       size="sm"
                       onClick={() => {
                         router.push(
-                          routes.students.details(studentcontact.studentId),
+                          routes.students.details(studentcontact.studentId)
                         );
                       }}
                       variant="outline"
-                      className="h-8 justify-start gap-1"
                     >
-                      <ExternalLink className="h-4 w-4" />
-                      <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-                        {t("profile")}
-                      </span>
+                      <ExternalLink />
+
+                      {t("profile")}
                     </Button>
-                    <div className="pl-1 text-xs text-muted-foreground">
+                    <div className="text-xs text-muted-foreground">
                       {t("bornOn")}:{" "}
                       {student.dateOfBirth &&
                         dateFormatter.format(student.dateOfBirth)}
                     </div>
-                  </div>
+                  </CardAction>
                 </CardHeader>
-                <CardContent className="p-0 text-sm">
-                  <ul className="grid gap-2 p-2">
+                <CardContent className="p-2 text-sm">
+                  <ul className="grid gap-2 ">
                     <li className="flex items-center justify-between">
                       <span className="text-muted-foreground">
                         {t("lastName")}
@@ -169,56 +170,37 @@ export default function StudentContactList({
                   </ul>
                 </CardContent>
                 {canDeleteContact && (
-                  <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-2 py-1">
-                    <Pagination className="ml-auto mr-0 w-auto p-0">
-                      <PaginationContent>
-                        <PaginationItem>
-                          <Button
-                            onClick={async () => {
-                              if (!contact?.id) {
-                                return;
-                              }
-                              const isConfirmed = await confirm({
-                                title: t("delete"),
-                                description: t("delete_confirmation"),
-                              });
+                  <CardFooter className="border-t gap-0 flex flex-row items-center mb-3 justify-end">
+                    <Button
+                      onClick={async () => {
+                        if (!contact?.id) {
+                          return;
+                        }
+                        const isConfirmed = await confirm({
+                          title: t("delete"),
+                          description: t("delete_confirmation"),
+                        });
 
-                              if (isConfirmed) {
-                                toast.promise(
-                                  deleteStudentContactMutation.mutateAsync({
-                                    studentId: studentcontact.studentId,
-                                    contactId: contact.id,
-                                  }),
-                                  {
-                                    loading: t("deleting"),
-                                    success: async () => {
-                                      await utils.student.contacts.invalidate();
-                                      await utils.contact.students.invalidate();
-
-                                      return t("deleted_successfully");
-                                    },
-                                    error: (error) => {
-                                      return getErrorMessage(error);
-                                    },
-                                  },
-                                );
-                              }
-                            }}
-                            size="icon"
-                            className="w-8"
-                            variant="outline"
-                          >
-                            <Trash2 className="h-4 w-4 text-destructive" />
-                            <span className="sr-only">{t("delete")}</span>
-                          </Button>
-                        </PaginationItem>
-                      </PaginationContent>
-                    </Pagination>
+                        if (isConfirmed) {
+                          toast.loading(t("deleting"), { id: 0 });
+                          deleteStudentContactMutation.mutate({
+                            studentId: studentcontact.studentId,
+                            contactId: contact.id,
+                          });
+                        }
+                      }}
+                      size="icon"
+                      className="sisze-8"
+                      variant="outline"
+                    >
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                      <span className="sr-only">{t("delete")}</span>
+                    </Button>
                   </CardFooter>
                 )}
               </Card>
             );
-          },
+          }
         )}
       </div>
     </div>

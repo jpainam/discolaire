@@ -1,17 +1,24 @@
+"use client";
 import { Card, CardContent, CardHeader } from "@repo/ui/components/card";
 import { Separator } from "@repo/ui/components/separator";
-import { getServerTranslations } from "~/i18n/server";
 
 import { AvatarState } from "~/components/AvatarState";
 
-import { api } from "~/trpc/server";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
+import { useLocale } from "~/i18n";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { StaffProfileHeader } from "./StaffProfileHeader";
 
-export async function StaffProfile({ staffId }: { staffId: string }) {
-  const staff = await api.staff.get(staffId);
+export function StaffProfile() {
+  const params = useParams<{ id: string }>();
+  const trpc = useTRPC();
+  const { data: staff } = useSuspenseQuery(
+    trpc.staff.get.queryOptions(params.id)
+  );
 
-  const { t, i18n } = await getServerTranslations();
+  const { t, i18n } = useLocale();
   const dateFormatter = new Intl.DateTimeFormat(i18n.language, {
     dateStyle: "long",
     timeZone: "UTC",

@@ -21,9 +21,9 @@ import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SheetClose, SheetFooter } from "@repo/ui/components/sheet";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { DatePicker } from "../DatePicker";
 import { CountryPicker } from "../shared/CountryPicker";
 import { InputField } from "../shared/forms/input-field";
@@ -91,34 +91,34 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
     },
   });
   const { t } = useLocale();
-  const utils = api.useUtils();
-  const router = useRouter();
-  const createStaffMutation = api.staff.create.useMutation({
-    onSettled: async () => {
-      await utils.staff.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeSheet();
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const updateStaffMutation = api.staff.update.useMutation({
-    onSettled: async () => {
-      await utils.staff.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      closeSheet();
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const createStaffMutation = useMutation(
+    trpc.staff.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.staff.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeSheet();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const updateStaffMutation = useMutation(
+    trpc.staff.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.staff.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeSheet();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const onSubmit = (data: z.infer<typeof staffCreateEditSchema>) => {
     const values = {
