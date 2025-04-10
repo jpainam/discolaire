@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
 import { isSameDay } from "date-fns";
 
 import type { CalendarEvent, EventColor } from "~/components/event-calendar";
@@ -5,25 +6,22 @@ import type { CalendarEvent, EventColor } from "~/components/event-calendar";
 /**
  * Get CSS classes for event colors
  */
-// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 export function getEventColorClasses(color?: EventColor | string): string {
   const eventColor = color ?? "sky";
 
   switch (eventColor) {
     case "sky":
-      return "bg-sky-200/50 hover:bg-sky-200/40 text-sky-950/80 dark:bg-sky-400/25 dark:hover:bg-sky-400/20 dark:text-sky-200 shadow-sky-700/8";
-    case "amber":
-      return "bg-amber-200/50 hover:bg-amber-200/40 text-amber-950/80 dark:bg-amber-400/25 dark:hover:bg-amber-400/20 dark:text-amber-200 shadow-amber-700/8";
+      return "bg-blue-200/50 hover:bg-blue-200/40 text-blue-900/90 dark:bg-blue-400/25 dark:hover:bg-blue-400/20 dark:text-blue-200 shadow-blue-700/8";
     case "violet":
-      return "bg-violet-200/50 hover:bg-violet-200/40 text-violet-950/80 dark:bg-violet-400/25 dark:hover:bg-violet-400/20 dark:text-violet-200 shadow-violet-700/8";
+      return "bg-violet-200/50 hover:bg-violet-200/40 text-violet-900/90 dark:bg-violet-400/25 dark:hover:bg-violet-400/20 dark:text-violet-200 shadow-violet-700/8";
     case "rose":
-      return "bg-rose-200/50 hover:bg-rose-200/40 text-rose-950/80 dark:bg-rose-400/25 dark:hover:bg-rose-400/20 dark:text-rose-200 shadow-rose-700/8";
+      return "bg-rose-200/50 hover:bg-rose-200/40 text-rose-900/90 dark:bg-rose-400/25 dark:hover:bg-rose-400/20 dark:text-rose-200 shadow-rose-700/8";
     case "emerald":
-      return "bg-emerald-200/50 hover:bg-emerald-200/40 text-emerald-950/80 dark:bg-emerald-400/25 dark:hover:bg-emerald-400/20 dark:text-emerald-200 shadow-emerald-700/8";
+      return "bg-emerald-200/50 hover:bg-emerald-200/40 text-emerald-900/90 dark:bg-emerald-400/25 dark:hover:bg-emerald-400/20 dark:text-emerald-200 shadow-emerald-700/8";
     case "orange":
-      return "bg-orange-200/50 hover:bg-orange-200/40 text-orange-950/80 dark:bg-orange-400/25 dark:hover:bg-orange-400/20 dark:text-orange-200 shadow-orange-700/8";
+      return "bg-orange-200/50 hover:bg-orange-200/40 text-orange-900/90 dark:bg-orange-400/25 dark:hover:bg-orange-400/20 dark:text-orange-200 shadow-orange-700/8";
     default:
-      return "bg-sky-200/50 hover:bg-sky-200/40 text-sky-950/80 dark:bg-sky-400/25 dark:hover:bg-sky-400/20 dark:text-sky-200 shadow-sky-700/8";
+      return "bg-blue-200/50 hover:bg-blue-200/40 text-blue-900/90 dark:bg-blue-400/25 dark:hover:bg-blue-400/20 dark:text-blue-200 shadow-blue-700/8";
   }
 }
 
@@ -32,16 +30,16 @@ export function getEventColorClasses(color?: EventColor | string): string {
  */
 export function getBorderRadiusClasses(
   isFirstDay: boolean,
-  isLastDay: boolean,
+  isLastDay: boolean
 ): string {
   if (isFirstDay && isLastDay) {
     return "rounded"; // Both ends rounded
   } else if (isFirstDay) {
-    return "rounded-l rounded-r-none"; // Only left end rounded
+    return "rounded-l rounded-r-none not-in-data-[slot=popover-content]:w-[calc(100%+5px)]"; // Only left end rounded
   } else if (isLastDay) {
-    return "rounded-r rounded-l-none"; // Only right end rounded
+    return "rounded-r rounded-l-none not-in-data-[slot=popover-content]:w-[calc(100%+4px)] not-in-data-[slot=popover-content]:-translate-x-[4px]"; // Only right end rounded
   } else {
-    return "rounded-none"; // No rounded corners
+    return "rounded-none not-in-data-[slot=popover-content]:w-[calc(100%+9px)] not-in-data-[slot=popover-content]:-translate-x-[4px]"; // No rounded corners
   }
 }
 
@@ -59,7 +57,7 @@ export function isMultiDayEvent(event: CalendarEvent): boolean {
  */
 export function getEventsForDay(
   events: CalendarEvent[],
-  day: Date,
+  day: Date
 ): CalendarEvent[] {
   return events
     .filter((event) => {
@@ -89,7 +87,7 @@ export function sortEvents(events: CalendarEvent[]): CalendarEvent[] {
  */
 export function getSpanningEventsForDay(
   events: CalendarEvent[],
-  day: Date,
+  day: Date
 ): CalendarEvent[] {
   return events.filter((event) => {
     if (!isMultiDayEvent(event)) return false;
@@ -110,7 +108,7 @@ export function getSpanningEventsForDay(
  */
 export function getAllEventsForDay(
   events: CalendarEvent[],
-  day: Date,
+  day: Date
 ): CalendarEvent[] {
   return events.filter((event) => {
     const eventStart = new Date(event.start);
@@ -128,7 +126,7 @@ export function getAllEventsForDay(
  */
 export function getAgendaEventsForDay(
   events: CalendarEvent[],
-  day: Date,
+  day: Date
 ): CalendarEvent[] {
   return events
     .filter((event) => {

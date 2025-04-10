@@ -18,6 +18,7 @@ import {
 } from "date-fns";
 import React, { useMemo } from "react";
 
+import { cn } from "@repo/ui/lib/utils";
 import type { CalendarEvent } from "~/components/event-calendar";
 import {
   DraggableEvent,
@@ -28,13 +29,12 @@ import {
   WeekCellsHeight,
 } from "~/components/event-calendar";
 import { EndHour, StartHour } from "~/components/event-calendar/constants";
-import { cn } from "~/lib/utils";
 
 interface WeekViewProps {
   currentDate: Date;
   events: CalendarEvent[];
-  onEventSelect: (event: CalendarEvent) => void;
-  onEventCreate: (startTime: Date) => void;
+  onEventSelect?: (event: CalendarEvent) => void;
+  onEventCreate?: (startTime: Date) => void;
 }
 
 interface PositionedEvent {
@@ -49,8 +49,8 @@ interface PositionedEvent {
 export function WeekView({
   currentDate,
   events,
-  //onEventSelect,
-  //onEventCreate,
+  onEventSelect,
+  onEventCreate,
 }: WeekViewProps) {
   const days = useMemo(() => {
     const weekStart = startOfWeek(currentDate, { weekStartsOn: 0 });
@@ -60,7 +60,7 @@ export function WeekView({
 
   const weekStart = useMemo(
     () => startOfWeek(currentDate, { weekStartsOn: 0 }),
-    [currentDate],
+    [currentDate]
   );
 
   const hours = useMemo(() => {
@@ -76,7 +76,7 @@ export function WeekView({
     return events
       .filter((event) => {
         // Include explicitly marked all-day events or multi-day events
-        return event.allDay ?? isMultiDayEvent(event);
+        return (event.allDay ?? false) || isMultiDayEvent(event);
       })
       .filter((event) => {
         const eventStart = new Date(event.start);
@@ -85,7 +85,7 @@ export function WeekView({
           (day) =>
             isSameDay(day, eventStart) ||
             isSameDay(day, eventEnd) ||
-            (day > eventStart && day < eventEnd),
+            (day > eventStart && day < eventEnd)
         );
       });
   }, [events, days]);
@@ -170,8 +170,8 @@ export function WeekView({
                 {
                   start: new Date(c.event.start),
                   end: new Date(c.event.end),
-                },
-              ),
+                }
+              )
             );
             if (!overlaps) {
               placed = true;
@@ -208,25 +208,25 @@ export function WeekView({
 
   const handleEventClick = (event: CalendarEvent, e: React.MouseEvent) => {
     e.stopPropagation();
-    //onEventSelect(event);
+    onEventSelect?.(event);
   };
 
   const showAllDaySection = allDayEvents.length > 0;
   const { currentTimePosition, currentTimeVisible } = useCurrentTimeIndicator(
     currentDate,
-    "week",
+    "week"
   );
 
   return (
     <div data-slot="week-view" className="flex h-full flex-col">
-      <div className="bg-background/80 border-border/70 sticky top-0 z-30 grid grid-cols-8 border-b backdrop-blur-md">
-        <div className="text-muted-foreground/70 py-2 text-center text-sm">
+      <div className="bg-background/80 border-border/70 sticky top-0 z-30 grid grid-cols-8 border-y backdrop-blur-md uppercase">
+        <div className="text-muted-foreground/70 py-2 text-center text-xs">
           <span className="max-[479px]:sr-only">{format(new Date(), "O")}</span>
         </div>
         {days.map((day) => (
           <div
             key={day.toString()}
-            className="data-today:text-foreground text-muted-foreground/70 py-2 text-center text-sm data-today:font-medium"
+            className="data-today:text-foreground text-muted-foreground/70 py-2 text-center text-xs data-today:font-medium"
             data-today={isToday(day) || undefined}
           >
             <span className="sm:hidden" aria-hidden="true">
@@ -286,7 +286,7 @@ export function WeekView({
                         <div
                           className={cn(
                             "truncate",
-                            !shouldShowTitle && "invisible",
+                            !shouldShowTitle && "invisible"
                           )}
                           aria-hidden={!shouldShowTitle}
                         >
@@ -303,7 +303,7 @@ export function WeekView({
       )}
 
       <div className="grid flex-1 grid-cols-8 overflow-hidden">
-        <div className="border-border/70 grid auto-cols-fr border-r">
+        <div className="border-border/70 border-r grid auto-cols-fr">
           {hours.map((hour, index) => (
             <div
               key={hour.toString()}
@@ -321,7 +321,7 @@ export function WeekView({
         {days.map((day, dayIndex) => (
           <div
             key={day.toString()}
-            className="border-border/70 relative grid auto-cols-fr border-r last:border-r-0"
+            className="border-border/70 relative border-r last:border-r-0 grid auto-cols-fr"
             data-today={isToday(day) || undefined}
           >
             {/* Positioned events */}
@@ -357,8 +357,8 @@ export function WeekView({
                 style={{ top: `${currentTimePosition}%` }}
               >
                 <div className="relative flex items-center">
-                  <div className="bg-primary absolute -left-1 h-2 w-2 rounded-full"></div>
-                  <div className="bg-primary h-[2px] w-full"></div>
+                  <div className="bg-red-500 absolute -left-1 h-2 w-2 rounded-full"></div>
+                  <div className="bg-red-500 h-[2px] w-full"></div>
                 </div>
               </div>
             )}
@@ -386,13 +386,13 @@ export function WeekView({
                           quarter === 2 &&
                             "top-[calc(var(--week-cells-height)/4*2)]",
                           quarter === 3 &&
-                            "top-[calc(var(--week-cells-height)/4*3)]",
+                            "top-[calc(var(--week-cells-height)/4*3)]"
                         )}
                         onClick={() => {
                           const startTime = new Date(day);
                           startTime.setHours(hourValue);
                           startTime.setMinutes(quarter * 15);
-                          //onEventCreate(startTime);
+                          onEventCreate?.(startTime);
                         }}
                       />
                     );

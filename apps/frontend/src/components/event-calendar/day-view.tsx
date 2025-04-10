@@ -13,6 +13,7 @@ import {
 } from "date-fns";
 import React, { useMemo } from "react";
 
+import { cn } from "@repo/ui/lib/utils";
 import type { CalendarEvent } from "~/components/event-calendar";
 import {
   DraggableEvent,
@@ -23,13 +24,12 @@ import {
   WeekCellsHeight,
 } from "~/components/event-calendar";
 import { EndHour, StartHour } from "~/components/event-calendar/constants";
-import { cn } from "~/lib/utils";
 
 interface DayViewProps {
   currentDate: Date;
   events: CalendarEvent[];
-  onEventSelect: (event: CalendarEvent) => void;
-  onEventCreate: (startTime: Date) => void;
+  onEventSelect?: (event: CalendarEvent) => void;
+  onEventCreate?: (startTime: Date) => void;
 }
 
 interface PositionedEvent {
@@ -44,8 +44,8 @@ interface PositionedEvent {
 export function DayView({
   currentDate,
   events,
-  //onEventSelect,
-  //onEventCreate,
+  onEventSelect,
+  onEventCreate,
 }: DayViewProps) {
   const hours = useMemo(() => {
     const dayStart = startOfDay(currentDate);
@@ -67,7 +67,7 @@ export function DayView({
         );
       })
       .sort(
-        (a, b) => new Date(a.start).getTime() - new Date(b.start).getTime(),
+        (a, b) => new Date(a.start).getTime() - new Date(b.start).getTime()
       );
   }, [currentDate, events]);
 
@@ -144,8 +144,8 @@ export function DayView({
           const overlaps = col.some((c) =>
             areIntervalsOverlapping(
               { start: adjustedStart, end: adjustedEnd },
-              { start: new Date(c.event.start), end: new Date(c.event.end) },
-            ),
+              { start: new Date(c.event.start), end: new Date(c.event.end) }
+            )
           );
           if (!overlaps) {
             placed = true;
@@ -179,13 +179,13 @@ export function DayView({
 
   const handleEventClick = (event: CalendarEvent, e: React.MouseEvent) => {
     e.stopPropagation();
-    //onEventSelect(event);
+    onEventSelect?.(event);
   };
 
   const showAllDaySection = allDayEvents.length > 0;
   const { currentTimePosition, currentTimeVisible } = useCurrentTimeIndicator(
     currentDate,
-    "day",
+    "day"
   );
 
   return (
@@ -224,7 +224,7 @@ export function DayView({
         </div>
       )}
 
-      <div className="border-border/70 grid flex-1 grid-cols-[3rem_1fr] overflow-hidden border-t sm:grid-cols-[4rem_1fr]">
+      <div className="border-border/70 grid flex-1 grid-cols-[3rem_1fr] border-t sm:grid-cols-[4rem_1fr] overflow-hidden">
         <div>
           {hours.map((hour, index) => (
             <div
@@ -273,8 +273,8 @@ export function DayView({
               style={{ top: `${currentTimePosition}%` }}
             >
               <div className="relative flex items-center">
-                <div className="bg-primary absolute -left-1 h-2 w-2 rounded-full"></div>
-                <div className="bg-primary h-[2px] w-full"></div>
+                <div className="bg-red-500 absolute -left-1 h-2 w-2 rounded-full"></div>
+                <div className="bg-red-500 h-[2px] w-full"></div>
               </div>
             </div>
           )}
@@ -304,13 +304,13 @@ export function DayView({
                         quarter === 2 &&
                           "top-[calc(var(--week-cells-height)/4*2)]",
                         quarter === 3 &&
-                          "top-[calc(var(--week-cells-height)/4*3)]",
+                          "top-[calc(var(--week-cells-height)/4*3)]"
                       )}
                       onClick={() => {
                         const startTime = new Date(currentDate);
                         startTime.setHours(hourValue);
                         startTime.setMinutes(quarter * 15);
-                        //onEventCreate(startTime);
+                        onEventCreate?.(startTime);
                       }}
                     />
                   );

@@ -9,7 +9,7 @@ import { AdminSidebar } from "./administration/admin-sidebar";
 import { ClassroomSidebar } from "./classrooms/ClassroomSidebar";
 import { ContactSidebar } from "./contacts/ContactSidebar";
 import { StaffSidebar } from "./staffs/StaffSidebar";
-import { TimetableSidebar } from "./timetables/TimetableSidebar";
+//import { TimetableSidebar } from "./timetables/TimetableSidebar";
 import { UserSidebar } from "./users/UserSidebar";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -38,7 +38,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const isStaff =
     pathname.startsWith("/staffs") && pathname.split("/").length > 2;
 
-  const isTimetable = pathname.startsWith("/timetables");
+  //const isTimetable = pathname.startsWith("/timetables");
 
   return (
     <>
@@ -49,7 +49,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {isUser && <UserSidebar {...props} />}
       {isContact && <ContactSidebar {...props} />}
       {isStaff && <StaffSidebar {...props} />}
-      {isTimetable && <TimetableSidebar {...props} />}
+      {/* {isTimetable && <TimetableSidebar {...props} />} */}
     </>
   );
 }

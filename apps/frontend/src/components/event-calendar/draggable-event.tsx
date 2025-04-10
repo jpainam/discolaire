@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
 
 import { useDraggable } from "@dnd-kit/core";
@@ -45,7 +44,9 @@ export function DraggableEvent({
   const eventStart = new Date(event.start);
   const eventEnd = new Date(event.end);
   const isMultiDayEvent =
-    isMultiDay ?? event.allDay ?? differenceInDays(eventEnd, eventStart) >= 1;
+    (isMultiDay ?? false) ||
+    (event.allDay ?? false) ||
+    differenceInDays(eventEnd, eventStart) >= 1;
 
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
@@ -102,12 +103,12 @@ export function DraggableEvent({
     if (elementRef.current) {
       const rect = elementRef.current.getBoundingClientRect();
       const touch = e.touches[0];
-      setDragHandlePosition({
-        // @ts-expect-error TODO Remove this
-        x: touch.clientX - rect.left,
-        // @ts-expect-error TODO Remove this
-        y: touch.clientY - rect.top,
-      });
+      if (touch) {
+        setDragHandlePosition({
+          x: touch.clientX - rect.left,
+          y: touch.clientY - rect.top,
+        });
+      }
     }
   };
 
@@ -115,6 +116,7 @@ export function DraggableEvent({
     <div
       ref={(node) => {
         setNodeRef(node);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (elementRef) elementRef.current = node;
       }}
       style={style}

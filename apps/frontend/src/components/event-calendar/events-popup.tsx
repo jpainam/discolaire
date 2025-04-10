@@ -11,16 +11,16 @@ interface EventsPopupProps {
   date: Date;
   events: CalendarEvent[];
   position: { top: number; left: number };
-  onClose: () => void;
-  onEventSelect: (event: CalendarEvent) => void;
+  onClose?: () => void;
+  onEventSelect?: (event: CalendarEvent) => void;
 }
 
 export function EventsPopup({
   date,
   events,
   position,
-  //onClose,
-  //onEventSelect,
+  onClose,
+  onEventSelect,
 }: EventsPopupProps) {
   const popupRef = useRef<HTMLDivElement>(null);
 
@@ -31,7 +31,7 @@ export function EventsPopup({
         popupRef.current &&
         !popupRef.current.contains(event.target as Node)
       ) {
-        //onClose();
+        onClose?.();
       }
     };
 
@@ -39,13 +39,13 @@ export function EventsPopup({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [onClose]);
 
   // Handle escape key to close popup
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        // onClose();
+        onClose?.();
       }
     };
 
@@ -53,12 +53,11 @@ export function EventsPopup({
     return () => {
       document.removeEventListener("keydown", handleEscKey);
     };
-  }, []);
+  }, [onClose]);
 
   const handleEventClick = (event: CalendarEvent) => {
-    console.log("Event clicked:", event);
-    //onEventSelect(event);
-    //onClose();
+    onEventSelect?.(event);
+    onClose?.();
   };
 
   // Adjust position to ensure popup stays within viewport
@@ -97,7 +96,7 @@ export function EventsPopup({
       <div className="bg-background sticky top-0 flex items-center justify-between border-b p-3">
         <h3 className="font-medium">{format(date, "d MMMM yyyy")}</h3>
         <button
-          //onClick={onClose}
+          onClick={onClose}
           className="hover:bg-muted rounded-full p-1"
           aria-label="Close"
         >
