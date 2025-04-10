@@ -14,7 +14,7 @@ export function SchoolDataTable() {
   const { t } = useLocale();
   const trpc = useTRPC();
   const { data: schools } = useSuspenseQuery(
-    trpc.formerSchool.all.queryOptions()
+    trpc.formerSchool.all.queryOptions(),
   );
 
   const columns = useMemo(() => getSchoolColumns({ t }), [t]);

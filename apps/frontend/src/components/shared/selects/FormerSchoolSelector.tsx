@@ -24,11 +24,11 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
 import { useForm } from "react-hook-form";
-import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { api, useTRPC } from "~/trpc/react";
 import VirtualizedCommand from "./VirtualizedCommand";
 
 interface Option {
@@ -70,7 +70,7 @@ export function FormerSchoolSelector({
     if (formerSchoolsQuery.data) {
       if (defaultValue) {
         const dValue = formerSchoolsQuery.data.find(
-          (item) => item.id === defaultValue,
+          (item) => item.id === defaultValue
         );
         if (dValue) setSelectedOption({ label: dValue.name, value: dValue.id });
       }
@@ -79,7 +79,7 @@ export function FormerSchoolSelector({
           label: decode(item.name),
           value: item.id,
           avatar: undefined,
-        })),
+        }))
       );
     }
   }, [defaultValue, formerSchoolsQuery.data]);
@@ -116,7 +116,7 @@ export function FormerSchoolSelector({
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    isSelected ? "opacity-100" : "opacity-0",
+                    isSelected ? "opacity-100" : "opacity-0"
                   )}
                 />
               </>
@@ -131,7 +131,7 @@ export function FormerSchoolSelector({
           selectedOption={selectedOption.value}
           onSelectOption={(currentValue) => {
             onChange?.(
-              currentValue === selectedOption.value ? null : currentValue,
+              currentValue === selectedOption.value ? null : currentValue
             );
             setSelectedOption({
               value: currentValue === selectedOption.value ? "" : currentValue,
@@ -161,22 +161,22 @@ function CreateFormerSchool() {
       name: "",
     },
   });
-  const utils = api.useUtils();
-  const router = useRouter();
+
   const { closeModal } = useModal();
-  const createFormerSchoolMutation = api.formerSchool.create.useMutation({
-    onSettled: async () => {
-      await utils.formerSchool.all.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      router.refresh();
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const createFormerSchoolMutation = useMutation(
+    trpc.formerSchool.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.formerSchool.all.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const onSubmit = (data: z.infer<typeof createSchoolSchema>) => {
     toast.loading(t("creating"), { id: 0 });
     createFormerSchoolMutation.mutate(data);

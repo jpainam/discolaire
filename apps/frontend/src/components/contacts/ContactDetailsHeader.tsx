@@ -28,15 +28,20 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import type { RouterOutputs } from "@repo/api";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
+import { useParams } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
@@ -46,27 +51,32 @@ import { CreateEditUser } from "../users/CreateEditUser";
 import CreateEditContact from "./CreateEditContact";
 import { LinkStudent } from "./LinkStudent";
 
-export function ContactDetailsHeader({
-  contact,
-}: {
-  contact: NonNullable<RouterOutputs["contact"]["get"]>;
-}) {
-  const utils = api.useUtils();
+export function ContactDetailsHeader() {
+  const trpc = useTRPC();
+  const params = useParams<{ id: string }>();
+  const { data: contact } = useSuspenseQuery(
+    trpc.contact.get.queryOptions(params.id)
+  );
+
   const router = useRouter();
   const confirm = useConfirm();
-  const deleteContactMutation = api.contact.delete.useMutation({
-    onSettled: () => utils.contact.invalidate(),
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.push(routes.contacts.index);
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const queryClient = useQueryClient();
+
+  const deleteContactMutation = useMutation(
+    trpc.contact.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.contact.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+        router.push(routes.contacts.index);
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();
@@ -84,11 +94,11 @@ export function ContactDetailsHeader({
 
   const canUpdateContact = useCheckPermission(
     "contact",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   const handleDeleteAvatar = useCallback(
@@ -109,7 +119,7 @@ export function ContactDetailsHeader({
         toast.error(response.statusText, { id: 0 });
       }
     },
-    [t, router],
+    [t, router]
   );
 
   return (

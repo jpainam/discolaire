@@ -90,7 +90,7 @@ function ActionCell({ school }: { school: FormerSchool }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   return (
     <div className="flex justify-end">

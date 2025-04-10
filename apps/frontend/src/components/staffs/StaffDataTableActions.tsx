@@ -11,10 +11,9 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { RiDeleteBinLine } from "@remixicon/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
-import { getErrorMessage } from "~/lib/handle-error";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 type StaffProcedureOutput = NonNullable<RouterOutputs["staff"]["all"]>[number];
 
@@ -24,20 +23,22 @@ export function StaffDataTableActions({
   table: Table<StaffProcedureOutput>;
 }) {
   const { t } = useLocale();
-  const router = useRouter();
-
   const canDeleteStaff = useCheckPermission("staff", PermissionAction.DELETE);
-  const utils = api.useUtils();
-  const deleteStaffMutation = api.staff.delete.useMutation({
-    onSettled: () => utils.staff.invalidate(),
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const deleteStaffMutation = useMutation(
+    trpc.staff.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.staff.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+        table.resetRowSelection();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const rows = table.getFilteredSelectedRowModel().rows;
 
@@ -68,17 +69,8 @@ export function StaffDataTableActions({
               });
               if (isConfirmed) {
                 const ids = rows.map((row) => row.original.id);
-
-                toast.promise(deleteStaffMutation.mutateAsync(ids), {
-                  loading: t("deleting"),
-                  success: () => {
-                    table.toggleAllRowsSelected(false);
-                    return t("deleted_successfully");
-                  },
-                  error: (err) => {
-                    return getErrorMessage(err);
-                  },
-                });
+                toast.loading(t("deleting"), { id: 0 });
+                deleteStaffMutation.mutate(ids);
               }
             }}
             variant="destructive"

@@ -20,47 +20,51 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { EmptyState } from "~/components/EmptyState";
-import { useLocale } from "~/i18n";
-import { useConfirm } from "~/providers/confirm-dialog";
-
-import type { RouterOutputs } from "@repo/api";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { decode } from "entities";
+import { useParams } from "next/navigation";
 import { AvatarState } from "~/components/AvatarState";
+import { EmptyState } from "~/components/EmptyState";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
-import { api } from "~/trpc/react";
+import { useConfirm } from "~/providers/confirm-dialog";
+import { useTRPC } from "~/trpc/react";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 
-export function ContactStudentTable({
-  studentContacts,
-}: {
-  studentContacts: RouterOutputs["contact"]["students"];
-}) {
-  const utils = api.useUtils();
+export function ContactStudentTable() {
   const confirm = useConfirm();
-  const router = useRouter();
   const { t } = useLocale();
   const canUpdateContact = useCheckPermission(
     "contact",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
-  const deleteStudentContactMutation = api.studentContact.delete.useMutation({
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSettled: async () => {
-      await utils.contact.students.invalidate();
-      await utils.student.contacts.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("delete_successfully"), { id: 0 });
-      router.refresh();
-    },
-  });
+  const trpc = useTRPC();
+  const params = useParams<{ id: string }>();
+  const { data: studentContacts } = useSuspenseQuery(
+    trpc.contact.students.queryOptions(params.id)
+  );
+  const queryClient = useQueryClient();
+  const deleteStudentContactMutation = useMutation(
+    trpc.studentContact.delete.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.contact.students.pathFilter());
+        await queryClient.invalidateQueries(trpc.student.contacts.pathFilter());
+        toast.success(t("delete_successfully"), { id: 0 });
+      },
+    })
+  );
+  const router = useRouter();
 
   if (studentContacts.length == 0) {
     return <EmptyState className="m-8" />;
@@ -133,7 +137,7 @@ export function ContactStudentTable({
                         onSelect={() => {
                           if (!student.id) return;
                           router.push(
-                            `${routes.students.contacts(student.id)}/${stc.contactId}`,
+                            `${routes.students.contacts(student.id)}/${stc.contactId}`
                           );
                         }}
                       >
