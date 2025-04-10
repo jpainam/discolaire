@@ -42,7 +42,7 @@ export function EventSidebar({
       <SidebarHeader>
         <SidebarLogo />
       </SidebarHeader>
-      <SidebarContent className="gap-0 mt-3 pt-3 border-t">
+      <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
@@ -55,7 +55,7 @@ export function EventSidebar({
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
-        <SidebarGroup className="px-1">
+        <SidebarGroup>
           <SidebarCalendar />
         </SidebarGroup>
         <SidebarGroup className="px-1 mt-3 pt-4 border-t">

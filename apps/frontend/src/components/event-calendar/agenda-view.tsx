@@ -26,7 +26,7 @@ export function AgendaView({
   const days = useMemo(() => {
     console.log("Agenda view updating with date:", currentDate.toISOString());
     return Array.from({ length: AgendaDaysToShow }, (_, i) =>
-      addDays(new Date(currentDate), i)
+      addDays(new Date(currentDate), i),
     );
   }, [currentDate]);
 
@@ -38,7 +38,7 @@ export function AgendaView({
 
   // Check if there are any days with events
   const hasEvents = days.some(
-    (day) => getAgendaEventsForDay(events, day).length > 0
+    (day) => getAgendaEventsForDay(events, day).length > 0,
   );
 
   return (

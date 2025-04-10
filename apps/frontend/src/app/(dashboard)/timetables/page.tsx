@@ -1,6 +1,6 @@
 // "use client";
 
-import { SidebarInset, SidebarProvider } from "@repo/ui/components/sidebar";
+import { SidebarProvider } from "@repo/ui/components/sidebar";
 import BigCalendar from "~/components/event-calendar/big-calendar";
 import { EventSidebar } from "~/components/event-calendar/event-sidebar";
 
@@ -164,13 +164,20 @@ import { EventSidebar } from "~/components/event-calendar/event-sidebar";
 // }
 export default function Page() {
   return (
-    <SidebarProvider>
+    <SidebarProvider
+      style={
+        {
+          // "--sidebar-width": "14rem",
+          // "--sidebar-width-mobile": "16rem",
+        }
+      }
+      defaultOpen={true}
+    >
       <EventSidebar />
-      <SidebarInset>
-        <div className="flex flex-1 flex-col gap-4 p-2 pt-0">
-          <BigCalendar />
-        </div>
-      </SidebarInset>
+
+      <div className="flex flex-1 flex-col gap-4 p-2 pt-0">
+        <BigCalendar />
+      </div>
     </SidebarProvider>
   );
 }
