@@ -30,11 +30,11 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CreateEditUser } from "~/components/users/CreateEditUser";
-import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { CreateEditStaff } from "../CreateEditStaff";
 
@@ -45,23 +45,25 @@ export function StaffProfileHeader({
 }) {
   const confirm = useConfirm();
   const { t } = useLocale();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const params = useParams<{ id: string }>();
   const router = useRouter();
-  const utils = api.useUtils();
+
   const canDeleteStaff = useCheckPermission("staff", PermissionAction.DELETE);
   const canEditStaff = useCheckPermission("staff", PermissionAction.UPDATE);
-  const deleteStaffMutation = api.staff.delete.useMutation({
-    onSettled: async () => {
-      await utils.staff.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-      router.push(routes.staffs.index);
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const deleteStaffMutation = useMutation(
+    trpc.staff.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.staff.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+        router.push("/staffs");
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   // const staffQuery = api.staff.get.useQuery(params.id);
   // const staff = staffQuery.data;
   const { openModal } = useModal();
@@ -139,15 +141,14 @@ export function StaffProfileHeader({
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   variant="destructive"
-                  className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                   onSelect={async () => {
                     const isConfirmed = await confirm({
                       title: t("delete"),
                       description: t("delete_confirmation"),
-                      icon: <Trash2 className="text-destructive" />,
-                      alertDialogTitle: {
-                        className: "flex items-center gap-1",
-                      },
+                      // icon: <Trash2 className="text-destructive" />,
+                      // alertDialogTitle: {
+                      //   className: "flex items-center gap-1",
+                      // },
                     });
                     if (isConfirmed) {
                       toast.loading(t("deleting"), { id: 0 });

@@ -33,10 +33,11 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { api, useTRPC } from "~/trpc/react";
 
 interface StaffLevelSelectorProps {
   className?: string;
@@ -148,18 +149,22 @@ function CreateStaffLevel() {
       name: "",
     },
   });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const { t } = useLocale();
-  const utils = api.useUtils();
-  const createStaffLevelMutation = api.degree.create.useMutation({
-    onSettled: () => utils.degree.invalidate(),
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+
+  const createStaffLevelMutation = useMutation(
+    trpc.degree.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.degree.all.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const handleSubmit = (data: z.infer<typeof createLevelSchema>) => {
     toast.loading(t("creating"), { id: 0 });

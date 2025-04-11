@@ -47,7 +47,7 @@ export default async function Page(props: {
   }
   const queryClient = getQueryClient();
   const school = await queryClient.fetchQuery(
-    trpc.school.get.queryOptions(schoolId)
+    trpc.school.get.queryOptions(schoolId),
   );
 
   if (

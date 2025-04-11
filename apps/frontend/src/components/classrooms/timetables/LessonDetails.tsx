@@ -15,7 +15,8 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { api } from "~/trpc/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditLesson } from "./CreateEditLesson";
 
 export function LessonDetails({
@@ -25,20 +26,24 @@ export function LessonDetails({
 }) {
   const { t, i18n } = useLocale();
   const confirm = useConfirm();
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
   const { openModal, closeModal } = useModal();
-  const deleteLessonMutation = api.lesson.delete.useMutation({
-    onSettled: () => {
-      void utils.lesson.invalidate();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-      closeModal();
-    },
-  });
+  const deleteLessonMutation = useMutation(
+    trpc.lesson.delete.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.lesson.byClassroom.pathFilter()
+        );
+        toast.success(t("deleted_successfully"), { id: 0 });
+        closeModal();
+      },
+    })
+  );
   return (
     <div className="grid grid-cols-2 gap-4 text-sm">
       <div className="flex flex-row gap-2 items-center text-muted-foreground">
@@ -102,16 +107,16 @@ export function LessonDetails({
         onClick={() => {
           const startHours = String(event.startTime.getHours()).padStart(
             2,
-            "0",
+            "0"
           );
           const startMinutes = String(event.startTime.getMinutes()).padStart(
             2,
-            "0",
+            "0"
           );
           const endHours = String(event.endTime.getHours()).padStart(2, "0");
           const endMinutes = String(event.endTime.getMinutes()).padStart(
             2,
-            "0",
+            "0"
           );
 
           closeModal();

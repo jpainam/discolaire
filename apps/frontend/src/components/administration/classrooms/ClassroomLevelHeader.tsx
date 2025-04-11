@@ -31,14 +31,14 @@ export function ClassroomLevelHeader() {
   const queryClient = useQueryClient();
   const { openModal } = useModal();
   const [selectedLevels, setSelectedLevels] = useAtom(
-    selectedClassroomLevelAtom
+    selectedClassroomLevelAtom,
   );
 
   const deleteClassroomLevelMutation = useMutation(
     trpc.classroomLevel.delete.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.classroomLevel.all.pathFilter()
+          trpc.classroomLevel.all.pathFilter(),
         );
         toast.success(t("deleted_successfully"), { id: 0 });
         setSelectedLevels([]);
@@ -46,7 +46,7 @@ export function ClassroomLevelHeader() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const confirm = useConfirm();

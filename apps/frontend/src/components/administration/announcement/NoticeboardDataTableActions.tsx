@@ -10,8 +10,8 @@ import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { getErrorMessage } from "~/lib/handle-error";
-import { api } from "~/trpc/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditAnnouncement } from "./CreateEditAnnouncement";
 
 type AnnouncementAllProcedureOutput = NonNullable<
@@ -28,10 +28,21 @@ export function NoticeboardDataTableActions({
   const { openSheet } = useSheet();
   const confirm = useConfirm();
   const { t } = useLocale();
-  const utils = api.useUtils();
-  const deleteAnnouncementMutation = api.announcement.delete.useMutation({
-    onSettled: () => utils.announcement.invalidate(),
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const deleteAnnouncementMutation = useMutation(
+    trpc.announcement.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.announcement.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+        table.toggleAllRowsSelected(false);
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   return (
     <div className="flex items-center gap-2">
@@ -49,21 +60,9 @@ export function NoticeboardDataTableActions({
               description: `${t("delete_confirmation")} ${selectedNotices.map((cl) => cl.title).join(", ")}?`,
             });
             if (isConfirmed) {
-              toast.promise(
-                deleteAnnouncementMutation.mutateAsync(
-                  selectedNotices.map((cl) => cl.id),
-                ),
-                {
-                  loading: t("deleting"),
-                  success: () => {
-                    table.toggleAllRowsSelected(false);
-                    return t("deleted_successfully");
-                  },
-                  error: (error) => {
-                    console.error(error);
-                    return getErrorMessage(error);
-                  },
-                },
+              toast.loading(t("deleting"), { id: 0 });
+              deleteAnnouncementMutation.mutate(
+                selectedNotices.map((cl) => cl.id)
               );
             }
           }}

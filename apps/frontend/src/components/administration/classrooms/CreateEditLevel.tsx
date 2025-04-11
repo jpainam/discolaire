@@ -52,18 +52,18 @@ export function CreateEditLevel({
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.classroomLevel.all.pathFilter()
+          trpc.classroomLevel.all.pathFilter(),
         );
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
       },
-    })
+    }),
   );
   const updateClassroomLevel = useMutation(
     trpc.classroomLevel.update.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.classroomLevel.all.pathFilter()
+          trpc.classroomLevel.all.pathFilter(),
         );
         toast.success(t("updated_successfully"), { id: 0 });
         closeModal();
@@ -71,7 +71,7 @@ export function CreateEditLevel({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const onSubmit = (data: z.infer<typeof createLevelSchema>) => {

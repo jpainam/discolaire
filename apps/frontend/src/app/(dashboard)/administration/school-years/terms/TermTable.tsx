@@ -25,27 +25,32 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import i18next from "i18next";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditTerm } from "./CreateEditTerm";
 
 export function TermTable() {
-  const termsQuery = api.term.all.useQuery();
+  const trpc = useTRPC();
+  const termsQuery = useQuery(trpc.term.all.queryOptions());
   const { t } = useLocale();
 
   const { openModal } = useModal();
   const confirm = useConfirm();
-  const utils = api.useUtils();
 
-  const deleteTermMutation = api.term.delete.useMutation({
-    onSettled: () => utils.term.invalidate(),
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const queryClient = useQueryClient();
+
+  const deleteTermMutation = useMutation(
+    trpc.term.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.term.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   return (
     <div className="px-4">
       <div className="bg-background overflow-hidden rounded-md border">
@@ -121,10 +126,10 @@ export function TermTable() {
                             const isConfirm = await confirm({
                               title: t("delete"),
                               description: t("delete_confirmation"),
-                              icon: <Trash2 className="h-4 w-4" />,
-                              alertDialogTitle: {
-                                className: "flex items-center gap-2",
-                              },
+                              // icon: <Trash2 className="h-4 w-4" />,
+                              // alertDialogTitle: {
+                              //   className: "flex items-center gap-2",
+                              // },
                             });
                             if (isConfirm) {
                               toast.loading(t("deleting"), { id: 0 });
@@ -132,7 +137,6 @@ export function TermTable() {
                             }
                           }}
                           variant="destructive"
-                          className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                         >
                           <Trash2 />
                           {t("delete")}

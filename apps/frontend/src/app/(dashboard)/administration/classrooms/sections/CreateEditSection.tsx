@@ -45,7 +45,7 @@ export function CreateEditSection({
     trpc.classroomSection.create.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.classroomSection.all.pathFilter()
+          trpc.classroomSection.all.pathFilter(),
         );
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
@@ -53,13 +53,13 @@ export function CreateEditSection({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateSectionMutation = useMutation(
     trpc.classroomSection.update.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.classroomSection.all.pathFilter()
+          trpc.classroomSection.all.pathFilter(),
         );
         toast.success(t("updated_successfully"), { id: 0 });
         closeModal();
@@ -67,7 +67,7 @@ export function CreateEditSection({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const handleSubmit = (data: z.infer<typeof createEditSchema>) => {

@@ -39,7 +39,7 @@ export function CreateEditCycle({ id, name }: { id?: string; name?: string }) {
     trpc.classroomCycle.create.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.classroomCycle.all.pathFilter()
+          trpc.classroomCycle.all.pathFilter(),
         );
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
@@ -47,13 +47,13 @@ export function CreateEditCycle({ id, name }: { id?: string; name?: string }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateCycleMutation = useMutation(
     trpc.classroomCycle.update.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.classroomCycle.all.pathFilter()
+          trpc.classroomCycle.all.pathFilter(),
         );
         toast.success(t("updated_successfully"), { id: 0 });
         closeModal();
@@ -61,7 +61,7 @@ export function CreateEditCycle({ id, name }: { id?: string; name?: string }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const handleSubmit = (data: z.infer<typeof createEditSchema>) => {

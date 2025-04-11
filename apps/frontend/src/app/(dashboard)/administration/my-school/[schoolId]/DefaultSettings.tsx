@@ -50,7 +50,7 @@ export function DefaultSettings() {
   const trpc = useTRPC();
   const params = useParams<{ schoolId: string }>();
   const { data: school } = useSuspenseQuery(
-    trpc.school.get.queryOptions(params.schoolId)
+    trpc.school.get.queryOptions(params.schoolId),
   );
 
   const queryClient = useQueryClient();
@@ -77,7 +77,7 @@ export function DefaultSettings() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const handleSubmit = (data: z.infer<typeof defaultSettingsSchema>) => {

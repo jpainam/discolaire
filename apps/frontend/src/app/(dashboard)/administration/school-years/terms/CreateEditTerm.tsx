@@ -19,9 +19,10 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { DatePicker } from "~/components/DatePicker";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 type Term = RouterOutputs["term"]["all"][number];
 
@@ -41,28 +42,34 @@ export function CreateEditTerm({ term }: { term?: Term }) {
       isActive: term?.isActive ?? true,
     },
   });
-  const utils = api.useUtils();
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
+
   const { closeModal } = useModal();
-  const createTermMutation = api.term.create.useMutation({
-    onSettled: () => utils.term.invalidate(),
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const updateTermMutation = api.term.update.useMutation({
-    onSettled: () => utils.term.invalidate(),
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const createTermMutation = useMutation(
+    trpc.term.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.term.all.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const updateTermMutation = useMutation(
+    trpc.term.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.term.all.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const { t } = useLocale();
   const onSubmit = (data: z.infer<typeof createEditTermSchema>) => {
     if (term) {

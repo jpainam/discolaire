@@ -41,14 +41,14 @@ export function CycleTable() {
     trpc.classroomCycle.delete.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.classroomCycle.all.pathFilter()
+          trpc.classroomCycle.all.pathFilter(),
         );
         toast.success(t("deleted_successfully"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const { openModal } = useModal();
   const confirm = useConfirm();

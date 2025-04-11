@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
 import { Pencil, Trash2 } from "lucide-react";
@@ -18,10 +19,9 @@ import { toast } from "sonner";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
-import { getErrorMessage } from "~/lib/handle-error";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditBook } from "./CreateEditBook";
 
 type BookProcedureOutput = RouterOutputs["book"]["recentlyUsed"][number];
@@ -158,12 +158,20 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
   const { openSheet } = useSheet();
   const confirm = useConfirm();
   const { t } = useLocale();
-  //const router = useRouter();
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
-  const bookMutation = api.book.delete.useMutation({
-    onSettled: () => utils.book.invalidate(),
-  });
+  const bookMutation = useMutation(
+    trpc.book.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.book.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const canUpdateBook = useCheckPermission("library", PermissionAction.UPDATE);
   const canDeleteBook = useCheckPermission("library", PermissionAction.DELETE);
 
@@ -205,15 +213,8 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
                     description: t("delete_confirmation"),
                   });
                   if (isConfirmed) {
-                    toast.promise(bookMutation.mutateAsync(book.id), {
-                      loading: t("deleting"),
-                      success: () => {
-                        return t("deleted_successfully");
-                      },
-                      error: (error) => {
-                        return getErrorMessage(error);
-                      },
-                    });
+                    toast.loading(t("deleting"), { id: 0 });
+                    bookMutation.mutate(book.id);
                   }
                 }}
               >

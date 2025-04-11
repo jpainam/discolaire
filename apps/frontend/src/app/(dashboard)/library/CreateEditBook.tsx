@@ -26,8 +26,9 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { SheetClose, SheetFooter } from "@repo/ui/components/sheet";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 const updateBookSchema = z.object({
   title: z.string().trim().min(1),
   author: z.string().min(1),
@@ -59,33 +60,34 @@ export function CreateEditBook({
   });
 
   const { closeSheet } = useSheet();
-  const categoryQuery = api.book.categories.useQuery();
+  const trpc = useTRPC();
+  const categoryQuery = useQuery(trpc.book.categories.queryOptions());
+  const queryClient = useQueryClient();
 
-  const updateMutation = api.book.update.useMutation({
-    onSettled: async () => {
-      await utils.book.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      closeSheet();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const createMutation = api.book.create.useMutation({
-    onSettled: async () => {
-      await utils.book.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeSheet();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const utils = api.useUtils();
+  const updateMutation = useMutation(
+    trpc.book.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.book.all.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeSheet();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const createMutation = useMutation(
+    trpc.book.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.book.all.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeSheet();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   function onSubmit(data: z.infer<typeof updateBookSchema>) {
     const values = {
