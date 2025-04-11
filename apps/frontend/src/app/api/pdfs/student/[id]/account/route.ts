@@ -7,7 +7,7 @@ import { caller } from "~/trpc/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const session = await auth();
   if (!session) {
@@ -25,7 +25,7 @@ export async function GET(
         student: student,
         school: school,
         transactions: data,
-      })
+      }),
     );
 
     // @ts-expect-error TODO: fix this

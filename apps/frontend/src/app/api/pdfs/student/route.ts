@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
         StudentList({
           students: students,
           school: school,
-        })
+        }),
       );
 
       //const blob = await new Response(stream).blob();

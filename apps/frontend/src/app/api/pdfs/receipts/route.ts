@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
         amountInWords: amountInWords,
         school: school,
         info: info,
-      })
+      }),
     );
 
     // @ts-expect-error TODO: fix this

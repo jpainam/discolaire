@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
           classrooms: classrooms,
           school: school,
           size: size,
-        })
+        }),
       );
 
       //const blob = await new Response(stream).blob();

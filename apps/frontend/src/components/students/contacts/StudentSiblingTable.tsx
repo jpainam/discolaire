@@ -34,7 +34,7 @@ export async function StudentSiblingTable({
     return <EmptyState description="No student contact found" />;
   }
   const linkedStudents = await caller.contact.students(
-    studentContact.contactId
+    studentContact.contactId,
   );
   const contact = studentContact.contact;
   const { t } = await getServerTranslations();

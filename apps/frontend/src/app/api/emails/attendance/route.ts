@@ -120,7 +120,7 @@ async function getAbsenceEmail(id: number) {
         name: school.name,
       },
       title: title,
-    })
+    }),
   );
   return { title, body, studentId: student.id };
 }
@@ -143,7 +143,7 @@ async function getChatterEmail(id: number) {
         logo: school.logo,
         name: school.name,
       },
-    })
+    }),
   );
   return { title, body, studentId: student.id };
 }
@@ -167,7 +167,7 @@ async function getConsigneEmail(id: number) {
         logo: school.logo,
         name: school.name,
       },
-    })
+    }),
   );
   return { title, body, studentId: student.id };
 }
@@ -191,7 +191,7 @@ async function getLatenessEmail(id: number) {
         logo: school.logo,
         name: school.name,
       },
-    })
+    }),
   );
   return { title, body, studentId: student.id };
 }
@@ -218,7 +218,7 @@ async function getExclusionEmail(id: number) {
         logo: school.logo,
         name: school.name,
       },
-    })
+    }),
   );
   return { title, body, studentId: student.id };
 }

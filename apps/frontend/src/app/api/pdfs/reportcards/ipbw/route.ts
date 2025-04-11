@@ -4,7 +4,7 @@ import { z } from "zod";
 import { IPBW, IPBWClassroom, renderToStream } from "@repo/reports";
 
 import { auth } from "@repo/auth";
-import { api, caller } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 const searchSchema = z.object({
   studentId: z.string().nullable(),
@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
 
     return Response.json(
       { error: "Invalid request body", errors },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -83,7 +83,7 @@ async function classroomReportCard({
       report,
       contacts,
       schoolYear: classroom.schoolYear,
-    })
+    }),
   );
 
   const headers: Record<string, string> = {
@@ -139,7 +139,7 @@ async function indvidualReportCard({
       report,
       contact,
       schoolYear: classroom.schoolYear,
-    })
+    }),
   );
 
   const headers: Record<string, string> = {

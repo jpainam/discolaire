@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
           username: user.username,
           resetLink: `${env.NEXT_PUBLIC_BASE_URL}/auth/password/reset/?code=${hashedCode}`,
           locale: i18n.language,
-        })
+        }),
       );
 
       await caller.messaging.sendEmail({

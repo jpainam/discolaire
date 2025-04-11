@@ -14,14 +14,14 @@ export async function QuickStatistics({ className }: { className?: string }) {
   const contactCount = await caller.contact.count();
   const classroomTotal = classroomCount.length;
   const newClassrooms = classroomCount.filter(
-    (classroom) => classroom.createdAt >= subMonths(new Date(), 1)
+    (classroom) => classroom.createdAt >= subMonths(new Date(), 1),
   ).length;
   const { t } = await getServerTranslations();
   return (
     <div
       className={cn(
         "grid grid-cols-2 min-[1200px]:grid-cols-4 border border-border rounded-xl bg-gradient-to-br from-sidebar/60 to-sidebar",
-        className
+        className,
       )}
     >
       <CountCard

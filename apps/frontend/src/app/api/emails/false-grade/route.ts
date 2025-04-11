@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
             date: "2022-01-01",
           },
           reportComment: "This is a fake  grade report",
-        })
+        }),
       );
       await caller.messaging.sendEmail({
         subject: "Signalement de fausse note",

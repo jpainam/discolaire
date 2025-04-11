@@ -19,7 +19,7 @@ const querySchema = z.object({
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   const session = await auth();
   if (!session) {
@@ -34,7 +34,7 @@ export async function GET(
   if (!parsedQuery.success) {
     return NextResponse.json(
       { error: parsedQuery.error.format() },
-      { status: 400 }
+      { status: 400 },
     );
   }
   try {
@@ -64,7 +64,7 @@ export async function GET(
           classroom: classroom,
           gradesheets: gradesheets,
           school: school,
-        })
+        }),
       );
 
       //const blob = await new Response(stream).blob();

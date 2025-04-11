@@ -13,7 +13,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     student.photos.map(async (photo) => {
       const signedUrl = await downloadFileFromAws(photo);
       return signedUrl;
-    })
+    }),
   );
   const { t } = await getServerTranslations();
   return (
