@@ -10,8 +10,9 @@ import {
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 interface JournalSelectorProps {
   onChange?: (value: string) => void;
@@ -28,8 +29,8 @@ export function JournalSelector({
   showAllOption = true,
 }: JournalSelectorProps) {
   const { t } = useLocale();
-
-  const journalsQuery = api.journal.all.useQuery();
+  const trpc = useTRPC();
+  const journalsQuery = useQuery(trpc.journal.all.queryOptions());
 
   return (
     <Select

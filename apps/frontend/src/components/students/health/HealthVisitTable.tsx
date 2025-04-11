@@ -26,9 +26,9 @@ import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { cn } from "~/lib/utils";
-import { api, useTRPC } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditHealthVisit } from "./CreateEditHealthVisit";
 import { HealthVisitDetails } from "./HealthVisitDetails";
 
@@ -48,7 +48,7 @@ export function HealthVisitTable({ userId }: { userId: string }) {
         await queryClient.invalidateQueries(trpc.health.visits.pathFilter());
         toast.success(t("deleted"), { id: 0 });
       },
-    }),
+    })
   );
   const confirm = useConfirm();
 
@@ -58,7 +58,9 @@ export function HealthVisitTable({ userId }: { userId: string }) {
     year: "numeric",
   });
 
-  const visitsQuery = api.health.visits.useQuery({ userId: userId });
+  const visitsQuery = useQuery(
+    trpc.health.visits.queryOptions({ userId: userId })
+  );
 
   return (
     <div className="px-4">

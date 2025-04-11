@@ -19,7 +19,7 @@
 // }
 // export function FeeTypeSelector({ className, onChange }: FeeTypeSelectorProps) {
 //   const { t } = useLocale();
-//   const feeTypesQuery = api.fee.types.useQuery();
+
 //   return (
 //     <Select
 //       onValueChange={(val) => {

@@ -18,15 +18,19 @@ import {
 import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { AvatarState } from "~/components/AvatarState";
 import { showErrorToast } from "~/lib/handle-error";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { routes } from "../../../configs/routes";
 
 export function AttendanceTable() {
   const params = useParams<{ id: string }>();
-  const studentsQuery = api.classroom.students.useQuery(params.id);
+  const trpc = useTRPC();
+  const studentsQuery = useQuery(
+    trpc.classroom.students.queryOptions(params.id)
+  );
 
   const form = useForm();
   const onSubmit = (data: any) => {

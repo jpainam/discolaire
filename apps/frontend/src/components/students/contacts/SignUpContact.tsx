@@ -9,14 +9,18 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { EmptyState } from "~/components/EmptyState";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { showErrorToast } from "~/lib/handle-error";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { SignUpContactIcon } from "./SignUpContactIcon";
 
 export function SignUpContact() {
   const params = useParams<{ id: string }>();
   const { t } = useLocale();
-  const studentContactsQuery = api.student.contacts.useQuery(params.id);
+  const trpc = useTRPC();
+  const studentContactsQuery = useQuery(
+    trpc.student.contacts.queryOptions(params.id)
+  );
 
   if (studentContactsQuery.isPending) {
     return (
@@ -33,7 +37,7 @@ export function SignUpContact() {
     return <EmptyState className="my-4" />;
   }
   const haveNotSignedUp = studentContactsQuery.data.map(
-    (std) => !std.contact.userId,
+    (std) => !std.contact.userId
   ).length;
   if (haveNotSignedUp == 0) {
     return;
@@ -74,7 +78,7 @@ export function SignUpContact() {
                             " " +
                             std.contact.lastName +
                             " " +
-                            std.contact.firstName,
+                            std.contact.firstName
                         );
                         return;
                       }
@@ -82,13 +86,13 @@ export function SignUpContact() {
                         `/api/emails/invite?email=${std.contact.email}&entityId=${std.contact.id}&entityType=contact`,
                         {
                           method: "GET",
-                        },
+                        }
                       ).catch((error) => {
                         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
                         toast.error(error.message, { id: 0 });
                       });
                       return true;
-                    }),
+                    })
                   );
                   await allPromise;
                 }}

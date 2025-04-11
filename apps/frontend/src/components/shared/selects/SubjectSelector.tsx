@@ -20,9 +20,10 @@ import {
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 interface Option {
   label: string;
@@ -50,7 +51,10 @@ export function SubjectSelector({
   const [value, setValue] = React.useState(defaultValue);
   const [items, setItems] = React.useState<Option[]>([]);
   const { t } = useLocale();
-  const subjectsQuery = api.classroom.subjects.useQuery(classroomId);
+  const trpc = useTRPC();
+  const subjectsQuery = useQuery(
+    trpc.classroom.subjects.queryOptions(classroomId)
+  );
 
   const subjects = subjectsQuery.data;
   React.useEffect(() => {
@@ -62,20 +66,20 @@ export function SubjectSelector({
       subjects?.map((it) => ({
         label: it.course.name,
         value: it.id.toString(),
-      })) ?? [],
+      })) ?? []
     );
   }, [subjects]);
 
   const handleSearch = (search: string) => {
     if (!subjects) return;
     const filteredItems = subjects.filter((it) =>
-      it.course.name.toLowerCase().includes(search.toLowerCase()),
+      it.course.name.toLowerCase().includes(search.toLowerCase())
     );
     setItems(
       filteredItems.map((it) => ({
         label: it.course.name,
         value: it.id.toString(),
-      })),
+      }))
     );
   };
   if (subjectsQuery.isPending) {
@@ -124,7 +128,7 @@ export function SubjectSelector({
                   <Check
                     className={cn(
                       "h-4 w-4",
-                      value === item.value ? "opacity-100" : "opacity-0",
+                      value === item.value ? "opacity-100" : "opacity-0"
                     )}
                   />
                   {item.label}

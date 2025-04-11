@@ -22,9 +22,10 @@ import {
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { AvatarState } from "~/components/AvatarState";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
 // https://github.com/oaarnikoivu/shadcn-virtualized-combobox
@@ -66,8 +67,8 @@ const VirtualizedCommand = ({
   const handleSearch = (search: string) => {
     setFilteredOptions(
       options.filter((option) =>
-        option.label.toLowerCase().includes(search.toLowerCase()),
-      ),
+        option.label.toLowerCase().includes(search.toLowerCase())
+      )
     );
   };
 
@@ -131,7 +132,7 @@ const VirtualizedCommand = ({
                       selectedOption ===
                         filteredOptions[virtualOption.index]?.value
                         ? "opacity-100"
-                        : "opacity-0",
+                        : "opacity-0"
                     )}
                   />
                 </CommandItem>
@@ -164,7 +165,10 @@ export function ClassroomStudentSelector({
   defaultValue,
   classroomId,
 }: ClassroomStudentSelectorProps) {
-  const classroomStudentsQuery = api.classroom.students.useQuery(classroomId);
+  const trpc = useTRPC();
+  const classroomStudentsQuery = useQuery(
+    trpc.classroom.students.queryOptions(classroomId)
+  );
 
   const [open, setOpen] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<Option>({
@@ -178,7 +182,7 @@ export function ClassroomStudentSelector({
     if (classroomStudentsQuery.data) {
       if (defaultValue) {
         const dValue = classroomStudentsQuery.data.find(
-          (item) => item.id === defaultValue,
+          (item) => item.id === defaultValue
         );
         if (dValue)
           setSelectedOption({ label: getFullName(dValue), value: dValue.id });
@@ -188,7 +192,7 @@ export function ClassroomStudentSelector({
           label: getFullName(student),
           value: student.id,
           avatar: student.user?.avatar ?? undefined,
-        })),
+        }))
       );
     }
   }, [defaultValue, classroomStudentsQuery.data]);
@@ -224,7 +228,7 @@ export function ClassroomStudentSelector({
           selectedOption={selectedOption.value}
           onSelectOption={(currentValue) => {
             onChange?.(
-              currentValue === selectedOption.value ? null : currentValue,
+              currentValue === selectedOption.value ? null : currentValue
             );
             setSelectedOption({
               value: currentValue === selectedOption.value ? "" : currentValue,

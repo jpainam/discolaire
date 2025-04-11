@@ -14,20 +14,24 @@ import {
 import { Label } from "@repo/ui/components/label";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 export default function FinanceHeader() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const { t } = useLocale();
-  const classroomQuery = api.student.classroom.useQuery({
-    studentId: params.id,
-  });
+  const trpc = useTRPC();
+  const classroomQuery = useQuery(
+    trpc.student.classroom.queryOptions({
+      studentId: params.id,
+    })
+  );
 
   return (
     <div className="flex flex-row items-center gap-4 bg-muted/50 px-2 py-1">

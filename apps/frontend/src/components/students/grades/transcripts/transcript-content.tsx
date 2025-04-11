@@ -8,15 +8,17 @@ import { Label } from "@repo/ui/components/label";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { ExportButton } from "~/components/shared/buttons/export-button";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { TranscriptItem } from "./transcript-item";
 
 export function TranscriptContent() {
   const params = useParams<{ id: string }>();
-  const studentQuery = api.student.get.useQuery(params.id);
+  const trpc = useTRPC();
+  const studentQuery = useQuery(trpc.student.get.queryOptions(params.id));
 
   const { t } = useLocale();
   if (studentQuery.isPending) {

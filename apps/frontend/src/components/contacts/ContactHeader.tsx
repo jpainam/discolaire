@@ -13,6 +13,7 @@ import { Label } from "@repo/ui/components/label";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { useParams } from "next/navigation";
 import { ContactSelector } from "~/components/shared/selects/ContactSelector";
@@ -22,7 +23,7 @@ import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { PermissionAction } from "~/permissions";
 import { useSession } from "~/providers/AuthProvider";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { SearchCombobox } from "../SearchCombobox";
 import { DropdownHelp } from "../shared/DropdownHelp";
@@ -37,11 +38,13 @@ export function ContactHeader() {
 
   const [value, setValue] = useState("");
   const [label, setLabel] = useState(t("search_a_contact"));
-
+  const trpc = useTRPC();
   const [search, setSearch] = useState("");
-  const contacts = api.contact.search.useQuery({
-    query: search,
-  });
+  const contacts = useQuery(
+    trpc.contact.search.queryOptions({
+      query: search,
+    })
+  );
 
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
   useEffect(() => {
@@ -56,7 +59,7 @@ export function ContactHeader() {
 
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (

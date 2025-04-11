@@ -21,8 +21,9 @@ import {
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
 interface SelectorProps {
@@ -42,7 +43,8 @@ export function StudentSelector({
   const [value, setValue] = React.useState(defaultValue);
   const { t } = useLocale();
   const [label, setLabel] = React.useState(t("select_an_option"));
-  const studentsQuery = api.student.all.useQuery();
+  const trpc = useTRPC();
+  const studentsQuery = useQuery(trpc.student.all.queryOptions());
 
   React.useEffect(() => {
     if (studentsQuery.data) {

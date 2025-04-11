@@ -20,8 +20,9 @@ import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 interface SelectProgramThemeProps {
   placeholder?: string;
@@ -37,7 +38,8 @@ export function ProgramThemeSelector({
   disabled = false,
   contentClassName,
 }: SelectProgramThemeProps) {
-  const programThemesQuery = api.program.themes.useQuery();
+  const trpc = useTRPC();
+  const programThemesQuery = useQuery(trpc.program.themes.queryOptions());
 
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
@@ -87,7 +89,7 @@ export function ProgramThemeSelector({
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      Number(value) === d.id ? "opacity-100" : "opacity-0",
+                      Number(value) === d.id ? "opacity-100" : "opacity-0"
                     )}
                   />
                   <div className="flex flex-col">

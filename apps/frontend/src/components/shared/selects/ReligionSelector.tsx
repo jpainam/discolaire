@@ -12,8 +12,9 @@ import {
 } from "@repo/ui/components/select";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 interface ReligionSelectorProps {
   className?: string;
@@ -26,7 +27,8 @@ export function ReligionSelector({
   defaultValue,
 }: ReligionSelectorProps) {
   const { t } = useLocale();
-  const religionsQuery = api.religion.all.useQuery();
+  const trpc = useTRPC();
+  const religionsQuery = useQuery(trpc.religion.all.queryOptions());
   if (religionsQuery.error) {
     toast.error(religionsQuery.error.message);
   }

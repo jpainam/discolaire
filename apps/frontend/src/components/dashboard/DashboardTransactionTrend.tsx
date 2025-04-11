@@ -31,10 +31,11 @@ import { EmptyState } from "~/components/EmptyState";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "~/hooks/use-router";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 export function DashboardTransactionTrend({
   className,
@@ -58,8 +59,10 @@ export function DashboardTransactionTrend({
   // const status = searchParams.get("status");
   // const from = searchParams.get("from");
   // const to = searchParams.get("to");
-
-  const transactionsTrendQuery = api.transaction.trends.useQuery();
+  const trpc = useTRPC();
+  const transactionsTrendQuery = useQuery(
+    trpc.transaction.trends.queryOptions()
+  );
 
   const [filteredData, setFilteredData] = React.useState<
     { date: string; amount: number }[]
@@ -146,7 +149,7 @@ export function DashboardTransactionTrend({
                   "?" +
                     createQueryString({
                       timeRange: val == "All" ? undefined : val,
-                    }),
+                    })
                 );
               }}
             >

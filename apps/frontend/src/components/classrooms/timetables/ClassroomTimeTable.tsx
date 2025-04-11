@@ -20,9 +20,10 @@ import BigCalendar, {
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import rangeMap from "~/lib/range-map";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditTimetable } from "./CreateEditTimetable";
 
 // moment.locale(i18next.language);
@@ -34,9 +35,12 @@ const CalendarWrapper = BigCalendar;
 
 export function ClassroomTimeTable() {
   const params = useParams<{ id: string }>();
-  const calendarEventsQuery = api.timetable.classroom.useQuery({
-    classroomId: params.id,
-  });
+  const trpc = useTRPC();
+  const calendarEventsQuery = useQuery(
+    trpc.timetable.classroom.queryOptions({
+      classroomId: params.id,
+    })
+  );
   const [view, setView] = useState<RbcView>(RbcViews.AGENDA);
   const [date, setDate] = useState(new Date());
   const { openModal } = useModal();
@@ -86,7 +90,7 @@ export function ClassroomTimeTable() {
         ),
       });
     },
-    [openModal, params.id, t],
+    [openModal, params.id, t]
   );
 
   const handleSelectEvent = useCallback(
@@ -106,7 +110,7 @@ export function ClassroomTimeTable() {
         ),
       });
     },
-    [openModal, params.id, t],
+    [openModal, params.id, t]
   );
 
   const { _views, _scrollToTime, formats } = useMemo(
@@ -123,18 +127,18 @@ export function ClassroomTimeTable() {
         weekdayFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer,
+          localizer?: DateLocalizer
         ) => localizer?.format(date, "EEE", culture),
         dayFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) =>
           localizer?.format(date, "EEE M/d", culture),
         timeGutterFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer,
+          localizer?: DateLocalizer
         ) => localizer?.format(date, "HH:mm", culture),
       } as Formats,
     }),
-    [],
+    []
   );
 
   const handleViewChange = (view: RbcView) => {
@@ -231,7 +235,7 @@ export function ClassroomTimeTable() {
 
 const getWeekdayNumbersBetweenDates = (
   startDate: Date,
-  endDate: Date,
+  endDate: Date
 ): number[] => {
   const uniqueDays = new Set<number>();
   const current = new Date(startDate);

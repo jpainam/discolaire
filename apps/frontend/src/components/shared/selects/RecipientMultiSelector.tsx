@@ -14,9 +14,10 @@ import {
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 export function RecipientMultiSelector({
   className,
@@ -57,16 +58,16 @@ export function RecipientMultiSelector({
         }
       }
     },
-    [],
+    []
   );
-
-  const recipientsQuery = api.recipient.groups.useQuery();
+  const trpc = useTRPC();
+  const recipientsQuery = useQuery(trpc.recipient.groups.queryOptions());
 
   React.useEffect(() => {
     if (!recipientsQuery.data) return;
     const recipients = recipientsQuery.data;
     const _selectables = recipients.filter(
-      (recipient) => !selected.includes(recipient.id),
+      (recipient) => !selected.includes(recipient.id)
     );
     setSelectables(_selectables.map((recipient) => recipient.id));
   }, [recipientsQuery.data, selected]);
@@ -118,7 +119,7 @@ export function RecipientMultiSelector({
             placeholder={t("select_recipients")}
             className={cn(
               "ml-2 flex-1 bg-transparent outline-none placeholder:text-muted-foreground",
-              className,
+              className
             )}
           />
         </div>

@@ -20,8 +20,9 @@ import {
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 interface SelectCoursesProps {
   placeholder?: string;
@@ -40,7 +41,8 @@ export function CourseSelector({
   disabled = false,
   contentClassName,
 }: SelectCoursesProps) {
-  const coursesQuery = api.course.all.useQuery();
+  const trpc = useTRPC();
+  const coursesQuery = useQuery(trpc.course.all.queryOptions());
 
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState(defaultValue);
@@ -105,7 +107,7 @@ export function CourseSelector({
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === item.id ? "opacity-100" : "opacity-0",
+                      value === item.id ? "opacity-100" : "opacity-0"
                     )}
                   />
                   <div className="flex flex-row items-center space-x-1">

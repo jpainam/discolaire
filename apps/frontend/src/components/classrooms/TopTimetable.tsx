@@ -36,21 +36,24 @@ import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import EyeIcon from "~/components/icons/eye";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditLesson } from "./timetables/CreateEditLesson";
 
 export default function TopTimetable() {
   const params = useParams<{ id: string }>();
-
+  const trpc = useTRPC();
   const [today, setToday] = useState<Date>(new Date());
-  const timetablesQuery = api.lesson.byClassroom.useQuery({
-    classroomId: params.id,
-    currentDate: today,
-  });
+  const timetablesQuery = useQuery(
+    trpc.lesson.byClassroom.queryOptions({
+      classroomId: params.id,
+      currentDate: today,
+    })
+  );
 
   const periods = timetablesQuery.data ?? [];
   const { t, i18n } = useLocale();
@@ -209,7 +212,7 @@ function TopTimetableCard({
           ? "bg-muted opacity-50"
           : isSameDay(period.start, today)
             ? "bg-red-600"
-            : "bg-card",
+            : "bg-card"
       )}
     >
       <div className="mb-2 flex items-start justify-between">

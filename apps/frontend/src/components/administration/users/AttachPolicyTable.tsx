@@ -29,14 +29,16 @@ import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import i18next from "i18next";
 import { attachPolicyAtom } from "~/atoms/permission-atom";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { CreateUserPolicy } from "./CreateUserPolicy";
 
 export function AttachPolicyTable() {
   const { t } = useLocale();
-  const policiesQuery = api.permission.policies.useQuery();
+  const trpc = useTRPC();
+  const policiesQuery = useQuery(trpc.permission.policies.queryOptions());
   const [attachPolicyValue, setAttachPolicyValue] = useAtom(attachPolicyAtom);
 
   const { openModal } = useModal();

@@ -23,12 +23,14 @@ import type { Option } from "~/components/multiselect";
 import MultipleSelector from "~/components/multiselect";
 import { useLocale } from "~/i18n";
 
-import { api } from "~/trpc/react";
+import { useQuery } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 
 export function CreateUpdateExtra() {
   const { t } = useLocale();
-  const clubsQuery = api.setting.clubs.useQuery();
-  const sportsQuery = api.setting.sports.useQuery();
+  const trpc = useTRPC();
+  const clubsQuery = useQuery(trpc.setting.clubs.queryOptions());
+  const sportsQuery = useQuery(trpc.setting.sports.queryOptions());
   const sportOptions: Option[] = sportsQuery.data
     ? sportsQuery.data.map((sport) => ({
         label: sport.name,

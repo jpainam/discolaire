@@ -11,7 +11,8 @@ import {
 } from "@repo/ui/components/select";
 import { useLocale } from "~/i18n";
 
-import { api } from "~/trpc/react";
+import { useQuery } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 
 export function AssignmentCategorySelector({
   defaultValue,
@@ -21,7 +22,10 @@ export function AssignmentCategorySelector({
   onChange?: (value: string) => void;
 }) {
   const { t } = useLocale();
-  const assignmentCategoriesQuery = api.assignment.categories.useQuery();
+  const trpc = useTRPC();
+  const assignmentCategoriesQuery = useQuery(
+    trpc.assignment.categories.queryOptions()
+  );
   return (
     <Select
       onValueChange={(value) => {

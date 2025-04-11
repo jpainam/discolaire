@@ -10,8 +10,9 @@ import {
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 interface AppreciationSelectorProps {
   onChange?: (value: string) => void;
@@ -28,8 +29,8 @@ export function AppreciationSelector({
   showAllOption = true,
 }: AppreciationSelectorProps) {
   const { t } = useLocale();
-
-  const termsQuery = api.term.all.useQuery();
+  const trpc = useTRPC();
+  const termsQuery = useQuery(trpc.term.all.queryOptions());
 
   return (
     <Select

@@ -4,12 +4,14 @@ import { Separator } from "@repo/ui/components/separator";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { showErrorToast } from "~/lib/handle-error";
 import rangeMap from "~/lib/range-map";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 export function ContactDetails({ contactId }: { contactId: string }) {
-  const contactQuery = api.contact.get.useQuery(contactId);
+  const trpc = useTRPC();
+  const contactQuery = useQuery(trpc.contact.get.queryOptions(contactId));
   const { t } = useLocale();
   if (contactQuery.isPending) {
     return (

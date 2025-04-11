@@ -21,6 +21,7 @@ import { useLocale } from "~/i18n";
 
 import {
   useMutation,
+  useQuery,
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
@@ -33,14 +34,14 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
-import { api, useTRPC } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
   const { t } = useLocale();
   const trpc = useTRPC();
   const params = useParams<{ gradeId: string; id: string }>();
   const { data: student } = useSuspenseQuery(
-    trpc.student.get.queryOptions(params.id),
+    trpc.student.get.queryOptions(params.id)
   );
   // const searchParams = useSearchParams();
   const [term] = useQueryState("term", parseAsInteger);
@@ -52,13 +53,13 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
     trpc.student.grades.queryOptions({
       id: student.id,
       termId: term ? Number(term) : undefined,
-    }),
+    })
   );
 
   const queryClient = useQueryClient();
   const canDeleteGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const confirm = useConfirm();
   const deleteGradeMutation = useMutation(
@@ -71,14 +72,15 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
         await queryClient.invalidateQueries(trpc.student.grades.pathFilter());
         router.push(`/students/${student.id}/grades`);
       },
-    }),
+    })
   );
 
   const [studentAvg, setStudentAvg] = useState<number | null>(null);
   const [classroomAvg, setClassroomAvg] = useState<number | null>(null);
 
-  const classroomMinMaxMoyGrades =
-    api.classroom.getMinMaxMoyGrades.useQuery(classroomId);
+  const classroomMinMaxMoyGrades = useQuery(
+    trpc.classroom.getMinMaxMoyGrades.queryOptions(classroomId)
+  );
 
   useEffect(() => {
     let gradeSum = 0;
@@ -137,7 +139,7 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
               "?" +
                 createQueryString({
                   term: val,
-                }),
+                })
             );
           }}
           defaultValue={term ? `${term}` : undefined}
@@ -187,7 +189,7 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/student/grades/?id=${student.id}&format=pdf`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >
@@ -197,7 +199,7 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/student/grades/?id=${student.id}&format=csv`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >

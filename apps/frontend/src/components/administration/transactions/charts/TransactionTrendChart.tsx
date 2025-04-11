@@ -18,8 +18,9 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { EmptyState } from "~/components/EmptyState";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { showErrorToast } from "~/lib/handle-error";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 export function TransactionTrendChart() {
   const { t } = useLocale();
@@ -39,8 +40,10 @@ export function TransactionTrendChart() {
   // const status = searchParams.get("status");
   // const from = searchParams.get("from");
   // const to = searchParams.get("to");
-
-  const transactionsTrendQuery = api.transaction.trends.useQuery();
+  const trpc = useTRPC();
+  const transactionsTrendQuery = useQuery(
+    trpc.transaction.trends.queryOptions()
+  );
 
   const [filteredData, setFilteredData] = React.useState<
     { date: string; amount?: number }[]

@@ -55,7 +55,6 @@ export function GradeDetailsHeader({
 }) {
   const params = useParams<{ id: string }>();
 
-  //const classroomQuery = api.classroom.get.useQuery(params.id);
   const { t, i18n } = useLocale();
   const maxGrade = Math.max(...grades.map((grade) => grade.grade));
   const minGrade = Math.min(...grades.map((grade) => grade.grade));
@@ -64,12 +63,12 @@ export function GradeDetailsHeader({
 
   const males10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "male",
+      (grade) => grade.grade >= 10 && grade.student.gender == "male"
     ).length / len;
 
   const females10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "female",
+      (grade) => grade.grade >= 10 && grade.student.gender == "female"
     ).length / len;
 
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
@@ -108,12 +107,12 @@ export function GradeDetailsHeader({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const canDeleteGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
 
   return (
@@ -238,7 +237,7 @@ export function GradeDetailsHeader({
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/gradesheets/${gradesheet.id}?format=pdf&classroomId=${params.id}`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >
@@ -249,7 +248,7 @@ export function GradeDetailsHeader({
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/gradesheets/${gradesheet.id}?format=csv&classroomId=${params.id}`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >

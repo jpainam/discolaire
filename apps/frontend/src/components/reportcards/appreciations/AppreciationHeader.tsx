@@ -18,6 +18,7 @@ import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { ClassroomStudentSelector } from "~/components/shared/selects/ClassroomStudentSelector";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
@@ -25,7 +26,7 @@ import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { showErrorToast } from "~/lib/handle-error";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { AppreciationCategoryList } from "./AppreciationCategoryList";
 
 export function AppreciationHeader() {
@@ -33,7 +34,10 @@ export function AppreciationHeader() {
   const router = useRouter();
   const { createQueryString } = useCreateQueryString();
   const searchParams = useSearchParams();
-  const appreciationCategories = api.appreciation.categories.useQuery();
+  const trpc = useTRPC();
+  const appreciationCategories = useQuery(
+    trpc.appreciation.categories.queryOptions()
+  );
   const [classroomId, setClassroomId] = useQueryState("classroom");
   const [subjectId, setSubjectId] = useQueryState("subject");
   const [termId, setTermId] = useQueryState("term");
@@ -86,7 +90,7 @@ export function AppreciationHeader() {
           router.push(
             routes.reportcards.appreciations +
               "/?" +
-              createQueryString({ classroom: val }),
+              createQueryString({ classroom: val })
           );
         }}
       />

@@ -23,12 +23,13 @@ import { useLocale } from "~/i18n";
 
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import rangeMap from "~/lib/range-map";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getNameParts } from "~/utils";
 import { CreateEditLesson } from "./CreateEditLesson";
 import { LessonDetails } from "./LessonDetails";
 
 //import { CreateEditTimetable } from "./CreateEditTimetable";
+import { useQuery } from "@tanstack/react-query";
 
 // moment.locale(i18next.language);
 // const localizer = momentLocalizer(moment);
@@ -41,12 +42,14 @@ export function ClassroomLesson() {
   const params = useParams<{ id: string }>();
   const [_currentDate, _] = useQueryState(
     "date",
-    parseAsIsoDateTime.withDefault(new Date()),
+    parseAsIsoDateTime.withDefault(new Date())
   );
-  const calendarEventsQuery = api.lesson.byClassroom.useQuery({
-    classroomId: params.id,
-    //currentDate: currentDate,
-  });
+  const trpc = useTRPC();
+  const calendarEventsQuery = useQuery(
+    trpc.lesson.byClassroom.queryOptions({
+      classroomId: params.id,
+    })
+  );
   const [view, setView] = useState<RbcView>(RbcViews.MONTH);
   const [date, setDate] = useState(new Date());
   const { openModal } = useModal();
@@ -91,7 +94,7 @@ export function ClassroomLesson() {
         view: <CreateEditLesson daysOfWeek={days} />,
       });
     },
-    [openModal, t],
+    [openModal, t]
   );
 
   const handleSelectEvent = useCallback(
@@ -101,7 +104,7 @@ export function ClassroomLesson() {
         view: <LessonDetails event={event} />,
       });
     },
-    [openModal, t],
+    [openModal, t]
   );
 
   const { _views, _scrollToTime, formats } = useMemo(
@@ -118,18 +121,18 @@ export function ClassroomLesson() {
         weekdayFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer,
+          localizer?: DateLocalizer
         ) => localizer?.format(date, "EEE", culture),
         dayFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) =>
           localizer?.format(date, "EEE M/d", culture),
         timeGutterFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer,
+          localizer?: DateLocalizer
         ) => localizer?.format(date, "HH:mm", culture),
       } as Formats,
     }),
-    [],
+    []
   );
 
   const handleViewChange = (view: RbcView) => {
@@ -230,7 +233,7 @@ export function ClassroomLesson() {
 
 const getWeekdayNumbersBetweenDates = (
   startDate: Date,
-  endDate: Date,
+  endDate: Date
 ): number[] => {
   const uniqueDays = new Set<number>();
   const current = new Date(startDate);

@@ -25,8 +25,9 @@ import {
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
+import { useQuery } from "@tanstack/react-query";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 interface CountryPickerFieldProps {
   emptyPlaceholder?: React.ReactNode;
@@ -49,7 +50,8 @@ export function CountryPicker({
   const countries = useMemo(() => getCountries(), []);
   const [value, setValue] = React.useState(defaultValue ?? undefined);
   const [open, setOpen] = React.useState(false);
-  const schoolQuery = api.school.getSchool.useQuery();
+  const trpc = useTRPC();
+  const schoolQuery = useQuery(trpc.school.getSchool.queryOptions());
   useEffect(() => {
     if (!schoolQuery.data) return;
     if (!defaultValue) {
@@ -73,7 +75,7 @@ export function CountryPicker({
             className={cn(
               "w-full justify-between",
               !value && "text-muted-foreground",
-              className,
+              className
             )}
           >
             {value ? (
@@ -118,7 +120,7 @@ export function CountryPicker({
                     <CheckIcon
                       className={cn(
                         "ml-auto h-4 w-4",
-                        country === value ? "opacity-100" : "opacity-0",
+                        country === value ? "opacity-100" : "opacity-0"
                       )}
                     />
                   </CommandItem>
@@ -147,7 +149,7 @@ const CountryComponent = ({
     <div
       className={cn(
         "flex cursor-pointer items-center gap-2 text-xs",
-        className,
+        className
       )}
     >
       <span className="flex h-4 w-6 overflow-hidden rounded-sm">

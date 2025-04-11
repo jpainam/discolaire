@@ -9,8 +9,10 @@ import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Separator } from "@repo/ui/components/separator";
 import { useLocale } from "~/i18n";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { showErrorToast } from "~/lib/handle-error";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import type { AppreciationCategory } from "~/types/appreciation";
 import { CreateEditAppreciation } from "./CreateEditAppreciation";
 
@@ -29,9 +31,23 @@ export function AppreciationList({
   const searchParams = useSearchParams();
   const classroomId = searchParams.get("classroom");
   const termId = Number(searchParams.get("term"));
-  const upsertStudentRemarkMutation = api.reportCard.upsertRemark.useMutation();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const upsertStudentRemarkMutation = useMutation(
+    trpc.reportCard.upsertRemark.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.reportCard.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
-  const appreciationCategoriesQuery = api.appreciation.categories.useQuery();
+  const appreciationCategoriesQuery = useQuery(
+    trpc.appreciation.categories.queryOptions()
+  );
 
   if (appreciationCategoriesQuery.isPending) {
     return (

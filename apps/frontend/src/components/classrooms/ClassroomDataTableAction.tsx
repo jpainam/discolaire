@@ -21,9 +21,9 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { RiDeleteBinLine, RiFilter3Line } from "@remixicon/react";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import { Label } from "@repo/ui/components/label";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { api, useTRPC } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 type ClassroomProcedureOutput = NonNullable<
   RouterOutputs["classroom"]["all"]
@@ -38,7 +38,7 @@ export function ClassroomDataTableAction({
   const { t } = useLocale();
   const canDeleteClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -52,7 +52,7 @@ export function ClassroomDataTableAction({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   // Clear selection on Escape key press
@@ -69,7 +69,7 @@ export function ClassroomDataTableAction({
 
   const confirm = useConfirm();
 
-  const cycleQuery = api.classroomCycle.all.useQuery();
+  const cycleQuery = useQuery(trpc.classroomCycle.all.queryOptions());
   const cycles = cycleQuery.data ?? [];
 
   // Extract complex expressions into separate variables
@@ -166,7 +166,7 @@ export function ClassroomDataTableAction({
                         }
                         const filterValues = Array.from(selectedStatuses);
                         cycleColumn?.setFilterValue(
-                          filterValues.length ? filterValues : undefined,
+                          filterValues.length ? filterValues : undefined
                         );
                         //handleStatusChange(checked, value)
                       }}

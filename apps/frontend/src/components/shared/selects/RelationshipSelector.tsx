@@ -10,8 +10,9 @@ import {
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 interface RelationshipSelectorProps {
   onChange?: (value: string) => void;
@@ -28,8 +29,10 @@ export function RelationshipSelector({
   showAllOption = true,
 }: RelationshipSelectorProps) {
   const { t } = useLocale();
-
-  const relationshipsQuery = api.studentContact.relationships.useQuery();
+  const trpc = useTRPC();
+  const relationshipsQuery = useQuery(
+    trpc.studentContact.relationships.queryOptions()
+  );
 
   return (
     <Select

@@ -22,7 +22,8 @@ import {
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
-import { api } from "~/trpc/react";
+import { useQuery } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 
 type TransactionQuotaProcedureOutput = NonNullable<
   RouterOutputs["transaction"]["quotas"]
@@ -47,7 +48,10 @@ export function TransactionClassrooms() {
     } satisfies ChartConfig;
   }, [t]);
 
-  const transactionsQuotaQuery = api.transaction.quotas.useQuery();
+  const trpc = useTRPC();
+  const transactionsQuotaQuery = useQuery(
+    trpc.transaction.quotas.queryOptions()
+  );
 
   const [filteredData, setFilteredData] = React.useState<
     TransactionQuotaProcedureOutput[][]

@@ -23,11 +23,12 @@ import FlatBadge from "~/components/FlatBadge";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { api, useTRPC } from "~/trpc/react";
 import type { ReportCardType } from "~/types/report-card";
 import { getFullName } from "~/utils";
 import { AppreciationCategoryList } from "./AppreciationCategoryList";
@@ -36,19 +37,24 @@ import { EditableAppreciation } from "./EditableAppreciation";
 export function AppreciationTable({ reports }: { reports: any[] }) {
   const { createQueryString } = useCreateQueryString();
   const [selected, setSelected] = useState<string[]>([]);
-  const appreciationCategoriesQuery = api.appreciation.categories.useQuery();
+  const trpc = useTRPC();
+  const appreciationCategoriesQuery = useQuery(
+    trpc.appreciation.categories.queryOptions()
+  );
 
   const searchParams = useSearchParams();
   const classroomId = searchParams.get("classroom");
 
   const [remarksMap, setRemarkMaps] = useState<Record<string, ReportCardType>>(
-    {},
+    {}
   );
   const termId = Number(searchParams.get("term"));
-  const remarksQuery = api.reportCard.getRemarks.useQuery({
-    classroomId: classroomId ?? "",
-    termId: termId || 0,
-  });
+  const remarksQuery = useQuery(
+    trpc.reportCard.getRemarks.queryOptions({
+      classroomId: classroomId ?? "",
+      termId: termId || 0,
+    })
+  );
 
   useEffect(() => {
     if (remarksQuery.data) {
@@ -103,7 +109,7 @@ export function AppreciationTable({ reports }: { reports: any[] }) {
                 rowClassName,
                 "group/report",
                 selected.includes(report.student.id) &&
-                  "bg-secondary text-secondary-foreground",
+                  "bg-secondary text-secondary-foreground"
               )}
               key={report.student.id}
             >
@@ -117,7 +123,7 @@ export function AppreciationTable({ reports }: { reports: any[] }) {
                       setSelected([...selected, report.student.id]);
                     } else {
                       setSelected(
-                        selected.filter((id) => id !== report.student.id),
+                        selected.filter((id) => id !== report.student.id)
                       );
                     }
                   }}

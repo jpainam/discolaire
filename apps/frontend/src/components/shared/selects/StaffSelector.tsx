@@ -20,9 +20,10 @@ import {
 } from "@repo/ui/components/popover";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
 interface StaffSelectorProps {
@@ -54,8 +55,13 @@ export const StaffSelector = ({
   useEffect(() => {
     setValue(defaultValue);
   }, [defaultValue]);
-
-  const { data: staffs, isPending, isError, error } = api.staff.all.useQuery();
+  const trpc = useTRPC();
+  const {
+    data: staffs,
+    isPending,
+    isError,
+    error,
+  } = useQuery(trpc.staff.all.queryOptions());
 
   if (isError) {
     showErrorToast(error);
