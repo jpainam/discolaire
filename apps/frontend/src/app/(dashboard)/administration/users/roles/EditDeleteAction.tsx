@@ -44,7 +44,7 @@ export function EditDeleteAction({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   return (
     <DropdownMenu>

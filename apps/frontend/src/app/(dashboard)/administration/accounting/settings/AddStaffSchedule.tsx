@@ -63,7 +63,7 @@ export function AddStaffSchedule({
       onError: (error) => {
         toast.error(error.message);
       },
-    })
+    }),
   );
   const updateScheduleTask = useMutation(
     trpc.scheduleTask.update.mutationOptions({
@@ -75,7 +75,7 @@ export function AddStaffSchedule({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const handleSubmit = (data: z.infer<typeof addStaffScheduleSchema>) => {

@@ -53,12 +53,12 @@ export function CanReceiveTransactionSummary({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const scheduleTasksQuery = useQuery(
     trpc.scheduleTask.byName.queryOptions({
       name: "transaction-summary",
-    })
+    }),
   );
   if (staffQuery.isPending || scheduleTasksQuery.isPending) {
     return (

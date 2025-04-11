@@ -40,14 +40,14 @@ export function SectionTable() {
     trpc.classroomSection.delete.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.classroomSection.all.pathFilter()
+          trpc.classroomSection.all.pathFilter(),
         );
         toast.success(t("deleted_successfully"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const { openModal } = useModal();
   const confirm = useConfirm();

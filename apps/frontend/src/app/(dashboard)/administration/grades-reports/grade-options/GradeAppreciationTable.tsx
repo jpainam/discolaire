@@ -46,7 +46,7 @@ export function GradeAppreciationTable() {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const gradeAppreciationsQuery = useQuery(
-    trpc.gradeAppreciation.all.queryOptions()
+    trpc.gradeAppreciation.all.queryOptions(),
   );
 
   const { t } = useLocale();
@@ -54,14 +54,14 @@ export function GradeAppreciationTable() {
     trpc.gradeAppreciation.delete.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.gradeAppreciation.all.pathFilter()
+          trpc.gradeAppreciation.all.pathFilter(),
         );
         toast.success(t("deleted_successfully"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const confirm = useConfirm();
 

@@ -53,13 +53,13 @@ export function CreateEditGradeAppreciation({
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.gradeAppreciation.all.pathFilter()
+          trpc.gradeAppreciation.all.pathFilter(),
         );
 
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
       },
-    })
+    }),
   );
   const updateAppreciation = useMutation(
     trpc.gradeAppreciation.update.mutationOptions({
@@ -68,12 +68,12 @@ export function CreateEditGradeAppreciation({
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.gradeAppreciation.all.pathFilter()
+          trpc.gradeAppreciation.all.pathFilter(),
         );
         toast.success(t("updated_successfully"), { id: 0 });
         closeModal();
       },
-    })
+    }),
   );
 
   const handleSubmit = (data: z.infer<typeof createEditAppreciationSchema>) => {
