@@ -1,5 +1,3 @@
-import { notFound } from "next/navigation";
-
 import { auth } from "@repo/auth";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import {
@@ -9,11 +7,13 @@ import {
   TabsTrigger,
 } from "@repo/ui/components/tabs";
 import { LockKeyhole, Shield, User } from "lucide-react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { ErrorFallback } from "~/components/error-fallback";
 import { ReinitializePassword } from "~/components/users/password/ReinitializePassword";
 import { PermissionTable } from "~/components/users/PermissionTable";
 import { getServerTranslations } from "~/i18n/server";
-import { api, HydrateClient } from "~/trpc/server";
+import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 import { ChangeUserPassword } from "./ChangeUserPassword";
 import { UserProfile } from "./UserProfile";
 export default async function Page(props: { params: Promise<{ id: string }> }) {
@@ -22,10 +22,9 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const { id } = params;
   const { t } = await getServerTranslations();
 
-  const user = await api.user.get(id);
-  if (!user) {
-    notFound();
-  }
+  //const user = await api.user.get(id);
+  prefetch(trpc.user.get.queryOptions(id));
+
   return (
     <HydrateClient>
       <div className="w-full px-4">
@@ -70,15 +69,22 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </Suspense>
           </TabsContent>
           <TabsContent className="px-4" value="tab-2">
-            {session?.user.id == user.id ? (
-              <ReinitializePassword />
-            ) : (
-              <ChangeUserPassword user={user} />
-            )}
+            <ErrorBoundary errorComponent={ErrorFallback}>
+              <Suspense
+                key={params.id}
+                fallback={<Skeleton className="h-20" />}
+              >
+                {session?.user.id == params.id ? (
+                  <ReinitializePassword />
+                ) : (
+                  <ChangeUserPassword />
+                )}
+              </Suspense>
+            </ErrorBoundary>
           </TabsContent>
           {session?.user.profile == "staff" && (
             <TabsContent value="tab-3">
-              <PermissionTable userId={user.id} />
+              <PermissionTable userId={params.id} />
             </TabsContent>
           )}
         </Tabs>

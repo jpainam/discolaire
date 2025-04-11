@@ -20,9 +20,10 @@ const accept = {
 
 export function ChangeAvatarButton(
   props: PropsWithChildren<{
-    entityId: string;
-    entityType: string;
+    entityId?: string;
+    entityType?: string;
     className?: string;
+    userId?: string;
   }>,
 ) {
   const [selectedFile, setSelectedFile] =
@@ -65,8 +66,9 @@ export function ChangeAvatarButton(
           croppedBlob,
           selectedFile?.name ?? "avatar.png",
         );
-        formData.append("entityId", props.entityId);
-        formData.append("entityType", props.entityType);
+        formData.append("entityId", props.entityId ?? "");
+        formData.append("entityType", props.entityType ?? "");
+        formData.append("userId", props.userId ?? "");
         const response = await fetch("/api/upload/avatars", {
           method: "POST",
           body: formData,
@@ -85,7 +87,14 @@ export function ChangeAvatarButton(
         console.error(error);
       }
     },
-    [props.entityId, props.entityType, router, selectedFile?.name, t],
+    [
+      props.entityId,
+      props.entityType,
+      props.userId,
+      router,
+      selectedFile?.name,
+      t,
+    ],
   );
 
   return (

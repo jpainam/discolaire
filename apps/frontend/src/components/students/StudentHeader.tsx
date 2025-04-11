@@ -189,7 +189,10 @@ export function StudentHeader() {
       });
       await queryClient.invalidateQueries(trpc.student.get.pathFilter());
     } else {
-      toast.error(response.statusText, { id: 0 });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const { error } = await response.json();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      toast.error(error ?? response.statusText, { id: 0 });
     }
   };
 

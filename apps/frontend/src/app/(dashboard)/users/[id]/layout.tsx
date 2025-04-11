@@ -1,12 +1,17 @@
 import { auth } from "@repo/auth";
 import { Separator } from "@repo/ui/components/separator";
-import { getServerTranslations } from "~/i18n/server";
 
-import { notFound } from "next/navigation";
 import { NoPermission } from "~/components/no-permission";
 
-import { AvatarState } from "~/components/AvatarState";
-import { api } from "~/trpc/server";
+import { checkPermission } from "@repo/api/permission";
+import { Skeleton } from "@repo/ui/components/skeleton";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { redirect } from "next/navigation";
+import { Suspense } from "react";
+import { ErrorFallback } from "~/components/error-fallback";
+import { PermissionAction } from "~/permissions";
+import { HydrateClient, prefetch, trpc } from "~/trpc/server";
+import { UserHeader } from "./UserHeader";
 
 export default async function Layout(props: {
   params: Promise<{ id: string }>;
@@ -14,51 +19,45 @@ export default async function Layout(props: {
 }) {
   const params = await props.params;
   const session = await auth();
-  if (session?.user.id !== params.id && session?.user.profile != "staff") {
-    return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
+  if (!session) {
+    redirect("/auth/login");
+  }
+  if (session.user.id !== params.id) {
+    if (session.user.profile == "staff") {
+      const canReadUser = await checkPermission("user", PermissionAction.READ);
+      if (!canReadUser) {
+        return (
+          <NoPermission className="my-8" isFullPage={true} resourceText="" />
+        );
+      }
+    } else {
+      return (
+        <NoPermission className="my-8" isFullPage={true} resourceText="" />
+      );
+    }
   }
 
   const { children } = props;
 
-  const { t } = await getServerTranslations();
+  prefetch(trpc.user.get.queryOptions(params.id));
 
-  const user = await api.user.get(params.id);
-  if (!user) {
-    notFound();
-  }
   return (
-    <div className="">
-      <div className="flex flex-row items-center gap-2 px-4 py-2">
-        <AvatarState
-          pos={1}
-          avatar={user.avatar}
-          className="w-[100px] h-[100px]"
-        />
-
-        <div className="space-y-0.5">
-          <h2 className=" font-bold tracking-tight">{t("user_management")}</h2>
-          <div className="flex flex-row items-center gap-16">
-            <div className="flex flex-row items-center gap-2 text-muted-foreground">
-              <span className="font-bold">{t("name")}</span>
-              {user.name}
+    <HydrateClient>
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <Suspense
+          key={params.id}
+          fallback={
+            <div className="px-4 py-2">
+              <Skeleton className="h-20" />
             </div>
-            <div className="flex flex-row items-center gap-2 text-muted-foreground">
-              <span className="font-bold">{t("username")}</span>
-              {user.username}
-            </div>
-            <div className="flex flex-row items-center gap-2 text-muted-foreground">
-              <span className="font-bold">{t("email")}</span>
-              {user.email}
-            </div>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            {t("userManagementDescription")}
-          </p>
-        </div>
-      </div>
+          }
+        >
+          <UserHeader />
+        </Suspense>
+      </ErrorBoundary>
       <Separator />
 
       {children}
-    </div>
+    </HydrateClient>
   );
 }

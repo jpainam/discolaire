@@ -42,7 +42,7 @@ export function UserProfile() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: user } = useSuspenseQuery(
-    trpc.user.get.queryOptions(params.id)
+    trpc.user.get.queryOptions(params.id),
   );
   const form = useForm({
     resolver: zodResolver(usernameSchema),
@@ -85,7 +85,10 @@ export function UserProfile() {
       });
       await queryClient.invalidateQueries(trpc.user.get.pathFilter());
     } else {
-      toast.error(response.statusText, { id: 0 });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const { error } = await response.json();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      toast.error(error ?? response.statusText, { id: 0 });
     }
   };
   return (
@@ -106,7 +109,11 @@ export function UserProfile() {
                 <div className="flex flex-col items-center space-y-2">
                   <Avatar className="h-24 w-24">
                     <AvatarImage
-                      src={user.avatar ?? undefined}
+                      src={
+                        user.avatar
+                          ? `/api/download/avatars/${user.avatar}`
+                          : undefined
+                      }
                       alt={user.name ?? ""}
                     />
                     <AvatarFallback className="text-2xl font-bold uppercase">
@@ -120,12 +127,13 @@ export function UserProfile() {
                       }}
                       variant={"outline"}
                       size={"sm"}
+                      type="button"
                     >
                       <ImageMinus />
                       {t("Remove avatar")}
                     </Button>
                   ) : (
-                    <ChangeAvatarButton entityId={user.id} entityType="contact">
+                    <ChangeAvatarButton userId={user.id}>
                       <Button type="button" variant={"outline"} size={"sm"}>
                         <ImageUpIcon />
                         {t("change_avatar")}

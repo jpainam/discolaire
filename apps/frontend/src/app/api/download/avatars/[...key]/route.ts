@@ -6,14 +6,15 @@ import { env } from "~/env";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ key: string }> },
+  { params }: { params: Promise<{ key: string[] }> },
 ) {
   const { key } = await params;
   const isLocal = env.NEXT_PUBLIC_DEPLOYMENT_ENV === "local";
-  const encodedKey = encodeURIComponent(key);
+  const encodedKey = encodeURIComponent(key.join("/"));
+
   const s3Url = isLocal
-    ? `http://localhost:${env.MINIO_PORT}/${env.S3_IMAGE_BUCKET_NAME}/${encodedKey}`
-    : `https://${env.S3_IMAGE_BUCKET_NAME}.s3.eu-central-1.amazonaws.com/${encodedKey}`;
+    ? `http://localhost:${env.MINIO_PORT}/${env.S3_AVATAR_BUCKET_NAME}/${encodedKey}`
+    : `https://${env.S3_AVATAR_BUCKET_NAME}.s3.eu-central-1.amazonaws.com/${encodedKey}`;
 
   try {
     const response = await fetch(s3Url);

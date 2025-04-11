@@ -13,7 +13,6 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@repo/ui/components/dialog";
-import { env } from "~/env";
 import { cn } from "~/lib/utils";
 import { avatars, randomAvatar } from "./raw-images";
 interface AvatarStateProps {
@@ -29,17 +28,13 @@ export function AvatarState({ avatar, className, pos }: AvatarStateProps) {
   } else {
     generatedAvatar = randomAvatar();
   }
-  const publicUrl =
-    env.NEXT_PUBLIC_DEPLOYMENT_ENV == "local"
-      ? `${env.NEXT_PUBLIC_MINIO_ENDPOINT}`
-      : "https://discolaire-public.s3.eu-central-1.amazonaws.com";
 
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Avatar className={cn("my-0 h-8 w-8 cursor-pointer", className)}>
           <AvatarImage
-            src={avatar ? `${publicUrl}/${avatar}` : undefined}
+            src={avatar ? `/api/download/avatars/${avatar}` : undefined}
             alt={"AV"}
           />
           <AvatarFallback>
@@ -60,7 +55,7 @@ export function AvatarState({ avatar, className, pos }: AvatarStateProps) {
           <DialogTitle></DialogTitle>
         </VisuallyHidden>
         <img
-          src={avatar ? `${publicUrl}/${avatar}` : generatedAvatar}
+          src={avatar ? `/api/download/avatars/${avatar}` : generatedAvatar}
           alt="Full Image"
           className="w-full h-auto rounded-lg"
         />

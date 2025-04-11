@@ -1,6 +1,5 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -18,20 +17,27 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useLocale } from "~/i18n";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 const updateUserPasswordSchema = z.object({
   new_password: z.string().min(1),
   confirm_password: z.string().min(1),
 });
-export function ChangeUserPassword({
-  user,
-}: {
-  user: NonNullable<RouterOutputs["user"]["get"]>;
-}) {
+export function ChangeUserPassword() {
+  const trpc = useTRPC();
+  const params = useParams<{ id: string }>();
+  const { data: user } = useSuspenseQuery(
+    trpc.user.get.queryOptions(params.id),
+  );
   const form = useForm({
     resolver: zodResolver(updateUserPasswordSchema),
     defaultValues: {
@@ -39,18 +45,19 @@ export function ChangeUserPassword({
       confirm_password: "",
     },
   });
-  const utils = api.useUtils();
-  const updateUserPassword = api.user.updatePassword.useMutation({
-    onSettled: () => {
-      void utils.user.get.invalidate(user.id);
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const queryClient = useQueryClient();
+
+  const updateUserPassword = useMutation(
+    trpc.user.updatePassword.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.user.get.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
   const { t } = useLocale();
 
   const handleSubmit = (values: z.infer<typeof updateUserPasswordSchema>) => {

@@ -11,10 +11,11 @@ export async function POST(request: Request) {
   try {
     const formData = await request.formData();
     const file = formData.get("file");
-    const entityId = formData.get("entityId") as string;
-    const entityType = formData.get("entityType") as string;
+    const entityId = formData.get("entityId") as string | null;
+    const entityType = formData.get("entityType") as string | null;
+    const userId = formData.get("userId") as string | null;
 
-    if (!file || !entityId || !entityType) {
+    if (!file) {
       return Response.json({ error: "Data missing" }, { status: 400 });
     }
     if (!(file instanceof File)) {
@@ -22,12 +23,22 @@ export async function POST(request: Request) {
     }
 
     const ext = file.name.split(".").pop();
-    const user = await caller.user.getUserByEntity({
-      entityId,
-      entityType: entityType as "staff" | "contact" | "student",
-    });
+    let concernedId = "";
+    let concernedType = "";
+    if (entityId && entityType) {
+      const user = await caller.user.getUserByEntity({
+        entityId,
+        entityType: entityType as "staff" | "contact" | "student",
+      });
+      concernedId = user.id;
+      concernedType = entityType;
+    } else if (userId) {
+      const user = await caller.user.get(userId);
+      concernedId = user.id;
+      concernedType = user.profile;
+    }
 
-    const key = `${entityType}/${user.id}.${ext}`;
+    const key = `${concernedType}/${userId}.${ext}`;
     const result = await uploadFile({
       file: file,
       bucket: env.S3_AVATAR_BUCKET_NAME,
@@ -35,7 +46,7 @@ export async function POST(request: Request) {
     });
     // Update the avatar in the database
     await caller.user.updateAvatar({
-      id: user.id,
+      id: concernedId,
       avatar: result.key,
     });
     // TODO Send an email to the user to confirm the change
@@ -56,26 +67,25 @@ export async function DELETE(request: Request) {
       return Response.json({ error: "No userId provided" }, { status: 400 });
     }
     const user = await caller.user.get(userId);
-    if (!user) {
-      return Response.json({ error: "User not found" }, { status: 404 });
-    }
+
     const avatar = user.avatar;
     if (!avatar) {
       return Response.json({ error: "No avatar to delete" }, { status: 400 });
     }
-    //const school = await caller.school.getSchool();
+
     await deleteFile({
       bucket: env.S3_AVATAR_BUCKET_NAME,
       key: avatar,
     });
 
-    // Update the avatar in the database
     await caller.user.updateAvatar({
       id: userId,
       avatar: null,
     });
-    return Response.json({});
+
+    return Response.json({ message: "Avatar deleted successfully" });
   } catch (error) {
-    return Response.json({ error: (error as Error).message });
+    console.error(error);
+    return Response.json({ error: (error as Error).message }, { status: 500 });
   }
 }
