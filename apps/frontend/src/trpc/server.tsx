@@ -67,8 +67,3 @@ export function batchPrefetch<T extends ReturnType<TRPCQueryOptions<any>>>(
   }
 }
 export const caller = createCaller(createContext);
-
-// TODO After fully migrating to 11.0.0, remove this lines
-
-// export const { trpc: api, HydrateClient: _HydrateClient } =
-//   createHydrationHelpers<AppRouter>(caller, getQueryClient);
