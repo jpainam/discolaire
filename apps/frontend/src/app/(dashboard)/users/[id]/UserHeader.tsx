@@ -11,7 +11,7 @@ export function UserHeader() {
   const params = useParams<{ id: string }>();
   const { t } = useLocale();
   const { data: user } = useSuspenseQuery(
-    trpc.user.get.queryOptions(params.id)
+    trpc.user.get.queryOptions(params.id),
   );
   return (
     <div className="flex flex-row items-center gap-2 px-4 py-2">
