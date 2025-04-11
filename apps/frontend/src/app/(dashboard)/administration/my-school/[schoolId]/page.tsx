@@ -25,8 +25,12 @@ import FlatBadge from "~/components/FlatBadge";
 import { NoPermission } from "~/components/no-permission";
 import { getServerTranslations } from "~/i18n/server";
 
+import { Skeleton } from "@repo/ui/components/skeleton";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { Suspense } from "react";
+import { ErrorFallback } from "~/components/error-fallback";
 import { env } from "~/env";
-import { api } from "~/trpc/server";
+import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 import { DefaultSettings } from "./DefaultSettings";
 import { SchoolDetailAction } from "./SchoolDetailAction";
 
@@ -41,8 +45,10 @@ export default async function Page(props: {
   if (!session) {
     redirect("/auth/login");
   }
-
-  const school = await api.school.get(schoolId);
+  const queryClient = getQueryClient();
+  const school = await queryClient.fetchQuery(
+    trpc.school.get.queryOptions(schoolId)
+  );
 
   if (
     school.id !== session.user.schoolId &&
@@ -53,88 +59,89 @@ export default async function Page(props: {
 
   const { t } = await getServerTranslations();
   return (
-    <div className="flex flex-col gap-2 text-sm">
-      <Card className="p-0">
-        <CardHeader className="flex flex-row items-center space-x-4 border-b bg-muted/50 p-2">
-          {school.logo && (
-            <Image
-              src={`/api/download/images/${school.logo}`}
-              alt={school.name}
-              width={80}
-              height={80}
-            />
-          )}
+    <HydrateClient>
+      <div className="flex flex-col gap-2 text-sm">
+        <Card className="p-0">
+          <CardHeader className="flex flex-row items-center space-x-4 border-b bg-muted/50 p-2">
+            {school.logo && (
+              <Image
+                src={`/api/download/images/${school.logo}`}
+                alt={school.name}
+                width={80}
+                height={80}
+              />
+            )}
 
-          <div className="flex-1">
-            <CardTitle className="text-xl">{school.name}</CardTitle>
-            <p className="text-sm text-muted-foreground">ID: {school.id}</p>
-          </div>
-          <CardAction className="flex flex-row items-center space-x-2">
-            <FlatBadge variant={school.isActive ? "green" : "red"}>
-              {school.isActive ? t("active") : t("inactive")}
-            </FlatBadge>
-            <SchoolDetailAction schoolId={schoolId} />
-          </CardAction>
-        </CardHeader>
-        <CardContent className="p-2">
-          <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-            <InfoItem
-              label={t("authorization")}
-              value={school.authorization}
-              icon={<BookMarkedIcon className="h-4 w-4" />}
-            />
-            <InfoItem
-              label={t("ministry")}
-              value={school.ministry}
-              icon={<NotebookIcon className="h-4 w-4" />}
-            />
-            <InfoItem
-              label={t("department")}
-              value={school.department}
-              icon={<NavigationIcon className="h-4 w-4" />}
-            />
-            <InfoItem
-              label={t("region")}
-              value={school.region}
-              icon={<LocateFixedIcon className="h-4 w-4" />}
-            />
-            <InfoItem
-              label={t("city")}
-              value={school.city}
-              icon={<MapPinHouse className="h-4 w-4" />}
-            />
-            <InfoItem
-              label={t("headmaster")}
-              value={school.headmaster}
-              icon={<UserIcon className="h-4 w-4" />}
-            />
-            <InfoItem
-              label={t("phoneNumber")}
-              value={school.phoneNumber1}
-              icon={<Phone className="h-4 w-4" />}
-            />
-            <InfoItem
-              label={t("phoneNumber")}
-              value={school.phoneNumber2}
-              icon={<Phone className="h-4 w-4" />}
-            />
-            <InfoItem
-              label={t("email")}
-              value={school.email}
-              icon={<Mail className="h-4 w-4" />}
-            />
-            <InfoItem
-              label={t("website")}
-              value={school.website}
-              icon={<Globe className="h-4 w-4" />}
-            />
-            <InfoItem
-              label={t("address")}
-              value={`${school.city ?? ""}, ${school.region ?? ""}`}
-              icon={<MapPin className="h-4 w-4" />}
-            />
-          </div>
-          {/* <div className="mt-4 text-sm text-muted-foreground">
+            <div className="flex-1">
+              <CardTitle className="text-xl">{school.name}</CardTitle>
+              <p className="text-sm text-muted-foreground">ID: {school.id}</p>
+            </div>
+            <CardAction className="flex flex-row items-center space-x-2">
+              <FlatBadge variant={school.isActive ? "green" : "red"}>
+                {school.isActive ? t("active") : t("inactive")}
+              </FlatBadge>
+              <SchoolDetailAction schoolId={schoolId} />
+            </CardAction>
+          </CardHeader>
+          <CardContent className="p-2">
+            <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+              <InfoItem
+                label={t("authorization")}
+                value={school.authorization}
+                icon={<BookMarkedIcon className="h-4 w-4" />}
+              />
+              <InfoItem
+                label={t("ministry")}
+                value={school.ministry}
+                icon={<NotebookIcon className="h-4 w-4" />}
+              />
+              <InfoItem
+                label={t("department")}
+                value={school.department}
+                icon={<NavigationIcon className="h-4 w-4" />}
+              />
+              <InfoItem
+                label={t("region")}
+                value={school.region}
+                icon={<LocateFixedIcon className="h-4 w-4" />}
+              />
+              <InfoItem
+                label={t("city")}
+                value={school.city}
+                icon={<MapPinHouse className="h-4 w-4" />}
+              />
+              <InfoItem
+                label={t("headmaster")}
+                value={school.headmaster}
+                icon={<UserIcon className="h-4 w-4" />}
+              />
+              <InfoItem
+                label={t("phoneNumber")}
+                value={school.phoneNumber1}
+                icon={<Phone className="h-4 w-4" />}
+              />
+              <InfoItem
+                label={t("phoneNumber")}
+                value={school.phoneNumber2}
+                icon={<Phone className="h-4 w-4" />}
+              />
+              <InfoItem
+                label={t("email")}
+                value={school.email}
+                icon={<Mail className="h-4 w-4" />}
+              />
+              <InfoItem
+                label={t("website")}
+                value={school.website}
+                icon={<Globe className="h-4 w-4" />}
+              />
+              <InfoItem
+                label={t("address")}
+                value={`${school.city ?? ""}, ${school.region ?? ""}`}
+                icon={<MapPin className="h-4 w-4" />}
+              />
+            </div>
+            {/* <div className="mt-4 text-sm text-muted-foreground">
             <p>
               {t("created_at")}: {school.createdAt.toLocaleString()}
             </p>
@@ -142,17 +149,22 @@ export default async function Page(props: {
               {t("last_updated")}: {school.updatedAt.toLocaleString()}
             </p>
           </div> */}
-        </CardContent>
-      </Card>
-      <Card className="p-0">
-        <CardHeader className="border-b bg-muted/50 p-2">
-          <CardTitle>{t("default_settings")}</CardTitle>
-        </CardHeader>
-        <CardContent className="p-4">
-          <DefaultSettings school={school} />
-        </CardContent>
-      </Card>
-    </div>
+          </CardContent>
+        </Card>
+        <Card className="p-0">
+          <CardHeader className="border-b bg-muted/50 p-2">
+            <CardTitle>{t("default_settings")}</CardTitle>
+          </CardHeader>
+          <CardContent className="p-4">
+            <ErrorBoundary errorComponent={ErrorFallback}>
+              <Suspense fallback={<Skeleton className="h-20 " />}>
+                <DefaultSettings />
+              </Suspense>
+            </ErrorBoundary>
+          </CardContent>
+        </Card>
+      </div>
+    </HydrateClient>
   );
 }
 

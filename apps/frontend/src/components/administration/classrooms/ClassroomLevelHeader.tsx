@@ -17,31 +17,37 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { selectedClassroomLevelAtom } from "./_atom";
 import { CreateEditLevel } from "./CreateEditLevel";
 
 export function ClassroomLevelHeader() {
   const { t } = useLocale();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const { openModal } = useModal();
   const [selectedLevels, setSelectedLevels] = useAtom(
-    selectedClassroomLevelAtom,
+    selectedClassroomLevelAtom
   );
 
-  const utils = api.useUtils();
-  const deleteClassroomLevelMutation = api.classroomLevel.delete.useMutation({
-    onSettled: () => utils.classroomLevel.invalidate(),
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-      setSelectedLevels([]);
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const deleteClassroomLevelMutation = useMutation(
+    trpc.classroomLevel.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.classroomLevel.all.pathFilter()
+        );
+        toast.success(t("deleted_successfully"), { id: 0 });
+        setSelectedLevels([]);
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const confirm = useConfirm();
   return (
@@ -51,7 +57,6 @@ export function ClassroomLevelHeader() {
         <Button
           onClick={() => {
             openModal({
-              className: "w-96",
               title: t("level"),
               view: <CreateEditLevel />,
             });
@@ -69,20 +74,21 @@ export function ClassroomLevelHeader() {
               const isConfirm = await confirm({
                 title: t("delete"),
                 description: t("delete_confirmation"),
-                icon: <Trash2 className="h-4 w-4 text-destructive" />,
-                alertDialogTitle: {
-                  className: "flex items-center gap-1",
-                },
+                // icon: <Trash2 className="h-4 w-4 text-destructive" />,
+                // alertDialogTitle: {
+                //   className: "flex items-center gap-1",
+                // },
               });
               if (isConfirm) {
-                toast.loading(t("deleting"), { id: 0 });
+                toast.loading(t("Processing..."), { id: 0 });
                 deleteClassroomLevelMutation.mutate(selectedLevels);
               }
             }}
             variant={"destructive"}
+            size={"sm"}
           >
             <Trash2 />
-            <span className="mr-2">{t("delete")}</span>({selectedLevels.length})
+            <span>{t("delete")}</span>({selectedLevels.length})
           </Button>
         )}
         <DropdownMenu>

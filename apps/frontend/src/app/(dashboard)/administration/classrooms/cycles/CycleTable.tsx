@@ -25,23 +25,31 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { api } from "~/trpc/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditCycle } from "./CreateEditCycle";
 
 export function CycleTable() {
-  const cyclesQuery = api.classroomCycle.all.useQuery();
+  const trpc = useTRPC();
+  const cyclesQuery = useQuery(trpc.classroomCycle.all.queryOptions());
   const { t } = useLocale();
   const data = cyclesQuery.data ?? [];
-  const utils = api.useUtils();
-  const deleteCycleMutation = api.classroomCycle.delete.useMutation({
-    onSettled: () => utils.classroomCycle.invalidate(),
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+
+  const queryClient = useQueryClient();
+
+  const deleteCycleMutation = useMutation(
+    trpc.classroomCycle.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.classroomCycle.all.pathFilter()
+        );
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const { openModal } = useModal();
   const confirm = useConfirm();
   return (

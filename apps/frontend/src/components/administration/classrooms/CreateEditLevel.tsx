@@ -16,8 +16,9 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const createLevelSchema = z.object({
   name: z.string().min(1),
@@ -41,27 +42,37 @@ export function CreateEditLevel({
   });
   const { t } = useLocale();
   const { closeModal } = useModal();
-  const utils = api.useUtils();
-  const createClassroomLevel = api.classroomLevel.create.useMutation({
-    onSettled: () => utils.classroomLevel.invalidate(),
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeModal();
-    },
-  });
-  const updateClassroomLevel = api.classroomLevel.update.useMutation({
-    onSettled: () => utils.classroomLevel.invalidate(),
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const createClassroomLevel = useMutation(
+    trpc.classroomLevel.create.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.classroomLevel.all.pathFilter()
+        );
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+    })
+  );
+  const updateClassroomLevel = useMutation(
+    trpc.classroomLevel.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.classroomLevel.all.pathFilter()
+        );
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const onSubmit = (data: z.infer<typeof createLevelSchema>) => {
     const values = {
@@ -79,7 +90,7 @@ export function CreateEditLevel({
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-2"
+        className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField

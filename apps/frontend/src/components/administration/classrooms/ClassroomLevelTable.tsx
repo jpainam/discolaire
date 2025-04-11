@@ -22,7 +22,7 @@ import { CreateEditLevel } from "./CreateEditLevel";
 export function ClassroomLevelTable() {
   const classroomLevelsQuery = api.classroomLevel.all.useQuery();
   const [selectedLevels, setSelectedLevels] = useAtom(
-    selectedClassroomLevelAtom,
+    selectedClassroomLevelAtom
   );
   const utils = api.useUtils();
   const { t } = useLocale();
@@ -48,7 +48,7 @@ export function ClassroomLevelTable() {
           levelId: level.id,
           order: index,
         };
-      },
+      }
     );
 
     updateLevelOrder.mutate(levelWithOrders);
@@ -88,7 +88,7 @@ export function ClassroomLevelTable() {
                   setSelectedLevels([...selectedLevels, item.id]);
                 } else {
                   setSelectedLevels(
-                    selectedLevels.filter((id) => id !== item.id),
+                    selectedLevels.filter((id) => id !== item.id)
                   );
                 }
               }}
@@ -98,7 +98,6 @@ export function ClassroomLevelTable() {
               <Button
                 onClick={() => {
                   openModal({
-                    className: "w-96",
                     title: t("level"),
                     view: (
                       <CreateEditLevel

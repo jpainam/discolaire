@@ -22,13 +22,13 @@ import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { Badge } from "@repo/ui/components/badge";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
 import i18next from "i18next";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { getErrorMessage } from "~/lib/handle-error";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getAge, getFullName } from "~/utils";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { SimpleTooltip } from "../simple-tooltip";
@@ -249,7 +249,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
             year: "numeric",
             month: "short",
             day: "numeric",
-          },
+          }
         );
         return (
           <SimpleTooltip
@@ -352,12 +352,21 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
 function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
   const { t } = useLocale();
   const router = useRouter();
-
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const confirm = useConfirm();
-  const utils = api.useUtils();
-  const deleteStudentMutation = api.student.delete.useMutation({
-    onSettled: () => utils.student.invalidate(),
-  });
+
+  const deleteStudentMutation = useMutation(
+    trpc.student.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.student.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   return (
     <div className="flex justify-end">
@@ -398,7 +407,6 @@ function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             variant="destructive"
-            className="dark:data-[variant=destructive]:focus:bg-destructive/10"
             onSelect={async () => {
               const isConfirmed = await confirm({
                 title: t("delete"),
@@ -407,15 +415,8 @@ function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
                 }),
               });
               if (isConfirmed) {
-                toast.promise(deleteStudentMutation.mutateAsync(student.id), {
-                  loading: t("deleting"),
-                  success: () => {
-                    return t("deleted_successfully");
-                  },
-                  error: (error) => {
-                    return getErrorMessage(error);
-                  },
-                });
+                toast.loading(t("deleting"), { id: 0 });
+                deleteStudentMutation.mutate(student.id);
               }
             }}
           >

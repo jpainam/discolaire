@@ -4,7 +4,6 @@ import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   Form,
@@ -26,12 +25,17 @@ import { Switch } from "@repo/ui/components/switch";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { CountryPicker } from "~/components/shared/CountryPicker";
 import { routes } from "~/configs/routes";
 import { timezones } from "~/data/timezones";
 import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const defaultSettingsSchema = z.object({
   defaultCountryId: z.string().min(1),
@@ -41,14 +45,16 @@ const defaultSettingsSchema = z.object({
   currency: z.string().min(1).default("CFA"),
   timezone: z.string().min(1).default("UTC"),
 });
-export function DefaultSettings({
-  school,
-}: {
-  school: NonNullable<RouterOutputs["school"]["get"]>;
-}) {
+export function DefaultSettings() {
   const { t } = useLocale();
+  const trpc = useTRPC();
   const params = useParams<{ schoolId: string }>();
-  const utils = api.useUtils();
+  const { data: school } = useSuspenseQuery(
+    trpc.school.get.queryOptions(params.schoolId)
+  );
+
+  const queryClient = useQueryClient();
+
   const form = useForm({
     resolver: zodResolver(defaultSettingsSchema),
     defaultValues: {
@@ -61,16 +67,18 @@ export function DefaultSettings({
     },
   });
   const router = useRouter();
-  const updateDefaultSettings = api.school.updateDefaultSettings.useMutation({
-    onSettled: () => utils.school.invalidate(),
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      router.push(routes.administration.my_school.details(params.schoolId));
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const updateDefaultSettings = useMutation(
+    trpc.school.updateDefaultSettings.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.school.get.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        router.push(routes.administration.my_school.details(params.schoolId));
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const handleSubmit = (data: z.infer<typeof defaultSettingsSchema>) => {
     toast.loading(t("updating"), { id: 0 });

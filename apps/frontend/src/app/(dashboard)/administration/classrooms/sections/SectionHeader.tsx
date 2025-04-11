@@ -19,7 +19,6 @@ export function SectionHeader() {
         <Button
           onClick={() => {
             openModal({
-              className: "w-96",
               title: t("create"),
               view: <CreateEditSection />,
             });

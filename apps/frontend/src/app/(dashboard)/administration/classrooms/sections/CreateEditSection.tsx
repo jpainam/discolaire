@@ -17,8 +17,9 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const createEditSchema = z.object({
   name: z.string().min(1),
@@ -37,28 +38,37 @@ export function CreateEditSection({
     },
   });
   const { closeModal } = useModal();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
-  const utils = api.useUtils();
-  const createSectionMutation = api.classroomSection.create.useMutation({
-    onSettled: () => utils.classroomSection.invalidate(),
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const updateSectionMutation = api.classroomSection.update.useMutation({
-    onSettled: () => utils.classroomSection.invalidate(),
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const createSectionMutation = useMutation(
+    trpc.classroomSection.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.classroomSection.all.pathFilter()
+        );
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const updateSectionMutation = useMutation(
+    trpc.classroomSection.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.classroomSection.all.pathFilter()
+        );
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const handleSubmit = (data: z.infer<typeof createEditSchema>) => {
     if (id) {
@@ -74,7 +84,7 @@ export function CreateEditSection({
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-4"
+        className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
         <FormField

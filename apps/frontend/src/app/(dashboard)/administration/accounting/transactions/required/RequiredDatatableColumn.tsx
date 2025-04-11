@@ -196,10 +196,10 @@ function ActionCells({
   const confirm = useConfirm();
   const { t } = useLocale();
   //const router = useRouter();
-  //const utils = api.useUtils();
+
   const canDeleteClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   // const canUpdateClassroom = useCheckPermission(
   //   "classroom",

@@ -17,8 +17,9 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const createEditSchema = z.object({
   name: z.string().min(1),
@@ -31,28 +32,37 @@ export function CreateEditCycle({ id, name }: { id?: string; name?: string }) {
     },
   });
   const { closeModal } = useModal();
+  const trpc = useTRPC();
 
-  const utils = api.useUtils();
-  const createCycleMutation = api.classroomCycle.create.useMutation({
-    onSettled: () => utils.classroomCycle.invalidate(),
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const updateCycleMutation = api.classroomCycle.update.useMutation({
-    onSettled: () => utils.classroomCycle.invalidate(),
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const queryClient = useQueryClient();
+  const createCycleMutation = useMutation(
+    trpc.classroomCycle.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.classroomCycle.all.pathFilter()
+        );
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const updateCycleMutation = useMutation(
+    trpc.classroomCycle.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.classroomCycle.all.pathFilter()
+        );
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const handleSubmit = (data: z.infer<typeof createEditSchema>) => {
     if (id) {
@@ -68,7 +78,7 @@ export function CreateEditCycle({ id, name }: { id?: string; name?: string }) {
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-4"
+        className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
         <FormField
