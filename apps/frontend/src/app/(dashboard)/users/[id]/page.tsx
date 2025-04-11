@@ -22,7 +22,6 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const { id } = params;
   const { t } = await getServerTranslations();
 
-  //const user = await api.user.get(id);
   prefetch(trpc.user.get.queryOptions(id));
 
   return (

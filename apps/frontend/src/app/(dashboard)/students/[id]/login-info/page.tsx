@@ -22,7 +22,6 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const { t } = await getServerTranslations();
   const student = await api.student.get(id);
   const studentcontacts = await api.student.contacts(id);
-  //const user = student.userId ? await api.user.get(student.userId) : null;
 
   return (
     <div className="flex flex-col text-sm">

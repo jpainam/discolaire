@@ -1,6 +1,6 @@
 import { auth } from "@repo/auth";
 import { env } from "~/env";
-import { deleteFile, uploadFile } from "~/lib/s3-client";
+import { uploadFile } from "~/lib/s3-client";
 import { caller } from "~/trpc/server";
 
 export async function POST(request: Request) {
@@ -36,41 +36,6 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error(error);
-    return Response.json({ error: (error as Error).message });
-  }
-}
-
-export async function DELETE(request: Request) {
-  const session = await auth();
-  if (!session) {
-    return new Response("Unauthorized", { status: 401 });
-  }
-  try {
-    const { userId } = (await request.json()) as { userId: string };
-    if (!userId) {
-      return Response.json({ error: "No userId provided" }, { status: 400 });
-    }
-    const user = await caller.user.get(userId);
-    if (!user) {
-      return Response.json({ error: "User not found" }, { status: 404 });
-    }
-    const avatar = user.avatar;
-    if (!avatar) {
-      return Response.json({ error: "No avatar to delete" }, { status: 400 });
-    }
-    //const school = await caller.school.getSchool();
-
-    const key = avatar;
-    await deleteFile({ bucket: env.S3_IMAGE_BUCKET_NAME, key });
-    //const key = `${school.code}/avatars/${userId}.png`;
-
-    // Update the avatar in the database
-    await caller.user.updateAvatar({
-      id: userId,
-      avatar: null,
-    });
-    return Response.json({ message: "avatar deleted" });
-  } catch (error) {
     return Response.json({ error: (error as Error).message });
   }
 }

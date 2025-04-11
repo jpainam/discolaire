@@ -1,5 +1,5 @@
-import type { NextRequest } from "next/server";
 import { render } from "@react-email/render";
+import type { NextRequest } from "next/server";
 
 import { auth } from "@repo/auth";
 import { FakeGradeReportEmail } from "@repo/transactional";
@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
       return new Response("Invalid request", { status: 400 });
     }
     const user = await api.user.get(id);
-    if (user?.email) {
+    if (user.email) {
       const emailHtml = await render(
         FakeGradeReportEmail({
           studentName: user.username,
@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
             date: "2022-01-01",
           },
           reportComment: "This is a fake  grade report",
-        }),
+        })
       );
       await api.messaging.sendEmail({
         subject: "Signalement de fausse note",
