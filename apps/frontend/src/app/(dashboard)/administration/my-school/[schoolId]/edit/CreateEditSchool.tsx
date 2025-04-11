@@ -60,7 +60,7 @@ export function CreateEditSchool({ school }: { school: School }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const form = useForm({
