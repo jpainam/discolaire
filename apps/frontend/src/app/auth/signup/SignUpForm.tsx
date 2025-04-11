@@ -22,12 +22,13 @@ import { Input } from "@repo/ui/components/input";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const formSchema = z.object({
   username: z.string().min(1),
@@ -39,16 +40,19 @@ export function SignUpForm() {
   const router = useRouter();
   const { t } = useLocale();
   const searchParams = useSearchParams();
-  const signUpMutation = api.user.signUp.useMutation({
-    onSuccess: () => {
-      toast.success("Account created successfully");
-      router.push("/auth/login");
-    },
-    onError: (err) => {
-      console.error(err);
-      toast.error(err.message);
-    },
-  });
+  const trpc = useTRPC();
+  const signUpMutation = useMutation(
+    trpc.user.signUp.mutationOptions({
+      onSuccess: () => {
+        toast.success("Account created successfully");
+        router.push("/auth/login");
+      },
+      onError: (err) => {
+        console.error(err);
+        toast.error(err.message);
+      },
+    })
+  );
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -71,7 +75,7 @@ export function SignUpForm() {
           console.error(err);
           toast.error(err.message);
         },
-      },
+      }
     );
   }
 

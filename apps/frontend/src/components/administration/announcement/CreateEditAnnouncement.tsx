@@ -71,14 +71,12 @@ export function CreateEditAnnouncement({
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) =>
-      console.log(value, name, type),
+      console.log(value, name, type)
     );
     return () => subscription.unsubscribe();
   }, [watch]);
 
   const { closeSheet } = useSheet();
-  //const updateAnnouncementMutation = api.announcement.update.useMutation();
-  //const createAnnouncementMutation = api.announcement.create.useMutation();
 
   function onSubmit(data: UpdateNoticeBoardValues) {
     console.log("Submitting data:", data);
@@ -103,7 +101,7 @@ export function CreateEditAnnouncement({
           error: (error) => {
             return getErrorMessage(error);
           },
-        },
+        }
       );
     } else {
       toast.promise(
@@ -118,7 +116,7 @@ export function CreateEditAnnouncement({
           error: (error) => {
             return getErrorMessage(error);
           },
-        },
+        }
       );
     }
   }

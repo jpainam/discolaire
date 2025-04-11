@@ -9,10 +9,11 @@ import { Button } from "@repo/ui/components/button";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation } from "@tanstack/react-query";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { getErrorMessage } from "~/lib/handle-error";
 import { PermissionAction } from "~/permissions";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 type ClassroomGetAssignemntProcedureOutput = NonNullable<
   RouterOutputs["classroom"]["assignments"]
@@ -26,11 +27,14 @@ export function AssignmentDataTableActions({ table }: ToolbarActionsProps) {
   const { t } = useLocale();
 
   const confirm = useConfirm();
-  const deleteAssignemntMutation = api.assignment.delete.useMutation();
+  const trpc = useTRPC();
+  const deleteAssignemntMutation = useMutation(
+    trpc.assignment.delete.mutationOptions()
+  );
 
   const canDeleteAssignment = useCheckPermission(
     "assignment",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   return (
     <>
@@ -57,7 +61,7 @@ export function AssignmentDataTableActions({ table }: ToolbarActionsProps) {
                     error: (err) => {
                       return getErrorMessage(err);
                     },
-                  },
+                  }
                 );
               }
             }}

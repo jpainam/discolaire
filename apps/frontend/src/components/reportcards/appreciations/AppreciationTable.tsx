@@ -23,12 +23,12 @@ import FlatBadge from "~/components/FlatBadge";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
-import { api, useTRPC } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import type { ReportCardType } from "~/types/report-card";
 import { getFullName } from "~/utils";
 import { AppreciationCategoryList } from "./AppreciationCategoryList";
@@ -39,21 +39,21 @@ export function AppreciationTable({ reports }: { reports: any[] }) {
   const [selected, setSelected] = useState<string[]>([]);
   const trpc = useTRPC();
   const appreciationCategoriesQuery = useQuery(
-    trpc.appreciation.categories.queryOptions(),
+    trpc.appreciation.categories.queryOptions()
   );
 
   const searchParams = useSearchParams();
   const classroomId = searchParams.get("classroom");
 
   const [remarksMap, setRemarkMaps] = useState<Record<string, ReportCardType>>(
-    {},
+    {}
   );
   const termId = Number(searchParams.get("term"));
   const remarksQuery = useQuery(
     trpc.reportCard.getRemarks.queryOptions({
       classroomId: classroomId ?? "",
       termId: termId || 0,
-    }),
+    })
   );
 
   useEffect(() => {
@@ -66,7 +66,9 @@ export function AppreciationTable({ reports }: { reports: any[] }) {
     }
   }, [remarksQuery.data]);
 
-  const upsertStudentRemarkMutation = api.reportCard.upsertRemark.useMutation();
+  const upsertStudentRemarkMutation = useMutation(
+    trpc.reportCard.upsertRemark.mutationOptions()
+  );
 
   const rowClassName = "py-0";
 
@@ -109,7 +111,7 @@ export function AppreciationTable({ reports }: { reports: any[] }) {
                 rowClassName,
                 "group/report",
                 selected.includes(report.student.id) &&
-                  "bg-secondary text-secondary-foreground",
+                  "bg-secondary text-secondary-foreground"
               )}
               key={report.student.id}
             >
@@ -123,7 +125,7 @@ export function AppreciationTable({ reports }: { reports: any[] }) {
                       setSelected([...selected, report.student.id]);
                     } else {
                       setSelected(
-                        selected.filter((id) => id !== report.student.id),
+                        selected.filter((id) => id !== report.student.id)
                       );
                     }
                   }}

@@ -15,14 +15,18 @@ import { Textarea } from "@repo/ui/components/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useMutation } from "@tanstack/react-query";
 import { DatePicker } from "~/components/shared/date-picker";
 import { getErrorMessage } from "~/lib/handle-error";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 export default function SendNotificationDialog() {
   const { closeModal } = useModal();
   const { t } = useLocale();
-  const sendEmailMutation = api.messaging.sendEmail.useMutation();
+  const trpc = useTRPC();
+  const sendEmailMutation = useMutation(
+    trpc.messaging.sendEmail.mutationOptions()
+  );
   return (
     <>
       <div className="grid gap-1">
@@ -115,7 +119,7 @@ export default function SendNotificationDialog() {
                   closeModal();
                   return t("sent_successfully");
                 },
-              },
+              }
             );
           }}
         >

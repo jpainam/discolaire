@@ -23,7 +23,11 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { t } from "i18next";
 import { ImageMinus, ImageUpIcon } from "lucide-react";
 import { useParams } from "next/navigation";
@@ -31,7 +35,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { ChangeAvatarButton } from "~/components/users/ChangeAvatarButton";
-import { api, useTRPC } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const usernameSchema = z.object({
   username: z.string().min(3),
@@ -42,7 +46,7 @@ export function UserProfile() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: user } = useSuspenseQuery(
-    trpc.user.get.queryOptions(params.id),
+    trpc.user.get.queryOptions(params.id)
   );
   const form = useForm({
     resolver: zodResolver(usernameSchema),
@@ -52,14 +56,17 @@ export function UserProfile() {
       username: user.username,
     },
   });
-  const updateUser = api.user.update.useMutation({
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-    },
-    onError: (err) => {
-      toast.error(err.message, { id: 0 });
-    },
-  });
+
+  const updateUser = useMutation(
+    trpc.user.update.mutationOptions({
+      onSuccess: () => {
+        toast.success(t("updated_successfully"), { id: 0 });
+      },
+      onError: (err) => {
+        toast.error(err.message, { id: 0 });
+      },
+    })
+  );
   const handleSubmit = (data: z.infer<typeof usernameSchema>) => {
     toast.loading(t("updating"), { id: 0 });
     updateUser.mutate({

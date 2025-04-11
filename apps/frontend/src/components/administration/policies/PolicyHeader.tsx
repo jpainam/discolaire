@@ -41,11 +41,11 @@ export function PolicyHeader() {
         toast.success(t("deleted_successfully"), { id: 0 });
         setSelectedPolicies([]);
       },
-    }),
+    })
   );
 
   // const { school } = useSchool();
-  // const addAllMutation = api.policy.createFromJson.useMutation({
+  // const addAllMutation = trpc.policy.createFromJson.useMutation({
   //   onSuccess: () => {
   //     toast.success(t("created_successfully"), { id: 0 });
   //   },

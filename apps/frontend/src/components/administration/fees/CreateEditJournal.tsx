@@ -11,9 +11,10 @@ import { Form } from "@repo/ui/components/form";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useMutation } from "@tanstack/react-query";
 import { InputField } from "~/components/shared/forms/input-field";
 import { getErrorMessage } from "~/lib/handle-error";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const journalSchema = z.object({
   name: z.string().min(1),
@@ -29,8 +30,11 @@ export function CreateEditJournal({ journal }: { journal?: Journal }) {
     resolver: zodResolver(journalSchema),
   });
   const { t } = useLocale();
-  const addJournalMutation = api.journal.create.useMutation();
-  const updateJournalMutation = api.journal.update.useMutation();
+  const trpc = useTRPC();
+  const addJournalMutation = useMutation(trpc.journal.create.mutationOptions());
+  const updateJournalMutation = useMutation(
+    trpc.journal.update.mutationOptions()
+  );
 
   const onSubmit = (data: z.infer<typeof journalSchema>) => {
     if (!journal) {
@@ -56,7 +60,7 @@ export function CreateEditJournal({ journal }: { journal?: Journal }) {
           error: (error) => {
             return getErrorMessage(error);
           },
-        },
+        }
       );
     }
   };
