@@ -56,7 +56,7 @@ export function CreateEditTerm({ term }: { term?: Term }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateTermMutation = useMutation(
     trpc.term.update.mutationOptions({
@@ -68,7 +68,7 @@ export function CreateEditTerm({ term }: { term?: Term }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const { t } = useLocale();
   const onSubmit = (data: z.infer<typeof createEditTermSchema>) => {

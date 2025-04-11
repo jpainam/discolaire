@@ -41,7 +41,7 @@ export function NoticeboardDataTableActions({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   return (
@@ -62,7 +62,7 @@ export function NoticeboardDataTableActions({
             if (isConfirmed) {
               toast.loading(t("deleting"), { id: 0 });
               deleteAnnouncementMutation.mutate(
-                selectedNotices.map((cl) => cl.id)
+                selectedNotices.map((cl) => cl.id),
               );
             }
           }}

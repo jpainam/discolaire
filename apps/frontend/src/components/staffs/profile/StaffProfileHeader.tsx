@@ -62,7 +62,7 @@ export function StaffProfileHeader({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   // const staffQuery = api.staff.get.useQuery(params.id);
   // const staff = staffQuery.data;

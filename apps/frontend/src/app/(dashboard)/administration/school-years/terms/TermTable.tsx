@@ -49,7 +49,7 @@ export function TermTable() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   return (
     <div className="px-4">

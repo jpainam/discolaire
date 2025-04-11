@@ -74,7 +74,7 @@ export function CreateEditBook({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const createMutation = useMutation(
     trpc.book.create.mutationOptions({
@@ -86,7 +86,7 @@ export function CreateEditBook({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   function onSubmit(data: z.infer<typeof updateBookSchema>) {

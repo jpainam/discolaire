@@ -9,10 +9,11 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
 import { InputField } from "~/components/shared/forms/input-field";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const editGradeStudentSchema = z.object({
   studentId: z.string().min(1),
@@ -39,20 +40,26 @@ export function EditGradeStudent({
       gradeId: gradeId,
     },
   });
-  const updateGradeMutation = api.grade.update.useMutation({
-    onSettled: async () => {
-      await utils.grade.invalidate();
-      await utils.gradeSheet.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const updateGradeMutation = useMutation(
+    trpc.grade.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.classroom.gradesheets.pathFilter()
+        );
+        await queryClient.invalidateQueries(
+          trpc.gradeSheet.grades.pathFilter()
+        );
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+
   const onSubmit = (data: z.infer<typeof editGradeStudentSchema>) => {
     toast.loading(t("updating"), { id: 0 });
     updateGradeMutation.mutate({

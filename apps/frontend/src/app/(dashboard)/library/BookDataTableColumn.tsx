@@ -170,7 +170,7 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const canUpdateBook = useCheckPermission("library", PermissionAction.UPDATE);
   const canDeleteBook = useCheckPermission("library", PermissionAction.DELETE);
