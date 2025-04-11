@@ -42,6 +42,16 @@ const config = {
         protocol: "https",
         hostname: "discolaire-public.s3.eu-central-1.amazonaws.com",
       },
+      {
+        protocol: "https",
+        hostname:
+          "discolaire-avatar-public-uploads-f4a2c9.s3.eu-central-1.amazonaws.com",
+      },
+      {
+        protocol: "https",
+        hostname:
+          "discolaire-images-public-uploads-g5v2c4o.s3.eu-central-1.amazonaws.com",
+      },
     ],
   },
   webpack: (config, { isServer }) => {

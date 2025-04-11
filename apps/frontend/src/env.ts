@@ -21,6 +21,7 @@ export const env = createEnv({
     S3_BUCKET_NAME: z.string().min(2),
     S3_SECRET_ACCESS_KEY: z.string().min(1),
     S3_AVATAR_BUCKET_NAME: z.string().min(2),
+    S3_IMAGE_BUCKET_NAME: z.string().min(2),
     REDIS_URL: z.string().min(1),
     SUPER_ADMIN_USERNAME: z.string().min(1),
     RESEND_API_KEY: z.string().min(1),
@@ -47,6 +48,7 @@ export const env = createEnv({
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
     MINIO_PORT: process.env.MINIO_PORT,
+    S3_IMAGE_BUCKET_NAME: process.env.S3_IMAGE_BUCKET_NAME,
     NEXT_PUBLIC_DEPLOYMENT_ENV: process.env.NEXT_PUBLIC_DEPLOYMENT_ENV,
     NEXT_PUBLIC_MINIO_ENDPOINT: process.env.NEXT_PUBLIC_MINIO_ENDPOINT,
     MINIO_ENDPOINT: process.env.MINIO_ENDPOINT,

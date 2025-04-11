@@ -56,7 +56,12 @@ export default async function Page(props: {
       <Card className="p-0">
         <CardHeader className="flex flex-row items-center space-x-4 border-b bg-muted/50 p-2">
           {school.logo && (
-            <Image src={school.logo} alt={school.name} width={80} height={80} />
+            <Image
+              src={`/api/download/images/${school.logo}`}
+              alt={school.name}
+              width={80}
+              height={80}
+            />
           )}
 
           <div className="flex-1">
