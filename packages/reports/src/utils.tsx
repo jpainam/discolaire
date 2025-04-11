@@ -54,3 +54,20 @@ export function getTitle({ trimestreId }: { trimestreId: string }) {
     seq2: "SEQ6",
   };
 }
+
+export function getAssetUrl(asset: string) {
+  const isLocal = process.env.NEXT_PUBLIC_DEPLOYMENT_ENV === "local";
+  if (isLocal) {
+    if (asset === "images") {
+      return `http://localhost:${process.env.MINIO_PORT}/${process.env.S3_IMAGE_BUCKET_NAME}`;
+    } else if (asset == "avatars") {
+      return `http://localhost:${process.env.MINIO_PORT}/${process.env.S3_AVATAR_BUCKET_NAME}`;
+    }
+  } else {
+    if (asset === "images") {
+      return `https://${process.env.S3_IMAGE_BUCKET_NAME}.s3.eu-central-1.amazonaws.com`;
+    } else {
+      return `https://${process.env.S3_AVATAR_BUCKET_NAME}.s3.eu-central-1.amazonaws.com`;
+    }
+  }
+}

@@ -6,6 +6,10 @@ import type { Style } from "@react-pdf/stylesheet";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { getAssetUrl } from "../utils";
+
+const imageUrl = getAssetUrl("images");
+
 export function IPBWHeader({
   school,
   style,
@@ -84,7 +88,13 @@ export function IPBWHeader({
       >
         {school.logo && (
           <Image
-            src={school.logo}
+            src={`${imageUrl}/${school.logo}`}
+            // src={{
+            //   uri: "http://localhost:9310/images/cm1hbntgn00001h578bvyjxln.png",
+            //   method: "GET",
+            //   headers: { "Cache-Control": "no-cache" },
+            //   body: "",
+            // }}
             style={{
               width: 125,
               height: 80,
