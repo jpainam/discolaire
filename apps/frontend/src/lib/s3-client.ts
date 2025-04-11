@@ -60,10 +60,10 @@ export const uploadFile = async ({
       destination,
       Buffer.from(await file.arrayBuffer()),
       file.size,
-      metaData,
+      metaData
     );
     return {
-      key: `${bucket}/${destination}`,
+      key: destination,
       fullPath: `https://${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${bucket}/${destination}`,
     };
   } else {
@@ -106,7 +106,7 @@ export async function uploadFiles({
 
 async function runWithConcurrency<T>(
   tasks: (() => Promise<T>)[],
-  concurrency: number,
+  concurrency: number
 ): Promise<T[]> {
   const results: T[] = [];
   const queue = [...tasks];
