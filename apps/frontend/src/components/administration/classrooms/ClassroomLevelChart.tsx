@@ -25,7 +25,8 @@ import {
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
-import { api } from "~/trpc/react";
+import { useQuery } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 
 const chartConfig = {
   count: {
@@ -38,7 +39,10 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function ClassroomLevelChart() {
-  const classroomLevelCountQuery = api.classroomLevel.count.useQuery();
+  const trpc = useTRPC();
+  const classroomLevelCountQuery = useQuery(
+    trpc.classroomLevel.count.queryOptions()
+  );
   const { t } = useLocale();
   if (classroomLevelCountQuery.isPending) {
     return <Skeleton className="h-full w-full" />;

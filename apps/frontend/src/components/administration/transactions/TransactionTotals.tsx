@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import ContainersIcon from "~/components/icons/containers";
 import ExpenseIcon from "~/components/icons/expenses";
 import RevenueUpIcon from "~/components/icons/revenue-up";
@@ -13,17 +14,20 @@ import SalesIcon from "~/components/icons/sales";
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import { routes } from "~/configs/routes";
 import { CURRENCY } from "~/lib/constants";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 export function TransactionTotals() {
   const { t } = useLocale();
 
   const [from, _] = useQueryState("from", parseAsIsoDateTime);
   const [to, __] = useQueryState("to", parseAsIsoDateTime);
-  const transactionsStats = api.transaction.stats.useQuery({
-    from: from ?? undefined,
-    to: to ?? undefined,
-  });
+  const trpc = useTRPC();
+  const transactionsStats = useQuery(
+    trpc.transaction.stats.queryOptions({
+      from: from ?? undefined,
+      to: to ?? undefined,
+    })
+  );
 
   if (transactionsStats.isPending) {
     return (

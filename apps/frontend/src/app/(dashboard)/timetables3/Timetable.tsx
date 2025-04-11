@@ -19,9 +19,10 @@ import BigCalendar, {
 } from "~/components/big-calendar";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import rangeMap from "~/lib/range-map";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 type TimetableEventType = RouterOutputs["lesson"]["byClassroom"][number];
 
@@ -31,10 +32,11 @@ const CalendarWrapper = BigCalendar;
 export function Timetable() {
   const [_currentDate, _] = useQueryState(
     "date",
-    parseAsIsoDateTime.withDefault(new Date()),
+    parseAsIsoDateTime.withDefault(new Date())
   );
 
-  const calendarEventsQuery = api.timetable.all2.useQuery();
+  const trpc = useTRPC();
+  const calendarEventsQuery = useQuery(trpc.timetable.all2.queryOptions());
 
   const [view, setView] = useState<RbcView>(RbcViews.MONTH);
   const [date, setDate] = useState(new Date());
@@ -90,18 +92,18 @@ export function Timetable() {
         weekdayFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer,
+          localizer?: DateLocalizer
         ) => localizer?.format(date, "EEE", culture),
         dayFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) =>
           localizer?.format(date, "EEE M/d", culture),
         timeGutterFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer,
+          localizer?: DateLocalizer
         ) => localizer?.format(date, "HH:mm", culture),
       } as Formats,
     }),
-    [],
+    []
   );
 
   const handleViewChange = (view: RbcView) => {

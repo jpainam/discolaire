@@ -28,7 +28,7 @@ export function SubjectJournalTemplate() {
   const journalsQuery = useQuery(
     trpc.subjectJournal.bySubject.queryOptions({
       subjectId: Number(params.subjectId),
-    })
+    }),
   );
   const { createQueryString } = useCreateQueryString();
   const [templateId, setTemplateId] = useState<string | null>(null);

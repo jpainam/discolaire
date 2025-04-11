@@ -15,6 +15,7 @@ import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
 
 import type { RouterOutputs } from "@repo/api";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import type {
   Culture,
   DateLocalizer,
@@ -23,13 +24,13 @@ import type {
   RbcView,
 } from "~/components/big-calendar";
 import BigCalendar, { dateFnsLocalizer } from "~/components/big-calendar";
-import { Skeleton } from "@repo/ui/components/skeleton";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import rangeMap from "~/lib/range-map";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import EventForm from "./EventForm";
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -63,14 +64,17 @@ type CalendarEventProcedureOutput = NonNullable<
 
 export function EventCalendar() {
   const searchParams = useSearchParams();
-  const calendarEventsQuery = api.calendarEvent.all.useQuery({
-    start: searchParams.get("start")
-      ? new Date(searchParams.get("start") ?? "")
-      : undefined,
-    end: searchParams.get("end")
-      ? new Date(searchParams.get("end") ?? "")
-      : undefined,
-  });
+  const trpc = useTRPC();
+  const calendarEventsQuery = useQuery(
+    trpc.calendarEvent.all.queryOptions({
+      start: searchParams.get("start")
+        ? new Date(searchParams.get("start") ?? "")
+        : undefined,
+      end: searchParams.get("end")
+        ? new Date(searchParams.get("end") ?? "")
+        : undefined,
+    })
+  );
 
   const locales = {
     fr: fr,
@@ -117,7 +121,7 @@ export function EventCalendar() {
       });
     },
 
-    [], // eslint-disable-line react-hooks/exhaustive-deps
+    [] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const handleSelectEvent = useCallback(
@@ -128,7 +132,7 @@ export function EventCalendar() {
         view: <EventForm event={event} />,
       });
     },
-    [], // eslint-disable-line react-hooks/exhaustive-deps
+    [] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const { _views, scrollToTime, formats } = useMemo(
@@ -145,18 +149,18 @@ export function EventCalendar() {
         weekdayFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer,
+          localizer?: DateLocalizer
         ) => localizer?.format(date, "EEE", culture),
         dayFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) =>
           localizer?.format(date, "EEE M/d", culture),
         timeGutterFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer,
+          localizer?: DateLocalizer
         ) => localizer?.format(date, "HH:mm", culture),
       } as Formats,
     }),
-    [],
+    []
   );
 
   const handleViewChange = (view: RbcView) => {

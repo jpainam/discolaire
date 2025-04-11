@@ -6,11 +6,13 @@ import { Label } from "@repo/ui/components/label";
 import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 
-import { api } from "~/trpc/react";
+import { useQuery } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 
 export function AnnouncementSummary() {
   const { t } = useLocale();
-  const announcementsQuery = api.announcement.all.useQuery();
+  const trpc = useTRPC();
+  const announcementsQuery = useQuery(trpc.announcement.all.queryOptions());
   const [activeNotices, setActiveNotices] = useState(0);
   const [futureNotices, setFutureNotices] = useState(0);
   const [expiredNotices, setExpiredNotices] = useState(0);
@@ -21,14 +23,14 @@ export function AnnouncementSummary() {
     const now = new Date();
     setActiveNotices(
       noticeboards.filter(
-        (nb) => new Date(nb.from) <= now && now <= new Date(nb.to),
-      ).length,
+        (nb) => new Date(nb.from) <= now && now <= new Date(nb.to)
+      ).length
     );
     setFutureNotices(
-      noticeboards.filter((nb) => new Date(nb.from) > now).length,
+      noticeboards.filter((nb) => new Date(nb.from) > now).length
     );
     setExpiredNotices(
-      noticeboards.filter((nb) => new Date(nb.to) < now).length,
+      noticeboards.filter((nb) => new Date(nb.to) < now).length
     );
   }, [announcementsQuery.data]);
 

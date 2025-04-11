@@ -1,8 +1,9 @@
 import { cn } from "@repo/ui/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { SearchCombobox } from "~/components/SearchCombobox";
 import { useLocale } from "~/i18n";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 export function UserSelector({
   className,
@@ -17,9 +18,12 @@ export function UserSelector({
   const [value, setValue] = useState<string>(defaultValue ?? "");
   const [label, setLabel] = useState(t("search_a_user"));
   const [search, setSearch] = useState("");
-  const usersQuery = api.user.search.useQuery({
-    query: search,
-  });
+  const trpc = useTRPC();
+  const usersQuery = useQuery(
+    trpc.user.search.queryOptions({
+      query: search,
+    })
+  );
 
   return (
     <SearchCombobox

@@ -7,14 +7,16 @@ import { Card, CardContent } from "@repo/ui/components/card";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 export function ClassroomStatistics({ className }: { className?: string }) {
   const [selectedClassroom, setSelectedClassroom] = useState<string | null>(
-    null,
+    null
   );
-  const classroomsQuery = api.classroom.all.useQuery();
+  const trpc = useTRPC();
+  const classroomsQuery = useQuery(trpc.classroom.all.queryOptions());
 
   const { t } = useLocale();
 

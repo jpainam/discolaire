@@ -113,14 +113,14 @@ export default async function Page(props: {
   if (session?.user.profile === "student") {
     const student = await caller.student.getFromUserId(session.user.id);
     attendances = attendances.filter(
-      (attendance) => attendance.studentId === student.id
+      (attendance) => attendance.studentId === student.id,
     );
   } else if (session?.user.profile === "contact") {
     const contact = await caller.contact.getFromUserId(session.user.id);
     const students = await caller.contact.students(contact.id);
     const studentIds = students.map((stdc) => stdc.studentId);
     attendances = attendances.filter((attendance) =>
-      studentIds.includes(attendance.studentId)
+      studentIds.includes(attendance.studentId),
     );
   }
 
@@ -130,27 +130,27 @@ export default async function Page(props: {
   switch (searchParams.type) {
     case "absence":
       attendances = attendances.filter(
-        (attendance) => attendance.type === "absence"
+        (attendance) => attendance.type === "absence",
       );
       break;
     case "lateness":
       attendances = attendances.filter(
-        (attendance) => attendance.type === "lateness"
+        (attendance) => attendance.type === "lateness",
       );
       break;
     case "consigne":
       attendances = attendances.filter(
-        (attendance) => attendance.type === "consigne"
+        (attendance) => attendance.type === "consigne",
       );
       break;
     case "chatter":
       attendances = attendances.filter(
-        (attendance) => attendance.type === "chatter"
+        (attendance) => attendance.type === "chatter",
       );
       break;
     case "exclusion":
       attendances = attendances.filter(
-        (attendance) => attendance.type === "exclusion"
+        (attendance) => attendance.type === "exclusion",
       );
       break;
   }
@@ -176,7 +176,7 @@ export default async function Page(props: {
                 className={cn(
                   attendance.type === "chatter" && "bg-yellow-800",
                   attendance.type === "consigne" && "bg-pink-800",
-                  attendance.type === "lateness" && "bg-green-800 text-white"
+                  attendance.type === "lateness" && "bg-green-800 text-white",
                 )}
                 variant={
                   attendance.type === "absence"

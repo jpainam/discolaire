@@ -13,7 +13,8 @@ import {
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
-import { api } from "~/trpc/react";
+import { useQuery } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 
 export function FeeBar() {
   const { t } = useLocale();
@@ -26,7 +27,8 @@ export function FeeBar() {
       color: "hsl(var(--background))",
     },
   } satisfies ChartConfig;
-  const feesMonthlyQuery = api.fee.monthly.useQuery();
+  const trpc = useTRPC();
+  const feesMonthlyQuery = useQuery(trpc.fee.monthly.queryOptions());
 
   if (feesMonthlyQuery.isPending) {
     return <Skeleton className="h-[200px] w-[350px] p-2" />;

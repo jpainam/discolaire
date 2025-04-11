@@ -21,9 +21,10 @@ import BigCalendar, {
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import rangeMap from "~/lib/range-map";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { StaffTimetableDetails } from "./StaffTimetableDetails";
 
 type TimetableEventType = RouterOutputs["lesson"]["byClassroom"][number];
@@ -35,12 +36,14 @@ export default function Page() {
   const params = useParams<{ id: string }>();
   const [_currentDate, _] = useQueryState(
     "date",
-    parseAsIsoDateTime.withDefault(new Date()),
+    parseAsIsoDateTime.withDefault(new Date())
   );
-  const calendarEventsQuery = api.lesson.byClassroom.useQuery({
-    classroomId: params.id,
-    //currentDate: currentDate,
-  });
+  const trpc = useTRPC();
+  const calendarEventsQuery = useQuery(
+    trpc.lesson.byClassroom.queryOptions({
+      classroomId: params.id,
+    })
+  );
   const [view, setView] = useState<RbcView>(RbcViews.MONTH);
   const [date, setDate] = useState(new Date());
   const { openModal } = useModal();
@@ -85,7 +88,7 @@ export default function Page() {
         view: <StaffTimetableDetails event={event} />,
       });
     },
-    [openModal, t],
+    [openModal, t]
   );
 
   const { _views, _scrollToTime, formats } = useMemo(
@@ -102,18 +105,18 @@ export default function Page() {
         weekdayFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer,
+          localizer?: DateLocalizer
         ) => localizer?.format(date, "EEE", culture),
         dayFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) =>
           localizer?.format(date, "EEE M/d", culture),
         timeGutterFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer,
+          localizer?: DateLocalizer
         ) => localizer?.format(date, "HH:mm", culture),
       } as Formats,
     }),
-    [],
+    []
   );
 
   const handleViewChange = (view: RbcView) => {

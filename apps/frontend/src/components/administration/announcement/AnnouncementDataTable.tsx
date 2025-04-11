@@ -6,13 +6,15 @@ import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
 import { useLocale } from "~/i18n";
 
-import { api } from "~/trpc/react";
+import { useQuery } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 import { NoticeboardDataTableActions } from "./NoticeboardDataTableActions";
 import { getColumns } from "./NoticeboardDataTableColumns";
 
 export function AnnouncementDataTable() {
   const { t } = useLocale();
-  const announcementsQuery = api.announcement.all.useQuery();
+  const trpc = useTRPC();
+  const announcementsQuery = useQuery(trpc.announcement.all.queryOptions());
 
   const columns = React.useMemo(() => getColumns({ t }), [t]);
 

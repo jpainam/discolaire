@@ -24,8 +24,9 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { Label } from "@repo/ui/components/label";
+import { useQuery } from "@tanstack/react-query";
 import i18next from "i18next";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
 export function TransactionDetails({
@@ -41,8 +42,11 @@ export function TransactionDetails({
     year: "numeric",
   });
   const { closeModal } = useModal();
+  const trpc = useTRPC();
 
-  const transactionQuery = api.transaction.get.useQuery(transactionId);
+  const transactionQuery = useQuery(
+    trpc.transaction.get.queryOptions(transactionId)
+  );
 
   if (transactionQuery.isPending) {
     return (

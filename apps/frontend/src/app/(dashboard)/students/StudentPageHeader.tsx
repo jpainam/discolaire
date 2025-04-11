@@ -15,6 +15,7 @@ import { Label } from "@repo/ui/components/label";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
+import { useQuery } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
@@ -25,7 +26,7 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { useSession } from "~/providers/AuthProvider";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
 export function StudentPageHeader() {
@@ -35,15 +36,18 @@ export function StudentPageHeader() {
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   const [value, setValue] = useState("");
   const [label, setLabel] = useState(t("search"));
   const [search, setSearch] = useState("");
-  const students = api.student.search.useQuery({
-    query: search,
-  });
+  const trpc = useTRPC();
+  const students = useQuery(
+    trpc.student.search.queryOptions({
+      query: search,
+    })
+  );
 
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
   useEffect(() => {

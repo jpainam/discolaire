@@ -33,11 +33,11 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
-import { api, useTRPC } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 interface StaffLevelSelectorProps {
   className?: string;
@@ -56,8 +56,9 @@ export const StaffLevelSelector = ({
   const [value, setValue] = useState<string>(defaultValue ?? "");
   const { t } = useLocale();
   const { openModal } = useModal();
+  const trpc = useTRPC();
 
-  const staffLevelsQuery = api.degree.all.useQuery();
+  const staffLevelsQuery = useQuery(trpc.degree.all.queryOptions());
   const staffLevels = staffLevelsQuery.data ?? [];
 
   if (staffLevelsQuery.isError) {
@@ -163,7 +164,7 @@ function CreateStaffLevel() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const handleSubmit = (data: z.infer<typeof createLevelSchema>) => {

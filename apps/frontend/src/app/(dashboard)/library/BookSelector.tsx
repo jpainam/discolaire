@@ -19,8 +19,9 @@ import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 interface BookSelectorProps {
   className?: string;
@@ -38,8 +39,8 @@ export const BookSelector = ({
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<number>(defaultValue ?? -1);
   const { t } = useLocale();
-
-  const booksQuery = api.book.all.useQuery();
+  const trpc = useTRPC();
+  const booksQuery = useQuery(trpc.book.all.queryOptions());
 
   if (booksQuery.isPending) {
     return <Skeleton className={cn("h-8 w-[250px]", className)} />;

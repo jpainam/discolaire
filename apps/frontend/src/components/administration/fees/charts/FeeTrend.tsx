@@ -14,10 +14,12 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { EmptyState } from "~/components/EmptyState";
 import { useLocale } from "~/i18n";
 
-import { api } from "~/trpc/react";
+import { useQuery } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 
 export function FeeTrend() {
-  const feesTrendQuery = api.fee.trend.useQuery();
+  const trpc = useTRPC();
+  const feesTrendQuery = useQuery(trpc.fee.trend.queryOptions());
 
   const { t } = useLocale();
   const chartConfig = {
