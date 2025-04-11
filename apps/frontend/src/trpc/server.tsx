@@ -1,7 +1,6 @@
 import type { AppRouter } from "@repo/api";
 import { appRouter, createCaller, createTRPCContext } from "@repo/api";
 import { auth } from "@repo/auth";
-import { createHydrationHelpers } from "@trpc/react-query/rsc";
 import type { TRPCQueryOptions } from "@trpc/tanstack-react-query";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import { cookies, headers } from "next/headers";
@@ -43,7 +42,7 @@ export function HydrateClient(props: { children: React.ReactNode }) {
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function prefetch<T extends ReturnType<TRPCQueryOptions<any>>>(
-  queryOptions: T,
+  queryOptions: T
 ) {
   const queryClient = getQueryClient();
   if (queryOptions.queryKey[1]?.type === "infinite") {
@@ -55,7 +54,7 @@ export function prefetch<T extends ReturnType<TRPCQueryOptions<any>>>(
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function batchPrefetch<T extends ReturnType<TRPCQueryOptions<any>>>(
-  queryOptionsArray: T[],
+  queryOptionsArray: T[]
 ) {
   const queryClient = getQueryClient();
   for (const queryOptions of queryOptionsArray) {
@@ -71,5 +70,5 @@ export const caller = createCaller(createContext);
 
 // TODO After fully migrating to 11.0.0, remove this lines
 
-export const { trpc: api, HydrateClient: _HydrateClient } =
-  createHydrationHelpers<AppRouter>(caller, getQueryClient);
+// export const { trpc: api, HydrateClient: _HydrateClient } =
+//   createHydrationHelpers<AppRouter>(caller, getQueryClient);
