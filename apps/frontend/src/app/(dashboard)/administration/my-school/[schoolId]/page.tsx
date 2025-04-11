@@ -16,6 +16,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@repo/auth";
 import {
   Card,
+  CardAction,
   CardContent,
   CardHeader,
   CardTitle,
@@ -68,10 +69,12 @@ export default async function Page(props: {
             <CardTitle className="text-xl">{school.name}</CardTitle>
             <p className="text-sm text-muted-foreground">ID: {school.id}</p>
           </div>
-          <FlatBadge variant={school.isActive ? "green" : "red"}>
-            {school.isActive ? t("active") : t("inactive")}
-          </FlatBadge>
-          <SchoolDetailAction schoolId={schoolId} />
+          <CardAction className="flex flex-row items-center space-x-2">
+            <FlatBadge variant={school.isActive ? "green" : "red"}>
+              {school.isActive ? t("active") : t("inactive")}
+            </FlatBadge>
+            <SchoolDetailAction schoolId={schoolId} />
+          </CardAction>
         </CardHeader>
         <CardContent className="p-2">
           <div className="grid grid-cols-1 gap-2 md:grid-cols-2">

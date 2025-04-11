@@ -75,7 +75,7 @@ export const uploadFile = async ({
     });
     await s3client.send(command);
     return {
-      key: `${bucket}/${destination}`,
+      key: destination,
       fullPath: `https://${env.S3_REGION}.amazonaws.com/${bucket}/${destination}`,
     };
   }
