@@ -24,10 +24,11 @@ import { z } from "zod";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const passwordFormSchema = z.object({
   oldPassword: z.string().min(1),
@@ -43,19 +44,24 @@ export function ReinitializePassword() {
     },
     mode: "onChange",
   });
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
   const router = useRouter();
 
-  const updateUserPasswordMutation = api.user.updateMyPassword.useMutation({
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      router.push(routes.auth.login);
-    },
-    onSettled: () => utils.user.invalidate(),
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
+  const updateUserPasswordMutation = useMutation(
+    trpc.user.updateMyPassword.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.user.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        router.push(routes.auth.login);
+      },
+
+      onError: (err) => {
+        toast.error(err.message);
+      },
+    })
+  );
   function onSubmit(data: z.infer<typeof passwordFormSchema>) {
     toast.loading(t("updating"), { id: 0 });
     updateUserPasswordMutation.mutate(data);

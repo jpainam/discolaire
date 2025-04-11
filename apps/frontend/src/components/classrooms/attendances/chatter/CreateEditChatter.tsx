@@ -29,11 +29,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
 const attendanceSchema = z.object({
@@ -42,7 +43,7 @@ const attendanceSchema = z.object({
       id: z.string().min(1),
       chatter: z.string().optional(),
       justify: z.string().optional(),
-    }),
+    })
   ),
 });
 
@@ -67,22 +68,26 @@ export function CreateEditChatter({
       })),
     },
   });
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
   const router = useRouter();
-  const createChatter = api.chatter.createClassroom.useMutation({
-    onSettled: async () => {
-      await utils.chatter.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("added_successfully"), { id: 0 });
-      router.push(
-        `/classrooms/${classroomId}/attendances?type=chatter&term=${termId}`,
-      );
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const createChatter = useMutation(
+    trpc.chatter.createClassroom.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.chatter.byClassroom.pathFilter()
+        );
+        toast.success(t("added_successfully"), { id: 0 });
+        router.push(
+          `/classrooms/${classroomId}/attendances?type=chatter&term=${termId}`
+        );
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const onSubmit = (data: z.infer<typeof attendanceSchema>) => {
     if (!termId) {
       toast.error(t("select_term"));
@@ -131,7 +136,7 @@ export function CreateEditChatter({
                 <Button
                   onClick={() => {
                     router.push(
-                      routes.classrooms.attendances.index(classroomId),
+                      routes.classrooms.attendances.index(classroomId)
                     );
                   }}
                   size={"sm"}

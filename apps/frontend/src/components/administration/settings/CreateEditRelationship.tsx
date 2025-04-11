@@ -47,7 +47,7 @@ export function CreateEditRelationship({
     trpc.studentContact.createRelationship.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.studentContact.relationships.pathFilter()
+          trpc.studentContact.relationships.pathFilter(),
         );
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
@@ -55,14 +55,14 @@ export function CreateEditRelationship({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const updateRelationshipMutation = useMutation(
     trpc.studentContact.updateRelationship.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.studentContact.relationships.pathFilter()
+          trpc.studentContact.relationships.pathFilter(),
         );
         toast.success(t("updated_successfully"), { id: 0 });
         closeModal();
@@ -70,7 +70,7 @@ export function CreateEditRelationship({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const onSubmit = (data: z.infer<typeof createRelationshipSchema>) => {
     if (id) {

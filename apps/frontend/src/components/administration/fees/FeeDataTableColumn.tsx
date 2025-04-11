@@ -184,7 +184,7 @@ function ActionCell({ fee }: { fee: Fee }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   return (

@@ -56,7 +56,7 @@ export function PolicyTable({
   const queryClient = useQueryClient();
 
   const policiesQuery = useQuery(
-    trpc.policy.all.queryOptions({ q, category: "system" })
+    trpc.policy.all.queryOptions({ q, category: "system" }),
   );
   const { t } = useLocale();
 
@@ -71,7 +71,7 @@ export function PolicyTable({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const confirm = useConfirm();
 
@@ -79,7 +79,7 @@ export function PolicyTable({
     setSelectedPolicies((prev) =>
       prev.includes(id)
         ? prev.filter((policyId) => policyId !== id)
-        : [...prev, id]
+        : [...prev, id],
     );
   };
 
@@ -87,7 +87,7 @@ export function PolicyTable({
     setExpandedPolicies((prev) =>
       prev.includes(id)
         ? prev.filter((policyId) => policyId !== id)
-        : [...prev, id]
+        : [...prev, id],
     );
   };
 

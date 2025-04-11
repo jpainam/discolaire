@@ -41,7 +41,7 @@ export function PolicyHeader() {
         toast.success(t("deleted_successfully"), { id: 0 });
         setSelectedPolicies([]);
       },
-    })
+    }),
   );
 
   // const { school } = useSchool();

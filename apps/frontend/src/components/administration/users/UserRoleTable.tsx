@@ -19,41 +19,47 @@ import {
 } from "@repo/ui/components/table";
 import { useLocale } from "~/i18n";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import i18next from "i18next";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 export function UserRoleTable() {
   const { t } = useLocale();
-  const rolesQuery = api.role.all.useQuery();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const rolesQuery = useQuery(trpc.role.all.queryOptions());
 
   const params = useParams<{ id: string }>();
-  const utils = api.useUtils();
-  const userRolesQuery = api.user.roles.useQuery({ userId: params.id });
 
-  const attachRoleMutation = api.role.attach.useMutation({
-    onSuccess: () => {
-      toast.success(t("added_successfully"), { id: 0 });
-    },
-    onSettled: async () => {
-      await utils.user.roles.invalidate();
-      await utils.role.all.invalidate();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const remoteRoleMutation = api.role.removeRole.useMutation({
-    onSettled: async () => {
-      await utils.user.roles.invalidate();
-      await utils.role.all.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const userRolesQuery = useQuery(
+    trpc.user.roles.queryOptions({ userId: params.id })
+  );
+
+  const attachRoleMutation = useMutation(
+    trpc.role.attach.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.user.roles.pathFilter());
+        await queryClient.invalidateQueries(trpc.role.all.pathFilter());
+        toast.success(t("added_successfully"), { id: 0 });
+      },
+
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const remoteRoleMutation = useMutation(
+    trpc.role.removeRole.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.user.roles.pathFilter());
+        await queryClient.invalidateQueries(trpc.role.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const debounced = useDebouncedCallback((value: string, checked: boolean) => {
     if (checked) {
       attachRoleMutation.mutate({ roleId: value, userId: params.id });

@@ -37,14 +37,14 @@ export function AssignmentCategoryTable() {
     trpc.assignment.deleteCategory.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.assignment.categories.pathFilter()
+          trpc.assignment.categories.pathFilter(),
         );
         toast.success(t("deleted_successfully"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const confirm = useConfirm();
   return (

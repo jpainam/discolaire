@@ -63,7 +63,7 @@ export function CreateEditPolicy({ policy }: { policy?: Policy }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const createPolicyMutation = useMutation(
     trpc.policy.create.mutationOptions({
@@ -75,7 +75,7 @@ export function CreateEditPolicy({ policy }: { policy?: Policy }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const onSubmit = (data: z.infer<typeof createEditPolicySchema>) => {

@@ -45,7 +45,7 @@ export function CreateEditAssignmentCategory({
     trpc.assignment.createCategory.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.assignment.categories.pathFilter()
+          trpc.assignment.categories.pathFilter(),
         );
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
@@ -53,7 +53,7 @@ export function CreateEditAssignmentCategory({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const { closeModal } = useModal();
@@ -62,7 +62,7 @@ export function CreateEditAssignmentCategory({
     trpc.assignment.updateCategory.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.assignment.categories.pathFilter()
+          trpc.assignment.categories.pathFilter(),
         );
         toast.success(t("updated_successfully"), { id: 0 });
         closeModal();
@@ -70,7 +70,7 @@ export function CreateEditAssignmentCategory({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const onSubmit = (data: z.infer<typeof createAssignmentCategorySchema>) => {

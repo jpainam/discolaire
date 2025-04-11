@@ -15,10 +15,11 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 export function AssignmentDetailsHeader({
   assignmentId,
@@ -26,19 +27,23 @@ export function AssignmentDetailsHeader({
   assignmentId: string;
 }) {
   const { t } = useLocale();
-  const utils = api.useUtils();
-  const deleteAssignmentMutation = api.assignment.delete.useMutation({
-    onSettled: () => {
-      void utils.assignment.invalidate();
-      void utils.classroom.assignments.invalidate();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const deleteAssignmentMutation = useMutation(
+    trpc.assignment.delete.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.assignment.pathFilter());
+        await queryClient.invalidateQueries(
+          trpc.classroom.assignments.pathFilter()
+        );
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+    })
+  );
   const confirm = useConfirm();
 
   const canDelete = useCheckPermission("assignment", PermissionAction.DELETE);

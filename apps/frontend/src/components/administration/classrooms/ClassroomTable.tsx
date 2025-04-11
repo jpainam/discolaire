@@ -48,15 +48,15 @@ export default function ClassroomTable() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const canDeleteClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const canEditClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   const confirm = useConfirm();
   return (

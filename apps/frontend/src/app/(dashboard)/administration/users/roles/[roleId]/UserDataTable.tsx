@@ -42,7 +42,7 @@ export function UserDataTable({ roleId }: { roleId: string }) {
   const canAddRoleToUser = useCheckPermission("role", PermissionAction.CREATE);
   const canRemoveRoleFromUser = useCheckPermission(
     "role",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const confirm = useConfirm();
   const [debounceValue] = useDebounce(query, 300);
@@ -55,7 +55,7 @@ export function UserDataTable({ roleId }: { roleId: string }) {
     trpc.role.users.queryOptions({
       roleId: roleId,
       q: debounceValue,
-    })
+    }),
   );
   const removeUserFromRole = useMutation(
     trpc.role.removeRole.mutationOptions({
@@ -66,7 +66,7 @@ export function UserDataTable({ roleId }: { roleId: string }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const { openModal } = useModal();
   return (
@@ -125,7 +125,7 @@ export function UserDataTable({ roleId }: { roleId: string }) {
                         <DropdownMenuItem
                           onSelect={() => {
                             router.push(
-                              `/administration/users/${userRole.userId}`
+                              `/administration/users/${userRole.userId}`,
                             );
                           }}
                         >

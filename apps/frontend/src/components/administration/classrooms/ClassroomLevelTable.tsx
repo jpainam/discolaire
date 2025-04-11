@@ -25,7 +25,7 @@ export function ClassroomLevelTable() {
   const queryClient = useQueryClient();
   const classroomLevelsQuery = useQuery(trpc.classroomLevel.all.queryOptions());
   const [selectedLevels, setSelectedLevels] = useAtom(
-    selectedClassroomLevelAtom
+    selectedClassroomLevelAtom,
   );
 
   const { t } = useLocale();
@@ -36,11 +36,11 @@ export function ClassroomLevelTable() {
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.classroomLevel.all.pathFilter()
+          trpc.classroomLevel.all.pathFilter(),
         );
         toast.success(t("updated_successfully"), { id: 0 });
       },
-    })
+    }),
   );
 
   const [items, setItems] = useState<
@@ -55,7 +55,7 @@ export function ClassroomLevelTable() {
           levelId: level.id,
           order: index,
         };
-      }
+      },
     );
 
     updateLevelOrder.mutate(levelWithOrders);
@@ -95,7 +95,7 @@ export function ClassroomLevelTable() {
                   setSelectedLevels([...selectedLevels, item.id]);
                 } else {
                   setSelectedLevels(
-                    selectedLevels.filter((id) => id !== item.id)
+                    selectedLevels.filter((id) => id !== item.id),
                   );
                 }
               }}

@@ -34,7 +34,7 @@ export function AssignmentTable() {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const assignmentsQuery = useQuery(
-    trpc.assignment.getLatest.queryOptions({ pageSize: 10 })
+    trpc.assignment.getLatest.queryOptions({ pageSize: 10 }),
   );
   const confirm = useConfirm();
   const { t } = useLocale();
@@ -45,14 +45,14 @@ export function AssignmentTable() {
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.assignment.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.classroom.assignments.pathFilter()
+          trpc.classroom.assignments.pathFilter(),
         );
         toast.success(t("deleted_successfully"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const assignments = assignmentsQuery.data ?? [];
   return (

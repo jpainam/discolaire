@@ -39,7 +39,7 @@ export function PolicyDataTable({ roleId }: { roleId: string }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   useEffect(() => {
@@ -101,7 +101,7 @@ export function PolicyDataTable({ roleId }: { roleId: string }) {
                         setSelectedPolicies((prev) =>
                           checked
                             ? [...prev, policy.id]
-                            : prev.filter((id) => id !== policy.id)
+                            : prev.filter((id) => id !== policy.id),
                         );
                       }}
                     />

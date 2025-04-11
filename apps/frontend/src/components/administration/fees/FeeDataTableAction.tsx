@@ -34,7 +34,7 @@ export function FeeDataTableActions({
         toast.success(t("deleted_successfully"), { id: 0 });
         table.toggleAllRowsSelected(false);
       },
-    })
+    }),
   );
   return (
     <>

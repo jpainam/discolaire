@@ -22,6 +22,7 @@ import { useLocale } from "~/i18n";
 import { FileUploader } from "~/uploads/file-uploader";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { DatePicker } from "~/components/DatePicker";
 import { DateRangePicker } from "~/components/shared/DateRangePicker";
@@ -31,7 +32,7 @@ import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { TiptapEditor } from "~/components/tiptap-editor";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 // const QuillEditor = dynamic(() => import("~/components/quill-editor"), {
 //   ssr: false,
@@ -96,34 +97,44 @@ export function CreateEditAssignment({
   ];
 
   const { t } = useLocale();
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
   const router = useRouter();
-  const createAssignmentMutation = api.assignment.create.useMutation({
-    onSettled: async () => {
-      await utils.assignment.invalidate();
-      await utils.classroom.assignments.invalidate(params.id);
-    },
-    onError: (err) => {
-      toast.error(err.message, { id: 0 });
-    },
-    onSuccess: (result) => {
-      toast.success(t("created_successfully"), { id: 0 });
-      router.push(routes.classrooms.assignments.details(params.id, result.id));
-    },
-  });
-  const updateAssignmentMutation = api.assignment.update.useMutation({
-    onSettled: async () => {
-      await utils.assignment.invalidate();
-      await utils.classroom.assignments.invalidate(params.id);
-    },
-    onSuccess: (result) => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      router.push(routes.classrooms.assignments.details(params.id, result.id));
-    },
-    onError: (err) => {
-      toast.error(err.message, { id: 0 });
-    },
-  });
+  const createAssignmentMutation = useMutation(
+    trpc.assignment.create.mutationOptions({
+      onError: (err) => {
+        toast.error(err.message, { id: 0 });
+      },
+      onSuccess: async (result) => {
+        await queryClient.invalidateQueries(trpc.assignment.pathFilter());
+        await queryClient.invalidateQueries(
+          trpc.classroom.assignments.pathFilter()
+        );
+        toast.success(t("created_successfully"), { id: 0 });
+        router.push(
+          routes.classrooms.assignments.details(params.id, result.id)
+        );
+      },
+    })
+  );
+  const updateAssignmentMutation = useMutation(
+    trpc.assignment.update.mutationOptions({
+      onSuccess: async (result) => {
+        await queryClient.invalidateQueries(trpc.assignment.pathFilter());
+        await queryClient.invalidateQueries(
+          trpc.classroom.assignments.pathFilter()
+        );
+        toast.success(t("updated_successfully"), { id: 0 });
+        router.push(
+          routes.classrooms.assignments.details(params.id, result.id)
+        );
+      },
+      onError: (err) => {
+        toast.error(err.message, { id: 0 });
+      },
+    })
+  );
   const onSubmit = (data: z.infer<typeof assignmentSchema>) => {
     const values = {
       title: data.title,
@@ -384,8 +395,8 @@ export function CreateEditAssignment({
                                     ])
                                   : field.onChange(
                                       (field.value ?? []).filter(
-                                        (value) => value !== item.value,
-                                      ),
+                                        (value) => value !== item.value
+                                      )
                                     );
                               }}
                             />

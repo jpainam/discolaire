@@ -28,8 +28,9 @@ import { useLocale } from "~/i18n";
 import { FileUploader } from "~/uploads/file-uploader";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const preventSchema = z.object({
   from: z.string().datetime(),
@@ -54,20 +55,24 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
   const { unstable_onUpload: onUpload } = useUpload();
   const [files, setFiles] = React.useState<File[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const utils = api.useUtils();
-  const createPreventedAbsence = api.absence.createPreventAbsence.useMutation({
-    onSettled: () => {
-      void utils.absence.invalidate();
-      setIsLoading(false);
-    },
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const createPreventedAbsence = useMutation(
+    trpc.absence.createPreventAbsence.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.absence.byStudent.pathFilter()
+        );
+        setIsLoading(false);
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const { t } = useLocale();
   const onSubmit = async (data: z.infer<typeof preventSchema>) => {

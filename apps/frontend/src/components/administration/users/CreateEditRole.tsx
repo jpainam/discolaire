@@ -56,7 +56,7 @@ export function CreateEditRole({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateRoleMutation = useMutation(
     trpc.role.update.mutationOptions({
@@ -68,7 +68,7 @@ export function CreateEditRole({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const onSubmit = (data: z.infer<typeof createEditRoleSchema>) => {
     if (id) {

@@ -136,13 +136,13 @@ export default function EventForm({
   const queryClient = useQueryClient();
   const trpc = useTRPC();
   const createCalendarEventMutation = useMutation(
-    trpc.calendarEvent.create.mutationOptions()
+    trpc.calendarEvent.create.mutationOptions(),
   );
   const updateCalendarEventMutation = useMutation(
-    trpc.calendarEvent.update.mutationOptions()
+    trpc.calendarEvent.update.mutationOptions(),
   );
   const deleteCalendarEventMutation = useMutation(
-    trpc.calendarEvent.delete.mutationOptions()
+    trpc.calendarEvent.delete.mutationOptions(),
   );
 
   const onSubmit: SubmitHandler<EventFormInput> = (data) => {
@@ -170,11 +170,11 @@ export default function EventForm({
           },
           success: async () => {
             await queryClient.invalidateQueries(
-              trpc.calendarEvent.all.pathFilter()
+              trpc.calendarEvent.all.pathFilter(),
             );
             return t("updated_successfully");
           },
-        }
+        },
       );
     } else {
       toast.promise(createCalendarEventMutation.mutateAsync(newEvent), {
@@ -184,7 +184,7 @@ export default function EventForm({
         },
         success: async () => {
           await queryClient.invalidateQueries(
-            trpc.calendarEvent.all.pathFilter()
+            trpc.calendarEvent.all.pathFilter(),
           );
           return t("added_successfully");
         },
@@ -203,7 +203,7 @@ export default function EventForm({
         },
         success: async () => {
           await queryClient.invalidateQueries(
-            trpc.calendarEvent.all.pathFilter()
+            trpc.calendarEvent.all.pathFilter(),
           );
           return t("deleted_successfully");
         },
@@ -225,7 +225,7 @@ export default function EventForm({
             onValueChange={(val) =>
               setValue(
                 "calendarType",
-                val as "School Year" | "Teaching" | "Holidays"
+                val as "School Year" | "Teaching" | "Holidays",
               )
             }
           >
@@ -315,7 +315,7 @@ export default function EventForm({
               onValueChange={(val) =>
                 setValue(
                   "repeat",
-                  val as "None" | "Daily" | "Weekly" | "Monthly" | "Yearly"
+                  val as "None" | "Daily" | "Weekly" | "Monthly" | "Yearly",
                 )
               }
             >
@@ -413,7 +413,7 @@ export default function EventForm({
               "@xl:w-auto w-full",
               isUpdateEvent
                 ? "bg-red-600 text-white hover:border-none hover:bg-red-700 hover:text-white hover:ring-0"
-                : "dark:hover:border-gray-400"
+                : "dark:hover:border-gray-400",
             )}
             onClick={() => (isUpdateEvent ? deleteEvent() : closeModal())}
           >

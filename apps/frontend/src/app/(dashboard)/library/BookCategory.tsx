@@ -49,21 +49,21 @@ export function BookCategory() {
         await queryClient.invalidateQueries(trpc.book.categories.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
-    })
+    }),
   );
   const { t } = useLocale();
   const { openModal } = useModal();
   const canUpdateCategory = useCheckPermission(
     "library",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   const canCreateCategory = useCheckPermission(
     "library",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
   const canDeleteCategory = useCheckPermission(
     "library",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
 
   return (
@@ -187,7 +187,7 @@ function CreateEditCategory({
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
       },
-    })
+    }),
   );
   const updateCategory = useMutation(
     trpc.book.updateCategory.mutationOptions({
@@ -199,7 +199,7 @@ function CreateEditCategory({
         toast.success(t("updated_successfully"), { id: 0 });
         closeModal();
       },
-    })
+    }),
   );
   const onSubmit = (data: z.infer<typeof createEditCategorySchema>) => {
     if (category) {
