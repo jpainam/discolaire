@@ -13,7 +13,7 @@ import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 
 import { DocumentTableAction } from "~/components/shared/DocumentTableAction";
-import { api } from "~/trpc/server";
+import { api, caller } from "~/trpc/server";
 import { LinkUser } from "./LinkUser";
 import { StaffDocumentHeader } from "./StaffDocumentHeader";
 
@@ -22,7 +22,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   const { id } = params;
 
-  const staff = await api.staff.get(id);
+  const staff = await caller.staff.get(id);
 
   const { t, i18n } = await getServerTranslations();
   if (!staff.userId) {

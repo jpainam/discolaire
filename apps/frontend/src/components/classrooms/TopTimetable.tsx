@@ -52,7 +52,7 @@ export default function TopTimetable() {
     trpc.lesson.byClassroom.queryOptions({
       classroomId: params.id,
       currentDate: today,
-    })
+    }),
   );
 
   const periods = timetablesQuery.data ?? [];
@@ -212,7 +212,7 @@ function TopTimetableCard({
           ? "bg-muted opacity-50"
           : isSameDay(period.start, today)
             ? "bg-red-600"
-            : "bg-card"
+            : "bg-card",
       )}
     >
       <div className="mb-2 flex items-start justify-between">

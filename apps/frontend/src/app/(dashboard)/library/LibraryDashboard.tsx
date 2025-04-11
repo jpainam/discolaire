@@ -1,11 +1,11 @@
 import { BookMarked, BookOpen, Clock, UsersIcon } from "lucide-react";
 import { getServerTranslations } from "~/i18n/server";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { LibraryStatsGrid } from "./LibraryStatsGrid";
 import { MonthlyActivities } from "./MonthlyActivities";
 import { RecentBorrows } from "./RecentBorrows";
 export async function LibraryDashboard() {
-  const counts = await api.library.count();
+  const counts = await caller.library.count();
   const { t } = await getServerTranslations();
   return (
     <div className="flex-1  px-4">

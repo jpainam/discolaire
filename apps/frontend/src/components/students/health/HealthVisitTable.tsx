@@ -48,7 +48,7 @@ export function HealthVisitTable({ userId }: { userId: string }) {
         await queryClient.invalidateQueries(trpc.health.visits.pathFilter());
         toast.success(t("deleted"), { id: 0 });
       },
-    })
+    }),
   );
   const confirm = useConfirm();
 
@@ -59,7 +59,7 @@ export function HealthVisitTable({ userId }: { userId: string }) {
   });
 
   const visitsQuery = useQuery(
-    trpc.health.visits.queryOptions({ userId: userId })
+    trpc.health.visits.queryOptions({ userId: userId }),
   );
 
   return (

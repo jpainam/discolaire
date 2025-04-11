@@ -29,7 +29,7 @@ export function AttendanceTable() {
   const params = useParams<{ id: string }>();
   const trpc = useTRPC();
   const studentsQuery = useQuery(
-    trpc.classroom.students.queryOptions(params.id)
+    trpc.classroom.students.queryOptions(params.id),
   );
 
   const form = useForm();

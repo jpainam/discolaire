@@ -24,7 +24,7 @@ export function AssignmentCategorySelector({
   const { t } = useLocale();
   const trpc = useTRPC();
   const assignmentCategoriesQuery = useQuery(
-    trpc.assignment.categories.queryOptions()
+    trpc.assignment.categories.queryOptions(),
   );
   return (
     <Select

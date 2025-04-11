@@ -42,7 +42,7 @@ export function TransactionTrendChart() {
   // const to = searchParams.get("to");
   const trpc = useTRPC();
   const transactionsTrendQuery = useQuery(
-    trpc.transaction.trends.queryOptions()
+    trpc.transaction.trends.queryOptions(),
   );
 
   const [filteredData, setFilteredData] = React.useState<

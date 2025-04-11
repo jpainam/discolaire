@@ -36,7 +36,7 @@ export function AppreciationHeader() {
   const searchParams = useSearchParams();
   const trpc = useTRPC();
   const appreciationCategories = useQuery(
-    trpc.appreciation.categories.queryOptions()
+    trpc.appreciation.categories.queryOptions(),
   );
   const [classroomId, setClassroomId] = useQueryState("classroom");
   const [subjectId, setSubjectId] = useQueryState("subject");
@@ -90,7 +90,7 @@ export function AppreciationHeader() {
           router.push(
             routes.reportcards.appreciations +
               "/?" +
-              createQueryString({ classroom: val })
+              createQueryString({ classroom: val }),
           );
         }}
       />

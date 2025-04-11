@@ -19,7 +19,7 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
 import { ErrorFallback } from "~/components/error-fallback";
 import { getServerTranslations } from "~/i18n/server";
-import { api, HydrateClient, prefetch, trpc } from "~/trpc/server";
+import { caller, HydrateClient, prefetch, trpc } from "~/trpc/server";
 import { BookTab } from "./BookTab";
 import { LibraryDashboard } from "./LibraryDashboard";
 import { LibrarySetting } from "./LibrarySetting";
@@ -29,7 +29,7 @@ import { ReservationDataTable } from "./reservations/ReservationDataTable";
 
 export default async function Page() {
   const { t } = await getServerTranslations();
-  const books = await api.book.all();
+  const books = await caller.book.all();
 
   prefetch(trpc.library.borrowBooks.queryOptions({ limit: 2000 }));
   return (

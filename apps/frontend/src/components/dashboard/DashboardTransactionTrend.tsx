@@ -61,7 +61,7 @@ export function DashboardTransactionTrend({
   // const to = searchParams.get("to");
   const trpc = useTRPC();
   const transactionsTrendQuery = useQuery(
-    trpc.transaction.trends.queryOptions()
+    trpc.transaction.trends.queryOptions(),
   );
 
   const [filteredData, setFilteredData] = React.useState<
@@ -149,7 +149,7 @@ export function DashboardTransactionTrend({
                   "?" +
                     createQueryString({
                       timeRange: val == "All" ? undefined : val,
-                    })
+                    }),
                 );
               }}
             >

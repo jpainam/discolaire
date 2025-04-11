@@ -30,7 +30,7 @@ export default function FinanceHeader() {
   const classroomQuery = useQuery(
     trpc.student.classroom.queryOptions({
       studentId: params.id,
-    })
+    }),
   );
 
   return (

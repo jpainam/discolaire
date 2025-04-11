@@ -31,7 +31,7 @@ export function RelationshipSelector({
   const { t } = useLocale();
   const trpc = useTRPC();
   const relationshipsQuery = useQuery(
-    trpc.studentContact.relationships.queryOptions()
+    trpc.studentContact.relationships.queryOptions(),
   );
 
   return (

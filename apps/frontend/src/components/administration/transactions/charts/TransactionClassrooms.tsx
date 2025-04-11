@@ -50,7 +50,7 @@ export function TransactionClassrooms() {
 
   const trpc = useTRPC();
   const transactionsQuotaQuery = useQuery(
-    trpc.transaction.quotas.queryOptions()
+    trpc.transaction.quotas.queryOptions(),
   );
 
   const [filteredData, setFilteredData] = React.useState<

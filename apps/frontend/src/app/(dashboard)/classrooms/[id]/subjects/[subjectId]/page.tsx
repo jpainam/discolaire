@@ -12,7 +12,7 @@ import { PermissionAction } from "~/permissions";
 
 import { checkPermission } from "@repo/api/permission";
 import { SubjectDetailsHeader } from "~/components/classrooms/subjects/SubjectDetailsHeader";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 export default async function Page(props: {
   params: Promise<{ id: string; subjectId: string }>;
@@ -25,7 +25,7 @@ export default async function Page(props: {
     return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
   }
 
-  const subject = await api.subject.get(Number(subjectId));
+  const subject = await caller.subject.get(Number(subjectId));
 
   return (
     <div className="flex flex-col">

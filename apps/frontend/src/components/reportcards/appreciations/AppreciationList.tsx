@@ -42,11 +42,11 @@ export function AppreciationList({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const appreciationCategoriesQuery = useQuery(
-    trpc.appreciation.categories.queryOptions()
+    trpc.appreciation.categories.queryOptions(),
   );
 
   if (appreciationCategoriesQuery.isPending) {

@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import type { PropsWithChildren } from "react";
 import { NoPermission } from "~/components/no-permission";
 import { PermissionAction } from "~/permissions";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 export default async function Layout({
   children,
@@ -15,12 +15,12 @@ export default async function Layout({
   if (!session) {
     redirect("/auth/login");
   }
-  const contact = await api.contact.get(id);
+  const contact = await caller.contact.get(id);
   if (session.user.profile == "contact" && session.user.id != contact.userId) {
     return <NoPermission className="my-8" />;
   }
   if (session.user.profile == "student") {
-    const studentContacts = await api.contact.students(id);
+    const studentContacts = await caller.contact.students(id);
     const userIds = studentContacts
       .map((stdc) => stdc.student.userId)
       .filter((userId) => userId != null);
@@ -30,7 +30,7 @@ export default async function Layout({
   } else {
     const canReadContact = await checkPermission(
       "contact",
-      PermissionAction.READ,
+      PermissionAction.READ
     );
     if (!canReadContact) {
       return <NoPermission className="my-8" />;
