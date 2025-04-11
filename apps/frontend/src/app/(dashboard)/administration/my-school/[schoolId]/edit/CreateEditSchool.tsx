@@ -60,7 +60,7 @@ export function CreateEditSchool({ school }: { school: School }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const form = useForm({
@@ -103,7 +103,7 @@ export function CreateEditSchool({ school }: { school: School }) {
           key: string;
           fullPath: string;
         };
-        updateSchoolMutation.mutate({ id: school.id, logo: key, ...data });
+        updateSchoolMutation.mutate({ id: school.id, ...data, logo: key });
       } else {
         const status = response.statusText;
         toast.error(status, { id: 0 });

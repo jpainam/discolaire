@@ -28,7 +28,7 @@ export async function POST(request: Request) {
     const { key, fullPath } = await uploadFile({
       file: file,
       destination: `${school.id}.${ext}`,
-      bucket: env.S3_BUCKET_NAME,
+      bucket: env.S3_IMAGE_BUCKET_NAME,
     });
 
     return Response.json({
@@ -62,7 +62,7 @@ export async function DELETE(request: Request) {
     //const school = await caller.school.getSchool();
 
     const key = avatar.split(
-      "https://discolaire-public.s3.eu-central-1.amazonaws.com/",
+      "https://discolaire-public.s3.eu-central-1.amazonaws.com/"
     )[1];
     //const key = `${school.code}/avatars/${userId}.png`;
     const command = new DeleteObjectCommand({
