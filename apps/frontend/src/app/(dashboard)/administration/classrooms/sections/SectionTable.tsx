@@ -25,23 +25,30 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { api } from "~/trpc/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditSection } from "./CreateEditSection";
 
 export function SectionTable() {
-  const sectionsQuery = api.classroomSection.all.useQuery();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const sectionsQuery = useQuery(trpc.classroomSection.all.queryOptions());
   const { t } = useLocale();
   const data = sectionsQuery.data ?? [];
-  const utils = api.useUtils();
-  const deleteSectionMutation = api.classroomSection.delete.useMutation({
-    onSettled: () => utils.classroomSection.invalidate(),
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+
+  const deleteSectionMutation = useMutation(
+    trpc.classroomSection.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.classroomSection.all.pathFilter()
+        );
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const { openModal } = useModal();
   const confirm = useConfirm();
   return (

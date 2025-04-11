@@ -27,8 +27,9 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AvatarState } from "~/components/AvatarState";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { AddStaffSchedule } from "./AddStaffSchedule";
 
 export function CanReceiveTransactionSummary({
@@ -39,23 +40,26 @@ export function CanReceiveTransactionSummary({
   const { t } = useLocale();
   const { openModal } = useModal();
   const confirm = useConfirm();
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
-  const staffQuery = api.staff.all.useQuery();
-  const deleteScheduleTask = api.scheduleTask.delete.useMutation({
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSettled: () => {
-      void utils.scheduleTask.invalidate();
-    },
-  });
-  const scheduleTasksQuery = api.scheduleTask.byName.useQuery({
-    name: "transaction-summary",
-  });
+  const staffQuery = useQuery(trpc.staff.all.queryOptions());
+  const deleteScheduleTask = useMutation(
+    trpc.scheduleTask.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.scheduleTask.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const scheduleTasksQuery = useQuery(
+    trpc.scheduleTask.byName.queryOptions({
+      name: "transaction-summary",
+    })
+  );
   if (staffQuery.isPending || scheduleTasksQuery.isPending) {
     return (
       <div className="flex flex-col gap-2 rounded-md border p-1">

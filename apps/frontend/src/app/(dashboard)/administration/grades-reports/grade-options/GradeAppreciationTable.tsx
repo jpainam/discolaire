@@ -33,30 +33,36 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { EmptyState } from "~/components/EmptyState";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditGradeAppreciation } from "./CreateEditGradeAppreciation";
 
 export function GradeAppreciationTable() {
   const { openModal } = useModal();
-  const gradeAppreciationsQuery = api.gradeAppreciation.all.useQuery();
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const gradeAppreciationsQuery = useQuery(
+    trpc.gradeAppreciation.all.queryOptions()
+  );
+
   const { t } = useLocale();
-  const deleteAppreciation = api.gradeAppreciation.delete.useMutation({
-    onSettled: () => {
-      void utils.gradeAppreciation.invalidate();
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const deleteAppreciation = useMutation(
+    trpc.gradeAppreciation.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.gradeAppreciation.all.pathFilter()
+        );
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const confirm = useConfirm();
 
   return (

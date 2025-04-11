@@ -19,8 +19,9 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const createEditAppreciationSchema = z.object({
   min: z.coerce.number().min(0),
@@ -41,32 +42,39 @@ export function CreateEditGradeAppreciation({
     },
   });
   const { t } = useLocale();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const { closeModal } = useModal();
-  const utils = api.useUtils();
-  const createAppreciation = api.gradeAppreciation.create.useMutation({
-    onSettled: () => {
-      void utils.gradeAppreciation.invalidate();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      closeModal();
-      toast.success(t("created_successfully"), { id: 0 });
-    },
-  });
-  const updateAppreciation = api.gradeAppreciation.update.useMutation({
-    onSettled: () => {
-      void utils.gradeAppreciation.invalidate();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      closeModal();
-      toast.success(t("updated_successfully"), { id: 0 });
-    },
-  });
+
+  const createAppreciation = useMutation(
+    trpc.gradeAppreciation.create.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.gradeAppreciation.all.pathFilter()
+        );
+
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+    })
+  );
+  const updateAppreciation = useMutation(
+    trpc.gradeAppreciation.update.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.gradeAppreciation.all.pathFilter()
+        );
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+    })
+  );
 
   const handleSubmit = (data: z.infer<typeof createEditAppreciationSchema>) => {
     const values = {

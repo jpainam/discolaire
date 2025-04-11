@@ -15,8 +15,9 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CreateEditRole } from "~/components/administration/users/CreateEditRole";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 interface EditDeleteActionProps {
   id: string;
@@ -31,16 +32,20 @@ export function EditDeleteAction({
   const { t } = useLocale();
   const { openModal } = useModal();
   const confirm = useConfirm();
-  const utils = api.useUtils();
-  const deleteRoleMutation = api.role.delete.useMutation({
-    onSettled: () => utils.role.invalidate(),
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const deleteRoleMutation = useMutation(
+    trpc.role.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.role.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
