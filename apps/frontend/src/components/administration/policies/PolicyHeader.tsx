@@ -13,8 +13,9 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { selectedPoliciesAtom } from "./_selected_policies_atom";
 import { CreateEditPolicy } from "./CreateEditPolicy";
 
@@ -22,21 +23,26 @@ export function PolicyHeader() {
   const { t } = useLocale();
   const { openModal } = useModal();
   const [value, setValue] = useState("");
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
   const debounceValue = useDebounce(value, 200);
   const [_, setSearchValue] = useQueryState("q");
   const [selectedPolicies, setSelectedPolicies] = useAtom(selectedPoliciesAtom);
-  const utils = api.useUtils();
 
   const canCreatePolicy = useCheckPermission("policy", PermissionAction.CREATE);
   const canDeletePolicy = useCheckPermission("policy", PermissionAction.DELETE);
-  const deletePolicyMutation = api.policy.delete.useMutation({
-    onSettled: () => utils.policy.invalidate(),
-    onError: (error) => toast.error(error.message, { id: 0 }),
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-      setSelectedPolicies([]);
-    },
-  });
+
+  const deletePolicyMutation = useMutation(
+    trpc.policy.delete.mutationOptions({
+      onError: (error) => toast.error(error.message, { id: 0 }),
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.policy.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+        setSelectedPolicies([]);
+      },
+    })
+  );
 
   // const { school } = useSchool();
   // const addAllMutation = api.policy.createFromJson.useMutation({

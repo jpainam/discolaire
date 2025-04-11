@@ -24,8 +24,8 @@ import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { getErrorMessage } from "~/lib/handle-error";
-import { api } from "~/trpc/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditAnnouncement } from "./CreateEditAnnouncement";
 
 const statusVariants: Record<string, FlatBadgeProps["variant"]> = {
@@ -207,9 +207,20 @@ function ActionCells({
   const { openSheet } = useSheet();
   const confirm = useConfirm();
   const { t } = useLocale();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
-  const utils = api.useUtils();
-  const deleteAnnouncementMutation = api.announcement.delete.useMutation();
+  const deleteAnnouncementMutation = useMutation(
+    trpc.announcement.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.announcement.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   return (
     <div className="flex justify-end">
@@ -244,17 +255,8 @@ function ActionCells({
                 description: t("delete_confirmation"),
               });
               if (isConfirmed) {
-                toast.promise(
-                  deleteAnnouncementMutation.mutateAsync(noticeboard.id),
-                  {
-                    loading: t("deleting"),
-                    success: async () => {
-                      await utils.announcement.all.invalidate();
-                      return t("deleted_successfully");
-                    },
-                    error: (error) => getErrorMessage(error),
-                  },
-                );
+                toast.loading(t("deleting"), { id: 0 });
+                deleteAnnouncementMutation.mutate(noticeboard.id);
               }
             }}
           >

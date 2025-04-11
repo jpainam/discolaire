@@ -32,13 +32,14 @@ import { Textarea } from "@repo/ui/components/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DateTimePicker } from "~/components/shared/date-time-picker";
 import { InputField } from "~/components/shared/forms/input-field";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { getErrorMessage } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 //const isSchoolYear = (data: any) => data.calendarType === "School Year";
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -132,10 +133,17 @@ export default function EventForm({
   const watchedClassroomId = watch("classroom");
   const watchedSubject = watch("subject");
 
-  const utils = api.useUtils();
-  const createCalendarEventMutation = api.calendarEvent.create.useMutation();
-  const updateCalendarEventMutation = api.calendarEvent.update.useMutation();
-  const deleteCalendarEventMutation = api.calendarEvent.delete.useMutation();
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
+  const createCalendarEventMutation = useMutation(
+    trpc.calendarEvent.create.mutationOptions()
+  );
+  const updateCalendarEventMutation = useMutation(
+    trpc.calendarEvent.update.mutationOptions()
+  );
+  const deleteCalendarEventMutation = useMutation(
+    trpc.calendarEvent.delete.mutationOptions()
+  );
 
   const onSubmit: SubmitHandler<EventFormInput> = (data) => {
     const eventData = {
@@ -160,11 +168,13 @@ export default function EventForm({
           error: (error) => {
             return getErrorMessage(error);
           },
-          success: () => {
-            void utils.calendarEvent.all.invalidate();
+          success: async () => {
+            await queryClient.invalidateQueries(
+              trpc.calendarEvent.all.pathFilter()
+            );
             return t("updated_successfully");
           },
-        },
+        }
       );
     } else {
       toast.promise(createCalendarEventMutation.mutateAsync(newEvent), {
@@ -172,8 +182,10 @@ export default function EventForm({
         error: (error) => {
           return getErrorMessage(error);
         },
-        success: () => {
-          void utils.calendarEvent.all.invalidate();
+        success: async () => {
+          await queryClient.invalidateQueries(
+            trpc.calendarEvent.all.pathFilter()
+          );
           return t("added_successfully");
         },
       });
@@ -189,8 +201,10 @@ export default function EventForm({
         error: (error) => {
           return getErrorMessage(error);
         },
-        success: () => {
-          void utils.calendarEvent.all.invalidate();
+        success: async () => {
+          await queryClient.invalidateQueries(
+            trpc.calendarEvent.all.pathFilter()
+          );
           return t("deleted_successfully");
         },
       });
@@ -211,7 +225,7 @@ export default function EventForm({
             onValueChange={(val) =>
               setValue(
                 "calendarType",
-                val as "School Year" | "Teaching" | "Holidays",
+                val as "School Year" | "Teaching" | "Holidays"
               )
             }
           >
@@ -301,7 +315,7 @@ export default function EventForm({
               onValueChange={(val) =>
                 setValue(
                   "repeat",
-                  val as "None" | "Daily" | "Weekly" | "Monthly" | "Yearly",
+                  val as "None" | "Daily" | "Weekly" | "Monthly" | "Yearly"
                 )
               }
             >
@@ -399,7 +413,7 @@ export default function EventForm({
               "@xl:w-auto w-full",
               isUpdateEvent
                 ? "bg-red-600 text-white hover:border-none hover:bg-red-700 hover:text-white hover:ring-0"
-                : "dark:hover:border-gray-400",
+                : "dark:hover:border-gray-400"
             )}
             onClick={() => (isUpdateEvent ? deleteEvent() : closeModal())}
           >

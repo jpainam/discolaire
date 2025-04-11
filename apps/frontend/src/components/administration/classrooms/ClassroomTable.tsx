@@ -25,33 +25,38 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CreateEditClassroom } from "~/components/classrooms/CreateEditClassroom";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 export default function ClassroomTable() {
   const { t } = useLocale();
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
   const router = useRouter();
-  const classroomsQuery = api.classroom.all.useQuery();
+  const classroomsQuery = useQuery(trpc.classroom.all.queryOptions());
   const { openSheet } = useSheet();
-  const deleteClassroomMutation = api.classroom.delete.useMutation({
-    onSettled: () => utils.classroom.invalidate(),
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const deleteClassroomMutation = useMutation(
+    trpc.classroom.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.classroom.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const canDeleteClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const confirm = useConfirm();
   return (

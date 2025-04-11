@@ -16,9 +16,10 @@ import { Input } from "@repo/ui/components/input";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -28,18 +29,22 @@ const formSchema = z.object({
 
 export default function Page() {
   const { t } = useLocale();
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
   const router = useRouter();
-  const createSchoolMutation = api.school.create.useMutation({
-    onSettled: () => utils.school.invalidate(),
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      router.push("/administration/my-school");
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const createSchoolMutation = useMutation(
+    trpc.school.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.school.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        router.push("/administration/my-school");
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const form = useForm({
     resolver: zodResolver(formSchema),

@@ -5,7 +5,6 @@ import { useQueryState } from "nuqs";
 import { toast } from "sonner";
 import { useDebounce } from "use-debounce";
 
-import { PermissionAction } from "~/permissions";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -27,11 +26,13 @@ import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 import { EmptyState } from "~/components/EmptyState";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { AddUserToRole } from "./AddUserToRole";
 
 export function UserDataTable({ roleId }: { roleId: string }) {
@@ -41,26 +42,32 @@ export function UserDataTable({ roleId }: { roleId: string }) {
   const canAddRoleToUser = useCheckPermission("role", PermissionAction.CREATE);
   const canRemoveRoleFromUser = useCheckPermission(
     "role",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const confirm = useConfirm();
   const [debounceValue] = useDebounce(query, 300);
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const { t } = useLocale();
-  const utils = api.useUtils();
+
   const router = useRouter();
-  const userRolesQuery = api.role.users.useQuery({
-    roleId: roleId,
-    q: debounceValue,
-  });
-  const removeUserFromRole = api.role.removeRole.useMutation({
-    onSettled: () => utils.role.invalidate(),
-    onSuccess: () => {
-      toast.success(t("removed_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const userRolesQuery = useQuery(
+    trpc.role.users.queryOptions({
+      roleId: roleId,
+      q: debounceValue,
+    })
+  );
+  const removeUserFromRole = useMutation(
+    trpc.role.removeRole.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.role.users.pathFilter());
+        toast.success(t("removed_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const { openModal } = useModal();
   return (
     <div className="flex flex-col gap-2">
@@ -118,7 +125,7 @@ export function UserDataTable({ roleId }: { roleId: string }) {
                         <DropdownMenuItem
                           onSelect={() => {
                             router.push(
-                              `/administration/users/${userRole.userId}`,
+                              `/administration/users/${userRole.userId}`
                             );
                           }}
                         >

@@ -5,7 +5,6 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
-import { useDebounce } from "~/hooks/use-debounce";
 import {
   Avatar,
   AvatarFallback,
@@ -22,40 +21,50 @@ import {
 } from "@repo/ui/components/command";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { useDebounce } from "~/hooks/use-debounce";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { randomAvatar } from "~/components/raw-images";
 import rangeMap from "~/lib/range-map";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 export function AddUserToRole({ roleId }: { roleId: string }) {
   const { t } = useLocale();
   const [value, setValue] = useState("");
   const debounceValue = useDebounce(value, 500);
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const [selectedUserIds, setSelectedUserIds] = React.useState<
     { id: string; avatar?: string }[]
   >([]);
-  const utils = api.useUtils();
 
-  const existingUsers = api.role.users.useQuery({
-    roleId: roleId,
-  });
-  const usersQuery = api.user.search.useQuery({
-    query: debounceValue,
-  });
+  const existingUsers = useQuery(
+    trpc.role.users.queryOptions({
+      roleId: roleId,
+    })
+  );
+
+  const usersQuery = useQuery(
+    trpc.user.search.queryOptions({
+      query: debounceValue,
+    })
+  );
 
   const { closeModal } = useModal();
-  const addUserToRole = api.role.addUsers.useMutation({
-    onSettled: () => utils.role.invalidate(),
-    onSuccess: () => {
-      closeModal();
-      toast.success(t("added_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const addUserToRole = useMutation(
+    trpc.role.addUsers.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.role.pathFilter());
+        toast.success(t("added_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
@@ -98,15 +107,15 @@ export function AddUserToRole({ roleId }: { roleId: string }) {
                       if (selectedUserIds.map((w) => w.id).includes(user.id)) {
                         return setSelectedUserIds(
                           selectedUserIds.filter(
-                            (selectedUser) => selectedUser.id !== user.id,
-                          ),
+                            (selectedUser) => selectedUser.id !== user.id
+                          )
                         );
                       }
 
                       return setSelectedUserIds(
                         [...selectedUserIds, user].map((u) => {
                           return { id: u.id, avatar: u.avatar ?? undefined };
-                        }),
+                        })
                       );
                     }}
                   >

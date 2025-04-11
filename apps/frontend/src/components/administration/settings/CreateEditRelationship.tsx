@@ -17,8 +17,9 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const createRelationshipSchema = z.object({
   name: z.string().min(1),
@@ -37,32 +38,40 @@ export function CreateEditRelationship({
     },
   });
   const { closeModal } = useModal();
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
   const { t } = useLocale();
 
-  const createRelationshipMutation =
-    api.studentContact.createRelationship.useMutation({
-      onSettled: () => utils.studentContact.relationships.invalidate(),
-      onSuccess: () => {
+  const createRelationshipMutation = useMutation(
+    trpc.studentContact.createRelationship.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.studentContact.relationships.pathFilter()
+        );
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    });
+    })
+  );
 
-  const updateRelationshipMutation =
-    api.studentContact.updateRelationship.useMutation({
-      onSettled: () => utils.studentContact.relationships.invalidate(),
-      onSuccess: () => {
+  const updateRelationshipMutation = useMutation(
+    trpc.studentContact.updateRelationship.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.studentContact.relationships.pathFilter()
+        );
         toast.success(t("updated_successfully"), { id: 0 });
         closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    });
+    })
+  );
   const onSubmit = (data: z.infer<typeof createRelationshipSchema>) => {
     if (id) {
       toast.loading(t("updating"), { id: 0 });

@@ -17,27 +17,30 @@ import {
 import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 
-import { api } from "~/trpc/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 
 export function PolicyDataTable({ roleId }: { roleId: string }) {
   const { t } = useLocale();
-
-  const policiesQuery = api.policy.all.useQuery({});
-  const rolePoliciesQuery = api.role.policies.useQuery(roleId);
+  const trpc = useTRPC();
+  const policiesQuery = useQuery(trpc.policy.all.queryOptions({}));
+  const rolePoliciesQuery = useQuery(trpc.role.policies.queryOptions(roleId));
   const [selectedPolicies, setSelectedPolicies] = useState<string[]>([]);
-  const utils = api.useUtils();
-  const attachPoliciesMutation = api.role.attachPolicies.useMutation({
-    onSuccess: () => {
-      toast.success("Policies attached successfully", { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSettled: async () => {
-      await utils.role.invalidate();
-      await utils.policy.invalidate();
-    },
-  });
+
+  const queryClient = useQueryClient();
+
+  const attachPoliciesMutation = useMutation(
+    trpc.role.attachPolicies.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.role.all.pathFilter());
+        await queryClient.invalidateQueries(trpc.policy.all.pathFilter());
+        toast.success("Policies attached successfully", { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   useEffect(() => {
     if (!rolePoliciesQuery.data) return;
@@ -98,7 +101,7 @@ export function PolicyDataTable({ roleId }: { roleId: string }) {
                         setSelectedPolicies((prev) =>
                           checked
                             ? [...prev, policy.id]
-                            : prev.filter((id) => id !== policy.id),
+                            : prev.filter((id) => id !== policy.id)
                         );
                       }}
                     />

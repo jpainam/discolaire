@@ -76,8 +76,12 @@ export function UserNav() {
               <DialogTrigger asChild>
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage
-                    src={user.avatar ?? undefined}
-                    alt={user.name ?? ""}
+                    src={
+                      user.avatar
+                        ? `/api/download/avatars/${user.avatar}`
+                        : undefined
+                    }
+                    alt={initials}
                   />
                   <AvatarFallback className="rounded-lg uppercase">{`${user.name?.charAt(0)}${user.name?.charAt(1)}`}</AvatarFallback>
                 </Avatar>
@@ -88,7 +92,11 @@ export function UserNav() {
                   <DialogTitle></DialogTitle>
                 </VisuallyHidden>
                 <img
-                  src={user.avatar ?? undefined}
+                  src={
+                    user.avatar
+                      ? `/api/download/avatars/${user.avatar}`
+                      : undefined
+                  }
                   alt="Full Image"
                   className="w-full h-auto rounded-lg"
                 />

@@ -9,8 +9,8 @@ import { Button } from "@repo/ui/components/button";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { getErrorMessage } from "~/lib/handle-error";
-import { api } from "~/trpc/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 
 type FeeProcedureOutput = NonNullable<RouterOutputs["fee"]["all"]>[number];
 
@@ -21,10 +21,21 @@ export function FeeDataTableActions({
 }) {
   const { t } = useLocale();
   const confirm = useConfirm();
-  const utils = api.useUtils();
-  const feesMutation = api.fee.delete.useMutation({
-    onSettled: () => utils.fee.invalidate(),
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const feesMutation = useMutation(
+    trpc.fee.delete.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.fee.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+        table.toggleAllRowsSelected(false);
+      },
+    })
+  );
   return (
     <>
       {table.getFilteredSelectedRowModel().rows.length > 0 && (
@@ -41,17 +52,8 @@ export function FeeDataTableActions({
               const selectedRowIds = table
                 .getFilteredSelectedRowModel()
                 .rows.map((row) => row.original.id);
-
-              toast.promise(feesMutation.mutateAsync(selectedRowIds), {
-                loading: t("deleting"),
-                success: () => {
-                  table.toggleAllRowsSelected(false);
-                  return t("deleted_successfully");
-                },
-                error: (error) => {
-                  return getErrorMessage(error);
-                },
-              });
+              toast.loading(t("deleting"), { id: 0 });
+              feesMutation.mutate(selectedRowIds);
             }
           }}
           variant={"destructive"}

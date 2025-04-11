@@ -19,7 +19,8 @@ import { Input } from "@repo/ui/components/input";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
-import { api } from "~/trpc/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 import { PolicyEditor } from "./PolicyEditor";
 
 const createEditPolicySchema = z.object({
@@ -49,27 +50,33 @@ export function CreateEditPolicy({ policy }: { policy?: Policy }) {
       }),
     },
   });
-  const utils = api.useUtils();
-  const updatePolicyMutation = api.policy.update.useMutation({
-    onSettled: () => utils.policy.invalidate(),
-    onSuccess: () => {
-      closeModal();
-      toast.success(t("updated_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const createPolicyMutation = api.policy.create.useMutation({
-    onSettled: () => utils.policy.invalidate(),
-    onSuccess: () => {
-      closeModal();
-      toast.success(t("created_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const updatePolicyMutation = useMutation(
+    trpc.policy.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.policy.all.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const createPolicyMutation = useMutation(
+    trpc.policy.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.policy.all.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const onSubmit = (data: z.infer<typeof createEditPolicySchema>) => {
     const content = JSON.parse(data.content);

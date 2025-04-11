@@ -23,10 +23,10 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CreateEditFee } from "~/components/classrooms/fees/CreateEditFee";
 import { CURRENCY } from "~/lib/constants";
-import { getErrorMessage } from "~/lib/handle-error";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 type FeeProcedureOutput = NonNullable<RouterOutputs["fee"]["all"]>[number];
 
@@ -173,8 +173,19 @@ function ActionCell({ fee }: { fee: Fee }) {
   const { t } = useLocale();
   const { openModal } = useModal();
   const confirm = useConfirm();
-  const feeMutation = api.fee.delete.useMutation();
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const feeMutation = useMutation(
+    trpc.fee.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.fee.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   return (
     <div className="flex justify-end">
@@ -207,16 +218,8 @@ function ActionCell({ fee }: { fee: Fee }) {
                 description: t("delete_confirmation"),
               });
               if (isConfirmed) {
-                toast.promise(feeMutation.mutateAsync(fee.id), {
-                  loading: t("deleting"),
-                  error: (error) => {
-                    return getErrorMessage(error);
-                  },
-                  success: () => {
-                    void utils.fee.all.invalidate();
-                    return t("deleted_successfully");
-                  },
-                });
+                toast.loading(t("deleting"), { id: 0 });
+                feeMutation.mutate(fee.id);
               }
             }}
             variant="destructive"

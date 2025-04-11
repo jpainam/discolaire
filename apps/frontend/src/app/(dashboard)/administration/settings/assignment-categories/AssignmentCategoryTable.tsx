@@ -23,21 +23,29 @@ import { EmptyState } from "~/components/EmptyState";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { api } from "~/trpc/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 
 export function AssignmentCategoryTable() {
   const { t } = useLocale();
-  const categoriesQuery = api.assignment.categories.useQuery();
-  const utils = api.useUtils();
-  const deleteCategoryMutation = api.assignment.deleteCategory.useMutation({
-    onSettled: () => utils.assignment.categories.invalidate(),
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const categoriesQuery = useQuery(trpc.assignment.categories.queryOptions());
+
+  const deleteCategoryMutation = useMutation(
+    trpc.assignment.deleteCategory.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.assignment.categories.pathFilter()
+        );
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const confirm = useConfirm();
   return (
     <div className="rounded-lg border">

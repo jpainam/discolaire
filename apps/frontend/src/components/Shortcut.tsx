@@ -28,12 +28,13 @@ import {
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 import { env } from "~/env";
 import { useLocale } from "~/i18n";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { SimpleTooltip } from "./simple-tooltip";
 
 type Shortcut = RouterOutputs["shortcut"]["search"][number];
@@ -44,10 +45,14 @@ export function Shortcut() {
     void setSearchQuery(value);
   }, 1000);
   const pathname = usePathname();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
-  const shortcutsQuery = api.shortcut.search.useQuery({
-    query: searchQuery,
-  });
+  const shortcutsQuery = useQuery(
+    trpc.shortcut.search.queryOptions({
+      query: searchQuery,
+    })
+  );
 
   const [isOpen, setIsOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -55,41 +60,39 @@ export function Shortcut() {
   const [editTitle, setEditTitle] = useState("");
   const [editUrl, setEditUrl] = useState("");
 
-  const utils = api.useUtils();
-
-  const addShortcut = api.shortcut.create.useMutation({
-    onSettled: async () => {
-      await utils.shortcut.invalidate();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("added_successfully"), { id: 0 });
-    },
-  });
-  const deleteShortcut = api.shortcut.delete.useMutation({
-    onSettled: async () => {
-      await utils.shortcut.invalidate();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-  });
-  const updateShortcut = api.shortcut.update.useMutation({
-    onSettled: async () => {
-      await utils.shortcut.invalidate();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-    },
-  });
+  const addShortcut = useMutation(
+    trpc.shortcut.create.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.shortcut.pathFilter());
+        toast.success(t("added_successfully"), { id: 0 });
+      },
+    })
+  );
+  const deleteShortcut = useMutation(
+    trpc.shortcut.delete.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.shortcut.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+    })
+  );
+  const updateShortcut = useMutation(
+    trpc.shortcut.update.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.shortcut.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+      },
+    })
+  );
 
   const addCurrentPageToShortcuts = () => {
     const newShortcut = {

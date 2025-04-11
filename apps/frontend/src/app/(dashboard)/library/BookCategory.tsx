@@ -24,6 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Pencil, PlusIcon, TrashIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -32,35 +33,37 @@ import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 export function BookCategory() {
-  const categoryQuery = api.book.categories.useQuery();
-  const utils = api.useUtils();
-  const deleteCategory = api.book.deleteCategory.useMutation({
-    onSettled: () => {
-      void utils.book.categories.invalidate();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const categoryQuery = useQuery(trpc.book.categories.queryOptions());
+
+  const deleteCategory = useMutation(
+    trpc.book.deleteCategory.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.book.categories.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+    })
+  );
   const { t } = useLocale();
   const { openModal } = useModal();
   const canUpdateCategory = useCheckPermission(
     "library",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const canCreateCategory = useCheckPermission(
     "library",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const canDeleteCategory = useCheckPermission(
     "library",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
 
   return (
@@ -171,31 +174,33 @@ function CreateEditCategory({
       name: category?.name ?? "",
     },
   });
-  const utils = api.useUtils();
-  const createCategory = api.book.createCategory.useMutation({
-    onSettled: () => {
-      void utils.book.categories.invalidate();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeModal();
-    },
-  });
-  const updateCategory = api.book.updateCategory.useMutation({
-    onSettled: () => {
-      void utils.book.categories.invalidate();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      closeModal();
-    },
-  });
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
+
+  const createCategory = useMutation(
+    trpc.book.createCategory.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.book.categories.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+    })
+  );
+  const updateCategory = useMutation(
+    trpc.book.updateCategory.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.book.categories.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+    })
+  );
   const onSubmit = (data: z.infer<typeof createEditCategorySchema>) => {
     if (category) {
       toast.loading(t("updating"), { id: 0 });

@@ -17,8 +17,9 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const createEditRoleSchema = z.object({
   name: z.string(),
@@ -42,27 +43,33 @@ export function CreateEditRole({
   });
   const { closeModal } = useModal();
   const { t } = useLocale();
-  const utils = api.useUtils();
-  const createRoleMutation = api.role.create.useMutation({
-    onSettled: () => utils.role.invalidate(),
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const updateRoleMutation = api.role.update.useMutation({
-    onSettled: () => utils.role.invalidate(),
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const createRoleMutation = useMutation(
+    trpc.role.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.role.all.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const updateRoleMutation = useMutation(
+    trpc.role.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.role.all.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const onSubmit = (data: z.infer<typeof createEditRoleSchema>) => {
     if (id) {
       toast.loading(t("updating"), { id: 0 });

@@ -35,7 +35,8 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { api } from "~/trpc/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 import { selectedPoliciesAtom } from "./_selected_policies_atom";
 import { CreateEditPolicy } from "./CreateEditPolicy";
 
@@ -51,27 +52,34 @@ export function PolicyTable({
   const [q] = useQueryState("q", {
     defaultValue: "",
   });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
-  const policiesQuery = api.policy.all.useQuery({ q, category: "system" });
+  const policiesQuery = useQuery(
+    trpc.policy.all.queryOptions({ q, category: "system" })
+  );
   const { t } = useLocale();
-  const utils = api.useUtils();
+
   const { openModal } = useModal();
-  const deletePolicyMutation = api.policy.delete.useMutation({
-    onSettled: () => utils.policy.invalidate(),
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+
+  const deletePolicyMutation = useMutation(
+    trpc.policy.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.policy.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const confirm = useConfirm();
 
   const toggleSelection = (id: string) => {
     setSelectedPolicies((prev) =>
       prev.includes(id)
         ? prev.filter((policyId) => policyId !== id)
-        : [...prev, id],
+        : [...prev, id]
     );
   };
 
@@ -79,7 +87,7 @@ export function PolicyTable({
     setExpandedPolicies((prev) =>
       prev.includes(id)
         ? prev.filter((policyId) => policyId !== id)
-        : [...prev, id],
+        : [...prev, id]
     );
   };
 

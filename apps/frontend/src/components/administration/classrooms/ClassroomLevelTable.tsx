@@ -15,26 +15,33 @@ import { Checkbox } from "@repo/ui/components/checkbox";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
-import { api } from "~/trpc/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 import { selectedClassroomLevelAtom } from "./_atom";
 import { CreateEditLevel } from "./CreateEditLevel";
 
 export function ClassroomLevelTable() {
-  const classroomLevelsQuery = api.classroomLevel.all.useQuery();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const classroomLevelsQuery = useQuery(trpc.classroomLevel.all.queryOptions());
   const [selectedLevels, setSelectedLevels] = useAtom(
-    selectedClassroomLevelAtom,
+    selectedClassroomLevelAtom
   );
-  const utils = api.useUtils();
+
   const { t } = useLocale();
-  const updateLevelOrder = api.classroomLevel.updateOrder.useMutation({
-    onSettled: () => utils.classroomLevel.invalidate(),
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-    },
-  });
+  const updateLevelOrder = useMutation(
+    trpc.classroomLevel.updateOrder.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.classroomLevel.all.pathFilter()
+        );
+        toast.success(t("updated_successfully"), { id: 0 });
+      },
+    })
+  );
 
   const [items, setItems] = useState<
     { id: string; name: string; order: number }[]
@@ -48,7 +55,7 @@ export function ClassroomLevelTable() {
           levelId: level.id,
           order: index,
         };
-      },
+      }
     );
 
     updateLevelOrder.mutate(levelWithOrders);
@@ -88,7 +95,7 @@ export function ClassroomLevelTable() {
                   setSelectedLevels([...selectedLevels, item.id]);
                 } else {
                   setSelectedLevels(
-                    selectedLevels.filter((id) => id !== item.id),
+                    selectedLevels.filter((id) => id !== item.id)
                   );
                 }
               }}

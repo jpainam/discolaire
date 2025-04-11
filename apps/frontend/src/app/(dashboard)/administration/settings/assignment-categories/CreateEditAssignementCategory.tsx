@@ -17,8 +17,9 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const createAssignmentCategorySchema = z.object({
   name: z.string().min(1),
@@ -36,37 +37,41 @@ export function CreateEditAssignmentCategory({
       name: name ?? "",
     },
   });
-  const utils = api.useUtils();
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
+
   const { t } = useLocale();
-  const createAssignmentCategoryMutation =
-    api.assignment.createCategory.useMutation({
-      onSettled: async () => {
-        await utils.assignment.categories.invalidate();
-      },
-      onSuccess: () => {
+  const createAssignmentCategoryMutation = useMutation(
+    trpc.assignment.createCategory.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.assignment.categories.pathFilter()
+        );
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    });
+    })
+  );
 
   const { closeModal } = useModal();
 
-  const updateAssignmentCategoryMutation =
-    api.assignment.updateCategory.useMutation({
-      onSettled: async () => {
-        await utils.assignment.categories.invalidate();
-      },
-      onSuccess: () => {
+  const updateAssignmentCategoryMutation = useMutation(
+    trpc.assignment.updateCategory.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.assignment.categories.pathFilter()
+        );
         toast.success(t("updated_successfully"), { id: 0 });
         closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    });
+    })
+  );
 
   const onSubmit = (data: z.infer<typeof createAssignmentCategorySchema>) => {
     if (id) {
