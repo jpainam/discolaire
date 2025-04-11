@@ -111,7 +111,7 @@ export const enrollmentRouter = createTRPCRouter({
       });
     }),
 
-  getUnEnrolledStudents: protectedProcedure
+  unenrolled: protectedProcedure
     .input(
       z.object({
         limit: z.number().optional().default(10),

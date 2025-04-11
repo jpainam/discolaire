@@ -26,9 +26,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const createEditTimetable = z.object({
   startTime: z.string().min(1),
@@ -66,23 +67,25 @@ export function CreateEditLesson({
       repeat: "weekly" as const,
     },
   });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
   const { t } = useLocale();
-  const utils = api.useUtils();
+
   const { closeModal } = useModal();
 
-  const createLessonMutation = api.lesson.create.useMutation({
-    onSettled: async () => {
-      await utils.lesson.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const createLessonMutation = useMutation(
+    trpc.lesson.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.lesson.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const dayNames = [
     "sunday",
     "monday",

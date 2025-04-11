@@ -17,39 +17,42 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { CreateEditLesson } from "./CreateEditLesson";
 
 export function ClassroomTimeTableHeader() {
   const { t } = useLocale();
   const confirm = useConfirm();
   const params = useParams<{ id: string }>();
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
   const { openModal } = useModal();
   const canDeleteTimetable = useCheckPermission(
     "timetable",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canCreateTimetable = useCheckPermission(
     "timetable",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
-  const clearClassroomLessonMutation = api.lesson.clearByClassroom.useMutation({
-    onSettled: async () => {
-      await utils.lesson.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("deleted_successfully"), { id: 0 });
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const clearClassroomLessonMutation = useMutation(
+    trpc.lesson.clearByClassroom.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.lesson.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1">
       <CalendarDays className="h-4 w-4" />

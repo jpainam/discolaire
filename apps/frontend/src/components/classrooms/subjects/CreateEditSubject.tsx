@@ -21,11 +21,12 @@ import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { CourseSelector } from "~/components/shared/selects/CourseSelector";
 import { StaffSelector } from "~/components/shared/selects/StaffSelector";
 import rangeMap from "~/lib/range-map";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { SelectField } from "../../shared/forms/SelectField";
 
 const createEditSubjectSchema = z.object({
@@ -42,7 +43,8 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
   const { t } = useLocale();
   const { closeSheet } = useSheet();
   const params = useParams<{ id: string }>();
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
   const form = useForm({
     resolver: zodResolver(createEditSubjectSchema),
@@ -55,32 +57,35 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
     },
   });
 
-  const subjectGroupsQuery = api.subjectGroup.all.useQuery();
-  const subjectCreateMutation = api.subject.create.useMutation({
-    onSettled: async () => {
-      await utils.classroom.subjects.invalidate(params.id);
-    },
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-
-      closeSheet();
-    },
-    onError: (err) => {
-      toast.error(err.message, { id: 0 });
-    },
-  });
-  const subjectUpdateMutation = api.subject.update.useMutation({
-    onSettled: async () => {
-      await utils.classroom.subjects.invalidate(params.id);
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      closeSheet();
-    },
-    onError: (err) => {
-      toast.error(err.message, { id: 0 });
-    },
-  });
+  const subjectGroupsQuery = useQuery(trpc.subjectGroup.all.queryOptions());
+  const subjectCreateMutation = useMutation(
+    trpc.subject.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.classroom.subjects.pathFilter()
+        );
+        toast.success(t("created_successfully"), { id: 0 });
+        closeSheet();
+      },
+      onError: (err) => {
+        toast.error(err.message, { id: 0 });
+      },
+    })
+  );
+  const subjectUpdateMutation = useMutation(
+    trpc.subject.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.classroom.subjects.pathFilter()
+        );
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeSheet();
+      },
+      onError: (err) => {
+        toast.error(err.message, { id: 0 });
+      },
+    })
+  );
 
   const onSubmit = (data: z.infer<typeof createEditSubjectSchema>) => {
     const formValues = {

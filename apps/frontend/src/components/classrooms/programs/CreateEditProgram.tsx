@@ -30,10 +30,11 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 //import { html_content } from "./editor-content";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { RouterOutputs } from "@repo/api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { TiptapEditor } from "~/components/tiptap-editor";
 
@@ -64,21 +65,25 @@ export function CreateEditProgram({
     },
     resolver: zodResolver(programFormSchema),
   });
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
   const canUpdateSubject = useCheckPermission(
     "subject",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
-  const updateSubjectProgram = api.subject.updateProgram.useMutation({
-    onSettled: () => utils.subject.invalidate(),
-    onSuccess: () => {
-      toast.success(t("added_successfully"), { id: 0 });
-      router.push(pathname.split("/").slice(0, -1).join("/"));
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const updateSubjectProgram = useMutation(
+    trpc.subject.updateProgram.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.subject.get.pathFilter());
+        toast.success(t("added_successfully"), { id: 0 });
+        router.push(pathname.split("/").slice(0, -1).join("/"));
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   const submitProgram = (data: z.infer<typeof programFormSchema>) => {
     toast.loading(t("updating"), { id: 0 });
@@ -140,7 +145,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=pdf`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -151,7 +156,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=pdf&subjectId=${subject.id}`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -163,7 +168,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=csv`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -174,7 +179,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=csv&subjectId=${subject.id}`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >

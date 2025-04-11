@@ -3,7 +3,6 @@
 import { Check } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
-import { toast } from "sonner";
 
 import {
   Avatar,
@@ -25,10 +24,11 @@ import { useDebounce } from "~/hooks/use-debounce";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { randomAvatar } from "~/components/raw-images";
-import { getErrorMessage } from "~/lib/handle-error";
 import rangeMap from "~/lib/range-map";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
 export function EnrollStudent({ classroomId }: { classroomId: string }) {
@@ -38,12 +38,32 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
   const debounceValue = useDebounce(value, 500);
 
   const { t } = useLocale();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
-  const unenrollStudentsQuery = api.enrollment.getUnEnrolledStudents.useQuery({
-    q: debounceValue,
-  });
-  const utils = api.useUtils();
-  const createEnrollmentMutation = api.enrollment.create.useMutation();
+  const unenrollStudentsQuery = useQuery(
+    trpc.enrollment.unenrolled.queryOptions({
+      q: debounceValue,
+    })
+  );
+
+  const createEnrollmentMutation = useMutation(
+    trpc.enrollment.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.classroom.students.pathFilter()
+        );
+        await queryClient.invalidateQueries(
+          trpc.enrollment.unenrolled.pathFilter()
+        );
+        closeModal();
+        return t("enrolled_successfully");
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
@@ -81,15 +101,15 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
                     if (selectedIds.includes(stud.id)) {
                       return setSelectedIds(
                         selectedIds.filter(
-                          (selectedId) => selectedId !== stud.id,
-                        ),
+                          (selectedId) => selectedId !== stud.id
+                        )
                       );
                     }
 
                     return setSelectedIds(
                       unenrollStudentsQuery.data
                         .filter((u) => [...selectedIds, stud.id].includes(u.id))
-                        .map((u) => u.id),
+                        .map((u) => u.id)
                     );
                   }}
                 >
@@ -129,7 +149,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
           <div className="flex -space-x-2">
             {selectedIds.map((studId) => {
               const stud = unenrollStudentsQuery.data?.find(
-                (u) => u.id === studId,
+                (u) => u.id === studId
               );
               return (
                 <Avatar
@@ -163,25 +183,12 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
           isLoading={createEnrollmentMutation.isPending}
           disabled={selectedIds.length === 0}
           onClick={() => {
-            toast.promise(
-              createEnrollmentMutation.mutateAsync({
-                studentId: selectedIds,
-                classroomId: classroomId,
-                observation: "",
-              }),
-              {
-                loading: t("enrolling"),
-                success: async () => {
-                  await utils.classroom.students.invalidate(classroomId);
-                  await utils.enrollment.getUnEnrolledStudents.invalidate();
-                  closeModal();
-                  return t("enrolled_successfully");
-                },
-                error: (error) => {
-                  return getErrorMessage(error);
-                },
-              },
-            );
+            toast.loading(t("Processing..."), { id: 0 });
+            createEnrollmentMutation.mutate({
+              studentId: selectedIds,
+              classroomId: classroomId,
+              observation: "",
+            });
           }}
         >
           {t("enroll")}

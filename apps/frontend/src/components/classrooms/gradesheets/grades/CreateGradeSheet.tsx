@@ -27,11 +27,12 @@ import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { RouterOutputs } from "@repo/api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { CreateGradeSheetHeader } from "./CreateGradeSheetHeader";
 
@@ -48,7 +49,7 @@ const createGradeSchema = z.object({
       studentId: z.string(),
       absent: z.boolean().default(false),
       grade: z.string().default(""),
-    }),
+    })
   ),
 });
 
@@ -71,7 +72,7 @@ export function CreateGradeSheet({
         }
       }
     },
-    [], // No dependencies, so this function is only created once
+    [] // No dependencies, so this function is only created once
   );
   const searchParams = useSearchParams();
   const form = useForm({
@@ -92,19 +93,23 @@ export function CreateGradeSheet({
     },
   });
   const router = useRouter();
-  const utils = api.useUtils();
-  const createGradesheetMutation = api.gradeSheet.create.useMutation({
-    onSettled: async () => {
-      await utils.gradeSheet.invalidate();
-    },
-    onSuccess: (result) => {
-      toast.success(t("created_successfully"), { id: 0 });
-      router.push(routes.classrooms.gradesheets.details(params.id, result.id));
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const createGradesheetMutation = useMutation(
+    trpc.gradeSheet.create.mutationOptions({
+      onSuccess: async (result) => {
+        await queryClient.invalidateQueries(trpc.gradeSheet.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        router.push(
+          routes.classrooms.gradesheets.details(params.id, result.id)
+        );
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   const onSubmit = (data: z.infer<typeof createGradeSchema>) => {
     toast.loading(t("creating"), { id: 0 });
     const values = {

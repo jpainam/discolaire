@@ -26,11 +26,11 @@ import { useDebounce } from "~/hooks/use-debounce";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { randomAvatar } from "~/components/raw-images";
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
-import { getErrorMessage } from "~/lib/handle-error";
 import rangeMap from "~/lib/range-map";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
 type Contact = NonNullable<
@@ -41,17 +41,33 @@ export function LinkContact({ studentId }: { studentId: string }) {
   const { t } = useLocale();
   const [value, setValue] = useState("");
   const debounceValue = useDebounce(value, 500);
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const [selectedContacts, setSelectedContacts] = React.useState<Contact[]>([]);
   const [relationship, setRelationship] = useState<string | null>(null);
 
-  const studentUnLinkedContact = api.student.unlinkedContacts.useQuery({
-    studentId: studentId,
-    q: debounceValue,
-  });
+  const studentUnLinkedContact = useQuery(
+    trpc.student.unlinkedContacts.queryOptions({
+      studentId: studentId,
+      q: debounceValue,
+    })
+  );
 
   const { closeModal } = useModal();
-  const createStudentContactMutation = api.studentContact.create2.useMutation();
-  const utils = api.useUtils();
+  const createStudentContactMutation = useMutation(
+    trpc.studentContact.create2.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.contact.students.pathFilter());
+        await queryClient.invalidateQueries(trpc.student.contacts.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
@@ -99,16 +115,15 @@ export function LinkContact({ studentId }: { studentId: string }) {
                     if (selectedContacts.includes(contact)) {
                       return setSelectedContacts(
                         selectedContacts.filter(
-                          (selectedContact) =>
-                            selectedContact.id !== contact.id,
-                        ),
+                          (selectedContact) => selectedContact.id !== contact.id
+                        )
                       );
                     }
 
                     return setSelectedContacts(
                       [...studentUnLinkedContact.data].filter((u) =>
-                        [...selectedContacts, contact].includes(u),
-                      ),
+                        [...selectedContacts, contact].includes(u)
+                      )
                     );
                   }}
                 >
@@ -178,26 +193,14 @@ export function LinkContact({ studentId }: { studentId: string }) {
               toast.error(t("please_select_relationship"));
               return;
             }
-            toast.promise(
-              createStudentContactMutation.mutateAsync({
-                contactId: selectedContacts.map((contact) => contact.id),
-                studentId: studentId,
-                data: {
-                  relationshipId: Number(relationship),
-                },
-              }),
-              {
-                success: async () => {
-                  await utils.contact.students.invalidate();
-                  await utils.student.contacts.invalidate();
-                  closeModal();
-                  return t("added_successfully");
-                },
-                error: (error) => {
-                  return getErrorMessage(error);
-                },
+            toast.loading(t("Processing..."), { id: 0 });
+            createStudentContactMutation.mutate({
+              contactId: selectedContacts.map((contact) => contact.id),
+              studentId: studentId,
+              data: {
+                relationshipId: Number(relationship),
               },
-            );
+            });
           }}
         >
           {createStudentContactMutation.isPending && (

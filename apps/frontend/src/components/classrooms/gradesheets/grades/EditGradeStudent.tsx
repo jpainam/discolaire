@@ -46,10 +46,10 @@ export function EditGradeStudent({
     trpc.grade.update.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.classroom.gradesheets.pathFilter()
+          trpc.classroom.gradesheets.pathFilter(),
         );
         await queryClient.invalidateQueries(
-          trpc.gradeSheet.grades.pathFilter()
+          trpc.gradeSheet.grades.pathFilter(),
         );
         toast.success(t("updated_successfully"), { id: 0 });
         closeModal();
@@ -57,7 +57,7 @@ export function EditGradeStudent({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const onSubmit = (data: z.infer<typeof editGradeStudentSchema>) => {
