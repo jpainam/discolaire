@@ -49,7 +49,7 @@ const createGradeSchema = z.object({
       studentId: z.string(),
       absent: z.boolean().default(false),
       grade: z.string().default(""),
-    })
+    }),
   ),
 });
 
@@ -72,7 +72,7 @@ export function CreateGradeSheet({
         }
       }
     },
-    [] // No dependencies, so this function is only created once
+    [], // No dependencies, so this function is only created once
   );
   const searchParams = useSearchParams();
   const form = useForm({
@@ -102,13 +102,13 @@ export function CreateGradeSheet({
         await queryClient.invalidateQueries(trpc.gradeSheet.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
         router.push(
-          routes.classrooms.gradesheets.details(params.id, result.id)
+          routes.classrooms.gradesheets.details(params.id, result.id),
         );
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const onSubmit = (data: z.infer<typeof createGradeSchema>) => {
     toast.loading(t("creating"), { id: 0 });

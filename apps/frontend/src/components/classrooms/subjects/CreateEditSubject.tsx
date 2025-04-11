@@ -62,7 +62,7 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
     trpc.subject.create.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.classroom.subjects.pathFilter()
+          trpc.classroom.subjects.pathFilter(),
         );
         toast.success(t("created_successfully"), { id: 0 });
         closeSheet();
@@ -70,13 +70,13 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
       onError: (err) => {
         toast.error(err.message, { id: 0 });
       },
-    })
+    }),
   );
   const subjectUpdateMutation = useMutation(
     trpc.subject.update.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.classroom.subjects.pathFilter()
+          trpc.classroom.subjects.pathFilter(),
         );
         toast.success(t("updated_successfully"), { id: 0 });
         closeSheet();
@@ -84,7 +84,7 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
       onError: (err) => {
         toast.error(err.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const onSubmit = (data: z.infer<typeof createEditSubjectSchema>) => {

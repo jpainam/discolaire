@@ -84,7 +84,7 @@ export function CreateEditLesson({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const dayNames = [
     "sunday",

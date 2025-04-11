@@ -39,7 +39,7 @@ export const enrollmentRouter = createTRPCRouter({
       );
       return enrollmentWithRepeating;
     }),
-  getEnrolledStudents: protectedProcedure
+  enrolled: protectedProcedure
     .input(z.object({ schoolYearId: z.string().optional() }))
     .query(async ({ ctx, input }) => {
       const data = await ctx.db.student.findMany({

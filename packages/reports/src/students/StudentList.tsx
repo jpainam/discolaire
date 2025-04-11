@@ -12,7 +12,7 @@ export function StudentList({
 }: {
   school: RouterOutputs["school"]["getSchool"];
 
-  students: RouterOutputs["enrollment"]["getEnrolledStudents"];
+  students: RouterOutputs["enrollment"]["enrolled"];
 }) {
   const w = [0.1, 0.3, 0.3, 0.2, 0.1];
   //const { t, i18n } = await getServerTranslations();
