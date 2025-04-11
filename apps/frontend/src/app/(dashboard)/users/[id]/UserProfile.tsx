@@ -1,6 +1,5 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { RouterOutputs } from "@repo/api";
 import {
   Avatar,
   AvatarFallback,
@@ -24,22 +23,27 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { t } from "i18next";
+import { ImageMinus, ImageUpIcon } from "lucide-react";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { api } from "~/trpc/react";
+import { ChangeAvatarButton } from "~/components/users/ChangeAvatarButton";
+import { api, useTRPC } from "~/trpc/react";
 
 const usernameSchema = z.object({
   username: z.string().min(3),
   email: z.string().optional(),
   name: z.string().optional(),
 });
-export function UserProfile({
-  user,
-}: {
-  user: NonNullable<RouterOutputs["user"]["get"]>;
-}) {
+export function UserProfile() {
+  const trpc = useTRPC();
+  const params = useParams<{ id: string }>();
+  const { data: user } = useSuspenseQuery(
+    trpc.user.get.queryOptions(params.id)
+  );
   const form = useForm({
     resolver: zodResolver(usernameSchema),
     defaultValues: {
@@ -64,6 +68,25 @@ export function UserProfile({
       email: data.email,
       name: data.name,
     });
+  };
+  const queryClient = useQueryClient();
+
+  const handleDeleteAvatar = async (userId: string) => {
+    toast.loading(t("deleting"), { id: 0 });
+    const response = await fetch("/api/upload/avatars", {
+      method: "DELETE",
+      body: JSON.stringify({
+        userId: userId,
+      }),
+    });
+    if (response.ok) {
+      toast.success(t("deleted_successfully"), {
+        id: 0,
+      });
+      await queryClient.invalidateQueries(trpc.user.get.pathFilter());
+    } else {
+      toast.error(response.statusText, { id: 0 });
+    }
   };
   return (
     <div className="mx-auto max-w-3xl">
@@ -90,9 +113,25 @@ export function UserProfile({
                       {user.name?.slice(0, 2) ?? "N/A"}
                     </AvatarFallback>
                   </Avatar>
-                  <Button variant="outline" type="button" size="sm">
-                    {t("change_avatar")}
-                  </Button>
+                  {user.avatar ? (
+                    <Button
+                      onClick={() => {
+                        void handleDeleteAvatar(user.id);
+                      }}
+                      variant={"outline"}
+                      size={"sm"}
+                    >
+                      <ImageMinus />
+                      {t("Remove avatar")}
+                    </Button>
+                  ) : (
+                    <ChangeAvatarButton entityId={user.id} entityType="contact">
+                      <Button type="button" variant={"outline"} size={"sm"}>
+                        <ImageUpIcon />
+                        {t("change_avatar")}
+                      </Button>
+                    </ChangeAvatarButton>
+                  )}
                 </div>
 
                 <div className="flex-1 space-y-4">

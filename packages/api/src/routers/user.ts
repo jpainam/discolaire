@@ -123,7 +123,7 @@ export const userRouter = createTRPCRouter({
   get: protectedProcedure
     .input(z.string().min(1))
     .query(async ({ ctx, input }) => {
-      return ctx.db.user.findUnique({
+      return ctx.db.user.findUniqueOrThrow({
         include: {
           school: true,
         },
