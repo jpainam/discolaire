@@ -109,31 +109,31 @@ export function CreateEditAssignment({
       onSuccess: async (result) => {
         await queryClient.invalidateQueries(trpc.assignment.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.classroom.assignments.pathFilter()
+          trpc.classroom.assignments.pathFilter(),
         );
         toast.success(t("created_successfully"), { id: 0 });
         router.push(
-          routes.classrooms.assignments.details(params.id, result.id)
+          routes.classrooms.assignments.details(params.id, result.id),
         );
       },
-    })
+    }),
   );
   const updateAssignmentMutation = useMutation(
     trpc.assignment.update.mutationOptions({
       onSuccess: async (result) => {
         await queryClient.invalidateQueries(trpc.assignment.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.classroom.assignments.pathFilter()
+          trpc.classroom.assignments.pathFilter(),
         );
         toast.success(t("updated_successfully"), { id: 0 });
         router.push(
-          routes.classrooms.assignments.details(params.id, result.id)
+          routes.classrooms.assignments.details(params.id, result.id),
         );
       },
       onError: (err) => {
         toast.error(err.message, { id: 0 });
       },
-    })
+    }),
   );
   const onSubmit = (data: z.infer<typeof assignmentSchema>) => {
     const values = {
@@ -395,8 +395,8 @@ export function CreateEditAssignment({
                                     ])
                                   : field.onChange(
                                       (field.value ?? []).filter(
-                                        (value) => value !== item.value
-                                      )
+                                        (value) => value !== item.value,
+                                      ),
                                     );
                               }}
                             />

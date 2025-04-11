@@ -32,7 +32,7 @@ export function UserRoleTable() {
   const params = useParams<{ id: string }>();
 
   const userRolesQuery = useQuery(
-    trpc.user.roles.queryOptions({ userId: params.id })
+    trpc.user.roles.queryOptions({ userId: params.id }),
   );
 
   const attachRoleMutation = useMutation(
@@ -46,7 +46,7 @@ export function UserRoleTable() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const remoteRoleMutation = useMutation(
     trpc.role.removeRole.mutationOptions({
@@ -58,7 +58,7 @@ export function UserRoleTable() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const debounced = useDebouncedCallback((value: string, checked: boolean) => {
     if (checked) {

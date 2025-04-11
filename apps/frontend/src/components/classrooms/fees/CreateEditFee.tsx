@@ -20,9 +20,10 @@ import {
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DatePicker } from "~/components/DatePicker";
 import { InputField } from "~/components/shared/forms/input-field";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const createEditFeeSchema = z.object({
   code: z.string().min(1),
@@ -54,33 +55,35 @@ export function CreateEditFee({
   });
 
   const { closeModal } = useModal();
-  const utils = api.useUtils();
-  const updateFeeMutation = api.fee.update.useMutation({
-    onSettled: async () => {
-      await utils.fee.invalidate();
-      await utils.classroom.fees.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const createFeeMutation = api.fee.create.useMutation({
-    onSettled: async () => {
-      await utils.fee.invalidate();
-      await utils.classroom.fees.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const updateFeeMutation = useMutation(
+    trpc.fee.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.fee.all.pathFilter());
+        await queryClient.invalidateQueries(trpc.classroom.fees.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
+  const createFeeMutation = useMutation(
+    trpc.fee.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.fee.all.pathFilter());
+        await queryClient.invalidateQueries(trpc.classroom.fees.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
 
   const onSubmit: SubmitHandler<z.infer<typeof createEditFeeSchema>> = (
     data: z.infer<typeof createEditFeeSchema>,

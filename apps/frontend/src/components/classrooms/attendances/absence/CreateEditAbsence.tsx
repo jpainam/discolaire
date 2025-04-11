@@ -43,7 +43,7 @@ const attendanceSchema = z.object({
       id: z.string().min(1),
       absence: z.coerce.number().nullish(),
       justify: z.coerce.number().nullable(),
-    })
+    }),
   ),
   notifyParents: z.boolean().default(true),
   notifyStudents: z.boolean().default(true),
@@ -80,17 +80,17 @@ export function CreateEditAbsence({
     trpc.absence.createClassroom.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.absence.byClassroom.pathFilter()
+          trpc.absence.byClassroom.pathFilter(),
         );
         toast.success(t("added_successfully"), { id: 0 });
         router.push(
-          `${routes.classrooms.attendances.index(classroomId)}?type=absence&term=${termId}`
+          `${routes.classrooms.attendances.index(classroomId)}?type=absence&term=${termId}`,
         );
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const onSubmit = (data: z.infer<typeof attendanceSchema>) => {
     if (!termId) {
@@ -108,7 +108,7 @@ export function CreateEditAbsence({
         toast.error(
           t("absence_cannot_be_less_than_justify_for", {
             name: getFullName(std),
-          })
+          }),
         );
         hasError = true;
         break;

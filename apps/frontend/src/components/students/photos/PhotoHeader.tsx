@@ -8,9 +8,10 @@ import { Label } from "@repo/ui/components/label";
 import { useUpload } from "~/hooks/use-upload";
 import { useLocale } from "~/i18n";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getErrorMessage } from "~/lib/handle-error";
 import { useSchool } from "~/providers/SchoolProvider";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function PhotoHeader() {
@@ -35,18 +36,21 @@ export function PhotoHeader() {
     );
   };
   const params = useParams<{ id: string }>();
-  const utils = api.useUtils();
-  const addStudentPhotoMutation = api.student.addPhoto.useMutation({
-    onSuccess: () => {
-      toast.success(t("added_successfully"));
-    },
-    onSettled: async () => {
-      await utils.student.get.invalidate(params.id);
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const addStudentPhotoMutation = useMutation(
+    trpc.student.addPhoto.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.student.get.pathFilter());
+        toast.success(t("added_successfully"));
+      },
+
+      onError: (err) => {
+        toast.error(err.message);
+      },
+    }),
+  );
   useEffect(() => {
     if (uploadedFiles.length > 0) {
       const uploadedFile = uploadedFiles[0];

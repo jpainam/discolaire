@@ -2,12 +2,12 @@ import { XIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { useConfirm } from "~/providers/confirm-dialog";
 import { Input } from "@repo/ui/components/input";
 import { useLocale } from "~/i18n";
+import { useConfirm } from "~/providers/confirm-dialog";
 
-import { getErrorMessage } from "~/lib/handle-error";
-import { api } from "~/trpc/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 import type { AppreciationCategory } from "~/types/appreciation";
 
 export function CreateEditAppreciationCategory({
@@ -19,13 +19,49 @@ export function CreateEditAppreciationCategory({
 }) {
   const [value, setValue] = useState(category?.name);
   const confirm = useConfirm();
-  const deleteAppreciationCategory =
-    api.appreciation.deleteCategory.useMutation();
-  const updateAppreciationCategory =
-    api.appreciation.updateCategory.useMutation();
-  const createAppreciationCategory =
-    api.appreciation.createCategory.useMutation();
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const deleteAppreciationCategory = useMutation(
+    trpc.appreciation.deleteCategory.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.appreciation.categories.pathFilter(),
+        );
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
+  const updateAppreciationCategory = useMutation(
+    trpc.appreciation.updateCategory.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.appreciation.categories.pathFilter(),
+        );
+        toast.success(t("updated_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
+  const createAppreciationCategory = useMutation(
+    trpc.appreciation.createCategory.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.appreciation.categories.pathFilter(),
+        );
+        toast.success(t("created_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
+
   const { t } = useLocale();
   return (
     <div className="mb-4 flex flex-col px-1">
@@ -59,20 +95,8 @@ export function CreateEditAppreciationCategory({
                 description: t("delete_confirmation"),
               });
               if (isConfirmed) {
-                toast.promise(
-                  deleteAppreciationCategory.mutateAsync(category.id),
-                  {
-                    loading: t("deleting"),
-                    success: async () => {
-                      await utils.appreciation.categories.invalidate();
-                      onCompleted?.();
-                      return t("deleted");
-                    },
-                    error: (error) => {
-                      return getErrorMessage(error);
-                    },
-                  },
-                );
+                toast.loading(t("deleting"), { id: 0 });
+                deleteAppreciationCategory.mutate(category.id);
               }
             }}
           >
@@ -85,40 +109,16 @@ export function CreateEditAppreciationCategory({
             className="cursor-pointer text-xs hover:text-muted-foreground hover:underline"
             onClick={() => {
               if (category) {
-                toast.promise(
-                  updateAppreciationCategory.mutateAsync({
-                    id: category.id,
-                    name: value ?? "N/A",
-                  }),
-                  {
-                    loading: t("updating"),
-                    success: () => {
-                      void utils.appreciation.categories.invalidate();
-                      onCompleted?.();
-                      return t("updated");
-                    },
-                    error: (error) => {
-                      return getErrorMessage(error);
-                    },
-                  },
-                );
+                toast.loading(t("updating"), { id: 0 });
+                updateAppreciationCategory.mutate({
+                  id: category.id,
+                  name: value ?? "N/A",
+                });
               } else {
-                toast.promise(
-                  createAppreciationCategory.mutateAsync({
-                    name: value ?? "N/A",
-                  }),
-                  {
-                    loading: t("adding"),
-                    success: async () => {
-                      await utils.appreciation.categories.invalidate();
-                      onCompleted?.();
-                      return t("created");
-                    },
-                    error: (error) => {
-                      return getErrorMessage(error);
-                    },
-                  },
-                );
+                toast.loading(t("creating"), { id: 0 });
+                createAppreciationCategory.mutate({
+                  name: value ?? "N/A",
+                });
               }
             }}
           >

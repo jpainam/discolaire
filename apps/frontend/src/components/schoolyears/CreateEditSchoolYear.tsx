@@ -18,9 +18,10 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { DatePicker } from "~/components/DatePicker";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const schoolYearSchema = z.object({
   name: z.string().min(1),
@@ -53,27 +54,33 @@ export function CreateEditSchoolYear({
     },
   });
   const { closeModal } = useModal();
-  const utils = api.useUtils();
-  const updateSchoolYearMutation = api.schoolYear.update.useMutation({
-    onSettled: () => utils.schoolYear.invalidate(),
-    onSuccess: () => {
-      toast.success(t("updated_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
-  const createSchoolYearMutation = api.schoolYear.create.useMutation({
-    onSettled: () => utils.schoolYear.invalidate(),
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const updateSchoolYearMutation = useMutation(
+    trpc.schoolYear.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.schoolYear.all.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
+  const createSchoolYearMutation = useMutation(
+    trpc.schoolYear.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.schoolYear.all.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
   const onSubmit = (data: z.infer<typeof schoolYearSchema>) => {
     const values = {
       startDate: data.start,

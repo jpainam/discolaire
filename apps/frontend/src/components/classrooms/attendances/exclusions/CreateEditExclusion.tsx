@@ -29,11 +29,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
 const attendanceSchema = z.object({
@@ -69,22 +70,26 @@ export function CreateEditExclusion({
       })),
     },
   });
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
   const router = useRouter();
-  const createExclusion = api.exclusion.createClassroom.useMutation({
-    onSettled: async () => {
-      await utils.exclusion.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("added_successfully"), { id: 0 });
-      router.push(
-        `/classrooms/${classroomId}/attendances?type=exclusion&term=${termId}`,
-      );
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const createExclusion = useMutation(
+    trpc.exclusion.createClassroom.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.exclusion.byClassroom.pathFilter(),
+        );
+        toast.success(t("added_successfully"), { id: 0 });
+        router.push(
+          `/classrooms/${classroomId}/attendances?type=exclusion&term=${termId}`,
+        );
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
   const onSubmit = (data: z.infer<typeof attendanceSchema>) => {
     if (!termId) {
       toast.error(t("select_term"));

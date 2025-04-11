@@ -32,13 +32,14 @@ import { useLocale } from "~/i18n";
 import { FileUploader } from "~/uploads/file-uploader";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { DatePicker } from "~/components/DatePicker";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { getErrorMessage } from "~/lib/handle-error";
 import { useSchool } from "~/providers/SchoolProvider";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
 const createEditVisitSchema = z.object({
@@ -62,7 +63,9 @@ export function CreateEditHealthVisit({
 }) {
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
-  const studentQuery = api.student.get.useQuery(params.id);
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const studentQuery = useQuery(trpc.student.get.queryOptions(params.id));
   const student = studentQuery.data;
   const form = useForm({
     resolver: zodResolver(createEditVisitSchema),
@@ -116,17 +119,20 @@ export function CreateEditHealthVisit({
   };
 
   const router = useRouter();
-  const utils = api.useUtils();
-  const createVisitMutation = api.health.createVisit.useMutation({
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      router.push(routes.students.health.index(params.id));
-    },
-    onSettled: () => utils.health.invalidate(),
-    onError: (err) => {
-      toast.error(err.message, { id: 0 });
-    },
-  });
+
+  const createVisitMutation = useMutation(
+    trpc.health.createVisit.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.health.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        router.push(routes.students.health.index(params.id));
+      },
+
+      onError: (err) => {
+        toast.error(err.message, { id: 0 });
+      },
+    }),
+  );
   const onSubmit = (data: z.infer<typeof createEditVisitSchema>) => {
     const values = {
       ...data,

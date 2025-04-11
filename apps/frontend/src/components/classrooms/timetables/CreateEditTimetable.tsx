@@ -25,9 +25,10 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const createEditTimetable = z.object({
   startTime: z.string().min(1),
@@ -82,22 +83,26 @@ export function CreateEditTimetable({
       daysOfWeek: daysOfWeek ?? [],
     },
   });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const { t } = useLocale();
-  const utils = api.useUtils();
+
   const { closeModal } = useModal();
 
-  const createTimetableMutation = api.timetable.create.useMutation({
-    onSettled: async () => {
-      await utils.timetable.invalidate();
-    },
-    onSuccess: () => {
-      toast.success(t("created_successfully"), { id: 0 });
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const createTimetableMutation = useMutation(
+    trpc.timetable.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.timetable.classroom.pathFilter(),
+        );
+        toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
 
   const dayNames = [
     "sunday",

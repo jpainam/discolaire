@@ -62,7 +62,7 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
     trpc.absence.createPreventAbsence.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.absence.byStudent.pathFilter()
+          trpc.absence.byStudent.pathFilter(),
         );
         setIsLoading(false);
         toast.success(t("created_successfully"), { id: 0 });
@@ -71,7 +71,7 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const { t } = useLocale();

@@ -60,7 +60,7 @@ export function ReinitializePassword() {
       onError: (err) => {
         toast.error(err.message);
       },
-    })
+    }),
   );
   function onSubmit(data: z.infer<typeof passwordFormSchema>) {
     toast.loading(t("updating"), { id: 0 });

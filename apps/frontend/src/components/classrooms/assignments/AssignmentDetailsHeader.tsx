@@ -38,11 +38,11 @@ export function AssignmentDetailsHeader({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.assignment.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.classroom.assignments.pathFilter()
+          trpc.classroom.assignments.pathFilter(),
         );
         toast.success(t("deleted_successfully"), { id: 0 });
       },
-    })
+    }),
   );
   const confirm = useConfirm();
 

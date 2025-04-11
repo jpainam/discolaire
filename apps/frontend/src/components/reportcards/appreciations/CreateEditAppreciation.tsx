@@ -2,12 +2,12 @@ import { XIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { useConfirm } from "~/providers/confirm-dialog";
 import { Textarea } from "@repo/ui/components/textarea";
 import { useLocale } from "~/i18n";
+import { useConfirm } from "~/providers/confirm-dialog";
 
-import { getErrorMessage } from "~/lib/handle-error";
-import { api } from "~/trpc/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 import type { Appreciation, AppreciationCategory } from "~/types/appreciation";
 
 export function CreateEditAppreciation({
@@ -22,13 +22,41 @@ export function CreateEditAppreciation({
   const [value, setValue] = useState(category?.name);
   const confirm = useConfirm();
   const { t } = useLocale();
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
-  const deleteAppreciationMutation = api.appreciation.delete.useMutation({
-    onSettled: () => utils.appreciation.invalidate(),
-  });
-  const createAppreciationMutation = api.appreciation.create.useMutation();
-  const updateAppreciationMutation = api.appreciation.update.useMutation();
+  const deleteAppreciationMutation = useMutation(
+    trpc.appreciation.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.appreciation.pathFilter());
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
+  const createAppreciationMutation = useMutation(
+    trpc.appreciation.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.appreciation.pathFilter());
+        toast.success(t("added_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
+  const updateAppreciationMutation = useMutation(
+    trpc.appreciation.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.appreciation.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
 
   return (
     <div className="mb-4 flex w-full flex-col px-1">
@@ -60,19 +88,8 @@ export function CreateEditAppreciation({
                 description: t("delete_confirmation"),
               });
               if (isConfirmed) {
-                toast.promise(
-                  deleteAppreciationMutation.mutateAsync(appreciation.id),
-                  {
-                    loading: t("deleting"),
-                    success: () => {
-                      onCompleted?.();
-                      return t("deleted");
-                    },
-                    error: (error) => {
-                      return getErrorMessage(error);
-                    },
-                  },
-                );
+                toast.loading(t("deleting"), { id: 0 });
+                deleteAppreciationMutation.mutate(appreciation.id);
               }
             }}
           >
@@ -89,24 +106,12 @@ export function CreateEditAppreciation({
                   toast.error(t("required"));
                   return;
                 }
-                toast.promise(
-                  updateAppreciationMutation.mutateAsync({
-                    content: value,
-                    id: appreciation.id,
-                    categoryId: category.id,
-                  }),
-                  {
-                    loading: t("updating"),
-                    success: async () => {
-                      await utils.appreciation.invalidate();
-                      onCompleted?.();
-                      return t("updated");
-                    },
-                    error: (error) => {
-                      return getErrorMessage(error);
-                    },
-                  },
-                );
+                toast.loading(t("updating"), { id: 0 });
+                updateAppreciationMutation.mutate({
+                  content: value,
+                  id: appreciation.id,
+                  categoryId: category.id,
+                });
               } else {
                 if (!value) {
                   toast.error(t("required"));
@@ -116,23 +121,11 @@ export function CreateEditAppreciation({
                   toast.error(t("required"));
                   return;
                 }
-                toast.promise(
-                  createAppreciationMutation.mutateAsync({
-                    content: value,
-                    categoryId: category.id,
-                  }),
-                  {
-                    loading: t("adding"),
-                    success: async () => {
-                      await utils.appreciation.invalidate();
-                      onCompleted?.();
-                      return t("added");
-                    },
-                    error: (error) => {
-                      return getErrorMessage(error);
-                    },
-                  },
-                );
+                toast.loading(t("creating"), { id: 0 });
+                createAppreciationMutation.mutate({
+                  content: value,
+                  categoryId: category.id,
+                });
               }
             }}
           >

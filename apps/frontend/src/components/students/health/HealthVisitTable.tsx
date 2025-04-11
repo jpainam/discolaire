@@ -26,26 +26,30 @@ import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
+import { api, useTRPC } from "~/trpc/react";
 import { CreateEditHealthVisit } from "./CreateEditHealthVisit";
 import { HealthVisitDetails } from "./HealthVisitDetails";
 
 export function HealthVisitTable({ userId }: { userId: string }) {
   const { t, i18n } = useLocale();
-
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const { openSheet } = useSheet();
   const { openModal } = useModal();
-  const utils = api.useUtils();
-  const deleteHealthVisit = api.health.deleteVisit.useMutation({
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-    onSuccess: () => {
-      toast.success(t("deleted"), { id: 0 });
-    },
-    onSettled: () => utils.health.invalidate(),
-  });
+
+  const deleteHealthVisit = useMutation(
+    trpc.health.deleteVisit.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.health.visits.pathFilter());
+        toast.success(t("deleted"), { id: 0 });
+      },
+    }),
+  );
   const confirm = useConfirm();
 
   const dateFormat = Intl.DateTimeFormat(i18n.language, {

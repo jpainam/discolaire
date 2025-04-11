@@ -18,10 +18,10 @@ import { Form } from "@repo/ui/components/form";
 import { Separator } from "@repo/ui/components/separator";
 import { useLocale } from "~/i18n";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
-import { getErrorMessage } from "~/lib/handle-error";
 import { useSession } from "~/providers/AuthProvider";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 const editRelationshipSchema = z.object({
   primaryContact: z.boolean(),
@@ -69,29 +69,29 @@ export function StudentContactRelationship({
       paysFee: studentContact.paysFee ?? false,
     },
   });
-
-  const updateStudentContactMutation = api.studentContact.update.useMutation();
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const updateStudentContactMutation = useMutation(
+    trpc.studentContact.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.student.contacts.pathFilter());
+        await queryClient.invalidateQueries(trpc.contact.students.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
 
   function onSubmit(data: z.infer<typeof editRelationshipSchema>) {
     if (studentContact.studentId && studentContact.contactId) {
-      toast.promise(
-        updateStudentContactMutation.mutateAsync({
-          data: data,
-          studentId: studentContact.studentId,
-          contactId: studentContact.contactId,
-        }),
-        {
-          success: async () => {
-            await utils.student.contacts.invalidate();
-            await utils.contact.students.invalidate();
-            return t("updated_successfully");
-          },
-          error: (error) => {
-            return getErrorMessage(error);
-          },
-        },
-      );
+      toast.loading(t("updating"), { id: 0 });
+      updateStudentContactMutation.mutate({
+        data: data,
+        studentId: studentContact.studentId,
+        contactId: studentContact.contactId,
+      });
     }
   }
 

@@ -18,10 +18,11 @@ import {
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 import { useCreateTransaction } from "./CreateTransactionContextProvider";
 import Step2Details from "./step2details";
 
@@ -43,22 +44,25 @@ export function Step2() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const studentId = params.id;
-  const utils = api.useUtils();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
-  const createTransactionMutation = api.transaction.create.useMutation({
-    onSettled: async () => {
-      await utils.student.transactions.invalidate(studentId);
-    },
-    onSuccess: (transaction) => {
-      toast.success(t("created_successfully"), { id: 0 });
-      router.push(
-        routes.students.transactions.details(params.id, transaction.id),
-      );
-    },
-    onError: (error) => {
-      toast.error(error.message, { id: 0 });
-    },
-  });
+  const createTransactionMutation = useMutation(
+    trpc.transaction.create.mutationOptions({
+      onSuccess: async (transaction) => {
+        await queryClient.invalidateQueries(
+          trpc.student.transactions.pathFilter(),
+        );
+        toast.success(t("created_successfully"), { id: 0 });
+        router.push(
+          routes.students.transactions.details(params.id, transaction.id),
+        );
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
 
   const form = useForm({
     resolver: zodResolver(step2Schema),
