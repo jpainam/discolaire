@@ -13,7 +13,7 @@ import { useTRPC } from "~/trpc/react";
 
 export function ClassroomStatistics({ className }: { className?: string }) {
   const [selectedClassroom, setSelectedClassroom] = useState<string | null>(
-    null
+    null,
   );
   const trpc = useTRPC();
   const classroomsQuery = useQuery(trpc.classroom.all.queryOptions());

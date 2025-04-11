@@ -45,7 +45,7 @@ export function TransactionDetails({
   const trpc = useTRPC();
 
   const transactionQuery = useQuery(
-    trpc.transaction.get.queryOptions(transactionId)
+    trpc.transaction.get.queryOptions(transactionId),
   );
 
   if (transactionQuery.isPending) {

@@ -32,7 +32,7 @@ const CalendarWrapper = BigCalendar;
 export function Timetable() {
   const [_currentDate, _] = useQueryState(
     "date",
-    parseAsIsoDateTime.withDefault(new Date())
+    parseAsIsoDateTime.withDefault(new Date()),
   );
 
   const trpc = useTRPC();
@@ -92,18 +92,18 @@ export function Timetable() {
         weekdayFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer
+          localizer?: DateLocalizer,
         ) => localizer?.format(date, "EEE", culture),
         dayFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) =>
           localizer?.format(date, "EEE M/d", culture),
         timeGutterFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer
+          localizer?: DateLocalizer,
         ) => localizer?.format(date, "HH:mm", culture),
       } as Formats,
     }),
-    []
+    [],
   );
 
   const handleViewChange = (view: RbcView) => {

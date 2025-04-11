@@ -22,7 +22,7 @@ export function UserSelector({
   const usersQuery = useQuery(
     trpc.user.search.queryOptions({
       query: search,
-    })
+    }),
   );
 
   return (

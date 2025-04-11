@@ -23,14 +23,14 @@ export function AnnouncementSummary() {
     const now = new Date();
     setActiveNotices(
       noticeboards.filter(
-        (nb) => new Date(nb.from) <= now && now <= new Date(nb.to)
-      ).length
+        (nb) => new Date(nb.from) <= now && now <= new Date(nb.to),
+      ).length,
     );
     setFutureNotices(
-      noticeboards.filter((nb) => new Date(nb.from) > now).length
+      noticeboards.filter((nb) => new Date(nb.from) > now).length,
     );
     setExpiredNotices(
-      noticeboards.filter((nb) => new Date(nb.to) < now).length
+      noticeboards.filter((nb) => new Date(nb.to) < now).length,
     );
   }, [announcementsQuery.data]);
 

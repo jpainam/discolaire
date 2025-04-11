@@ -41,7 +41,7 @@ const chartConfig = {
 export function ClassroomLevelEffectif() {
   const trpc = useTRPC();
   const classroomLevelCountQuery = useQuery(
-    trpc.classroomLevel.count.queryOptions()
+    trpc.classroomLevel.count.queryOptions(),
   );
   const { t } = useLocale();
   if (classroomLevelCountQuery.isPending) {

@@ -36,7 +36,7 @@ export function StudentPageHeader() {
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
 
   const [value, setValue] = useState("");
@@ -46,7 +46,7 @@ export function StudentPageHeader() {
   const students = useQuery(
     trpc.student.search.queryOptions({
       query: search,
-    })
+    }),
   );
 
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);

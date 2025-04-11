@@ -26,7 +26,7 @@ export function TransactionTotals() {
     trpc.transaction.stats.queryOptions({
       from: from ?? undefined,
       to: to ?? undefined,
-    })
+    }),
   );
 
   if (transactionsStats.isPending) {
