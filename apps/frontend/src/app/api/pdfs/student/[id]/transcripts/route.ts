@@ -9,7 +9,7 @@ import { getServerTranslations } from "~/i18n/server";
 
 import { GradesheetList } from "@repo/reports/students/GradesheetList";
 import { getSheetName } from "~/lib/utils";
-import { api, caller } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { xlsxType } from "~/utils";
 
 const searchSchema = z.object({
@@ -20,7 +20,7 @@ const searchSchema = z.object({
 });
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await auth();
   if (!session) {
@@ -47,7 +47,7 @@ export async function GET(
   }
 
   const { format } = result.data;
-  const student = await api.student.get(id);
+  const student = await caller.student.get(id);
 
   const grades = await caller.student.grades({ id });
   const vv: Record<
@@ -78,7 +78,7 @@ export async function GET(
     observation: entry.observation,
   }));
 
-  const school = await api.school.getSchool();
+  const school = await caller.school.getSchool();
   if (format === "csv") {
     const { blob, headers } = await toExcel({ data });
     return new Response(blob, { headers });
@@ -88,7 +88,7 @@ export async function GET(
         student: student,
         grades: data,
         school: school,
-      }),
+      })
     );
 
     //const blob = await new Response(stream).blob();

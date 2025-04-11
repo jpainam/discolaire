@@ -20,7 +20,7 @@ import { getServerTranslations } from "~/i18n/server";
 
 import { decode } from "entities";
 import { routes } from "~/configs/routes";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 
 type StudentContactGetProcedureOutput = RouterOutputs["studentContact"]["get"];
@@ -33,7 +33,9 @@ export async function StudentSiblingTable({
   if (!studentContact) {
     return <EmptyState description="No student contact found" />;
   }
-  const linkedStudents = await api.contact.students(studentContact.contactId);
+  const linkedStudents = await caller.contact.students(
+    studentContact.contactId
+  );
   const contact = studentContact.contact;
   const { t } = await getServerTranslations();
   return (

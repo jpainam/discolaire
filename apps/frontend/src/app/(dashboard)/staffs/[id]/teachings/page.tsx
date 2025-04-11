@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import { EmptyState } from "~/components/EmptyState";
 import {
   Table,
   TableBody,
@@ -9,14 +8,15 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 
 import { routes } from "~/configs/routes";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
-  const teachings = await api.staff.teachings(params.id);
+  const teachings = await caller.staff.teachings(params.id);
   const { t } = await getServerTranslations();
   if (teachings.length === 0) {
     return <EmptyState className="py-8" title={t("no_teachings_found")} />;

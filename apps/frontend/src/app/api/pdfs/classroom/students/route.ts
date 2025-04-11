@@ -8,7 +8,7 @@ import { ClassroomStudentList, renderToStream } from "@repo/reports";
 import { getServerTranslations } from "~/i18n/server";
 
 import { auth } from "@repo/auth";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 const searchSchema = z.object({
   preview: z.coerce.boolean().default(true),
@@ -37,9 +37,9 @@ export async function GET(req: NextRequest) {
     }
     const { id, preview, format } = result.data;
 
-    const students = await api.classroom.students(id);
-    const classroom = await api.classroom.get(id);
-    const school = await api.school.getSchool();
+    const students = await caller.classroom.students(id);
+    const classroom = await caller.classroom.get(id);
+    const school = await caller.school.getSchool();
     if (format === "csv") {
       const { blob, headers } = await toExcel({ students, classroom });
       return new Response(blob, { headers });
@@ -150,7 +150,7 @@ async function toCSV({
             ? `"${cellValue.replace(/"/g, '""')}"`
             : cellValue;
         })
-        .join(","),
+        .join(",")
     ),
   ].join("\n");
   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
@@ -181,7 +181,7 @@ async function toPdf({
       students: students,
       school: school,
       classroom: classroom,
-    }),
+    })
   );
 
   //const blob = await new Response(stream).blob();

@@ -23,14 +23,14 @@
 //     }
 //     const { i18n } = await getServerTranslations();
 
-//     const user = await api.user.getByEmail({ email });
+//     const user = await caller.user.getByEmail({ email });
 //     if (!user) {
 //       return new Response("User not found", { status: 404 });
 //     }
 //     if (!user.email) {
 //       return new Response("Email not found", { status: 404 });
 //     }
-//     const school = await api.school.getSchool();
+//     const school = await caller.school.getSchool();
 
 //     const token = await createUniqueInvite({
 //       entityId: contact.id,
@@ -50,7 +50,7 @@
 //         url: invitationLink,
 //       }) as React.ReactElement,
 //     });
-//     // await api.messaging.sendEmail({
+//     // await caller.messaging.sendEmail({
 //     //   subject: t("welcome_to_discolaire"),
 //     //   to: email,
 //     //   body: emailHtml,

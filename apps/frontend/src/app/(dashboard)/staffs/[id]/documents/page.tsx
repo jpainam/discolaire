@@ -13,7 +13,7 @@ import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 
 import { DocumentTableAction } from "~/components/shared/DocumentTableAction";
-import { api, caller } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { LinkUser } from "./LinkUser";
 import { StaffDocumentHeader } from "./StaffDocumentHeader";
 
@@ -32,7 +32,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
       </div>
     );
   }
-  const documents = await api.document.byUserId({ ownerId: staff.userId });
+  const documents = await caller.document.byUserId({ ownerId: staff.userId });
   const dateFormat = Intl.DateTimeFormat(i18n.language, {
     year: "numeric",
     month: "short",

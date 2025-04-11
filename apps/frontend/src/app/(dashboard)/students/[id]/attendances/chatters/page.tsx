@@ -1,4 +1,4 @@
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 export default async function Page(props: {
   params: Promise<{ id: string }>;
@@ -10,7 +10,7 @@ export default async function Page(props: {
   const termId = searchParams.termId
     ? parseInt(searchParams.termId)
     : undefined;
-  const chatters = await api.chatter.byStudent({
+  const chatters = await caller.chatter.byStudent({
     studentId: studentId,
     termId: termId,
   });

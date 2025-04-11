@@ -6,7 +6,7 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
 import { ErrorFallback } from "~/components/error-fallback";
 import { ReportCardHeader } from "~/components/students/reportcards/ReportCardHeader";
-import { api, HydrateClient, prefetch, trpc } from "~/trpc/server";
+import { caller, HydrateClient, prefetch, trpc } from "~/trpc/server";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -18,7 +18,7 @@ export default async function Layout(props: {
 
   const { children } = props;
 
-  const classroom = await api.student.classroom({ studentId: id });
+  const classroom = await caller.student.classroom({ studentId: id });
   const { t } = await getServerTranslations();
   if (!classroom) {
     return (

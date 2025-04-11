@@ -8,7 +8,7 @@ import { z } from "zod";
 import { createUniqueInvite } from "~/actions/invite";
 import { env } from "~/env";
 import { resend } from "~/lib/resend";
-import { api, caller } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 const searchSchema = z.object({
   email: z.string().email(),
@@ -38,10 +38,10 @@ export async function GET(req: NextRequest) {
 
     return Response.json(
       { error: "Invalid request body", errors },
-      { status: 400 },
+      { status: 400 }
     );
   }
-  const school = await api.school.getSchool();
+  const school = await caller.school.getSchool();
 
   const { email, entityId, entityType } = result.data;
   const user = await getNameEmail(entityId, entityType);
@@ -78,7 +78,7 @@ export async function GET(req: NextRequest) {
 
 async function getNameEmail(
   entityId: string,
-  entityType: "staff" | "contact" | "student",
+  entityType: "staff" | "contact" | "student"
 ) {
   if (entityType == "staff") {
     const s = await caller.staff.get(entityId);

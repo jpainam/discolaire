@@ -11,7 +11,7 @@ import { getServerTranslations } from "~/i18n/server";
 
 import { hashPassword } from "@repo/auth/session";
 import { env } from "~/env";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 const schema = z.object({
   email: z.string().email(),
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
       return new Response("Invalid request", { status: 400 });
     }
     const { email } = result.data;
-    const user = await api.user.getByEmail({ email });
+    const user = await caller.user.getByEmail({ email });
     if (!user) {
       return new Response("User not found", { status: 404 });
     }
@@ -35,13 +35,13 @@ export async function POST(req: NextRequest) {
 
     const expiresAt = addMinutes(new Date(), 15); // Set expiration time to 15 minutes
 
-    await api.passwordReset.createResetCode({
+    await caller.passwordReset.createResetCode({
       userId: user.id,
       resetCode: secretCode,
       expiresAt: expiresAt,
     });
 
-    const school = await api.school.getSchool();
+    const school = await caller.school.getSchool();
     const { t, i18n } = await getServerTranslations();
 
     if (user.email) {
@@ -55,10 +55,10 @@ export async function POST(req: NextRequest) {
           username: user.username,
           resetLink: `${env.NEXT_PUBLIC_BASE_URL}/auth/password/reset/?code=${hashedCode}`,
           locale: i18n.language,
-        }),
+        })
       );
 
-      await api.messaging.sendEmail({
+      await caller.messaging.sendEmail({
         subject: t("reset_password"),
         to: user.email,
         body: emailHtml,

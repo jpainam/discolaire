@@ -10,7 +10,7 @@ import FlatBadge from "~/components/FlatBadge";
 import { getServerTranslations } from "~/i18n/server";
 
 import { LoginInfoHeader } from "~/components/students/login-info/LoginInfoHeader";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 import { AttachUserButton } from "./AttachUserButton";
 
@@ -20,8 +20,8 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const { id } = params;
 
   const { t } = await getServerTranslations();
-  const student = await api.student.get(id);
-  const studentcontacts = await api.student.contacts(id);
+  const student = await caller.student.get(id);
+  const studentcontacts = await caller.student.contacts(id);
 
   return (
     <div className="flex flex-col text-sm">

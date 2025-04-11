@@ -8,7 +8,7 @@ import PasswordResetSuccess from "@repo/transactional/emails/PasswordResetSucces
 import { getServerTranslations } from "~/i18n/server";
 
 import { comparePasswords } from "@repo/auth/session";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 const schema = z.object({
   email: z.string().email(),
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     return new Response("Invalid request", { status: 400 });
   }
   const { email, newPassword, code } = result.data;
-  const resetRequest = await api.passwordReset.getByEmail({
+  const resetRequest = await caller.passwordReset.getByEmail({
     email,
   });
 
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
   ) {
     return new Response("Invalid reset code", { status: 400 });
   }
-  const user = await api.passwordReset.reset({
+  const user = await caller.passwordReset.reset({
     userId: resetRequest.userId,
     password: newPassword,
   });
@@ -41,13 +41,13 @@ export async function POST(req: NextRequest) {
   if (user.email) {
     const emailHtml = await render(PasswordResetSuccess());
     const { t } = await getServerTranslations();
-    await api.messaging.sendEmail({
+    await caller.messaging.sendEmail({
       subject: t("password_reset_successful"),
       to: user.email,
       body: emailHtml,
     });
   }
-  await api.passwordReset.delete(resetRequest.id);
+  await caller.passwordReset.delete(resetRequest.id);
 
   redirect("/auth/login");
 }

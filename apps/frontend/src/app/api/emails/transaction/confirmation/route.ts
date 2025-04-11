@@ -8,7 +8,7 @@ import { getServerTranslations } from "~/i18n/server";
 import { db } from "@repo/db";
 import { nanoid } from "nanoid";
 import { resend } from "~/lib/resend";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 
 const schema = z.object({
@@ -33,9 +33,9 @@ export async function POST(req: Request) {
     const { transactionId, studentId, remaining, createdBy, status } =
       result.data;
 
-    const transaction = await api.transaction.get(transactionId);
+    const transaction = await caller.transaction.get(transactionId);
 
-    const student = await api.student.get(studentId);
+    const student = await caller.student.get(studentId);
 
     const contacts = await db.studentContact.findMany({
       include: {
@@ -54,7 +54,7 @@ export async function POST(req: Request) {
       .filter((email) => email != null);
 
     const { t } = await getServerTranslations();
-    const school = await api.school.getSchool();
+    const school = await caller.school.getSchool();
 
     const { error } = await resend.emails.send({
       from: "Confirmation de Paiement <hi@discolaire.com>",

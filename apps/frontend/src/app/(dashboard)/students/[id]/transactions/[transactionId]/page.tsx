@@ -9,7 +9,7 @@ import { routes } from "~/configs/routes";
 import { CURRENCY } from "~/lib/constants";
 import { notificationQueue } from "~/lib/queue";
 import { numberToWords } from "~/lib/toword";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 
 export default async function Page(props: {
@@ -19,7 +19,7 @@ export default async function Page(props: {
 
   const { id, transactionId } = params;
 
-  const transaction = await api.transaction.get(Number(transactionId));
+  const transaction = await caller.transaction.get(Number(transactionId));
 
   const {
     student,
@@ -30,10 +30,10 @@ export default async function Page(props: {
     school,
     contact,
     remaining,
-  } = await api.transaction.getReceiptInfo(transactionId);
+  } = await caller.transaction.getReceiptInfo(transactionId);
 
   const { t, i18n } = await getServerTranslations();
-  const studentAccount = await api.studentAccount.get(transaction.accountId);
+  const studentAccount = await caller.studentAccount.get(transaction.accountId);
   if (studentAccount?.studentId !== id) {
     redirect(routes.students.transactions.index(id));
   }

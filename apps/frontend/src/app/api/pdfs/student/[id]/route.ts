@@ -9,7 +9,7 @@ import { renderToStream, StudentPage } from "@repo/reports";
 import { getServerTranslations } from "~/i18n/server";
 
 import { getSheetName } from "~/lib/utils";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { xlsxType } from "~/utils";
 
 const searchSchema = z.object({
@@ -25,7 +25,7 @@ const searchSchema = z.object({
 });
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await auth();
   if (!session) {
@@ -54,10 +54,10 @@ export async function GET(
   const { size, preview, format } = result.data;
   console.log(size);
 
-  const student = await api.student.get(id);
-  const contacts = await api.student.contacts(id);
+  const student = await caller.student.get(id);
+  const contacts = await caller.student.contacts(id);
 
-  const school = await api.school.getSchool();
+  const school = await caller.school.getSchool();
   if (format === "csv") {
     //const { blob, headers } = await toExcel({ students });
     //return new Response(blob, { headers });
@@ -68,7 +68,7 @@ export async function GET(
         student: student,
         contacts: contacts,
         school: school,
-      }),
+      })
     );
 
     //const blob = await new Response(stream).blob();

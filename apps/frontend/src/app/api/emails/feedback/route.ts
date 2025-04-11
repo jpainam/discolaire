@@ -8,7 +8,7 @@ import { nanoid } from "nanoid";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { resend } from "~/lib/resend";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 const schema = z.object({
   content: z.string().min(1),
@@ -26,12 +26,12 @@ export async function POST(req: NextRequest) {
       console.error(errors);
       return NextResponse.json(
         { error: result.error.format() },
-        { status: 400 },
+        { status: 400 }
       );
     }
     const { content } = result.data;
     const { user } = session;
-    const school = await api.school.getSchool();
+    const school = await caller.school.getSchool();
     const { error } = await resend.emails.send({
       from: "Feedback <hi@discolaire.com>",
       to: ["jpainam@gmail.com"],

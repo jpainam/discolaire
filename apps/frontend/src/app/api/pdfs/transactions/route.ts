@@ -10,7 +10,7 @@ import { TransactionList } from "@repo/reports/transactions/TransactionList";
 import { getServerTranslations } from "~/i18n/server";
 
 import { getSheetName } from "~/lib/utils";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { xlsxType } from "~/utils";
 
 const searchSchema = z.object({
@@ -45,14 +45,14 @@ export async function GET(req: NextRequest) {
 
   const { format, status, from, to, classroom } = result.data;
 
-  const transactions = await api.transaction.all({
+  const transactions = await caller.transaction.all({
     status: status,
     from: from,
     to: to,
     classroomId: classroom,
   });
 
-  const school = await api.school.getSchool();
+  const school = await caller.school.getSchool();
   if (format === "csv") {
     const { blob, headers } = await toExcel({ transactions });
     return new Response(blob, { headers });
@@ -61,7 +61,7 @@ export async function GET(req: NextRequest) {
       TransactionList({
         transactions: transactions,
         school: school,
-      }),
+      })
     );
 
     //const blob = await new Response(stream).blob();

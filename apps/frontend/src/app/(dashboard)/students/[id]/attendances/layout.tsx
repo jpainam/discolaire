@@ -12,7 +12,7 @@ import { getServerTranslations } from "~/i18n/server";
 
 import { EmptyState } from "~/components/EmptyState";
 import { StudentAttendanceHeader } from "~/components/students/attendances/StudentAttendanceHeader";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 export default async function Layout(props: {
   params: Promise<{ id: string }>;
@@ -21,7 +21,7 @@ export default async function Layout(props: {
   const { children } = props;
   const params = await props.params;
   const { t } = await getServerTranslations();
-  const classroom = await api.student.classroom({ studentId: params.id });
+  const classroom = await caller.student.classroom({ studentId: params.id });
   if (!classroom) {
     return (
       <EmptyState className="my-8" title={t("student_not_registered_yet")} />
@@ -29,11 +29,11 @@ export default async function Layout(props: {
   }
 
   const [absence, late, chatter, exclusion, consigne] = await Promise.all([
-    api.absence.studentSummary({ studentId: params.id }),
-    api.lateness.studentSummary({ studentId: params.id }),
-    api.chatter.studentSummary({ studentId: params.id }),
-    api.exclusion.studentSummary({ studentId: params.id }),
-    api.consigne.studentSummary({ studentId: params.id }),
+    caller.absence.studentSummary({ studentId: params.id }),
+    caller.lateness.studentSummary({ studentId: params.id }),
+    caller.chatter.studentSummary({ studentId: params.id }),
+    caller.exclusion.studentSummary({ studentId: params.id }),
+    caller.consigne.studentSummary({ studentId: params.id }),
   ]);
 
   const total =

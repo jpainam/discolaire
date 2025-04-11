@@ -1,7 +1,7 @@
 import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { PrintAction } from "./PrintAction";
 import { TransactionTabMenu } from "./TransactionTabMenu";
 
@@ -15,7 +15,7 @@ export default async function Layout(props: {
 
   const { children } = props;
 
-  const classroom = await api.student.classroom({ studentId: id });
+  const classroom = await caller.student.classroom({ studentId: id });
   const { t } = await getServerTranslations();
   if (!classroom) {
     return (

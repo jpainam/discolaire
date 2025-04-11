@@ -7,7 +7,7 @@ import { auth } from "@repo/auth";
 import { redirect } from "next/navigation";
 import { StudentFooter } from "~/components/students/StudentFooter";
 import { StudentHeader } from "~/components/students/StudentHeader";
-import { api, getQueryClient, HydrateClient, trpc } from "~/trpc/server";
+import { caller, getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 
 import { decode } from "entities";
 import type { Metadata } from "next";
@@ -20,11 +20,11 @@ interface Props {
 }
 
 export const generateMetadata = async (
-  { params }: Props,
+  { params }: Props
   // parent: ResolvingMetadata
 ): Promise<Metadata> => {
   const { id } = await params;
-  const student = await api.student.get(id);
+  const student = await caller.student.get(id);
   return {
     title: {
       template: `${decode(student.lastName ?? "")}-%s`,
@@ -51,7 +51,7 @@ export default async function Layout(props: {
   const { id } = params;
   const queryClient = getQueryClient();
   const student = await queryClient.fetchQuery(
-    trpc.student.get.queryOptions(id),
+    trpc.student.get.queryOptions(id)
   );
 
   const { children } = props;

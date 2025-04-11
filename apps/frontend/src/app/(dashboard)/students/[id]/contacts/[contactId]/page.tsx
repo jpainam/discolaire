@@ -22,7 +22,7 @@ import { AvatarState } from "~/components/AvatarState";
 import { StudentContactRelationship } from "~/components/students/contacts/StudentContactRelationship";
 import { StudentSiblingTable } from "~/components/students/contacts/StudentSiblingTable";
 import { routes } from "~/configs/routes";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 
 export default async function Page(props: {
@@ -32,14 +32,14 @@ export default async function Page(props: {
 
   const { id, contactId } = params;
 
-  const studentContact = await api.studentContact.get({
+  const studentContact = await caller.studentContact.get({
     studentId: id,
     contactId: contactId,
   });
   if (!studentContact) {
     notFound();
   }
-  const contact = await api.contact.get(contactId);
+  const contact = await caller.contact.get(contactId);
 
   const { t } = await getServerTranslations();
   return (

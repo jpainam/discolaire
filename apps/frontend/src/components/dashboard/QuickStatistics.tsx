@@ -4,24 +4,24 @@ import { School, Users } from "lucide-react";
 import { getServerTranslations } from "~/i18n/server";
 
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { CountCard } from "./CountCard";
 
 export async function QuickStatistics({ className }: { className?: string }) {
-  const studentCount = await api.student.count();
-  const staffCount = await api.staff.count();
-  const classroomCount = await api.classroom.all();
-  const contactCount = await api.contact.count();
+  const studentCount = await caller.student.count();
+  const staffCount = await caller.staff.count();
+  const classroomCount = await caller.classroom.all();
+  const contactCount = await caller.contact.count();
   const classroomTotal = classroomCount.length;
   const newClassrooms = classroomCount.filter(
-    (classroom) => classroom.createdAt >= subMonths(new Date(), 1),
+    (classroom) => classroom.createdAt >= subMonths(new Date(), 1)
   ).length;
   const { t } = await getServerTranslations();
   return (
     <div
       className={cn(
         "grid grid-cols-2 min-[1200px]:grid-cols-4 border border-border rounded-xl bg-gradient-to-br from-sidebar/60 to-sidebar",
-        className,
+        className
       )}
     >
       <CountCard

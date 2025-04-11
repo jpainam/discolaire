@@ -7,7 +7,7 @@ import { getServerTranslations } from "~/i18n/server";
 import { AlertState } from "~/components/AlertState";
 import { CreateTransaction } from "~/components/students/transactions/create/CreateTransaction";
 import { CreateTransactionContextProvider } from "~/components/students/transactions/create/CreateTransactionContextProvider";
-import { api, caller } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -16,14 +16,14 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   const { t } = await getServerTranslations();
 
-  const classroom = await api.student.classroom({ studentId: id });
+  const classroom = await caller.student.classroom({ studentId: id });
   if (!classroom) {
     return (
       <EmptyState className="my-8" title={t("student_not_registered_yet")} />
     );
   }
-  const studentContacts = await api.student.contacts(id);
-  const student = await api.student.get(id);
+  const studentContacts = await caller.student.contacts(id);
+  const student = await caller.student.get(id);
   const fees = await caller.classroom.fees(classroom.id);
   const unpaidRequiredFees = await caller.student.unpaidRequiredFees(params.id);
   const transactions = await caller.student.transactions(params.id);

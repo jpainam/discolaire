@@ -7,7 +7,7 @@ import { Suspense } from "react";
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentGrade } from "~/components/students/grades/StudentGrade";
 import { StudentGradeHeader } from "~/components/students/grades/StudentGradeHeader";
-import { api, batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
+import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -20,8 +20,8 @@ export default async function Layout(props: {
 
   const { children } = props;
 
-  const classroom = await api.student.classroom({ studentId: id });
-  const student = await api.student.get(id);
+  const classroom = await caller.student.classroom({ studentId: id });
+  const student = await caller.student.get(id);
   const { t } = await getServerTranslations();
   if (!classroom) {
     return (

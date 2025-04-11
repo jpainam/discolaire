@@ -5,7 +5,7 @@ import { auth } from "@repo/auth";
 import { renderToStream } from "@repo/reports";
 import { IPBWClassroomTrimestre } from "@repo/reports/reportcards/IPBWClassroomTrimestre";
 import { IPBWTrimestre } from "@repo/reports/reportcards/IPBWTrimestre";
-import { api, caller } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 const searchSchema = z.object({
   studentId: z.string().nullable(),
@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
 
     return Response.json(
       { error: "Invalid request body", errors },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -53,15 +53,15 @@ async function classroomReportCard({
   classroomId: string;
   trimestreId: string;
 }) {
-  const school = await api.school.getSchool();
-  const students = await api.classroom.students(classroomId);
-  const contacts = await api.student.getPrimaryContacts({ classroomId });
+  const school = await caller.school.getSchool();
+  const students = await caller.classroom.students(classroomId);
+  const contacts = await caller.student.getPrimaryContacts({ classroomId });
   const report = await caller.reportCard.getTrimestre({
     classroomId: classroomId,
     trimestreId: trimestreId,
   });
 
-  const subjects = await api.classroom.subjects(classroomId);
+  const subjects = await caller.classroom.subjects(classroomId);
   const classroom = await caller.classroom.get(classroomId);
 
   const disciplines = await caller.discipline.trimestre({
@@ -80,7 +80,7 @@ async function classroomReportCard({
       report,
       contacts,
       schoolYear: classroom.schoolYear,
-    }),
+    })
   );
 
   const headers: Record<string, string> = {
@@ -97,7 +97,7 @@ async function indvidualReportCard({
   studentId: string;
   trimestreId: string;
 }) {
-  const student = await api.student.get(studentId);
+  const student = await caller.student.get(studentId);
   if (!student.classroom) {
     return new Response("Student not registered", { status: 400 });
   }
@@ -107,7 +107,7 @@ async function indvidualReportCard({
     trimestreId: trimestreId,
   });
 
-  const subjects = await api.classroom.subjects(student.classroom.id);
+  const subjects = await caller.classroom.subjects(student.classroom.id);
   const classroom = await caller.classroom.get(student.classroom.id);
 
   const studentReport = report.studentsReport.get(studentId);
@@ -116,8 +116,8 @@ async function indvidualReportCard({
     return new Response("Student has no grades", { status: 400 });
   }
 
-  const contact = await api.student.getPrimaryContact(student.id);
-  const school = await api.school.getSchool();
+  const contact = await caller.student.getPrimaryContact(student.id);
+  const school = await caller.school.getSchool();
 
   const disciplines = await caller.discipline.trimestre({
     classroomId: classroom.id,
@@ -135,7 +135,7 @@ async function indvidualReportCard({
       report,
       contact,
       schoolYear: classroom.schoolYear,
-    }),
+    })
   );
 
   const headers: Record<string, string> = {

@@ -6,7 +6,7 @@ import { IPBWReceipt, renderToStream } from "@repo/reports";
 import { auth } from "@repo/auth";
 import i18next from "i18next";
 import { numberToWords } from "~/lib/toword";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 const searchSchema = z.object({
   id: z.coerce.number(),
@@ -32,14 +32,14 @@ export async function GET(req: NextRequest) {
     }
     const { id } = result.data;
 
-    const transaction = await api.transaction.get(id);
+    const transaction = await caller.transaction.get(id);
 
-    const school = await api.school.getSchool();
-    //const student = await api.student.get(transaction.account.studentId);
-    //const contacts = await api.student.contacts(transaction.account.studentId);
+    const school = await caller.school.getSchool();
+    //const student = await caller.student.get(transaction.account.studentId);
+    //const contacts = await caller.student.contacts(transaction.account.studentId);
     const amountInWords = numberToWords(transaction.amount, i18next.language);
 
-    const info = await api.transaction.getReceiptInfo(id);
+    const info = await caller.transaction.getReceiptInfo(id);
 
     const stream = await renderToStream(
       IPBWReceipt({
@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
         amountInWords: amountInWords,
         school: school,
         info: info,
-      }),
+      })
     );
 
     // @ts-expect-error TODO: fix this

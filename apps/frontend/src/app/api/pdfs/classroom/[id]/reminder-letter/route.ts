@@ -9,7 +9,7 @@ import i18next from "i18next";
 import { sumBy } from "lodash";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 const querySchema = z.object({
   ids: z.string().optional(),
@@ -21,7 +21,7 @@ const querySchema = z.object({
 });
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: { id: string } }
 ) {
   const session = await auth();
   if (!session) {
@@ -36,25 +36,25 @@ export async function GET(
   if (!parsedQuery.success) {
     return NextResponse.json(
       { error: parsedQuery.error.format() },
-      { status: 400 },
+      { status: 400 }
     );
   }
   try {
-    const classroom = await api.classroom.get(id);
-    const school = await api.school.getSchool();
+    const classroom = await caller.classroom.get(id);
+    const school = await caller.school.getSchool();
     const { ids, dueDate } = parsedQuery.data;
 
-    const fees = await api.classroom.fees(id);
+    const fees = await caller.classroom.fees(id);
     const amountDue = sumBy(
       fees.filter((fee) => fee.dueDate <= new Date()),
-      "amount",
+      "amount"
     );
 
-    let students = await api.classroom.studentsBalance({ id });
+    let students = await caller.classroom.studentsBalance({ id });
     if (ids) {
       const selectedIds = ids.split(",");
       students = students.filter((stud) =>
-        selectedIds.includes(stud.student.id),
+        selectedIds.includes(stud.student.id)
       );
     }
     const reminders = students
@@ -77,7 +77,7 @@ export async function GET(
         dueDate: dueDate,
         reminders: reminders,
         classroom: classroom.name,
-      }),
+      })
     );
 
     //const blob = await new Response(stream).blob();

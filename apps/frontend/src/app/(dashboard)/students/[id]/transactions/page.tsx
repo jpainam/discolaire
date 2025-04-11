@@ -8,14 +8,14 @@ import { Suspense } from "react";
 import { ErrorFallback } from "~/components/error-fallback";
 import { TransactionStats } from "~/components/students/transactions/transaction-stats";
 import { TransactionTable } from "~/components/students/transactions/TransactionTable";
-import { api, HydrateClient, prefetch, trpc } from "~/trpc/server";
+import { caller, HydrateClient, prefetch, trpc } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
 
   const { id } = params;
 
-  const classroom = await api.student.classroom({ studentId: id });
+  const classroom = await caller.student.classroom({ studentId: id });
 
   const { t } = await getServerTranslations();
   prefetch(trpc.student.transactions.queryOptions(id));

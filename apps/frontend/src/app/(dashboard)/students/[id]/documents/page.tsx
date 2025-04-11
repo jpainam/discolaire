@@ -13,19 +13,19 @@ import { getServerTranslations } from "~/i18n/server";
 
 import { DocumentTableAction } from "~/components/shared/DocumentTableAction";
 import { StudentDocumentHeader } from "~/components/students/documents/StudentDocumentHeader";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
 
   const { id } = params;
 
-  const student = await api.student.get(id);
+  const student = await caller.student.get(id);
   const { t, i18n } = await getServerTranslations();
   if (!student.userId) {
     return <EmptyState />;
   }
-  const documents = await api.document.byUserId({ ownerId: student.userId });
+  const documents = await caller.document.byUserId({ ownerId: student.userId });
   const dateFormat = Intl.DateTimeFormat(i18n.language, {
     year: "numeric",
     month: "short",

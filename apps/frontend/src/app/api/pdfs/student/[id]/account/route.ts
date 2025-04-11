@@ -3,11 +3,11 @@ import type { NextRequest } from "next/server";
 import { AcccountStatement, renderToStream } from "@repo/reports";
 
 import { auth } from "@repo/auth";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await auth();
   if (!session) {
@@ -15,17 +15,17 @@ export async function GET(
   }
   try {
     const { id } = await params;
-    const student = await api.student.get(id);
-    const school = await api.school.getSchool();
+    const student = await caller.student.get(id);
+    const school = await caller.school.getSchool();
 
-    const data = await api.studentAccount.getStatements({ studentId: id });
+    const data = await caller.studentAccount.getStatements({ studentId: id });
 
     const stream = await renderToStream(
       await AcccountStatement({
         student: student,
         school: school,
         transactions: data,
-      }),
+      })
     );
 
     // @ts-expect-error TODO: fix this

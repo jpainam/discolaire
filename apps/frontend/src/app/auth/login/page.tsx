@@ -15,8 +15,6 @@ export const metadata: Metadata = {
 export default async function Page() {
   const { t } = await getServerTranslations();
 
-  //const { verse, book } = await api.bible.random();
-
   return (
     <>
       <div className="container relative h-[100vh] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">

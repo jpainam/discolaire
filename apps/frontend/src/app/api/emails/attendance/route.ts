@@ -13,7 +13,7 @@ import {
 } from "@repo/transactional";
 import { getServerTranslations } from "~/i18n/server";
 
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 const dateFormat = Intl.DateTimeFormat(i18next.language, {
   month: "short",
@@ -73,7 +73,7 @@ export async function POST(req: Request) {
 }
 
 async function completeSend(title: string, body: string, studentId: string) {
-  const studentContacts = await api.student.contacts(studentId);
+  const studentContacts = await caller.student.contacts(studentId);
   if (studentContacts.length === 0) {
     return new Response("Student has no contact", { status: 404 });
   }
@@ -81,7 +81,7 @@ async function completeSend(title: string, body: string, studentId: string) {
   const contactEmails = studentContacts
     .map((c) => c.contact.email)
     .filter((v) => v != null);
-  await api.messaging.sendEmail({
+  await caller.messaging.sendEmail({
     subject: title,
     to: contactEmails,
     body: body,
@@ -120,7 +120,7 @@ async function getAbsenceEmail(id: number) {
         name: school.name,
       },
       title: title,
-    }),
+    })
   );
   return { title, body, studentId: student.id };
 }
@@ -143,7 +143,7 @@ async function getChatterEmail(id: number) {
         logo: school.logo,
         name: school.name,
       },
-    }),
+    })
   );
   return { title, body, studentId: student.id };
 }
@@ -167,7 +167,7 @@ async function getConsigneEmail(id: number) {
         logo: school.logo,
         name: school.name,
       },
-    }),
+    })
   );
   return { title, body, studentId: student.id };
 }
@@ -191,7 +191,7 @@ async function getLatenessEmail(id: number) {
         logo: school.logo,
         name: school.name,
       },
-    }),
+    })
   );
   return { title, body, studentId: student.id };
 }
@@ -218,7 +218,7 @@ async function getExclusionEmail(id: number) {
         logo: school.logo,
         name: school.name,
       },
-    }),
+    })
   );
   return { title, body, studentId: student.id };
 }

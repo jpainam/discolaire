@@ -9,7 +9,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getServerTranslations } from "~/i18n/server";
 import { getSheetName } from "~/lib/utils";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { xlsxType } from "~/utils";
 
 const querySchema = z.object({
@@ -27,13 +27,13 @@ export async function GET(request: NextRequest) {
   if (!parsedQuery.success) {
     return NextResponse.json(
       { error: parsedQuery.error.format() },
-      { status: 400 },
+      { status: 400 }
     );
   }
   try {
-    const courses = await api.course.all();
+    const courses = await caller.course.all();
 
-    const school = await api.school.getSchool();
+    const school = await caller.school.getSchool();
 
     const { format } = parsedQuery.data;
     const cookieStore = await cookies();
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
     if (!schoolYearId) {
       throw new Error("School year id is required");
     }
-    const schoolYear = await api.schoolYear.get(schoolYearId.value);
+    const schoolYear = await caller.schoolYear.get(schoolYearId.value);
 
     if (format === "csv") {
       const { blob, headers } = await toExcel({ courses });
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
           courses: courses,
           schoolYear: schoolYear,
           school: school,
-        }),
+        })
       );
 
       //const blob = await new Response(stream).blob();

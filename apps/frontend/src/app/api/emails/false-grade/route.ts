@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 import { auth } from "@repo/auth";
 import { FakeGradeReportEmail } from "@repo/transactional";
 
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 export async function GET(req: NextRequest) {
   try {
@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
     if (!id) {
       return new Response("Invalid request", { status: 400 });
     }
-    const user = await api.user.get(id);
+    const user = await caller.user.get(id);
     if (user.email) {
       const emailHtml = await render(
         FakeGradeReportEmail({
@@ -29,9 +29,9 @@ export async function GET(req: NextRequest) {
             date: "2022-01-01",
           },
           reportComment: "This is a fake  grade report",
-        }),
+        })
       );
-      await api.messaging.sendEmail({
+      await caller.messaging.sendEmail({
         subject: "Signalement de fausse note",
         to: user.email,
         body: emailHtml,

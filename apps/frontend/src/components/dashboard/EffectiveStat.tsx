@@ -3,7 +3,7 @@ import type { IconType } from "react-icons/lib";
 import { getServerTranslations } from "~/i18n/server";
 
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { MaleVsFemaleCount } from "./MaleVsFemaleCount";
 
 interface JobStatsType {
@@ -21,8 +21,8 @@ export interface StatType {
 
 export async function EffectiveStat({ className }: JobStatsType) {
   const { t } = await getServerTranslations();
-  const studentsCount = await api.student.count();
-  const enrollmentsCount = await api.enrollment.count({});
+  const studentsCount = await caller.student.count();
+  const enrollmentsCount = await caller.enrollment.count({});
 
   return (
     <div

@@ -7,7 +7,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getSheetName } from "~/lib/utils";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { getFullName, xlsxType } from "~/utils";
 import { getAppreciations } from "~/utils/get-appreciation";
 
@@ -18,7 +18,7 @@ const querySchema = z.object({
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: number } },
+  { params }: { params: { id: number } }
 ) {
   const session = await auth();
   if (!session) {
@@ -33,25 +33,25 @@ export async function GET(
   if (!parsedQuery.success) {
     return NextResponse.json(
       { error: parsedQuery.error.format() },
-      { status: 400 },
+      { status: 400 }
     );
   }
   try {
     const { format, classroomId } = parsedQuery.data;
-    const classroom = await api.classroom.get(classroomId);
-    const school = await api.school.getSchool();
+    const classroom = await caller.classroom.get(classroomId);
+    const school = await caller.school.getSchool();
 
-    let grades = await api.gradeSheet.grades(Number(id));
-    const gradesheet = await api.gradeSheet.get(Number(id));
+    let grades = await caller.gradeSheet.grades(Number(id));
+    const gradesheet = await caller.gradeSheet.get(Number(id));
     const allGrades = [...grades];
 
     const session = await auth();
     if (session?.user.profile === "student") {
-      const student = await api.student.getFromUserId(session.user.id);
+      const student = await caller.student.getFromUserId(session.user.id);
       grades = grades.filter((g) => g.studentId === student.id);
     } else if (session?.user.profile === "contact") {
-      const contact = await api.contact.getFromUserId(session.user.id);
-      const students = await api.contact.students(contact.id);
+      const contact = await caller.contact.getFromUserId(session.user.id);
+      const students = await caller.contact.students(contact.id);
       const studentIds = students.map((s) => s.studentId);
       grades = grades.filter((g) => studentIds.includes(g.studentId));
     }
@@ -71,7 +71,7 @@ export async function GET(
           allGrades: allGrades,
           gradesheet: gradesheet,
           school: school,
-        }),
+        })
       );
 
       //const blob = await new Response(stream).blob();

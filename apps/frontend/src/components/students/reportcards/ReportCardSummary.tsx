@@ -1,7 +1,7 @@
 import { Separator } from "@repo/ui/components/separator";
 import { getServerTranslations } from "~/i18n/server";
 
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { getAppreciations } from "~/utils/get-appreciation";
 
 export async function ReportCardSummary({
@@ -14,9 +14,9 @@ export async function ReportCardSummary({
   rank: number;
 }) {
   const { t } = await getServerTranslations();
-  const cl = await api.student.classroom({ studentId: id });
+  const cl = await caller.student.classroom({ studentId: id });
   if (!cl) return null;
-  const classroom = await api.classroom.get(cl.id);
+  const classroom = await caller.classroom.get(cl.id);
   return (
     <div className="flex-1 border text-sm">
       <div className="bg-muted/50 py-2 text-center font-bold">

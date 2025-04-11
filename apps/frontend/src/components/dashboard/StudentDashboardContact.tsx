@@ -7,7 +7,7 @@ import {
 } from "@repo/ui/components/card";
 import Link from "next/link";
 import { getServerTranslations } from "~/i18n/server";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 import { AvatarState } from "../AvatarState";
 export async function StudentDashboardContact({
@@ -16,7 +16,7 @@ export async function StudentDashboardContact({
   studentId: string;
 }) {
   const { t } = await getServerTranslations();
-  const studentContacts = await api.student.contacts(studentId);
+  const studentContacts = await caller.student.contacts(studentId);
   return (
     <Card>
       <CardHeader>

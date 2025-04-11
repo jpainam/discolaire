@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
 
     return Response.json(
       { error: "Invalid request body", errors },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
     return classroomReportCard({ classroomId, termId });
   }
 
-  //const schoolYear = await api.schoolYear.get(classroom.schoolYearId);
+  //const schoolYear = await caller.schoolYear.get(classroom.schoolYearId);
   //const totalPoints = sum(reportCard.map((c) => 20 * c.coefficient));
 }
 
@@ -55,16 +55,16 @@ async function classroomReportCard({
   classroomId: string;
   termId: number;
 }) {
-  const school = await api.school.getSchool();
-  const students = await api.classroom.students(classroomId);
-  const contacts = await api.student.getPrimaryContacts({ classroomId });
+  const school = await caller.school.getSchool();
+  const students = await caller.classroom.students(classroomId);
+  const contacts = await caller.student.getPrimaryContacts({ classroomId });
   const report = await caller.reportCard.getSequence({
     classroomId: classroomId,
     termId: termId,
   });
 
-  const subjects = await api.classroom.subjects(classroomId);
-  const term = await api.term.get(termId);
+  const subjects = await caller.classroom.subjects(classroomId);
+  const term = await caller.term.get(termId);
   const classroom = await caller.classroom.get(classroomId);
 
   const disciplines = await caller.discipline.sequence({
@@ -83,7 +83,7 @@ async function classroomReportCard({
       report,
       contacts,
       schoolYear: classroom.schoolYear,
-    }),
+    })
   );
 
   const headers: Record<string, string> = {
@@ -100,7 +100,7 @@ async function indvidualReportCard({
   studentId: string;
   termId: number;
 }) {
-  const student = await api.student.get(studentId);
+  const student = await caller.student.get(studentId);
   if (!student.classroom) {
     return new Response("Student not registered", { status: 400 });
   }
@@ -110,7 +110,7 @@ async function indvidualReportCard({
     termId: termId,
   });
 
-  const subjects = await api.classroom.subjects(student.classroom.id);
+  const subjects = await caller.classroom.subjects(student.classroom.id);
   const classroom = await caller.classroom.get(student.classroom.id);
 
   const studentReport = report.studentsReport.get(studentId);
@@ -119,8 +119,8 @@ async function indvidualReportCard({
     return new Response("Student has no grades", { status: 400 });
   }
 
-  const contact = await api.student.getPrimaryContact(student.id);
-  const school = await api.school.getSchool();
+  const contact = await caller.student.getPrimaryContact(student.id);
+  const school = await caller.school.getSchool();
   const term = await caller.term.get(termId);
 
   const disciplines = await caller.discipline.sequence({
@@ -139,7 +139,7 @@ async function indvidualReportCard({
       report,
       contact,
       schoolYear: classroom.schoolYear,
-    }),
+    })
   );
 
   const headers: Record<string, string> = {

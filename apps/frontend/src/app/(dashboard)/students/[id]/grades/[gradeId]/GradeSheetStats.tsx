@@ -9,7 +9,7 @@ import {
 import { getServerTranslations } from "~/i18n/server";
 
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 export async function GradeSheetStats({
   gradeSheetId,
@@ -19,7 +19,7 @@ export async function GradeSheetStats({
   className?: string;
 }) {
   const { t } = await getServerTranslations();
-  const successRate = await api.gradeSheet.successRate(gradeSheetId);
+  const successRate = await caller.gradeSheet.successRate(gradeSheetId);
 
   return (
     <div className={cn("py-2 px-4", className)}>

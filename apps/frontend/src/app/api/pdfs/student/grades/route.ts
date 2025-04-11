@@ -9,7 +9,7 @@ import { GradeList, renderToStream } from "@repo/reports";
 import { getServerTranslations } from "~/i18n/server";
 
 import { getSheetName } from "~/lib/utils";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { xlsxType } from "~/utils";
 import { getAppreciations } from "~/utils/get-appreciation";
 
@@ -35,11 +35,11 @@ export async function GET(req: NextRequest) {
       return new Response(error, { status: 400 });
     }
     const { id, format } = result.data;
-    const school = await api.school.getSchool();
+    const school = await caller.school.getSchool();
 
-    const student = await api.student.get(id);
+    const student = await caller.student.get(id);
 
-    const grades = await api.student.grades({ id });
+    const grades = await caller.student.grades({ id });
 
     if (format === "csv") {
       const { blob, headers } = await toExcel({ grades, student });
@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
           student: student,
           grades: grades,
           school: school,
-        }),
+        })
       );
 
       //const blob = await new Response(stream).blob();

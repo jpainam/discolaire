@@ -14,7 +14,7 @@ import { getServerTranslations } from "~/i18n/server";
 import { Suspense } from "react";
 import { StudentAttendanceAction } from "~/components/students/attendances/StudentAttendanceAction";
 import { cn } from "~/lib/utils";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 export default async function Page(props: {
   params: Promise<{ id: string }>;
@@ -28,7 +28,7 @@ export default async function Page(props: {
     ? parseInt(searchParams.termId)
     : undefined;
 
-  const classroom = await api.student.classroom({ studentId: studentId });
+  const classroom = await caller.student.classroom({ studentId: studentId });
   if (!classroom) {
     return (
       <EmptyState
@@ -65,7 +65,7 @@ async function LateItem({
   studentId: string;
   termId?: number;
 }) {
-  const lates = await api.lateness.byStudent({
+  const lates = await caller.lateness.byStudent({
     studentId: studentId,
     termId: termId,
   });
@@ -127,7 +127,7 @@ async function ChatterItem({
   studentId: string;
   termId?: number;
 }) {
-  const chatters = await api.chatter.byStudent({
+  const chatters = await caller.chatter.byStudent({
     studentId: studentId,
     termId: termId,
   });
@@ -179,7 +179,7 @@ async function ConsigneItem({
   studentId: string;
   termId?: number;
 }) {
-  const consignes = await api.consigne.byStudent({
+  const consignes = await caller.consigne.byStudent({
     studentId: studentId,
     termId: termId,
   });
@@ -240,7 +240,7 @@ async function ExclusionItem({
   studentId: string;
   termId?: number;
 }) {
-  const exclusions = await api.exclusion.byStudent({
+  const exclusions = await caller.exclusion.byStudent({
     studentId: studentId,
     termId: termId,
   });
@@ -309,7 +309,7 @@ async function AbsenceItem({
   studentId: string;
   termId?: number;
 }) {
-  const absences = await api.absence.byStudent({
+  const absences = await caller.absence.byStudent({
     studentId: studentId,
     termId: termId,
   });
@@ -326,7 +326,7 @@ async function AbsenceItem({
             <BaselineIcon
               className={cn(
                 "h-6 w-6",
-                !item.justified ? "text-destructive" : "text-green-700",
+                !item.justified ? "text-destructive" : "text-green-700"
               )}
             />
             <div className="flex-1 items-start justify-start">

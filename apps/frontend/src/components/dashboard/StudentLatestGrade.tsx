@@ -7,7 +7,7 @@ import {
 import i18next from "i18next";
 import { CalendarDays } from "lucide-react";
 import { getServerTranslations } from "~/i18n/server";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import FlatBadge from "../FlatBadge";
 export async function StudentLatestGrade({
   studentId,
@@ -17,7 +17,7 @@ export async function StudentLatestGrade({
   name: string;
 }) {
   const { t } = await getServerTranslations();
-  const grades = await api.student.grades({ id: studentId });
+  const grades = await caller.student.grades({ id: studentId });
 
   return (
     <Card>
@@ -51,7 +51,7 @@ export async function StudentLatestGrade({
                         year: "numeric",
                         month: "short",
                         day: "numeric",
-                      },
+                      }
                     )}
                   </span>
                 </div>

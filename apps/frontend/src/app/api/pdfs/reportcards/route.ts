@@ -4,7 +4,7 @@ import { z } from "zod";
 import { CSAB, renderToStream } from "@repo/reports";
 
 import { auth } from "@repo/auth";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 const searchSchema = z.object({
   studentId: z.string().optional(),
@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
       const error = result.error.issues.map((e) => e.message).join(", ");
       return new Response(error, { status: 400 });
     }
-    const school = await api.school.getSchool();
+    const school = await caller.school.getSchool();
     const stream = await renderToStream(CSAB({ size: "a4", school: school }));
 
     const headers: Record<string, string> = {

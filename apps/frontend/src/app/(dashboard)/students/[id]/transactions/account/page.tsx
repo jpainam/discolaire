@@ -14,7 +14,7 @@ import {
 import { getServerTranslations } from "~/i18n/server";
 
 import { routes } from "~/configs/routes";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -22,13 +22,14 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const { id } = params;
 
   const { t, i18n } = await getServerTranslations();
-  //const school = await api.school.getSchool();
 
-  const account = await api.studentAccount.getByStudentId(id);
+  const account = await caller.studentAccount.getByStudentId(id);
   if (!account) {
     throw new Error("Account not found");
   }
-  const statements = await api.studentAccount.getStatements({ studentId: id });
+  const statements = await caller.studentAccount.getStatements({
+    studentId: id,
+  });
 
   const dateFormat = Intl.DateTimeFormat(i18n.language, {
     month: "short",
@@ -111,7 +112,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                             ? routes.classrooms.fees(`${item.id}`)
                             : routes.students.transactions.details(
                                 id,
-                                Number(item.id),
+                                Number(item.id)
                               )
                         }
                         className="text-blue-700 hover:underline"
