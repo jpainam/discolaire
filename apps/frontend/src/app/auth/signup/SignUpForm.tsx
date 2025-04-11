@@ -51,7 +51,7 @@ export function SignUpForm() {
         console.error(err);
         toast.error(err.message);
       },
-    })
+    }),
   );
 
   const form = useForm({
@@ -75,7 +75,7 @@ export function SignUpForm() {
           console.error(err);
           toast.error(err.message);
         },
-      }
+      },
     );
   }
 

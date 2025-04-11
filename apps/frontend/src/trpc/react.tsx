@@ -8,7 +8,6 @@ import {
   httpBatchStreamLink,
   loggerLink,
 } from "@trpc/client";
-import { createTRPCReact } from "@trpc/react-query";
 import { createTRPCContext } from "@trpc/tanstack-react-query";
 import { useState } from "react";
 import SuperJSON from "superjson";
@@ -29,31 +28,8 @@ const getQueryClient = () => {
 
 export const { useTRPC, TRPCProvider } = createTRPCContext<AppRouter>();
 
-export const api = createTRPCReact<AppRouter>();
-
 export function TRPCReactProvider(props: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
-  // TODO remove trpcClient2 after migrating to trpc
-  const [trpcClient2] = useState(() =>
-    api.createClient({
-      links: [
-        loggerLink({
-          enabled: (op) =>
-            env.NODE_ENV === "development" ||
-            (op.direction === "down" && op.result instanceof Error),
-        }),
-        httpBatchStreamLink({
-          transformer: SuperJSON,
-          url: getBaseUrl() + "/api/trpc",
-          headers() {
-            const headers = new Headers();
-            headers.set("x-trpc-source", "nextjs-react");
-            return headers;
-          },
-        }),
-      ],
-    }),
-  );
   const [trpcClient] = useState(() =>
     createTRPCClient<AppRouter>({
       links: [
@@ -72,19 +48,14 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
           },
         }),
       ],
-    }),
+    })
   );
 
   return (
     <QueryClientProvider client={queryClient}>
       <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
-        <api.Provider client={trpcClient2} queryClient={queryClient}>
-          {props.children}
-        </api.Provider>
-      </TRPCProvider>
-      {/* <api.Provider client={trpcClient} queryClient={queryClient}>
         {props.children}
-      </api.Provider> */}
+      </TRPCProvider>
     </QueryClientProvider>
   );
 }

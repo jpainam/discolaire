@@ -29,12 +29,12 @@ export function AssignmentDataTableActions({ table }: ToolbarActionsProps) {
   const confirm = useConfirm();
   const trpc = useTRPC();
   const deleteAssignemntMutation = useMutation(
-    trpc.assignment.delete.mutationOptions()
+    trpc.assignment.delete.mutationOptions(),
   );
 
   const canDeleteAssignment = useCheckPermission(
     "assignment",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   return (
     <>
@@ -61,7 +61,7 @@ export function AssignmentDataTableActions({ table }: ToolbarActionsProps) {
                     error: (err) => {
                       return getErrorMessage(err);
                     },
-                  }
+                  },
                 );
               }
             }}

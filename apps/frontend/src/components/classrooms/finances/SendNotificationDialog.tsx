@@ -25,7 +25,7 @@ export default function SendNotificationDialog() {
   const { t } = useLocale();
   const trpc = useTRPC();
   const sendEmailMutation = useMutation(
-    trpc.messaging.sendEmail.mutationOptions()
+    trpc.messaging.sendEmail.mutationOptions(),
   );
   return (
     <>
@@ -119,7 +119,7 @@ export default function SendNotificationDialog() {
                   closeModal();
                   return t("sent_successfully");
                 },
-              }
+              },
             );
           }}
         >

@@ -33,7 +33,7 @@ export function CreateEditJournal({ journal }: { journal?: Journal }) {
   const trpc = useTRPC();
   const addJournalMutation = useMutation(trpc.journal.create.mutationOptions());
   const updateJournalMutation = useMutation(
-    trpc.journal.update.mutationOptions()
+    trpc.journal.update.mutationOptions(),
   );
 
   const onSubmit = (data: z.infer<typeof journalSchema>) => {
@@ -60,7 +60,7 @@ export function CreateEditJournal({ journal }: { journal?: Journal }) {
           error: (error) => {
             return getErrorMessage(error);
           },
-        }
+        },
       );
     }
   };

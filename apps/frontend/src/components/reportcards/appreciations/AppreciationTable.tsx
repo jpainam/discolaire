@@ -39,21 +39,21 @@ export function AppreciationTable({ reports }: { reports: any[] }) {
   const [selected, setSelected] = useState<string[]>([]);
   const trpc = useTRPC();
   const appreciationCategoriesQuery = useQuery(
-    trpc.appreciation.categories.queryOptions()
+    trpc.appreciation.categories.queryOptions(),
   );
 
   const searchParams = useSearchParams();
   const classroomId = searchParams.get("classroom");
 
   const [remarksMap, setRemarkMaps] = useState<Record<string, ReportCardType>>(
-    {}
+    {},
   );
   const termId = Number(searchParams.get("term"));
   const remarksQuery = useQuery(
     trpc.reportCard.getRemarks.queryOptions({
       classroomId: classroomId ?? "",
       termId: termId || 0,
-    })
+    }),
   );
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export function AppreciationTable({ reports }: { reports: any[] }) {
   }, [remarksQuery.data]);
 
   const upsertStudentRemarkMutation = useMutation(
-    trpc.reportCard.upsertRemark.mutationOptions()
+    trpc.reportCard.upsertRemark.mutationOptions(),
   );
 
   const rowClassName = "py-0";
@@ -111,7 +111,7 @@ export function AppreciationTable({ reports }: { reports: any[] }) {
                 rowClassName,
                 "group/report",
                 selected.includes(report.student.id) &&
-                  "bg-secondary text-secondary-foreground"
+                  "bg-secondary text-secondary-foreground",
               )}
               key={report.student.id}
             >
@@ -125,7 +125,7 @@ export function AppreciationTable({ reports }: { reports: any[] }) {
                       setSelected([...selected, report.student.id]);
                     } else {
                       setSelected(
-                        selected.filter((id) => id !== report.student.id)
+                        selected.filter((id) => id !== report.student.id),
                       );
                     }
                   }}
