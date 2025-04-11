@@ -108,7 +108,7 @@ export function DefaultSettings({
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder={t("timezones")} />
                     </SelectTrigger>
                     <SelectContent>
@@ -139,7 +139,7 @@ export function DefaultSettings({
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder={t("status")} />
                     </SelectTrigger>
                     <SelectContent>
@@ -201,7 +201,7 @@ export function DefaultSettings({
                     onValueChange={field.onChange}
                     defaultValue={`${field.value}`}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
