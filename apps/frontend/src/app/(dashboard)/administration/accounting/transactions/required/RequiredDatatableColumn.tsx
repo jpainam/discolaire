@@ -199,13 +199,13 @@ function ActionCells({
 
   const canDeleteClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   // const canUpdateClassroom = useCheckPermission(
   //   "classroom",
   //   PermissionAction.UPDATE
   // );
-  // const deleteClassroomMutation = api.classroom.delete.useMutation({
+  // const deleteClassroomMutation = caller.classroom.delete.useMutation({
   //   onSettled: () => utils.classroom.invalidate(),
   //   onSuccess: () => {
   //     toast.success(t("deleted_successfully"), { id: 0 });

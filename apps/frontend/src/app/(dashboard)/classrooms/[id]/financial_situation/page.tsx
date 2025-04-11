@@ -3,7 +3,7 @@ import { sumBy } from "lodash";
 
 import { GridViewFinanceCard } from "~/components/classrooms/finances/GridViewFinanceCard";
 import { ListViewFinance } from "~/components/classrooms/finances/ListViewFinance";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 export default async function Page(props: {
   params: Promise<{ id: string }>;
@@ -17,18 +17,18 @@ export default async function Page(props: {
 
   const { id } = params;
 
-  const fees = await api.classroom.fees(id);
-  let balances = await api.classroom.studentsBalance({ id });
+  const fees = await caller.classroom.fees(id);
+  let balances = await caller.classroom.studentsBalance({ id });
   const session = await auth();
   if (session?.user.profile == "student") {
-    const student = await api.student.getFromUserId(session.user.id);
+    const student = await caller.student.getFromUserId(session.user.id);
     balances = balances.filter((balance) => balance.student.id === student.id);
   } else if (session?.user.profile == "contact") {
-    const contact = await api.contact.getFromUserId(session.user.id);
-    const students = await api.contact.students(contact.id);
+    const contact = await caller.contact.getFromUserId(session.user.id);
+    const students = await caller.contact.students(contact.id);
     const studentIds = students.map((student) => student.studentId);
     balances = balances.filter((balance) =>
-      studentIds.includes(balance.student.id),
+      studentIds.includes(balance.student.id)
     );
   }
 
@@ -43,12 +43,12 @@ export default async function Page(props: {
             ?.toLowerCase()
             .includes(query.toLowerCase()) ??
           balance.student.email?.toLowerCase().includes(query.toLowerCase()) ??
-          (!isNaN(Number(query)) && balance.balance >= Number(query)),
+          (!isNaN(Number(query)) && balance.balance >= Number(query))
       );
 
   const amountDue = sumBy(
     fees.filter((fee) => fee.dueDate <= new Date()),
-    "amount",
+    "amount"
   );
   const view = searchParams.view ?? "grid";
   return (

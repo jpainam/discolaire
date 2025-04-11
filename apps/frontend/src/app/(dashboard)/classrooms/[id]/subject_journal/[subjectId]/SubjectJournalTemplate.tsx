@@ -16,16 +16,20 @@ import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "~/hooks/use-router";
-import { api } from "~/trpc/react";
+import { useTRPC } from "~/trpc/react";
 
 export function SubjectJournalTemplate() {
   const params = useParams<{ subjectId: string }>();
   const { t } = useLocale();
   const { closeModal } = useModal();
-  const journalsQuery = api.subjectJournal.bySubject.useQuery({
-    subjectId: Number(params.subjectId),
-  });
+  const trpc = useTRPC();
+  const journalsQuery = useQuery(
+    trpc.subjectJournal.bySubject.queryOptions({
+      subjectId: Number(params.subjectId),
+    })
+  );
   const { createQueryString } = useCreateQueryString();
   const [templateId, setTemplateId] = useState<string | null>(null);
   const router = useRouter();

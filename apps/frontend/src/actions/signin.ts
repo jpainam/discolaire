@@ -11,7 +11,7 @@ import {
 } from "@repo/auth/session";
 import { db } from "@repo/db";
 
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 const signInSchema = z.object({
   username: z.string().min(1),
@@ -20,7 +20,7 @@ const signInSchema = z.object({
 
 export async function signIn(
   previousState: { error: string },
-  formData: FormData,
+  formData: FormData
 ) {
   const parsed = signInSchema.safeParse(Object.fromEntries(formData));
 
@@ -49,7 +49,7 @@ export async function signIn(
     };
   }
 
-  const schoolYear = await api.schoolYear.getDefault({
+  const schoolYear = await caller.schoolYear.getDefault({
     schoolId: user.schoolId,
   });
 

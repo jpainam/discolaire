@@ -9,7 +9,7 @@ import {
 } from "@repo/ui/components/tabs";
 import { getServerTranslations } from "~/i18n/server";
 
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { PolicyDataTable } from "./PolicyDataTable";
 import { UserDataTable } from "./UserDataTable";
 
@@ -21,7 +21,7 @@ export default async function Page(props: {
   const { roleId } = params;
 
   const { t } = await getServerTranslations();
-  const role = await api.role.get(roleId);
+  const role = await caller.role.get(roleId);
 
   if (!role) {
     notFound();

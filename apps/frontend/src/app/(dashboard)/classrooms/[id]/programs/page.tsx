@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -11,7 +11,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const { id } = params;
 
   const { t } = await getServerTranslations();
-  const subjects = await api.classroom.subjects(id);
+  const subjects = await caller.classroom.subjects(id);
   const subject = subjects.length > 0 ? subjects[0] : null;
   if (subject) {
     redirect(`/classrooms/${id}/programs/${subject.id}`);

@@ -12,13 +12,13 @@ import {
 import { getServerTranslations } from "~/i18n/server";
 
 import { ExternalLinkIcon } from "lucide-react";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { CreateRoleButton } from "./CreateRoleButton";
 import { EditDeleteAction } from "./EditDeleteAction";
 
 export default async function Page() {
   const { t, i18n } = await getServerTranslations();
-  const roles = await api.role.all();
+  const roles = await caller.role.all();
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
     day: "numeric",
     month: "short",

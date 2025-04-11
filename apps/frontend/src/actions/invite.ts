@@ -2,7 +2,7 @@
 
 import { db } from "@repo/db";
 import { nanoid } from "nanoid";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function generateInviteToken() {
@@ -24,7 +24,7 @@ export async function createUniqueInvite({
     exists = !!existing;
   }
 
-  const school = await api.school.getSchool();
+  const school = await caller.school.getSchool();
   if (!token) {
     throw new Error("Token not generated");
   }

@@ -20,7 +20,7 @@ import { ThemeSelector } from "~/components/theme-selector";
 import { TopRightButtons } from "~/components/TopRightButtons";
 import GlobalModal from "~/layouts/GlobalModal";
 import GlobalSheet from "~/layouts/GlobalSheet";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 export default async function Layout({
   children,
@@ -38,12 +38,12 @@ export default async function Layout({
     console.error("No school year selected");
     redirect("/auth/login");
   }
-  //prefetch(api.classroom.all.queryOptions());
+
   const [school, schoolYear, schoolYears, permissions] = await Promise.all([
-    api.school.get(session.user.schoolId),
-    api.schoolYear.get(schoolYearId),
-    api.schoolYear.all(),
-    api.user.getPermissions(session.user.id),
+    caller.school.get(session.user.schoolId),
+    caller.schoolYear.get(schoolYearId),
+    caller.schoolYear.all(),
+    caller.user.getPermissions(session.user.id),
   ]);
 
   return (

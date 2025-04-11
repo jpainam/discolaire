@@ -22,7 +22,7 @@ import { cn } from "@repo/ui/lib/utils";
 import { Printer } from "lucide-react";
 import Link from "next/link";
 import { AvatarState } from "~/components/AvatarState";
-import { api, caller } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { getAppreciations } from "~/utils/get-appreciation";
 
 export default async function Page(props: {
@@ -48,8 +48,8 @@ export default async function Page(props: {
 
   const classroom = await caller.classroom.get(params.id);
   const term = await caller.term.get(Number(termId));
-  const subjects = await api.classroom.subjects(params.id);
-  const students = await api.classroom.students(params.id);
+  const subjects = await caller.classroom.subjects(params.id);
+  const students = await caller.classroom.students(params.id);
   const studentsMap = new Map(students.map((s) => [s.id, s]));
   //const groups = _.groupBy(subjects, "subjectGroupId");
 
@@ -170,7 +170,7 @@ export default async function Page(props: {
                       .sort((a, b) => a.order - b.order)
                       .map((subject, index) => {
                         const g = studentReport.studentCourses.find(
-                          (c) => c.subjectId === subject.id,
+                          (c) => c.subjectId === subject.id
                         )?.average;
                         return (
                           <TableCell
@@ -181,7 +181,7 @@ export default async function Page(props: {
                                 ? "!bg-red-50 dark:!bg-red-800"
                                 : (g ?? 0) < 15
                                   ? "!bg-yellow-50 dark:!bg-yellow-800"
-                                  : "!bg-green-50 dark:!bg-green-800",
+                                  : "!bg-green-50 dark:!bg-green-800"
                             )}
                           >
                             {g ? g.toFixed(2) : "-"}

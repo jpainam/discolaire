@@ -1,5 +1,5 @@
 import { CreateEditExclusion } from "~/components/classrooms/attendances/exclusions/CreateEditExclusion";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 export default async function Page(props: {
   searchParams: Promise<{ term: number }>;
@@ -7,7 +7,7 @@ export default async function Page(props: {
 }) {
   const params = await props.params;
   const searchParams = await props.searchParams;
-  const students = await api.classroom.students(params.id);
+  const students = await caller.classroom.students(params.id);
   const termId = Number(searchParams.term);
   const classroomId = params.id;
 

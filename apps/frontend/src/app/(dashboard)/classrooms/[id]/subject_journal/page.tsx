@@ -3,14 +3,14 @@ import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 import { isRichText } from "~/lib/utils";
 
-import { api, caller } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
 
   const { id } = params;
 
-  const subjects = await api.classroom.subjects(id);
+  const subjects = await caller.classroom.subjects(id);
   if (subjects.length == 0) {
     return <EmptyState className="m-8" />;
   }

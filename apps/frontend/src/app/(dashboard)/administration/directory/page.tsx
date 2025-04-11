@@ -1,7 +1,7 @@
 import { Label } from "@repo/ui/components/label";
 import { getServerTranslations } from "~/i18n/server";
 
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import DirectoryHeader from "./DirectoryHeader";
 import { DirectoryTable } from "./DirectoryTable";
 
@@ -9,7 +9,7 @@ export default async function Page(props: {
   searchParams: Promise<{ q: string }>;
 }) {
   const searchParams = await props.searchParams;
-  const directories = await api.directory.all({ q: searchParams.q });
+  const directories = await caller.directory.all({ q: searchParams.q });
 
   const { t } = await getServerTranslations();
   return (

@@ -1,5 +1,5 @@
 import { CreateEditAssignment } from "~/components/classrooms/assignments/CreateEditAssignment";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 interface EditPageProps {
   params: Promise<{
@@ -9,7 +9,7 @@ interface EditPageProps {
 }
 export default async function Page(props: EditPageProps) {
   const params = await props.params;
-  const assignment = await api.assignment.get(params.assignmentId);
+  const assignment = await caller.assignment.get(params.assignmentId);
 
   return (
     <div>

@@ -15,13 +15,13 @@ import { StudentTransactionStat } from "~/components/dashboard/student/StudentTr
 import { StudentDashboardContact } from "~/components/dashboard/StudentDashboardContact";
 import { StudentLatestGrade } from "~/components/dashboard/StudentLatestGrade";
 import { ErrorFallback } from "~/components/error-fallback";
-import { api, batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
+import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
 
 export default async function Page() {
   const session = await auth();
 
   if (session?.user.profile === "student") {
-    const student = await api.student.getFromUserId(session.user.id);
+    const student = await caller.student.getFromUserId(session.user.id);
     const grades = await caller.student.gradeTrends(student.id);
     const subjects = grades.map((grade) => ({
       id: grade.subjectId,

@@ -14,7 +14,7 @@ import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 
 import { env } from "~/env";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { SchoolTableAction } from "./SchoolTableAction";
 
 export default async function Page() {
@@ -26,7 +26,7 @@ export default async function Page() {
   if (user.username != env.SUPER_ADMIN_USERNAME) {
     redirect(`/administration/my-school/${user.schoolId}`);
   }
-  const schools = await api.school.all();
+  const schools = await caller.school.all();
   const { t } = await getServerTranslations();
 
   return (

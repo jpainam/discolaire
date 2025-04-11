@@ -5,7 +5,7 @@ import { db } from "@repo/db";
 import { getServerTranslations } from "~/i18n/server";
 import { numberToWords } from "~/lib/toword";
 
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 export async function printReceipt(transactionId: number) {
   try {
@@ -23,7 +23,7 @@ export async function printReceipt(transactionId: number) {
         id: transactionId,
       },
     });
-    const data = await api.transaction.getReceiptInfo(transactionId);
+    const data = await caller.transaction.getReceiptInfo(transactionId);
     const title = `${data.student.lastName} ${data.transaction.transactionRef}`;
 
     const { i18n } = await getServerTranslations();
@@ -33,7 +33,7 @@ export async function printReceipt(transactionId: number) {
     }
     const inLetter = `${transaction.amount.toLocaleString(lang)} ${data.school.currency} (${numberToWords(data.transaction.amount, lang)})`;
 
-    const v = await api.reporting.submitReport({
+    const v = await caller.reporting.submitReport({
       endpoint: "receipt",
       title: title,
       data: {

@@ -1,6 +1,6 @@
 import { AssignmentDataTable } from "~/components/classrooms/assignments/AssignmentDataTable";
 import { AssignmentHeader } from "~/components/classrooms/assignments/AssignmentHeader";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 interface AssignmentPageProps {
   params: Promise<{
@@ -10,7 +10,7 @@ interface AssignmentPageProps {
 }
 export default async function Page(props: AssignmentPageProps) {
   const params = await props.params;
-  const assignemts = await api.classroom.assignments(params.id);
+  const assignemts = await caller.classroom.assignments(params.id);
   return (
     <div className="flex gap-2 flex-col">
       <AssignmentHeader />

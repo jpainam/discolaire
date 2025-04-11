@@ -13,7 +13,7 @@ import FlatBadge from "~/components/FlatBadge";
 import { getServerTranslations } from "~/i18n/server";
 
 import { CURRENCY } from "~/lib/constants";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { FinanceGroupAction } from "./FinanceGroupAction";
 import { GroupTableAction } from "./GroupTableAction";
 
@@ -44,7 +44,7 @@ export default async function Page() {
     month: "short",
     day: "numeric",
   });
-  const groups = await api.accounting.groups();
+  const groups = await caller.accounting.groups();
 
   return (
     <div className="flex flex-col gap-2 px-2">

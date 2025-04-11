@@ -16,15 +16,13 @@ export default async function Page(props: {
 }) {
   const searchParams = await props.searchParams;
 
-  //const school = await api.school.getSchool();
-
   prefetch(
     trpc.transaction.all.queryOptions({
       status: searchParams.status,
       from: searchParams.from ? new Date(searchParams.from) : undefined,
       to: searchParams.to ? new Date(searchParams.to) : undefined,
       classroomId: searchParams.classroom,
-    }),
+    })
   );
 
   return (

@@ -2,7 +2,7 @@ import FlatBadge from "~/components/FlatBadge";
 import { getServerTranslations } from "~/i18n/server";
 
 import { DeletedTransactionDataTable } from "~/components/administration/transactions/DeletedDataTable";
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 
 export default async function Page(props: {
   searchParams: Promise<{
@@ -14,8 +14,8 @@ export default async function Page(props: {
 }) {
   const searchParams = await props.searchParams;
   const { t, i18n } = await getServerTranslations();
-  const school = await api.school.getSchool();
-  const transactions = await api.transaction.getDeleted({
+  const school = await caller.school.getSchool();
+  const transactions = await caller.transaction.getDeleted({
     status: searchParams.status,
     from: searchParams.from ? new Date(searchParams.from) : undefined,
     to: searchParams.to ? new Date(searchParams.to) : undefined,

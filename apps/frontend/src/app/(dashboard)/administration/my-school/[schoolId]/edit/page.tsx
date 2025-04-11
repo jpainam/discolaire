@@ -1,4 +1,4 @@
-import { api } from "~/trpc/server";
+import { caller } from "~/trpc/server";
 import { CreateEditSchool } from "./CreateEditSchool";
 
 export default async function Page(props: {
@@ -8,7 +8,7 @@ export default async function Page(props: {
 
   const { schoolId } = params;
 
-  const school = await api.school.get(schoolId);
+  const school = await caller.school.get(schoolId);
 
   return <CreateEditSchool school={school} />;
 }
