@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
 
     const { preview, format } = result.data;
 
-    const students = await api.enrollment.ennrolled({});
+    const students = await api.enrollment.enrolled({});
 
     const school = await api.school.getSchool();
     if (format === "csv") {
@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
         StudentList({
           students: students,
           school: school,
-        })
+        }),
       );
 
       //const blob = await new Response(stream).blob();
@@ -78,7 +78,7 @@ export async function GET(req: NextRequest) {
 async function toExcel({
   students,
 }: {
-  students: RouterOutputs["enrollment"]["ennrolled"];
+  students: RouterOutputs["enrollment"]["enrolled"];
 }) {
   const { t, i18n } = await getServerTranslations();
   const dateFormat = Intl.DateTimeFormat(i18n.language, {
