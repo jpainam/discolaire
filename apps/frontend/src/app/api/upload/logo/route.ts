@@ -1,7 +1,6 @@
-import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { auth } from "@repo/auth";
 import { env } from "~/env";
-import { s3client, uploadFile } from "~/lib/s3-client";
+import { deleteFile, uploadFile } from "~/lib/s3-client";
 import { caller } from "~/trpc/server";
 
 export async function POST(request: Request) {
@@ -61,21 +60,16 @@ export async function DELETE(request: Request) {
     }
     //const school = await caller.school.getSchool();
 
-    const key = avatar.split(
-      "https://discolaire-public.s3.eu-central-1.amazonaws.com/"
-    )[1];
+    const key = avatar;
+    await deleteFile({ bucket: env.S3_IMAGE_BUCKET_NAME, key });
     //const key = `${school.code}/avatars/${userId}.png`;
-    const command = new DeleteObjectCommand({
-      Bucket: "discolaire-public",
-      Key: key,
-    });
-    const response = await s3client.send(command);
+
     // Update the avatar in the database
     await caller.user.updateAvatar({
       id: userId,
       avatar: null,
     });
-    return Response.json({ response });
+    return Response.json({ message: "avatar deleted" });
   } catch (error) {
     return Response.json({ error: (error as Error).message });
   }
