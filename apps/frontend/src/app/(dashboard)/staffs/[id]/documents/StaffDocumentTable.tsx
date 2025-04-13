@@ -22,6 +22,7 @@ import {
 } from "@tanstack/react-query";
 import i18next from "i18next";
 import { DownloadCloud, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { EmptyState } from "~/components/EmptyState";
@@ -33,7 +34,7 @@ export function StaffDocumentTable() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: documents } = useSuspenseQuery(
-    trpc.staff.documents.queryOptions(params.id),
+    trpc.staff.documents.queryOptions(params.id)
   );
   const { t } = useLocale();
 
@@ -63,7 +64,7 @@ export function StaffDocumentTable() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   return (
@@ -72,9 +73,9 @@ export function StaffDocumentTable() {
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">
+              <TableHead>{t("date")}</TableHead>
               <TableHead>{t("title")}</TableHead>
               <TableHead>{t("description")}</TableHead>
-              <TableHead>{t("date")}</TableHead>
               <TableHead>{t("created_by")}</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
@@ -90,8 +91,6 @@ export function StaffDocumentTable() {
             {documents.map((document) => {
               return (
                 <TableRow key={document.id}>
-                  <TableCell>{document.title}</TableCell>
-                  <TableCell>{document.description}</TableCell>
                   <TableCell>
                     {document.createdAt.toLocaleDateString(i18next.language, {
                       year: "numeric",
@@ -99,8 +98,27 @@ export function StaffDocumentTable() {
                       day: "2-digit",
                     })}
                   </TableCell>
+                  <TableCell>{document.title}</TableCell>
+                  <TableCell>{document.description}</TableCell>
                   <TableCell>
                     {document.createdBy.name ?? t("unknown")}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-wrap  gap-2">
+                      {document.attachments.map((attachment, index) => {
+                        return (
+                          <Link
+                            href={`/api/download/documents/${attachment}`}
+                            className="underline text-blue-600 flex items-center gap-1"
+                            target="_blank"
+                            key={attachment}
+                          >
+                            File {index + 1}
+                            <DownloadCloud className="size-4" />
+                          </Link>
+                        );
+                      })}
+                    </div>
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
@@ -114,23 +132,7 @@ export function StaffDocumentTable() {
                           <Pencil />
                           {t("edit")}
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                        // onSelect={() => {
-                        //   toast.promise(downloadFileFromAws(url), {
-                        //     success: (signedUrl) => {
-                        //       window.open(signedUrl, "_blank");
-                        //       return t("downloaded");
-                        //     },
-                        //     loading: t("downloading"),
-                        //     error: (error) => {
-                        //       return getErrorMessage(error);
-                        //     },
-                        //   });
-                        // }}
-                        >
-                          <DownloadCloud className="mr-2 h-4 w-4" />
-                          {t("download")}
-                        </DropdownMenuItem>
+
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                           variant="destructive"

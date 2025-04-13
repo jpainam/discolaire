@@ -33,7 +33,7 @@ export function StudentDocumentTable() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: documents } = useSuspenseQuery(
-    trpc.student.documents.queryOptions(params.id)
+    trpc.student.documents.queryOptions(params.id),
   );
   const { t } = useLocale();
 
@@ -59,14 +59,14 @@ export function StudentDocumentTable() {
     trpc.document.delete.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.student.documents.pathFilter()
+          trpc.student.documents.pathFilter(),
         );
         toast.success(t("deleted_successfully"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   return (
