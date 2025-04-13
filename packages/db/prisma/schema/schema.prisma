@@ -1048,7 +1048,7 @@ model User {
     password          String
     createdAt         DateTime         @default(now())
     updatedAt         DateTime         @updatedAt
-    profile           String           @default("student")
+    profile           String
     permissions       Json?
     contacts          Contact[]
     photos            Photo[]

@@ -401,6 +401,7 @@ export const userRouter = createTRPCRouter({
           email: `${input.username}@discolaire.com`,
           username: input.username,
           name: input.username,
+          profile: invite.entityType,
           schoolId: invite.schoolId,
           password: await hashPassword(input.password),
           isActive: true,
