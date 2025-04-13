@@ -33,7 +33,7 @@ export function StaffDocumentTable() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: documents } = useSuspenseQuery(
-    trpc.staff.documents.queryOptions(params.id)
+    trpc.staff.documents.queryOptions(params.id),
   );
   const { t } = useLocale();
 
@@ -63,7 +63,7 @@ export function StaffDocumentTable() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   return (

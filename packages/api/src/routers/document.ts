@@ -1,4 +1,3 @@
-import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { getUserByEntity } from "../services/user-service";
@@ -8,9 +7,8 @@ const createEditDocumentSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional(),
   attachments: z.array(z.string()).optional().default([]),
-  userId: z.string().optional(),
-  entityId: z.string().optional(),
-  entityType: z.enum(["student", "staff", "contact"]).optional(),
+  entityId: z.string().min(1),
+  entityType: z.enum(["student", "staff", "contact"]),
 });
 
 export const documentRouter = createTRPCRouter({
@@ -43,26 +41,16 @@ export const documentRouter = createTRPCRouter({
   create: protectedProcedure
     .input(createEditDocumentSchema)
     .mutation(async ({ ctx, input }) => {
-      let userId = input.userId;
-      if (!userId) {
-        if (!input.entityId || !input.entityType) {
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: "entityId and entityType are required",
-          });
-        }
-        const user = await getUserByEntity({
-          entityId: input.entityId,
-          entityType: input.entityType,
-          schoolId: ctx.schoolId,
-        });
-        userId = user.id;
-      }
+      const user = await getUserByEntity({
+        entityId: input.entityId,
+        entityType: input.entityType,
+        schoolId: ctx.schoolId,
+      });
       return ctx.db.document.create({
         data: {
           title: input.title,
           description: input.description,
-          userId: userId,
+          userId: user.id,
           attachments: input.attachments,
           createdById: ctx.session.user.id,
           schoolId: ctx.schoolId,

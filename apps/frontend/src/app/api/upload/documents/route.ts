@@ -53,7 +53,7 @@ export async function DELETE(request: Request) {
     if (!documentId) {
       return Response.json(
         { error: "No documentId provided" },
-        { status: 400 }
+        { status: 400 },
       );
     }
     const document = await caller.document.get(documentId);
@@ -62,8 +62,8 @@ export async function DELETE(request: Request) {
         deleteFile({
           bucket: env.S3_DOCUMENT_BUCKET_NAME,
           key: attachment,
-        })
-      )
+        }),
+      ),
     );
 
     return Response.json({ message: "Avatar deleted successfully" });

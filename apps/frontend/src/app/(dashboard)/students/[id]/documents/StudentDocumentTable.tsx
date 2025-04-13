@@ -22,6 +22,7 @@ import {
 } from "@tanstack/react-query";
 import i18next from "i18next";
 import { DownloadCloud, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { EmptyState } from "~/components/EmptyState";
@@ -74,9 +75,9 @@ export function StudentDocumentTable() {
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">
+              <TableHead>{t("date")}</TableHead>
               <TableHead>{t("title")}</TableHead>
               <TableHead>{t("description")}</TableHead>
-              <TableHead>{t("date")}</TableHead>
               <TableHead>{t("created_by")}</TableHead>
               <TableHead>{t("files")}</TableHead>
               <TableHead className="text-right"></TableHead>
@@ -93,20 +94,37 @@ export function StudentDocumentTable() {
             {documents.map((document) => {
               return (
                 <TableRow key={document.id}>
-                  <TableCell>{document.title}</TableCell>
-                  <TableCell>{document.description}</TableCell>
-                  <TableCell>
+                  <TableCell className="text-muted-foreground">
                     {document.createdAt.toLocaleDateString(i18next.language, {
                       year: "numeric",
                       month: "2-digit",
                       day: "2-digit",
                     })}
                   </TableCell>
-                  <TableCell>
+                  <TableCell>{document.title}</TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {document.description}
+                  </TableCell>
+
+                  <TableCell className="text-muted-foreground">
                     {document.createdBy.name ?? t("unknown")}
                   </TableCell>
-                  <TableCell>
-                    {document.createdBy.name ?? t("unknown")}
+                  <TableCell className="text-center ">
+                    <div className="flex flex-wrap  gap-2">
+                      {document.attachments.map((attachment, index) => {
+                        return (
+                          <Link
+                            href={`/api/download/documents/${attachment}`}
+                            className="underline text-blue-600 flex items-center gap-1"
+                            target="_blank"
+                            key={attachment}
+                          >
+                            File {index + 1}
+                            <DownloadCloud className="size-4" />
+                          </Link>
+                        );
+                      })}
+                    </div>
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
@@ -119,23 +137,6 @@ export function StudentDocumentTable() {
                         <DropdownMenuItem>
                           <Pencil />
                           {t("edit")}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                        // onSelect={() => {
-                        //   toast.promise(downloadFileFromAws(url), {
-                        //     success: (signedUrl) => {
-                        //       window.open(signedUrl, "_blank");
-                        //       return t("downloaded");
-                        //     },
-                        //     loading: t("downloading"),
-                        //     error: (error) => {
-                        //       return getErrorMessage(error);
-                        //     },
-                        //   });
-                        // }}
-                        >
-                          <DownloadCloud className="mr-2 h-4 w-4" />
-                          {t("download")}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
