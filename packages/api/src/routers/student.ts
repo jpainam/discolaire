@@ -700,4 +700,28 @@ export const studentRouter = createTRPCRouter({
         maxGrade: maxGradeMap.get(grade.gradeSheetId),
       }));
     }),
+
+  documents: protectedProcedure
+    .input(z.string().min(1))
+    .query(async ({ ctx, input }) => {
+      const student = await ctx.db.student.findUniqueOrThrow({
+        where: {
+          id: input,
+        },
+      });
+      if (!student.userId) {
+        return [];
+      }
+      return ctx.db.document.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          createdBy: true,
+        },
+        where: {
+          userId: student.userId,
+        },
+      });
+    }),
 });

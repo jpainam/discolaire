@@ -462,13 +462,13 @@ model Document {
     id          String   @id @default(uuid())
     title       String
     description String?
-    owner       User     @relation("owner", fields: [ownerId], references: [id])
-    ownerId     String
+    user        User     @relation("owner", fields: [userId], references: [id])
+    userId      String
     createdAt   DateTime @default(now()) @db.Timestamp(6)
     updatedAt   DateTime @updatedAt
     createdById String
     createdBy   User     @relation("createdBy", fields: [createdById], references: [id])
-    url         String
+    attachments String[]
     school      School   @relation(fields: [schoolId], references: [id])
     schoolId    String
 }
