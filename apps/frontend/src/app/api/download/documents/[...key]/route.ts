@@ -13,7 +13,7 @@ import { minioClient, s3client } from "~/lib/s3-client";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ key: string[] }> }
+  { params }: { params: Promise<{ key: string[] }> },
 ) {
   const { key } = await params;
   const objectKey = key.join("/");
@@ -24,11 +24,11 @@ export async function GET(
       // Use MinIO client
       const stream = await minioClient.getObject(
         env.S3_DOCUMENT_BUCKET_NAME,
-        objectKey
+        objectKey,
       );
       const stat = await minioClient.statObject(
         env.S3_DOCUMENT_BUCKET_NAME,
-        objectKey
+        objectKey,
       );
       const contentType =
         stat.metaData["content-type"] ?? "application/octet-stream";
@@ -67,7 +67,7 @@ export async function GET(
     console.error("Document fetch error:", error);
     return NextResponse.json(
       { error: "Failed to fetch document" },
-      { status: error.code === "NoSuchKey" ? 404 : 500 }
+      { status: error.code === "NoSuchKey" ? 404 : 500 },
     );
   }
 }
