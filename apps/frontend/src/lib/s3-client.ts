@@ -9,7 +9,7 @@ import { env } from "~/env";
 import * as Minio from "minio";
 const isLocal = env.NEXT_PUBLIC_DEPLOYMENT_ENV == "local";
 
-const minioClient = new Minio.Client({
+export const minioClient = new Minio.Client({
   endPoint: "localhost",
   port: 9310, //env.MINIO_PORT,
   useSSL: false, // set to False when using localhost
@@ -60,7 +60,7 @@ export const uploadFile = async ({
       destination,
       Buffer.from(await file.arrayBuffer()),
       file.size,
-      metaData,
+      metaData
     );
     return {
       key: destination,
@@ -106,7 +106,7 @@ export async function uploadFiles({
 
 async function runWithConcurrency<T>(
   tasks: (() => Promise<T>)[],
-  concurrency: number,
+  concurrency: number
 ): Promise<T[]> {
   const results: T[] = [];
   const queue = [...tasks];
