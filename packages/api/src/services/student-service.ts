@@ -229,30 +229,6 @@ export const studentService = {
         },
       },
     });
-    /*return db.$transaction(
-      async (tx) => {
-        const students = await tx.student.findMany({
-          where: {
-            schoolId: schoolId,
-            id: {
-              in: Array.isArray(studentIds) ? studentIds : [studentIds],
-            },
-          },
-        });
-        await tx.student.deleteMany({
-          where: {
-            id: {
-              in: Array.isArray(studentIds) ? studentIds : [studentIds],
-            },
-          },
-        });
-        await userService.deleteUsers(
-          students.map((c) => c.userId).filter((t) => t !== null),
-        );
-        return students;
-      },
-      { maxWait: 5000, timeout: 50000 },
-    );*/
   },
   registrationNumberExists: async (
     registrationNumber: string,

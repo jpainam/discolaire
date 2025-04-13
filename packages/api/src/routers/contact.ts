@@ -27,13 +27,13 @@ export const contactRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(async ({ ctx, input }) => {
-      if (Array.isArray(input)) {
-        void Promise.all(
-          input.map((id) => redisClient.del(`contact:${id}:students`)),
-        );
-      } else {
-        void redisClient.del(`contact:${input}:students`);
-      }
+      // if (Array.isArray(input)) {
+      //   void Promise.all(
+      //     input.map((id) => redisClient.del(`contact:${id}:students`)),
+      //   );
+      // } else {
+      //   void redisClient.del(`contact:${input}:students`);
+      // }
       const contacts = await ctx.db.contact.findMany({
         where: {
           schoolId: ctx.schoolId,
