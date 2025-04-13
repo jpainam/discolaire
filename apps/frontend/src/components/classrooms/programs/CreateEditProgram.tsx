@@ -5,6 +5,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import {
@@ -22,7 +23,6 @@ import { z } from "zod";
 import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 
-import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 import { MoreVertical } from "lucide-react";
 import { EmptyState } from "~/components/EmptyState";
 import PDFIcon from "~/components/icons/pdf-solid";
@@ -70,7 +70,7 @@ export function CreateEditProgram({
 
   const canUpdateSubject = useCheckPermission(
     "subject",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const updateSubjectProgram = useMutation(
     trpc.subject.updateProgram.mutationOptions({
@@ -82,7 +82,7 @@ export function CreateEditProgram({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const submitProgram = (data: z.infer<typeof programFormSchema>) => {
@@ -145,7 +145,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=pdf`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -156,7 +156,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=pdf&subjectId=${subject.id}`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -168,7 +168,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=csv`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
@@ -179,7 +179,7 @@ export function CreateEditProgram({
                   onSelect={() => {
                     window.open(
                       `/api/pdfs/classroom/${params.id}/programs?format=csv&subjectId=${subject.id}`,
-                      "_blank",
+                      "_blank"
                     );
                   }}
                 >
