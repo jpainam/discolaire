@@ -168,6 +168,55 @@ export const userService = {
   },
 };
 
+export async function getUserByEntity({
+  entityId,
+  entityType,
+  schoolId,
+}: {
+  entityId: string;
+  entityType: "staff" | "contact" | "student";
+  schoolId: string;
+}) {
+  let userId, name;
+  if (entityType == "staff") {
+    const dd = await db.staff.findUniqueOrThrow({
+      where: {
+        id: entityId,
+      },
+    });
+    userId = dd.userId;
+    name = `${dd.lastName} ${dd.firstName}`;
+  } else if (entityType == "student") {
+    const dd = await db.student.findFirstOrThrow({
+      where: {
+        id: entityId,
+      },
+    });
+    userId = dd.userId;
+    name = `${dd.lastName} ${dd.firstName}`;
+  } else {
+    const dd = await db.contact.findFirstOrThrow({
+      where: {
+        id: entityId,
+      },
+    });
+    userId = dd.userId;
+    name = `${dd.lastName} ${dd.firstName}`;
+  }
+  if (!userId) {
+    return userService.createAutoUser({
+      schoolId: schoolId,
+      entityId: entityId,
+      profile: entityType,
+      name: name,
+    });
+  }
+  return db.user.findFirstOrThrow({
+    where: {
+      id: userId,
+    },
+  });
+}
 export async function getPermissions(userId: string) {
   const user = await db.user.findUniqueOrThrow({
     where: { id: userId },

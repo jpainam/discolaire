@@ -21,12 +21,13 @@ import { useLocale } from "~/i18n";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { Label } from "@repo/ui/components/label";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { cn } from "@repo/ui/lib/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useForm } from "react-hook-form";
-import { useRouter } from "~/hooks/use-router";
+import { formatBytes } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
 const createEditDocumentSchema = z.object({
@@ -55,8 +56,10 @@ export function CreateEditDocument({
   });
   const [files, setFiles] = useState<File[]>([]);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop: (acceptedFiles) => setFiles(acceptedFiles),
+    onDrop: (acceptedFiles) =>
+      setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]),
   });
+  const { t } = useLocale();
   const [isLoading, setIsLoading] = useState(false);
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -64,71 +67,82 @@ export function CreateEditDocument({
   const createDocumentMutation = useMutation(
     trpc.document.create.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.document.all.pathFilter());
+        await queryClient.invalidateQueries(
+          trpc.student.documents.pathFilter(),
+        );
+        await queryClient.invalidateQueries(trpc.staff.documents.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateDocumentMutation = useMutation(
     trpc.document.update.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.document.all.pathFilter());
+        await queryClient.invalidateQueries(trpc.staff.documents.pathFilter());
+        await queryClient.invalidateQueries(
+          trpc.student.documents.pathFilter(),
+        );
         toast.success(t("updated_successfully"), { id: 0 });
         closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
-  const router = useRouter();
+
   const { closeModal } = useModal();
   const handleSubmit = async (
-    data: z.infer<typeof createEditDocumentSchema>
+    data: z.infer<typeof createEditDocumentSchema>,
   ) => {
-    setIsLoading(true);
-    const formData = new FormData();
-    try {
-      //formData.append("file", croppedBlob, selectedFile?.name ?? "avatar.png");
-      //formData.append("entityId", props.entityId ?? "");
-      //formData.append("entityType", props.entityType ?? "");
-      //formData.append("userId", props.userId ?? "");
-      const response = await fetch("/api/upload/avatars", {
-        method: "POST",
-        body: formData,
-      });
-      if (response.ok) {
-        toast.success(t("success"), { id: 0 });
-        router.refresh();
-      } else {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const { error } = await response.json();
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        toast.error(error ?? response.statusText, { id: 0 });
-      }
-    } catch (error) {}
     const values = {
       title: data.title,
       description: data.description,
     };
     if (documentId) {
       toast.loading(t("updating"), { id: 0 });
-      //updateDocumentMutation.mutate({ id: documentId, ...values });
-    } else {
+      updateDocumentMutation.mutate({ id: documentId, ...values });
+      return;
+    }
+    setIsLoading(true);
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append("files", file, file.name);
+    });
+    formData.append("entityId", entityId);
+    formData.append("entityType", entityType);
+
+    const response = await fetch("/api/upload/documents", {
+      method: "POST",
+      body: formData,
+    });
+    if (response.ok) {
+      const results = (await response.json()) as {
+        key: string;
+        fullPath: string;
+      }[];
+      const attachments = results.map((result) => result.key);
       toast.loading(t("creating"), { id: 0 });
-      //createDocumentMutation.mutate(values);
+      createDocumentMutation.mutate({
+        ...values,
+        attachments: attachments,
+      });
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const { error } = await response.json();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      toast.error(error ?? response.statusText, { id: 0 });
     }
   };
-  const { t } = useLocale();
 
   const filesList = files.map((file) => (
-    <li key={file.name} className="relative">
-      <Card className="relative p-4">
-        <div className="absolute right-4 top-1/2 -translate-y-1/2">
+    <li key={file.name}>
+      <Card className="relative p-2">
+        <div className="absolute right-2 top-1/2 -translate-y-1/2">
           <Button
             type="button"
             variant="ghost"
@@ -136,21 +150,21 @@ export function CreateEditDocument({
             aria-label="Remove file"
             onClick={() =>
               setFiles((prevFiles) =>
-                prevFiles.filter((prevFile) => prevFile.name !== file.name)
+                prevFiles.filter((prevFile) => prevFile.name !== file.name),
               )
             }
           >
             <Trash2 className="h-5 w-5 text-destructive" aria-hidden={true} />
           </Button>
         </div>
-        <CardContent className="flex items-center space-x-3 p-0">
+        <CardContent className="flex items-center space-x-2 p-0">
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-muted">
             <FileIcon className="h-5 w-5 text-foreground" aria-hidden={true} />
           </span>
           <div>
-            <p className="font-medium text-foreground">{file.name}</p>
-            <p className="mt-0.5 text-sm text-muted-foreground">
-              {file.size} bytes
+            <p className="text-sm text-foreground">{file.name}</p>
+            <p className="text-xs text-muted-foreground">
+              {formatBytes(file.size)}
             </p>
           </div>
         </CardContent>
@@ -161,7 +175,7 @@ export function CreateEditDocument({
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-6"
+        className="flex flex-col gap-4"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
         <FormField
@@ -185,66 +199,60 @@ export function CreateEditDocument({
             <FormItem>
               <FormLabel htmlFor="description">{t("description")}</FormLabel>
               <FormControl>
-                <Textarea {...field} />
+                <Textarea className="resize-none" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <div className="col-span-full">
-          <Label htmlFor="file-upload-2" className="font-medium">
-            File(s) upload
-          </Label>
-          <div
-            {...getRootProps()}
-            className={cn(
-              isDragActive
-                ? "border-primary bg-primary/10 ring-2 ring-primary/20"
-                : "border-border",
-              "mt-2 flex justify-center rounded-md border border-dashed px-6 py-20 transition-colors duration-200"
-            )}
-          >
-            <div>
-              <FileIcon
-                className="mx-auto h-12 w-12 text-muted-foreground/80"
-                aria-hidden={true}
-              />
-              <div className="mt-4 flex text-muted-foreground">
-                <p>Drag and drop or</p>
-                <label
-                  htmlFor="file"
-                  className="relative cursor-pointer rounded-sm pl-1 font-medium text-primary hover:text-primary/80 hover:underline hover:underline-offset-4"
-                >
-                  <span>choose file(s)</span>
-                  <input
-                    {...getInputProps()}
-                    id="file-upload-2"
-                    name="file-upload-2"
-                    type="file"
-                    className="sr-only"
-                  />
-                </label>
-                <p className="pl-1">to upload</p>
-              </div>
+        {!documentId && (
+          <div className="col-span-full gap-2 flex flex-col">
+            <Label htmlFor="file-upload-2" className="font-medium">
+              {t("documents")}
+            </Label>
+            <div
+              {...getRootProps()}
+              className={cn(
+                isDragActive
+                  ? "border-primary bg-primary/10 ring-2 ring-primary/20"
+                  : "border-border",
+                "flex justify-center rounded-md border border-dashed py-4 transition-colors duration-200",
+              )}
+            >
+              <input {...getInputProps()} />
+              {isDragActive ? (
+                <div className="flex flex-col items-center justify-center gap-2 sm:px-5">
+                  <UploadIcon className="size-5 text-muted-foreground" />
+                  <p className="font-medium text-sm text-muted-foreground">
+                    Drop the files here
+                  </p>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center gap-2 sm:px-5">
+                  <UploadIcon className="size-5 text-muted-foreground" />
+                  <div className="flex flex-col gap-px items-center justify-center">
+                    <p className="font-medium text-sm text-muted-foreground">
+                      Drag {`'n'`} drop files here, or click to select files
+                    </p>
+                    <p className="text-xs text-muted-foreground/70">
+                      You can upload multiple files (up to{" "}
+                      {formatBytes(10000000)} each)
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
+            {filesList.length > 0 && (
+              <ScrollArea className="h-fit w-full">
+                <ul role="list" className="mt-2 space-y-2">
+                  {filesList}
+                </ul>
+              </ScrollArea>
+            )}
           </div>
-          <p className="mt-2 text-sm leading-5 text-muted-foreground sm:flex sm:items-center sm:justify-between">
-            <span>All file types are allowed to upload.</span>
-            <span className="pl-1 sm:pl-0">Max. size per file: 50MB</span>
-          </p>
-          {filesList.length > 0 && (
-            <>
-              <h4 className="mt-6 font-medium text-foreground">
-                File(s) to upload
-              </h4>
-              <ul role="list" className="mt-4 space-y-4">
-                {filesList}
-              </ul>
-            </>
-          )}
-        </div>
-        <div className="ml-auto flex flex-row items-center gap-2">
+        )}
+        <div className="ml-auto flex flex-row items-center gap-4">
           <Button
             onClick={() => {
               closeModal();

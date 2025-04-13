@@ -1,45 +1,19 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
+import { getUserByEntity } from "../services/user-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const createEditDocumentSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional(),
-  url: z.string().min(1),
-  ownerId: z.string().min(1),
+  attachments: z.array(z.string()).optional().default([]),
+  userId: z.string().optional(),
+  entityId: z.string().optional(),
+  entityType: z.enum(["student", "staff", "contact"]).optional(),
 });
 
 export const documentRouter = createTRPCRouter({
-  all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.document.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-      include: {
-        createdBy: true,
-        owner: true,
-      },
-      where: {
-        schoolId: ctx.schoolId,
-      },
-    });
-  }),
-  byUserId: protectedProcedure
-    .input(z.object({ ownerId: z.string() }))
-    .query(({ ctx, input }) => {
-      return ctx.db.document.findMany({
-        orderBy: {
-          createdAt: "desc",
-        },
-        include: {
-          createdBy: true,
-          owner: true,
-        },
-        where: {
-          ownerId: input.ownerId,
-        },
-      });
-    }),
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(({ ctx, input }) => {
@@ -61,29 +35,44 @@ export const documentRouter = createTRPCRouter({
         data: {
           title: input.title,
           description: input.description,
-          url: input.url,
+          //attachments: input.attachments,
           createdById: ctx.session.user.id,
         },
       });
     }),
   create: protectedProcedure
     .input(createEditDocumentSchema)
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
+      let userId = input.userId;
+      if (!userId) {
+        if (!input.entityId || !input.entityType) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "entityId and entityType are required",
+          });
+        }
+        const user = await getUserByEntity({
+          entityId: input.entityId,
+          entityType: input.entityType,
+          schoolId: ctx.schoolId,
+        });
+        userId = user.id;
+      }
       return ctx.db.document.create({
         data: {
           title: input.title,
           description: input.description,
-          ownerId: input.ownerId,
-          url: input.url,
+          userId: userId,
+          attachments: input.attachments,
           createdById: ctx.session.user.id,
           schoolId: ctx.schoolId,
         },
       });
     }),
   get: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
-    return ctx.db.document.findUnique({
+    return ctx.db.document.findUniqueOrThrow({
       include: {
-        owner: true,
+        user: true,
         createdBy: true,
       },
       where: {

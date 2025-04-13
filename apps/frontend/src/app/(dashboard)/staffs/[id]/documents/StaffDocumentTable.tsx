@@ -28,17 +28,17 @@ import { EmptyState } from "~/components/EmptyState";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
-export function StudentDocumentTable() {
+
+export function StaffDocumentTable() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: documents } = useSuspenseQuery(
-    trpc.student.documents.queryOptions(params.id)
+    trpc.staff.documents.queryOptions(params.id)
   );
   const { t } = useLocale();
 
   const queryClient = useQueryClient();
   const confirm = useConfirm();
-
   const handleDeleteAttachments = async (documentId: string) => {
     const response = await fetch("/api/upload/documents", {
       method: "DELETE",
@@ -57,9 +57,7 @@ export function StudentDocumentTable() {
   const deleteDocumentMutation = useMutation(
     trpc.document.delete.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(
-          trpc.student.documents.pathFilter()
-        );
+        await queryClient.invalidateQueries(trpc.staff.documents.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
       onError: (error) => {
@@ -78,7 +76,6 @@ export function StudentDocumentTable() {
               <TableHead>{t("description")}</TableHead>
               <TableHead>{t("date")}</TableHead>
               <TableHead>{t("created_by")}</TableHead>
-              <TableHead>{t("files")}</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
@@ -101,9 +98,6 @@ export function StudentDocumentTable() {
                       month: "2-digit",
                       day: "2-digit",
                     })}
-                  </TableCell>
-                  <TableCell>
-                    {document.createdBy.name ?? t("unknown")}
                   </TableCell>
                   <TableCell>
                     {document.createdBy.name ?? t("unknown")}
