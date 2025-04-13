@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  ImageMinus,
+  ImagePlusIcon,
   KeyRound,
   Mails,
   MoreHorizontal,
@@ -31,6 +33,7 @@ import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ChangeAvatarButton } from "~/components/users/ChangeAvatarButton";
 import { CreateEditUser } from "~/components/users/CreateEditUser";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
@@ -62,15 +65,56 @@ export function StaffProfileHeader({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const { openModal } = useModal();
   const { openSheet } = useSheet();
+  const handleDeleteAvatar = async (userId: string) => {
+    toast.loading(t("deleting"), { id: 0 });
+    const response = await fetch("/api/upload/avatars", {
+      method: "DELETE",
+      body: JSON.stringify({
+        userId: userId,
+      }),
+    });
+    if (response.ok) {
+      toast.success(t("deleted_successfully"), {
+        id: 0,
+      });
+      await queryClient.invalidateQueries(trpc.user.get.pathFilter());
+      await queryClient.invalidateQueries(trpc.staff.get.pathFilter());
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const { error } = await response.json();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      toast.error(error ?? response.statusText, { id: 0 });
+    }
+  };
   return (
     <div className="flex flex-col gap-1">
       <div className="flex flex-row items-center gap-2">
-        <Button variant={"outline"}>{t("change_avatar")}</Button>
+        {!staff.user?.avatar ? (
+          <ChangeAvatarButton entityId={staff.id} entityType="staff">
+            <Button size={"sm"} variant={"outline"}>
+              <ImagePlusIcon />
+              {t("change_avatar")}
+            </Button>
+          </ChangeAvatarButton>
+        ) : (
+          <Button
+            onClick={() => {
+              if (!staff.user) return;
+              void handleDeleteAvatar(staff.user.id);
+            }}
+            variant={"outline"}
+            size={"sm"}
+            type="button"
+          >
+            <ImageMinus />
+            {t("Remove avatar")}
+          </Button>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant={"outline"} className="size-8" size={"icon"}>

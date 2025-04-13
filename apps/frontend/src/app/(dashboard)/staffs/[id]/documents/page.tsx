@@ -2,8 +2,8 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
 import { ErrorFallback } from "~/components/error-fallback";
-import { StudentDocumentHeader } from "~/components/students/documents/StudentDocumentHeader";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
+import { StaffDocumentHeader } from "./StaffDocumentHeader";
 import { StaffDocumentTable } from "./StaffDocumentTable";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
@@ -21,7 +21,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </div>
           }
         >
-          <StudentDocumentHeader />
+          <StaffDocumentHeader />
         </Suspense>
       </ErrorBoundary>
       <ErrorBoundary errorComponent={ErrorFallback}>
