@@ -20,7 +20,7 @@ const signInSchema = z.object({
 
 export async function signIn(
   previousState: { error: string },
-  formData: FormData,
+  formData: FormData
 ) {
   const parsed = signInSchema.safeParse(Object.fromEntries(formData));
 
@@ -63,6 +63,7 @@ export async function signIn(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const redirectTo = formData.get("redirect") as string | null;
   //redirect(redirectTo ?? "/");
+  await caller.user.logLoginActivity();
   redirect("/");
 }
 

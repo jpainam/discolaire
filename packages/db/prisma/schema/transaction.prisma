@@ -73,7 +73,7 @@ model LoginActivity {
     id         Int       @id @default(autoincrement())
     userId     String
     ipAddress  String
-    device     String
+    userAgent  String
     loginDate  DateTime
     logoutDate DateTime?
     createdAt  DateTime  @default(now()) @db.Timestamp(6)
