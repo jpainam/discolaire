@@ -20,8 +20,8 @@ export async function GET(request: Request) {
       return new Response("Missing userId", { status: 400 });
     }
     const school = await caller.school.getSchool();
-    const accessLogs = await caller.user.loginActivities({
-      userIds: [userId],
+    const accessLogs = await caller.loginActivity.all({
+      userId: userId,
     });
     if (format == "pdf") {
       const stream = await renderToStream(
@@ -48,7 +48,7 @@ export async function GET(request: Request) {
   }
 }
 
-function toExcel({ logs }: { logs: RouterOutputs["user"]["loginActivities"] }) {
+function toExcel({ logs }: { logs: RouterOutputs["loginActivity"]["all"] }) {
   const rows = logs.map((log) => {
     return {
       user: log.user.name,

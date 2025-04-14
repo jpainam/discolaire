@@ -13,7 +13,7 @@ export function AccessLogs({
   logs,
 }: {
   school: RouterOutputs["school"]["getSchool"];
-  logs: RouterOutputs["user"]["loginActivities"];
+  logs: RouterOutputs["loginActivity"]["all"];
 }) {
   return (
     <Document>

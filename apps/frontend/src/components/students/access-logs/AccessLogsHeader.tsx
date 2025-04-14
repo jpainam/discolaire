@@ -32,10 +32,10 @@ export function AccessLogsHeader({ userId }: { userId: string }) {
   const router = useRouter();
   const canCreateUser = useCheckPermission("user", PermissionAction.CREATE);
   const deleteAllMutation = useMutation(
-    trpc.user.deleteLoginActivities.mutationOptions({
+    trpc.loginActivity.delete.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.user.loginActivities.pathFilter(),
+          trpc.loginActivity.all.pathFilter(),
         );
         toast.success(t("deleted_successfully"), { id: 0 });
         router.refresh();

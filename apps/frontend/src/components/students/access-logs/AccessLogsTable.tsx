@@ -35,16 +35,19 @@ export async function AccessLogsTable({
 }) {
   const { t } = await getServerTranslations();
 
-  const studentLogs = await caller.user.loginActivities({
-    userIds: [userId],
+  const studentLogs = await caller.loginActivity.all({
+    userId: userId,
   });
 
   const studentContacts = await caller.student.contacts(studentId);
-  const contactLogs = await caller.user.loginActivities({
-    userIds: studentContacts
-      .map((c) => c.contact.userId)
-      .filter((e) => e !== null),
-  });
+  const contactUserIds = studentContacts
+    .map((c) => c.contact.userId)
+    .filter((c) => c != null);
+  const contactLogs = await Promise.all(
+    contactUserIds.map((cUserId) =>
+      caller.loginActivity.all({ userId: cUserId }),
+    ),
+  );
 
   return (
     <div className="px-4">
@@ -63,7 +66,7 @@ export async function AccessLogsTable({
           <UserActivityTable userActivities={studentLogs} />
         </TabsContent>
         <TabsContent value="contacts">
-          <UserActivityTable userActivities={contactLogs} />
+          <UserActivityTable userActivities={contactLogs.flat()} />
         </TabsContent>
       </Tabs>
     </div>
@@ -82,7 +85,7 @@ const calculateDuration = (login: Date, logout: Date) => {
 async function UserActivityTable({
   userActivities,
 }: {
-  userActivities: RouterOutputs["user"]["loginActivities"];
+  userActivities: RouterOutputs["loginActivity"]["all"];
 }) {
   const { i18n, t } = await getServerTranslations();
   const format = Intl.DateTimeFormat(i18n.language, {

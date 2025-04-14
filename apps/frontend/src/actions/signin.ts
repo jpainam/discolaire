@@ -63,7 +63,7 @@ export async function signIn(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const redirectTo = formData.get("redirect") as string | null;
   //redirect(redirectTo ?? "/");
-  await caller.user.logLoginActivity();
+  await caller.loginActivity.login();
   redirect("/");
 }
 
@@ -72,7 +72,7 @@ export async function signOut() {
   // if (!user) {
   //   return;
   // }
-  await caller.user.logLogoutActivity();
+  await caller.loginActivity.logout();
   (await cookies()).delete("session");
 }
 
