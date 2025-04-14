@@ -1,4 +1,5 @@
 import { auth } from "@repo/auth";
+import { db } from "@repo/db";
 import { env } from "~/env";
 import { deleteFile, uploadFile } from "~/lib/s3-client";
 import { caller } from "~/trpc/server";
@@ -44,10 +45,13 @@ export async function POST(request: Request) {
       bucket: env.S3_AVATAR_BUCKET_NAME,
       destination: key,
     });
-    // Update the avatar in the database
-    await caller.user.updateAvatar({
-      id: concernedId,
-      avatar: result.key,
+    await db.user.update({
+      where: {
+        id: concernedId,
+      },
+      data: {
+        avatar: result.key,
+      },
     });
     // TODO Send an email to the user to confirm the change
     return Response.json(result);
@@ -78,9 +82,13 @@ export async function DELETE(request: Request) {
       key: avatar,
     });
 
-    await caller.user.updateAvatar({
-      id: userId,
-      avatar: null,
+    await db.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        avatar: null,
+      },
     });
 
     return Response.json({ message: "Avatar deleted successfully" });

@@ -218,16 +218,6 @@ export const userRouter = createTRPCRouter({
         },
       });
     }),
-  updateAvatar: protectedProcedure
-    .input(z.object({ id: z.string(), avatar: z.string().nullable() }))
-    .mutation(async ({ ctx, input }) => {
-      return ctx.db.user.update({
-        where: { id: input.id, schoolId: ctx.schoolId },
-        data: {
-          avatar: input.avatar,
-        },
-      });
-    }),
   createAutoUser: protectedProcedure
     .input(
       z.object({
@@ -264,16 +254,6 @@ export const userRouter = createTRPCRouter({
       return getPermissions(input);
     }),
 
-  attachPolicy: protectedProcedure
-    .input(
-      z.object({
-        userId: z.string(),
-      }),
-    )
-    .mutation(() => {
-      return [];
-    }),
-
   updateMyPassword: protectedProcedure
     .input(
       z.object({
@@ -306,77 +286,6 @@ export const userRouter = createTRPCRouter({
         },
         data: {
           password: await hashPassword(input.newPassword),
-        },
-      });
-    }),
-  logLoginActivity: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.loginActivity.create({
-      data: {
-        userId: ctx.session.user.id,
-        ipAddress: ctx.ipAddress,
-        userAgent: ctx.userAgent,
-        loginDate: new Date(),
-      },
-    });
-  }),
-  logLogoutActivity: protectedProcedure.query(async ({ ctx }) => {
-    const lastLogin = await ctx.db.loginActivity.findFirst({
-      where: {
-        userId: ctx.session.user.id,
-        logoutDate: null,
-      },
-      orderBy: {
-        loginDate: "desc",
-      },
-    });
-    if (!lastLogin) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "No login activity found",
-      });
-    }
-    return ctx.db.loginActivity.update({
-      where: {
-        id: lastLogin.id,
-      },
-      data: {
-        logoutDate: new Date(),
-      },
-    });
-  }),
-  deleteLoginActivities: protectedProcedure
-    .input(
-      z.object({
-        userId: z.string().min(1),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      return ctx.db.loginActivity.deleteMany({
-        where: {
-          userId: input.userId,
-        },
-      });
-    }),
-  loginActivities: protectedProcedure
-    .input(
-      z.object({
-        userIds: z.array(z.string()),
-        limit: z.number().optional().default(10),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      return ctx.db.loginActivity.findMany({
-        take: input.limit,
-        where: {
-          userId: {
-            in: input.userIds,
-          },
-        },
-        include: {
-          user: true,
-        },
-        orderBy: {
-          loginDate: "desc",
         },
       });
     }),

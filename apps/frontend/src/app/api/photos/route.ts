@@ -1,5 +1,6 @@
 import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { auth } from "@repo/auth";
+import { db } from "@repo/db";
 import { env } from "~/env";
 import { s3client } from "~/lib/s3-client";
 import { caller } from "~/trpc/server";
@@ -78,7 +79,7 @@ export async function DELETE(request: Request) {
     //const school = await caller.school.getSchool();
 
     const key = avatar.split(
-      "https://TODO-UPLOAD.s3.eu-central-1.amazonaws.com/",
+      "https://TODO-UPLOAD.s3.eu-central-1.amazonaws.com/"
     )[1];
     //const key = `${school.code}/avatars/${userId}.png`;
     const command = new DeleteObjectCommand({
@@ -87,9 +88,13 @@ export async function DELETE(request: Request) {
     });
     const response = await s3client.send(command);
     // Update the avatar in the database
-    await caller.user.updateAvatar({
-      id: userId,
-      avatar: null,
+    await db.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        avatar: null,
+      },
     });
     return Response.json({ response });
   } catch (error) {
@@ -99,7 +104,7 @@ export async function DELETE(request: Request) {
 
 async function runWithConcurrency<T>(
   tasks: (() => Promise<T>)[],
-  concurrency: number,
+  concurrency: number
 ): Promise<T[]> {
   const results: T[] = [];
   const queue = [...tasks];
