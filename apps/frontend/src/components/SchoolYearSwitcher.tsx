@@ -23,7 +23,7 @@ export function SchoolYearSwitcher({ defaultValue }: SchoolYearSwitcherProps) {
   const { t } = useLocale();
   const trpc = useTRPC();
   const { data: schoolYears } = useSuspenseQuery(
-    trpc.schoolYear.all.queryOptions()
+    trpc.schoolYear.all.queryOptions(),
   );
 
   return (
