@@ -28,7 +28,7 @@ export async function GET(request: Request) {
         AccessLogs({
           logs: accessLogs,
           school: school,
-        })
+        }),
       );
 
       //const blob = await new Response(stream).blob();
