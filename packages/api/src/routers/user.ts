@@ -319,6 +319,31 @@ export const userRouter = createTRPCRouter({
       },
     });
   }),
+  logLogoutActivity: protectedProcedure.query(async ({ ctx }) => {
+    const lastLogin = await ctx.db.loginActivity.findFirst({
+      where: {
+        userId: ctx.session.user.id,
+        logoutDate: null,
+      },
+      orderBy: {
+        loginDate: "desc",
+      },
+    });
+    if (!lastLogin) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "No login activity found",
+      });
+    }
+    return ctx.db.loginActivity.update({
+      where: {
+        id: lastLogin.id,
+      },
+      data: {
+        logoutDate: new Date(),
+      },
+    });
+  }),
   loginActivities: protectedProcedure
     .input(
       z.object({

@@ -20,7 +20,7 @@ const signInSchema = z.object({
 
 export async function signIn(
   previousState: { error: string },
-  formData: FormData
+  formData: FormData,
 ) {
   const parsed = signInSchema.safeParse(Object.fromEntries(formData));
 
@@ -72,6 +72,7 @@ export async function signOut() {
   // if (!user) {
   //   return;
   // }
+  await caller.user.logLogoutActivity();
   (await cookies()).delete("session");
 }
 

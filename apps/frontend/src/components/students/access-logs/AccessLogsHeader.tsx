@@ -16,14 +16,17 @@ import { useLocale } from "~/i18n";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { useCheckPermission } from "~/hooks/use-permission";
+import { PermissionAction } from "~/permissions";
 import { sidebarIcons } from "../sidebar-icons";
 
-export function AccessLogsHeader() {
+export function AccessLogsHeader({ userId }: { userId: string }) {
   const { t } = useLocale();
   const Icon = sidebarIcons.access_logs;
+  const canCreateUser = useCheckPermission("user", PermissionAction.CREATE);
   return (
-    <div className="flex flex-row items-center bg-secondary px-2 py-1 text-secondary-foreground">
-      {Icon && <Icon className="mr-2 h-5 w-5" />}
+    <div className="flex flex-row gap-2 border-b items-center bg-secondary px-2 py-1 text-secondary-foreground">
+      {Icon && <Icon className="h-4 w-4" />}
       <Label>{t("access_logs")}</Label>
       <div className="ml-auto flex flex-row">
         <DropdownMenu>
@@ -35,23 +38,38 @@ export function AccessLogsHeader() {
           <DropdownMenuContent align="end">
             <DropdownHelp />
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                window.open(
+                  `/api/accesslogs?format=pdf?userId=${userId}`,
+                  "_blank"
+                );
+              }}
+            >
               <PDFIcon />
               {t("pdf_export")}
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                window.open(
+                  `/api/accesslogs?format=csv?userId=${userId}`,
+                  "_blank"
+                );
+              }}
+            >
               <XMLIcon />
               {t("xml_export")}
             </DropdownMenuItem>
 
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              variant="destructive"
-              className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-            >
-              <Trash2 />
-              {t("clear_all")}
-            </DropdownMenuItem>
+            {canCreateUser && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem variant="destructive">
+                  <Trash2 />
+                  {t("clear_all")}
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
