@@ -29,7 +29,7 @@ export default async function Page() {
     }));
 
     return (
-      <div className="overflow-hidden grid lg:grid-cols-2 w-full gap-4 p-4">
+      <div className="grid lg:grid-cols-2 w-full gap-4 p-4">
         <StudentTransactionStat
           studentId={student.id}
           className="col-span-full"
@@ -62,11 +62,11 @@ export default async function Page() {
   ]);
 
   return (
-    <div className="lg:grid flex flex-col grid-cols-2 gap-4 p-4">
+    <div className="@container grid md:grid-cols-2 flex-1 gap-4 p-4">
       <Suspense
         key={"quick-statistics"}
         fallback={
-          <div className="col-span-full grid lg:grid-cols-4 gap-4">
+          <div className="col-span-full grid grid-cols-1 xl:grid-cols-4 gap-4">
             <Skeleton className="h-24 w-full" />
             <Skeleton className="h-24 w-full" />
             <Skeleton className="h-24 w-full" />

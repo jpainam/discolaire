@@ -50,126 +50,130 @@ export function UserNav() {
   const initials = user.name?.charAt(0) ?? "" + user.name?.charAt(1);
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-auto p-0 hover:bg-transparent">
-          <Avatar className="h-8 w-8 rounded-lg">
-            <AvatarImage
-              src={
-                user.avatar ? `/api/download/avatars/${user.avatar}` : undefined
-              }
-              alt={initials}
-            />
-            <AvatarFallback className="rounded-lg uppercase">{`${user.name?.charAt(0)}${user.name?.charAt(1)}`}</AvatarFallback>
-          </Avatar>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        className="w-(--radix-dropdown-menu-trigger-width) min-w-60 rounded-lg"
-        side={isMobile ? "bottom" : "bottom"}
-        align="end"
-        //sideOffset={4}
-      >
-        <DropdownMenuLabel className="p-0 font-normal">
-          <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-            <Dialog>
-              <DialogTrigger asChild>
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage
+    <div className="hidden md:flex">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-auto p-0 hover:bg-transparent">
+            <Avatar className="h-8 w-8 rounded-lg">
+              <AvatarImage
+                src={
+                  user.avatar
+                    ? `/api/download/avatars/${user.avatar}`
+                    : undefined
+                }
+                alt={initials}
+              />
+              <AvatarFallback className="rounded-lg uppercase">{`${user.name?.charAt(0)}${user.name?.charAt(1)}`}</AvatarFallback>
+            </Avatar>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          className="w-(--radix-dropdown-menu-trigger-width) min-w-60 rounded-lg"
+          side={isMobile ? "bottom" : "bottom"}
+          align="end"
+          //sideOffset={4}
+        >
+          <DropdownMenuLabel className="p-0 font-normal">
+            <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Avatar className="h-8 w-8 rounded-lg">
+                    <AvatarImage
+                      src={
+                        user.avatar
+                          ? `/api/download/avatars/${user.avatar}`
+                          : undefined
+                      }
+                      alt={initials}
+                    />
+                    <AvatarFallback className="rounded-lg uppercase">{`${user.name?.charAt(0)}${user.name?.charAt(1)}`}</AvatarFallback>
+                  </Avatar>
+                </DialogTrigger>
+
+                <DialogContent className="max-w-[90%] sm:max-w-[600px] p-0">
+                  <VisuallyHidden>
+                    <DialogTitle></DialogTitle>
+                  </VisuallyHidden>
+                  <img
                     src={
                       user.avatar
                         ? `/api/download/avatars/${user.avatar}`
                         : undefined
                     }
-                    alt={initials}
+                    alt="Full Image"
+                    className="w-full h-auto rounded-lg"
                   />
-                  <AvatarFallback className="rounded-lg uppercase">{`${user.name?.charAt(0)}${user.name?.charAt(1)}`}</AvatarFallback>
-                </Avatar>
-              </DialogTrigger>
+                </DialogContent>
+              </Dialog>
 
-              <DialogContent className="max-w-[90%] sm:max-w-[600px] p-0">
-                <VisuallyHidden>
-                  <DialogTitle></DialogTitle>
-                </VisuallyHidden>
-                <img
-                  src={
-                    user.avatar
-                      ? `/api/download/avatars/${user.avatar}`
-                      : undefined
-                  }
-                  alt="Full Image"
-                  className="w-full h-auto rounded-lg"
-                />
-              </DialogContent>
-            </Dialog>
-
-            <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-semibold">{user.name}</span>
-              <span className="truncate text-xs">{user.email}</span>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-semibold">{user.name}</span>
+                <span className="truncate text-xs">{user.email}</span>
+              </div>
             </div>
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
 
-        <DropdownMenuGroup>
-          <DropdownMenuItem
-            onClick={() => {
-              if (user.id) router.push(routes.users.details(user.id));
-            }}
-          >
-            <User className="h-4 w-4" />
-            <span>{t("profile")}</span>
-          </DropdownMenuItem>
-
-          <DropdownMenuItem
-            onClick={() => {
-              if (user.id) router.push(routes.users.settings(user.id));
-            }}
-          >
-            <Settings className="h-4 w-4" />
-            <span>{t("settings")}</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onSelect={() => router.push(`/users/${user.id}/subscriptions`)}
-          >
-            <DollarSignIcon />
-            {t("subscriptions")}
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => {
-              if (user.id) router.push(routes.users.logs(user.id));
-            }}
-          >
-            <Computer />
-            <span>{t("logs_and_activities")}</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onSelect={() => router.push(`/users/${user.id}/notifications`)}
-          >
-            <Bell />
-            {t("notifications")}
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          variant="destructive"
-          className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-          // onClick={() => {
-          //   void signOut({ callbackUrl: "/", redirect: true });
-          // }}
-        >
-          <form action={signOut}>
-            <button
-              className="flex flex-row items-center justify-between"
-              type="submit"
+          <DropdownMenuGroup>
+            <DropdownMenuItem
+              onClick={() => {
+                if (user.id) router.push(routes.users.details(user.id));
+              }}
             >
-              <LogOut className="text-destructive focus:text-destructive mr-2 h-4 w-4 dark:data-[variant=destructive]:focus:bg-destructive/10" />
-              <span>{t("logout")}</span>
-            </button>
-          </form>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+              <User className="h-4 w-4" />
+              <span>{t("profile")}</span>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem
+              onClick={() => {
+                if (user.id) router.push(routes.users.settings(user.id));
+              }}
+            >
+              <Settings className="h-4 w-4" />
+              <span>{t("settings")}</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => router.push(`/users/${user.id}/subscriptions`)}
+            >
+              <DollarSignIcon />
+              {t("subscriptions")}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                if (user.id) router.push(routes.users.logs(user.id));
+              }}
+            >
+              <Computer />
+              <span>{t("logs_and_activities")}</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => router.push(`/users/${user.id}/notifications`)}
+            >
+              <Bell />
+              {t("notifications")}
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            variant="destructive"
+            className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+            // onClick={() => {
+            //   void signOut({ callbackUrl: "/", redirect: true });
+            // }}
+          >
+            <form action={signOut}>
+              <button
+                className="flex flex-row items-center justify-between"
+                type="submit"
+              >
+                <LogOut className="text-destructive focus:text-destructive mr-2 h-4 w-4 dark:data-[variant=destructive]:focus:bg-destructive/10" />
+                <span>{t("logout")}</span>
+              </button>
+            </form>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 }

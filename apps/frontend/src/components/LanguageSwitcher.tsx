@@ -34,7 +34,7 @@ export const LanguageSwitcher = ({ className }: { className?: string }) => {
         <Button
           variant={"outline"}
           size={"icon"}
-          className={cn("rounded-lg hover:bg-transparent", className)}
+          className={cn("rounded-lg hover:bg-transparent size-8", className)}
         >
           <RenderSwitchItem
             countryId={

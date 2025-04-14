@@ -74,20 +74,18 @@ export default async function Layout({
               />
               {/* <NavHeader /> */}
               <Breadcrumbs />
-              <div className="ml-auto flex items-center gap-4">
+              <div className="ml-auto flex items-center gap-2">
                 <HydrateClient>
                   <Suspense fallback={<Skeleton className="w-10" />}>
                     <SchoolYearSwitcher defaultValue={schoolYearId} />
                   </Suspense>
                 </HydrateClient>
                 <ThemeSelector />
-                <div className="hidden md:flex items-center gap-2">
-                  <TopRightButtons />
-                  <Shortcut />
-                  <ModeSwitcher />
-                  <LanguageSwitcher />
-                  <UserNav />
-                </div>
+                <TopRightButtons />
+                <Shortcut />
+                <ModeSwitcher />
+                <LanguageSwitcher />
+                <UserNav />
               </div>
             </div>
           </header>

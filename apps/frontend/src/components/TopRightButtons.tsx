@@ -21,7 +21,7 @@ export function TopRightButtons() {
   const router = useRouter();
   const { t } = useLocale("description");
   return (
-    <>
+    <div className="hidden md:flex items-center gap-2">
       <SimpleTooltip content="Messages">
         <Button
           onClick={() => {
@@ -68,6 +68,6 @@ export function TopRightButtons() {
           <CircleHelp className="h-4 w-4" />
         </Button>
       </SimpleTooltip>
-    </>
+    </div>
   );
 }
