@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 
+import { useSidebar } from "@repo/ui/components/sidebar";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -39,7 +40,7 @@ import { SimpleTooltip } from "./simple-tooltip";
 
 type Shortcut = RouterOutputs["shortcut"]["search"][number];
 
-export function Shortcut() {
+export function Shortcut({ className }: { className?: string }) {
   const [searchQuery, setSearchQuery] = useState("");
   const debounced = useDebouncedCallback((value: string) => {
     void setSearchQuery(value);
@@ -51,7 +52,7 @@ export function Shortcut() {
   const shortcutsQuery = useQuery(
     trpc.shortcut.search.queryOptions({
       query: searchQuery,
-    }),
+    })
   );
 
   const [isOpen, setIsOpen] = useState(false);
@@ -69,7 +70,7 @@ export function Shortcut() {
         await queryClient.invalidateQueries(trpc.shortcut.pathFilter());
         toast.success(t("added_successfully"), { id: 0 });
       },
-    }),
+    })
   );
   const deleteShortcut = useMutation(
     trpc.shortcut.delete.mutationOptions({
@@ -80,7 +81,7 @@ export function Shortcut() {
         await queryClient.invalidateQueries(trpc.shortcut.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
-    }),
+    })
   );
   const updateShortcut = useMutation(
     trpc.shortcut.update.mutationOptions({
@@ -91,7 +92,7 @@ export function Shortcut() {
         await queryClient.invalidateQueries(trpc.shortcut.pathFilter());
         toast.success(t("updated_successfully"), { id: 0 });
       },
-    }),
+    })
   );
 
   const addCurrentPageToShortcuts = () => {
@@ -125,19 +126,29 @@ export function Shortcut() {
   };
 
   const { t } = useLocale();
+  const { isMobile } = useSidebar();
 
   const shortcuts = shortcutsQuery.data ?? [];
   return (
-    <div className="hidden md:flex items-center gap-2">
+    <div className={className}>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
-        <SimpleTooltip content={t("manage_shortcuts")}>
+        {isMobile ? (
           <PopoverTrigger asChild>
-            <Button variant="outline" size="icon" className="size-8">
+            <button className="flex items-center gap-2 flex-row">
               <BookmarkPlus className="h-4 w-4" />
-              <span className="sr-only">{t("shortcuts")}</span>
-            </Button>
+              <span>{t("shortcuts")}</span>
+            </button>
           </PopoverTrigger>
-        </SimpleTooltip>
+        ) : (
+          <SimpleTooltip content={t("manage_shortcuts")}>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="icon" className="size-8">
+                <BookmarkPlus className="h-4 w-4" />
+                <span className="sr-only">{t("shortcuts")}</span>
+              </Button>
+            </PopoverTrigger>
+          </SimpleTooltip>
+        )}
         <PopoverContent className="w-96 p-0" align="end">
           {shortcutsQuery.isPending ? (
             <div className="flex justify-center items-center w-32">

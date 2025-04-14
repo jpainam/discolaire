@@ -10,7 +10,9 @@ import {
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
+  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
@@ -21,13 +23,20 @@ import {
 import {
   CalendarDays,
   FolderOpen,
+  HelpCircleIcon,
   HouseIcon,
   LibraryBigIcon,
   Users,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { UserNav } from "~/components/user-nav";
+
+import React from "react";
+import { FeedBackDialog } from "~/components/FeedbackDialog";
+import { Shortcut } from "~/components/Shortcut";
 import { SidebarLogo } from "~/components/sidebar-logo";
+import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
@@ -67,7 +76,7 @@ export function MainSidebar({
           url: `/timetables`,
           icon: CalendarDays,
         },
-      ],
+      ]
     );
   }
   data.push({
@@ -77,7 +86,7 @@ export function MainSidebar({
   });
   const canReadLibrary = useCheckPermission(
     "menu:library",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
   if (canReadLibrary) {
     data.push({
@@ -88,7 +97,7 @@ export function MainSidebar({
   }
   const canReadAdministration = useCheckPermission(
     "menu:administration",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
   if (canReadAdministration) {
     data.push({
@@ -113,6 +122,8 @@ export function MainSidebar({
 
   const { t } = useLocale();
   const pathname = usePathname();
+
+  const { openModal } = useModal();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -168,7 +179,36 @@ export function MainSidebar({
           </SidebarMenu>
           {/* </SidebarGroupContent> */}
         </SidebarGroup>
+        <SidebarGroup className="mt-auto md:hidden">
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <button
+                    onClick={() => {
+                      openModal({
+                        title: t("feedback"),
+                        view: <FeedBackDialog />,
+                      });
+                    }}
+                  >
+                    <HelpCircleIcon />
+                    <span>Feedback</span>
+                  </button>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Shortcut />
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <UserNav className="md:hidden" />
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

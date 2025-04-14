@@ -82,10 +82,10 @@ export default async function Layout({
                 </HydrateClient>
                 <ThemeSelector />
                 <TopRightButtons />
-                <Shortcut />
+                <Shortcut className="hidden md:flex" />
                 <ModeSwitcher />
                 <LanguageSwitcher />
-                <UserNav />
+                <UserNav className={"hidden md:block"} />
               </div>
             </div>
           </header>
