@@ -27,7 +27,7 @@ export function FeeBar() {
   } satisfies ChartConfig;
   const trpc = useTRPC();
   const { data: feesMonthly } = useSuspenseQuery(
-    trpc.fee.monthly.queryOptions()
+    trpc.fee.monthly.queryOptions(),
   );
 
   return (
