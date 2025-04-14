@@ -12,6 +12,8 @@ import { ModeSwitcher } from "~/components/mode-switcher";
 import { UserNav } from "~/components/user-nav";
 import { SchoolContextProvider } from "~/providers/SchoolProvider";
 
+import { Skeleton } from "@repo/ui/components/skeleton";
+import { Suspense } from "react";
 import { Breadcrumbs } from "~/components/breadcrumbs";
 import { LanguageSwitcher } from "~/components/LanguageSwitcher";
 import { SchoolYearSwitcher } from "~/components/SchoolYearSwitcher";
@@ -20,7 +22,7 @@ import { ThemeSelector } from "~/components/theme-selector";
 import { TopRightButtons } from "~/components/TopRightButtons";
 import GlobalModal from "~/layouts/GlobalModal";
 import GlobalSheet from "~/layouts/GlobalSheet";
-import { caller } from "~/trpc/server";
+import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
 
 export default async function Layout({
   children,
@@ -39,12 +41,12 @@ export default async function Layout({
     redirect("/auth/login");
   }
 
-  const [school, schoolYear, schoolYears, permissions] = await Promise.all([
+  const [school, schoolYear, permissions] = await Promise.all([
     caller.school.get(session.user.schoolId),
     caller.schoolYear.get(schoolYearId),
-    caller.schoolYear.all(),
     caller.user.getPermissions(session.user.id),
   ]);
+  batchPrefetch([trpc.schoolYear.all.queryOptions()]);
 
   return (
     <SidebarProvider
@@ -73,10 +75,11 @@ export default async function Layout({
               {/* <NavHeader /> */}
               <Breadcrumbs />
               <div className="ml-auto flex items-center gap-4">
-                <SchoolYearSwitcher
-                  schoolYears={schoolYears}
-                  defaultValue={schoolYear.id}
-                />
+                <HydrateClient>
+                  <Suspense fallback={<Skeleton className="w-10" />}>
+                    <SchoolYearSwitcher defaultValue={schoolYearId} />
+                  </Suspense>
+                </HydrateClient>
                 <ThemeSelector />
                 <div className="hidden md:flex items-center gap-2">
                   <TopRightButtons />

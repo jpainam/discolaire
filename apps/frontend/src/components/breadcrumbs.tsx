@@ -28,7 +28,7 @@ export const Breadcrumbs = () => {
   if (breadcrumbs.length === 0) return null;
 
   return (
-    <Breadcrumb>
+    <Breadcrumb className="hidden md:block">
       <BreadcrumbList>
         {breadcrumbs.map((breadcrumb, index) => (
           <React.Fragment key={breadcrumb.url}>

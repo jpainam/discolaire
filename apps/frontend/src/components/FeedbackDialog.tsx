@@ -59,28 +59,28 @@ export function FeedBackDialog() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-4"
+        className="flex flex-col gap-6"
       >
-        <div className="flex flex-col gap-4 px-4">
-          <FormField
-            name={"content"}
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Textarea
-                    {...field}
-                    rows={100}
-                    placeholder={t("help_us_improve_this_page")}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+        <FormField
+          name={"content"}
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Textarea
+                  {...field}
+                  rows={100}
+                  className="resize-none"
+                  placeholder={t("help_us_improve_this_page")}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <span className="px-4 text-xs">{t("have_a_specific_issue")}</span>
 
-        <div className="flex flex-row justify-end gap-4 px-4">
+        <div className="flex flex-row justify-end gap-4">
           <Button
             size={"sm"}
             onClick={() => {

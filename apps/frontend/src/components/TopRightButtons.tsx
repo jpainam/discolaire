@@ -60,13 +60,7 @@ export function TopRightButtons() {
           variant="outline"
           onClick={() => {
             openModal({
-              title: (
-                <span className="p-4 text-2xl font-semibold">
-                  {t("Feedback")}
-                </span>
-              ),
-
-              className: "w-[400px] py-4 px-0",
+              title: t("Feedback"),
               view: <FeedBackDialog />,
             });
           }}

@@ -4,60 +4,49 @@
 import { useLocale } from "~/i18n";
 //import { useConfig } from "@repo/hooks/use-config";
 //import { Style, styles } from "~/registry/styles";
+
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-
-import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
-import { cn } from "@repo/ui/lib/utils";
-import { Check, ChevronDownIcon } from "lucide-react";
-import { useState } from "react";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/components/select";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { setSchoolYearCookie } from "~/actions/signin";
-
+import { useTRPC } from "~/trpc/react";
 interface SchoolYearSwitcherProps {
   className?: string;
   defaultValue: string;
-  schoolYears: RouterOutputs["schoolYear"]["all"];
 }
-export function SchoolYearSwitcher({
-  defaultValue,
-  schoolYears,
-}: SchoolYearSwitcherProps) {
+export function SchoolYearSwitcher({ defaultValue }: SchoolYearSwitcherProps) {
   const { t } = useLocale();
-  const [value, setValue] = useState<string>(defaultValue);
+  const trpc = useTRPC();
+  const { data: schoolYears } = useSuspenseQuery(
+    trpc.schoolYear.all.queryOptions()
+  );
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant={"ghost"}
-          size={"sm"}
-          className={cn("rounded-lg hover:bg-transparent")}
-        >
-          {t("year")} - {schoolYears.find((item) => item.id === value)?.name}
-          <ChevronDownIcon size={16} />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        {schoolYears.map((item) => {
+    <Select
+      defaultValue={defaultValue}
+      onValueChange={(val) => {
+        void setSchoolYearCookie(val);
+      }}
+    >
+      <SelectTrigger className="w-fit hidden md:flex">
+        <span className="text-muted-foreground">{t("year")}</span>
+
+        <SelectValue placeholder={t("school_year")} />
+      </SelectTrigger>
+      <SelectContent>
+        {schoolYears.map((item, index) => {
           return (
-            <DropdownMenuItem
-              onSelect={() => {
-                setValue(item.id);
-                void setSchoolYearCookie(item.id);
-              }}
-              key={item.id}
-            >
+            <SelectItem key={index} value={item.id}>
               {item.name}
-              {item.id === defaultValue && <Check size={16} />}
-            </DropdownMenuItem>
+            </SelectItem>
           );
         })}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </SelectContent>
+    </Select>
   );
 }

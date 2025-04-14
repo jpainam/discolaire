@@ -14,7 +14,6 @@ export function ContactDataTable() {
   const { t } = useLocale();
   const trpc = useTRPC();
   const { data: contacts } = useSuspenseQuery(trpc.contact.all.queryOptions());
-  console.log("contacts", contacts);
 
   const columns = React.useMemo(() => getColumns({ t: t }), [t]);
 
