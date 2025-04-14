@@ -344,6 +344,19 @@ export const userRouter = createTRPCRouter({
       },
     });
   }),
+  deleteLoginActivities: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.loginActivity.deleteMany({
+        where: {
+          userId: input.userId,
+        },
+      });
+    }),
   loginActivities: protectedProcedure
     .input(
       z.object({

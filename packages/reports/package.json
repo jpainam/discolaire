@@ -11,6 +11,7 @@
     "./transactions/*": "./src/transactions/*.tsx",
     "./gradesheet/*": "./src/gradesheet/*.tsx",
     "./course/*": "./src/course/*.tsx",
+    "./accesslogs/*": "./src/accesslogs/*.tsx",
     "./reportcards/*": "./src/reportcards/*.tsx"
   },
   "scripts": {

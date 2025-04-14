@@ -13,17 +13,38 @@ import {
 import { Label } from "@repo/ui/components/label";
 import { useLocale } from "~/i18n";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
+import { useTRPC } from "~/trpc/react";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function AccessLogsHeader({ userId }: { userId: string }) {
   const { t } = useLocale();
+  const trpc = useTRPC();
   const Icon = sidebarIcons.access_logs;
+  const queryClient = useQueryClient();
+  const router = useRouter();
   const canCreateUser = useCheckPermission("user", PermissionAction.CREATE);
+  const deleteAllMutation = useMutation(
+    trpc.user.deleteLoginActivities.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.user.loginActivities.pathFilter()
+        );
+        toast.success(t("deleted_successfully"), { id: 0 });
+        router.refresh();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   return (
     <div className="flex flex-row gap-2 border-b items-center bg-secondary px-2 py-1 text-secondary-foreground">
       {Icon && <Icon className="h-4 w-4" />}
@@ -41,7 +62,7 @@ export function AccessLogsHeader({ userId }: { userId: string }) {
             <DropdownMenuItem
               onSelect={() => {
                 window.open(
-                  `/api/accesslogs?format=pdf?userId=${userId}`,
+                  `/api/accesslogs?format=pdf&userId=${userId}`,
                   "_blank"
                 );
               }}
@@ -52,7 +73,7 @@ export function AccessLogsHeader({ userId }: { userId: string }) {
             <DropdownMenuItem
               onSelect={() => {
                 window.open(
-                  `/api/accesslogs?format=csv?userId=${userId}`,
+                  `/api/accesslogs?format=csv&userId=${userId}`,
                   "_blank"
                 );
               }}
@@ -64,7 +85,13 @@ export function AccessLogsHeader({ userId }: { userId: string }) {
             {canCreateUser && (
               <>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive">
+                <DropdownMenuItem
+                  onSelect={() => {
+                    toast.loading(t("deleting"), { id: 0 });
+                    deleteAllMutation.mutate({ userId });
+                  }}
+                  variant="destructive"
+                >
                   <Trash2 />
                   {t("clear_all")}
                 </DropdownMenuItem>
