@@ -31,7 +31,6 @@ const createEditFeeSchema = z.object({
   amount: z.coerce.number().min(1),
   dueDate: z.coerce.date(),
   isRequired: z.boolean().default(false),
-  //isActive: z.boolean().default(true),
 });
 
 export function CreateEditFee({
@@ -50,7 +49,6 @@ export function CreateEditFee({
       amount: fee?.amount ?? 0,
       dueDate: fee?.dueDate ?? new Date(),
       isRequired: fee?.isRequired ?? false,
-      //isActive: fee?.isActive ?? true,
     },
   });
 
@@ -69,7 +67,7 @@ export function CreateEditFee({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const createFeeMutation = useMutation(
     trpc.fee.create.mutationOptions({
@@ -82,11 +80,11 @@ export function CreateEditFee({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const onSubmit: SubmitHandler<z.infer<typeof createEditFeeSchema>> = (
-    data: z.infer<typeof createEditFeeSchema>,
+    data: z.infer<typeof createEditFeeSchema>
   ) => {
     const values = {
       code: data.code,

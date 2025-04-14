@@ -14,7 +14,7 @@ import { Label } from "@repo/ui/components/label";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
-import type { RouterOutputs } from "@repo/api";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import i18next from "i18next";
 import { useEffect, useState } from "react";
 import { CreateEditFee } from "~/components/classrooms/fees/CreateEditFee";
@@ -25,8 +25,11 @@ import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector
 import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
 import { useSchool } from "~/providers/SchoolProvider";
+import { useTRPC } from "~/trpc/react";
 
-export function FeeHeader({ fees }: { fees: RouterOutputs["fee"]["all"] }) {
+export function FeeHeader() {
+  const trpc = useTRPC();
+  const { data: fees } = useSuspenseQuery(trpc.fee.all.queryOptions());
   const { t } = useLocale();
   const router = useRouter();
   const { school } = useSchool();
@@ -55,7 +58,7 @@ export function FeeHeader({ fees }: { fees: RouterOutputs["fee"]["all"] }) {
 
   return (
     <div className="flex flex-row items-center gap-4 px-4 border-b py-1">
-      <Label>{t("classrooms")}</Label>
+      <Label className="hidden md:block">{t("classrooms")}</Label>
       <ClassroomSelector
         className="w-full md:w-[300px]"
         defaultValue={classroomId ?? ""}

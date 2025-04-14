@@ -6,13 +6,17 @@ import type { RouterOutputs } from "@repo/api";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { useLocale } from "~/i18n";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
+import { useTRPC } from "~/trpc/react";
 import { FeeDataTableActions } from "./FeeDataTableAction";
 import { fetchFeesColumns } from "./FeeDataTableColumn";
 
 type FeeProcedureOutput = NonNullable<RouterOutputs["fee"]["all"]>;
 
-export function FeeDataTable({ fees }: { fees: FeeProcedureOutput }) {
+export function FeeDataTable() {
+  const trpc = useTRPC();
+  const { data: fees } = useSuspenseQuery(trpc.fee.all.queryOptions());
   const [classroomId] = useQueryState("classroomId");
   const [filteredFees, setFilteredFees] = useState<FeeProcedureOutput>(fees);
 
@@ -30,7 +34,7 @@ export function FeeDataTable({ fees }: { fees: FeeProcedureOutput }) {
       fetchFeesColumns({
         t: t,
       }),
-    [t],
+    [t]
   );
 
   const { table } = useDataTable({

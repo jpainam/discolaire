@@ -1,7 +1,6 @@
 "use client";
 
 import { Bar, BarChart, LabelList, XAxis, YAxis } from "recharts";
-import { toast } from "sonner";
 
 import { Card, CardContent } from "@repo/ui/components/card";
 import type { ChartConfig } from "@repo/ui/components/chart";
@@ -10,10 +9,9 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
-import { Skeleton } from "@repo/ui/components/skeleton";
 import { useLocale } from "~/i18n";
 
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTRPC } from "~/trpc/react";
 
 export function FeeBar() {
@@ -28,24 +26,17 @@ export function FeeBar() {
     },
   } satisfies ChartConfig;
   const trpc = useTRPC();
-  const feesMonthlyQuery = useQuery(trpc.fee.monthly.queryOptions());
+  const { data: feesMonthly } = useSuspenseQuery(
+    trpc.fee.monthly.queryOptions()
+  );
 
-  if (feesMonthlyQuery.isPending) {
-    return <Skeleton className="h-[200px] w-[350px] p-2" />;
-  }
-  if (feesMonthlyQuery.isError) {
-    toast.error(feesMonthlyQuery.error.message);
-    return;
-  }
-
-  const data = feesMonthlyQuery.data;
   return (
     <Card className="flex w-[350px] flex-col border-none shadow-none">
       <CardContent className="flex-1 p-0">
         <ChartContainer config={chartConfig}>
           <BarChart
             accessibilityLayer
-            data={data}
+            data={feesMonthly}
             layout="vertical"
             margin={{
               left: -20,

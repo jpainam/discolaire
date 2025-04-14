@@ -37,7 +37,7 @@ export const feeRouter = createTRPCRouter({
         classroom: true,
       },
       orderBy: {
-        createdAt: "desc",
+        dueDate: "asc",
       },
     });
   }),

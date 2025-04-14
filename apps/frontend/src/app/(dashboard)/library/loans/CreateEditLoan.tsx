@@ -20,7 +20,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { DatePicker } from "~/components/DatePicker";
 import { UserSelector } from "~/components/shared/selects/UserSelector";
-import { useModal } from "~/hooks/use-modal";
+import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { BookSelector } from "../BookSelector";
@@ -36,6 +36,7 @@ export function CreateEditLoan({
 }: {
   borrow?: RouterOutputs["library"]["borrowBooks"][number];
 }) {
+  const { closeSheet } = useSheet();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -46,7 +47,7 @@ export function CreateEditLoan({
       expected: addDays(new Date(), 14),
     },
   });
-  const { closeModal } = useModal();
+
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
@@ -55,30 +56,30 @@ export function CreateEditLoan({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.book.all.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.library.borrowBooks.pathFilter(),
+          trpc.library.borrowBooks.pathFilter()
         );
         toast.success("Loan created successfully", { id: 0 });
-        closeModal();
+        closeSheet();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const updateMutation = useMutation(
     trpc.library.updateBorrow.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.book.all.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.library.borrowBooks.pathFilter(),
+          trpc.library.borrowBooks.pathFilter()
         );
         toast.success("Loan updated successfully", { id: 0 });
-        closeModal();
+        closeSheet();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     if (!borrow) {
@@ -130,40 +131,40 @@ export function CreateEditLoan({
               </FormItem>
             )}
           />
-          <div className="grid md:grid-cols-2 gap-2">
-            <FormField
-              control={form.control}
-              name="borrowed"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("borrow_from")}</FormLabel>
-                  <FormControl>
-                    <DatePicker
-                      defaultValue={field.value}
-                      onChange={(val) => field.onChange(val)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="expected"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("borrow_to")}</FormLabel>
-                  <FormControl>
-                    <DatePicker
-                      defaultValue={field.value ?? undefined}
-                      onChange={(val) => field.onChange(val)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+
+          <FormField
+            control={form.control}
+            name="borrowed"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("borrow_from")}</FormLabel>
+                <FormControl>
+                  <DatePicker
+                    defaultValue={field.value}
+                    onChange={(val) => field.onChange(val)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="expected"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("borrow_to")}</FormLabel>
+                <FormControl>
+                  <DatePicker
+                    defaultValue={field.value ?? undefined}
+                    onChange={(val) => field.onChange(val)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="returned"
@@ -191,7 +192,7 @@ export function CreateEditLoan({
             size={"sm"}
             type="button"
             onClick={() => {
-              closeModal();
+              closeSheet();
             }}
           >
             {t("close")}

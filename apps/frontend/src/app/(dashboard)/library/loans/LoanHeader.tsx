@@ -25,9 +25,9 @@ import {
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { BookSelector } from "../BookSelector";
@@ -36,7 +36,7 @@ export function LoanHeader() {
   const { t } = useLocale();
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
-  const { openModal } = useModal();
+  const { openSheet } = useSheet();
   const canCreateLoan = useCheckPermission("library", PermissionAction.CREATE);
   return (
     <div className="grid md:flex flex-row items-center gap-4 px-4 py-1 border-y">
@@ -45,7 +45,7 @@ export function LoanHeader() {
         <BookSelector
           onChange={(val) => {
             router.push(
-              `/library?${createQueryString({ bookId: val, tab: "tab-3" })}`,
+              `/library?${createQueryString({ bookId: val, tab: "tab-3" })}`
             );
           }}
         />
@@ -55,7 +55,7 @@ export function LoanHeader() {
         <Select
           onValueChange={(val) => {
             router.push(
-              `/library?${createQueryString({ status: val, tab: "tab-3" })}`,
+              `/library?${createQueryString({ status: val, tab: "tab-3" })}`
             );
           }}
         >
@@ -82,7 +82,7 @@ export function LoanHeader() {
         {canCreateLoan && (
           <Button
             onClick={() => {
-              openModal({
+              openSheet({
                 title: t("create_a_book_loan"),
                 view: <CreateEditLoan />,
               });
