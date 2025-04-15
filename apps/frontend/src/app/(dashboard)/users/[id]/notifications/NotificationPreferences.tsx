@@ -37,20 +37,20 @@ export function NotificationPreferences() {
     trpc.notificationPreference.upsert.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.notificationPreference.user.pathFilter()
+          trpc.notificationPreference.user.pathFilter(),
         );
         toast.success(t("updated_successfully"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const { data: preferences } = useSuspenseQuery(
-    trpc.notificationPreference.user.queryOptions({ userId: params.id })
+    trpc.notificationPreference.user.queryOptions({ userId: params.id }),
   );
   const findPreferences = (
-    event: string
+    event: string,
   ): { sms: boolean; email: boolean; whatsapp: boolean } => {
     const pref = preferences.find((pref) => pref.event === event);
     return {
@@ -103,7 +103,7 @@ export function NotificationPreferences() {
   const handleChannelChange = (
     eventId: string,
     channel: keyof NotificationEvent["channels"],
-    value: boolean
+    value: boolean,
   ) => {
     setNotificationEvents(
       notificationEvents.map((event) => {
@@ -117,7 +117,7 @@ export function NotificationPreferences() {
           };
         }
         return event;
-      })
+      }),
     );
   };
 
@@ -135,7 +135,7 @@ export function NotificationPreferences() {
           };
         }
         return event;
-      })
+      }),
     );
   };
 
