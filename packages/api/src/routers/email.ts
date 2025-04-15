@@ -57,7 +57,7 @@ export const emailRouter = createTRPCRouter({
           },
           ...email.replies.map((reply, index) => ({
             id: `${reply.id}-${index + 2}`,
-            from: reply.sender.name || reply.sender.email,
+            from: reply.sender.name ?? reply.sender.email,
             email: reply.sender.email,
             to: reply.recipients.map((r) => r.user.email).join(", "),
             subject: reply.subject,
