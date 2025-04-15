@@ -94,7 +94,8 @@ export function getColumns({
         <DataTableColumnHeader column={column} title={t("civ.")} />
       ),
       cell: ({ row }) => {
-        return <div>{row.getValue("prefix")}</div>;
+        const contact = row.original;
+        return <div className="text-muted-foreground">{contact.prefix}</div>;
       },
       size: 32,
     },
@@ -107,7 +108,7 @@ export function getColumns({
         const v = row.original;
         return (
           <Link
-            className="hover:text-blue-600 hover:underline"
+            className="hover:text-blue-600 hover:underline line-clamp-1"
             href={routes.contacts.details(v.id)}
           >
             {v.lastName && decode(v.lastName)}
@@ -124,7 +125,7 @@ export function getColumns({
         const v = row.original;
         return (
           <Link
-            className="hover:text-blue-600 hover:underline text-muted-foreground"
+            className="hover:text-blue-600 hover:underline line-clamp-1 text-muted-foreground"
             href={routes.contacts.details(v.id)}
           >
             {v.firstName && decode(v.firstName)}
@@ -198,11 +199,11 @@ function ActionsCell({ contact }: { contact: ContactAllProcedureOutput }) {
 
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateContact = useCheckPermission(
     "contact",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const deleteContactMutation = useMutation(
     trpc.contact.delete.mutationOptions({
@@ -213,7 +214,7 @@ function ActionsCell({ contact }: { contact: ContactAllProcedureOutput }) {
         await queryClient.invalidateQueries(trpc.contact.all.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
-    }),
+    })
   );
   const router = useRouter();
   return (

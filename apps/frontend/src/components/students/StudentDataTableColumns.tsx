@@ -96,7 +96,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
         const student = row.original;
         return (
           <Link
-            className="hover:text-blue-600 capitalize font-medium hover:underline"
+            className="hover:text-blue-600 line-clamp-1 capitalize hover:underline"
             href={routes.students.details(student.id)}
           >
             {decode(student.lastName ?? "")}
@@ -115,7 +115,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
 
         return (
           <Link
-            className="hover:text-blue-600  text-muted-foreground hover:underline"
+            className="hover:text-blue-600 line-clamp-1 text-muted-foreground hover:underline"
             href={routes.students.details(student.id)}
           >
             <span className="capitalize">
@@ -249,7 +249,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
             year: "numeric",
             month: "short",
             day: "numeric",
-          },
+          }
         );
         return (
           <SimpleTooltip
@@ -365,7 +365,7 @@ function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   return (

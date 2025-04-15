@@ -38,7 +38,7 @@ export function StatsCard({ title, value, change, icon }: StatsCardProps) {
           >
             {title}
           </a>
-          <div className="text-2xl font-semibold mb-2">{value}</div>
+          <div className="text-xl font-semibold mb-2">{value}</div>
           <div className="text-xs text-muted-foreground/60">
             <span className={cn("font-medium", trendColor)}>
               {isPositive ? "↗" : "↘"} {change.value}
@@ -61,7 +61,7 @@ export function StatsGrid({ stats, className }: StatsGridProps) {
     <div
       className={cn(
         "grid grid-cols-2 min-[1200px]:grid-cols-4 border border-border rounded-xl bg-gradient-to-br from-sidebar/60 to-sidebar",
-        className,
+        className
       )}
     >
       {stats.map((stat) => (

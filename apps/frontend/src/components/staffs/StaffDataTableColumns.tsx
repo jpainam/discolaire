@@ -98,7 +98,7 @@ export function fetchStaffColumns({
         const staff = row.original;
         return (
           <Link
-            className="hover:text-blue-600 hover:underline"
+            className="hover:text-blue-600 line-clamp-1 hover:underline"
             href={routes.staffs.details(staff.id)}
           >
             {staff.lastName}
@@ -117,7 +117,7 @@ export function fetchStaffColumns({
         const staff = row.original;
         return (
           <Link
-            className="hover:text-blue-600 hover:underline"
+            className="hover:text-blue-600 line-clamp-1 hover:underline text-muted-foreground"
             href={routes.staffs.details(staff.id)}
           >
             {staff.firstName}
@@ -277,7 +277,7 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
         await queryClient.invalidateQueries(trpc.staff.all.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
-    }),
+    })
   );
   const router = useRouter();
   const canDeleteStaff = useCheckPermission("staff", PermissionAction.DELETE);

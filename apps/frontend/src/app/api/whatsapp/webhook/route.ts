@@ -11,10 +11,6 @@ export async function GET(request: Request) {
   const mode = searchParams.get("hub.mode");
   const token = searchParams.get("hub.verify_token");
   const challenge = searchParams.get("hub.challenge");
-  console.log("mode", mode);
-  console.log("token", token);
-  console.log("challenge", challenge);
-  console.log("env.WHATSAPP_VERIFY_TOKEN", env.WHATSAPP_VERIFY_TOKEN);
 
   if (mode && token && challenge && mode == "subscribe") {
     const isValid = token == env.WHATSAPP_VERIFY_TOKEN;
@@ -43,7 +39,7 @@ export async function POST(request: NextRequest) {
 
     // Send reply
     await fetch(
-      `https://graph.facebook.com/v18.0/${business_phone_number_id}/messages`,
+      `https://graph.facebook.com/v22.0/${business_phone_number_id}/messages`,
       {
         method: "POST",
         headers: {
@@ -58,7 +54,7 @@ export async function POST(request: NextRequest) {
             message_id: message.id,
           },
         }),
-      },
+      }
     );
 
     // Mark as read
@@ -75,7 +71,7 @@ export async function POST(request: NextRequest) {
           status: "read",
           message_id: message.id,
         }),
-      },
+      }
     );
   }
 

@@ -1,18 +1,5 @@
-import { Separator } from "@repo/ui/components/separator";
+import NotificationPreferences from "./NotificationPreferences";
 
-import { NotificationsForm } from "~/components/users/notifications/notifications-form";
-
-export default function SettingsNotificationsPage() {
-  return (
-    <div className="px-4">
-      <div>
-        <h3 className="text-lg font-medium">Notifications</h3>
-        <p className="text-sm text-muted-foreground">
-          Configure how you receive notifications.
-        </p>
-      </div>
-      <Separator />
-      <NotificationsForm />
-    </div>
-  );
+export default function Page() {
+  return <NotificationPreferences />;
 }

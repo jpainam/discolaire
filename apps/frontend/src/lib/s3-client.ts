@@ -1,6 +1,7 @@
 "server-only";
 import {
   DeleteObjectCommand,
+  ListObjectsV2Command,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
@@ -9,9 +10,23 @@ import { env } from "~/env";
 import * as Minio from "minio";
 const isLocal = env.NEXT_PUBLIC_DEPLOYMENT_ENV == "local";
 
+function getHost(input: string): string {
+  if (!input.startsWith("http")) {
+    input = "http://" + input;
+  }
+
+  try {
+    const url = new URL(input);
+    return url.hostname;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (e) {
+    return input.split(":")[0] ?? "localhost"; // fallback
+  }
+}
+
 export const minioClient = new Minio.Client({
-  endPoint: "localhost",
-  port: 9310, //env.MINIO_PORT,
+  endPoint: getHost(env.NEXT_PUBLIC_MINIO_ENDPOINT),
+  port: env.MINIO_PORT,
   useSSL: false, // set to False when using localhost
   accessKey: env.S3_ACCESS_KEY_ID,
   secretKey: env.S3_SECRET_ACCESS_KEY,
@@ -60,7 +75,7 @@ export const uploadFile = async ({
       destination,
       Buffer.from(await file.arrayBuffer()),
       file.size,
-      metaData,
+      metaData
     );
     return {
       key: destination,
@@ -106,7 +121,7 @@ export async function uploadFiles({
 
 async function runWithConcurrency<T>(
   tasks: (() => Promise<T>)[],
-  concurrency: number,
+  concurrency: number
 ): Promise<T[]> {
   const results: T[] = [];
   const queue = [...tasks];
@@ -145,5 +160,74 @@ export async function deleteFile({
       Key: key,
     });
     await s3client.send(command);
+  }
+}
+
+interface ListObjectsReturn {
+  name: string;
+  etag: string;
+  size: number;
+  lastModified: Date | null;
+  key: string;
+  location: string;
+  bucket: string;
+  prefix: string;
+}
+export async function listS3Objects({
+  bucket,
+  prefix,
+}: {
+  bucket: string;
+  prefix?: string;
+}): Promise<ListObjectsReturn[]> {
+  const files: ListObjectsReturn[] = [];
+  if (isLocal) {
+    const objects = minioClient.listObjectsV2(bucket, prefix ?? "", true);
+    objects.on("data", function (obj) {
+      files.push({
+        name: obj.name ?? "",
+        etag: obj.etag ?? "",
+        size: obj.size,
+        lastModified: obj.lastModified ? new Date(obj.lastModified) : null,
+        key: obj.name ?? "",
+        location: `https://${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${bucket}/${obj.name}`,
+        bucket: bucket,
+        prefix: prefix ?? "",
+      });
+    });
+    objects.on("error", function (err) {
+      console.log(err);
+    });
+    // Wait for the end event to resolve the promise
+    // This is a workaround to ensure the function returns after all objects have been processed
+    await new Promise((resolve) => {
+      objects.on("end", function () {
+        console.log("done");
+        resolve(true);
+      });
+    });
+
+    return files;
+  } else {
+    const command = new ListObjectsV2Command({
+      Bucket: bucket,
+      Prefix: prefix,
+    });
+    const response = await s3client.send(command);
+    if (response.Contents) {
+      for (const obj of response.Contents) {
+        files.push({
+          name: obj.Key ?? "",
+          etag: obj.ETag ?? "",
+          size: obj.Size ?? 0,
+          lastModified: obj.LastModified ?? new Date(),
+          key: obj.Key ?? "",
+          location: `https://${env.S3_REGION}.amazonaws.com/${bucket}/${obj.Key}`,
+          bucket: bucket,
+          prefix: prefix ?? "",
+        });
+      }
+    }
+    return files;
   }
 }

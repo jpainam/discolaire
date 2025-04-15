@@ -66,11 +66,11 @@ export default async function Page() {
       <Suspense
         key={"quick-statistics"}
         fallback={
-          <div className="col-span-full grid grid-cols-1 xl:grid-cols-4 gap-4">
+          <div className="col-span-full grid grid-cols-1 lg:grid-cols-4 gap-4">
             <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full hidden lg:flex" />
+            <Skeleton className="h-24 w-full hidden lg:flex" />
+            <Skeleton className="h-24 w-full hidden lg:flex" />
           </div>
         }
       >

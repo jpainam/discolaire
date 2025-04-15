@@ -40,11 +40,11 @@ export async function CountCard({
         <div>
           <a
             href="#"
-            className="font-medium tracking-widest text-xs uppercase text-muted-foreground/60 before:absolute before:inset-0"
+            className="line-clamp-1 tracking-widest text-xs uppercase text-muted-foreground/60 before:absolute before:inset-0"
           >
             {title}
           </a>
-          <div className="text-2xl font-semibold mb-2">
+          <div className="text-xl font-semibold mb-2">
             {count.toLocaleString(i18n.language)}
           </div>
           <div className="text-xs text-muted-foreground/60">
