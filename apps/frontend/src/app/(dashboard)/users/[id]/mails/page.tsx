@@ -1,5 +1,3 @@
-"use client";
-
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { ErrorFallback } from "~/components/error-fallback";
 import { MailContent } from "./MailContent";

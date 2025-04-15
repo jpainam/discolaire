@@ -1,30 +1,9 @@
 "use client";
 
+import type { RouterOutputs } from "@repo/api";
 import type { PropsWithChildren } from "react";
 import { createContext, useContext, useState } from "react";
 
-interface EmailType {
-  id: string;
-  from: string;
-  email: string;
-  subject: string;
-  preview: string;
-  date: string;
-  read: boolean;
-  folder: string;
-  group: string;
-  avatar: string;
-  thread: {
-    id: string;
-    from: string;
-    email: string;
-    to: string;
-    subject: string;
-    content: string;
-    date: string;
-    avatar: string;
-  }[];
-}
 interface MailContextProps {
   activeView: string;
   setActiveView: (view: string) => void;
@@ -34,18 +13,18 @@ interface MailContextProps {
   setSelectedEmail: (emailId: string | null) => void;
   setAttachedFiles: (files: File[]) => void;
   attachedFiles: File[];
-  emails: EmailType[];
+  emails: RouterOutputs["email"]["all"];
 }
 
 export const MailContext = createContext<MailContextProps | undefined>(
-  undefined,
+  undefined
 );
 
 export function useMailContext() {
   const context = useContext(MailContext);
   if (!context) {
     throw new Error(
-      "useMailContext must be used within a <MailContextProvider />",
+      "useMailContext must be used within a <MailContextProvider />"
     );
   }
   return context;
@@ -54,8 +33,8 @@ export function useMailContext() {
 export const MailContextProvider = (
   props: PropsWithChildren<{
     activeView: string;
-    emails: EmailType[];
-  }>,
+    emails: RouterOutputs["email"]["all"];
+  }>
 ) => {
   const [activeView, setActiveView] = useState(props.activeView);
   const [composing, setComposing] = useState(false);

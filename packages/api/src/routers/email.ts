@@ -48,11 +48,7 @@ export const emailRouter = createTRPCRouter({
             to: email.recipients.map((r) => r.user.email).join(", "),
             subject: email.subject,
             content: email.body,
-            date: email.createdAt.toLocaleString("en-US", {
-              weekday: "short",
-              hour: "2-digit",
-              minute: "2-digit",
-            }),
+            date: email.createdAt,
             avatar: getInitials(email.sender.name),
           },
           ...email.replies.map((reply, index) => ({
