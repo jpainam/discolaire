@@ -154,8 +154,6 @@
   "light": "Clair",
   "crop": "Recadrer",
   "attach_policy": "Attacher une règle",
-  "attach_policy_description": "Attachez une stratégie gérée directement à un utilisateur. À titre de bonne pratique, nous recommandons plutôt d’attacher des stratégies à un groupe. Ensuite, ajoutez l'utilisateur au groupe approprié.",
-  "select_a_theme_for_the_dashboard": "Sélectionnez un thème pour le tableau de bord",
   "create_a_user": "Créé un utilisateur",
   "attachments": "Pièces jointes",
   "attendance": "Assiduité",

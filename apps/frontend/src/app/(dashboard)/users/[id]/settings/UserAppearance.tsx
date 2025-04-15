@@ -22,11 +22,14 @@ import { Layout, Palette } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useLocale } from "~/i18n";
 export function UserAppearance() {
   const { setTheme, resolvedTheme } = useTheme();
   const [fontSize, setFontSize] = useState("default");
-  const form = useForm();
+  const form = useForm({
+    defaultValues: {
+      theme: resolvedTheme as "light" | "dark",
+    },
+  });
   const [layout, setLayout] = useState("default");
   const [sidebarPosition, setSidebarPosition] = useState("left");
 
@@ -48,7 +51,7 @@ export function UserAppearance() {
     console.log("Sidebar position changed to:", value);
     setSidebarPosition(value);
   };
-  const { t } = useLocale();
+
   const plans = [
     {
       id: "starter",
