@@ -2,11 +2,20 @@ import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
+const getInitials = (name: string | null | undefined) => {
+  return (
+    name
+      ?.split(" ")
+      .map((n) => n[0]?.toUpperCase())
+      .join("")
+      .slice(0, 2) ?? ""
+  );
+};
 export const emailRouter = createTRPCRouter({
   get: protectedProcedure
     .input(z.string().min(1))
     .query(async ({ ctx, input }) => {
-      const email = await ctx.db.email.findUnique({
+      const email = await ctx.db.email.findUniqueOrThrow({
         where: { id: input },
         include: {
           sender: true,
@@ -19,7 +28,45 @@ export const emailRouter = createTRPCRouter({
           },
         },
       });
-      return email;
+
+      return {
+        id: email.id,
+        from: email.sender.name ?? email.sender.email,
+        email: email.sender.email,
+        subject: email.subject,
+        preview: email.body.slice(0, 60) + "...",
+        date: email.createdAt,
+        read: true, // you can later track this per user in EmailRecipient
+        folder: "inbox", // derive based on currentUserEmail
+        group: "work", // optionally derive from metadata or tags
+        avatar: getInitials(email.sender.name),
+        thread: [
+          {
+            id: `${email.id}-1`,
+            from: email.sender.name ?? email.sender.email,
+            email: email.sender.email,
+            to: email.recipients.map((r) => r.user.email).join(", "),
+            subject: email.subject,
+            content: email.body,
+            date: email.createdAt.toLocaleString("en-US", {
+              weekday: "short",
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+            avatar: getInitials(email.sender.name),
+          },
+          ...email.replies.map((reply, index) => ({
+            id: `${reply.id}-${index + 2}`,
+            from: reply.sender.name || reply.sender.email,
+            email: reply.sender.email,
+            to: reply.recipients.map((r) => r.user.email).join(", "),
+            subject: reply.subject,
+            content: reply.body,
+            date: reply.createdAt,
+            avatar: getInitials(reply.sender.name),
+          })),
+        ],
+      };
     }),
   all: protectedProcedure
     .input(
