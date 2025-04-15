@@ -36,6 +36,7 @@ import { logActivityRouter } from "./routers/logActivity";
 import { loginActivityRouter } from "./routers/loginActivity";
 import { menuRouter } from "./routers/menu";
 import { messagingRouter } from "./routers/messaging";
+import { notificationPreferenceRouter } from "./routers/notificationPreference";
 import { passwordResetRouter } from "./routers/passwordReset";
 import { permissionRouter } from "./routers/permission";
 import { policyRouter } from "./routers/policy";
@@ -99,6 +100,7 @@ export const appRouter = createTRPCRouter({
   passwordReset: passwordResetRouter,
   studentContact: studentContactRouter,
   calendarEvent: calendarEventRouter,
+  notificationPreference: notificationPreferenceRouter,
   studentAccount: studentAccountRouter,
   formerSchool: formerShoolRouter,
   setting: settingRouter,

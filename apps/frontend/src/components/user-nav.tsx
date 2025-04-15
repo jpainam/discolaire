@@ -144,7 +144,7 @@ export function UserNav({ className }: { className?: string }) {
 
         <DropdownMenuGroup>
           <DropdownMenuItem
-            onClick={() => {
+            onSelect={() => {
               if (user.id) router.push(routes.users.details(user.id));
             }}
           >
@@ -153,7 +153,7 @@ export function UserNav({ className }: { className?: string }) {
           </DropdownMenuItem>
 
           <DropdownMenuItem
-            onClick={() => {
+            onSelect={() => {
               if (user.id) router.push(routes.users.settings(user.id));
             }}
           >

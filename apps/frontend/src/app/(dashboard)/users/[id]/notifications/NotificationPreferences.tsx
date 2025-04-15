@@ -4,13 +4,24 @@ import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import { Label } from "@repo/ui/components/label";
 import { Separator } from "@repo/ui/components/separator";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { Mail, MessageSquare, Phone } from "lucide-react";
+import { useParams } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
+import type { NotificationType } from "~/configs/constants";
+import { useLocale } from "~/i18n";
+import { useTRPC } from "~/trpc/react";
 
 interface NotificationEvent {
-  id: string;
+  id: NotificationType;
   name: string;
   description: string;
+  icon?: string;
   channels: {
     email: boolean;
     sms: boolean;
@@ -18,67 +29,81 @@ interface NotificationEvent {
   };
 }
 
-export default function NotificationPreferences() {
+export function NotificationPreferences() {
+  const trpc = useTRPC();
+  const params = useParams<{ id: string }>();
+  const queryClient = useQueryClient();
+  const upsertMutation = useMutation(
+    trpc.notificationPreference.upsert.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.notificationPreference.user.pathFilter()
+        );
+        toast.success(t("updated_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const { data: preferences } = useSuspenseQuery(
+    trpc.notificationPreference.user.queryOptions({ userId: params.id })
+  );
+  const findPreferences = (
+    event: string
+  ): { sms: boolean; email: boolean; whatsapp: boolean } => {
+    const pref = preferences.find((pref) => pref.event === event);
+    return {
+      sms: pref?.channels.SMS ?? false,
+      email: pref?.channels.EMAIL ?? false,
+      whatsapp: pref?.channels.WHATSAPP ?? false,
+    };
+  };
+
   const [notificationEvents, setNotificationEvents] = useState<
     NotificationEvent[]
   >([
     {
-      id: "account_updates",
-      name: "Account Updates",
-      description: "Get notified about important changes to your account",
-      channels: {
-        email: true,
-        sms: false,
-        whatsapp: false,
-      },
+      id: "grades_updates",
+      icon: "📚",
+      name: "Grades Updates",
+      description: "Receive updates when new grades are available",
+      channels: findPreferences("grades_updates"),
     },
     {
-      id: "security_alerts",
-      name: "Security Alerts",
-      description:
-        "Receive alerts about security issues and suspicious activities",
-      channels: {
-        email: true,
-        sms: true,
-        whatsapp: false,
-      },
+      id: "absence_alerts",
+      icon: "🚨",
+      name: "Absence Alerts",
+      description: "Be notified if your child is absent",
+      channels: findPreferences("absence_alerts"),
     },
     {
       id: "payment_reminders",
+      icon: "💰",
       name: "Payment Reminders",
-      description: "Get reminders about upcoming and past due payments",
-      channels: {
-        email: true,
-        sms: false,
-        whatsapp: false,
-      },
+      description: "Upcoming tuition/payment due dates",
+      channels: findPreferences("payment_reminders"),
     },
     {
-      id: "new_features",
-      name: "New Features",
-      description: "Stay updated on new features and improvements",
-      channels: {
-        email: true,
-        sms: false,
-        whatsapp: false,
-      },
+      id: "event_notifications",
+      icon: "📅",
+      name: "Event Notifications",
+      description: "School meetings, deadlines, or announcements",
+      channels: findPreferences("event_notifications"),
     },
     {
-      id: "marketing",
-      name: "Marketing & Promotions",
-      description: "Receive special offers and promotional content",
-      channels: {
-        email: false,
-        sms: false,
-        whatsapp: false,
-      },
+      id: "weekly_summaries",
+      icon: "📊",
+      name: "Weekly Summaries",
+      description: "Weekly academic summaries",
+      channels: findPreferences("weekly_summaries"),
     },
   ]);
 
   const handleChannelChange = (
     eventId: string,
     channel: keyof NotificationEvent["channels"],
-    value: boolean,
+    value: boolean
   ) => {
     setNotificationEvents(
       notificationEvents.map((event) => {
@@ -92,7 +117,7 @@ export default function NotificationPreferences() {
           };
         }
         return event;
-      }),
+      })
     );
   };
 
@@ -110,23 +135,37 @@ export default function NotificationPreferences() {
           };
         }
         return event;
-      }),
+      })
     );
   };
 
   const handleSavePreferences = () => {
     // Here you would typically save the preferences to your backend
     console.log("Saved preferences:", notificationEvents);
-    alert("Preferences saved successfully!");
+    const notifications = notificationEvents.map((event) => ({
+      event: event.id,
+      channels: {
+        SMS: event.channels.sms,
+        EMAIL: event.channels.email,
+        WHATSAPP: event.channels.whatsapp,
+      },
+    }));
+    upsertMutation.mutate({ userId: params.id, notifications: notifications });
   };
+  const { t } = useLocale();
 
   return (
     <div className="space-y-8 p-4 container max-w-3xl">
       {notificationEvents.map((event) => (
         <div key={event.id} className="space-y-3">
           <div>
-            <h3 className="text-md font-medium">{event.name}</h3>
-            <p className="text-sm text-muted-foreground">{event.description}</p>
+            <h3 className="text-md flex gap-1 items-center flex-row font-medium">
+              <span>{event.icon}</span>
+              <span> {t(event.name)}</span>
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              {t(event.description)}
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-[40%_15%_15%_15%] gap-4 items-center">
@@ -139,7 +178,7 @@ export default function NotificationPreferences() {
                 }
               />
               <Label htmlFor={`${event.id}-all`} className="font-medium">
-                All channels
+                {t("All channels")}
               </Label>
             </div>
 
@@ -186,7 +225,7 @@ export default function NotificationPreferences() {
 
       <div className="flex ">
         <Button size={"sm"} onClick={handleSavePreferences}>
-          Save Preferences
+          {t("submit")}
         </Button>
       </div>
     </div>
