@@ -1,7 +1,5 @@
 "use client";
 
-import { Layout, Palette } from "lucide-react";
-
 import {
   Card,
   CardContent,
@@ -9,16 +7,26 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
 import { cn } from "@repo/ui/lib/utils";
+import { Layout, Palette } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useCallback, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useLocale } from "~/i18n";
 export function UserAppearance() {
   const { setTheme, resolvedTheme } = useTheme();
   const [fontSize, setFontSize] = useState("default");
+  const form = useForm();
   const [layout, setLayout] = useState("default");
   const [sidebarPosition, setSidebarPosition] = useState("left");
 
@@ -72,96 +80,91 @@ export function UserAppearance() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
+        <Form {...form}>
+          <form className="space-y-8">
+            <FormField
+              control={form.control}
+              name="theme"
+              render={({ field }) => (
+                <FormItem className="space-y-1">
+                  <RadioGroup
+                    onValueChange={(val) => {
+                      field.onChange(val);
+                      toggleTheme();
+                    }}
+                    defaultValue={field.value}
+                    className="grid max-w-md grid-cols-2 gap-8 pt-2"
+                  >
+                    <FormItem>
+                      <FormLabel className="[&:has([data-state=checked])>div]:border-primary">
+                        <FormControl>
+                          <RadioGroupItem value="light" className="sr-only" />
+                        </FormControl>
+                        <div className="items-center rounded-md border-2 border-muted p-1 hover:border-accent">
+                          <div className="space-y-2 rounded-sm bg-[#ecedef] p-2">
+                            <div className="space-y-2 rounded-md bg-white p-2 shadow-sm">
+                              <div className="h-2 w-[80px] rounded-lg bg-[#ecedef]" />
+                              <div className="h-2 w-[100px] rounded-lg bg-[#ecedef]" />
+                            </div>
+                            <div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm">
+                              <div className="h-4 w-4 rounded-full bg-[#ecedef]" />
+                              <div className="h-2 w-[100px] rounded-lg bg-[#ecedef]" />
+                            </div>
+                          </div>
+                        </div>
+                      </FormLabel>
+                    </FormItem>
+                    <FormItem>
+                      <FormLabel className="[&:has([data-state=checked])>div]:border-primary">
+                        <FormControl>
+                          <RadioGroupItem value="dark" className="sr-only" />
+                        </FormControl>
+                        <div className="items-center rounded-md border-2 border-muted bg-popover p-1 hover:bg-accent hover:text-accent-foreground">
+                          <div className="space-y-2 rounded-sm bg-slate-950 p-2">
+                            <div className="space-y-2 rounded-md bg-slate-800 p-2 shadow-sm">
+                              <div className="h-2 w-[80px] rounded-lg bg-slate-400" />
+                              <div className="h-2 w-[100px] rounded-lg bg-slate-400" />
+                            </div>
+                            <div className="flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-sm">
+                              <div className="h-4 w-4 rounded-full bg-slate-400" />
+                              <div className="h-2 w-[100px] rounded-lg bg-slate-400" />
+                            </div>
+                          </div>
+                        </div>
+                      </FormLabel>
+                    </FormItem>
+                  </RadioGroup>
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
+
         <div className="space-y-2">
-          <Label htmlFor="theme">Theme</Label>
-          <RadioGroup
-            onValueChange={(val) => {
-              console.log("val", val);
-              alert(val);
-              toggleTheme();
-            }}
-            defaultValue={resolvedTheme}
-            className="grid max-w-md grid-cols-2 gap-8 pt-2"
-          >
-            <div>
-              <div className="[&:has([data-state=checked])>div]:border-primary">
-                <RadioGroupItem value="light" className="sr-only" />
-
-                <div
-                  onClick={() => {
-                    toggleTheme();
-                  }}
-                  className="items-center rounded-md border-2 border-muted p-1 hover:border-accent"
-                >
-                  <div className="space-y-2 rounded-sm bg-[#ecedef] p-2">
-                    <div className="space-y-2 rounded-md bg-white p-2 shadow-sm">
-                      <div className="h-2 w-[80px] rounded-lg bg-[#ecedef]" />
-                      <div className="h-2 w-[100px] rounded-lg bg-[#ecedef]" />
-                    </div>
-                    <div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm">
-                      <div className="h-4 w-4 rounded-full bg-[#ecedef]" />
-                      <div className="h-2 w-[100px] rounded-lg bg-[#ecedef]" />
-                    </div>
-                  </div>
+          <Label htmlFor="primary-color">Primary Color</Label>
+          <RadioGroup defaultValue="starter" className="flex flex-wrap gap-4">
+            {plans.map((plan) => (
+              <Label
+                className="hover:bg-accent/50 flex items-start gap-3 rounded-lg border p-4 has-[[data-state=checked]]:border-green-600 has-[[data-state=checked]]:bg-green-50 dark:has-[[data-state=checked]]:border-green-900 dark:has-[[data-state=checked]]:bg-green-950"
+                key={plan.id}
+              >
+                <RadioGroupItem
+                  value={plan.id}
+                  id={plan.name}
+                  className="shadow-none data-[state=checked]:border-green-600 data-[state=checked]:bg-green-600 *:data-[slot=radio-group-indicator]:[&>svg]:fill-white *:data-[slot=radio-group-indicator]:[&>svg]:stroke-white"
+                />
+                <div className="gap-1 items-center flex flex-row font-normal">
+                  <div className={cn("h-4 w-4 rounded-full ", plan.bg)} />
+                  {plan.name}
                 </div>
-                <span className="block w-full p-2 text-center font-normal">
-                  {t("light")}
-                </span>
-              </div>
-            </div>
-            <div>
-              <div className="[&:has([data-state=checked])>div]:border-primary">
-                <RadioGroupItem value="dark" className="sr-only" />
-
-                <div
-                  onClick={() => {
-                    toggleTheme();
-                  }}
-                  className="items-center rounded-md border-2 border-muted bg-popover p-1 hover:bg-accent hover:text-accent-foreground"
-                >
-                  <div className="space-y-2 rounded-sm bg-slate-950 p-2">
-                    <div className="space-y-2 rounded-md bg-slate-800 p-2 shadow-sm">
-                      <div className="h-2 w-[80px] rounded-lg bg-slate-400" />
-                      <div className="h-2 w-[100px] rounded-lg bg-slate-400" />
-                    </div>
-                    <div className="flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-sm">
-                      <div className="h-4 w-4 rounded-full bg-slate-400" />
-                      <div className="h-2 w-[100px] rounded-lg bg-slate-400" />
-                    </div>
-                  </div>
-                </div>
-                <span className="block w-full p-2 text-center font-normal">
-                  {t("dark")}
-                </span>
-              </div>
+              </Label>
+            ))}
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="custom" id="color-custom" />
+              <Label htmlFor="color-custom">Custom</Label>
+              <Input type="color" className="h-8 w-12" />
             </div>
           </RadioGroup>
-          <div className="space-y-2">
-            <Label htmlFor="primary-color">Primary Color</Label>
-            <RadioGroup defaultValue="starter" className="flex flex-wrap gap-4">
-              {plans.map((plan) => (
-                <Label
-                  className="hover:bg-accent/50 flex items-start gap-3 rounded-lg border p-4 has-[[data-state=checked]]:border-green-600 has-[[data-state=checked]]:bg-green-50 dark:has-[[data-state=checked]]:border-green-900 dark:has-[[data-state=checked]]:bg-green-950"
-                  key={plan.id}
-                >
-                  <RadioGroupItem
-                    value={plan.id}
-                    id={plan.name}
-                    className="shadow-none data-[state=checked]:border-green-600 data-[state=checked]:bg-green-600 *:data-[slot=radio-group-indicator]:[&>svg]:fill-white *:data-[slot=radio-group-indicator]:[&>svg]:stroke-white"
-                  />
-                  <div className="gap-1 items-center flex flex-row font-normal">
-                    <div className={cn("h-4 w-4 rounded-full ", plan.bg)} />
-                    {plan.name}
-                  </div>
-                </Label>
-              ))}
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="custom" id="color-custom" />
-                <Label htmlFor="color-custom">Custom</Label>
-                <Input type="color" className="h-8 w-12" />
-              </div>
-            </RadioGroup>
-          </div>
         </div>
 
         <div className="space-y-2">
