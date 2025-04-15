@@ -55,7 +55,7 @@ export async function UserAccessLogTable({ userId }: { userId: string }) {
                   {t("ip_address")}
                 </div>
               </TableHead>
-              <TableHead className="w-1/3">
+              <TableHead>
                 <div className="flex flex-row gap-2 items-center">
                   <MonitorSmartphoneIcon className="h-4 w-4" />
                   {t("device")}
@@ -87,7 +87,7 @@ export async function UserAccessLogTable({ userId }: { userId: string }) {
                 </TableCell>
                 <TableCell className="py-0">{activity.ipAddress}</TableCell>
                 <TableCell className="py-0 ">
-                  <div className="truncate w-1/3">{activity.userAgent}</div>
+                  <div className="truncate">{activity.userAgent}</div>
                 </TableCell>
                 <TableCell className="py-0 text-right">
                   {activity.logoutDate &&
