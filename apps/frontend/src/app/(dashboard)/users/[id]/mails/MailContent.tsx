@@ -12,7 +12,7 @@ export function MailContent() {
     <div
       className={cn(
         "flex-1 flex flex-col h-full overflow-hidden",
-        !selectedEmail && !composing && "hidden md:flex"
+        !selectedEmail && !composing && "hidden md:flex",
       )}
     >
       {composing ? (

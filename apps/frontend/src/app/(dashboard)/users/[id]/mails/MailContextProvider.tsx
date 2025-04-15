@@ -17,14 +17,14 @@ interface MailContextProps {
 }
 
 export const MailContext = createContext<MailContextProps | undefined>(
-  undefined
+  undefined,
 );
 
 export function useMailContext() {
   const context = useContext(MailContext);
   if (!context) {
     throw new Error(
-      "useMailContext must be used within a <MailContextProvider />"
+      "useMailContext must be used within a <MailContextProvider />",
     );
   }
   return context;
@@ -34,7 +34,7 @@ export const MailContextProvider = (
   props: PropsWithChildren<{
     activeView: string;
     emails: RouterOutputs["email"]["all"];
-  }>
+  }>,
 ) => {
   const [activeView, setActiveView] = useState(props.activeView);
   const [composing, setComposing] = useState(false);
