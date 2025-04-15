@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
             message_id: message.id,
           },
         }),
-      }
+      },
     );
 
     // Mark as read
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
           status: "read",
           message_id: message.id,
         }),
-      }
+      },
     );
   }
 
