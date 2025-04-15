@@ -45,8 +45,8 @@ export async function AccessLogsTable({
     .filter((c) => c != null);
   const contactLogs = await Promise.all(
     contactUserIds.map((cUserId) =>
-      caller.loginActivity.all({ userId: cUserId })
-    )
+      caller.loginActivity.all({ userId: cUserId }),
+    ),
   );
 
   return (
