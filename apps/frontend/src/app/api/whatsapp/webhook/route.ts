@@ -1,41 +1,83 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { env } from "~/env";
 
 export async function GET(request: Request) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  const url = new URL(request.url);
-  const searchParams = url.searchParams;
+  const query = new URL(request.url);
+  const searchParams = query.searchParams;
   const mode = searchParams.get("hub.mode");
   const token = searchParams.get("hub.verify_token");
   const challenge = searchParams.get("hub.challenge");
-  if (mode === "subscribe" && token === env.WHATSAPP_VERIFY_TOKEN) {
-    console.log("mode", mode);
-    console.log("token", token);
-    console.log("challenge", challenge);
-    console.log("Webhook verified successfully");
-    return new Response(challenge, {
-      status: 200,
-      headers: {
-        "Content-Type": "text/plain",
-      },
-    });
+  console.log("mode", mode);
+  console.log("token", token);
+  console.log("challenge", challenge);
+  console.log("env.WHATSAPP_VERIFY_TOKEN", env.WHATSAPP_VERIFY_TOKEN);
+
+  if (mode && token && challenge && mode == "subscribe") {
+    const isValid = token == env.WHATSAPP_VERIFY_TOKEN;
+    if (isValid) {
+      return new NextResponse(challenge);
+    } else {
+      return new NextResponse(null, { status: 403 });
+    }
   } else {
-    console.log("mode", mode);
-    console.log("token", token);
-    console.log("challenge", challenge);
-    return new Response("ok", {
-      status: 403,
-      headers: {
-        "Content-Type": "text/plain",
-      },
-    });
+    return new NextResponse(null, { status: 400 });
   }
 }
 
-export async function POST(request: Request) {
-  const url = new URL(request.url);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const GRAPH_API_TOKEN = env.WHATSAPP_API_TOKEN;
+
+export async function POST(request: NextRequest) {
   const body = await request.json();
-  console.log("body", body);
-  console.log("url", url);
-  return new Response("ok");
+
+  console.log("Incoming webhook message:", JSON.stringify(body, null, 2));
+
+  const message = body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+
+  if (message?.type === "text") {
+    const business_phone_number_id =
+      body.entry?.[0]?.changes?.[0]?.value?.metadata?.phone_number_id;
+
+    // Send reply
+    await fetch(
+      `https://graph.facebook.com/v18.0/${business_phone_number_id}/messages`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${GRAPH_API_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messaging_product: "whatsapp",
+          to: message.from,
+          text: { body: "Echo: " + message.text.body },
+          context: {
+            message_id: message.id,
+          },
+        }),
+      }
+    );
+
+    // Mark as read
+    await fetch(
+      `https://graph.facebook.com/v18.0/${business_phone_number_id}/messages`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${GRAPH_API_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messaging_product: "whatsapp",
+          status: "read",
+          message_id: message.id,
+        }),
+      }
+    );
+  }
+
+  return new NextResponse(null, { status: 200 });
 }
