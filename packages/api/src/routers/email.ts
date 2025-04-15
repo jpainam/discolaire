@@ -67,6 +67,7 @@ export const emailRouter = createTRPCRouter({
   all: protectedProcedure
     .input(
       z.object({
+        userId: z.string().min(1),
         limit: z.number().min(1).max(100).default(10),
         offset: z.number().min(0).default(0),
         query: z.string().optional(),
@@ -74,7 +75,7 @@ export const emailRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const userId = ctx.session.user.id;
+      const userId = input.userId;
       const { unreadOnly = false, limit, offset, query } = input;
       const qq = `%${query?.toLowerCase()}%`;
       const received = await ctx.db.emailRecipient.findMany({
