@@ -1,10 +1,10 @@
 "use client";
 
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { ErrorFallback } from "~/components/error-fallback";
 import { MailContent } from "./MailContent";
 import { MailList } from "./MailList";
 import { MailSidebar } from "./MailSidebar";
-
-// Sample email data
 
 export default function Page() {
   return (
@@ -17,8 +17,9 @@ export default function Page() {
         {/* Email List */}
         <MailList />
 
-        {/* Email Detail or Compose View */}
-        <MailContent />
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <MailContent />
+        </ErrorBoundary>
       </div>
     </div>
   );

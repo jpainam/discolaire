@@ -43,7 +43,7 @@ export function MailList() {
     <div
       className={cn(
         "w-80 border-r overflow-y-auto",
-        (selectedEmail ?? composing) && "hidden md:block"
+        (selectedEmail ?? composing) && "hidden md:block",
       )}
     >
       <div className="p-4 border-b sticky top-0 bg-background z-10">
@@ -60,7 +60,7 @@ export function MailList() {
             className={cn(
               "p-3 cursor-pointer hover:bg-muted/50 transition-colors",
               email.id === selectedEmail && "bg-muted",
-              !email.read && "font-medium"
+              !email.read && "font-medium",
             )}
             onClick={() => handleEmailClick(email.id)}
           >
