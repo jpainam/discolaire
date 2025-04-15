@@ -1,17 +1,11 @@
 import { auth } from "@repo/auth";
-import { Separator } from "@repo/ui/components/separator";
 
 import { NoPermission } from "~/components/no-permission";
 
 import { checkPermission } from "@repo/api/permission";
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { redirect } from "next/navigation";
-import { Suspense } from "react";
-import { ErrorFallback } from "~/components/error-fallback";
 import { PermissionAction } from "~/permissions";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
-import { UserHeader } from "./UserHeader";
 
 export default async function Layout(props: {
   params: Promise<{ id: string }>;
@@ -43,7 +37,7 @@ export default async function Layout(props: {
 
   return (
     <HydrateClient>
-      <ErrorBoundary errorComponent={ErrorFallback}>
+      {/* <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
           key={params.id}
           fallback={
@@ -55,7 +49,7 @@ export default async function Layout(props: {
           <UserHeader />
         </Suspense>
       </ErrorBoundary>
-      <Separator />
+      <Separator /> */}
 
       {children}
     </HydrateClient>

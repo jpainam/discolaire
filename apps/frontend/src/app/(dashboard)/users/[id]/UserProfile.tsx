@@ -1,10 +1,5 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/avatar";
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -34,6 +29,7 @@ import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { AvatarState } from "~/components/AvatarState";
 import { ChangeAvatarButton } from "~/components/users/ChangeAvatarButton";
 import { useTRPC } from "~/trpc/react";
 
@@ -46,7 +42,7 @@ export function UserProfile() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: user } = useSuspenseQuery(
-    trpc.user.get.queryOptions(params.id),
+    trpc.user.get.queryOptions(params.id)
   );
   const form = useForm({
     resolver: zodResolver(usernameSchema),
@@ -65,7 +61,7 @@ export function UserProfile() {
       onError: (err) => {
         toast.error(err.message, { id: 0 });
       },
-    }),
+    })
   );
   const handleSubmit = (data: z.infer<typeof usernameSchema>) => {
     toast.loading(t("updating"), { id: 0 });
@@ -114,19 +110,12 @@ export function UserProfile() {
             <CardContent className="space-y-6">
               <div className="flex flex-col md:flex-row gap-6 items-start">
                 <div className="flex flex-col items-center space-y-2">
-                  <Avatar className="h-24 w-24">
-                    <AvatarImage
-                      src={
-                        user.avatar
-                          ? `/api/download/avatars/${user.avatar}`
-                          : undefined
-                      }
-                      alt={user.name ?? ""}
-                    />
-                    <AvatarFallback className="text-2xl font-bold uppercase">
-                      {user.name?.slice(0, 2) ?? "N/A"}
-                    </AvatarFallback>
-                  </Avatar>
+                  <AvatarState
+                    pos={user.name?.length ?? 0}
+                    avatar={user.avatar}
+                    className="h-[100px] w-[100px] mb-2"
+                  />
+
                   {user.avatar ? (
                     <Button
                       onClick={() => {
