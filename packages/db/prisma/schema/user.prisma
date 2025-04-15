@@ -42,6 +42,8 @@ model User {
     borrowedBooks           BorrowedBook[]
     logActivities           LogActivity[]
     notificationPreferences NotificationPreference[]
+    sentEmails              Email[]                  @relation("Sender")
+    receivedEmails          EmailRecipient[]
 }
 
 model Role {

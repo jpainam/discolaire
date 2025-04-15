@@ -1,0 +1,33 @@
+model Email {
+  id                String           @id @default(cuid())
+  subject           String
+  body              String
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  senderId          String
+  sender            User             @relation("Sender", fields: [senderId], references: [id])
+  recipients        EmailRecipient[]
+  attachments       Attachment[]
+  parentEmail       Email?           @relation("ReplyTo", fields: [parentEmailId], references: [id])
+  parentEmailId     String?
+  replies           Email[]          @relation("ReplyTo")
+  deletedBySenderAt DateTime? // <-- soft delete for sender
+}
+
+model EmailRecipient {
+  id        String    @id @default(cuid())
+  emailId   String
+  userId    String
+  readAt    DateTime?
+  deletedAt DateTime? // <-- soft delete per user
+  email     Email     @relation(fields: [emailId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model Attachment {
+  id       String @id @default(cuid())
+  emailId  String
+  filename String
+  url      String
+  email    Email  @relation(fields: [emailId], references: [id])
+}

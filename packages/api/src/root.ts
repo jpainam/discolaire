@@ -19,6 +19,7 @@ import { degreeRouter } from "./routers/degree";
 import { directoryRouter } from "./routers/directory";
 import { disciplineRouter } from "./routers/discipline";
 import { documentRouter } from "./routers/document";
+import { emailRouter } from "./routers/email";
 import { enrollmentRouter } from "./routers/enrollment";
 import { exclusionRouter } from "./routers/exclusion";
 import { feeRouter } from "./routers/fee";
@@ -95,6 +96,7 @@ export const appRouter = createTRPCRouter({
   term: termRouter,
   document: documentRouter,
   school: schoolRouter,
+  email: emailRouter,
   consigne: consigneRouter,
   loginActivity: loginActivityRouter,
   passwordReset: passwordResetRouter,
