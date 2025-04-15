@@ -11,7 +11,7 @@ export function UserHeader() {
   const params = useParams<{ id: string }>();
   const { t } = useLocale();
   const { data: user } = useSuspenseQuery(
-    trpc.user.get.queryOptions(params.id),
+    trpc.user.get.queryOptions(params.id)
   );
   return (
     <div className="flex flex-row items-center gap-2 px-4 py-2">
@@ -21,11 +21,9 @@ export function UserHeader() {
         className="w-[100px] h-[100px]"
       />
 
-      <div className="space-y-0.5">
-        <h2 className=" font-bold tracking-tight">{t("user_management")}</h2>
-        <div className="flex flex-row items-center gap-16">
+      <div className="space-y-0.5 ">
+        <div className="flex flex-row gap-16">
           <div className="flex flex-row items-center gap-2 text-muted-foreground">
-            <span className="font-bold">{t("name")}</span>
             {user.name}
           </div>
           <div className="flex flex-row items-center gap-2 text-muted-foreground">

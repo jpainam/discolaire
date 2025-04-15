@@ -36,7 +36,7 @@ export default function StudentContactList({
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const contactStudentsQuery = useQuery(
-    trpc.contact.students.queryOptions(contactId)
+    trpc.contact.students.queryOptions(contactId),
   );
   const contactQuery = useQuery(trpc.contact.get.queryOptions(contactId));
 
@@ -55,7 +55,7 @@ export default function StudentContactList({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
@@ -66,11 +66,11 @@ export default function StudentContactList({
   });
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
 
   return (
@@ -124,7 +124,7 @@ export default function StudentContactList({
                     size="sm"
                     onClick={() => {
                       router.push(
-                        routes.students.details(studentcontact.studentId)
+                        routes.students.details(studentcontact.studentId),
                       );
                     }}
                     variant="outline"

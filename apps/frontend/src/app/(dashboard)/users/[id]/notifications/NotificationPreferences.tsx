@@ -78,7 +78,7 @@ export default function NotificationPreferences() {
   const handleChannelChange = (
     eventId: string,
     channel: keyof NotificationEvent["channels"],
-    value: boolean,
+    value: boolean
   ) => {
     setNotificationEvents(
       notificationEvents.map((event) => {
@@ -92,7 +92,7 @@ export default function NotificationPreferences() {
           };
         }
         return event;
-      }),
+      })
     );
   };
 
@@ -110,7 +110,7 @@ export default function NotificationPreferences() {
           };
         }
         return event;
-      }),
+      })
     );
   };
 
@@ -125,7 +125,7 @@ export default function NotificationPreferences() {
       {notificationEvents.map((event) => (
         <div key={event.id} className="space-y-3">
           <div>
-            <h3 className="text-lg font-medium">{event.name}</h3>
+            <h3 className="text-md font-medium">{event.name}</h3>
             <p className="text-sm text-muted-foreground">{event.description}</p>
           </div>
 
