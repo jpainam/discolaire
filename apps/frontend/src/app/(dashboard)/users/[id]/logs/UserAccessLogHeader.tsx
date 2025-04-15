@@ -18,13 +18,13 @@ import { toast } from "sonner";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { sidebarIcons } from "~/components/students/sidebar-icons";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
-import { sidebarIcons } from "../sidebar-icons";
 
-export function AccessLogsHeader({ userId }: { userId: string }) {
+export function UserAccessLogHeader({ userId }: { userId: string }) {
   const { t } = useLocale();
   const trpc = useTRPC();
   const Icon = sidebarIcons.access_logs;
@@ -46,7 +46,7 @@ export function AccessLogsHeader({ userId }: { userId: string }) {
     })
   );
   return (
-    <div className="flex flex-row gap-2 border-b items-center bg-secondary px-4 py-1 text-secondary-foreground">
+    <div className="flex flex-row gap-2 border-y items-center bg-secondary px-4 py-1 text-secondary-foreground">
       {Icon && <Icon className="h-4 w-4" />}
       <Label>{t("access_logs")}</Label>
       <div className="ml-auto flex flex-row">
