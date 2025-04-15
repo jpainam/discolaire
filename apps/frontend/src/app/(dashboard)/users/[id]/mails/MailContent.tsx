@@ -47,13 +47,13 @@ export function MailContent() {
 
   // Get the selected email details
   const selectedEmailDetails = emails.find(
-    (email) => email.id === selectedEmail
+    (email) => email.id === selectedEmail,
   );
   return (
     <div
       className={cn(
         "flex-1 flex flex-col h-full overflow-hidden",
-        !selectedEmail && !composing && "hidden md:flex"
+        !selectedEmail && !composing && "hidden md:flex",
       )}
     >
       {composing ? (
