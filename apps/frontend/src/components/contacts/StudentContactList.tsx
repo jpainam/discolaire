@@ -3,7 +3,6 @@
 import { ExternalLink, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -26,11 +25,8 @@ import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { routes } from "../../configs/routes";
 import { AvatarState } from "../AvatarState";
+import { Skeleton } from "../ui/skeleton";
 import { LinkStudent } from "./LinkStudent";
-
-type StudentContactOutput = NonNullable<
-  RouterOutputs["contact"]["students"]
->[number];
 
 export default function StudentContactList({
   contactId,
@@ -40,7 +36,7 @@ export default function StudentContactList({
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const contactStudentsQuery = useQuery(
-    trpc.contact.students.queryOptions(contactId),
+    trpc.contact.students.queryOptions(contactId)
   );
   const contactQuery = useQuery(trpc.contact.get.queryOptions(contactId));
 
@@ -59,7 +55,7 @@ export default function StudentContactList({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
@@ -70,11 +66,11 @@ export default function StudentContactList({
   });
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (
@@ -84,12 +80,10 @@ export default function StudentContactList({
           className="w-fit"
           size={"sm"}
           onClick={() => {
-            const contact = contactQuery.data;
-
             openModal({
               className: "p-0 w-[600px]",
               title: <div className="px-4 pt-2">{t("link_students")}</div>,
-              view: <LinkStudent contactId={contact.id} />,
+              view: <LinkStudent contactId={contactId} />,
             });
           }}
         >
@@ -103,105 +97,110 @@ export default function StudentContactList({
           description={`${contactQuery.data?.prefix} ${getFullName(contactQuery.data)}`}
         />
       )}
+      {(contactQuery.isPending || contactStudentsQuery.isPending) && (
+        <div className="grid gap-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-12" />
+          ))}
+        </div>
+      )}
       <div className="flex flex-col gap-2">
-        {contactStudentsQuery.data?.map(
-          (studentcontact: StudentContactOutput, index) => {
-            const student = studentcontact.student;
-            const contact = contactQuery.data;
+        {contactStudentsQuery.data?.map((studentcontact, index) => {
+          const student = studentcontact.student;
+          const contact = contactQuery.data;
 
-            return (
-              <Card key={index} className="p-0 gap-0">
-                <CardHeader className="border-b gap-0 bg-muted/50 p-2">
-                  <CardTitle>
-                    <AvatarState
-                      avatar={student.user?.avatar}
-                      className="h-[60px] w-[60px]"
-                      pos={getFullName(student).length}
-                    />
-                  </CardTitle>
-                  <CardAction className="gap-2 flex flex-col">
-                    <Button
-                      size="sm"
-                      onClick={() => {
-                        router.push(
-                          routes.students.details(studentcontact.studentId),
-                        );
-                      }}
-                      variant="outline"
-                    >
-                      <ExternalLink />
+          return (
+            <Card key={index} className="p-0 gap-0">
+              <CardHeader className="border-b gap-0 bg-muted/50 p-2">
+                <CardTitle>
+                  <AvatarState
+                    avatar={student.user?.avatar}
+                    className="h-[60px] w-[60px]"
+                    pos={getFullName(student).length}
+                  />
+                </CardTitle>
+                <CardAction className="gap-2 flex flex-col">
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      router.push(
+                        routes.students.details(studentcontact.studentId)
+                      );
+                    }}
+                    variant="outline"
+                  >
+                    <ExternalLink />
 
-                      {t("profile")}
-                    </Button>
-                    <div className="text-xs text-muted-foreground">
-                      {t("bornOn")}:{" "}
-                      {student.dateOfBirth &&
-                        dateFormatter.format(student.dateOfBirth)}
-                    </div>
-                  </CardAction>
-                </CardHeader>
-                <CardContent className="p-2 text-sm">
-                  <ul className="grid gap-2 ">
-                    <li className="flex items-center justify-between">
-                      <span className="text-muted-foreground">
-                        {t("lastName")}
-                      </span>
-                      <span className="truncate">{student.lastName}</span>
-                    </li>
-                    <li className="flex items-center justify-between">
-                      <span className="text-muted-foreground">
-                        {t("firstName")}
-                      </span>
-                      <span className="truncate">{student.firstName}</span>
-                    </li>
+                    {t("profile")}
+                  </Button>
+                  <div className="text-xs text-muted-foreground">
+                    {t("bornOn")}:{" "}
+                    {student.dateOfBirth &&
+                      dateFormatter.format(student.dateOfBirth)}
+                  </div>
+                </CardAction>
+              </CardHeader>
+              <CardContent className="p-2 text-sm">
+                <ul className="grid gap-2 ">
+                  <li className="flex items-center justify-between">
+                    <span className="text-muted-foreground">
+                      {t("lastName")}
+                    </span>
+                    <span className="truncate">{student.lastName}</span>
+                  </li>
+                  <li className="flex items-center justify-between">
+                    <span className="text-muted-foreground">
+                      {t("firstName")}
+                    </span>
+                    <span className="truncate">{student.firstName}</span>
+                  </li>
 
-                    <li className="flex items-center justify-between">
-                      <span className="text-muted-foreground">
-                        {t("classroom")}
-                      </span>
-                      <span>{student.classroom?.name ?? ""}</span>
-                    </li>
-                    <li className="flex items-center justify-between">
-                      <span className="text-muted-foreground">
-                        {t("studentContactName")}
-                      </span>
-                      <span>{getFullName(contact)}</span>
-                    </li>
-                  </ul>
-                </CardContent>
-                {canDeleteContact && (
-                  <CardFooter className="border-t gap-0 flex flex-row items-center mb-3 justify-end">
-                    <Button
-                      onClick={async () => {
-                        if (!contact?.id) {
-                          return;
-                        }
-                        const isConfirmed = await confirm({
-                          title: t("delete"),
-                          description: t("delete_confirmation"),
+                  <li className="flex items-center justify-between">
+                    <span className="text-muted-foreground">
+                      {t("classroom")}
+                    </span>
+                    <span>{student.classroom?.name ?? ""}</span>
+                  </li>
+                  <li className="flex items-center justify-between">
+                    <span className="text-muted-foreground">
+                      {t("studentContactName")}
+                    </span>
+                    <span>{getFullName(contact)}</span>
+                  </li>
+                </ul>
+              </CardContent>
+              {canDeleteContact && (
+                <CardFooter className="border-t gap-0 flex flex-row items-center mb-3 justify-end">
+                  <Button
+                    onClick={async () => {
+                      if (!contact?.id) {
+                        return;
+                      }
+                      const isConfirmed = await confirm({
+                        title: t("delete"),
+                        description: t("delete_confirmation"),
+                      });
+
+                      if (isConfirmed) {
+                        toast.loading(t("deleting"), { id: 0 });
+                        deleteStudentContactMutation.mutate({
+                          studentId: studentcontact.studentId,
+                          contactId: contact.id,
                         });
-
-                        if (isConfirmed) {
-                          toast.loading(t("deleting"), { id: 0 });
-                          deleteStudentContactMutation.mutate({
-                            studentId: studentcontact.studentId,
-                            contactId: contact.id,
-                          });
-                        }
-                      }}
-                      size="icon"
-                      className="sisze-8"
-                      variant="outline"
-                    >
-                      <Trash2 className="h-4 w-4 text-destructive" />
-                      <span className="sr-only">{t("delete")}</span>
-                    </Button>
-                  </CardFooter>
-                )}
-              </Card>
-            );
-          },
-        )}
+                      }
+                    }}
+                    size="icon"
+                    className="sisze-8"
+                    variant="outline"
+                  >
+                    <Trash2 className="h-4 w-4 text-destructive" />
+                    <span className="sr-only">{t("delete")}</span>
+                  </Button>
+                </CardFooter>
+              )}
+            </Card>
+          );
+        })}
       </div>
     </div>
   );

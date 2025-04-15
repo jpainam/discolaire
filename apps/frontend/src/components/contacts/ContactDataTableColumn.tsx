@@ -267,12 +267,10 @@ function ActionsCell({ contact }: { contact: ContactAllProcedureOutput }) {
 
           {canDeleteContact && (
             <>
-              {" "}
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 disabled={deleteContactMutation.isPending}
                 variant="destructive"
-                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                 onSelect={async () => {
                   const isConfirmed = await confirm({
                     title: t("delete"),

@@ -307,11 +307,11 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
 
   const canDeleteClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const canUpdateClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -325,7 +325,7 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   return (
