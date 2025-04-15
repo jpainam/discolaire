@@ -16,9 +16,9 @@ const upsertSchema = z.object({
         "weekly_summaries",
       ]),
       channels: z.object({
-        email: z.boolean(),
-        sms: z.boolean(),
-        whatsapp: z.boolean(),
+        EMAIL: z.boolean(),
+        SMS: z.boolean(),
+        WHATSAPP: z.boolean(),
       }),
     }),
   ),

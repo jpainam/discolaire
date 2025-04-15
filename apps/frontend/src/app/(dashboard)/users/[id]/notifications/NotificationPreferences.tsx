@@ -224,7 +224,11 @@ export function NotificationPreferences() {
       ))}
 
       <div className="flex ">
-        <Button size={"sm"} onClick={handleSavePreferences}>
+        <Button
+          isLoading={upsertMutation.isPending}
+          size={"sm"}
+          onClick={handleSavePreferences}
+        >
           {t("submit")}
         </Button>
       </div>
