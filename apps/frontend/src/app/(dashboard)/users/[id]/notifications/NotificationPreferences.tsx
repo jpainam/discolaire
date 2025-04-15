@@ -78,7 +78,7 @@ export default function NotificationPreferences() {
   const handleChannelChange = (
     eventId: string,
     channel: keyof NotificationEvent["channels"],
-    value: boolean
+    value: boolean,
   ) => {
     setNotificationEvents(
       notificationEvents.map((event) => {
@@ -92,7 +92,7 @@ export default function NotificationPreferences() {
           };
         }
         return event;
-      })
+      }),
     );
   };
 
@@ -110,7 +110,7 @@ export default function NotificationPreferences() {
           };
         }
         return event;
-      })
+      }),
     );
   };
 
