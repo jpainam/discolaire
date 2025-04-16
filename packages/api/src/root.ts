@@ -40,6 +40,7 @@ import { messagingRouter } from "./routers/messaging";
 import { notificationPreferenceRouter } from "./routers/notificationPreference";
 import { passwordResetRouter } from "./routers/passwordReset";
 import { permissionRouter } from "./routers/permission";
+import { photoRouter } from "./routers/photo";
 import { policyRouter } from "./routers/policy";
 import { postRouter } from "./routers/post";
 import { programRouter } from "./routers/program";
@@ -70,6 +71,7 @@ import { createTRPCRouter } from "./trpc";
 
 export const appRouter = createTRPCRouter({
   staff: staffRouter,
+  photo: photoRouter,
   upload: uploadRouter,
   classroom: classroomRouter,
   contact: contactRouter,

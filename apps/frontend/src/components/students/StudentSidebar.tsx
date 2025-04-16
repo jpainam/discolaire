@@ -16,6 +16,7 @@ import {
   ArrowRightLeft,
   BellRing,
   BookText,
+  CalendarDays,
   CaptionsIcon,
   CircleDollarSign,
   CreditCard,
@@ -98,6 +99,11 @@ export function StudentSidebar({
         name: "transactions",
         icon: CircleDollarSign,
         url: `/students/${params.id}/transactions`,
+      },
+      {
+        name: "timetables",
+        icon: CalendarDays,
+        url: `/students/${params.id}/timetables`,
       },
 
       {

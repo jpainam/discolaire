@@ -75,7 +75,7 @@ export const uploadFile = async ({
       destination,
       Buffer.from(await file.arrayBuffer()),
       file.size,
-      metaData,
+      metaData
     );
     return {
       key: destination,
@@ -121,7 +121,7 @@ export async function uploadFiles({
 
 async function runWithConcurrency<T>(
   tasks: (() => Promise<T>)[],
-  concurrency: number,
+  concurrency: number
 ): Promise<T[]> {
   const results: T[] = [];
   const queue = [...tasks];
@@ -190,7 +190,7 @@ export async function listS3Objects({
         size: obj.size,
         lastModified: obj.lastModified ? new Date(obj.lastModified) : null,
         key: obj.name ?? "",
-        location: `https://${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${bucket}/${obj.name}`,
+        location: `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${bucket}/${obj.name}`,
         bucket: bucket,
         prefix: prefix ?? "",
       });

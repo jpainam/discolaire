@@ -1,18 +1,5 @@
 "use client";
-
-import { MoreVertical, Pencil, Trash2 } from "lucide-react";
-import Link from "next/link";
-
 import { Button } from "@repo/ui/components/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { useLocale } from "~/i18n";
-
 import {
   Card,
   CardAction,
@@ -21,20 +8,58 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
+import { MoreVertical, Pencil, Trash2 } from "lucide-react";
+import Link from "next/link";
 import FolderIcon from "~/components/icons/folder-solid";
-interface PhotoCardProps {
-  title: string;
-  size: string;
-  totalFiles: number;
-  href: string;
+
+import { useLocale } from "~/i18n";
+
+export function PhotosList() {
+  const { t } = useLocale();
+  return (
+    <div className="grid grid-flow-col gap-4">
+      <PhotoListItem
+        href={`/administration/photos/students`}
+        title={t("Student photos")}
+        size={"2.4 GB"}
+        totalFiles={135}
+      />
+
+      <PhotoListItem
+        title={t("Staff photos")}
+        size={"1.8 GB"}
+        totalFiles={15}
+        href={`/administration/photos/staffs`}
+      />
+
+      <PhotoListItem
+        title={t("Parent photos")}
+        href={`/administration/photos/contacts`}
+        size={"528 MB"}
+        totalFiles={800}
+      />
+    </div>
+  );
 }
 
-export function PhotoListItem({
+function PhotoListItem({
   title,
   href,
   size,
   totalFiles,
-}: PhotoCardProps) {
+}: {
+  title: string;
+  size: string;
+  totalFiles: number;
+  href: string;
+}) {
   const { t } = useLocale();
   return (
     <Link href={href}>

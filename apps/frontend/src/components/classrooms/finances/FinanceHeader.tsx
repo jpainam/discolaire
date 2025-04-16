@@ -78,7 +78,7 @@ export function FinanceHeader() {
         <ChangeFinanceView />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size="icon" variant="outline">
+            <Button size="icon" variant="outline" className="size-8">
               <MoreVertical className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -87,7 +87,7 @@ export function FinanceHeader() {
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <PDFIcon className="mr-2 h-4 w-4" />
-                <span className="px-2">{t("pdf_export")}</span>
+                <span>{t("pdf_export")}</span>
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
@@ -95,7 +95,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=all&ids=${ids}`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >
@@ -111,7 +111,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=debit&ids=${ids}`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >
@@ -126,7 +126,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=credit&ids=${ids}`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >
@@ -176,8 +176,8 @@ export function FinanceHeader() {
             <DropdownMenuSeparator />
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
-                <XMLIcon className="mr-2 h-4 w-4" />
-                <span className="px-2">{t("xml_export")}</span>
+                <XMLIcon className="h-4 w-4 mr-2" />
+                <span>{t("xml_export")}</span>
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
@@ -185,7 +185,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=csv&type=all&ids=${ids}`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >
@@ -200,7 +200,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=csv&type=debit&ids=${ids}`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >
@@ -215,7 +215,7 @@ export function FinanceHeader() {
                     onSelect={() => {
                       window.open(
                         `/api/pdfs/classroom/${params.id}/finances?format=csv&type=credit&ids=${ids}`,
-                        "_blank",
+                        "_blank"
                       );
                     }}
                   >

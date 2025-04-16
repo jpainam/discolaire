@@ -1,4 +1,4 @@
-import { PhotosList } from "~/components/administration/photos/PhotosList";
+import { PhotosList } from "~/app/(dashboard)/administration/photos/PhotosList";
 import { ZipImageMatcher } from "./ZipImageMatcher";
 
 export default function Page() {
