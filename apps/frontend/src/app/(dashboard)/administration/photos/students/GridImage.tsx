@@ -16,10 +16,10 @@ export function ImageGrid({ bucket }: { bucket: string }) {
       prefix: "student/",
       bucket: bucket,
       startAfter: startAfter,
-    })
+    }),
   );
   const [selectedImage, setSelectedImage] = useState<string | undefined>(
-    undefined
+    undefined,
   );
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
