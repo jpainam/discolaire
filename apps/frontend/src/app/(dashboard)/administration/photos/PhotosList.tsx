@@ -19,10 +19,26 @@ import { MoreVertical, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import FolderIcon from "~/components/icons/folder-solid";
 
+import { useSetAtom } from "jotai";
+import { useEffect } from "react";
 import { useLocale } from "~/i18n";
+import { breadcrumbAtom } from "~/lib/atoms";
 
 export function PhotosList() {
   const { t } = useLocale();
+  const setBreadcrumbs = useSetAtom(breadcrumbAtom);
+  useEffect(() => {
+    setBreadcrumbs([
+      {
+        name: t("Administration"),
+        url: "/administration",
+      },
+      {
+        name: t("Photos"),
+        url: "/administration/photos",
+      },
+    ]);
+  }, [setBreadcrumbs, t]);
   return (
     <div className="grid grid-flow-col gap-4">
       <PhotoListItem

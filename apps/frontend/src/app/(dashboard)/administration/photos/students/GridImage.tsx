@@ -3,9 +3,12 @@
 import { Button } from "@repo/ui/components/button";
 import { Dialog, DialogClose, DialogContent } from "@repo/ui/components/dialog";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSetAtom } from "jotai";
 import { X } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocale } from "~/i18n";
+import { breadcrumbAtom } from "~/lib/atoms";
 import { useTRPC } from "~/trpc/react";
 
 export function ImageGrid({ bucket }: { bucket: string }) {
@@ -16,10 +19,29 @@ export function ImageGrid({ bucket }: { bucket: string }) {
       prefix: "student/",
       bucket: bucket,
       startAfter: startAfter,
-    }),
+    })
   );
+  const { t } = useLocale();
+  const setBreadcrumbs = useSetAtom(breadcrumbAtom);
+  useEffect(() => {
+    setBreadcrumbs([
+      {
+        name: t("Administration"),
+        url: "/administration",
+      },
+      {
+        name: t("Photos"),
+        url: "/administration/photos",
+      },
+      {
+        name: t("Student photos"),
+        url: "/administration/photos/students",
+      },
+    ]);
+  }, [setBreadcrumbs, t]);
+
   const [selectedImage, setSelectedImage] = useState<string | undefined>(
-    undefined,
+    undefined
   );
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
