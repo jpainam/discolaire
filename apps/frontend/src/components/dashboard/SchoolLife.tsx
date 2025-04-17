@@ -51,33 +51,33 @@ const groupByWeekday = (items: { date: Date; value: number }[]) => {
       }
       return acc;
     },
-    {} as Record<number, number>
+    {} as Record<number, number>,
   );
 };
 
 export function SchoolLife({ className }: { className?: string }) {
   const trpc = useTRPC();
   const [startWeek, setStartWeek] = useState<Date>(
-    startOfWeek(new Date(), { weekStartsOn: 0 })
+    startOfWeek(new Date(), { weekStartsOn: 0 }),
   );
   const [endWeek, setEndWeek] = useState<Date>(
-    endOfWeek(new Date(), { weekStartsOn: 0 })
+    endOfWeek(new Date(), { weekStartsOn: 0 }),
   );
 
   const absenceQuery = useQuery(
-    trpc.absence.all.queryOptions({ from: startWeek, to: endWeek })
+    trpc.absence.all.queryOptions({ from: startWeek, to: endWeek }),
   );
   const lateQuery = useQuery(
-    trpc.lateness.all.queryOptions({ from: startWeek, to: endWeek })
+    trpc.lateness.all.queryOptions({ from: startWeek, to: endWeek }),
   );
   const convocationQuery = useQuery(
-    trpc.convocation.all.queryOptions({ from: startWeek, to: endWeek })
+    trpc.convocation.all.queryOptions({ from: startWeek, to: endWeek }),
   );
   const exclusionQuery = useQuery(
-    trpc.exclusion.all.queryOptions({ from: startWeek, to: endWeek })
+    trpc.exclusion.all.queryOptions({ from: startWeek, to: endWeek }),
   );
   const visitQuery = useQuery(
-    trpc.health.allvisits.queryOptions({ from: startWeek, to: endWeek })
+    trpc.health.allvisits.queryOptions({ from: startWeek, to: endWeek }),
   );
 
   const [data, setData] = useState<
@@ -96,23 +96,23 @@ export function SchoolLife({ className }: { className?: string }) {
   useEffect(() => {
     const absences = absenceQuery.data ?? [];
     const absenceCounts = groupByWeekday(
-      absences.map((a) => ({ date: a.date, value: a.value }))
+      absences.map((a) => ({ date: a.date, value: a.value })),
     );
     const lates = lateQuery.data ?? [];
     const latenessCounts = groupByWeekday(
-      lates.map((l) => ({ date: l.date, value: 1 }))
+      lates.map((l) => ({ date: l.date, value: 1 })),
     );
     const visits = visitQuery.data ?? [];
     const visitCounts = groupByWeekday(
-      visits.map((v) => ({ date: v.date, value: 1 }))
+      visits.map((v) => ({ date: v.date, value: 1 })),
     );
     const exclusions = exclusionQuery.data ?? [];
     const exclusionCounts = groupByWeekday(
-      exclusions.map((e) => ({ date: e.startDate, value: 1 }))
+      exclusions.map((e) => ({ date: e.startDate, value: 1 })),
     );
     const convocations = convocationQuery.data ?? [];
     const convocationCounts = groupByWeekday(
-      convocations.map((c) => ({ date: c.date, value: 1 }))
+      convocations.map((c) => ({ date: c.date, value: 1 })),
     );
 
     const summary = [
@@ -219,7 +219,7 @@ export function SchoolLife({ className }: { className?: string }) {
       format(date, "EEE d", {
         locale:
           i18n.language === "fr" ? fr : i18n.language === "es" ? es : enUS,
-      })
+      }),
     );
 
   return (
