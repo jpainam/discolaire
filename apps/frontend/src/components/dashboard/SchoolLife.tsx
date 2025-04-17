@@ -17,6 +17,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 import { cn } from "@repo/ui/lib/utils";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { eachDayOfInterval, endOfWeek, format, startOfWeek } from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
 import {
@@ -30,9 +31,28 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 import { useLocale } from "~/i18n";
+import { useTRPC } from "~/trpc/react";
 import type { ChangeEvent } from "~/types/event_type";
 
 export function SchoolLife({ className }: { className?: string }) {
+  const trpc = useTRPC();
+  //const [today, setToday] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(() => new Date());
+  const startOfWeekDate = startOfWeek(selectedDate, { weekStartsOn: 0 });
+  const endOfWeekDate = endOfWeek(selectedDate, { weekStartsOn: 0 });
+  const { data: absences } = useSuspenseQuery(
+    trpc.absence.all.queryOptions({
+      from: startOfWeekDate,
+      to: endOfWeekDate,
+    })
+  );
+  const { data: lates } = useSuspenseQuery(
+    trpc.lateness.all.queryOptions({
+      from: startOfWeekDate,
+      to: endOfWeekDate,
+    })
+  );
+
   const data = [
     {
       category: "Absents",
@@ -122,25 +142,11 @@ export function SchoolLife({ className }: { className?: string }) {
     const daysToAdd = (week - 1) * 7;
     const selectedWeekStart = startOfWeek(
       new Date(firstDayOfYear.setDate(firstDayOfYear.getDate() + daysToAdd)),
-      { weekStartsOn: 0 },
+      { weekStartsOn: 0 }
     );
 
     setSelectedDate(selectedWeekStart);
   };
-
-  //const [today, setToday] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(() => new Date());
-  const startOfWeekDate = startOfWeek(selectedDate, { weekStartsOn: 0 });
-  const endOfWeekDate = endOfWeek(selectedDate, { weekStartsOn: 0 });
-
-  // const formatDate = Intl.DateTimeFormat(i18n.language, {
-  //   month: "short",
-  //   day: "numeric",
-  // });
-  // const dayFormat = Intl.DateTimeFormat(i18n.language, {
-  //   weekday: "short",
-  //   day: "numeric",
-  // });
 
   // Generate weekdays
   const days = eachDayOfInterval({ start: startOfWeekDate, end: endOfWeekDate })
@@ -149,7 +155,7 @@ export function SchoolLife({ className }: { className?: string }) {
       format(date, "EEE d", {
         locale:
           i18n.language === "fr" ? fr : i18n.language === "es" ? es : enUS,
-      }),
+      })
     );
 
   return (

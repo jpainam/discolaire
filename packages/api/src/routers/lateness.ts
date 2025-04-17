@@ -13,19 +13,30 @@ export const latenessRouter = createTRPCRouter({
       },
     });
   }),
-  all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.lateness.findMany({
-      orderBy: {
-        date: "desc",
-      },
-      where: {
-        term: {
-          schoolId: ctx.schoolId,
-          schoolYearId: ctx.schoolYearId,
+  all: protectedProcedure
+    .input(
+      z
+        .object({
+          from: z.coerce.date().optional(),
+          to: z.coerce.date().optional(),
+        })
+        .optional(),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.lateness.findMany({
+        orderBy: {
+          date: "desc",
         },
-      },
-    });
-  }),
+        where: {
+          ...(input?.from && { date: { gte: input.from } }),
+          ...(input?.to && { date: { lte: input.to } }),
+          term: {
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
+        },
+      });
+    }),
 
   studentSummary: protectedProcedure
     .input(
