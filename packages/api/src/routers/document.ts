@@ -68,4 +68,22 @@ export const documentRouter = createTRPCRouter({
       },
     });
   }),
+  latest: protectedProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).default(10),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.document.findMany({
+        take: input.limit,
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          user: true,
+          createdBy: true,
+        },
+      });
+    }),
 });

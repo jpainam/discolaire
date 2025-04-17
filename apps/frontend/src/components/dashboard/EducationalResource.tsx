@@ -15,47 +15,25 @@ import { enUS, es, fr } from "date-fns/locale";
 import { DownloadIcon, FileIcon, RatioIcon } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
+import { useQuery } from "@tanstack/react-query";
 import i18next from "i18next";
 import Link from "next/link";
 import { useLocale } from "~/i18n";
+import { useTRPC } from "~/trpc/react";
 import { DatePicker } from "../DatePicker";
-
-interface Resource {
-  subject: string;
-  fileName: string;
-  depositDate: string;
-}
-
-const resources: Resource[] = [
-  {
-    subject: "MATHÉMATIQUES",
-    fileName: "3e_MATHS_01_Utiliser les nombres pour comparer, calc...",
-    depositDate: "05/06/2022",
-  },
-  {
-    subject: "MUSIQUE",
-    fileName: "Biographie-Mozart.pdf",
-    depositDate: "05/22/2022",
-  },
-  {
-    subject: "MATHÉMATIQUES",
-    fileName: "3e_MATHS_04_Interpréter, représenter et traiter des d...",
-    depositDate: "05/06/2022",
-  },
-  {
-    subject: "ANGLAIS LV1",
-    fileName: "The Tales of Mother Goose - Blue Beard.pdf",
-    depositDate: "04/25/2022",
-  },
-  {
-    subject: "MUSIQUE",
-    fileName: "Biographie-Dvorak.pdf",
-    depositDate: "04/24/2022",
-  },
-];
+import { EmptyState } from "../EmptyState";
 
 export function EducationalResource({ className }: { className?: string }) {
   const { t } = useLocale();
+  const trpc = useTRPC();
+  const { data: resources } = useQuery(trpc.document.latest.queryOptions({}));
+  // const colors = [
+  //   "bg-red-500",
+  //   "bg-green-500",
+  //   "bg-blue-500",
+  //   "bg-yellow-500",
+  //   "bg-purple-500",
+  // ];
 
   return (
     <Card className={cn(className)}>
@@ -77,22 +55,25 @@ export function EducationalResource({ className }: { className?: string }) {
         </CardAction>
       </CardHeader>
       <CardContent className="space-y-2">
-        {resources.map((resource, index) => (
+        {resources?.length === 0 && (
+          <EmptyState className="my-8" title={t("no_data")} />
+        )}
+        {resources?.slice(0, 5).map((resource, index) => (
           <div
             key={index}
             className="group relative flex justify-between pr-2 items-center space-x-4 border hover:bg-muted/50 transition-colors"
           >
             <div
               className="border-l-4 py-2  p-4"
-              style={{ borderColor: getSubjectColor(resource.subject) }}
+              style={{ borderColor: "red" }}
             >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <Badge className="font-medium" variant={"outline"}>
-                    {resource.subject}
+                    {resource.title}
                   </Badge>
                   <time className="text-sm text-muted-foreground">
-                    {format(resource.depositDate, "d MMMM", {
+                    {format(resource.createdAt, "d MMMM", {
                       locale:
                         i18next.language == "fr"
                           ? fr
@@ -106,7 +87,9 @@ export function EducationalResource({ className }: { className?: string }) {
                   <div className="flex text-xs items-center gap-2">
                     <FileIcon className="h-4 w-4 text-muted-foreground" />
                     <Link href={"#"} target="_blank" className="truncate">
-                      {resource.fileName}
+                      {resource.attachments.length > 0
+                        ? resource.attachments[0]
+                        : ""}
                     </Link>
                   </div>
                 </div>
@@ -124,17 +107,4 @@ export function EducationalResource({ className }: { className?: string }) {
       </CardContent>
     </Card>
   );
-}
-
-function getSubjectColor(subject: string): string {
-  switch (subject) {
-    case "MATHÉMATIQUES":
-      return "#FF6B6B";
-    case "MUSIQUE":
-      return "#4ECDC4";
-    case "ANGLAIS LV1":
-      return "#45B7D1";
-    default:
-      return "#95A5A6";
-  }
 }
