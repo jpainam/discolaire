@@ -14,6 +14,7 @@ import { classroomLevelRouter } from "./routers/classroomLevel";
 import { classroomSectionRouter } from "./routers/classroomSection";
 import { consigneRouter } from "./routers/consigne";
 import { contactRouter } from "./routers/contact";
+import { convocationRouter } from "./routers/convocation";
 import { courseRouter } from "./routers/course";
 import { degreeRouter } from "./routers/degree";
 import { directoryRouter } from "./routers/directory";
@@ -92,6 +93,7 @@ export const appRouter = createTRPCRouter({
   journal: journalRouter,
   user: userRouter,
   bible: bibleRouter,
+  convocation: convocationRouter,
   student: studentRouter,
   scheduleTask: scheduleTaskRouter,
   assignment: assignmentRouter,

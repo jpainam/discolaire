@@ -1,5 +1,6 @@
 import { auth } from "@repo/auth";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { endOfWeek, startOfWeek } from "date-fns";
 import { decode } from "entities";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
@@ -56,9 +57,18 @@ export default async function Page() {
     );
   }
 
+  const today = new Date();
+  const startWeek = startOfWeek(today, { weekStartsOn: 0 });
+  const endWeek = endOfWeek(today, { weekStartsOn: 0 });
+
   batchPrefetch([
     trpc.gradeSheet.getLatestGradesheet.queryOptions({ limit: 15 }),
     trpc.classroom.all.queryOptions(),
+    trpc.absence.all.queryOptions({ from: startWeek, to: endWeek }),
+    trpc.lateness.all.queryOptions({ from: startWeek, to: endWeek }),
+    trpc.convocation.all.queryOptions({ from: startWeek, to: endWeek }),
+    trpc.exclusion.all.queryOptions({ from: startWeek, to: endWeek }),
+    trpc.health.allvisits.queryOptions({ from: startWeek, to: endWeek }),
   ]);
 
   return (

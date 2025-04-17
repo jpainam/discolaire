@@ -81,6 +81,29 @@ export const healthRouter = createTRPCRouter({
         },
       });
     }),
+  allvisits: protectedProcedure
+    .input(
+      z
+        .object({
+          from: z.coerce.date().optional(),
+          to: z.coerce.date().optional(),
+        })
+        .optional(),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.healthVisit.findMany({
+        where: {
+          ...(input?.from && { date: { gte: input.from } }),
+          ...(input?.to && { date: { lte: input.to } }),
+          user: {
+            schoolId: ctx.schoolId,
+          },
+        },
+        orderBy: {
+          date: "desc",
+        },
+      });
+    }),
   visits: protectedProcedure
     .input(
       z.object({

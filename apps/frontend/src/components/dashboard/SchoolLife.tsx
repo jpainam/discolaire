@@ -18,7 +18,14 @@ import {
 } from "@repo/ui/components/table";
 import { cn } from "@repo/ui/lib/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { eachDayOfInterval, endOfWeek, format, startOfWeek } from "date-fns";
+import {
+  eachDayOfInterval,
+  endOfWeek,
+  format,
+  getDay,
+  parseISO,
+  startOfWeek,
+} from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
 import {
   AlertTriangleIcon,
@@ -29,127 +36,171 @@ import {
   UsersIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
-import type { ChangeEvent } from "~/types/event_type";
+
+const groupByWeekday = (items: { date: Date; value: number }[]) => {
+  return items.reduce(
+    (acc, item) => {
+      const day = getDay(new Date(item.date)); // 0 (Sun) - 6 (Sat)
+      if (day >= 1 && day <= 5) {
+        const index = day - 1; // 0 (Mon) - 4 (Fri)
+        acc[index] = (acc[index] ?? 0) + item.value;
+      }
+      return acc;
+    },
+    {} as Record<number, number>
+  );
+};
 
 export function SchoolLife({ className }: { className?: string }) {
   const trpc = useTRPC();
-  //const [today, setToday] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(() => new Date());
-  const startOfWeekDate = startOfWeek(selectedDate, { weekStartsOn: 0 });
-  const endOfWeekDate = endOfWeek(selectedDate, { weekStartsOn: 0 });
+  const [startWeek, setStartWeek] = useState<Date>(
+    startOfWeek(new Date(), { weekStartsOn: 0 })
+  );
+  const [endWeek, setEndWeek] = useState<Date>(
+    endOfWeek(new Date(), { weekStartsOn: 0 })
+  );
+
   const { data: absences } = useSuspenseQuery(
-    trpc.absence.all.queryOptions({
-      from: startOfWeekDate,
-      to: endOfWeekDate,
-    })
+    trpc.absence.all.queryOptions({ from: startWeek, to: endWeek })
   );
   const { data: lates } = useSuspenseQuery(
-    trpc.lateness.all.queryOptions({
-      from: startOfWeekDate,
-      to: endOfWeekDate,
-    })
+    trpc.lateness.all.queryOptions({ from: startWeek, to: endWeek })
+  );
+  const { data: convocations } = useSuspenseQuery(
+    trpc.convocation.all.queryOptions({ from: startWeek, to: endWeek })
+  );
+  const { data: exclusions } = useSuspenseQuery(
+    trpc.exclusion.all.queryOptions({ from: startWeek, to: endWeek })
+  );
+  const { data: visits } = useSuspenseQuery(
+    trpc.health.allvisits.queryOptions({ from: startWeek, to: endWeek })
   );
 
-  const data = [
+  const [data, setData] = useState<
     {
-      category: "Absents",
-      icon: <UsersIcon className="h-4 w-4 text-primary" />,
-      mon: 98,
-      tue: 64,
-      wed: 64,
-      thu: 64,
-      fri: 64,
-    },
-    {
-      category: "Retardataires",
-      icon: <ClockIcon className="h-4 w-4 text-amber-500" />,
-      mon: 0,
-      tue: 0,
-      wed: 1,
-      thu: 1,
-      fri: 0,
-    },
-    {
-      category: "Passages à l'infirmerie",
-      icon: <AmbulanceIcon className="h-4 w-4 text-red-500" />,
-      mon: 0,
-      tue: 0,
-      wed: 0,
-      thu: 0,
-      fri: 0,
-    },
-    {
-      category: "Exclusions de cours",
-      icon: <AlertTriangleIcon className="w-4 h-4 text-orange-500" />,
-      mon: 3,
-      tue: 0,
-      wed: 0,
-      thu: 0,
-      fri: 1,
-    },
-    // {
-    //   category: "Punitions notifiées",
-    //   icon: <AlertTriangleIcon className="w-4 h-4 text-destructive" />,
-    //   mon: 4,
-    //   tue: 0,
-    //   wed: 0,
-    //   thu: 0,
-    //   fri: 5,
-    // },
-    // {
-    //   category: "Observations",
-    //   icon: <EyeIcon className="w-4 h-4 text-blue-500" />,
-    //   mon: 0,
-    //   tue: 0,
-    //   wed: 0,
-    //   thu: 0,
-    //   fri: 0,
-    // },
-    // {
-    //   category: "Encouragements",
-    //   icon: <ThumbsUp className="w-4 h-4 text-green-500" />,
-    //   mon: 0,
-    //   tue: 0,
-    //   wed: 0,
-    //   thu: 1,
-    //   fri: 0,
-    // },
-    {
-      category: "Convocations",
-      icon: <FileTextIcon className="w-4 h-4 text-gray-500" />,
-      mon: 0,
-      tue: 0,
-      wed: 0,
-      thu: 0,
-      fri: 0,
-    },
-  ];
+      category: string;
+      icon: React.ReactNode;
+      mon?: number;
+      tue?: number;
+      wed?: number;
+      thu?: number;
+      fri?: number;
+    }[]
+  >();
   const { t, i18n } = useLocale();
 
-  const handleWeekChange = (event: ChangeEvent) => {
-    const selectedWeek = event.target.value; // format: "YYYY-Wxx"
-    if (!selectedWeek) return;
-
-    // Convert to Date (Monday of the selected week)
-    const year = parseInt(selectedWeek.substring(0, 4), 10);
-    const week = parseInt(selectedWeek.substring(6), 10);
-
-    // Calculate the first day of the selected week (Sunday-based)
-    const firstDayOfYear = new Date(year, 0, 1);
-    const daysToAdd = (week - 1) * 7;
-    const selectedWeekStart = startOfWeek(
-      new Date(firstDayOfYear.setDate(firstDayOfYear.getDate() + daysToAdd)),
-      { weekStartsOn: 0 }
+  useEffect(() => {
+    const absenceCounts = groupByWeekday(
+      absences.map((a) => ({ date: a.date, value: a.value }))
+    );
+    const latenessCounts = groupByWeekday(
+      lates.map((l) => ({ date: l.date, value: 1 }))
+    );
+    const visitCounts = groupByWeekday(
+      visits.map((v) => ({ date: v.date, value: 1 }))
+    );
+    const exclusionCounts = groupByWeekday(
+      exclusions.map((e) => ({ date: e.startDate, value: 1 }))
+    );
+    const convocationCounts = groupByWeekday(
+      convocations.map((c) => ({ date: c.date, value: 1 }))
     );
 
-    setSelectedDate(selectedWeekStart);
+    const summary = [
+      {
+        category: t("Absents"),
+        icon: <UsersIcon className="h-4 w-4 text-primary" />,
+        mon: absenceCounts[0],
+        tue: absenceCounts[1],
+        wed: absenceCounts[2],
+        thu: absenceCounts[3],
+        fri: absenceCounts[4],
+      },
+      {
+        category: t("Retardataires"),
+        icon: <ClockIcon className="h-4 w-4 text-amber-500" />,
+        mon: latenessCounts[0],
+        tue: latenessCounts[1],
+        wed: latenessCounts[2],
+        thu: latenessCounts[3],
+        fri: latenessCounts[4],
+      },
+      {
+        category: t("Visits to the infirmary"),
+        icon: <AmbulanceIcon className="h-4 w-4 text-red-500" />,
+        mon: visitCounts[0],
+        tue: visitCounts[1],
+        wed: visitCounts[2],
+        thu: visitCounts[3],
+        fri: visitCounts[4],
+      },
+      {
+        category: t("Course exclusions"),
+        icon: <AlertTriangleIcon className="w-4 h-4 text-orange-500" />,
+        mon: exclusionCounts[0],
+        tue: exclusionCounts[1],
+        wed: exclusionCounts[2],
+        thu: exclusionCounts[3],
+        fri: exclusionCounts[4],
+      },
+      {
+        category: "Convocations",
+        icon: <FileTextIcon className="w-4 h-4 text-gray-500" />,
+        mon: convocationCounts[0],
+        tue: convocationCounts[1],
+        wed: convocationCounts[2],
+        thu: convocationCounts[3],
+        fri: convocationCounts[4],
+      },
+    ];
+
+    setData(summary);
+  }, [absences, lates, visits, exclusions, convocations, t]);
+
+  // {
+  //   category: "Punitions notifiées",
+  //   icon: <AlertTriangleIcon className="w-4 h-4 text-destructive" />,
+  //   mon: 4,
+  //   tue: 0,
+  //   wed: 0,
+  //   thu: 0,
+  //   fri: 5,
+  // },
+  // {
+  //   category: "Observations",
+  //   icon: <EyeIcon className="w-4 h-4 text-blue-500" />,
+  //   mon: 0,
+  //   tue: 0,
+  //   wed: 0,
+  //   thu: 0,
+  //   fri: 0,
+  // },
+  // {
+  //   category: "Encouragements",
+  //   icon: <ThumbsUp className="w-4 h-4 text-green-500" />,
+  //   mon: 0,
+  //   tue: 0,
+  //   wed: 0,
+  //   thu: 1,
+  //   fri: 0,
+  // },
+
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedDate = event.target.value;
+    if (!selectedDate) return;
+    const date = parseISO(selectedDate);
+    const weekStart = startOfWeek(date, { weekStartsOn: 0 });
+    const weekEnd = endOfWeek(date, { weekStartsOn: 0 });
+
+    setStartWeek(weekStart);
+    setEndWeek(weekEnd);
   };
 
   // Generate weekdays
-  const days = eachDayOfInterval({ start: startOfWeekDate, end: endOfWeekDate })
+  const days = eachDayOfInterval({ start: startWeek, end: endWeek })
     .slice(1, 6) // Select Monday to Friday
     .map((date) =>
       format(date, "EEE d", {
@@ -167,7 +218,7 @@ export function SchoolLife({ className }: { className?: string }) {
         </CardTitle>
         {/* <CardDescription>Card Description</CardDescription> */}
         <CardAction>
-          <Input type="week" onChange={handleWeekChange} />
+          <Input type="date" onChange={handleDateChange} />
         </CardAction>
       </CardHeader>
       <CardContent>
@@ -183,7 +234,7 @@ export function SchoolLife({ className }: { className?: string }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((row) => {
+            {data?.map((row) => {
               const Icon = row.icon;
               return (
                 <TableRow
@@ -203,50 +254,60 @@ export function SchoolLife({ className }: { className?: string }) {
                     <Badge
                       variant={row.mon == 0 ? "secondary" : "outline"}
                       className={
-                        row.mon > 10 ? " text-destructive-foreground" : ""
+                        (row.mon ?? 0) > 10
+                          ? " text-destructive-foreground"
+                          : ""
                       }
                     >
-                      {row.mon}
+                      {row.mon ?? 0}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
                     <Badge
                       variant={row.tue == 0 ? "secondary" : "outline"}
                       className={
-                        row.tue > 10 ? " text-destructive-foreground" : ""
+                        (row.tue ?? 0) > 10
+                          ? " text-destructive-foreground"
+                          : ""
                       }
                     >
-                      {row.mon}
+                      {row.mon ?? 0}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
                     <Badge
                       variant={row.wed == 0 ? "secondary" : "outline"}
                       className={
-                        row.mon > 10 ? " text-destructive-foreground" : ""
+                        (row.mon ?? 0) > 10
+                          ? " text-destructive-foreground"
+                          : ""
                       }
                     >
-                      {row.wed}
+                      {row.wed ?? 0}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
                     <Badge
                       variant={row.thu == 0 ? "secondary" : "outline"}
                       className={
-                        row.thu > 10 ? " text-destructive-foreground" : ""
+                        (row.thu ?? 0) > 10
+                          ? " text-destructive-foreground"
+                          : ""
                       }
                     >
-                      {row.mon}
+                      {row.mon ?? 0}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
                     <Badge
                       variant={row.fri == 0 ? "secondary" : "outline"}
                       className={
-                        row.fri > 10 ? " text-destructive-foreground" : ""
+                        (row.fri ?? 0) > 10
+                          ? " text-destructive-foreground"
+                          : ""
                       }
                     >
-                      {row.mon}
+                      {row.mon ?? 0}
                     </Badge>
                   </TableCell>
                 </TableRow>

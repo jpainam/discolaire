@@ -85,3 +85,16 @@ model PreventedAbsence {
     approvedById String?
     approvedAt   DateTime?
 }
+
+model Convocation {
+    id          Int      @id @default(autoincrement())
+    studentId   String
+    student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+    termId      Int
+    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
+    date        DateTime
+    reason      String
+    createdAt   DateTime @default(now())
+    createdById String
+    comment     String?
+}

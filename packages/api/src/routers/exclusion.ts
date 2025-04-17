@@ -42,22 +42,33 @@ export const exclusionRouter = createTRPCRouter({
       }
       return true;
     }),
-  all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.exclusion.findMany({
-      orderBy: {
-        startDate: "desc",
-      },
-      include: {
-        student: true,
-      },
-      where: {
-        term: {
-          schoolId: ctx.schoolId,
-          schoolYearId: ctx.schoolYearId,
+  all: protectedProcedure
+    .input(
+      z
+        .object({
+          from: z.coerce.date().optional(),
+          to: z.coerce.date().optional(),
+        })
+        .optional(),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.exclusion.findMany({
+        orderBy: {
+          startDate: "desc",
         },
-      },
-    });
-  }),
+        include: {
+          student: true,
+        },
+        where: {
+          ...(input?.from && { startDate: { gte: input.from } }),
+          ...(input?.to && { endDate: { lte: input.to } }),
+          term: {
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
+        },
+      });
+    }),
   byClassroom: protectedProcedure
     .input(
       z.object({
