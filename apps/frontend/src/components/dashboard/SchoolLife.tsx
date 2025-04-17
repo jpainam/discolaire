@@ -17,7 +17,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 import { cn } from "@repo/ui/lib/utils";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   eachDayOfInterval,
   endOfWeek,
@@ -39,6 +39,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
+import { Skeleton } from "../ui/skeleton";
 
 const groupByWeekday = (items: { date: Date; value: number }[]) => {
   return items.reduce(
@@ -63,19 +64,19 @@ export function SchoolLife({ className }: { className?: string }) {
     endOfWeek(new Date(), { weekStartsOn: 0 })
   );
 
-  const { data: absences } = useSuspenseQuery(
+  const absenceQuery = useQuery(
     trpc.absence.all.queryOptions({ from: startWeek, to: endWeek })
   );
-  const { data: lates } = useSuspenseQuery(
+  const lateQuery = useQuery(
     trpc.lateness.all.queryOptions({ from: startWeek, to: endWeek })
   );
-  const { data: convocations } = useSuspenseQuery(
+  const convocationQuery = useQuery(
     trpc.convocation.all.queryOptions({ from: startWeek, to: endWeek })
   );
-  const { data: exclusions } = useSuspenseQuery(
+  const exclusionQuery = useQuery(
     trpc.exclusion.all.queryOptions({ from: startWeek, to: endWeek })
   );
-  const { data: visits } = useSuspenseQuery(
+  const visitQuery = useQuery(
     trpc.health.allvisits.queryOptions({ from: startWeek, to: endWeek })
   );
 
@@ -93,18 +94,23 @@ export function SchoolLife({ className }: { className?: string }) {
   const { t, i18n } = useLocale();
 
   useEffect(() => {
+    const absences = absenceQuery.data ?? [];
     const absenceCounts = groupByWeekday(
       absences.map((a) => ({ date: a.date, value: a.value }))
     );
+    const lates = lateQuery.data ?? [];
     const latenessCounts = groupByWeekday(
       lates.map((l) => ({ date: l.date, value: 1 }))
     );
+    const visits = visitQuery.data ?? [];
     const visitCounts = groupByWeekday(
       visits.map((v) => ({ date: v.date, value: 1 }))
     );
+    const exclusions = exclusionQuery.data ?? [];
     const exclusionCounts = groupByWeekday(
       exclusions.map((e) => ({ date: e.startDate, value: 1 }))
     );
+    const convocations = convocationQuery.data ?? [];
     const convocationCounts = groupByWeekday(
       convocations.map((c) => ({ date: c.date, value: 1 }))
     );
@@ -158,7 +164,14 @@ export function SchoolLife({ className }: { className?: string }) {
     ];
 
     setData(summary);
-  }, [absences, lates, visits, exclusions, convocations, t]);
+  }, [
+    absenceQuery.data,
+    lateQuery.data,
+    visitQuery.data,
+    exclusionQuery.data,
+    convocationQuery.data,
+    t,
+  ]);
 
   // {
   //   category: "Punitions notifiées",
@@ -234,85 +247,103 @@ export function SchoolLife({ className }: { className?: string }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data?.map((row) => {
-              const Icon = row.icon;
-              return (
-                <TableRow
-                  key={row.category}
-                  className="border-b hover:bg-muted/10 transition-colors"
-                >
-                  <TableCell>
-                    <Link
-                      href={`/administration/attendances/?category=${row.category}`}
-                      className="text-muted-foreground hover:text-blue-500 hover:underline  flex items-center gap-2"
+            {absenceQuery.isPending ||
+            lateQuery.isPending ||
+            visitQuery.isPending ||
+            exclusionQuery.isPending ||
+            convocationQuery.isPending ? (
+              <TableRow>
+                <TableCell colSpan={6}>
+                  <div className="grid grid-cols-4 gap-4">
+                    {Array.from({ length: 16 }).map((_, index) => (
+                      <Skeleton key={index} className="h-8" />
+                    ))}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : (
+              <>
+                {data?.map((row) => {
+                  const Icon = row.icon;
+                  return (
+                    <TableRow
+                      key={row.category}
+                      className="border-b hover:bg-muted/10 transition-colors"
                     >
-                      {Icon}
-                      {row.category}
-                    </Link>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Badge
-                      variant={row.mon == 0 ? "secondary" : "outline"}
-                      className={
-                        (row.mon ?? 0) > 10
-                          ? " text-destructive-foreground"
-                          : ""
-                      }
-                    >
-                      {row.mon ?? 0}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Badge
-                      variant={row.tue == 0 ? "secondary" : "outline"}
-                      className={
-                        (row.tue ?? 0) > 10
-                          ? " text-destructive-foreground"
-                          : ""
-                      }
-                    >
-                      {row.mon ?? 0}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Badge
-                      variant={row.wed == 0 ? "secondary" : "outline"}
-                      className={
-                        (row.mon ?? 0) > 10
-                          ? " text-destructive-foreground"
-                          : ""
-                      }
-                    >
-                      {row.wed ?? 0}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Badge
-                      variant={row.thu == 0 ? "secondary" : "outline"}
-                      className={
-                        (row.thu ?? 0) > 10
-                          ? " text-destructive-foreground"
-                          : ""
-                      }
-                    >
-                      {row.mon ?? 0}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Badge
-                      variant={row.fri == 0 ? "secondary" : "outline"}
-                      className={
-                        (row.fri ?? 0) > 10
-                          ? " text-destructive-foreground"
-                          : ""
-                      }
-                    >
-                      {row.mon ?? 0}
-                    </Badge>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                      <TableCell>
+                        <Link
+                          href={`/administration/attendances/?category=${row.category}`}
+                          className="text-muted-foreground hover:text-blue-500 hover:underline  flex items-center gap-2"
+                        >
+                          {Icon}
+                          {row.category}
+                        </Link>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Badge
+                          variant={row.mon == 0 ? "secondary" : "outline"}
+                          className={
+                            (row.mon ?? 0) > 10
+                              ? " text-destructive-foreground"
+                              : ""
+                          }
+                        >
+                          {row.mon ?? 0}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Badge
+                          variant={row.tue == 0 ? "secondary" : "outline"}
+                          className={
+                            (row.tue ?? 0) > 10
+                              ? " text-destructive-foreground"
+                              : ""
+                          }
+                        >
+                          {row.mon ?? 0}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Badge
+                          variant={row.wed == 0 ? "secondary" : "outline"}
+                          className={
+                            (row.mon ?? 0) > 10
+                              ? " text-destructive-foreground"
+                              : ""
+                          }
+                        >
+                          {row.wed ?? 0}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Badge
+                          variant={row.thu == 0 ? "secondary" : "outline"}
+                          className={
+                            (row.thu ?? 0) > 10
+                              ? " text-destructive-foreground"
+                              : ""
+                          }
+                        >
+                          {row.mon ?? 0}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Badge
+                          variant={row.fri == 0 ? "secondary" : "outline"}
+                          className={
+                            (row.fri ?? 0) > 10
+                              ? " text-destructive-foreground"
+                              : ""
+                          }
+                        >
+                          {row.mon ?? 0}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </>
+            )}
           </TableBody>
         </Table>
       </CardContent>
