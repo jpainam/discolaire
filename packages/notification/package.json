@@ -14,7 +14,7 @@
     "@novu/api": "^0.6.2",
     "@t3-oss/env-nextjs": "^0.12.0",
     "nanoid": "^5.1.5",
-    "resend": "^4.2.0"
+    "resend": "^4.3.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
