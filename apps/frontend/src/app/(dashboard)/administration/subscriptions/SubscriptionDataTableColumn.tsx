@@ -147,11 +147,11 @@ function ActionCells({
 
   const canDeleteSubscription = useCheckPermission(
     "subscription",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const canUpdateSubscription = useCheckPermission(
     "subscription",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -161,14 +161,14 @@ function ActionCells({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.subscription.all.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.subscription.count.pathFilter()
+          trpc.subscription.count.pathFilter(),
         );
         toast.success(t("success"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const router = useRouter();
 
