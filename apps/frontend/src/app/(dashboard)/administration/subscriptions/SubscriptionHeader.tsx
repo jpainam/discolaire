@@ -46,7 +46,7 @@ export function SubscriptionHeader() {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const { data: totals } = useSuspenseQuery(
-    trpc.subscription.count.queryOptions()
+    trpc.subscription.count.queryOptions(),
   );
 
   const deleteSubscriptionMutation = useMutation(
@@ -54,23 +54,23 @@ export function SubscriptionHeader() {
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.subscription.all.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.subscription.count.pathFilter()
+          trpc.subscription.count.pathFilter(),
         );
         toast.success(t("success"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const confirm = useConfirm();
   const canCreateSubscription = useCheckPermission(
     "subscription",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
   const canDeleteSubscription = useCheckPermission(
     "subscription",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const totalData = [
     {
