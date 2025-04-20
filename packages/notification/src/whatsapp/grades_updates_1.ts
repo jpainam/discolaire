@@ -21,4 +21,5 @@ export async function grades_updates_1({
       },
     },
   });
+  console.log("contacts", contacts);
 }

@@ -12,6 +12,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
@@ -27,14 +28,18 @@ import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { RouterOutputs } from "@repo/api";
+import { Button } from "@repo/ui/components/button";
+import { cn } from "@repo/ui/lib/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { AvatarState } from "~/components/AvatarState";
+import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
-import { CreateGradeSheetHeader } from "./CreateGradeSheetHeader";
 
 const createGradeSchema = z.object({
   notifyParents: z.boolean().default(true),
@@ -125,15 +130,146 @@ export function CreateGradeSheet({
   };
   const params = useParams<{ id: string }>();
 
+  const { createQueryString } = useCreateQueryString();
+
   return (
     <Form {...form}>
       <form
         className="flex w-full flex-col gap-2"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <CreateGradeSheetHeader
-          isSubmitting={createGradesheetMutation.isPending}
-        />
+        <div className="grid px-2 flex-row gap-2 border-b md:flex">
+          <div className="grid w-[75%] grid-cols-1 items-center gap-x-4 gap-y-2 border-r p-2 md:grid-cols-2">
+            <FormField
+              control={form.control}
+              name="termId"
+              render={({ field }) => (
+                <FormItem className="space-y-0">
+                  <FormLabel>{t("term")} </FormLabel>
+                  <FormControl>
+                    <TermSelector {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="subjectId"
+              render={({ field }) => (
+                <FormItem className="w-full space-y-0">
+                  <FormLabel>{t("subject")}</FormLabel>
+                  <FormControl>
+                    <SubjectSelector
+                      onChange={field.onChange}
+                      classroomId={params.id}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("grade_name")}</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+              <FormField
+                control={form.control}
+                name="scale"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("grade_scale")}</FormLabel>
+                    <FormControl>
+                      <Input type="number" {...field} />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name={"weight"}
+                render={({ field }) => (
+                  <FormItem className={cn("space-y-0")}>
+                    <FormLabel>{t("weight")} (0-100)</FormLabel>
+                    <FormControl>
+                      <Input {...field} type="number" />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col justify-between gap-4 py-2">
+            <div className="flex flex-col gap-4">
+              <FormField
+                control={form.control}
+                name="notifyParents"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start ">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel>{t("notify_parents")}</FormLabel>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="notifyStudents"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start ">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel>{t("notify_students")}</FormLabel>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                type="button"
+                variant={"outline"}
+                onClick={() => {
+                  router.push(
+                    routes.classrooms.gradesheets.index(params.id) +
+                      "?" +
+                      createQueryString({}),
+                  );
+                }}
+              >
+                {t("cancel")}
+              </Button>
+              <Button
+                isLoading={createGradesheetMutation.isPending}
+                type="submit"
+              >
+                {t("submit")}
+              </Button>
+            </div>
+          </div>
+        </div>
         <div className="px-4">
           <div className="bg-background overflow-hidden rounded-md border">
             <Table>

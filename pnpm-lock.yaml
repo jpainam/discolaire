@@ -918,9 +918,15 @@ importers:
       '@repo/db':
         specifier: workspace:*
         version: link:../db
+      '@repo/kv':
+        specifier: workspace:*
+        version: link:../kv
       '@t3-oss/env-nextjs':
         specifier: ^0.12.0
         version: 0.12.0(typescript@5.8.3)(zod@3.24.3)
+      entities:
+        specifier: ^6.0.0
+        version: 6.0.0
       nanoid:
         specifier: ^5.1.5
         version: 5.1.5
