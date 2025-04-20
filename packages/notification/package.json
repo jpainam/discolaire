@@ -2,7 +2,10 @@
   "name": "@repo/notification",
   "version": "1.0.0",
   "private": true,
-  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./whatsapp/*": "./src/whatsapp/*.ts"
+  },
   "scripts": {
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "format": "prettier --check . --ignore-path ../../.gitignore",
@@ -15,7 +18,8 @@
     "@repo/db": "workspace:*",
     "@t3-oss/env-nextjs": "^0.12.0",
     "nanoid": "^5.1.5",
-    "resend": "^4.3.0"
+    "resend": "^4.3.0",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

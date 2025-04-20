@@ -28,7 +28,6 @@ const GRAPH_API_TOKEN = env.WHATSAPP_API_TOKEN;
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-
   console.log("Incoming webhook message:", JSON.stringify(body, null, 2));
 
   const message = body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
@@ -54,7 +53,7 @@ export async function POST(request: NextRequest) {
             message_id: message.id,
           },
         }),
-      },
+      }
     );
 
     // Mark as read
@@ -71,7 +70,7 @@ export async function POST(request: NextRequest) {
           status: "read",
           message_id: message.id,
         }),
-      },
+      }
     );
   }
 

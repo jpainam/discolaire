@@ -43,7 +43,7 @@ export function ContactHeader() {
   const contacts = useQuery(
     trpc.contact.search.queryOptions({
       query: search,
-    }),
+    })
   );
 
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
@@ -59,7 +59,7 @@ export function ContactHeader() {
 
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (

@@ -11,10 +11,6 @@ export async function sendPaymentReminder({
   schoolYearId: string;
   dueDate: string;
 }) {
-  // send a whatsapp message using facebook graph api, the message is like that
-  //Rappel de paiement
-  // Cher parent de l'élève {{student}}  de la classe de {{classroom}}. Bien vouloir s'acquitter des frais {{fee}} {{amount}} dont la date est fixée ce {{due_date}}. Passé ce delai, l'administration de l'établissement sera dans l'obligation de le mettre hors des cours.
-
   const student = await db.student.findUniqueOrThrow({
     where: {
       id: studentId,
