@@ -117,7 +117,7 @@ export function getColumns({
           <div>
             {subscription.email != -1
               ? subscription.email
-              : t("unlimited_email")}
+              : t("unlimited_emails")}
           </div>
         );
       },

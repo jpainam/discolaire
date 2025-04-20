@@ -15,8 +15,8 @@ import { toast } from "sonner";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
-import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -25,7 +25,7 @@ import { CreateEditSubscription } from "./CreateEditSubscription";
 
 export function SubscriptionHeader() {
   const { t } = useLocale();
-  const { openModal } = useModal();
+  const { openSheet } = useSheet();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
@@ -57,7 +57,7 @@ export function SubscriptionHeader() {
           {canCreateSubscription && (
             <Button
               onClick={() => {
-                openModal({
+                openSheet({
                   title: `${t("add")} - ${t("subscription")}`,
                   view: <CreateEditSubscription />,
                 });
@@ -85,24 +85,27 @@ export function SubscriptionHeader() {
                 <XMLIcon />
                 {t("xml_export")}
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
+
               {canDeleteSubscription && (
-                <DropdownMenuItem
-                  onSelect={async () => {
-                    const isConfirmed = await confirm({
-                      title: t("delete"),
-                      description: t("delete_confirmation"),
-                    });
-                    if (isConfirmed) {
-                      toast.loading(t("Processing..."), { id: 0 });
-                      deleteSubscriptionMutation.mutate();
-                    }
-                  }}
-                  variant="destructive"
-                >
-                  <Trash2 />
-                  {t("clear_all")}
-                </DropdownMenuItem>
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onSelect={async () => {
+                      const isConfirmed = await confirm({
+                        title: t("delete"),
+                        description: t("delete_confirmation"),
+                      });
+                      if (isConfirmed) {
+                        toast.loading(t("Processing..."), { id: 0 });
+                        deleteSubscriptionMutation.mutate();
+                      }
+                    }}
+                    variant="destructive"
+                  >
+                    <Trash2 />
+                    {t("clear_all")}
+                  </DropdownMenuItem>
+                </>
               )}
             </DropdownMenuContent>
           </DropdownMenu>

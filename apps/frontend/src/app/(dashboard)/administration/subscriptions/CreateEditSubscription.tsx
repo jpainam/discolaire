@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { UserSelector } from "~/components/shared/selects/UserSelector";
-import { useModal } from "~/hooks/use-modal";
+import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 const formSchema = z.object({
@@ -49,14 +49,14 @@ export function CreateEditSubscription({
   });
   const trpc = useTRPC();
   const { t } = useLocale();
-  const { closeModal } = useModal();
+  const { closeSheet } = useSheet();
   const queryClient = useQueryClient();
   const upsertSubscriptionMutation = useMutation(
     trpc.subscription.upsert.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.subscription.all.pathFilter());
         toast.success(t("success"), { id: 0 });
-        closeModal();
+        closeSheet();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
@@ -76,7 +76,7 @@ export function CreateEditSubscription({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 gap-8">
+        <div className="grid grid-cols-1 gap-6 px-4">
           <FormField
             control={form.control}
             name="userId"
@@ -193,18 +193,22 @@ export function CreateEditSubscription({
             />
           </div>
         </div>
-        <div className="flex flex-row justify-end items-center gap-4">
+        <div className="flex flex-row justify-end items-center gap-4 p-4">
           <Button
             type="button"
             onClick={() => {
-              closeModal();
+              closeSheet();
             }}
             size={"sm"}
             variant={"outline"}
           >
             {t("cancel")}
           </Button>
-          <Button type="submit" size={"sm"}>
+          <Button
+            isLoading={upsertSubscriptionMutation.isPending}
+            type="submit"
+            size={"sm"}
+          >
             {t("submit")}
           </Button>
         </div>
