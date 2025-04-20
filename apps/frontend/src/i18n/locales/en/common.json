@@ -81,6 +81,7 @@
   "sms_and_emails": "SMS and Emails",
   "unlimited_emails": "Unlimited Emails",
   "number_of_emails": "Number of Emails",
+  "users_with_unlimited": "{{unlimited}} users with unlimited {{title}}",
   "unlimited_whatsapp_messages": "Unlimited WhatsApp messages",
   "unlimited_sms": "Unlimited SMS",
   "number_of_sms": "Number of SMS",

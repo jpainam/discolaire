@@ -3,6 +3,7 @@
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
+  CardAction,
   CardContent,
   CardHeader,
   CardTitle,
@@ -71,10 +72,30 @@ export function SubscriptionHeader() {
     "subscription",
     PermissionAction.DELETE
   );
+  const totalData = [
+    {
+      title: "SMS",
+      value: totals.sms,
+      icon: <MessageSquare className="h-4 w-4 text-muted-foreground" />,
+      unlimited: totals.unlimitedSms,
+    },
+    {
+      title: "WhatsApp",
+      value: totals.whatsapp,
+      icon: <MessageCircle className="h-4 w-4 text-muted-foreground" />,
+      unlimited: totals.unlimitedWhatsapp,
+    },
+    {
+      title: "Email",
+      value: totals.email,
+      icon: <Mail className="h-4 w-4 text-muted-foreground" />,
+      unlimited: totals.unlimitedEmail,
+    },
+  ];
   return (
     <div className="py-2 px-4">
       <div className="flex items-center justify-between">
-        <Label className="text-lg font-semibold">{t("subscriptions")}</Label>
+        <Label className="hidden md:block">{t("subscriptions")}</Label>
         <div className="flex items-center gap-2">
           {canCreateSubscription && (
             <Button
@@ -96,7 +117,7 @@ export function SubscriptionHeader() {
                 <MoreVertical className="w-4 h-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent align="end">
               <DropdownHelp />
               <DropdownMenuSeparator />
               <DropdownMenuItem>
@@ -133,45 +154,25 @@ export function SubscriptionHeader() {
           </DropdownMenu>
         </div>
       </div>
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total SMS</CardTitle>
-            <MessageSquare className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totals.sms}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {totals.unlimitedSms} users with unlimited SMS
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total WhatsApp
-            </CardTitle>
-            <MessageCircle className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totals.whatsapp}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {totals.unlimitedWhatsapp} users with unlimited WhatsApp
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Email</CardTitle>
-            <Mail className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totals.email}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {totals.unlimitedEmail} users with unlimited Email
-            </p>
-          </CardContent>
-        </Card>
+      <div className="grid gap-4 md:grid-cols-3 pt-2">
+        {totalData.map((item) => (
+          <Card key={item.title} className="gap-2">
+            <CardHeader>
+              <CardTitle>Total {item.title}</CardTitle>
+              <CardAction>{item.icon}</CardAction>
+            </CardHeader>
+            <CardContent>
+              <div className="text-lg font-bold">{item.value}</div>
+              <p className="text-xs text-muted-foreground">
+                {t("users_with_unlimited", {
+                  unlimited: item.unlimited,
+                  title: item.title,
+                })}
+                {/* {item.unlimited} users with unlimited {item.title} */}
+              </p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </div>
   );

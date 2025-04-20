@@ -68,7 +68,7 @@ export function SubscriptionDataTableAction({
         >
           <Trash2 />
           {t("delete")}
-          <Badge className="rounded-full">
+          <Badge className=" size-4">
             {table.getSelectedRowModel().rows.length}
           </Badge>
         </Button>

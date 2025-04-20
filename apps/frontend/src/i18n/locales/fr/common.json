@@ -678,6 +678,7 @@
   "notify_students": "Notifier les élèves",
   "numberOfStaffs": "Nombre de personnels",
   "number_from_last_week": "{{n}} de la semaine dernière",
+  "users_with_unlimited": "{{unlimited}} utilisateur(s) avec accès illimité",
   "number_assessed": "Effectif évalué",
   "new_visit": "Nouvelle visite",
   "number_of_avg": "Nombre de Moy >= 10",

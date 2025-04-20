@@ -55,13 +55,16 @@ export function CreateEditSubscription({
     trpc.subscription.upsert.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.subscription.all.pathFilter());
+        await queryClient.invalidateQueries(
+          trpc.subscription.count.pathFilter()
+        );
         toast.success(t("success"), { id: 0 });
         closeSheet();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     toast.loading(t("Processing..."), { id: 0 });

@@ -18,8 +18,11 @@ export default function Page() {
       <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
           fallback={
-            <div className="py-2 px-4">
-              <Skeleton className="h-8 " />
+            <div className="grid grid-cols-3 gap-4 py-2 px-4">
+              <Skeleton className="h-8 col-span-full" />
+              <Skeleton className="h-20" />
+              <Skeleton className="h-20" />
+              <Skeleton className="h-20" />
             </div>
           }
         >
