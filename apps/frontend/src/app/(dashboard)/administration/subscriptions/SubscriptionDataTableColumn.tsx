@@ -3,7 +3,7 @@
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Receipt, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 
@@ -25,6 +25,7 @@ import { useConfirm } from "~/providers/confirm-dialog";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditSubscription } from "./CreateEditSubscription";
 
@@ -67,7 +68,7 @@ export function getColumns({
         return (
           <Link
             className="hover:text-blue-600 line-clamp-1 hover:underline"
-            href={`/users/${subscription.user.id}`}
+            href={`/users/${subscription.user.id}/subscriptions`}
           >
             {subscription.user.name}
           </Link>
@@ -166,6 +167,7 @@ function ActionCells({
       },
     })
   );
+  const router = useRouter();
 
   return (
     <div className="flex justify-end">
@@ -180,6 +182,14 @@ function ActionCells({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+          <DropdownMenuItem
+            onSelect={() => {
+              router.push(`/users/${subscription.user.id}/subscriptions`);
+            }}
+          >
+            <Receipt />
+            {t("details")}
+          </DropdownMenuItem>
           {canUpdateSubscription && (
             <DropdownMenuItem
               onSelect={() => {

@@ -10,7 +10,7 @@ export default function Page() {
   prefetch(
     trpc.subscription.all.queryOptions({
       limit: 1000,
-    })
+    }),
   );
   return (
     <HydrateClient>

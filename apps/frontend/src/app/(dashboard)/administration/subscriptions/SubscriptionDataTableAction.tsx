@@ -25,7 +25,7 @@ export function SubscriptionDataTableAction({
 
   const canDeleteSubscription = useCheckPermission(
     "subscription",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const queryClient = useQueryClient();
   const trpc = useTRPC();
@@ -40,7 +40,7 @@ export function SubscriptionDataTableAction({
         table.toggleAllRowsSelected(false);
         toast.success(t("deleted_successfully"), { id: 0 });
       },
-    })
+    }),
   );
   const rows = table.getFilteredSelectedRowModel().rows;
 
