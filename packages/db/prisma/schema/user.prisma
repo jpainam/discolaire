@@ -112,4 +112,6 @@ model Subscription {
     createdBy   User     @relation("CreatedSubscriptions", fields: [createdById], references: [id], onDelete: Cascade, onUpdate: Cascade)
     updatedAt   DateTime @updatedAt
     comment     String?
+
+    @@unique([userId])
 }

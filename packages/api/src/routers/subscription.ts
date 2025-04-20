@@ -3,6 +3,50 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const subscriptionRouter = createTRPCRouter({
+  upsert: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string().min(1),
+        sms: z.number().default(0),
+        email: z.number().default(0),
+        whatsapp: z.number().default(0),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const subsc = await ctx.db.subscription.findUnique({
+        where: {
+          userId: input.userId,
+        },
+      });
+      return ctx.db.subscription.upsert({
+        where: {
+          userId: input.userId,
+        },
+        update: {
+          sms: input.sms + (subsc?.sms ?? 0),
+          email: input.email + (subsc?.email ?? 0),
+          whatsapp: input.whatsapp + (subsc?.whatsapp ?? 0),
+        },
+        create: {
+          userId: input.userId,
+          sms: input.sms,
+          email: input.email,
+          whatsapp: input.whatsapp,
+          createdById: ctx.session.user.id,
+        },
+      });
+    }),
+  delete: protectedProcedure
+    .input(z.union([z.string(), z.array(z.string())]))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.subscription.deleteMany({
+        where: {
+          id: {
+            in: Array.isArray(input) ? input : [input],
+          },
+        },
+      });
+    }),
   count: protectedProcedure.query(async ({ ctx }) => {
     const counts = await ctx.db.subscription.aggregate({
       _sum: {
@@ -62,10 +106,14 @@ export const subscriptionRouter = createTRPCRouter({
         limit: z.number().optional().default(100),
       }),
     )
-    .query(({ ctx }) => {
+    .query(({ ctx, input }) => {
       return ctx.db.subscription.findMany({
         orderBy: {
           createdAt: "desc",
+        },
+        take: input.limit,
+        include: {
+          user: true,
         },
         where: {
           user: {

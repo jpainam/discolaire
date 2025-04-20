@@ -2,26 +2,14 @@
 
 import { Button } from "@repo/ui/components/button";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import {
-  DollarSign,
-  MoreVertical,
-  PlusIcon,
-  Trash2,
-  TrendingUp,
-  Users,
-} from "lucide-react";
+import { Label } from "@repo/ui/components/label";
+import { MoreVertical, PlusIcon, Trash2 } from "lucide-react";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
@@ -29,58 +17,13 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { CreateEditSubscription } from "./CreateEditSubscription";
 
-const metrics = [
-  {
-    id: 1,
-    title: "Revenue Growth",
-    subtitle: "Monthly revenue target",
-    icon: TrendingUp,
-    status: "On Track",
-    progress: 75,
-    target: 100000,
-    current: 75000,
-    unit: "$",
-  },
-  {
-    id: 2,
-    title: "Customer Acquisition",
-    subtitle: "New customers this quarter",
-    icon: Users,
-    status: "Behind",
-    progress: 60,
-    target: 1000,
-    current: 600,
-    unit: "",
-  },
-  {
-    id: 3,
-    title: "Average Order Value",
-    subtitle: "Target AOV for Q3",
-    icon: DollarSign,
-    status: "Ahead",
-    progress: 110,
-    target: 150,
-    current: 165,
-    unit: "$",
-  },
-];
-
-const statusColors = {
-  "On Track":
-    "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
-  Behind: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
-  Ahead: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
-};
-
 export function SubscriptionHeader() {
-  //const trpc = useTRPC();
-
   const { t } = useLocale();
   const { openModal } = useModal();
   return (
     <div className="space-y-2 p-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">{t("subscriptions")}</h2>
+        <Label className="text-lg font-semibold">{t("subscriptions")}</Label>
         <div className="flex items-center gap-2">
           <Button
             onClick={() => {
@@ -119,49 +62,6 @@ export function SubscriptionHeader() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-      </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {metrics.map((metric) => (
-          <Card key={metric.id}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {metric.title}
-              </CardTitle>
-              <metric.icon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <p className="text-xs text-muted-foreground">{metric.subtitle}</p>
-              <div className="mt-2 space-y-2">
-                <div className="flex items-center justify-between text-xs">
-                  <span
-                    // @ts-expect-error TODO fix it
-                    className={`px-2 py-1 rounded-full ${statusColors[metric.status]}`}
-                  >
-                    {metric.status}
-                  </span>
-                  <span className="text-muted-foreground">
-                    {metric.current} / {metric.target} {metric.unit}
-                  </span>
-                </div>
-                <div className="w-full bg-secondary rounded-full h-1.5">
-                  <div
-                    className="bg-primary h-1.5 rounded-full"
-                    style={{ width: `${Math.min(metric.progress, 100)}%` }}
-                  />
-                </div>
-                <div className="flex justify-between items-center text-sm">
-                  <span className="font-medium">
-                    {metric.unit}
-                    {metric.target.toLocaleString()}
-                  </span>
-                  <span className="text-muted-foreground">
-                    {metric.progress}% complete
-                  </span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
       </div>
     </div>
   );

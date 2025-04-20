@@ -330,6 +330,26 @@ export const policies: {
     resource: "timetable",
     action: PermissionAction.Delete,
   },
+  {
+    title: "subscription",
+    resource: "subscription",
+    action: PermissionAction.Read,
+  },
+  {
+    title: "subscription",
+    resource: "subscription",
+    action: PermissionAction.Delete,
+  },
+  {
+    title: "subscription",
+    resource: "subscription",
+    action: PermissionAction.Create,
+  },
+  {
+    title: "subscription",
+    resource: "subscription",
+    action: PermissionAction.Update,
+  },
 ];
 
 export const menuPolicies: {

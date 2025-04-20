@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import {
@@ -12,11 +13,14 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { UserSelector } from "~/components/shared/selects/UserSelector";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
+import { useTRPC } from "~/trpc/react";
 const formSchema = z.object({
   userId: z.string().min(1),
   emails: z.number().default(0),
@@ -26,24 +30,49 @@ const formSchema = z.object({
   whatsapp: z.number().default(0),
   unlimitedWhatsapp: z.boolean().default(false),
 });
-export function CreateEditSubscription() {
+export function CreateEditSubscription({
+  subscription,
+}: {
+  subscription?: RouterOutputs["subscription"]["all"][number];
+}) {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      userId: "",
-      emails: 0,
-      unlimitedEmails: false,
-      sms: 0,
-      unlimitedSms: false,
-      whatsapp: 0,
-      unlimitedWhatsapp: false,
+      userId: subscription?.userId ?? "",
+      emails: subscription?.email ?? 0,
+      unlimitedEmails: subscription?.email === -1,
+      sms: subscription?.sms ?? 0,
+      unlimitedSms: subscription?.sms === -1,
+      whatsapp: subscription?.whatsapp ?? 0,
+      unlimitedWhatsapp: subscription?.whatsapp === -1,
     },
   });
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
-  };
+  const trpc = useTRPC();
   const { t } = useLocale();
   const { closeModal } = useModal();
+  const queryClient = useQueryClient();
+  const upsertSubscriptionMutation = useMutation(
+    trpc.subscription.upsert.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.subscription.all.pathFilter());
+        toast.success(t("success"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    toast.loading(t("Processing..."), { id: 0 });
+    upsertSubscriptionMutation.mutate({
+      userId: data.userId,
+      sms: data.unlimitedSms ? -1 : data.sms,
+      email: data.unlimitedEmails ? -1 : data.emails,
+      whatsapp: data.unlimitedWhatsapp ? -1 : data.whatsapp,
+    });
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
