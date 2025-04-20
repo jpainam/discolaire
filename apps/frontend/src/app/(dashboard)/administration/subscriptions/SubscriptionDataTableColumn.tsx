@@ -160,6 +160,9 @@ function ActionCells({
     trpc.subscription.delete.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.subscription.all.pathFilter());
+        await queryClient.invalidateQueries(
+          trpc.subscription.count.pathFilter()
+        );
         toast.success(t("success"), { id: 0 });
       },
       onError: (error) => {

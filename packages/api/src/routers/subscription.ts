@@ -57,23 +57,33 @@ export const subscriptionRouter = createTRPCRouter({
     });
   }),
   count: protectedProcedure.query(async ({ ctx }) => {
-    const counts = await ctx.db.subscription.aggregate({
-      _sum: {
-        sms: true,
-        email: true,
-        whatsapp: true,
-      },
+    const subscriptions = await ctx.db.subscription.findMany({
       where: {
         user: {
           schoolId: ctx.schoolId,
         },
       },
     });
-    return {
-      sms: counts._sum.sms,
-      email: counts._sum.email,
-      whatsapp: counts._sum.whatsapp,
-    };
+    return subscriptions.reduce(
+      (acc, subsc) => {
+        acc.sms += subsc.sms != -1 ? subsc.sms : 0;
+        acc.email += subsc.email != -1 ? subsc.email : 0;
+        acc.whatsapp += subsc.whatsapp != -1 ? subsc.whatsapp : 0;
+        acc.unlimitedSms += subsc.sms == -1 ? 1 : 0;
+        acc.unlimitedEmail += subsc.email == -1 ? 1 : 0;
+        acc.unlimitedWhatsapp += subsc.whatsapp == -1 ? 1 : 0;
+
+        return acc;
+      },
+      {
+        sms: 0,
+        email: 0,
+        whatsapp: 0,
+        unlimitedSms: 0,
+        unlimitedEmail: 0,
+        unlimitedWhatsapp: 0,
+      },
+    );
   }),
   sum: protectedProcedure
     .input(z.object({ limit: z.number().optional().default(1000) }))

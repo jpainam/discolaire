@@ -61,7 +61,7 @@ export function CreateEditSubscription({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     toast.loading(t("Processing..."), { id: 0 });

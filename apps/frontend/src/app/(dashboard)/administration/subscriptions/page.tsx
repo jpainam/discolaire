@@ -2,16 +2,17 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
 import { ErrorFallback } from "~/components/error-fallback";
-import { HydrateClient, prefetch, trpc } from "~/trpc/server";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { SubscriptionHeader } from "./SubscriptionHeader";
 import { SubscriptionDataTable } from "./SuscriptionDataTable";
 
 export default function Page() {
-  prefetch(
+  batchPrefetch([
     trpc.subscription.all.queryOptions({
       limit: 1000,
     }),
-  );
+    trpc.subscription.count.queryOptions(),
+  ]);
   return (
     <HydrateClient>
       <ErrorBoundary errorComponent={ErrorFallback}>
