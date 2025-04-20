@@ -67,7 +67,7 @@ export function CreateEditFee({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const createFeeMutation = useMutation(
     trpc.fee.create.mutationOptions({
@@ -80,11 +80,11 @@ export function CreateEditFee({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const onSubmit: SubmitHandler<z.infer<typeof createEditFeeSchema>> = (
-    data: z.infer<typeof createEditFeeSchema>,
+    data: z.infer<typeof createEditFeeSchema>
   ) => {
     const values = {
       code: data.code,
