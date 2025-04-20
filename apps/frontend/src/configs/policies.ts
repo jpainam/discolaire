@@ -331,22 +331,22 @@ export const policies: {
     action: PermissionAction.Delete,
   },
   {
-    title: "subscription",
+    title: "subscriptions",
     resource: "subscription",
     action: PermissionAction.Read,
   },
   {
-    title: "subscription",
+    title: "subscriptions",
     resource: "subscription",
     action: PermissionAction.Delete,
   },
   {
-    title: "subscription",
+    title: "subscriptions",
     resource: "subscription",
     action: PermissionAction.Create,
   },
   {
-    title: "subscription",
+    title: "subscriptions",
     resource: "subscription",
     action: PermissionAction.Update,
   },

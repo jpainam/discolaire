@@ -26,7 +26,7 @@ export function SubscriptionDataTable() {
   });
 
   return (
-    <div className="px-4 py-2">
+    <div className="px-4">
       <DataTable table={table}>
         <SubscriptionDataTableAction table={table} />
       </DataTable>

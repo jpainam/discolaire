@@ -100,7 +100,7 @@ export function getColumns({
         return (
           <div>
             {subscription.whatsapp == -1
-              ? t("unlimited_whatsapp")
+              ? t("unlimited_whatsapp_messages")
               : subscription.whatsapp}
           </div>
         );

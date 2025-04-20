@@ -47,6 +47,15 @@ export const subscriptionRouter = createTRPCRouter({
         },
       });
     }),
+  clearAll: protectedProcedure.mutation(async ({ ctx }) => {
+    return ctx.db.subscription.deleteMany({
+      where: {
+        user: {
+          schoolId: ctx.schoolId,
+        },
+      },
+    });
+  }),
   count: protectedProcedure.query(async ({ ctx }) => {
     const counts = await ctx.db.subscription.aggregate({
       _sum: {

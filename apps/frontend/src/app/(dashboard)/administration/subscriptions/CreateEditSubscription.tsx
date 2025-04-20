@@ -23,11 +23,11 @@ import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 const formSchema = z.object({
   userId: z.string().min(1),
-  emails: z.number().default(0),
+  emails: z.coerce.number().default(0),
   unlimitedEmails: z.boolean().default(false),
-  sms: z.number().default(0),
+  sms: z.coerce.number().default(0),
   unlimitedSms: z.boolean().default(false),
-  whatsapp: z.number().default(0),
+  whatsapp: z.coerce.number().default(0),
   unlimitedWhatsapp: z.boolean().default(false),
 });
 export function CreateEditSubscription({
@@ -61,7 +61,7 @@ export function CreateEditSubscription({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     toast.loading(t("Processing..."), { id: 0 });
