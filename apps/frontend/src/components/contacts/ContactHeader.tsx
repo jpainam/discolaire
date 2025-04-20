@@ -43,7 +43,7 @@ export function ContactHeader() {
   const contacts = useQuery(
     trpc.contact.search.queryOptions({
       query: search,
-    }),
+    })
   );
 
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
@@ -59,12 +59,32 @@ export function ContactHeader() {
 
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (
     <div className="grid md:flex flex-row items-center gap-2 border-b px-4 py-1">
       <Label className="hidden md:block">{t("contacts")}</Label>
+      {/* <Button
+        onClick={async () => {
+          const response = await fetch("/api/notifications/whatsapp", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              template: "payment_reminder_1",
+            }),
+          });
+          if (!response.ok) {
+            const data = await response.json();
+            console.log(data);
+            console.log(response.statusText);
+          }
+        }}
+      >
+        Text whatsapp
+      </Button> */}
       {session.user?.profile != "staff" ? (
         <ContactSelector
           className="w-full lg:w-1/3"

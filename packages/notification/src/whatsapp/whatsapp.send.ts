@@ -40,6 +40,11 @@ export async function sendWhatsapp({
   if (!response.ok) {
     console.error("Failed to send message:", data);
   } else {
-    console.log("Message sent successfully:", data);
+    console.log("Message sent successfully:");
   }
+  return data as {
+    messaging_product: string;
+    contacts: { input: string; wa_id: string }[];
+    messages: { id: string; message_status: string }[];
+  };
 }

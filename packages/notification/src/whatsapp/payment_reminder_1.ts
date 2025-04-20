@@ -70,7 +70,6 @@ export async function sendPaymentReminder({
   });
   console.log(">>>Parents", parents);
 
-  const phoneNumber = "+15183689728";
   const businessPhoneNumberId = env.WHATSAPP_BUSINESS_PHONE_NUMBER_ID;
   const message = `Rappel de paiement\nCher parent de l'élève ${student.lastName} de la classe de ${classroom.name}. Bien vouloir s'acquitter des frais ${amount} dont la date est fixée ce ${dueDate}. Passé ce delai, l'administration de l'établissement sera dans l'obligation de le mettre hors des cours.`;
   const response = await fetch(
@@ -83,7 +82,7 @@ export async function sendPaymentReminder({
       },
       body: JSON.stringify({
         messaging_product: "whatsapp",
-        to: phoneNumber,
+        to: "+14046627457",
         text: { body: message },
       }),
     },
