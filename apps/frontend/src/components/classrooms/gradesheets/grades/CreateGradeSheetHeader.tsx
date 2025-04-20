@@ -15,7 +15,7 @@ import { Input } from "@repo/ui/components/input";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
-import { CheckboxField } from "~/components/shared/forms/checkbox-field";
+import { Checkbox } from "@repo/ui/components/checkbox";
 import { InputField } from "~/components/shared/forms/input-field";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
@@ -97,8 +97,36 @@ export function CreateGradeSheetHeader({
       <div className="flex flex-col justify-between gap-4 py-2">
         {/* <span className="font-semibold">{t("notifications")}</span> */}
         <div className="flex flex-col gap-4">
-          <CheckboxField label={t("notify_parents")} name="notifyParents" />
-          <CheckboxField label={t("notify_students")} name="notifyStudents" />
+          <FormField
+            control={form.control}
+            name="notifyParents"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start ">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel>{t("notify_parents")}</FormLabel>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="notifyStudents"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start ">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel>{t("notify_students")}</FormLabel>
+              </FormItem>
+            )}
+          />
         </div>
         <div className="grid grid-cols-2 gap-2">
           <Button
@@ -108,7 +136,7 @@ export function CreateGradeSheetHeader({
               router.push(
                 routes.classrooms.gradesheets.index(params.id) +
                   "?" +
-                  createQueryString({}),
+                  createQueryString({})
               );
             }}
           >
