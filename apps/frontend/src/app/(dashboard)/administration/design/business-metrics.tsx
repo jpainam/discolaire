@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -7,27 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import {
-  DollarSign,
-  MoreVertical,
-  PlusIcon,
-  Trash2,
-  TrendingUp,
-  Users,
-} from "lucide-react";
-import PDFIcon from "~/components/icons/pdf-solid";
-import XMLIcon from "~/components/icons/xml-solid";
-import { DropdownHelp } from "~/components/shared/DropdownHelp";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
-import { CreateEditSubscription } from "./CreateEditSubscription";
+import { ArrowRight, DollarSign, TrendingUp, Users } from "lucide-react";
 
 const metrics = [
   {
@@ -72,53 +50,14 @@ const statusColors = {
   Ahead: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
 };
 
-export function SubscriptionHeader() {
-  //const trpc = useTRPC();
-
-  const { t } = useLocale();
-  const { openModal } = useModal();
+export function BusinessMetrics() {
   return (
-    <div className="space-y-2 p-4">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">{t("subscriptions")}</h2>
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={() => {
-              openModal({
-                title: `${t("add")} - ${t("subscription")}`,
-                view: <CreateEditSubscription />,
-              });
-            }}
-            size={"sm"}
-          >
-            <PlusIcon />
-            {t("create")}
-          </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size={"icon"} variant={"outline"} className="size-8">
-                <MoreVertical className="w-4 h-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownHelp />
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <PDFIcon />
-                {t("pdf_export")}
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <XMLIcon />
-                {t("xml_export")}
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem variant="destructive">
-                <Trash2 />
-                {t("clear_all")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <h2 className="text-lg font-semibold">Business Metrics</h2>
+        <Button variant="outline" size="sm">
+          View Details <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {metrics.map((metric) => (
