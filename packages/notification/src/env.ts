@@ -6,11 +6,16 @@ export const env = createEnv({
     NODE_ENV: z.enum(["development", "production"]).optional(),
     NOVU_API_KEY: z.string().min(1),
     RESEND_API_KEY: z.string().min(1),
+    WHATSAPP_API_TOKEN: z.string().min(1),
+    WHATSAPP_BUSINESS_PHONE_NUMBER_ID: z.string().min(1),
   },
   client: {},
   runtimeEnv: {
     ...process.env,
     NODE_ENV: process.env.NODE_ENV,
+    WHATSAPP_API_TOKEN: process.env.WHATSAPP_API_TOKEN,
+    WHATSAPP_BUSINESS_PHONE_NUMBER_ID:
+      process.env.WHATSAPP_BUSINESS_PHONE_NUMBER_ID,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     NOVU_API_KEY: process.env.NOVU_API_KEY,
   },
