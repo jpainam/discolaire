@@ -53,7 +53,7 @@ export function SubjectSelector({
   const { t } = useLocale();
   const trpc = useTRPC();
   const subjectsQuery = useQuery(
-    trpc.classroom.subjects.queryOptions(classroomId)
+    trpc.classroom.subjects.queryOptions(classroomId),
   );
 
   const subjects = subjectsQuery.data;
@@ -66,20 +66,20 @@ export function SubjectSelector({
       subjects?.map((it) => ({
         label: it.course.name,
         value: it.id.toString(),
-      })) ?? []
+      })) ?? [],
     );
   }, [subjects]);
 
   const handleSearch = (search: string) => {
     if (!subjects) return;
     const filteredItems = subjects.filter((it) =>
-      it.course.name.toLowerCase().includes(search.toLowerCase())
+      it.course.name.toLowerCase().includes(search.toLowerCase()),
     );
     setItems(
       filteredItems.map((it) => ({
         label: it.course.name,
         value: it.id.toString(),
-      }))
+      })),
     );
   };
   if (subjectsQuery.isPending) {
@@ -131,7 +131,7 @@ export function SubjectSelector({
                   <Check
                     className={cn(
                       "h-4 w-4",
-                      value === item.value ? "opacity-100" : "opacity-0"
+                      value === item.value ? "opacity-100" : "opacity-0",
                     )}
                   />
                   {item.label}

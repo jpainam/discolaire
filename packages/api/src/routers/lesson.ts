@@ -1,4 +1,4 @@
-import { addMonths, getDay } from "date-fns";
+import { addMonths, getDay, subMonths } from "date-fns";
 import { z } from "zod";
 
 import { timetableService } from "../services/timetable-service";
@@ -55,10 +55,12 @@ export const lessonRouter = createTRPCRouter({
     .input(
       z.object({
         classroomId: z.string().min(1),
-        currentDate: z.coerce.date().default(new Date()),
+        from: z.coerce.date().optional().default(subMonths(new Date(), 3)),
+        to: z.coerce.date().optional().default(addMonths(new Date(), 3)),
       }),
     )
     .query(async ({ ctx, input }) => {
+      // take -3/+3 month from the currentDate
       const lessons = await ctx.db.lesson.findMany({
         include: {
           subject: {
@@ -69,6 +71,12 @@ export const lessonRouter = createTRPCRouter({
           },
         },
         where: {
+          startTime: {
+            gte: input.from,
+          },
+          endTime: {
+            lte: input.to,
+          },
           subject: {
             classroomId: input.classroomId,
           },

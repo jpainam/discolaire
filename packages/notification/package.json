@@ -1,5 +1,4 @@
 {
-  "prettier": "@repo/prettier-config",
   "name": "@repo/notification",
   "version": "1.0.0",
   "private": true,
@@ -10,8 +9,10 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit"
   },
+  "prettier": "@repo/prettier-config",
   "dependencies": {
     "@novu/api": "^0.6.2",
+    "@repo/db": "workspace:*",
     "@t3-oss/env-nextjs": "^0.12.0",
     "nanoid": "^5.1.5",
     "resend": "^4.2.0"
