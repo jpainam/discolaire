@@ -52,7 +52,7 @@ export function Shortcut({ className }: { className?: string }) {
   const shortcutsQuery = useQuery(
     trpc.shortcut.search.queryOptions({
       query: searchQuery,
-    }),
+    })
   );
 
   const [isOpen, setIsOpen] = useState(false);
@@ -70,7 +70,7 @@ export function Shortcut({ className }: { className?: string }) {
         await queryClient.invalidateQueries(trpc.shortcut.pathFilter());
         toast.success(t("added_successfully"), { id: 0 });
       },
-    }),
+    })
   );
   const deleteShortcut = useMutation(
     trpc.shortcut.delete.mutationOptions({
@@ -81,7 +81,7 @@ export function Shortcut({ className }: { className?: string }) {
         await queryClient.invalidateQueries(trpc.shortcut.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
-    }),
+    })
   );
   const updateShortcut = useMutation(
     trpc.shortcut.update.mutationOptions({
@@ -92,7 +92,7 @@ export function Shortcut({ className }: { className?: string }) {
         await queryClient.invalidateQueries(trpc.shortcut.pathFilter());
         toast.success(t("updated_successfully"), { id: 0 });
       },
-    }),
+    })
   );
 
   const addCurrentPageToShortcuts = () => {
@@ -142,7 +142,7 @@ export function Shortcut({ className }: { className?: string }) {
         ) : (
           <SimpleTooltip content={t("manage_shortcuts")}>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="icon" className="size-8">
+              <Button variant="ghost" size="icon" className="size-7">
                 <BookmarkPlus className="h-4 w-4" />
                 <span className="sr-only">{t("shortcuts")}</span>
               </Button>

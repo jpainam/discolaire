@@ -59,7 +59,7 @@ export function UserNav({ className }: { className?: string }) {
             size="lg"
             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
           >
-            <Avatar className="h-8 w-8 rounded-lg">
+            <Avatar className="h-7 w-7 rounded-lg">
               <AvatarImage
                 src={
                   user.avatar

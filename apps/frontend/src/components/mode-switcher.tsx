@@ -16,15 +16,15 @@ export function ModeSwitcher() {
     setMetaColor(
       resolvedTheme === "dark"
         ? META_THEME_COLORS.light
-        : META_THEME_COLORS.dark,
+        : META_THEME_COLORS.dark
     );
   }, [resolvedTheme, setTheme, setMetaColor]);
 
   return (
     <Button
-      variant="outline"
+      variant="ghost"
       size="icon"
-      className="group/toggle size-8"
+      className="group/toggle size-7"
       onClick={toggleTheme}
     >
       <SunIcon className="hidden [html.dark_&]:block" />

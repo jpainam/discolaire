@@ -55,7 +55,7 @@ export function ThemeSelector() {
   const { t } = useLocale();
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1">
       <Label htmlFor="theme-selector" className="sr-only">
         Theme
       </Label>
@@ -63,7 +63,7 @@ export function ThemeSelector() {
         <SelectTrigger
           id="theme-selector"
           size="sm"
-          className="h-8 justify-start *:data-[slot=select-value]:w-12 "
+          className="h-7 justify-start *:data-[slot=select-value]:w-12 "
         >
           <span className="text-muted-foreground hidden sm:block">
             {t("theme")}:

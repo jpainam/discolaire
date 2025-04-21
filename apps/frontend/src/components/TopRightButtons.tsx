@@ -21,26 +21,26 @@ export function TopRightButtons() {
   const router = useRouter();
   const { t } = useLocale("description");
   return (
-    <div className="hidden md:flex items-center gap-2">
+    <div className="hidden md:flex items-center gap-1">
       <SimpleTooltip content="Messages">
         <Button
           onClick={() => {
             router.push(`/users/${session.user?.id}/mails`);
           }}
-          className="size-8"
+          className="size-7"
           size={"icon"}
           aria-label="Message"
-          variant="outline"
+          variant="ghost"
         >
-          <Mail className="h-4 w-4" />
+          <Mail className="h-3 w-3" />
         </Button>
       </SimpleTooltip>
       <SimpleTooltip content="Activity">
         <Button
-          className="size-8"
+          className="size-7"
           size={"icon"}
           aria-label="Feedback"
-          variant="outline"
+          variant="ghost"
           onClick={() => {
             openSheet({
               className: "w-[700px] py-4 px-4",
@@ -54,10 +54,10 @@ export function TopRightButtons() {
       </SimpleTooltip>
       <SimpleTooltip content="Feedback">
         <Button
-          className="size-8"
+          className="size-7"
           size={"icon"}
           aria-label="Feedback"
-          variant="outline"
+          variant="ghost"
           onClick={() => {
             openModal({
               title: t("Feedback"),

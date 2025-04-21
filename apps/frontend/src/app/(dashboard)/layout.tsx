@@ -65,8 +65,8 @@ export default async function Layout({
         {/* <NoticeBanner /> */}
         <AppSidebar />
         <SidebarInset>
-          <header className="bg-background sticky inset-x-0 top-0 isolate z-10 flex shrink-0 items-center gap-2 border-b">
-            <div className="flex h-14 w-full items-center gap-2 px-4">
+          <header className="bg-background sticky inset-x-0 top-0 isolate z-20 flex shrink-0 items-center gap-2 border-b">
+            <div className="flex py-2 w-full items-center gap-2 px-4">
               <SidebarTrigger className="-ml-1.5" />
               <Separator
                 orientation="vertical"
@@ -74,17 +74,29 @@ export default async function Layout({
               />
               {/* <NavHeader /> */}
               <Breadcrumbs />
-              <div className="ml-auto flex items-center gap-2">
+              <div className="ml-auto flex items-center gap-1">
                 <HydrateClient>
                   <Suspense fallback={<Skeleton className="w-10" />}>
                     <SchoolYearSwitcher defaultValue={schoolYearId} />
                   </Suspense>
                 </HydrateClient>
                 <ThemeSelector />
+                <Separator
+                  orientation="vertical"
+                  className="hidden md:block ml-1 w-px data-[orientation=vertical]:h-6"
+                />
                 <TopRightButtons />
+                <Separator
+                  orientation="vertical"
+                  className="hidden md:block w-px data-[orientation=vertical]:h-6"
+                />
                 <Shortcut className="hidden md:flex" />
                 <ModeSwitcher />
                 <LanguageSwitcher />
+                <Separator
+                  orientation="vertical"
+                  className="hidden md:block mr-1 w-px data-[orientation=vertical]:h-6"
+                />
                 <UserNav className={"hidden md:block"} />
               </div>
             </div>
