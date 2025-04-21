@@ -11,7 +11,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
   TableBody,
@@ -26,7 +25,11 @@ import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditHealthVisit } from "./CreateEditHealthVisit";
@@ -42,6 +45,9 @@ export function HealthVisitTable({
   const { t, i18n } = useLocale();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+  const { data: visits } = useSuspenseQuery(
+    trpc.health.visits.queryOptions({ userId: userId })
+  );
   const { openSheet } = useSheet();
   const { openModal } = useModal();
 
@@ -54,7 +60,7 @@ export function HealthVisitTable({
         await queryClient.invalidateQueries(trpc.health.visits.pathFilter());
         toast.success(t("deleted"), { id: 0 });
       },
-    }),
+    })
   );
   const confirm = useConfirm();
 
@@ -63,10 +69,6 @@ export function HealthVisitTable({
     day: "numeric",
     year: "numeric",
   });
-
-  const visitsQuery = useQuery(
-    trpc.health.visits.queryOptions({ userId: userId }),
-  );
 
   return (
     <div className="px-4">
@@ -83,35 +85,22 @@ export function HealthVisitTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {visitsQuery.isPending && (
-              <TableRow>
-                <TableCell colSpan={6}>
-                  <div className="grid w-full grid-cols-6 gap-2">
-                    {Array.from({ length: 30 }).map((_, i) => (
-                      <Skeleton key={i} className="h-10" />
-                    ))}
-                  </div>
-                </TableCell>
-              </TableRow>
-            )}
-            {visitsQuery.data?.length === 0 && (
+            {visits.length === 0 && (
               <TableRow>
                 <TableCell colSpan={6} className="text-center">
                   <EmptyState className="my-8" />
                 </TableCell>
               </TableRow>
             )}
-            {visitsQuery.data?.map((visit) => {
+            {visits.map((visit, index) => {
               return (
-                <TableRow>
-                  <TableCell className="py-0">
-                    {dateFormat.format(visit.date)}
-                  </TableCell>
-                  <TableCell className="py-0">{visit.complaint}</TableCell>
-                  <TableCell className="py-0">{visit.assessment}</TableCell>
-                  <TableCell className="py-0">{visit.examination}</TableCell>
-                  <TableCell className="py-0">{visit.signs}</TableCell>
-                  <TableCell className="py-0 text-right">
+                <TableRow key={index}>
+                  <TableCell>{dateFormat.format(visit.date)}</TableCell>
+                  <TableCell>{visit.complaint}</TableCell>
+                  <TableCell>{visit.assessment}</TableCell>
+                  <TableCell>{visit.examination}</TableCell>
+                  <TableCell>{visit.signs}</TableCell>
+                  <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-2">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>

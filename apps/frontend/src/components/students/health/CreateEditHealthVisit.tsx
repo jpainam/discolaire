@@ -118,7 +118,7 @@ export function CreateEditHealthVisit({
       onError: (err) => {
         toast.error(err.message, { id: 0 });
       },
-    })
+    }),
   );
   const onSubmit = async (data: z.infer<typeof createEditVisitSchema>) => {
     const values = {
@@ -135,7 +135,7 @@ export function CreateEditHealthVisit({
       formData.append(
         "files",
         fileWithPreview.file as File,
-        fileWithPreview.file.name
+        fileWithPreview.file.name,
       );
     });
     formData.append("userId", userId);
@@ -439,7 +439,7 @@ export function CreateEditHealthVisit({
                                 {formatBytes(
                                   file.file instanceof File
                                     ? file.file.size
-                                    : file.file.size
+                                    : file.file.size,
                                 )}
                               </p>
                             </div>
