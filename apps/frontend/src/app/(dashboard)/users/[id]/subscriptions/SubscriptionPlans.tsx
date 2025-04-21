@@ -16,8 +16,8 @@ import { useState } from "react";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-export function SubscriptionPlans() {
-  const [selectedPlan, setSelectedPlan] = useState("pro");
+export function SubscriptionPlans({ plan }: { plan: string }) {
+  const [selectedPlan, setSelectedPlan] = useState(plan);
   const { t } = useLocale();
   const confirm = useConfirm();
   const alertContent = (
@@ -89,7 +89,7 @@ export function SubscriptionPlans() {
           //   cancelText: t("cancel"),
           // });
         }}
-        className="grid grid-cols-1 md:grid-cols-3 gap-6"
+        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
       >
         {plans.map((plan) => (
           <div key={plan.id} className="relative">
@@ -99,7 +99,7 @@ export function SubscriptionPlans() {
                 "h-full transition-all duration-200",
                 selectedPlan === plan.id
                   ? "border-primary ring-2 ring-primary"
-                  : "border-border hover:border-primary/50",
+                  : "border-border hover:border-primary/50"
               )}
             >
               {selectedPlan === plan.id && (
