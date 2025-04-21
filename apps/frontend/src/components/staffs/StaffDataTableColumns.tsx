@@ -277,7 +277,7 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
         await queryClient.invalidateQueries(trpc.staff.all.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
-    }),
+    })
   );
   const router = useRouter();
   const canDeleteStaff = useCheckPermission("staff", PermissionAction.DELETE);
@@ -287,7 +287,7 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
     <div className="justify-end flex">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button aria-label="Open menu" variant={"ghost"}>
+          <Button aria-label="Open menu" className="size-8" variant={"ghost"}>
             <DotsHorizontalIcon />
           </Button>
         </DropdownMenuTrigger>
