@@ -167,7 +167,7 @@ export function CreateEditHealthVisit({
         className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="flex flex-row items-center gap-2 border-b bg-muted/50 px-4 py-2">
+        <div className="flex flex-row items-center gap-2 border-b bg-muted/50 px-4 py-1">
           <Label>{t("patient_visit_notes")}</Label>
           <div className="ml-auto flex items-center gap-2">
             <Button

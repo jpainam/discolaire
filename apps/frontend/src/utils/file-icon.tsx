@@ -13,7 +13,7 @@ export const getFileIcon = (
   file: {
     file: File | { type: string; name: string };
   },
-  className?: string
+  className?: string,
 ) => {
   const fileType = file.file instanceof File ? file.file.type : file.file.type;
   const fileName = file.file instanceof File ? file.file.name : file.file.name;

@@ -57,17 +57,17 @@ export async function DELETE(request: Request) {
     if (!documentId) {
       return Response.json(
         { error: "No documentId provided" },
-        { status: 400 }
+        { status: 400 },
       );
     }
     const document = await caller.document.get(documentId);
     await Promise.all(
       document.attachments.map((attachment) =>
         deleteFile({
-          bucket: env.S3_DOCUMENT_BUCKET_NAME,
+          bucket: env.S3_HEALTHVISIT_BUCKET_NAME,
           key: attachment,
-        })
-      )
+        }),
+      ),
     );
 
     return Response.json({ message: "Avatar deleted successfully" });

@@ -32,7 +32,13 @@ import { useTRPC } from "~/trpc/react";
 import { CreateEditHealthVisit } from "./CreateEditHealthVisit";
 import { HealthVisitDetails } from "./HealthVisitDetails";
 
-export function HealthVisitTable({ userId }: { userId: string }) {
+export function HealthVisitTable({
+  userId,
+  name,
+}: {
+  userId: string;
+  name: string;
+}) {
   const { t, i18n } = useLocale();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -132,7 +138,12 @@ export function HealthVisitTable({ userId }: { userId: string }) {
                           <DropdownMenuItem
                             onClick={() => {
                               openSheet({
-                                view: <CreateEditHealthVisit userId={userId} />,
+                                view: (
+                                  <CreateEditHealthVisit
+                                    name={name}
+                                    userId={userId}
+                                  />
+                                ),
                               });
                             }}
                           >
