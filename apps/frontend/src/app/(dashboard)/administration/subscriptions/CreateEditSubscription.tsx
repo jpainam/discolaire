@@ -65,7 +65,7 @@ export function CreateEditSubscription({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.subscription.all.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.subscription.count.pathFilter()
+          trpc.subscription.count.pathFilter(),
         );
         toast.success(t("success"), { id: 0 });
         closeSheet();
@@ -73,7 +73,7 @@ export function CreateEditSubscription({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     toast.loading(t("Processing..."), { id: 0 });
