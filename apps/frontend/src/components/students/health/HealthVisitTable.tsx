@@ -39,7 +39,7 @@ export function HealthVisitTable({ userId }: { userId: string }) {
   const queryClient = useQueryClient();
   const params = useParams<{ id: string }>();
   const { data: visits } = useSuspenseQuery(
-    trpc.health.visits.queryOptions({ userId: userId })
+    trpc.health.visits.queryOptions({ userId: userId }),
   );
 
   const deleteHealthVisit = useMutation(
@@ -51,7 +51,7 @@ export function HealthVisitTable({ userId }: { userId: string }) {
         await queryClient.invalidateQueries(trpc.health.visits.pathFilter());
         toast.success(t("deleted"), { id: 0 });
       },
-    })
+    }),
   );
   const confirm = useConfirm();
   const router = useRouter();
@@ -104,7 +104,7 @@ export function HealthVisitTable({ userId }: { userId: string }) {
                           <DropdownMenuItem
                             onSelect={() => {
                               router.push(
-                                `/students/${params.id}/health/${visit.id}`
+                                `/students/${params.id}/health/${visit.id}`,
                               );
                             }}
                           >
@@ -118,7 +118,7 @@ export function HealthVisitTable({ userId }: { userId: string }) {
                           <DropdownMenuItem
                             onSelect={() => {
                               router.push(
-                                `/students/${params.id}/health/${visit.id}/edit`
+                                `/students/${params.id}/health/${visit.id}/edit`,
                               );
                             }}
                           >
