@@ -10,6 +10,7 @@ export const subscriptionRouter = createTRPCRouter({
         sms: z.number().default(0),
         email: z.number().default(0),
         whatsapp: z.number().default(0),
+        plan: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -25,10 +26,12 @@ export const subscriptionRouter = createTRPCRouter({
         update: {
           sms: input.sms + (subsc?.sms ?? 0),
           email: input.email + (subsc?.email ?? 0),
+          plan: input.plan,
           whatsapp: input.whatsapp + (subsc?.whatsapp ?? 0),
         },
         create: {
           userId: input.userId,
+          plan: input.plan,
           sms: input.sms,
           email: input.email,
           whatsapp: input.whatsapp,

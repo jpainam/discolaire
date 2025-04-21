@@ -13,6 +13,13 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/components/select";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -29,6 +36,7 @@ const formSchema = z.object({
   unlimitedSms: z.boolean().default(false),
   whatsapp: z.coerce.number().default(0),
   unlimitedWhatsapp: z.boolean().default(false),
+  plan: z.string().default("hobby"),
 });
 export function CreateEditSubscription({
   subscription,
@@ -40,6 +48,7 @@ export function CreateEditSubscription({
     defaultValues: {
       userId: subscription?.userId ?? "",
       emails: subscription?.email ?? 0,
+      plan: subscription?.plan ?? "hobby",
       unlimitedEmails: subscription?.email === -1,
       sms: subscription?.sms ?? 0,
       unlimitedSms: subscription?.sms === -1,
@@ -56,7 +65,7 @@ export function CreateEditSubscription({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.subscription.all.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.subscription.count.pathFilter(),
+          trpc.subscription.count.pathFilter()
         );
         toast.success(t("success"), { id: 0 });
         closeSheet();
@@ -64,12 +73,13 @@ export function CreateEditSubscription({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     toast.loading(t("Processing..."), { id: 0 });
     upsertSubscriptionMutation.mutate({
       userId: data.userId,
+      plan: data.plan,
       sms: data.unlimitedSms ? -1 : data.sms,
       email: data.unlimitedEmails ? -1 : data.emails,
       whatsapp: data.unlimitedWhatsapp ? -1 : data.whatsapp,
@@ -89,6 +99,32 @@ export function CreateEditSubscription({
                 <FormControl>
                   <UserSelector {...field} />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="plan"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("plan")}</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder={t("plan")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="hobby">Hobby</SelectItem>
+                      <SelectItem value="pro">Pro</SelectItem>
+                      <SelectItem value="full">{t("full")}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}

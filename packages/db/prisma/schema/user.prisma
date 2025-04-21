@@ -107,6 +107,7 @@ model Subscription {
     sms         Int      @default(0)
     whatsapp    Int      @default(0)
     email       Int      @default(0)
+    plan        String
     createdAt   DateTime @default(now())
     createdById String
     createdBy   User     @relation("CreatedSubscriptions", fields: [createdById], references: [id], onDelete: Cascade, onUpdate: Cascade)

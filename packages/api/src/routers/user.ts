@@ -369,4 +369,13 @@ export const userRouter = createTRPCRouter({
         effect: input.effect,
       });
     }),
+  subscription: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      return ctx.db.subscription.findFirst({
+        where: {
+          userId: input,
+        },
+      });
+    }),
 });
