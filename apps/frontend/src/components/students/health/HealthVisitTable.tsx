@@ -118,7 +118,7 @@ export function HealthVisitTable({ userId }: { userId: string }) {
                           <DropdownMenuItem
                             onSelect={() => {
                               router.push(
-                                `/students/${params.id}/health/${visit.id}`
+                                `/students/${params.id}/health/${visit.id}/edit`
                               );
                             }}
                           >
