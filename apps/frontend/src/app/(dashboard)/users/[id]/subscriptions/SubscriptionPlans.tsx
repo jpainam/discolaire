@@ -99,7 +99,7 @@ export function SubscriptionPlans({ plan }: { plan: string }) {
                 "h-full transition-all duration-200",
                 selectedPlan === plan.id
                   ? "border-primary ring-2 ring-primary"
-                  : "border-border hover:border-primary/50"
+                  : "border-border hover:border-primary/50",
               )}
             >
               {selectedPlan === plan.id && (

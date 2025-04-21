@@ -8,7 +8,7 @@ import { UpdateAdminBreadcrumb } from "./UpdateAdminBreadcrumb";
 export default async function Layout({ children }: PropsWithChildren) {
   const canSeeAdminMenu = await checkPermission(
     "menu:administration",
-    PermissionAction.READ
+    PermissionAction.READ,
   );
   if (!canSeeAdminMenu) {
     redirect("/");
