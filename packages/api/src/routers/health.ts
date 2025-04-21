@@ -104,6 +104,18 @@ export const healthRouter = createTRPCRouter({
         },
       });
     }),
+  getVisit: protectedProcedure
+    .input(z.string().min(1))
+    .query(({ ctx, input }) => {
+      return ctx.db.healthVisit.findUniqueOrThrow({
+        where: {
+          id: input,
+        },
+        include: {
+          user: true,
+        },
+      });
+    }),
   visits: protectedProcedure
     .input(
       z.object({

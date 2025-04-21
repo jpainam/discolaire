@@ -30,6 +30,8 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
+import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditHealthVisit } from "./CreateEditHealthVisit";
@@ -45,6 +47,7 @@ export function HealthVisitTable({
   const { t, i18n } = useLocale();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+  const params = useParams<{ id: string }>();
   const { data: visits } = useSuspenseQuery(
     trpc.health.visits.queryOptions({ userId: userId })
   );
@@ -63,6 +66,7 @@ export function HealthVisitTable({
     })
   );
   const confirm = useConfirm();
+  const router = useRouter();
 
   const dateFormat = Intl.DateTimeFormat(i18n.language, {
     month: "short",
@@ -122,10 +126,13 @@ export function HealthVisitTable({
                           </DropdownMenuItem>
                           <DropdownMenuItem>
                             <MailIcon className="h-4 w-4" />
-                            {t("send_message")}
+                            {t("notify")}
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => {
+                              router.push(
+                                `/students/${params.id}/health/${visit.id}`
+                              );
                               openSheet({
                                 view: (
                                   <CreateEditHealthVisit
@@ -145,10 +152,6 @@ export function HealthVisitTable({
                               const isConfirmed = await confirm({
                                 title: t("delete"),
                                 description: t("delete_confirmation"),
-                                icon: <Trash2 className="text-destructive" />,
-                                alertDialogTitle: {
-                                  className: "flex items-center gap-2",
-                                },
                               });
                               if (isConfirmed) {
                                 toast.loading(t("deleting"), { id: 0 });
@@ -156,7 +159,6 @@ export function HealthVisitTable({
                               }
                             }}
                             variant="destructive"
-                            className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                           >
                             <Trash2 />
                             {t("delete")}

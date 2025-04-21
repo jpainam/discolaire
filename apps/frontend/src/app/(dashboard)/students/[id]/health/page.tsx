@@ -24,7 +24,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         <Suspense
           fallback={
             <div className="grid grid-cols-3 gap-4 px-4 py-2">
-              {Array.from({ length: 8 }).map((_, i) => (
+              {Array.from({ length: 9 }).map((_, i) => (
                 <Skeleton key={i} className="h-8 " />
               ))}
             </div>
