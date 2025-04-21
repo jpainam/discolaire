@@ -108,7 +108,7 @@ export function CreateEditSubscription({
             name="plan"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("plan")}</FormLabel>
+                <FormLabel>{t("Plan")}</FormLabel>
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
