@@ -2,7 +2,6 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useEffect } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -25,22 +24,25 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
-import { Skeleton } from "@repo/ui/components/skeleton";
 import { Textarea } from "@repo/ui/components/textarea";
-import { useUpload } from "~/hooks/use-upload";
 import { useLocale } from "~/i18n";
-import { FileUploader } from "~/uploads/file-uploader";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  AlertCircleIcon,
+  FileIcon,
+  Trash2Icon,
+  UploadCloudIcon,
+  UploadIcon,
+  XIcon,
+} from "lucide-react";
 import { useForm } from "react-hook-form";
 import { DatePicker } from "~/components/DatePicker";
-import { routes } from "~/configs/routes";
+import { formatBytes, useFileUpload } from "~/hooks/use-file-upload";
 import { useRouter } from "~/hooks/use-router";
-import { getErrorMessage } from "~/lib/handle-error";
-import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
-import { getFullName } from "~/utils";
+import { getFileIcon } from "~/utils/file-icon";
 
 const createEditVisitSchema = z.object({
   date: z.coerce.date().default(() => new Date()),
@@ -57,16 +59,17 @@ const createEditVisitSchema = z.object({
 export function CreateEditHealthVisit({
   healthVisit,
   userId,
+  name,
 }: {
   healthVisit?: RouterOutputs["health"]["visits"][number];
   userId: string;
+  name: string;
 }) {
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  const studentQuery = useQuery(trpc.student.get.queryOptions(params.id));
-  const student = studentQuery.data;
+
   const form = useForm({
     resolver: zodResolver(createEditVisitSchema),
     defaultValues: {
@@ -81,42 +84,26 @@ export function CreateEditHealthVisit({
       attachments: [],
     },
   });
-  const {
-    onUpload,
-    isPending,
-    data: uploadedFiles,
-    //clearUploadedFiles,
-  } = useUpload();
+  const maxSize = 10 * 1024 * 1024; // 10MB default
+  const maxFiles = 10;
 
-  useEffect(() => {
-    if (uploadedFiles.length > 0) {
-      const urls: string[] = uploadedFiles
-        .map((file) => file.data?.id)
-        .filter((url) => url !== undefined);
-      //console.log("The attachments", urls);
-      form.setValue("attachments", urls as never);
-    }
-  }, [form, uploadedFiles]);
-
-  const { school } = useSchool();
-
-  const handleUpload = (files: File[]) => {
-    if (!student) return;
-    toast.promise(
-      onUpload(files, {
-        destination: `${school.code}/health-visit-attachments`,
-      }),
-      {
-        loading: t("uploading"),
-        success: () => {
-          return t("uploaded_successfully");
-        },
-        error: (err) => {
-          return getErrorMessage(err);
-        },
-      },
-    );
-  };
+  const [
+    { files, isDragging, errors },
+    {
+      handleDragEnter,
+      handleDragLeave,
+      handleDragOver,
+      handleDrop,
+      openFileDialog,
+      removeFile,
+      clearFiles,
+      getInputProps,
+    },
+  ] = useFileUpload({
+    multiple: true,
+    maxFiles,
+    maxSize,
+  });
 
   const router = useRouter();
 
@@ -125,21 +112,54 @@ export function CreateEditHealthVisit({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.health.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
-        router.push(routes.students.health.index(params.id));
+        router.push(`/students/${params.id}/health`);
       },
 
       onError: (err) => {
         toast.error(err.message, { id: 0 });
       },
-    }),
+    })
   );
-  const onSubmit = (data: z.infer<typeof createEditVisitSchema>) => {
+  const onSubmit = async (data: z.infer<typeof createEditVisitSchema>) => {
     const values = {
       ...data,
       userId: userId,
     };
     toast.loading(t("creating"), { id: 0 });
-    createVisitMutation.mutate(values);
+    if (files.length == 0) {
+      createVisitMutation.mutate(values);
+      return;
+    }
+    const formData = new FormData();
+    files.forEach((fileWithPreview) => {
+      formData.append(
+        "files",
+        fileWithPreview.file as File,
+        fileWithPreview.file.name
+      );
+    });
+    formData.append("userId", userId);
+
+    const response = await fetch("/api/upload/health", {
+      method: "POST",
+      body: formData,
+    });
+    if (response.ok) {
+      const results = (await response.json()) as {
+        key: string;
+        fullPath: string;
+      }[];
+      const attachments = results.map((result) => result.key);
+      toast.loading(t("creating"), { id: 0 });
+      createVisitMutation.mutate({
+        ...values,
+        attachments: attachments,
+      });
+    } else {
+      const { error } = await response.json();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      toast.error(error ?? response.statusText, { id: 0 });
+    }
   };
   return (
     <Form {...form}>
@@ -153,13 +173,18 @@ export function CreateEditHealthVisit({
             <Button
               variant={"outline"}
               type="button"
+              size={"sm"}
               onClick={() => {
-                router.push(routes.students.health.index(params.id));
+                router.push(`/students/${params.id}/health`);
               }}
             >
               {t("cancel")}
             </Button>
-            <Button isLoading={createVisitMutation.isPending} type="submit">
+            <Button
+              size={"sm"}
+              isLoading={createVisitMutation.isPending}
+              type="submit"
+            >
               {t("submit")}
             </Button>
           </div>
@@ -173,15 +198,7 @@ export function CreateEditHealthVisit({
             <div className="grid grid-cols-2 gap-6">
               <div className="flex flex-col space-y-2">
                 <Label htmlFor="patient-name">{t("patient_name")}</Label>
-                {studentQuery.isPending ? (
-                  <Skeleton className="h-8 w-full" />
-                ) : (
-                  <Input
-                    id="patient-name"
-                    placeholder={getFullName(studentQuery.data)}
-                    disabled
-                  />
-                )}
+                <Input id="patient-name" placeholder={name} disabled />
               </div>
               <FormField
                 control={form.control}
@@ -326,28 +343,132 @@ export function CreateEditHealthVisit({
             </AccordionItem>
             <AccordionItem value="files">
               <AccordionTrigger>
-                <Label htmlFor="files">{t("files")}</Label>
+                <Label htmlFor="files">
+                  {t("files")} {files.length > 0 ? <>({files.length})</> : ""}
+                </Label>
               </AccordionTrigger>
-              <AccordionContent className="px-2 pt-1">
-                <Label>{t("files")}</Label>
-                <FileUploader
-                  disabled={isPending}
-                  //accept={{ "application/*": [], "image/*": [] }}
-                  onValueChange={(files) => {
-                    if (files.length === 0) {
-                      toast.warning(t("please_upload_a_file"), { id: 0 });
-                      return;
-                    }
+              <AccordionContent>
+                <div className="flex flex-col gap-2">
+                  {/* Drop area */}
+                  <div
+                    onDragEnter={handleDragEnter}
+                    onDragLeave={handleDragLeave}
+                    onDragOver={handleDragOver}
+                    onDrop={handleDrop}
+                    data-dragging={isDragging || undefined}
+                    data-files={files.length > 0 || undefined}
+                    className="border-input data-[dragging=true]:bg-accent/50 has-[input:focus]:border-ring has-[input:focus]:ring-ring/50 flex  flex-col items-center rounded-xl border border-dashed p-4 transition-colors not-data-[files]:justify-center has-[input:focus]:ring-[3px] data-[files]:hidden"
+                  >
+                    <input
+                      {...getInputProps()}
+                      className="sr-only"
+                      aria-label="Upload files"
+                    />
+                    <div className="flex flex-col items-center justify-center text-center">
+                      <div
+                        className="bg-background mb-2 flex size-11 shrink-0 items-center justify-center rounded-full border"
+                        aria-hidden="true"
+                      >
+                        <FileIcon className="size-4 opacity-60" />
+                      </div>
+                      <p className="mb-1.5 text-sm font-medium">
+                        {t("upload_files")}
+                      </p>
+                      <p className="text-muted-foreground text-xs">
+                        Max {maxFiles} files ∙ Up to {formatBytes(maxSize)}
+                      </p>
+                      <Button
+                        variant="outline"
+                        className="mt-4"
+                        type="button"
+                        onClick={openFileDialog}
+                      >
+                        <UploadIcon
+                          className="-ms-1 opacity-60"
+                          aria-hidden="true"
+                        />
+                        {t("Select files")}
+                      </Button>
+                    </div>
+                  </div>
+                  {files.length > 0 && (
+                    <div className="space-y-2 flex flex-col">
+                      <div className="flex ml-auto gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          type="button"
+                          onClick={openFileDialog}
+                        >
+                          <UploadCloudIcon
+                            className="-ms-0.5 size-3.5 opacity-60"
+                            aria-hidden="true"
+                          />
+                          {t("Add files")}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          type="button"
+                          onClick={clearFiles}
+                        >
+                          <Trash2Icon
+                            className="-ms-0.5 size-3.5 opacity-60"
+                            aria-hidden="true"
+                          />
+                          {t("Remove all")}
+                        </Button>
+                      </div>
 
-                    handleUpload(files);
-                  }}
-                  maxFileCount={4}
-                  maxSize={4 * 1024 * 1024}
-                  //progresses={progresses}
-                  // pass the onUpload function here for direct upload
-                  // onUpload={uploadFiles}
-                  //disabled={isUploading}
-                />
+                      {files.map((file) => (
+                        <div
+                          key={file.id}
+                          className="bg-background flex items-center justify-between gap-2 rounded-lg border p-2 pe-3"
+                        >
+                          <div className="flex items-center gap-3 overflow-hidden">
+                            <div className="flex aspect-square size-10 shrink-0 items-center justify-center rounded border">
+                              {getFileIcon(file)}
+                            </div>
+                            <div className="flex min-w-0 flex-col gap-0.5">
+                              <p className="truncate text-[13px] font-medium">
+                                {file.file instanceof File
+                                  ? file.file.name
+                                  : file.file.name}
+                              </p>
+                              <p className="text-muted-foreground text-xs">
+                                {formatBytes(
+                                  file.file instanceof File
+                                    ? file.file.size
+                                    : file.file.size
+                                )}
+                              </p>
+                            </div>
+                          </div>
+
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className="text-muted-foreground/80 hover:text-foreground -me-2 size-8 hover:bg-transparent"
+                            onClick={() => removeFile(file.id)}
+                            aria-label="Remove file"
+                          >
+                            <XIcon className="size-4" aria-hidden="true" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {errors.length > 0 && (
+                    <div
+                      className="text-destructive flex items-center gap-1 text-xs"
+                      role="alert"
+                    >
+                      <AlertCircleIcon className="size-3 shrink-0" />
+                      <span>{errors[0]}</span>
+                    </div>
+                  )}
+                </div>
               </AccordionContent>
             </AccordionItem>
           </Accordion>

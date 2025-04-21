@@ -3,6 +3,7 @@ import { getServerTranslations } from "~/i18n/server";
 
 import { CreateEditHealthVisit } from "~/components/students/health/CreateEditHealthVisit";
 import { caller } from "~/trpc/server";
+import { getFullName } from "~/utils";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -12,5 +13,10 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     return <EmptyState className="py-8" title={t("no_user_attached_yet")} />;
   }
 
-  return <CreateEditHealthVisit userId={student.userId} />;
+  return (
+    <CreateEditHealthVisit
+      name={getFullName(student)}
+      userId={student.userId}
+    />
+  );
 }
