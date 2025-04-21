@@ -5,7 +5,6 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { HealthVisitHeader } from "~/components/students/health/HealthVisitHeader";
 import { HealthVisitTable } from "~/components/students/health/HealthVisitTable";
 import { caller, HydrateClient, prefetch, trpc } from "~/trpc/server";
-import { getFullName } from "~/utils";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -30,10 +29,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </div>
           }
         >
-          <HealthVisitTable
-            name={getFullName(student)}
-            userId={student.userId ?? "N/A"}
-          />
+          <HealthVisitTable userId={student.userId ?? "N/A"} />
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>

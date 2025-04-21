@@ -20,8 +20,6 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 import { EmptyState } from "~/components/EmptyState";
-import { useModal } from "~/hooks/use-modal";
-import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
@@ -34,16 +32,8 @@ import { useParams } from "next/navigation";
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
-import { CreateEditHealthVisit } from "./CreateEditHealthVisit";
-import { HealthVisitDetails } from "./HealthVisitDetails";
 
-export function HealthVisitTable({
-  userId,
-  name,
-}: {
-  userId: string;
-  name: string;
-}) {
+export function HealthVisitTable({ userId }: { userId: string }) {
   const { t, i18n } = useLocale();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -51,8 +41,6 @@ export function HealthVisitTable({
   const { data: visits } = useSuspenseQuery(
     trpc.health.visits.queryOptions({ userId: userId })
   );
-  const { openSheet } = useSheet();
-  const { openModal } = useModal();
 
   const deleteHealthVisit = useMutation(
     trpc.health.deleteVisit.mutationOptions({
@@ -115,10 +103,9 @@ export function HealthVisitTable({
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem
                             onSelect={() => {
-                              openModal({
-                                className: "w-[600px]",
-                                view: <HealthVisitDetails />,
-                              });
+                              router.push(
+                                `/students/${params.id}/health/${visit.id}`
+                              );
                             }}
                           >
                             <Eye />
@@ -129,18 +116,10 @@ export function HealthVisitTable({
                             {t("notify")}
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={() => {
+                            onSelect={() => {
                               router.push(
                                 `/students/${params.id}/health/${visit.id}`
                               );
-                              openSheet({
-                                view: (
-                                  <CreateEditHealthVisit
-                                    name={name}
-                                    userId={userId}
-                                  />
-                                ),
-                              });
                             }}
                           >
                             <Pencil />
