@@ -42,7 +42,7 @@ import { CreateEditCommunicationChannel } from "./CreateEditCommunicationChannel
 export function CommunicationChannelList() {
   const trpc = useTRPC();
   const { data: channels } = useSuspenseQuery(
-    trpc.communicationChannel.all.queryOptions()
+    trpc.communicationChannel.all.queryOptions(),
   );
 
   const handleChannelClick = (url: string) => {
@@ -68,14 +68,14 @@ export function CommunicationChannelList() {
     trpc.communicationChannel.delete.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.communicationChannel.pathFilter()
+          trpc.communicationChannel.pathFilter(),
         );
         toast.success(t("success"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const { openModal } = useModal();
