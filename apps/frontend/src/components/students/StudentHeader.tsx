@@ -83,7 +83,7 @@ export function StudentHeader() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: student } = useSuspenseQuery(
-    trpc.student.get.queryOptions(params.id),
+    trpc.student.get.queryOptions(params.id)
   );
   const router = useRouter();
   const { t } = useLocale();
@@ -92,7 +92,7 @@ export function StudentHeader() {
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
 
@@ -117,7 +117,7 @@ export function StudentHeader() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const { openModal } = useModal();
@@ -134,7 +134,7 @@ export function StudentHeader() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const changeStudentStatus = useCallback(
@@ -145,7 +145,7 @@ export function StudentHeader() {
         status,
       });
     },
-    [t, studentStatusMutation, student.id],
+    [t, studentStatusMutation, student.id]
   );
 
   const navigateToStudent = (id: string) => {
@@ -160,7 +160,7 @@ export function StudentHeader() {
 
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditStudent = useCheckPermission("student", PermissionAction.UPDATE);
 
@@ -172,7 +172,7 @@ export function StudentHeader() {
   const studentsQuery = useQuery(
     trpc.student.search.queryOptions({
       query: search,
-    }),
+    })
   );
 
   const handleDeleteAvatar = async (userId: string) => {
@@ -197,9 +197,9 @@ export function StudentHeader() {
   };
 
   return (
-    <div className="flex border-b bg-muted/50 py-1 px-4 w-full gap-2">
+    <div className="flex border-b bg-muted/50 py-1 px-4  gap-2">
       <AvatarState
-        className="my-0 h-full w-[100px] rounded-md"
+        className="hidden md:flex my-0 h-full w-[100px] rounded-md"
         pos={getFullName(student).length}
         avatar={student.user?.avatar}
       />
@@ -351,7 +351,7 @@ export function StudentHeader() {
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -583,7 +583,7 @@ export function StudentHeader() {
           </DropdownMenu>
         </div>
 
-        <div className="grid grid-cols-2 flex-row items-center gap-4 text-sm font-semibold md:flex">
+        <div className="grid grid-cols-3 flex-row items-center gap-4 text-sm font-semibold md:flex">
           {student.registrationNumber && (
             <div className="flex flex-row items-center gap-2 rounded dark:bg-secondary">
               <NotebookTabs className="h-4 w-4 text-foreground" />

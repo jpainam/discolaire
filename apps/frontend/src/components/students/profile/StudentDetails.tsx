@@ -33,10 +33,10 @@ export default function StudentDetails() {
   const { t, i18n } = useLocale();
   const trpc = useTRPC();
   const { data: siblings } = useSuspenseQuery(
-    trpc.student.siblings.queryOptions(params.id),
+    trpc.student.siblings.queryOptions(params.id)
   );
   const { data: student } = useSuspenseQuery(
-    trpc.student.get.queryOptions(params.id),
+    trpc.student.get.queryOptions(params.id)
   );
 
   const dateFormat = Intl.DateTimeFormat(i18n.language, {
@@ -47,7 +47,7 @@ export default function StudentDetails() {
   });
 
   return (
-    <div className="flex gap-2 flex-col">
+    <div className="flex gap-2 flex-col text-sm py-2">
       <div className="grid grid-cols-2 gap-y-3 px-4 xl:grid-cols-4">
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <SquareUserRound className="h-4 w-4 stroke-1" /> {t("lastName")}

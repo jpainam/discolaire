@@ -55,7 +55,7 @@ export function ThemeSelector() {
   const { t } = useLocale();
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="hidden md:flex items-center gap-1">
       <Label htmlFor="theme-selector" className="sr-only">
         Theme
       </Label>

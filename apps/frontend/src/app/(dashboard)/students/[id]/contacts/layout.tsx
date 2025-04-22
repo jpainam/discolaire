@@ -1,12 +1,14 @@
 import { Separator } from "@repo/ui/components/separator";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import type { Metadata } from "next";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { ErrorFallback } from "~/components/error-fallback";
 
 import { SignUpContact } from "~/components/students/contacts/SignUpContact";
 import { StudentContactHeader } from "~/components/students/contacts/StudentContactHeader";
 import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";
-import { prefetch, trpc } from "~/trpc/server";
+import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 
 export const metadata: Metadata = {
   title: "Contacts",
@@ -23,14 +25,34 @@ export default async function Layout(props: {
   prefetch(trpc.student.contacts.queryOptions(params.id));
 
   return (
-    <div className="grid w-full flex-col md:flex">
-      <StudentContactHeader />
+    <HydrateClient>
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <Suspense
+          fallback={
+            <div className="px-4 py-2">
+              <Skeleton className="h-8" />
+            </div>
+          }
+        >
+          <StudentContactHeader />
+        </Suspense>
+      </ErrorBoundary>
       <Separator />
-      <SignUpContact />
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <Suspense
+          fallback={
+            <div className="px-4 py-2">
+              <Skeleton className="h-20" />
+            </div>
+          }
+        >
+          <SignUpContact />
+        </Suspense>
+      </ErrorBoundary>
       <Suspense
         fallback={
-          <div className="grid grid-cols-6 gap-4 w-full p-4">
-            {Array.from({ length: 12 }).map((_, index) => (
+          <div className="grid grid-cols-3 gap-4 px-4 py-2">
+            {Array.from({ length: 9 }).map((_, index) => (
               <Skeleton key={index} className="h-8" />
             ))}
           </div>
@@ -42,6 +64,6 @@ export default async function Layout(props: {
         />
       </Suspense>
       {children}
-    </div>
+    </HydrateClient>
   );
 }

@@ -46,16 +46,16 @@ export function SubjectTable() {
   const { openSheet } = useSheet();
   const session = useSession();
   const { data: subjects } = useSuspenseQuery(
-    trpc.classroom.subjects.queryOptions(params.id),
+    trpc.classroom.subjects.queryOptions(params.id)
   );
   const confirm = useConfirm();
   const canDeleteClassroomSubject = useCheckPermission(
     "subject",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditClassroomSubject = useCheckPermission(
     "subject",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const queryClient = useQueryClient();
 
@@ -63,18 +63,18 @@ export function SubjectTable() {
     trpc.subject.delete.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.classroom.subjects.pathFilter(),
+          trpc.classroom.subjects.pathFilter()
         );
         toast.success(t("deleted_successfully"), { id: 0 });
       },
       onError: (err) => {
         toast.error(err.message, { id: 0 });
       },
-    }),
+    })
   );
 
   return (
-    <div className="px-4">
+    <div className="px-4 py-2">
       <div className="bg-background overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
@@ -99,13 +99,7 @@ export function SubjectTable() {
             {subjects.map((subject, index) => (
               <TableRow key={`subject-${index}`}>
                 <TableCell>
-                  <Link
-                    href={
-                      routes.classrooms.subjects(`${subject.classroomId}`) +
-                      `/${subject.id}`
-                    }
-                    className="flex flex-row items-center space-x-1 hover:text-blue-600 hover:underline"
-                  >
+                  <div className="flex flex-row items-center space-x-1">
                     <div
                       className="flex h-4 w-4 rounded-full"
                       style={{
@@ -116,7 +110,7 @@ export function SubjectTable() {
                       {subject.course.shortName.toUpperCase()} -{" "}
                       {subject.course.name}
                     </div>
-                  </Link>
+                  </div>
                 </TableCell>
                 <TableCell className="text-muted-foreground">
                   {session.user?.profile == "staff" ? (
