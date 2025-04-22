@@ -350,6 +350,11 @@ export const policies: {
     resource: "subscription",
     action: PermissionAction.Update,
   },
+  {
+    title: "communications",
+    resource: "communication",
+    action: PermissionAction.Create,
+  },
 ];
 
 export const menuPolicies: {

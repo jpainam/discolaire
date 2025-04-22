@@ -24,12 +24,15 @@ import {
   Printer,
   Proportions,
   Receipt,
+  SendIcon,
   TableProperties,
   Users,
 } from "lucide-react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
 import { SidebarLogo } from "../sidebar-logo";
 export function ClassroomSidebar({
   ...props
@@ -113,6 +116,17 @@ export function ClassroomSidebar({
       },
     ],
   };
+  const canSendCommunication = useCheckPermission(
+    "communication",
+    PermissionAction.CREATE
+  );
+  if (canSendCommunication) {
+    data.information.push({
+      name: "communications",
+      url: `/classrooms/${params.id}/communications`,
+      icon: SendIcon,
+    });
+  }
 
   const { t } = useLocale();
   const pathname = usePathname();
