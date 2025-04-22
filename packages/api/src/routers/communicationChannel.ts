@@ -5,6 +5,9 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 export const communicationChannelRouter = createTRPCRouter({
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.communicationChannel.findMany({
+      include: {
+        lastAccessedBy: true,
+      },
       where: {
         schoolId: ctx.schoolId,
         schoolYearId: ctx.schoolYearId,
@@ -14,95 +17,54 @@ export const communicationChannelRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
-        title: z.string().min(1),
+        name: z.string().min(1),
+        description: z.string().optional(),
+        classroomId: z.string(),
+        type: z.enum(["WHATSAPP", "SMS", "EMAIL", "TELEGRAM", "OTHER"]),
         url: z.string().url(),
       }),
     )
     .mutation(({ ctx, input }) => {
-      return ctx.db.shortcut.upsert({
-        where: {
-          userId_url_schoolId: {
-            url: input.url,
-            userId: ctx.session.user.id,
-            schoolId: ctx.schoolId,
-          },
-        },
-        update: {
-          title: input.title,
+      return ctx.db.communicationChannel.create({
+        data: {
+          name: input.name,
+          description: input.description,
+          type: input.type,
+          classroomId: input.classroomId,
           url: input.url,
-        },
-        create: {
-          title: input.title,
-          url: input.url,
-          userId: ctx.session.user.id,
           schoolId: ctx.schoolId,
+          schoolYearId: ctx.schoolYearId,
         },
       });
     }),
   update: protectedProcedure
     .input(
       z.object({
-        title: z.string().min(1),
+        id: z.string(),
+        name: z.string().min(1),
+        description: z.string().optional(),
+        type: z.enum(["WHATSAPP", "SMS", "EMAIL", "TELEGRAM", "OTHER"]),
         url: z.string().url(),
-        id: z.coerce.number(),
       }),
     )
     .mutation(({ ctx, input }) => {
-      return ctx.db.shortcut.update({
-        data: {
-          title: input.title,
-          url: input.url,
-        },
+      return ctx.db.communicationChannel.update({
         where: {
           id: input.id,
-          userId: ctx.session.user.id,
-          schoolId: ctx.schoolId,
+        },
+        data: {
+          name: input.name,
+          description: input.description,
+          type: input.type,
+          url: input.url,
         },
       });
     }),
-  delete: protectedProcedure
-    .input(z.coerce.number())
-    .mutation(({ ctx, input }) => {
-      return ctx.db.shortcut.delete({
-        where: {
-          id: input,
-          userId: ctx.session.user.id,
-          schoolId: ctx.schoolId,
-        },
-      });
-    }),
-  search: protectedProcedure
-    .input(
-      z.object({
-        query: z.string().default(""),
-        limit: z.number().int().optional().default(10),
-      }),
-    )
-    .query(({ ctx, input }) => {
-      const qq = `${input.query.trim()}%`;
-      return ctx.db.shortcut.findMany({
-        take: input.limit,
-        where: {
-          userId: ctx.session.user.id,
-          schoolId: ctx.schoolId,
-          OR: [
-            {
-              title: {
-                startsWith: qq,
-                mode: "insensitive",
-              },
-            },
-            {
-              url: {
-                startsWith: qq,
-                mode: "insensitive",
-              },
-            },
-          ],
-        },
-        orderBy: {
-          updatedAt: "desc",
-        },
-      });
-    }),
+  delete: protectedProcedure.input(z.string()).mutation(({ ctx, input }) => {
+    return ctx.db.communicationChannel.delete({
+      where: {
+        id: input,
+      },
+    });
+  }),
 });

@@ -1,10 +1,9 @@
 "use client";
 
-import type React from "react";
-
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -12,108 +11,46 @@ import {
   CardTitle,
 } from "@repo/ui/components/card";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@repo/ui/components/dialog";
-import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@repo/ui/components/select";
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { t } from "i18next";
 import {
   BellIcon as BrandTelegram,
   ExternalLink,
   Mail,
   MessageCircle,
   MessageSquare,
+  MoreVertical,
+  Pencil,
   Phone,
-  Plus,
+  Trash,
 } from "lucide-react";
-import { useState } from "react";
-
-interface Channel {
-  id: string;
-  name: string;
-  type: "whatsapp" | "sms" | "email" | "telegram" | "other";
-  icon: React.ReactNode;
-  url: string;
-  unreadCount: number;
-  lastMessage?: string;
-  lastMessageTime?: string;
-}
-
+import { toast } from "sonner";
+import { useModal } from "~/hooks/use-modal";
+import { useConfirm } from "~/providers/confirm-dialog";
+import { useTRPC } from "~/trpc/react";
+import { CreateEditCommunicationChannel } from "./CreateEditCommunicationChannel";
 export function CommunicationChannelList() {
-  const [channels, setChannels] = useState<Channel[]>([
-    {
-      id: "1",
-      name: "Marketing Team",
-      type: "whatsapp",
-      icon: <MessageSquare className="h-5 w-5 text-green-500" />,
-      url: "https://web.whatsapp.com/",
-      unreadCount: 3,
-      lastMessage: "When is the next meeting?",
-      lastMessageTime: "10:30 AM",
-    },
-    {
-      id: "2",
-      name: "Customer Support",
-      type: "sms",
-      icon: <Phone className="h-5 w-5 text-blue-500" />,
-      url: "https://messages.google.com/",
-      unreadCount: 0,
-      lastMessage: "Issue resolved. Thank you!",
-      lastMessageTime: "Yesterday",
-    },
-    {
-      id: "3",
-      name: "Project Updates",
-      type: "email",
-      icon: <Mail className="h-5 w-5 text-purple-500" />,
-      url: "https://mail.google.com/",
-      unreadCount: 5,
-      lastMessage: "New design files attached",
-      lastMessageTime: "2 days ago",
-    },
-  ]);
-
-  const [newChannelName, setNewChannelName] = useState("");
-  const [newChannelType, setNewChannelType] =
-    useState<Channel["type"]>("whatsapp");
-  const [newChannelUrl, setNewChannelUrl] = useState("");
-  const [isAddChannelOpen, setIsAddChannelOpen] = useState(false);
-
-  const handleAddChannel = () => {
-    if (!newChannelName.trim() || !newChannelUrl.trim()) return;
-
-    const newChannel: Channel = {
-      id: `${channels.length + 1}`,
-      name: newChannelName,
-      type: newChannelType,
-      icon: getChannelIcon(newChannelType),
-      url: newChannelUrl,
-      unreadCount: 0,
-    };
-
-    setChannels([...channels, newChannel]);
-    setNewChannelName("");
-    setNewChannelType("whatsapp");
-    setNewChannelUrl("");
-    setIsAddChannelOpen(false);
-  };
+  const trpc = useTRPC();
+  const { data: channels } = useSuspenseQuery(
+    trpc.communicationChannel.all.queryOptions()
+  );
 
   const handleChannelClick = (url: string) => {
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
-  const getChannelIcon = (type: Channel["type"]) => {
-    switch (type) {
+  const getChannelIcon = (type: string) => {
+    switch (type.toLowerCase()) {
       case "whatsapp":
         return <MessageSquare className="h-5 w-5 text-green-500" />;
       case "sms":
@@ -126,52 +63,101 @@ export function CommunicationChannelList() {
         return <MessageCircle className="h-5 w-5 text-gray-500" />;
     }
   };
+  const queryClient = useQueryClient();
+  const deleteCommunicationChannel = useMutation(
+    trpc.communicationChannel.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.communicationChannel.pathFilter()
+        );
+        toast.success(t("success"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
+  const { openModal } = useModal();
+  const confirm = useConfirm();
   return (
-    <div>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Your Channels</h2>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {channels.map((channel) => (
-          <Card
-            key={channel.id}
-            className="cursor-pointer hover:bg-accent/50 transition-colors"
-            onClick={() => handleChannelClick(channel.url)}
-          >
-            <CardHeader className="pb-2">
-              <div className="flex justify-between items-start">
-                <div className="flex items-center gap-2">
-                  {channel.icon}
-                  <CardTitle>{channel.name}</CardTitle>
-                </div>
-                {channel.unreadCount > 0 && (
-                  <div className="bg-primary text-primary-foreground text-xs rounded-full h-5 min-w-5 flex items-center justify-center px-1">
-                    {channel.unreadCount}
-                  </div>
-                )}
-              </div>
-              <CardDescription className="flex items-center gap-1 text-xs">
-                <ExternalLink className="h-3 w-3" />
-                <span className="truncate">{channel.url}</span>
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {channel.lastMessage && (
-                <p className="text-sm truncate">{channel.lastMessage}</p>
-              )}
-            </CardContent>
-            {channel.lastMessageTime && (
-              <CardFooter className="pt-0">
-                <p className="text-xs text-muted-foreground">
-                  {channel.lastMessageTime}
-                </p>
-              </CardFooter>
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 px-4">
+      {channels.map((channel) => (
+        <Card key={channel.id}>
+          <CardHeader>
+            <div
+              onClick={() => handleChannelClick(channel.url)}
+              className="cursor-pointer flex items-center gap-2"
+            >
+              {getChannelIcon(channel.type)}
+              <CardTitle>{channel.name}</CardTitle>
+            </div>
+            <CardDescription
+              onClick={() => handleChannelClick(channel.url)}
+              className="cursor-pointer flex items-center gap-1 text-xs"
+            >
+              <ExternalLink className="h-3 w-3" />
+              <span className="truncate">{channel.url}</span>
+            </CardDescription>
+            <CardAction>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant={"ghost"} size={"sm"}>
+                    <MoreVertical className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      openModal({
+                        title: t("communications"),
+                        description: t("edit"),
+                        view: (
+                          <CreateEditCommunicationChannel channel={channel} />
+                        ),
+                      });
+                    }}
+                  >
+                    <Pencil />
+                    {t("edit")}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onSelect={async () => {
+                      const isConfirmed = await confirm({
+                        title: t("delete"),
+                        description: t("delete_confirmation"),
+                      });
+                      if (isConfirmed) {
+                        toast.loading(t("loading"), { id: 0 });
+                        deleteCommunicationChannel.mutate(channel.id);
+                      }
+                    }}
+                    variant="destructive"
+                  >
+                    <Trash />
+                    {t("delete")}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </CardAction>
+          </CardHeader>
+          <CardContent>
+            {channel.lastAccessedAt && (
+              <p className="text-sm truncate">
+                {channel.lastAccessedAt.toISOString()}
+              </p>
             )}
-          </Card>
-        ))}
-      </div>
+          </CardContent>
+          {channel.lastAccessedById && (
+            <CardFooter className="pt-0">
+              <p className="text-xs text-muted-foreground">
+                {channel.lastAccessedBy?.name}
+              </p>
+            </CardFooter>
+          )}
+        </Card>
+      ))}
     </div>
   );
 }

@@ -19,34 +19,91 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
+import { Textarea } from "@repo/ui/components/textarea";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
+import { useTRPC } from "~/trpc/react";
 
 const schema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
-  type: z.enum(["whatsapp", "sms", "email", "telegram", "other"]),
+  type: z.enum(["WHATSAPP", "SMS", "EMAIL", "TELEGRAM", "OTHER"]),
   url: z.string().url(),
 });
 export function CreateEditCommunicationChannel({
   channel,
 }: {
-  channel: RouterOutputs["communicationChannel"]["all"][number];
+  channel?: RouterOutputs["communicationChannel"]["all"][number];
 }) {
+  const params = useParams<{ id: string }>();
   const form = useForm({
     resolver: zodResolver(schema),
+    defaultValues: {
+      name: channel?.name ?? "",
+      description: channel?.description ?? "",
+      type: channel?.type ?? "WHATSAPP",
+      url: channel?.url ?? "",
+    },
   });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const createCommunicationChannel = useMutation(
+    trpc.communicationChannel.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.communicationChannel.pathFilter(),
+        );
+        toast.success(t("success"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
+  const { closeModal } = useModal();
+  const updateCommunicationChannel = useMutation(
+    trpc.communicationChannel.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.communicationChannel.pathFilter(),
+        );
+        toast.success(t("success"), { id: 0 });
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
   const handleSubmit = (data: z.infer<typeof schema>) => {
-    console.log(data);
+    toast.loading(t("Processing..."), { id: 0 });
+    const values = {
+      name: data.name,
+      description: data.description,
+      type: data.type,
+      url: data.url,
+    };
+    if (channel) {
+      updateCommunicationChannel.mutate({ ...values, id: channel.id });
+    } else {
+      createCommunicationChannel.mutate({
+        ...values,
+        classroomId: params.id,
+      });
+    }
   };
   const { t } = useLocale();
-  const { closeModal } = useModal();
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <div className="gap-6">
+        <div className="flex flex-col gap-6">
           <FormField
             control={form.control}
             name="name"
@@ -66,18 +123,18 @@ export function CreateEditCommunicationChannel({
             name="type"
             render={({ field }) => (
               <FormItem>
-                <FormLabel></FormLabel>
+                <FormLabel>{t("type")}</FormLabel>
                 <FormControl>
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select channel type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                      <SelectItem value="sms">SMS</SelectItem>
-                      <SelectItem value="email">Email</SelectItem>
-                      <SelectItem value="telegram">Telegram</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      <SelectItem value="WHATSAPP">WhatsApp</SelectItem>
+                      <SelectItem value="SMS">SMS</SelectItem>
+                      <SelectItem value="EMAIL">Email</SelectItem>
+                      <SelectItem value="TELEGRAM">Telegram</SelectItem>
+                      <SelectItem value="OTHER">Other</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormControl>
@@ -92,9 +149,22 @@ export function CreateEditCommunicationChannel({
               <FormItem>
                 <FormLabel>URL</FormLabel>
                 <FormControl>
-                  <Input placeholder="shadcn" {...field} />
+                  <Input {...field} />
                 </FormControl>
 
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("description")}</FormLabel>
+                <FormControl>
+                  <Textarea className="resize-none" {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -109,7 +179,14 @@ export function CreateEditCommunicationChannel({
             >
               {t("cancel")}
             </Button>
-            <Button type="submit" size={"sm"}>
+            <Button
+              isLoading={
+                updateCommunicationChannel.isPending ||
+                createCommunicationChannel.isPending
+              }
+              type="submit"
+              size={"sm"}
+            >
               {t("submit")}
             </Button>
           </div>
