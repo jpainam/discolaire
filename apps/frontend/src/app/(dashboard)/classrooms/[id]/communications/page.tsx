@@ -1,9 +1,7 @@
-import { getServerTranslations } from "~/i18n/server";
 import { CommunicationChannelList } from "./CommunicationChannelList";
 import { CommunicationHeader } from "./CommunicationHeader";
 
-export default async function Page() {
-  const { t } = await getServerTranslations();
+export default function Page() {
   return (
     <div className="flex flex-col gap-4">
       <CommunicationHeader />
