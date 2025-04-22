@@ -131,68 +131,6 @@ export function CommunicationChannelList() {
     <div>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Your Channels</h2>
-        <Dialog open={isAddChannelOpen} onOpenChange={setIsAddChannelOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Channel
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add New Channel</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="channel-name">Channel Name</Label>
-                <Input
-                  id="channel-name"
-                  placeholder="Enter channel name"
-                  value={newChannelName}
-                  onChange={(e) => setNewChannelName(e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="channel-type">Channel Type</Label>
-                <Select
-                  value={newChannelType}
-                  onValueChange={(value) =>
-                    setNewChannelType(value as Channel["type"])
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select channel type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                    <SelectItem value="sms">SMS</SelectItem>
-                    <SelectItem value="email">Email</SelectItem>
-                    <SelectItem value="telegram">Telegram</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="channel-url">Channel URL</Label>
-                <Input
-                  id="channel-url"
-                  placeholder="https://example.com"
-                  value={newChannelUrl}
-                  onChange={(e) => setNewChannelUrl(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="flex justify-end gap-2">
-              <Button
-                variant="outline"
-                onClick={() => setIsAddChannelOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button onClick={handleAddChannel}>Add Channel</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

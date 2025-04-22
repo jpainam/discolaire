@@ -12,6 +12,7 @@ import { classroomRouter } from "./routers/classroom";
 import { classroomCycleRouter } from "./routers/classroomCycle";
 import { classroomLevelRouter } from "./routers/classroomLevel";
 import { classroomSectionRouter } from "./routers/classroomSection";
+import { communicationChannelRouter } from "./routers/communicationChannel";
 import { consigneRouter } from "./routers/consigne";
 import { contactRouter } from "./routers/contact";
 import { convocationRouter } from "./routers/convocation";
@@ -108,6 +109,7 @@ export const appRouter = createTRPCRouter({
   passwordReset: passwordResetRouter,
   studentContact: studentContactRouter,
   calendarEvent: calendarEventRouter,
+  communicationChannel: communicationChannelRouter,
   notificationPreference: notificationPreferenceRouter,
   studentAccount: studentAccountRouter,
   formerSchool: formerShoolRouter,
