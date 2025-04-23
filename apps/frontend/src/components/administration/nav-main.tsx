@@ -60,7 +60,11 @@ export function NavMain({
               isActive={pathname === "/administration"}
             >
               <Link href={"/administration"}>
-                <Home />
+                <Home
+                  className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
+                  size={22}
+                  aria-hidden="true"
+                />
                 <span>{t("home")}</span>
               </Link>
             </SidebarMenuButton>

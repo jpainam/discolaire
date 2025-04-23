@@ -7,6 +7,7 @@ import {
   Frame,
   ImageUp,
   LifeBuoy,
+  PrinterIcon,
   Send,
 } from "lucide-react";
 
@@ -91,10 +92,6 @@ export function AdminSidebar({
             url: "/administration/accounting/groups",
           },
           {
-            title: "reports",
-            url: "/administration/accounting/reports",
-          },
-          {
             title: "settings",
             url: "/administration/accounting/settings",
           },
@@ -119,6 +116,7 @@ export function AdminSidebar({
           },
         ],
       },
+
       {
         title: "settings",
         url: "/administration/settings",
@@ -185,6 +183,11 @@ export function AdminSidebar({
     ],
   };
   const others = [
+    {
+      name: "reports",
+      url: "/administration/reports",
+      icon: PrinterIcon,
+    },
     {
       name: "schoolYear",
       url: "/administration/school-years",

@@ -21,7 +21,6 @@ import {
   CircleDollarSign,
   CreditCard,
   FileText,
-  ImageIcon,
   KeySquare,
   LineChart,
   Logs,
@@ -57,11 +56,11 @@ export function StudentSidebar({
         icon: CreditCard,
         url: `/students/${params.id}/id-card`,
       },
-      {
-        name: "photos",
-        icon: ImageIcon,
-        url: `/students/${params.id}/photos`,
-      },
+      // {
+      //   name: "photos",
+      //   icon: ImageIcon,
+      //   url: `/students/${params.id}/photos`,
+      // },
 
       {
         name: "grades",

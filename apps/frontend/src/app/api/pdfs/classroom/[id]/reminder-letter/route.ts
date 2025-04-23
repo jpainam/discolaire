@@ -10,6 +10,7 @@ import { sumBy } from "lodash";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { caller } from "~/trpc/server";
+import { getFullName } from "~/utils";
 
 const querySchema = z.object({
   ids: z.string().optional(),
@@ -21,7 +22,7 @@ const querySchema = z.object({
 });
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: { id: string } }
 ) {
   const session = await auth();
   if (!session) {
@@ -36,7 +37,7 @@ export async function GET(
   if (!parsedQuery.success) {
     return NextResponse.json(
       { error: parsedQuery.error.format() },
-      { status: 400 },
+      { status: 400 }
     );
   }
   try {
@@ -47,21 +48,21 @@ export async function GET(
     const fees = await caller.classroom.fees(id);
     const amountDue = sumBy(
       fees.filter((fee) => fee.dueDate <= new Date()),
-      "amount",
+      "amount"
     );
 
     let students = await caller.classroom.studentsBalance({ id });
     if (ids) {
       const selectedIds = ids.split(",");
       students = students.filter((stud) =>
-        selectedIds.includes(stud.student.id),
+        selectedIds.includes(stud.student.id)
       );
     }
     const reminders = students
       .filter((stud) => stud.balance - amountDue < 0)
       .map((stud) => {
         return {
-          studentName: stud.student.firstName + " " + stud.student.lastName,
+          studentName: getFullName(stud.student),
           amount: (amountDue - stud.balance).toLocaleString(i18next.language, {
             style: "currency",
             maximumFractionDigits: 0,
@@ -77,7 +78,7 @@ export async function GET(
         dueDate: dueDate,
         reminders: reminders,
         classroom: classroom.name,
-      }),
+      })
     );
 
     //const blob = await new Response(stream).blob();
