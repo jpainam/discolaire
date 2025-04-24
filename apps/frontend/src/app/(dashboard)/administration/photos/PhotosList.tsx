@@ -16,7 +16,6 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { MoreVertical, Pencil, Trash2 } from "lucide-react";
-import Link from "next/link";
 import FolderIcon from "~/components/icons/folder-solid";
 
 import { useSetAtom } from "jotai";
@@ -78,44 +77,59 @@ function PhotoListItem({
 }) {
   const { t } = useLocale();
   return (
-    <Link href={href}>
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            <FolderIcon className="h-7 w-7" />
-          </CardTitle>
-          <CardDescription>{title}</CardDescription>
-          <CardAction>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant={"ghost"} size={"icon"}>
-                  <MoreVertical />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>
-                  <Pencil />
-                  {t("edit")}
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive">
-                  <Trash2 />
-                  {t("delete")}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </CardAction>
-        </CardHeader>
-        {/* <CardContent></CardContent> */}
-        <CardFooter>
-          <ul className="flex list-inside list-disc gap-3.5">
-            <li className="list-none text-sm ">{size}</li>
-            <li className="text-sm ">
-              {totalFiles} {t("files")}
-            </li>
-          </ul>
-        </CardFooter>
-      </Card>
-    </Link>
+    <Card className="gap-2 p-2 ">
+      <CardHeader className="p-2">
+        <CardTitle
+          className="cursor-pointer"
+          onClick={() => {
+            window.open(href);
+          }}
+        >
+          <FolderIcon className="h-7 w-7" />
+        </CardTitle>
+        <CardDescription
+          className="cursor-pointer "
+          onClick={() => {
+            window.open(href, "noopener,noreferrer");
+          }}
+        >
+          {title}
+        </CardDescription>
+        <CardAction>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant={"ghost"} size={"icon"}>
+                <MoreVertical />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>
+                <Pencil />
+                {t("edit")}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem variant="destructive">
+                <Trash2 />
+                {t("delete")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </CardAction>
+      </CardHeader>
+      {/* <CardContent></CardContent> */}
+      <CardFooter
+        className="cursor-pointer px-2"
+        onClick={() => {
+          window.open(href, "noopener,noreferrer");
+        }}
+      >
+        <ul className="flex list-inside list-disc gap-3.5">
+          <li className="list-none text-sm ">{size}</li>
+          <li className="text-sm ">
+            {totalFiles} {t("files")}
+          </li>
+        </ul>
+      </CardFooter>
+    </Card>
   );
 }
