@@ -4,14 +4,14 @@ import { Suspense } from "react";
 import { ErrorFallback } from "~/components/error-fallback";
 import { env } from "~/env";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
-import { ImageGrid } from "./GridImage";
+import { ImageGrid } from "../ImageGrid";
 
 export default function Page() {
   prefetch(
     trpc.photo.listObjects.queryOptions({
       prefix: "student/",
       bucket: env.S3_AVATAR_BUCKET_NAME,
-    }),
+    })
   );
 
   return (
@@ -26,7 +26,7 @@ export default function Page() {
             </div>
           }
         ></Suspense>
-        <ImageGrid bucket={env.S3_AVATAR_BUCKET_NAME} />
+        <ImageGrid bucket={env.S3_AVATAR_BUCKET_NAME} prefix="student/" />
       </ErrorBoundary>
     </HydrateClient>
   );

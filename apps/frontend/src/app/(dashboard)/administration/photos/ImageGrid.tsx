@@ -76,7 +76,7 @@ export function ImageGrid({
       prefix: prefix,
       bucket: bucket,
       startAfter: startAfter,
-    }),
+    })
   );
   const { t } = useLocale();
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
@@ -241,7 +241,9 @@ export function ImageGrid({
           if (!lastImage) return;
           setStartAfter(lastImage.name);
         }}
-      ></Button>
+      >
+        Load more
+      </Button>
     </div>
   );
 }
