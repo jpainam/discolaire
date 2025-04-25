@@ -51,6 +51,7 @@ export async function listS3Objects({
     size: number;
     lastModified: Date | null;
     key: string;
+    mime: string;
     location: string;
     bucket: string;
     prefix: string;
@@ -62,7 +63,7 @@ export async function listS3Objects({
     size: number;
     lastModified: Date | null;
     key: string;
-    mime: string | false;
+    mime: string;
     location: string;
     bucket: string;
     prefix: string;
@@ -75,11 +76,12 @@ export async function listS3Objects({
       startAfter,
     );
     objects.on("data", function (obj) {
+      const m = lookup(obj.name ?? "");
       files.push({
         name: obj.name ?? "",
         etag: obj.etag ?? "",
         size: obj.size,
-        mime: lookup(obj.name ?? "") ?? "application/octet-stream",
+        mime: !m ? "application/octet-stream" : m,
         lastModified: obj.lastModified ? new Date(obj.lastModified) : null,
         key: obj.name ?? "",
         location: `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${bucket}/${obj.name}`,
@@ -109,10 +111,11 @@ export async function listS3Objects({
     const response = await s3client.send(command);
     if (response.Contents) {
       for (const obj of response.Contents) {
+        const m = lookup(obj.Key ?? "");
         files.push({
           name: obj.Key ?? "",
           etag: obj.ETag ?? "",
-          mime: lookup(obj.Key ?? "") ?? "application/octet-stream",
+          mime: !m ? "application/octet-stream" : m,
           size: obj.Size ?? 0,
           lastModified: obj.LastModified ?? new Date(),
           key: obj.Key ?? "",

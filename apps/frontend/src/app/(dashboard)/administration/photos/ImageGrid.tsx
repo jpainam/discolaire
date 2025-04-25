@@ -76,7 +76,7 @@ export function ImageGrid({
       prefix: prefix,
       bucket: bucket,
       startAfter: startAfter,
-    })
+    }),
   );
   const { t } = useLocale();
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
@@ -183,7 +183,7 @@ export function ImageGrid({
                 >
                   {getFilePreview({
                     url: image.location,
-                    type: image.etag,
+                    type: image.mime,
                     name: image.name,
                   })}
                   <Button
@@ -235,6 +235,13 @@ export function ImageGrid({
           <span>{errors[0]}</span>
         </div>
       )}
+      <Button
+        onClick={() => {
+          const lastImage = images[images.length - 1];
+          if (!lastImage) return;
+          setStartAfter(lastImage.name);
+        }}
+      ></Button>
     </div>
   );
 }
