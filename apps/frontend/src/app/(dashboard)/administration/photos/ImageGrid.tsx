@@ -182,7 +182,7 @@ export function ImageGrid({
                   className="bg-background relative flex flex-col rounded-md border"
                 >
                   {getFilePreview({
-                    url: image.location,
+                    url: `/api/download/avatars/${image.key}`,
                     type: image.mime,
                     name: image.name,
                   })}

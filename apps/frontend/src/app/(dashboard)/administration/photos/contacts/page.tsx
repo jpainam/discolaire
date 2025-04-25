@@ -11,7 +11,7 @@ export default function Page() {
     trpc.photo.listObjects.queryOptions({
       prefix: "contact/",
       bucket: env.S3_AVATAR_BUCKET_NAME,
-    })
+    }),
   );
 
   return (
