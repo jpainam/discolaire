@@ -317,6 +317,9 @@ importers:
       lucide-react:
         specifier: 0.501.0
         version: 0.501.0(react@19.1.0)
+      mime-types:
+        specifier: ^3.0.1
+        version: 3.0.1
       minio:
         specifier: ^8.0.5
         version: 8.0.5
@@ -420,6 +423,9 @@ importers:
       '@types/json-logic-js':
         specifier: ^2.0.8
         version: 2.0.8
+      '@types/mime-types':
+        specifier: ^2.1.4
+        version: 2.1.4
       '@types/node':
         specifier: 'catalog:'
         version: 22.14.1
@@ -704,6 +710,9 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
+      mime-types:
+        specifier: ^3.0.1
+        version: 3.0.1
       next:
         specifier: ^15.3.1
         version: 15.3.1(@babel/core@7.24.5)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -732,6 +741,9 @@ importers:
       '@types/lodash':
         specifier: ^4.17.16
         version: 4.17.16
+      '@types/mime-types':
+        specifier: ^2.1.4
+        version: 2.1.4
       '@types/uuid':
         specifier: ^10.0.0
         version: 10.0.0
@@ -4772,6 +4784,9 @@ packages:
 
   '@types/mdurl@2.0.0':
     resolution: {integrity: sha512-RGdgjQUZba5p6QEFAVx2OGb8rQDL/cPRG7GiedRzMcJ1tYnUANBncjbSB1NRGwbvjcPeikRABz2nshyPk1bhWg==}
+
+  '@types/mime-types@2.1.4':
+    resolution: {integrity: sha512-lfU4b34HOri+kAY5UheuFMWPDOI+OPceBSHZKp69gEyTL/mmJ4cnU6Y/rlme3UL3GyOn6Y42hyIEw0/q8sWx5w==}
 
   '@types/minimatch@5.1.2':
     resolution: {integrity: sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==}
@@ -13240,6 +13255,8 @@ snapshots:
       '@types/unist': 3.0.3
 
   '@types/mdurl@2.0.0': {}
+
+  '@types/mime-types@2.1.4': {}
 
   '@types/minimatch@5.1.2': {}
 

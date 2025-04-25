@@ -1,4 +1,5 @@
 import { ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3";
+import { lookup } from "mime-types";
 import * as Minio from "minio";
 
 import { env } from "../env";
@@ -61,6 +62,7 @@ export async function listS3Objects({
     size: number;
     lastModified: Date | null;
     key: string;
+    mime: string | false;
     location: string;
     bucket: string;
     prefix: string;
@@ -77,6 +79,7 @@ export async function listS3Objects({
         name: obj.name ?? "",
         etag: obj.etag ?? "",
         size: obj.size,
+        mime: lookup(obj.name ?? "") ?? "application/octet-stream",
         lastModified: obj.lastModified ? new Date(obj.lastModified) : null,
         key: obj.name ?? "",
         location: `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${bucket}/${obj.name}`,
@@ -109,6 +112,7 @@ export async function listS3Objects({
         files.push({
           name: obj.Key ?? "",
           etag: obj.ETag ?? "",
+          mime: lookup(obj.Key ?? "") ?? "application/octet-stream",
           size: obj.Size ?? 0,
           lastModified: obj.LastModified ?? new Date(),
           key: obj.Key ?? "",
