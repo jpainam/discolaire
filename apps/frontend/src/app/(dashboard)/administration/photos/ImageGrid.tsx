@@ -76,7 +76,7 @@ export function ImageGrid({
       prefix: prefix,
       bucket: bucket,
       startAfter: startAfter,
-    }),
+    })
   );
   const { t } = useLocale();
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
@@ -131,11 +131,17 @@ export function ImageGrid({
     multiple: true,
     maxFiles,
     maxSize,
-    //initialFiles,
+    initialFiles: images.map((image) => ({
+      name: image.name,
+      size: image.size,
+      type: image.mime,
+      url: image.location,
+      id: image.key,
+    })),
   });
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-4 p-4">
       {/* Drop area */}
       <div
         onDragEnter={handleDragEnter}
@@ -175,7 +181,7 @@ export function ImageGrid({
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-12">
               {images.map((image, index) => (
                 <div
                   key={index}
@@ -235,15 +241,20 @@ export function ImageGrid({
           <span>{errors[0]}</span>
         </div>
       )}
-      <Button
-        onClick={() => {
-          const lastImage = images[images.length - 1];
-          if (!lastImage) return;
-          setStartAfter(lastImage.name);
-        }}
-      >
-        Load more
-      </Button>
+
+      {files.length >= 0 && (
+        <Button
+          size={"sm"}
+          className="w-fit self-center"
+          onClick={() => {
+            const lastImage = images[images.length - 1];
+            if (!lastImage) return;
+            setStartAfter(lastImage.name);
+          }}
+        >
+          {t("Load more")}
+        </Button>
+      )}
     </div>
   );
 }
