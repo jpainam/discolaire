@@ -377,7 +377,9 @@ export function StudentHeader() {
               </ChangeAvatarButton>
             )}
           </SimpleTooltip>
-          <SuccessProbability studentId={params.id} />
+          <SimpleTooltip content={t("Success Probability")}>
+            <SuccessProbability studentId={params.id} />
+          </SimpleTooltip>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button

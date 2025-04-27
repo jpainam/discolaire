@@ -29,7 +29,7 @@ const flatBadgeVariants = cva(
     defaultVariants: {
       variant: "gray",
     },
-  }
+  },
 );
 
 export interface FlatBadgeProps
