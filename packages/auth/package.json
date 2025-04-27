@@ -18,7 +18,7 @@
     "prettier": "@repo/prettier-config",
     "dependencies": {
         "@repo/db": "workspace:*",
-        "@t3-oss/env-nextjs": "^0.12.0",
+        "@t3-oss/env-nextjs": "^0.13.0",
         "bcryptjs": "^3.0.2",
         "jose": "^6.0.10",
         "jsonwebtoken": "^9.0.2",

@@ -23,8 +23,8 @@
     "@repo/api": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/transactional": "workspace:*",
-    "@t3-oss/env-nextjs": "^0.12.0",
-    "bullmq": "^5.49.1",
+    "@t3-oss/env-nextjs": "^0.13.0",
+    "bullmq": "^5.51.1",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "dotenv": "^16.5.0",
@@ -38,7 +38,7 @@
     "react": "catalog:",
     "react-dom": "catalog:",
     "rehype-parse": "^9.0.1",
-    "resend": "^4.3.0",
+    "resend": "^4.4.1",
     "unified": "^11.0.5",
     "zod": "catalog:"
   },
@@ -47,7 +47,7 @@
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@swc-node/register": "^1.10.10",
-    "@swc/core": "^1.11.21",
+    "@swc/core": "^1.11.22",
     "@tailwindcss/postcss": "^4.1.4",
     "@types/json-logic-js": "^2.0.8",
     "@types/node": "catalog:",
@@ -64,6 +64,6 @@
     "typescript": "catalog:"
   },
   "engines": {
-    "node": ">=22.14.0"
+    "node": ">=22.15.0"
   }
 }
