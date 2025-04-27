@@ -134,3 +134,22 @@ https://github.com/list-jonas/shadcn-ui-big-calendar/blob/main/package.json
 https://www.index-education.com/fr/pronote-info191-demo-des-espaces-web-et-mobile.php
 
 className="resize-none" for textarea
+
+```
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base"],
+  "schedule": ["before 7am on the first day of the month"],
+  "ignoreDeps": ["postgres"],
+  "rangeStrategy": "update-lockfile",
+  "packageRules": [
+    {
+      "description": "Group minor and patch dependency updates",
+      "matchPackagePatterns": ["*"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch"
+    }
+  ]
+}
+```

@@ -2,16 +2,6 @@
 "use client";
 
 import {
-  Bell,
-  Computer,
-  DollarSignIcon,
-  LogOut,
-  MoreVerticalIcon,
-  Settings,
-  User,
-} from "lucide-react";
-
-import {
   Avatar,
   AvatarFallback,
   AvatarImage,
@@ -31,6 +21,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+import { IconBell, IconCreditCard, IconUserCircle } from "@tabler/icons-react";
+import { Computer, LogOut, MoreVerticalIcon, Settings } from "lucide-react";
 import { useLocale } from "~/i18n";
 //import { signinout } from "~/app/auth/login/signin";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
@@ -148,7 +140,7 @@ export function UserNav({ className }: { className?: string }) {
               if (user.id) router.push(routes.users.details(user.id));
             }}
           >
-            <User className="h-4 w-4" />
+            <IconUserCircle className="h-4 w-4" />
             <span>{t("profile")}</span>
           </DropdownMenuItem>
 
@@ -163,7 +155,7 @@ export function UserNav({ className }: { className?: string }) {
           <DropdownMenuItem
             onSelect={() => router.push(`/users/${user.id}/subscriptions`)}
           >
-            <DollarSignIcon />
+            <IconCreditCard />
             {t("subscriptions")}
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -177,7 +169,7 @@ export function UserNav({ className }: { className?: string }) {
           <DropdownMenuItem
             onSelect={() => router.push(`/users/${user.id}/notifications`)}
           >
-            <Bell />
+            <IconBell />
             {t("notifications")}
           </DropdownMenuItem>
         </DropdownMenuGroup>
