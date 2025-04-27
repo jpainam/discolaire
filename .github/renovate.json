@@ -7,6 +7,9 @@
   "schedule": [
     "every weekend"
   ],
+  "ignoreDeps": [
+    "@tanstack/react-query"
+  ],
   "packageRules": [
     {
       "matchPackagePatterns": [
