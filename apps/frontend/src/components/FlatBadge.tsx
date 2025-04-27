@@ -6,7 +6,7 @@ import { cn } from "@repo/ui/lib/utils";
 
 //border border-red-500 bg-red-100 dark:bg-red-900/20 text-red-600 text-xs rounded-full px-2 py-0.5 mt-4
 const flatBadgeVariants = cva(
-  "inline-flex items-center rounded-md border px-2 py-1 text-xs",
+  "focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-md border px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none [&>svg]:size-3",
   {
     variants: {
       variant: {
@@ -29,7 +29,7 @@ const flatBadgeVariants = cva(
     defaultVariants: {
       variant: "gray",
     },
-  },
+  }
 );
 
 export interface FlatBadgeProps

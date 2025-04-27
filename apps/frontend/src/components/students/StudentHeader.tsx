@@ -43,7 +43,6 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { Separator } from "@repo/ui/components/separator";
 import FlatBadge from "~/components/FlatBadge";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
@@ -78,12 +77,13 @@ import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { ChangeAvatarButton } from "../users/ChangeAvatarButton";
 import { CreateEditUser } from "../users/CreateEditUser";
+import { SuccessProbability } from "./SuccessProbability";
 
 export function StudentHeader() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: student } = useSuspenseQuery(
-    trpc.student.get.queryOptions(params.id),
+    trpc.student.get.queryOptions(params.id)
   );
   const router = useRouter();
   const { t } = useLocale();
@@ -92,7 +92,7 @@ export function StudentHeader() {
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
 
@@ -117,7 +117,7 @@ export function StudentHeader() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const { openModal } = useModal();
@@ -134,7 +134,7 @@ export function StudentHeader() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const changeStudentStatus = useCallback(
@@ -145,7 +145,7 @@ export function StudentHeader() {
         status,
       });
     },
-    [t, studentStatusMutation, student.id],
+    [t, studentStatusMutation, student.id]
   );
 
   const navigateToStudent = (id: string) => {
@@ -160,7 +160,7 @@ export function StudentHeader() {
 
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditStudent = useCheckPermission("student", PermissionAction.UPDATE);
 
@@ -172,7 +172,7 @@ export function StudentHeader() {
   const studentsQuery = useQuery(
     trpc.student.search.queryOptions({
       query: search,
-    }),
+    })
   );
 
   const handleDeleteAvatar = async (userId: string) => {
@@ -243,7 +243,7 @@ export function StudentHeader() {
 
         <div className="flex flex-row items-center gap-1">
           <FlatBadge
-            className="hidden md:block text-xs"
+            className="hidden md:block text-xs capitalize"
             variant={
               student.status == StudentStatus.ACTIVE
                 ? "green"
@@ -252,47 +252,37 @@ export function StudentHeader() {
                   : "red"
             }
           >
-            {t(`${student.status}`)}
+            {t(`${student.status.toLowerCase()}`)}
           </FlatBadge>
 
           {canEditStudent && (
-            <>
-              <Separator
-                orientation="vertical"
-                className="data-[orientation=vertical]:h-4"
-              />
-              <Button
-                disabled={!canEditStudent}
-                size={"icon"}
-                className="size-8"
-                onClick={() => {
-                  router.push(routes.students.edit(student.id));
-                }}
-                aria-label={t("edit")}
-                variant="ghost"
-              >
-                <Pencil className="h-4 w-4" />
-              </Button>
-            </>
+            <Button
+              disabled={!canEditStudent}
+              size={"icon"}
+              className="size-7"
+              onClick={() => {
+                router.push(routes.students.edit(student.id));
+              }}
+              aria-label={t("edit")}
+              variant="ghost"
+            >
+              <Pencil className="h-3 w-3" />
+            </Button>
           )}
-          <Separator
-            orientation="vertical"
-            className="data-[orientation=vertical]:h-4"
-          />
           <SimpleTooltip content="Notification reçus">
             <Button
-              className="size-8"
+              className="size-7"
               size={"icon"}
               aria-label="Notification"
               variant="ghost"
             >
-              <BellRing className="h-4 w-4" />
+              <BellRing className="h-3 w-3" />
             </Button>
           </SimpleTooltip>
           {student.userId && (
             <SimpleTooltip content={t("user")}>
               <Button
-                className="size-8"
+                className="size-7"
                 onClick={() => {
                   router.push(`/users/${student.userId}`);
                 }}
@@ -300,88 +290,68 @@ export function StudentHeader() {
                 aria-label="user"
                 variant="ghost"
               >
-                <UserIcon className="h-4 w-4" />
+                <UserIcon className="h-3 w-3" />
               </Button>
             </SimpleTooltip>
           )}
-          <Separator
-            orientation="vertical"
-            className="data-[orientation=vertical]:h-4"
-          />
           <SimpleTooltip content="Dialoguer">
             <Button
               size={"icon"}
-              className="size-8"
+              className="size-7"
               aria-label="Notification"
               variant="ghost"
               onClick={() => {
                 router.push(`${routes.students.notifications(params.id)}`);
               }}
             >
-              <MessageCircleMore className="h-4 w-4" />
+              <MessageCircleMore className="h-3 w-3" />
             </Button>
           </SimpleTooltip>
-          <Separator
-            orientation="vertical"
-            className="data-[orientation=vertical]:h-4"
-          />
           <SimpleTooltip content="Contacts et Responsables">
             <Button
               size={"icon"}
-              className="size-8"
+              className="size-7"
               aria-label="Contacts"
               variant="ghost"
               onClick={() => {
                 router.push(routes.students.contacts(params.id));
               }}
             >
-              <Users className="h-4 w-4" />
+              <Users className="h-3 w-3" />
             </Button>
           </SimpleTooltip>
-          <Separator
-            orientation="vertical"
-            className="data-[orientation=vertical]:h-4"
-          />
+
           <SimpleTooltip content="Impressions">
             <Button
               size={"icon"}
-              className="size-8"
+              className="size-7"
               aria-label="print"
               variant="ghost"
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
-              <Printer className="h-4 w-4" />
+              <Printer className="h-3 w-3" />
             </Button>
           </SimpleTooltip>
-          <Separator
-            orientation="vertical"
-            className="data-[orientation=vertical]:h-4"
-          />
+
           {canCreateStudent && (
-            <>
-              <SimpleTooltip content={t("add")}>
-                <Button
-                  size={"icon"}
-                  aria-label="add"
-                  className="size-8"
-                  variant="ghost"
-                  onClick={() => {
-                    router.push(routes.students.create);
-                  }}
-                >
-                  <PlusIcon className="h-4 w-4" />
-                </Button>
-              </SimpleTooltip>
-              <Separator
-                orientation="vertical"
-                className="data-[orientation=vertical]:h-4"
-              />
-            </>
+            <SimpleTooltip content={t("add")}>
+              <Button
+                size={"icon"}
+                aria-label="add"
+                className="size-7"
+                variant="ghost"
+                onClick={() => {
+                  router.push(routes.students.create);
+                }}
+              >
+                <PlusIcon className="h-3 w-3" />
+              </Button>
+            </SimpleTooltip>
           )}
           <SimpleTooltip
             content={
@@ -394,30 +364,31 @@ export function StudentHeader() {
                   if (student.userId) void handleDeleteAvatar(student.userId);
                 }}
                 variant={"ghost"}
-                className="size-8"
+                className="size-7"
                 size={"icon"}
               >
                 <ImageMinusIcon />
               </Button>
             ) : (
               <ChangeAvatarButton entityId={student.id} entityType="student">
-                <Button size={"icon"} className="size-8" variant={"ghost"}>
+                <Button size={"icon"} className="size-7" variant={"ghost"}>
                   <ImagePlusIcon />
                 </Button>
               </ChangeAvatarButton>
             )}
           </SimpleTooltip>
+          <SuccessProbability studentId={params.id} />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 size={"icon"}
                 variant="ghost"
-                className="size-8"
+                className="size-7"
                 onClick={() => {
                   router.push(routes.students.contacts(params.id));
                 }}
               >
-                <MoreVertical className="h-4 w-4" />
+                <MoreVertical className="h-3 w-3" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -440,7 +411,7 @@ export function StudentHeader() {
                     });
                   }}
                 >
-                  <UserPlus2 />
+                  <UserPlus2 className="h-3 w-3" />
                   {t("create_a_user")}
                 </DropdownMenuItem>
               )}
@@ -467,7 +438,7 @@ export function StudentHeader() {
               )}
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
-                  <ShieldCheck className="mr-2 h-4 w-4" />
+                  <ShieldCheck className="mr-2 h-3 w-3" />
                   <span>{t("status")}</span>
                 </DropdownMenuSubTrigger>
                 <DropdownMenuPortal>
