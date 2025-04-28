@@ -17,6 +17,7 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { cn } from "@repo/ui/lib/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
@@ -30,13 +31,15 @@ import { LinkStudent } from "./LinkStudent";
 
 export default function StudentContactList({
   contactId,
+  className,
 }: {
   contactId: string;
+  className?: string;
 }) {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const contactStudentsQuery = useQuery(
-    trpc.contact.students.queryOptions(contactId),
+    trpc.contact.students.queryOptions(contactId)
   );
   const contactQuery = useQuery(trpc.contact.get.queryOptions(contactId));
 
@@ -55,7 +58,7 @@ export default function StudentContactList({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const dateFormatter = Intl.DateTimeFormat(i18n.language, {
@@ -66,15 +69,20 @@ export default function StudentContactList({
   });
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (
-    <div className="overflow-y-auto px-4 text-sm gap-2 flex flex-col">
+    <div
+      className={cn(
+        "overflow-y-auto px-4 text-sm gap-2 flex flex-col",
+        className
+      )}
+    >
       {contactQuery.data && canCreateContact && (
         <Button
           className="w-fit"
@@ -124,7 +132,7 @@ export default function StudentContactList({
                     size="sm"
                     onClick={() => {
                       router.push(
-                        routes.students.details(studentcontact.studentId),
+                        routes.students.details(studentcontact.studentId)
                       );
                     }}
                     variant="outline"

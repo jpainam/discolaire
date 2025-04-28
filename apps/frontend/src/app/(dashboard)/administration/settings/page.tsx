@@ -6,7 +6,7 @@ import { StaffLevelTable } from "./staff-levels/StaffLevelTable";
 
 export default function Page() {
   return (
-    <div className="grid grid-cols-3 gap-4 p-4">
+    <div className="grid lg:grid-cols-3 gap-4 p-4">
       <StudentContactRelationship />
       <div className="flex flex-col gap-4">
         <ClubTable />

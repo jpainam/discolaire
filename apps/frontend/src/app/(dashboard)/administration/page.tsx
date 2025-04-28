@@ -8,7 +8,7 @@ import { QuickStatistics } from "~/components/dashboard/QuickStatistics";
 export default function Page() {
   //const { t } = await getServerTranslations();
   return (
-    <div className="grid grid-cols-2 p-4 flex-col gap-4">
+    <div className="grid md:grid-cols-2 p-4 flex-col gap-4">
       <Suspense
         key={"quick-statistics"}
         fallback={
