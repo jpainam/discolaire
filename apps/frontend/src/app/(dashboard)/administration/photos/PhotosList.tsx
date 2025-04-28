@@ -1,24 +1,15 @@
 "use client";
-import { Button } from "@repo/ui/components/button";
 import {
   Card,
-  CardAction,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { MoreVertical, Pencil, Trash2 } from "lucide-react";
 import FolderIcon from "~/components/icons/folder-solid";
 
 import { useSetAtom } from "jotai";
+import Link from "next/link";
 import { useEffect } from "react";
 import { useLocale } from "~/i18n";
 import { breadcrumbAtom } from "~/lib/atoms";
@@ -39,7 +30,7 @@ export function PhotosList() {
     ]);
   }, [setBreadcrumbs, t]);
   return (
-    <div className="grid grid-flow-col gap-4">
+    <div className="grid lg:grid-cols-3 gap-4">
       <PhotoListItem
         href={`/administration/photos/students`}
         title={t("Student photos")}
@@ -77,59 +68,24 @@ function PhotoListItem({
 }) {
   const { t } = useLocale();
   return (
-    <Card className="gap-2 p-2 ">
-      <CardHeader className="p-2">
-        <CardTitle
-          className="cursor-pointer"
-          onClick={() => {
-            window.open(href);
-          }}
-        >
-          <FolderIcon className="h-7 w-7" />
-        </CardTitle>
-        <CardDescription
-          className="cursor-pointer "
-          onClick={() => {
-            window.open(href, "noopener,noreferrer");
-          }}
-        >
-          {title}
-        </CardDescription>
-        <CardAction>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant={"ghost"} size={"icon"}>
-                <MoreVertical />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>
-                <Pencil />
-                {t("edit")}
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem variant="destructive">
-                <Trash2 />
-                {t("delete")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </CardAction>
-      </CardHeader>
-      {/* <CardContent></CardContent> */}
-      <CardFooter
-        className="cursor-pointer px-2"
-        onClick={() => {
-          window.open(href, "noopener,noreferrer");
-        }}
-      >
-        <ul className="flex list-inside list-disc gap-3.5">
-          <li className="list-none text-sm ">{size}</li>
-          <li className="text-sm ">
-            {totalFiles} {t("files")}
-          </li>
-        </ul>
-      </CardFooter>
-    </Card>
+    <Link href={href}>
+      <Card className="gap-2 p-2 ">
+        <CardHeader className="p-2">
+          <CardTitle>
+            <FolderIcon className="h-7 w-7" />
+          </CardTitle>
+          <CardDescription>{title}</CardDescription>
+        </CardHeader>
+        {/* <CardContent></CardContent> */}
+        <CardFooter className="px-2">
+          <ul className="flex list-inside list-disc gap-3.5">
+            <li className="list-none text-sm ">{size}</li>
+            <li className="text-sm ">
+              {totalFiles} {t("files")}
+            </li>
+          </ul>
+        </CardFooter>
+      </Card>
+    </Link>
   );
 }

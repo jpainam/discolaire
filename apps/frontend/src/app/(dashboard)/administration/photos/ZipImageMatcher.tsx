@@ -47,7 +47,7 @@ interface FileMatchResult {
 export function ZipImageMatcher() {
   const trpc = useTRPC();
   const matchIdsMutation = useMutation(
-    trpc.upload.matchedIds.mutationOptions(),
+    trpc.upload.matchedIds.mutationOptions()
   );
   const [ids, setIds] = useState<string[]>([]);
   const [entityType, setEntityType] = useState<string>("student");
@@ -85,7 +85,7 @@ export function ZipImageMatcher() {
       const imageFileEntries = Object.entries(zip.files)
         .filter(([_, entry]) => !entry.dir)
         .filter(([name]) =>
-          /\.(jpg|jpeg|png|gif|bmp|webp|tiff|svg)$/i.test(name),
+          /\.(jpg|jpeg|png|gif|bmp|webp|tiff|svg)$/i.test(name)
         );
 
       const results: FileMatchResult[] = [];
@@ -101,7 +101,7 @@ export function ZipImageMatcher() {
             matched: false,
           });
           return baseName;
-        }),
+        })
       );
 
       matchIdsMutation.mutate(
@@ -125,7 +125,7 @@ export function ZipImageMatcher() {
           onError: (error) => {
             toast.error(error.message);
           },
-        },
+        }
       );
     } catch (error) {
       console.error("Error processing zip file:", error);
@@ -144,13 +144,13 @@ export function ZipImageMatcher() {
       formData.append(
         `id_${result.matchedId}`,
         result.fileData,
-        result.fileName,
+        result.fileName
       );
     });
 
     formData.append(
       "matchedIds",
-      JSON.stringify(matchedFiles.map((r) => r.matchedId)),
+      JSON.stringify(matchedFiles.map((r) => r.matchedId))
     );
     formData.append("entityType", entityType);
 
@@ -188,10 +188,11 @@ export function ZipImageMatcher() {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Image ID Matcher</CardTitle>
+        <CardTitle>{t("Image ID Matcher")}</CardTitle>
         <CardDescription>
-          Upload a zip file containing images and match them with your list of
-          IDs
+          {t(
+            "Upload a zip file containing images and match them with your list of IDs"
+          )}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -200,9 +201,7 @@ export function ZipImageMatcher() {
 
           <div className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="ids">
-                List of IDs (one per line, or comma/space separated)
-              </Label>
+              <Label htmlFor="ids">{t("Type of IDs")}:</Label>
               <Select
                 onValueChange={(val) => setEntityType(val)}
                 defaultValue="student"
@@ -218,13 +217,13 @@ export function ZipImageMatcher() {
               </Select>
               {ids.length > 0 && (
                 <p className="text-sm text-muted-foreground">
-                  {ids.length} IDs detected
+                  {ids.length} {t("IDs detected")}
                 </p>
               )}
             </div>
 
             <div className="space-y-2">
-              <Label>Upload Zip File</Label>
+              <Label>{t("Upload Zip File")}</Label>
               <div
                 {...getRootProps()}
                 className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
@@ -343,10 +342,11 @@ export function ZipImageMatcher() {
               <div className="flex items-center justify-center h-full">
                 <div className="text-center text-muted-foreground p-8">
                   <FileZip className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <h3 className="text-lg font-medium mb-2">No Results Yet</h3>
-                  <p>
-                    Upload a zip file and click "Match Files with IDs" to see
-                    the results here.
+                  <h3 className="font-medium mb-2">{t("No Results Yet")}</h3>
+                  <p className="text-sm">
+                    {t(
+                      "Upload a zip file and click 'Match Files with IDs' to see the results here."
+                    )}
                   </p>
                 </div>
               </div>
@@ -356,7 +356,7 @@ export function ZipImageMatcher() {
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button size={"sm"} variant="outline" onClick={resetForm}>
-          Reset
+          {t("Reset")}
         </Button>
         <Button
           size={"sm"}
@@ -368,9 +368,7 @@ export function ZipImageMatcher() {
             matchedCount === 0
           }
         >
-          {matchIdsMutation.isPending
-            ? "Submitting..."
-            : "Submit Matched Files"}
+          {t("Submit Matched Files")}
         </Button>
       </CardFooter>
     </Card>
