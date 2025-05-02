@@ -97,7 +97,7 @@ export const lessonRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.coerce.number(),
-        type: z.enum(["current", "previous", "after"]),
+        type: z.enum(["current", "before", "after"]),
       }),
     )
     .mutation(async ({ ctx, input }) => {
