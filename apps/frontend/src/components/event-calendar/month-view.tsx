@@ -37,8 +37,8 @@ import { DefaultStartHour } from "~/components/event-calendar/constants";
 interface MonthViewProps {
   currentDate: Date;
   events: CalendarEvent[];
-  onEventSelect?: (event: CalendarEvent) => void;
-  onEventCreate?: (startTime: Date) => void;
+  onEventSelect: (event: CalendarEvent) => void;
+  onEventCreate: (startTime: Date) => void;
 }
 
 export function MonthView({
@@ -80,7 +80,7 @@ export function MonthView({
 
   const handleEventClick = (event: CalendarEvent, e: React.MouseEvent) => {
     e.stopPropagation();
-    onEventSelect?.(event);
+    onEventSelect(event);
   };
 
   const [isMounted, setIsMounted] = useState(false);
@@ -95,11 +95,11 @@ export function MonthView({
 
   return (
     <div data-slot="month-view" className="contents">
-      <div className="border-border/70 grid grid-cols-7 border-y uppercase">
+      <div className="border-border/70 grid grid-cols-7 border-b">
         {weekdays.map((day) => (
           <div
             key={day}
-            className="text-muted-foreground/70 py-2 text-center text-xs"
+            className="text-muted-foreground/70 py-2 text-center text-sm"
           >
             {day}
           </div>
@@ -145,7 +145,7 @@ export function MonthView({
                     onClick={() => {
                       const startTime = new Date(day);
                       startTime.setHours(DefaultStartHour, 0, 0);
-                      onEventCreate?.(startTime);
+                      onEventCreate(startTime);
                     }}
                   >
                     <div className="group-data-today:bg-primary group-data-today:text-primary-foreground mt-1 inline-flex size-6 items-center justify-center rounded-full text-sm">
@@ -185,7 +185,7 @@ export function MonthView({
                                     <span>
                                       {format(
                                         new Date(event.start),
-                                        "h:mm",
+                                        "h:mm"
                                       )}{" "}
                                     </span>
                                   )}

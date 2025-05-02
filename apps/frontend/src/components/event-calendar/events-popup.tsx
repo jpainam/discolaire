@@ -11,8 +11,8 @@ interface EventsPopupProps {
   date: Date;
   events: CalendarEvent[];
   position: { top: number; left: number };
-  onClose?: () => void;
-  onEventSelect?: (event: CalendarEvent) => void;
+  onClose: () => void;
+  onEventSelect: (event: CalendarEvent) => void;
 }
 
 export function EventsPopup({
@@ -31,7 +31,7 @@ export function EventsPopup({
         popupRef.current &&
         !popupRef.current.contains(event.target as Node)
       ) {
-        onClose?.();
+        onClose();
       }
     };
 
@@ -45,7 +45,7 @@ export function EventsPopup({
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        onClose?.();
+        onClose();
       }
     };
 
@@ -56,8 +56,8 @@ export function EventsPopup({
   }, [onClose]);
 
   const handleEventClick = (event: CalendarEvent) => {
-    onEventSelect?.(event);
-    onClose?.();
+    onEventSelect(event);
+    onClose();
   };
 
   // Adjust position to ensure popup stays within viewport

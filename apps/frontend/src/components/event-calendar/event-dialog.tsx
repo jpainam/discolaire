@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
 
 import { RiCalendarLine, RiDeleteBinLine } from "@remixicon/react";
@@ -31,7 +32,6 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { Textarea } from "@repo/ui/components/textarea";
-import { cn } from "@repo/ui/lib/utils";
 import type { CalendarEvent, EventColor } from "~/components/event-calendar";
 import {
   DefaultEndHour,
@@ -39,13 +39,14 @@ import {
   EndHour,
   StartHour,
 } from "~/components/event-calendar/constants";
+import { cn } from "~/lib/utils";
 
 interface EventDialogProps {
   event: CalendarEvent | null;
   isOpen: boolean;
-  onClose?: () => void;
-  onSave?: (event: CalendarEvent) => void;
-  onDelete?: (eventId: string) => void;
+  onClose: () => void;
+  onSave: (event: CalendarEvent) => void;
+  onDelete: (eventId: string) => void;
 }
 
 export function EventDialog({
@@ -57,13 +58,13 @@ export function EventDialog({
 }: EventDialogProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
+  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [endDate, setEndDate] = useState<Date>(new Date());
   const [startTime, setStartTime] = useState(`${DefaultStartHour}:00`);
   const [endTime, setEndTime] = useState(`${DefaultEndHour}:00`);
   const [allDay, setAllDay] = useState(false);
   const [location, setLocation] = useState("");
-  const [color, setColor] = useState<EventColor>("blue");
+  const [color, setColor] = useState<EventColor>("sky");
   const [error, setError] = useState<string | null>(null);
   const [startDateOpen, setStartDateOpen] = useState(false);
   const [endDateOpen, setEndDateOpen] = useState(false);
@@ -87,7 +88,6 @@ export function EventDialog({
       setEndTime(formatTimeForInput(end));
       setAllDay(event.allDay ?? false);
       setLocation(event.location ?? "");
-      // @ts-expect-error TODO fix
       setColor(event.color ?? "sky");
       setError(null); // Reset error when opening dialog
     } else {
@@ -104,7 +104,7 @@ export function EventDialog({
     setEndTime(`${DefaultEndHour}:00`);
     setAllDay(false);
     setLocation("");
-    setColor("blue");
+    setColor("sky");
     setError(null);
   };
 
@@ -132,8 +132,8 @@ export function EventDialog({
   }, []); // Empty dependency array ensures this only runs once
 
   const handleSave = () => {
-    const start = startDate ? new Date(startDate) : new Date();
-    const end = endDate ? new Date(endDate) : new Date();
+    const start = new Date(startDate);
+    const end = new Date(endDate);
 
     if (!allDay) {
       const [startHours = 0, startMinutes = 0] = startTime
@@ -148,7 +148,7 @@ export function EventDialog({
         endHours > EndHour
       ) {
         setError(
-          `Selected time must be between ${StartHour}:00 and ${EndHour}:00`,
+          `Selected time must be between ${StartHour}:00 and ${EndHour}:00`
         );
         return;
       }
@@ -169,7 +169,7 @@ export function EventDialog({
     // Use generic title if empty
     const eventTitle = title.trim() ? title : "(no title)";
 
-    onSave?.({
+    onSave({
       id: event?.id ?? "",
       title: eventTitle,
       description,
@@ -183,7 +183,7 @@ export function EventDialog({
 
   const handleDelete = () => {
     if (event?.id) {
-      onDelete?.(event.id);
+      onDelete(event.id);
     }
   };
 
@@ -195,10 +195,16 @@ export function EventDialog({
     borderClass: string;
   }[] = [
     {
-      value: "blue",
-      label: "Blue",
-      bgClass: "bg-blue-400 data-[state=checked]:bg-blue-400",
-      borderClass: "border-blue-400 data-[state=checked]:border-blue-400",
+      value: "sky",
+      label: "Sky",
+      bgClass: "bg-sky-400 data-[state=checked]:bg-sky-400",
+      borderClass: "border-sky-400 data-[state=checked]:border-sky-400",
+    },
+    {
+      value: "amber",
+      label: "Amber",
+      bgClass: "bg-amber-400 data-[state=checked]:bg-amber-400",
+      borderClass: "border-amber-400 data-[state=checked]:border-amber-400",
     },
     {
       value: "violet",
@@ -227,7 +233,7 @@ export function EventDialog({
   ];
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose?.()}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{event?.id ? "Edit Event" : "Create Event"}</DialogTitle>
@@ -272,13 +278,13 @@ export function EventDialog({
                     variant={"outline"}
                     className={cn(
                       "group bg-background hover:bg-background border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]",
-                      !startDate && "text-muted-foreground",
+                      !startDate && "text-muted-foreground"
                     )}
                   >
                     <span
                       className={cn(
                         "truncate",
-                        !startDate && "text-muted-foreground",
+                        !startDate && "text-muted-foreground"
                       )}
                     >
                       {startDate ? format(startDate, "PPP") : "Pick a date"}
@@ -293,13 +299,13 @@ export function EventDialog({
                 <PopoverContent className="w-auto p-2" align="start">
                   <Calendar
                     mode="single"
-                    selected={startDate ?? new Date()}
-                    defaultMonth={startDate ?? new Date()}
+                    selected={startDate}
+                    defaultMonth={startDate}
                     onSelect={(date) => {
                       if (date) {
                         setStartDate(date);
                         // If end date is before the new start date, update it to match the start date
-                        if (isBefore(endDate ?? new Date(), date)) {
+                        if (isBefore(endDate, date)) {
                           setEndDate(date);
                         }
                         setError(null);
@@ -340,13 +346,13 @@ export function EventDialog({
                     variant={"outline"}
                     className={cn(
                       "group bg-background hover:bg-background border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]",
-                      !endDate && "text-muted-foreground",
+                      !endDate && "text-muted-foreground"
                     )}
                   >
                     <span
                       className={cn(
                         "truncate",
-                        !endDate && "text-muted-foreground",
+                        !endDate && "text-muted-foreground"
                       )}
                     >
                       {endDate ? format(endDate, "PPP") : "Pick a date"}
@@ -361,9 +367,9 @@ export function EventDialog({
                 <PopoverContent className="w-auto p-2" align="start">
                   <Calendar
                     mode="single"
-                    selected={endDate ?? new Date()}
-                    defaultMonth={endDate ?? new Date()}
-                    disabled={{ before: startDate ?? new Date() }}
+                    selected={endDate}
+                    defaultMonth={endDate}
+                    disabled={{ before: startDate }}
                     onSelect={(date) => {
                       if (date) {
                         setEndDate(date);
@@ -431,7 +437,7 @@ export function EventDialog({
                   className={cn(
                     "size-6 shadow-none",
                     colorOption.bgClass,
-                    colorOption.borderClass,
+                    colorOption.borderClass
                   )}
                 />
               ))}
@@ -442,7 +448,6 @@ export function EventDialog({
           {event?.id && (
             <Button
               variant="outline"
-              className="text-destructive hover:text-destructive"
               size="icon"
               onClick={handleDelete}
               aria-label="Delete event"
