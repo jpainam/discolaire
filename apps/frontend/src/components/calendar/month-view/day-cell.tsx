@@ -10,6 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
+import i18next from "i18next";
 import { getMonthCellEvents } from "~/components/calendar/helpers";
 import type { ICalendarCell, IEvent } from "~/components/calendar/interfaces";
 
@@ -79,11 +80,11 @@ export function DayCell({ cell, events, eventPositions }: IProps) {
 
       {cellEvents.length > MAX_VISIBLE_EVENTS && (
         <Popover>
-          <PopoverTrigger asChild>
+          <PopoverTrigger asChild className="">
             <button>
               <p
                 className={cn(
-                  "h-4.5 px-1.5 text-xs font-semibold text-t-quaternary",
+                  "flex  h-4.5 px-1.5  items-start text-xs font-semibold text-t-quaternary",
                   !currentMonth && "opacity-50"
                 )}
               >
@@ -91,14 +92,24 @@ export function DayCell({ cell, events, eventPositions }: IProps) {
                   +{cellEvents.length - MAX_VISIBLE_EVENTS}
                 </span>
                 <span className="hidden sm:inline">
-                  {" "}
-                  {cellEvents.length - MAX_VISIBLE_EVENTS} more...
+                  + {cellEvents.length - MAX_VISIBLE_EVENTS} more...
                 </span>
               </p>
             </button>
           </PopoverTrigger>
-          <PopoverContent>
-            {Array.from({ length: cellEvents.length }).map((position) => {
+          <PopoverContent
+            className={cn(
+              "flex gap-1 p-2 lg:flex-col lg:gap-2 lg:px-0",
+              !currentMonth && "opacity-50"
+            )}
+          >
+            <div className="text-xs px-2">
+              {date.toLocaleDateString(i18next.language, {
+                weekday: "short",
+                day: "2-digit",
+              })}
+            </div>
+            {Array.from({ length: cellEvents.length }).map((_, position) => {
               const event = cellEvents.find((e) => e.position === position);
               const eventKey = event
                 ? `event-${event.id}-${position}-2`
