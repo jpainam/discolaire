@@ -37,12 +37,12 @@ export function LessonDetails({
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.lesson.byClassroom.pathFilter(),
+          trpc.lesson.byClassroom.pathFilter()
         );
         toast.success(t("deleted_successfully"), { id: 0 });
         closeModal();
       },
-    }),
+    })
   );
   return (
     <div className="grid grid-cols-2 gap-4 text-sm">
@@ -107,16 +107,16 @@ export function LessonDetails({
         onClick={() => {
           const startHours = String(event.startTime.getHours()).padStart(
             2,
-            "0",
+            "0"
           );
           const startMinutes = String(event.startTime.getMinutes()).padStart(
             2,
-            "0",
+            "0"
           );
           const endHours = String(event.endTime.getHours()).padStart(2, "0");
           const endMinutes = String(event.endTime.getMinutes()).padStart(
             2,
-            "0",
+            "0"
           );
 
           closeModal();
@@ -126,6 +126,7 @@ export function LessonDetails({
             view: (
               <CreateEditLesson
                 daysOfWeek={[event.startTime.getDay()]}
+                categoryId={event.categoryId}
                 startTime={`${startHours}:${startMinutes}`}
                 endTime={`${endHours}:${endMinutes}`}
                 subjectId={event.subjectId}

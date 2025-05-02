@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
@@ -53,6 +54,7 @@ export function CreateEditLesson({
   lessonId?: string;
   startTime?: string;
   endTime?: string;
+  categoryId?: string;
   category?: string;
   daysOfWeek?: number[];
   start?: Date;
@@ -64,7 +66,7 @@ export function CreateEditLesson({
     resolver: zodResolver(createEditTimetable),
     defaultValues: {
       startTime: startTime ?? "08:00",
-      categoryId: categoryId ?? "1",
+      categoryId: categoryId ?? "",
       endTime: endTime ?? "09:00",
       subjectId: subjectId ? `${subjectId}` : "",
       daysOfWeek: daysOfWeek ?? [],
@@ -89,7 +91,7 @@ export function CreateEditLesson({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const dayNames = [
     "sunday",
@@ -154,29 +156,35 @@ export function CreateEditLesson({
             )}
           />
           <div className="grid grid-cols-2 gap-x-4">
-            <FormField
-              control={form.control}
-              name="categoryId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("category")}</FormLabel>
-                  <FormControl>
-                    <Select onValueChange={field.onChange}>
-                      <SelectTrigger className="w-1/2">
-                        <SelectValue placeholder="Theme" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">Light</SelectItem>
-                        <SelectItem value="dark">Dark</SelectItem>
-                        <SelectItem value="system">System</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormDescription>desc.</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {categoryQuery.isPending ? (
+              <Skeleton className="h-8" />
+            ) : (
+              <FormField
+                control={form.control}
+                name="categoryId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("category")}</FormLabel>
+                    <FormControl>
+                      <Select onValueChange={field.onChange}>
+                        <SelectTrigger className="w-1/2">
+                          <SelectValue placeholder="Theme" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {categoryQuery.data?.map((category) => (
+                            <SelectItem key={category.id} value={category.id}>
+                              {category.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
           </div>
           <FormField
             control={form.control}
