@@ -67,7 +67,7 @@ export function ClassroomTimetable({
       //   } as IEvent;
       // })}
     >
-      <div className="flex  flex-col gap-4 py-2 px-4">
+      <div className="flex flex-col gap-4 py-2 px-4">
         <ClientContainer />
       </div>
     </CalendarProvider>

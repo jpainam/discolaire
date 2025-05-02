@@ -668,6 +668,7 @@ model School {
     documents          Document[]
     degrees            Degree[]
     relationships      Relationship[]
+    lessonCategories   LessonCategory[]
 }
 
 model FormerSchool {
@@ -706,17 +707,6 @@ model Subject {
     lessons         Lesson[]
 
     @@unique([courseId, teacherId, classroomId])
-}
-
-model Lesson {
-    id        Int      @id @default(autoincrement())
-    startTime DateTime
-    endTime   DateTime
-    subjectId Int
-    schoolId  String
-    subject   Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-
-    @@unique([startTime, endTime, subjectId])
 }
 
 model SubjectGroup {
@@ -769,6 +759,7 @@ model SchoolYear {
     transactions        Transaction[]
     school              School            @relation(fields: [schoolId], references: [id])
     schoolId            String
+    lessonCategories    LessonCategory[]
 }
 
 model Cycle {

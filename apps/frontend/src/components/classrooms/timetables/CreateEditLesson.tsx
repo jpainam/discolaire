@@ -26,7 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { useTRPC } from "~/trpc/react";
@@ -34,6 +34,7 @@ import { useTRPC } from "~/trpc/react";
 const createEditTimetable = z.object({
   startTime: z.string().min(1),
   endTime: z.string().min(1),
+  categoryId: z.string().min(1),
   daysOfWeek: z.array(z.number()).default([]), // 0-6 (Sunday-Saturday)
   subjectId: z.string().min(1),
   repeat: z
@@ -42,6 +43,7 @@ const createEditTimetable = z.object({
 });
 export function CreateEditLesson({
   lessonId,
+  categoryId,
   startTime,
   endTime,
   daysOfWeek,
@@ -51,16 +53,18 @@ export function CreateEditLesson({
   lessonId?: string;
   startTime?: string;
   endTime?: string;
+  category?: string;
   daysOfWeek?: number[];
   start?: Date;
   subjectId?: number;
 }) {
   const params = useParams<{ id: string }>();
+
   const form = useForm({
     resolver: zodResolver(createEditTimetable),
     defaultValues: {
       startTime: startTime ?? "08:00",
-
+      categoryId: categoryId ?? "1",
       endTime: endTime ?? "09:00",
       subjectId: subjectId ? `${subjectId}` : "",
       daysOfWeek: daysOfWeek ?? [],
@@ -68,6 +72,7 @@ export function CreateEditLesson({
     },
   });
   const trpc = useTRPC();
+  const categoryQuery = useQuery(trpc.lesson.categories.queryOptions());
   const queryClient = useQueryClient();
 
   const { t } = useLocale();
@@ -84,7 +89,7 @@ export function CreateEditLesson({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const dayNames = [
     "sunday",
@@ -111,6 +116,7 @@ export function CreateEditLesson({
       endTime: data.endTime,
       subjectId: Number(data.subjectId),
       repeat: data.repeat,
+      categoryId: "1",
       daysOfWeek: data.daysOfWeek.map((day) => Number(day)),
       startDate: start ?? new Date(),
     };
@@ -147,6 +153,31 @@ export function CreateEditLesson({
               </FormItem>
             )}
           />
+          <div className="grid grid-cols-2 gap-x-4">
+            <FormField
+              control={form.control}
+              name="categoryId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("category")}</FormLabel>
+                  <FormControl>
+                    <Select onValueChange={field.onChange}>
+                      <SelectTrigger className="w-1/2">
+                        <SelectValue placeholder="Theme" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="light">Light</SelectItem>
+                        <SelectItem value="dark">Dark</SelectItem>
+                        <SelectItem value="system">System</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormDescription>desc.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <FormField
             control={form.control}
             name="repeat"
