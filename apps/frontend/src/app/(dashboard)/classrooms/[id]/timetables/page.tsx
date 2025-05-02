@@ -140,8 +140,8 @@ export default function Component() {
   const handleEventUpdate = (updatedEvent: CalendarEvent) => {
     setEvents(
       events.map((event) =>
-        event.id === updatedEvent.id ? updatedEvent : event
-      )
+        event.id === updatedEvent.id ? updatedEvent : event,
+      ),
     );
   };
 
