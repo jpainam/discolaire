@@ -94,28 +94,52 @@ export const lessonRouter = createTRPCRouter({
       return events;
     }),
   delete: protectedProcedure
-    .input(z.coerce.number())
+    .input(
+      z.object({
+        id: z.coerce.number(),
+        type: z.enum(["current", "previous", "after"]),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
+      if (input.type === "current") {
+        return ctx.db.lesson.delete({
+          where: {
+            id: input.id,
+          },
+        });
+      }
       const event = await ctx.db.lesson.findUniqueOrThrow({
         where: {
-          id: input,
+          id: input.id,
         },
       });
+
       const schoolYear = await ctx.db.schoolYear.findUnique({
         where: {
           id: ctx.schoolYearId,
         },
       });
       const endDate = schoolYear?.endDate ?? addMonths(new Date(), 9);
+
       const events = await ctx.db.lesson.findMany({
         where: {
           subjectId: event.subjectId,
-          startTime: {
-            gte: event.startTime,
-            lt: endDate,
-          },
+          ...(input.type == "after"
+            ? {
+                startTime: {
+                  gte: event.startTime,
+                  lte: endDate,
+                },
+              }
+            : {
+                startTime: {
+                  gte: schoolYear?.startDate ?? subMonths(new Date(), 9),
+                  lte: event.startTime,
+                },
+              }),
         },
       });
+
       const targetDayOfTheWeek = getDay(event.startTime);
       const matchingEventIds = events
         .filter((evt) => getDay(evt.startTime) === targetDayOfTheWeek)
@@ -129,22 +153,3 @@ export const lessonRouter = createTRPCRouter({
       });
     }),
 });
-
-// function getWeekdayDatesInMonth(currentDate: Date, weekday: number): Date[] {
-//   const startDate = startOfMonth(currentDate);
-//   const endDate = endOfMonth(startDate);
-//   let firstWeekdayDate = startDate;
-//   while (firstWeekdayDate.getDay() !== weekday) {
-//     firstWeekdayDate = addDays(firstWeekdayDate, 1);
-//   }
-
-//   const dates = [];
-//   let current = firstWeekdayDate;
-
-//   while (isBefore(current, endDate) || isEqual(current, endDate)) {
-//     dates.push(current);
-//     current = addDays(current, 7);
-//   }
-
-//   return dates;
-// }
