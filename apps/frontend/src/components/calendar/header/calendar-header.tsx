@@ -30,7 +30,7 @@ export function CalendarHeader({ events }: IProps) {
   const { t } = useLocale();
   const { openModal } = useModal();
   return (
-    <div className="flex flex-col gap-4 border-b p-4 lg:flex-row lg:items-center lg:justify-between">
+    <div className="flex flex-col gap-4 border-b p-1 lg:flex-row lg:items-center lg:justify-between">
       <div className="flex items-center gap-3">
         <TodayButton />
         <DateNavigator events={events} />
@@ -69,7 +69,7 @@ export function CalendarHeader({ events }: IProps) {
                   <ToggleGroupItem
                     value={modeValue}
                     className={cn(
-                      "w-full rounded-none shadow-none text-base flex items-center justify-center gap-2 relative border-none",
+                      "w-full rounded-none shadow-none text-base flex items-center justify-center gap-2 relative border-none"
                       //isSelected && "z-5"
                     )}
                   >

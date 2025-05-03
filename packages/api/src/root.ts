@@ -67,6 +67,7 @@ import { subjectJournalRouter } from "./routers/subjectJournal";
 import { subscriptionRouter } from "./routers/subscription";
 import { termRouter } from "./routers/term";
 import { timetableRouter } from "./routers/timetable";
+import { timetableCategoryRouter } from "./routers/timetableCategory";
 import { transactionRouter } from "./routers/transaction";
 import { uploadRouter } from "./routers/upload";
 import { userRouter } from "./routers/user";
@@ -145,6 +146,7 @@ export const appRouter = createTRPCRouter({
   absence: absenceRouter,
   chatter: chatterRouter,
   discipline: disciplineRouter,
+  timetableCategory: timetableCategoryRouter,
 });
 
 // export type definition of API

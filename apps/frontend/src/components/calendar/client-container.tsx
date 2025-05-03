@@ -21,12 +21,12 @@ export function ClientContainer() {
       const monthStart = new Date(
         selectedDate.getFullYear(),
         selectedDate.getMonth(),
-        1,
+        1
       );
       const monthEnd = new Date(
         selectedDate.getFullYear(),
         selectedDate.getMonth() + 1,
-        0,
+        0
       );
 
       const isInSelectedMonth =

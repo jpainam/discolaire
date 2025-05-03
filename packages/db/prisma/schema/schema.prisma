@@ -620,55 +620,55 @@ model Country {
 }
 
 model School {
-    id                 String           @id @default(cuid())
-    code               String           @unique
-    name               String
-    authorization      String?
-    ministry           String?
-    department         String?
-    region             String?
-    defaultLocale      String           @default("fr")
-    city               String?
-    headmaster         String?
-    phoneNumber1       String?
-    phoneNumber2       String?
-    email              String?
-    website            String?
-    numberOfReceipts   Int?             @default(1)
-    logo               String?
-    createdAt          DateTime         @default(now()) @db.Timestamp(6)
-    updatedAt          DateTime         @updatedAt
-    isActive           Boolean          @default(true)
-    address            String?
-    timezone           String           @default("Africa/Brazzaville")
-    defaultCountryId   String?
-    registrationPrefix String           @default("1")
-    requestSunPlusNo   Boolean?         @default(true)
-    applyRequiredFee   ApplyRequiredFee @default(NO)
-    includeRequiredFee Boolean?         @default(false)
-    contacts           Contact[]
-    users              User[]
-    students           Student[]
-    currency           String
-    classrooms         Classroom[]
-    staffs             Staff[]
-    formerSchools      FormerSchool[]
-    religions          Religion[]
-    sports             Sport[]
-    clubs              Club[]
-    permissions        Policy[]
-    roles              Role[]
-    subjectGroup       SubjectGroup[]
-    courses            Course[]
-    schoolYears        SchoolYear[]
-    cycles             Cycle[]
-    sections           Section[]
-    levels             ClassroomLevel[]
-    terms              Term[]
-    documents          Document[]
-    degrees            Degree[]
-    relationships      Relationship[]
-    lessonCategories   LessonCategory[]
+    id                  String              @id @default(cuid())
+    code                String              @unique
+    name                String
+    authorization       String?
+    ministry            String?
+    department          String?
+    region              String?
+    defaultLocale       String              @default("fr")
+    city                String?
+    headmaster          String?
+    phoneNumber1        String?
+    phoneNumber2        String?
+    email               String?
+    website             String?
+    numberOfReceipts    Int?                @default(1)
+    logo                String?
+    createdAt           DateTime            @default(now()) @db.Timestamp(6)
+    updatedAt           DateTime            @updatedAt
+    isActive            Boolean             @default(true)
+    address             String?
+    timezone            String              @default("Africa/Brazzaville")
+    defaultCountryId    String?
+    registrationPrefix  String              @default("1")
+    requestSunPlusNo    Boolean?            @default(true)
+    applyRequiredFee    ApplyRequiredFee    @default(NO)
+    includeRequiredFee  Boolean?            @default(false)
+    contacts            Contact[]
+    users               User[]
+    students            Student[]
+    currency            String
+    classrooms          Classroom[]
+    staffs              Staff[]
+    formerSchools       FormerSchool[]
+    religions           Religion[]
+    sports              Sport[]
+    clubs               Club[]
+    permissions         Policy[]
+    roles               Role[]
+    subjectGroup        SubjectGroup[]
+    courses             Course[]
+    schoolYears         SchoolYear[]
+    cycles              Cycle[]
+    sections            Section[]
+    levels              ClassroomLevel[]
+    terms               Term[]
+    documents           Document[]
+    degrees             Degree[]
+    relationships       Relationship[]
+    timetableCategories TimetableCategory[]
 }
 
 model FormerSchool {
@@ -733,23 +733,23 @@ model Course {
 }
 
 model SchoolYear {
-    id                  String            @id @default(cuid())
+    id                  String              @id @default(cuid())
     observation         String?
-    createdAt           DateTime?         @default(now()) @db.Timestamp(6)
-    updatedAt           DateTime          @updatedAt
+    createdAt           DateTime?           @default(now()) @db.Timestamp(6)
+    updatedAt           DateTime            @updatedAt
     abbreviation        String?
     createdBy           String?
     updatedBy           String?
-    isDefault           Boolean?          @default(false)
-    deletedAt           DateTime?         @db.Timestamp(6)
+    isDefault           Boolean?            @default(false)
+    deletedAt           DateTime?           @db.Timestamp(6)
     deletedBy           String?
-    isActive            Boolean           @default(true)
-    isDeleted           Boolean?          @default(false)
+    isActive            Boolean             @default(true)
+    isDeleted           Boolean?            @default(false)
     name                String
-    startDate           DateTime          @default(now()) @db.Timestamp(6)
-    endDate             DateTime          @default(now()) @db.Timestamp(6)
-    enrollmentStartDate DateTime?         @default(now()) @db.Timestamp(6)
-    enrollmentEndDate   DateTime?         @default(now()) @db.Timestamp(6)
+    startDate           DateTime            @default(now()) @db.Timestamp(6)
+    endDate             DateTime            @default(now()) @db.Timestamp(6)
+    enrollmentStartDate DateTime?           @default(now()) @db.Timestamp(6)
+    enrollmentEndDate   DateTime?           @default(now()) @db.Timestamp(6)
     classrooms          Classroom[]
     enrollments         Enrollment[]
     programs            Program[]
@@ -757,9 +757,9 @@ model SchoolYear {
     ProgramTheme        ProgramTheme[]
     terms               Term[]
     transactions        Transaction[]
-    school              School            @relation(fields: [schoolId], references: [id])
+    school              School              @relation(fields: [schoolId], references: [id])
     schoolId            String
-    lessonCategories    LessonCategory[]
+    timetableCategories TimetableCategory[]
 }
 
 model Cycle {

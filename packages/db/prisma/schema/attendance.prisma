@@ -99,7 +99,7 @@ model Convocation {
     comment     String?
 }
 
-model LessonCategory {
+model TimetableCategory {
     id           String     @id @default(cuid())
     name         String     @unique
     schoolId     String
@@ -112,14 +112,14 @@ model LessonCategory {
 }
 
 model Lesson {
-    id         Int             @id @default(autoincrement())
+    id         Int                @id @default(autoincrement())
     startTime  DateTime
     endTime    DateTime
     subjectId  Int
     schoolId   String
-    subject    Subject         @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+    subject    Subject            @relation(fields: [subjectId], references: [id], onDelete: Cascade)
     categoryId String
-    category   LessonCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+    category   TimetableCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
     @@unique([startTime, endTime, subjectId])
 }

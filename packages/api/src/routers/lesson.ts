@@ -13,58 +13,6 @@ const createEditLessonSchema = z.object({
   startDate: z.coerce.date(),
 });
 export const lessonRouter = createTRPCRouter({
-  categories: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.lessonCategory.findMany({
-      orderBy: {
-        name: "asc",
-      },
-      where: {
-        schoolId: ctx.schoolId,
-        schoolYearId: ctx.schoolYearId,
-      },
-    });
-  }),
-  createCategory: protectedProcedure
-    .input(
-      z.object({
-        name: z.string().min(1),
-      }),
-    )
-    .mutation(({ ctx, input }) => {
-      return ctx.db.lessonCategory.create({
-        data: {
-          name: input.name,
-          schoolId: ctx.schoolId,
-          schoolYearId: ctx.schoolYearId,
-        },
-      });
-    }),
-  updateCategory: protectedProcedure
-    .input(
-      z.object({
-        id: z.string().min(1),
-        name: z.string().min(1),
-      }),
-    )
-    .mutation(({ ctx, input }) => {
-      return ctx.db.lessonCategory.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          name: input.name,
-        },
-      });
-    }),
-  deleteCategory: protectedProcedure
-    .input(z.object({ id: z.string().min(1) }))
-    .mutation(({ ctx, input }) => {
-      return ctx.db.lessonCategory.delete({
-        where: {
-          id: input.id,
-        },
-      });
-    }),
   create: protectedProcedure
     .input(createEditLessonSchema)
     .mutation(async ({ ctx, input }) => {
