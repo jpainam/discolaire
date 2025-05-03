@@ -17,10 +17,10 @@
     "@novu/api": "^0.6.2",
     "@repo/db": "workspace:*",
     "@repo/kv": "workspace:*",
-    "@t3-oss/env-nextjs": "^0.13.0",
+    "@t3-oss/env-nextjs": "^0.13.4",
     "entities": "^6.0.0",
     "nanoid": "^5.1.5",
-    "resend": "^4.4.1",
+    "resend": "^4.5.0",
     "zod": "catalog:"
   },
   "devDependencies": {
