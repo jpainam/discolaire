@@ -14,13 +14,13 @@ export function ClassroomTimetable() {
   const params = useParams<{ id: string }>();
   const trpc = useTRPC();
   const { data: teachers } = useSuspenseQuery(
-    trpc.classroom.teachers.queryOptions(params.id)
+    trpc.classroom.teachers.queryOptions(params.id),
   );
 
   const { data: events } = useSuspenseQuery(
     trpc.lesson.byClassroom.queryOptions({
       classroomId: params.id,
-    })
+    }),
   );
   const tmpColors = ["blue", "green", "red", "yellow", "purple", "orange"];
 
@@ -45,7 +45,7 @@ export function ClassroomTimetable() {
           user: {
             id: e.subject.teacher?.id,
             name: decode(
-              e.subject.teacher?.lastName ?? e.subject.teacher?.firstName ?? ""
+              e.subject.teacher?.lastName ?? e.subject.teacher?.firstName ?? "",
             ),
             picturePath: "",
           },
