@@ -91,7 +91,7 @@ export function ClassroomLesson() {
       const days = getWeekdayNumbersBetweenDates(start, end);
       openModal({
         title: t("create_timetable"),
-        view: <CreateEditLesson daysOfWeek={days} />,
+        view: <CreateEditLesson dayOfWeek={days[0]} />,
       });
     },
     [openModal, t],

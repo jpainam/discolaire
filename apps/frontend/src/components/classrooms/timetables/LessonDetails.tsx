@@ -125,7 +125,7 @@ export function LessonDetails({
             title: t("update"),
             view: (
               <CreateEditLesson
-                daysOfWeek={[event.startTime.getDay()]}
+                dayOfWeek={event.startTime.getDay()}
                 categoryId={event.categoryId}
                 startTime={`${startHours}:${startMinutes}`}
                 endTime={`${endHours}:${endMinutes}`}

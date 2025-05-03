@@ -21,12 +21,18 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useTRPC } from "~/trpc/react";
 
-const createSportSchema = z.object({
+const createTimetableCategorySchema = z.object({
   name: z.string().min(1),
 });
-export function CreateEditSport({ id, name }: { id?: string; name?: string }) {
+export function CreateEditTimetableCategory({
+  id,
+  name,
+}: {
+  id?: string;
+  name?: string;
+}) {
   const form = useForm({
-    resolver: zodResolver(createSportSchema),
+    resolver: zodResolver(createTimetableCategorySchema),
     defaultValues: {
       name: name ?? "",
     },
@@ -36,10 +42,12 @@ export function CreateEditSport({ id, name }: { id?: string; name?: string }) {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
-  const createSportMutation = useMutation(
-    trpc.setting.createSport.mutationOptions({
+  const createCategoryMutation = useMutation(
+    trpc.timetableCategory.create.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.setting.sports.pathFilter());
+        await queryClient.invalidateQueries(
+          trpc.timetableCategory.all.pathFilter(),
+        );
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
       },
@@ -49,10 +57,12 @@ export function CreateEditSport({ id, name }: { id?: string; name?: string }) {
     }),
   );
 
-  const updateSportMutation = useMutation(
-    trpc.setting.updateSport.mutationOptions({
+  const updateCategoryMutation = useMutation(
+    trpc.timetableCategory.update.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.setting.sports.pathFilter());
+        await queryClient.invalidateQueries(
+          trpc.timetableCategory.all.pathFilter(),
+        );
         toast.success(t("updated_successfully"), { id: 0 });
         closeModal();
       },
@@ -61,16 +71,16 @@ export function CreateEditSport({ id, name }: { id?: string; name?: string }) {
       },
     }),
   );
-  const onSubmit = (data: z.infer<typeof createSportSchema>) => {
+  const onSubmit = (data: z.infer<typeof createTimetableCategorySchema>) => {
     if (id) {
       toast.loading(t("updating"), { id: 0 });
-      updateSportMutation.mutate({
+      updateCategoryMutation.mutate({
         id: id,
         name: data.name,
       });
     } else {
       toast.loading(t("creating"), { id: 0 });
-      createSportMutation.mutate({ name: data.name });
+      createCategoryMutation.mutate({ name: data.name });
     }
   };
 
@@ -85,7 +95,7 @@ export function CreateEditSport({ id, name }: { id?: string; name?: string }) {
           name="name"
           render={({ field }) => (
             <FormItem className="space-y-0">
-              <FormLabel>{t("sports")}</FormLabel>
+              <FormLabel>{t("category")}</FormLabel>
               <FormControl>
                 <Input placeholder={t("name")} {...field} />
               </FormControl>
@@ -107,7 +117,8 @@ export function CreateEditSport({ id, name }: { id?: string; name?: string }) {
           <Button
             size={"sm"}
             isLoading={
-              createSportMutation.isPending || updateSportMutation.isPending
+              createCategoryMutation.isPending ||
+              updateCategoryMutation.isPending
             }
             variant={"default"}
           >

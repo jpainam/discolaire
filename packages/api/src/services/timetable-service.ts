@@ -15,7 +15,7 @@ export const timetableService = {
   generateRange: ({
     startTime,
     endTime,
-    daysOfWeek,
+    dayOfWeek,
     startDate,
     finalDate,
   }: {
@@ -23,7 +23,7 @@ export const timetableService = {
     startDate: Date;
     finalDate: Date;
     endTime: string;
-    daysOfWeek: number[];
+    dayOfWeek: number;
   }) => {
     const events: Event[] = [];
     const weekRange = eachWeekOfInterval({ start: startDate, end: finalDate });
@@ -40,22 +40,23 @@ export const timetableService = {
     }
 
     for (const week of weekRange) {
-      for (const day of daysOfWeek) {
-        const eventDay = addDays(startOfWeek(week, { weekStartsOn: 0 }), day);
-        if (eventDay >= startDate && eventDay <= finalDate) {
-          const eventStartDateTime = setMinutes(
-            setHours(eventDay, startHour),
-            startMinute,
-          );
-          const eventEndDateTime = setMinutes(
-            setHours(eventDay, endHour),
-            endMinute,
-          );
-          events.push({
-            start: eventStartDateTime,
-            end: eventEndDateTime,
-          });
-        }
+      const eventDay = addDays(
+        startOfWeek(week, { weekStartsOn: 0 }),
+        dayOfWeek,
+      );
+      if (eventDay >= startDate && eventDay <= finalDate) {
+        const eventStartDateTime = setMinutes(
+          setHours(eventDay, startHour),
+          startMinute,
+        );
+        const eventEndDateTime = setMinutes(
+          setHours(eventDay, endHour),
+          endMinute,
+        );
+        events.push({
+          start: eventStartDateTime,
+          end: eventEndDateTime,
+        });
       }
     }
     return events;

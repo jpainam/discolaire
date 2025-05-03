@@ -26,28 +26,30 @@ import { useConfirm } from "~/providers/confirm-dialog";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "~/trpc/react";
-import { CreateEditSport } from "./CreateEditTimetableCategory";
+import { CreateEditTimetableCategory } from "./CreateEditTimetableCategory";
 
 export function TimetableCategoryTable() {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  const sportsQuery = useQuery(trpc.setting.sports.queryOptions());
-  const sports = sportsQuery.data ?? [];
+  const categoryQuery = useQuery(trpc.timetableCategory.all.queryOptions());
+  const categories = categoryQuery.data ?? [];
   const { t } = useLocale();
   const confirm = useConfirm();
 
   const { openModal } = useModal();
 
-  const deleteSportMutation = useMutation(
-    trpc.setting.deleteSport.mutationOptions({
+  const deleteCategoryMutation = useMutation(
+    trpc.timetableCategory.delete.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.setting.sports.pathFilter());
+        await queryClient.invalidateQueries(
+          trpc.timetableCategory.all.pathFilter(),
+        );
         toast.success(t("deleted_successfully"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   return (
     <div>
@@ -55,13 +57,13 @@ export function TimetableCategoryTable() {
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
-              <TableHead>{t("sports")}</TableHead>
+              <TableHead>{t("category")}</TableHead>
               <TableHead className="text-right">
                 <Button
                   onClick={() => {
                     openModal({
                       title: t("create"),
-                      view: <CreateEditSport />,
+                      view: <CreateEditTimetableCategory />,
                     });
                   }}
                   className="size-8"
@@ -74,17 +76,17 @@ export function TimetableCategoryTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sports.length === 0 && (
+            {categories.length === 0 && (
               <TableRow>
                 <TableCell colSpan={2}>
                   <EmptyState iconClassName="w-[100px] h-auto" />
                 </TableCell>
               </TableRow>
             )}
-            {sports.map((sport) => {
+            {categories.map((cat) => {
               return (
-                <TableRow key={sport.id}>
-                  <TableCell className="py-0">{sport.name}</TableCell>
+                <TableRow key={cat.id}>
+                  <TableCell className="py-0">{cat.name}</TableCell>
                   <TableCell className="py-0 text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger className="ml-auto" asChild>
@@ -98,9 +100,9 @@ export function TimetableCategoryTable() {
                             openModal({
                               title: t("edit"),
                               view: (
-                                <CreateEditSport
-                                  id={sport.id}
-                                  name={sport.name}
+                                <CreateEditTimetableCategory
+                                  id={cat.id}
+                                  name={cat.name}
                                 />
                               ),
                             });
@@ -113,7 +115,6 @@ export function TimetableCategoryTable() {
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                           variant="destructive"
-                          className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                           onSelect={async () => {
                             const isConfirmed = await confirm({
                               title: t("delete"),
@@ -121,7 +122,7 @@ export function TimetableCategoryTable() {
                             });
                             if (isConfirmed) {
                               toast.loading(t("deleting"), { id: 0 });
-                              deleteSportMutation.mutate(sport.id);
+                              deleteCategoryMutation.mutate(cat.id);
                             }
                           }}
                         >

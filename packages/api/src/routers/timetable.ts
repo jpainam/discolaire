@@ -99,7 +99,7 @@ export const timetableRouter = createTRPCRouter({
         startDate: input.startDate,
         startTime: input.startTime,
         endTime: input.endTime,
-        daysOfWeek: input.daysOfWeek,
+        dayOfWeek: 0, //input.dayOfWeek,
         finalDate: schoolYear?.endDate ?? addMonths(new Date(), 9),
       });
       const data = events.map((event) => {
