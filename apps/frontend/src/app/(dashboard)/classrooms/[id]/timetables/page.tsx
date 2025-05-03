@@ -1,8 +1,6 @@
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { decode } from "entities";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
-import { getEvents, getUsers } from "~/components/calendar/requests";
 import { ErrorFallback } from "~/components/error-fallback";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { ClassroomTimetable } from "./ClassroomTimetable";
@@ -19,11 +17,7 @@ export default async function Page(props: {
     trpc.lesson.byClassroom.queryOptions({
       classroomId: params.id,
     }),
-  ]);
-
-  const [events, teachers] = await Promise.all([
-    getEvents(),
-    getUsers({ classroomId: params.id }),
+    trpc.classroom.teachers.queryOptions(params.id),
   ]);
 
   return (
@@ -41,16 +35,7 @@ export default async function Page(props: {
             </div>
           }
         >
-          <ClassroomTimetable
-            events={events}
-            users={teachers.map((teacher) => {
-              return {
-                id: teacher.id,
-                name: decode(teacher.lastName ?? teacher.firstName ?? ""),
-                picturePath: teacher.user?.avatar ?? null,
-              };
-            })}
-          />
+          <ClassroomTimetable />
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>
