@@ -1,7 +1,7 @@
 "use client";
 
 import type { Table } from "@tanstack/react-table";
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 
 import {
   CheckCircledIcon,
@@ -42,21 +42,10 @@ export function TransactionDataTableAction({
 
   const canDeleteTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const { openModal } = useModal();
 
-  // Clear selection on Escape key press
-  React.useEffect(() => {
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        table.toggleAllRowsSelected(false);
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [table]);
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
@@ -65,14 +54,15 @@ export function TransactionDataTableAction({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.transaction.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.student.transactions.pathFilter(),
+          trpc.student.transactions.pathFilter()
         );
+        table.toggleAllRowsSelected(false);
         toast.success(t("updated_successfully"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const handleStatusChange = useCallback(
@@ -84,7 +74,7 @@ export function TransactionDataTableAction({
         status: v,
       });
     },
-    [rows, updateTransactionMutation],
+    [rows, updateTransactionMutation]
   );
 
   return (
