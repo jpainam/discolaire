@@ -1,13 +1,15 @@
 // app/auth-context.tsx
-import { useQueryClient } from "@tanstack/react-query";
-import { useRouter, useSegments } from "expo-router";
+import { useQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
-import { useSignOut, useUser } from "~/utils/auth";
+import type { RouterOutputs } from "~/utils/api";
+import { trpc } from "~/utils/api";
+import { useSignOut } from "~/utils/auth";
 
+type SessionType = RouterOutputs["auth"]["getSession"];
 interface AuthContextType {
-  user: ReturnType<typeof useUser> | undefined;
+  session: SessionType;
   isAuthenticated: boolean;
   loading: boolean;
   signOut: () => Promise<void>;
@@ -16,26 +18,29 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const user = useUser();
-  const router = useRouter();
-  const segments = useSegments();
-  const queryClient = useQueryClient();
+  const [session, setSession] = useState<SessionType>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const signOut = useSignOut();
-  const loading = user === undefined; // because useUser returns null or user; initially undefined
-  const isAuthenticated = !!user;
+  //const segments = useSegments();
+  const sessionQuery = useQuery(trpc.auth.getSession.queryOptions());
 
-  // Redirect if not authenticated and outside public routes
-  const inAuthGroup =
-    segments[0] === "login" ||
-    segments[0] === "sign-up" ||
-    segments[0] === "forgot-password";
+  useEffect(() => {
+    if (sessionQuery.isPending) return;
+    setIsLoading(false);
+    if (sessionQuery.isError) {
+      setSession(null);
+      return;
+    }
 
-  if (!loading && !isAuthenticated && !inAuthGroup) {
-    router.replace("/login");
-    return null;
-  }
+    const sess = sessionQuery.data;
+    if (sess) {
+      setSession(sess);
+    } else {
+      setSession(null);
+    }
+  }, [sessionQuery.data, sessionQuery.isError, sessionQuery.isPending]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" />
@@ -44,14 +49,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, loading, signOut }}>
+    <AuthContext.Provider
+      value={{
+        session,
+        isAuthenticated: !!session?.user,
+        loading: isLoading,
+        signOut,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => {
+export const useSession = () => {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  if (!ctx) throw new Error("useSession must be used within AuthProvider");
   return ctx;
 };

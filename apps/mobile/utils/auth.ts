@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 
 import { trpc } from "./api";
@@ -21,11 +21,6 @@ export const signIn = async (username: string, password: string) => {
   if (!data.sessionToken) throw new Error("No session token returned");
   setToken(data.sessionToken);
   return true;
-};
-
-export const useUser = () => {
-  const { data: session } = useQuery(trpc.auth.getSession.queryOptions());
-  return session?.user ?? null;
 };
 
 export const useSignIn = () => {
