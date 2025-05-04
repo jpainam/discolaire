@@ -1,5 +1,6 @@
 // app/auth-context.tsx
 import { useQuery } from "@tanstack/react-query";
+import { router, useSegments } from "expo-router";
 import type { ReactNode } from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
@@ -20,8 +21,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<SessionType>(null);
   const [isLoading, setIsLoading] = useState(true);
+
   const signOut = useSignOut();
-  //const segments = useSegments();
+  const segments = useSegments();
   const sessionQuery = useQuery(trpc.auth.getSession.queryOptions());
 
   useEffect(() => {
@@ -37,8 +39,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setSession(sess);
     } else {
       setSession(null);
+      if (segments[0] !== "auth") {
+        router.replace("/auth");
+      }
     }
-  }, [sessionQuery.data, sessionQuery.isError, sessionQuery.isPending]);
+  }, [
+    segments,
+    sessionQuery.data,
+    sessionQuery.error,
+    sessionQuery.isError,
+    sessionQuery.isPending,
+  ]);
 
   if (isLoading) {
     return (

@@ -48,7 +48,8 @@ export async function verifyToken(input: string) {
 
 // For Mobile
 export async function validateToken(input: string) {
-  const sessionData = await verifyToken(input);
+  const sessionToken = input.split(" ")[1] ?? ""; // Bearer token
+  const sessionData = await verifyToken(sessionToken);
   if (typeof sessionData.user.id !== "string") {
     return null;
   }
