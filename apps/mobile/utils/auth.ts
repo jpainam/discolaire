@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 
 import { trpc } from "./api";
@@ -42,12 +42,12 @@ export const useSignIn = () => {
 
 export const useSignOut = () => {
   const queryClient = useQueryClient();
-  const signOut = useMutation(trpc.auth.signOut.mutationOptions());
+  //const signOut = useMutation(trpc.auth.signOut.mutationOptions());
   const router = useRouter();
 
   return async () => {
-    const res = await signOut.mutateAsync();
-    if (!res.success) return;
+    //const res = await signOut.mutateAsync();
+    //if (!res.success) return;
     await deleteToken();
     await queryClient.invalidateQueries(trpc.pathFilter());
     router.replace("/");
