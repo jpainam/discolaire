@@ -107,7 +107,7 @@
     "react-big-calendar": "^1.18.0",
     "react-countup": "^6.5.3",
     "react-day-picker": "^9.6.7",
-    "react-dom": "^19.1.0",
+    "react-dom": "catalog:",
     "react-dropzone": "^14.3.8",
     "react-hook-form": "^7.56.2",
     "react-i18next": "^15.5.1",
