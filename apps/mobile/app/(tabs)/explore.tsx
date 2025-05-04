@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Image } from "expo-image";
 import { Platform, StyleSheet } from "react-native";
 
