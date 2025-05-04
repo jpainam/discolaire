@@ -5,10 +5,10 @@
     "group:allNonMajor"
   ],
   "schedule": [
-    "every weekend"
+    "before 7am on the first day of the month"
   ],
   "ignoreDeps": [
-    "@tanstack/react-query"
+    "@hookform/resolvers"
   ],
   "packageRules": [
     {

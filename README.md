@@ -139,7 +139,9 @@ className="resize-none" for textarea
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base"],
+  // "schedule": [ "every weekend"],
   "schedule": ["before 7am on the first day of the month"],
+
   "ignoreDeps": ["postgres"],
   "rangeStrategy": "update-lockfile",
   "packageRules": [
