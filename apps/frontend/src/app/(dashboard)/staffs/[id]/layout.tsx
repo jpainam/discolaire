@@ -1,6 +1,7 @@
 import {
   BookOpenCheck,
   CalendarDays,
+  CircleDollarSign,
   Folders,
   History,
   KeySquare,
@@ -78,11 +79,11 @@ export default async function Layout(props: {
       icon: <CalendarDays className="h-4 w-4" />,
     },
 
-    // {
-    //   name: t("payroll"),
-    //   href: routes.staffs.payroll(id),
-    //   icon: <CircleDollarSign className="h-4 w-4" />,
-    // },
+    {
+      name: t("payroll"),
+      href: `/staffs/${id}/payroll`,
+      icon: <CircleDollarSign className="h-4 w-4" />,
+    },
     {
       name: t("documents"),
       href: routes.staffs.documents(id),
