@@ -18,7 +18,7 @@
   },
   "prettier": "@repo/prettier-config",
   "dependencies": {
-    "@bull-board/express": "^6.9.2",
+    "@bull-board/express": "^6.9.5",
     "@react-email/render": "^1.1.0",
     "@repo/api": "workspace:*",
     "@repo/db": "workspace:*",
