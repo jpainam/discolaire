@@ -3,7 +3,7 @@ import { useRouter } from "expo-router";
 
 import { trpc } from "./api";
 import { getBaseUrl } from "./base-url";
-import { deleteToken, setToken } from "./session-store";
+import { deleteToken, setSchoolYear, setToken } from "./session-store";
 
 export const signIn = async (username: string, password: string) => {
   const res = await fetch(`${getBaseUrl()}/api/auth/signin`, {
@@ -20,6 +20,8 @@ export const signIn = async (username: string, password: string) => {
   if (!res.ok) throw new Error(data.error ?? "Login failed");
   if (!data.sessionToken) throw new Error("No session token returned");
   setToken(data.sessionToken);
+  if (!data.schoolYearId) throw new Error("No school year returned");
+  setSchoolYear(data.schoolYearId);
   return true;
 };
 
@@ -45,6 +47,6 @@ export const useSignOut = () => {
     //if (!res.success) return;
     await deleteToken();
     await queryClient.invalidateQueries(trpc.pathFilter());
-    router.replace("/");
+    router.replace("/auth");
   };
 };

@@ -91,7 +91,7 @@ export async function setSession(user: User) {
 
 export async function setSchoolYearSession(schoolYearId: string) {
   const expiresInOneDay = new Date(Date.now() + 24 * 60 * 60 * 1000);
-  (await cookies()).set("schoolYear", schoolYearId, {
+  (await cookies()).set("x-school-year", schoolYearId, {
     expires: expiresInOneDay,
     httpOnly: true,
     secure: true,

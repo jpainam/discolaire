@@ -1,14 +1,17 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Image } from "expo-image";
-import { Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet, TouchableOpacity } from "react-native";
 
 import { HelloWave } from "~/components/HelloWave";
 import ParallaxScrollView from "~/components/ParallaxScrollView";
 import { ThemedText } from "~/components/ThemedText";
 import { ThemedView } from "~/components/ThemedView";
+import { useSession } from "~/providers/auth-provider";
+import { getSchoolYear } from "~/utils/session-store";
 
 export default function HomeScreen() {
+  const { signOut } = useSession();
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
@@ -23,6 +26,14 @@ export default function HomeScreen() {
         <ThemedText type="title">Welcome!</ThemedText>
         <HelloWave />
       </ThemedView>
+      <TouchableOpacity
+        onPress={async () => {
+          await signOut();
+        }}
+      >
+        <ThemedText>Sign out</ThemedText>
+      </TouchableOpacity>
+      <ThemedText>{getSchoolYear()}</ThemedText>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
         <ThemedText>

@@ -55,7 +55,7 @@ export async function POST(req: Request) {
     });
     const interval = parser.parseExpression(cron);
 
-    const schoolYearId = req.headers.get("schoolYearId");
+    const schoolYearId = req.headers.get("x-school-year");
     if (!schoolYearId) {
       throw new Error("School year id is required");
     }
@@ -104,7 +104,7 @@ export async function POST(req: Request) {
           };
         }),
         fullName: staff.lastName + " " + staff.firstName,
-      }),
+      })
     );
 
     const response = await messagingService.sendEmail({

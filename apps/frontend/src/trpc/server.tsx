@@ -16,7 +16,10 @@ import { createQueryClient } from "./query-client";
 const createContext = cache(async () => {
   const heads = new Headers(await headers());
   heads.set("x-trpc-source", "rsc");
-  heads.set("schoolYearId", (await cookies()).get("schoolYear")?.value ?? "");
+  heads.set(
+    "x-school-year",
+    (await cookies()).get("x-school-year")?.value ?? ""
+  );
 
   return createTRPCContext({
     session: await auth(),
@@ -42,7 +45,7 @@ export function HydrateClient(props: { children: React.ReactNode }) {
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function prefetch<T extends ReturnType<TRPCQueryOptions<any>>>(
-  queryOptions: T,
+  queryOptions: T
 ) {
   const queryClient = getQueryClient();
   if (queryOptions.queryKey[1]?.type === "infinite") {
@@ -54,7 +57,7 @@ export function prefetch<T extends ReturnType<TRPCQueryOptions<any>>>(
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function batchPrefetch<T extends ReturnType<TRPCQueryOptions<any>>>(
-  queryOptionsArray: T[],
+  queryOptionsArray: T[]
 ) {
   const queryClient = getQueryClient();
   for (const queryOptions of queryOptionsArray) {

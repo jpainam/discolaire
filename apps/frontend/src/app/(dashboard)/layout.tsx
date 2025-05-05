@@ -35,7 +35,7 @@ export default async function Layout({
   const sidebarState = cookieStore.get("sidebar_state");
   const defaultOpen = sidebarState ? sidebarState.value === "true" : true;
 
-  const schoolYearId = cookieStore.get("schoolYear")?.value;
+  const schoolYearId = cookieStore.get("x-school-year")?.value;
   if (!schoolYearId) {
     console.error("No school year selected");
     redirect("/auth/login");

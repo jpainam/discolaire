@@ -1,10 +1,9 @@
 // Fallback for using MaterialIcons on Android and web.
 
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import type { SymbolWeight, SymbolViewProps } from "expo-symbols";
+import type { SymbolViewProps, SymbolWeight } from "expo-symbols";
 import type { ComponentProps } from "react";
-import type { OpaqueColorValue } from "react-native";
-import type { StyleProp, TextStyle } from "react-native";
+import type { OpaqueColorValue, StyleProp, TextStyle } from "react-native";
 
 type IconMapping = Record<
   SymbolViewProps["name"],
@@ -20,6 +19,8 @@ type IconSymbolName = keyof typeof MAPPING;
 const MAPPING = {
   "house.fill": "home",
   "paperplane.fill": "send",
+  "person.2.fill": "groups",
+  calendar: "event",
   "chevron.left.forwardslash.chevron.right": "code",
   "chevron.right": "chevron-right",
 } as IconMapping;

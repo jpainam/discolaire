@@ -42,7 +42,7 @@ async function jobWorker(job: Job<any, any, string>) {
 
     const headers = new Map<string, string>();
     headers.set("x-trpc-source", "job-worker");
-    headers.set("schoolYearId", schoolYearId);
+    headers.set("x-school-year", schoolYearId);
 
     const token = await generateToken({ id: user.id });
 

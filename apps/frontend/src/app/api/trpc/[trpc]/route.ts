@@ -25,9 +25,9 @@ export const OPTIONS = () => {
 
 // const handler = auth(async (req) => {
 //   try {
-//     const schoolYearId = req.cookies.get("schoolYear")?.value ?? "";
+//     const schoolYearId = req.cookies.get("x-school-year")?.value ?? "";
 //     const heads = new Headers(req.headers);
-//     heads.set("schoolYearId", schoolYearId);
+//     heads.set("x-school-year", schoolYearId);
 //     const response = await fetchRequestHandler({
 //       endpoint: "/api/trpc",
 //       router: appRouter,
@@ -60,9 +60,9 @@ export const OPTIONS = () => {
 
 const handler = async (req: NextRequest) => {
   const session = await auth();
-  const schoolYearId = req.cookies.get("schoolYear")?.value ?? "";
+  const schoolYearId = req.cookies.get("x-school-year")?.value ?? "";
   const heads = new Headers(req.headers);
-  heads.set("schoolYearId", schoolYearId);
+  heads.set("x-school-year", schoolYearId);
 
   const response = await fetchRequestHandler({
     endpoint: "/api/trpc",
