@@ -3,6 +3,6 @@ import { decode } from "entities";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function getFullName(val: any) {
   return decode(
-    `${val?.firstName ?? ""} ${val?.middleName ?? ""} ${val?.lastName ?? ""}`
+    `${val?.firstName ?? ""} ${val?.middleName ?? ""} ${val?.lastName ?? ""}`,
   );
 }

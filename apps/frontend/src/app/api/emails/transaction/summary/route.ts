@@ -104,7 +104,7 @@ export async function POST(req: Request) {
           };
         }),
         fullName: staff.lastName + " " + staff.firstName,
-      })
+      }),
     );
 
     const response = await messagingService.sendEmail({
