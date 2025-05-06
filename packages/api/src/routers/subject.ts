@@ -1,8 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { classroomService } from "../services/classroom-service";
-import { subjectService } from "../services/subject-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const subjectRouter = createTRPCRouter({
@@ -64,35 +62,9 @@ export const subjectRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const staff = await ctx.db.staff.findUnique({
-        where: {
-          id: input.teacherId,
-        },
-      });
-      const subject = await ctx.db.subject.create({
+      return ctx.db.subject.create({
         data: input,
       });
-      if (staff?.userId) {
-        void classroomService.addPermission({
-          classroomId: input.classroomId,
-          resources: [
-            "classroom:list",
-            "classroom:details",
-            "classroom:subject",
-          ],
-          userId: staff.userId,
-          schoolId: ctx.schoolId,
-          byId: ctx.session.user.id,
-        });
-        void subjectService.addPermission({
-          resources: ["subject"],
-          userId: staff.userId,
-          subjectId: subject.id,
-          byId: ctx.session.user.id,
-          schoolId: ctx.schoolId,
-        });
-      }
-      return subject;
     }),
 
   updateProgram: protectedProcedure
@@ -122,33 +94,7 @@ export const subjectRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { id, ...data } = input;
-      const staff = await ctx.db.staff.findUnique({
-        where: {
-          id: input.teacherId,
-        },
-      });
-      if (staff?.userId) {
-        console.log("Adding permission for classroom", staff.lastName);
-        void classroomService.addPermission({
-          classroomId: input.classroomId,
-          resources: [
-            "classroom:list",
-            "classroom:details",
-            "classroom:subject",
-          ],
-          userId: staff.userId,
-          schoolId: ctx.schoolId,
-          byId: ctx.session.user.id,
-        });
-        console.info("Adding permission for subject", staff.lastName);
-        void subjectService.addPermission({
-          resources: ["subject"],
-          userId: staff.userId,
-          subjectId: input.id,
-          schoolId: ctx.schoolId,
-          byId: ctx.session.user.id,
-        });
-      }
+
       return ctx.db.subject.update({
         where: {
           id: id,
