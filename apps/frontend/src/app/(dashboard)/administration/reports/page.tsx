@@ -77,7 +77,7 @@ export default function DataExportPage() {
 
   // Filter export options based on search query
   const filteredOptions = exportOptions.filter((option) =>
-    option.name.toLowerCase().includes(searchQuery.toLowerCase())
+    option.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   // Function to get options by category

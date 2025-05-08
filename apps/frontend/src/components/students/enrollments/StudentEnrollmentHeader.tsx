@@ -23,7 +23,7 @@ export function StudentEnrollmentHeader({ studentId }: { studentId: string }) {
   const { t } = useLocale();
   const trpc = useTRPC();
   const { data: student } = useSuspenseQuery(
-    trpc.student.get.queryOptions(studentId)
+    trpc.student.get.queryOptions(studentId),
   );
   const { openModal } = useModal();
   const params = useParams<{ id: string }>();

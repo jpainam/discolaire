@@ -32,7 +32,7 @@ export function ReportCardHeader({ classroomId }: { classroomId: string }) {
 
   const canPrintReportCard = useCheckPermission(
     "reportcard",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
   const termId = searchParams.get("termId");
   const trimestreId = searchParams.get("trimestreId");

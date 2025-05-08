@@ -37,7 +37,7 @@ export function StudentGradesheetHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}/transcripts?format=pdf`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >
@@ -48,7 +48,7 @@ export function StudentGradesheetHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}/transcripts?format=csv`,
-                  "_blank"
+                  "_blank",
                 );
               }}
             >
