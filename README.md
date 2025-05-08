@@ -67,6 +67,9 @@ pnpm db:push
 }
 ```
 
+- - Locally MiNio using `./minio server --console-address ":9001" ./data --address ":9310"`
+- The --address is used for api calls, the --console-address is used for the UI
+
 ## Turborepo
 
 https://github.com/vercel/turborepo/issues/9016

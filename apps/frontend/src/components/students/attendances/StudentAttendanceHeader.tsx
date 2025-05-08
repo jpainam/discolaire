@@ -50,13 +50,15 @@ export function StudentAttendanceHeader({
 
   const canCreateAttendance = useCheckPermission(
     "attendance",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (
-    <div className="flex flex-row items-center gap-2 border-b bg-muted/50 px-4 py-1">
-      <LineChart className="hidden md:block w-4 h-4" />
-      <Label className="hidden md:block">{t("attendances")}</Label>
+    <div className="grid md:flex flex-row items-center gap-2 border-b bg-muted/50 px-4 py-1">
+      <div className="flex flex-row items-center gap-1">
+        <LineChart className="w-4 h-4" />
+        <Label>{t("attendances")}</Label>
+      </div>
       {/* <Label className="hidden md:block">{t("attendances")}</Label> */}
       {/* <div className="w-[15px] hidden md:block"></div> */}
       {/* <FlatBadge>Total justified records: 2 out of 5</FlatBadge> */}

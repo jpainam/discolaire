@@ -116,7 +116,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                 <div className="w-2/5 p-1 rounded-md">
                   {school.logo && (
                     <Image
-                      src={school.logo}
+                      src={`/api/download/images/${school.logo}`}
                       height={40}
                       width={120}
                       alt="Logo"
@@ -196,7 +196,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                 {/* School logo */}
                 {school.logo && (
                   <Image
-                    src={school.logo}
+                    src={`/api/download/images/${school.logo}`}
                     height={40}
                     width={120}
                     alt="Logo"

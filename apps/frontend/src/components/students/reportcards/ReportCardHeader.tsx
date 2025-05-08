@@ -1,6 +1,6 @@
 "use client";
 
-import { MailIcon, MoreVertical } from "lucide-react";
+import { BookText, MailIcon, MoreVertical } from "lucide-react";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 
 import { Button } from "@repo/ui/components/button";
@@ -21,7 +21,6 @@ import { TrimestreSelector } from "~/components/shared/selects/TrimestreSelector
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
-import { sidebarIcons } from "../sidebar-icons";
 
 export function ReportCardHeader({ classroomId }: { classroomId: string }) {
   const { t } = useLocale();
@@ -30,43 +29,47 @@ export function ReportCardHeader({ classroomId }: { classroomId: string }) {
   const params = useParams<{ id: string }>();
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const Icon = sidebarIcons.reportcards;
+
   const canPrintReportCard = useCheckPermission(
     "reportcard",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const termId = searchParams.get("termId");
   const trimestreId = searchParams.get("trimestreId");
   return (
     <div className="grid md:flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1 text-secondary-foreground">
-      {Icon && <Icon className="h-4 w-4" />}
-      <Label className="hidden md:block">{t("term")}</Label>
-      <TermSelector
-        className="w-[300px]"
-        defaultValue={searchParams.get("termId")}
-        onChange={(val) => {
-          router.push(`/students/${params.id}/reportcards?termId=${val}`);
-        }}
-      />
-      <TrimestreSelector
-        className="w-[300px]"
-        defaultValue={searchParams.get("trimestreId") ?? undefined}
-        onChange={(val) => {
-          if (val == "ann") {
-            router.push(`/students/${params.id}/reportcards/annual`);
-          } else {
-            const url =
-              `/students/${params.id}/reportcards/trimestres?` +
-              createQueryString({
-                trimestreId: val,
-                classroomId: classroomId,
-                studentId: params.id,
-                format: "pdf",
-              });
-            router.push(url);
-          }
-        }}
-      />
+      <div className="flex flex-row items-center gap-1">
+        <BookText className="h-4 w-4" />
+        <Label>{t("reportcards")}</Label>
+      </div>
+      <div className="grid grid-cols-2 md:flex flex-row items-center gap-2">
+        <TermSelector
+          className="md:w-[300px]"
+          defaultValue={searchParams.get("termId")}
+          onChange={(val) => {
+            router.push(`/students/${params.id}/reportcards?termId=${val}`);
+          }}
+        />
+        <TrimestreSelector
+          className="md:w-[300px]"
+          defaultValue={searchParams.get("trimestreId") ?? undefined}
+          onChange={(val) => {
+            if (val == "ann") {
+              router.push(`/students/${params.id}/reportcards/annual`);
+            } else {
+              const url =
+                `/students/${params.id}/reportcards/trimestres?` +
+                createQueryString({
+                  trimestreId: val,
+                  classroomId: classroomId,
+                  studentId: params.id,
+                  format: "pdf",
+                });
+              router.push(url);
+            }
+          }}
+        />
+      </div>
       {canPrintReportCard && (
         <div className="ml-auto flex flex-row items-center gap-0">
           <DropdownMenu>

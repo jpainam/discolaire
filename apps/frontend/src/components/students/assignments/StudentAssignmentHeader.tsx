@@ -1,6 +1,6 @@
 "use client";
 
-import { Mail, MoreVertical } from "lucide-react";
+import { Mail, MoreVertical, NotebookPen } from "lucide-react";
 import { parseAsInteger, useQueryState } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
@@ -22,7 +22,8 @@ export function StudentAssignmentHeader() {
   const [_, setTerm] = useQueryState("term", parseAsInteger);
   return (
     <div className="flex flex-row items-center gap-2 bg-secondary px-2 py-1">
-      <Label className="hidden md:block">{t("assignments")}</Label>
+      <NotebookPen className="h-4 w-4" />
+      <Label>{t("assignments")}</Label>
       <TermSelector
         onChange={(val) => {
           void setTerm(val ? Number(val) : null);

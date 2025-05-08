@@ -38,10 +38,10 @@ export function StudentContactHeader() {
 
   return (
     <div className="flex flex-row items-center gap-2 bg-secondary px-4 py-1">
-      {Icon && <Icon className="hidden md:block h-4 w-4" />}
-      <Label className="hidden md:block">{t("contacts")}</Label>
+      {Icon && <Icon className="h-4 w-4" />}
+      <Label>{t("contacts")}</Label>
 
-      <div className="md:ml-auto flex flex-row items-center gap-2">
+      <div className="ml-auto flex flex-row items-center gap-2">
         {canAddContact && (
           <SimpleTooltip content={t("link_contacts")}>
             <DropdownMenu>
@@ -98,7 +98,7 @@ export function StudentContactHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -109,7 +109,7 @@ export function StudentContactHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

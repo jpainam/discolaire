@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight, MoreVertical } from "lucide-react";
+import { ArrowRightLeft, ChevronRight, MoreVertical } from "lucide-react";
 import { useParams } from "next/navigation";
 
 import { Button } from "@repo/ui/components/button";
@@ -17,25 +17,24 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
-import { sidebarIcons } from "../sidebar-icons";
 import { EnrollStudentModal } from "./EnrollStudentModal";
 
 export function StudentEnrollmentHeader({ studentId }: { studentId: string }) {
   const { t } = useLocale();
   const trpc = useTRPC();
   const { data: student } = useSuspenseQuery(
-    trpc.student.get.queryOptions(studentId),
+    trpc.student.get.queryOptions(studentId)
   );
   const { openModal } = useModal();
   const params = useParams<{ id: string }>();
-  const Icon = sidebarIcons.enrollments;
+
   const canEnroll = useCheckPermission("enrollment", PermissionAction.CREATE);
   const isEnrolled = !!student.classroom;
 
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1">
-      {Icon && <Icon className="hidden md:block h-4 w-4" />}
-      <Label className="hidden md:block">{t("enrollments")}</Label>
+      <ArrowRightLeft className="h-4 w-4" />
+      <Label>{t("enrollments")}</Label>
       <div className="ml-auto flex flex-row items-center gap-2">
         {!isEnrolled && canEnroll && (
           <Button
