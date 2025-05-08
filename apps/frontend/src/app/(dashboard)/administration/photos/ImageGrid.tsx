@@ -1,21 +1,34 @@
 "use client";
 
+import { Button } from "@repo/ui/components/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { useSetAtom } from "jotai";
 import {
   AlertCircleIcon,
+  ArrowRightLeft,
+  DownloadIcon,
   ImageIcon,
+  MoreVertical,
   Trash2Icon,
   UploadIcon,
   XIcon,
 } from "lucide-react";
-
-import { Button } from "@repo/ui/components/button";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { useSetAtom } from "jotai";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { StudentSearchDialog } from "~/components/students/StudentSearchDialog";
 import { formatBytes, useFileUpload } from "~/hooks/use-file-upload";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { breadcrumbAtom } from "~/lib/atoms";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFileIcon } from "./photo-utils";
 
@@ -76,7 +89,7 @@ export function ImageGrid({
       prefix: prefix,
       bucket: bucket,
       startAfter: startAfter,
-    }),
+    })
   );
   const { t } = useLocale();
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
@@ -114,6 +127,7 @@ export function ImageGrid({
   const maxSizeMB = 5;
   const maxSize = maxSizeMB * 1024 * 1024; // 5MB default
   const maxFiles = 6;
+  const confirm = useConfirm();
 
   const [
     { files, isDragging, errors },
@@ -139,6 +153,29 @@ export function ImageGrid({
       id: image.key,
     })),
   });
+  const queryClient = useQueryClient();
+  const { openModal } = useModal();
+
+  const handleDeleteAvatar = async (userId: string) => {
+    toast.loading(t("deleting"), { id: 0 });
+    const response = await fetch("/api/upload/avatars", {
+      method: "DELETE",
+      body: JSON.stringify({
+        userId: userId,
+      }),
+    });
+    if (response.ok) {
+      toast.success(t("deleted_successfully"), {
+        id: 0,
+      });
+      await queryClient.invalidateQueries(trpc.user.get.pathFilter());
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const { error } = await response.json();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      toast.error(error ?? response.statusText, { id: 0 });
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4 p-4">
@@ -200,13 +237,69 @@ export function ImageGrid({
                   >
                     <XIcon className="size-3.5" />
                   </Button>
-                  <div className="flex min-w-0 flex-col gap-0.5 border-t p-3">
-                    <p className="truncate text-[13px] font-medium">
-                      {image.name}
-                    </p>
-                    <p className="text-muted-foreground truncate text-xs">
-                      {formatBytes(image.size)}
-                    </p>
+
+                  <div className="flex flex-row items-center gap-1">
+                    <div className="flex min-w-0 flex-col gap-0.5 border-t px-1">
+                      <p className="truncate text-[13px] font-medium">
+                        {image.name}
+                      </p>
+                      <p className="text-muted-foreground truncate text-xs">
+                        {formatBytes(image.size)}
+                      </p>
+                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant={"ghost"}
+                          className="size-6"
+                          size={"icon"}
+                        >
+                          <MoreVertical className="w-3 h-3" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem
+                          onSelect={() => {
+                            openModal({
+                              title: t("Search"),
+                              view: (
+                                <StudentSearchDialog
+                                  onSelect={(val) => {
+                                    console.log(val);
+                                  }}
+                                />
+                              ),
+                            });
+                          }}
+                        >
+                          <ArrowRightLeft />
+                          {t("Re-assign")}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <DownloadIcon />
+                          {t("download")}
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          onSelect={async () => {
+                            const isConfirmed = await confirm({
+                              title: t("Are you sure?"),
+                              description: t("This action cannot be undone."),
+                            });
+                            if (isConfirmed) {
+                              const userId = extractId(image.key);
+                              if (!userId) return;
+                              alert(userId);
+                              void handleDeleteAvatar(userId);
+                            }
+                          }}
+                          variant="destructive"
+                        >
+                          <Trash2Icon />
+                          {t("delete")}
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </div>
               ))}
@@ -257,4 +350,10 @@ export function ImageGrid({
       )}
     </div>
   );
+}
+
+function extractId(path: string): string | null {
+  const filename = path.split("/").pop();
+  if (!filename) return null;
+  return filename.split(".").slice(0, -1).join(".") || null;
 }
