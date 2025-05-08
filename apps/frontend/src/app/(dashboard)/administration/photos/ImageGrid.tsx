@@ -218,7 +218,7 @@ export function ImageGrid({
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-12">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-6">
               {images.map((image, index) => (
                 <div
                   key={index}
