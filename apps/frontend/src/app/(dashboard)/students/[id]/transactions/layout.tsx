@@ -1,35 +1,15 @@
-import { EmptyState } from "~/components/EmptyState";
-import { getServerTranslations } from "~/i18n/server";
-
-import { caller } from "~/trpc/server";
+import type { PropsWithChildren } from "react";
 import { PrintAction } from "./PrintAction";
 import { TransactionTabMenu } from "./TransactionTabMenu";
 
-export default async function Layout(props: {
-  params: Promise<{ id: string }>;
-  children: React.ReactNode;
-}) {
-  const params = await props.params;
-
-  const { id } = params;
-
-  const { children } = props;
-
-  const classroom = await caller.student.classroom({ studentId: id });
-  const { t } = await getServerTranslations();
-  if (!classroom) {
-    return (
-      <EmptyState className="my-8" title={t("student_not_registered_yet")} />
-    );
-  }
-
+export default function Layout(props: PropsWithChildren) {
   return (
     <div className="flex flex-col">
       <div className="flex flex-row items-center justify-between border-b py-1 px-4">
         <TransactionTabMenu />
         <PrintAction />
       </div>
-      {children}
+      {props.children}
     </div>
   );
 }

@@ -1,5 +1,3 @@
-"use client";
-
 import { sumBy } from "lodash";
 import type { IconType } from "react-icons";
 import {
@@ -9,13 +7,10 @@ import {
   PiMoneyBold,
 } from "react-icons/pi";
 
-import { useLocale } from "~/i18n";
-
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+import { getServerTranslations } from "~/i18n/server";
 import { CURRENCY } from "~/lib/constants";
 import { cn } from "~/lib/utils";
-import { useTRPC } from "~/trpc/react";
+import { caller } from "~/trpc/server";
 
 export interface TransactionType {
   icon: IconType;
@@ -25,16 +20,11 @@ export interface TransactionType {
   className?: string;
 }
 
-export function TransactionStats({ classroomId }: { classroomId: string }) {
-  const { t, i18n } = useLocale();
-  const trpc = useTRPC();
-  const { data: fees } = useSuspenseQuery(
-    trpc.classroom.fees.queryOptions(classroomId),
-  );
-  const params = useParams<{ id: string }>();
-  const { data: transactions } = useSuspenseQuery(
-    trpc.student.transactions.queryOptions(params.id),
-  );
+export async function TransactionStats({ studentId }: { studentId: string }) {
+  const { t, i18n } = await getServerTranslations();
+  const transactions = await caller.student.transactions(studentId);
+  const classroom = await caller.student.classroom({ studentId });
+  const fees = classroom ? await caller.classroom.fees(classroom.id) : [];
 
   const statData: TransactionType[] = [
     {
@@ -61,7 +51,7 @@ export function TransactionStats({ classroomId }: { classroomId: string }) {
       title: t("transactionsCompleted"),
       amount: sumBy(
         transactions.filter((t) => t.status == "VALIDATED"),
-        "amount",
+        "amount"
       ).toLocaleString(i18n.language),
       icon: PiMoneyBold,
       iconWrapperFill: "#FF0000",
@@ -72,50 +62,29 @@ export function TransactionStats({ classroomId }: { classroomId: string }) {
     <div className="grid-cols-1 px-4 mt-2 grid gap-2 2xl:grid-cols-4">
       {statData.map((stat, index: number) => {
         return (
-          <TransactionStatCard key={"transaction-card-" + index} {...stat} />
+          <div
+            key={index}
+            className={cn("rounded-md border p-2 bg-muted hover:bg-secondary")}
+          >
+            <div className="flex items-center gap-5">
+              <span
+                style={{ backgroundColor: stat.iconWrapperFill }}
+                className={cn("flex rounded-lg p-2")}
+              >
+                <stat.icon className="h-auto w-[30px]" />
+              </span>
+              <div className="flex flex-col">
+                <span className="text-sm text-muted-foreground">
+                  {stat.title}
+                </span>
+                <span className="text-md font-semibold">
+                  {stat.amount} {CURRENCY}
+                </span>
+              </div>
+            </div>
+          </div>
         );
       })}
-    </div>
-  );
-}
-
-export interface TransactionCardProps {
-  className?: string;
-  icon: IconType;
-  amount: string;
-  title: string;
-  iconWrapperFill?: string;
-}
-
-function TransactionStatCard({
-  className,
-  icon,
-  amount,
-  title,
-  iconWrapperFill,
-}: TransactionCardProps) {
-  const Icon = icon;
-  return (
-    <div
-      className={cn(
-        "rounded-md border p-2 bg-muted hover:bg-secondary",
-        className,
-      )}
-    >
-      <div className="flex items-center gap-5">
-        <span
-          style={{ backgroundColor: iconWrapperFill }}
-          className={cn("flex rounded-lg p-2")}
-        >
-          <Icon className="h-auto w-[30px]" />
-        </span>
-        <div className="flex flex-col">
-          <span className="text-sm text-muted-foreground">{title}</span>
-          <span className="text-md font-semibold">
-            {amount} {CURRENCY}
-          </span>
-        </div>
-      </div>
     </div>
   );
 }
