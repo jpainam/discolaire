@@ -84,6 +84,14 @@ export function ImageGrid({
 }) {
   const trpc = useTRPC();
   const [startAfter, setStartAfter] = useState<string | undefined>(undefined);
+
+  // const usersQuery = useQueries({
+  //   queries: ids.map((id) => ({
+  //     queryKey: ["data", id],
+  //     queryFn: () => fetchDataById(id),
+  //   })),
+  // });
+
   const { data: images } = useSuspenseQuery(
     trpc.photo.listObjects.queryOptions({
       prefix: prefix,

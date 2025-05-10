@@ -23,41 +23,6 @@ export const OPTIONS = () => {
   return response;
 };
 
-// const handler = auth(async (req) => {
-//   try {
-//     const schoolYearId = req.cookies.get("x-school-year")?.value ?? "";
-//     const heads = new Headers(req.headers);
-//     heads.set("x-school-year", schoolYearId);
-//     const response = await fetchRequestHandler({
-//       endpoint: "/api/trpc",
-//       router: appRouter,
-//       req,
-//       createContext: () =>
-//         createTRPCContext({
-//           session: req.auth,
-//           headers: heads,
-//         }),
-//       onError({ error, path }) {
-//         console.error(`>>> tRPC Error on '${path}'`, error);
-//         if (error.code == "UNAUTHORIZED") {
-//           return Response.redirect(new URL("/auth/login", req.url));
-//         }
-//       },
-//     });
-
-//     setCorsHeaders(response);
-//     return response;
-//   } catch (e) {
-//     console.error(">>> tRPC Error", e);
-//     const error = e as TRPCError;
-//     if (error.code == "UNAUTHORIZED") {
-//       return Response.redirect(new URL("/auth/login", req.url));
-//     } else {
-//       throw e;
-//     }
-//   }
-// });
-
 const handler = async (req: NextRequest) => {
   const session = await auth();
   const schoolYearId = req.cookies.get("x-school-year")?.value ?? "";
@@ -76,9 +41,6 @@ const handler = async (req: NextRequest) => {
     onError({ error, path }) {
       console.error(`>>> tRPC Error on '${path}'`);
       console.error(error.stack);
-      if (error.code == "UNAUTHORIZED") {
-        return Response.redirect(new URL("/auth/login", req.url));
-      }
     },
   });
   setCorsHeaders(response);
