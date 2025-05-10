@@ -187,23 +187,23 @@ function ActionCell({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.transaction.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.student.transactions.pathFilter(),
+          trpc.student.transactions.pathFilter()
         );
         toast.success(t("updated_successfully"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const canDeleteTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
 
   const { openModal } = useModal();
@@ -229,7 +229,7 @@ function ActionCell({
         {canUpdateTransaction && (
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
-              <BookCopy className="mr-2 h-4 w-4" />
+              <BookCopy className="mr-2 h-4 w-4 text-muted-foreground" />
               {t("status")}
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent>

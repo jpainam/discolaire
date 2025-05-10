@@ -24,7 +24,7 @@ export function FinanceBulkAction() {
   return (
     <DropdownMenuSub>
       <DropdownMenuSubTrigger>
-        <MailIcon className="mr-2 h-4 w-4" />
+        <MailIcon className="mr-2 h-4 w-4 text-muted-foreground" />
         {t("notifications")}
       </DropdownMenuSubTrigger>
       <DropdownMenuPortal>

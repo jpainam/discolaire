@@ -54,7 +54,7 @@ export default async function Page(props: {
 
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-10">
           <Image
-            src={`${school.logo}?height=350&width=350`}
+            src={`/api/download/images/${school.logo}?height=350&width=350`}
             alt="Watermark"
             width={350}
             height={350}
@@ -67,7 +67,7 @@ export default async function Page(props: {
           <div className="flex items-start justify-between">
             <div className="flex items-center">
               <Image
-                src={`${school.logo}?height=100&width=100`}
+                src={`/api/download/images/${school.logo}?height=100&width=100`}
                 alt="Institut Logo"
                 width={200}
                 height={500}

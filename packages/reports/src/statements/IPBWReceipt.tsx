@@ -6,6 +6,10 @@ import type { RouterOutputs } from "@repo/api";
 
 import "../fonts";
 
+import { getAssetUrl } from "../utils";
+
+const imageUrl = getAssetUrl("images");
+
 export function IPBWReceipt({
   amountInWords,
   transaction,
@@ -72,7 +76,7 @@ export function IPBWReceipt({
 
                 {school.logo && (
                   <Image
-                    src={school.logo}
+                    src={`${imageUrl}/${school.logo}`}
                     style={{
                       width: 125,
                       height: 80,

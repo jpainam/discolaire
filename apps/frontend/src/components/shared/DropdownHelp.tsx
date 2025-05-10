@@ -21,7 +21,7 @@ export function DropdownHelp() {
   return (
     <DropdownMenuSub>
       <DropdownMenuSubTrigger>
-        <HelpCircleIcon className="mr-2 h-4 w-4" />
+        <HelpCircleIcon className="mr-2 h-4 w-4 text-muted-foreground" />
         <span>{t("help")}</span>
       </DropdownMenuSubTrigger>
       <DropdownMenuPortal>
@@ -38,7 +38,7 @@ export function DropdownHelp() {
             onSelect={() => {
               window.open(
                 "https://youtube.com/@discolaire?si=3b2XmG6oOVLkhh3n",
-                "_blank",
+                "_blank"
               );
             }}
           >
