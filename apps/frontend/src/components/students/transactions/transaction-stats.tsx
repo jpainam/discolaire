@@ -51,7 +51,7 @@ export async function TransactionStats({ studentId }: { studentId: string }) {
       title: t("transactionsCompleted"),
       amount: sumBy(
         transactions.filter((t) => t.status == "VALIDATED"),
-        "amount"
+        "amount",
       ).toLocaleString(i18n.language),
       icon: PiMoneyBold,
       iconWrapperFill: "#FF0000",

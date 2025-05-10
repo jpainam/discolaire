@@ -18,7 +18,7 @@ export default async function Page(props: {
   const params = await props.params;
 
   const transaction = await caller.transaction.get(
-    Number(params.transactionId)
+    Number(params.transactionId),
   );
 
   const {
