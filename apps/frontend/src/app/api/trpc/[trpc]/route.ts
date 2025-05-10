@@ -41,7 +41,7 @@ const handler = async (req: NextRequest) => {
     onError({ error, path }) {
       console.error(`>>> tRPC Error on '${path}'`);
       console.error(
-        error.code != "UNAUTHORIZED" ? error.stack : "UNAUTHORIZED"
+        error.code != "UNAUTHORIZED" ? error.stack : "UNAUTHORIZED",
       );
     },
   });
