@@ -97,7 +97,7 @@ export function ImageGrid({
       prefix: prefix,
       bucket: bucket,
       startAfter: startAfter,
-    })
+    }),
   );
   const { t } = useLocale();
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);

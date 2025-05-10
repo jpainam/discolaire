@@ -38,6 +38,7 @@ export function UserNav({ className }: { className?: string }) {
   const router = useRouter();
   const session = useSession();
   const { isMobile } = useSidebar();
+  //const pathname = usePathname();
 
   const user = session.user;
   if (!user) return null;
@@ -187,6 +188,7 @@ export function UserNav({ className }: { className?: string }) {
               className="flex flex-row items-center justify-between"
               type="submit"
             >
+              {/* <input type="hidden" name="redirect" value={pathname} /> */}
               <LogOut className="text-destructive focus:text-destructive mr-2 h-4 w-4 dark:data-[variant=destructive]:focus:bg-destructive/10" />
               <span>{t("logout")}</span>
             </button>

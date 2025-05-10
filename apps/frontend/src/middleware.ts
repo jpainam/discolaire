@@ -27,60 +27,48 @@ export async function middleware(request: NextRequest) {
   const sessionCookie = request.cookies.get("session");
 
   const isProtectedRoute = !unProtectedRoutes.some((route) =>
-    pathname.startsWith(route),
+    pathname.startsWith(route)
   );
 
+  const redirectToLogin = (redirectUrl: string) => {
+    return NextResponse.redirect(
+      new URL(
+        `/auth/login?redirect=${encodeURIComponent(redirectUrl)}`,
+        env.NEXT_PUBLIC_BASE_URL
+      )
+    );
+  };
+
+  // No session & trying to access protected route
   if (isProtectedRoute && !sessionCookie) {
-    // Temporary fix for local redirect issues
-    if (env.NODE_ENV === "production") {
-      let newUrl = request.url;
-      if (newUrl.includes("localhost")) {
-        newUrl = env.NEXT_PUBLIC_BASE_URL;
-      }
-      return NextResponse.redirect(
-        new URL(
-          `/auth/login?redirect=${newUrl}`,
-          new URL(env.NEXT_PUBLIC_BASE_URL),
-        ),
-      );
-    } else {
-      return NextResponse.redirect(
-        new URL(
-          `/auth/login?redirect=${request.url}`,
-          new URL(env.NEXT_PUBLIC_BASE_URL),
-        ),
-      );
-    }
+    return redirectToLogin(request.url);
   }
 
-  const res = NextResponse.next();
+  const response = NextResponse.next();
 
   if (sessionCookie) {
     try {
       const parsed = await verifyToken(sessionCookie.value);
-      const expiresInOneDay = new Date(Date.now() + 24 * 60 * 60 * 1000);
+      const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 1 day
+      const newToken = await signToken({
+        ...parsed,
+        expires: expires.toISOString(),
+      });
 
-      res.cookies.set({
-        name: "session",
-        value: await signToken({
-          ...parsed,
-          expires: expiresInOneDay.toISOString(),
-        }),
+      response.cookies.set("session", newToken, {
         httpOnly: true,
-        secure: true,
+        secure: env.NODE_ENV === "production",
         sameSite: "lax",
-        expires: expiresInOneDay,
+        expires,
       });
     } catch (error) {
-      console.error("Error updating session:", error);
-      res.cookies.delete("session");
+      console.error("Invalid session token:", error);
+      response.cookies.delete("session");
       if (isProtectedRoute) {
-        return NextResponse.redirect(
-          new URL("/auth/login", new URL(env.NEXT_PUBLIC_BASE_URL)),
-        );
+        return redirectToLogin(request.url);
       }
     }
   }
 
-  return res;
+  return response;
 }

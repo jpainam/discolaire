@@ -20,7 +20,7 @@ const signInSchema = z.object({
 
 export async function signIn(
   previousState: { error: string },
-  formData: FormData,
+  formData: FormData
 ) {
   const parsed = signInSchema.safeParse(Object.fromEntries(formData));
 
@@ -60,13 +60,16 @@ export async function signIn(
   }
   await Promise.all([setSession(user), setSchoolYearSession(schoolYear.id)]);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const redirectTo = formData.get("redirect") as string | null;
-  //redirect(redirectTo ?? "/");
   await caller.loginActivity.login();
+  if (redirectTo && redirectTo.trim() !== "") {
+    redirect(redirectTo);
+  }
+
   redirect("/");
 }
 
+//export async function signOut(formData: FormData) {
 export async function signOut() {
   //const user = await auth();
   // if (!user) {
@@ -74,6 +77,9 @@ export async function signOut() {
   // }
   await caller.loginActivity.logout();
   (await cookies()).delete("session");
+  //const redirectTo = formData.get("redirect") as string | null;
+  //redirect("/auth/login?redirect=" + redirectTo);
+  redirect("/auth/login");
 }
 
 export async function setSchoolYearCookie(schoolYearId: string) {

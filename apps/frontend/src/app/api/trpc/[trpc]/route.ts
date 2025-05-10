@@ -22,7 +22,7 @@ export const OPTIONS = () => {
   setCorsHeaders(response);
   return response;
 };
-
+// https://github.com/trpc/trpc/discussions/2036#discussioncomment-5137412
 const handler = async (req: NextRequest) => {
   const session = await auth();
   const schoolYearId = req.cookies.get("x-school-year")?.value ?? "";
