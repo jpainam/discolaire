@@ -12,6 +12,7 @@ import {
 import { db } from "@repo/db";
 
 import { caller } from "~/trpc/server";
+import { routes } from "~/configs/routes";
 
 const signInSchema = z.object({
   username: z.string().min(1),
@@ -79,7 +80,7 @@ export async function signOut() {
   (await cookies()).delete("session");
   //const redirectTo = formData.get("redirect") as string | null;
   //redirect("/auth/login?redirect=" + redirectTo);
-  redirect("/auth/login");
+  redirect(routes.auth.login);
 }
 
 export async function setSchoolYearCookie(schoolYearId: string) {

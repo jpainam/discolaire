@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 import { useLocale } from "~/i18n";
 
+import { routes } from "~/configs/routes";
 import { env } from "~/env";
 import { useRouter } from "~/hooks/use-router";
 
@@ -19,9 +20,11 @@ export default function Error({
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     document.title = "Error";
-    console.error(error);
+    console.error(">>>>>>>>Error from error.tsx", error);
     if (error.message === "UNAUTHORIZED") {
-      router.push("/auth/login");
+      setTimeout(() => {
+        window.location.href = routes.auth.login;
+      }, 0);
     } else {
       setIsLoading(false);
     }

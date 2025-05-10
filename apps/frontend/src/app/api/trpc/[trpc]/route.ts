@@ -40,7 +40,7 @@ const handler = async (req: NextRequest) => {
       }),
     onError({ error, path }) {
       console.error(`>>> tRPC Error on '${path}'`);
-      console.error(error.stack);
+      console.error(error.code != "UNAUTHORIZED" ? error.stack : "");
     },
   });
   setCorsHeaders(response);

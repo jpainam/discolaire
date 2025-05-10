@@ -8,6 +8,7 @@ import PasswordResetSuccess from "@repo/transactional/emails/PasswordResetSucces
 import { getServerTranslations } from "~/i18n/server";
 
 import { comparePasswords } from "@repo/auth/session";
+import { routes } from "~/configs/routes";
 import { caller } from "~/trpc/server";
 
 const schema = z.object({
@@ -49,5 +50,5 @@ export async function POST(req: NextRequest) {
   }
   await caller.passwordReset.delete(resetRequest.id);
 
-  redirect("/auth/login");
+  redirect(routes.auth.login);
 }

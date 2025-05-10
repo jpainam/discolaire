@@ -27,15 +27,15 @@ export async function middleware(request: NextRequest) {
   const sessionCookie = request.cookies.get("session");
 
   const isProtectedRoute = !unProtectedRoutes.some((route) =>
-    pathname.startsWith(route)
+    pathname.startsWith(route),
   );
 
   const redirectToLogin = (redirectUrl: string) => {
     return NextResponse.redirect(
       new URL(
         `/auth/login?redirect=${encodeURIComponent(redirectUrl)}`,
-        env.NEXT_PUBLIC_BASE_URL
-      )
+        env.NEXT_PUBLIC_BASE_URL,
+      ),
     );
   };
 
