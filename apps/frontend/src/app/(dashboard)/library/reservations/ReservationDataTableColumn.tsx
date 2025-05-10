@@ -131,7 +131,7 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
     trpc.library.deleteBorrow.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.library.borrowBooks.pathFilter()
+          trpc.library.borrowBooks.pathFilter(),
         );
         await queryClient.invalidateQueries(trpc.book.all.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
@@ -139,7 +139,7 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const updateBookMutation = useMutation(
@@ -149,11 +149,11 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.library.borrowBooks.pathFilter()
+          trpc.library.borrowBooks.pathFilter(),
         );
         toast.success(t("updated_successfully"), { id: 0 });
       },
-    })
+    }),
   );
 
   const canUpdateLoan = useCheckPermission("library", PermissionAction.UPDATE);
