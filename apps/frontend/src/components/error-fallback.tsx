@@ -1,19 +1,24 @@
 "use client";
 
-import { Button } from "@repo/ui/components/button";
-import { useRouter } from "next/navigation";
+import { env } from "~/env";
 
-export function ErrorFallback() {
-  const router = useRouter();
-
+export function ErrorFallback({
+  error,
+  reset,
+}: {
+  error: Error;
+  reset?: () => void;
+}) {
   return (
     <div className="flex flex-col items-center justify-center h-full space-y-4">
       <div>
-        <h2 className="text-md">Something went wrong</h2>
+        <h2 className="text-md">
+          {env.NODE_ENV == "production"
+            ? "Something went wrong"
+            : error.message}
+        </h2>
       </div>
-      <Button size={"sm"} onClick={() => router.refresh()} variant="outline">
-        Try again
-      </Button>
+      <button onClick={() => reset?.()}>Try again</button>
     </div>
   );
 }

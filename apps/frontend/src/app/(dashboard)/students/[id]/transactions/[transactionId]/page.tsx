@@ -18,7 +18,7 @@ export default async function Page(props: {
   const params = await props.params;
 
   const transaction = await caller.transaction.get(
-    Number(params.transactionId),
+    Number(params.transactionId)
   );
 
   const {
@@ -165,11 +165,6 @@ export default async function Page(props: {
                 </span>
               </div>
             </div>
-
-            {/* <div className="mt-4 text-center">
-          <p className="text-xs">Le chemin de la réussite scolaire</p>
-          <p className="text-xs">The road to academic success</p>
-        </div> */}
           </div>
         </div>
       </div>
