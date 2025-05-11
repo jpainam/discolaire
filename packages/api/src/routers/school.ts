@@ -95,7 +95,7 @@ export const schoolRouter = createTRPCRouter({
         defaultCountryId: z.string().min(1),
         applyRequiredFee: z.enum(["NO", "YES", "PASSIVE"]),
         includeRequiredFee: z.boolean(),
-        applyClassroomMaxSize: z.boolean().default(false),
+        allowOverEnrollment: z.boolean().default(true),
         currency: z.string().min(1),
         numberOfReceipts: z.coerce.number().min(1),
       }),
@@ -105,7 +105,7 @@ export const schoolRouter = createTRPCRouter({
         numberOfReceipts: input.numberOfReceipts,
         defaultCountryId: input.defaultCountryId,
         applyRequiredFee: input.applyRequiredFee,
-        applyClassroomMaxSize: input.applyClassroomMaxSize,
+        allowOverEnrollment: input.allowOverEnrollment,
         includeRequiredFee: input.includeRequiredFee,
         currency: input.currency,
       } as Prisma.SchoolUpdateInput;

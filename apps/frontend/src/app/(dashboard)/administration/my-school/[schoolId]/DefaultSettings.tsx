@@ -45,7 +45,7 @@ const defaultSettingsSchema = z.object({
   numberOfReceipts: z.coerce.number().min(1),
   currency: z.string().min(1).default("CFA"),
   timezone: z.string().min(1).default("UTC"),
-  applyClassroomMaxSize: z.boolean().default(false),
+  allowOverEnrollment: z.boolean().default(true),
 });
 export function DefaultSettings() {
   const { t } = useLocale();
@@ -64,7 +64,7 @@ export function DefaultSettings() {
       applyRequiredFee: school.applyRequiredFee,
       includeRequiredFee: school.includeRequiredFee ?? false,
       numberOfReceipts: school.numberOfReceipts ?? 1,
-      applyClassroomMaxSize: school.applyClassroomMaxSize ?? false,
+      allowOverEnrollment: school.allowOverEnrollment ?? true,
       currency: school.currency,
       timezone: school.timezone,
     },
@@ -94,193 +94,205 @@ export function DefaultSettings() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
-          <FormField
-            control={form.control}
-            name="defaultCountryId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("default_country")}</FormLabel>
-                <FormControl>
-                  <CountryPicker placeholder={t("country")} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="timezone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("timezones")}</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder={t("timezones")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {timezones.map((timezone, index) => (
-                        <SelectItem
-                          key={`${timezone.utc}-${index}`}
-                          value={timezone.tzCode}
-                        >
-                          {timezone.label}
+        <div className="grid gap-4 xl:grid-cols-[1fr_40%]">
+          <div className="grid md:grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="defaultCountryId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("default_country")}</FormLabel>
+                  <FormControl>
+                    <CountryPicker placeholder={t("country")} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="timezone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("timezones")}</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder={t("timezones")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {timezones.map((timezone, index) => (
+                          <SelectItem
+                            key={`${timezone.utc}-${index}`}
+                            value={timezone.tzCode}
+                          >
+                            {timezone.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="applyRequiredFee"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("activate_required_fees")}</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder={t("status")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="YES">
+                          {t("yes_and_active")}
                         </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                        <SelectItem value="PASSIVE">
+                          {t("yes_but_passive")}
+                        </SelectItem>
+                        <SelectItem value="NO">{t("no")}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
 
-          <FormField
-            control={form.control}
-            name="applyRequiredFee"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("activate_required_fees")}</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder={t("status")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="YES">{t("yes_and_active")}</SelectItem>
-                      <SelectItem value="PASSIVE">
-                        {t("yes_but_passive")}
-                      </SelectItem>
-                      <SelectItem value="NO">{t("no")}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="currency"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("currency")}</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="numberOfReceipts"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("number_of_receipts_to_print")}</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={`${field.value}`}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">1</SelectItem>
+                        <SelectItem value="2">2</SelectItem>
+                        <SelectItem value="3">3</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
 
-          <FormField
-            control={form.control}
-            name="includeRequiredFee"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("include_required_fees_in_finances")}</FormLabel>
-                <FormControl>
-                  <Switch
-                    defaultChecked={field.value}
-                    onCheckedChange={(checked) => {
-                      field.onChange(checked);
-                    }}
-                  />
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="applyClassroomMaxSize"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel></FormLabel>
-                <FormControl>
-                  <Label className="flex items-center gap-6 rounded-lg border p-4 has-[[data-state=checked]]:border-blue-600">
-                    <div className="flex flex-col gap-1">
-                      <div className="font-medium">
-                        {t("Classroom maximum size")}
-                      </div>
-                      <div className="text-muted-foreground text-sm font-normal">
-                        {t(
-                          "Do not allow students to enroll in classrooms that exceed the maximum size"
-                        )}
-                      </div>
-                    </div>
-                    <Switch
-                      defaultChecked={field.value}
-                      onCheckedChange={(checked) => {
-                        field.onChange(checked);
-                      }}
-                      id="switch-demo-focus-mode"
-                      className="data-[state=checked]:bg-blue-500 dark:data-[state=checked]:bg-blue-600"
-                    />
-                  </Label>
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="currency"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("currency")}</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="numberOfReceipts"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("number_of_receipts_to_print")}</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={`${field.value}`}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1">1</SelectItem>
-                      <SelectItem value="2">2</SelectItem>
-                      <SelectItem value="3">3</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="col-span-full flex flex-row justify-end gap-2">
-            <Button
-              variant={"outline"}
-              type="button"
-              onClick={() => {
-                form.reset();
-              }}
-              size={"sm"}
-            >
-              {t("reset")}
-            </Button>
-            <Button
-              type="submit"
-              disabled={!form.formState.isDirty}
-              isLoading={updateDefaultSettings.isPending}
-              size={"sm"}
-            >
-              {t("submit")}
-            </Button>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
+          <div className="flex flex-col gap-4">
+            <FormField
+              control={form.control}
+              name="allowOverEnrollment"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Label className="flex justify-between items-center gap-6 rounded-lg border p-4 has-[[data-state=checked]]:border-blue-600">
+                      <div className="flex flex-col gap-1">
+                        <div className="font-medium">
+                          {t("Classroom maximum size")}
+                        </div>
+                        <div className="text-muted-foreground text-sm font-normal">
+                          {t(
+                            "Allow enrollments in classrooms that exceed the maximum size"
+                          )}
+                        </div>
+                      </div>
+                      <Switch
+                        defaultChecked={field.value}
+                        onCheckedChange={(checked) => {
+                          field.onChange(checked);
+                        }}
+                        id="switch-demo-focus-mode1"
+                        className="data-[state=checked]:bg-blue-500 dark:data-[state=checked]:bg-blue-600"
+                      />
+                    </Label>
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="includeRequiredFee"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Label className="flex justify-between items-center gap-6 rounded-lg border p-4 has-[[data-state=checked]]:border-blue-600">
+                      <div className="flex flex-col gap-1">
+                        <div className="font-medium">{t("required_fees")}</div>
+                        <div className="text-muted-foreground text-sm font-normal">
+                          {t("Include required fees in cash reports?")}
+                        </div>
+                      </div>
+                      <Switch
+                        defaultChecked={field.value}
+                        onCheckedChange={(checked) => {
+                          field.onChange(checked);
+                        }}
+                        id="switch-demo-focus-mode2"
+                        className="data-[state=checked]:bg-blue-500 dark:data-[state=checked]:bg-blue-600"
+                      />
+                    </Label>
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        <div className="col-span-full flex flex-row justify-end gap-2">
+          <Button
+            variant={"outline"}
+            type="button"
+            onClick={() => {
+              form.reset();
+            }}
+            size={"sm"}
+          >
+            {t("reset")}
+          </Button>
+          <Button
+            type="submit"
+            disabled={!form.formState.isDirty}
+            isLoading={updateDefaultSettings.isPending}
+            size={"sm"}
+          >
+            {t("submit")}
+          </Button>
         </div>
       </form>
     </Form>

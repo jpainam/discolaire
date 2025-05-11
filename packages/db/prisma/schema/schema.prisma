@@ -620,56 +620,56 @@ model Country {
 }
 
 model School {
-    id                    String              @id @default(cuid())
-    code                  String              @unique
-    name                  String
-    authorization         String?
-    ministry              String?
-    department            String?
-    region                String?
-    defaultLocale         String              @default("fr")
-    city                  String?
-    headmaster            String?
-    phoneNumber1          String?
-    phoneNumber2          String?
-    email                 String?
-    website               String?
-    numberOfReceipts      Int?                @default(1)
-    logo                  String?
-    createdAt             DateTime            @default(now()) @db.Timestamp(6)
-    updatedAt             DateTime            @updatedAt
-    isActive              Boolean             @default(true)
-    address               String?
-    timezone              String              @default("Africa/Brazzaville")
-    defaultCountryId      String?
-    registrationPrefix    String              @default("1")
-    requestSunPlusNo      Boolean?            @default(true)
-    applyClassroomMaxSize Boolean?            @default(false)
-    applyRequiredFee      ApplyRequiredFee    @default(NO)
-    includeRequiredFee    Boolean?            @default(false)
-    contacts              Contact[]
-    users                 User[]
-    students              Student[]
-    currency              String
-    classrooms            Classroom[]
-    staffs                Staff[]
-    formerSchools         FormerSchool[]
-    religions             Religion[]
-    sports                Sport[]
-    clubs                 Club[]
-    permissions           Policy[]
-    roles                 Role[]
-    subjectGroup          SubjectGroup[]
-    courses               Course[]
-    schoolYears           SchoolYear[]
-    cycles                Cycle[]
-    sections              Section[]
-    levels                ClassroomLevel[]
-    terms                 Term[]
-    documents             Document[]
-    degrees               Degree[]
-    relationships         Relationship[]
-    timetableCategories   TimetableCategory[]
+    id                  String              @id @default(cuid())
+    code                String              @unique
+    name                String
+    authorization       String?
+    ministry            String?
+    department          String?
+    region              String?
+    defaultLocale       String              @default("fr")
+    city                String?
+    headmaster          String?
+    phoneNumber1        String?
+    phoneNumber2        String?
+    email               String?
+    website             String?
+    numberOfReceipts    Int?                @default(1)
+    logo                String?
+    createdAt           DateTime            @default(now()) @db.Timestamp(6)
+    updatedAt           DateTime            @updatedAt
+    isActive            Boolean             @default(true)
+    address             String?
+    timezone            String              @default("Africa/Brazzaville")
+    defaultCountryId    String?
+    registrationPrefix  String              @default("1")
+    requestSunPlusNo    Boolean?            @default(true)
+    allowOverEnrollment Boolean?            @default(true)
+    applyRequiredFee    ApplyRequiredFee    @default(NO)
+    includeRequiredFee  Boolean?            @default(false)
+    contacts            Contact[]
+    users               User[]
+    students            Student[]
+    currency            String
+    classrooms          Classroom[]
+    staffs              Staff[]
+    formerSchools       FormerSchool[]
+    religions           Religion[]
+    sports              Sport[]
+    clubs               Club[]
+    permissions         Policy[]
+    roles               Role[]
+    subjectGroup        SubjectGroup[]
+    courses             Course[]
+    schoolYears         SchoolYear[]
+    cycles              Cycle[]
+    sections            Section[]
+    levels              ClassroomLevel[]
+    terms               Term[]
+    documents           Document[]
+    degrees             Degree[]
+    relationships       Relationship[]
+    timetableCategories TimetableCategory[]
 }
 
 model FormerSchool {
