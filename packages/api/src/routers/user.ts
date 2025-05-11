@@ -378,4 +378,15 @@ export const userRouter = createTRPCRouter({
         },
       });
     }),
+  activities: protectedProcedure
+    .input(z.string().min(1))
+    .query(async ({ ctx, input }) => {
+      return ctx.db.logActivity.findMany({
+        where: {
+          userId: input,
+          schoolYearId: ctx.schoolYearId,
+          schoolId: ctx.schoolId,
+        },
+      });
+    }),
 });

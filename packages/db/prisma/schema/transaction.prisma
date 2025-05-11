@@ -144,21 +144,20 @@ model HealthDrug {
 }
 
 model LogActivity {
-    id           Int          @id @default(autoincrement())
-    event        String
-    ipAddress    String?
-    userAgent    String?
+    id           Int             @id @default(autoincrement())
+    title        String
+    url          String
+    description  String?
     userId       String
     schoolId     String
     schoolYearId String
-    source       String       @default("info")
-    eventType    LogEventType @default(READ)
-    createdAt    DateTime     @default(now())
+    type         LogActivityType @default(READ)
+    createdAt    DateTime        @default(now())
     data         Json?
-    user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+    user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-enum LogEventType {
+enum LogActivityType {
     UPDATE
     DELETE
     CREATE
