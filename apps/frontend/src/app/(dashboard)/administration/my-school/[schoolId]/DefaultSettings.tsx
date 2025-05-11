@@ -189,17 +189,20 @@ export function DefaultSettings() {
           />
           <FormField
             control={form.control}
-            name=""
+            name="applyClassroomMaxSize"
             render={({ field }) => (
               <FormItem>
                 <FormLabel></FormLabel>
                 <FormControl>
                   <Label className="flex items-center gap-6 rounded-lg border p-4 has-[[data-state=checked]]:border-blue-600">
                     <div className="flex flex-col gap-1">
-                      <div className="font-medium">Share across devices</div>
+                      <div className="font-medium">
+                        {t("Classroom maximum size")}
+                      </div>
                       <div className="text-muted-foreground text-sm font-normal">
-                        Focus is shared across devices, and turns off when you
-                        leave the app.
+                        {t(
+                          "Do not allow students to enroll in classrooms that exceed the maximum size"
+                        )}
                       </div>
                     </div>
                     <Switch

@@ -872,6 +872,8 @@
   "send_as": "Enviar como",
   "will_post_on": "Se publicará en {{date}}",
   "template": "Plantilla",
+  "Classroom maximum size": "Tamaño máximo del aula",
+  "Do not allow students to enroll in classrooms that exceed the maximum size": "No permitir que los estudiantes se inscriban en aulas que excedan el tamaño máximo",
   "page": "Página",
   "everyone": "Todos",
   "select_a_recipient": "Seleccione un destinatario",

@@ -925,6 +925,8 @@
   "will_post_on": "Sera publié le {{date}}",
   "template": "Modèle",
   "select_options": "Sélectionner des options",
+  "Classroom maximum size": "Taille max de la classe",
+  "Do not allow students to enroll in classrooms that exceed the maximum size": "Ne pas autoriser les élèves à s'inscrire dans des classes qui dépassent la taille maximale",
   "Happening now": "En cours",
   "No appointments or consultations at the moment": "Aucun rendez-vous ou consultation pour le moment",
   "select_chef_de_class": "Choisir un chef de classe",
