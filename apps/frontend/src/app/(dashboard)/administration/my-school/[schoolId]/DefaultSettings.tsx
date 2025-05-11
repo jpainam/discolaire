@@ -34,7 +34,9 @@ import {
 import { useForm } from "react-hook-form";
 import { CountryPicker } from "~/components/shared/CountryPicker";
 import { timezones } from "~/data/timezones";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 
 const defaultSettingsSchema = z.object({
@@ -69,6 +71,7 @@ export function DefaultSettings() {
     },
   });
   const router = useRouter();
+  const canUpdateSchool = useCheckPermission("school", PermissionAction.UPDATE);
   const updateDefaultSettings = useMutation(
     trpc.school.updateDefaultSettings.mutationOptions({
       onSuccess: async () => {
@@ -90,12 +93,15 @@ export function DefaultSettings() {
     });
   };
 
+  const disabled = !canUpdateSchool;
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <div className="grid gap-4 xl:grid-cols-[1fr_40%]">
           <div className="grid md:grid-cols-2 gap-4">
             <FormField
+              disabled={disabled}
               control={form.control}
               name="defaultCountryId"
               render={({ field }) => (
@@ -111,11 +117,13 @@ export function DefaultSettings() {
             <FormField
               control={form.control}
               name="timezone"
+              disabled={disabled}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("timezones")}</FormLabel>
                   <FormControl>
                     <Select
+                      disabled={disabled}
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
@@ -141,11 +149,13 @@ export function DefaultSettings() {
             <FormField
               control={form.control}
               name="applyRequiredFee"
+              disabled={disabled}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("activate_required_fees")}</FormLabel>
                   <FormControl>
                     <Select
+                      disabled={disabled}
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
@@ -171,6 +181,7 @@ export function DefaultSettings() {
             <FormField
               control={form.control}
               name="currency"
+              disabled={disabled}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("currency")}</FormLabel>
@@ -185,11 +196,13 @@ export function DefaultSettings() {
             <FormField
               control={form.control}
               name="numberOfReceipts"
+              disabled={disabled}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("number_of_receipts_to_print")}</FormLabel>
                   <FormControl>
                     <Select
+                      disabled={disabled}
                       onValueChange={field.onChange}
                       defaultValue={`${field.value}`}
                     >
@@ -213,6 +226,7 @@ export function DefaultSettings() {
             <FormField
               control={form.control}
               name="allowOverEnrollment"
+              disabled={disabled}
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
@@ -228,6 +242,7 @@ export function DefaultSettings() {
                         </div>
                       </div>
                       <Switch
+                        disabled={disabled}
                         defaultChecked={field.value}
                         onCheckedChange={(checked) => {
                           field.onChange(checked);
@@ -245,6 +260,7 @@ export function DefaultSettings() {
             <FormField
               control={form.control}
               name="includeRequiredFee"
+              disabled={disabled}
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
@@ -257,6 +273,7 @@ export function DefaultSettings() {
                       </div>
                       <Switch
                         defaultChecked={field.value}
+                        disabled={disabled}
                         onCheckedChange={(checked) => {
                           field.onChange(checked);
                         }}
@@ -276,6 +293,7 @@ export function DefaultSettings() {
         <div className="col-span-full flex flex-row justify-end gap-2">
           <Button
             variant={"outline"}
+            disabled={disabled}
             type="button"
             onClick={() => {
               form.reset();
@@ -286,7 +304,7 @@ export function DefaultSettings() {
           </Button>
           <Button
             type="submit"
-            disabled={!form.formState.isDirty}
+            disabled={!form.formState.isDirty || disabled}
             isLoading={updateDefaultSettings.isPending}
             size={"sm"}
           >

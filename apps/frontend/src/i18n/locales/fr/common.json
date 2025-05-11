@@ -922,6 +922,7 @@
   "transaction_date": "Date transaction",
   "send_as": "Envoyer sur",
   "page": "Page",
+  "Authorize": "Autoriser",
   "will_post_on": "Sera publié le {{date}}",
   "template": "Modèle",
   "select_options": "Sélectionner des options",

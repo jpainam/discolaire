@@ -13,7 +13,9 @@ import {
 import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 
+import { checkPermission } from "@repo/api/permission";
 import { env } from "~/env";
+import { PermissionAction } from "~/permissions";
 import { caller } from "~/trpc/server";
 import { SchoolTableAction } from "./SchoolTableAction";
 
@@ -28,6 +30,15 @@ export default async function Page() {
   }
   const schools = await caller.school.all();
   const { t } = await getServerTranslations();
+  const canUpdateSchool = await checkPermission(
+    "school",
+    PermissionAction.UPDATE
+  );
+  const canDeleteSchool = await checkPermission(
+    "school",
+    PermissionAction.DELETE
+  );
+  const canReadSchool = await checkPermission("school", PermissionAction.READ);
 
   return (
     <div className="rounded-lg border">
@@ -56,7 +67,11 @@ export default async function Page() {
                 <TableCell>
                   <Link
                     className="hover:text-blue-600 hover:underline"
-                    href={`/administration/my-school/${school.id}`}
+                    href={
+                      canReadSchool
+                        ? `/administration/my-school/${school.id}`
+                        : "#"
+                    }
                   >
                     {school.name}
                   </Link>
@@ -66,7 +81,9 @@ export default async function Page() {
                 <TableCell>{school.address}</TableCell>
                 <TableCell>{school.phoneNumber1}</TableCell>
                 <TableCell className="text-right">
-                  <SchoolTableAction schoolId={school.id} />
+                  {(canDeleteSchool || canUpdateSchool) && (
+                    <SchoolTableAction schoolId={school.id} />
+                  )}
                 </TableCell>
               </TableRow>
             );

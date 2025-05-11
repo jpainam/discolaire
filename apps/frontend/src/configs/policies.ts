@@ -355,6 +355,26 @@ export const policies: {
     resource: "communication",
     action: PermissionAction.Create,
   },
+  {
+    title: "my_school",
+    resource: "school",
+    action: PermissionAction.Read,
+  },
+  {
+    title: "my_school",
+    resource: "school",
+    action: PermissionAction.Update,
+  },
+  {
+    title: "my_school",
+    resource: "school",
+    action: PermissionAction.Read,
+  },
+  {
+    title: "my_school",
+    resource: "school",
+    action: PermissionAction.Delete,
+  },
 ];
 
 export const menuPolicies: {
@@ -375,6 +395,28 @@ export const menuPolicies: {
   {
     title: "staff",
     resource: "menu:staff",
+    action: PermissionAction.Read,
+  },
+];
+
+export const adminPolicies: {
+  title: string;
+  resource: string;
+  action: PermissionAction;
+}[] = [
+  {
+    title: "school",
+    resource: "school",
+    action: PermissionAction.Read,
+  },
+  {
+    title: "school",
+    resource: "school",
+    action: PermissionAction.Update,
+  },
+  {
+    title: "school",
+    resource: "school",
     action: PermissionAction.Read,
   },
 ];

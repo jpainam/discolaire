@@ -25,11 +25,13 @@ import FlatBadge from "~/components/FlatBadge";
 import { NoPermission } from "~/components/no-permission";
 import { getServerTranslations } from "~/i18n/server";
 
+import { checkPermission } from "@repo/api/permission";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
 import { ErrorFallback } from "~/components/error-fallback";
 import { env } from "~/env";
+import { PermissionAction } from "~/permissions";
 import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 import { DefaultSettings } from "./DefaultSettings";
 import { SchoolDetailAction } from "./SchoolDetailAction";
@@ -56,6 +58,13 @@ export default async function Page(props: {
   ) {
     return <NoPermission />;
   }
+  const canReadSchool = await checkPermission("school", PermissionAction.READ);
+  if (!canReadSchool) return <NoPermission />;
+
+  const canUpdateSchool = await checkPermission(
+    "school",
+    PermissionAction.UPDATE
+  );
 
   const { t } = await getServerTranslations();
   return (
@@ -80,7 +89,7 @@ export default async function Page(props: {
               <FlatBadge variant={school.isActive ? "green" : "red"}>
                 {school.isActive ? t("active") : t("inactive")}
               </FlatBadge>
-              <SchoolDetailAction schoolId={schoolId} />
+              {canUpdateSchool && <SchoolDetailAction schoolId={schoolId} />}
             </CardAction>
           </CardHeader>
           <CardContent className="p-2">
