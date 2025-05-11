@@ -4,8 +4,6 @@ import { Worker } from "bullmq";
 import IORedis from "ioredis";
 import * as z from "zod";
 
-import { db } from "@repo/db";
-
 import { env } from "./env";
 import { transactionWorker } from "./transaction";
 
@@ -86,12 +84,12 @@ new Worker(
     const { event } = result.data;
     console.log("Logging", event);
 
-    await db.logActivity.create({
-      data: {
-        ...result.data,
-        data: JSON.stringify(result.data.data),
-      },
-    });
+    // await db.logActivity.create({
+    //   data: {
+    //     ...result.data,
+    //     data: JSON.stringify(result.data.data),
+    //   },
+    // });
   },
   { connection },
 );

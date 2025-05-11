@@ -7,7 +7,7 @@ import type { TransactionStatus } from "@repo/db";
 import { classroomService } from "../services/classroom-service";
 import { transactionService } from "../services/transaction-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { logQueue, notificationQueue } from "../utils";
+import { notificationQueue } from "../utils";
 
 const createSchema = z.object({
   amount: z.number(),
@@ -379,19 +379,6 @@ export const transactionRouter = createTRPCRouter({
         type: "transaction",
         id: result.id,
       });
-
-      void logQueue.add("log", {
-        userId: ctx.session.user.id,
-        event: `Create transaction ${result.id} for ${result.accountId}`,
-        ipAddress: ctx.ipAddress,
-        schoolId: ctx.schoolId,
-        schoolYearId: ctx.schoolYearId,
-        userAgent: ctx.userAgent,
-        source: "transaction",
-        eventType: "CREATE",
-        data: result,
-      });
-
       return result;
     }),
   trends: protectedProcedure.query(async ({ ctx }) => {

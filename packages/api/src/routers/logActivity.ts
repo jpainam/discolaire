@@ -31,7 +31,7 @@ export const logActivityRouter = {
           schoolId: ctx.schoolId,
           OR: [
             {
-              event: {
+              title: {
                 contains: q,
                 mode: "insensitive",
               },

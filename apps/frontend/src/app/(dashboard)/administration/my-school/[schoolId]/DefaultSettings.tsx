@@ -25,6 +25,7 @@ import { Switch } from "@repo/ui/components/switch";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Label } from "@repo/ui/components/label";
 import {
   useMutation,
   useQueryClient,
@@ -44,13 +45,14 @@ const defaultSettingsSchema = z.object({
   numberOfReceipts: z.coerce.number().min(1),
   currency: z.string().min(1).default("CFA"),
   timezone: z.string().min(1).default("UTC"),
+  applyClassroomMaxSize: z.boolean().default(false),
 });
 export function DefaultSettings() {
   const { t } = useLocale();
   const trpc = useTRPC();
   const params = useParams<{ schoolId: string }>();
   const { data: school } = useSuspenseQuery(
-    trpc.school.get.queryOptions(params.schoolId),
+    trpc.school.get.queryOptions(params.schoolId)
   );
 
   const queryClient = useQueryClient();
@@ -62,6 +64,7 @@ export function DefaultSettings() {
       applyRequiredFee: school.applyRequiredFee,
       includeRequiredFee: school.includeRequiredFee ?? false,
       numberOfReceipts: school.numberOfReceipts ?? 1,
+      applyClassroomMaxSize: school.applyClassroomMaxSize ?? false,
       currency: school.currency,
       timezone: school.timezone,
     },
@@ -77,7 +80,7 @@ export function DefaultSettings() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const handleSubmit = (data: z.infer<typeof defaultSettingsSchema>) => {
@@ -178,6 +181,36 @@ export function DefaultSettings() {
                       field.onChange(checked);
                     }}
                   />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name=""
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel></FormLabel>
+                <FormControl>
+                  <Label className="flex items-center gap-6 rounded-lg border p-4 has-[[data-state=checked]]:border-blue-600">
+                    <div className="flex flex-col gap-1">
+                      <div className="font-medium">Share across devices</div>
+                      <div className="text-muted-foreground text-sm font-normal">
+                        Focus is shared across devices, and turns off when you
+                        leave the app.
+                      </div>
+                    </div>
+                    <Switch
+                      defaultChecked={field.value}
+                      onCheckedChange={(checked) => {
+                        field.onChange(checked);
+                      }}
+                      id="switch-demo-focus-mode"
+                      className="data-[state=checked]:bg-blue-500 dark:data-[state=checked]:bg-blue-600"
+                    />
+                  </Label>
                 </FormControl>
 
                 <FormMessage />

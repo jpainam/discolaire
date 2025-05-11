@@ -11,6 +11,7 @@ import {
   SidebarRail,
 } from "@repo/ui/components/sidebar";
 import {
+  ActivityIcon,
   ArrowLeft,
   BellRing,
   CircleDollarSign,
@@ -58,6 +59,11 @@ export function UserSidebar({
         name: "settings",
         icon: Settings,
         url: `/users/${params.id}/settings`,
+      },
+      {
+        name: "activities",
+        icon: ActivityIcon,
+        url: `/users/${params.id}/activities`,
       },
       {
         name: "logs_and_activities",
