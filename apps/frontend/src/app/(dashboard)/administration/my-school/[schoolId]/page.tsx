@@ -49,7 +49,7 @@ export default async function Page(props: {
   }
   const queryClient = getQueryClient();
   const school = await queryClient.fetchQuery(
-    trpc.school.get.queryOptions(schoolId)
+    trpc.school.get.queryOptions(schoolId),
   );
 
   if (
@@ -63,7 +63,7 @@ export default async function Page(props: {
 
   const canUpdateSchool = await checkPermission(
     "school",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
 
   const { t } = await getServerTranslations();

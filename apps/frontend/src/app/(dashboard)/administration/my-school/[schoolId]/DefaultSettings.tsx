@@ -53,7 +53,7 @@ export function DefaultSettings() {
   const trpc = useTRPC();
   const params = useParams<{ schoolId: string }>();
   const { data: school } = useSuspenseQuery(
-    trpc.school.get.queryOptions(params.schoolId)
+    trpc.school.get.queryOptions(params.schoolId),
   );
 
   const queryClient = useQueryClient();
@@ -82,7 +82,7 @@ export function DefaultSettings() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const handleSubmit = (data: z.infer<typeof defaultSettingsSchema>) => {
@@ -237,7 +237,7 @@ export function DefaultSettings() {
                         </div>
                         <div className="text-muted-foreground text-sm font-normal">
                           {t(
-                            "Allow enrollments in classrooms that exceed the maximum size"
+                            "Allow enrollments in classrooms that exceed the maximum size",
                           )}
                         </div>
                       </div>

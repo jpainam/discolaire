@@ -47,10 +47,7 @@ export function EnrollmentHeader() {
   const session = useSession();
   const { school } = useSchool();
   const router = useRouter();
-  const canUpdateClassroom = useCheckPermission(
-    "classroom",
-    PermissionAction.UPDATE
-  );
+  const canUpdateSchool = useCheckPermission("school", PermissionAction.UPDATE);
 
   const canEnroll = useCheckPermission("enrollment", PermissionAction.CREATE);
 
@@ -164,7 +161,7 @@ export function EnrollmentHeader() {
                       position: "top-center",
                       duration: 5000,
                       className: "w-[300px]",
-                      action: canUpdateClassroom
+                      action: canUpdateSchool
                         ? {
                             label: t("Authorize"),
                             onClick: () =>
