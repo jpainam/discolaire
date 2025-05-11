@@ -33,7 +33,6 @@ import {
 } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { CountryPicker } from "~/components/shared/CountryPicker";
-import { routes } from "~/configs/routes";
 import { timezones } from "~/data/timezones";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
@@ -52,7 +51,7 @@ export function DefaultSettings() {
   const trpc = useTRPC();
   const params = useParams<{ schoolId: string }>();
   const { data: school } = useSuspenseQuery(
-    trpc.school.get.queryOptions(params.schoolId),
+    trpc.school.get.queryOptions(params.schoolId)
   );
 
   const queryClient = useQueryClient();
@@ -75,12 +74,12 @@ export function DefaultSettings() {
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.school.get.pathFilter());
         toast.success(t("updated_successfully"), { id: 0 });
-        router.push(routes.administration.my_school.details(params.schoolId));
+        router.refresh();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const handleSubmit = (data: z.infer<typeof defaultSettingsSchema>) => {
@@ -224,7 +223,7 @@ export function DefaultSettings() {
                         </div>
                         <div className="text-muted-foreground text-sm font-normal">
                           {t(
-                            "Allow enrollments in classrooms that exceed the maximum size",
+                            "Allow enrollments in classrooms that exceed the maximum size"
                           )}
                         </div>
                       </div>

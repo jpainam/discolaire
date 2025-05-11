@@ -47,7 +47,7 @@ export default async function Page(props: {
   }
   const queryClient = getQueryClient();
   const school = await queryClient.fetchQuery(
-    trpc.school.get.queryOptions(schoolId),
+    trpc.school.get.queryOptions(schoolId)
   );
 
   if (
@@ -151,11 +151,8 @@ export default async function Page(props: {
           </div> */}
           </CardContent>
         </Card>
-        <Card className="p-0">
-          <CardHeader className="border-b bg-muted/50 p-2">
-            <CardTitle>{t("default_settings")}</CardTitle>
-          </CardHeader>
-          <CardContent className="p-4">
+        <Card>
+          <CardContent>
             <ErrorBoundary errorComponent={ErrorFallback}>
               <Suspense fallback={<Skeleton className="h-20 " />}>
                 <DefaultSettings />
