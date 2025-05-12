@@ -27,21 +27,24 @@ export async function middleware(request: NextRequest) {
   const sessionCookie = request.cookies.get("session");
 
   const isProtectedRoute = !unProtectedRoutes.some((route) =>
-    pathname.startsWith(route),
+    pathname.startsWith(route)
   );
 
   const redirectToLogin = (redirectUrl: string) => {
     return NextResponse.redirect(
       new URL(
         `/auth/login?redirect=${encodeURIComponent(redirectUrl)}`,
-        env.NEXT_PUBLIC_BASE_URL,
-      ),
+        env.NEXT_PUBLIC_BASE_URL
+      )
     );
   };
 
   // No session & trying to access protected route
   if (isProtectedRoute && !sessionCookie) {
-    return redirectToLogin(request.url);
+    // request.url not working inside docker, or reverse proxy
+    return redirectToLogin(
+      `${env.NEXT_PUBLIC_BASE_URL}${pathname}${request.nextUrl.search}`
+    );
   }
 
   const response = NextResponse.next();
@@ -65,7 +68,9 @@ export async function middleware(request: NextRequest) {
       console.error("Invalid session token:", error);
       response.cookies.delete("session");
       if (isProtectedRoute) {
-        return redirectToLogin(request.url);
+        return redirectToLogin(
+          `${env.NEXT_PUBLIC_BASE_URL}${pathname}${request.nextUrl.search}`
+        );
       }
     }
   }
