@@ -3,7 +3,6 @@
 import { useAtom } from "jotai";
 import { ArrowDownUp, AtSign, DollarSign, Phone, Users } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 
 import type { RouterOutputs } from "@repo/api";
@@ -28,12 +27,14 @@ type StudentAccountWithBalance = NonNullable<
 export function GridViewFinanceCard({
   studentBalance,
   amountDue,
+  type,
 }: {
   amountDue: number;
+  type: string;
   studentBalance: StudentAccountWithBalance;
 }) {
   const [selectedStudents, setSelectedStudents] = useAtom(
-    selectedStudentIdsAtom,
+    selectedStudentIdsAtom
   );
 
   const student = studentBalance.student;
@@ -43,25 +44,24 @@ export function GridViewFinanceCard({
     setSelectedStudents((students) =>
       students.includes(student.id)
         ? students.filter((id) => id !== student.id)
-        : [...students, student.id],
+        : [...students, student.id]
     );
   }, [setSelectedStudents, student.id]);
 
   const { t } = useLocale();
   const remaining = balance - amountDue;
-  const searchParams = useSearchParams();
 
-  if (searchParams.get("type") == "credit" && remaining < 0) {
+  if (type == "credit" && remaining < 0) {
     return null;
   }
-  if (searchParams.get("type") == "debit" && remaining > 0) {
+  if (type == "debit" && remaining > 0) {
     return null;
   }
   return (
     <Card
       className={cn(
         "rounded-sm p-2 shadow-none hover:bg-muted hover:shadow-md",
-        selectedStudents.includes(student.id) && "border-green-600 bg-muted",
+        selectedStudents.includes(student.id) && "border-green-600 bg-muted"
       )}
     >
       <CardContent className="flex flex-row items-start p-0">
