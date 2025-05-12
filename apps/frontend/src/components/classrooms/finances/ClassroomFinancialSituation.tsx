@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 "use client";
 
 import { useAtomValue } from "jotai";
@@ -60,7 +61,7 @@ export function ClassroomFinancialSituation({
   const [view, setView] = useState<string>("grid");
 
   const [filteredBalances, setFilteredBalances] = useState(balances);
-  const [debounceValue] = useDebounce(query, 500);
+  const [debouncedQuery] = useDebounce(query, 500);
 
   const options = [
     {
@@ -74,23 +75,21 @@ export function ClassroomFinancialSituation({
   ];
 
   useEffect(() => {
-    if (!debounceValue) {
-      setFilteredBalances(balances);
-      return;
-    }
-    const qq = debounceValue.toLowerCase();
-    const filtered = balances.filter(
-      (balance) =>
-        balance.student.firstName?.toLowerCase().includes(qq) ??
-        balance.student.lastName?.toLowerCase().includes(qq) ??
-        balance.student.email
-          ?.toLowerCase()
-          .includes(debounceValue.toLowerCase()) ??
-        (!isNaN(Number(debounceValue)) &&
-          balance.balance >= Number(debounceValue))
-    );
+    if (!debouncedQuery) return setFilteredBalances(balances);
+
+    const qq = debouncedQuery.toLowerCase();
+    const filtered = balances.filter((balance) => {
+      const { firstName, lastName, email } = balance.student;
+      return (
+        firstName?.toLowerCase().includes(qq) ||
+        lastName?.toLowerCase().includes(qq) ||
+        email?.toLowerCase().includes(qq) ||
+        (!isNaN(Number(qq)) && balance.balance >= Number(qq))
+      );
+    });
+
     setFilteredBalances(filtered);
-  }, [balances, debounceValue]);
+  }, [debouncedQuery, balances]);
 
   return (
     <div>

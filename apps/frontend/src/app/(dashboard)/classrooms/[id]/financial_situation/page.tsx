@@ -19,13 +19,13 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     const students = await caller.contact.students(contact.id);
     const studentIds = students.map((student) => student.studentId);
     balances = balances.filter((balance) =>
-      studentIds.includes(balance.student.id),
+      studentIds.includes(balance.student.id)
     );
   }
 
   const amountDue = sumBy(
     fees.filter((fee) => fee.dueDate <= new Date()),
-    "amount",
+    "amount"
   );
 
   return (
