@@ -12,7 +12,6 @@ export default function Page() {
     <HydrateClient>
       <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
-          key={"classroom-data-table"}
           fallback={
             <div className="grid grid-cols-4 gap-4 p-4">
               {Array.from({ length: 16 }).map((_, i) => (

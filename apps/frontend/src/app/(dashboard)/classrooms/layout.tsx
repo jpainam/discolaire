@@ -13,7 +13,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <HydrateClient>
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense
-            key={"classroom-header"}
             fallback={
               <div className="px-4 py-2">
                 <Skeleton className="h-8 w-full" />
