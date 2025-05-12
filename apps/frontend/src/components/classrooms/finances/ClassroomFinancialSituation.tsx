@@ -76,6 +76,7 @@ export function ClassroomFinancialSituation({
   useEffect(() => {
     if (!debounceValue) {
       setFilteredBalances(balances);
+      return;
     }
     const qq = debounceValue.toLowerCase();
     const filtered = balances.filter(
@@ -86,7 +87,7 @@ export function ClassroomFinancialSituation({
           ?.toLowerCase()
           .includes(debounceValue.toLowerCase()) ??
         (!isNaN(Number(debounceValue)) &&
-          balance.balance >= Number(debounceValue)),
+          balance.balance >= Number(debounceValue))
     );
     setFilteredBalances(filtered);
   }, [balances, debounceValue]);
@@ -159,7 +160,7 @@ export function ClassroomFinancialSituation({
                       onSelect={() => {
                         window.open(
                           `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=all&ids=${ids}`,
-                          "_blank",
+                          "_blank"
                         );
                       }}
                     >
@@ -175,7 +176,7 @@ export function ClassroomFinancialSituation({
                       onSelect={() => {
                         window.open(
                           `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=debit&ids=${ids}`,
-                          "_blank",
+                          "_blank"
                         );
                       }}
                     >
@@ -190,7 +191,7 @@ export function ClassroomFinancialSituation({
                       onSelect={() => {
                         window.open(
                           `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=credit&ids=${ids}`,
-                          "_blank",
+                          "_blank"
                         );
                       }}
                     >
@@ -249,7 +250,7 @@ export function ClassroomFinancialSituation({
                       onSelect={() => {
                         window.open(
                           `/api/pdfs/classroom/${params.id}/finances?format=csv&type=all&ids=${ids}`,
-                          "_blank",
+                          "_blank"
                         );
                       }}
                     >
@@ -264,7 +265,7 @@ export function ClassroomFinancialSituation({
                       onSelect={() => {
                         window.open(
                           `/api/pdfs/classroom/${params.id}/finances?format=csv&type=debit&ids=${ids}`,
-                          "_blank",
+                          "_blank"
                         );
                       }}
                     >
@@ -279,7 +280,7 @@ export function ClassroomFinancialSituation({
                       onSelect={() => {
                         window.open(
                           `/api/pdfs/classroom/${params.id}/finances?format=csv&type=credit&ids=${ids}`,
-                          "_blank",
+                          "_blank"
                         );
                       }}
                     >
