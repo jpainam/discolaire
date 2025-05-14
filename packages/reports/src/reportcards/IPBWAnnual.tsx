@@ -5,7 +5,7 @@ import type { RouterOutputs } from "@repo/api";
 
 import { IPBWHeader } from "../headers/IPBWHeader";
 import { getAppreciations } from "../utils";
-import { IPBWSignature } from "./IPBWSignature";
+import { IPBWSignatureAnnual } from "./IPBWSignature";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWSummary } from "./IPBWSummary";
 
@@ -451,7 +451,7 @@ export function IPBWAnnual({
                 }}
                 rank={`${value.rank}`}
               />
-              <IPBWSignature />
+              <IPBWSignatureAnnual />
             </View>
           </Page>
         );

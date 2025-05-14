@@ -8,7 +8,7 @@ import type { RouterOutputs } from "@repo/api";
 
 import { IPBWHeader } from "../headers/IPBWHeader";
 import { getAppreciations, getTitle } from "../utils";
-import { IPBWSignature } from "./IPBWSignature";
+import { IPBWSignatureTrimestre } from "./IPBWSignature";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWSummary } from "./IPBWSummary";
 
@@ -433,7 +433,7 @@ export function IPBWTrimestre({
               consigne: disc?.consigne ?? 0,
             }}
           />
-          <IPBWSignature />
+          <IPBWSignatureTrimestre />
         </View>
       </Page>
     </Document>

@@ -22,10 +22,10 @@ export function IPBWHeader({
       style={{
         flexDirection: "row",
         justifyContent: "space-between",
-        gap: 2,
-        fontSize: 7,
+        gap: 1,
+        fontSize: 6,
         alignItems: "flex-start",
-        marginBottom: "8px",
+        marginBottom: "5px",
         ...style,
       }}
     >
@@ -66,7 +66,8 @@ export function IPBWHeader({
             fontWeight: "bold",
           }}
         >
-          {school.region}
+          {/* {school.region} */}
+          Délégation Régionale du Centre
         </Text>
         <DashStart />
         <Text
@@ -74,10 +75,17 @@ export function IPBWHeader({
             textTransform: "uppercase",
           }}
         >
-          {school.department}
+          {/* {school.department} */}
+          Délégation Départementale de la Mefou Afamba
         </Text>
         <DashStart />
-        <Text>{school.name}</Text>
+        <Text style={{ textTransform: "uppercase" }}>
+          {/* {school.name} */}
+          Institut Polyvalent Bilingue Wague
+        </Text>
+        <Text>BP: 5062 YAOUNDE</Text>
+        <Text>Tél: (Secrétariat) (+237) 693378043</Text>
+        <Text>(Principal) (+237) 699474456 / 671690331</Text>
       </View>
       <View
         style={{
@@ -101,13 +109,22 @@ export function IPBWHeader({
             }}
           />
         )}
+
         <Text
           style={{
             textTransform: "uppercase",
             fontWeight: "bold",
           }}
         >
-          HWOFW
+          5JN2GWFD101667112
+        </Text>
+        <Text
+          style={{
+            textTransform: "uppercase",
+            fontWeight: "bold",
+          }}
+        >
+          5JM2WBD111319113
         </Text>
       </View>
       <View
@@ -122,7 +139,7 @@ export function IPBWHeader({
             textTransform: "uppercase",
           }}
         >
-          République du Cameroon
+          Republic of Cameroon
         </Text>
         <Text
           style={{
@@ -158,7 +175,13 @@ export function IPBWHeader({
           DIVISIONAL DELEGATION OF MEFOU AFAMBA
         </Text>
         <DashStart />
-        <Text>{school.name}</Text>
+        <Text style={{ textTransform: "uppercase" }}>
+          WAGUE BILINGUAL COMPREHENSIVE INSTITUTE
+          {/* {school.name} */}
+        </Text>
+        <Text>P.O Box: 5062 YAOUNDE</Text>
+        <Text>Tel: (+237) 677281244 / 695226223</Text>
+        <Text>Situated at NKOLFOULOU 1-Long street yaounde-Soa road</Text>
       </View>
     </View>
   );

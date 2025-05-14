@@ -338,7 +338,7 @@ export function IPBW({
             }}
             rank={globalRank.aequoRank}
           />
-          <IPBWSignature />
+          <IPBWSignature cycle={classroom.cycle?.name} />
         </View>
       </Page>
     </Document>

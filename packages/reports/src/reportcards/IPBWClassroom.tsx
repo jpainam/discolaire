@@ -359,7 +359,7 @@ export function IPBWClassroom({
                 }}
                 rank={value.aequoRank}
               />
-              <IPBWSignature />
+              <IPBWSignature cycle={classroom.cycle?.name} />
             </View>
           </Page>
         );
