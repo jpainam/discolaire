@@ -63,14 +63,8 @@ export const inventoryRouter = createTRPCRouter({
         categoryId: z.string(),
       }),
     )
-    .mutation(({ ctx, input }) => {
-      return ctx.db.inventoryItem.create({
-        data: {
-          name: input.name,
-          sku: input.sku,
-          unitId: input.unitId,
-        },
-      });
+    .mutation(() => {
+      return true;
     }),
   update: protectedProcedure
     .input(

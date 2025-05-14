@@ -10,7 +10,7 @@ export function InventoryHeader() {
   return (
     <div className="flex flex-row items-center gap-2 px-4">
       <LayoutListIcon className="w-4 h-4" />
-      <Label className="text-lg">{t("inventory")}</Label>
+      <Label>{t("inventory")}</Label>
       <div className="ml-auto flex flex-row gap-2 items-center">
         <Button size={"sm"} variant={"outline"}>
           <PlusIcon className="w-4 h-4" />
