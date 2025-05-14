@@ -3,8 +3,37 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const inventoryRouter = createTRPCRouter({
-  all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.journal.findMany();
+  assets: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.asset.findMany({
+      where: {
+        item: {
+          schoolId: ctx.schoolId,
+        },
+      },
+      include: {
+        item: {
+          include: {
+            category: true,
+          },
+        },
+      },
+    });
+  }),
+  consumables: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.consumableUsage.findMany({
+      where: {
+        item: {
+          schoolId: ctx.schoolId,
+        },
+      },
+      include: {
+        item: {
+          include: {
+            category: true,
+          },
+        },
+      },
+    });
   }),
   get: protectedProcedure
     .input(z.object({ id: z.coerce.number() }))
@@ -25,10 +54,22 @@ export const inventoryRouter = createTRPCRouter({
       });
     }),
   create: protectedProcedure
-    .input(z.object({ name: z.string(), description: z.string() }))
+    .input(
+      z.object({
+        name: z.string(),
+        sku: z.string().optional(),
+        unitId: z.string(),
+        currentStock: z.number().default(0),
+        categoryId: z.string(),
+      }),
+    )
     .mutation(({ ctx, input }) => {
-      return ctx.db.journal.create({
-        data: input,
+      return ctx.db.inventoryItem.create({
+        data: {
+          name: input.name,
+          sku: input.sku,
+          unitId: input.unitId,
+        },
       });
     }),
   update: protectedProcedure

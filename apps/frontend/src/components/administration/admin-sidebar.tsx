@@ -6,6 +6,7 @@ import {
   CircleArrowOutUpRight,
   Frame,
   ImageUp,
+  LayoutListIcon,
   LifeBuoy,
   PrinterIcon,
   Send,
@@ -183,6 +184,11 @@ export function AdminSidebar({
     ],
   };
   const others = [
+    {
+      name: "inventory",
+      url: "/administration/inventory",
+      icon: LayoutListIcon,
+    },
     {
       name: "reports",
       url: "/administration/reports",

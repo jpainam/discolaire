@@ -5,6 +5,7 @@ model InventoryCategory {
     updatedAt DateTime              @updatedAt
     type      InventoryCategoryType
     items     InventoryItem[]
+    schoolId  String
 }
 
 enum InventoryCategoryType {
@@ -26,6 +27,7 @@ model InventoryItem {
     stockMovements StockMovement[]
     assets         Asset[]
     consumables    ConsumableUsage[]
+    schoolId       String
 }
 
 model Asset {
@@ -41,15 +43,22 @@ model Asset {
 }
 
 model AssetAssignment {
-    id         String    @id @default(uuid())
+    id         String           @id @default(uuid())
     assetId    String
-    asset      Asset     @relation(fields: [assetId], references: [id])
+    asset      Asset            @relation(fields: [assetId], references: [id])
     userId     String
-    user       User      @relation(fields: [userId], references: [id])
+    user       User             @relation(fields: [userId], references: [id])
     location   String?
+    status     AssignmentStatus @default(PENDING)
     note       String?
-    assignedAt DateTime  @default(now())
+    createdAt  DateTime         @default(now())
     returnedAt DateTime?
+}
+
+enum AssignmentStatus {
+    PENDING
+    ASSIGNED
+    RETURNED
 }
 
 model ConsumableUsage {
@@ -64,9 +73,10 @@ model ConsumableUsage {
 }
 
 model InventoryUnit {
-    id    String          @id @default(uuid())
-    name  String
-    items InventoryItem[]
+    id       String          @id @default(uuid())
+    name     String
+    items    InventoryItem[]
+    schoolId String
 }
 
 enum MovementType {
