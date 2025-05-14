@@ -1,0 +1,86 @@
+model InventoryCategory {
+    id        String                @id @default(uuid())
+    name      String                @unique
+    createdAt DateTime              @default(now())
+    updatedAt DateTime              @updatedAt
+    type      InventoryCategoryType
+    items     InventoryItem[]
+}
+
+enum InventoryCategoryType {
+    CONSUMABLE
+    ASSET
+}
+
+model InventoryItem {
+    id             String            @id @default(uuid())
+    name           String            @unique
+    description    String?
+    quantity       Int
+    unitId         String
+    unit           InventoryUnit     @relation(fields: [unitId], references: [id])
+    category       InventoryCategory @relation(fields: [categoryId], references: [id])
+    categoryId     String
+    currentStock   Int               @default(0)
+    minStockLevel  Int               @default(0)
+    stockMovements StockMovement[]
+    assets         Asset[]
+    consumables    ConsumableUsage[]
+}
+
+model Asset {
+    id          String            @id @default(uuid())
+    itemId      String
+    item        InventoryItem     @relation(fields: [itemId], references: [id])
+    serial      String            @unique
+    tag         String?
+    note        String?
+    createdAt   DateTime          @default(now())
+    updatedAt   DateTime          @updatedAt
+    assignments AssetAssignment[]
+}
+
+model AssetAssignment {
+    id         String    @id @default(uuid())
+    assetId    String
+    asset      Asset     @relation(fields: [assetId], references: [id])
+    userId     String
+    user       User      @relation(fields: [userId], references: [id])
+    location   String?
+    note       String?
+    assignedAt DateTime  @default(now())
+    returnedAt DateTime?
+}
+
+model ConsumableUsage {
+    id       String        @id @default(uuid())
+    itemId   String
+    item     InventoryItem @relation(fields: [itemId], references: [id])
+    userId   String
+    user     User          @relation(fields: [userId], references: [id])
+    quantity Int
+    note     String?
+    usedAt   DateTime      @default(now())
+}
+
+model InventoryUnit {
+    id    String          @id @default(uuid())
+    name  String
+    items InventoryItem[]
+}
+
+enum MovementType {
+    IN
+    OUT
+    ADJUST
+}
+
+model StockMovement {
+    id        String        @id @default(uuid())
+    item      InventoryItem @relation(fields: [itemId], references: [id])
+    itemId    String
+    quantity  Int
+    type      MovementType
+    note      String?
+    createdAt DateTime      @default(now())
+}
