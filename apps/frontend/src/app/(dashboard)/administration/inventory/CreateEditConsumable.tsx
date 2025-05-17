@@ -66,7 +66,7 @@ export function CreateEditConsumable({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const updateConsumableMutation = useMutation(
     trpc.inventory.updateConsumable.mutationOptions({
@@ -78,7 +78,7 @@ export function CreateEditConsumable({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const handleSubmit = (data: z.infer<typeof schema>) => {
     const values = {
@@ -137,7 +137,7 @@ export function CreateEditConsumable({
               name="minStockLevel"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("Min level stock")}</FormLabel>
+                  <FormLabel>{t("Min level")}</FormLabel>
                   <FormControl>
                     <Input type="number" {...field} />
                   </FormControl>

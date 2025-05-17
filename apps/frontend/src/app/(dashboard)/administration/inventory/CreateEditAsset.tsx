@@ -34,10 +34,10 @@ export function CreateEditAsset({
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      name: "",
-      sku: "",
-      serial: "",
-      note: "",
+      name: asset?.name ?? "",
+      sku: asset?.sku ?? "",
+      serial: asset?.serial ?? "",
+      note: asset?.note?.replace(/,/g, "\n") ?? "",
     },
   });
   const trpc = useTRPC();
@@ -52,7 +52,7 @@ export function CreateEditAsset({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const updateAssetMutation = useMutation(
     trpc.inventory.updateAsset.mutationOptions({
@@ -64,7 +64,7 @@ export function CreateEditAsset({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const { closeModal } = useModal();
   const handleSubmit = (data: z.infer<typeof schema>) => {
@@ -137,7 +137,7 @@ export function CreateEditAsset({
         </div>
         <FormField
           control={form.control}
-          name="serial"
+          name="note"
           render={({ field }) => (
             <FormItem>
               <FormLabel>{t("Serial number")}</FormLabel>

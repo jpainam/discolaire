@@ -23,6 +23,7 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { Badge } from "@repo/ui/components/badge";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
@@ -94,7 +95,41 @@ export function getColumns({
       ),
       cell: ({ row }) => {
         const inventory = row.original;
-        return <div>{JSON.stringify(inventory.other)}</div>;
+        if (inventory.type === "ASSET") {
+          const sku = inventory.other.sku;
+          const serial = inventory.other.serial;
+          return (
+            <div className="flex flex-row items-center gap-2">
+              {sku && (
+                <Badge>
+                  {t("Sku")}: {sku}
+                </Badge>
+              )}
+              {serial && (
+                <Badge variant={"destructive"}>
+                  {t("Serial number")}: {serial}
+                </Badge>
+              )}
+            </div>
+          );
+        }
+        const currentStock = inventory.other.currentStock;
+        const minLevelStock = inventory.other.minLevelStock;
+        const unit = inventory.other.unitName;
+        return (
+          <div className="flex flex-row items-center gap-2">
+            {currentStock && (
+              <Badge>
+                {t("Current stock")}: {currentStock} {unit}
+              </Badge>
+            )}
+            {minLevelStock && (
+              <Badge variant={"destructive"}>
+                {t("Min level")}: {minLevelStock} {unit}
+              </Badge>
+            )}
+          </div>
+        );
       },
     },
 
@@ -123,11 +158,11 @@ function ActionCell({
 
   const canDeleteInventory = useCheckPermission(
     "inventory",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateInventory = useCheckPermission(
     "inventory",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -140,7 +175,7 @@ function ActionCell({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const { openModal } = useModal();
 
@@ -153,7 +188,7 @@ function ActionCell({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   return (

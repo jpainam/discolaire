@@ -1,8 +1,7 @@
 "use client";
 
 import { Button } from "@repo/ui/components/button";
-import { Label } from "@repo/ui/components/label";
-import { LayoutListIcon, PlusIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
@@ -14,9 +13,9 @@ export function InventoryHeader() {
   const { openModal } = useModal();
   const { openSheet } = useSheet();
   return (
-    <div className="flex flex-row items-center gap-2 px-4">
-      <LayoutListIcon className="w-4 h-4" />
-      <Label>{t("inventory")}</Label>
+    <div className="flex flex-row items-center gap-2">
+      {/* <LayoutListIcon className="w-4 h-4" />
+      <Label>{t("inventory")}</Label> */}
       <div className="ml-auto flex flex-row gap-2 items-center">
         <Button size={"sm"}>{t("Stock movement")}</Button>
         <Button
