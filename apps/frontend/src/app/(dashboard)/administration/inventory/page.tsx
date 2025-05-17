@@ -79,7 +79,7 @@ export default async function Page() {
               size={16}
               aria-hidden="true"
             />
-            Insights
+            {t("Stock movement")}
           </TabsTrigger>
           <TabsTrigger
             value="tab-6"
@@ -90,7 +90,7 @@ export default async function Page() {
               size={16}
               aria-hidden="true"
             />
-            Settings
+            {t("settings")}
           </TabsTrigger>
         </TabsList>
         <ScrollBar orientation="horizontal" />
