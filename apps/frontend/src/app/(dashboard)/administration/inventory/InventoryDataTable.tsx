@@ -14,7 +14,7 @@ export function InventoryDataTable() {
   const { t } = useLocale();
   const trpc = useTRPC();
   const { data: inventory } = useSuspenseQuery(
-    trpc.inventory.all.queryOptions()
+    trpc.inventory.all.queryOptions(),
   );
 
   const columns = React.useMemo(() => getColumns({ t: t }), [t]);

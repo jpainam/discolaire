@@ -60,7 +60,7 @@ export function CreateEditStockUnit({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateStockUnitMutation = useMutation(
     trpc.inventory.updateUnit.mutationOptions({
@@ -72,7 +72,7 @@ export function CreateEditStockUnit({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   return (
