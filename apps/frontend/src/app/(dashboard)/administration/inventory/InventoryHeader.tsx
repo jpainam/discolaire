@@ -7,6 +7,7 @@ import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { CreateEditAsset } from "./CreateEditAsset";
 import { CreateEditConsumable } from "./CreateEditConsumable";
+import { CreateEditMovement } from "./CreateEditMovement";
 
 export function InventoryHeader() {
   const { t } = useLocale();
@@ -17,7 +18,17 @@ export function InventoryHeader() {
       {/* <LayoutListIcon className="w-4 h-4" />
       <Label>{t("inventory")}</Label> */}
       <div className="ml-auto flex flex-row gap-2 items-center">
-        <Button size={"sm"}>{t("Stock movement")}</Button>
+        <Button
+          onClick={() => {
+            openSheet({
+              title: t("Create a stock movement"),
+              view: <CreateEditMovement />,
+            });
+          }}
+          size={"sm"}
+        >
+          {t("Stock movement")}
+        </Button>
         <Button
           onClick={() => {
             openModal({

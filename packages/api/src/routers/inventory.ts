@@ -218,4 +218,23 @@ export const inventoryRouter = createTRPCRouter({
         },
       });
     }),
+
+  createMovement: protectedProcedure
+    .input(
+      z.object({
+        consumableId: z.string().min(1),
+        userId: z.string().min(1),
+        quantity: z.coerce.number().min(1).max(1000),
+        type: z.enum(["IN", "OUT"]).default("OUT"),
+        note: z.string().optional(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.consumableUsage.create({
+        data: {
+          ...input,
+          schoolYearId: ctx.schoolYearId,
+        },
+      });
+    }),
 });

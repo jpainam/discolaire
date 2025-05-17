@@ -765,6 +765,7 @@ model SchoolYear {
     timetableCategories  TimetableCategory[]
     inventoryAssets      InventoryAsset[]
     inventoryConsumables InventoryConsumable[]
+    consumableUsages     ConsumableUsage[]
 }
 
 model Cycle {
