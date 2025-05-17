@@ -183,7 +183,6 @@ export const inventoryRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string().min(5),
-        currentStock: z.number().min(0),
         minStockLevel: z.number().min(0),
         unitId: z.string().min(1),
         note: z.string().optional(),
@@ -193,6 +192,7 @@ export const inventoryRouter = createTRPCRouter({
       return ctx.db.inventoryConsumable.create({
         data: {
           ...input,
+          currentStock: 0,
           schoolId: ctx.schoolId,
           schoolYearId: ctx.schoolYearId,
         },
@@ -203,7 +203,6 @@ export const inventoryRouter = createTRPCRouter({
       z.object({
         id: z.string().min(1),
         name: z.string().min(5),
-        currentStock: z.number().min(0),
         minStockLevel: z.number().min(0),
         unitId: z.string().min(1),
         note: z.string().optional(),

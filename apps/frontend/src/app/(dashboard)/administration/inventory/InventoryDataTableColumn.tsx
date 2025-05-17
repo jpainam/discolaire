@@ -23,8 +23,8 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { Badge } from "@repo/ui/components/badge";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
@@ -81,7 +81,7 @@ export function getColumns({
     {
       accessorKey: "note",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("note")} />
+        <DataTableColumnHeader column={column} title={t("description")} />
       ),
       cell: ({ row }) => {
         const inventory = row.original;
@@ -91,7 +91,7 @@ export function getColumns({
     {
       accessorKey: "other",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="" />
+        <DataTableColumnHeader column={column} title={t("observation")} />
       ),
       cell: ({ row }) => {
         const inventory = row.original;
@@ -101,14 +101,14 @@ export function getColumns({
           return (
             <div className="flex flex-row items-center gap-2">
               {sku && (
-                <Badge>
+                <FlatBadge variant={"blue"}>
                   {t("Sku")}: {sku}
-                </Badge>
+                </FlatBadge>
               )}
               {serial && (
-                <Badge variant={"destructive"}>
+                <FlatBadge variant={"red"}>
                   {t("Serial number")}: {serial}
-                </Badge>
+                </FlatBadge>
               )}
             </div>
           );
@@ -119,14 +119,14 @@ export function getColumns({
         return (
           <div className="flex flex-row items-center gap-2">
             {currentStock && (
-              <Badge>
+              <FlatBadge variant={"green"}>
                 {t("Current stock")}: {currentStock} {unit}
-              </Badge>
+              </FlatBadge>
             )}
             {minLevelStock && (
-              <Badge variant={"destructive"}>
+              <FlatBadge variant={"yellow"}>
                 {t("Min level")}: {minLevelStock} {unit}
-              </Badge>
+              </FlatBadge>
             )}
           </div>
         );
@@ -158,11 +158,11 @@ function ActionCell({
 
   const canDeleteInventory = useCheckPermission(
     "inventory",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateInventory = useCheckPermission(
     "inventory",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -175,7 +175,7 @@ function ActionCell({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const { openModal } = useModal();
 
@@ -188,7 +188,7 @@ function ActionCell({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   return (

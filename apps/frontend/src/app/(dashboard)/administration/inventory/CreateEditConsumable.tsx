@@ -33,7 +33,7 @@ import { useTRPC } from "~/trpc/react";
 import { CreateEditStockUnit } from "./CreateEditStockUnit";
 const schema = z.object({
   name: z.string().min(5),
-  currentStock: z.coerce.number().default(0),
+  //currentStock: z.coerce.number().default(0),
   minStockLevel: z.coerce.number().default(0),
   unitId: z.string().min(1),
   note: z.string().optional(),
@@ -47,7 +47,7 @@ export function CreateEditConsumable({
     resolver: zodResolver(schema),
     defaultValues: {
       name: consumable?.name ?? "",
-      currentStock: consumable?.currentStock ?? 0,
+      //currentStock: consumable?.currentStock ?? 0,
       minStockLevel: consumable?.minStockLevel ?? 0,
       unitId: consumable?.unitId ?? "",
       note: consumable?.note ?? "",
@@ -66,7 +66,7 @@ export function CreateEditConsumable({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const updateConsumableMutation = useMutation(
     trpc.inventory.updateConsumable.mutationOptions({
@@ -78,12 +78,12 @@ export function CreateEditConsumable({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const handleSubmit = (data: z.infer<typeof schema>) => {
     const values = {
       ...data,
-      currentStock: Number(data.currentStock),
+      //currentStock: Number(data.currentStock),
       minStockLevel: Number(data.minStockLevel),
     };
     if (consumable) {
@@ -117,36 +117,22 @@ export function CreateEditConsumable({
               </FormItem>
             )}
           />
-          <div className="grid grid-cols-2 gap-2">
-            <FormField
-              control={form.control}
-              name="currentStock"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("Current stock")}</FormLabel>
-                  <FormControl>
-                    <Input type="number" {...field} />
-                  </FormControl>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="minStockLevel"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("Min level")}</FormLabel>
-                  <FormControl>
-                    <Input type="number" {...field} />
-                  </FormControl>
+          <FormField
+            control={form.control}
+            name="minStockLevel"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("Min level stock")}</FormLabel>
+                <FormControl>
+                  <Input type="number" {...field} />
+                </FormControl>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="unitId"

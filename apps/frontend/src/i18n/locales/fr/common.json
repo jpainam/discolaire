@@ -460,6 +460,7 @@
   "borrow_date": "Date d'emprunt",
   "Current stock": "Stock actuel",
   "Min level": "Niveau minimum",
+  "Min level stock": "Niveau minimum de stock",
   "filter_by_status": "Filtrer par statut",
   "books": "Livres",
   "returned_books": "Livres retournés",
