@@ -15,13 +15,16 @@ import {
   TabsList,
   TabsTrigger,
 } from "@repo/ui/components/tabs";
+import { batchPrefetch, trpc } from "~/trpc/server";
+import { InventoryDataTable } from "./InventoryDataTable";
 import { InventorySummary } from "./InventorySummary";
 
 export default function Page() {
+  batchPrefetch([trpc.inventory.all.queryOptions()]);
   return (
-    <Tabs defaultValue="tab-1">
+    <Tabs defaultValue="tab-2">
       <ScrollArea>
-        <TabsList className="text-foreground mb-3 h-auto gap-2 rounded-none border-b bg-transparent px-0 py-1">
+        <TabsList className="text-foreground h-auto gap-2 rounded-none border-b bg-transparent px-0 py-1">
           <TabsTrigger
             value="tab-1"
             className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
@@ -105,10 +108,8 @@ export default function Page() {
          */}
         <InventorySummary />
       </TabsContent>
-      <TabsContent value="tab-2">
-        <p className="text-muted-foreground pt-1 text-center text-xs">
-          Content for Tab 2
-        </p>
+      <TabsContent className="px-4" value="tab-2">
+        <InventoryDataTable />
       </TabsContent>
       <TabsContent value="tab-3">
         <p className="text-muted-foreground pt-1 text-center text-xs">

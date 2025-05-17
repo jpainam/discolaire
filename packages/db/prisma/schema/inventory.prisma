@@ -1,57 +1,51 @@
-model InventoryCategory {
-    id        String                @id @default(uuid())
-    name      String                @unique
-    createdAt DateTime              @default(now())
-    updatedAt DateTime              @updatedAt
-    type      InventoryCategoryType
-    items     InventoryItem[]
-    schoolId  String
-}
-
 enum InventoryCategoryType {
     CONSUMABLE
     ASSET
 }
 
-model InventoryItem {
+model InventoryAsset {
+    id           String            @id @default(uuid())
+    name         String
+    sku          String?
+    serial       String?           @unique
+    note         String?
+    createdAt    DateTime          @default(now())
+    updatedAt    DateTime          @updatedAt
+    assignments  AssetAssignment[]
+    schoolId     String
+    school       School            @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+    schoolYearId String
+    schoolYear   SchoolYear        @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+}
+
+model InventoryConsumable {
     id             String            @id @default(uuid())
     name           String            @unique
-    description    String?
-    quantity       Int
+    note           String?
     unitId         String
     unit           InventoryUnit     @relation(fields: [unitId], references: [id])
-    category       InventoryCategory @relation(fields: [categoryId], references: [id])
-    categoryId     String
     currentStock   Int               @default(0)
     minStockLevel  Int               @default(0)
     stockMovements StockMovement[]
-    assets         Asset[]
-    consumables    ConsumableUsage[]
+    usages         ConsumableUsage[]
     schoolId       String
-}
-
-model Asset {
-    id          String            @id @default(uuid())
-    itemId      String
-    item        InventoryItem     @relation(fields: [itemId], references: [id])
-    serial      String            @unique
-    tag         String?
-    note        String?
-    createdAt   DateTime          @default(now())
-    updatedAt   DateTime          @updatedAt
-    assignments AssetAssignment[]
+    school         School            @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+    schoolYearId   String
+    schoolYear     SchoolYear        @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
 }
 
 model AssetAssignment {
     id         String           @id @default(uuid())
     assetId    String
-    asset      Asset            @relation(fields: [assetId], references: [id])
+    asset      InventoryAsset   @relation(fields: [assetId], references: [id])
     userId     String
     user       User             @relation(fields: [userId], references: [id])
     location   String?
     status     AssignmentStatus @default(PENDING)
     note       String?
     createdAt  DateTime         @default(now())
+    approvedAt DateTime?
+    approvedBy String?
     returnedAt DateTime?
 }
 
@@ -62,21 +56,22 @@ enum AssignmentStatus {
 }
 
 model ConsumableUsage {
-    id       String        @id @default(uuid())
-    itemId   String
-    item     InventoryItem @relation(fields: [itemId], references: [id])
-    userId   String
-    user     User          @relation(fields: [userId], references: [id])
-    quantity Int
-    note     String?
-    usedAt   DateTime      @default(now())
+    id           String               @id @default(uuid())
+    itemId       String
+    userId       String
+    user         User                 @relation(fields: [userId], references: [id])
+    quantity     Int
+    note         String?
+    usedAt       DateTime             @default(now())
+    consumable   InventoryConsumable? @relation(fields: [consumableId], references: [id])
+    consumableId String
 }
 
 model InventoryUnit {
-    id       String          @id @default(uuid())
-    name     String
-    items    InventoryItem[]
-    schoolId String
+    id          String                @id @default(uuid())
+    name        String
+    schoolId    String
+    consumables InventoryConsumable[]
 }
 
 enum MovementType {
@@ -86,11 +81,11 @@ enum MovementType {
 }
 
 model StockMovement {
-    id        String        @id @default(uuid())
-    item      InventoryItem @relation(fields: [itemId], references: [id])
-    itemId    String
-    quantity  Int
-    type      MovementType
-    note      String?
-    createdAt DateTime      @default(now())
+    id           String              @id @default(uuid())
+    quantity     Int
+    type         MovementType
+    note         String?
+    createdAt    DateTime            @default(now())
+    consumable   InventoryConsumable @relation(fields: [consumableId], references: [id])
+    consumableId String
 }

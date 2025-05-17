@@ -351,6 +351,26 @@ export const policies: {
     action: PermissionAction.Update,
   },
   {
+    title: "inventory",
+    resource: "inventory",
+    action: PermissionAction.Create,
+  },
+  {
+    title: "inventory",
+    resource: "inventory",
+    action: PermissionAction.Update,
+  },
+  {
+    title: "inventory",
+    resource: "inventory",
+    action: PermissionAction.Delete,
+  },
+  {
+    title: "inventory",
+    resource: "inventory",
+    action: PermissionAction.Read,
+  },
+  {
     title: "communications",
     resource: "communication",
     action: PermissionAction.Create,
