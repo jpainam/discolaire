@@ -1,5 +1,4 @@
 import {
-  BoxIcon,
   ChartLine,
   HouseIcon,
   PanelsTopLeftIcon,
@@ -16,12 +15,15 @@ import {
   TabsTrigger,
 } from "@repo/ui/components/tabs";
 import { getServerTranslations } from "~/i18n/server";
-import { batchPrefetch, trpc } from "~/trpc/server";
+import { batchPrefetch, getQueryClient, trpc } from "~/trpc/server";
 import { InventoryDataTable } from "./InventoryDataTable";
 import { InventoryHeader } from "./InventoryHeader";
 import { InventorySummary } from "./InventorySummary";
 
 export default async function Page() {
+  const queryClient = getQueryClient();
+  const items = await queryClient.fetchQuery(trpc.inventory.all.queryOptions());
+  //const items = await fetchQtrpc.inventory.all;
   batchPrefetch([trpc.inventory.all.queryOptions()]);
   const { t } = await getServerTranslations();
   return (
@@ -53,23 +55,12 @@ export default async function Page() {
               className="bg-primary/15 ms-1.5 min-w-5 px-1"
               variant="secondary"
             >
-              3
+              {items.length}
             </Badge>
           </TabsTrigger>
+
           <TabsTrigger
             value="tab-3"
-            className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-          >
-            <BoxIcon
-              className="-ms-0.5 me-1.5 opacity-60"
-              size={16}
-              aria-hidden="true"
-            />
-            Packages
-            <Badge className="ms-1.5">New</Badge>
-          </TabsTrigger>
-          <TabsTrigger
-            value="tab-4"
             className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
           >
             <UsersRoundIcon
@@ -77,7 +68,7 @@ export default async function Page() {
               size={16}
               aria-hidden="true"
             />
-            Team
+            {t("users")}
           </TabsTrigger>
           <TabsTrigger
             value="tab-5"
@@ -121,11 +112,7 @@ export default async function Page() {
           Content for Tab 3
         </p>
       </TabsContent>
-      <TabsContent value="tab-4">
-        <p className="text-muted-foreground pt-1 text-center text-xs">
-          Content for Tab 4
-        </p>
-      </TabsContent>
+
       <TabsContent value="tab-5">
         <p className="text-muted-foreground pt-1 text-center text-xs">
           Content for Tab 5
