@@ -44,6 +44,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   void caller.logActivity.create({
     title: "Student Profile",
+    type: "READ",
     url: `/students/${params.id}`,
     entityId: params.id,
     entityType: "student",

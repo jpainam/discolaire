@@ -21,7 +21,7 @@ interface Props {
 }
 
 export const generateMetadata = async (
-  { params }: Props
+  { params }: Props,
   // parent: ResolvingMetadata
 ): Promise<Metadata> => {
   const { id } = await params;
@@ -52,7 +52,7 @@ export default async function Layout(props: {
   const { id } = params;
   const queryClient = getQueryClient();
   const student = await queryClient.fetchQuery(
-    trpc.student.get.queryOptions(id)
+    trpc.student.get.queryOptions(id),
   );
 
   const { children } = props;
