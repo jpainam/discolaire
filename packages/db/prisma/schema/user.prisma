@@ -50,6 +50,7 @@ model User {
     accessedCommunicationChannel CommunicationChannel[]
     assetAssignments             AssetAssignment[]
     consumables                  ConsumableUsage[]
+    stockMovements               StockMovement[]
 }
 
 model Role {

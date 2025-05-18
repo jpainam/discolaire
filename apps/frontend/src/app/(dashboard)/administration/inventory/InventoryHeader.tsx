@@ -1,14 +1,18 @@
 "use client";
 
 import { Button } from "@repo/ui/components/button";
-import { PlusIcon } from "lucide-react";
+import {
+  BlocksIcon,
+  MinusIcon,
+  PlusIcon,
+  StretchVerticalIcon,
+} from "lucide-react";
 import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { CreateEditAsset } from "./CreateEditAsset";
 import { CreateEditConsumable } from "./CreateEditConsumable";
 import { CreateEditMovement } from "./CreateEditMovement";
-
 export function InventoryHeader() {
   const { t } = useLocale();
   const { openModal } = useModal();
@@ -22,13 +26,29 @@ export function InventoryHeader() {
           onClick={() => {
             openSheet({
               title: t("Create a stock movement"),
-              view: <CreateEditMovement />,
+              description: t("OUT"),
+              view: <CreateEditMovement type={"OUT"} />,
             });
           }}
           size={"sm"}
         >
-          {t("Stock movement")}
+          <MinusIcon className="w-4 h-4" />
+          {t("Stock withdrawal")}
         </Button>
+        <Button
+          onClick={() => {
+            openSheet({
+              title: t("Create a stock movement"),
+              description: t("IN"),
+              view: <CreateEditMovement type={"IN"} />,
+            });
+          }}
+          size={"sm"}
+        >
+          <PlusIcon className="w-4 h-4" />
+          {t("Stock addition")}
+        </Button>
+
         <Button
           onClick={() => {
             openModal({
@@ -39,7 +59,7 @@ export function InventoryHeader() {
           variant={"outline"}
           size={"sm"}
         >
-          <PlusIcon className="w-4 h-4" />
+          <StretchVerticalIcon className="w-4 h-4" />
           {t("Create an asset")}
         </Button>
         <Button
@@ -52,6 +72,7 @@ export function InventoryHeader() {
           variant={"outline"}
           size={"sm"}
         >
+          <BlocksIcon className="w-4 h-4" />
           {t("Create a consumable")}
         </Button>
       </div>

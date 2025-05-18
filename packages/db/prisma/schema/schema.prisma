@@ -672,6 +672,7 @@ model School {
     timetableCategories  TimetableCategory[]
     inventoryAssets      InventoryAsset[]
     inventoryConsumables InventoryConsumable[]
+    stockMovements       StockMovement[]
 }
 
 model FormerSchool {
@@ -766,6 +767,7 @@ model SchoolYear {
     inventoryAssets      InventoryAsset[]
     inventoryConsumables InventoryConsumable[]
     consumableUsages     ConsumableUsage[]
+    stockMovements       StockMovement[]
 }
 
 model Cycle {

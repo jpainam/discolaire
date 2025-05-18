@@ -8,9 +8,11 @@ import { useTRPC } from "~/trpc/react";
 export function UserSelector({
   className,
   defaultValue,
+  disabled = false,
   onChange,
 }: {
   className?: string;
+  disabled?: boolean;
   defaultValue?: string;
   onChange: (value: string | undefined) => void;
 }) {
@@ -22,7 +24,7 @@ export function UserSelector({
   const usersQuery = useQuery(
     trpc.user.search.queryOptions({
       query: search,
-    }),
+    })
   );
 
   return (
@@ -34,6 +36,7 @@ export function UserSelector({
           label: user.name ?? user.username,
         })) ?? []
       }
+      disabled={disabled}
       value={value}
       label={label}
       onSelect={(value, label) => {

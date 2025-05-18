@@ -88,5 +88,11 @@ model StockMovement {
     note         String?
     createdAt    DateTime            @default(now())
     consumable   InventoryConsumable @relation(fields: [consumableId], references: [id])
+    createdById  String
+    createdBy    User                @relation(fields: [createdById], references: [id])
     consumableId String
+    schoolYearId String
+    schoolYear   SchoolYear          @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    schoolId     String
+    school       School              @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 }

@@ -219,7 +219,7 @@ export const inventoryRouter = createTRPCRouter({
       });
     }),
 
-  createMovement: protectedProcedure
+  createUsage: protectedProcedure
     .input(
       z.object({
         consumableId: z.string().min(1),
@@ -233,6 +233,25 @@ export const inventoryRouter = createTRPCRouter({
       return ctx.db.consumableUsage.create({
         data: {
           ...input,
+          schoolYearId: ctx.schoolYearId,
+        },
+      });
+    }),
+  createMovement: protectedProcedure
+    .input(
+      z.object({
+        consumableId: z.string().min(1),
+        quantity: z.coerce.number().min(1).max(1000),
+        type: z.enum(["IN", "OUT", "ADJUST"]).default("IN"),
+        note: z.string().optional(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.stockMovement.create({
+        data: {
+          ...input,
+          schoolId: ctx.schoolId,
+          createdById: ctx.session.user.id,
           schoolYearId: ctx.schoolYearId,
         },
       });
