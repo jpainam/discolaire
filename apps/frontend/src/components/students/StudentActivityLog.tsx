@@ -12,12 +12,11 @@ import {
 } from "@repo/ui/components/timeline";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 import { useQuery } from "@tanstack/react-query";
-import { PencilIcon, PlusIcon, Trash } from "lucide-react";
+import { EyeIcon, PencilIcon, PlusIcon, Trash, Trash2Icon } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { EmptyState } from "../EmptyState";
-import EyeIcon from "../icons/eye";
 
 export function StudentActivityLog() {
   const params = useParams<{ id: string }>();
@@ -27,7 +26,7 @@ export function StudentActivityLog() {
     trpc.logActivity.findByEntityId.queryOptions({
       entityId: params.id,
       entityType: "student",
-    }),
+    })
   );
   if (logsQuery.isPending) {
     return (
@@ -69,40 +68,56 @@ export function StudentActivityLog() {
       </ToggleGroup>
 
       <Timeline className="w-full px-2 gap-2" defaultValue={3}>
-        {logs.map((item, index) => (
-          <TimelineItem
-            className="group-data-[orientation=vertical]/timeline:not-last:pb-1"
-            key={index}
-            step={item.id}
-          >
-            <TimelineHeader>
-              <TimelineSeparator />
-              <TimelineTitle className="-mt-0.5 text-xs">
-                {item.user.name}
-              </TimelineTitle>
-              <TimelineIndicator />
-            </TimelineHeader>
-            <TimelineContent className="text-xs ">
-              {item.type === "CREATE" && t("has created")}
-              {item.type === "UPDATE" && t("has updated")}
-              {item.type === "DELETE" && t("has deleted")}
-              {item.type === "READ" && t("has read")}{" "}
-              <a className="text-blue-500 underline" href={item.url}>
-                {item.title}
-              </a>
-              <TimelineDate className="m-0 text-xs">
-                {item.createdAt.toLocaleDateString(i18n.language, {
-                  month: "short",
-                  weekday: "short",
-                  day: "2-digit",
-                  year: "2-digit",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </TimelineDate>
-            </TimelineContent>
-          </TimelineItem>
-        ))}
+        {logs.map((item, index) => {
+          let action = "";
+          let icon = null;
+          if (item.type === "CREATE") {
+            icon = <PlusIcon size={14} />;
+            action = "has created";
+          } else if (item.type === "UPDATE") {
+            icon = <PencilIcon size={14} />;
+            action = "has updated";
+          } else if (item.type === "DELETE") {
+            icon = <Trash2Icon size={14} className="text-destructive" />;
+            action = "has deleted";
+          } else {
+            icon = <EyeIcon size={14} />;
+            action = "has read";
+          }
+          return (
+            <TimelineItem
+              className="group-data-[orientation=vertical]/timeline:ms-10 group-data-[orientation=vertical]/timeline:not-last:pb-1"
+              key={index}
+              step={item.id}
+            >
+              <TimelineHeader>
+                <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
+                <TimelineTitle className="-mt-0.5 text-xs">
+                  {item.user.name}
+                </TimelineTitle>
+                <TimelineIndicator className="bg-primary/10 group-data-completed/timeline-item:bg-primary group-data-completed/timeline-item:text-primary-foreground flex size-6 items-center justify-center border-none group-data-[orientation=vertical]/timeline:-left-7">
+                  {icon}
+                </TimelineIndicator>
+              </TimelineHeader>
+              <TimelineContent className="text-xs ">
+                {t(action)}{" "}
+                <a className="text-blue-500 underline" href={item.url}>
+                  {item.title}
+                </a>
+                <TimelineDate className="m-0 text-xs">
+                  {item.createdAt.toLocaleDateString(i18n.language, {
+                    month: "short",
+                    weekday: "short",
+                    day: "2-digit",
+                    year: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </TimelineDate>
+              </TimelineContent>
+            </TimelineItem>
+          );
+        })}
       </Timeline>
     </div>
   );
