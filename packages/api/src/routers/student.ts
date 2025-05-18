@@ -217,6 +217,18 @@ export const studentRouter = createTRPCRouter({
           schoolId: ctx.schoolId,
         },
       });
+      await ctx.db.logActivity.create({
+        data: {
+          schoolId: ctx.schoolId,
+          schoolYearId: ctx.schoolYearId,
+          userId: ctx.session.user.id,
+          title: "Student profile",
+          type: "CREATE",
+          url: `/students/${student.id}`,
+          entityId: student.id,
+          entityType: "student",
+        },
+      });
       await userService.createAutoUser({
         name: `${input.firstName} ${input.lastName}`,
         profile: "student",
@@ -238,6 +250,18 @@ export const studentRouter = createTRPCRouter({
             classroomId: input.classroom,
             schoolYearId: ctx.schoolYearId,
             createdBy: ctx.session.user.id,
+          },
+        });
+        await ctx.db.logActivity.create({
+          data: {
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+            userId: ctx.session.user.id,
+            title: "Student enrollment",
+            type: "CREATE",
+            url: `/students/${student.id}/enrollments`,
+            entityId: student.id,
+            entityType: "student",
           },
         });
       }
@@ -265,6 +289,19 @@ export const studentRouter = createTRPCRouter({
         //   message: "Registration number already exists",
         // });
       }
+      await ctx.db.logActivity.create({
+        data: {
+          schoolId: ctx.schoolId,
+          schoolYearId: ctx.schoolYearId,
+          userId: ctx.session.user.id,
+          title: "Student profile",
+          type: "UPDATE",
+          url: `/students/${input.id}`,
+          entityId: input.id,
+          data: input,
+          entityType: "student",
+        },
+      });
       return ctx.db.student.update({
         where: { id: input.id },
         data: {

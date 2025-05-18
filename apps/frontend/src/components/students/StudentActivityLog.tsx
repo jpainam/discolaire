@@ -21,7 +21,7 @@ import EyeIcon from "../icons/eye";
 
 export function StudentActivityLog() {
   const params = useParams<{ id: string }>();
-  const { i18n } = useLocale();
+  const { t, i18n } = useLocale();
   const trpc = useTRPC();
   const logsQuery = useQuery(
     trpc.logActivity.findByEntityId.queryOptions({
@@ -83,7 +83,13 @@ export function StudentActivityLog() {
               <TimelineIndicator />
             </TimelineHeader>
             <TimelineContent className="text-xs ">
-              <a href={item.url}>a consulter la page de {item.title}</a>
+              {item.type === "CREATE" && t("has created")}
+              {item.type === "UPDATE" && t("has updated")}
+              {item.type === "DELETE" && t("has deleted")}
+              {item.type === "READ" && t("has read")}{" "}
+              <a className="text-blue-500 underline" href={item.url}>
+                {item.title}
+              </a>
               <TimelineDate className="m-0 text-xs">
                 {item.createdAt.toLocaleDateString(i18n.language, {
                   month: "short",

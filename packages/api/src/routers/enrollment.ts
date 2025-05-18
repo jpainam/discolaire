@@ -155,22 +155,26 @@ export const enrollmentRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      // const enrollments = await ctx.db.enrollment.findMany({
-      //   where: {
-      //     studentId: {
-      //       in: Array.isArray(input.studentId)
-      //         ? input.studentId
-      //         : [input.studentId],
-      //     },
-      //     classroomId: input.classroomId,
-      //   },
-      // });
-      // await Promise.all(
-      //   enrollments.map((enr) => {
-      //     const key = `student:${enr.studentId}:schoolYear:${enr.schoolYearId}:isRepeating`;
-      //     void redisClient.del(key);
-      //   }),
-      // );
+      const studentIds = Array.isArray(input.studentId)
+        ? input.studentId
+        : [input.studentId];
+
+      const data = studentIds.map((studentId) => {
+        return {
+          schoolId: ctx.schoolId,
+          schoolYearId: ctx.schoolYearId,
+          userId: ctx.session.user.id,
+          title: "Student enrollment",
+          type: "DELETE" as const,
+          url: `/students/${studentId}/enrollments`,
+          entityId: studentId,
+          entityType: "student",
+        };
+      });
+      await ctx.db.logActivity.createMany({
+        data: data,
+      });
+
       return ctx.db.enrollment.deleteMany({
         where: {
           studentId: {
@@ -185,19 +189,29 @@ export const enrollmentRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.union([z.array(z.coerce.number()), z.coerce.number()]))
     .mutation(async ({ ctx, input }) => {
-      // const enrollments = await ctx.db.enrollment.findMany({
-      //   where: {
-      //     id: {
-      //       in: Array.isArray(input) ? input : [input],
-      //     },
-      //   },
-      // });
-      // await Promise.all(
-      //   enrollments.map((enr) => {
-      //     const key = `student:${enr.studentId}:schoolYear:${enr.schoolYearId}:isRepeating`;
-      //     void redisClient.del(key);
-      //   }),
-      // );
+      const studentIds = Array.isArray(input) ? input : [input];
+      const enrollments = await ctx.db.enrollment.findMany({
+        where: {
+          id: {
+            in: studentIds,
+          },
+        },
+      });
+      const data = enrollments.map((enrollment) => {
+        return {
+          schoolId: ctx.schoolId,
+          schoolYearId: ctx.schoolYearId,
+          userId: ctx.session.user.id,
+          title: "Student enrollment",
+          type: "DELETE" as const,
+          url: `/students/${enrollment.studentId}/enrollments`,
+          entityId: enrollment.studentId,
+          entityType: "student",
+        };
+      });
+      await ctx.db.logActivity.createMany({
+        data: data,
+      });
       return ctx.db.enrollment.deleteMany({
         where: {
           id: {
