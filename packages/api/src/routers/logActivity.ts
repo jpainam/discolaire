@@ -55,4 +55,28 @@ export const logActivityRouter = {
         },
       });
     }),
+
+  findByEntityId: protectedProcedure
+    .input(
+      z.object({
+        entityId: z.string(),
+        entityType: z.enum(["student", "staff", "classroom"]),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.logActivity.findMany({
+        where: {
+          entityId: input.entityId,
+          entityType: input.entityType,
+          schoolYearId: ctx.schoolYearId,
+          schoolId: ctx.schoolId,
+        },
+        include: {
+          user: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }),
 } satisfies TRPCRouterRecord;

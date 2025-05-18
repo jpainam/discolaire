@@ -4,15 +4,16 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { NoPermission } from "~/components/no-permission";
 
 import { auth } from "@repo/auth";
-import { redirect } from "next/navigation";
-import { StudentFooter } from "~/components/students/StudentFooter";
-import { StudentHeader } from "~/components/students/StudentHeader";
-import { caller, getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 
 import { decode } from "entities";
 import type { Metadata } from "next";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { redirect } from "next/navigation";
 import { ErrorFallback } from "~/components/error-fallback";
+import { StudentFooter } from "~/components/students/StudentFooter";
+import { StudentHeader } from "~/components/students/StudentHeader";
+import { StudentMainContent } from "~/components/students/StudentMainContent";
+import { caller, getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -20,7 +21,7 @@ interface Props {
 }
 
 export const generateMetadata = async (
-  { params }: Props,
+  { params }: Props
   // parent: ResolvingMetadata
 ): Promise<Metadata> => {
   const { id } = await params;
@@ -51,7 +52,7 @@ export default async function Layout(props: {
   const { id } = params;
   const queryClient = getQueryClient();
   const student = await queryClient.fetchQuery(
-    trpc.student.get.queryOptions(id),
+    trpc.student.get.queryOptions(id)
   );
 
   const { children } = props;
@@ -76,7 +77,7 @@ export default async function Layout(props: {
         </ErrorBoundary>
 
         {/* <CardContent className="flex h-[calc(100vh-20rem)] flex-1 w-full p-0"> */}
-        <main className="flex-1">{children}</main>
+        <StudentMainContent>{children}</StudentMainContent>
         <div className="flex flex-row items-center border-y bg-muted/50 px-6 py-1">
           <Suspense fallback={<Skeleton className="h-full w-full" />}>
             <StudentFooter />
