@@ -82,7 +82,7 @@ export const logActivityRouter = {
           },
         },
       });
-      if (recentLog) {
+      if (!recentLog) {
         return ctx.db.logActivity.create({
           data: {
             title: input.title,

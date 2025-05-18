@@ -12,7 +12,7 @@ import {
 } from "@repo/ui/components/timeline";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 import { useQuery } from "@tanstack/react-query";
-import { CheckIcon, PencilIcon, PlusIcon, Trash } from "lucide-react";
+import { PencilIcon, PlusIcon, Trash } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
@@ -27,7 +27,7 @@ export function StudentActivityLog() {
     trpc.logActivity.findByEntityId.queryOptions({
       entityId: params.id,
       entityType: "student",
-    }),
+    })
   );
   if (logsQuery.isPending) {
     return (
@@ -68,16 +68,23 @@ export function StudentActivityLog() {
         </ToggleGroupItem>
       </ToggleGroup>
 
-      <Timeline defaultValue={3}>
+      <Timeline className="w-full px-2 gap-2" defaultValue={3}>
         {logs.map((item, index) => (
           <TimelineItem
+            className="group-data-[orientation=vertical]/timeline:not-last:pb-1"
             key={index}
             step={item.id}
-            className="group-data-[orientation=vertical]/timeline:ms-10"
           >
             <TimelineHeader>
-              <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
-              <TimelineDate>
+              <TimelineSeparator />
+              <TimelineTitle className="-mt-0.5 text-xs">
+                {item.user.name}
+              </TimelineTitle>
+              <TimelineIndicator />
+            </TimelineHeader>
+            <TimelineContent className="text-xs ">
+              <a href={item.url}>a consulter la page de {item.title}</a>
+              <TimelineDate className="m-0 text-xs">
                 {item.createdAt.toLocaleDateString(i18n.language, {
                   month: "short",
                   weekday: "short",
@@ -87,15 +94,7 @@ export function StudentActivityLog() {
                   minute: "2-digit",
                 })}
               </TimelineDate>
-              <TimelineTitle>{item.title}</TimelineTitle>
-              <TimelineIndicator className="group-data-completed/timeline-item:bg-primary group-data-completed/timeline-item:text-primary-foreground flex size-6 items-center justify-center group-data-completed/timeline-item:border-none group-data-[orientation=vertical]/timeline:-left-7">
-                <CheckIcon
-                  className="group-not-data-completed/timeline-item:hidden"
-                  size={16}
-                />
-              </TimelineIndicator>
-            </TimelineHeader>
-            <TimelineContent>{item.description}</TimelineContent>
+            </TimelineContent>
           </TimelineItem>
         ))}
       </Timeline>

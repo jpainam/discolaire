@@ -42,7 +42,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     trpc.student.contacts.queryOptions(params.id),
   ]);
 
-  void caller.logActivity.create({
+  await caller.logActivity.create({
     title: "Student Profile",
     type: "READ",
     url: `/students/${params.id}`,

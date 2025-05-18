@@ -5,11 +5,19 @@ import { Suspense } from "react";
 import { ErrorFallback } from "~/components/error-fallback";
 import { TransactionStats } from "~/components/students/transactions/transaction-stats";
 import { TransactionTable } from "~/components/students/transactions/TransactionTable";
-import { HydrateClient, prefetch, trpc } from "~/trpc/server";
+import { caller, HydrateClient, prefetch, trpc } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   prefetch(trpc.student.transactions.queryOptions(params.id));
+
+  await caller.logActivity.create({
+    title: "Student transactions",
+    type: "READ",
+    url: `/students/${params.id}/transactions`,
+    entityId: params.id,
+    entityType: "student",
+  });
 
   return (
     <HydrateClient>
