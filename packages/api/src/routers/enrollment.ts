@@ -95,17 +95,19 @@ export const enrollmentRouter = createTRPCRouter({
               schoolYearId: ctx.schoolYearId,
             },
           ];
-      // if (Array.isArray(input.studentId)) {
-      //   await Promise.all(
-      //     input.studentId.map((studId) => {
-      //       const key = `student:${studId}:schoolYear:${ctx.schoolYearId}:isRepeating`;
-      //       return redisClient.del(key);
-      //     }),
-      //   );
-      // } else {
-      //   const key = `student:${input.studentId}:schoolYear:${ctx.schoolYearId}:isRepeating`;
-      //   await redisClient.del(key);
-      // }
+      const dataLog = data.map((enrollment) => {
+        return {
+          schoolId: ctx.schoolId,
+          schoolYearId: ctx.schoolYearId,
+          userId: ctx.session.user.id,
+          title: "Student enrollment",
+          type: "CREATE" as const,
+          url: `/students/${enrollment.studentId}/enrollments`,
+          entityId: enrollment.studentId,
+          entityType: "student",
+        };
+      });
+      await ctx.db.logActivity.createMany({ data: dataLog });
       return ctx.db.enrollment.createMany({
         data: data,
       });

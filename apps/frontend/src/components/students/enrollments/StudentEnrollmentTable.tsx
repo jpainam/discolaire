@@ -40,7 +40,7 @@ export function StudentEnrollmentTable({ studentId }: { studentId: string }) {
   const { t } = useLocale();
   const trpc = useTRPC();
   const { data: enrollments } = useSuspenseQuery(
-    trpc.student.enrollments.queryOptions(studentId),
+    trpc.student.enrollments.queryOptions(studentId)
   );
   const confirm = useConfirm();
   const fullDateFormatter = new Intl.DateTimeFormat(i18next.language, {
@@ -51,7 +51,7 @@ export function StudentEnrollmentTable({ studentId }: { studentId: string }) {
 
   const canDeleteEnrollment = useCheckPermission(
     "enrollment",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
 
   const queryClient = useQueryClient();
@@ -59,10 +59,10 @@ export function StudentEnrollmentTable({ studentId }: { studentId: string }) {
     trpc.enrollment.delete.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.student.enrollments.pathFilter(),
+          trpc.student.enrollments.pathFilter()
         );
         await queryClient.invalidateQueries(
-          trpc.classroom.students.pathFilter(),
+          trpc.classroom.students.pathFilter()
         );
         await queryClient.invalidateQueries(trpc.student.get.pathFilter());
         toast.success(t("success"), { id: 0 });
@@ -70,7 +70,7 @@ export function StudentEnrollmentTable({ studentId }: { studentId: string }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   if (enrollments.length === 0) {
@@ -94,13 +94,13 @@ export function StudentEnrollmentTable({ studentId }: { studentId: string }) {
         <TableBody>
           {enrollments.map((c) => {
             const createdAt = fullDateFormatter.format(
-              c.createdAt ?? new Date(),
+              c.createdAt ?? new Date()
             );
             const enrollmentStartDate = fullDateFormatter.format(
-              c.schoolYear?.enrollmentStartDate ?? new Date(),
+              c.schoolYear?.enrollmentStartDate ?? new Date()
             );
             const enrolmmentEndDate = fullDateFormatter.format(
-              c.schoolYear?.enrollmentEndDate ?? new Date(),
+              c.schoolYear?.enrollmentEndDate ?? new Date()
             );
 
             return (
@@ -141,7 +141,6 @@ export function StudentEnrollmentTable({ studentId }: { studentId: string }) {
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem
                           variant="destructive"
-                          className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                           onSelect={async () => {
                             const isConfirmed = await confirm({
                               title: t("delete"),
