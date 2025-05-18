@@ -26,7 +26,7 @@ export function StudentActivityLog() {
     trpc.logActivity.findByEntityId.queryOptions({
       entityId: params.id,
       entityType: "student",
-    })
+    }),
   );
   if (logsQuery.isPending) {
     return (
