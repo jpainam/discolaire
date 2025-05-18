@@ -23,7 +23,7 @@ export function StudentRightSidebar() {
     <div
       className={cn(
         "flex transition-transform duration-300 ease-in-out",
-        activeSidePanel ? "translate-x-0" : ""
+        activeSidePanel ? "translate-x-0" : "",
       )}
     >
       <div className="bg-muted/50 p-1 flex flex-col gap-2 border-l">
@@ -78,7 +78,7 @@ export function StudentRightSidebar() {
           "border-l  transition-all duration-300 ease-in-out",
           activeSidePanel
             ? "opacity-100 h-[calc(100%-30rem)]"
-            : "w-0 opacity-0 overflow-hidden"
+            : "w-0 opacity-0 overflow-hidden",
         )}
       >
         {activeSidePanel && (

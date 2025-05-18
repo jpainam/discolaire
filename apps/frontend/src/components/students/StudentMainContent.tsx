@@ -19,20 +19,21 @@ import {
 } from "@repo/ui/components/tooltip";
 import { ActivityIcon, UsersIcon, XIcon } from "lucide-react";
 import type { PropsWithChildren } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
+import { useStudentLayout } from "~/stores/layout";
 import { StudentActivityLog } from "./StudentActivityLog";
 
 export function StudentMainContent(props: PropsWithChildren) {
-  //const mainPanelRef = useRef<ImperativePanelHandle>(null);
+  const { activeRightPanel, setActiveRightPanel } = useStudentLayout();
   const rightPanelRef = useRef<ImperativePanelHandle>(null);
   const panelGroupRef = useRef<ImperativePanelGroupHandle>(null);
 
-  const [activeSidePanel, setActiveSidePanel] = useState<string | null>(null);
+  //const [activeSidePanel, setActiveSidePanel] = useState<string | null>(null);
 
   const toggleSidePanel = (panelId: string) => {
-    const hasPanel = activeSidePanel === panelId ? null : panelId;
-    console.log("hasPanel", hasPanel);
-    if (hasPanel) {
+    const newPanelId = activeRightPanel === panelId ? null : panelId;
+
+    if (newPanelId) {
       const panelGroup = panelGroupRef.current;
       if (panelGroup) {
         // Reset each Panel width
@@ -49,14 +50,8 @@ export function StudentMainContent(props: PropsWithChildren) {
         panelGroup.setLayout([97, 3]);
       }
     }
-    setActiveSidePanel(activeSidePanel === panelId ? null : panelId);
+    setActiveRightPanel(newPanelId);
   };
-  useEffect(() => {
-    const panel = rightPanelRef.current;
-    if (panel) {
-      panel.collapse();
-    }
-  }, []);
 
   return (
     <ResizablePanelGroup
@@ -78,8 +73,10 @@ export function StudentMainContent(props: PropsWithChildren) {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                onClick={() => toggleSidePanel("1")}
-                variant={activeSidePanel === "1" ? "default" : "outline"}
+                onClick={() => toggleSidePanel("activities")}
+                variant={
+                  activeRightPanel === "activities" ? "default" : "outline"
+                }
                 size={"icon"}
                 className="size-8"
               >
@@ -94,7 +91,7 @@ export function StudentMainContent(props: PropsWithChildren) {
             <TooltipTrigger asChild>
               <Button
                 onClick={() => toggleSidePanel("2")}
-                variant={activeSidePanel === "2" ? "default" : "outline"}
+                variant={activeRightPanel === "2" ? "default" : "outline"}
                 size={"icon"}
                 className="size-8"
               >
@@ -106,7 +103,7 @@ export function StudentMainContent(props: PropsWithChildren) {
             </TooltipContent>
           </Tooltip>
         </div>
-        {activeSidePanel && (
+        {activeRightPanel && (
           <div className="flex flex-col border-l w-full">
             <div className="flex flex-row justify-between p-2 items-center">
               <Label>Activities</Label>
@@ -120,7 +117,7 @@ export function StudentMainContent(props: PropsWithChildren) {
                     // Reset each Panel width
                     panelGroup.setLayout([97, 3]);
                   }
-                  setActiveSidePanel(null);
+                  setActiveRightPanel(null);
                 }}
               >
                 <span className="sr-only">Close</span>
@@ -129,7 +126,7 @@ export function StudentMainContent(props: PropsWithChildren) {
             </div>
             <Separator />
             <ScrollArea className="h-[calc(100vh-18rem)] w-full overflow-hidden">
-              {activeSidePanel && <StudentActivityLog />}
+              {activeRightPanel && <StudentActivityLog />}
             </ScrollArea>
           </div>
         )}

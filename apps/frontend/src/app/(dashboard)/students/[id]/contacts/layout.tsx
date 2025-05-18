@@ -1,3 +1,4 @@
+import { auth } from "@repo/auth";
 import { Separator } from "@repo/ui/components/separator";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import type { Metadata } from "next";
@@ -8,6 +9,7 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { SignUpContact } from "~/components/students/contacts/SignUpContact";
 import { StudentContactHeader } from "~/components/students/contacts/StudentContactHeader";
 import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";
+import { logQueue } from "~/lib/queue";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 
 export const metadata: Metadata = {
@@ -19,10 +21,21 @@ export default async function Layout(props: {
   params: Promise<{ id: string }>;
 }) {
   const params = await props.params;
+  const session = await auth();
 
   const { children } = props;
   //const studentContacts = await caller.student.contacts(params.id);
   prefetch(trpc.student.contacts.queryOptions(params.id));
+  await logQueue.add("log", {
+    type: "log",
+    title: "Student Contact",
+    url: `/students/${params.id}/contacts`,
+    description: "Student Contact",
+    userId: session?.user.id,
+    entityId: params.id,
+    entityType: "student",
+    action: "READ",
+  });
 
   return (
     <HydrateClient>

@@ -28,7 +28,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   if (session?.user.profile === "staff") {
     const canReadStudent = await checkPermission(
       "student",
-      PermissionAction.READ,
+      PermissionAction.READ
     );
     if (!canReadStudent) {
       return <NoPermission className="my-8" />;
@@ -41,6 +41,13 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     trpc.student.get.queryOptions(params.id),
     trpc.student.contacts.queryOptions(params.id),
   ]);
+
+  void caller.logActivity.create({
+    title: "Student Profile",
+    url: `/students/${params.id}`,
+    entityId: params.id,
+    entityType: "student",
+  });
 
   return (
     <HydrateClient>

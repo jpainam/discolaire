@@ -66,7 +66,7 @@ export default function Dashboard() {
           <ScrollArea
             className={cn(
               "transition-all duration-300 ease-in-out",
-              activeSidePanel ? "w-[calc(100%-25%)]" : "w-full"
+              activeSidePanel ? "w-[calc(100%-25%)]" : "w-full",
             )}
           >
             <div className="space-y-4 p-4">
@@ -100,7 +100,7 @@ export default function Dashboard() {
               "absolute inset-y-0 right-0 flex transition-transform duration-300 ease-in-out",
               activeSidePanel
                 ? "translate-x-0"
-                : "translate-x-[calc(100%-3.5rem)]"
+                : "translate-x-[calc(100%-3.5rem)]",
             )}
           >
             {/* Buttons Column */}
@@ -129,7 +129,7 @@ export default function Dashboard() {
                 "border-l bg-background transition-all duration-300 ease-in-out",
                 activeSidePanel
                   ? "w-[calc(25%-3.5rem)] opacity-100"
-                  : "w-0 opacity-0 overflow-hidden"
+                  : "w-0 opacity-0 overflow-hidden",
               )}
             >
               {activeSidePanel && (
