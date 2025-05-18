@@ -673,6 +673,7 @@ model School {
     inventoryAssets      InventoryAsset[]
     inventoryConsumables InventoryConsumable[]
     stockMovements       StockMovement[]
+    consumableUsages     ConsumableUsage[]
 }
 
 model FormerSchool {

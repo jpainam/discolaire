@@ -35,18 +35,19 @@ model InventoryConsumable {
 }
 
 model AssetAssignment {
-    id         String           @id @default(uuid())
-    assetId    String
-    asset      InventoryAsset   @relation(fields: [assetId], references: [id])
-    userId     String
-    user       User             @relation(fields: [userId], references: [id])
-    location   String?
-    status     AssignmentStatus @default(PENDING)
-    note       String?
-    createdAt  DateTime         @default(now())
-    approvedAt DateTime?
-    approvedBy String?
-    returnedAt DateTime?
+    id          String           @id @default(uuid())
+    assetId     String
+    asset       InventoryAsset   @relation(fields: [assetId], references: [id])
+    userId      String
+    user        User             @relation(fields: [userId], references: [id])
+    location    String?
+    status      AssignmentStatus @default(PENDING)
+    note        String?
+    createdAt   DateTime         @default(now())
+    createdById String?
+    approvedAt  DateTime?
+    approvedBy  String?
+    returnedAt  DateTime?
 }
 
 enum AssignmentStatus {
@@ -61,11 +62,15 @@ model ConsumableUsage {
     user         User                 @relation(fields: [userId], references: [id])
     quantity     Int
     note         String?
-    usedAt       DateTime             @default(now())
+    createdAt    DateTime             @default(now())
+    updatedAt    DateTime             @updatedAt
     consumable   InventoryConsumable? @relation(fields: [consumableId], references: [id])
     schoolYearId String
     schoolYear   SchoolYear           @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    schoolId     String
+    school       School               @relation(fields: [schoolId], references: [id], onDelete: Cascade)
     consumableId String
+    createdById  String?
 }
 
 model InventoryUnit {

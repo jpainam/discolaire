@@ -18,38 +18,47 @@ import { z } from "zod";
 import { UserSelector } from "~/components/shared/selects/UserSelector";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
-import { useSession } from "~/providers/AuthProvider";
 import { useTRPC } from "~/trpc/react";
 import { InventorySelector } from "./InventorySelector";
 const schema = z.object({
-  itemId: z.string().min(1),
   userId: z.string().min(1),
+  consumableId: z.string().min(1),
   quantity: z.coerce.number().min(1).max(1000),
   note: z.string().optional(),
   //type: z.enum(["IN", "OUT"]).default("OUT"),
 });
-export function CreateEditMovement({ type }: { type: "IN" | "OUT" }) {
-  const { user } = useSession();
+
+export function CreateEditConsumableUsage({
+  userId,
+  consumableId,
+  quantity,
+  note,
+}: {
+  userId?: string;
+  consumableId?: string;
+  quantity?: number;
+  note?: string;
+}) {
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      itemId: "",
-      userId: type === "IN" ? (user?.id ?? "") : "",
-      quantity: 1,
-      note: "",
+      iteconsumableIdmId: consumableId ?? "",
+      userId: userId ?? "",
+      quantity: quantity ?? 1,
+      note: note ?? "",
       //type: type,
     },
   });
 
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  const createMovementMutation = useMutation(
-    trpc.inventory.createMovement.mutationOptions({
+  const createConsumableMutation = useMutation(
+    trpc.inventory.createConsumableUsage.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         closeSheet();
       },
-    }),
+    })
   );
   const handleSubmit = (data: z.infer<typeof schema>) => {
     console.log(data);

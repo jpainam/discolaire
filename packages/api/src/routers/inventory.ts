@@ -219,7 +219,7 @@ export const inventoryRouter = createTRPCRouter({
       });
     }),
 
-  createUsage: protectedProcedure
+  createConsumableUsage: protectedProcedure
     .input(
       z.object({
         consumableId: z.string().min(1),
@@ -233,6 +233,7 @@ export const inventoryRouter = createTRPCRouter({
       return ctx.db.consumableUsage.create({
         data: {
           ...input,
+          schoolId: ctx.schoolId,
           schoolYearId: ctx.schoolYearId,
         },
       });
