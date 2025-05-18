@@ -49,7 +49,7 @@ export function CreateEditMovement({ type }: { type: "IN" | "OUT" }) {
         await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         closeSheet();
       },
-    })
+    }),
   );
   const handleSubmit = (data: z.infer<typeof schema>) => {
     console.log(data);
