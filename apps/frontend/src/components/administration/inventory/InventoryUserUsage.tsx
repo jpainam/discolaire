@@ -6,75 +6,49 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
+import { Progress } from "@repo/ui/components/progress";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useLocale } from "~/i18n";
+import { cn } from "@repo/ui/lib/utils";
 import { useTRPC } from "~/trpc/react";
-export function InventoryUserUsage() {
+
+export function InventoryUserUsage({ className }: { className?: string }) {
   const trpc = useTRPC();
-  //const {data: usages} =  useSuspenseQuery(trpc.inventory.getUserUsage.);
+  const { data: usages } = useSuspenseQuery(
+    trpc.inventoryUsage.usageSummary.queryOptions()
+  );
+  // const maxUsage = Math.max(...usages.map((usage) => usage.count), 0);
+  // const maxWidth = 100; // Set the maximum width for the progress bar
+  const { t } = useLocale();
   return (
-    <Card className="lg:col-span-3">
+    <Card className={cn(className)}>
       <CardHeader>
         <CardTitle>Teacher Assignments</CardTitle>
         <CardDescription>Items assigned to teachers</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div className="flex items-center">
-            <div className="w-full">
-              <div className="flex items-center justify-between">
-                <div className="text-sm font-medium">Ms. Johnson</div>
-                <div className="text-sm text-muted-foreground">12 items</div>
+          {usages.map((usage, index) => {
+            return (
+              <div key={index} className="flex items-center">
+                <div className="w-full">
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm font-medium">{usage.name}</div>
+                    <div className="text-sm text-muted-foreground">
+                      {usage.count} {t("items")}
+                    </div>
+                  </div>
+                  <Progress value={usage.count} />
+                  {/* <div className="mt-1 h-2 w-full rounded-full bg-muted">
+                    <div
+                      className="h-2 rounded-full bg-primary"
+                      style={{ width: "28%" }}
+                    ></div>
+                  </div> */}
+                </div>
               </div>
-              <div className="mt-1 h-2 w-full rounded-full bg-muted">
-                <div
-                  className="h-2 rounded-full bg-primary"
-                  style={{ width: "28%" }}
-                ></div>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center">
-            <div className="w-full">
-              <div className="flex items-center justify-between">
-                <div className="text-sm font-medium">Mr. Smith</div>
-                <div className="text-sm text-muted-foreground">9 items</div>
-              </div>
-              <div className="mt-1 h-2 w-full rounded-full bg-muted">
-                <div
-                  className="h-2 rounded-full bg-primary"
-                  style={{ width: "21%" }}
-                ></div>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center">
-            <div className="w-full">
-              <div className="flex items-center justify-between">
-                <div className="text-sm font-medium">Ms. Davis</div>
-                <div className="text-sm text-muted-foreground">15 items</div>
-              </div>
-              <div className="mt-1 h-2 w-full rounded-full bg-muted">
-                <div
-                  className="h-2 rounded-full bg-primary"
-                  style={{ width: "35%" }}
-                ></div>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center">
-            <div className="w-full">
-              <div className="flex items-center justify-between">
-                <div className="text-sm font-medium">Mr. Wilson</div>
-                <div className="text-sm text-muted-foreground">7 items</div>
-              </div>
-              <div className="mt-1 h-2 w-full rounded-full bg-muted">
-                <div
-                  className="h-2 rounded-full bg-primary"
-                  style={{ width: "16%" }}
-                ></div>
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </CardContent>
     </Card>
