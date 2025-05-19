@@ -57,13 +57,13 @@ export function CreateEditConsumableUsage({
     trpc.inventory.createConsumableUsage.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.inventory.pathFilter());
-        toast.success(t("Success"), { id: 0 });
+        toast.success(t("created_successfully"), { id: 0 });
         closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const { t } = useLocale();
   const handleSubmit = (data: z.infer<typeof schema>) => {
