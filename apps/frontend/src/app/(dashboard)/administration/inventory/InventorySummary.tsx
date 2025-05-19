@@ -25,6 +25,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { InventoryMonthlyUsage } from "~/components/administration/inventory/InventoryMontlyUsage";
 
 const statusData = [
   { name: "Available", value: 240, color: "#22c55e" },
@@ -44,7 +45,8 @@ const monthlyUsageData = [
 
 export function InventorySummary() {
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 px-4">
+      <InventoryMonthlyUsage className="col-span-full" />
       <Card className="lg:col-span-4">
         <CardHeader>
           <CardTitle>Monthly Usage</CardTitle>

@@ -22,7 +22,7 @@ export function ConsumableUsageDataTableAction({
   const { t } = useLocale();
   const canDeleteInventory = useCheckPermission(
     "inventory",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -37,7 +37,7 @@ export function ConsumableUsageDataTableAction({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const confirm = useConfirm();

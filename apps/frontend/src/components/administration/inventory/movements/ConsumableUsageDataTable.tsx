@@ -14,7 +14,7 @@ export function ConsumableUsageDataTable() {
   const { t } = useLocale();
   const trpc = useTRPC();
   const { data: inventory } = useSuspenseQuery(
-    trpc.inventory.consumableUsages.queryOptions()
+    trpc.inventory.consumableUsages.queryOptions(),
   );
 
   const columns = React.useMemo(() => getColumns({ t: t }), [t]);

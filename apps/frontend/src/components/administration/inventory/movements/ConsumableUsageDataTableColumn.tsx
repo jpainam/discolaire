@@ -18,7 +18,6 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -26,6 +25,7 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import i18next from "i18next";
 import { CreateEditConsumableUsage } from "~/app/(dashboard)/administration/inventory/CreateEditConsumableUsage";
+import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
@@ -59,7 +59,7 @@ export function getColumns({
           aria-label="Select row"
         />
       ),
-      size: 10,
+      size: 28,
       enableSorting: false,
       enableHiding: false,
     },
@@ -68,7 +68,7 @@ export function getColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("createdAt")} />
       ),
-      size: 40,
+      size: 60,
       cell: ({ row }) => {
         const usage = row.original;
         return (
@@ -88,14 +88,43 @@ export function getColumns({
         <DataTableColumnHeader column={column} title={t("name")} />
       ),
       cell: ({ row }) => {
-        const inventory = row.original;
+        const usage = row.original;
+        const consumable = usage.consumable;
+        if (!consumable) {
+          return <div className="text-muted-foreground">-</div>;
+        }
+
         return (
           <Link
-            className="hover:text-blue-600 line-clamp-1 hover:underline"
-            href={`/administration/inventory/${inventory.id}`}
+            className="gap-1 flex line-clamp-1"
+            href={`/administration/inventory/${consumable.id}`}
           >
-            {inventory.consumable?.name}
+            <span>{consumable.name}</span>
+
+            <FlatBadge
+              variant={
+                consumable.currentStock < consumable.minStockLevel
+                  ? "red"
+                  : "green"
+              }
+            >
+              {t("Stock")}: {consumable.currentStock} {consumable.unit.name}
+            </FlatBadge>
           </Link>
+        );
+      },
+    },
+    {
+      accessorKey: "quantity",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("quantity")} />
+      ),
+      cell: ({ row }) => {
+        const usage = row.original;
+        return (
+          <div className="text-muted-foreground">
+            {usage.quantity} {usage.consumable?.unit.name}
+          </div>
         );
       },
     },
@@ -112,25 +141,30 @@ export function getColumns({
     {
       accessorKey: "user.name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("user")} />
+        <DataTableColumnHeader column={column} title={t("to")} />
       ),
       cell: ({ row }) => {
-        const inventory = row.original;
+        const usage = row.original;
         return (
-          <div className="text-muted-foreground">{inventory.user?.name}</div>
+          <Link
+            href={`/users/${usage.userId}`}
+            className="text-muted-foreground hover:underline"
+          >
+            {usage.user.name}
+          </Link>
         );
       },
     },
     {
       accessorKey: "createdBy.name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("user")} />
+        <DataTableColumnHeader column={column} title={t("created_by")} />
       ),
       cell: ({ row }) => {
         const consumable = row.original;
         return (
           <div className="text-muted-foreground">
-            {consumable.createdBy?.name}
+            {consumable.createdBy.name}
           </div>
         );
       },
@@ -154,18 +188,17 @@ function ActionCell({
 }: {
   inventory: RouterOutputs["inventory"]["consumableUsages"][number];
 }) {
-  const { openSheet } = useSheet();
   const confirm = useConfirm();
   const { t } = useLocale();
   const router = useRouter();
 
   const canDeleteInventory = useCheckPermission(
     "inventory",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const canUpdateInventory = useCheckPermission(
     "inventory",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -181,7 +214,7 @@ function ActionCell({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   return (
