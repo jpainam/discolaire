@@ -49,8 +49,9 @@ model User {
     createdSubscriptions         Subscription[]           @relation("CreatedSubscriptions")
     accessedCommunicationChannel CommunicationChannel[]
     assetAssignments             AssetAssignment[]
-    consumables                  ConsumableUsage[]
     stockMovements               StockMovement[]
+    consumableUsages             ConsumableUsage[]        @relation("UserConsumableUsages")
+    createdConsumableUsages      ConsumableUsage[]        @relation("CreatedConsumableUsages")
 }
 
 model Role {

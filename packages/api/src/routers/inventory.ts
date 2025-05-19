@@ -160,7 +160,32 @@ export const inventoryRouter = createTRPCRouter({
       },
     });
   }),
+  deleteUsage: protectedProcedure
+    .input(z.string().min(1))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.consumableUsage.delete({
+        where: {
+          id: input,
+        },
+      });
+    }),
 
+  consumableUsages: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.consumableUsage.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        user: true,
+        createdBy: true,
+        consumable: {
+          include: {
+            unit: true,
+          },
+        },
+      },
+    });
+  }),
   deleteAsset: protectedProcedure
     .input(z.string().min(1))
     .mutation(({ ctx, input }) => {
@@ -225,14 +250,17 @@ export const inventoryRouter = createTRPCRouter({
         consumableId: z.string().min(1),
         userId: z.string().min(1),
         quantity: z.coerce.number().min(1).max(1000),
-        type: z.enum(["IN", "OUT"]).default("OUT"),
         note: z.string().optional(),
       }),
     )
     .mutation(({ ctx, input }) => {
       return ctx.db.consumableUsage.create({
         data: {
-          ...input,
+          consumableId: input.consumableId,
+          userId: input.userId,
+          quantity: input.quantity,
+          note: input.note,
+          createdById: ctx.session.user.id,
           schoolId: ctx.schoolId,
           schoolYearId: ctx.schoolYearId,
         },

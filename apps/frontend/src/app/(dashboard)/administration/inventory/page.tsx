@@ -14,6 +14,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@repo/ui/components/tabs";
+import { ConsumableUsageDataTable } from "~/components/administration/inventory/movements/ConsumableUsageDataTable";
 import { getServerTranslations } from "~/i18n/server";
 import { batchPrefetch, getQueryClient, trpc } from "~/trpc/server";
 import { InventoryDataTable } from "./InventoryDataTable";
@@ -24,7 +25,10 @@ export default async function Page() {
   const queryClient = getQueryClient();
   const items = await queryClient.fetchQuery(trpc.inventory.all.queryOptions());
   //const items = await fetchQtrpc.inventory.all;
-  batchPrefetch([trpc.inventory.all.queryOptions()]);
+  batchPrefetch([
+    trpc.inventory.all.queryOptions(),
+    trpc.inventory.consumableUsages.queryOptions(),
+  ]);
   const { t } = await getServerTranslations();
   return (
     <Tabs defaultValue="tab-2">
@@ -114,9 +118,7 @@ export default async function Page() {
       </TabsContent>
 
       <TabsContent value="tab-5">
-        <p className="text-muted-foreground pt-1 text-center text-xs">
-          Content for Tab 5
-        </p>
+        <ConsumableUsageDataTable />
       </TabsContent>
       <TabsContent value="tab-6">
         <p className="text-muted-foreground pt-1 text-center text-xs">

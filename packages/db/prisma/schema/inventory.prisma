@@ -59,7 +59,7 @@ enum AssignmentStatus {
 model ConsumableUsage {
     id           String               @id @default(uuid())
     userId       String
-    user         User                 @relation(fields: [userId], references: [id])
+    user         User                 @relation("UserConsumableUsages", fields: [userId], references: [id])
     quantity     Int
     note         String?
     createdAt    DateTime             @default(now())
@@ -70,7 +70,8 @@ model ConsumableUsage {
     schoolId     String
     school       School               @relation(fields: [schoolId], references: [id], onDelete: Cascade)
     consumableId String
-    createdById  String?
+    createdById  String
+    createdBy    User                 @relation("CreatedConsumableUsages", fields: [createdById], references: [id])
 }
 
 model InventoryUnit {

@@ -14,9 +14,10 @@ import { Input } from "@repo/ui/components/input";
 import { Textarea } from "@repo/ui/components/textarea";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { UserSelector } from "~/components/shared/selects/UserSelector";
-import { useSheet } from "~/hooks/use-sheet";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { InventorySelector } from "./InventorySelector";
@@ -25,15 +26,16 @@ const schema = z.object({
   consumableId: z.string().min(1),
   quantity: z.coerce.number().min(1).max(1000),
   note: z.string().optional(),
-  //type: z.enum(["IN", "OUT"]).default("OUT"),
 });
 
 export function CreateEditConsumableUsage({
+  id,
   userId,
   consumableId,
   quantity,
   note,
 }: {
+  id?: string;
   userId?: string;
   consumableId?: string;
   quantity?: number;
@@ -42,11 +44,10 @@ export function CreateEditConsumableUsage({
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      iteconsumableIdmId: consumableId ?? "",
+      consumableId: consumableId ?? "",
       userId: userId ?? "",
       quantity: quantity ?? 1,
       note: note ?? "",
-      //type: type,
     },
   });
 
@@ -56,103 +57,119 @@ export function CreateEditConsumableUsage({
     trpc.inventory.createConsumableUsage.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.inventory.pathFilter());
-        closeSheet();
+        toast.success(t("Success"), { id: 0 });
+        closeModal();
       },
-    })
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
   );
-  const handleSubmit = (data: z.infer<typeof schema>) => {
-    console.log(data);
-  };
   const { t } = useLocale();
-  const { closeSheet } = useSheet();
+  const handleSubmit = (data: z.infer<typeof schema>) => {
+    toast.loading(t("Processing..."), { id: 0 });
+    const values = {
+      consumableId: data.consumableId,
+      userId: data.userId,
+      quantity: data.quantity,
+      note: data.note,
+    };
+    if (id) {
+      //
+    } else {
+      createConsumableMutation.mutate(values);
+    }
+  };
+
+  const { closeModal } = useModal();
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <div className="px-4 flex flex-col gap-6">
-          <FormField
-            control={form.control}
-            name="itemId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("item")}</FormLabel>
-                <FormControl>
-                  <InventorySelector
-                    defaultValue={field.value}
-                    onChange={(value) => {
-                      field.onChange(value);
-                    }}
-                  />
-                </FormControl>
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={form.handleSubmit(handleSubmit)}
+      >
+        <FormField
+          control={form.control}
+          name="consumableId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("Consumable")}</FormLabel>
+              <FormControl>
+                <InventorySelector
+                  defaultValue={field.value}
+                  onChange={(value) => {
+                    field.onChange(value);
+                  }}
+                />
+              </FormControl>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {type == "OUT" && (
-            <FormField
-              control={form.control}
-              name="userId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("user")}</FormLabel>
-                  <FormControl>
-                    <UserSelector
-                      defaultValue={field.value}
-                      onChange={(value) => {
-                        field.onChange(value);
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormMessage />
+            </FormItem>
           )}
+        />
 
-          <FormField
-            control={form.control}
-            name="quantity"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("quantity")}</FormLabel>
-                <FormControl>
-                  <Input type="number" {...field} />
-                </FormControl>
+        <FormField
+          control={form.control}
+          name="userId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("user")}</FormLabel>
+              <FormControl>
+                <UserSelector
+                  defaultValue={field.value}
+                  onChange={(value) => {
+                    field.onChange(value);
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <FormField
+          control={form.control}
+          name="quantity"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("quantity")}</FormLabel>
+              <FormControl>
+                <Input type="number" {...field} />
+              </FormControl>
 
-          <FormField
-            control={form.control}
-            name="note"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("observation")}</FormLabel>
-                <FormControl>
-                  <Textarea className="resize-none" {...field} />
-                </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="grid grid-cols-1 gap-2">
-            <Button isLoading={createMovementMutation.isPending} size={"sm"}>
-              {t("submit")}
-            </Button>
-            <Button
-              onClick={() => {
-                closeSheet();
-              }}
-              type="button"
-              size={"sm"}
-              variant={"outline"}
-            >
-              {t("close")}
-            </Button>
-          </div>
+        <FormField
+          control={form.control}
+          name="note"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("observation")}</FormLabel>
+              <FormControl>
+                <Textarea className="resize-none" {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="flex flex-row justify-end space-x-2">
+          <Button isLoading={createConsumableMutation.isPending} size={"sm"}>
+            {t("submit")}
+          </Button>
+          <Button
+            onClick={() => {
+              closeModal();
+            }}
+            type="button"
+            size={"sm"}
+            variant={"outline"}
+          >
+            {t("close")}
+          </Button>
         </div>
       </form>
     </Form>
