@@ -22,20 +22,17 @@ import { useTRPC } from "~/trpc/react";
 import { InventorySelector } from "./InventorySelector";
 const schema = z.object({
   consumableId: z.string().min(1),
-  userId: z.string().min(1),
   quantity: z.coerce.number().min(1).max(1000),
   note: z.string().optional(),
 });
-export function CreateEditMovement({
+export function CreateEditStockMovement({
   id,
-  userId,
   quantity,
   note,
   consumableId,
 }: {
   consumableId?: string;
   id?: string;
-  userId?: string;
   quantity?: number;
   note?: string;
 }) {
@@ -43,7 +40,6 @@ export function CreateEditMovement({
     resolver: zodResolver(schema),
     defaultValues: {
       consumableId: consumableId ?? "",
-      userId: userId ?? "",
       quantity: quantity ?? 1,
       note: note ?? "",
     },
@@ -62,7 +58,7 @@ export function CreateEditMovement({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateMovementMutation = useMutation(
     trpc.inventory.updateStockMovement.mutationOptions({
@@ -74,7 +70,7 @@ export function CreateEditMovement({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const handleSubmit = (data: z.infer<typeof schema>) => {
     toast.loading(t("loading"), { id: 0 });

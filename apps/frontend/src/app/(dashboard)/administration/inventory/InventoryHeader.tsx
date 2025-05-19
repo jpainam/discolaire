@@ -13,7 +13,7 @@ import { useLocale } from "~/i18n";
 import { CreateEditAsset } from "./CreateEditAsset";
 import { CreateEditConsumable } from "./CreateEditConsumable";
 import { CreateEditConsumableUsage } from "./CreateEditConsumableUsage";
-import { CreateEditMovement } from "./CreateEditMovement";
+import { CreateEditStockMovement } from "./CreateEditStockMovement";
 export function InventoryHeader() {
   const { t } = useLocale();
   const { openModal } = useModal();
@@ -41,7 +41,7 @@ export function InventoryHeader() {
             openSheet({
               title: t("Create a stock movement"),
               description: t("IN"),
-              view: <CreateEditMovement type={"IN"} />,
+              view: <CreateEditStockMovement />,
             });
           }}
           size={"sm"}
