@@ -63,7 +63,7 @@ export function CreateEditConsumableUsage({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const { t } = useLocale();
   const handleSubmit = (data: z.infer<typeof schema>) => {

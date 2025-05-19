@@ -2,65 +2,20 @@ import { z } from "zod";
 
 import { db } from "@repo/db";
 
+import { getAllAssets, getAllConsumables } from "../services/inventory-service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const inventoryRouter = createTRPCRouter({
   all: protectedProcedure.query(async ({ ctx }) => {
-    const assets = await ctx.db.inventoryAsset.findMany({
-      where: {
-        schoolId: ctx.schoolId,
-      },
+    const assets = await getAllAssets({
+      schoolId: ctx.schoolId,
+      schoolYearId: ctx.schoolYearId,
     });
-    const consumables = await ctx.db.inventoryConsumable.findMany({
-      include: {
-        unit: true,
-      },
-      where: {
-        schoolId: ctx.schoolId,
-      },
+    const consumables = await getAllConsumables({
+      schoolId: ctx.schoolId,
+      schoolYearId: ctx.schoolYearId,
     });
-    const items: {
-      id: string;
-      type: "ASSET" | "CONSUMABLE";
-      name: string;
-      note: string | null;
-      schoolId: string;
-      schoolYearId: string;
-      other: Record<string, string | null>;
-    }[] = [];
-    assets.forEach((asset) => {
-      items.push({
-        id: asset.id,
-        type: "ASSET",
-        schoolId: asset.schoolId,
-        schoolYearId: asset.schoolYearId,
-        name: asset.name,
-        note: asset.note ? asset.note.replace(/(\r\n|\n|\r)/g, ",") : null,
-        other: {
-          sku: asset.sku,
-          serial: asset.serial,
-        },
-      });
-    });
-    consumables.forEach((consumable) => {
-      items.push({
-        id: consumable.id,
-        type: "CONSUMABLE",
-        name: consumable.name,
-        schoolId: consumable.schoolId,
-        schoolYearId: consumable.schoolYearId,
-        note: consumable.note
-          ? consumable.note.replace(/(\r\n|\n|\r)/g, ",")
-          : null,
-        other: {
-          currentStock: consumable.currentStock.toString(),
-          minLevelStock: consumable.minStockLevel.toString(),
-          unitId: consumable.unitId,
-          unitName: consumable.unit.name,
-        },
-      });
-    });
-    return items;
+    return [...assets, ...consumables];
   }),
   units: protectedProcedure.query(({ ctx }) => {
     return ctx.db.inventoryUnit.findMany({

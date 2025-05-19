@@ -8,6 +8,11 @@ import Link from "next/link";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@repo/ui/components/avatar";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import {
@@ -17,7 +22,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@repo/ui/components/tooltip";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+import { useState } from "react";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
@@ -134,6 +146,17 @@ export function getColumns({
     },
 
     {
+      accessorKey: "note",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("description")} />
+      ),
+      cell: ({ row }) => {
+        const inventory = row.original;
+        return <div>{inventory.note}</div>;
+      },
+    },
+
+    {
       id: "actions",
       header: () => <span className="sr-only">Actions</span>,
       cell: function Cell({ row }) {
@@ -158,11 +181,11 @@ function ActionCell({
 
   const canDeleteInventory = useCheckPermission(
     "inventory",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateInventory = useCheckPermission(
     "inventory",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -175,7 +198,7 @@ function ActionCell({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const { openModal } = useModal();
 
@@ -188,7 +211,7 @@ function ActionCell({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   return (
@@ -291,5 +314,45 @@ function ActionCell({
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
+  );
+}
+
+export function AvatarGroup4({
+  users,
+}: {
+  users: { name: string; image: string }[];
+}) {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  return (
+    <TooltipProvider delayDuration={0}>
+      <div className="flex -space-x-2 *:ring-3 *:ring-background">
+        {users.map((user, index) => (
+          <Tooltip key={index}>
+            <TooltipTrigger asChild>
+              <Avatar
+                className={`transition-transform ${
+                  activeIndex === index ? "z-10 scale-110" : ""
+                }`}
+                onMouseEnter={() => setActiveIndex(index)}
+                onMouseLeave={() => setActiveIndex(null)}
+              >
+                <AvatarImage src={user.image} alt={user.name} />
+                <AvatarFallback>
+                  {user.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")}
+                </AvatarFallback>
+              </Avatar>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="font-semibold">{user.name}</p>
+              {/* <p className="text-sm">{user.role}</p> */}
+            </TooltipContent>
+          </Tooltip>
+        ))}
+      </div>
+    </TooltipProvider>
   );
 }
