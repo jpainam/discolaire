@@ -255,8 +255,8 @@ export const inventoryRouter = createTRPCRouter({
         note: z.string().optional(),
       }),
     )
-    .mutation(({ ctx, input }) => {
-      return ctx.db.inventoryConsumableUsage.create({
+    .mutation(async ({ ctx, input }) => {
+      const v = await ctx.db.inventoryConsumableUsage.create({
         data: {
           consumableId: input.consumableId,
           userId: input.userId,
@@ -267,6 +267,12 @@ export const inventoryRouter = createTRPCRouter({
           schoolYearId: ctx.schoolYearId,
         },
       });
+      await syncStockQuantity({
+        schoolId: ctx.schoolId,
+        schoolYearId: ctx.schoolYearId,
+        consumableId: input.consumableId,
+      });
+      return v;
     }),
   updateStockMovement: protectedProcedure
     .input(
@@ -345,12 +351,23 @@ async function syncStockQuantity({
       return acc + movement.quantity;
     }
   }, 0);
+
+  const usages = await db.inventoryConsumableUsage.findMany({
+    where: {
+      consumableId: consumableId,
+      schoolId: schoolId,
+      schoolYearId: schoolYearId,
+    },
+  });
+  const usageStock = usages.reduce((acc, usage) => {
+    return acc + usage.quantity;
+  }, 0);
   await db.inventoryConsumable.update({
     where: {
       id: consumableId,
     },
     data: {
-      currentStock,
+      currentStock: currentStock - usageStock,
     },
   });
 }
