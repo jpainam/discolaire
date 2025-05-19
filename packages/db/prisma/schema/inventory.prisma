@@ -4,59 +4,59 @@ enum InventoryCategoryType {
 }
 
 model InventoryAsset {
-    id           String            @id @default(uuid())
+    id           String                     @id @default(uuid())
     name         String
     sku          String?
-    serial       String?           @unique
+    serial       String?                    @unique
     note         String?
-    createdAt    DateTime          @default(now())
-    updatedAt    DateTime          @updatedAt
-    assignments  AssetAssignment[]
+    createdAt    DateTime                   @default(now())
+    updatedAt    DateTime                   @updatedAt
+    assignments  InventoryAssetAssignment[]
     schoolId     String
-    school       School            @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+    school       School                     @relation(fields: [schoolId], references: [id], onDelete: Cascade)
     schoolYearId String
-    schoolYear   SchoolYear        @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    schoolYear   SchoolYear                 @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
 }
 
 model InventoryConsumable {
-    id             String            @id @default(uuid())
-    name           String            @unique
+    id             String                     @id @default(uuid())
+    name           String                     @unique
     note           String?
     unitId         String
-    unit           InventoryUnit     @relation(fields: [unitId], references: [id])
-    currentStock   Int               @default(0)
-    minStockLevel  Int               @default(0)
-    stockMovements StockMovement[]
-    usages         ConsumableUsage[]
+    unit           InventoryUnit              @relation(fields: [unitId], references: [id])
+    currentStock   Int                        @default(0)
+    minStockLevel  Int                        @default(0)
+    stockMovements InventoryStockMovement[]
+    usages         InventoryConsumableUsage[]
     schoolId       String
-    school         School            @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+    school         School                     @relation(fields: [schoolId], references: [id], onDelete: Cascade)
     schoolYearId   String
-    schoolYear     SchoolYear        @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    schoolYear     SchoolYear                 @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
 }
 
-model AssetAssignment {
-    id          String           @id @default(uuid())
+model InventoryAssetAssignment {
+    id          String                    @id @default(uuid())
     assetId     String
-    asset       InventoryAsset   @relation(fields: [assetId], references: [id])
+    asset       InventoryAsset            @relation(fields: [assetId], references: [id])
     userId      String
-    user        User             @relation(fields: [userId], references: [id])
+    user        User                      @relation(fields: [userId], references: [id])
     location    String?
-    status      AssignmentStatus @default(PENDING)
+    status      InventoryAssignmentStatus @default(PENDING)
     note        String?
-    createdAt   DateTime         @default(now())
+    createdAt   DateTime                  @default(now())
     createdById String?
     approvedAt  DateTime?
     approvedBy  String?
     returnedAt  DateTime?
 }
 
-enum AssignmentStatus {
+enum InventoryAssignmentStatus {
     PENDING
     ASSIGNED
     RETURNED
 }
 
-model ConsumableUsage {
+model InventoryConsumableUsage {
     id           String               @id @default(uuid())
     userId       String
     user         User                 @relation("UserConsumableUsages", fields: [userId], references: [id])
@@ -81,24 +81,24 @@ model InventoryUnit {
     consumables InventoryConsumable[]
 }
 
-enum MovementType {
+enum InventoryMovementType {
     IN
     OUT
     ADJUST
 }
 
-model StockMovement {
-    id           String              @id @default(uuid())
+model InventoryStockMovement {
+    id           String                @id @default(uuid())
     quantity     Int
-    type         MovementType
+    type         InventoryMovementType
     note         String?
-    createdAt    DateTime            @default(now())
-    consumable   InventoryConsumable @relation(fields: [consumableId], references: [id])
+    createdAt    DateTime              @default(now())
+    consumable   InventoryConsumable   @relation(fields: [consumableId], references: [id])
     createdById  String
-    createdBy    User                @relation(fields: [createdById], references: [id])
+    createdBy    User                  @relation(fields: [createdById], references: [id])
     consumableId String
     schoolYearId String
-    schoolYear   SchoolYear          @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    schoolYear   SchoolYear            @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
     schoolId     String
-    school       School              @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+    school       School                @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 }

@@ -165,7 +165,7 @@ export const inventoryRouter = createTRPCRouter({
   deleteUsage: protectedProcedure
     .input(z.string().min(1))
     .mutation(({ ctx, input }) => {
-      return ctx.db.consumableUsage.delete({
+      return ctx.db.inventoryConsumableUsage.delete({
         where: {
           id: input,
         },
@@ -173,7 +173,7 @@ export const inventoryRouter = createTRPCRouter({
     }),
 
   consumableUsages: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.consumableUsage.findMany({
+    return ctx.db.inventoryConsumableUsage.findMany({
       orderBy: {
         createdAt: "desc",
       },
@@ -256,7 +256,7 @@ export const inventoryRouter = createTRPCRouter({
       }),
     )
     .mutation(({ ctx, input }) => {
-      return ctx.db.consumableUsage.create({
+      return ctx.db.inventoryConsumableUsage.create({
         data: {
           consumableId: input.consumableId,
           userId: input.userId,
@@ -279,7 +279,7 @@ export const inventoryRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const movement = await ctx.db.stockMovement.update({
+      const movement = await ctx.db.inventoryStockMovement.update({
         data: {
           ...input,
         },
@@ -304,7 +304,7 @@ export const inventoryRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const movement = await ctx.db.stockMovement.create({
+      const movement = await ctx.db.inventoryStockMovement.create({
         data: {
           ...input,
           schoolId: ctx.schoolId,
@@ -332,7 +332,7 @@ async function syncStockQuantity({
   schoolYearId: string;
   consumableId: string;
 }) {
-  const allMovements = await db.stockMovement.findMany({
+  const allMovements = await db.inventoryStockMovement.findMany({
     where: {
       schoolId: schoolId,
       schoolYearId: schoolYearId,
