@@ -21,7 +21,7 @@ export function ConsumableUsageHeader() {
   const { t } = useLocale();
   const trpc = useTRPC();
   const { data: consumables } = useSuspenseQuery(
-    trpc.inventory.consumables.queryOptions()
+    trpc.inventory.consumables.queryOptions(),
   );
   return (
     <div className="flex gap-4 px-4 flex-row items-center">
