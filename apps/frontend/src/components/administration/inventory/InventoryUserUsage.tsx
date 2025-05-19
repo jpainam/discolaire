@@ -15,7 +15,7 @@ import { useTRPC } from "~/trpc/react";
 export function InventoryUserUsage({ className }: { className?: string }) {
   const trpc = useTRPC();
   const { data: usages } = useSuspenseQuery(
-    trpc.inventoryUsage.usageSummary.queryOptions()
+    trpc.inventoryUsage.usageSummary.queryOptions(),
   );
   // const maxUsage = Math.max(...usages.map((usage) => usage.count), 0);
   // const maxWidth = 100; // Set the maximum width for the progress bar
