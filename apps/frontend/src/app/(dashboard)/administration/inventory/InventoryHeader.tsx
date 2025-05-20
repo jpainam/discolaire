@@ -1,18 +1,12 @@
 "use client";
 
 import { Button } from "@repo/ui/components/button";
-import {
-  BlocksIcon,
-  MinusIcon,
-  PlusIcon,
-  StretchVerticalIcon,
-} from "lucide-react";
+import { BlocksIcon, PlusIcon, StretchVerticalIcon } from "lucide-react";
 import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { CreateEditAsset } from "./CreateEditAsset";
 import { CreateEditConsumable } from "./CreateEditConsumable";
-import { CreateEditConsumableUsage } from "./CreateEditConsumableUsage";
 import { CreateEditStockMovement } from "./CreateEditStockMovement";
 export function InventoryHeader() {
   const { t } = useLocale();
@@ -23,19 +17,6 @@ export function InventoryHeader() {
       {/* <LayoutListIcon className="w-4 h-4" />
       <Label>{t("inventory")}</Label> */}
       <div className="ml-auto flex flex-row gap-2 items-center">
-        <Button
-          onClick={() => {
-            openModal({
-              title: t("Create a stock movement"),
-              description: t("OUT"),
-              view: <CreateEditConsumableUsage />,
-            });
-          }}
-          size={"sm"}
-        >
-          <MinusIcon className="w-4 h-4" />
-          {t("Stock withdrawal")}
-        </Button>
         <Button
           onClick={() => {
             openSheet({

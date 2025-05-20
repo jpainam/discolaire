@@ -282,6 +282,23 @@ export const inventoryRouter = createTRPCRouter({
 
       return movement;
     }),
+  createAssetAssignment: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string().min(1),
+        assetId: z.string().min(1),
+        location: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.inventoryAssetAssignment.create({
+        data: {
+          userId: input.userId,
+          assetId: input.assetId,
+          location: input.location,
+        },
+      });
+    }),
 });
 
 async function syncStockQuantity({

@@ -4,18 +4,16 @@ enum InventoryCategoryType {
 }
 
 model InventoryAsset {
-    id           String                     @id @default(uuid())
-    name         String
-    sku          String?
-    serial       String?                    @unique
-    note         String?
-    createdAt    DateTime                   @default(now())
-    updatedAt    DateTime                   @updatedAt
-    assignments  InventoryAssetAssignment[]
-    schoolId     String
-    school       School                     @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-    schoolYearId String
-    schoolYear   SchoolYear                 @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    id          String                     @id @default(uuid())
+    name        String
+    sku         String?
+    serial      String?                    @unique
+    note        String?
+    createdAt   DateTime                   @default(now())
+    updatedAt   DateTime                   @updatedAt
+    assignments InventoryAssetAssignment[]
+    schoolId    String
+    school      School                     @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 }
 
 model InventoryConsumable {
@@ -35,19 +33,21 @@ model InventoryConsumable {
 }
 
 model InventoryAssetAssignment {
-    id          String                    @id @default(uuid())
-    assetId     String
-    asset       InventoryAsset            @relation(fields: [assetId], references: [id])
-    userId      String
-    user        User                      @relation(fields: [userId], references: [id])
-    location    String?
-    status      InventoryAssignmentStatus @default(PENDING)
-    note        String?
-    createdAt   DateTime                  @default(now())
-    createdById String?
-    approvedAt  DateTime?
-    approvedBy  String?
-    returnedAt  DateTime?
+    id           String                    @id @default(uuid())
+    assetId      String
+    asset        InventoryAsset            @relation(fields: [assetId], references: [id])
+    userId       String
+    user         User                      @relation(fields: [userId], references: [id])
+    location     String?
+    status       InventoryAssignmentStatus @default(PENDING)
+    note         String?
+    createdAt    DateTime                  @default(now())
+    createdById  String?
+    approvedAt   DateTime?
+    approvedBy   String?
+    returnedAt   DateTime?
+    schoolYearId String
+    schoolYear   SchoolYear                @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
 }
 
 enum InventoryAssignmentStatus {

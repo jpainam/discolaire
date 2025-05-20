@@ -20,10 +20,9 @@ import { UserSelector } from "~/components/shared/selects/UserSelector";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
-import { InventorySelector } from "./InventorySelector";
+
 const schema = z.object({
   userId: z.string().min(1),
-  consumableId: z.string().min(1),
   quantity: z.coerce.number().min(1).max(1000),
   note: z.string().optional(),
 });
@@ -37,14 +36,13 @@ export function CreateEditConsumableUsage({
 }: {
   id?: string;
   userId?: string;
-  consumableId?: string;
+  consumableId: string;
   quantity?: number;
   note?: string;
 }) {
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      consumableId: consumableId ?? "",
       userId: userId ?? "",
       quantity: quantity ?? 1,
       note: note ?? "",
@@ -63,13 +61,13 @@ export function CreateEditConsumableUsage({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const { t } = useLocale();
   const handleSubmit = (data: z.infer<typeof schema>) => {
     toast.loading(t("Processing..."), { id: 0 });
     const values = {
-      consumableId: data.consumableId,
+      consumableId: consumableId,
       userId: data.userId,
       quantity: data.quantity,
       note: data.note,
@@ -88,26 +86,6 @@ export function CreateEditConsumableUsage({
         className="flex flex-col gap-4"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
-        <FormField
-          control={form.control}
-          name="consumableId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("Consumable")}</FormLabel>
-              <FormControl>
-                <InventorySelector
-                  defaultValue={field.value}
-                  onChange={(value) => {
-                    field.onChange(value);
-                  }}
-                />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <FormField
           control={form.control}
           name="userId"

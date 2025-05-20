@@ -24,7 +24,7 @@ import { useConfirm } from "~/providers/confirm-dialog";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import i18next from "i18next";
-import { CreateEditConsumableUsage } from "~/app/(dashboard)/administration/inventory/CreateEditConsumableUsage";
+import { CreateEditConsumableUsage } from "~/components/administration/inventory/CreateEditConsumableUsage";
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
@@ -194,11 +194,11 @@ function ActionCell({
 
   const canDeleteInventory = useCheckPermission(
     "inventory",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateInventory = useCheckPermission(
     "inventory",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -214,7 +214,7 @@ function ActionCell({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   return (

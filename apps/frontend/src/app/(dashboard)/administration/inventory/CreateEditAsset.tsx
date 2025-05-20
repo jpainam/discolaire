@@ -52,7 +52,7 @@ export function CreateEditAsset({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const updateAssetMutation = useMutation(
     trpc.inventory.updateAsset.mutationOptions({
@@ -64,7 +64,7 @@ export function CreateEditAsset({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const { closeModal } = useModal();
   const handleSubmit = (data: z.infer<typeof schema>) => {
