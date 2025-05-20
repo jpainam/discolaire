@@ -7,21 +7,21 @@ export async function getAllAssets({
   schoolId: string;
   schoolYearId: string;
 }) {
-  const assignedAssets = await db.inventoryAssetUsage.findMany({
-    include: {
-      user: true,
-    },
-    where: {
-      schoolYearId: schoolYearId,
-      asset: {
-        schoolId: schoolId,
-      },
-    },
-  });
-
   const assets = await db.inventoryAsset.findMany({
     where: {
       schoolId: schoolId,
+      // usages: {
+      //   some: {
+      //     schoolYearId: schoolYearId,
+      //   },
+      // },
+    },
+    include: {
+      usages: {
+        include: {
+          user: true,
+        },
+      },
     },
   });
 
@@ -42,14 +42,12 @@ export async function getAllAssets({
       schoolId: asset.schoolId,
       schoolYearId: schoolYearId,
       name: asset.name,
-      users: assignedAssets
-        .filter((v) => (v.assetId = asset.id))
-        .map((assignment) => {
-          return {
-            image: assignment.user.avatar ?? "",
-            name: assignment.user.name ?? "",
-          };
-        }),
+      users: asset.usages.map((u) => {
+        return {
+          image: u.user.avatar ?? "",
+          name: u.user.name ?? "",
+        };
+      }),
       note: asset.note ? asset.note.replace(/(\r\n|\n|\r)/g, ",") : null,
       other: {
         sku: asset.sku,
@@ -67,21 +65,14 @@ export async function getAllConsumables({
   schoolId: string;
   schoolYearId: string;
 }) {
-  const usages = await db.inventoryConsumableUsage.findMany({
-    include: {
-      user: true,
-    },
-    where: {
-      consumable: {
-        schoolId: schoolId,
-        schoolYearId: schoolYearId,
-      },
-    },
-  });
-
   const consumables = await db.inventoryConsumable.findMany({
     include: {
       unit: true,
+      usages: {
+        include: {
+          user: true,
+        },
+      },
     },
     where: {
       schoolId: schoolId,
@@ -109,14 +100,12 @@ export async function getAllConsumables({
         : null,
       schoolId: consumable.schoolId,
       schoolYearId: consumable.schoolYearId,
-      users: usages
-        .filter((v) => (v.consumableId = consumable.id))
-        .map((usage) => {
-          return {
-            image: usage.user.avatar ?? "",
-            name: usage.user.name ?? "",
-          };
-        }),
+      users: consumable.usages.map((u) => {
+        return {
+          name: u.user.name ?? "",
+          image: u.user.avatar ?? "",
+        };
+      }),
       other: {
         currentStock: consumable.currentStock.toString(),
         minLevelStock: consumable.minStockLevel.toString(),
