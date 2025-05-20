@@ -82,7 +82,6 @@ export const inventoryRouter = createTRPCRouter({
         data: {
           ...input,
           schoolId: ctx.schoolId,
-          schoolYearId: ctx.schoolYearId,
         },
       });
     }),
@@ -282,7 +281,7 @@ export const inventoryRouter = createTRPCRouter({
 
       return movement;
     }),
-  createAssetAssignment: protectedProcedure
+  createAssetUsage: protectedProcedure
     .input(
       z.object({
         userId: z.string().min(1),
@@ -291,7 +290,29 @@ export const inventoryRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.inventoryAssetAssignment.create({
+      return ctx.db.inventoryAssetUsage.create({
+        data: {
+          userId: input.userId,
+          assetId: input.assetId,
+          location: input.location,
+          schoolYearId: ctx.schoolYearId,
+        },
+      });
+    }),
+  updateAssetUsage: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+        userId: z.string().min(1),
+        assetId: z.string().min(1),
+        location: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.inventoryAssetUsage.update({
+        where: {
+          id: input.id,
+        },
         data: {
           userId: input.userId,
           assetId: input.assetId,

@@ -7,7 +7,7 @@ export const inventoryUsageRouter = createTRPCRouter({
         user: true,
       },
     });
-    const userAsset = await ctx.db.inventoryAssetAssignment.findMany({
+    const userAsset = await ctx.db.inventoryAssetUsage.findMany({
       include: {
         user: true,
       },

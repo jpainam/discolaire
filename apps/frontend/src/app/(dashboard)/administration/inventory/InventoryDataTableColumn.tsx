@@ -35,7 +35,7 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CreateEditAttribution } from "~/components/administration/inventory/CreateEditAttribution";
+import { CreateEditAssetUsage } from "~/components/administration/inventory/CreateEditAssetUsage";
 import { CreateEditConsumableUsage } from "~/components/administration/inventory/CreateEditConsumableUsage";
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
@@ -181,11 +181,11 @@ function ActionCell({
 
   const canDeleteInventory = useCheckPermission(
     "inventory",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const canUpdateInventory = useCheckPermission(
     "inventory",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -198,7 +198,7 @@ function ActionCell({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const { openModal } = useModal();
 
@@ -211,10 +211,10 @@ function ActionCell({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
-  const currentStock = inventory.other.currentStock;
+  //const currentStock = inventory.other.currentStock;
   //const minLevelStock = inventory.other.minLevelStock;
 
   return (
@@ -236,19 +236,17 @@ function ActionCell({
                 openSheet({
                   title: t("Stock withdrawal"),
                   description: inventory.name,
-                  view: (
-                    <CreateEditAttribution
-                      type={inventory.type}
-                      name={inventory.name}
-                      id={inventory.id}
-                      currentStock={currentStock ? Number(currentStock) : 1}
-                    />
-                  ),
+                  view: <CreateEditAssetUsage assetId={inventory.id} />,
                 });
               } else {
                 openModal({
                   title: t("Create a stock movement"),
-                  description: t("OUT"),
+                  description:
+                    inventory.name +
+                    " " +
+                    t("Current stock") +
+                    ": " +
+                    inventory.other.currentStock,
                   view: (
                     <CreateEditConsumableUsage consumableId={inventory.id} />
                   ),

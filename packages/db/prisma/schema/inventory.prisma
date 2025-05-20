@@ -4,16 +4,16 @@ enum InventoryCategoryType {
 }
 
 model InventoryAsset {
-    id          String                     @id @default(uuid())
+    id          String                @id @default(uuid())
     name        String
     sku         String?
-    serial      String?                    @unique
+    serial      String?               @unique
     note        String?
-    createdAt   DateTime                   @default(now())
-    updatedAt   DateTime                   @updatedAt
-    assignments InventoryAssetAssignment[]
+    createdAt   DateTime              @default(now())
+    updatedAt   DateTime              @updatedAt
+    assignments InventoryAssetUsage[]
     schoolId    String
-    school      School                     @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+    school      School                @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 }
 
 model InventoryConsumable {
@@ -32,7 +32,7 @@ model InventoryConsumable {
     schoolYear     SchoolYear                 @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
 }
 
-model InventoryAssetAssignment {
+model InventoryAssetUsage {
     id           String                    @id @default(uuid())
     assetId      String
     asset        InventoryAsset            @relation(fields: [assetId], references: [id])

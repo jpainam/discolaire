@@ -738,37 +738,37 @@ model Course {
 }
 
 model SchoolYear {
-    id                        String                     @id @default(cuid())
-    observation               String?
-    createdAt                 DateTime?                  @default(now()) @db.Timestamp(6)
-    updatedAt                 DateTime                   @updatedAt
-    abbreviation              String?
-    createdBy                 String?
-    updatedBy                 String?
-    isDefault                 Boolean?                   @default(false)
-    deletedAt                 DateTime?                  @db.Timestamp(6)
-    deletedBy                 String?
-    isActive                  Boolean                    @default(true)
-    isDeleted                 Boolean?                   @default(false)
-    name                      String
-    startDate                 DateTime                   @default(now()) @db.Timestamp(6)
-    endDate                   DateTime                   @default(now()) @db.Timestamp(6)
-    enrollmentStartDate       DateTime?                  @default(now()) @db.Timestamp(6)
-    enrollmentEndDate         DateTime?                  @default(now()) @db.Timestamp(6)
-    classrooms                Classroom[]
-    enrollments               Enrollment[]
-    programs                  Program[]
-    ProgramCategory           ProgramCategory[]
-    ProgramTheme              ProgramTheme[]
-    terms                     Term[]
-    transactions              Transaction[]
-    school                    School                     @relation(fields: [schoolId], references: [id])
-    schoolId                  String
-    timetableCategories       TimetableCategory[]
-    inventoryConsumables      InventoryConsumable[]
-    consumableUsages          InventoryConsumableUsage[]
-    stockMovements            InventoryStockMovement[]
-    inventoryAssetAssignments InventoryAssetAssignment[]
+    id                   String                     @id @default(cuid())
+    observation          String?
+    createdAt            DateTime?                  @default(now()) @db.Timestamp(6)
+    updatedAt            DateTime                   @updatedAt
+    abbreviation         String?
+    createdBy            String?
+    updatedBy            String?
+    isDefault            Boolean?                   @default(false)
+    deletedAt            DateTime?                  @db.Timestamp(6)
+    deletedBy            String?
+    isActive             Boolean                    @default(true)
+    isDeleted            Boolean?                   @default(false)
+    name                 String
+    startDate            DateTime                   @default(now()) @db.Timestamp(6)
+    endDate              DateTime                   @default(now()) @db.Timestamp(6)
+    enrollmentStartDate  DateTime?                  @default(now()) @db.Timestamp(6)
+    enrollmentEndDate    DateTime?                  @default(now()) @db.Timestamp(6)
+    classrooms           Classroom[]
+    enrollments          Enrollment[]
+    programs             Program[]
+    ProgramCategory      ProgramCategory[]
+    ProgramTheme         ProgramTheme[]
+    terms                Term[]
+    transactions         Transaction[]
+    school               School                     @relation(fields: [schoolId], references: [id])
+    schoolId             String
+    timetableCategories  TimetableCategory[]
+    inventoryConsumables InventoryConsumable[]
+    consumableUsages     InventoryConsumableUsage[]
+    stockMovements       InventoryStockMovement[]
+    inventoryAssetUsages InventoryAssetUsage[]
 }
 
 model Cycle {

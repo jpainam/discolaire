@@ -7,14 +7,14 @@ export async function getAllAssets({
   schoolId: string;
   schoolYearId: string;
 }) {
-  const assignedAssets = await db.inventoryAssetAssignment.findMany({
+  const assignedAssets = await db.inventoryAssetUsage.findMany({
     include: {
       user: true,
     },
     where: {
+      schoolYearId: schoolYearId,
       asset: {
         schoolId: schoolId,
-        schoolYearId: schoolYearId,
       },
     },
   });
@@ -40,7 +40,7 @@ export async function getAllAssets({
       id: asset.id,
       type: "ASSET",
       schoolId: asset.schoolId,
-      schoolYearId: asset.schoolYearId,
+      schoolYearId: schoolYearId,
       name: asset.name,
       users: assignedAssets
         .filter((v) => (v.assetId = asset.id))

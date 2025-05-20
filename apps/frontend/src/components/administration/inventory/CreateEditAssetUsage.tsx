@@ -12,46 +12,88 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Textarea } from "@repo/ui/components/textarea";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { UserSelector } from "~/components/shared/selects/UserSelector";
+import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
+import { useTRPC } from "~/trpc/react";
 const schema = z.object({
-  quantity: z.coerce.number().default(1),
   note: z.string().optional(),
   userId: z.string().min(1),
+  location: z.string().optional(),
 });
 
-export function CreateEditAttribution({
-  type,
-  quantity,
+export function CreateEditAssetUsage({
   id,
   note,
-  name,
-  currentStock,
   userId,
+  assetId,
+  location,
 }: {
-  type: "CONSUMABLE" | "ASSET";
-  quantity?: number;
-  name: string;
-  currentStock: number;
   note?: string;
-  id: string;
+  assetId: string;
+  id?: string;
+  location?: string;
   userId?: string;
 }) {
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      quantity: quantity ?? 1,
       note: note ?? "",
       userId: userId ?? "",
+      location: location ?? "",
     },
   });
+  const { t } = useLocale();
+  const { closeSheet } = useSheet();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const createAssetUsageMutation = useMutation(
+    trpc.inventory.createAssetUsage.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.inventory.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+        closeSheet();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
+  const updateAssetUsageMutation = useMutation(
+    trpc.inventory.updateAssetUsage.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.inventory.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeSheet();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
 
   const handleSubmit = (data: z.infer<typeof schema>) => {
-    console.log(data);
+    toast.loading(t("loading"), { id: 0 });
+    const values = {
+      note: data.note,
+      userId: data.userId,
+      assetId: assetId,
+    };
+    if (!id) {
+      createAssetUsageMutation.mutate(values);
+    } else {
+      updateAssetUsageMutation.mutate({
+        ...values,
+        id: id,
+      });
+    }
   };
-  const { t } = useLocale();
+
   return (
     <Form {...form}>
       <form
@@ -77,18 +119,19 @@ export function CreateEditAttribution({
         />
         <FormField
           control={form.control}
-          name="quantity"
-          disabled={type === "ASSET"}
+          name="location"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("quantity")}</FormLabel>
+              <FormLabel>{t("Location")}</FormLabel>
               <FormControl>
-                <Input disabled={type == "ASSET"} type="number" {...field} />
+                <Input {...field} />
               </FormControl>
+
               <FormMessage />
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="note"
@@ -104,8 +147,17 @@ export function CreateEditAttribution({
           )}
         />
         <div className="grid grid-cols-1 gap-2">
-          <Button size={"sm"}>{t("submit")}</Button>
-          <Button type="button" size={"sm"}>
+          <Button isLoading={createAssetUsageMutation.isPending} size={"sm"}>
+            {t("submit")}
+          </Button>
+          <Button
+            variant={"secondary"}
+            onClick={() => {
+              closeSheet();
+            }}
+            type="button"
+            size={"sm"}
+          >
             {t("close")}
           </Button>
         </div>
