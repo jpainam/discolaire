@@ -645,6 +645,8 @@
   "language": "Idioma",
   "lastCriminalRecordCheck": "Última verificación de antecedentes penales",
   "lastName": "Apellido",
+  "Current stock level": "Nivel de stock actual",
+  "Current stock level compared to minimum level": "Nivel de stock actual comparado con el nivel mínimo",
   "lastUpdatedAt": "Última actualización",
   "Last 30 days": "Últimos 30 días",
   "Last 3 months": "Últimos 3 meses",

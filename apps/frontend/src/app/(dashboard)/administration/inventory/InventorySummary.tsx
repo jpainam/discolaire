@@ -9,7 +9,10 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 
 export function InventorySummary() {
-  batchPrefetch([trpc.inventoryUsage.usageSummary.queryOptions()]);
+  batchPrefetch([
+    trpc.inventoryUsage.usageSummary.queryOptions(),
+    trpc.inventoryUsage.stockLevelSummary.queryOptions(),
+  ]);
   return (
     <HydrateClient>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 px-4">

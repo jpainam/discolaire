@@ -43,7 +43,7 @@ export default async function Page() {
   const { t } = await getServerTranslations();
   return (
     <HydrateClient>
-      <Tabs defaultValue="tab-2">
+      <Tabs defaultValue="tab-1">
         <ScrollArea>
           <TabsList className="w-full text-foreground h-auto gap-2 rounded-none border-b bg-transparent px-0 py-1">
             <TabsTrigger

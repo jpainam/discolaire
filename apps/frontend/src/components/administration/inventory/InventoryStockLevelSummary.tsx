@@ -23,6 +23,7 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 import { cn } from "@repo/ui/lib/utils";
+import { useLocale } from "../../../i18n/index";
 
 export const description = "A stacked bar chart with a legend";
 
@@ -51,11 +52,14 @@ export function InventoryStockLevelSummary({
 }: {
   className?: string;
 }) {
+  const { t } = useLocale();
   return (
     <Card className={cn(className)}>
       <CardHeader>
-        <CardTitle>Bar Chart - Stacked + Legend</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>{t("Current stock level")}</CardTitle>
+        <CardDescription>
+          {t("Current stock level compared to minimum level")}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

@@ -44,4 +44,21 @@ export const inventoryUsageRouter = createTRPCRouter({
       userId: user.userId,
     }));
   }),
+  stockLevelSummary: protectedProcedure.query(async ({ ctx }) => {
+    const consumables = await ctx.db.inventoryConsumable.findMany({
+      include: {
+        usages: true,
+      },
+    });
+
+    return consumables.map((consumable) => {
+      const total = consumable.usages.reduce((acc, usage) => {
+        return acc + usage.quantity;
+      }, 0);
+      return {
+        ...consumable,
+        total,
+      };
+    });
+  }),
 });
