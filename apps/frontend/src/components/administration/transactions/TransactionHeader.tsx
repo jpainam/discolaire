@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 "use client";
 
 import { MoreVertical } from "lucide-react";
@@ -15,7 +14,7 @@ import { Label } from "@repo/ui/components/label";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
-import { useSearchParams } from "next/navigation";
+import { useQueryStates } from "nuqs";
 import { DatePicker } from "~/components/DatePicker";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
@@ -23,22 +22,16 @@ import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { TransactionStatusSelector } from "~/components/shared/selects/TransactionStatusSelector";
 import { useRouter } from "~/hooks/use-router";
+import { transactionSearchParamsSchema } from "~/utils/filter-params";
 
 export function TransactionHeader() {
-  //const [from, setFrom] = useQueryState("from", parseAsIsoDate);
-  //const [to, setTo] = useQueryState("to", parseAsIsoDate);
-  const searchParams = useSearchParams();
-
   const { t } = useLocale();
 
   const router = useRouter();
   const { createQueryString } = useCreateQueryString();
-  const from = searchParams.get("from")
-    ? new Date(searchParams.get("from")!)
-    : undefined;
-  const to = searchParams.get("to")
-    ? new Date(searchParams.get("to")!)
-    : undefined;
+  const [searchParams] = useQueryStates(transactionSearchParamsSchema);
+  const from = searchParams.from ?? undefined;
+  const to = searchParams.to ?? undefined;
 
   return (
     <div className="grid px-4 py-2 flex-row items-center gap-6 md:flex">
@@ -47,7 +40,7 @@ export function TransactionHeader() {
         <ClassroomSelector
           className="w-full md:w-[250px]"
           onChange={(val) => {
-            router.push(`?${createQueryString({ classroom: val })}`);
+            router.push(`?${createQueryString({ classroomId: val })}`);
           }}
         />
       </div>

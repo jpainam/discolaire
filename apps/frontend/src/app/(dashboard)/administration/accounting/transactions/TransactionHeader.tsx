@@ -2,40 +2,38 @@
 
 import { useSuspenseQuery } from "@tanstack/react-query";
 import i18next from "i18next";
-import { useSearchParams } from "next/navigation";
+import { useQueryStates } from "nuqs";
 import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
+import { transactionSearchParamsSchema } from "~/utils/filter-params";
 
 export function TransactionHeader() {
   const trpc = useTRPC();
-  const searchParams = useSearchParams();
-  const from = searchParams.get("from");
-  const to = searchParams.get("to");
-  const status = searchParams.get("status");
-  const classroom = searchParams.get("classroom");
+
+  const [searchParams] = useQueryStates(transactionSearchParamsSchema);
   const { data: transactions } = useSuspenseQuery(
     trpc.transaction.all.queryOptions({
-      status: status ?? undefined,
-      from: from ? new Date(from) : undefined,
-      to: to ? new Date(to) : undefined,
-      classroomId: classroom ?? undefined,
-    }),
+      status: searchParams.status ?? undefined,
+      from: searchParams.from ?? undefined,
+      to: searchParams.to ?? undefined,
+      classroomId: searchParams.classroomId ?? undefined,
+    })
   );
   const { t } = useLocale();
   const totals = transactions.reduce((acc, curr) => acc + curr.amount, 0);
   const validated = transactions.reduce(
     (acc, curr) => acc + (curr.status == "VALIDATED" ? curr.amount : 0),
-    0,
+    0
   );
   const canceled = transactions.reduce(
     (acc, curr) => acc + (curr.status == "CANCELED" ? curr.amount : 0),
-    0,
+    0
   );
   const pending = transactions.reduce(
     (acc, curr) => acc + (curr.status == "PENDING" ? curr.amount : 0),
-    0,
+    0
   );
   const { school } = useSchool();
   const moneyFormatter = new Intl.NumberFormat(i18next.language, {
