@@ -1,8 +1,8 @@
 "use client";
 
 import { MoreVertical } from "lucide-react";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
-import { useQueryState } from "nuqs";
+import { useParams, usePathname } from "next/navigation";
+import { useQueryStates } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -22,15 +22,17 @@ import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { TrimestreSelector } from "~/components/shared/selects/TrimestreSelector";
 import { useRouter } from "~/hooks/use-router";
+import { reportcardSearchParamsSchema } from "~/utils/filter-params";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function ReportCardHeader() {
   const { t } = useLocale();
   const { createQueryString } = useCreateQueryString();
-  const searchParams = useSearchParams();
-  const [termId] = useQueryState("termId");
+
+  const [searchParams] = useQueryStates(reportcardSearchParamsSchema);
+  const { termId, trimestreId } = searchParams;
   const pathname = usePathname();
-  const [trimestreId] = useQueryState("trimestreId");
+
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const Icon = sidebarIcons.reportcards;
@@ -40,18 +42,18 @@ export function ReportCardHeader() {
       <Label className="hidden md:block">{t("term")}</Label>
       <TermSelector
         className="md:w-[350px]"
-        defaultValue={termId}
+        defaultValue={termId ? `${termId}` : undefined}
         onChange={(val) => {
           router.push(
             `/classrooms/${params.id}/reportcards?` +
-              createQueryString({ termId: val, trimestreId: undefined }),
+              createQueryString({ termId: val, trimestreId: undefined })
           );
         }}
       />
       <Label className="hidden md:block">{t("Trimestre")}</Label>
       <TrimestreSelector
         className="w-[300px]"
-        defaultValue={searchParams.get("trimestreId") ?? undefined}
+        defaultValue={trimestreId ?? undefined}
         onChange={(val) => {
           const url =
             `/classrooms/${params.id}/reportcards/trimestres?` +

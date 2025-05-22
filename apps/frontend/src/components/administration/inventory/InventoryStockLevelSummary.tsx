@@ -23,7 +23,7 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 import { cn } from "@repo/ui/lib/utils";
-import { useLocale } from "../../../i18n/index";
+import { useLocale } from "~/i18n/index";
 
 export const description = "A stacked bar chart with a legend";
 

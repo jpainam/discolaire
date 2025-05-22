@@ -9,6 +9,7 @@ import {
 import { cn } from "@repo/ui/lib/utils";
 import _, { sum } from "lodash";
 import Link from "next/link";
+import type { SearchParams } from "nuqs/server";
 import { Fragment } from "react";
 import { EmptyState } from "~/components/EmptyState";
 import type { FlatBadgeVariant } from "~/components/FlatBadge";
@@ -20,12 +21,15 @@ import { ReportCardPerformance } from "~/components/students/reportcards/ReportC
 import { ReportCardSummary } from "~/components/students/reportcards/ReportCardSummary";
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
+import { reportcardSearchParams } from "~/utils/filter-params";
 import { getAppreciations } from "~/utils/get-appreciation";
 
-export default async function Page(props: {
+interface PageProps {
+  searchParams: Promise<SearchParams>;
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ termId: string }>;
-}) {
+}
+
+export default async function Page(props: PageProps) {
   const params = await props.params;
   const { t } = await getServerTranslations();
   const { id } = params;
@@ -36,9 +40,7 @@ export default async function Page(props: {
     );
   }
 
-  const searchParams = await props.searchParams;
-
-  const { termId } = searchParams;
+  const { termId } = await reportcardSearchParams(props.searchParams);
 
   if (!termId) {
     return <EmptyState className="my-8" title={t("select_terms")} />;
@@ -46,12 +48,12 @@ export default async function Page(props: {
   const { studentsReport, summary, globalRanks } =
     await caller.reportCard.getSequence({
       classroomId: student.classroom.id,
-      termId: Number(termId),
+      termId: termId,
     });
 
   const disciplines = await caller.discipline.sequence({
     classroomId: student.classroom.id,
-    termId: Number(termId),
+    termId: termId,
   });
   const disc = disciplines.get(params.id);
 
@@ -93,7 +95,7 @@ export default async function Page(props: {
           <TableBody>
             {Object.keys(groups).map((groupId: string) => {
               const items = groups[Number(groupId)]?.sort(
-                (a, b) => a.order - b.order,
+                (a, b) => a.order - b.order
               );
 
               if (!items) return null;
@@ -103,7 +105,7 @@ export default async function Page(props: {
                 <Fragment key={`fragment-${groupId}`}>
                   {items.map((subject, index) => {
                     const grade = studentReport.studentCourses.find(
-                      (c) => c.subjectId === subject.id,
+                      (c) => c.subjectId === subject.id
                     );
                     const subjectSummary = summary.get(subject.id);
                     coeff += grade?.grade != null ? subject.coefficient : 0;
@@ -168,13 +170,13 @@ export default async function Page(props: {
                         items.map(
                           (subject) =>
                             studentReport.studentCourses.find(
-                              (c) => c.subjectId === subject.id,
-                            )?.total,
-                        ),
+                              (c) => c.subjectId === subject.id
+                            )?.total
+                        )
                       ).toFixed(1)}{" "}
                       /{" "}
                       {sum(
-                        items.map((subject) => 20 * subject.coefficient),
+                        items.map((subject) => 20 * subject.coefficient)
                       ).toFixed(1)}
                     </TableCell>
                     <TableCell className="text-sm" colSpan={2}>
@@ -184,9 +186,9 @@ export default async function Page(props: {
                           items.map(
                             (subject) =>
                               studentReport.studentCourses.find(
-                                (c) => c.subjectId === subject.id,
-                              )?.total,
-                          ),
+                                (c) => c.subjectId === subject.id
+                              )?.total
+                          )
                         ) / (coeff || 1)
                       ).toFixed(2)}
                     </TableCell>

@@ -1,7 +1,7 @@
 "use client";
 
 import { BookText, MailIcon, MoreVertical } from "lucide-react";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -14,6 +14,7 @@ import { Label } from "@repo/ui/components/label";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
+import { useQueryStates } from "nuqs";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
@@ -21,21 +22,23 @@ import { TrimestreSelector } from "~/components/shared/selects/TrimestreSelector
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
+import { reportcardSearchParamsSchema } from "~/utils/filter-params";
 
 export function ReportCardHeader({ classroomId }: { classroomId: string }) {
   const { t } = useLocale();
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
   const params = useParams<{ id: string }>();
-  const searchParams = useSearchParams();
+
   const pathname = usePathname();
 
   const canPrintReportCard = useCheckPermission(
     "reportcard",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
-  const termId = searchParams.get("termId");
-  const trimestreId = searchParams.get("trimestreId");
+
+  const [searchParams] = useQueryStates(reportcardSearchParamsSchema);
+  const { termId, trimestreId } = searchParams;
   return (
     <div className="grid md:flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1 text-secondary-foreground">
       <div className="flex flex-row items-center gap-1">
@@ -45,14 +48,14 @@ export function ReportCardHeader({ classroomId }: { classroomId: string }) {
       <div className="grid grid-cols-2 md:flex flex-row items-center gap-2">
         <TermSelector
           className="md:w-[300px]"
-          defaultValue={searchParams.get("termId")}
+          defaultValue={termId ? `${termId}` : undefined}
           onChange={(val) => {
             router.push(`/students/${params.id}/reportcards?termId=${val}`);
           }}
         />
         <TrimestreSelector
           className="md:w-[300px]"
-          defaultValue={searchParams.get("trimestreId") ?? undefined}
+          defaultValue={trimestreId ?? undefined}
           onChange={(val) => {
             if (val == "ann") {
               router.push(`/students/${params.id}/reportcards/annual`);
@@ -86,9 +89,9 @@ export function ReportCardHeader({ classroomId }: { classroomId: string }) {
               <DropdownMenuItem
                 disabled={!termId && !trimestreId}
                 onSelect={() => {
-                  let url = `/api/pdfs/reportcards/ipbw/?studentId=${params.id}&termId=${searchParams.get("termId")}`;
+                  let url = `/api/pdfs/reportcards/ipbw/?studentId=${params.id}&termId=${termId}`;
                   if (pathname.includes("/trimestres") && trimestreId) {
-                    url = `/api/pdfs/reportcards/ipbw/trimestres/?studentId=${params.id}&trimestreId=${searchParams.get("trimestreId")}`;
+                    url = `/api/pdfs/reportcards/ipbw/trimestres/?studentId=${params.id}&trimestreId=${trimestreId}`;
                   }
                   window.open(url, "_blank");
                 }}

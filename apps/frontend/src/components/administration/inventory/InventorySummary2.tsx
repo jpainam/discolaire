@@ -6,25 +6,24 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
+import type { ChartConfig } from "@repo/ui/components/chart";
 import {
   Bar,
   BarChart,
   CartesianGrid,
-  Cell,
   Legend,
-  Pie,
-  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
+import { InventoryPieChart } from "./InventoryPieChart";
 
 const statusData = [
-  { name: "Available", value: 240, color: "#22c55e" },
-  { name: "In Use", value: 45, color: "#3b82f6" },
-  { name: "Low Stock", value: 15, color: "#eab308" },
-  { name: "Needs Repair", value: 8, color: "#ef4444" },
+  { name: "available", value: 240, color: "#22c55e" },
+  { name: "in_use", value: 45, color: "#3b82f6" },
+  { name: "low_stock", value: 15, color: "#eab308" },
+  { name: "needs_repair", value: 8, color: "#ef4444" },
 ];
 
 const monthlyUsageData = [
@@ -36,6 +35,27 @@ const monthlyUsageData = [
   { name: "Jun", paper: 60, ink: 5, computers: 1, chairs: 0 },
 ];
 export function InventorySummary2() {
+  const chartConfig = {
+    value: {
+      label: "Status",
+    },
+    available: {
+      label: "Available",
+      color: "var(--chart-1)",
+    },
+    in_use: {
+      label: "In Use",
+      color: "var(--chart-2)",
+    },
+    low_stock: {
+      label: "Low Stock",
+      color: "var(--chart-3)",
+    },
+    needs_repair: {
+      label: "Needs Repair",
+      color: "var(--chart-4)",
+    },
+  } satisfies ChartConfig;
   return (
     <>
       <Card className="lg:col-span-4">
@@ -122,40 +142,7 @@ export function InventorySummary2() {
           </ChartContainer>
         </CardContent>
       </Card> */}
-      <Card className="lg:col-span-4">
-        <CardHeader>
-          <CardTitle>Item Status Overview</CardTitle>
-          <CardDescription>
-            Current status of all inventory items
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={statusData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                  label={({ name, percent }) =>
-                    `${name} ${(percent * 100).toFixed(0)}%`
-                  }
-                >
-                  {statusData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </CardContent>
-      </Card>
+      <InventoryPieChart />
     </>
   );
 }
