@@ -18,5 +18,5 @@ export const reportcardSearchParamsSchema = {
   trimestreId: parseAsString,
 };
 export const reportcardSearchParams = createLoader(
-  reportcardSearchParamsSchema
+  reportcardSearchParamsSchema,
 );

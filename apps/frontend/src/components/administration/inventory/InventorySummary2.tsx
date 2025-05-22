@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import type { ChartConfig } from "@repo/ui/components/chart";
 import {
   Bar,
   BarChart,
@@ -19,13 +18,6 @@ import {
 } from "recharts";
 import { InventoryPieChart } from "./InventoryPieChart";
 
-const statusData = [
-  { name: "available", value: 240, color: "#22c55e" },
-  { name: "in_use", value: 45, color: "#3b82f6" },
-  { name: "low_stock", value: 15, color: "#eab308" },
-  { name: "needs_repair", value: 8, color: "#ef4444" },
-];
-
 const monthlyUsageData = [
   { name: "Jan", paper: 40, ink: 5, computers: 0, chairs: 2 },
   { name: "Feb", paper: 35, ink: 3, computers: 1, chairs: 0 },
@@ -35,27 +27,6 @@ const monthlyUsageData = [
   { name: "Jun", paper: 60, ink: 5, computers: 1, chairs: 0 },
 ];
 export function InventorySummary2() {
-  const chartConfig = {
-    value: {
-      label: "Status",
-    },
-    available: {
-      label: "Available",
-      color: "var(--chart-1)",
-    },
-    in_use: {
-      label: "In Use",
-      color: "var(--chart-2)",
-    },
-    low_stock: {
-      label: "Low Stock",
-      color: "var(--chart-3)",
-    },
-    needs_repair: {
-      label: "Needs Repair",
-      color: "var(--chart-4)",
-    },
-  } satisfies ChartConfig;
   return (
     <>
       <Card className="lg:col-span-4">
