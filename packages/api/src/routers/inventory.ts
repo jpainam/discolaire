@@ -22,11 +22,23 @@ export const inventoryRouter = createTRPCRouter({
       where: {
         schoolId: ctx.schoolId,
       },
+      include: {
+        consumables: true,
+      },
       orderBy: {
         name: "desc",
       },
     });
   }),
+  deleteUnit: protectedProcedure
+    .input(z.string().min(1))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.inventoryUnit.delete({
+        where: {
+          id: input,
+        },
+      });
+    }),
   assets: protectedProcedure.query(({ ctx }) => {
     return ctx.db.inventoryAsset.findMany({
       where: {
