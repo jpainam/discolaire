@@ -6,15 +6,20 @@ import {
   TabsTrigger,
 } from "@repo/ui/components/tabs";
 import { Calendar, CalendarDays, PanelsTopLeftIcon } from "lucide-react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { Suspense } from "react";
+import { ErrorFallback } from "~/components/error-fallback";
 import { SchoolYearHeader } from "~/components/schoolyears/SchoolYearHeader";
 import { SchoolYearTable } from "~/components/schoolyears/SchoolYearTable";
 import { getServerTranslations } from "~/i18n/server";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { SchoolYearCalendar } from "./calendar/SchoolYearCalendar";
 import { TermHeader } from "./terms/TermHeader";
 import { TermTable } from "./terms/TermTable";
 
 export default async function Page() {
   const { t } = await getServerTranslations();
+  batchPrefetch([trpc.schoolYearEvent.all.queryOptions()]);
 
   return (
     <Tabs defaultValue="tab-1" className="pt-2">
@@ -57,7 +62,13 @@ export default async function Page() {
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
       <TabsContent value="tab-1">
-        <SchoolYearCalendar />
+        <HydrateClient>
+          <ErrorBoundary errorComponent={ErrorFallback}>
+            <Suspense>
+              <SchoolYearCalendar />
+            </Suspense>
+          </ErrorBoundary>
+        </HydrateClient>
       </TabsContent>
       <TabsContent value="tab-2">
         <div className="flex flex-col gap-2">
