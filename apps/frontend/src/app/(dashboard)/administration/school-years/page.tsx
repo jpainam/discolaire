@@ -15,6 +15,7 @@ import { TermTable } from "./terms/TermTable";
 
 export default async function Page() {
   const { t } = await getServerTranslations();
+
   return (
     <Tabs defaultValue="tab-1" className="pt-2">
       <ScrollArea>

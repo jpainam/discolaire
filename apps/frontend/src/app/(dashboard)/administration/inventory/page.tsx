@@ -17,6 +17,7 @@ import {
 } from "@repo/ui/components/tabs";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { InventorySettings } from "~/components/administration/inventory/InventorySettings";
 import { ConsumableUsageDataTable } from "~/components/administration/inventory/movements/ConsumableUsageDataTable";
 import { ConsumableUsageHeader } from "~/components/administration/inventory/movements/ConsumableUsageHeader";
 import { ErrorFallback } from "~/components/error-fallback";
@@ -161,9 +162,7 @@ export default async function Page() {
         </TabsContent>
 
         <TabsContent value="tab-4">
-          <p className="text-muted-foreground pt-1 text-center text-xs">
-            Content for Tab 6
-          </p>
+          <InventorySettings />
         </TabsContent>
       </Tabs>
     </HydrateClient>

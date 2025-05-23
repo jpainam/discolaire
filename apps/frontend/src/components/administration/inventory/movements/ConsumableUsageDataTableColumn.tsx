@@ -29,7 +29,9 @@ import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
+import { InventoryUsageDetail } from "../InventoryUsageDetail";
 
 export function getColumns({
   t,
@@ -89,29 +91,7 @@ export function getColumns({
       ),
       cell: ({ row }) => {
         const usage = row.original;
-        const consumable = usage.consumable;
-        if (!consumable) {
-          return <div className="text-muted-foreground">-</div>;
-        }
-
-        return (
-          <Link
-            className="gap-1 flex line-clamp-1"
-            href={`/administration/inventory/${consumable.id}`}
-          >
-            <span>{consumable.name}</span>
-
-            <FlatBadge
-              variant={
-                consumable.currentStock < consumable.minStockLevel
-                  ? "red"
-                  : "green"
-              }
-            >
-              {t("Stock")}: {consumable.currentStock} {consumable.unit.name}
-            </FlatBadge>
-          </Link>
-        );
+        return <ItemCell item={usage} />;
       },
     },
     {
@@ -283,5 +263,40 @@ function ActionCell({
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
+  );
+}
+
+function ItemCell({
+  item,
+}: {
+  item: RouterOutputs["inventory"]["consumableUsages"][number];
+}) {
+  const consumable = item.consumable;
+  const { openSheet } = useSheet();
+  const { t } = useLocale();
+  if (!consumable) {
+    return <div className="text-muted-foreground">-</div>;
+  }
+
+  return (
+    <Button
+      variant="link"
+      className="gap-1 flex line-clamp-1"
+      onClick={() => {
+        openSheet({
+          view: <InventoryUsageDetail item={item} />,
+        });
+      }}
+    >
+      <span>{consumable.name}</span>
+
+      <FlatBadge
+        variant={
+          consumable.currentStock < consumable.minStockLevel ? "red" : "green"
+        }
+      >
+        {t("Stock")}: {consumable.currentStock} {consumable.unit.name}
+      </FlatBadge>
+    </Button>
   );
 }

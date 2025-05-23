@@ -56,6 +56,7 @@ export function CreateEditStockUnit({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         toast.success(t("Success"), { id: 0 });
+        closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
@@ -103,7 +104,7 @@ export function CreateEditStockUnit({
             variant={"outline"}
             size={"sm"}
           >
-            {t("cancel")}
+            {t("close")}
           </Button>
           <Button
             isLoading={

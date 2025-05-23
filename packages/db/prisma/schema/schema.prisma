@@ -674,6 +674,8 @@ model School {
     inventoryConsumables InventoryConsumable[]
     stockMovements       InventoryStockMovement[]
     consumableUsages     InventoryConsumableUsage[]
+    schoolYearEvents     SchoolYearEvent[]
+    schoolYearEventTypes SchoolYearEventType[]
 }
 
 model FormerSchool {
@@ -769,6 +771,7 @@ model SchoolYear {
     consumableUsages     InventoryConsumableUsage[]
     stockMovements       InventoryStockMovement[]
     inventoryAssetUsages InventoryAssetUsage[]
+    events               SchoolYearEvent[]
 }
 
 model Cycle {
