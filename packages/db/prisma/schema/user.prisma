@@ -146,16 +146,16 @@ enum LogActivityType {
 }
 
 model SchoolYearEvent {
-    id           String               @id @default(cuid())
+    id           String              @id @default(cuid())
     name         String
     date         DateTime
-    createdAt    DateTime             @default(now())
+    createdAt    DateTime            @default(now())
     schoolId     String
-    school       School               @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+    school       School              @relation(fields: [schoolId], references: [id], onDelete: Cascade)
     schoolYearId String
-    schoolYear   SchoolYear           @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
-    type         SchoolYearEventType? @relation(fields: [typeId], references: [id])
-    typeId       String?
+    schoolYear   SchoolYear          @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    type         SchoolYearEventType @relation(fields: [typeId], references: [id])
+    typeId       String
 }
 
 model SchoolYearEventType {

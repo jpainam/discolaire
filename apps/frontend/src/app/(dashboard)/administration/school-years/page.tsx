@@ -17,14 +17,28 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { SchoolYearHeader } from "~/components/schoolyears/SchoolYearHeader";
 import { SchoolYearTable } from "~/components/schoolyears/SchoolYearTable";
 import { getServerTranslations } from "~/i18n/server";
-import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
+import {
+  batchPrefetch,
+  getQueryClient,
+  HydrateClient,
+  trpc,
+} from "~/trpc/server";
 import { SchoolYearCalendar } from "./calendar/SchoolYearCalendar";
+import { SchoolYearCalendarProvider } from "./calendar/SchoolYearCalendarContext";
 import { TermHeader } from "./terms/TermHeader";
 import { TermTable } from "./terms/TermTable";
 
 export default async function Page() {
   const { t } = await getServerTranslations();
-  batchPrefetch([trpc.schoolYearEvent.all.queryOptions()]);
+  const queryClient = getQueryClient();
+  const events = await queryClient.fetchQuery(
+    trpc.schoolYearEvent.all.queryOptions(),
+  );
+
+  batchPrefetch([
+    //trpc.schoolYearEvent.all.queryOptions(),
+    trpc.schoolYearEvent.eventTypes.queryOptions(),
+  ]);
 
   return (
     <Tabs defaultValue="tab-1" className="pt-2">
@@ -76,7 +90,9 @@ export default async function Page() {
                 </div>
               }
             >
-              <SchoolYearCalendar />
+              <SchoolYearCalendarProvider events={events}>
+                <SchoolYearCalendar />
+              </SchoolYearCalendarProvider>
             </Suspense>
           </ErrorBoundary>
         </HydrateClient>

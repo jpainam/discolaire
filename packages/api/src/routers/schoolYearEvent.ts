@@ -8,6 +8,9 @@ export const schoolYearEventRouter = createTRPCRouter({
       orderBy: {
         date: "asc",
       },
+      include: {
+        type: true,
+      },
       where: {
         schoolYearId: ctx.schoolYearId,
         schoolId: ctx.schoolId,
@@ -29,7 +32,7 @@ export const schoolYearEventRouter = createTRPCRouter({
         id: z.string(),
         name: z.string().min(1),
         date: z.coerce.date(),
-        typeId: z.string().optional(),
+        typeId: z.string().min(1),
       }),
     )
     .mutation(({ ctx, input }) => {
@@ -49,7 +52,7 @@ export const schoolYearEventRouter = createTRPCRouter({
       z.object({
         name: z.string().min(1),
         date: z.coerce.date(),
-        typeId: z.string().optional(),
+        typeId: z.string().min(1),
       }),
     )
     .mutation(({ ctx, input }) => {

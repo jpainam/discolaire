@@ -1,14 +1,9 @@
 "use client";
 
-import { useState } from "react";
-
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { cn } from "@repo/ui/lib/utils";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import i18next from "i18next";
-import { parseAsString, useQueryState } from "nuqs";
-import { useModal } from "~/hooks/use-modal";
-import { useTRPC } from "~/trpc/react";
+import { useSchoolYearCalendarContext } from "./SchoolYearCalendarContext";
 import { SchoolYearCalendarHeader } from "./SchoolYearCalendarHeader";
 
 // Define event types and their colors
@@ -40,7 +35,7 @@ const SCHOOL_YEAR_DATA = {
   startMonth: 8, // August
   endMonth: 5, // June
   year: 2024,
-  events: [
+  eventsf: [
     { date: "2024-08-26", type: "event", name: "First Day of School" },
     { date: "2024-09-02", type: "holiday", name: "Labor Day" },
     { date: "2024-10-14", type: "holiday", name: "Columbus Day" },
@@ -86,45 +81,8 @@ const getDayOfWeek = (year: number, month: number, day: number) => {
 };
 
 export function SchoolYearCalendar() {
-  const [activeFilters, setActiveFilters] = useState<string[]>(
-    Object.keys(EVENT_TYPES)
-  );
-  const trpc = useTRPC();
-  const { data: events } = useSuspenseQuery(
-    trpc.schoolYearEvent.all.queryOptions()
-  );
-  const [viewMode] = useQueryState(
-    "view",
-    parseAsString.withDefault("calendar")
-  );
-  const [currentYear, setCurrentYear] = useState(SCHOOL_YEAR_DATA.year);
-
-  const [newEvent, setNewEvent] = useState({
-    name: "",
-    date: "",
-    type: "event",
-  });
-
-  // Toggle filter
-  const toggleFilter = (type: string) => {
-    if (activeFilters.includes(type)) {
-      setActiveFilters(activeFilters.filter((t) => t !== type));
-    } else {
-      setActiveFilters([...activeFilters, type]);
-    }
-  };
-
-  // Previous school year
-  const prevYear = () => {
-    setCurrentYear(currentYear - 1);
-  };
-
-  // Next school year
-  const nextYear = () => {
-    setCurrentYear(currentYear + 1);
-  };
-
-  const { openModal } = useModal();
+  const { filters, events, currentYear, viewMode } =
+    useSchoolYearCalendarContext();
 
   // Generate months for the school year
   const generateMonths = () => {
@@ -147,20 +105,21 @@ export function SchoolYearCalendar() {
           <div
             key={`empty-${i}`}
             className="h-16 md:h-20 border border-border/50 bg-muted/20"
-          ></div>
+          ></div>,
         );
       }
 
       // Add days of the month
       for (let day = 1; day <= daysInMonth; day++) {
-        const date = `${actualYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+        const date1 = `${actualYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+        const date = new Date(actualYear, currentMonth, day);
         const dayEvents = events.filter(
-          (event) => event.date === date && activeFilters.includes(event.type)
+          (event) => event.date === date && filters.includes(event.typeId),
         );
 
         days.push(
           <div
-            key={date}
+            key={date1}
             className="h-16 md:h-20 border border-border/50 p-1 overflow-hidden"
           >
             <div className="text-xs font-medium">{day}</div>
@@ -170,7 +129,7 @@ export function SchoolYearCalendar() {
                   key={index}
                   className={cn(
                     "text-xs rounded px-1 py-0.5 border truncate",
-                    EVENT_TYPES[event.type as keyof typeof EVENT_TYPES].color
+                    //EVENT_TYPES[event.type as keyof typeof EVENT_TYPES].color
                   )}
                   title={event.name}
                 >
@@ -178,7 +137,7 @@ export function SchoolYearCalendar() {
                 </div>
               ))}
             </div>
-          </div>
+          </div>,
         );
       }
 
@@ -246,7 +205,7 @@ export function SchoolYearCalendar() {
   const generateEventsList = () => {
     // Filter events based on active filters and sort by date
     const filteredEvents = events
-      .filter((event) => activeFilters.includes(event.type))
+      .filter((event) => filters.includes(event.typeId))
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
     return (
@@ -265,14 +224,12 @@ export function SchoolYearCalendar() {
               key={index}
               className={cn(
                 "p-4 rounded-lg border",
-                EVENT_TYPES[event.type as keyof typeof EVENT_TYPES].color
+                //EVENT_TYPES[event.type as keyof typeof EVENT_TYPES].color
               )}
             >
               <div className="font-semibold">{event.name}</div>
               <div className="text-sm">{formattedDate}</div>
-              <div className="text-xs mt-1">
-                {EVENT_TYPES[event.type as keyof typeof EVENT_TYPES].label}
-              </div>
+              <div className="text-xs mt-1">{event.type.name}</div>
             </div>
           );
         })}

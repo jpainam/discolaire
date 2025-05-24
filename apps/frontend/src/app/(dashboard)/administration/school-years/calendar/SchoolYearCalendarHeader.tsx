@@ -19,58 +19,56 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
-import {
-  parseAsArrayOf,
-  parseAsInteger,
-  parseAsString,
-  useQueryState,
-} from "nuqs";
-import { useModal } from "~/hooks/use-modal";
-import { CreateEditSchoolYearEvent } from "./CreateEditSchoolYearEvent";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useModal } from "~/hooks/use-modal";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
+import { CreateEditSchoolYearEvent } from "./CreateEditSchoolYearEvent";
+import { useSchoolYearCalendarContext } from "./SchoolYearCalendarContext";
 
 export function SchoolYearCalendarHeader() {
   const { openModal } = useModal();
   const trpc = useTRPC();
-  const {data: eventTypes} = useSuspenseQuery(trpc.schoolYearEvent.);
+  const { data: eventTypes } = useSuspenseQuery(
+    trpc.schoolYearEvent.eventTypes.queryOptions(),
+  );
 
-  const [activeFilters, setActiveFilters] = useQueryState(
-    "filters",
-    parseAsArrayOf(parseAsString).withDefault([
-      "holiday",
-      "exam",
-      "break",
-      "event",
-      "deadline",
-      "other",
-    ])
-  );
-  const [viewMode, setViewMode] = useQueryState(
-    "view",
-    parseAsString.withDefault("calendar")
-  );
-  const [year, setYear] = useQueryState(
-    "year",
-    parseAsInteger.withDefault(2023)
-  );
+  const {
+    filters,
+    setFilters,
+    viewMode,
+    setViewMode,
+    currentYear,
+    setCurrentYear,
+  } = useSchoolYearCalendarContext();
+
+  const { t } = useLocale();
+
+  const toggleFilter = (type: string) => {
+    if (filters.includes(type)) {
+      setFilters(filters.filter((t) => t !== type));
+    } else {
+      setFilters([...filters, type]);
+    }
+  };
+
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div className="flex items-center gap-2">
         <Button
           variant="outline"
           size="sm"
-          onClick={() => setYear((old) => old - 1)}
+          onClick={() => setCurrentYear(currentYear - 1)}
         >
           <ChevronLeft className="h-4 w-4" />
-          <span>Previous Year</span>
+          <span>{t("Previous Year")}</span>
         </Button>
         <Button
           variant="outline"
           size="sm"
-          onClick={() => setYear((old) => old + 1)}
+          onClick={() => setCurrentYear(currentYear + 1)}
         >
-          <span>Next Year</span>
+          <span>{t("Next Year")}</span>
           <ChevronRight className="h-4 w-4" />
         </Button>
       </div>
@@ -93,13 +91,15 @@ export function SchoolYearCalendarHeader() {
         <Button
           onClick={() => {
             openModal({
+              title: "Add New Event",
+              description: "Create a new event for the school calendar.",
               view: <CreateEditSchoolYearEvent />,
             });
           }}
           size="sm"
         >
           <PlusCircle className=" h-4 w-4" />
-          Add Event
+          {t("Add Event")}
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -111,13 +111,13 @@ export function SchoolYearCalendarHeader() {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Event Types</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {Object.entries(EVENT_TYPES).map(([type, { label }]) => (
+            {eventTypes.map((type, index) => (
               <DropdownMenuCheckboxItem
-                key={type}
-                checked={activeFilters.includes(type)}
-                onCheckedChange={() => toggleFilter(type)}
+                key={index}
+                checked={filters.includes(type.id)}
+                onCheckedChange={() => toggleFilter(type.id)}
               >
-                {label}
+                {type.name}
               </DropdownMenuCheckboxItem>
             ))}
           </DropdownMenuContent>
