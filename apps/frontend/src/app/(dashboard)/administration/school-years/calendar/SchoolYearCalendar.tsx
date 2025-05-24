@@ -1,46 +1,15 @@
 "use client";
 
-import {
-  CalendarIcon,
-  ChevronLeft,
-  ChevronRight,
-  Filter,
-  ListIcon,
-  PlusCircle,
-} from "lucide-react";
 import { useState } from "react";
 
-import { Button } from "@repo/ui/components/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@repo/ui/components/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@repo/ui/components/select";
-import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 import { cn } from "@repo/ui/lib/utils";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import i18next from "i18next";
+import { parseAsString, useQueryState } from "nuqs";
+import { useModal } from "~/hooks/use-modal";
+import { useTRPC } from "~/trpc/react";
+import { SchoolYearCalendarHeader } from "./SchoolYearCalendarHeader";
 
 // Define event types and their colors
 const EVENT_TYPES = {
@@ -118,17 +87,23 @@ const getDayOfWeek = (year: number, month: number, day: number) => {
 
 export function SchoolYearCalendar() {
   const [activeFilters, setActiveFilters] = useState<string[]>(
-    Object.keys(EVENT_TYPES),
+    Object.keys(EVENT_TYPES)
+  );
+  const trpc = useTRPC();
+  const { data: events } = useSuspenseQuery(
+    trpc.schoolYearEvent.all.queryOptions()
+  );
+  const [viewMode] = useQueryState(
+    "view",
+    parseAsString.withDefault("calendar")
   );
   const [currentYear, setCurrentYear] = useState(SCHOOL_YEAR_DATA.year);
-  const [viewMode, setViewMode] = useState<"calendar" | "list">("calendar");
-  const [events, setEvents] = useState(SCHOOL_YEAR_DATA.events);
+
   const [newEvent, setNewEvent] = useState({
     name: "",
     date: "",
     type: "event",
   });
-  const [dialogOpen, setDialogOpen] = useState(false);
 
   // Toggle filter
   const toggleFilter = (type: string) => {
@@ -149,18 +124,7 @@ export function SchoolYearCalendar() {
     setCurrentYear(currentYear + 1);
   };
 
-  // Add new event
-  const handleAddEvent = () => {
-    if (newEvent.name && newEvent.date && newEvent.type) {
-      setEvents([...events, newEvent]);
-      setNewEvent({
-        name: "",
-        date: "",
-        type: "event",
-      });
-      setDialogOpen(false);
-    }
-  };
+  const { openModal } = useModal();
 
   // Generate months for the school year
   const generateMonths = () => {
@@ -183,7 +147,7 @@ export function SchoolYearCalendar() {
           <div
             key={`empty-${i}`}
             className="h-16 md:h-20 border border-border/50 bg-muted/20"
-          ></div>,
+          ></div>
         );
       }
 
@@ -191,7 +155,7 @@ export function SchoolYearCalendar() {
       for (let day = 1; day <= daysInMonth; day++) {
         const date = `${actualYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
         const dayEvents = events.filter(
-          (event) => event.date === date && activeFilters.includes(event.type),
+          (event) => event.date === date && activeFilters.includes(event.type)
         );
 
         days.push(
@@ -206,7 +170,7 @@ export function SchoolYearCalendar() {
                   key={index}
                   className={cn(
                     "text-xs rounded px-1 py-0.5 border truncate",
-                    EVENT_TYPES[event.type as keyof typeof EVENT_TYPES].color,
+                    EVENT_TYPES[event.type as keyof typeof EVENT_TYPES].color
                   )}
                   title={event.name}
                 >
@@ -214,7 +178,7 @@ export function SchoolYearCalendar() {
                 </div>
               ))}
             </div>
-          </div>,
+          </div>
         );
       }
 
@@ -301,7 +265,7 @@ export function SchoolYearCalendar() {
               key={index}
               className={cn(
                 "p-4 rounded-lg border",
-                EVENT_TYPES[event.type as keyof typeof EVENT_TYPES].color,
+                EVENT_TYPES[event.type as keyof typeof EVENT_TYPES].color
               )}
             >
               <div className="font-semibold">{event.name}</div>
@@ -318,120 +282,7 @@ export function SchoolYearCalendar() {
 
   return (
     <div className="space-y-4 px-4">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={prevYear}>
-            <ChevronLeft className="h-4 w-4" />
-            <span>Previous Year</span>
-          </Button>
-          <Button variant="outline" size="sm" onClick={nextYear}>
-            <span>Next Year</span>
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <ToggleGroup
-            type="single"
-            value={viewMode}
-            onValueChange={(value) =>
-              value && setViewMode(value as "calendar" | "list")
-            }
-          >
-            <ToggleGroupItem value="calendar" aria-label="Calendar View">
-              <CalendarIcon className="h-4 w-4" />
-            </ToggleGroupItem>
-            <ToggleGroupItem value="list" aria-label="List View">
-              <ListIcon className="h-4 w-4" />
-            </ToggleGroupItem>
-          </ToggleGroup>
-
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger asChild>
-              <Button size="sm">
-                <PlusCircle className=" h-4 w-4" />
-                Add Event
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Add New Event</DialogTitle>
-                <DialogDescription>
-                  Create a new event for the school calendar.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="event-name">Event Name</Label>
-                  <Input
-                    id="event-name"
-                    value={newEvent.name}
-                    onChange={(e) =>
-                      setNewEvent({ ...newEvent, name: e.target.value })
-                    }
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="event-date">Date</Label>
-                  <Input
-                    id="event-date"
-                    type="date"
-                    value={newEvent.date}
-                    onChange={(e) =>
-                      setNewEvent({ ...newEvent, date: e.target.value })
-                    }
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="event-type">Event Type</Label>
-                  <Select
-                    value={newEvent.type}
-                    onValueChange={(value) =>
-                      setNewEvent({ ...newEvent, type: value })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select event type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Object.entries(EVENT_TYPES).map(([type, { label }]) => (
-                        <SelectItem key={type} value={type}>
-                          {label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <DialogFooter>
-                <Button onClick={handleAddEvent}>Add Event</Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
-                <Filter className="h-4 w-4" />
-                Filter Events
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Event Types</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {Object.entries(EVENT_TYPES).map(([type, { label }]) => (
-                <DropdownMenuCheckboxItem
-                  key={type}
-                  checked={activeFilters.includes(type)}
-                  onCheckedChange={() => toggleFilter(type)}
-                >
-                  {label}
-                </DropdownMenuCheckboxItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
+      <SchoolYearCalendarHeader />
 
       <div className="rounded-lg border bg-card shadow">
         <div className="p-4">

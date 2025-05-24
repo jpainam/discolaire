@@ -63,4 +63,51 @@ export const schoolYearEventRouter = createTRPCRouter({
         },
       });
     }),
+
+  createEventType: protectedProcedure
+    .input(z.object({ name: z.string() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.schoolYearEventType.create({
+        data: {
+          name: input.name,
+          schoolId: ctx.schoolId,
+        },
+      });
+    }),
+  eventTypes: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.schoolYearEventType.findMany({
+      orderBy: {
+        name: "asc",
+      },
+      where: {
+        schoolId: ctx.schoolId,
+      },
+    });
+  }),
+  deleteEventType: protectedProcedure
+    .input(z.string().min(1))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.schoolYearEventType.delete({
+        where: {
+          id: input,
+        },
+      });
+    }),
+  updateEventType: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.schoolYearEventType.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name,
+        },
+      });
+    }),
 });

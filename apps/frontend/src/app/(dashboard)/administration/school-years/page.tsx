@@ -5,7 +5,12 @@ import {
   TabsList,
   TabsTrigger,
 } from "@repo/ui/components/tabs";
-import { Calendar, CalendarDays, PanelsTopLeftIcon } from "lucide-react";
+import {
+  Calendar,
+  CalendarDays,
+  Loader2,
+  PanelsTopLeftIcon,
+} from "lucide-react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
 import { ErrorFallback } from "~/components/error-fallback";
@@ -64,7 +69,13 @@ export default async function Page() {
       <TabsContent value="tab-1">
         <HydrateClient>
           <ErrorBoundary errorComponent={ErrorFallback}>
-            <Suspense>
+            <Suspense
+              fallback={
+                <div className="flex justify-center items-center my10">
+                  <Loader2 className="w-8 h-8 animate-spin" />
+                </div>
+              }
+            >
               <SchoolYearCalendar />
             </Suspense>
           </ErrorBoundary>
