@@ -30,7 +30,7 @@ export function SchoolYearCalendarHeader() {
   const { openModal } = useModal();
   const trpc = useTRPC();
   const { data: eventTypes } = useSuspenseQuery(
-    trpc.schoolYearEvent.eventTypes.queryOptions(),
+    trpc.schoolYearEvent.eventTypes.queryOptions()
   );
 
   const {
@@ -99,7 +99,7 @@ export function SchoolYearCalendarHeader() {
           size="sm"
         >
           <PlusCircle className=" h-4 w-4" />
-          {t("Add Event")}
+          {t("add")}
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

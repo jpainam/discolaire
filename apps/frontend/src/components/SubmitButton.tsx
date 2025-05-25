@@ -5,14 +5,17 @@ import { Loader2 } from "lucide-react";
 export function SubmitButton({
   children,
   isSubmitting,
+  size = "default",
   disabled = false,
   ...props
 }: {
   isSubmitting: boolean;
   disabled?: boolean;
+  size: "default" | "sm" | "lg";
 } & React.ComponentProps<"button">) {
   return (
     <Button
+      size={size}
       disabled={disabled || isSubmitting}
       {...props}
       className={cn(props.className, "relative")}

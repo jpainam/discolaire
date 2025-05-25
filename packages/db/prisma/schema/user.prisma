@@ -161,6 +161,7 @@ model SchoolYearEvent {
 model SchoolYearEventType {
     id        String            @id @default(cuid())
     name      String
+    color     String
     createdAt DateTime          @default(now())
     schoolId  String
     school    School            @relation(fields: [schoolId], references: [id], onDelete: Cascade)

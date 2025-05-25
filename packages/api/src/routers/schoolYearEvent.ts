@@ -68,11 +68,12 @@ export const schoolYearEventRouter = createTRPCRouter({
     }),
 
   createEventType: protectedProcedure
-    .input(z.object({ name: z.string() }))
+    .input(z.object({ name: z.string(), color: z.string() }))
     .mutation(({ ctx, input }) => {
       return ctx.db.schoolYearEventType.create({
         data: {
           name: input.name,
+          color: input.color,
           schoolId: ctx.schoolId,
         },
       });
@@ -100,6 +101,7 @@ export const schoolYearEventRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
+        color: z.string(),
         name: z.string(),
       }),
     )
@@ -110,6 +112,7 @@ export const schoolYearEventRouter = createTRPCRouter({
         },
         data: {
           name: input.name,
+          color: input.color,
         },
       });
     }),
