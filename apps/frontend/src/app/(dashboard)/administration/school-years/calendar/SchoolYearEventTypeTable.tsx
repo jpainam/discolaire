@@ -25,7 +25,7 @@ export function SchoolYearEventTypeTable() {
   const { t } = useLocale();
   const trpc = useTRPC();
   const { data: eventTypes } = useSuspenseQuery(
-    trpc.schoolYearEvent.eventTypes.queryOptions()
+    trpc.schoolYearEvent.eventTypes.queryOptions(),
   );
   const queryClient = useQueryClient();
   const confirm = useConfirm();
@@ -38,7 +38,7 @@ export function SchoolYearEventTypeTable() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const { openModal } = useModal();
   return (
@@ -117,7 +117,7 @@ export function SchoolYearEventTypeTable() {
                           const isConfirmed = await confirm({
                             title: t("Are you sure?"),
                             description: t(
-                              "Are you sure you want to delete this event type?"
+                              "Are you sure you want to delete this event type?",
                             ),
                           });
                           if (isConfirmed) {

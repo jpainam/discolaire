@@ -2,28 +2,11 @@
 
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { cn } from "@repo/ui/lib/utils";
+import { startOfWeek } from "date-fns";
 import i18next from "i18next";
 import { useSchoolYearCalendarContext } from "./SchoolYearCalendarContext";
 import { SchoolYearCalendarHeader } from "./SchoolYearCalendarHeader";
 
-// Define event types and their colors
-
-// Helper function to get month name
-const getMonthName = (month: number) => {
-  return new Date(2000, month, 1).toLocaleString(i18next.language, {
-    month: "long",
-  });
-};
-
-// Helper function to get days in month
-const getDaysInMonth = (year: number, month: number) => {
-  return new Date(year, month + 1, 0).getDate();
-};
-
-// Helper function to get day of week (0 = Sunday, 6 = Saturday)
-const getDayOfWeek = (year: number, month: number, day: number) => {
-  return new Date(year, month, day).getDay();
-};
 const startMonth = 8; // August;
 const endMonth = 5;
 export function SchoolYearCalendar() {
@@ -38,9 +21,18 @@ export function SchoolYearCalendar() {
 
     while (true) {
       const actualYear = currentYear + yearOffset;
-      const monthName = getMonthName(currentMonth);
-      const daysInMonth = getDaysInMonth(actualYear, currentMonth);
-      const firstDayOfWeek = getDayOfWeek(actualYear, currentMonth, 1);
+      const monthName = new Date(2000, currentMonth, 1).toLocaleString(
+        i18next.language,
+        {
+          month: "long",
+        }
+      );
+      const daysInMonth = new Date(actualYear, currentMonth + 1, 0).getDate();
+      //const firstDayOfWeek = getDayOfWeek(actualYear, currentMonth, 1);
+      const firstDayOfWeek = startOfWeek(
+        new Date(actualYear, currentMonth, 1),
+        { weekStartsOn: 0 }
+      ).getDay();
 
       // Generate calendar days
       const days = [];
@@ -51,7 +43,7 @@ export function SchoolYearCalendar() {
           <div
             key={`empty-${i}`}
             className="h-16 md:h-20 border border-border/50 bg-muted/20"
-          ></div>,
+          ></div>
         );
       }
 
@@ -60,7 +52,7 @@ export function SchoolYearCalendar() {
         const date1 = `${actualYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
         const date = new Date(actualYear, currentMonth, day);
         const dayEvents = events.filter(
-          (event) => event.date === date && filters.includes(event.typeId),
+          (event) => event.date === date && filters.includes(event.typeId)
         );
 
         days.push(
@@ -83,7 +75,7 @@ export function SchoolYearCalendar() {
                 </div>
               ))}
             </div>
-          </div>,
+          </div>
         );
       }
 
