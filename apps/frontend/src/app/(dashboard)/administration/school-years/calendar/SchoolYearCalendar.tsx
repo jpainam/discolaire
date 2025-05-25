@@ -51,7 +51,7 @@ export function SchoolYearCalendar() {
           <div
             key={`empty-${i}`}
             className="h-16 md:h-20 border border-border/50 bg-muted/20"
-          ></div>
+          ></div>,
         );
       }
 
@@ -60,7 +60,7 @@ export function SchoolYearCalendar() {
         const date1 = `${actualYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
         const date = new Date(actualYear, currentMonth, day);
         const dayEvents = events.filter(
-          (event) => event.date === date && filters.includes(event.typeId)
+          (event) => event.date === date && filters.includes(event.typeId),
         );
 
         days.push(
@@ -83,7 +83,7 @@ export function SchoolYearCalendar() {
                 </div>
               ))}
             </div>
-          </div>
+          </div>,
         );
       }
 

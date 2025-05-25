@@ -76,7 +76,7 @@ export function SchoolYearEventTypeTable() {
             )}
             {eventTypes.map((eventType) => {
               return (
-                <TableRow>
+                <TableRow key={eventType.id}>
                   <TableCell>{eventType.name}</TableCell>
                   <TableCell>
                     <div

@@ -27,10 +27,10 @@ export default async function Page() {
   const { t } = await getServerTranslations();
   const queryClient = getQueryClient();
   const events = await queryClient.fetchQuery(
-    trpc.schoolYearEvent.all.queryOptions()
+    trpc.schoolYearEvent.all.queryOptions(),
   );
   const eventTypes = await queryClient.fetchQuery(
-    trpc.schoolYearEvent.eventTypes.queryOptions()
+    trpc.schoolYearEvent.eventTypes.queryOptions(),
   );
 
   return (
