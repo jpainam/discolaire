@@ -20,13 +20,13 @@ export function SchoolYearCalendarGrid() {
         i18next.language,
         {
           month: "long",
-        }
+        },
       );
       const daysInMonth = new Date(actualYear, currentMonth + 1, 0).getDate();
       //const firstDayOfWeek = getDayOfWeek(actualYear, currentMonth, 1);
       const firstDayOfWeek = startOfWeek(
         new Date(actualYear, currentMonth, 1),
-        { weekStartsOn: 0 }
+        { weekStartsOn: 0 },
       ).getDay();
 
       // Generate calendar days
@@ -38,7 +38,7 @@ export function SchoolYearCalendarGrid() {
           <div
             key={`empty-${i}`}
             className="h-16 md:h-20 border border-border/50 bg-muted/20"
-          ></div>
+          ></div>,
         );
       }
 
@@ -47,7 +47,7 @@ export function SchoolYearCalendarGrid() {
         const date1 = `${actualYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
         const date = new Date(actualYear, currentMonth, day);
         const dayEvents = events.filter(
-          (event) => event.date === date && filters.includes(event.typeId)
+          (event) => event.date === date && filters.includes(event.typeId),
         );
 
         days.push(
@@ -70,7 +70,7 @@ export function SchoolYearCalendarGrid() {
                 </div>
               ))}
             </div>
-          </div>
+          </div>,
         );
       }
 
