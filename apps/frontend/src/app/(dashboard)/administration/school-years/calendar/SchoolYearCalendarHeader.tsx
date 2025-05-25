@@ -7,6 +7,7 @@ import {
   Filter,
   ListIcon,
   PlusCircle,
+  SquareGanttChartIcon,
 } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
@@ -21,16 +22,18 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useModal } from "~/hooks/use-modal";
+import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditSchoolYearEvent } from "./CreateEditSchoolYearEvent";
 import { useSchoolYearCalendarContext } from "./SchoolYearCalendarContext";
+import { SchoolYearEventTypeTable } from "./SchoolYearEventTypeTable";
 
 export function SchoolYearCalendarHeader() {
   const { openModal } = useModal();
   const trpc = useTRPC();
   const { data: eventTypes } = useSuspenseQuery(
-    trpc.schoolYearEvent.eventTypes.queryOptions()
+    trpc.schoolYearEvent.eventTypes.queryOptions(),
   );
 
   const {
@@ -51,6 +54,8 @@ export function SchoolYearCalendarHeader() {
       setFilters([...filters, type]);
     }
   };
+
+  const { openSheet } = useSheet();
 
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -100,6 +105,19 @@ export function SchoolYearCalendarHeader() {
         >
           <PlusCircle className=" h-4 w-4" />
           {t("add")}
+        </Button>
+        <Button
+          onClick={() => {
+            openSheet({
+              title: t("Event Types"),
+              description: t("Manage event types for the school calendar."),
+              view: <SchoolYearEventTypeTable />,
+            });
+          }}
+          size="icon"
+          variant={"secondary"}
+        >
+          <SquareGanttChartIcon className="w-4 h-4" />
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

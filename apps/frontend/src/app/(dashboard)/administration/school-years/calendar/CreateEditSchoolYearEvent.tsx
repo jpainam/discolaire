@@ -2,20 +2,34 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
-import { Form } from "@repo/ui/components/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
 import {
   Select,
   SelectContent,
+  SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { DatePicker } from "~/components/DatePicker";
+import { SubmitButton } from "~/components/SubmitButton";
 import { useModal } from "~/hooks/use-modal";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 const schema = z.object({
   name: z.string().min(1),
@@ -35,36 +49,42 @@ export function CreateEditSchoolYearEvent({
       typeId: event?.typeId ?? "",
     },
   });
+  const trpc = useTRPC();
+
+  const { data: eventTypes } = useSuspenseQuery(
+    trpc.schoolYearEvent.eventTypes.queryOptions()
+  );
 
   const queryClient = useQueryClient();
-  const trpc = useTRPC();
+
   const { closeModal } = useModal();
   const createEventMutation = useMutation(
     trpc.schoolYearEvent.create.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.schoolYearEvent.all.pathFilter(),
+          trpc.schoolYearEvent.all.pathFilter()
         );
         closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const updateEventMutation = useMutation(
     trpc.schoolYearEvent.update.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.schoolYearEvent.all.pathFilter(),
+          trpc.schoolYearEvent.all.pathFilter()
         );
         closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
+  const { t } = useLocale();
 
   // Add new event
   const handleAddEvent = (data: z.infer<typeof schema>) => {
@@ -86,54 +106,84 @@ export function CreateEditSchoolYearEvent({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleAddEvent)}>
-        <div>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="event-name">Event Name</Label>
-              <Input
-                id="event-name"
+        <div className="grid gap-4 py-4">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("Label")}</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
 
-                // value={newEvent.name}
-                // onChange={(e) =>
-                //   setNewEvent({ ...newEvent, name: e.target.value })
-                // }
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="event-date">Date</Label>
-              <Input
-                id="event-date"
-                type="date"
-                // value={newEvent.date}
-                // onChange={(e) =>
-                //   setNewEvent({ ...newEvent, date: e.target.value })
-                // }
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="event-type">Event Type</Label>
-              <Select
-              // value={newEvent.type}
-              // onValueChange={(value) =>
-              //   setNewEvent({ ...newEvent, type: value })
-              // }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select event type" />
-                </SelectTrigger>
-                <SelectContent>
-                  {/* {Object.entries(EVENT_TYPES).map(([type, { label }]) => (
-                    <SelectItem key={type} value={type}>
-                      {label}
-                    </SelectItem>
-                  ))} */}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <div>
-            <Button>Add Event</Button>
-          </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="date"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("Event date")}</FormLabel>
+                <FormControl>
+                  <DatePicker
+                    defaultValue={field.value}
+                    onChange={(v) => field.onChange(v)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="typeId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("Event types")}</FormLabel>
+                <FormControl>
+                  <Select
+                    defaultValue={field.value}
+                    onValueChange={(value) => field.onChange(value)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select event type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {eventTypes.map((event) => (
+                        <SelectItem key={event.id} value={event.id}>
+                          {event.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="flex flex-row justify-end items-center gap-2">
+          <Button
+            size={"sm"}
+            variant={"secondary"}
+            onClick={() => {
+              closeModal();
+            }}
+          >
+            {t("close")}
+          </Button>
+          <SubmitButton
+            isSubmitting={
+              createEventMutation.isPending || updateEventMutation.isPending
+            }
+            size={"sm"}
+          >
+            {t("submit")}
+          </SubmitButton>
         </div>
       </form>
     </Form>

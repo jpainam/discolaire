@@ -21,20 +21,22 @@ import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 const schema = z.object({
   name: z.string().min(1),
-  color: z.string().optional(),
+  color: z.string().min(1),
 });
 export function CreateEditSchoolYearEventType({
   id,
   name,
+  color,
 }: {
   id?: string;
   name?: string;
+  color?: string;
 }) {
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
       name: name ?? "",
-      color: "",
+      color: color ?? "#F4E4E7",
     },
   });
   const trpc = useTRPC();
@@ -44,27 +46,31 @@ export function CreateEditSchoolYearEventType({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.schoolYearEvent.pathFilter());
         toast.success(t("Success"), { id: 0 });
+        closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateSchoolYearEventTypeMutation = useMutation(
     trpc.schoolYearEvent.updateEventType.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.schoolYearEvent.pathFilter());
         toast.success(t("Success"), { id: 0 });
+        closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const handleSubmit = (data: z.infer<typeof schema>) => {
+    toast.loading(t("loading"), { id: 0 });
     if (id) {
       updateSchoolYearEventTypeMutation.mutate({
         name: data.name,
+        id: id,
         color: data.color,
       });
     } else {
@@ -78,7 +84,10 @@ export function CreateEditSchoolYearEventType({
   const { closeModal } = useModal();
   return (
     <Form {...form}>
-      <form className="grid grid-cols-1 gap-6">
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="grid grid-cols-1 gap-6"
+      >
         <FormField
           control={form.control}
           name="name"
@@ -97,7 +106,7 @@ export function CreateEditSchoolYearEventType({
           name="color"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("Label")}</FormLabel>
+              <FormLabel>{t("Color")}</FormLabel>
               <FormControl>
                 <Input type="color" {...field} />
               </FormControl>
