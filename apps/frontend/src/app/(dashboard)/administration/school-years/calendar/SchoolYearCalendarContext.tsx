@@ -18,14 +18,14 @@ interface CalendarContextType {
 }
 
 const CalendarContext = createContext<CalendarContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export function useSchoolYearCalendarContext() {
   const context = useContext(CalendarContext);
   if (context === undefined) {
     throw new Error(
-      "useCalendarContext must be used within a CalendarProvider"
+      "useCalendarContext must be used within a CalendarProvider",
     );
   }
   return context;
@@ -42,10 +42,10 @@ export function SchoolYearCalendarProvider({
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const trpc = useTRPC();
   const { data: events } = useSuspenseQuery(
-    trpc.schoolYearEvent.all.queryOptions()
+    trpc.schoolYearEvent.all.queryOptions(),
   );
   const { data: eventTypes } = useSuspenseQuery(
-    trpc.schoolYearEvent.eventTypes.queryOptions()
+    trpc.schoolYearEvent.eventTypes.queryOptions(),
   );
   const [filters, setFilters] = useState(eventTypes.map((event) => event.id));
 
