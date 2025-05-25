@@ -20,21 +20,15 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
-import { useTRPC } from "~/trpc/react";
 import { CreateEditSchoolYearEvent } from "./CreateEditSchoolYearEvent";
 import { useSchoolYearCalendarContext } from "./SchoolYearCalendarContext";
 import { SchoolYearEventTypeTable } from "./SchoolYearEventTypeTable";
 
 export function SchoolYearCalendarHeader() {
   const { openModal } = useModal();
-  const trpc = useTRPC();
-  const { data: eventTypes } = useSuspenseQuery(
-    trpc.schoolYearEvent.eventTypes.queryOptions(),
-  );
 
   const {
     filters,
@@ -43,6 +37,7 @@ export function SchoolYearCalendarHeader() {
     setViewMode,
     currentYear,
     setCurrentYear,
+    eventTypes,
   } = useSchoolYearCalendarContext();
 
   const { t } = useLocale();

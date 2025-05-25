@@ -52,7 +52,7 @@ export function CreateEditSchoolYearEvent({
   const trpc = useTRPC();
 
   const { data: eventTypes } = useSuspenseQuery(
-    trpc.schoolYearEvent.eventTypes.queryOptions()
+    trpc.schoolYearEvent.eventTypes.queryOptions(),
   );
 
   const queryClient = useQueryClient();
@@ -62,27 +62,27 @@ export function CreateEditSchoolYearEvent({
     trpc.schoolYearEvent.create.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.schoolYearEvent.all.pathFilter()
+          trpc.schoolYearEvent.all.pathFilter(),
         );
         closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateEventMutation = useMutation(
     trpc.schoolYearEvent.update.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.schoolYearEvent.all.pathFilter()
+          trpc.schoolYearEvent.all.pathFilter(),
         );
         closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const { t } = useLocale();
 

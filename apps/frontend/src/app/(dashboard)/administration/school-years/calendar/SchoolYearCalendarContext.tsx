@@ -7,6 +7,7 @@ import { createContext, useContext, useState } from "react";
 interface CalendarContextType {
   filters: string[];
   events: RouterOutputs["schoolYearEvent"]["all"];
+  eventTypes: RouterOutputs["schoolYearEvent"]["eventTypes"];
   setFilters: (filters: string[]) => void;
   viewMode: "calendar" | "list";
   setViewMode: (view: "calendar" | "list") => void;
@@ -15,14 +16,14 @@ interface CalendarContextType {
 }
 
 const CalendarContext = createContext<CalendarContextType | undefined>(
-  undefined,
+  undefined
 );
 
 export function useSchoolYearCalendarContext() {
   const context = useContext(CalendarContext);
   if (context === undefined) {
     throw new Error(
-      "useCalendarContext must be used within a CalendarProvider",
+      "useCalendarContext must be used within a CalendarProvider"
     );
   }
   return context;
@@ -31,11 +32,13 @@ export function useSchoolYearCalendarContext() {
 interface CalendarProviderProps {
   children: ReactNode;
   events: RouterOutputs["schoolYearEvent"]["all"];
+  eventTypes: RouterOutputs["schoolYearEvent"]["eventTypes"];
 }
 
 export function SchoolYearCalendarProvider({
   children,
   events,
+  eventTypes,
 }: CalendarProviderProps) {
   const [filters, setFilters] = useState([
     "holiday",
@@ -58,6 +61,7 @@ export function SchoolYearCalendarProvider({
         currentYear,
         setCurrentYear,
         events: events,
+        eventTypes: eventTypes,
       }}
     >
       {children}
