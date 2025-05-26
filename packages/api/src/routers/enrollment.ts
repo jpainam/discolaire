@@ -50,7 +50,15 @@ export const enrollmentRouter = createTRPCRouter({
           formerSchool: true,
           religion: true,
           user: true,
-          enrollments: true,
+          enrollments: {
+            where: {
+              schoolYear: {
+                name: {
+                  lte: schoolYear.name,
+                },
+              },
+            },
+          },
         },
         where: {
           enrollments: {

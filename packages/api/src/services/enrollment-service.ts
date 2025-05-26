@@ -7,19 +7,20 @@ export const enrollmentService = {
     });
     const students = await db.student.findMany({
       include: {
-        enrollments: true,
+        enrollments: {
+          where: {
+            schoolYear: {
+              name: {
+                lte: schoolYear.name,
+              },
+            },
+          },
+        },
       },
       where: {
         enrollments: {
           some: {
             schoolYearId,
-          },
-          none: {
-            schoolYear: {
-              name: {
-                gt: schoolYear.name,
-              },
-            },
           },
         },
       },
