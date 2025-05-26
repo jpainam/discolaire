@@ -30,7 +30,6 @@ export function EnrolledStudentDataTable({
   return (
     <DataTable className="px-4" table={table}>
       <EnrolledStudentDataTableAction table={table} />
-      {/* <DataTableToolbar table={table}></DataTableToolbar> */}
     </DataTable>
   );
 }

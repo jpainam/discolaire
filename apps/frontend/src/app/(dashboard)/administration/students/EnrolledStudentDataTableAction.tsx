@@ -28,7 +28,7 @@ export function EnrolledStudentDataTableAction({
 }
 
 function exportToCSV(
-  table: Table<NonNullable<RouterOutputs["enrollment"]["enrolled"]>[number]>
+  table: Table<NonNullable<RouterOutputs["enrollment"]["enrolled"]>[number]>,
 ) {
   const rows = table.getRowModel().rows.map((row) => row.original);
   const data: string[] = [];
