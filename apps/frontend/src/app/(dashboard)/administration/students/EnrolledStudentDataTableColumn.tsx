@@ -60,10 +60,7 @@ export function fetchStudentColumns({
               pos={getFullName(student).length}
               avatar={student.user?.avatar}
             />
-            <Link
-              href={`/students/${student.id}`}
-              className="font-medium hover:underline"
-            >
+            <Link href={`/students/${student.id}`} className="hover:underline">
               {getFullName(student)}
             </Link>
           </div>
@@ -150,18 +147,5 @@ export function fetchStudentColumns({
         );
       },
     },
-    // {
-    //   id: "phone",
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title={t("phone")} />
-    //   ),
-    //   cell: ({ row }) => {
-    //     return (
-    //       <div className="text-muted-foreground">
-    //         {row.original.phoneNumber}
-    //       </div>
-    //     );
-    //   },
-    // },
   ];
 }
