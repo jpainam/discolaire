@@ -8,7 +8,7 @@ export const enrollmentRouter = createTRPCRouter({
   students: protectedProcedure
     .input(z.object({ classroomId: z.string().min(1) }))
     .query(async ({ ctx, input }) => {
-      // TODO Use this to replace classroom.student in classroom/[id]enrollment
+      // TODO Use this to replace classroom.student in classroom/[id]/enrollment
       const enrollments = await ctx.db.enrollment.findMany({
         where: {
           classroomId: input.classroomId,
@@ -46,6 +46,7 @@ export const enrollmentRouter = createTRPCRouter({
         include: {
           formerSchool: true,
           religion: true,
+          user: true,
         },
         where: {
           enrollments: {

@@ -1,81 +1,80 @@
+import { BoxIcon, CircleUserRound, PanelsTopLeftIcon } from "lucide-react";
+
+import { Badge } from "@repo/ui/components/badge";
+import { ScrollArea, ScrollBar } from "@repo/ui/components/scroll-area";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@repo/ui/components/tabs";
-import { ChartSpline, SquareArrowLeft, Upload, Users } from "lucide-react";
-import { Suspense } from "react";
-import { StudentDataTable } from "~/components/students/StudentDataTable";
 import { getServerTranslations } from "~/i18n/server";
-import { HydrateClient, prefetch, trpc } from "~/trpc/server";
-import { StudentPageHeader } from "../../students/StudentPageHeader";
+import { caller } from "~/trpc/server";
+import { EnrolledStudentDataTable } from "./EnrolledStudentDataTable";
 
 export default async function Page() {
   const { t } = await getServerTranslations();
-  prefetch(trpc.student.all.queryOptions());
+  const enrolled = await caller.enrollment.enrolled({});
+  const newStudents = enrolled.length;
   return (
     <Tabs defaultValue="tab-1">
-      <TabsList className="h-auto justify-start w-full rounded-none border-b bg-transparent p-0">
-        <TabsTrigger
-          value="tab-1"
-          className="data-[state=active]:after:bg-primary relative flex-col rounded-none px-4 py-2 text-xs after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-        >
-          <Users className="mb-1.5 opacity-60" size={16} aria-hidden="true" />
-          {t("students")}
-        </TabsTrigger>
-        <TabsTrigger
-          value="tab-2"
-          className="data-[state=active]:after:bg-primary relative flex-col rounded-none px-4 py-2 text-xs after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-        >
-          <SquareArrowLeft
-            className="mb-1.5 opacity-60"
-            size={16}
-            aria-hidden="true"
-          />
-          {t("excluded")}
-        </TabsTrigger>
-        <TabsTrigger
-          value="tab-3"
-          className="data-[state=active]:after:bg-primary relative flex-col rounded-none px-4 py-2 text-xs after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-        >
-          <Upload className="mb-1.5 opacity-60" size={16} aria-hidden="true" />
-          {t("import")}
-        </TabsTrigger>
-        <TabsTrigger
-          value="tab-4"
-          className="data-[state=active]:after:bg-primary relative flex-col rounded-none px-4 py-2 text-xs after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-        >
-          <ChartSpline
-            className="mb-1.5 opacity-60"
-            size={16}
-            aria-hidden="true"
-          />
-          {t("statistics")}
-        </TabsTrigger>
-      </TabsList>
+      <ScrollArea>
+        <TabsList>
+          <TabsTrigger value="tab-1">
+            <CircleUserRound
+              className="-ms-0.5 me-1.5 opacity-60"
+              size={16}
+              aria-hidden="true"
+            />
+            {t("Registered")}
+            <Badge
+              className="bg-primary/15 ms-1.5 min-w-5 px-1 transition-opacity group-data-[state=inactive]:opacity-50"
+              variant="secondary"
+            >
+              {enrolled.length}
+            </Badge>
+          </TabsTrigger>
+          <TabsTrigger value="tab-2" className="group">
+            <PanelsTopLeftIcon
+              className="-ms-0.5 me-1.5 opacity-60"
+              size={16}
+              aria-hidden="true"
+            />
+            {t("New Students")}
+            <Badge
+              className="bg-primary/15 ms-1.5 min-w-5 px-1 transition-opacity group-data-[state=inactive]:opacity-50"
+              variant="secondary"
+            >
+              {newStudents}
+            </Badge>
+          </TabsTrigger>
+          <TabsTrigger value="tab-3" className="group">
+            <BoxIcon
+              className="-ms-0.5 me-1.5 opacity-60"
+              size={16}
+              aria-hidden="true"
+            />
+            {t("Excluded students")}
+            <Badge
+              className="bg-primary/15 ms-1.5 min-w-5 px-1 transition-opacity group-data-[state=inactive]:opacity-50"
+              variant="secondary"
+            >
+              3
+            </Badge>
+          </TabsTrigger>
+        </TabsList>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
       <TabsContent value="tab-1">
-        <div className="flex flex-col gap-2">
-          <StudentPageHeader />
-          <HydrateClient>
-            <Suspense fallback={<div className="px-4 py-2">Loading...</div>}>
-              <StudentDataTable />
-            </Suspense>
-          </HydrateClient>
-        </div>
+        <EnrolledStudentDataTable students={enrolled} />
       </TabsContent>
       <TabsContent value="tab-2">
-        <p className="text-muted-foreground p-4 text-center text-xs">
+        <p className="text-muted-foreground p-4 pt-1 text-center text-xs">
           Content for Tab 2
         </p>
       </TabsContent>
       <TabsContent value="tab-3">
-        <p className="text-muted-foreground p-4 text-center text-xs">
-          Content for Tab 3
-        </p>
-      </TabsContent>
-      <TabsContent value="tab-4">
-        <p className="text-muted-foreground p-4 text-center text-xs">
+        <p className="text-muted-foreground p-4 pt-1 text-center text-xs">
           Content for Tab 3
         </p>
       </TabsContent>
