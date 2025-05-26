@@ -42,6 +42,9 @@ export const enrollmentRouter = createTRPCRouter({
   enrolled: protectedProcedure
     .input(z.object({ schoolYearId: z.string().optional() }))
     .query(async ({ ctx, input }) => {
+      const schoolYear = await ctx.db.schoolYear.findUniqueOrThrow({
+        where: { id: input.schoolYearId ?? ctx.schoolYearId },
+      });
       const data = await ctx.db.student.findMany({
         include: {
           formerSchool: true,
@@ -53,6 +56,13 @@ export const enrollmentRouter = createTRPCRouter({
           enrollments: {
             some: {
               schoolYearId: input.schoolYearId ?? ctx.schoolYearId,
+            },
+            none: {
+              schoolYear: {
+                name: {
+                  gt: schoolYear.name,
+                },
+              },
             },
           },
         },

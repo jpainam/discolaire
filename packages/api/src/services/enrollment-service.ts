@@ -2,6 +2,9 @@ import { db } from "@repo/db";
 
 export const enrollmentService = {
   getCount: async (schoolYearId: string) => {
+    const schoolYear = await db.schoolYear.findUniqueOrThrow({
+      where: { id: schoolYearId },
+    });
     const students = await db.student.findMany({
       include: {
         enrollments: true,
@@ -10,6 +13,13 @@ export const enrollmentService = {
         enrollments: {
           some: {
             schoolYearId,
+          },
+          none: {
+            schoolYear: {
+              name: {
+                gt: schoolYear.name,
+              },
+            },
           },
         },
       },
