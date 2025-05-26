@@ -47,6 +47,7 @@ export const enrollmentRouter = createTRPCRouter({
           formerSchool: true,
           religion: true,
           user: true,
+          enrollments: true,
         },
         where: {
           enrollments: {
@@ -150,6 +151,7 @@ export const enrollmentRouter = createTRPCRouter({
         },
       });
     }),
+
   deleteByStudentIdClassroomId: protectedProcedure
     .input(
       z.object({
