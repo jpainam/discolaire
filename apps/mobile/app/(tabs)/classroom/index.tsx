@@ -21,7 +21,7 @@ export default function Screen() {
     }
     const lowerSearch = search.toLowerCase();
     const filtered = data.filter((classroom) =>
-      classroom.name.toLowerCase().includes(lowerSearch)
+      classroom.name.toLowerCase().includes(lowerSearch),
     );
     setFilteredData(filtered);
   }, [data, search]);
