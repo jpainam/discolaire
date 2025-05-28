@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import redisClient from "@repo/kv";
 
-import { checkPermission } from "../permission";
+import { checkPermission2 } from "../permission";
 import { contactService } from "../services/contact-service";
 import { studentService } from "../services/student-service";
 import { userService } from "../services/user-service";
@@ -141,7 +141,12 @@ export const contactRouter = createTRPCRouter({
         });
       }
 
-      const canReadStaff = await checkPermission("staff", "Read");
+      const canReadStaff = checkPermission2(
+        "staff",
+        "Read",
+        {},
+        ctx.permissions,
+      );
       if (canReadStaff) {
         return ctx.db.contact.findMany({
           take: input?.limit ?? 50,

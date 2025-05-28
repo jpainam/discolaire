@@ -8,6 +8,7 @@ import type { OpaqueColorValue, StyleProp, TextStyle } from "react-native";
 type IconMapping = Record<
   SymbolViewProps["name"],
   ComponentProps<typeof MaterialIcons>["name"]
+  // ComponentProps<typeof FontAwesome6>["name"]
 >;
 type IconSymbolName = keyof typeof MAPPING;
 

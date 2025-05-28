@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { TransactionStatus } from "@repo/db";
 
-import { checkPermission } from "../permission";
+import { checkPermission2 } from "../permission";
 import { classroomService } from "../services/classroom-service";
 import { contactService } from "../services/contact-service";
 import { staffService } from "../services/staff-service";
@@ -45,7 +45,7 @@ export const classroomRouter = createTRPCRouter({
     }
     // Has access to classrooms where he teachers
     if (ctx.session.user.profile === "staff") {
-      if (await checkPermission("classroom", "Read")) {
+      if (checkPermission2("classroom", "Read", {}, ctx.permissions)) {
         return classrooms;
       }
       const classes = await staffService.getClassrooms(

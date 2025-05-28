@@ -12,6 +12,7 @@ import { getSchoolYear } from "~/utils/session-store";
 
 export default function HomeScreen() {
   const { signOut } = useSession();
+  //return <Redirect href="/(tabs)/classroom" />;
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
