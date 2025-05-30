@@ -5,6 +5,8 @@ import { ActivityIndicator, FlatList, StyleSheet } from "react-native";
 import { ClassroomSearchResult } from "~/components/ClassroomSearchResult";
 import { ThemedText } from "~/components/ThemedText";
 import { ThemedView } from "~/components/ThemedView";
+import { Colors } from "~/constants/Colors";
+import { useColorScheme } from "~/hooks/useColorScheme";
 import { useThemeColor } from "~/hooks/useThemeColor";
 import { trpc } from "~/utils/api";
 
@@ -13,6 +15,8 @@ export default function Screen() {
   const [search, setSearch] = useState("");
   const borderColor = useThemeColor({}, "border");
   const [filteredData, setFilteredData] = useState(data);
+  const theme = useColorScheme();
+  //const router = useRouter();
   useEffect(() => {
     if (!data) return;
     if (search.trim() === "") {
@@ -21,7 +25,7 @@ export default function Screen() {
     }
     const lowerSearch = search.toLowerCase();
     const filtered = data.filter((classroom) =>
-      classroom.name.toLowerCase().includes(lowerSearch),
+      classroom.name.toLowerCase().includes(lowerSearch)
     );
     setFilteredData(filtered);
   }, [data, search]);
@@ -31,25 +35,58 @@ export default function Screen() {
       <Stack.Screen
         options={{
           title: "Classes",
-          headerTitle: (props) => {
-            return (
-              <ThemedView style={{ flex: 1, flexDirection: "row" }}>
-                <ThemedText type="title">{props.children}</ThemedText>
-              </ThemedView>
-            );
+          headerTitle: "Classes",
+          headerLargeTitle: true,
+          headerShadowVisible: false,
+          headerLargeTitleShadowVisible: false,
+
+          //headerTransparent: true,
+          //headerBlurEffect: "regular",
+          headerStyle: {
+            backgroundColor:
+              theme === "light"
+                ? Colors.light.background
+                : Colors.dark.background,
           },
+          // headerTitle: (props) => {
+          //   return (
+          //     <ThemedView style={{ flex: 1, flexDirection: "row" }}>
+          //       <ThemedText type="title">{props.children}</ThemedText>
+          //     </ThemedView>
+          //   );
+          // },
           headerSearchBarOptions: {
             placeholder: "Rechercher...",
             onChangeText: (e) => setSearch(e.nativeEvent.text),
-            autoFocus: true,
+            //autoFocus: true,
             hideWhenScrolling: false,
             //onCancelButtonPress: () => {},
           },
+          // headerRight: () => {
+          //   return (
+          //     <TouchableOpacity
+          //       onPress={() => {
+          //         router.push("/classroom/calendar");
+          //       }}
+          //     >
+          //       <Ionicons
+          //         name="calendar"
+          //         color={
+          //           theme === "light" ? Colors.light.icon : Colors.dark.icon
+          //         }
+          //         size={25}
+          //       />
+          //     </TouchableOpacity>
+          //   );
+          // },
         }}
       />
       <FlatList
         data={filteredData}
         contentInsetAdjustmentBehavior="automatic"
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+        contentContainerStyle={{ paddingBottom: 60 }} // Adjust based on your tab bar height
         ItemSeparatorComponent={() => (
           <ThemedView
             style={{
@@ -69,9 +106,8 @@ export default function Screen() {
             </ThemedView>
           );
         }}
-        renderItem={({ item }) => (
-          <ClassroomSearchResult key={item.id} classroom={item} />
-        )}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <ClassroomSearchResult classroom={item} />}
       />
     </ThemedView>
   );

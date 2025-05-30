@@ -4,6 +4,7 @@ import type { JwtPayload } from "jsonwebtoken";
 import { cookies } from "next/headers";
 import { compare, hash } from "bcryptjs";
 import { jwtVerify, SignJWT } from "jose";
+import { JWTExpired } from "jose/errors";
 
 import type { User } from "@repo/db";
 import { db } from "@repo/db";
@@ -38,19 +39,28 @@ export async function signToken(payload: SessionData) {
 }
 
 export async function verifyToken(input: string) {
-  const { payload } = await jwtVerify(input, key, {
-    algorithms: ["HS256"],
-  });
+  try {
+    const { payload } = await jwtVerify(input, key, {
+      algorithms: ["HS256"],
+    });
 
-  // @ts-expect-error : No need to fix. This is expected
-  return payload as SessionData;
+    // @ts-expect-error : No need to fix. This is expected
+    return payload as SessionData;
+  } catch (err) {
+    if (err instanceof JWTExpired) {
+      console.warn("Token expired at", err.message);
+    } else {
+      console.error("JWT verification failed:", err);
+    }
+    return null;
+  }
 }
 
 // For Mobile
 export async function validateToken(input: string) {
   const sessionToken = input.split(" ")[1] ?? ""; // Bearer token
   const sessionData = await verifyToken(sessionToken);
-  if (typeof sessionData.user.id !== "string") {
+  if (!sessionData || typeof sessionData.user.id !== "string") {
     return null;
   }
 
@@ -116,7 +126,7 @@ export async function getUser() {
   }
 
   const sessionData = await verifyToken(sessionCookie.value);
-  if (typeof sessionData.user.id !== "string") {
+  if (!sessionData || typeof sessionData.user.id !== "string") {
     return null;
   }
 

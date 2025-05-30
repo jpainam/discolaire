@@ -40,7 +40,7 @@ export default function TabLayout() {
         name="classroom"
         options={{
           title: "Classes",
-          headerShown: false,
+          //headerShown: false,
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons
               name={focused ? "albums" : "albums-outline"}
@@ -54,8 +54,12 @@ export default function TabLayout() {
         name="student"
         options={{
           title: "Elèves",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="person.2.fill" color={color} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name={focused ? "people" : "people-outline"}
+              size={size}
+              color={color}
+            />
           ),
           headerShown: false,
         }}

@@ -27,15 +27,15 @@ export async function middleware(request: NextRequest) {
   const sessionCookie = request.cookies.get("session");
 
   const isProtectedRoute = !unProtectedRoutes.some((route) =>
-    pathname.startsWith(route),
+    pathname.startsWith(route)
   );
 
   const redirectToLogin = (redirectUrl: string) => {
     return NextResponse.redirect(
       new URL(
         `/auth/login?redirect=${encodeURIComponent(redirectUrl)}`,
-        env.NEXT_PUBLIC_BASE_URL,
-      ),
+        env.NEXT_PUBLIC_BASE_URL
+      )
     );
   };
 
@@ -43,7 +43,7 @@ export async function middleware(request: NextRequest) {
   if (isProtectedRoute && !sessionCookie) {
     // request.url not working inside docker, or reverse proxy
     return redirectToLogin(
-      `${env.NEXT_PUBLIC_BASE_URL}${pathname}${request.nextUrl.search}`,
+      `${env.NEXT_PUBLIC_BASE_URL}${pathname}${request.nextUrl.search}`
     );
   }
 
@@ -52,6 +52,11 @@ export async function middleware(request: NextRequest) {
   if (sessionCookie) {
     try {
       const parsed = await verifyToken(sessionCookie.value);
+      if (!parsed) {
+        return redirectToLogin(
+          `${env.NEXT_PUBLIC_BASE_URL}${pathname}${request.nextUrl.search}`
+        );
+      }
       const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 1 day
       const newToken = await signToken({
         ...parsed,
@@ -69,7 +74,7 @@ export async function middleware(request: NextRequest) {
       response.cookies.delete("session");
       if (isProtectedRoute) {
         return redirectToLogin(
-          `${env.NEXT_PUBLIC_BASE_URL}${pathname}${request.nextUrl.search}`,
+          `${env.NEXT_PUBLIC_BASE_URL}${pathname}${request.nextUrl.search}`
         );
       }
     }
