@@ -1,19 +1,41 @@
 import { useQuery } from "@tanstack/react-query";
-import { Stack } from "expo-router";
+import { Redirect, Stack } from "expo-router";
 import { useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet } from "react-native";
+import { StudentListItem } from "~/components/StudentListItem";
 import { ThemedText } from "~/components/ThemedText";
 import { ThemedView } from "~/components/ThemedView";
 import { Colors } from "~/constants/Colors";
 import { useColorScheme } from "~/hooks/useColorScheme";
 import { useThemeColor } from "~/hooks/useThemeColor";
-import type { RouterOutputs } from "~/utils/api";
+import { useSession } from "~/providers/auth-provider";
 import { trpc } from "~/utils/api";
 export default function Screen() {
+  const { session } = useSession();
+  if (!session) {
+    return <Redirect href="/login" />;
+  }
+  if (session.user?.profile === "student") {
+    return <OnlyStudent />;
+  } else if (session.user?.profile === "contact") {
+    return <ContactStudent />;
+  } else if (session.user?.profile === "staff") {
+    return <SearchStudent />;
+  } else {
+    return (
+      <ThemedView>
+        <ThemedText>Vous n'avez pas accès à cette page</ThemedText>
+      </ThemedView>
+    );
+  }
+}
+
+function SearchStudent() {
   const [search, setSearch] = useState("");
   const { data: students, isPending } = useQuery(
-    trpc.student.search.queryOptions({ query: search }),
+    trpc.student.search.queryOptions({ query: search })
   );
+
   const borderColor = useThemeColor({}, "border");
   const theme = useColorScheme();
 
@@ -31,13 +53,6 @@ export default function Screen() {
                 ? Colors.light.background
                 : Colors.dark.background,
           },
-          // headerTitle: (props) => {
-          //   return (
-          //     <ThemedView style={{ flex: 1, flexDirection: "row" }}>
-          //       <ThemedText type="title">{props.children}</ThemedText>
-          //     </ThemedView>
-          //   );
-          // },
           headerSearchBarOptions: {
             placeholder: "Rechercher...",
             onChangeText: (e) => setSearch(e.nativeEvent.text),
@@ -86,10 +101,31 @@ export default function Screen() {
             </ThemedView>
           );
         }}
-        renderItem={({ item }) => <StudentItem key={item.id} student={item} />}
+        renderItem={({ item }) => (
+          <StudentListItem key={item.id} student={item} />
+        )}
       />
     </ThemedView>
   );
+}
+
+function ContactStudent() {
+  const { data: students, isPending } = useQuery(
+    trpc.student.all.queryOptions()
+  );
+  if (isPending) {
+    return <ActivityIndicator size={"large"} />;
+  }
+  return (
+    <ThemedView>
+      {students?.map((student) => {
+        return <StudentListItem key={student.id} student={student} />;
+      })}
+    </ThemedView>
+  );
+}
+function OnlyStudent() {
+  return <ThemedView></ThemedView>;
 }
 
 const styles = StyleSheet.create({
@@ -100,17 +136,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 20,
   },
+  itemContainer: {
+    paddingVertical: 0,
+    alignItems: "center",
+    paddingHorizontal: 16,
+    flexDirection: "row",
+    gap: 8,
+  },
+  registrationText: {
+    fontSize: 12,
+  },
 });
-
-function StudentItem({
-  student,
-}: {
-  student: RouterOutputs["student"]["search"][number];
-}) {
-  console.log("StudentItem", student);
-  return (
-    <ThemedView>
-      <ThemedText>The details of a student</ThemedText>
-    </ThemedView>
-  );
-}
