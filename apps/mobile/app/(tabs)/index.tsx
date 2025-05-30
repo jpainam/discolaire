@@ -1,94 +1,76 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Image } from "expo-image";
-import { Platform, StyleSheet, TouchableOpacity } from "react-native";
+import { StatusBar } from "expo-status-bar";
+import React from "react";
+import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { HelloWave } from "~/components/HelloWave";
-import ParallaxScrollView from "~/components/ParallaxScrollView";
-import { ThemedText } from "~/components/ThemedText";
-import { ThemedView } from "~/components/ThemedView";
-import { useSession } from "~/providers/auth-provider";
-import { getSchoolYear } from "~/utils/session-store";
+import AcademicProgress from "~/components/home/AcademicProgress";
+import NewsFeed from "~/components/home/NewsFeed";
+import Notifications from "~/components/home/Notifications";
+import QuickActions from "~/components/home/QuickActions";
+import TodaySchedule from "~/components/home/TodaySchedule";
+import UpcomingEvents from "~/components/home/UpcomingEvents";
+import WeatherInfo from "~/components/home/WeatherInfo";
+import WelcomeHeader from "~/components/home/WelcomeHeader";
 
-export default function HomeScreen() {
-  const { signOut } = useSession();
-  //return <Redirect href="/(tabs)/classroom" />;
+export default function HomePage() {
+  const insets = useSafeAreaInsets();
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    // Simulate fetching data
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1500);
+  }, []);
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("~/assets/images/partial-react-logo.png")}
-          style={styles.reactLogo}
-        />
-      }
-    >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <TouchableOpacity
-        onPress={async () => {
-          await signOut();
-        }}
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      <StatusBar style="dark" />
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
-        <ThemedText>Sign out</ThemedText>
-      </TouchableOpacity>
-      <ThemedText>{getSchoolYear()}</ThemedText>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          to see changes. Press{" "}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: "cmd + d",
-              android: "cmd + m",
-              web: "F12",
-            })}
-          </ThemedText>{" "}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">
-            npm run reset-project
-          </ThemedText>{" "}
-          to get a fresh <ThemedText type="defaultSemiBold">app</ThemedText>{" "}
-          directory. This will move the current{" "}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{" "}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+        <WelcomeHeader />
+
+        <View style={styles.weatherAndActions}>
+          <WeatherInfo />
+          <QuickActions />
+        </View>
+
+        <View style={styles.twoColumnLayout}>
+          <AcademicProgress />
+          <TodaySchedule />
+        </View>
+
+        <UpcomingEvents />
+        <NewsFeed />
+        <Notifications />
+
+        {/* Add padding at the bottom for better scrolling experience */}
+        <View style={{ height: 20 }} />
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: {
+    flex: 1,
+    backgroundColor: "#f8fafc",
+  },
+  scrollContent: {
+    padding: 16,
+  },
+  weatherAndActions: {
+    marginBottom: 16,
+  },
+  twoColumnLayout: {
     flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
+    justifyContent: "space-between",
+    marginBottom: 16,
   },
 });

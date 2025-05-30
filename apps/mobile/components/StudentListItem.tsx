@@ -18,7 +18,7 @@ export function StudentListItem({
         <ThemedView style={styles.itemContainer}>
           <Avatar />
           <ThemedView style={{ flex: 1, flexDirection: "column" }}>
-            <ThemedText style={{ fontSize: 14 }}>
+            <ThemedText style={{ fontSize: 16, fontWeight: "400" }}>
               {getFullName(student)}
             </ThemedText>
             <ThemedView
@@ -28,7 +28,7 @@ export function StudentListItem({
                 justifyContent: "space-between",
               }}
             >
-              <ThemedText
+              {/* <ThemedText
                 style={{
                   color: "gray",
                   fontSize: 10,
@@ -40,7 +40,7 @@ export function StudentListItem({
                   month: "short",
                   day: "2-digit",
                 })}
-              </ThemedText>
+              </ThemedText> */}
               <ThemedText
                 style={{
                   color: "gray",

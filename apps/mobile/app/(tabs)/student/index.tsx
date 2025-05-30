@@ -157,9 +157,9 @@ function ContactStudent() {
             </ThemedView>
           );
         }}
-        renderItem={({ item }) => (
-          <StudentListItem key={item.id} student={item} />
-        )}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        renderItem={({ item }) => <StudentListItem student={item} />}
       />
     </ThemedView>
   );

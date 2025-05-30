@@ -32,6 +32,10 @@ export default function RootLayout() {
         <AuthProvider>
           <Stack screenOptions={{}}>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="notifications"
+              options={{ headerShown: false }}
+            />
             <Stack.Screen name="+not-found" />
           </Stack>
           <StatusBar style="auto" />
