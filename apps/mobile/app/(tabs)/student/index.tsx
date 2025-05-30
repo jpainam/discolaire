@@ -33,7 +33,7 @@ export default function Screen() {
 function SearchStudent() {
   const [search, setSearch] = useState("");
   const { data: students, isPending } = useQuery(
-    trpc.student.search.queryOptions({ query: search })
+    trpc.student.search.queryOptions({ query: search }),
   );
 
   const borderColor = useThemeColor({}, "border");
@@ -111,7 +111,7 @@ function SearchStudent() {
 
 function ContactStudent() {
   const { data: students, isPending } = useQuery(
-    trpc.student.all.queryOptions()
+    trpc.student.all.queryOptions(),
   );
   if (isPending) {
     return <ActivityIndicator size={"large"} />;
