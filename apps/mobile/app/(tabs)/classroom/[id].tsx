@@ -8,13 +8,12 @@ import { trpc } from "~/utils/api";
 export default function Screen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { data: classroom, isPending } = useQuery(
-    trpc.classroom.get.queryOptions(id),
+    trpc.classroom.get.queryOptions(id)
   );
   return (
     <ThemedView style={styles.container}>
-      {isPending && <ActivityIndicator style={styles.loading} size="large" />}
-      {!isPending && !classroom ? (
-        <></>
+      {isPending ? (
+        <ActivityIndicator style={styles.loading} size="large" />
       ) : (
         <ThemedView>
           <ThemedText>Details de la classe {id}</ThemedText>
