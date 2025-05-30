@@ -51,6 +51,20 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="chat"
+        options={{
+          title: "Messages",
+          //headerShown: false,
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name={focused ? "chatbubbles" : "chatbubbles-outline"}
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="student"
         options={{
           title: "Elèves",
@@ -78,7 +92,7 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="explore"
         options={{
           title: "Explore",
@@ -86,7 +100,7 @@ export default function TabLayout() {
             <IconSymbol size={28} name="paperplane.fill" color={color} />
           ),
         }}
-      />
+      /> */}
     </Tabs>
   );
 }

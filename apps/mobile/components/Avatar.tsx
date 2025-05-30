@@ -1,23 +1,32 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import { Image, StyleSheet } from "react-native";
-export function Avatar({ imageUrl }: { imageUrl?: string }) {
+import type { ViewProps } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
+export type AvatarProps = ViewProps & {
+  imageUrl?: string | null;
+};
+
+export function Avatar({ imageUrl, style, ...props }: AvatarProps) {
   if (imageUrl) {
     return (
-      <Image
-        style={styles.photo}
-        source={{
-          uri: imageUrl,
-        }}
-      />
+      <View style={style} {...props}>
+        <Image
+          style={styles.photo}
+          source={{
+            uri: imageUrl,
+          }}
+        />
+      </View>
     );
   } else {
     return (
-      <Image
-        style={styles.photo}
-        source={require("~/assets/images/avatar-01.webp")}
-      />
+      <View style={style} {...props}>
+        <Image
+          style={styles.photo}
+          source={require("~/assets/images/avatar-01.webp")}
+        />
+      </View>
     );
   }
 }

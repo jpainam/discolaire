@@ -1,7 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { Redirect, Stack } from "expo-router";
 import { useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+} from "react-native";
 import { StudentListItem } from "~/components/StudentListItem";
 import { ThemedText } from "~/components/ThemedText";
 import { ThemedView } from "~/components/ThemedView";
@@ -32,9 +37,12 @@ export default function Screen() {
 
 function SearchStudent() {
   const [search, setSearch] = useState("");
-  const { data: students, isPending } = useQuery(
-    trpc.student.search.queryOptions({ query: search }),
-  );
+  const {
+    data: students,
+    isPending,
+    isRefetching,
+    refetch,
+  } = useQuery(trpc.student.search.queryOptions({ query: search }));
 
   const borderColor = useThemeColor({}, "border");
   const theme = useColorScheme();
@@ -68,7 +76,8 @@ function SearchStudent() {
           //       }}
           //     >
           //       <Ionicons
-          //         name="calendar"
+          //         name="chatbubbles"
+          //         //name={focused ? "calendar" : "calendar-outline"}
           //         color={
           //           theme === "light" ? Colors.light.icon : Colors.dark.icon
           //         }
@@ -81,6 +90,9 @@ function SearchStudent() {
       />
       <FlatList
         data={students}
+        refreshControl={
+          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+        }
         contentInsetAdjustmentBehavior="automatic"
         ItemSeparatorComponent={() => (
           <ThemedView
@@ -96,7 +108,7 @@ function SearchStudent() {
               {isPending ? (
                 <ActivityIndicator size={"large"} />
               ) : (
-                <ThemedText style={styles.emptyText}>Aucune classe</ThemedText>
+                <ThemedText style={styles.emptyText}>Aucun élève</ThemedText>
               )}
             </ThemedView>
           );
@@ -110,17 +122,45 @@ function SearchStudent() {
 }
 
 function ContactStudent() {
-  const { data: students, isPending } = useQuery(
-    trpc.student.all.queryOptions(),
-  );
-  if (isPending) {
-    return <ActivityIndicator size={"large"} />;
-  }
+  const {
+    data: students,
+    isPending,
+    isRefetching,
+    refetch,
+  } = useQuery(trpc.student.all.queryOptions());
+  const borderColor = useThemeColor({}, "border");
+
   return (
-    <ThemedView>
-      {students?.map((student) => {
-        return <StudentListItem key={student.id} student={student} />;
-      })}
+    <ThemedView style={styles.container}>
+      <FlatList
+        data={students}
+        refreshControl={
+          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+        }
+        contentInsetAdjustmentBehavior="automatic"
+        ItemSeparatorComponent={() => (
+          <ThemedView
+            style={{
+              height: StyleSheet.hairlineWidth,
+              backgroundColor: borderColor,
+            }}
+          ></ThemedView>
+        )}
+        ListEmptyComponent={() => {
+          return (
+            <ThemedView>
+              {isPending ? (
+                <ActivityIndicator size={"large"} />
+              ) : (
+                <ThemedText style={styles.emptyText}>Aucun élève</ThemedText>
+              )}
+            </ThemedView>
+          );
+        }}
+        renderItem={({ item }) => (
+          <StudentListItem key={item.id} student={item} />
+        )}
+      />
     </ThemedView>
   );
 }

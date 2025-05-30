@@ -21,16 +21,13 @@ export function StudentListItem({
             <ThemedText style={{ fontSize: 14 }}>
               {getFullName(student)}
             </ThemedText>
-            <ThemedView style={{ flexDirection: "row", gap: 4 }}>
-              <ThemedText
-                style={{
-                  color: "gray",
-                  fontSize: 10,
-                  opacity: 0.8,
-                }}
-              >
-                {student.classroom?.reportName}
-              </ThemedText>
+            <ThemedView
+              style={{
+                flexDirection: "row",
+                gap: 4,
+                justifyContent: "space-between",
+              }}
+            >
               <ThemedText
                 style={{
                   color: "gray",
@@ -44,13 +41,21 @@ export function StudentListItem({
                   day: "2-digit",
                 })}
               </ThemedText>
+              <ThemedText
+                style={{
+                  color: "gray",
+                  fontSize: 10,
+                  opacity: 0.8,
+                }}
+              >
+                {student.classroom?.reportName}
+              </ThemedText>
+              <ThemedText style={styles.registrationText}>
+                {student.registrationNumber}
+              </ThemedText>
             </ThemedView>
           </ThemedView>
-          <ThemedView>
-            <ThemedText style={styles.registrationText}>
-              {student.registrationNumber}
-            </ThemedText>
-          </ThemedView>
+          <ThemedView></ThemedView>
         </ThemedView>
       </TouchableOpacity>
     </Link>
@@ -66,7 +71,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   itemContainer: {
-    paddingVertical: 0,
+    paddingVertical: 2,
     alignItems: "center",
     paddingHorizontal: 16,
     flexDirection: "row",

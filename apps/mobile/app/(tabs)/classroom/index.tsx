@@ -1,7 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+} from "react-native";
 import { ClassroomSearchResult } from "~/components/ClassroomSearchResult";
 import { ThemedText } from "~/components/ThemedText";
 import { ThemedView } from "~/components/ThemedView";
@@ -11,7 +16,9 @@ import { useThemeColor } from "~/hooks/useThemeColor";
 import { trpc } from "~/utils/api";
 
 export default function Screen() {
-  const { data, isPending } = useQuery(trpc.classroom.all.queryOptions());
+  const { data, isPending, isRefetching, refetch } = useQuery(
+    trpc.classroom.all.queryOptions()
+  );
   const [search, setSearch] = useState("");
   const borderColor = useThemeColor({}, "border");
   const [filteredData, setFilteredData] = useState(data);
@@ -25,7 +32,7 @@ export default function Screen() {
     }
     const lowerSearch = search.toLowerCase();
     const filtered = data.filter((classroom) =>
-      classroom.name.toLowerCase().includes(lowerSearch),
+      classroom.name.toLowerCase().includes(lowerSearch)
     );
     setFilteredData(filtered);
   }, [data, search]);
@@ -83,6 +90,9 @@ export default function Screen() {
       />
       <FlatList
         data={filteredData}
+        refreshControl={
+          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+        }
         contentInsetAdjustmentBehavior="automatic"
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
