@@ -12,7 +12,7 @@ import { trpc } from "~/utils/api";
 export default function Screen() {
   const [search, setSearch] = useState("");
   const { data: students, isPending } = useQuery(
-    trpc.student.search.queryOptions({ query: search })
+    trpc.student.search.queryOptions({ query: search }),
   );
   const borderColor = useThemeColor({}, "border");
   const theme = useColorScheme();
