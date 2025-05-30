@@ -22,6 +22,7 @@ const createUpdateSchema = z.object({
 });
 export const classroomRouter = createTRPCRouter({
   all: protectedProcedure.query(async ({ ctx }) => {
+    console.log(">>> Fetching classrooms for user", ctx.session.user.username);
     const classrooms = await classroomService.getAll({
       schoolYearId: ctx.schoolYearId,
       schoolId: ctx.session.user.schoolId,

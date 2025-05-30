@@ -60,7 +60,8 @@ export async function verifyToken(input: string) {
 export async function validateToken(input: string) {
   const sessionToken = input.split(" ")[1] ?? ""; // Bearer token
   const sessionData = await verifyToken(sessionToken);
-  if (!sessionData || typeof sessionData.user.id !== "string") {
+
+  if (!sessionData?.user) {
     return null;
   }
 
