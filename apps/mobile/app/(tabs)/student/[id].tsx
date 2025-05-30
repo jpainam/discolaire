@@ -29,6 +29,7 @@ type TabType = "info" | "parents" | "grades" | "fees" | "transactions";
 
 export default function StudentProfileScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  console.log("Student ID:", id);
   const [activeTab, setActiveTab] = useState<TabType>("info");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -79,7 +80,7 @@ export default function StudentProfileScreen() {
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => history.back()}
+          onPress={() => refreshData()}
         >
           <ChevronLeft size={24} color="#ffffff" />
         </TouchableOpacity>

@@ -1,10 +1,19 @@
-import { ThemedText } from "~/components/ThemedText";
-import { ThemedView } from "~/components/ThemedView";
+import { Stack } from "expo-router";
 
-export default function Screen() {
+export default function Layout() {
   return (
-    <ThemedView>
-      <ThemedText>The notifications page with swipe to delete</ThemedText>
-    </ThemedView>
+    <Stack>
+      <Stack.Screen
+        name="index"
+        options={{
+          title: "Notifications",
+          headerLargeTitle: true,
+          headerBlurEffect: "regular",
+          headerStyle: {
+            backgroundColor: "transparent",
+          },
+        }}
+      />
+    </Stack>
   );
 }
