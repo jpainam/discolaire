@@ -33,7 +33,7 @@ export default function StudentProfileScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   console.log("Student ID:", id);
   const [activeTab, setActiveTab] = useState<TabType>("info");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, _] = useState(false);
 
   // This would normally fetch data from your API
   const student = getStudent("1");
@@ -64,14 +64,6 @@ export default function StudentProfileScreen() {
       default:
         return <StudentBasicInfo student={student} />;
     }
-  };
-
-  const refreshData = () => {
-    setIsLoading(true);
-    // Simulate a data refresh
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
   };
 
   return (
