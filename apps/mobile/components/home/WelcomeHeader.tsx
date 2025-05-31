@@ -1,6 +1,9 @@
-import { Bell } from "lucide-react-native";
+import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Appearance, Image, StyleSheet, Text, View } from "react-native";
+import { Colors } from "~/constants/Colors";
+import { ThemedText } from "../ThemedText";
+import { ThemedView } from "../ThemedView";
 
 // Mock user data - in a real app, this would come from authentication context
 const userData = {
@@ -23,19 +26,28 @@ export default function WelcomeHeader() {
   }
 
   return (
-    <View style={styles.container}>
+    <ThemedView style={styles.container}>
       <View style={styles.headerContent}>
         <View style={styles.userInfo}>
-          <Text style={styles.greeting}>{greeting},</Text>
-          <Text style={styles.userName}>{userData.name}</Text>
-          <Text style={styles.userRole}>
+          <ThemedText style={styles.greeting}>{greeting},</ThemedText>
+          <ThemedText style={styles.userName}>{userData.name}</ThemedText>
+          <ThemedText style={styles.userRole}>
             {userData.role} • {userData.grade}
-          </Text>
+          </ThemedText>
         </View>
 
         <View style={styles.rightSection}>
           <View style={styles.notificationIcon}>
-            <Bell size={22} color="#1e293b" />
+            <Ionicons
+              size={22}
+              name={
+                theme == "light"
+                  ? "notifications-outline"
+                  : "notifications-sharp"
+              }
+              color={Colors[theme].icon}
+            />
+
             <View style={styles.notificationBadge}>
               <Text style={styles.badgeText}>3</Text>
             </View>
@@ -44,10 +56,11 @@ export default function WelcomeHeader() {
           <Image source={{ uri: userData.avatarUrl }} style={styles.avatar} />
         </View>
       </View>
-    </View>
+    </ThemedView>
   );
 }
 
+const theme = Appearance.getColorScheme() ?? "light";
 const styles = StyleSheet.create({
   container: {
     marginBottom: 20,
@@ -62,18 +75,18 @@ const styles = StyleSheet.create({
   },
   greeting: {
     fontSize: 14,
-    color: "#64748b",
+    color: theme == "light" ? "#64748b" : Colors.dark.textSecondary,
     marginBottom: 4,
   },
   userName: {
     fontSize: 24,
     fontWeight: "700",
-    color: "#1e293b",
+    color: theme == "light" ? "#1e293b" : Colors.dark.text,
     marginBottom: 4,
   },
   userRole: {
     fontSize: 14,
-    color: "#64748b",
+    color: theme == "light" ? "#64748b" : Colors.dark.textSecondary,
   },
   rightSection: {
     flexDirection: "row",

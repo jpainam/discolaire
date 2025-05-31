@@ -1,6 +1,10 @@
-import { Cloud, CloudRain, Sun } from "lucide-react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { CloudRain, Sun } from "lucide-react-native";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Appearance, StyleSheet, View } from "react-native";
+import { Colors } from "~/constants/Colors";
+import { useColorScheme } from "~/hooks/useColorScheme";
+import { ThemedText } from "../ThemedText";
 
 // Mock weather data - in a real app, this would come from a weather API
 const weatherData = {
@@ -13,9 +17,17 @@ const weatherData = {
 
 export default function WeatherInfo() {
   // Function to get the appropriate weather icon based on condition
+  const theme = useColorScheme() ?? "light";
   const getWeatherIcon = () => {
     const condition = weatherData.condition.toLowerCase();
-    if (condition.includes("cloud")) return <Cloud size={28} color="#4361ee" />;
+    if (condition.includes("cloud"))
+      return (
+        <Ionicons
+          name={theme == "light" ? "cloud-outline" : "cloudy"}
+          size={28}
+          color={Colors[theme].icon}
+        />
+      );
     if (condition.includes("rain"))
       return <CloudRain size={28} color="#4361ee" />;
     return <Sun size={28} color="#f59e0b" />;
@@ -26,24 +38,31 @@ export default function WeatherInfo() {
       <View style={styles.weatherContent}>
         <View style={styles.mainInfo}>
           {getWeatherIcon()}
-          <Text style={styles.temperature}>{weatherData.temperature}°</Text>
+          <ThemedText style={styles.temperature}>
+            {weatherData.temperature}°
+          </ThemedText>
         </View>
 
         <View style={styles.weatherDetails}>
-          <Text style={styles.condition}>{weatherData.condition}</Text>
-          <Text style={styles.location}>{weatherData.location}</Text>
-          <Text style={styles.highLow}>
+          <ThemedText style={styles.condition}>
+            {weatherData.condition}
+          </ThemedText>
+          <ThemedText style={styles.location}>
+            {weatherData.location}
+          </ThemedText>
+          <ThemedText style={styles.highLow}>
             H: {weatherData.high}° L: {weatherData.low}°
-          </Text>
+          </ThemedText>
         </View>
       </View>
     </View>
   );
 }
 
+const theme = Appearance.getColorScheme() ?? "light";
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#ffffff",
+    backgroundColor: Colors[theme].cardBackground,
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
@@ -65,7 +84,7 @@ const styles = StyleSheet.create({
   temperature: {
     fontSize: 32,
     fontWeight: "600",
-    color: "#1e293b",
+    color: Colors[theme].text,
     marginLeft: 8,
   },
   weatherDetails: {
@@ -74,16 +93,16 @@ const styles = StyleSheet.create({
   condition: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#1e293b",
+    color: Colors[theme].text,
     marginBottom: 2,
   },
   location: {
     fontSize: 12,
-    color: "#64748b",
+    color: theme == "light" ? "#64748b" : Colors.dark.textSecondary,
     marginBottom: 2,
   },
   highLow: {
     fontSize: 12,
-    color: "#94a3b8",
+    color: theme == "light" ? "#94a3b8" : Colors.dark.textTertiary,
   },
 });

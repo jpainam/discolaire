@@ -1,5 +1,5 @@
-import { StyleSheet, Text } from "react-native";
 import type { TextProps } from "react-native";
+import { StyleSheet, Text } from "react-native";
 
 import { useThemeColor } from "~/hooks/useThemeColor";
 
@@ -36,8 +36,8 @@ export function ThemedText({
 
 const styles = StyleSheet.create({
   default: {
-    fontSize: 16,
-    lineHeight: 24,
+    //fontSize: 16,
+    //lineHeight: 24,
   },
   defaultSemiBold: {
     fontSize: 16,

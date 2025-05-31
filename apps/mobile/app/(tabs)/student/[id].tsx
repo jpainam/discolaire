@@ -1,14 +1,15 @@
 import { Stack, useLocalSearchParams } from "expo-router";
 import {
-  BookOpen,
-  ChevronLeft,
+  BookOpenText,
   CreditCard,
   FileText,
-  User,
+  UserCircle,
+  UserRound,
 } from "lucide-react-native";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
+  Appearance,
   Image,
   ScrollView,
   StyleSheet,
@@ -23,6 +24,7 @@ import StudentFeesTab from "~/components/student/StudentFeesTab";
 import StudentGradesTab from "~/components/student/StudentGradesTab";
 import StudentParentsTab from "~/components/student/StudentParentsTab";
 import StudentTransactionsTab from "~/components/student/StudentTransactionsTab";
+import { Colors } from "~/constants/Colors";
 
 // Define tab types for TypeScript
 type TabType = "info" | "parents" | "grades" | "fees" | "transactions";
@@ -74,18 +76,7 @@ export default function StudentProfileScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
-      <Stack.Screen options={{ headerShown: false }} />
-
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => refreshData()}
-        >
-          <ChevronLeft size={24} color="#ffffff" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Student Profile</Text>
-      </View>
+      {/* <Stack.Screen options={{ headerShown: false }} /> */}
 
       {/* Student Profile Header */}
       <View style={styles.profileHeader}>
@@ -127,7 +118,7 @@ export default function StudentProfileScreen() {
             style={[styles.tab, activeTab === "info" && styles.activeTab]}
             onPress={() => setActiveTab("info")}
           >
-            <User
+            <UserCircle
               size={18}
               color={activeTab === "info" ? "#4361ee" : "#64748b"}
             />
@@ -145,7 +136,7 @@ export default function StudentProfileScreen() {
             style={[styles.tab, activeTab === "parents" && styles.activeTab]}
             onPress={() => setActiveTab("parents")}
           >
-            <User
+            <UserRound
               size={18}
               color={activeTab === "parents" ? "#4361ee" : "#64748b"}
             />
@@ -163,7 +154,7 @@ export default function StudentProfileScreen() {
             style={[styles.tab, activeTab === "grades" && styles.activeTab]}
             onPress={() => setActiveTab("grades")}
           >
-            <BookOpen
+            <BookOpenText
               size={18}
               color={activeTab === "grades" ? "#4361ee" : "#64748b"}
             />
@@ -235,11 +226,11 @@ export default function StudentProfileScreen() {
     </SafeAreaView>
   );
 }
-
+const theme = Appearance.getColorScheme() ?? "light";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8fafc",
+    backgroundColor: Colors[theme].background,
   },
   notFoundContainer: {
     flex: 1,
@@ -251,23 +242,9 @@ const styles = StyleSheet.create({
     color: "#64748b",
     fontWeight: "500",
   },
-  header: {
-    backgroundColor: "#4361ee",
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  backButton: {
-    marginRight: 16,
-  },
-  headerTitle: {
-    color: "#ffffff",
-    fontSize: 18,
-    fontWeight: "600",
-  },
+
   profileHeader: {
-    backgroundColor: "#ffffff",
+    backgroundColor: "#fff",
     padding: 20,
     flexDirection: "row",
     alignItems: "center",

@@ -36,6 +36,7 @@ export default function RootLayout() {
               name="notifications"
               options={{ headerShown: false }}
             />
+            <Stack.Screen name="staff" options={{ headerShown: false }} />
             <Stack.Screen name="+not-found" />
           </Stack>
           <StatusBar style="auto" />

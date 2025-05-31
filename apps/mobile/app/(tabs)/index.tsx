@@ -1,6 +1,11 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
+import {
+  Appearance,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import AcademicProgress from "~/components/home/AcademicProgress";
@@ -11,6 +16,7 @@ import TodaySchedule from "~/components/home/TodaySchedule";
 import UpcomingEvents from "~/components/home/UpcomingEvents";
 import WeatherInfo from "~/components/home/WeatherInfo";
 import WelcomeHeader from "~/components/home/WelcomeHeader";
+import { Colors } from "~/constants/Colors";
 
 export default function HomePage() {
   const insets = useSafeAreaInsets();
@@ -26,7 +32,7 @@ export default function HomePage() {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      <StatusBar style="dark" />
+      {/* <StatusBar style="dark" /> */}
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -57,10 +63,11 @@ export default function HomePage() {
   );
 }
 
+const theme = Appearance.getColorScheme() ?? "light";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8fafc",
+    backgroundColor: Colors[theme].background,
   },
   scrollContent: {
     padding: 16,

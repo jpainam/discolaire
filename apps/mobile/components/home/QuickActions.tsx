@@ -9,7 +9,16 @@ import {
   UserPlus,
 } from "lucide-react-native";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Appearance,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Colors } from "~/constants/Colors";
+import { ThemedText } from "../ThemedText";
+import { ThemedView } from "../ThemedView";
 
 const quickActions = [
   { id: 1, title: "Attendance", icon: CheckSquare, color: "#4361ee" },
@@ -24,7 +33,7 @@ const quickActions = [
 
 export default function QuickActions() {
   return (
-    <View style={styles.container}>
+    <ThemedView style={styles.container}>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Quick Actions</Text>
       </View>
@@ -44,17 +53,18 @@ export default function QuickActions() {
             >
               <action.icon size={20} color={action.color} />
             </View>
-            <Text style={styles.actionTitle}>{action.title}</Text>
+            <ThemedText style={styles.actionTitle}>{action.title}</ThemedText>
           </TouchableOpacity>
         ))}
       </View>
-    </View>
+    </ThemedView>
   );
 }
 
+const theme = Appearance.getColorScheme() ?? "light";
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#ffffff",
+    backgroundColor: Colors[theme].cardBackground,
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
@@ -70,7 +80,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#1e293b",
+    color: Colors[theme].text,
   },
   actionsGrid: {
     flexDirection: "row",
