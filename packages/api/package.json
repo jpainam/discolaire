@@ -31,7 +31,7 @@
     "@repo/validators": "workspace:*",
     "@t3-oss/env-nextjs": "^0.13.6",
     "@trpc/server": "catalog:",
-    "@unkey/ratelimit": "^0.5.5",
+    "@unkey/ratelimit": "^2.0.0",
     "bullmq": "^5.53.1",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
