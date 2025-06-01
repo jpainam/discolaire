@@ -23,7 +23,7 @@ export default function ClassroomStudentsList({
   classroomId: string;
 }) {
   const { data: students, isPending } = useQuery(
-    trpc.classroom.students.queryOptions(classroomId)
+    trpc.classroom.students.queryOptions(classroomId),
   );
 
   if (isPending) {

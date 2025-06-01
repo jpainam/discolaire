@@ -40,7 +40,7 @@ export default function ClassroomDetailsScreen() {
   const [activeTab, setActiveTab] = useState<TabName>("students");
 
   const { data: classroom, isPending } = useQuery(
-    trpc.classroom.get.queryOptions(id)
+    trpc.classroom.get.queryOptions(id),
   );
 
   if (isPending) {
