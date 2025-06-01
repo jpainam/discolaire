@@ -23,17 +23,17 @@
     "@repo/typescript-config": "workspace:*",
     "husky": "^9.1.7",
     "prettier": "^3.5.3",
-    "turbo": "^2.5.2",
+    "turbo": "^2.5.4",
     "typescript": "catalog:"
   },
-  "packageManager": "pnpm@10.10.0",
+  "packageManager": "pnpm@10.11.0",
   "pnpm": {
     "onlyBuiltDependencies": [
       "bcrypt"
     ]
   },
   "engines": {
-    "node": ">=22.15.0"
+    "node": ">=22.16.0"
   },
   "prisma": {
     "schema": "packages/db/prisma/schema",
