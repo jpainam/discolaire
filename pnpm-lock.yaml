@@ -1064,8 +1064,8 @@ importers:
   packages/notification:
     dependencies:
       '@novu/api':
-        specifier: ^0.7.0
-        version: 0.7.0(zod@3.25.45)
+        specifier: ^1.2.0
+        version: 1.2.0(zod@3.25.45)
       '@repo/db':
         specifier: workspace:*
         version: link:../db
@@ -2928,8 +2928,8 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
-  '@novu/api@0.7.0':
-    resolution: {integrity: sha512-jY3I4ifIj/pVUWQnjofKp1govvqbEd65qgqvtqxAHB9vMTVe60uR37p1qY+cnCMQYhBscytpbk2Ku/VwfR2zBg==}
+  '@novu/api@1.2.0':
+    resolution: {integrity: sha512-jqXXd4SnDZaO76Aw8XLxmUvr34e/XopuOuhq7/y0EW88I2ihctkLXxKbV9ompz5iMxd7lSpKp8pexZl8ydmJ1g==}
     hasBin: true
     peerDependencies:
       '@modelcontextprotocol/sdk': '>=1.5.0 <1.10.0'
@@ -13620,7 +13620,7 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
-  '@novu/api@0.7.0(zod@3.25.45)':
+  '@novu/api@1.2.0(zod@3.25.45)':
     dependencies:
       zod: 3.25.45
 
