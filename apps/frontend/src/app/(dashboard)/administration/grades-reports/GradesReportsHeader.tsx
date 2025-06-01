@@ -12,14 +12,14 @@ export function GradesReportsHeader() {
   const router = useRouter();
   const { createQueryString } = useCreateQueryString();
   return (
-    <div className="w-full border-b px-4 py-2 flex flex-row gap-8 items-center">
+    <div className="w-full border-b px-4 flex flex-row gap-8 items-center">
       <div className="flex flex-row gap-2 items-center">
         <Label>{t("classrooms")}</Label>
         <ClassroomSelector
           className="w-[300px]"
           onChange={(val) => {
             router.push(
-              `/administration/grades-reports?${createQueryString({ classroom: val })}`,
+              `/administration/grades-reports?${createQueryString({ classroom: val })}`
             );
           }}
         />
@@ -30,7 +30,7 @@ export function GradesReportsHeader() {
           className="w-[300px]"
           onChange={(val) => {
             router.push(
-              `/administration/grades-reports?${createQueryString({ classroom: val })}`,
+              `/administration/grades-reports?${createQueryString({ classroom: val })}`
             );
           }}
         />

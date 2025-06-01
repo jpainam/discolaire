@@ -62,7 +62,7 @@ export const createTRPCContext = async (opts: {
     db,
     ipAddress: opts.headers.get("x-forwarded-for") ?? "127.0.0.1",
     userAgent: opts.headers.get("user-agent") ?? "desktop",
-    schoolYearId, // TODO: remove hardcoded value
+    schoolYearId: schoolYearId, // TODO: remove hardcoded value
     token: authToken,
   };
 };

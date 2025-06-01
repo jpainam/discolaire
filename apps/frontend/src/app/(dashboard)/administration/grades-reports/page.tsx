@@ -17,6 +17,7 @@ import {
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { GradeAppreciationTable } from "./grade-options/GradeAppreciationTable";
+import { GradesReportsHeader } from "./GradesReportsHeader";
 import { GradeReportSettings } from "./settings/GradeReportSettings";
 
 export default async function Page() {
@@ -25,7 +26,7 @@ export default async function Page() {
   return (
     <Tabs defaultValue="tab-1">
       <ScrollArea>
-        <TabsList className="w-full justify-start text-foreground mb-3 h-auto gap-2 rounded-none border-b bg-transparent px-0 py-1">
+        <TabsList className="w-full justify-start text-foreground h-auto gap-2 rounded-none border-b bg-transparent px-0 py-1">
           <TabsTrigger
             value="tab-1"
             className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
@@ -108,6 +109,7 @@ export default async function Page() {
         </p>
       </TabsContent>
       <TabsContent value="tab-2">
+        <GradesReportsHeader />
         <p className="text-muted-foreground pt-1 text-center text-xs">
           Content for Tab 2
         </p>

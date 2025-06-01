@@ -7,7 +7,9 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { ClassroomSearchResult } from "~/components/ClassroomSearchResult";
+import ClassroomCard from "~/components/classroom/ClassroomCard";
+import ClassroomFilterBar from "~/components/classroom/ClassroomFilterBar";
+
 import { ThemedText } from "~/components/ThemedText";
 import { ThemedView } from "~/components/ThemedView";
 import { Colors } from "~/constants/Colors";
@@ -17,30 +19,43 @@ import { useClassroomFilterStore } from "~/stores/classroom";
 import { trpc } from "~/utils/api";
 
 export default function Screen() {
-  const { data, isPending, isRefetching, refetch } = useQuery(
-    trpc.classroom.all.queryOptions(),
-  );
-  const { query, setQuery } = useClassroomFilterStore();
+  const { data, isPending, isRefetching, refetch } = useQuery({
+    ...trpc.classroom.all.queryOptions(),
+    staleTime: Infinity,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    enabled: true, // or false if you want full control
+  });
+  const { query, setQuery, setCycle, setSection, section, cycle } =
+    useClassroomFilterStore();
   const theme = useColorScheme() ?? "light";
   const borderColor = useThemeColor({}, "border");
   const [filteredData, setFilteredData] = useState(data);
   useEffect(() => {
-    return () => setQuery(""); // Clear on unmount
+    return () => {
+      setQuery("");
+      setCycle("");
+      setSection("");
+    }; // Clear on unmount
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (!data) return;
-    if (query.trim() === "") {
+    if (query.trim() === "" && !cycle && !section) {
       setFilteredData(data);
       return;
     }
     const lowerSearch = query.toLowerCase();
-    const filtered = data.filter((classroom) =>
-      classroom.name.toLowerCase().includes(lowerSearch),
-    );
+    const filtered = data.filter((classroom) => {
+      return (
+        classroom.name.toLowerCase().includes(lowerSearch) &&
+        (cycle ? classroom.cycleId === cycle : true) &&
+        (section ? classroom.sectionId === section : true)
+      );
+    });
     setFilteredData(filtered);
-  }, [data, query]);
+  }, [data, query, cycle, section]);
 
   return (
     <View>
@@ -53,7 +68,12 @@ export default function Screen() {
         contentInsetAdjustmentBehavior="automatic"
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
-        contentContainerStyle={{ paddingBottom: 60 }} // Adjust based on your tab bar height
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingHorizontal: 16,
+          paddingVertical: 2,
+          paddingBottom: 60,
+        }}
         ItemSeparatorComponent={() => (
           <ThemedView
             style={{
@@ -73,8 +93,11 @@ export default function Screen() {
             </ThemedView>
           );
         }}
+        ListHeaderComponent={() => {
+          return <ClassroomFilterBar />;
+        }}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => <ClassroomSearchResult classroom={item} />}
+        renderItem={({ item }) => <ClassroomCard classroom={item} />}
       />
     </View>
   );
