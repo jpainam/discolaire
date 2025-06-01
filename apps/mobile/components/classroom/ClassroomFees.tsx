@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 import {
   ActivityIndicator,
-  FlatList,
+  Appearance,
   StyleSheet,
   Text,
   TouchableOpacity,
+  useColorScheme,
   View,
 } from "react-native";
-import { theme } from "~/constants/theme";
+import { Colors } from "~/constants/theme";
 
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -26,8 +27,10 @@ export default function ClassroomFees({
   classroomId: string;
 }) {
   const { data: fees, isPending } = useQuery(
-    trpc.classroom.fees.queryOptions(classroomId),
+    trpc.classroom.fees.queryOptions(classroomId)
   );
+
+  const theme = useColorScheme() ?? "light";
 
   const [totalFees, setTotalFees] = React.useState(0);
   const [paidFees, setPaidFees] = React.useState(0);
@@ -56,7 +59,7 @@ export default function ClassroomFees({
           flex: 1,
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: theme.colors.background,
+          backgroundColor: Colors[theme].colors.background,
         }}
       >
         <ActivityIndicator size={"large"} />
@@ -67,11 +70,15 @@ export default function ClassroomFees({
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "paid":
-        return <CheckCircle size={16} color={theme.colors.success[500]} />;
+        return (
+          <CheckCircle size={16} color={Colors[theme].colors.success[500]} />
+        );
       case "pending":
-        return <Clock size={16} color={theme.colors.warning[500]} />;
+        return <Clock size={16} color={Colors[theme].colors.warning[500]} />;
       case "overdue":
-        return <AlertCircle size={16} color={theme.colors.error[500]} />;
+        return (
+          <AlertCircle size={16} color={Colors[theme].colors.error[500]} />
+        );
       default:
         return null;
     }
@@ -93,13 +100,13 @@ export default function ClassroomFees({
   const getStatusColor = (status: string) => {
     switch (status) {
       case "paid":
-        return theme.colors.success[500];
+        return Colors[theme].colors.success[500];
       case "pending":
-        return theme.colors.warning[500];
+        return Colors[theme].colors.warning[500];
       case "overdue":
-        return theme.colors.error[500];
+        return Colors[theme].colors.error[500];
       default:
-        return theme.colors.text.secondary;
+        return Colors[theme].colors.text.secondary;
     }
   };
 
@@ -108,7 +115,7 @@ export default function ClassroomFees({
   }: {
     item: RouterOutputs["classroom"]["fees"][number];
   }) => (
-    <TouchableOpacity style={styles.feeItem}>
+    <TouchableOpacity key={item.id} style={styles.feeItem}>
       <View style={styles.feeDetails}>
         <Text style={styles.feeName}>{item.description}</Text>
         <Text style={styles.feeDate}>
@@ -137,27 +144,34 @@ export default function ClassroomFees({
     <View style={styles.container}>
       <View style={styles.summaryContainer}>
         <View style={styles.summaryCard}>
-          <DollarSign size={20} color={theme.colors.primary[500]} />
+          <DollarSign size={20} color={Colors[theme].colors.primary[500]} />
           <Text style={styles.summaryTitle}>Total Fees</Text>
           <Text style={styles.summaryAmount}>${totalFees.toFixed(2)}</Text>
         </View>
 
         <View style={[styles.summaryCard, styles.paidCard]}>
-          <CheckCircle size={20} color={theme.colors.success[500]} />
+          <CheckCircle size={20} color={Colors[theme].colors.success[500]} />
           <Text style={styles.summaryTitle}>Paid</Text>
           <Text style={styles.summaryAmount}>${paidFees.toFixed(2)}</Text>
         </View>
 
         <View style={[styles.summaryCard, styles.pendingCard]}>
-          <Clock size={20} color={theme.colors.warning[500]} />
+          <Clock size={20} color={Colors[theme].colors.warning[500]} />
           <Text style={styles.summaryTitle}>Pending</Text>
           <Text style={styles.summaryAmount}>${pendingFees.toFixed(2)}</Text>
         </View>
       </View>
 
       <Text style={styles.sectionTitle}>Fee Details</Text>
-
-      <FlatList
+      {fees?.length === 0 && (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>No fees found for this classroom</Text>
+        </View>
+      )}
+      {fees?.map((fee) => {
+        return renderFeeItem({ item: fee });
+      })}
+      {/* <FlatList
         data={fees}
         renderItem={renderFeeItem}
         keyExtractor={(item, index) => `${item.id}-${index}`}
@@ -170,11 +184,12 @@ export default function ClassroomFees({
         }
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
-      />
+      /> */}
     </View>
   );
 }
 
+const theme = Appearance.getColorScheme() ?? "light";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -186,34 +201,34 @@ const styles = StyleSheet.create({
   summaryCard: {
     flex: 1,
     padding: 12,
-    backgroundColor: theme.colors.primary[50],
+    backgroundColor: Colors[theme].colors.primary[50],
     borderRadius: 12,
     marginRight: 8,
     alignItems: "center",
   },
   paidCard: {
-    backgroundColor: theme.colors.success[50],
+    backgroundColor: Colors[theme].colors.success[50],
   },
   pendingCard: {
-    backgroundColor: theme.colors.warning[50],
+    backgroundColor: Colors[theme].colors.warning[50],
     marginRight: 0,
   },
   summaryTitle: {
     fontFamily: "Inter-Medium",
     fontSize: 12,
-    color: theme.colors.text.secondary,
+    color: Colors[theme].colors.text.secondary,
     marginTop: 4,
     marginBottom: 4,
   },
   summaryAmount: {
     fontFamily: "Inter-Bold",
     fontSize: 16,
-    color: theme.colors.text.primary,
+    color: Colors[theme].colors.text.primary,
   },
   sectionTitle: {
     fontFamily: "Inter-SemiBold",
     fontSize: 16,
-    color: theme.colors.text.primary,
+    color: Colors[theme].colors.text.primary,
     marginBottom: 12,
   },
   feeItem: {
@@ -221,11 +236,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: 16,
-    backgroundColor: theme.colors.background,
+    backgroundColor: Colors[theme].colors.background,
     borderRadius: 12,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: theme.colors.neutral[200],
+    borderColor: Colors[theme].colors.neutral[200],
   },
   feeDetails: {
     flex: 1,
@@ -233,13 +248,13 @@ const styles = StyleSheet.create({
   feeName: {
     fontFamily: "Inter-SemiBold",
     fontSize: 15,
-    color: theme.colors.text.primary,
+    color: Colors[theme].colors.text.primary,
     marginBottom: 4,
   },
   feeDate: {
     fontFamily: "Inter-Regular",
     fontSize: 13,
-    color: theme.colors.text.tertiary,
+    color: Colors[theme].colors.text.tertiary,
   },
   feeAmount: {
     alignItems: "flex-end",
@@ -247,7 +262,7 @@ const styles = StyleSheet.create({
   amountText: {
     fontFamily: "Inter-SemiBold",
     fontSize: 16,
-    color: theme.colors.text.primary,
+    color: Colors[theme].colors.text.primary,
     marginBottom: 4,
   },
   statusContainer: {
@@ -270,6 +285,6 @@ const styles = StyleSheet.create({
   emptyText: {
     fontFamily: "Inter-Regular",
     fontSize: 14,
-    color: theme.colors.text.secondary,
+    color: Colors[theme].colors.text.secondary,
   },
 });

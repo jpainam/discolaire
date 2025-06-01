@@ -1,16 +1,18 @@
 import React from "react";
 import {
   ActivityIndicator,
-  FlatList,
+  Appearance,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { theme } from "~/constants/theme";
+import { Colors } from "~/constants/theme";
 
 import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "expo-router";
 import { ChevronRight } from "lucide-react-native";
+
 import { getFullName } from "~/utils";
 import type { RouterOutputs } from "~/utils/api";
 import { trpc } from "~/utils/api";
@@ -23,8 +25,10 @@ export default function ClassroomStudentsList({
   classroomId: string;
 }) {
   const { data: students, isPending } = useQuery(
-    trpc.classroom.students.queryOptions(classroomId),
+    trpc.classroom.students.queryOptions(classroomId)
   );
+
+  const router = useRouter();
 
   if (isPending) {
     return (
@@ -33,7 +37,7 @@ export default function ClassroomStudentsList({
           flex: 1,
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: theme.colors.background,
+          backgroundColor: Colors[theme].colors.background,
         }}
       >
         <ActivityIndicator size={"large"} />
@@ -46,12 +50,18 @@ export default function ClassroomStudentsList({
   }: {
     item: RouterOutputs["classroom"]["students"][number];
   }) => (
-    <TouchableOpacity style={styles.studentCard}>
+    <TouchableOpacity
+      onPress={() => {
+        router.push(`/student/${item.id}`);
+      }}
+      key={item.id}
+      style={styles.studentCard}
+    >
       <View style={styles.studentInfo}>
         <Avatar imageUrl={item.user?.avatar} style={styles.avatar} />
         <View style={styles.studentDetails}>
           <Text style={styles.studentName}>{getFullName(item)}</Text>
-          <Text style={styles.studentId}>ID: {item.id}</Text>
+          <Text style={styles.studentId}>ID: {item.registrationNumber}</Text>
         </View>
       </View>
       {/* Remplacer item.id.lenght par la moyenne de l'eleve */}
@@ -90,13 +100,27 @@ export default function ClassroomStudentsList({
         <Text style={styles.attendanceText}>{85}%</Text>
       </View>
 
-      <ChevronRight size={20} color={theme.colors.neutral[400]} />
+      <ChevronRight size={20} color={Colors[theme].colors.neutral[400]} />
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <FlatList
+      <View style={styles.header}>
+        <Text style={styles.headerText}>
+          {students?.length} student{students?.length !== 1 ? "s" : ""}
+        </Text>
+      </View>
+      {students?.length == 0 ? (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>No students in this classroom</Text>
+        </View>
+      ) : (
+        students?.map((student) => {
+          return renderStudent({ item: student });
+        })
+      )}
+      {/* <FlatList
         data={students}
         renderItem={renderStudent}
         keyExtractor={(item) => item.id}
@@ -113,11 +137,12 @@ export default function ClassroomStudentsList({
           </View>
         }
         showsVerticalScrollIndicator={false}
-      />
+      /> */}
     </View>
   );
 }
 
+const theme = Appearance.getColorScheme() ?? "light";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -131,17 +156,17 @@ const styles = StyleSheet.create({
   headerText: {
     fontFamily: "Inter-Medium",
     fontSize: 14,
-    color: theme.colors.text.secondary,
+    color: Colors[theme].colors.text.secondary,
   },
   studentCard: {
     flexDirection: "row",
     alignItems: "center",
     padding: 12,
-    backgroundColor: theme.colors.background,
+    backgroundColor: Colors[theme].colors.background,
     borderRadius: 12,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: theme.colors.neutral[200],
+    borderColor: Colors[theme].colors.neutral[200],
   },
   studentInfo: {
     flex: 1,
@@ -160,13 +185,13 @@ const styles = StyleSheet.create({
   studentName: {
     fontFamily: "Inter-SemiBold",
     fontSize: 16,
-    color: theme.colors.text.primary,
+    color: Colors[theme].colors.text.primary,
     marginBottom: 2,
   },
   studentId: {
     fontFamily: "Inter-Regular",
     fontSize: 12,
-    color: theme.colors.text.tertiary,
+    color: Colors[theme].colors.text.tertiary,
   },
   studentGrades: {
     alignItems: "center",
@@ -175,7 +200,7 @@ const styles = StyleSheet.create({
   gradeLabel: {
     fontFamily: "Inter-Regular",
     fontSize: 12,
-    color: theme.colors.text.tertiary,
+    color: Colors[theme].colors.text.tertiary,
     marginBottom: 2,
   },
   gradeValue: {
@@ -183,16 +208,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   excellentGrade: {
-    color: theme.colors.success[500],
+    color: Colors[theme].colors.success[500],
   },
   goodGrade: {
-    color: theme.colors.success[400],
+    color: Colors[theme].colors.success[400],
   },
   averageGrade: {
-    color: theme.colors.warning[500],
+    color: Colors[theme].colors.warning[500],
   },
   lowGrade: {
-    color: theme.colors.error[500],
+    color: Colors[theme].colors.error[500],
   },
   attendanceIndicator: {
     flexDirection: "row",
@@ -206,21 +231,21 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
   excellentAttendance: {
-    backgroundColor: theme.colors.success[500],
+    backgroundColor: Colors[theme].colors.success[500],
   },
   goodAttendance: {
-    backgroundColor: theme.colors.success[400],
+    backgroundColor: Colors[theme].colors.success[400],
   },
   averageAttendance: {
-    backgroundColor: theme.colors.warning[500],
+    backgroundColor: Colors[theme].colors.warning[500],
   },
   poorAttendance: {
-    backgroundColor: theme.colors.error[500],
+    backgroundColor: Colors[theme].colors.error[500],
   },
   attendanceText: {
     fontFamily: "Inter-Regular",
     fontSize: 12,
-    color: theme.colors.text.secondary,
+    color: Colors[theme].colors.text.secondary,
   },
   emptyContainer: {
     padding: 24,
@@ -229,6 +254,6 @@ const styles = StyleSheet.create({
   emptyText: {
     fontFamily: "Inter-Regular",
     fontSize: 14,
-    color: theme.colors.text.secondary,
+    color: Colors[theme].colors.text.secondary,
   },
 });

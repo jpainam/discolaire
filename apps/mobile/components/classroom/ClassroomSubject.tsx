@@ -1,14 +1,16 @@
-import { theme } from "~/constants/theme";
+import { Colors } from "~/constants/theme";
 
 import { useQuery } from "@tanstack/react-query";
 import { BookOpen, Clock, User } from "lucide-react-native";
 import React from "react";
 import {
   ActivityIndicator,
+  Appearance,
   FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
+  useColorScheme,
   View,
 } from "react-native";
 import type { RouterOutputs } from "~/utils/api";
@@ -21,7 +23,7 @@ export default function ClassroomSubjects({
   classroomId: string;
 }) {
   const { data: subjects, isPending } = useQuery(
-    trpc.classroom.subjects.queryOptions(classroomId),
+    trpc.classroom.subjects.queryOptions(classroomId)
   );
 
   const renderSubjectItem = ({
@@ -44,18 +46,21 @@ export default function ClassroomSubjects({
 
         <View style={styles.subjectDetails}>
           <View style={styles.detailItem}>
-            <User size={14} color={theme.colors.text.tertiary} />
+            <User size={14} color={Colors[theme].colors.text.tertiary} />
             <Text style={styles.detailText}>{item.teacher?.lastName}</Text>
           </View>
 
           <View style={styles.detailItem}>
-            <Clock size={14} color={theme.colors.text.tertiary} />
+            <Clock size={14} color={Colors[theme].colors.text.tertiary} />
             <Text style={styles.detailText}>{item.coefficient} hrs/week</Text>
           </View>
         </View>
       </View>
     </TouchableOpacity>
   );
+
+  const theme = useColorScheme() ?? "light";
+  const colors = Colors[theme].colors;
 
   if (isPending) {
     return (
@@ -64,7 +69,7 @@ export default function ClassroomSubjects({
           flex: 1,
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: theme.colors.background,
+          backgroundColor: colors.background,
         }}
       >
         <ActivityIndicator size={"large"} />
@@ -98,6 +103,7 @@ export default function ClassroomSubjects({
   );
 }
 
+const theme = Appearance.getColorScheme() ?? "light";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -105,18 +111,18 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontFamily: "Inter-SemiBold",
     fontSize: 16,
-    color: theme.colors.text.primary,
+    color: Colors[theme].colors.text.primary,
     marginBottom: 12,
   },
   subjectItem: {
     flexDirection: "row",
     alignItems: "center",
     padding: 16,
-    backgroundColor: theme.colors.background,
+    backgroundColor: Colors[theme].colors.background,
     borderRadius: 12,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: theme.colors.neutral[200],
+    borderColor: Colors[theme].colors.neutral[200],
   },
   subjectIconContainer: {
     width: 40,
@@ -132,7 +138,7 @@ const styles = StyleSheet.create({
   subjectName: {
     fontFamily: "Inter-SemiBold",
     fontSize: 16,
-    color: theme.colors.text.primary,
+    color: Colors[theme].colors.text.primary,
     marginBottom: 6,
   },
   subjectDetails: {
@@ -147,7 +153,7 @@ const styles = StyleSheet.create({
   detailText: {
     fontFamily: "Inter-Regular",
     fontSize: 12,
-    color: theme.colors.text.tertiary,
+    color: Colors[theme].colors.text.tertiary,
     marginLeft: 4,
   },
   listContent: {
@@ -161,6 +167,6 @@ const styles = StyleSheet.create({
   emptyText: {
     fontFamily: "Inter-Regular",
     fontSize: 14,
-    color: theme.colors.text.secondary,
+    color: Colors[theme].colors.text.secondary,
   },
 });

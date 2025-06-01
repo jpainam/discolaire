@@ -1,13 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import {
+  Appearance,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { theme as t2 } from "~/constants/theme";
+import { Colors } from "~/constants/theme";
 import { useClassroomFilterStore } from "~/stores/classroom";
 import { trpc } from "~/utils/api";
 
@@ -91,6 +92,7 @@ export default function ClassroomFilterBar() {
   );
 }
 
+const theme = Appearance.getColorScheme() ?? "light";
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
@@ -109,7 +111,7 @@ const styles = StyleSheet.create({
   filterText: {
     fontFamily: "Inter-Medium",
     fontSize: 14,
-    color: t2.colors.text.secondary,
+    color: Colors[theme].colors.text.secondary,
     marginLeft: 6,
   },
   filtersContainer: {
@@ -121,28 +123,28 @@ const styles = StyleSheet.create({
   filterLabel: {
     fontFamily: "Inter-Medium",
     fontSize: 14,
-    color: t2.colors.text.secondary,
+    color: Colors[theme].colors.text.secondary,
     marginBottom: 8,
   },
   filterOptions: {
     flexDirection: "row",
   },
   filterOption: {
-    backgroundColor: t2.colors.neutral[100],
+    backgroundColor: Colors[theme].colors.neutral[100],
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
     marginRight: 8,
   },
   selectedOption: {
-    backgroundColor: t2.colors.primary[500],
+    backgroundColor: Colors[theme].colors.primary[500],
   },
   optionText: {
     fontFamily: "Inter-Medium",
     fontSize: 13,
-    color: t2.colors.text.secondary,
+    color: Colors[theme].colors.text.secondary,
   },
   selectedOptionText: {
-    color: t2.colors.background,
+    color: Colors[theme].colors.background,
   },
 });

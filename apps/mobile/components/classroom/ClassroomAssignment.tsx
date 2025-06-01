@@ -1,15 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-import { theme } from "~/constants/theme";
+import { Colors } from "~/constants/theme";
 
 import { useQuery } from "@tanstack/react-query";
 import { Calendar, Check, ClipboardList, Clock, X } from "lucide-react-native";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
+  Appearance,
   FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
+  useColorScheme,
   View,
 } from "react-native";
 import type { RouterOutputs } from "~/utils/api";
@@ -22,11 +24,13 @@ export default function ClassroomAssignments({
   classroomId: string;
 }) {
   const { data: assignments, isPending } = useQuery(
-    trpc.classroom.assignments.queryOptions(classroomId),
+    trpc.classroom.assignments.queryOptions(classroomId)
   );
   const [filter, setFilter] = useState<
     "all" | "upcoming" | "completed" | "past-due"
   >("all");
+
+  const theme = useColorScheme() ?? "light";
   if (isPending) {
     return (
       <ThemedView
@@ -34,7 +38,7 @@ export default function ClassroomAssignments({
           flex: 1,
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: theme.colors.background,
+          backgroundColor: Colors[theme].colors.background,
         }}
       >
         <ActivityIndicator size={"large"} />
@@ -92,7 +96,7 @@ export default function ClassroomAssignments({
 
           <View style={styles.assignmentDetails}>
             <View style={styles.detailItem}>
-              <Calendar size={14} color={theme.colors.text.tertiary} />
+              <Calendar size={14} color={Colors[theme].colors.text.tertiary} />
               <Text style={styles.detailText}>
                 Due: {dueDate.toLocaleDateString()}
               </Text>
@@ -101,11 +105,11 @@ export default function ClassroomAssignments({
             <View style={styles.statusContainer}>
               {item.dueDate < today ? (
                 <View style={styles.statusWrapper}>
-                  <Check size={14} color={theme.colors.success[500]} />
+                  <Check size={14} color={Colors[theme].colors.success[500]} />
                   <Text
                     style={[
                       styles.statusText,
-                      { color: theme.colors.success[500] },
+                      { color: Colors[theme].colors.success[500] },
                     ]}
                   >
                     Completed
@@ -113,11 +117,11 @@ export default function ClassroomAssignments({
                 </View>
               ) : isPastDue ? (
                 <View style={styles.statusWrapper}>
-                  <X size={14} color={theme.colors.error[500]} />
+                  <X size={14} color={Colors[theme].colors.error[500]} />
                   <Text
                     style={[
                       styles.statusText,
-                      { color: theme.colors.error[500] },
+                      { color: Colors[theme].colors.error[500] },
                     ]}
                   >
                     Past Due
@@ -125,11 +129,11 @@ export default function ClassroomAssignments({
                 </View>
               ) : (
                 <View style={styles.statusWrapper}>
-                  <Clock size={14} color={theme.colors.warning[500]} />
+                  <Clock size={14} color={Colors[theme].colors.warning[500]} />
                   <Text
                     style={[
                       styles.statusText,
-                      { color: theme.colors.warning[500] },
+                      { color: Colors[theme].colors.warning[500] },
                     ]}
                   >
                     Pending
@@ -237,6 +241,7 @@ export default function ClassroomAssignments({
   );
 }
 
+const theme = Appearance.getColorScheme() ?? "light";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -250,34 +255,34 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 16,
     marginRight: 8,
-    backgroundColor: theme.colors.neutral[100],
+    backgroundColor: Colors[theme].colors.neutral[100],
   },
   activeFilterButton: {
-    backgroundColor: theme.colors.primary[500],
+    backgroundColor: Colors[theme].colors.primary[500],
   },
   filterText: {
     fontFamily: "Inter-Medium",
     fontSize: 12,
-    color: theme.colors.text.secondary,
+    color: Colors[theme].colors.text.secondary,
   },
   activeFilterText: {
-    color: theme.colors.background,
+    color: Colors[theme].colors.background,
   },
   sectionTitle: {
     fontFamily: "Inter-SemiBold",
     fontSize: 16,
-    color: theme.colors.text.primary,
+    color: Colors[theme].colors.text.primary,
     marginBottom: 12,
   },
   assignmentItem: {
     flexDirection: "row",
     alignItems: "flex-start",
     padding: 16,
-    backgroundColor: theme.colors.background,
+    backgroundColor: Colors[theme].colors.background,
     borderRadius: 12,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: theme.colors.neutral[200],
+    borderColor: Colors[theme].colors.neutral[200],
   },
   assignmentIconContainer: {
     width: 40,
@@ -293,13 +298,13 @@ const styles = StyleSheet.create({
   assignmentName: {
     fontFamily: "Inter-SemiBold",
     fontSize: 16,
-    color: theme.colors.text.primary,
+    color: Colors[theme].colors.text.primary,
     marginBottom: 2,
   },
   subjectName: {
     fontFamily: "Inter-Regular",
     fontSize: 14,
-    color: theme.colors.text.secondary,
+    color: Colors[theme].colors.text.secondary,
     marginBottom: 8,
   },
   assignmentDetails: {
@@ -314,7 +319,7 @@ const styles = StyleSheet.create({
   detailText: {
     fontFamily: "Inter-Regular",
     fontSize: 12,
-    color: theme.colors.text.tertiary,
+    color: Colors[theme].colors.text.tertiary,
     marginLeft: 4,
   },
   statusContainer: {
@@ -341,6 +346,6 @@ const styles = StyleSheet.create({
   emptyText: {
     fontFamily: "Inter-Regular",
     fontSize: 14,
-    color: theme.colors.text.secondary,
+    color: Colors[theme].colors.text.secondary,
   },
 });

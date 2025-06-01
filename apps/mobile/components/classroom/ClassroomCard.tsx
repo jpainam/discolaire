@@ -7,11 +7,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { theme as t } from "~/constants/theme";
+import { Colors } from "~/constants/theme";
 
 import { Ionicons } from "@expo/vector-icons";
 import type { RouterOutputs } from "@repo/api";
-import { Colors } from "~/constants/Colors";
+import { Colors as Colors2 } from "~/constants/Colors";
 import { useColorScheme } from "~/hooks/useColorScheme";
 import { ThemedText } from "../ThemedText";
 import CapacityIndicator from "./CapacityIndicator";
@@ -54,8 +54,8 @@ export default function ClassroomCard({
       <View style={styles.infoRow}>
         <View style={{ flex: 1 }}>
           <Text style={styles.infoLabel}>Prof. Principal</Text>
-          <ThemedText style={{ fontSize: 14 }}>
-            {classroom.classroomLeader?.lastName ?? "N/A"}
+          <ThemedText numberOfLines={1} style={{ fontSize: 14 }}>
+            {classroom.headTeacher?.lastName ?? "N/A"}
           </ThemedText>
         </View>
         <View style={{ flex: 1 }}>
@@ -68,7 +68,7 @@ export default function ClassroomCard({
           <Ionicons
             name={theme == "light" ? "people" : "people-outline"}
             size={16}
-            color={Colors[theme].icon}
+            color={Colors2[theme].icon}
           />
           <ThemedText style={styles.studentsText}>
             {classroom.size}/{classroom.maxSize} élèves
@@ -84,13 +84,13 @@ export default function ClassroomCard({
 const theme = Appearance.getColorScheme() ?? "light";
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors[theme].cardBackground,
+    backgroundColor: Colors2[theme].cardBackground,
     borderRadius: 16,
     padding: 10,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: Colors[theme].border,
-    shadowColor: t.colors.shadow,
+    borderColor: Colors2[theme].border,
+    shadowColor: Colors[theme].colors.shadow,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 8,
@@ -106,16 +106,16 @@ const styles = StyleSheet.create({
   level: {
     fontFamily: "Inter-Regular",
     fontSize: 14,
-    color: Colors[theme].textSecondary,
+    color: Colors2[theme].textSecondary,
   },
 
   englishBadge: {
-    backgroundColor: t.colors.secondary[50],
+    backgroundColor: Colors[theme].colors.secondary[50],
   },
   sectionText: {
     fontFamily: "Inter-Medium",
     fontSize: 12,
-    color: t.colors.accent[600],
+    color: Colors[theme].colors.accent[600],
   },
   infoRow: {
     flexDirection: "row",
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
 
   infoLabel: {
     fontSize: 12,
-    color: Colors[theme].textSecondary,
+    color: Colors2[theme].textSecondary,
     marginBottom: 2,
   },
 
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   },
   studentsText: {
     fontSize: 13,
-    color: Colors[theme].textSecondary,
+    color: Colors2[theme].textSecondary,
     marginLeft: 4,
   },
 });

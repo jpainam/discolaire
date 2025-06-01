@@ -16,20 +16,18 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useColorScheme,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import CapacityIndicator from "~/components/classroom/CapacityIndicator";
 import ClassroomAssignments from "~/components/classroom/ClassroomAssignment";
 import ClassroomFees from "~/components/classroom/ClassroomFees";
-import {
-  default as ClassroomStudentsList,
-  default as StudentsList,
-} from "~/components/classroom/ClassroomStudentsList";
+import ClassroomStudentsList from "~/components/classroom/ClassroomStudentsList";
 import ClassroomSubjects from "~/components/classroom/ClassroomSubject";
 import { ThemedView } from "~/components/ThemedView";
-import { Colors } from "~/constants/Colors";
-import { theme as t } from "~/constants/theme";
+
+import { Colors as Colors2 } from "~/constants/Colors";
+import { Colors } from "~/constants/theme";
 import { trpc } from "~/utils/api";
 
 type TabName = "students" | "attendance" | "fees" | "subjects" | "assignments";
@@ -40,21 +38,25 @@ export default function ClassroomDetailsScreen() {
   const [activeTab, setActiveTab] = useState<TabName>("students");
 
   const { data: classroom, isPending } = useQuery(
-    trpc.classroom.get.queryOptions(id),
+    trpc.classroom.get.queryOptions(id)
   );
+  const theme = useColorScheme() ?? "light";
+  //const { top } = useSafeAreaInsets();
 
   if (isPending) {
     return (
-      <ThemedView
-        style={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: t.colors.background,
-        }}
-      >
-        <ActivityIndicator size={"large"} />
-      </ThemedView>
+      <SafeAreaView>
+        <ThemedView
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: Colors2[theme].background,
+          }}
+        >
+          <ActivityIndicator size={"large"} />
+        </ThemedView>
+      </SafeAreaView>
     );
   }
   if (!classroom) {
@@ -78,7 +80,7 @@ export default function ClassroomDetailsScreen() {
       case "assignments":
         return <ClassroomAssignments classroomId={classroom.id} />;
       default:
-        return <StudentsList classroomId={classroom.id} />;
+        return <ClassroomStudentsList classroomId={classroom.id} />;
     }
   };
 
@@ -105,9 +107,9 @@ export default function ClassroomDetailsScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.container} edges={["top"]}>
-      <View style={styles.header}>
-        <View style={styles.headerTextContainer}>
+    <SafeAreaView style={styles.container} edges={["left", "right"]}>
+      <ScrollView>
+        <View style={[styles.header]}>
           <Text style={styles.headerTitle}>{classroom.name}</Text>
           <View style={styles.headerSubtitle}>
             <Text style={styles.headerInfo}>{classroom.level.name}</Text>
@@ -115,107 +117,106 @@ export default function ClassroomDetailsScreen() {
             <Text style={styles.headerInfo}>{classroom.section?.name}</Text>
             <Text style={styles.separator}>•</Text>
             <Text style={styles.headerInfo}>{classroom.cycle?.name}</Text>
+            <Text style={styles.separator}>•</Text>
+            <Text style={styles.headerInfo}>{classroom.size} élèves</Text>
           </View>
         </View>
-      </View>
 
-      <View style={styles.infoCards}>
-        <View style={styles.infoCard}>
-          <Text style={styles.infoLabel}>Leader</Text>
-          <Text style={styles.infoValue}>
-            {classroom.classroomLeader?.lastName}
-          </Text>
+        <View style={{ flexDirection: "row", paddingHorizontal: 8, gap: 8 }}>
+          <View style={styles.infoCard}>
+            <Text style={styles.infoLabel}>Leader</Text>
+            <Text style={styles.infoValue} numberOfLines={1}>
+              {classroom.headTeacher?.lastName}
+            </Text>
+          </View>
+          <View style={styles.infoCard}>
+            <Text style={styles.infoLabel}>Advisor</Text>
+            <Text style={styles.infoValue} numberOfLines={1}>
+              {classroom.seniorAdvisor?.lastName ?? "N/A"}
+            </Text>
+          </View>
         </View>
-        <View style={styles.infoCard}>
-          <Text style={styles.infoLabel}>Advisor</Text>
-          <Text style={styles.infoValue}>
-            {classroom.seniorAdvisor?.lastName}
-          </Text>
+        <View style={{ height: 48, marginBottom: 16 }}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingLeft: 16, alignItems: "center" }}
+          >
+            <TabButton
+              name="students"
+              icon={
+                <Users
+                  size={20}
+                  color={
+                    activeTab === "students"
+                      ? Colors[theme].colors.primary[500]
+                      : Colors[theme].colors.neutral[400]
+                  }
+                />
+              }
+              label="Students"
+            />
+            <TabButton
+              name="attendance"
+              icon={
+                <Calendar
+                  size={20}
+                  color={
+                    activeTab === "attendance"
+                      ? Colors[theme].colors.primary[500]
+                      : Colors[theme].colors.neutral[400]
+                  }
+                />
+              }
+              label="Attendance"
+            />
+            <TabButton
+              name="fees"
+              icon={
+                <DollarSign
+                  size={20}
+                  color={
+                    activeTab === "fees"
+                      ? Colors[theme].colors.primary[500]
+                      : Colors[theme].colors.neutral[400]
+                  }
+                />
+              }
+              label="Fees"
+            />
+            <TabButton
+              name="subjects"
+              icon={
+                <BookOpen
+                  size={20}
+                  color={
+                    activeTab === "subjects"
+                      ? Colors[theme].colors.primary[500]
+                      : Colors[theme].colors.neutral[400]
+                  }
+                />
+              }
+              label="Subjects"
+            />
+            <TabButton
+              name="assignments"
+              icon={
+                <ClipboardList
+                  size={20}
+                  color={
+                    activeTab === "assignments"
+                      ? Colors[theme].colors.primary[500]
+                      : Colors[theme].colors.neutral[400]
+                  }
+                />
+              }
+              label="Assignments"
+            />
+          </ScrollView>
         </View>
-        <View style={styles.infoCard}>
-          <Text style={styles.infoLabel}>Capacity</Text>
-          <CapacityIndicator current={classroom.size} max={classroom.maxSize} />
-        </View>
-      </View>
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.tabsContainer}
-      >
-        <TabButton
-          name="students"
-          icon={
-            <Users
-              size={20}
-              color={
-                activeTab === "students"
-                  ? t.colors.primary[500]
-                  : t.colors.neutral[400]
-              }
-            />
-          }
-          label="Students"
-        />
-        <TabButton
-          name="attendance"
-          icon={
-            <Calendar
-              size={20}
-              color={
-                activeTab === "attendance"
-                  ? t.colors.primary[500]
-                  : t.colors.neutral[400]
-              }
-            />
-          }
-          label="Attendance"
-        />
-        <TabButton
-          name="fees"
-          icon={
-            <DollarSign
-              size={20}
-              color={
-                activeTab === "fees"
-                  ? t.colors.primary[500]
-                  : t.colors.neutral[400]
-              }
-            />
-          }
-          label="Fees"
-        />
-        <TabButton
-          name="subjects"
-          icon={
-            <BookOpen
-              size={20}
-              color={
-                activeTab === "subjects"
-                  ? t.colors.primary[500]
-                  : t.colors.neutral[400]
-              }
-            />
-          }
-          label="Subjects"
-        />
-        <TabButton
-          name="assignments"
-          icon={
-            <ClipboardList
-              size={20}
-              color={
-                activeTab === "assignments"
-                  ? t.colors.primary[500]
-                  : t.colors.neutral[400]
-              }
-            />
-          }
-          label="Assignments"
-        />
+        <View style={styles.content}>{renderTabContent()}</View>
       </ScrollView>
-
-      <View style={styles.content}>{renderTabContent()}</View>
     </SafeAreaView>
   );
 }
@@ -224,22 +225,18 @@ const theme = Appearance.getColorScheme() ?? "light";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors[theme].background,
+    backgroundColor: Colors2[theme].background,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    flexDirection: "column",
+    flex: 1,
+    paddingHorizontal: 12,
   },
 
-  headerTextContainer: {
-    flex: 1,
-  },
   headerTitle: {
     fontFamily: "Inter-Bold",
     fontSize: 24,
-    color: t.colors.text.primary,
+    color: Colors[theme].colors.text.primary,
     marginBottom: 4,
   },
   headerSubtitle: {
@@ -249,11 +246,11 @@ const styles = StyleSheet.create({
   headerInfo: {
     fontFamily: "Inter-Regular",
     fontSize: 14,
-    color: t.colors.text.secondary,
+    color: Colors[theme].colors.text.secondary,
   },
   separator: {
     marginHorizontal: 6,
-    color: t.colors.neutral[300],
+    color: Colors[theme].colors.neutral[300],
   },
   infoCards: {
     flexDirection: "row",
@@ -262,47 +259,42 @@ const styles = StyleSheet.create({
   },
   infoCard: {
     flex: 1,
-    backgroundColor: t.colors.neutral[50],
+    backgroundColor: Colors[theme].colors.neutral[100],
     borderRadius: 12,
     padding: 12,
-    marginRight: 8,
   },
   infoLabel: {
     fontFamily: "Inter-Regular",
     fontSize: 12,
-    color: t.colors.text.secondary,
+    color: Colors[theme].colors.text.secondary,
     marginBottom: 4,
   },
   infoValue: {
     fontFamily: "Inter-SemiBold",
     fontSize: 14,
-    color: t.colors.text.primary,
+    color: Colors[theme].colors.text.primary,
   },
-  tabsContainer: {
-    flexDirection: "row",
-    paddingLeft: 16,
-    marginBottom: 16,
-  },
+
   tabButton: {
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 8,
-    paddingHorizontal: 16,
-    marginRight: 8,
-    borderRadius: 20,
-    backgroundColor: t.colors.neutral[100],
+    paddingHorizontal: 10,
+    marginRight: 16,
+    borderRadius: 10,
+    backgroundColor: Colors2[theme].secondaryBackground,
   },
   activeTabButton: {
-    backgroundColor: t.colors.primary[50],
+    backgroundColor: Colors[theme].colors.primary[50],
   },
   tabLabel: {
     fontFamily: "Inter-Medium",
     fontSize: 14,
-    color: t.colors.text.secondary,
+    color: Colors[theme].colors.text.secondary,
     marginLeft: 6,
   },
   activeTabLabel: {
-    color: t.colors.primary[500],
+    color: Colors[theme].colors.primary[500],
   },
   content: {
     flex: 1,

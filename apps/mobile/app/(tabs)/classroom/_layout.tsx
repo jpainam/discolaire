@@ -27,6 +27,16 @@ export default function Layout() {
           },
         }}
       />
+      <Stack.Screen
+        name="[id]"
+        options={{
+          title: "Détails",
+          headerShadowVisible: false,
+          headerStyle: {
+            backgroundColor: Colors[theme].background,
+          },
+        }}
+      />
     </Stack>
   );
 }
