@@ -56,7 +56,7 @@ export function StudentSearchResultCard({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   return (
     <Card key={student.id} className="py-2 shadow-none">
