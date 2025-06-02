@@ -12,7 +12,7 @@ export function StudentHeader() {
   const router = useRouter();
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
   const canReadStudent = useCheckPermission("student", PermissionAction.READ);
   return (
