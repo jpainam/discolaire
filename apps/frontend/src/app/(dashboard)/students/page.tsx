@@ -5,6 +5,7 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
 import { ErrorFallback } from "~/components/error-fallback";
+import { StudentDataTable } from "~/components/students/StudentDataTable";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { StudentHeader } from "./StudentHeader";
 import { StudentSearchPage } from "./StudentSearchPage";
@@ -61,7 +62,11 @@ export default async function Page() {
             </div>
           }
         >
-          <StudentSearchPage />
+          {session.user.profile == "staff" ? (
+            <StudentSearchPage />
+          ) : (
+            <StudentDataTable />
+          )}
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>
