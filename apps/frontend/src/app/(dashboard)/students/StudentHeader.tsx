@@ -18,7 +18,13 @@ export function StudentHeader() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm">
+          <Button
+            onClick={() => {
+              window.open("/api/pdfs/student?format=csv", "_blank");
+            }}
+            variant="outline"
+            size="sm"
+          >
             <Download className="h-4 w-4" />
             {t("Export")}
           </Button>
