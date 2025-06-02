@@ -7,12 +7,10 @@ import { useTRPC } from "~/trpc/react";
 export function StudentStats() {
   const trpc = useTRPC();
   const { data: effectif } = useSuspenseQuery(
-    trpc.enrollment.count.queryOptions({}),
+    trpc.enrollment.count.queryOptions({})
   );
-  const { data: students } = useSuspenseQuery(
-    trpc.student.all.queryOptions({ limit: 50 }),
-  );
-  const repeating = students.filter((student) => student.isRepeating).length;
+
+  //const repeating = students.filter((student) => student.isRepeating).length;
   const { t } = useLocale();
   return (
     <StatsGrid
@@ -74,7 +72,7 @@ export function StudentStats() {
         },
         {
           title: t("repeating"),
-          value: `${repeating}`,
+          value: `${effectif.repeating}`,
           change: {
             value: "-17%",
             trend: "down",
