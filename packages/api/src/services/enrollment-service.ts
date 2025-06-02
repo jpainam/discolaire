@@ -46,6 +46,7 @@ export const enrollmentService = {
     });
     return {
       total,
+      repeating: students.filter((s) => s.enrollments.length > 1).length,
       new: newStudents,
       old: oldStudents,
       male,

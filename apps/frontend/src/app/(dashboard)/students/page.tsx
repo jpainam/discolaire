@@ -5,9 +5,10 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
 import { ErrorFallback } from "~/components/error-fallback";
-import { HydrateClient, prefetch, trpc } from "~/trpc/server";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { StudentHeader } from "./StudentHeader";
 import { StudentSearchPage } from "./StudentSearchPage";
+import { StudentStats } from "./StudentStats";
 
 export default async function Page() {
   const session = await auth();
@@ -15,7 +16,9 @@ export default async function Page() {
     redirect("/auth/login");
   }
 
-  void prefetch(trpc.student.search.queryOptions({}));
+  //void prefetch(trpc.student.search.queryOptions({}));
+
+  batchPrefetch([trpc.enrollment.count.queryOptions({})]);
 
   return (
     <HydrateClient>
@@ -31,7 +34,7 @@ export default async function Page() {
           <StudentHeader />
         </Suspense>
       </ErrorBoundary>
-      {/* {session.user.profile == "staff" && (
+      {session.user.profile == "staff" && (
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense
             key={"student-stats"}
@@ -47,7 +50,7 @@ export default async function Page() {
             <StudentStats />
           </Suspense>
         </ErrorBoundary>
-      )} */}
+      )}
       <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
           fallback={
