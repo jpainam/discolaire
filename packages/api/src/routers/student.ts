@@ -133,6 +133,7 @@ export const studentRouter = createTRPCRouter({
       z.object({
         limit: z.number().optional().default(30),
         query: z.string().optional().default(""),
+        classroomId: z.string().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -143,10 +144,25 @@ export const studentRouter = createTRPCRouter({
         },
         where: {
           schoolId: ctx.schoolId,
+          enrollments: {
+            some: {
+              schoolYearId: ctx.schoolYearId,
+              classroom: {
+                ...(input.classroomId ? { id: input.classroomId } : {}),
+              },
+            },
+          },
           ...whereClause(input.query).where,
         },
         include: {
           formerSchool: true,
+          user: true,
+          enrollments: {
+            include: {
+              classroom: true,
+              schoolYear: true,
+            },
+          },
           religion: true,
           country: true,
         },

@@ -1,14 +1,13 @@
 import { auth } from "@repo/auth";
 import { redirect } from "next/navigation";
-import { StudentDataTable } from "~/components/students/StudentDataTable";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
 import { ErrorFallback } from "~/components/error-fallback";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
-import { StudentPageHeader } from "./StudentPageHeader";
-import { StudentStats } from "./StudentStats";
+import { StudentHeader } from "./StudentHeader";
+import { StudentSearchPage } from "./StudentSearchPage";
 
 export default async function Page() {
   const session = await auth();
@@ -16,7 +15,7 @@ export default async function Page() {
     redirect("/auth/login");
   }
 
-  void prefetch(trpc.student.all.queryOptions());
+  void prefetch(trpc.student.search.queryOptions({}));
 
   return (
     <HydrateClient>
@@ -29,10 +28,10 @@ export default async function Page() {
             </div>
           }
         >
-          <StudentPageHeader />
+          <StudentHeader />
         </Suspense>
       </ErrorBoundary>
-      {session.user.profile == "staff" && (
+      {/* {session.user.profile == "staff" && (
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense
             key={"student-stats"}
@@ -48,10 +47,9 @@ export default async function Page() {
             <StudentStats />
           </Suspense>
         </ErrorBoundary>
-      )}
+      )} */}
       <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
-          key={"student-table"}
           fallback={
             <div className="grid grid-cols-4 gap-4 px-4 py-2">
               {Array.from({ length: 16 }).map((_, i) => (
@@ -60,7 +58,7 @@ export default async function Page() {
             </div>
           }
         >
-          <StudentDataTable />
+          <StudentSearchPage />
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>
