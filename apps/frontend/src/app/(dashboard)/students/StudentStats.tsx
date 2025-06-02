@@ -7,7 +7,7 @@ import { useTRPC } from "~/trpc/react";
 export function StudentStats() {
   const trpc = useTRPC();
   const { data: effectif } = useSuspenseQuery(
-    trpc.enrollment.count.queryOptions({})
+    trpc.enrollment.count.queryOptions({}),
   );
 
   //const repeating = students.filter((student) => student.isRepeating).length;
