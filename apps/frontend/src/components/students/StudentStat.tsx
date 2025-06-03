@@ -97,7 +97,7 @@ function StudentStatCard({
       <div
         className={cn(
           "flex h-12 w-12 items-center justify-center rounded-full",
-          className,
+          className
         )}
       >
         <Icon className="h-6 w-6" />
@@ -106,7 +106,7 @@ function StudentStatCard({
       <span
         className={cn(
           "my-1 rounded-lg bg-secondary px-2 py-1 text-sm text-secondary-foreground",
-          className,
+          className
         )}
       >
         {title}

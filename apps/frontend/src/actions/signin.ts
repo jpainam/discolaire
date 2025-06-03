@@ -12,7 +12,6 @@ import {
 import { db } from "@repo/db";
 
 import { caller } from "~/trpc/server";
-import { routes } from "~/configs/routes";
 
 const signInSchema = z.object({
   username: z.string().min(1),
@@ -21,7 +20,7 @@ const signInSchema = z.object({
 
 export async function signIn(
   previousState: { error: string },
-  formData: FormData,
+  formData: FormData
 ) {
   const parsed = signInSchema.safeParse(Object.fromEntries(formData));
 
@@ -78,9 +77,6 @@ export async function signOut() {
   // }
   await caller.loginActivity.logout();
   (await cookies()).delete("session");
-  //const redirectTo = formData.get("redirect") as string | null;
-  //redirect("/auth/login?redirect=" + redirectTo);
-  redirect(routes.auth.login);
 }
 
 export async function setSchoolYearCookie(schoolYearId: string) {

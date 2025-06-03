@@ -28,6 +28,7 @@ import { useLocale } from "~/i18n";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Button } from "@repo/ui/components/button";
 import { SidebarMenuButton, useSidebar } from "@repo/ui/components/sidebar";
+
 import { signOut } from "~/actions/signin";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
@@ -178,21 +179,13 @@ export function UserNav({ className }: { className?: string }) {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           variant="destructive"
-          className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-          // onClick={() => {
-          //   void signOut({ callbackUrl: "/", redirect: true });
-          // }}
+          onSelect={async () => {
+            await signOut();
+            router.push(`/auth/login`);
+          }}
         >
-          <form action={signOut}>
-            <button
-              className="flex flex-row items-center justify-between"
-              type="submit"
-            >
-              {/* <input type="hidden" name="redirect" value={pathname} /> */}
-              <LogOut className="text-destructive focus:text-destructive mr-2 h-4 w-4 dark:data-[variant=destructive]:focus:bg-destructive/10" />
-              <span>{t("logout")}</span>
-            </button>
-          </form>
+          <LogOut />
+          <span>{t("logout")}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

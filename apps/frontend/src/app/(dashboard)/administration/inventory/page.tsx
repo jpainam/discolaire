@@ -19,7 +19,7 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
 import { InventorySettings } from "~/components/administration/inventory/InventorySettings";
 import { ConsumableUsageDataTable } from "~/components/administration/inventory/movements/ConsumableUsageDataTable";
-import { ConsumableUsageHeader } from "~/components/administration/inventory/movements/ConsumableUsageHeader";
+import { StockMovementHeader } from "~/components/administration/inventory/movements/StockMovementHeader";
 import { ErrorFallback } from "~/components/error-fallback";
 import { getServerTranslations } from "~/i18n/server";
 import {
@@ -67,7 +67,7 @@ export default async function Page() {
                 size={16}
                 aria-hidden="true"
               />
-              {t("inventory")}
+              {t("Articles")}
               <Badge
                 className="bg-primary/15 ms-1.5 min-w-5 px-1"
                 variant="secondary"
@@ -148,7 +148,7 @@ export default async function Page() {
                 </div>
               }
             >
-              <ConsumableUsageHeader />
+              <StockMovementHeader />
             </Suspense>
           </ErrorBoundary>
           <Separator />

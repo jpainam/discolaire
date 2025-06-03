@@ -16,40 +16,46 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { UserSelector } from "~/components/shared/selects/UserSelector";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
-import { InventorySelector } from "./InventorySelector";
+import { ConsumableSelector } from "../ConsumableSelector";
 const schema = z.object({
-  consumableId: z.string().min(1),
+  userId: z.string().min(1),
   quantity: z.coerce.number().min(1).max(1000),
   note: z.string().optional(),
+  consumableId: z.string().min(1),
 });
-export function CreateEditStockMovement({
+
+export function CreateEditStockWithdrawal({
   id,
+  userId,
+  consumableId,
   quantity,
   note,
-  consumableId,
 }: {
-  consumableId?: string;
   id?: string;
+  userId?: string;
+  consumableId?: string;
   quantity?: number;
   note?: string;
 }) {
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      consumableId: consumableId ?? "",
+      userId: userId ?? "",
       quantity: quantity ?? 1,
+      consumableId: consumableId ?? "",
       note: note ?? "",
     },
   });
 
   const trpc = useTRPC();
-  const { t } = useLocale();
+
   const queryClient = useQueryClient();
-  const createMovementMutation = useMutation(
-    trpc.inventory.createStockMovement.mutationOptions({
+  const createConsumableMutation = useMutation(
+    trpc.inventory.createConsumableUsage.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
@@ -58,40 +64,50 @@ export function CreateEditStockMovement({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
-  const updateMovementMutation = useMutation(
-    trpc.inventory.updateStockMovement.mutationOptions({
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.inventory.pathFilter());
-        toast.success(t("updated_successfully"), { id: 0 });
-        closeSheet();
-      },
-      onError: (error) => {
-        toast.error(error.message, { id: 0 });
-      },
-    }),
-  );
+  const { t } = useLocale();
   const handleSubmit = (data: z.infer<typeof schema>) => {
-    toast.loading(t("loading"), { id: 0 });
+    toast.loading(t("Processing..."), { id: 0 });
     const values = {
       consumableId: data.consumableId,
+      userId: data.userId,
       quantity: data.quantity,
-      type: "IN" as const,
       note: data.note,
     };
     if (id) {
-      updateMovementMutation.mutate({ ...values, id });
+      //
     } else {
-      createMovementMutation.mutate(values);
+      createConsumableMutation.mutate(values);
     }
   };
 
   const { closeSheet } = useSheet();
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)}>
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={form.handleSubmit(handleSubmit)}
+      >
         <div className="px-4 flex flex-col gap-6">
+          <FormField
+            control={form.control}
+            name="userId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("user")}</FormLabel>
+                <FormControl>
+                  <UserSelector
+                    defaultValue={field.value}
+                    onChange={(value) => {
+                      field.onChange(value);
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="consumableId"
@@ -99,11 +115,9 @@ export function CreateEditStockMovement({
               <FormItem>
                 <FormLabel>{t("consumable")}</FormLabel>
                 <FormControl>
-                  <InventorySelector
+                  <ConsumableSelector
+                    onChange={field.onChange}
                     defaultValue={field.value}
-                    onChange={(value) => {
-                      field.onChange(value);
-                    }}
                   />
                 </FormControl>
 
@@ -142,13 +156,7 @@ export function CreateEditStockMovement({
             )}
           />
           <div className="grid grid-cols-1 gap-2">
-            <Button
-              isLoading={
-                createMovementMutation.isPending ||
-                updateMovementMutation.isPending
-              }
-              size={"sm"}
-            >
+            <Button isLoading={createConsumableMutation.isPending} size={"sm"}>
               {t("submit")}
             </Button>
             <Button

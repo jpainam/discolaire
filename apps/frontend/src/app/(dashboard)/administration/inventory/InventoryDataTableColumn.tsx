@@ -3,7 +3,7 @@
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
-import { Eye, MinusIcon, Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 
@@ -35,12 +35,9 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CreateEditAssetUsage } from "~/components/administration/inventory/CreateEditAssetUsage";
-import { CreateEditConsumableUsage } from "~/components/administration/inventory/CreateEditConsumableUsage";
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditAsset } from "./CreateEditAsset";
 import { CreateEditConsumable } from "./CreateEditConsumable";
@@ -177,15 +174,14 @@ function ActionCell({
   const { openSheet } = useSheet();
   const confirm = useConfirm();
   const { t } = useLocale();
-  const router = useRouter();
 
   const canDeleteInventory = useCheckPermission(
     "inventory",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateInventory = useCheckPermission(
     "inventory",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -198,7 +194,7 @@ function ActionCell({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const { openModal } = useModal();
 
@@ -211,7 +207,7 @@ function ActionCell({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   //const currentStock = inventory.other.currentStock;
@@ -230,42 +226,6 @@ function ActionCell({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            onSelect={() => {
-              if (inventory.type === "ASSET") {
-                openSheet({
-                  title: t("Stock withdrawal"),
-                  description: inventory.name,
-                  view: <CreateEditAssetUsage assetId={inventory.id} />,
-                });
-              } else {
-                openModal({
-                  title: t("Create a stock movement"),
-                  description:
-                    inventory.name +
-                    " " +
-                    t("Current stock") +
-                    ": " +
-                    inventory.other.currentStock,
-                  view: (
-                    <CreateEditConsumableUsage consumableId={inventory.id} />
-                  ),
-                });
-              }
-            }}
-          >
-            <MinusIcon />
-            {t("Stock withdrawal")}
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onSelect={() => {
-              router.push(`/administration/inventory/${inventory.id}`);
-            }}
-          >
-            <Eye />
-            {t("details")}
-          </DropdownMenuItem>
           {canUpdateInventory && (
             <DropdownMenuItem
               onSelect={() => {

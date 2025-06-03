@@ -3,7 +3,7 @@
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 
@@ -24,11 +24,9 @@ import { useConfirm } from "~/providers/confirm-dialog";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import i18next from "i18next";
-import { CreateEditConsumableUsage } from "~/components/administration/inventory/CreateEditConsumableUsage";
+import { CreateEditStockWithdrawal } from "~/components/administration/inventory/movements/CreateEditStockWithdrawal";
 import FlatBadge from "~/components/FlatBadge";
-import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
 import { InventoryUsageDetail } from "../InventoryUsageDetail";
@@ -68,7 +66,7 @@ export function getColumns({
     {
       accessorKey: "createdAt",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("createdAt")} />
+        <DataTableColumnHeader column={column} title={t("date")} />
       ),
       size: 60,
       cell: ({ row }) => {
@@ -109,15 +107,24 @@ export function getColumns({
       },
     },
     {
-      accessorKey: "note",
+      accessorKey: "quantity",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("description")} />
+        <DataTableColumnHeader column={column} title={t("type")} />
       ),
-      cell: ({ row }) => {
-        const inventory = row.original;
-        return <div className="text-muted-foreground">{inventory.note}</div>;
+      cell: () => {
+        return <FlatBadge variant={"pink"}>{t("IN")}</FlatBadge>;
       },
     },
+    // {
+    //   accessorKey: "note",
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title={t("description")} />
+    //   ),
+    //   cell: ({ row }) => {
+    //     const inventory = row.original;
+    //     return <div className="text-muted-foreground">{inventory.note}</div>;
+    //   },
+    // },
     {
       accessorKey: "user.name",
       header: ({ column }) => (
@@ -135,20 +142,20 @@ export function getColumns({
         );
       },
     },
-    {
-      accessorKey: "createdBy.name",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("created_by")} />
-      ),
-      cell: ({ row }) => {
-        const consumable = row.original;
-        return (
-          <div className="text-muted-foreground">
-            {consumable.createdBy.name}
-          </div>
-        );
-      },
-    },
+    // {
+    //   accessorKey: "createdBy.name",
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title={t("created_by")} />
+    //   ),
+    //   cell: ({ row }) => {
+    //     const consumable = row.original;
+    //     return (
+    //       <div className="text-muted-foreground">
+    //         {consumable.createdBy.name}
+    //       </div>
+    //     );
+    //   },
+    // },
 
     {
       id: "actions",
@@ -170,20 +177,19 @@ function ActionCell({
 }) {
   const confirm = useConfirm();
   const { t } = useLocale();
-  const router = useRouter();
 
   const canDeleteInventory = useCheckPermission(
     "inventory",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateInventory = useCheckPermission(
     "inventory",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
-  const { openModal } = useModal();
+  const { openSheet } = useSheet();
 
   const deleteUsageMutation = useMutation(
     trpc.inventory.deleteUsage.mutationOptions({
@@ -194,7 +200,7 @@ function ActionCell({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   return (
@@ -210,21 +216,13 @@ function ActionCell({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            onSelect={() => {
-              router.push(`/administration/inventory/${inventory.id}`);
-            }}
-          >
-            <Eye />
-            {t("details")}
-          </DropdownMenuItem>
           {canUpdateInventory && (
             <DropdownMenuItem
               onSelect={() => {
-                openModal({
+                openSheet({
                   title: t("Update asset"),
                   view: (
-                    <CreateEditConsumableUsage
+                    <CreateEditStockWithdrawal
                       id={inventory.id}
                       userId={inventory.userId}
                       consumableId={inventory.consumableId}
@@ -273,7 +271,7 @@ function ItemCell({
 }) {
   const consumable = item.consumable;
   const { openSheet } = useSheet();
-  const { t } = useLocale();
+
   if (!consumable) {
     return <div className="text-muted-foreground">-</div>;
   }
@@ -281,7 +279,6 @@ function ItemCell({
   return (
     <Button
       variant="link"
-      className="gap-1 flex line-clamp-1"
       onClick={() => {
         openSheet({
           view: <InventoryUsageDetail item={item} />,
@@ -289,14 +286,6 @@ function ItemCell({
       }}
     >
       <span>{consumable.name}</span>
-
-      <FlatBadge
-        variant={
-          consumable.currentStock < consumable.minStockLevel ? "red" : "green"
-        }
-      >
-        {t("Stock")}: {consumable.currentStock} {consumable.unit.name}
-      </FlatBadge>
     </Button>
   );
 }
