@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import { caller } from "~/trpc/server";
 
 // Sample data for recent grades
 const recentGrades = [
@@ -48,7 +49,33 @@ const recentGrades = [
   },
 ];
 
-export function RecentGradesTable() {
+export async function RecentGradesTable() {
+  const grades = await caller.gradeSheet.getLatestGradesheet({ limit: 5 });
+  const latest: {
+    title: string;
+    classroom: string;
+    minGrade: number;
+    avgGrade: number;
+    maxGrade: number;
+    date: Date;
+  }[] = [];
+  grades.forEach((gradeSheet) => {
+    const subject = gradeSheet.subject.course.name;
+    const classroom = gradeSheet.subject.classroom.name;
+    const minGrade = Math.min(...gradeSheet.grades.map((g) => g.grade ?? 0));
+    const avgGrade =
+      gradeSheet.grades.reduce((sum, g) => sum + (g.grade ?? 0), 0) /
+      gradeSheet.grades.length;
+    const maxGrade = Math.max(...gradeSheet.grades.map((g) => g.grade ?? 0));
+    latest.push({
+      title: `${subject} - ${classroom}`,
+      classroom,
+      minGrade,
+      avgGrade,
+      maxGrade,
+      date: gradeSheet.createdAt,
+    });
+  });
   return (
     <Table>
       <TableHeader>

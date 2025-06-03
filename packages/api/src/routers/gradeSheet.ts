@@ -56,6 +56,7 @@ export const gradeSheetRouter = createTRPCRouter({
           grades: true,
           subject: {
             include: {
+              classroom: true,
               course: true,
             },
           },
