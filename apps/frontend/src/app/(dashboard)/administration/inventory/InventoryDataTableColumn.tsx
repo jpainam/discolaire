@@ -177,11 +177,11 @@ function ActionCell({
 
   const canDeleteInventory = useCheckPermission(
     "inventory",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const canUpdateInventory = useCheckPermission(
     "inventory",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -194,7 +194,7 @@ function ActionCell({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const { openModal } = useModal();
 
@@ -207,7 +207,7 @@ function ActionCell({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   //const currentStock = inventory.other.currentStock;

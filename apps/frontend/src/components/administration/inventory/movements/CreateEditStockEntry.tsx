@@ -59,7 +59,7 @@ export function CreateEditStockEntry({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateMovementMutation = useMutation(
     trpc.inventory.updateStockMovement.mutationOptions({
@@ -71,7 +71,7 @@ export function CreateEditStockEntry({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const handleSubmit = (data: z.infer<typeof schema>) => {
     toast.loading(t("loading"), { id: 0 });

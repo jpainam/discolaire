@@ -43,7 +43,7 @@ export function StockMovementHeader() {
   const { openSheet } = useSheet();
 
   const { data: consumables } = useSuspenseQuery(
-    trpc.inventory.consumables.queryOptions()
+    trpc.inventory.consumables.queryOptions(),
   );
   return (
     <div className="grid md:flex gap-4 px-4 flex-row items-center">
@@ -131,7 +131,7 @@ export function StockMovementHeader() {
             <DropdownMenuItem
               onSelect={() => {
                 toast.warning(
-                  "Cette fonctionnalité n'est pas encore implémentée."
+                  "Cette fonctionnalité n'est pas encore implémentée.",
                 );
               }}
             >
@@ -140,7 +140,7 @@ export function StockMovementHeader() {
             <DropdownMenuItem
               onSelect={() => {
                 toast.warning(
-                  "Cette fonctionnalité n'est pas encore implémentée."
+                  "Cette fonctionnalité n'est pas encore implémentée.",
                 );
               }}
             >

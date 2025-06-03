@@ -26,7 +26,7 @@ export function ConsumableSelector({
   const { t } = useLocale();
   const trpc = useTRPC();
   const { data: inventory } = useSuspenseQuery(
-    trpc.inventory.consumables.queryOptions()
+    trpc.inventory.consumables.queryOptions(),
   );
 
   return (
