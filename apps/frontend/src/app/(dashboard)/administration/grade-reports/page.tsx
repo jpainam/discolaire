@@ -7,18 +7,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@repo/ui/components/tabs";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { Suspense } from "react";
 import { GradeDistributionChart } from "~/components/administration/grade-reports/GradeDistributionChart";
 import { GradeReportGenerator } from "~/components/administration/grade-reports/GradeReportGenerator";
-import { GradeTable } from "~/components/administration/grade-reports/GradeTable";
+import { GradeSheetDataTable } from "~/components/administration/grade-reports/GradeSheetDataTable";
 import { RecentGradesTable } from "~/components/administration/grade-reports/RecentGradesTable";
 import { StudentPerformanceChart } from "~/components/administration/grade-reports/StudentPerformanceChart";
+import { ErrorFallback } from "~/components/error-fallback";
 import { getServerTranslations } from "~/i18n/server";
+import { batchPrefetch, trpc } from "~/trpc/server";
 
 export const metadata: Metadata = {
   title: "Grades Management Dashboard",
@@ -28,14 +33,13 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   const { t } = await getServerTranslations();
+  batchPrefetch([trpc.gradeSheet.all.queryOptions()]);
   return (
     <div className="px-4 py-2">
       <Tabs defaultValue="overview">
         <TabsList>
           <TabsTrigger value="overview">{t("dashboard")}</TabsTrigger>
-          <TabsTrigger value="grades">
-            {t("grades")} & {t("reportcards")}
-          </TabsTrigger>
+          <TabsTrigger value="grades">{t("grades")}</TabsTrigger>
           <TabsTrigger value="reports">{t("reports")}</TabsTrigger>
           <TabsTrigger value="analytics">{t("charts")}</TabsTrigger>
         </TabsList>
@@ -90,17 +94,19 @@ export default async function Page() {
           </div>
         </TabsContent>
         <TabsContent value="grades" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>All Grades</CardTitle>
-              <CardDescription>
-                Comprehensive view of all student grades
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="pt-2">
-              <GradeTable />
-            </CardContent>
-          </Card>
+          <ErrorBoundary errorComponent={ErrorFallback}>
+            <Suspense
+              fallback={
+                <div className="grid grid-cols-3 gap-4">
+                  {Array.from({ length: 12 }).map((_, index) => (
+                    <Skeleton key={index} className="h-48 " />
+                  ))}
+                </div>
+              }
+            >
+              <GradeSheetDataTable />
+            </Suspense>
+          </ErrorBoundary>
         </TabsContent>
         <TabsContent value="reports">
           <Card>

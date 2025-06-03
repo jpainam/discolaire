@@ -167,7 +167,25 @@ export const gradeSheetRouter = createTRPCRouter({
     return gradeSheetService.sucessRate(input);
   }),
   all: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db.course.findMany({
+    return ctx.db.gradeSheet.findMany({
+      where: {
+        subject: {
+          classroom: {
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
+        },
+      },
+      include: {
+        subject: {
+          include: {
+            course: true,
+            teacher: true,
+          },
+        },
+        term: true,
+        grades: true,
+      },
       orderBy: {
         createdAt: "desc",
       },
