@@ -1,5 +1,3 @@
-import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
-
 import {
   Table,
   TableBody,
@@ -8,51 +6,15 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import i18next from "i18next";
+import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 
-// Sample data for recent grades
-const recentGrades = [
-  {
-    student: "Emma Johnson",
-    assignment: "Math Quiz 3",
-    grade: 95,
-    previousGrade: 90,
-    date: "Sep 15, 2023",
-  },
-  {
-    student: "Liam Smith",
-    assignment: "Science Lab Report",
-    grade: 82,
-    previousGrade: 78,
-    date: "Sep 14, 2023",
-  },
-  {
-    student: "Noah Davis",
-    assignment: "English Essay",
-    grade: 68,
-    previousGrade: 65,
-    date: "Sep 14, 2023",
-  },
-  {
-    student: "Ava Taylor",
-    assignment: "Math Quiz 3",
-    grade: 62,
-    previousGrade: 58,
-    date: "Sep 13, 2023",
-  },
-  {
-    student: "Sophia Wilson",
-    assignment: "History Presentation",
-    grade: 93,
-    previousGrade: 91,
-    date: "Sep 12, 2023",
-  },
-];
-
 export async function RecentGradesTable() {
+  const { t } = await getServerTranslations();
   const grades = await caller.gradeSheet.getLatestGradesheet({ limit: 5 });
   const latest: {
-    title: string;
+    subject: string;
     classroom: string;
     minGrade: number;
     avgGrade: number;
@@ -62,13 +24,13 @@ export async function RecentGradesTable() {
   grades.forEach((gradeSheet) => {
     const subject = gradeSheet.subject.course.name;
     const classroom = gradeSheet.subject.classroom.name;
-    const minGrade = Math.min(...gradeSheet.grades.map((g) => g.grade ?? 0));
+    const minGrade = Math.min(...gradeSheet.grades.map((g) => g.grade));
     const avgGrade =
-      gradeSheet.grades.reduce((sum, g) => sum + (g.grade ?? 0), 0) /
+      gradeSheet.grades.reduce((sum, g) => sum + g.grade, 0) /
       gradeSheet.grades.length;
-    const maxGrade = Math.max(...gradeSheet.grades.map((g) => g.grade ?? 0));
+    const maxGrade = Math.max(...gradeSheet.grades.map((g) => g.grade));
     latest.push({
-      title: `${subject} - ${classroom}`,
+      subject: subject,
       classroom,
       minGrade,
       avgGrade,
@@ -77,33 +39,42 @@ export async function RecentGradesTable() {
     });
   });
   return (
-    <Table>
+    <Table className="text-xs">
       <TableHeader>
         <TableRow>
-          <TableHead>Student</TableHead>
-          <TableHead>Assignment</TableHead>
-          <TableHead className="text-right">Grade</TableHead>
-          <TableHead className="text-right">Date</TableHead>
+          <TableHead>{t("subject")}</TableHead>
+          <TableHead>{t("classroom")}</TableHead>
+          <TableHead className="text-right">{t("Min")}</TableHead>
+          <TableHead className="text-right">{t("Avg")}</TableHead>
+          <TableHead className="text-right">{t("Min")}</TableHead>
+          <TableHead className="text-right">{t("date")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {recentGrades.map((grade) => (
-          <TableRow key={`${grade.student}-${grade.assignment}`}>
-            <TableCell className="font-medium">{grade.student}</TableCell>
-            <TableCell>{grade.assignment}</TableCell>
-            <TableCell className="text-right">
-              <div className="flex items-center justify-end">
-                <span>{grade.grade}%</span>
-                {grade.grade > grade.previousGrade ? (
-                  <ArrowUpIcon className="ml-2 h-4 w-4 text-green-500" />
-                ) : grade.grade < grade.previousGrade ? (
-                  <ArrowDownIcon className="ml-2 h-4 w-4 text-red-500" />
-                ) : null}
-              </div>
-            </TableCell>
-            <TableCell className="text-right">{grade.date}</TableCell>
-          </TableRow>
-        ))}
+        {latest.map((g, index) => {
+          return (
+            <TableRow key={index}>
+              <TableCell className="font-medium">{g.classroom}</TableCell>
+              <TableCell>{g.subject}</TableCell>
+              <TableCell className="text-right">
+                {g.minGrade.toFixed(2)}
+              </TableCell>
+              <TableCell className="text-right">
+                {g.avgGrade.toFixed(2)}
+              </TableCell>
+              <TableCell className="text-right">
+                {g.maxGrade.toFixed(2)}
+              </TableCell>
+              <TableCell className="text-right">
+                {g.date.toLocaleDateString(i18next.language, {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </TableCell>
+            </TableRow>
+          );
+        })}
       </TableBody>
     </Table>
   );
