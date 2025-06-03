@@ -39,7 +39,7 @@ export default async function Page() {
           <TabsTrigger value="reports">{t("reports")}</TabsTrigger>
           <TabsTrigger value="analytics">{t("charts")}</TabsTrigger>
         </TabsList>
-        <TabsContent value="overview" className="">
+        <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
             <Card className="lg:col-span-4">
               <CardHeader>

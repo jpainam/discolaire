@@ -104,7 +104,9 @@ export function GradeReportGenerator({
                           value={c.value}
                           onSelect={(currentValue) => {
                             setSelectedClass(
-                              currentValue === selectedClass ? "" : currentValue
+                              currentValue === selectedClass
+                                ? ""
+                                : currentValue,
                             );
                             setOpen(false);
                           }}
@@ -114,7 +116,7 @@ export function GradeReportGenerator({
                               "mr-2 h-4 w-4",
                               selectedClass === c.value
                                 ? "opacity-100"
-                                : "opacity-0"
+                                : "opacity-0",
                             )}
                           />
                           {c.label}
