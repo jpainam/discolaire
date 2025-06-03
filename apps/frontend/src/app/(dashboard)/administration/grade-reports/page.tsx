@@ -17,6 +17,7 @@ import {
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
 import { GradeDistributionChart } from "~/components/administration/grade-reports/GradeDistributionChart";
+import { GradeDistributionBySubject } from "~/components/administration/grade-reports/GradeDistributionChartBySubject";
 import { GradeReportGenerator } from "~/components/administration/grade-reports/GradeReportGenerator";
 import { GradeSheetDataTable } from "~/components/administration/grade-reports/GradeSheetDataTable";
 import { RecentGradesTable } from "~/components/administration/grade-reports/RecentGradesTable";
@@ -47,20 +48,24 @@ export default async function Page() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
             <Card className="lg:col-span-4">
               <CardHeader>
-                <CardTitle>Grade Distribution</CardTitle>
-                <CardDescription>
-                  Distribution of grades across all students
+                <CardTitle>{t("Grade Distribution")}</CardTitle>
+                <CardDescription className="text-xs">
+                  {t("Distribution of grades across all students")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="pl-2">
-                <GradeDistributionChart />
+                <ErrorBoundary errorComponent={ErrorFallback}>
+                  <Suspense fallback={<Skeleton className="h-48" />}>
+                    <GradeDistributionChart />
+                  </Suspense>
+                </ErrorBoundary>
               </CardContent>
             </Card>
             <Card className="lg:col-span-3">
               <CardHeader>
-                <CardTitle>Recent Grades</CardTitle>
-                <CardDescription>
-                  Latest grades entered into the system
+                <CardTitle>{t("Recent Grades")}</CardTitle>
+                <CardDescription className="text-xs">
+                  {t("Latest grades entered into the system")}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -132,9 +137,7 @@ export default async function Page() {
                 <h3 className="mb-4 text-sm font-medium">
                   Grade Distribution by Subject
                 </h3>
-                <div className="h-[300px]">
-                  <GradeDistributionChart bySubject={true} />
-                </div>
+                <GradeDistributionBySubject />
               </div>
               <div>
                 <h3 className="mb-4 text-sm font-medium">Performance Trends</h3>

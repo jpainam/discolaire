@@ -132,7 +132,7 @@ export function fetchGradeSheetColumns({
       size: 60,
       cell: ({ row }) => {
         const numIsAbsent = row.original.grades.filter(
-          (g) => g.isAbsent
+          (g) => g.isAbsent,
         ).length;
         return (
           <div className={cn(numIsAbsent == 0 ? "" : "text-destructive")}>
