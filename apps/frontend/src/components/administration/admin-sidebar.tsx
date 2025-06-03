@@ -66,7 +66,7 @@ export function AdminSidebar({
           },
           {
             title: "grades_and_reports",
-            url: "/administration/grades-reports",
+            url: "/administration/grade-reports",
           },
           // {
           //   title: "directory",
