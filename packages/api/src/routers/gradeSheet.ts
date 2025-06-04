@@ -217,4 +217,38 @@ export const gradeSheetRouter = createTRPCRouter({
         },
       });
     }),
+  distribution: protectedProcedure.query(async ({ ctx }) => {
+    const sheets = await ctx.db.gradeSheet.findMany({
+      where: {
+        term: {
+          schoolYearId: ctx.schoolYearId,
+          schoolId: ctx.schoolId,
+        },
+      },
+      select: { scale: true, grades: true },
+    });
+
+    // 2. Build a 0–20 counter on the server:
+    const counts: Record<number, number> = {};
+    for (let i = 0; i <= 20; i++) counts[i] = 0;
+
+    for (const { scale, grades } of sheets) {
+      for (const { grade } of grades) {
+        let scaled = (grade / scale) * 20;
+        if (scaled < 0) scaled = 0;
+        if (scaled > 20) scaled = 20;
+        const bin = scaled === 20 ? 20 : Math.floor(scaled);
+        const valBin = counts[bin] ?? 0;
+        counts[bin] = valBin + 1;
+      }
+    }
+
+    // 3. Turn it into the array your client expects:
+    return Object.entries(counts)
+      .map(([key, val]) => ({
+        name: key,
+        value: val,
+      }))
+      .sort((a, b) => Number(a.name) - Number(b.name));
+  }),
 });

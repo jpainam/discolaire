@@ -39,36 +39,9 @@ const chartConfig = {
 export function GradeDistributionChart() {
   const { t } = useLocale();
   const trpc = useTRPC();
-  const { data: gradesheets } = useSuspenseQuery(
-    trpc.gradeSheet.all.queryOptions(),
+  const { data: chartData } = useSuspenseQuery(
+    trpc.gradeSheet.distribution.queryOptions()
   );
-
-  const counters: Record<number, number> = {};
-  for (let i = 0; i <= 20; i++) {
-    counters[i] = 0;
-  }
-  for (const entry of gradesheets) {
-    const { scale, grades } = entry;
-    for (const raw of grades) {
-      let scaled = (raw.grade / scale) * 20;
-      if (scaled > 20) {
-        scaled = 20;
-      } else if (scaled < 0) {
-        scaled = 0;
-      }
-      const bin = scaled === 20 ? 20 : Math.floor(scaled);
-      const b = counters[bin] ?? 0;
-      counters[bin] = b + 1;
-    }
-  }
-
-  const chartData: { name: string; value: number }[] = Object.entries(counters)
-    // Optionally sort by numeric key:
-    .sort(([aKey], [bKey]) => Number(aKey) - Number(bKey))
-    .map(([key, val]) => ({
-      name: key,
-      value: val,
-    }));
 
   return (
     <ChartContainer config={chartConfig} className="h-[200px] w-full">
