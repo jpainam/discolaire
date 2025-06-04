@@ -32,7 +32,7 @@ export const description = "A bar chart with a label";
 const chartConfig = {
   value: {
     label: "Value",
-    color: "var(--chart-3)",
+    color: "var(--chart-1)",
   },
 } satisfies ChartConfig;
 
@@ -40,7 +40,7 @@ export function GradeDistributionChart() {
   const { t } = useLocale();
   const trpc = useTRPC();
   const { data: chartData } = useSuspenseQuery(
-    trpc.gradeSheet.distribution.queryOptions(),
+    trpc.gradeSheet.distribution.queryOptions()
   );
 
   return (

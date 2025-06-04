@@ -19,11 +19,13 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { SettingsIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { DatePicker } from "~/components/DatePicker";
 import { useLocale } from "~/i18n";
+import { useTRPC } from "~/trpc/react";
 
 const formSchema = z.object({
   options: z.array(
@@ -32,15 +34,13 @@ const formSchema = z.object({
       termId: z.string(),
       date: z.coerce.date(),
       observation: z.string().default(""),
-    }),
+    })
   ),
 });
-export function GradeReportSettings({
-  terms,
-}: {
-  terms: RouterOutputs["term"]["all"];
-}) {
+export function GradeReportSettings() {
   const { t } = useLocale();
+  const trpc = useTRPC();
+  const { data: terms } = useSuspenseQuery(trpc.term.all.queryOptions());
   const periodes = terms.map((term) => {
     return {
       //active: false,

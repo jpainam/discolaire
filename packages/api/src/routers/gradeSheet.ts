@@ -277,4 +277,14 @@ export const gradeSheetRouter = createTRPCRouter({
     //   }))
     //   .sort((a, b) => Number(a.name) - Number(b.name));
   }),
+  allPercentile: protectedProcedure.query(({ ctx }) => {
+    // return gradeSheetService.allPercentile({
+    //   schoolYearId: ctx.schoolYearId,
+    //   schoolId: ctx.schoolId,
+    // });
+    return gradeSheetService.percentileRawQuery({
+      schoolYearId: ctx.schoolYearId,
+      schoolId: ctx.schoolId,
+    });
+  }),
 });
