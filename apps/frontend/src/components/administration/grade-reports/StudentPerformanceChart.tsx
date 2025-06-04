@@ -33,7 +33,7 @@ const chartConfig = {
 export function StudentPerformanceChart() {
   const trpc = useTRPC();
   const { data: percentiles } = useSuspenseQuery(
-    trpc.gradeSheet.allPercentile.queryOptions()
+    trpc.gradeSheet.allPercentile.queryOptions(),
   );
   console.log(percentiles);
   return (
