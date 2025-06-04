@@ -1,6 +1,5 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -34,7 +33,7 @@ const formSchema = z.object({
       termId: z.string(),
       date: z.coerce.date(),
       observation: z.string().default(""),
-    })
+    }),
   ),
 });
 export function GradeReportSettings() {

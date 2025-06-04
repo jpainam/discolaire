@@ -40,7 +40,7 @@ export function GradeDistributionChart() {
   const { t } = useLocale();
   const trpc = useTRPC();
   const { data: chartData } = useSuspenseQuery(
-    trpc.gradeSheet.distribution.queryOptions()
+    trpc.gradeSheet.distribution.queryOptions(),
   );
 
   return (
